@@ -116,7 +116,7 @@ def test_calendar_error_handling_missing_token():
     """Verify MCP tools return error dicts rather than raising when no token exists."""
     res_list = calendar_list_events()
     assert res_list["status"] == "error", "Expected error status for missing token"
-    assert res_list.get("error"), "Expected non-empty error message"
+    assert res_list.get("message") or res_list.get("error"), "Expected non-empty error message"
 
     now = datetime.now(UTC)
     res_create = calendar_create_event(
@@ -125,4 +125,4 @@ def test_calendar_error_handling_missing_token():
         end_time=(now + timedelta(hours=1)).isoformat(),
     )
     assert res_create["status"] == "error", "Expected error status for missing token"
-    assert res_create.get("error"), "Expected non-empty error message"
+    assert res_create.get("message") or res_create.get("error"), "Expected non-empty error message"

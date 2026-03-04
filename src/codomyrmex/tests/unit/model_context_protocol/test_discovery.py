@@ -329,6 +329,7 @@ class TestMCPBridgeAutoDiscoveryCriticalPath:
         was used and returned {} for all @mcp_tool functions (they use 'schema').
         """
         import types
+
         from codomyrmex.model_context_protocol.decorators import mcp_tool
         from codomyrmex.model_context_protocol.discovery import MCPDiscovery
 

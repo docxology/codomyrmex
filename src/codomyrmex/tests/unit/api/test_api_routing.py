@@ -5,7 +5,6 @@ from datetime import datetime
 import pytest
 
 
-
 class TestAPIRouter:
     """Tests for APIRouter class."""
 

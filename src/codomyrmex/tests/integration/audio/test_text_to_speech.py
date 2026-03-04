@@ -1,6 +1,5 @@
 """Integration tests for the text-to-speech providers."""
 
-import asyncio
 from pathlib import Path
 
 import pytest
@@ -41,7 +40,7 @@ class TestPyttsx3ProviderIntegration:
         # Save to disk and verify file
         output_file = tmp_path / "test_sync.wav"
         saved_file = result.save(output_file)
-        
+
         assert saved_file.exists()
         assert saved_file.stat().st_size > 0
 
@@ -61,7 +60,7 @@ class TestPyttsx3ProviderIntegration:
         # Save to disk and verify file
         output_file = tmp_path / "test_async.wav"
         saved_file = result.save(output_file)
-        
+
         assert saved_file.exists()
         assert saved_file.stat().st_size > 0
 
@@ -91,7 +90,7 @@ class TestEdgeTTSProviderIntegration:
         # Save to disk and verify file
         output_file = tmp_path / "test_sync.mp3"
         saved_file = result.save(output_file)
-        
+
         assert saved_file.exists()
         assert saved_file.stat().st_size > 0
 
@@ -114,7 +113,7 @@ class TestEdgeTTSProviderIntegration:
         # Save to disk and verify file
         output_file = tmp_path / "test_async.mp3"
         saved_file = result.save(output_file)
-        
+
         assert saved_file.exists()
         assert saved_file.stat().st_size > 0
 

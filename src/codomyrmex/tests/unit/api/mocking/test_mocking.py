@@ -9,7 +9,6 @@ import json
 
 import pytest
 
-
 try:
     from codomyrmex.api.mocking import (
         MatchStrategy,

@@ -25,7 +25,6 @@ from codomyrmex.config_management.core.config_loader import (
     ConfigSchema,
     Configuration,
     ConfigurationManager,
-    load_configuration,
     validate_configuration,
 )
 
@@ -164,7 +163,9 @@ class TestLoadConfigWithValidationFailurePath:
         which is a real class (not mocked). We provide a schema that requires a field
         the config file does NOT have, triggering result.is_valid == False.
         """
-        from codomyrmex.config_management.validation.config_validator import ConfigSchema as VSchema
+        from codomyrmex.config_management.validation.config_validator import (
+            ConfigSchema as VSchema,
+        )
 
         # Config file missing the required "required_field"
         config_file = tmp_path / "invalid_config.json"
@@ -190,10 +191,12 @@ class TestLoadConfigWithValidationFailurePath:
         via a real ConfigValidator with a custom_validator that emits warnings.
         """
         from codomyrmex.config_management.validation.config_validator import (
+            ConfigSchema as VSchema,
+        )
+        from codomyrmex.config_management.validation.config_validator import (
             ConfigValidator,
             ValidationIssue,
             ValidationSeverity,
-            ConfigSchema as VSchema,
         )
 
         # Build a config file that is valid but should produce a warning
@@ -244,7 +247,9 @@ class TestLoadConfigWithValidationFailurePath:
 
     def test_load_valid_config_with_real_schema_returns_config(self, tmp_path):
         """Valid config with a real schema returns a Configuration object."""
-        from codomyrmex.config_management.validation.config_validator import ConfigSchema as VSchema
+        from codomyrmex.config_management.validation.config_validator import (
+            ConfigSchema as VSchema,
+        )
 
         config_file = tmp_path / "valid_config.yaml"
         config_file.write_text(yaml.dump({"username": "alice", "timeout": 30}))
@@ -702,3 +707,73 @@ class TestConfigurationManagerGapFillers:
 
         assert validate_configuration(valid) == []
         assert len(validate_configuration(invalid)) >= 1
+
+
+# ---------------------------------------------------------------------------
+# Exception handler coverage — migrate_configuration (lines 631-633)
+# ---------------------------------------------------------------------------
+
+@pytest.mark.unit
+class TestMigrateConfigurationExceptionHandler:
+    """Force the exception handler in migrate_configuration (lines 631-633)."""
+
+    def test_migrate_config_raises_on_invalid_data_type(self, tmp_path):
+        """When migrate_config receives data that causes TypeError, exception is caught -> False.
+
+        The migrate_config function calls migrator.migrate_config(config.data, ...).
+        If config.data causes an unexpected error inside migrate_config (e.g. it calls
+        .get() on something unusual), the exception is caught at line 631.
+
+        We trigger this by setting config.data to a non-dict type that will
+        raise AttributeError when .get("version", "1.0.0") is called.
+        """
+        manager = ConfigurationManager(config_dir=str(tmp_path))
+
+        # Create a config with data that is not a dict — will cause AttributeError
+        # when config.data.get("version", "1.0.0") is called at line 607
+        config = Configuration(data={"version": "1.0.0"}, source="test")
+        manager.configurations["bad_migrate"] = config
+
+        # Replace data with a non-dict after construction to bypass the dataclass
+        # config.data is just a regular attribute — we can overwrite it
+        config.data = "this_is_not_a_dict"  # type: ignore[assignment]
+
+        result = manager.migrate_configuration("bad_migrate", "2.0.0")
+
+        # AttributeError on "this_is_not_a_dict".get("version", "1.0.0") is caught
+        assert result is False
+
+
+# ---------------------------------------------------------------------------
+# Exception handler coverage — create_migration_backup (lines 735-737)
+# ---------------------------------------------------------------------------
+
+@pytest.mark.unit
+class TestCreateMigrationBackupExceptionHandler:
+    """Force the exception handler in create_migration_backup (lines 735-737)."""
+
+    def test_backup_with_uncopyable_dict_triggers_exception(self, tmp_path):
+        """When config.data.copy() raises inside the try block -> False (lines 735-737).
+
+        The try block at line 724 wraps Configuration(...) and the .copy() call.
+        We replace config.data with a dict subclass whose .copy() method raises.
+        This triggers the except branch at line 735.
+        """
+
+        class RaisingDict(dict):
+            """A dict subclass whose .copy() always raises."""
+
+            def copy(self):
+                raise RuntimeError("simulated copy failure")
+
+        manager = ConfigurationManager(config_dir=str(tmp_path))
+
+        # Use RaisingDict so that data.get("version") works (it's a dict)
+        # but data.copy() raises inside the try block (line 727)
+        config = Configuration(data=RaisingDict({"version": "1.0.0"}), source="test")
+        manager.configurations["uncopyable_cfg"] = config
+
+        result = manager.create_migration_backup("uncopyable_cfg")
+
+        # RaisingDict.copy() raises RuntimeError at line 727 -> caught at 735 -> False
+        assert result is False

@@ -7,7 +7,6 @@ import tempfile
 import pytest
 
 
-
 # OpenAPI Generator Tests
 class TestAPISchema:
     """Tests for APISchema dataclass."""

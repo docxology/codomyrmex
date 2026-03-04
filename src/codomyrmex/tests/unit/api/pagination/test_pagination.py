@@ -6,7 +6,6 @@ cursor encoding/decoding, and the factory function.
 
 import pytest
 
-
 try:
     from codomyrmex.api.pagination import (
         CursorPaginator,

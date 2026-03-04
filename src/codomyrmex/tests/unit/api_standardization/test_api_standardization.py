@@ -10,7 +10,9 @@ from datetime import datetime
 import pytest
 
 try:
-    from codomyrmex.api.openapi_generator import OpenAPISpecification as _probe  # noqa: F401
+    from codomyrmex.api.openapi_generator import (
+        OpenAPISpecification as _probe,  # noqa: F401
+    )
     _API_AVAILABLE = True
 except ImportError:
     _API_AVAILABLE = False

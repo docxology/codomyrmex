@@ -6,7 +6,6 @@ and APISurface analyzer.
 
 import pytest
 
-
 try:
     from codomyrmex.api.api_contract import (
         APIContract,

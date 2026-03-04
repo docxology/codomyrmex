@@ -12,7 +12,6 @@ Pure data-model tests — no network required.
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # Enum exhaustive coverage
 # ---------------------------------------------------------------------------
@@ -1426,8 +1425,15 @@ class TestParseDatetimeEdgeCases:
         assert result.month == 12
         assert result.day == 31
 
-    def test_type_error_returns_none(self):
+    def test_malformed_iso_string_returns_none(self):
         from codomyrmex.cloud.coda_io.models import _parse_datetime
-        # Passing an integer where a string is expected — triggers TypeError
-        result = _parse_datetime(12345)  # type: ignore[arg-type]
+        # A string that looks date-like but is malformed — triggers ValueError in fromisoformat
+        result = _parse_datetime("2024-13-45T99:99:99Z")
+        assert result is None
+
+    def test_partial_date_string_returns_none(self):
+        from codomyrmex.cloud.coda_io.models import _parse_datetime
+        # fromisoformat accepts "2024-01-01" as a date string (not datetime), but that is valid
+        # Use a clearly invalid format instead
+        result = _parse_datetime("January 1st, 2024")
         assert result is None

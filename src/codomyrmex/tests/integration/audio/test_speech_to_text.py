@@ -1,11 +1,9 @@
 """Integration tests for the speech-to-text providers."""
 
-import asyncio
 from pathlib import Path
 
 import pytest
 
-from codomyrmex.audio.exceptions import ProviderNotAvailableError
 from codomyrmex.audio.speech_to_text.models import WhisperModelSize
 from codomyrmex.audio.speech_to_text.providers import (
     WHISPER_AVAILABLE,
@@ -56,11 +54,11 @@ class TestWhisperProviderIntegration:
         assert result.text
         assert len(result.text) > 0
         assert len(result.segments) > 0
-        
+
         # Verify language detection (assuming it detects English)
         assert result.language == "en"
         assert result.duration > 0
-        
+
         # Verify text content roughly matches (whisper isn't perfect, especially tiny)
         lower_text = result.text.lower()
         assert "zero" in lower_text or "mock" in lower_text or "test" in lower_text
@@ -70,7 +68,7 @@ class TestWhisperProviderIntegration:
         """Test asynchronous transcription with Whisper."""
         provider = WhisperProvider(model_size=WhisperModelSize.TINY)
 
-        # Transcribe audio asynchronously 
+        # Transcribe audio asynchronously
         result = await provider.transcribe_async(generated_audio_file)
 
         # Verify result
@@ -82,7 +80,7 @@ class TestWhisperProviderIntegration:
         """Test that TranscriptionResult correctly formats and saves VTT/SRT."""
         provider = WhisperProvider(model_size=WhisperModelSize.TINY)
         result = provider.transcribe(generated_audio_file)
-        
+
         # Save SRT
         srt_file = tmp_path / "test.srt"
         saved_srt = result.save_srt(srt_file)
@@ -90,7 +88,7 @@ class TestWhisperProviderIntegration:
         srt_text = srt_file.read_text("utf-8")
         assert "-->" in srt_text
         assert "1" in srt_text
-        
+
         # Save VTT
         vtt_file = tmp_path / "test.vtt"
         saved_vtt = result.save_vtt(vtt_file)
@@ -108,10 +106,10 @@ class TestTranscriberInterfaceIntegration:
     def test_transcriber_whisper(self, generated_audio_file: Path):
         """Test Transcriber interface with whisper provider."""
         transcriber = Transcriber(
-            provider="whisper", 
+            provider="whisper",
             model_size=WhisperModelSize.TINY
         )
         result = transcriber.transcribe(generated_audio_file)
-        
+
         assert result.text
         assert result.language == "en"

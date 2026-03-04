@@ -5,7 +5,6 @@ Tests for API Circuit Breaker Module
 
 import pytest
 
-
 try:
     from codomyrmex.api.circuit_breaker import (
         Bulkhead,

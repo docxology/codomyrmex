@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 
 import pytest
 
-
 try:
     from codomyrmex.api.rate_limiting import (
         CompositeRateLimiter,

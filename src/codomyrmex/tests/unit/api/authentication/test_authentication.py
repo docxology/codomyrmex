@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 import pytest
 
-
 try:
     from codomyrmex.api.authentication import (
         APIKeyAuthenticator,

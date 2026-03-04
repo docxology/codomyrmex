@@ -39,7 +39,6 @@ from codomyrmex.system_discovery.health.health_reporter import (
     generate_health_report,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -603,7 +602,7 @@ class TestExportHealthReport:
         reporter = HealthReporter()
         report = HealthReport()
         filepath = str(tmp_path / "nonexistent" / "deep" / "dir" / "report.txt")
-        with pytest.raises(Exception):
+        with pytest.raises(OSError):
             reporter.export_health_report(report, filepath)
 
     def test_exported_text_is_nonempty(self, tmp_path):

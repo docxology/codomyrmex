@@ -6,7 +6,6 @@ import tempfile
 
 import pytest
 
-
 try:
     from codomyrmex.api.openapi_generator import (
         DocumentationOpenAPIGenerator,

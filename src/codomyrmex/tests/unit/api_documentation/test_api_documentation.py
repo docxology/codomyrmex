@@ -12,7 +12,9 @@ from datetime import UTC, datetime
 import pytest
 
 try:
-    from codomyrmex.api.openapi_generator import generate_openapi_spec as _probe  # noqa: F401
+    from codomyrmex.api.openapi_generator import (
+        generate_openapi_spec as _probe,  # noqa: F401
+    )
     _API_AVAILABLE = True
 except ImportError:
     _API_AVAILABLE = False
