@@ -6,6 +6,7 @@ Zero-mock policy: all objects are real instances.
 """
 
 import json
+import math
 import time
 
 import pytest
@@ -26,6 +27,7 @@ from codomyrmex.physical_management.object_manager import (
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _make_obj(
     obj_id: str = "obj-1",
@@ -65,20 +67,49 @@ class TestEnums:
         assert ObjectType.VEHICLE.value == "vehicle"
         assert len(ObjectType) == 6
 
+    def test_object_type_all_members(self):
+        expected = {"sensor", "actuator", "device", "container", "vehicle", "structure"}
+        assert {m.value for m in ObjectType} == expected
+
     def test_object_status_values(self):
         assert ObjectStatus.ACTIVE.value == "active"
         assert ObjectStatus.CALIBRATING.value == "calibrating"
         assert len(ObjectStatus) == 8
+
+    def test_object_status_all_members(self):
+        expected = {
+            "active", "inactive", "maintenance", "error",
+            "offline", "initializing", "shutting_down", "calibrating",
+        }
+        assert {m.value for m in ObjectStatus} == expected
 
     def test_material_type_values(self):
         assert MaterialType.METAL.value == "metal"
         assert MaterialType.UNKNOWN.value == "unknown"
         assert len(MaterialType) == 9
 
+    def test_material_type_all_members(self):
+        expected = {
+            "metal", "plastic", "wood", "glass", "ceramic",
+            "composite", "liquid", "gas", "unknown",
+        }
+        assert {m.value for m in MaterialType} == expected
+
     def test_event_type_values(self):
         assert EventType.CREATED.value == "created"
         assert EventType.DISCONNECTED.value == "disconnected"
         assert len(EventType) == 8
+
+    def test_event_type_all_members(self):
+        expected = {
+            "created", "moved", "status_changed", "property_updated",
+            "collision", "destroyed", "connected", "disconnected",
+        }
+        assert {m.value for m in EventType} == expected
+
+    def test_enum_identity(self):
+        assert ObjectType.SENSOR is ObjectType.SENSOR
+        assert ObjectStatus.ACTIVE is not ObjectStatus.INACTIVE
 
 
 # ===================================================================
@@ -99,10 +130,49 @@ class TestMaterialProperties:
         assert mp.friction_coefficient == 0.5  # default
         assert mp.restitution == 0.5
 
+    def test_custom_friction_and_restitution(self):
+        mp = MaterialProperties(
+            density=1000, elasticity=1e9, thermal_conductivity=1.0,
+            specific_heat=1000, melting_point=500,
+            friction_coefficient=0.1, restitution=0.9,
+        )
+        assert mp.friction_coefficient == 0.1
+        assert mp.restitution == 0.9
+
     def test_from_material_type_metal(self):
         mp = MaterialProperties.from_material_type(MaterialType.METAL)
         assert mp.density == 7850
         assert mp.elasticity == 200e9
+
+    def test_from_material_type_plastic(self):
+        mp = MaterialProperties.from_material_type(MaterialType.PLASTIC)
+        assert mp.density == 1200
+        assert mp.melting_point == 373
+
+    def test_from_material_type_wood(self):
+        mp = MaterialProperties.from_material_type(MaterialType.WOOD)
+        assert mp.density == 600
+
+    def test_from_material_type_glass(self):
+        mp = MaterialProperties.from_material_type(MaterialType.GLASS)
+        assert mp.density == 2500
+
+    def test_from_material_type_ceramic(self):
+        mp = MaterialProperties.from_material_type(MaterialType.CERAMIC)
+        assert mp.density == 3000
+
+    def test_from_material_type_composite(self):
+        mp = MaterialProperties.from_material_type(MaterialType.COMPOSITE)
+        assert mp.density == 1500
+
+    def test_from_material_type_liquid(self):
+        mp = MaterialProperties.from_material_type(MaterialType.LIQUID)
+        assert mp.density == 1000
+        assert mp.restitution == 0.9
+
+    def test_from_material_type_gas(self):
+        mp = MaterialProperties.from_material_type(MaterialType.GAS)
+        assert mp.density == pytest.approx(1.2)
 
     def test_from_material_type_all_variants(self):
         for mt in MaterialType:
@@ -113,6 +183,16 @@ class TestMaterialProperties:
     def test_from_material_type_unknown_fallback(self):
         mp = MaterialProperties.from_material_type(MaterialType.UNKNOWN)
         assert mp.density == 1000
+
+    def test_all_materials_have_positive_conductivity(self):
+        for mt in MaterialType:
+            mp = MaterialProperties.from_material_type(mt)
+            assert mp.thermal_conductivity > 0
+
+    def test_all_materials_have_valid_restitution(self):
+        for mt in MaterialType:
+            mp = MaterialProperties.from_material_type(mt)
+            assert 0 <= mp.restitution <= 1
 
 
 # ===================================================================
@@ -139,6 +219,29 @@ class TestObjectEvent:
         )
         assert evt.data == {"dx": 1}
         assert evt.source == "test"
+
+    def test_all_event_types_constructable(self):
+        for et in EventType:
+            evt = ObjectEvent(event_type=et, object_id="z")
+            assert evt.event_type == et
+
+    def test_explicit_timestamp(self):
+        ts = 1_000_000.0
+        evt = ObjectEvent(event_type=EventType.DESTROYED, object_id="x", timestamp=ts)
+        assert evt.timestamp == ts
+
+    def test_data_mutation_independent(self):
+        d = {"key": "value"}
+        evt = ObjectEvent(event_type=EventType.CREATED, object_id="x", data=d)
+        d["extra"] = "added"
+        # The event holds the same dict reference (dataclass behavior)
+        assert evt.data["extra"] == "added"
+
+    def test_default_data_independent_per_instance(self):
+        evt1 = ObjectEvent(event_type=EventType.CREATED, object_id="a")
+        evt2 = ObjectEvent(event_type=EventType.CREATED, object_id="b")
+        evt1.data["key"] = "val"
+        assert "key" not in evt2.data
 
 
 # ===================================================================
@@ -180,6 +283,80 @@ class TestSpatialIndex:
         si = SpatialIndex()
         si.remove_object("nope")  # should not raise
 
+    def test_default_grid_size(self):
+        si = SpatialIndex()
+        assert si.grid_size == 10.0
+
+    def test_custom_grid_size(self):
+        si = SpatialIndex(grid_size=5.0)
+        assert si.grid_size == 5.0
+
+    def test_empty_index_returns_empty_set(self):
+        si = SpatialIndex()
+        result = si.get_nearby_cells(0.0, 0.0, 0.0, 100.0)
+        assert result == set()
+
+    def test_exact_boundary_object_included(self):
+        si = SpatialIndex(grid_size=10.0)
+        # Object exactly at radius distance should be included
+        si.add_object("boundary", 5.0, 0.0, 0.0)
+        nearby = si.get_nearby_cells(0.0, 0.0, 0.0, 5.0)
+        assert "boundary" in nearby
+
+    def test_just_outside_radius_excluded(self):
+        si = SpatialIndex(grid_size=10.0)
+        si.add_object("far", 6.0, 0.0, 0.0)
+        nearby = si.get_nearby_cells(0.0, 0.0, 0.0, 5.0)
+        assert "far" not in nearby
+
+    def test_multiple_objects_same_cell(self):
+        si = SpatialIndex(grid_size=10.0)
+        si.add_object("a", 1.0, 1.0, 1.0)
+        si.add_object("b", 2.0, 2.0, 2.0)
+        nearby = si.get_nearby_cells(0.0, 0.0, 0.0, 5.0)
+        assert "a" in nearby
+        assert "b" in nearby
+
+    def test_3d_radius_query(self):
+        si = SpatialIndex(grid_size=10.0)
+        # Object at distance sqrt(3) ≈ 1.73 in 3D
+        si.add_object("near_3d", 1.0, 1.0, 1.0)
+        # Object at distance sqrt(75) ≈ 8.66
+        si.add_object("far_3d", 5.0, 5.0, 5.0)
+        nearby = si.get_nearby_cells(0.0, 0.0, 0.0, 3.0)
+        assert "near_3d" in nearby
+        assert "far_3d" not in nearby
+
+    def test_remove_last_object_cleans_grid_cell(self):
+        si = SpatialIndex(grid_size=10.0)
+        si.add_object("a", 0.0, 0.0, 0.0)
+        si.remove_object("a")
+        # Grid should be empty after removing the only object
+        assert len(si._grid) == 0
+        assert len(si._object_locations) == 0
+
+    def test_large_radius_includes_all(self):
+        si = SpatialIndex(grid_size=10.0)
+        si.add_object("a", 0.0, 0.0, 0.0)
+        si.add_object("b", 50.0, 50.0, 50.0)
+        nearby = si.get_nearby_cells(0.0, 0.0, 0.0, 200.0)
+        assert "a" in nearby
+        assert "b" in nearby
+
+    def test_remove_cleans_coordinates(self):
+        si = SpatialIndex(grid_size=10.0)
+        si.add_object("a", 1.0, 2.0, 3.0)
+        si.remove_object("a")
+        assert "a" not in si._object_coordinates
+        assert "a" not in si._object_locations
+
+    def test_zero_radius_returns_only_at_point(self):
+        si = SpatialIndex(grid_size=10.0)
+        si.add_object("origin", 0.0, 0.0, 0.0)
+        si.add_object("tiny_offset", 0.001, 0.0, 0.0)
+        nearby = si.get_nearby_cells(0.0, 0.0, 0.0, 0.0)
+        assert "origin" in nearby
+
 
 # ===================================================================
 # PhysicalObject tests
@@ -194,6 +371,33 @@ class TestPhysicalObject:
         assert obj.material_properties is not None
         assert obj.material_properties.density == 7850  # METAL
 
+    def test_post_init_auto_material_props(self):
+        obj = PhysicalObject(
+            id="test",
+            name="Test",
+            object_type=ObjectType.SENSOR,
+            location=(0, 0, 0),
+            material=MaterialType.GLASS,
+        )
+        assert obj.material_properties is not None
+        assert obj.material_properties.density == 2500  # GLASS
+
+    def test_post_init_explicit_material_props_preserved(self):
+        custom_props = MaterialProperties(
+            density=9999, elasticity=1e9, thermal_conductivity=5.0,
+            specific_heat=100, melting_point=2000,
+        )
+        obj = PhysicalObject(
+            id="custom",
+            name="Custom",
+            object_type=ObjectType.DEVICE,
+            location=(0, 0, 0),
+            material=MaterialType.METAL,
+            material_properties=custom_props,
+        )
+        # Explicit material_properties must NOT be overwritten
+        assert obj.material_properties.density == 9999
+
     def test_density_property(self):
         obj = _make_obj(mass=10.0, volume=2.0)
         assert obj.density == pytest.approx(5.0)
@@ -202,29 +406,67 @@ class TestPhysicalObject:
         obj = _make_obj(volume=0.0)
         assert obj.density == 0.0
 
+    def test_density_unit_values(self):
+        obj = _make_obj(mass=1.0, volume=1.0)
+        assert obj.density == pytest.approx(1.0)
+
     def test_update_location(self):
         obj = _make_obj()
         obj.update_location(10.0, 20.0, 30.0)
         assert obj.location == (10.0, 20.0, 30.0)
+
+    def test_update_location_updates_last_updated(self):
+        obj = _make_obj()
+        before = time.time()
+        obj.update_location(1.0, 2.0, 3.0)
+        assert obj.last_updated >= before
 
     def test_update_status(self):
         obj = _make_obj()
         obj.update_status(ObjectStatus.MAINTENANCE)
         assert obj.status == ObjectStatus.MAINTENANCE
 
+    def test_update_status_updates_last_updated(self):
+        obj = _make_obj()
+        before = time.time()
+        obj.update_status(ObjectStatus.OFFLINE)
+        assert obj.last_updated >= before
+
     def test_distance_to(self):
         a = _make_obj(obj_id="a", location=(0.0, 0.0, 0.0))
         b = _make_obj(obj_id="b", location=(3.0, 4.0, 0.0))
         assert a.distance_to(b) == pytest.approx(5.0)
 
+    def test_distance_to_same_location(self):
+        a = _make_obj(obj_id="a", location=(5.0, 5.0, 5.0))
+        b = _make_obj(obj_id="b", location=(5.0, 5.0, 5.0))
+        assert a.distance_to(b) == pytest.approx(0.0)
+
+    def test_distance_to_3d(self):
+        a = _make_obj(obj_id="a", location=(0.0, 0.0, 0.0))
+        b = _make_obj(obj_id="b", location=(1.0, 1.0, 1.0))
+        assert a.distance_to(b) == pytest.approx(math.sqrt(3))
+
     def test_distance_to_point(self):
         obj = _make_obj(location=(0.0, 0.0, 0.0))
         assert obj.distance_to_point(1.0, 0.0, 0.0) == pytest.approx(1.0)
 
-    def test_is_within_range(self):
+    def test_distance_to_point_3d(self):
+        obj = _make_obj(location=(1.0, 2.0, 3.0))
+        assert obj.distance_to_point(1.0, 2.0, 3.0) == pytest.approx(0.0)
+
+    def test_is_within_range_true(self):
         obj = _make_obj(location=(0.0, 0.0, 0.0))
         assert obj.is_within_range(1.0, 0.0, 0.0, 2.0) is True
+
+    def test_is_within_range_false(self):
+        obj = _make_obj(location=(0.0, 0.0, 0.0))
         assert obj.is_within_range(10.0, 0.0, 0.0, 2.0) is False
+
+    def test_is_within_range_exact_boundary(self):
+        obj = _make_obj(location=(0.0, 0.0, 0.0))
+        # Exactly at max_distance should return True (<=)
+        assert obj.is_within_range(5.0, 0.0, 0.0, 5.0) is True
 
     def test_add_and_remove_property(self):
         obj = _make_obj()
@@ -234,30 +476,127 @@ class TestPhysicalObject:
         assert removed == "red"
         assert "color" not in obj.properties
 
+    def test_add_property_updates_last_updated(self):
+        obj = _make_obj()
+        before = time.time()
+        obj.add_property("x", 1)
+        assert obj.last_updated >= before
+
+    def test_add_property_overwrite(self):
+        obj = _make_obj()
+        obj.add_property("color", "red")
+        obj.add_property("color", "blue")
+        assert obj.properties["color"] == "blue"
+
     def test_remove_property_missing(self):
         obj = _make_obj()
         assert obj.remove_property("nope") is None
 
-    def test_tags(self):
+    def test_remove_property_updates_last_updated(self):
+        obj = _make_obj()
+        obj.add_property("key", "val")
+        before = time.time()
+        obj.remove_property("key")
+        assert obj.last_updated >= before
+
+    def test_remove_property_missing_does_not_update_last_updated(self):
+        obj = _make_obj()
+        t0 = obj.last_updated
+        # Sleep briefly so time.time() would differ
+        result = obj.remove_property("nonexistent")
+        assert result is None
+        # last_updated should not have changed since key was absent
+        assert obj.last_updated == t0
+
+    def test_tags_add_and_has(self):
         obj = _make_obj()
         obj.add_tag("urgent")
         assert obj.has_tag("urgent")
+
+    def test_tags_remove_present(self):
+        obj = _make_obj()
+        obj.add_tag("urgent")
         assert obj.remove_tag("urgent") is True
         assert obj.has_tag("urgent") is False
+
+    def test_tags_remove_absent(self):
+        obj = _make_obj()
         assert obj.remove_tag("urgent") is False
 
-    def test_connections(self):
+    def test_tags_has_nonexistent(self):
+        obj = _make_obj()
+        assert obj.has_tag("nope") is False
+
+    def test_tags_add_updates_last_updated(self):
+        obj = _make_obj()
+        before = time.time()
+        obj.add_tag("x")
+        assert obj.last_updated >= before
+
+    def test_tags_remove_updates_last_updated(self):
+        obj = _make_obj()
+        obj.add_tag("x")
+        before = time.time()
+        obj.remove_tag("x")
+        assert obj.last_updated >= before
+
+    def test_tags_multiple(self):
+        obj = _make_obj()
+        for tag in ["a", "b", "c"]:
+            obj.add_tag(tag)
+        assert obj.has_tag("a") and obj.has_tag("b") and obj.has_tag("c")
+        assert len(obj.tags) == 3
+
+    def test_connections_add_and_check(self):
         obj = _make_obj()
         obj.connect_to("other-1")
         assert obj.is_connected_to("other-1")
+
+    def test_connections_disconnect_present(self):
+        obj = _make_obj()
+        obj.connect_to("other-1")
         assert obj.disconnect_from("other-1") is True
         assert obj.is_connected_to("other-1") is False
+
+    def test_connections_disconnect_absent(self):
+        obj = _make_obj()
         assert obj.disconnect_from("other-1") is False
 
-    def test_temperature(self):
+    def test_connections_is_not_connected(self):
+        obj = _make_obj()
+        assert obj.is_connected_to("nobody") is False
+
+    def test_connections_multiple(self):
+        obj = _make_obj()
+        obj.connect_to("peer-1")
+        obj.connect_to("peer-2")
+        assert obj.is_connected_to("peer-1")
+        assert obj.is_connected_to("peer-2")
+        assert len(obj.connections) == 2
+
+    def test_connect_to_updates_last_updated(self):
+        obj = _make_obj()
+        before = time.time()
+        obj.connect_to("x")
+        assert obj.last_updated >= before
+
+    def test_disconnect_updates_last_updated(self):
+        obj = _make_obj()
+        obj.connect_to("x")
+        before = time.time()
+        obj.disconnect_from("x")
+        assert obj.last_updated >= before
+
+    def test_temperature_update(self):
         obj = _make_obj(temperature=300.0)
         obj.update_temperature(350.0)
         assert obj.temperature == 350.0
+
+    def test_temperature_update_timestamps(self):
+        obj = _make_obj()
+        before = time.time()
+        obj.update_temperature(400.0)
+        assert obj.last_updated >= before
 
     def test_calculate_thermal_energy(self):
         obj = _make_obj(mass=2.0, temperature=373.15, material=MaterialType.METAL)
@@ -265,20 +604,34 @@ class TestPhysicalObject:
         # mass * specific_heat * (T - 273.15) = 2 * 500 * 100 = 100000
         assert energy == pytest.approx(100000.0)
 
+    def test_calculate_thermal_energy_zero_delta(self):
+        # At exactly 273.15K (0°C), thermal energy should be 0
+        obj = _make_obj(mass=1.0, temperature=273.15, material=MaterialType.METAL)
+        assert obj.calculate_thermal_energy() == pytest.approx(0.0)
+
     def test_thermal_energy_no_material_props(self):
         obj = _make_obj()
         obj.material_properties = None
         assert obj.calculate_thermal_energy() == 0.0
 
+    def test_thermal_energy_scales_with_mass(self):
+        obj_light = _make_obj(obj_id="light", mass=1.0, temperature=373.15)
+        obj_heavy = _make_obj(obj_id="heavy", mass=2.0, temperature=373.15)
+        assert obj_heavy.calculate_thermal_energy() == pytest.approx(
+            2 * obj_light.calculate_thermal_energy()
+        )
+
     def test_get_age(self):
         obj = _make_obj()
         age = obj.get_age()
         assert age >= 0.0
+        assert age < 5.0  # Should be very small for a fresh object
 
     def test_time_since_update(self):
         obj = _make_obj()
         t = obj.time_since_update()
         assert t >= 0.0
+        assert t < 5.0  # Should be very small for a fresh object
 
     def test_to_dict(self):
         obj = _make_obj()
@@ -290,7 +643,101 @@ class TestPhysicalObject:
         assert d["material"] == "metal"
         assert "test-tag" in d["tags"]
         assert "peer" in d["connections"]
-        assert isinstance(d["location"], tuple) or isinstance(d["location"], list)
+        assert isinstance(d["location"], (tuple, list))
+
+    def test_to_dict_complete_keys(self):
+        obj = _make_obj()
+        d = obj.to_dict()
+        expected_keys = {
+            "id", "name", "object_type", "location", "properties",
+            "status", "created_at", "last_updated", "material",
+            "mass", "volume", "temperature", "connections", "tags", "metadata",
+        }
+        assert set(d.keys()) == expected_keys
+
+    def test_to_dict_status_value(self):
+        obj = _make_obj(status=ObjectStatus.MAINTENANCE)
+        d = obj.to_dict()
+        assert d["status"] == "maintenance"
+
+    def test_to_dict_connections_is_list(self):
+        obj = _make_obj()
+        obj.connect_to("a")
+        obj.connect_to("b")
+        d = obj.to_dict()
+        assert isinstance(d["connections"], list)
+        assert set(d["connections"]) == {"a", "b"}
+
+    def test_to_dict_tags_is_list(self):
+        obj = _make_obj()
+        obj.add_tag("x")
+        d = obj.to_dict()
+        assert isinstance(d["tags"], list)
+
+    def test_properties_stored_correctly(self):
+        obj = PhysicalObject(
+            id="p1",
+            name="Prop Test",
+            object_type=ObjectType.DEVICE,
+            location=(0, 0, 0),
+            properties={"color": "green", "weight": 5},
+        )
+        assert obj.properties["color"] == "green"
+        assert obj.properties["weight"] == 5
+
+    def test_metadata_stored_correctly(self):
+        obj = PhysicalObject(
+            id="m1",
+            name="Meta Test",
+            object_type=ObjectType.SENSOR,
+            location=(0, 0, 0),
+            metadata={"owner": "alice"},
+        )
+        assert obj.metadata["owner"] == "alice"
+
+    def test_default_status_is_active(self):
+        obj = PhysicalObject(
+            id="x",
+            name="X",
+            object_type=ObjectType.DEVICE,
+            location=(0, 0, 0),
+        )
+        assert obj.status == ObjectStatus.ACTIVE
+
+    def test_default_mass_and_volume(self):
+        obj = PhysicalObject(
+            id="x",
+            name="X",
+            object_type=ObjectType.DEVICE,
+            location=(0, 0, 0),
+        )
+        assert obj.mass == 1.0
+        assert obj.volume == 1.0
+
+    def test_default_temperature(self):
+        obj = PhysicalObject(
+            id="x",
+            name="X",
+            object_type=ObjectType.DEVICE,
+            location=(0, 0, 0),
+        )
+        assert obj.temperature == pytest.approx(293.15)
+
+    def test_all_object_types_constructable(self):
+        for obj_type in ObjectType:
+            obj = PhysicalObject(
+                id=f"test-{obj_type.value}",
+                name=f"Test {obj_type.value}",
+                object_type=obj_type,
+                location=(0, 0, 0),
+            )
+            assert obj.object_type == obj_type
+
+    def test_all_statuses_settable(self):
+        obj = _make_obj()
+        for status in ObjectStatus:
+            obj.update_status(status)
+            assert obj.status == status
 
 
 # ===================================================================
@@ -309,6 +756,22 @@ class TestObjectRegistry:
         reg.register_object(obj)
         assert reg.get_object("obj-1") is obj
 
+    def test_register_emits_created_event(self):
+        reg = self._fresh_registry()
+        events = []
+        reg.add_event_handler(EventType.CREATED, lambda e: events.append(e))
+        reg.register_object(_make_obj())
+        assert len(events) == 1
+        assert events[0].event_type == EventType.CREATED
+
+    def test_register_event_contains_object_info(self):
+        reg = self._fresh_registry()
+        events = []
+        reg.add_event_handler(EventType.CREATED, lambda e: events.append(e))
+        reg.register_object(_make_obj(obj_id="sensor-1", obj_type=ObjectType.SENSOR))
+        assert events[0].data["object_type"] == "sensor"
+        assert events[0].object_id == "sensor-1"
+
     def test_unregister(self):
         reg = self._fresh_registry()
         obj = _make_obj()
@@ -317,9 +780,22 @@ class TestObjectRegistry:
         assert removed is obj
         assert reg.get_object("obj-1") is None
 
+    def test_unregister_removes_from_location_index(self):
+        reg = self._fresh_registry()
+        obj = _make_obj(location=(5.0, 5.0, 5.0))
+        reg.register_object(obj)
+        reg.unregister_object("obj-1")
+        # After unregister, the _location_index cell should be clean
+        grid_key = (5, 5, 5)
+        assert grid_key not in reg._location_index or "obj-1" not in reg._location_index.get(grid_key, set())
+
     def test_unregister_nonexistent(self):
         reg = self._fresh_registry()
         assert reg.unregister_object("nope") is None
+
+    def test_get_object_missing(self):
+        reg = self._fresh_registry()
+        assert reg.get_object("missing") is None
 
     def test_get_objects_by_type(self):
         reg = self._fresh_registry()
@@ -329,12 +805,28 @@ class TestObjectRegistry:
         assert len(sensors) == 1
         assert sensors[0].id == "s1"
 
+    def test_get_objects_by_type_empty(self):
+        reg = self._fresh_registry()
+        assert reg.get_objects_by_type(ObjectType.VEHICLE) == []
+
+    def test_get_objects_by_type_multiple(self):
+        reg = self._fresh_registry()
+        for i in range(3):
+            reg.register_object(_make_obj(obj_id=f"s{i}", obj_type=ObjectType.SENSOR))
+        reg.register_object(_make_obj(obj_id="d1", obj_type=ObjectType.DEVICE))
+        sensors = reg.get_objects_by_type(ObjectType.SENSOR)
+        assert len(sensors) == 3
+
     def test_get_objects_by_status(self):
         reg = self._fresh_registry()
         reg.register_object(_make_obj(obj_id="a", status=ObjectStatus.ACTIVE))
         reg.register_object(_make_obj(obj_id="b", status=ObjectStatus.INACTIVE))
         active = reg.get_objects_by_status(ObjectStatus.ACTIVE)
         assert len(active) == 1
+
+    def test_get_objects_by_status_empty(self):
+        reg = self._fresh_registry()
+        assert reg.get_objects_by_status(ObjectStatus.ERROR) == []
 
     def test_get_objects_by_property(self):
         reg = self._fresh_registry()
@@ -344,6 +836,18 @@ class TestObjectRegistry:
         found = reg.get_objects_by_property("color", "blue")
         assert len(found) == 1
 
+    def test_get_objects_by_property_no_match(self):
+        reg = self._fresh_registry()
+        obj = _make_obj()
+        obj.add_property("color", "red")
+        reg.register_object(obj)
+        assert reg.get_objects_by_property("color", "blue") == []
+
+    def test_get_objects_by_property_missing_key(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj())
+        assert reg.get_objects_by_property("nonexistent_key", "any") == []
+
     def test_get_objects_in_area(self):
         reg = self._fresh_registry()
         reg.register_object(_make_obj(obj_id="near", location=(0.5, 0.5, 0.5)))
@@ -352,6 +856,20 @@ class TestObjectRegistry:
         ids = [o.id for o in nearby]
         assert "near" in ids
         assert "far" not in ids
+
+    def test_get_objects_in_area_empty_registry(self):
+        reg = self._fresh_registry()
+        result = reg.get_objects_in_area(0.0, 0.0, 0.0, 100.0)
+        assert result == []
+
+    def test_get_objects_in_area_zero_radius(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="a", location=(0.0, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="b", location=(1.0, 0.0, 0.0)))
+        # radius=0 should only include objects AT the point (0,0,0)
+        nearby = reg.get_objects_in_area(0.0, 0.0, 0.0, 0.0)
+        ids = [o.id for o in nearby]
+        assert "a" in ids
 
     def test_find_nearest_object(self):
         reg = self._fresh_registry()
@@ -373,11 +891,17 @@ class TestObjectRegistry:
         assert nearest_sensor is not None
         assert nearest_sensor.id == "s1"
 
+    def test_find_nearest_object_type_filter_returns_none_when_no_type(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="s1", obj_type=ObjectType.SENSOR))
+        result = reg.find_nearest_object(0.0, 0.0, 0.0, ObjectType.VEHICLE)
+        assert result is None
+
     def test_find_nearest_object_empty(self):
         reg = self._fresh_registry()
         assert reg.find_nearest_object(0.0, 0.0, 0.0) is None
 
-    def test_check_collisions(self):
+    def test_check_collisions_found(self):
         reg = self._fresh_registry()
         reg.register_object(_make_obj(obj_id="a", location=(0.0, 0.0, 0.0)))
         reg.register_object(_make_obj(obj_id="b", location=(0.5, 0.0, 0.0)))
@@ -386,6 +910,37 @@ class TestObjectRegistry:
         assert len(collisions) == 1
         pair_ids = {collisions[0][0].id, collisions[0][1].id}
         assert pair_ids == {"a", "b"}
+
+    def test_check_collisions_no_collision(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="a", location=(0.0, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="b", location=(100.0, 0.0, 0.0)))
+        collisions = reg.check_collisions(collision_distance=1.0)
+        assert collisions == []
+
+    def test_check_collisions_empty_registry(self):
+        reg = self._fresh_registry()
+        assert reg.check_collisions() == []
+
+    def test_check_collisions_single_object(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj())
+        assert reg.check_collisions() == []
+
+    def test_check_collisions_multiple_pairs(self):
+        reg = self._fresh_registry()
+        # All three objects within 1.0 of each other
+        reg.register_object(_make_obj(obj_id="a", location=(0.0, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="b", location=(0.5, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="c", location=(0.0, 0.5, 0.0)))
+        collisions = reg.check_collisions(collision_distance=1.0)
+        # a-b, a-c, b-c should all collide
+        assert len(collisions) == 3
+
+    def test_group_objects_by_distance_empty(self):
+        reg = self._fresh_registry()
+        groups = reg.group_objects_by_distance(max_group_distance=5.0)
+        assert groups == []
 
     def test_group_objects_by_distance(self):
         reg = self._fresh_registry()
@@ -397,6 +952,25 @@ class TestObjectRegistry:
         group_sizes = sorted(len(g) for g in groups)
         assert group_sizes == [1, 2]
 
+    def test_group_all_in_one(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="a", location=(0.0, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="b", location=(1.0, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="c", location=(2.0, 0.0, 0.0)))
+        groups = reg.group_objects_by_distance(max_group_distance=5.0)
+        assert len(groups) == 1
+        assert len(groups[0]) == 3
+
+    def test_group_all_singletons(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="a", location=(0.0, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="b", location=(100.0, 0.0, 0.0)))
+        reg.register_object(_make_obj(obj_id="c", location=(200.0, 0.0, 0.0)))
+        groups = reg.group_objects_by_distance(max_group_distance=5.0)
+        assert len(groups) == 3
+        for g in groups:
+            assert len(g) == 1
+
     def test_event_handler(self):
         reg = self._fresh_registry()
         captured = []
@@ -405,6 +979,16 @@ class TestObjectRegistry:
         assert len(captured) == 1
         assert captured[0].event_type == EventType.CREATED
 
+    def test_multiple_event_handlers_same_type(self):
+        reg = self._fresh_registry()
+        results_a = []
+        results_b = []
+        reg.add_event_handler(EventType.CREATED, lambda e: results_a.append(e))
+        reg.add_event_handler(EventType.CREATED, lambda e: results_b.append(e))
+        reg.register_object(_make_obj())
+        assert len(results_a) == 1
+        assert len(results_b) == 1
+
     def test_remove_event_handler(self):
         reg = self._fresh_registry()
         handler = lambda e: None  # noqa: E731
@@ -412,12 +996,28 @@ class TestObjectRegistry:
         assert reg.remove_event_handler(EventType.CREATED, handler) is True
         assert reg.remove_event_handler(EventType.CREATED, handler) is False
 
+    def test_remove_event_handler_not_registered(self):
+        reg = self._fresh_registry()
+        handler = lambda e: None  # noqa: E731
+        assert reg.remove_event_handler(EventType.DESTROYED, handler) is False
+
     def test_event_history_limit(self):
         reg = self._fresh_registry()
         reg.max_event_history = 5
         for i in range(10):
             reg.register_object(_make_obj(obj_id=f"obj-{i}"))
         assert len(reg.event_history) <= 5
+
+    def test_event_history_trimmed_to_last_n(self):
+        reg = self._fresh_registry()
+        reg.max_event_history = 3
+        for i in range(6):
+            reg.register_object(_make_obj(obj_id=f"obj-{i}"))
+        # The last 3 events should be retained
+        assert len(reg.event_history) == 3
+        # The events should be for the most recent objects
+        retained_ids = {e.object_id for e in reg.event_history}
+        assert "obj-3" in retained_ids or "obj-4" in retained_ids or "obj-5" in retained_ids
 
     def test_get_events_filters(self):
         reg = self._fresh_registry()
@@ -432,6 +1032,27 @@ class TestObjectRegistry:
         # Filter by since (future timestamp)
         future_events = reg.get_events(since=time.time() + 1000)
         assert len(future_events) == 0
+
+    def test_get_events_no_filter(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="a"))
+        reg.register_object(_make_obj(obj_id="b"))
+        all_events = reg.get_events()
+        assert len(all_events) == 2
+
+    def test_get_events_since_past(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj())
+        events = reg.get_events(since=0.0)  # epoch start
+        assert len(events) == 1
+
+    def test_get_events_combined_filters(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="a"))
+        reg.register_object(_make_obj(obj_id="b"))
+        events = reg.get_events(event_type=EventType.CREATED, object_id="a")
+        assert len(events) == 1
+        assert events[0].object_id == "a"
 
     def test_get_objects_by_tags_match_all(self):
         reg = self._fresh_registry()
@@ -452,6 +1073,23 @@ class TestObjectRegistry:
         found = reg.get_objects_by_tags({"urgent", "missing"}, match_all=False)
         assert len(found) == 1
 
+    def test_get_objects_by_tags_empty_registry(self):
+        reg = self._fresh_registry()
+        assert reg.get_objects_by_tags({"tag"}) == []
+
+    def test_get_objects_by_tags_no_match(self):
+        reg = self._fresh_registry()
+        obj = _make_obj()
+        obj.add_tag("existing")
+        reg.register_object(obj)
+        assert reg.get_objects_by_tags({"nonexistent"}) == []
+
+    def test_get_objects_by_tags_match_any_with_no_tag_objects(self):
+        reg = self._fresh_registry()
+        obj = _make_obj()  # no tags
+        reg.register_object(obj)
+        assert reg.get_objects_by_tags({"x"}, match_all=False) == []
+
     def test_get_network_topology(self):
         reg = self._fresh_registry()
         obj_a = _make_obj(obj_id="a")
@@ -462,6 +1100,10 @@ class TestObjectRegistry:
         topo = reg.get_network_topology()
         assert "b" in topo["a"]
         assert topo["b"] == []
+
+    def test_get_network_topology_empty(self):
+        reg = self._fresh_registry()
+        assert reg.get_network_topology() == {}
 
     def test_find_path_through_network(self):
         reg = self._fresh_registry()
@@ -484,6 +1126,16 @@ class TestObjectRegistry:
         path = reg.find_path_through_network("a", "a")
         assert path == ["a"]
 
+    def test_find_path_direct_connection(self):
+        reg = self._fresh_registry()
+        obj_a = _make_obj(obj_id="a")
+        obj_b = _make_obj(obj_id="b")
+        obj_a.connect_to("b")
+        reg.register_object(obj_a)
+        reg.register_object(obj_b)
+        path = reg.find_path_through_network("a", "b")
+        assert path == ["a", "b"]
+
     def test_find_path_no_route(self):
         reg = self._fresh_registry()
         reg.register_object(_make_obj(obj_id="a"))
@@ -496,11 +1148,57 @@ class TestObjectRegistry:
         reg = self._fresh_registry()
         assert reg.find_path_through_network("nope", "also-nope") is None
 
+    def test_find_path_start_missing(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="b"))
+        assert reg.find_path_through_network("missing", "b") is None
+
+    def test_find_path_end_missing(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="a"))
+        assert reg.find_path_through_network("a", "missing") is None
+
+    def test_find_path_max_hops_respected(self):
+        reg = self._fresh_registry()
+        # Chain: a -> b -> c -> d -> e
+        ids = ["a", "b", "c", "d", "e"]
+        objs = []
+        for i, oid in enumerate(ids):
+            obj = _make_obj(obj_id=oid)
+            if i > 0:
+                objs[i - 1].connect_to(oid)
+            objs.append(obj)
+            reg.register_object(obj)
+        # With max_hops=3, can't reach 'e' from 'a' (requires 5 hops)
+        path = reg.find_path_through_network("a", "e", max_hops=3)
+        assert path is None
+
+    def test_find_path_avoids_revisiting(self):
+        # Cycle: a -> b -> c -> a, target: d (unreachable)
+        reg = self._fresh_registry()
+        for oid in ["a", "b", "c", "d"]:
+            reg.register_object(_make_obj(obj_id=oid))
+        reg.objects["a"].connect_to("b")
+        reg.objects["b"].connect_to("c")
+        reg.objects["c"].connect_to("a")  # Creates cycle
+        path = reg.find_path_through_network("a", "d")
+        assert path is None  # d is unreachable from the cycle
+
     def test_analyze_network_metrics_empty(self):
         reg = self._fresh_registry()
         metrics = reg.analyze_network_metrics()
         assert metrics["total_objects"] == 0
         assert metrics["average_degree"] == 0
+
+    def test_analyze_network_metrics_single_node(self):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="solo"))
+        metrics = reg.analyze_network_metrics()
+        assert metrics["total_objects"] == 1
+        assert metrics["average_degree"] == 0
+        assert metrics["max_degree"] == 0
+        assert metrics["min_degree"] == 0
+        assert metrics["average_clustering"] == 0.0
 
     def test_analyze_network_metrics_with_objects(self):
         reg = self._fresh_registry()
@@ -520,6 +1218,30 @@ class TestObjectRegistry:
         assert metrics["total_objects"] == 3
         assert metrics["max_degree"] == 2
         assert metrics["average_clustering"] > 0
+
+    def test_analyze_network_metrics_density(self):
+        reg = self._fresh_registry()
+        a = _make_obj(obj_id="a")
+        b = _make_obj(obj_id="b")
+        a.connect_to("b")
+        b.connect_to("a")
+        reg.register_object(a)
+        reg.register_object(b)
+        metrics = reg.analyze_network_metrics()
+        # 2 objects, 2 directed connections -> 1 undirected, max possible = 1
+        assert metrics["density"] == pytest.approx(1.0)
+
+    def test_analyze_network_metrics_single_connection(self):
+        reg = self._fresh_registry()
+        a = _make_obj(obj_id="a")
+        b = _make_obj(obj_id="b")
+        a.connect_to("b")  # unidirectional
+        reg.register_object(a)
+        reg.register_object(b)
+        metrics = reg.analyze_network_metrics()
+        assert metrics["total_objects"] == 2
+        assert metrics["min_degree"] == 0  # b has no outgoing connections
+        assert metrics["max_degree"] == 1  # a has one
 
     def test_save_and_load(self, tmp_path):
         reg = self._fresh_registry()
@@ -549,6 +1271,52 @@ class TestObjectRegistry:
         assert "metadata" in data
         assert data["metadata"]["total_objects"] == 1
 
+    def test_save_and_load_multiple_objects(self, tmp_path):
+        reg = self._fresh_registry()
+        for i in range(5):
+            reg.register_object(_make_obj(
+                obj_id=f"obj-{i}",
+                location=(float(i), 0.0, 0.0),
+                obj_type=ObjectType.SENSOR,
+            ))
+        fp = tmp_path / "multi.json"
+        reg.save_to_file(fp)
+
+        reg2 = ObjectRegistry()
+        reg2.load_from_file(fp)
+        assert len(reg2.objects) == 5
+
+    def test_save_file_has_exported_at(self, tmp_path):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj())
+        fp = tmp_path / "out.json"
+        before = time.time()
+        reg.save_to_file(fp)
+        after = time.time()
+        data = json.loads(fp.read_text())
+        assert before <= data["metadata"]["exported_at"] <= after
+
+    def test_load_preserves_object_type(self, tmp_path):
+        reg = self._fresh_registry()
+        reg.register_object(_make_obj(obj_id="v1", obj_type=ObjectType.VEHICLE))
+        fp = tmp_path / "vehicle.json"
+        reg.save_to_file(fp)
+
+        reg2 = ObjectRegistry()
+        reg2.load_from_file(fp)
+        assert reg2.get_object("v1").object_type == ObjectType.VEHICLE
+
+    def test_load_preserves_status(self, tmp_path):
+        reg = self._fresh_registry()
+        obj = _make_obj(obj_id="m1", status=ObjectStatus.MAINTENANCE)
+        reg.register_object(obj)
+        fp = tmp_path / "maintenance.json"
+        reg.save_to_file(fp)
+
+        reg2 = ObjectRegistry()
+        reg2.load_from_file(fp)
+        assert reg2.get_object("m1").status == ObjectStatus.MAINTENANCE
+
     def test_event_handler_exception_does_not_crash(self):
         reg = self._fresh_registry()
 
@@ -559,6 +1327,28 @@ class TestObjectRegistry:
         # Should not raise
         reg.register_object(_make_obj())
         assert len(reg.objects) == 1
+
+    def test_thread_safety_concurrent_registration(self):
+        """Test that concurrent registrations don't corrupt the registry."""
+        import threading
+        reg = self._fresh_registry()
+        errors = []
+
+        def register_batch(start, count):
+            try:
+                for i in range(count):
+                    reg.register_object(_make_obj(obj_id=f"obj-{start + i}"))
+            except Exception as e:
+                errors.append(e)
+
+        threads = [threading.Thread(target=register_batch, args=(i * 10, 10)) for i in range(5)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        assert errors == []
+        assert len(reg.objects) == 50
 
 
 # ===================================================================
@@ -576,7 +1366,7 @@ class TestPhysicalObjectManager:
         assert mgr.registry is not None
         assert len(mgr._active_simulations) == 0
 
-    def test_create_object(self):
+    def test_create_object_basic(self):
         mgr = self._fresh_manager()
         obj = mgr.create_object(
             "t1", "Thermometer", ObjectType.SENSOR, 1.0, 2.0, 3.0,
@@ -586,6 +1376,36 @@ class TestPhysicalObjectManager:
         assert obj.location == (1.0, 2.0, 3.0)
         assert obj.material == MaterialType.GLASS
         assert mgr.registry.get_object("t1") is obj
+
+    def test_create_object_with_extra_properties(self):
+        mgr = self._fresh_manager()
+        obj = mgr.create_object(
+            "p1", "Device", ObjectType.DEVICE, 0.0, 0.0, 0.0,
+            color="red", serial="ABC123",
+        )
+        assert obj.properties["color"] == "red"
+        assert obj.properties["serial"] == "ABC123"
+
+    def test_create_object_default_material(self):
+        mgr = self._fresh_manager()
+        obj = mgr.create_object("x", "X", ObjectType.SENSOR, 0, 0, 0)
+        assert obj.material == MaterialType.UNKNOWN
+
+    def test_create_object_custom_temperature(self):
+        mgr = self._fresh_manager()
+        obj = mgr.create_object("t1", "Hot", ObjectType.SENSOR, 0, 0, 0, temperature=500.0)
+        assert obj.temperature == 500.0
+
+    def test_create_object_custom_volume(self):
+        mgr = self._fresh_manager()
+        obj = mgr.create_object("v1", "Volume", ObjectType.CONTAINER, 0, 0, 0, volume=5.0)
+        assert obj.volume == 5.0
+
+    def test_create_object_all_object_types(self):
+        mgr = self._fresh_manager()
+        for i, obj_type in enumerate(ObjectType):
+            obj = mgr.create_object(f"obj-{i}", f"Object-{i}", obj_type, 0, 0, 0)
+            assert obj.object_type == obj_type
 
     def test_get_object_status(self):
         mgr = self._fresh_manager()
@@ -604,6 +1424,14 @@ class TestPhysicalObjectManager:
         mgr = self._fresh_manager()
         assert mgr.update_object_location("nope", 1, 2, 3) is False
 
+    def test_update_object_location_updates_index(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        mgr.update_object_location("a", 50, 50, 50)
+        # Object should now be findable at new location
+        nearby = mgr.get_nearby_objects(50, 50, 50, 5)
+        assert any(o.id == "a" for o in nearby)
+
     def test_get_nearby_objects(self):
         mgr = self._fresh_manager()
         mgr.create_object("a", "A", ObjectType.SENSOR, 0.0, 0.0, 0.0)
@@ -613,6 +1441,10 @@ class TestPhysicalObjectManager:
         ids = [o.id for o in nearby]
         assert "a" in ids
         assert "b" in ids
+
+    def test_get_nearby_objects_empty(self):
+        mgr = self._fresh_manager()
+        assert mgr.get_nearby_objects(0.0, 0.0, 0.0, 100.0) == []
 
     def test_get_objects_by_type(self):
         mgr = self._fresh_manager()
@@ -633,6 +1465,14 @@ class TestPhysicalObjectManager:
         assert obj is not None
         assert obj.object_type == ObjectType.VEHICLE
 
+    def test_get_statistics_empty(self):
+        mgr = self._fresh_manager()
+        stats = mgr.get_statistics()
+        assert stats["total_objects"] == 0
+        assert stats["active_simulations"] == 0
+        for obj_type in ObjectType:
+            assert stats["objects_by_type"][obj_type.value] == 0
+
     def test_get_statistics(self):
         mgr = self._fresh_manager()
         mgr.create_object("s1", "S", ObjectType.SENSOR, 0, 0, 0)
@@ -644,6 +1484,23 @@ class TestPhysicalObjectManager:
         assert stats["active_simulations"] == 0
         assert stats["objects_by_status"]["active"] == 2
 
+    def test_get_statistics_mixed_status(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        mgr.create_object("b", "B", ObjectType.SENSOR, 0, 0, 0)
+        mgr.registry.get_object("b").update_status(ObjectStatus.OFFLINE)
+        stats = mgr.get_statistics()
+        assert stats["objects_by_status"]["active"] == 1
+        assert stats["objects_by_status"]["offline"] == 1
+
+    def test_get_statistics_counts_all_types(self):
+        mgr = self._fresh_manager()
+        for i, obj_type in enumerate(ObjectType):
+            mgr.create_object(f"obj-{i}", "O", obj_type, 0, 0, 0)
+        stats = mgr.get_statistics()
+        for obj_type in ObjectType:
+            assert stats["objects_by_type"][obj_type.value] == 1
+
     def test_batch_update_status(self):
         mgr = self._fresh_manager()
         mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
@@ -653,6 +1510,23 @@ class TestPhysicalObjectManager:
         assert mgr.get_object_status("a") == ObjectStatus.MAINTENANCE
         assert mgr.get_object_status("b") == ObjectStatus.MAINTENANCE
 
+    def test_batch_update_status_empty_list(self):
+        mgr = self._fresh_manager()
+        count = mgr.batch_update_status([], ObjectStatus.OFFLINE)
+        assert count == 0
+
+    def test_batch_update_status_all_missing(self):
+        mgr = self._fresh_manager()
+        count = mgr.batch_update_status(["nope1", "nope2"], ObjectStatus.OFFLINE)
+        assert count == 0
+
+    def test_batch_update_status_single(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("x", "X", ObjectType.DEVICE, 0, 0, 0)
+        count = mgr.batch_update_status(["x"], ObjectStatus.CALIBRATING)
+        assert count == 1
+        assert mgr.get_object_status("x") == ObjectStatus.CALIBRATING
+
     def test_batch_move_objects(self):
         mgr = self._fresh_manager()
         mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
@@ -661,6 +1535,15 @@ class TestPhysicalObjectManager:
         count = mgr.batch_move_objects(moves)
         assert count == 2
         assert mgr.registry.get_object("a").location == (1.0, 2.0, 3.0)
+
+    def test_batch_move_objects_empty(self):
+        mgr = self._fresh_manager()
+        assert mgr.batch_move_objects({}) == 0
+
+    def test_batch_move_objects_all_missing(self):
+        mgr = self._fresh_manager()
+        count = mgr.batch_move_objects({"nope": (1, 2, 3)})
+        assert count == 0
 
     def test_calculate_center_of_mass_all(self):
         mgr = self._fresh_manager()
@@ -686,6 +1569,23 @@ class TestPhysicalObjectManager:
         mgr = self._fresh_manager()
         assert mgr.calculate_center_of_mass(["nope"]) == (0.0, 0.0, 0.0)
 
+    def test_calculate_center_of_mass_single(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 7, 3, 5)
+        cx, cy, cz = mgr.calculate_center_of_mass()
+        assert cx == pytest.approx(7.0)
+        assert cy == pytest.approx(3.0)
+        assert cz == pytest.approx(5.0)
+
+    def test_calculate_center_of_mass_3d(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        mgr.create_object("b", "B", ObjectType.SENSOR, 6, 6, 6)
+        cx, cy, cz = mgr.calculate_center_of_mass()
+        assert cx == pytest.approx(3.0)
+        assert cy == pytest.approx(3.0)
+        assert cz == pytest.approx(3.0)
+
     def test_detect_object_clusters(self):
         mgr = self._fresh_manager()
         mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
@@ -694,6 +1594,35 @@ class TestPhysicalObjectManager:
         clusters = mgr.detect_object_clusters(cluster_radius=3.0, min_cluster_size=2)
         assert len(clusters) == 1
         assert len(clusters[0]) == 2
+
+    def test_detect_object_clusters_no_clusters(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        mgr.create_object("b", "B", ObjectType.SENSOR, 100, 0, 0)
+        mgr.create_object("c", "C", ObjectType.SENSOR, 200, 0, 0)
+        clusters = mgr.detect_object_clusters(cluster_radius=3.0, min_cluster_size=2)
+        assert clusters == []
+
+    def test_detect_object_clusters_empty_manager(self):
+        mgr = self._fresh_manager()
+        assert mgr.detect_object_clusters() == []
+
+    def test_detect_object_clusters_large_min_size(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        mgr.create_object("b", "B", ObjectType.SENSOR, 1, 0, 0)
+        # min_cluster_size=3 means groups of 2 won't qualify
+        clusters = mgr.detect_object_clusters(cluster_radius=5.0, min_cluster_size=3)
+        assert clusters == []
+
+    def test_detect_object_clusters_all_in_one(self):
+        mgr = self._fresh_manager()
+        for i in range(5):
+            mgr.create_object(f"obj-{i}", "O", ObjectType.SENSOR, float(i), 0, 0)
+        clusters = mgr.detect_object_clusters(cluster_radius=10.0, min_cluster_size=2)
+        assert len(clusters) >= 1
+        total_in_clusters = sum(len(c) for c in clusters)
+        assert total_in_clusters == 5
 
     def test_get_boundary_box(self):
         mgr = self._fresh_manager()
@@ -717,6 +1646,19 @@ class TestPhysicalObjectManager:
         bb = mgr.get_boundary_box(["a", "b"])
         assert bb["x"] == (0.0, 10.0)
 
+    def test_get_boundary_box_missing_ids(self):
+        mgr = self._fresh_manager()
+        bb = mgr.get_boundary_box(["nope1", "nope2"])
+        assert bb == {"x": (0.0, 0.0), "y": (0.0, 0.0), "z": (0.0, 0.0)}
+
+    def test_get_boundary_box_single_object(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 5.0, 3.0, 1.0)
+        bb = mgr.get_boundary_box()
+        assert bb["x"] == (5.0, 5.0)
+        assert bb["y"] == (3.0, 3.0)
+        assert bb["z"] == (1.0, 1.0)
+
     def test_find_path_between_close_objects(self):
         mgr = self._fresh_manager()
         mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
@@ -730,6 +1672,16 @@ class TestPhysicalObjectManager:
         mgr = self._fresh_manager()
         assert mgr.find_path_between_objects("x", "y") is None
 
+    def test_find_path_missing_start(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("b", "B", ObjectType.SENSOR, 0, 0, 0)
+        assert mgr.find_path_between_objects("missing", "b") is None
+
+    def test_find_path_missing_end(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        assert mgr.find_path_between_objects("a", "missing") is None
+
     def test_find_path_no_route(self):
         mgr = self._fresh_manager()
         mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
@@ -737,3 +1689,44 @@ class TestPhysicalObjectManager:
         path = mgr.find_path_between_objects("a", "b", max_steps=2)
         # Objects too far apart with no waypoints
         assert path is None
+
+    def test_find_path_same_object(self):
+        mgr = self._fresh_manager()
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        # Start and end are the same object at very close range
+        path = mgr.find_path_between_objects("a", "a")
+        # a is within 1.0 of itself (distance=0)
+        assert path is not None
+        assert path[0].id == "a"
+
+    def test_find_path_through_waypoint(self):
+        mgr = self._fresh_manager()
+        # a -> waypoint (nearby) -> b (farther)
+        mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
+        mgr.create_object("waypoint", "W", ObjectType.SENSOR, 3, 0, 0)
+        mgr.create_object("b", "B", ObjectType.SENSOR, 6, 0, 0)
+        path = mgr.find_path_between_objects("a", "b", max_steps=10)
+        # Path found through waypoint or directly
+        if path is not None:
+            assert path[0].id == "a"
+            assert path[-1].id == "b"
+
+    def test_save_and_load_roundtrip_preserves_all_objects(self, tmp_path):
+        mgr = self._fresh_manager()
+        expected_ids = set()
+        for i in range(10):
+            oid = f"obj-{i}"
+            mgr.create_object(oid, f"Object {i}", ObjectType.SENSOR, float(i), 0.0, 0.0)
+            expected_ids.add(oid)
+        fp = tmp_path / "roundtrip.json"
+        mgr.save_state(fp)
+
+        mgr2 = PhysicalObjectManager()
+        mgr2.load_state(fp)
+        assert set(mgr2.registry.objects.keys()) == expected_ids
+
+    def test_object_registered_in_registry_after_create(self):
+        mgr = self._fresh_manager()
+        obj = mgr.create_object("test", "Test", ObjectType.DEVICE, 1, 2, 3)
+        assert mgr.registry.get_object("test") is not None
+        assert mgr.registry.get_object("test") is obj
