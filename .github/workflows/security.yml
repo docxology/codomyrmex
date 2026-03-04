@@ -245,16 +245,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check Semgrep token
+        id: check_token
         run: |
-          if [ -z "${{ secrets.SEMGREP_APP_TOKEN }}" ]; then
+          if [ -n "${{ secrets.SEMGREP_APP_TOKEN }}" ]; then
+            echo "✅ SEMGREP_APP_TOKEN found, proceeding with scan"
+            echo "has_token=true" >> "$GITHUB_OUTPUT"
+          else
             echo "⚠️  SEMGREP_APP_TOKEN not configured — Semgrep scan skipped."
-            echo "   To enable: add SEMGREP_APP_TOKEN to repository secrets."
-            exit 0
+            echo "has_token=false" >> "$GITHUB_OUTPUT"
           fi
-          echo "✅ SEMGREP_APP_TOKEN found, proceeding with scan"
 
       - name: Run Semgrep
-        if: ${{ secrets.SEMGREP_APP_TOKEN != '' }}
+        if: steps.check_token.outputs.has_token == 'true'
         uses: semgrep/semgrep-action@v1
         with:
           config: >-
@@ -559,7 +561,7 @@ jobs:
                 : report;
               
               github.rest.issues.createComment({
-                issue_number: context.issue.number,
+                issue_number: context.payload.pull_request ? context.payload.pull_request.number : context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body: `## 🔒 Security Scan Results\n\n${summary}`
