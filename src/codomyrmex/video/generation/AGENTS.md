@@ -1,6 +1,6 @@
 # Video Generation -- Agent Coordination
 
-**Version**: v1.0.8 | **Updated**: March 2026
+**Version**: v1.1.0 | **Updated**: March 2026
 
 ## Overview
 

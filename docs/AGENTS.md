@@ -1,10 +1,10 @@
 # Codomyrmex Agents — docs
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 124 specialized modules.
+Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 127 specialized modules.
 
 ## Documentation Organization
 

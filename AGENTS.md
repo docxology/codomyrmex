@@ -1,12 +1,12 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 126 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 127 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -432,6 +432,7 @@ Before completing significant changes:
 
 ## Version History
 
+- **v1.1.0** (March 2026) - Release: 127 modules, 545 `@mcp_tool` decorators, repo-wide version sync to v1.1.0, RASP doc compliance 127/127
 - **v1.0.8** (March 2026) - Repo-wide doc audit: module count updated to 126; MCP auto-discovered updated to 121 (Sprint 22); ~407 dynamic tools; all metric references reconciled
 - **v1.0.7** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
 - **v1.0.5** (March 2026) - Sprint 16 MCP coverage, ruff violations zeroed, circular imports resolved

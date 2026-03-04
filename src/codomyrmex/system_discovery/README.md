@@ -1,6 +1,6 @@
 # System Discovery Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 Module scanning, capability discovery, and system status reporting.
 

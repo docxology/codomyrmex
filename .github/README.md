@@ -35,7 +35,7 @@ Codomyrmex is a production-grade library of 126 deeply integrated modules spanni
 | [**docs/getting-started/**](docs/getting-started/) | 18 | Quick start, installation, setup, tutorials |
 | [**docs/development/**](docs/development/) | 9 | Dev environment, testing strategy, contribution guides |
 | [**docs/reference/**](docs/reference/) | 15 | API reference, CLI reference, troubleshooting |
-| [**docs/modules/**](docs/modules/) | 740 | Per-module documentation for all 126 modules |
+| [**docs/modules/**](docs/modules/) | 740 | Per-module documentation for all 127 modules |
 | [**docs/agents/**](docs/agents/) | 9 | Agent rules, coordination, autonomous operation |
 | [**docs/integration/**](docs/integration/) | 11 | External service integration (Google, GitHub, etc.) |
 | [**docs/deployment/**](docs/deployment/) | 5 | Production deployment guides and checklists |
@@ -406,7 +406,7 @@ codomyrmex/
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
-├── src/codomyrmex/           # Main source (126 modules)
+├── src/codomyrmex/           # Main source (127 modules)
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
 │   ├── security/             # 47 files
@@ -540,7 +540,7 @@ graph TB
         Src1["agents/"]
         Src2["llm/"]
         Src3["security/"]
-        SrcDots["... 126 modules"]
+        SrcDots["... 127 modules"]
     end
 
     C1 -.->|"YAML load"| S1
@@ -633,5 +633,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>126 modules · 1,800+ Python files · 800+ tests · 900+ docs · Zero-Mock · Production-Grade</sub>
+  <sub>127 modules · 1,800+ Python files · 800+ tests · 900+ docs · Zero-Mock · Production-Grade</sub>
 </p>

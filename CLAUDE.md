@@ -312,12 +312,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/tests/unit/agentic_memory/test_rule_loader_property.py (edit), scripts/docs/add_rule_crossref.py (create), scripts/docs/add_rule_crossref.py (edit)
+Files: src/codomyrmex/tests/unit/coding/test_dashboard_mixin.py (edit)
 
 ## Crash Recovery
-Last session (2026-03-04T12:56:37.688561) was not properly closed (crash/kill).
-Recorded 5 file changes before crash.
-Last changed files: scripts/docs/add_rule_crossref.py, src/codomyrmex/tests/unit/agentic_memory/test_rule_loader_property.py
+Last session (2026-03-04T14:09:55.034072) was not properly closed (crash/kill).
+Recorded 4 file changes before crash.
+Last changed files: src/codomyrmex/tests/unit/coding/test_dashboard_mixin.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

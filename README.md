@@ -99,7 +99,7 @@ Codomyrmex is the **toolbox** for the [Personal AI Infrastructure](https://githu
 | **Verify** | `static_analysis`, `security`, `validation` | Test and validate |
 | **Learn** | `agentic_memory`, `telemetry` | Store insights |
 
-**MCP Bridge**: 424 dynamic tools across 126 auto-discovered modules  
+**MCP Bridge**: Dynamic tools across 127 auto-discovered modules  
 **Trust model**: `UNTRUSTED` → `VERIFIED` → `TRUSTED`  
 **Deep dive**: [`PAI.md`](PAI.md) · [`docs/pai/`](docs/pai/)
 
@@ -151,7 +151,7 @@ uv run mutmut run                                # 6-file mutation suite
 | MCP tools | **424** dynamically discovered |
 | Test suite | **21,000+** tests |
 | Coverage | ~32% (gate: 31%) |
-| `@mcp_tool` decorators | **917** |
+| `@mcp_tool` decorators | **545** |
 | Ruff violations | **0** |
 | PAI skills | **81** installed |
 | RASP docs compliance | **127/127** |

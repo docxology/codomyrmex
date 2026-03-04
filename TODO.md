@@ -18,7 +18,7 @@ This is the authoritative project backlog. Updated after each sprint.
 | Ruff violations | **0** ✅ | Sprint 22 re-zeroed |
 | Pass-only function stubs | **4** intentional no-ops | AST analysis |
 | Coverage gate | `fail_under=31`; actual ~32% ✅ | Gate ratcheted |
-| MCP `@mcp_tool` decorators | **917** | `grep -r '@mcp_tool'` |
+| MCP `@mcp_tool` decorators | **545** | `grep -r '@mcp_tool'` |
 | RASP documentation | 127/127 | Automated audit |
 | `py.typed` markers | **572** | PEP 561 ✅ |
 | Zero-Mock policy | Enforced via ruff | `pyproject.toml` |

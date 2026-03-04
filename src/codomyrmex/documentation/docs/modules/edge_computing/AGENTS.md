@@ -1,6 +1,6 @@
 # Edge Computing -- Agent Integration Guide
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Agent Capabilities
 

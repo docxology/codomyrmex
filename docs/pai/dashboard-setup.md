@@ -1,6 +1,6 @@
 # Dashboard Setup Guide
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 Two dashboards exist in the PAI-Codomyrmex ecosystem. They serve different purposes and run on different ports.
 
@@ -28,7 +28,7 @@ open http://localhost:8787/
 | Tab | URL | What It Shows |
 |-----|-----|---------------|
 | **Overview** | `/` | System status, module count, uptime, git branch, coverage |
-| **Modules** | `/modules` | All 126 modules with status (Active / ImportError / SyntaxError) |
+| **Modules** | `/modules` | All 127 modules with status (Active / ImportError / SyntaxError) |
 | **Agents** | `/agents` | AI agent integrations (Claude, Jules, Codex, Aider, etc.) |
 | **Scripts** | `/scripts` | Executable scripts in `scripts/`; run them with args from UI |
 | **Config** | `/config` | Read/edit `.json`, `.toml`, `.yaml` config files |

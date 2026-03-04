@@ -1,7 +1,7 @@
 # PAI: Personal AI Infrastructure Integration
 
 **Upstream**: [github.com/danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
-**Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0-dev | **Status**: Active | **Last Updated**: February 2026
 
 ---
 

@@ -1,6 +1,6 @@
 # Orchestrator Module - Technical Specification
 
-**Version**: v1.0.8 | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Last Updated**: March 2026
 
 ## Overview
 

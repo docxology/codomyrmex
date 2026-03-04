@@ -1,21 +1,27 @@
 """Property-based tests for RuleLoader._parse_sections using Hypothesis (zero-mock)."""
 from __future__ import annotations
+
 import re
+
 import pytest
 from hypothesis import assume, given
 from hypothesis import strategies as st
+
 from codomyrmex.agentic_memory.rules.loader import RuleLoader
 from codomyrmex.agentic_memory.rules.models import RuleSection
+
 pytestmark = pytest.mark.unit
 _HEADING_RE = re.compile(r"^#{1,3}\s+(\d+)\.\s+(.+)$", re.MULTILINE)
 _NO_HASH = st.characters(blacklist_characters="#")
+_SAFE_TEXT_MAX = 5000
+_SAFE_TITLE_MAX = 60
 
 
 def _build_raw(bodies: list[str], numbers: list[int] | None = None) -> str:
     """Build a .cursorrules string with numbered headings and no-hash body text."""
     nums = numbers if numbers is not None else list(range(len(bodies)))
     lines: list[str] = []
-    for idx, body in zip(nums, bodies):
+    for idx, body in zip(nums, bodies, strict=False):
         lines.append(f"## {idx}. Section {idx}")
         lines.append(body.replace("\n#", "\n-"))
     return "\n".join(lines)
@@ -30,7 +36,7 @@ class TestParseSectionsLength:
         assert isinstance(sections, list)
         assert len(sections) >= 1
 
-    @given(st.text(min_size=1, max_size=5000))
+    @given(st.text(min_size=1, max_size=_SAFE_TEXT_MAX))
     def test_large_text_yields_at_least_one_result(self, raw: str) -> None:
         sections = RuleLoader._parse_sections(raw)
         assert sections  # non-empty list is truthy
@@ -112,7 +118,7 @@ class TestParseSectionsQuality:
         for s in sections:
             assert isinstance(s.title, str) and s.title
 
-    @given(st.text(alphabet=st.characters(blacklist_characters="\n\r#"), min_size=1, max_size=60))
+    @given(st.text(alphabet=st.characters(blacklist_characters="\n\r#"), min_size=1, max_size=_SAFE_TITLE_MAX))
     def test_heading_title_captured_correctly(self, title: str) -> None:
         safe = title.strip()
         assume(len(safe) >= 1)

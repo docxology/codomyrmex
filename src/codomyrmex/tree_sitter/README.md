@@ -1,6 +1,6 @@
 # Tree-Sitter Module
 
-**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 Code parsing with tree-sitter for syntax analysis and transformations.
 

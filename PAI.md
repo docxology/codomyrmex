@@ -1,6 +1,6 @@
 # Codomyrmex &harr; PAI System Bridge
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## What Is PAI?
 
@@ -23,7 +23,7 @@ Codomyrmex is a **126-module Python development platform**. PAI agents consume c
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              126 modules of dev-platform tools
+     Algorithm + Skills + Hooks              127 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
