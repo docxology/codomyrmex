@@ -39,7 +39,7 @@ Incremental release focused on quality ramp, documentation polish, and developer
 | **Dashboard WebSocket** | `website/` | Replace 15s polling with real-time push |
 | **Coverage ramp 31→35%** | `pyproject.toml` | Ratchet `fail_under`, add tests for uncovered modules |
 | **Lighthouse CI** | `.github/workflows/` | Performance budget enforcement for documentation site |
-| **Rules CLI** | `cli/` | `codomyrmex rules list` and `codomyrmex rules check <file>` |
+| ~~**Rules CLI**~~ ✅ | `cli/` | Already implemented: `codomyrmex rules list` and `codomyrmex rules check <file>` |
 | **Rule-AGENTS cross-ref** | `agentic_memory/rules/` | Cross-reference rules to corresponding `AGENTS.md` files |
 | **Gemini workflow health** | `.github/workflows/` | Verify 5 Gemini workflows + API key integration check |
 
