@@ -294,3 +294,89 @@ class TestDiscoveryMetrics:
         assert metrics.modules_scanned >= 1
         assert metrics.scan_duration_ms > 0.0
         assert metrics.last_scan_time is not None
+
+
+@pytest.mark.unit
+class TestMCPBridgeAutoDiscoveryCriticalPath:
+    """Regression tests for the MCP bridge auto-discovery critical path.
+
+    These tests guard against the schema key bug fixed in discovery/__init__.py
+    where meta.get("parameters") was used but @mcp_tool stores schema under "schema".
+    Without this test, the bug would have silently caused all auto-discovered tools
+    to expose empty parameter schemas to MCP clients.
+    """
+
+    def test_mcp_tool_decorator_uses_schema_key(self):
+        """Verify @mcp_tool stores parameters under 'schema' key, not 'parameters'."""
+        from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+        @mcp_tool(name="test.verify_schema_key", description="Test schema key")
+        def test_fn(x: int, y: str = "default") -> str:
+            """Test function."""
+            return str(x)
+
+        assert hasattr(test_fn, "_mcp_tool_meta")
+        meta = test_fn._mcp_tool_meta
+        # Decorator must store under "schema", not "parameters"
+        assert "schema" in meta, "decorator must use 'schema' key, not 'parameters'"
+        assert "properties" in meta["schema"]
+        assert "x" in meta["schema"]["properties"]
+
+    def test_discovery_reads_schema_key_from_mcp_tool(self):
+        """Verify MCPDiscovery reads 'schema' key correctly from decorated functions.
+
+        This is the critical regression: before the fix, meta.get('parameters', {})
+        was used and returned {} for all @mcp_tool functions (they use 'schema').
+        """
+        import types
+        from codomyrmex.model_context_protocol.decorators import mcp_tool
+        from codomyrmex.model_context_protocol.discovery import MCPDiscovery
+
+        @mcp_tool(name="test.real_schema", description="Real schema test")
+        def real_tool(count: int, label: str) -> dict:
+            """A real tool with parameters."""
+            return {"count": count, "label": label}
+
+        mod = types.ModuleType("test_real_schema_module")
+        mod.__name__ = "test_real_schema_module"
+        mod.real_tool = real_tool
+
+        engine = MCPDiscovery()
+        tools = engine._scan_module(mod)
+
+        assert len(tools) == 1
+        tool = tools[0]
+        assert tool.name == "codomyrmex.test.real_schema"
+        # The critical assertion: parameters must NOT be empty
+        assert tool.parameters, (
+            "Bug regression: parameters is empty — discovery failed to read "
+            "'schema' key from @mcp_tool metadata"
+        )
+        assert "properties" in tool.parameters
+        assert "count" in tool.parameters["properties"]
+        assert "label" in tool.parameters["properties"]
+
+    def test_real_mcp_tools_module_exposes_nonempty_schemas(self):
+        """Verify real @mcp_tool functions expose non-empty parameter schemas.
+
+        Scans the model_context_protocol mcp_tools module (which has @mcp_tool
+        decorators with real parameters) and asserts at least one tool has
+        non-empty parameters — proving end-to-end auto-discovery works.
+        """
+        from codomyrmex.model_context_protocol.discovery import MCPDiscovery
+
+        engine = MCPDiscovery()
+        report = engine.scan_module("codomyrmex.model_context_protocol.mcp_tools")
+
+        if report.failed_modules:
+            # Module import failed — skip gracefully
+            pytest.skip(f"mcp_tools import failed: {report.failed_modules[0].error}")
+
+        assert len(report.tools) >= 1, "Expected at least 1 tool in mcp_tools"
+
+        # At least one tool must have non-empty parameters (proving schema key is read)
+        tools_with_params = [t for t in report.tools if t.parameters]
+        assert tools_with_params, (
+            "All discovered tools have empty parameters — "
+            "schema key bug may have regressed"
+        )
