@@ -17,6 +17,7 @@ class SerializationError(CodomyrmexError):
         message: Error description.
         format: Serialization format (JSON, YAML, MessagePack, etc.).
         data_type: Type of data being serialized.
+
     """
 
     def __init__(
@@ -26,6 +27,7 @@ class SerializationError(CodomyrmexError):
         data_type: str | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, **kwargs)
         if format:
             self.context["format"] = format
@@ -41,6 +43,7 @@ class DeserializationError(SerializationError):
         format: Expected serialization format.
         raw_data_preview: Preview of the raw data that failed to deserialize.
         expected_type: The expected output type.
+
     """
 
     def __init__(
@@ -51,6 +54,7 @@ class DeserializationError(SerializationError):
         expected_type: str | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, format=format, **kwargs)
         # Truncate raw data preview to avoid huge context
         if raw_data_preview:
@@ -69,6 +73,7 @@ class SchemaValidationError(SerializationError):
         schema_name: Name of the schema.
         validation_errors: List of specific validation failures.
         path: JSON path or location of the validation error.
+
     """
 
     def __init__(
@@ -79,6 +84,7 @@ class SchemaValidationError(SerializationError):
         path: str | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, **kwargs)
         if schema_name:
             self.context["schema_name"] = schema_name
@@ -95,6 +101,7 @@ class EncodingError(SerializationError):
         message: Error description.
         encoding: The encoding that failed (UTF-8, ASCII, etc.).
         position: Position in data where encoding error occurred.
+
     """
 
     def __init__(
@@ -104,6 +111,7 @@ class EncodingError(SerializationError):
         position: int | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, **kwargs)
         if encoding:
             self.context["encoding"] = encoding
@@ -118,6 +126,7 @@ class FormatNotSupportedError(SerializationError):
         message: Error description.
         requested_format: The format that was requested.
         supported_formats: List of supported formats.
+
     """
 
     def __init__(
@@ -127,6 +136,7 @@ class FormatNotSupportedError(SerializationError):
         supported_formats: list[str] | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, **kwargs)
         if requested_format:
             self.context["requested_format"] = requested_format
@@ -141,6 +151,7 @@ class CircularReferenceError(SerializationError):
         message: Error description.
         object_type: Type of object with circular reference.
         reference_path: Path to the circular reference.
+
     """
 
     def __init__(
@@ -150,6 +161,7 @@ class CircularReferenceError(SerializationError):
         reference_path: str | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, **kwargs)
         if object_type:
             self.context["object_type"] = object_type
@@ -165,6 +177,7 @@ class TypeConversionError(SerializationError):
         source_type: The source type.
         target_type: The target type.
         value_preview: Preview of the value that failed conversion.
+
     """
 
     def __init__(
@@ -175,6 +188,7 @@ class TypeConversionError(SerializationError):
         value_preview: str | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, **kwargs)
         if source_type:
             self.context["source_type"] = source_type
@@ -193,6 +207,7 @@ class BinaryFormatError(SerializationError):
         message: Error description.
         format: Binary format (MessagePack, Protobuf, Avro, etc.).
         operation: The operation that failed (pack, unpack, etc.).
+
     """
 
     def __init__(
@@ -202,6 +217,7 @@ class BinaryFormatError(SerializationError):
         operation: str | None = None,
         **kwargs: Any
     ):
+        """Initialize exception."""
         super().__init__(message, format=format, **kwargs)
         if operation:
             self.context["operation"] = operation

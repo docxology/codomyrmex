@@ -4,8 +4,8 @@ import io
 from typing import Any
 
 import fastavro
-import msgpack
-import pandas as pd
+import msgpack  # type: ignore[import-untyped]
+import pandas as pd  # type: ignore[import-untyped]
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -17,7 +17,7 @@ class MsgpackSerializer:
     @staticmethod
     def serialize(data: Any) -> bytes:
         """Serialize this object to a portable format."""
-        return msgpack.packb(data, use_bin_type=True)
+        return msgpack.packb(data, use_bin_type=True)  # type: ignore[no-any-return]
 
     @staticmethod
     def deserialize(data: bytes) -> Any:
@@ -37,9 +37,10 @@ class AvroSerializer:
     @staticmethod
     def deserialize(data: bytes) -> list[dict[str, Any]]:
         """Deserialize from a portable format and return an instance."""
+        from typing import cast
         inp = io.BytesIO(data)
         reader = fastavro.reader(inp)
-        return list(reader)
+        return cast("list[dict[str, Any]]", list(reader))
 
 class ParquetSerializer:
     """Parquet serialization using pandas and pyarrow."""
@@ -57,4 +58,4 @@ class ParquetSerializer:
         """Deserialize from a portable format and return an instance."""
         inp = io.BytesIO(data)
         df = pd.read_parquet(inp, engine='pyarrow')
-        return df.to_dict('records')
+        return df.to_dict('records')  # type: ignore[no-any-return]
