@@ -1,5 +1,4 @@
-"""
-Communication channels for inter-agent messaging.
+"""Communication channels for inter-agent messaging.
 
 Provides Channel, MessageQueue, and ChannelManager classes for
 establishing communication pathways between agents.
@@ -22,6 +21,7 @@ logger = get_logger(__name__)
 
 class ChannelState(Enum):
     """State of a communication channel."""
+
     OPEN = "open"
     CLOSED = "closed"
     PAUSED = "paused"
@@ -31,6 +31,7 @@ class ChannelState(Enum):
 @dataclass
 class ChannelInfo:
     """Information about a channel."""
+
     channel_id: str
     name: str
     state: ChannelState
@@ -51,8 +52,7 @@ class ChannelInfo:
 
 
 class Channel(ABC):
-    """
-    Abstract base class for communication channels.
+    """Abstract base class for communication channels.
 
     Channels provide a conduit for message passing between agents.
     Different channel implementations support different messaging patterns.
@@ -110,8 +110,7 @@ class Channel(ABC):
 
 
 class MessageQueue:
-    """
-    Async message queue for buffering messages.
+    """Async message queue for buffering messages.
 
     Provides a thread-safe, async-compatible queue for agent messages
     with optional maximum size and message expiration.
@@ -119,6 +118,7 @@ class MessageQueue:
     Attributes:
         max_size: Maximum queue size (0 for unlimited).
         message_ttl: Time-to-live for messages in seconds (0 for no expiration).
+
     """
 
     def __init__(self, max_size: int = 0, message_ttl: float = 0):
@@ -143,8 +143,7 @@ class MessageQueue:
         return self._max_size > 0 and self._queue.full()
 
     async def put(self, message: AgentMessage, timeout: float | None = None) -> None:
-        """
-        Put a message in the queue.
+        """Put a message in the queue.
 
         Args:
             message: The message to queue.
@@ -152,6 +151,7 @@ class MessageQueue:
 
         Raises:
             ChannelError: If the queue is full and timeout expires.
+
         """
         try:
             if timeout:
@@ -174,8 +174,7 @@ class MessageQueue:
             raise ChannelError("message_queue", "Queue is full") from None
 
     async def get(self, timeout: float | None = None) -> AgentMessage:
-        """
-        Get a message from the queue.
+        """Get a message from the queue.
 
         Args:
             timeout: Optional timeout in seconds.
@@ -185,6 +184,7 @@ class MessageQueue:
 
         Raises:
             ChannelError: If timeout expires before a message is available.
+
         """
         try:
             if timeout:
@@ -227,8 +227,7 @@ class MessageQueue:
 
 
 class QueueChannel(Channel):
-    """
-    A channel backed by a message queue.
+    """A channel backed by a message queue.
 
     Supports point-to-point messaging with message buffering.
     """
@@ -271,8 +270,7 @@ class QueueChannel(Channel):
 
 
 class ChannelManager:
-    """
-    Manager for creating and maintaining communication channels.
+    """Manager for creating and maintaining communication channels.
 
     Provides a centralized registry for channels and handles
     channel lifecycle management.
@@ -287,8 +285,7 @@ class ChannelManager:
         channel_type: str = "queue",
         **kwargs
     ) -> Channel:
-        """
-        Create a new channel.
+        """Create a new channel.
 
         Args:
             name: Human-readable channel name.
@@ -297,6 +294,7 @@ class ChannelManager:
 
         Returns:
             The created channel.
+
         """
         if channel_type == "queue":
             channel = QueueChannel(name=name, **kwargs)

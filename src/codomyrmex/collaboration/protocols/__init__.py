@@ -1,5 +1,4 @@
-"""
-Multi-agent coordination protocols.
+"""Multi-agent coordination protocols.
 
 Provides protocols and utilities for agent collaboration and swarm behavior.
 """
@@ -17,6 +16,7 @@ from typing import Any, Optional
 
 class AgentState(Enum):
     """States an agent can be in."""
+
     IDLE = "idle"
     BUSY = "busy"
     WAITING = "waiting"
@@ -25,6 +25,7 @@ class AgentState(Enum):
 
 class MessageType(Enum):
     """Types of messages between agents."""
+
     REQUEST = "request"
     RESPONSE = "response"
     BROADCAST = "broadcast"
@@ -35,6 +36,7 @@ class MessageType(Enum):
 @dataclass
 class AgentMessage:
     """Message passed between agents."""
+
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     sender_id: str = ""
     receiver_id: str | None = None  # None = broadcast
@@ -71,6 +73,7 @@ class AgentMessage:
 @dataclass
 class AgentCapability:
     """A capability that an agent possesses."""
+
     name: str
     description: str
     input_schema: dict[str, Any] | None = None
@@ -153,6 +156,7 @@ class AgentCoordinator:
     """Coordinates communication and task distribution between agents."""
 
     def __init__(self):
+        """Initialize AgentCoordinator."""
         self.agents: dict[str, BaseAgent] = {}
         self.message_log: list[AgentMessage] = []
         self.protocols: dict[str, AgentProtocol] = {}
@@ -207,9 +211,11 @@ class RoundRobinProtocol(AgentProtocol):
     """Distributes tasks to agents in round-robin fashion."""
 
     def __init__(self):
+        """Initialize RoundRobinProtocol."""
         self._current_index = 0
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Select agents."""
         if not available_agents:
             return []
 
@@ -218,6 +224,7 @@ class RoundRobinProtocol(AgentProtocol):
         return [agent]
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
+        """Execute task."""
         if not agents:
             raise ValueError("No agents available")
 
@@ -233,9 +240,11 @@ class BroadcastProtocol(AgentProtocol):
     """Broadcasts task to all agents and collects results."""
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Select agents."""
         return available_agents
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> list[Any]:
+        """Execute task."""
         tasks = []
         for agent in agents:
             agent.state = AgentState.BUSY
@@ -252,12 +261,15 @@ class CapabilityRoutingProtocol(AgentProtocol):
     """Routes tasks to agents based on required capabilities."""
 
     def __init__(self, required_capability: str):
+        """Initialize CapabilityRoutingProtocol."""
         self.required_capability = required_capability
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Select agents."""
         return [a for a in available_agents if a.has_capability(self.required_capability)]
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
+        """Execute task."""
         if not agents:
             raise ValueError(f"No agents with capability: {self.required_capability}")
 
@@ -274,12 +286,15 @@ class ConsensusProtocol(AgentProtocol):
     """Requires consensus among agents for task completion."""
 
     def __init__(self, quorum: float = 0.5):
+        """Initialize ConsensusProtocol."""
         self.quorum = quorum  # Percentage of agents that must agree
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Select agents."""
         return available_agents
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
+        """Execute task."""
         if not agents:
             raise ValueError("No agents available for consensus")
 

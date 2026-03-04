@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 
 class AgentRole(Enum):
     """Roles an agent can assume in a swarm."""
+
     CODER = "coder"
     REVIEWER = "reviewer"
     ARCHITECT = "architect"
@@ -29,6 +30,7 @@ class AgentRole(Enum):
 
 class SwarmMessageType(Enum):
     """Types of swarm messages."""
+
     TASK_ASSIGNMENT = "task_assignment"
     REVIEW_REQUEST = "review_request"
     APPROVAL_VOTE = "approval_vote"
@@ -39,6 +41,7 @@ class SwarmMessageType(Enum):
 
 class TaskStatus(Enum):
     """Status of a swarm task."""
+
     PENDING = "pending"
     ASSIGNED = "assigned"
     IN_PROGRESS = "in_progress"
@@ -60,6 +63,7 @@ class SwarmMessage:
         payload: Message payload.
         message_id: Unique message identifier.
         timestamp: Creation timestamp.
+
     """
 
     message_type: SwarmMessageType
@@ -70,6 +74,7 @@ class SwarmMessage:
     timestamp: float = 0.0
 
     def __post_init__(self) -> None:
+        """Initialize missing message id."""
         if not self.message_id:
             self.message_id = str(uuid.uuid4())[:8]
         if not self.timestamp:
@@ -97,6 +102,7 @@ class SwarmAgent:
         capabilities: Set of capability tags (e.g. ``python``, ``security``).
         active_tasks: Number of currently assigned tasks.
         max_concurrent: Maximum concurrent tasks.
+
     """
 
     agent_id: str
@@ -140,6 +146,7 @@ class TaskAssignment:
         status: Current task status.
         priority: Task priority (lower = higher priority).
         result: Task result payload.
+
     """
 
     task_id: str = ""
@@ -152,6 +159,7 @@ class TaskAssignment:
     result: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Initialize missing task id."""
         if not self.task_id:
             self.task_id = str(uuid.uuid4())[:8]
 

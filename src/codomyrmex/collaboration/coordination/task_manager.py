@@ -1,5 +1,4 @@
-"""
-Task management and scheduling for multi-agent workflows.
+"""Task management and scheduling for multi-agent workflows.
 
 Provides TaskManager for task scheduling, dependency resolution,
 and load balancing across agents.
@@ -24,6 +23,7 @@ logger = get_logger(__name__)
 
 class SchedulingStrategy(Enum):
     """Task scheduling strategies."""
+
     FIFO = "fifo"              # First-in, first-out
     PRIORITY = "priority"       # By task priority
     SHORTEST_FIRST = "shortest" # Estimate shortest tasks first
@@ -33,14 +33,14 @@ class SchedulingStrategy(Enum):
 @dataclass(order=True)
 class PriorityTask:
     """Wrapper for priority queue ordering."""
+
     priority: int
     timestamp: float = field(compare=True)
     task: Task = field(compare=False)
 
 
 class TaskQueue:
-    """
-    Priority-based task queue.
+    """Priority-based task queue.
 
     Manages pending tasks with priority ordering and dependency tracking.
     """
@@ -97,8 +97,7 @@ class TaskQueue:
 
 
 class DependencyGraph:
-    """
-    Tracks task dependencies for workflow execution.
+    """Tracks task dependencies for workflow execution.
 
     Enables topological sorting and dependency resolution.
     """
@@ -176,8 +175,7 @@ class DependencyGraph:
 
 
 class TaskManager:
-    """
-    Manages task scheduling and distribution to agents.
+    """Manages task scheduling and distribution to agents.
 
     Provides task queuing, dependency resolution, load balancing,
     and result tracking for multi-agent workflows.
@@ -185,6 +183,7 @@ class TaskManager:
     Attributes:
         strategy: Scheduling strategy to use.
         max_concurrent: Maximum concurrent tasks per agent.
+
     """
 
     def __init__(
@@ -203,11 +202,11 @@ class TaskManager:
         self._callbacks: list[Callable[[Task, TaskResult], None]] = []
 
     def submit(self, task: Task) -> str:
-        """
-        Submit a task for execution.
+        """Submit a task for execution.
 
         Returns:
             The task ID.
+
         """
         task.status = TaskStatus.QUEUED
         self._queue.push(task)
@@ -220,8 +219,7 @@ class TaskManager:
         return [self.submit(task) for task in tasks]
 
     def cancel(self, task_id: str) -> bool:
-        """
-        Cancel a pending task.
+        """Cancel a pending task.
 
         Running tasks cannot be cancelled through this method.
         """
@@ -242,8 +240,7 @@ class TaskManager:
         self,
         agent: CollaborativeAgent,
     ) -> Task | None:
-        """
-        Get the next task for an agent to execute.
+        """Get the next task for an agent to execute.
 
         Considers agent capabilities, current load, and dependencies.
         """
@@ -364,8 +361,7 @@ class TaskManager:
         agents: list[CollaborativeAgent],
         on_progress: Callable[[Task, TaskResult], None] | None = None,
     ) -> dict[str, TaskResult]:
-        """
-        Run all queued tasks as a workflow.
+        """Run all queued tasks as a workflow.
 
         Automatically assigns tasks to agents and waits for completion.
 
@@ -375,6 +371,7 @@ class TaskManager:
 
         Returns:
             Dictionary mapping task IDs to results.
+
         """
         if on_progress:
             self.add_callback(on_progress)

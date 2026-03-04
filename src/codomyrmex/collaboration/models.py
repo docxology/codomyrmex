@@ -1,5 +1,4 @@
-"""
-Core data models for the collaboration module.
+"""Core data models for the collaboration module.
 
 Provides Task, TaskResult, SwarmStatus, and AgentStatus dataclasses
 for multi-agent collaboration workflows.
@@ -14,6 +13,7 @@ from typing import Any
 
 class TaskPriority(Enum):
     """Priority levels for tasks."""
+
     LOW = 1
     NORMAL = 5
     HIGH = 8
@@ -22,6 +22,7 @@ class TaskPriority(Enum):
 
 class TaskStatus(Enum):
     """Status of a task in the system."""
+
     PENDING = "pending"
     QUEUED = "queued"
     RUNNING = "running"
@@ -32,8 +33,7 @@ class TaskStatus(Enum):
 
 @dataclass
 class Task:
-    """
-    A task to be executed by agents in the swarm.
+    """A task to be executed by agents in the swarm.
 
     Attributes:
         id: Unique task identifier.
@@ -46,7 +46,9 @@ class Task:
         created_at: When the task was created.
         status: Current task status.
         assigned_agent_id: ID of the agent assigned to this task.
+
     """
+
     name: str
     description: str = ""
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
@@ -96,8 +98,7 @@ class Task:
 
 @dataclass
 class TaskResult:
-    """
-    Result of a task execution.
+    """Result of a task execution.
 
     Attributes:
         task_id: ID of the executed task.
@@ -107,7 +108,9 @@ class TaskResult:
         duration: Execution duration in seconds.
         agent_id: ID of the agent that executed the task.
         completed_at: When the task completed.
+
     """
+
     task_id: str
     success: bool
     output: Any = None
@@ -144,8 +147,7 @@ class TaskResult:
 
 @dataclass
 class SwarmStatus:
-    """
-    Status of the entire swarm.
+    """Status of the entire swarm.
 
     Attributes:
         total_agents: Total number of agents in the swarm.
@@ -156,7 +158,9 @@ class SwarmStatus:
         completed_tasks: Number of completed tasks.
         failed_tasks: Number of failed tasks.
         uptime_seconds: How long the swarm has been running.
+
     """
+
     total_agents: int = 0
     active_agents: int = 0
     idle_agents: int = 0
@@ -182,8 +186,7 @@ class SwarmStatus:
 
 @dataclass
 class AgentStatus:
-    """
-    Status of an individual agent.
+    """Status of an individual agent.
 
     Attributes:
         agent_id: Unique agent identifier.
@@ -194,7 +197,9 @@ class AgentStatus:
         tasks_completed: Number of tasks completed by this agent.
         tasks_failed: Number of tasks failed by this agent.
         last_heartbeat: Last time agent sent a heartbeat.
+
     """
+
     agent_id: str
     name: str = ""
     status: str = "idle"

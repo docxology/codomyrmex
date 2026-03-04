@@ -76,6 +76,7 @@ class KnowledgeRouter:
 
         Returns:
             (agent_id, confidence) of the best match, or ("", 0.0).
+
         """
         if not self._experts:
             return ("", 0.0)
@@ -126,6 +127,7 @@ class KnowledgeRouter:
 
         Returns:
             QueryResult with entries and routing info.
+
         """
         start = time.monotonic()
 
@@ -157,6 +159,7 @@ class KnowledgeRouter:
 
         Returns:
             List of (agent_id, score) tuples, descending.
+
         """
         if not self._experts:
             return []

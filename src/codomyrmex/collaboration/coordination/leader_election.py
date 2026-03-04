@@ -1,5 +1,4 @@
-"""
-Leader election protocols for multi-agent coordination.
+"""Leader election protocols for multi-agent coordination.
 
 Provides algorithms for selecting a coordinator or leader
 among a group of agents.
@@ -22,6 +21,7 @@ logger = get_logger(__name__)
 
 class ElectionState(Enum):
     """State of an election process."""
+
     IDLE = "idle"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -31,6 +31,7 @@ class ElectionState(Enum):
 @dataclass
 class ElectionResult:
     """Result of a leader election."""
+
     leader_id: str | None
     success: bool
     round_count: int
@@ -51,8 +52,7 @@ class ElectionResult:
 
 
 class LeaderElection(ABC):
-    """
-    Base leader election protocol.
+    """Base leader election protocol.
 
     Provides common functionality for leader election algorithms.
     """
@@ -78,8 +78,7 @@ class LeaderElection(ABC):
 
     @abstractmethod
     async def elect(self, agents: list[CollaborativeAgent]) -> ElectionResult:
-        """
-        Run an election among the given agents.
+        """Run an election among the given agents.
 
         This is the base implementation - subclasses should override.
         """
@@ -94,8 +93,7 @@ class LeaderElection(ABC):
 
 
 class BullyElection(LeaderElection):
-    """
-    Bully algorithm for leader election.
+    """Bully algorithm for leader election.
 
     The agent with the highest priority (determined by a scoring function)
     becomes the leader. Higher-priority agents can "bully" lower-priority
@@ -104,6 +102,7 @@ class BullyElection(LeaderElection):
     Attributes:
         priority_fn: Function to determine agent priority (higher = more priority).
         timeout: Timeout for waiting for responses.
+
     """
 
     def __init__(
@@ -121,14 +120,14 @@ class BullyElection(LeaderElection):
         return hash(agent.agent_id)
 
     async def elect(self, agents: list[CollaborativeAgent]) -> ElectionResult:
-        """
-        Run the bully election algorithm.
+        """Run the bully election algorithm.
 
         Args:
             agents: List of agents participating in the election.
 
         Returns:
             Election result with the selected leader.
+
         """
         if not agents:
             result = ElectionResult(
@@ -181,8 +180,7 @@ class BullyElection(LeaderElection):
 
 
 class RingElection(LeaderElection):
-    """
-    Ring-based leader election.
+    """Ring-based leader election.
 
     Agents are arranged in a logical ring and pass election messages
     around until the highest-priority agent is determined.
@@ -196,8 +194,7 @@ class RingElection(LeaderElection):
         self._priority_fn = priority_fn or (lambda a: hash(a.agent_id))
 
     async def elect(self, agents: list[CollaborativeAgent]) -> ElectionResult:
-        """
-        Run the ring election algorithm.
+        """Run the ring election algorithm.
 
         In this implementation, we simulate the ring traversal.
         """
@@ -258,8 +255,7 @@ class RingElection(LeaderElection):
 
 
 class RandomElection(LeaderElection):
-    """
-    Random leader election.
+    """Random leader election.
 
     Randomly selects a leader from the available agents.
     Useful for load balancing or when all agents are equal.
@@ -311,8 +307,7 @@ class RandomElection(LeaderElection):
 
 
 class RotatingLeadership:
-    """
-    Rotating leadership pattern.
+    """Rotating leadership pattern.
 
     Cycles through agents as leader, ensuring fair distribution
     of leadership responsibilities.

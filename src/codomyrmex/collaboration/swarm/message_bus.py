@@ -29,6 +29,7 @@ class Subscription:
         subscriber_id: ID of the subscribing agent.
         topic: Topic pattern to match.
         handler: Callback for received messages.
+
     """
 
     subscriber_id: str
@@ -52,6 +53,7 @@ class MessageBus:
     """
 
     def __init__(self) -> None:
+        """Initialize message bus."""
         self._subscriptions: list[Subscription] = []
         self._history: list[SwarmMessage] = []
         self._history_limit: int = 1000
@@ -68,6 +70,7 @@ class MessageBus:
             subscriber_id: ID of the subscribing agent.
             topic: Topic pattern (use ``*`` for wildcard).
             handler: Callback invoked with matching messages.
+
         """
         self._subscriptions.append(Subscription(
             subscriber_id=subscriber_id,
@@ -88,6 +91,7 @@ class MessageBus:
 
         Returns:
             Number of subscriptions removed.
+
         """
         before = len(self._subscriptions)
         self._subscriptions = [
@@ -111,6 +115,7 @@ class MessageBus:
 
         Returns:
             Number of handlers invoked.
+
         """
         # Record in history
         if len(self._history) >= self._history_limit:

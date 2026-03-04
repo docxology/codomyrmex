@@ -1,5 +1,4 @@
-"""
-Base agent classes for the collaboration module.
+"""Base agent classes for the collaboration module.
 
 Provides abstract and concrete base implementations for collaborative agents.
 """
@@ -25,8 +24,7 @@ logger = get_logger(__name__)
 
 
 class AbstractAgent(ABC):
-    """
-    Abstract base class defining the agent interface.
+    """Abstract base class defining the agent interface.
 
     All agent implementations must inherit from this class and implement
     the required abstract methods.
@@ -67,8 +65,7 @@ class AbstractAgent(ABC):
 
 
 class CollaborativeAgent(AbstractAgent):
-    """
-    Base implementation for collaborative agents.
+    """Base implementation for collaborative agents.
 
     Provides common functionality for agents participating in swarm collaboration
     including messaging, lifecycle management, and task execution.
@@ -78,6 +75,7 @@ class CollaborativeAgent(AbstractAgent):
         name: Human-readable agent name.
         capabilities: List of capabilities this agent possesses.
         state: Current agent state.
+
     """
 
     def __init__(
@@ -188,8 +186,7 @@ class CollaborativeAgent(AbstractAgent):
         logger.info(f"Agent {self.name} ({self._agent_id}) stopped")
 
     async def process_task(self, task: Task) -> TaskResult:
-        """
-        Process a task and return a result.
+        """Process a task and return a result.
 
         This base implementation tracks task state and metrics.
         Subclasses should override _execute_task for actual work.
@@ -234,8 +231,7 @@ class CollaborativeAgent(AbstractAgent):
             self.update_heartbeat()
 
     async def _execute_task(self, task: Task) -> Any:
-        """
-        Execute the actual task work.
+        """Execute the actual task work.
 
         Subclasses should override this method to implement
         task-specific logic.

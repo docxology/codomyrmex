@@ -1,5 +1,4 @@
-"""
-Task coordination submodule.
+"""Task coordination submodule.
 
 Task distribution, consensus protocols, and leader election
 for multi-agent collaboration.

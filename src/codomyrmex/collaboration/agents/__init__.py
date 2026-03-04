@@ -1,5 +1,4 @@
-"""
-Multi-agent coordination submodule.
+"""Multi-agent coordination submodule.
 
 Agent definitions and lifecycle management for collaborative workflows.
 """

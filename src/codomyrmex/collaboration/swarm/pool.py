@@ -37,6 +37,7 @@ class AgentPool:
     """
 
     def __init__(self) -> None:
+        """Initialize agent pool."""
         self._agents: dict[str, SwarmAgent] = {}
 
     def register(self, agent: SwarmAgent) -> None:
@@ -78,6 +79,7 @@ class AgentPool:
 
         Raises:
             AssignmentError: If no suitable agent available.
+
         """
         candidates = list(self._agents.values())
 

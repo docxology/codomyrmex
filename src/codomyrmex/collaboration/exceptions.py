@@ -1,5 +1,4 @@
-"""
-Custom exceptions for the collaboration module.
+"""Custom exceptions for the collaboration module.
 
 Provides specific exception types for different failure scenarios
 in multi-agent collaboration workflows.
@@ -97,6 +96,7 @@ class MessageDeliveryError(CollaborationError):
     """Raised when a message cannot be delivered."""
 
     def __init__(self, message_id: str, sender_id: str, receiver_id: str, reason: str):
+        """Initialize error with message routing details."""
         message = f"Failed to deliver message {message_id} from {sender_id} to {receiver_id}: {reason}"
         super().__init__(message, {
             "message_id": message_id,
@@ -114,6 +114,7 @@ class CoordinationError(CollaborationError):
     """Raised when there's a coordination failure."""
 
     def __init__(self, operation: str, reason: str):
+        """Initialize error with operation."""
         message = f"Coordination failed during {operation}: {reason}"
         super().__init__(message, {"operation": operation, "reason": reason})
         self.operation = operation
@@ -124,6 +125,7 @@ class LeaderElectionError(CollaborationError):
     """Raised when leader election fails."""
 
     def __init__(self, reason: str, candidates: list = None):
+        """Initialize error with reason."""
         message = f"Leader election failed: {reason}"
         super().__init__(message, {"reason": reason, "candidates": candidates or []})
         self.reason = reason
@@ -134,6 +136,7 @@ class CapabilityMismatchError(CollaborationError):
     """Raised when no agent has the required capabilities."""
 
     def __init__(self, required_capabilities: list, available_capabilities: list = None):
+        """Initialize error with required capabilities."""
         message = f"No agent has required capabilities: {required_capabilities}"
         super().__init__(message, {
             "required_capabilities": required_capabilities,

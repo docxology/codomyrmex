@@ -1,5 +1,4 @@
-"""
-Consensus mechanisms for multi-agent agreement.
+"""Consensus mechanisms for multi-agent agreement.
 
 Provides voting mechanisms and consensus building for
 collaborative decision making.
@@ -21,6 +20,7 @@ logger = get_logger(__name__)
 
 class VoteType(Enum):
     """Types of votes."""
+
     YES = "yes"
     NO = "no"
     ABSTAIN = "abstain"
@@ -29,6 +29,7 @@ class VoteType(Enum):
 @dataclass
 class Vote:
     """A vote cast by an agent."""
+
     voter_id: str
     vote: VoteType
     timestamp: datetime = field(default_factory=datetime.now)
@@ -47,6 +48,7 @@ class Vote:
 @dataclass
 class Proposal:
     """A proposal to be voted on."""
+
     proposal_id: str
     title: str
     description: str
@@ -71,6 +73,7 @@ class Proposal:
 @dataclass
 class VotingResult:
     """Result of a voting round."""
+
     proposal_id: str
     passed: bool
     votes_for: int
@@ -103,8 +106,7 @@ class VotingResult:
 
 
 class VotingMechanism:
-    """
-    Manages voting processes for multi-agent consensus.
+    """Manages voting processes for multi-agent consensus.
 
     Supports various voting strategies including simple majority,
     supermajority, and unanimity.
@@ -112,6 +114,7 @@ class VotingMechanism:
     Attributes:
         quorum: Minimum participation rate (0.0 to 1.0).
         threshold: Vote ratio needed to pass (0.0 to 1.0).
+
     """
 
     def __init__(
@@ -159,11 +162,11 @@ class VotingMechanism:
         vote: VoteType,
         reason: str | None = None,
     ) -> Vote:
-        """
-        Cast a vote on a proposal.
+        """Cast a vote on a proposal.
 
         Raises:
             ValueError: If proposal not found or voting closed.
+
         """
         if proposal_id not in self._active_proposals:
             raise ValueError(f"Proposal not found: {proposal_id}")
@@ -190,8 +193,7 @@ class VotingMechanism:
         proposal_id: str,
         total_voters: int,
     ) -> VotingResult:
-        """
-        Tally votes and determine the result.
+        """Tally votes and determine the result.
 
         Args:
             proposal_id: ID of the proposal.
@@ -199,6 +201,7 @@ class VotingMechanism:
 
         Returns:
             The voting result.
+
         """
         if proposal_id not in self._active_proposals:
             raise ValueError(f"Proposal not found: {proposal_id}")
@@ -246,8 +249,7 @@ class VotingMechanism:
 
 
 class ConsensusBuilder:
-    """
-    Facilitates reaching consensus among agents.
+    """Facilitates reaching consensus among agents.
 
     Provides methods for value convergence, conflict resolution,
     and agreement tracking.
@@ -274,8 +276,7 @@ class ConsensusBuilder:
         key: str,
         total_agents: int,
     ) -> Any | None:
-        """
-        Check if consensus has been reached for a key.
+        """Check if consensus has been reached for a key.
 
         Returns the consensus value if reached, None otherwise.
         """
@@ -333,8 +334,7 @@ class ConsensusBuilder:
         value_fn: Callable[[CollaborativeAgent], Any],
         max_rounds: int = 5,
     ) -> Any | None:
-        """
-        Attempt to reach consensus through iterative rounds.
+        """Attempt to reach consensus through iterative rounds.
 
         Args:
             key: Key for the consensus value.
@@ -344,6 +344,7 @@ class ConsensusBuilder:
 
         Returns:
             The consensus value if reached, None otherwise.
+
         """
         for round_num in range(max_rounds):
             # Collect proposals
