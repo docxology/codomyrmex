@@ -37,19 +37,22 @@ class BasePlot:
         return f'<div class="plot" data-type="{self.__class__.__name__}">{self.title}</div>'
 
     def to_html(self) -> str:
-        """Render the plot as an ``<img>`` tag containing a base64 PNG."""
-        import matplotlib
-        if matplotlib.get_backend().lower() != "agg":
-            matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
-        fig, ax = plt.subplots(
-            figsize=(self.width / 100, self.height / 100), dpi=100
-        )
+        """Render the plot as an ``<img>`` tag containing a base64 PNG.
+
+        Uses ``FigureCanvasAgg`` directly so that the global pyplot backend
+        is never mutated — safe to call in interactive sessions or alongside
+        other matplotlib plots.
+        """
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+        from matplotlib.figure import Figure
+
+        fig = Figure(figsize=(self.width / 100, self.height / 100), dpi=100)
+        FigureCanvasAgg(fig)
+        ax = fig.add_subplot(111)
         self._render_figure(fig, ax)
         ax.set_title(self.title)
         fig.tight_layout()
         png = self._fig_to_base64(fig)
-        plt.close(fig)
         return f'<img src="data:image/png;base64,{png}" alt="{self.title}" />'
 
     def to_dict(self) -> dict[str, Any]:
