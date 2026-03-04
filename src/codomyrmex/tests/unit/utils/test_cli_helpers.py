@@ -10,6 +10,7 @@ save_json_file, OUTPUT_WIDTH.
 
 import argparse
 import json
+import os
 import time
 from pathlib import Path
 
@@ -957,6 +958,30 @@ class TestLoadSaveJsonFile:
         bad.write_text("not valid json {{{")
         with pytest.raises(json.JSONDecodeError):
             load_json_file(bad)
+
+    @pytest.mark.skipif(
+        hasattr(os, "geteuid") and os.geteuid() == 0,
+        reason="Root user bypasses file permissions",
+    )
+    @pytest.mark.skipif(
+        os.name == "nt",
+        reason="chmod(0o000) does not prevent read on Windows",
+    )
+    def test_load_json_file_permission_error(self, tmp_path):
+        """Test generic Exception handling in load_json_file using PermissionError."""
+        # Create a valid JSON file
+        protected_file = tmp_path / "protected.json"
+        protected_file.write_text('{"key": "value"}')
+
+        # Remove all permissions to trigger PermissionError when opening
+        protected_file.chmod(0o000)
+
+        try:
+            with pytest.raises(PermissionError):
+                load_json_file(protected_file)
+        finally:
+            # Restore permissions so pytest can clean up tmp_path
+            protected_file.chmod(0o644)
 
     def test_save_returns_path(self, tmp_path):
         out = tmp_path / "result.json"
