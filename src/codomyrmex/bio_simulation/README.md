@@ -12,6 +12,7 @@ High-fidelity biological simulation engine. Provides digital twins of ant coloni
 - **Agent State Machine**: High-fidelity behavioral states (FORAGING, RETURNING, RESTING).
 - **Spatial Environment**: Grid-based world with resources, obstacles, and pheromone dynamics.
 - **Genomics**: Trait-based genetic representation with mutation and crossover for evolutionary studies.
+- **MCP Tools**: Exposes operations for running colony simulations and analyzing population genetics to LLM agents.
 
 ## PAI Integration
 
