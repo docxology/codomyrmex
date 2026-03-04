@@ -24,19 +24,15 @@ if not HAS_MODULE:
 class TestWASMRuntime:
     """Test suite for WASMRuntime."""
     def test_wasmtime(self):
-        """Verify wasmtime behavior."""
         assert WASMRuntime.WASMTIME is not None
 
     def test_wasmer(self):
-        """Verify wasmer behavior."""
         assert WASMRuntime.WASMER is not None
 
     def test_wazero(self):
-        """Verify wazero behavior."""
         assert WASMRuntime.WAZERO is not None
 
     def test_wasmedge(self):
-        """Verify wasmedge behavior."""
         assert WASMRuntime.WASMEDGE is not None
 
 
@@ -44,14 +40,12 @@ class TestWASMRuntime:
 class TestWASMModule:
     """Test suite for WASMModule."""
     def test_create_module(self):
-        """Verify create module behavior."""
         module = WASMModule(name="test-mod", path="/tmp/test.wasm")
         assert module.name == "test-mod"
         assert module.runtime == WASMRuntime.WASMTIME
         assert module.memory_pages == 256
 
     def test_module_defaults(self):
-        """Verify module defaults behavior."""
         module = WASMModule(name="m", path="/m.wasm")
         assert module.fuel_limit is None
         assert module.environment == {}
@@ -62,7 +56,6 @@ class TestWASMModule:
 class TestWASMInstance:
     """Test suite for WASMInstance."""
     def test_create_instance(self):
-        """Verify create instance behavior."""
         module = WASMModule(name="m", path="/m.wasm")
         instance = WASMInstance(id="inst-1", module=module)
         assert instance.id == "inst-1"
@@ -75,14 +68,12 @@ class TestWASMInstance:
 class TestWASMExecution:
     """Test suite for WASMExecution."""
     def test_successful_execution(self):
-        """Verify successful execution behavior."""
         execution = WASMExecution(success=True, result=42)
         assert execution.success is True
         assert execution.result == 42
         assert execution.error is None
 
     def test_failed_execution(self):
-        """Verify failed execution behavior."""
         execution = WASMExecution(success=False, error="out of fuel")
         assert execution.success is False
         assert execution.error == "out of fuel"
@@ -92,7 +83,6 @@ class TestWASMExecution:
 class TestWasmtimeClient:
     """Test suite for WasmtimeClient."""
     def test_create_client(self):
-        """Verify create client behavior."""
         client = WasmtimeClient()
         assert client is not None
         assert client.runtime == WASMRuntime.WASMTIME
@@ -102,7 +92,6 @@ class TestWasmtimeClient:
 class TestWASMOrchestrator:
     """Test suite for WASMOrchestrator."""
     def test_create_orchestrator(self):
-        """Verify create orchestrator behavior."""
         orch = WASMOrchestrator()
         assert orch is not None
 
@@ -111,12 +100,10 @@ class TestWASMOrchestrator:
 class TestWASMComponentModel:
     """Test suite for WASMComponentModel."""
     def test_create_model(self):
-        """Verify create model behavior."""
         model = WASMComponentModel()
         assert model is not None
 
     def test_define_interface(self):
-        """Verify define interface behavior."""
         model = WASMComponentModel()
         model.define_interface("math", {"add": {"params": ["i32", "i32"], "result": "i32"}})
         iface = model.get_interface("math")

@@ -60,20 +60,16 @@ class TestModuleExports:
     """Verify that all public symbols are importable."""
 
     def test_bridge_importable(self) -> None:
-        """Verify bridge importable behavior."""
         assert PAIBridge is not None
 
     def test_config_importable(self) -> None:
-        """Verify config importable behavior."""
         assert PAIConfig is not None
 
     def test_dataclasses_importable(self) -> None:
-        """Verify dataclasses importable behavior."""
         for cls in (PAISkillInfo, PAIToolInfo, PAIHookInfo, PAIAgentInfo, PAIMemoryStore):
             assert cls is not None
 
     def test_constants_importable(self) -> None:
-        """Verify constants importable behavior."""
         assert len(ALGORITHM_PHASES) == 7
         assert len(RESPONSE_DEPTH_LEVELS) == 3
         assert len(PAI_PRINCIPLES) == 16
@@ -89,12 +85,10 @@ class TestDiscovery:
     """Test PAI discovery against the real installation."""
 
     def test_is_installed(self, bridge: PAIBridge) -> None:
-        """Verify is installed behavior."""
         # PAI SKILL.md should exist on this machine
         assert bridge.is_installed() is True
 
     def test_get_status_structure(self, bridge: PAIBridge) -> None:
-        """Verify get status structure behavior."""
         status = bridge.get_status()
         assert isinstance(status, dict)
         assert status["installed"] is True
@@ -103,7 +97,6 @@ class TestDiscovery:
         assert isinstance(status["components"], dict)
 
     def test_get_components(self, bridge: PAIBridge) -> None:
-        """Verify get components behavior."""
         components = bridge.get_components()
         expected_keys = {"algorithm", "skills", "tools", "agents", "memory", "hooks", "security", "components"}
         assert expected_keys.issubset(set(components.keys()))
@@ -124,12 +117,10 @@ class TestAlgorithm:
     """Test Algorithm phase and principle methods."""
 
     def test_phases_count(self) -> None:
-        """Verify phases count behavior."""
         phases = PAIBridge.get_algorithm_phases()
         assert len(phases) == 7
 
     def test_phases_structure(self) -> None:
-        """Verify phases structure behavior."""
         phases = PAIBridge.get_algorithm_phases()
         for phase in phases:
             assert "phase" in phase
@@ -137,12 +128,10 @@ class TestAlgorithm:
             assert "description" in phase
 
     def test_phase_names(self) -> None:
-        """Verify phase names behavior."""
         names = [p["name"] for p in PAIBridge.get_algorithm_phases()]
         assert names == ["OBSERVE", "THINK", "PLAN", "BUILD", "EXECUTE", "VERIFY", "LEARN"]
 
     def test_response_depth_levels(self) -> None:
-        """Verify response depth levels behavior."""
         levels = PAIBridge.get_response_depth_levels()
         assert len(levels) == 3
         depth_names = [d["depth"] for d in levels]
@@ -150,11 +139,9 @@ class TestAlgorithm:
         assert "MINIMAL" in depth_names
 
     def test_principles_count(self) -> None:
-        """Verify principles count behavior."""
         assert len(PAIBridge.get_principles()) >= 15
 
     def test_algorithm_version(self, bridge: PAIBridge) -> None:
-        """Verify algorithm version behavior."""
         version = bridge.get_algorithm_version()
         # Should be a version string like "v0.2.25"
         assert version is not None
@@ -170,13 +157,11 @@ class TestSkills:
     """Test skill discovery against real PAI installation."""
 
     def test_list_skills_returns_list(self, bridge: PAIBridge) -> None:
-        """Verify list skills returns list behavior."""
         skills = bridge.list_skills()
         assert isinstance(skills, list)
         assert len(skills) > 0
 
     def test_skill_info_structure(self, bridge: PAIBridge) -> None:
-        """Verify skill info structure behavior."""
         skills = bridge.list_skills()
         for skill in skills:
             assert isinstance(skill, PAISkillInfo)
@@ -192,7 +177,6 @@ class TestSkills:
         assert pai.has_skill_md is True
 
     def test_get_skill_info_missing(self, bridge: PAIBridge) -> None:
-        """Verify get skill info missing behavior."""
         result = bridge.get_skill_info("NonexistentSkill12345")
         assert result is None
 
@@ -206,13 +190,11 @@ class TestTools:
     """Test tool discovery against real PAI installation."""
 
     def test_list_tools_returns_list(self, bridge: PAIBridge) -> None:
-        """Verify list tools returns list behavior."""
         tools = bridge.list_tools()
         assert isinstance(tools, list)
         assert len(tools) > 0
 
     def test_tool_info_structure(self, bridge: PAIBridge) -> None:
-        """Verify tool info structure behavior."""
         tools = bridge.list_tools()
         for tool in tools:
             assert isinstance(tool, PAIToolInfo)
@@ -230,7 +212,6 @@ class TestTools:
         assert result.name == first.name
 
     def test_get_tool_info_missing(self, bridge: PAIBridge) -> None:
-        """Verify get tool info missing behavior."""
         assert bridge.get_tool_info("NonexistentTool12345") is None
 
 
@@ -243,20 +224,17 @@ class TestHooks:
     """Test hook discovery against real PAI installation."""
 
     def test_list_hooks_returns_list(self, bridge: PAIBridge) -> None:
-        """Verify list hooks returns list behavior."""
         hooks = bridge.list_hooks()
         assert isinstance(hooks, list)
         assert len(hooks) > 0
 
     def test_hook_info_structure(self, bridge: PAIBridge) -> None:
-        """Verify hook info structure behavior."""
         for hook in bridge.list_hooks():
             assert isinstance(hook, PAIHookInfo)
             assert isinstance(hook.name, str)
             assert isinstance(hook.is_archived, bool)
 
     def test_active_hooks_subset(self, bridge: PAIBridge) -> None:
-        """Verify active hooks subset behavior."""
         all_hooks = bridge.list_hooks()
         active = bridge.list_active_hooks()
         assert len(active) <= len(all_hooks)
@@ -283,27 +261,23 @@ class TestAgents:
     """Test agent personality discovery."""
 
     def test_list_agents_returns_list(self, bridge: PAIBridge) -> None:
-        """Verify list agents returns list behavior."""
         agents = bridge.list_agents()
         assert isinstance(agents, list)
         assert len(agents) > 0
 
     def test_agent_info_structure(self, bridge: PAIBridge) -> None:
-        """Verify agent info structure behavior."""
         for agent in bridge.list_agents():
             assert isinstance(agent, PAIAgentInfo)
             assert isinstance(agent.name, str)
             assert agent.size_bytes > 0
 
     def test_known_agents_present(self, bridge: PAIBridge) -> None:
-        """Verify known agents present behavior."""
         names = {a.name for a in bridge.list_agents()}
         # These are known upstream agent personalities
         expected = {"Engineer", "Architect", "Pentester"}
         assert expected.issubset(names), f"Missing agents: {expected - names}"
 
     def test_get_agent_info(self, bridge: PAIBridge) -> None:
-        """Verify get agent info behavior."""
         agent = bridge.get_agent_info("Engineer")
         assert agent is not None
 
@@ -317,32 +291,27 @@ class TestMemory:
     """Test memory store discovery."""
 
     def test_list_memory_stores(self, bridge: PAIBridge) -> None:
-        """Verify list memory stores behavior."""
         stores = bridge.list_memory_stores()
         assert isinstance(stores, list)
         assert len(stores) > 0
 
     def test_memory_store_structure(self, bridge: PAIBridge) -> None:
-        """Verify memory store structure behavior."""
         for store in bridge.list_memory_stores():
             assert isinstance(store, PAIMemoryStore)
             assert isinstance(store.name, str)
             assert isinstance(store.item_count, int)
 
     def test_known_stores_present(self, bridge: PAIBridge) -> None:
-        """Verify known stores present behavior."""
         names = {s.name for s in bridge.list_memory_stores()}
         expected = {"LEARNING", "STATE", "RESEARCH"}
         assert expected.issubset(names), f"Missing stores: {expected - names}"
 
     def test_get_memory_info(self, bridge: PAIBridge) -> None:
-        """Verify get memory info behavior."""
         result = bridge.get_memory_info("LEARNING")
         assert result is not None
         assert result.name == "LEARNING"
 
     def test_get_memory_info_missing(self, bridge: PAIBridge) -> None:
-        """Verify get memory info missing behavior."""
         assert bridge.get_memory_info("NonexistentStore12345") is None
 
 
@@ -355,7 +324,6 @@ class TestSecurity:
     """Test security system discovery."""
 
     def test_security_config_structure(self, bridge: PAIBridge) -> None:
-        """Verify security config structure behavior."""
         sec = bridge.get_security_config()
         assert isinstance(sec, dict)
         assert "exists" in sec
@@ -373,7 +341,6 @@ class TestTelos:
     """Test TELOS identity file discovery."""
 
     def test_telos_returns_list(self, bridge: PAIBridge) -> None:
-        """Verify telos returns list behavior."""
         files = bridge.get_telos_files()
         assert isinstance(files, list)
 
@@ -387,20 +354,17 @@ class TestSettings:
     """Test settings and MCP registration."""
 
     def test_get_settings(self, bridge: PAIBridge) -> None:
-        """Verify get settings behavior."""
         settings = bridge.get_settings()
         assert settings is not None
         assert isinstance(settings, dict)
 
     def test_get_pai_env(self, bridge: PAIBridge) -> None:
-        """Verify get pai env behavior."""
         env = bridge.get_pai_env()
         assert isinstance(env, dict)
         # PAI_DIR is set in settings.json
         assert "PAI_DIR" in env
 
     def test_mcp_registration(self, bridge: PAIBridge) -> None:
-        """Verify mcp registration behavior."""
         result = bridge.get_mcp_registration()
         # May or may not exist — just check the return type
         assert result is None or isinstance(result, dict)
@@ -415,49 +379,38 @@ class TestGracefulDegradation:
     """Verify graceful behavior when PAI is NOT installed."""
 
     def test_not_installed(self, empty_bridge: PAIBridge) -> None:
-        """Verify not installed behavior."""
         assert empty_bridge.is_installed() is False
 
     def test_status_when_absent(self, empty_bridge: PAIBridge) -> None:
-        """Verify status when absent behavior."""
         status = empty_bridge.get_status()
         assert status["installed"] is False
         assert status["components"] == {}
         assert status["settings"] is None
 
     def test_list_skills_empty(self, empty_bridge: PAIBridge) -> None:
-        """Verify list skills empty behavior."""
         assert empty_bridge.list_skills() == []
 
     def test_list_tools_empty(self, empty_bridge: PAIBridge) -> None:
-        """Verify list tools empty behavior."""
         assert empty_bridge.list_tools() == []
 
     def test_list_hooks_empty(self, empty_bridge: PAIBridge) -> None:
-        """Verify list hooks empty behavior."""
         assert empty_bridge.list_hooks() == []
 
     def test_list_agents_empty(self, empty_bridge: PAIBridge) -> None:
-        """Verify list agents empty behavior."""
         assert empty_bridge.list_agents() == []
 
     def test_list_memory_empty(self, empty_bridge: PAIBridge) -> None:
-        """Verify list memory empty behavior."""
         assert empty_bridge.list_memory_stores() == []
 
     def test_security_absent(self, empty_bridge: PAIBridge) -> None:
-        """Verify security absent behavior."""
         sec = empty_bridge.get_security_config()
         assert sec["exists"] is False
 
     def test_telos_empty(self, empty_bridge: PAIBridge) -> None:
-        """Verify telos empty behavior."""
         assert empty_bridge.get_telos_files() == []
 
     def test_algorithm_version_absent(self, empty_bridge: PAIBridge) -> None:
-        """Verify algorithm version absent behavior."""
         assert empty_bridge.get_algorithm_version() is None
 
     def test_pai_env_empty(self, empty_bridge: PAIBridge) -> None:
-        """Verify pai env empty behavior."""
         assert empty_bridge.get_pai_env() == {}

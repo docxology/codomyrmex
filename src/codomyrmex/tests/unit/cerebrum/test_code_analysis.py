@@ -31,7 +31,6 @@ from codomyrmex.cerebrum.drift_tracker import (
 class TestAntiPattern:
     """Test suite for AntiPattern."""
     def test_to_dict(self) -> None:
-        """Verify to dict behavior."""
         ap = AntiPattern(name="test", message="msg", severity=Severity.WARNING)
         d = ap.to_dict()
         assert d["name"] == "test"
@@ -41,7 +40,6 @@ class TestAntiPattern:
 class TestAntiPatternDetector:
     """Test suite for AntiPatternDetector."""
     def test_clean_code(self) -> None:
-        """Verify clean code behavior."""
         detector = AntiPatternDetector()
         source = "def hello():\n    return 'world'\n"
         report = detector.analyze_source(source)
@@ -49,7 +47,6 @@ class TestAntiPatternDetector:
         assert report.files_scanned == 1
 
     def test_god_function(self) -> None:
-        """Verify god function behavior."""
         detector = AntiPatternDetector(max_function_lines=5)
         source = "def big():\n" + "    x = 1\n" * 10
         report = detector.analyze_source(source)
@@ -57,7 +54,6 @@ class TestAntiPatternDetector:
         assert "god-function" in names
 
     def test_too_many_params(self) -> None:
-        """Verify too many params behavior."""
         detector = AntiPatternDetector(max_params=3)
         source = "def f(a, b, c, d, e):\n    pass\n"
         report = detector.analyze_source(source)
@@ -65,7 +61,6 @@ class TestAntiPatternDetector:
         assert "too-many-params" in names
 
     def test_deep_nesting(self) -> None:
-        """Verify deep nesting behavior."""
         detector = AntiPatternDetector(max_nesting=2)
         source = textwrap.dedent("""\
         def f():
@@ -79,7 +74,6 @@ class TestAntiPatternDetector:
         assert "deep-nesting" in names
 
     def test_bare_except(self) -> None:
-        """Verify bare except behavior."""
         detector = AntiPatternDetector()
         source = textwrap.dedent("""\
         def f():
@@ -94,14 +88,12 @@ class TestAntiPatternDetector:
         assert any(p.severity == Severity.ERROR for p in report.patterns)
 
     def test_syntax_error(self) -> None:
-        """Verify syntax error behavior."""
         detector = AntiPatternDetector()
         report = detector.analyze_source("def f(")
         assert report.has_errors
         assert report.patterns[0].name == "syntax-error"
 
     def test_god_class(self) -> None:
-        """Verify god class behavior."""
         detector = AntiPatternDetector()
         methods = "\n".join(f"    def m{i}(self): pass" for i in range(25))
         source = f"class Big:\n{methods}\n"
@@ -110,7 +102,6 @@ class TestAntiPatternDetector:
         assert "god-class" in names
 
     def test_report_count_by_severity(self) -> None:
-        """Verify report count by severity behavior."""
         report = AnalysisReport(patterns=[
             AntiPattern(name="a", message="", severity=Severity.WARNING),
             AntiPattern(name="b", message="", severity=Severity.ERROR),
@@ -125,7 +116,6 @@ class TestAntiPatternDetector:
 class TestDriftEvent:
     """Test suite for DriftEvent."""
     def test_to_dict(self) -> None:
-        """Verify to dict behavior."""
         e = DriftEvent(term="foo", category="new")
         d = e.to_dict()
         assert d["term"] == "foo"
@@ -135,7 +125,6 @@ class TestDriftEvent:
 class TestConceptDriftTracker:
     """Test suite for ConceptDriftTracker."""
     def test_no_drift_identical(self) -> None:
-        """Verify no drift identical behavior."""
         tracker = ConceptDriftTracker()
         corpus = ["The function processes input data correctly"]
         snapshot = tracker.compare(corpus, corpus)
@@ -143,7 +132,6 @@ class TestConceptDriftTracker:
         assert snapshot.shifted_count == 0
 
     def test_drift_different(self) -> None:
-        """Verify drift different behavior."""
         tracker = ConceptDriftTracker()
         a = ["The function validates user input"]
         b = ["The module transforms binary output"]
@@ -152,7 +140,6 @@ class TestConceptDriftTracker:
         assert len(snapshot.events) > 0
 
     def test_new_concepts(self) -> None:
-        """Verify new concepts behavior."""
         tracker = ConceptDriftTracker()
         a = ["Database connection pooling"]
         b = ["Database connection pooling with caching layer"]
@@ -160,7 +147,6 @@ class TestConceptDriftTracker:
         assert snapshot.new_count >= 0  # "caching layer" might be new
 
     def test_lost_concepts(self) -> None:
-        """Verify lost concepts behavior."""
         tracker = ConceptDriftTracker()
         a = ["Advanced encryption algorithm implementation"]
         b = ["Simple storage retrieval"]
@@ -168,7 +154,6 @@ class TestConceptDriftTracker:
         assert snapshot.lost_count > 0
 
     def test_snapshot_to_dict(self) -> None:
-        """Verify snapshot to dict behavior."""
         snapshot = DriftSnapshot(version_a="v1", version_b="v2")
         d = snapshot.to_dict()
         assert d["version_a"] == "v1"
@@ -183,14 +168,12 @@ class TestConceptDriftTracker:
 class TestAgentPromptSelector:
     """Test suite for AgentPromptSelector."""
     def test_list_builtins(self) -> None:
-        """Verify list builtins behavior."""
         selector = AgentPromptSelector()
         names = selector.list_templates()
         assert "code_review" in names
         assert "reasoning_chain" in names
 
     def test_select_review(self) -> None:
-        """Verify select review behavior."""
         selector = AgentPromptSelector()
         selection = selector.select(
             task="code review",
@@ -206,7 +189,6 @@ class TestAgentPromptSelector:
         assert selection.score > 0
 
     def test_select_analysis(self) -> None:
-        """Verify select analysis behavior."""
         selector = AgentPromptSelector()
         selection = selector.select(
             task="anti_pattern analysis",
@@ -217,18 +199,15 @@ class TestAgentPromptSelector:
         )
 
     def test_fallback_to_reasoning(self) -> None:
-        """Verify fallback to reasoning behavior."""
         selector = AgentPromptSelector()
         selection = selector.select(task="something_unknown_xyz")
         assert selection.rendered  # Should produce something
 
     def test_no_builtins(self) -> None:
-        """Verify no builtins behavior."""
         selector = AgentPromptSelector(load_builtins=False)
         assert len(selector.list_templates()) == 0
 
     def test_category_filter(self) -> None:
-        """Verify category filter behavior."""
         selector = AgentPromptSelector()
         selection = selector.select(
             task="review",
@@ -244,7 +223,6 @@ class TestAgentPromptSelector:
 class TestReviewFinding:
     """Test suite for ReviewFinding."""
     def test_to_dict(self) -> None:
-        """Verify to dict behavior."""
         f = ReviewFinding(category="test", message="msg")
         d = f.to_dict()
         assert d["category"] == "test"
@@ -253,14 +231,12 @@ class TestReviewFinding:
 class TestCodeReviewer:
     """Test suite for CodeReviewer."""
     def test_review_clean(self) -> None:
-        """Verify review clean behavior."""
         reviewer = CodeReviewer()
         report = reviewer.review_source("def hello():\n    return 42\n")
         assert report.is_clean
         assert "clean" in report.summary.lower()
 
     def test_review_with_issues(self) -> None:
-        """Verify review with issues behavior."""
         reviewer = CodeReviewer(
             detector=AntiPatternDetector(max_params=2),
         )
@@ -269,7 +245,6 @@ class TestCodeReviewer:
         assert report.warning_count >= 1
 
     def test_review_diff(self) -> None:
-        """Verify review diff behavior."""
         reviewer = CodeReviewer()
         old = "def old_function():\n    return 'legacy'\n"
         new = "def new_function():\n    return 'modern'\n"
@@ -277,7 +252,6 @@ class TestCodeReviewer:
         assert report.files_reviewed == 1
 
     def test_get_review_prompt(self) -> None:
-        """Verify get review prompt behavior."""
         reviewer = CodeReviewer()
         prompt = reviewer.get_review_prompt("x = 1", language="python")
         assert len(prompt) > 0  # Prompt was generated
@@ -286,7 +260,6 @@ class TestCodeReviewer:
         assert len(prompt) > 20
 
     def test_report_to_dict(self) -> None:
-        """Verify report to dict behavior."""
         report = CodeReviewReport(
             findings=[ReviewFinding(category="a", message="b", severity="error")],
             files_reviewed=1,

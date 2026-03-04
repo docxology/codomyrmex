@@ -298,7 +298,6 @@ class TestInferenceOptimizer:
         assert result.latency_ms > 0
 
     def test_optimizer_caching(self):
-        """Verify caching behavior."""
         from codomyrmex.model_ops.optimization import (
             InferenceOptimizer,
             OptimizationConfig,

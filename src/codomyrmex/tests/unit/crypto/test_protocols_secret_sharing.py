@@ -80,7 +80,6 @@ class TestShamirSplitReconstruct:
         assert recovered == secret
 
     def test_single_byte_secret(self) -> None:
-        """Verify single byte secret behavior."""
         secret = b"\x42"
         shares = split_secret(secret, n=3, k=2)
         recovered = reconstruct_secret(shares[:2])
@@ -100,27 +99,22 @@ class TestShamirValidation:
     """Input validation and error handling tests."""
 
     def test_k_less_than_2_raises(self) -> None:
-        """Verify k less than 2 raises behavior."""
         with pytest.raises(ProtocolError, match="k must be >= 2"):
             split_secret(b"secret", n=3, k=1)
 
     def test_n_less_than_k_raises(self) -> None:
-        """Verify n less than k raises behavior."""
         with pytest.raises(ProtocolError, match="n must be >= threshold k"):
             split_secret(b"secret", n=2, k=3)
 
     def test_empty_secret_raises(self) -> None:
-        """Verify empty secret raises behavior."""
         with pytest.raises(ProtocolError, match="must not be empty"):
             split_secret(b"", n=3, k=2)
 
     def test_reconstruct_with_one_share_raises(self) -> None:
-        """Verify reconstruct with one share raises behavior."""
         with pytest.raises(ProtocolError, match="at least 2 shares"):
             reconstruct_secret([Share(index=1, value=42)])
 
     def test_reconstruct_duplicate_indices_raises(self) -> None:
-        """Verify reconstruct duplicate indices raises behavior."""
         with pytest.raises(ProtocolError, match="distinct"):
             reconstruct_secret([Share(index=1, value=10), Share(index=1, value=20)])
 
@@ -131,7 +125,6 @@ class TestShareCommitments:
     """Share commitment generation and verification tests."""
 
     def test_commitment_roundtrip(self) -> None:
-        """Verify commitment roundtrip behavior."""
         secret = b"commitment test"
         shares = split_secret(secret, n=3, k=2)
         for share in shares:
@@ -139,7 +132,6 @@ class TestShareCommitments:
             assert verify_share(share, commitment)
 
     def test_tampered_share_fails_verification(self) -> None:
-        """Verify tampered share fails verification behavior."""
         secret = b"tamper test"
         shares = split_secret(secret, n=3, k=2)
         commitment = generate_share_commitment(shares[0])
@@ -149,7 +141,6 @@ class TestShareCommitments:
         assert not verify_share(tampered, commitment)
 
     def test_wrong_index_fails_verification(self) -> None:
-        """Verify wrong index fails verification behavior."""
         secret = b"index test"
         shares = split_secret(secret, n=3, k=2)
         commitment = generate_share_commitment(shares[0])

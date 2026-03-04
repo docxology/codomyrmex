@@ -48,7 +48,6 @@ class TestWorkflowJournal:
     """Test suite for WorkflowJournal."""
 
     def test_record_start(self):
-        """Verify record start behavior."""
         journal = WorkflowJournal()
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a"))
@@ -58,7 +57,6 @@ class TestWorkflowJournal:
         assert len(entries) == 1
 
     def test_record_step(self):
-        """Verify record step behavior."""
         journal = WorkflowJournal()
         step = WorkflowStep(name="build", status=StepStatus.COMPLETED, duration_ms=100.0)
         journal.on_step_complete("wf-1", step)
@@ -68,7 +66,6 @@ class TestWorkflowJournal:
         assert entries[0].status == "completed"
 
     def test_record_complete(self):
-        """Verify record complete behavior."""
         journal = WorkflowJournal()
         result = _make_result(success=True)
         journal.on_workflow_complete(result)
@@ -77,7 +74,6 @@ class TestWorkflowJournal:
         assert entries[0].status == "success"
 
     def test_record_full_workflow(self):
-        """Verify record full workflow behavior."""
         journal = WorkflowJournal()
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a"))
@@ -88,7 +84,6 @@ class TestWorkflowJournal:
         assert journal.entry_count == 4
 
     def test_by_workflow_id(self):
-        """Verify by workflow id behavior."""
         journal = WorkflowJournal()
         result1 = _make_result(wf_id="wf-1")
         result2 = _make_result(wf_id="wf-2")
@@ -97,7 +92,6 @@ class TestWorkflowJournal:
         assert len(journal.by_workflow_id("wf-1")) == 1
 
     def test_memory_persistence(self):
-        """Verify memory persistence behavior."""
         memory = MemoryStore()
         journal = WorkflowJournal(memory=memory)
         result = _make_result()
@@ -126,7 +120,6 @@ class TestWorkflowAnalytics:
         return journal
 
     def test_failure_hotspots(self):
-        """Verify failure hotspots behavior."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         hotspots = analytics.failure_hotspots(n=3)
@@ -134,21 +127,18 @@ class TestWorkflowAnalytics:
         assert len(hotspots) >= 1
 
     def test_duration_trend(self):
-        """Verify duration trend behavior."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         trend = analytics.duration_trend(window=2)
         assert len(trend) == 3  # 3 workflows
 
     def test_success_rate(self):
-        """Verify success rate behavior."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         rate = analytics.success_rate("step_0")
         assert rate == 1.0  # step_0 always succeeds
 
     def test_generate_insight(self):
-        """Verify generate insight behavior."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         insight = analytics.generate_insight()
@@ -157,7 +147,6 @@ class TestWorkflowAnalytics:
         assert insight.overall_success_rate == pytest.approx(2 / 3, abs=0.01)
 
     def test_empty_journal(self):
-        """Verify empty journal behavior."""
         journal = WorkflowJournal()
         analytics = WorkflowAnalytics(journal)
         insight = analytics.generate_insight()

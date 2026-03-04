@@ -16,7 +16,6 @@ class TestEventStore:
     """Test suite for EventStore."""
 
     def test_append_and_read(self):
-        """Verify append and read behavior."""
         store = EventStore()
         seq = store.append(StreamEvent(topic="agent", event_type="started"))
         assert seq == 1
@@ -25,14 +24,12 @@ class TestEventStore:
         assert len(events) == 1
 
     def test_sequence_numbers(self):
-        """Verify sequence numbers behavior."""
         store = EventStore()
         s1 = store.append(StreamEvent(topic="a"))
         s2 = store.append(StreamEvent(topic="b"))
         assert s2 == s1 + 1
 
     def test_read_range(self):
-        """Verify read range behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="a"))
         store.append(StreamEvent(topic="b"))
@@ -41,7 +38,6 @@ class TestEventStore:
         assert len(events) == 2
 
     def test_read_by_topic(self):
-        """Verify read by topic behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="agent"))
         store.append(StreamEvent(topic="task"))
@@ -50,7 +46,6 @@ class TestEventStore:
         assert len(agent_events) == 2
 
     def test_compaction(self):
-        """Verify compaction behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="a"))
         store.append(StreamEvent(topic="b"))
@@ -60,7 +55,6 @@ class TestEventStore:
         assert store.count == 1
 
     def test_topics(self):
-        """Verify topics behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="z"))
         store.append(StreamEvent(topic="a"))
@@ -73,7 +67,6 @@ class TestEventReplayer:
     """Test suite for EventReplayer."""
 
     def test_replay_all(self):
-        """Verify replay all behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="agent", data={"n": 1}))
         store.append(StreamEvent(topic="agent", data={"n": 2}))
@@ -96,7 +89,6 @@ class TestEventReplayer:
         assert r1.handler_outputs == r2.handler_outputs
 
     def test_diff_deterministic(self):
-        """Verify diff deterministic behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="a", data={"v": 1}))
         replayer = EventReplayer(store)
@@ -112,7 +104,6 @@ class TestStreamProjection:
     """Test suite for StreamProjection."""
 
     def test_counter(self):
-        """Verify counter behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="a"))
         store.append(StreamEvent(topic="a"))
@@ -122,7 +113,6 @@ class TestStreamProjection:
         assert proj.counter() == 3
 
     def test_latest_per_key(self):
-        """Verify laper key behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="agent", source="a1", data={"v": 1}))
         store.append(StreamEvent(topic="agent", source="a2", data={"v": 2}))
@@ -133,7 +123,6 @@ class TestStreamProjection:
         assert latest["a2"].data["v"] == 2
 
     def test_fold(self):
-        """Verify fold behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="counter", data={"n": 5}))
         store.append(StreamEvent(topic="counter", data={"n": 3}))
@@ -142,7 +131,6 @@ class TestStreamProjection:
         assert total == 8
 
     def test_running_aggregate(self):
-        """Verify running aggregate behavior."""
         store = EventStore()
         store.append(StreamEvent(topic="m", data={"v": 10}))
         store.append(StreamEvent(topic="m", data={"v": 20}))

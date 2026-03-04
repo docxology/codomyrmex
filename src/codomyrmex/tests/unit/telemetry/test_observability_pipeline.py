@@ -26,7 +26,6 @@ class TestObservabilityPipeline:
     """Test suite for ObservabilityPipeline."""
 
     def test_correlation(self):
-        """Verify correlation behavior."""
         pipe = ObservabilityPipeline()
         cid = pipe.start_correlation()
         pipe.record_span("api.call", cid, duration_ms=10)
@@ -38,14 +37,12 @@ class TestObservabilityPipeline:
         assert kinds == {EventKind.SPAN, EventKind.METRIC, EventKind.LOG}
 
     def test_audit_event(self):
-        """Verify audit event behavior."""
         pipe = ObservabilityPipeline()
         evt = pipe.record_audit("login", actor="user1")
         assert evt.kind == EventKind.AUDIT
         assert evt.data["actor"] == "user1"
 
     def test_get_by_kind(self):
-        """Verify get by kind behavior."""
         pipe = ObservabilityPipeline()
         pipe.record_span("a", duration_ms=1)
         pipe.record_log("info", message="x")
@@ -58,20 +55,17 @@ class TestMetricAggregator:
     """Test suite for MetricAggregator."""
 
     def test_counter(self):
-        """Verify counter behavior."""
         m = MetricAggregator()
         m.increment("req")
         m.increment("req", 2)
         assert m.counter_value("req") == 3
 
     def test_gauge(self):
-        """Verify gauge behavior."""
         m = MetricAggregator()
         m.gauge("cpu", 65.0)
         assert m.gauge_value("cpu") == 65.0
 
     def test_histogram(self):
-        """Verify histogram behavior."""
         m = MetricAggregator()
         for v in [10, 20, 30, 40, 50]:
             m.observe("latency", v)
@@ -80,7 +74,6 @@ class TestMetricAggregator:
         assert stats["mean"] == 30.0
 
     def test_snapshot(self):
-        """Verify snapshot behavior."""
         m = MetricAggregator()
         m.increment("x")
         m.gauge("y", 1.0)
@@ -95,7 +88,6 @@ class TestAlertEvaluator:
     """Test suite for AlertEvaluator."""
 
     def test_fires_on_threshold(self):
-        """Verify fires on threshold behavior."""
         m = MetricAggregator()
         m.gauge("cpu", 95.0)
         ev = AlertEvaluator(metrics=m)
@@ -109,7 +101,6 @@ class TestAlertEvaluator:
         assert alerts[0].severity == AlertSeverity.CRITICAL
 
     def test_no_alert_below_threshold(self):
-        """Verify no alert below threshold behavior."""
         m = MetricAggregator()
         m.gauge("cpu", 50.0)
         ev = AlertEvaluator(metrics=m)
@@ -118,7 +109,6 @@ class TestAlertEvaluator:
         assert len(alerts) == 0
 
     def test_resolves_alert(self):
-        """Verify resolves alert behavior."""
         m = MetricAggregator()
         m.gauge("cpu", 95.0)
         ev = AlertEvaluator(metrics=m)
@@ -130,7 +120,6 @@ class TestAlertEvaluator:
         assert len(ev.active_alerts) == 0
 
     def test_alert_history(self):
-        """Verify alert history behavior."""
         m = MetricAggregator()
         m.increment("errors", 10)
         ev = AlertEvaluator(metrics=m)
@@ -145,7 +134,6 @@ class TestDashboardBuilder:
     """Test suite for DashboardBuilder."""
 
     def test_build_basic(self):
-        """Verify build basic behavior."""
         builder = DashboardBuilder(title="Test")
         builder.add_panel(Panel(title="CPU", targets=[PanelTarget(metric="cpu")]))
         config = builder.build()
@@ -153,7 +141,6 @@ class TestDashboardBuilder:
         assert len(config["panels"]) == 1
 
     def test_valid_json(self):
-        """Verify valid json behavior."""
         builder = DashboardBuilder(title="Export")
         builder.add_panel(Panel(title="P1"))
         output = builder.to_json()
@@ -161,7 +148,6 @@ class TestDashboardBuilder:
         assert parsed["title"] == "Export"
 
     def test_thresholds(self):
-        """Verify thresholds behavior."""
         builder = DashboardBuilder()
         builder.add_panel(Panel(
             title="Latency",

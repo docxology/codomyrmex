@@ -64,7 +64,6 @@ class TestBenchmarkingUtilities:
         from codomyrmex.performance import run_benchmark
 
         def test_function():
-            """Verify function behavior."""
             time.sleep(0.001)  # Small delay
 
         # Test with different iteration counts
@@ -93,7 +92,6 @@ class TestBenchmarkingUtilities:
         from codomyrmex.performance import profile_function
 
         def test_function():
-            """Verify function behavior."""
             result = []
             for i in range(100):
                 result.append(i * i)
@@ -435,7 +433,6 @@ class TestBenchmarkingIntegration:
         perf_logger = PerformanceLogger("benchmark_integration")
 
         def test_function():
-            """Verify function behavior."""
             return sum(range(500))
 
         # Benchmark with logging

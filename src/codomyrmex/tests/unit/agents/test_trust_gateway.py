@@ -39,19 +39,15 @@ class TestTrustLevel:
     """Test trust level enum values."""
 
     def test_untrusted_value(self):
-        """Verify untrusted value behavior."""
         assert TrustLevel.UNTRUSTED.value == "untrusted"
 
     def test_verified_value(self):
-        """Verify verified value behavior."""
         assert TrustLevel.VERIFIED.value == "verified"
 
     def test_trusted_value(self):
-        """Verify trusted value behavior."""
         assert TrustLevel.TRUSTED.value == "trusted"
 
     def test_three_levels(self):
-        """Verify three levels behavior."""
         assert len(TrustLevel) == 3
 
 
@@ -63,7 +59,6 @@ class TestToolClassification:
     """Test safe vs destructive tool sets."""
 
     def test_destructive_tools_count(self):
-        """Verify destructive tools count behavior."""
         # At least the original 4 + pattern-matched from auto-discovered modules
         assert DESTRUCTIVE_TOOL_COUNT >= 4
         # The original 4 must still be classified as destructive
@@ -71,33 +66,27 @@ class TestToolClassification:
             assert _is_destructive(tool)
 
     def test_safe_tools_count(self):
-        """Verify safe tools count behavior."""
         total = get_total_tool_count()
         assert SAFE_TOOL_COUNT == total - DESTRUCTIVE_TOOL_COUNT
 
     def test_no_overlap(self):
-        """Verify no overlap behavior."""
         destructive = _get_destructive_tools()
         safe = frozenset(SAFE_TOOLS)
         assert safe & destructive == frozenset()
 
     def test_union_is_complete(self):
-        """Verify union is complete behavior."""
         total = get_total_tool_count()
         destructive = _get_destructive_tools()
         safe = frozenset(SAFE_TOOLS)
         assert len(safe | destructive) == total
 
     def test_write_file_is_destructive(self):
-        """Verify write file is destructive behavior."""
         assert _is_destructive("codomyrmex.write_file")
 
     def test_run_command_is_destructive(self):
-        """Verify run command is destructive behavior."""
         assert _is_destructive("codomyrmex.run_command")
 
     def test_run_tests_is_destructive(self):
-        """Verify run tests is destructive behavior."""
         assert _is_destructive("codomyrmex.run_tests")
 
     def test_auto_discovered_destructive_pattern(self):
@@ -107,11 +96,9 @@ class TestToolClassification:
         assert not _is_destructive("codomyrmex.encryption.generate_aes_key")
 
     def test_read_file_is_safe(self):
-        """Verify read file is safe behavior."""
         assert "codomyrmex.read_file" in SAFE_TOOLS
 
     def test_list_modules_is_safe(self):
-        """Verify list modules is safe behavior."""
         assert "codomyrmex.list_modules" in SAFE_TOOLS
 
 
@@ -129,17 +116,14 @@ class TestTrustRegistry:
         reset_trust()
 
     def test_initial_state_untrusted(self):
-        """Verify initial state untrusted behavior."""
         reg = TrustRegistry()
         assert reg.level("codomyrmex.read_file") == TrustLevel.UNTRUSTED
 
     def test_initial_not_trusted(self):
-        """Verify initial not trusted behavior."""
         reg = TrustRegistry()
         assert not reg.is_trusted("codomyrmex.read_file")
 
     def test_verify_all_safe(self):
-        """Verify verify all safe behavior."""
         reg = TrustRegistry()
         promoted = reg.verify_all_safe()
         assert len(promoted) == SAFE_TOOL_COUNT
@@ -149,20 +133,17 @@ class TestTrustRegistry:
             assert reg.level(name) == TrustLevel.UNTRUSTED
 
     def test_trust_single_tool(self):
-        """Verify trust single tool behavior."""
         reg = TrustRegistry()
         new_level = reg.trust_tool("codomyrmex.write_file")
         assert new_level == TrustLevel.TRUSTED
         assert reg.is_trusted("codomyrmex.write_file")
 
     def test_trust_unknown_raises(self):
-        """Verify trust unknown raises behavior."""
         reg = TrustRegistry()
         with pytest.raises(KeyError, match="Unknown tool"):
             reg.trust_tool("codomyrmex.does_not_exist")
 
     def test_trust_all(self):
-        """Verify trust all behavior."""
         reg = TrustRegistry()
         promoted = reg.trust_all()
         total = get_total_tool_count()
@@ -171,7 +152,6 @@ class TestTrustRegistry:
             assert reg.is_trusted(name)
 
     def test_reset(self):
-        """Verify reset behavior."""
         reg = TrustRegistry()
         reg.trust_all()
         reg.reset()
@@ -179,7 +159,6 @@ class TestTrustRegistry:
             assert reg.level(name) == TrustLevel.UNTRUSTED
 
     def test_report_structure(self):
-        """Verify report structure behavior."""
         reg = TrustRegistry()
         report = reg.get_report()
         assert "total_tools" in report
@@ -189,7 +168,6 @@ class TestTrustRegistry:
         assert "counts" in report
 
     def test_is_at_least_verified(self):
-        """Verify is at least verified behavior."""
         reg = TrustRegistry()
         assert not reg.is_at_least_verified("codomyrmex.read_file")
         reg.verify_all_safe()
@@ -198,7 +176,6 @@ class TestTrustRegistry:
         assert reg.is_at_least_verified("codomyrmex.read_file")
 
     def test_verify_idempotent(self):
-        """Verify verify idempotent behavior."""
         reg = TrustRegistry()
         first = reg.verify_all_safe()
         second = reg.verify_all_safe()
@@ -220,18 +197,15 @@ class TestVerifyCapabilities:
         reset_trust()
 
     def test_returns_dict(self):
-        """Verify returns dict behavior."""
         report = verify_capabilities()
         assert isinstance(report, dict)
 
     def test_has_modules_section(self):
-        """Verify has modules section behavior."""
         report = verify_capabilities()
         assert "modules" in report
         assert report["modules"]["total"] > 50
 
     def test_has_tools_section(self):
-        """Verify has tools section behavior."""
         report = verify_capabilities()
         tools = report["tools"]
         assert tools["total"] == get_total_tool_count()
@@ -239,17 +213,14 @@ class TestVerifyCapabilities:
         assert tools["by_category"]["destructive"] == DESTRUCTIVE_TOOL_COUNT
 
     def test_has_resources_section(self):
-        """Verify has resources section behavior."""
         report = verify_capabilities()
         assert report["mcp"]["resources"] >= 2
 
     def test_has_prompts_section(self):
-        """Verify has prompts section behavior."""
         report = verify_capabilities()
         assert report["mcp"]["prompts"] >= 10
 
     def test_mcp_server_healthy(self):
-        """Verify mcp server healthy behavior."""
         report = verify_capabilities()
         assert report["mcp"]["server_name"] != "unknown"
 
@@ -259,7 +230,6 @@ class TestVerifyCapabilities:
         assert report["trust"]["gateway_healthy"] is True
 
     def test_trust_promotion(self):
-        """Verify trust promotion behavior."""
         report = verify_capabilities()
         trust = report["trust"]
         assert len(trust["promoted_to_verified"]) == SAFE_TOOL_COUNT
@@ -316,14 +286,12 @@ class TestTrustedCallTool:
         assert is_trusted("codomyrmex.run_tests")
 
     def test_trust_all_enables_everything(self):
-        """Verify trust all enables everything behavior."""
         trust_all()
         # All tools should now be trusted
         result = trusted_call_tool("codomyrmex.list_modules")
         assert "modules" in result
 
     def test_unknown_tool_raises_key_error(self):
-        """Verify unknown tool raises key error behavior."""
         trust_all()
         with pytest.raises(KeyError):
             trusted_call_tool("codomyrmex.nonexistent")
@@ -343,35 +311,29 @@ class TestModuleLevelFunctions:
         reset_trust()
 
     def test_trust_tool_returns_state(self):
-        """Verify trust tool returns state behavior."""
         result = trust_tool("codomyrmex.write_file")
         assert result["tool"] == "codomyrmex.write_file"
         assert result["new_level"] == "trusted"
         assert "report" in result
 
     def test_trust_all_returns_promoted(self):
-        """Verify trust all returns promoted behavior."""
         result = trust_all()
         total = get_total_tool_count()
         assert result["count"] == total
         assert len(result["promoted"]) == total
 
     def test_get_trust_report(self):
-        """Verify get trust report behavior."""
         report = get_trust_report()
         assert report["total_tools"] == get_total_tool_count()
 
     def test_is_trusted_false_initially(self):
-        """Verify is trusted false initially behavior."""
         assert not is_trusted("codomyrmex.write_file")
 
     def test_is_trusted_after_trust(self):
-        """Verify is trusted after trust behavior."""
         trust_tool("codomyrmex.write_file")
         assert is_trusted("codomyrmex.write_file")
 
     def test_reset_trust(self):
-        """Verify reset trust behavior."""
         trust_all()
         reset_trust()
         assert not is_trusted("codomyrmex.write_file")

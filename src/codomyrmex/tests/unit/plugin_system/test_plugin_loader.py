@@ -305,7 +305,6 @@ class TestPluginDiscovery:
     """Tests for PluginDiscovery."""
 
     def test_scan_entry_points_runs(self):
-        """Verify scan entry points runs behavior."""
         from codomyrmex.plugin_system.discovery import PluginDiscovery
         discovery = PluginDiscovery(entry_point_group="codomyrmex.test.nonexistent")
         result = discovery.scan_entry_points()
@@ -313,7 +312,6 @@ class TestPluginDiscovery:
         assert len(result.scan_sources) == 1
 
     def test_scan_invalid_directory(self):
-        """Verify scan invalid directory behavior."""
         from codomyrmex.plugin_system.discovery import PluginDiscovery
         discovery = PluginDiscovery()
         result = discovery.scan_directory("/nonexistent/path")

@@ -19,7 +19,6 @@ class TestOperationRiskClassification:
     """Tests for classify_operation_risk() mapping."""
 
     def test_list_is_read(self):
-        """Verify list is read behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -27,7 +26,6 @@ class TestOperationRiskClassification:
         assert classify_operation_risk("list_instances") == OperationRisk.READ
 
     def test_get_is_read(self):
-        """Verify get is read behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -35,7 +33,6 @@ class TestOperationRiskClassification:
         assert classify_operation_risk("get_volume") == OperationRisk.READ
 
     def test_create_is_write(self):
-        """Verify create is write behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -43,7 +40,6 @@ class TestOperationRiskClassification:
         assert classify_operation_risk("create_network") == OperationRisk.WRITE
 
     def test_delete_is_delete(self):
-        """Verify delete is delete behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -51,7 +47,6 @@ class TestOperationRiskClassification:
         assert classify_operation_risk("delete_bucket") == OperationRisk.DELETE
 
     def test_terminate_is_admin(self):
-        """Verify terminate is admin behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -59,7 +54,6 @@ class TestOperationRiskClassification:
         assert classify_operation_risk("terminate_instance") == OperationRisk.ADMIN
 
     def test_unknown_defaults_to_read(self):
-        """Verify unknown defaults to read behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -67,7 +61,6 @@ class TestOperationRiskClassification:
         assert classify_operation_risk("some_unknown_operation") == OperationRisk.READ
 
     def test_upload_is_write(self):
-        """Verify upload is write behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -75,7 +68,6 @@ class TestOperationRiskClassification:
         assert classify_operation_risk("upload_file") == OperationRisk.WRITE
 
     def test_remove_is_delete(self):
-        """Verify remove is delete behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             classify_operation_risk,
@@ -91,7 +83,6 @@ class TestSecurityCheckResult:
     """Tests for SecurityCheckResult dataclass."""
 
     def test_default_values(self):
-        """Verify default values behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             SecurityCheckResult,
@@ -104,7 +95,6 @@ class TestSecurityCheckResult:
         assert r.checks_failed == []
 
     def test_custom_values(self):
-        """Verify custom values behavior."""
         from codomyrmex.cloud.infomaniak.security import (
             OperationRisk,
             SecurityCheckResult,
@@ -123,7 +113,6 @@ class TestSecurityCheckResult:
         assert r.checks_failed == ["b"]
 
     def test_mutable_lists_are_independent(self):
-        """Verify mutable lists are independent behavior."""
         from codomyrmex.cloud.infomaniak.security import SecurityCheckResult
         r1 = SecurityCheckResult()
         r2 = SecurityCheckResult()

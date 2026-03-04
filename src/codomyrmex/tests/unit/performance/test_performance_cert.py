@@ -15,7 +15,6 @@ class TestBenchmarkRunner:
     """Test suite for BenchmarkRunner."""
 
     def test_basic_benchmark(self):
-        """Verify basic benchmark behavior."""
         runner = BenchmarkRunner()
         runner.add("noop", lambda: None, iterations=10)
         suite = runner.run()
@@ -23,21 +22,18 @@ class TestBenchmarkRunner:
         assert len(suite.results) == 1
 
     def test_threshold_pass(self):
-        """Verify threshold pass behavior."""
         runner = BenchmarkRunner()
         runner.add("fast", lambda: None, iterations=10, threshold_ms=100)
         suite = runner.run()
         assert suite.results[0].passed
 
     def test_ops_per_sec(self):
-        """Verify ops per sec behavior."""
         runner = BenchmarkRunner()
         runner.add("work", lambda: sum(range(100)), iterations=50)
         suite = runner.run()
         assert suite.results[0].ops_per_sec > 0
 
     def test_markdown_output(self):
-        """Verify markdown output behavior."""
         runner = BenchmarkRunner()
         runner.add("test", lambda: None, iterations=5)
         suite = runner.run()
@@ -46,7 +42,6 @@ class TestBenchmarkRunner:
         assert "Ops/s" in md
 
     def test_multiple_benchmarks(self):
-        """Verify multiple benchmarks behavior."""
         runner = BenchmarkRunner()
         runner.add("a", lambda: None, iterations=5)
         runner.add("b", lambda: sum(range(10)), iterations=5)
@@ -60,14 +55,12 @@ class TestLoadTester:
     """Test suite for Loader."""
 
     def test_successful_load(self):
-        """Verify successful load behavior."""
         tester = LoadTester()
         result = tester.run(fn=lambda: None, total_requests=50)
         assert result.successful == 50
         assert result.error_rate == 0.0
 
     def test_error_rate(self):
-        """Verify error rate behavior."""
         call_count = {"n": 0}
         def sometimes_fail():
             call_count["n"] += 1
@@ -80,7 +73,6 @@ class TestLoadTester:
         assert result.error_rate == pytest.approx(0.2)
 
     def test_throughput(self):
-        """Verify throughput behavior."""
         tester = LoadTester()
         result = tester.run(fn=lambda: None, total_requests=100)
         assert result.throughput_per_sec > 0
@@ -92,13 +84,11 @@ class TestMemoryProfiler:
     """Test suite for MemoryProfiler."""
 
     def test_snapshot(self):
-        """Verify snapshot behavior."""
         profiler = MemoryProfiler()
         snap = profiler.snapshot_lightweight("test", tracked_count=100)
         assert snap.object_count == 100
 
     def test_diff_no_leak(self):
-        """Verify diff no leak behavior."""
         profiler = MemoryProfiler(leak_threshold=1000)
         profiler.snapshot_lightweight("before", 100)
         profiler.snapshot_lightweight("after", 150)
@@ -107,7 +97,6 @@ class TestMemoryProfiler:
         assert not delta.leak_suspected
 
     def test_diff_leak_detected(self):
-        """Verify diff leak detected behavior."""
         profiler = MemoryProfiler(leak_threshold=100)
         profiler.snapshot_lightweight("before", 100)
         profiler.snapshot_lightweight("after", 300)
@@ -115,7 +104,6 @@ class TestMemoryProfiler:
         assert delta.leak_suspected
 
     def test_gc_snapshot(self):
-        """Verify gc snapshot behavior."""
         profiler = MemoryProfiler()
         snap = profiler.snapshot("gc_test")
         assert snap.object_count > 0

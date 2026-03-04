@@ -17,7 +17,6 @@ from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 class TestCreateNote:
     """Test suite for CreateNote."""
     def test_create_basic(self, tmp_vault):
-        """Verify create basic behavior."""
         vault = ObsidianVault(tmp_vault)
         note = create_note(vault, "New Note.md", content="Hello world")
         assert note.title == "New Note"
@@ -25,32 +24,27 @@ class TestCreateNote:
         assert (tmp_vault / "New Note.md").exists()
 
     def test_create_with_frontmatter(self, tmp_vault):
-        """Verify create with frontmatter behavior."""
         vault = ObsidianVault(tmp_vault)
         fm = {"title": "Created", "tags": ["auto"]}
         note = create_note(vault, "Created.md", content="Body", frontmatter=fm)
         assert note.frontmatter["title"] == "Created"
 
     def test_create_in_subfolder(self, tmp_vault):
-        """Verify create in subfolder behavior."""
         vault = ObsidianVault(tmp_vault)
         create_note(vault, "deep/folder/Note.md", content="Deep")
         assert (tmp_vault / "deep" / "folder" / "Note.md").exists()
 
     def test_create_adds_md_extension(self, tmp_vault):
-        """Verify create adds md extension behavior."""
         vault = ObsidianVault(tmp_vault)
         create_note(vault, "NoExt", content="Test")
         assert (tmp_vault / "NoExt.md").exists()
 
     def test_create_duplicate_raises(self, tmp_vault):
-        """Verify create duplicate raises behavior."""
         vault = ObsidianVault(tmp_vault)
         with pytest.raises(FileExistsError):
             create_note(vault, "My Test Note.md")
 
     def test_create_traversal_blocked(self, tmp_vault):
-        """Verify create traversal blocked behavior."""
         vault = ObsidianVault(tmp_vault)
         with pytest.raises(ValueError, match="traversal"):
             create_note(vault, "../../etc/passwd")
@@ -59,20 +53,17 @@ class TestCreateNote:
 class TestReadNote:
     """Test suite for ReadNote."""
     def test_read_existing(self, tmp_vault):
-        """Verify read existing behavior."""
         vault = ObsidianVault(tmp_vault)
         note = read_note(vault, "My Test Note.md")
         assert note.frontmatter["title"] == "My Test Note"
         assert len(note.links) > 0
 
     def test_read_not_found(self, tmp_vault):
-        """Verify read not found behavior."""
         vault = ObsidianVault(tmp_vault)
         with pytest.raises(FileNotFoundError):
             read_note(vault, "Nonexistent.md")
 
     def test_read_without_extension(self, tmp_vault):
-        """Verify read without extension behavior."""
         vault = ObsidianVault(tmp_vault)
         note = read_note(vault, "Simple Note")
         assert note.title == "Simple Note"
@@ -81,7 +72,6 @@ class TestReadNote:
 class TestUpdateNote:
     """Test suite for UpdateNote."""
     def test_update_content(self, tmp_vault):
-        """Verify update content behavior."""
         vault = ObsidianVault(tmp_vault)
         update_note(vault, "Simple Note.md", content="Updated content")
         # Re-read to verify
@@ -89,7 +79,6 @@ class TestUpdateNote:
         assert "Updated content" in note2.content
 
     def test_update_frontmatter(self, tmp_vault):
-        """Verify update frontmatter behavior."""
         vault = ObsidianVault(tmp_vault)
         update_note(
             vault, "My Test Note.md", frontmatter={"new_key": "new_value"}
@@ -100,7 +89,6 @@ class TestUpdateNote:
         assert note2.frontmatter["title"] == "My Test Note"
 
     def test_update_not_found(self, tmp_vault):
-        """Verify update not found behavior."""
         vault = ObsidianVault(tmp_vault)
         with pytest.raises(FileNotFoundError):
             update_note(vault, "Nonexistent.md", content="x")
@@ -109,18 +97,15 @@ class TestUpdateNote:
 class TestDeleteNote:
     """Test suite for DeleteNote."""
     def test_delete_existing(self, tmp_vault):
-        """Verify delete existing behavior."""
         vault = ObsidianVault(tmp_vault)
         assert delete_note(vault, "Simple Note.md") is True
         assert not (tmp_vault / "Simple Note.md").exists()
 
     def test_delete_not_found(self, tmp_vault):
-        """Verify delete not found behavior."""
         vault = ObsidianVault(tmp_vault)
         assert delete_note(vault, "Nonexistent.md") is False
 
     def test_delete_traversal_blocked(self, tmp_vault):
-        """Verify delete traversal blocked behavior."""
         vault = ObsidianVault(tmp_vault)
         with pytest.raises(ValueError, match="traversal"):
             delete_note(vault, "../../etc/passwd")
@@ -129,14 +114,12 @@ class TestDeleteNote:
 class TestFrontmatter:
     """Test suite for Frontmatter."""
     def test_get_frontmatter(self, tmp_vault):
-        """Verify get frontmatter behavior."""
         vault = ObsidianVault(tmp_vault)
         fm = get_frontmatter(vault, "My Test Note.md")
         assert fm["title"] == "My Test Note"
         assert "testing" in fm["tags"]
 
     def test_set_frontmatter_merge(self, tmp_vault):
-        """Verify set frontmatter merge behavior."""
         vault = ObsidianVault(tmp_vault)
         set_frontmatter(vault, "My Test Note.md", {"priority": "high"})
         fm = get_frontmatter(vault, "My Test Note.md")
@@ -147,7 +130,6 @@ class TestFrontmatter:
 class TestRenameNote:
     """Test suite for RenameNote."""
     def test_rename_basic(self, tmp_vault):
-        """Verify rename basic behavior."""
         vault = ObsidianVault(tmp_vault)
         note = rename_note(vault, "Simple Note.md", "Renamed Note.md")
         assert note.title == "Renamed Note"
@@ -155,7 +137,6 @@ class TestRenameNote:
         assert (tmp_vault / "Renamed Note.md").exists()
 
     def test_rename_updates_links(self, tmp_vault):
-        """Verify rename updates links behavior."""
         vault = ObsidianVault(tmp_vault)
         # Simple Note links to My Test Note. Rename My Test Note.
         rename_note(vault, "My Test Note.md", "Renamed Test.md")
@@ -164,13 +145,11 @@ class TestRenameNote:
         assert "[[Renamed Test]]" in content
 
     def test_rename_not_found(self, tmp_vault):
-        """Verify rename not found behavior."""
         vault = ObsidianVault(tmp_vault)
         with pytest.raises(FileNotFoundError):
             rename_note(vault, "Nonexistent.md", "New.md")
 
     def test_rename_target_exists(self, tmp_vault):
-        """Verify rename target exists behavior."""
         vault = ObsidianVault(tmp_vault)
         with pytest.raises(FileExistsError):
             rename_note(vault, "Simple Note.md", "My Test Note.md")

@@ -20,7 +20,6 @@ class TestReleaseValidator:
     """Test suite for ReleaseValidator."""
 
     def test_full_certification_pass(self):
-        """Verify full certification pass behavior."""
         v = ReleaseValidator(version="1.0.0")
         v.check_tests(failures=0, total=9000)
         v.check_coverage(overall=67, tier1=82)
@@ -32,7 +31,6 @@ class TestReleaseValidator:
         assert cert.pass_rate == pytest.approx(1.0)
 
     def test_certification_fail_on_tests(self):
-        """Verify certification fail on tests behavior."""
         v = ReleaseValidator()
         v.check_tests(failures=3, total=100)
         cert = v.certify()
@@ -40,14 +38,12 @@ class TestReleaseValidator:
         assert "Test Suite" in cert.blockers
 
     def test_certification_fail_on_coverage(self):
-        """Verify certification fail on coverage behavior."""
         v = ReleaseValidator()
         v.check_coverage(overall=50, tier1=60)
         cert = v.certify()
         assert not cert.certified
 
     def test_markdown_output(self):
-        """Verify markdown output behavior."""
         v = ReleaseValidator(version="1.0.0")
         v.check_tests(failures=0, total=100)
         cert = v.certify()
@@ -62,27 +58,23 @@ class TestPackageBuilder:
     """Test suite for PackageBuilder."""
 
     def test_valid_build(self):
-        """Verify valid build behavior."""
         builder = PackageBuilder(PackageMetadata(name="mypackage", version="1.0.0"))
         report = builder.build()
         assert report.success
         assert len(report.artifacts) == 2
 
     def test_checksums(self):
-        """Verify checksums behavior."""
         builder = PackageBuilder(PackageMetadata(name="pkg", version="1.0"))
         report = builder.build()
         for artifact in report.artifacts:
             assert len(artifact.checksum) > 0
 
     def test_invalid_metadata(self):
-        """Verify invalid metadata behavior."""
         builder = PackageBuilder(PackageMetadata(name="", version=""))
         report = builder.build()
         assert not report.success
 
     def test_artifact_filenames(self):
-        """Verify artifact filenames behavior."""
         builder = PackageBuilder(PackageMetadata(name="mylib", version="2.0.0"))
         report = builder.build()
         formats = {a.format for a in report.artifacts}
@@ -96,7 +88,6 @@ class TestDistributionManager:
     """Test suite for DistributionManager."""
 
     def test_preflight_pass(self):
-        """Verify preflight pass behavior."""
         builder = PackageBuilder(PackageMetadata(name="pkg", version="1.0"))
         report = builder.build()
         dm = DistributionManager(build=report)
@@ -104,13 +95,11 @@ class TestDistributionManager:
         assert pf.ready
 
     def test_preflight_fail_no_build(self):
-        """Verify preflight fail no build behavior."""
         dm = DistributionManager()
         pf = dm.preflight(DistributionTarget.PYPI)
         assert not pf.ready
 
     def test_publish_pypi(self):
-        """Verify publish pypi behavior."""
         builder = PackageBuilder(PackageMetadata(name="codomyrmex", version="1.0.0"))
         report = builder.build()
         dm = DistributionManager(build=report)
@@ -119,7 +108,6 @@ class TestDistributionManager:
         assert "pypi.org" in result.url
 
     def test_publish_github(self):
-        """Verify publish github behavior."""
         builder = PackageBuilder(PackageMetadata(name="codomyrmex", version="1.0.0"))
         report = builder.build()
         dm = DistributionManager(build=report)

@@ -21,7 +21,6 @@ class TestHealthCheckResult:
     """Test HealthCheckResult dataclass."""
 
     def test_creation_defaults(self):
-        """Verify creation defaults behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthCheckResult,
             HealthStatus,
@@ -33,7 +32,6 @@ class TestHealthCheckResult:
         assert r.issues == []
 
     def test_to_dict(self):
-        """Verify to dict behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthCheckResult,
             HealthStatus,
@@ -46,7 +44,6 @@ class TestHealthCheckResult:
         assert isinstance(d["checks_performed"], list)
 
     def test_add_issue(self):
-        """Verify add issue behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthCheckResult,
             HealthStatus,
@@ -58,7 +55,6 @@ class TestHealthCheckResult:
         assert any("something broke" in str(i) for i in r.issues)
 
     def test_add_issue_without_recommendation(self):
-        """Verify add issue without recommendation behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthCheckResult,
             HealthStatus,
@@ -68,7 +64,6 @@ class TestHealthCheckResult:
         assert len(r.issues) == 1
 
     def test_add_metric(self):
-        """Verify add metric behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthCheckResult,
             HealthStatus,
@@ -78,7 +73,6 @@ class TestHealthCheckResult:
         assert r.metrics["latency_ms"] == 42
 
     def test_multiple_metrics(self):
-        """Verify multiple metrics behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthCheckResult,
             HealthStatus,
@@ -94,7 +88,6 @@ class TestHealthStatus:
     """Test HealthStatus enum."""
 
     def test_values(self):
-        """Verify values behavior."""
         from codomyrmex.system_discovery.health.health_checker import HealthStatus
         assert HealthStatus.HEALTHY.value == "healthy"
         assert HealthStatus.DEGRADED.value == "degraded"
@@ -111,13 +104,11 @@ class TestHealthChecker:
     """Test HealthChecker functionality."""
 
     def test_init(self):
-        """Verify init behavior."""
         from codomyrmex.system_discovery.health.health_checker import HealthChecker
         checker = HealthChecker()
         assert checker is not None
 
     def test_check_known_module(self):
-        """Verify check known module behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthChecker,
             HealthCheckResult,
@@ -128,7 +119,6 @@ class TestHealthChecker:
         assert result.module_name == "logging_monitoring"
 
     def test_check_unknown_module(self):
-        """Verify check unknown module behavior."""
         from codomyrmex.system_discovery.health.health_checker import (
             HealthChecker,
             HealthCheckResult,
@@ -138,7 +128,6 @@ class TestHealthChecker:
         assert isinstance(result, HealthCheckResult)
 
     def test_check_multiple_modules(self):
-        """Verify check multiple modules behavior."""
         from codomyrmex.system_discovery.health.health_checker import HealthChecker
         checker = HealthChecker()
         modules = ["logging_monitoring", "events", "agents"]
@@ -147,7 +136,6 @@ class TestHealthChecker:
             assert result.module_name == mod
 
     def test_result_has_checks_performed(self):
-        """Verify result has checks performed behavior."""
         from codomyrmex.system_discovery.health.health_checker import HealthChecker
         checker = HealthChecker()
         result = checker.perform_health_check("logging_monitoring")
@@ -163,12 +151,10 @@ class TestDiscoveryEngine:
     """Test SystemDiscovery."""
 
     def test_import(self):
-        """Verify import behavior."""
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
         assert SystemDiscovery is not None
 
     def test_init(self):
-        """Verify init behavior."""
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
         engine = SystemDiscovery()
         assert engine is not None
@@ -183,14 +169,12 @@ class TestCapabilityScanner:
     """Test CapabilityScanner."""
 
     def test_import(self):
-        """Verify import behavior."""
         from codomyrmex.system_discovery.core.capability_scanner import (
             CapabilityScanner,
         )
         assert CapabilityScanner is not None
 
     def test_init(self):
-        """Verify init behavior."""
         from codomyrmex.system_discovery.core.capability_scanner import (
             CapabilityScanner,
         )
@@ -207,12 +191,10 @@ class TestDiscoveryContext:
     """Test discovery context."""
 
     def test_import(self):
-        """Verify import behavior."""
         from codomyrmex.system_discovery.core.context import get_system_context
         assert get_system_context is not None
 
     def test_call(self):
-        """Verify call behavior."""
         from codomyrmex.system_discovery.core.context import get_system_context
         ctx = get_system_context()
         assert ctx is not None

@@ -43,18 +43,15 @@ def _run(coro):
 class TestSetupModuleLogging:
     """Test suite for SetupModuleLogging."""
     def test_creates_logger(self):
-        """Verify creates logger behavior."""
         log = setup_module_logging("test_module")
         assert isinstance(log, logging.Logger)
         assert log.name == "codomyrmex.test_module"
 
     def test_sets_level(self):
-        """Verify sets level behavior."""
         log = setup_module_logging("test_level", level=logging.DEBUG)
         assert log.level == logging.DEBUG
 
     def test_custom_format(self):
-        """Verify custom format behavior."""
         log = setup_module_logging("test_fmt", format_str="%(message)s")
         assert log is not None
 
@@ -74,7 +71,6 @@ class TestSetupModuleLogging:
 class TestLogPerformance:
     """Test suite for LogPerformance."""
     def test_decorator_preserves_return_value(self):
-        """Verify decorator preserves return value behavior."""
         @log_performance("test_op")
         def add(a, b):
             return a + b
@@ -82,7 +78,6 @@ class TestLogPerformance:
         assert add(1, 2) == 3
 
     def test_decorator_preserves_function_name(self):
-        """Verify decorator preserves function name behavior."""
         @log_performance("test_op")
         def my_func():
             pass
@@ -90,7 +85,6 @@ class TestLogPerformance:
         assert my_func.__name__ == "my_func"
 
     def test_decorator_raises_on_error(self):
-        """Verify decorator raises on error behavior."""
         @log_performance("test_op")
         def failing():
             raise ValueError("fail")
@@ -107,7 +101,6 @@ class TestLogPerformance:
 class TestRunAsync:
     """Test suite for RunAsync."""
     def test_runs_coroutine(self):
-        """Verify runs coroutine behavior."""
         async def coro():
             return 42
 
@@ -115,7 +108,6 @@ class TestRunAsync:
         assert result == 42
 
     def test_returns_value(self):
-        """Verify returns value behavior."""
         async def coro():
             return "hello"
 
@@ -130,7 +122,6 @@ class TestRunAsync:
 class TestMakeAsync:
     """Test suite for MakeAsync."""
     def test_converts_sync_to_async(self):
-        """Verify converts sync to async behavior."""
         def sync_fn(x):
             return x * 2
 
@@ -142,7 +133,6 @@ class TestMakeAsync:
         _run(_test())
 
     def test_preserves_function_name(self):
-        """Verify preserves function name behavior."""
         def my_function():
             pass
 
@@ -158,7 +148,6 @@ class TestMakeAsync:
 class TestRetryConfig:
     """Test suite for RetryConfig."""
     def test_defaults(self):
-        """Verify defaults behavior."""
         config = RetryConfig()
         assert config.max_attempts == 3
         assert config.initial_delay == 0.1
@@ -167,7 +156,6 @@ class TestRetryConfig:
         assert config.jitter is True
 
     def test_custom(self):
-        """Verify custom behavior."""
         config = RetryConfig(
             max_attempts=5,
             initial_delay=0.5,
@@ -187,7 +175,6 @@ class TestRetryConfig:
 class TestWithRetry:
     """Test suite for WithRetry."""
     def test_succeeds_first_try(self):
-        """Verify succeeds first try behavior."""
         call_count = 0
 
         @with_retry(RetryConfig(max_attempts=3, initial_delay=0.001))
@@ -201,7 +188,6 @@ class TestWithRetry:
         assert call_count == 1
 
     def test_retries_on_failure(self):
-        """Verify retries on failure behavior."""
         call_count = 0
 
         @with_retry(RetryConfig(max_attempts=3, initial_delay=0.001, jitter=False))
@@ -217,7 +203,6 @@ class TestWithRetry:
         assert call_count == 3
 
     def test_raises_after_max_attempts(self):
-        """Verify raises after max attempts behavior."""
         @with_retry(RetryConfig(max_attempts=2, initial_delay=0.001, jitter=False))
         def always_fail():
             raise RuntimeError("always")
@@ -226,7 +211,6 @@ class TestWithRetry:
             always_fail()
 
     def test_only_retries_specified_exceptions(self):
-        """Verify only retries specified exceptions behavior."""
         @with_retry(RetryConfig(
             max_attempts=3,
             initial_delay=0.001,
@@ -247,13 +231,11 @@ class TestWithRetry:
 class TestTimedOperation:
     """Test suite for TimedOperation."""
     def test_context_manager(self):
-        """Verify context manager behavior."""
         with timed_operation("test_op"):
             time.sleep(0.01)
         # Should not raise
 
     def test_yields_control(self):
-        """Verify yields control behavior."""
         result = None
         with timed_operation("test_op"):
             result = 42
@@ -268,7 +250,6 @@ class TestTimedOperation:
 class TestAsyncTimedOperation:
     """Test suite for AsyncTimedOperation."""
     def test_async_context_manager(self):
-        """Verify async context manager behavior."""
         async def _test():
             async with async_timed_operation("test_op"):
                 await asyncio.sleep(0.01)
@@ -276,7 +257,6 @@ class TestAsyncTimedOperation:
         _run(_test())
 
     def test_yields_control(self):
-        """Verify yields control behavior."""
         async def _test():
             result = None
             async with async_timed_operation("test_op"):
@@ -294,13 +274,11 @@ class TestAsyncTimedOperation:
 class TestModuleRegistry:
     """Test suite for ModuleRegistry."""
     def test_singleton(self):
-        """Verify singleton behavior."""
         r1 = ModuleRegistry()
         r2 = ModuleRegistry()
         assert r1 is r2
 
     def test_register_and_get(self):
-        """Verify register and get behavior."""
         reg = ModuleRegistry()
         reg.register("test_module_xyz", {"name": "test"})
         result = reg.get("test_module_xyz")
@@ -308,12 +286,10 @@ class TestModuleRegistry:
         assert result["name"] == "test"
 
     def test_get_nonexistent(self):
-        """Verify get nonexistent behavior."""
         reg = ModuleRegistry()
         assert reg.get("nonexistent_module_abc") is None
 
     def test_add_hook_and_trigger(self):
-        """Verify add hook and trigger behavior."""
         reg = ModuleRegistry()
         results = []
         reg.add_hook("test_event_xyz", lambda: results.append("called"))
@@ -321,7 +297,6 @@ class TestModuleRegistry:
         assert len(results) == 1
 
     def test_trigger_with_args(self):
-        """Verify trigger with args behavior."""
         reg = ModuleRegistry()
         received = []
         reg.add_hook("test_args_xyz", lambda x, y: received.append((x, y)))
@@ -329,13 +304,11 @@ class TestModuleRegistry:
         assert received == [(1, 2)]
 
     def test_trigger_nonexistent_event(self):
-        """Verify trigger nonexistent event behavior."""
         reg = ModuleRegistry()
         results = reg.trigger("nonexistent_event_abc")
         assert results == []
 
     def test_global_registry_instance(self):
-        """Verify global registry instance behavior."""
         assert registry is not None
         assert isinstance(registry, ModuleRegistry)
 
@@ -348,14 +321,12 @@ class TestModuleRegistry:
 class TestHealthStatus:
     """Test suite for HealthStatus."""
     def test_create_healthy(self):
-        """Verify create healthy behavior."""
         status = HealthStatus(healthy=True, name="test_service")
         assert status.healthy is True
         assert status.name == "test_service"
         assert status.message == ""
 
     def test_create_unhealthy(self):
-        """Verify create unhealthy behavior."""
         status = HealthStatus(
             healthy=False,
             name="db",
@@ -365,7 +336,6 @@ class TestHealthStatus:
         assert "Connection refused" in status.message
 
     def test_defaults(self):
-        """Verify defaults behavior."""
         status = HealthStatus(healthy=True, name="test")
         assert status.latency_ms == 0.0
         assert status.details == {}
@@ -379,18 +349,15 @@ class TestHealthStatus:
 class TestHealthChecker:
     """Test suite for HealthChecker."""
     def test_create(self):
-        """Verify create behavior."""
         checker = HealthChecker()
         assert checker._checks == {}
 
     def test_register_check(self):
-        """Verify register check behavior."""
         checker = HealthChecker()
         checker.register("db", lambda: HealthStatus(healthy=True, name="db"))
         assert "db" in checker._checks
 
     def test_check_all_healthy(self):
-        """Verify check all healthy behavior."""
         checker = HealthChecker()
         checker.register("db", lambda: HealthStatus(healthy=True, name="db"))
         checker.register("cache", lambda: HealthStatus(healthy=True, name="cache"))
@@ -399,7 +366,6 @@ class TestHealthChecker:
         assert all(s.healthy for s in results.values())
 
     def test_check_all_with_failure(self):
-        """Verify check all with failure behavior."""
         checker = HealthChecker()
         checker.register("db", lambda: HealthStatus(healthy=True, name="db"))
         checker.register("broken", lambda: HealthStatus(healthy=False, name="broken"))
@@ -408,7 +374,6 @@ class TestHealthChecker:
         assert results["broken"].healthy is False
 
     def test_check_all_handles_exception(self):
-        """Verify check all handles exception behavior."""
         checker = HealthChecker()
 
         def exploding_check():
@@ -420,20 +385,17 @@ class TestHealthChecker:
         assert "boom" in results["bad"].message
 
     def test_is_healthy_all_good(self):
-        """Verify is healthy all good behavior."""
         checker = HealthChecker()
         checker.register("a", lambda: HealthStatus(healthy=True, name="a"))
         assert checker.is_healthy() is True
 
     def test_is_healthy_one_bad(self):
-        """Verify is healthy one bad behavior."""
         checker = HealthChecker()
         checker.register("a", lambda: HealthStatus(healthy=True, name="a"))
         checker.register("b", lambda: HealthStatus(healthy=False, name="b"))
         assert checker.is_healthy() is False
 
     def test_latency_measured(self):
-        """Verify latency measured behavior."""
         checker = HealthChecker()
 
         def slow_check():
@@ -453,7 +415,6 @@ class TestHealthChecker:
 class TestGatherWithConcurrency:
     """Test suite for GatherWithConcurrency."""
     def test_runs_coroutines(self):
-        """Verify runs coroutines behavior."""
         async def _test():
             async def double(x):
                 return x * 2
@@ -467,7 +428,6 @@ class TestGatherWithConcurrency:
         _run(_test())
 
     def test_respects_concurrency_limit(self):
-        """Verify respects concurrency limit behavior."""
         async def _test():
             running = 0
             max_running = 0

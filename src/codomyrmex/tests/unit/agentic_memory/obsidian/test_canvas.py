@@ -22,18 +22,15 @@ from codomyrmex.agentic_memory.obsidian.models import (
 class TestParseCanvas:
     """Test suite for ParseCanvas."""
     def test_parse_nodes(self, tmp_canvas_file):
-        """Verify parse nodes behavior."""
         canvas = parse_canvas(tmp_canvas_file)
         assert len(canvas.nodes) == 4
 
     def test_parse_edges(self, tmp_canvas_file):
-        """Verify parse edges behavior."""
         canvas = parse_canvas(tmp_canvas_file)
         assert len(canvas.edges) == 2
         assert canvas.edges[0].label == "references"
 
     def test_parse_node_types(self, tmp_canvas_file):
-        """Verify parse node types behavior."""
         canvas = parse_canvas(tmp_canvas_file)
         types = {n.type for n in canvas.nodes}
         assert "text" in types
@@ -41,19 +38,16 @@ class TestParseCanvas:
         assert "link" in types
 
     def test_parse_text_node(self, tmp_canvas_file):
-        """Verify parse text node behavior."""
         canvas = parse_canvas(tmp_canvas_file)
         text_nodes = [n for n in canvas.nodes if n.type == "text"]
         assert len(text_nodes) == 2
         assert text_nodes[0].text == "Hello World"
 
     def test_parse_file_not_found(self, tmp_path):
-        """Verify parse file not found behavior."""
         with pytest.raises(FileNotFoundError):
             parse_canvas(tmp_path / "nonexistent.canvas")
 
     def test_parse_sets_path(self, tmp_canvas_file):
-        """Verify parse sets path behavior."""
         canvas = parse_canvas(tmp_canvas_file)
         assert canvas.path == tmp_canvas_file
 
@@ -61,7 +55,6 @@ class TestParseCanvas:
 class TestCreateCanvas:
     """Test suite for CreateCanvas."""
     def test_create_basic(self, tmp_path):
-        """Verify create basic behavior."""
         path = tmp_path / "new.canvas"
         nodes = [
             CanvasNode(id="n1", type="text", text="Test"),
@@ -71,7 +64,6 @@ class TestCreateCanvas:
         assert len(canvas.nodes) == 1
 
     def test_create_roundtrip(self, tmp_path):
-        """Verify create roundtrip behavior."""
         path = tmp_path / "roundtrip.canvas"
         nodes = [
             CanvasNode(id="n1", type="text", x=10, y=20, text="Hello"),
@@ -89,7 +81,6 @@ class TestCreateCanvas:
         assert canvas2.nodes[0].text == "Hello"
 
     def test_create_empty(self, tmp_path):
-        """Verify create empty behavior."""
         path = tmp_path / "empty.canvas"
         create_canvas(path)
         assert path.exists()
@@ -101,7 +92,6 @@ class TestCreateCanvas:
 class TestCanvasSerialization:
     """Test suite for CanvasSerialization."""
     def test_to_dict(self):
-        """Verify to dict behavior."""
         canvas = Canvas(
             nodes=[CanvasNode(id="n1", type="text", text="Hi")],
             edges=[],
@@ -113,7 +103,6 @@ class TestCanvasSerialization:
         assert "file" not in d["nodes"][0]
 
     def test_from_dict(self):
-        """Verify from dict behavior."""
         data = {
             "nodes": [{"id": "n1", "type": "text", "x": 0, "y": 0, "width": 100, "height": 100, "text": "Test"}],
             "edges": [],
@@ -123,7 +112,6 @@ class TestCanvasSerialization:
         assert canvas.nodes[0].text == "Test"
 
     def test_roundtrip_dict(self):
-        """Verify roundtrip dict behavior."""
         original = Canvas(
             nodes=[
                 CanvasNode(id="n1", type="text", x=10, y=20, width=300, height=200, text="Content"),
@@ -143,7 +131,6 @@ class TestCanvasSerialization:
 class TestAddOperations:
     """Test suite for AddOperations."""
     def test_add_node(self):
-        """Verify add node behavior."""
         canvas = Canvas()
         node = CanvasNode(id="new", type="text", text="Added")
         result = add_canvas_node(canvas, node)
@@ -151,7 +138,6 @@ class TestAddOperations:
         assert result is canvas  # Same object
 
     def test_add_edge(self):
-        """Verify add edge behavior."""
         canvas = Canvas(
             nodes=[
                 CanvasNode(id="a", type="text"),

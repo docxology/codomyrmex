@@ -33,50 +33,41 @@ from codomyrmex.orchestrator.resilience.self_healing import (
 class TestClassifyError:
     """Test suite for ClassifyError."""
     def test_config_error(self) -> None:
-        """Verify config error behavior."""
         result = classify_error("Invalid config value for model")
         assert result.category == FailureCategory.CONFIG_ERROR
 
     def test_resource_error(self) -> None:
-        """Verify resource error behavior."""
         result = classify_error("Out of memory (OOM)")
         assert result.category == FailureCategory.RESOURCE_EXHAUSTION
 
     def test_dependency_error(self) -> None:
-        """Verify dependency error behavior."""
         result = classify_error("Connection refused to API")
         assert result.category == FailureCategory.DEPENDENCY_FAILURE
 
     def test_timeout(self) -> None:
-        """Verify timeout behavior."""
         result = classify_error("Request timed out")
         assert result.category == FailureCategory.TIMEOUT
 
     def test_permission(self) -> None:
-        """Verify permission behavior."""
         result = classify_error("Permission denied")
         assert result.category == FailureCategory.PERMISSION_ERROR
 
     def test_logic_error(self) -> None:
-        """Verify logic error behavior."""
         result = classify_error("Assertion failed: expected True")
         assert result.category == FailureCategory.LOGIC_ERROR
 
     def test_unknown(self) -> None:
-        """Verify unknown behavior."""
         result = classify_error("Something weird happened")
         assert result.category == FailureCategory.UNKNOWN
         assert result.confidence < 1.0
 
     def test_classified_to_dict(self) -> None:
-        """Verify classified to dict behavior."""
         result = classify_error("Config issue")
         d = result.to_dict()
         assert "category" in d
         assert "strategies" in d
 
     def test_strategies_populated(self) -> None:
-        """Verify strategies populated behavior."""
         result = classify_error("Config problem")
         assert len(result.suggested_strategies) >= 1
 
@@ -87,7 +78,6 @@ class TestClassifyError:
 class TestDiagnoser:
     """Test suite for Diagnoser."""
     def test_diagnose_config_error(self) -> None:
-        """Verify diagnose config error behavior."""
         diag = Diagnoser()
         diagnosis = diag.diagnose("Invalid config value")
         assert diagnosis.root_cause
@@ -95,21 +85,18 @@ class TestDiagnoser:
         assert diagnosis.impact == "medium"
 
     def test_diagnose_timeout(self) -> None:
-        """Verify diagnose timeout behavior."""
         diag = Diagnoser()
         diagnosis = diag.diagnose("Request timed out after 30s")
         assert diagnosis.error.category == FailureCategory.TIMEOUT
         assert diagnosis.impact == "low"
 
     def test_diagnose_with_context(self) -> None:
-        """Verify diagnose with context behavior."""
         diag = Diagnoser()
         diagnosis = diag.diagnose("OOM error", context={"agent": "agent-1"})
         assert diagnosis.error.context.get("agent") == "agent-1"
         assert diagnosis.impact == "high"
 
     def test_diagnosis_to_dict(self) -> None:
-        """Verify diagnosis to dict behavior."""
         diag = Diagnoser()
         d = diag.diagnose("Some error").to_dict()
         assert "root_cause" in d
@@ -122,7 +109,6 @@ class TestDiagnoser:
 class TestRetryEngine:
     """Test suite for RetryEngine."""
     def test_immediate_success(self) -> None:
-        """Verify immediate success behavior."""
         engine = RetryEngine(max_retries=3, base_delay=0.001)
         result = engine.execute(lambda: 42)
         assert result.success
@@ -130,7 +116,6 @@ class TestRetryEngine:
         assert result.attempts == 1
 
     def test_retry_then_success(self) -> None:
-        """Verify retry then success behavior."""
         call_count = {"n": 0}
         def flaky():
             call_count["n"] += 1
@@ -144,7 +129,6 @@ class TestRetryEngine:
         assert result.attempts == 3
 
     def test_all_retries_fail(self) -> None:
-        """Verify all retries fail behavior."""
         engine = RetryEngine(max_retries=2, base_delay=0.001)
         result = engine.execute(lambda: 1 / 0)
         assert not result.success
@@ -152,7 +136,6 @@ class TestRetryEngine:
         assert len(result.errors) == 3
 
     def test_result_to_dict(self) -> None:
-        """Verify result to dict behavior."""
         r = RetryResult(success=True, attempts=1)
         d = r.to_dict()
         assert d["success"] is True
@@ -164,13 +147,11 @@ class TestRetryEngine:
 class TestCircuitBreaker:
     """Test suite for CircuitBreaker."""
     def test_allow_when_closed(self) -> None:
-        """Verify allow when closed behavior."""
         cb = CircuitBreaker(failure_threshold=3)
         cb.register("a1")
         assert cb.allow("a1") is True
 
     def test_open_after_failures(self) -> None:
-        """Verify open after failures behavior."""
         cb = CircuitBreaker(failure_threshold=3)
         cb.register("a1")
         for _ in range(3):
@@ -181,7 +162,6 @@ class TestCircuitBreaker:
         assert health.state == CircuitState.OPEN
 
     def test_half_open_after_cooldown(self) -> None:
-        """Verify half open after cooldown behavior."""
         cb = CircuitBreaker(failure_threshold=2, cooldown_seconds=0.01)
         cb.register("a1")
         cb.record_failure("a1")
@@ -195,7 +175,6 @@ class TestCircuitBreaker:
         assert health.state == CircuitState.HALF_OPEN
 
     def test_close_after_success(self) -> None:
-        """Verify close after success behavior."""
         cb = CircuitBreaker(failure_threshold=2, cooldown_seconds=0.01)
         cb.register("a1")
         cb.record_failure("a1")
@@ -209,7 +188,6 @@ class TestCircuitBreaker:
         assert health.state == CircuitState.CLOSED
 
     def test_reset(self) -> None:
-        """Verify reset behavior."""
         cb = CircuitBreaker(failure_threshold=1)
         cb.register("a1")
         cb.record_failure("a1")
@@ -217,13 +195,11 @@ class TestCircuitBreaker:
         assert cb.allow("a1") is True
 
     def test_health_to_dict(self) -> None:
-        """Verify health to dict behavior."""
         h = AgentHealth(agent_id="x", total_successes=8, total_failures=2)
         d = h.to_dict()
         assert d["failure_rate"] == 0.2
 
     def test_unknown_agent(self) -> None:
-        """Verify unknown agent behavior."""
         cb = CircuitBreaker()
         assert cb.allow("unknown") is True
 
@@ -234,12 +210,10 @@ class TestCircuitBreaker:
 class TestHealingEvent:
     """Test suite for HealingEvent."""
     def test_auto_id(self) -> None:
-        """Verify auto id behavior."""
         e = HealingEvent(error_category="timeout")
         assert e.event_id.startswith("heal-")
 
     def test_to_jsonl(self) -> None:
-        """Verify to jsonl behavior."""
         e = HealingEvent(error_category="config_error", outcome="success")
         j = e.to_jsonl()
         assert "config_error" in j
@@ -249,27 +223,23 @@ class TestHealingEvent:
 class TestHealingLog:
     """Test suite for HealingLog."""
     def test_record_and_size(self) -> None:
-        """Verify record and size behavior."""
         log = HealingLog()
         log.record(HealingEvent(outcome="success"))
         assert log.size == 1
 
     def test_success_rate(self) -> None:
-        """Verify success rate behavior."""
         log = HealingLog()
         log.record(HealingEvent(outcome="success"))
         log.record(HealingEvent(outcome="failure"))
         assert log.success_rate == 0.5
 
     def test_events_by_category(self) -> None:
-        """Verify events by category behavior."""
         log = HealingLog()
         log.record(HealingEvent(error_category="timeout", outcome="success"))
         log.record(HealingEvent(error_category="config", outcome="success"))
         assert len(log.events_by_category("timeout")) == 1
 
     def test_summary(self) -> None:
-        """Verify summary behavior."""
         log = HealingLog()
         log.record(HealingEvent(error_category="timeout", outcome="success"))
         s = log.summary()
@@ -277,7 +247,6 @@ class TestHealingLog:
         assert "timeout" in s["by_category"]
 
     def test_to_jsonl(self) -> None:
-        """Verify to jsonl behavior."""
         log = HealingLog()
         log.record(HealingEvent(outcome="success"))
         log.record(HealingEvent(outcome="failure"))

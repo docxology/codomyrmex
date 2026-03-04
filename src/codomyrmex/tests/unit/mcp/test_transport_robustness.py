@@ -30,7 +30,6 @@ from codomyrmex.model_context_protocol.transport.server import (
 class TestClientConfig:
     """Test suite for ClientConfig."""
     def test_default_retry_fields(self):
-        """Verify default retry fields behavior."""
         cfg = MCPClientConfig()
         assert cfg.max_retries == 3
         assert cfg.retry_delay == 0.5
@@ -38,7 +37,6 @@ class TestClientConfig:
         assert cfg.connection_pool_size == 10
 
     def test_custom_retry_fields(self):
-        """Verify custom retry fields behavior."""
         cfg = MCPClientConfig(max_retries=5, retry_delay=1.0, connection_pool_size=20)
         assert cfg.max_retries == 5
         assert cfg.retry_delay == 1.0
@@ -241,7 +239,6 @@ def test_http_transport_default_pool_size():
 class TestServerConfig:
     """Test suite for ServerConfig."""
     def test_default_timeout_fields(self):
-        """Verify default timeout fields behavior."""
         cfg = MCPServerConfig()
         assert cfg.default_tool_timeout == 60.0
         assert cfg.per_tool_timeouts is None
@@ -249,7 +246,6 @@ class TestServerConfig:
         assert cfg.rate_limit_burst == 100
 
     def test_custom_timeout(self):
-        """Verify custom timeout behavior."""
         cfg = MCPServerConfig(
             default_tool_timeout=10,
             per_tool_timeouts={"slow": 120},

@@ -267,7 +267,6 @@ class TestVisualizationPerformanceWorkflow:
 
         # Profile a simple function
         def test_func():
-            """Verify func behavior."""
             return sum(range(100))
 
         result = profiler.profile_function(test_func)

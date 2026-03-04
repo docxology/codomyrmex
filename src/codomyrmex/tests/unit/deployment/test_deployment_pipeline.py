@@ -45,7 +45,6 @@ except ImportError:
 class TestDockerStage:
     """Test suite for DockerStage."""
     def test_render(self) -> None:
-        """Verify render behavior."""
         stage = DockerStage("builder", "python:3.12", ["WORKDIR /build"])
         rendered = stage.render()
         assert "FROM python:3.12 AS builder" in rendered
@@ -55,7 +54,6 @@ class TestDockerStage:
 class TestDockerfileSpec:
     """Test suite for DockerfileSpec."""
     def test_render_multi_stage(self) -> None:
-        """Verify render multi stage behavior."""
         spec = DockerfileSpec(stages=[
             DockerStage("builder", "python:3.12", ["WORKDIR /build"]),
             DockerStage("runtime", "python:3.12-slim", ["WORKDIR /app"]),
@@ -66,7 +64,6 @@ class TestDockerfileSpec:
         assert spec.stage_count == 2
 
     def test_labels(self) -> None:
-        """Verify labels behavior."""
         spec = DockerfileSpec(
             stages=[DockerStage("app", "python:3.12")],
             labels={"version": "1.0"},
@@ -78,7 +75,6 @@ class TestDockerfileSpec:
 class TestAutoBuilder:
     """Test suite for AutoBuilder."""
     def test_from_pyproject(self) -> None:
-        """Verify from pyproject behavior."""
         content = '''
 [project]
 name = "my-app"
@@ -97,21 +93,18 @@ requires-python = ">=3.11"
         assert spec.stage_count == 2
 
     def test_default_spec(self) -> None:
-        """Verify default spec behavior."""
         builder = AutoBuilder()
         spec = builder.default_spec()
         assert spec.stage_count == 2
         assert "python" in spec.render().lower()
 
     def test_from_config(self) -> None:
-        """Verify from config behavior."""
         builder = AutoBuilder()
         spec = builder.from_config("myapp", "3.13", "server.py")
         rendered = spec.render()
         assert "server.py" in rendered
 
     def test_missing_file(self) -> None:
-        """Verify missing file behavior."""
         builder = AutoBuilder()
         spec = builder.from_pyproject("/nonexistent.toml")
         assert spec.stage_count == 2  # Falls back to defaults
@@ -123,7 +116,6 @@ requires-python = ">=3.11"
 class TestComponentHealth:
     """Test suite for ComponentHealth."""
     def test_to_dict(self) -> None:
-        """Verify to dict behavior."""
         h = ComponentHealth("db", HealthStatus.HEALTHY, 5.2)
         d = h.to_dict()
         assert d["status"] == "healthy"
@@ -132,7 +124,6 @@ class TestComponentHealth:
 class TestHealthReport:
     """Test suite for HealthReport."""
     def test_is_healthy(self) -> None:
-        """Verify is healthy behavior."""
         r = HealthReport(status=HealthStatus.HEALTHY)
         assert r.is_healthy
         r2 = HealthReport(status=HealthStatus.UNHEALTHY)
@@ -142,7 +133,6 @@ class TestHealthReport:
 class TestHealthChecker:
     """Test suite for HealthChecker."""
     def test_all_healthy(self) -> None:
-        """Verify all healthy behavior."""
         checker = HealthChecker()
         checker.register("db", lambda: ComponentHealth("db"))
         checker.register("cache", lambda: ComponentHealth("cache"))
@@ -151,34 +141,29 @@ class TestHealthChecker:
         assert report.component_count == 2
 
     def test_unhealthy_component(self) -> None:
-        """Verify unhealthy component behavior."""
         checker = HealthChecker()
         checker.register("db", lambda: ComponentHealth("db", HealthStatus.UNHEALTHY))
         report = checker.check()
         assert not report.is_healthy
 
     def test_degraded_escalation(self) -> None:
-        """Verify degraded escalation behavior."""
         checker = HealthChecker()
         checker.register("a", lambda: ComponentHealth("a", HealthStatus.DEGRADED))
         report = checker.check()
         assert report.status == HealthStatus.DEGRADED
 
     def test_check_fn_exception(self) -> None:
-        """Verify check fn exception behavior."""
         checker = HealthChecker()
         checker.register("bad", lambda: 1 / 0)
         report = checker.check()
         assert not report.is_healthy
 
     def test_liveness(self) -> None:
-        """Verify liveness behavior."""
         checker = HealthChecker()
         live = checker.liveness()
         assert live["status"] == "alive"
 
     def test_readiness(self) -> None:
-        """Verify readiness behavior."""
         checker = HealthChecker()
         checker.register("ok", lambda: ComponentHealth("ok"))
         ready = checker.readiness()
@@ -191,17 +176,14 @@ class TestHealthChecker:
 class TestMetricComparison:
     """Test suite for MetricComparison."""
     def test_within_threshold(self) -> None:
-        """Verify within threshold behavior."""
         mc = MetricComparison("err_rate", 0.01, 0.011, threshold=0.15)
         assert mc.passed
 
     def test_exceeds_threshold(self) -> None:
-        """Verify exceeds threshold behavior."""
         mc = MetricComparison("err_rate", 0.01, 0.05, threshold=0.1)
         assert not mc.passed
 
     def test_zero_baseline(self) -> None:
-        """Verify zero baseline behavior."""
         mc = MetricComparison("err_rate", 0.0, 0.005, threshold=0.01)
         assert mc.passed
 
@@ -209,7 +191,6 @@ class TestMetricComparison:
 class TestCanaryAnalyzer:
     """Test suite for CanaryAnalyzer."""
     def test_promote(self) -> None:
-        """Verify promote behavior."""
         analyzer = CanaryAnalyzer(promote_threshold=0.9)
         report = analyzer.analyze(
             baseline={"err": 0.01, "latency": 200},
@@ -218,7 +199,6 @@ class TestCanaryAnalyzer:
         assert report.decision == CanaryDecision.PROMOTE
 
     def test_rollback(self) -> None:
-        """Verify rollback behavior."""
         analyzer = CanaryAnalyzer(rollback_threshold=0.5)
         report = analyzer.analyze(
             baseline={"err": 0.01, "latency": 200},
@@ -227,7 +207,6 @@ class TestCanaryAnalyzer:
         assert report.decision == CanaryDecision.ROLLBACK
 
     def test_continue(self) -> None:
-        """Verify continue behavior."""
         analyzer = CanaryAnalyzer(promote_threshold=0.9, rollback_threshold=0.3)
         report = analyzer.analyze(
             baseline={"a": 1.0, "b": 1.0, "c": 1.0},
@@ -236,7 +215,6 @@ class TestCanaryAnalyzer:
         assert report.decision == CanaryDecision.CONTINUE
 
     def test_custom_tolerances(self) -> None:
-        """Verify custom tolerances behavior."""
         analyzer = CanaryAnalyzer()
         report = analyzer.analyze(
             baseline={"err": 0.01},
@@ -246,7 +224,6 @@ class TestCanaryAnalyzer:
         assert report.decision == CanaryDecision.PROMOTE
 
     def test_report_to_dict(self) -> None:
-        """Verify report to dict behavior."""
         r = CanaryReport(decision=CanaryDecision.PROMOTE, pass_rate=1.0)
         d = r.to_dict()
         assert d["decision"] == "promote"

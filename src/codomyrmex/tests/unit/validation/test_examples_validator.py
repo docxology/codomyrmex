@@ -21,27 +21,21 @@ class TestValidationSeverity:
     """Tests for ValidationSeverity enum values."""
 
     def test_critical_value(self):
-        """Verify critical value behavior."""
         assert ValidationSeverity.CRITICAL.value == "critical"
 
     def test_error_value(self):
-        """Verify error value behavior."""
         assert ValidationSeverity.ERROR.value == "error"
 
     def test_warning_value(self):
-        """Verify warning value behavior."""
         assert ValidationSeverity.WARNING.value == "warning"
 
     def test_info_value(self):
-        """Verify info value behavior."""
         assert ValidationSeverity.INFO.value == "info"
 
     def test_member_count(self):
-        """Verify member count behavior."""
         assert len(list(ValidationSeverity)) == 4
 
     def test_is_string_enum(self):
-        """Verify is string enum behavior."""
         assert isinstance(ValidationSeverity.CRITICAL, str)
         assert ValidationSeverity.CRITICAL == "critical"
 
@@ -51,27 +45,21 @@ class TestValidationType:
     """Tests for ValidationType enum values."""
 
     def test_execution_value(self):
-        """Verify execution value behavior."""
         assert ValidationType.EXECUTION.value == "execution"
 
     def test_configuration_value(self):
-        """Verify configuration value behavior."""
         assert ValidationType.CONFIGURATION.value == "configuration"
 
     def test_documentation_value(self):
-        """Verify documentation value behavior."""
         assert ValidationType.DOCUMENTATION.value == "documentation"
 
     def test_test_references_value(self):
-        """Verify references value behavior."""
         assert ValidationType.TEST_REFERENCES.value == "test_references"
 
     def test_output_files_value(self):
-        """Verify output files value behavior."""
         assert ValidationType.OUTPUT_FILES.value == "output_files"
 
     def test_member_count(self):
-        """Verify member count behavior."""
         assert len(list(ValidationType)) == 5
 
 
@@ -80,7 +68,6 @@ class TestValidationIssue:
     """Tests for ValidationIssue dataclass."""
 
     def test_create_with_required_fields(self):
-        """Verify create with required fields behavior."""
         issue = ValidationIssue(
             module="test_module",
             validation_type=ValidationType.EXECUTION,
@@ -93,7 +80,6 @@ class TestValidationIssue:
         assert issue.message == "Test failed"
 
     def test_optional_fields_default_to_none(self):
-        """Verify optional fields default to none behavior."""
         issue = ValidationIssue(
             module="m",
             validation_type=ValidationType.CONFIGURATION,
@@ -105,7 +91,6 @@ class TestValidationIssue:
         assert issue.line_number is None
 
     def test_create_with_all_fields(self):
-        """Verify create with all fields behavior."""
         issue = ValidationIssue(
             module="mymodule",
             validation_type=ValidationType.DOCUMENTATION,
@@ -125,7 +110,6 @@ class TestModuleValidationResult:
     """Tests for ModuleValidationResult dataclass."""
 
     def test_successful_result(self):
-        """Verify successful result behavior."""
         result = ModuleValidationResult(module="mymodule", success=True)
         assert result.success is True
         assert result.issues == []
@@ -133,7 +117,6 @@ class TestModuleValidationResult:
         assert result.duration == 0.0
 
     def test_failed_result_with_issues(self):
-        """Verify failed result with issues behavior."""
         issue = ValidationIssue(
             module="mymodule",
             validation_type=ValidationType.EXECUTION,
@@ -151,7 +134,6 @@ class TestModuleValidationResult:
         assert result.duration == 1.5
 
     def test_result_with_metadata(self):
-        """Verify result with metadata behavior."""
         result = ModuleValidationResult(
             module="test_mod",
             success=True,
@@ -161,7 +143,6 @@ class TestModuleValidationResult:
         assert result.metadata["tests_run"] == 5
 
     def test_multiple_issues(self):
-        """Verify multiple issues behavior."""
         issues = [
             ValidationIssue(
                 module="mod",
@@ -180,7 +161,6 @@ class TestExamplesValidatorInit:
     """Tests for ExamplesValidator initialization."""
 
     def test_init_with_required_args(self, tmp_path):
-        """Verify init with required args behavior."""
         output_dir = tmp_path / "output"
         validator = ExamplesValidator(
             root_dir=tmp_path,
@@ -190,7 +170,6 @@ class TestExamplesValidatorInit:
         assert validator.output_dir == output_dir
 
     def test_default_parallel_jobs(self, tmp_path):
-        """Verify default parallel jobs behavior."""
         validator = ExamplesValidator(
             root_dir=tmp_path,
             output_dir=tmp_path / "out",
@@ -198,7 +177,6 @@ class TestExamplesValidatorInit:
         assert validator.parallel_jobs == 4
 
     def test_custom_parallel_jobs(self, tmp_path):
-        """Verify custom parallel jobs behavior."""
         validator = ExamplesValidator(
             root_dir=tmp_path,
             output_dir=tmp_path / "out",
@@ -207,7 +185,6 @@ class TestExamplesValidatorInit:
         assert validator.parallel_jobs == 2
 
     def test_init_accepts_path_objects(self, tmp_path):
-        """Verify init accepts path objects behavior."""
         root = tmp_path / "root"
         root.mkdir()
         out = tmp_path / "out"

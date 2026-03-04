@@ -503,7 +503,6 @@ class TestPerformanceBenchmarking:
         from codomyrmex.performance import profile_function, run_benchmark
 
         def test_function():
-            """Verify function behavior."""
             return sum(range(1000))
 
         # Profile the function

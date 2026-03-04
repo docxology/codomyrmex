@@ -19,7 +19,6 @@ from codomyrmex.orchestrator.triage_engine import (
 class TestModuleProfile:
     """Test suite for ModuleProfile."""
     def test_to_dict(self) -> None:
-        """Verify to dict behavior."""
         p = ModuleProfile("foo", loc=100, file_count=3, decision=TriageDecision.STUB)
         d = p.to_dict()
         assert d["name"] == "foo"
@@ -29,7 +28,6 @@ class TestModuleProfile:
 class TestTriageReport:
     """Test suite for TriageReport."""
     def test_summary(self) -> None:
-        """Verify summary behavior."""
         r = TriageReport(modules=[
             ModuleProfile("a", decision=TriageDecision.PROMOTE),
             ModuleProfile("b", decision=TriageDecision.ARCHIVE),
@@ -42,7 +40,6 @@ class TestTriageReport:
         assert s["stub"] == 1
 
     def test_filters(self) -> None:
-        """Verify filters behavior."""
         r = TriageReport(modules=[
             ModuleProfile("x", decision=TriageDecision.MERGE),
             ModuleProfile("y", decision=TriageDecision.ACTIVE),
@@ -61,7 +58,6 @@ class TestTriageEngine:
         return mod
 
     def test_profile_module(self) -> None:
-        """Verify profile module behavior."""
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             self._make_module(root, "mymod", {
@@ -75,21 +71,18 @@ class TestTriageEngine:
             assert profile.loc > 0
 
     def test_archive_decision(self) -> None:
-        """Verify archive decision behavior."""
         engine = TriageEngine()
         profile = ModuleProfile("embodiment")
         result = engine._classify(profile)
         assert result == TriageDecision.ARCHIVE
 
     def test_promote_decision(self) -> None:
-        """Verify promote decision behavior."""
         engine = TriageEngine()
         profile = ModuleProfile("wallet", loc=1300)
         result = engine._classify(profile)
         assert result == TriageDecision.PROMOTE
 
     def test_merge_decision(self) -> None:
-        """Verify merge decision behavior."""
         engine = TriageEngine()
         profile = ModuleProfile("cache")
         result = engine._classify(profile)
@@ -97,35 +90,30 @@ class TestTriageEngine:
         assert profile.merge_target == "performance/caching"
 
     def test_active_by_loc(self) -> None:
-        """Verify active by loc behavior."""
         engine = TriageEngine()
         profile = ModuleProfile("big_mod", loc=3000, has_tests=True)
         result = engine._classify(profile)
         assert result == TriageDecision.ACTIVE
 
     def test_active_by_mcp(self) -> None:
-        """Verify active by mcp behavior."""
         engine = TriageEngine()
         profile = ModuleProfile("api_mod", loc=600, has_mcp_tools=True)
         result = engine._classify(profile)
         assert result == TriageDecision.ACTIVE
 
     def test_stub_default(self) -> None:
-        """Verify stub default behavior."""
         engine = TriageEngine()
         profile = ModuleProfile("misc_mod", loc=300, file_count=5)
         result = engine._classify(profile)
         assert result == TriageDecision.STUB
 
     def test_small_archive(self) -> None:
-        """Verify small archive behavior."""
         engine = TriageEngine()
         profile = ModuleProfile("tiny", loc=50, file_count=1)
         result = engine._classify(profile)
         assert result == TriageDecision.ARCHIVE
 
     def test_triage_all(self) -> None:
-        """Verify triage all behavior."""
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             self._make_module(root, "mod_a", {"__init__.py": "", "x.py": "a = 1\n"})
@@ -135,19 +123,16 @@ class TestTriageEngine:
             assert len(report.modules) == 2
 
     def test_missing_dir(self) -> None:
-        """Verify missing dir behavior."""
         engine = TriageEngine()
         report = engine.triage_all(Path("/nonexistent_dir"))
         assert len(report.modules) == 0
 
     def test_constants(self) -> None:
-        """Verify constants behavior."""
         assert "embodiment" in ARCHIVE_SET
         assert "wallet" in PROMOTE_SET
         assert "cache" in MERGE_MAP
 
     def test_profile_nonexistent(self) -> None:
-        """Verify profile nonexistent behavior."""
         engine = TriageEngine()
         profile = engine.profile_module("ghost", Path("/nonexistent"))
         assert profile.file_count == 0

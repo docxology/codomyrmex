@@ -26,7 +26,6 @@ class TestAntiPatternDetector:
     """Test suite for AntiPatternDetector."""
 
     def test_detects_bare_except(self):
-        """Verify detects bare except behavior."""
         source = "try:\n    pass\nexcept:\n    pass"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
@@ -34,7 +33,6 @@ class TestAntiPatternDetector:
         assert "bare_except" in names
 
     def test_detects_mutable_default(self):
-        """Verify detects mutable default behavior."""
         source = "def foo(x=[]):\n    return x"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
@@ -42,14 +40,12 @@ class TestAntiPatternDetector:
         assert "mutable_default" in names
 
     def test_detects_star_import(self):
-        """Verify detects star import behavior."""
         source = "from os import *"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
         assert any(p.name == "star_import" for p in patterns)
 
     def test_severity_threshold_filters(self):
-        """Verify severity threshold filters behavior."""
         source = "# TODO: fix this"
         detector = AntiPatternDetector(severity_threshold=0.5)
         patterns = detector.analyze(source)
@@ -57,7 +53,6 @@ class TestAntiPatternDetector:
         assert len(patterns) == 0
 
     def test_no_patterns_in_clean_code(self):
-        """Verify no patterns in clean code behavior."""
         source = "def foo(x: int) -> int:\n    return x + 1"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
@@ -120,7 +115,6 @@ class TestImprovementReport:
     """Test suite for ImprovementReport."""
 
     def test_report_to_markdown(self):
-        """Verify report to markdown behavior."""
         report = ImprovementReport(
             source_file="app.py",
             anti_patterns=[AntiPattern(
@@ -142,12 +136,10 @@ class TestImprovementReport:
         assert "APPROVE" in md.lower() or "approve" in md
 
     def test_change_count(self):
-        """Verify change count behavior."""
         report = ImprovementReport(source_file="test.py")
         assert report.change_count == 0
 
     def test_approved_property(self):
-        """Verify approved property behavior."""
         report = ImprovementReport(
             source_file="test.py",
             review_verdict=ReviewVerdict.APPROVE,
@@ -155,6 +147,5 @@ class TestImprovementReport:
         assert report.approved is True
 
     def test_test_suite_success_rate(self):
-        """Verify suite success rate behavior."""
         result = TestSuiteResult(total=10, passed=8, failed=2)
         assert result.success_rate == pytest.approx(0.8)

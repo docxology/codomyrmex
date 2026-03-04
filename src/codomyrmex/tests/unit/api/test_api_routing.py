@@ -100,7 +100,6 @@ class TestRESTAPI:
 
         @api.router.get("/test")
         def test_handler(request: APIRequest) -> APIResponse:
-            """Verify handler behavior."""
             return APIResponse.success({"message": "OK"})
 
         response = api.handle_request("GET", "/test")
@@ -129,7 +128,6 @@ class TestRESTAPI:
 
         @api.router.get("/test")
         def test_handler(request: APIRequest) -> APIResponse:
-            """Verify handler behavior."""
             return APIResponse.success({})
 
         # Make some requests
@@ -176,7 +174,6 @@ class TestAPIRouterEdgeCases:
         middleware_called = []
 
         def test_middleware(request: APIRequest):
-            """Verify middleware behavior."""
             middleware_called.append(True)
             return None
 

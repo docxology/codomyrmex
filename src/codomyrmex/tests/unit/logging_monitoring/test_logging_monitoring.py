@@ -439,7 +439,6 @@ class TestStructuredFormatter:
     """Tests for StructuredFormatter."""
 
     def test_format_basic(self):
-        """Verify format basic behavior."""
         import json
 
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
@@ -461,7 +460,6 @@ class TestStructuredFormatter:
         assert parsed["module"] == "test"
 
     def test_static_fields(self):
-        """Verify static fields behavior."""
         import json
 
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
@@ -478,7 +476,6 @@ class TestStructuredFormatter:
         assert parsed["service"] == "codomyrmex"
 
     def test_correlation_id(self):
-        """Verify correlation id behavior."""
         import json
 
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
@@ -503,7 +500,6 @@ class TestLogAggregator:
     """Tests for LogAggregator."""
 
     def test_add_and_count(self):
-        """Verify add and count behavior."""
         from codomyrmex.logging_monitoring.core.log_aggregator import (
             LogAggregator,
             LogRecord,
@@ -513,7 +509,6 @@ class TestLogAggregator:
         assert agg.count == 1
 
     def test_search_by_level(self):
-        """Verify search by level behavior."""
         from codomyrmex.logging_monitoring.core.log_aggregator import (
             LogAggregator,
             LogQuery,
@@ -527,7 +522,6 @@ class TestLogAggregator:
         assert results[0].level == "error"
 
     def test_stats(self):
-        """Verify stats behavior."""
         from codomyrmex.logging_monitoring.core.log_aggregator import (
             LogAggregator,
             LogRecord,
@@ -540,7 +534,6 @@ class TestLogAggregator:
         assert stats.error_rate == pytest.approx(0.5)
 
     def test_max_records_eviction(self):
-        """Verify max records eviction behavior."""
         from codomyrmex.logging_monitoring.core.log_aggregator import (
             LogAggregator,
             LogRecord,

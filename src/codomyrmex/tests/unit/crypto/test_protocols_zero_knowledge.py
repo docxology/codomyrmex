@@ -98,7 +98,6 @@ class TestSchnorrProtocol:
         assert not schnorr_verify(proof, wrong_pv, SMALL_GEN, SMALL_PRIME)
 
     def test_invalid_inputs_raise(self) -> None:
-        """Verify invalid inputs raise behavior."""
         with pytest.raises(ProtocolError, match="Prime must be >= 3"):
             schnorr_prove(secret=5, generator=2, prime=2)
         with pytest.raises(ProtocolError, match="Secret must be >= 1"):
@@ -176,6 +175,5 @@ class TestPedersenCommitment:
         assert pedersen_verify(c, 0, randomness, self.P_G, self.P_H, self.P_P)
 
     def test_invalid_prime_raises(self) -> None:
-        """Verify invalid prime raises behavior."""
         with pytest.raises(ProtocolError, match="Prime must be >= 3"):
             pedersen_commit(1, 1, 2, 3, 2)

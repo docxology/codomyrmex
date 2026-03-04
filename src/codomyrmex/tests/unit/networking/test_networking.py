@@ -60,16 +60,13 @@ class TestNetworkingModuleImport:
     """Test networking module import and structure."""
 
     def test_networking_module_import(self):
-        """Verify networking module import behavior."""
         assert networking is not None
         assert hasattr(networking, "__path__")
 
     def test_networking_module_structure(self):
-        """Verify networking module structure behavior."""
         assert hasattr(networking, "__file__")
 
     def test_networking_module_exports(self):
-        """Verify networking module exports behavior."""
         assert hasattr(networking, "HTTPClient")
         assert hasattr(networking, "WebSocketClient")
         assert hasattr(networking, "SSHClient")
@@ -78,7 +75,6 @@ class TestNetworkingModuleImport:
         assert hasattr(networking, "PortScanner")
 
     def test_get_http_client_factory(self):
-        """Verify get http client factory behavior."""
         client = get_http_client()
         assert isinstance(client, HTTPClient)
 
@@ -91,7 +87,6 @@ class TestResponse:
     """Tests for Response dataclass."""
 
     def test_response_creation(self):
-        """Verify response creation behavior."""
         response = Response(
             status_code=200,
             headers={"Content-Type": "application/json"},
@@ -102,7 +97,6 @@ class TestResponse:
         assert response.headers["Content-Type"] == "application/json"
 
     def test_response_json_parsing(self):
-        """Verify response json parsing behavior."""
         response = Response(
             status_code=200, headers={},
             content=b'{"name": "test", "value": 123}',
@@ -113,7 +107,6 @@ class TestResponse:
         assert data["value"] == 123
 
     def test_response_json_caching(self):
-        """Verify response json caching behavior."""
         response = Response(
             status_code=200, headers={},
             content=b'{"cached": true}', text='{"cached": true}'
@@ -123,7 +116,6 @@ class TestResponse:
         assert data1 is data2
 
     def test_response_with_predefined_json(self):
-        """Verify response with predefined json behavior."""
         json_data = {"preloaded": "data"}
         response = Response(
             status_code=200, headers={},
@@ -142,7 +134,6 @@ class TestHTTPClient:
     """Tests for HTTPClient using real HTTP requests."""
 
     def test_client_initialization_defaults(self):
-        """Verify client initialization defaults behavior."""
         client = HTTPClient()
         assert client.timeout == 30
         assert client.max_retries == 3
@@ -150,7 +141,6 @@ class TestHTTPClient:
         assert client.default_headers == {}
 
     def test_client_initialization_custom(self):
-        """Verify client initialization custom behavior."""
         client = HTTPClient(
             timeout=60, max_retries=5, retry_backoff=2.0,
             headers={"Authorization": "Bearer token"}
@@ -160,7 +150,6 @@ class TestHTTPClient:
         assert client.default_headers["Authorization"] == "Bearer token"
 
     def test_get_request(self):
-        """Verify get request behavior."""
         if not EphemeralServer:
             pytest.skip("EphemeralServer not available")
 
@@ -173,7 +162,6 @@ class TestHTTPClient:
             assert f"{server.url}/get" == data["url"]
 
     def test_post_request(self):
-        """Verify post request behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -188,7 +176,6 @@ class TestHTTPClient:
             assert data["json"]["name"] == "test"
 
     def test_put_request(self):
-        """Verify put request behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -201,7 +188,6 @@ class TestHTTPClient:
             assert response.status_code == 200
 
     def test_delete_request(self):
-        """Verify delete request behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -211,7 +197,6 @@ class TestHTTPClient:
             assert response.status_code == 200
 
     def test_request_with_custom_headers(self):
-        """Verify request with custom headers behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -229,7 +214,6 @@ class TestHTTPClient:
             assert data["headers"].get("X-Custom-Header") == "custom-value"
 
     def test_request_with_custom_timeout(self):
-        """Verify request with custom timeout behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -251,7 +235,6 @@ class TestHTTPClient:
             client.get("http://127.0.0.1:1/impossible")
 
     def test_response_4xx_error(self):
-        """Verify response 4xx error behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -262,7 +245,6 @@ class TestHTTPClient:
 
     @requires_network
     def test_response_5xx_error(self):
-        """Verify response 5xx error behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -280,7 +262,6 @@ class TestWebSocketClient:
     """Tests for WebSocketClient."""
 
     def test_websocket_client_initialization(self):
-        """Verify websocket client initialization behavior."""
         client = WebSocketClient("ws://localhost:8080")
         assert client.url == "ws://localhost:8080"
         assert client.headers == {}
@@ -288,7 +269,6 @@ class TestWebSocketClient:
         assert client.max_reconnect_delay == 30.0
 
     def test_websocket_client_custom_initialization(self):
-        """Verify websocket client custom initialization behavior."""
         client = WebSocketClient(
             "wss://example.com/ws",
             headers={"Authorization": "Bearer token"},
@@ -391,25 +371,21 @@ class TestSSHClient:
     """Tests for SSHClient — uses real paramiko if SSH available."""
 
     def test_ssh_client_initialization(self):
-        """Verify ssh client initialization behavior."""
         client = SSHClient(hostname="example.com", username="user", password="pass")
         assert client.hostname == "example.com"
         assert client.username == "user"
         assert client.port == 22
 
     def test_ssh_client_key_based_auth(self):
-        """Verify ssh client key based auth behavior."""
         client = SSHClient(hostname="example.com", username="user", key_filename="/path/to/key")
         assert client.key_filename == "/path/to/key"
 
     def test_ssh_client_custom_port(self):
-        """Verify ssh client custom port behavior."""
         client = SSHClient(hostname="example.com", username="user", port=2222)
         assert client.port == 2222
 
     @requires_ssh
     def test_ssh_client_connect_and_execute(self):
-        """Verify ssh client connect and execute behavior."""
         import os
         key_path = os.path.expanduser("~/.ssh/id_rsa")
         if not os.path.exists(key_path):
@@ -434,13 +410,11 @@ class TestTCPClient:
     """Tests for TCPClient using real loopback sockets."""
 
     def test_tcp_client_initialization(self):
-        """Verify tcp client initialization behavior."""
         client = TCPClient("localhost", 8080)
         assert client.host == "localhost"
         assert client.port == 8080
 
     def test_tcp_client_connect_send_receive(self):
-        """Verify tcp client connect send receive behavior."""
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_sock.bind(("127.0.0.1", 0))
@@ -471,12 +445,10 @@ class TestTCPServer:
     """Tests for TCPServer using real sockets."""
 
     def test_tcp_server_initialization(self):
-        """Verify tcp server initialization behavior."""
         server = TCPServer("0.0.0.0", 0)
         assert server.host == "0.0.0.0"
 
     def test_tcp_server_start_and_accept(self):
-        """Verify tcp server start and accept behavior."""
         server = TCPServer("127.0.0.1", 0)
         server.start()
         port = server.sock.getsockname()[1]
@@ -504,13 +476,11 @@ class TestUDPClient:
     """Tests for UDPClient using real loopback sockets."""
 
     def test_udp_client_initialization(self):
-        """Verify udp client initialization behavior."""
         client = UDPClient("localhost", 5000)
         assert client.host == "localhost"
         assert client.port == 5000
 
     def test_udp_client_send_receive(self):
-        """Verify udp client send receive behavior."""
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         server_sock.bind(("127.0.0.1", 0))
         port = server_sock.getsockname()[1]
@@ -540,7 +510,6 @@ class TestPortScanner:
     """Tests for PortScanner using real ports."""
 
     def test_is_port_open_success(self):
-        """Verify is port open success behavior."""
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_sock.bind(("127.0.0.1", 0))
@@ -552,12 +521,10 @@ class TestPortScanner:
             server_sock.close()
 
     def test_is_port_open_connection_refused(self):
-        """Verify is port open connection refused behavior."""
         # Port 1 is almost never open
         assert PortScanner.is_port_open("127.0.0.1", 1) is False
 
     def test_scan_range(self):
-        """Verify scan range behavior."""
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_sock.bind(("127.0.0.1", 0))
@@ -578,7 +545,6 @@ class TestNetworkingIntegration:
     """Integration tests using real services."""
 
     def test_http_client_json_workflow(self):
-        """Verify http client json workflow behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -590,7 +556,6 @@ class TestNetworkingIntegration:
             assert "url" in data
 
     def test_http_client_post_json_workflow(self):
-        """Verify http client post json workflow behavior."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
 
@@ -624,17 +589,14 @@ class TestNetworkingErrorHandling:
     """Tests for error handling in networking module."""
 
     def test_networking_error_creation(self):
-        """Verify networking error creation behavior."""
         error = NetworkingError("Connection failed")
         assert "Connection failed" in str(error)
 
     def test_networking_error_inheritance(self):
-        """Verify networking error inheritance behavior."""
         from codomyrmex.exceptions import CodomyrmexError
         assert isinstance(NetworkingError("Test"), CodomyrmexError)
 
     def test_http_client_wraps_request_exceptions(self):
-        """Verify http client wraps request exceptions behavior."""
         client = HTTPClient()
         with pytest.raises(NetworkingError):
             client.get("http://nonexistent-host-xyz-12345.invalid")

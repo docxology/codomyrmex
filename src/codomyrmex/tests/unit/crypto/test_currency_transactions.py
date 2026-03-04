@@ -34,30 +34,25 @@ class TestCreateTransaction:
     """Tests for transaction creation."""
 
     def test_creates_with_tx_id(self):
-        """Verify creates with tx id behavior."""
         tx = create_transaction("alice", "bob", 1.5)
         assert tx.tx_id
         assert len(tx.tx_id) == 64  # SHA-256 hex
 
     def test_fields_match(self):
-        """Verify fields match behavior."""
         tx = create_transaction("alice", "bob", 3.14)
         assert tx.sender == "alice"
         assert tx.recipient == "bob"
         assert tx.amount == 3.14
 
     def test_timestamp_set(self):
-        """Verify timestamp set behavior."""
         tx = create_transaction("a", "b", 1.0)
         assert tx.timestamp > 0
 
     def test_zero_amount_raises(self):
-        """Verify zero amount raises behavior."""
         with pytest.raises(WalletError):
             create_transaction("a", "b", 0)
 
     def test_negative_amount_raises(self):
-        """Verify negative amount raises behavior."""
         with pytest.raises(WalletError):
             create_transaction("a", "b", -5)
 
@@ -71,7 +66,6 @@ class TestSerialization:
     """Tests for transaction serialization and deserialization."""
 
     def test_roundtrip_preserves_fields(self):
-        """Verify roundtrip preserves fields behavior."""
         tx = create_transaction("alice", "bob", 42.0)
         data = serialize_transaction(tx)
         restored = deserialize_transaction(data)
@@ -81,19 +75,16 @@ class TestSerialization:
         assert restored.timestamp == tx.timestamp
 
     def test_roundtrip_tx_id_matches(self):
-        """Verify roundtrip tx id matches behavior."""
         tx = create_transaction("alice", "bob", 42.0)
         data = serialize_transaction(tx)
         restored = deserialize_transaction(data)
         assert restored.tx_id == tx.tx_id
 
     def test_serialized_is_bytes(self):
-        """Verify serialized is bytes behavior."""
         tx = create_transaction("a", "b", 1.0)
         assert isinstance(serialize_transaction(tx), bytes)
 
     def test_invalid_bytes_raises(self):
-        """Verify invalid bytes raises behavior."""
         with pytest.raises(WalletError):
             deserialize_transaction(b"not-valid-json")
 
@@ -107,7 +98,6 @@ class TestSignAndVerify:
     """Tests for ECDSA transaction signing and verification."""
 
     def test_sign_produces_signature(self, keypair):
-        """Verify sign produces signature behavior."""
         private_key, _ = keypair
         tx = create_transaction("alice", "bob", 10.0)
         signed = sign_transaction(tx, private_key)
@@ -116,14 +106,12 @@ class TestSignAndVerify:
         assert signed.public_key
 
     def test_verify_valid_signature(self, keypair):
-        """Verify verify valid signature behavior."""
         private_key, public_key = keypair
         tx = create_transaction("alice", "bob", 10.0)
         signed = sign_transaction(tx, private_key)
         assert verify_transaction(signed, public_key) is True
 
     def test_verify_with_embedded_key(self, keypair):
-        """Verify verify with embedded key behavior."""
         private_key, _ = keypair
         tx = create_transaction("alice", "bob", 10.0)
         signed = sign_transaction(tx, private_key)
@@ -131,7 +119,6 @@ class TestSignAndVerify:
         assert verify_transaction(signed) is True
 
     def test_tampered_amount_fails(self, keypair):
-        """Verify tampered amount fails behavior."""
         private_key, public_key = keypair
         tx = create_transaction("alice", "bob", 10.0)
         signed = sign_transaction(tx, private_key)
@@ -140,7 +127,6 @@ class TestSignAndVerify:
         assert verify_transaction(signed, public_key) is False
 
     def test_tampered_recipient_fails(self, keypair):
-        """Verify tampered recipient fails behavior."""
         private_key, public_key = keypair
         tx = create_transaction("alice", "bob", 10.0)
         signed = sign_transaction(tx, private_key)
@@ -148,7 +134,6 @@ class TestSignAndVerify:
         assert verify_transaction(signed, public_key) is False
 
     def test_wrong_key_fails(self, keypair):
-        """Verify wrong key fails behavior."""
         private_key, _ = keypair
         other_private = ec.generate_private_key(ec.SECP256K1())
         other_public = other_private.public_key()

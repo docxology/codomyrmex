@@ -43,7 +43,6 @@ def _make_test_graph() -> KnowledgeGraph:
 class TestLinkedEntity:
     """Test suite for LinkedEntity."""
     def test_create(self) -> None:
-        """Verify create behavior."""
         e = Entity(id="x", name="X")
         le = LinkedEntity(entity=e, matched_term="x")
         assert le.score == 1.0
@@ -53,7 +52,6 @@ class TestLinkedEntity:
 class TestGraphRetriever:
     """Test suite for GraphRetriever."""
     def test_retrieve_basic(self) -> None:
-        """Verify retrieve basic behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g)
         ctx = r.retrieve("Python")
@@ -63,7 +61,6 @@ class TestGraphRetriever:
         assert "Python" in names
 
     def test_retrieve_returns_neighbors(self) -> None:
-        """Verify retrieve returns neighbors behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g, expand_neighbors=True)
         ctx = r.retrieve("Python")
@@ -72,7 +69,6 @@ class TestGraphRetriever:
         assert len(names) >= 2
 
     def test_retrieve_without_neighbors(self) -> None:
-        """Verify retrieve without neighbors behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g, expand_neighbors=False)
         ctx = r.retrieve("Python")
@@ -80,7 +76,6 @@ class TestGraphRetriever:
         assert len(ctx.entities) >= 1
 
     def test_retrieve_no_match(self) -> None:
-        """Verify retrieve no match behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g)
         ctx = r.retrieve("Quantum Computing")
@@ -88,7 +83,6 @@ class TestGraphRetriever:
         assert ctx.confidence == 0.0
 
     def test_retrieve_with_type_filter(self) -> None:
-        """Verify retrieve with type filter behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g)
         ctx = r.retrieve("Python", entity_type=EntityType.PERSON)
@@ -98,28 +92,24 @@ class TestGraphRetriever:
         assert all(e.entity_type == EntityType.PERSON for e in ctx.entities)
 
     def test_confidence_positive(self) -> None:
-        """Verify confidence positive behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g)
         ctx = r.retrieve("Python machine learning")
         assert ctx.confidence > 0
 
     def test_relationships_populated(self) -> None:
-        """Verify relationships populated behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g, expand_neighbors=True)
         ctx = r.retrieve("Python")
         assert len(ctx.relationships) >= 1
 
     def test_limit_respected(self) -> None:
-        """Verify limit respected behavior."""
         g = _make_test_graph()
         r = GraphRetriever(g, max_entities=2)
         ctx = r.retrieve("Python machine learning PyTorch")
         assert len(ctx.entities) <= 2
 
     def test_extract_terms(self) -> None:
-        """Verify extract terms behavior."""
         terms = GraphRetriever._extract_terms("How do I use Python for machine learning?")
         assert "python" in terms
         assert "machine" in terms

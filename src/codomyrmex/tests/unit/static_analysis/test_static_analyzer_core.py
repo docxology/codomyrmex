@@ -33,39 +33,30 @@ class TestAnalysisTypeEnum:
     """Tests for AnalysisType enum."""
 
     def test_quality_value(self):
-        """Verify quality value behavior."""
         assert AnalysisType.QUALITY.value == "quality"
 
     def test_security_value(self):
-        """Verify security value behavior."""
         assert AnalysisType.SECURITY.value == "security"
 
     def test_performance_value(self):
-        """Verify performance value behavior."""
         assert AnalysisType.PERFORMANCE.value == "performance"
 
     def test_maintainability_value(self):
-        """Verify maintainability value behavior."""
         assert AnalysisType.MAINTAINABILITY.value == "maintainability"
 
     def test_complexity_value(self):
-        """Verify complexity value behavior."""
         assert AnalysisType.COMPLEXITY.value == "complexity"
 
     def test_style_value(self):
-        """Verify style value behavior."""
         assert AnalysisType.STYLE.value == "style"
 
     def test_documentation_value(self):
-        """Verify documentation value behavior."""
         assert AnalysisType.DOCUMENTATION.value == "documentation"
 
     def test_testing_value(self):
-        """Verify testing value behavior."""
         assert AnalysisType.TESTING.value == "testing"
 
     def test_member_count(self):
-        """Verify member count behavior."""
         assert len(list(AnalysisType)) == 8
 
 
@@ -73,23 +64,18 @@ class TestSeverityLevelEnum:
     """Tests for SeverityLevel enum."""
 
     def test_info_value(self):
-        """Verify info value behavior."""
         assert SeverityLevel.INFO.value == "info"
 
     def test_warning_value(self):
-        """Verify warning value behavior."""
         assert SeverityLevel.WARNING.value == "warning"
 
     def test_error_value(self):
-        """Verify error value behavior."""
         assert SeverityLevel.ERROR.value == "error"
 
     def test_critical_value(self):
-        """Verify critical value behavior."""
         assert SeverityLevel.CRITICAL.value == "critical"
 
     def test_member_count(self):
-        """Verify member count behavior."""
         assert len(list(SeverityLevel)) == 4
 
 
@@ -97,7 +83,6 @@ class TestAnalysisResult:
     """Tests for AnalysisResult dataclass."""
 
     def test_creation_with_required_fields(self):
-        """Verify creation with required fields behavior."""
         result = AnalysisResult(
             file_path="test.py",
             line_number=10,
@@ -116,7 +101,6 @@ class TestAnalysisResult:
         assert result.category == "style"
 
     def test_optional_fields_have_defaults(self):
-        """Verify optional fields have defaults behavior."""
         result = AnalysisResult(
             file_path="f.py",
             line_number=1,
@@ -130,7 +114,6 @@ class TestAnalysisResult:
         assert result.confidence == 1.0
 
     def test_creation_with_all_fields(self):
-        """Verify creation with all fields behavior."""
         result = AnalysisResult(
             file_path="main.py",
             line_number=1,
@@ -152,17 +135,14 @@ class TestAnalysisSummary:
     """Tests for AnalysisSummary dataclass."""
 
     def test_creation_with_total_issues(self):
-        """Verify creation with total issues behavior."""
         summary = AnalysisSummary(total_issues=5)
         assert summary.total_issues == 5
 
     def test_default_files_analyzed_is_zero(self):
-        """Verify default files analyzed is zero behavior."""
         summary = AnalysisSummary(total_issues=0)
         assert summary.files_analyzed == 0
 
     def test_default_by_severity_is_empty(self):
-        """Verify default by severity is empty behavior."""
         summary = AnalysisSummary(total_issues=0)
         assert summary.by_severity == {}
 
@@ -171,7 +151,6 @@ class TestCodeMetrics:
     """Tests for CodeMetrics dataclass."""
 
     def test_creation_with_required_fields(self):
-        """Verify creation with required fields behavior."""
         m = CodeMetrics(
             lines_of_code=100,
             cyclomatic_complexity=5,
@@ -184,7 +163,6 @@ class TestCodeMetrics:
         assert m.maintainability_index == 75.0
 
     def test_optional_test_coverage_defaults_none(self):
-        """Verify optional coverage defaults none behavior."""
         m = CodeMetrics(
             lines_of_code=50,
             cyclomatic_complexity=1,
@@ -199,17 +177,14 @@ class TestStaticAnalyzerInit:
     """Tests for StaticAnalyzer initialization."""
 
     def test_init_default_project_root(self):
-        """Verify init default project root behavior."""
         analyzer = StaticAnalyzer()
         assert analyzer.project_root is not None
 
     def test_init_custom_project_root(self, tmp_path):
-        """Verify init custom project root behavior."""
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
         assert analyzer.project_root == str(tmp_path)
 
     def test_tools_available_is_dict(self):
-        """Verify tools available is dict behavior."""
         analyzer = StaticAnalyzer()
         assert isinstance(analyzer.tools_available, dict)
         for tool_name, available in analyzer.tools_available.items():
@@ -217,12 +192,10 @@ class TestStaticAnalyzerInit:
             assert isinstance(available, bool)
 
     def test_results_starts_empty(self):
-        """Verify results starts empty behavior."""
         analyzer = StaticAnalyzer()
         assert analyzer.results == []
 
     def test_analyze_file_on_real_python_file(self, tmp_path):
-        """Verify analyze file on real python file behavior."""
         code_file = tmp_path / "sample.py"
         code_file.write_text("x = 1\n")
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
@@ -230,7 +203,6 @@ class TestStaticAnalyzerInit:
         assert isinstance(results, list)
 
     def test_analyze_file_nonexistent_returns_empty_or_error(self):
-        """Verify analyze file nonexistent returns empty or error behavior."""
         analyzer = StaticAnalyzer()
         results = analyzer.analyze_file("/nonexistent/path/file.py")
         assert isinstance(results, list)

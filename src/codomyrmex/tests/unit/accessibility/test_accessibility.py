@@ -34,15 +34,12 @@ if not HAS_MODULE:
 class TestWCAGLevel:
     """Test suite for WCAGLevel."""
     def test_level_a(self):
-        """Verify level a behavior."""
         assert WCAGLevel.A is not None
 
     def test_level_aa(self):
-        """Verify level aa behavior."""
         assert WCAGLevel.AA is not None
 
     def test_level_aaa(self):
-        """Verify level aaa behavior."""
         assert WCAGLevel.AAA is not None
 
 
@@ -50,15 +47,12 @@ class TestWCAGLevel:
 class TestIssueType:
     """Test suite for IssueType."""
     def test_error_type(self):
-        """Verify error type behavior."""
         assert IssueType.ERROR is not None
 
     def test_warning_type(self):
-        """Verify warning type behavior."""
         assert IssueType.WARNING is not None
 
     def test_notice_type(self):
-        """Verify notice type behavior."""
         assert IssueType.NOTICE is not None
 
 
@@ -66,13 +60,11 @@ class TestIssueType:
 class TestAccessibilityIssue:
     """Test suite for AccessibilityIssue."""
     def test_create_issue(self):
-        """Verify create issue behavior."""
         issue = AccessibilityIssue(code="img-alt", message="Missing alt text")
         assert issue.code == "img-alt"
         assert issue.message == "Missing alt text"
 
     def test_issue_defaults(self):
-        """Verify issue defaults behavior."""
         issue = AccessibilityIssue(code="test", message="test")
         assert issue.selector == ""
         assert issue.issue_type == IssueType.ERROR
@@ -81,7 +73,6 @@ class TestAccessibilityIssue:
         assert issue.suggestion == ""
 
     def test_issue_with_all_fields(self):
-        """Verify issue with all fields behavior."""
         issue = AccessibilityIssue(
             code="color-contrast",
             message="Low contrast",
@@ -99,7 +90,6 @@ class TestAccessibilityIssue:
 class TestAccessibilityReport:
     """Test suite for AccessibilityReport."""
     def test_create_report(self):
-        """Verify create report behavior."""
         report = AccessibilityReport()
         assert report.url == ""
         assert report.issues == []
@@ -112,7 +102,6 @@ class TestAccessibilityReport:
 class TestWCAGRule:
     """Test suite for WCAGRule."""
     def test_create_rule(self):
-        """Verify create rule behavior."""
         rule = WCAGRule(
             code="img-alt",
             criterion="1.1.1",
@@ -124,7 +113,6 @@ class TestWCAGRule:
         assert rule.level == WCAGLevel.A
 
     def test_rule_with_suggestion(self):
-        """Verify rule with suggestion behavior."""
         rule = WCAGRule(
             code="test",
             criterion="1.1.1",
@@ -140,12 +128,10 @@ class TestWCAGRule:
 class TestA11yChecker:
     """Test suite for A11yChecker."""
     def test_create_checker(self):
-        """Verify create checker behavior."""
         checker = A11yChecker()
         assert checker is not None
 
     def test_create_checker_with_level(self):
-        """Verify create checker with level behavior."""
         checker = A11yChecker(level=WCAGLevel.AAA)
         assert checker is not None
 
@@ -154,17 +140,14 @@ class TestA11yChecker:
 class TestCalculateContrastRatio:
     """Test suite for CalculateContrastRatio."""
     def test_black_white_contrast(self):
-        """Verify black white contrast behavior."""
         ratio = calculate_contrast_ratio("#000000", "#ffffff")
         assert ratio >= 21.0
 
     def test_same_color_contrast(self):
-        """Verify same color contrast behavior."""
         ratio = calculate_contrast_ratio("#000000", "#000000")
         assert ratio == 1.0
 
     def test_returns_float(self):
-        """Verify returns float behavior."""
         ratio = calculate_contrast_ratio("#333333", "#cccccc")
         assert isinstance(ratio, float)
         assert ratio > 1.0
@@ -174,17 +157,14 @@ class TestCalculateContrastRatio:
 class TestCheckHeadingHierarchy:
     """Test suite for CheckHeadingHierarchy."""
     def test_valid_hierarchy(self):
-        """Verify valid hierarchy behavior."""
         issues = check_heading_hierarchy([1, 2, 3])
         assert isinstance(issues, list)
 
     def test_skipped_level(self):
-        """Verify skipped level behavior."""
         issues = check_heading_hierarchy([1, 3])
         assert len(issues) > 0
 
     def test_empty_headings(self):
-        """Verify empty headings behavior."""
         issues = check_heading_hierarchy([])
         assert isinstance(issues, list)
 

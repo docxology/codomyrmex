@@ -43,38 +43,32 @@ class TestBitcoinAddress:
     """Tests for Bitcoin P2PKH address generation and validation."""
 
     def test_mainnet_address_starts_with_1(self, secp256k1_keys):
-        """Verify mainnet address starts with 1 behavior."""
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed, network="mainnet")
         assert addr.startswith("1"), f"Mainnet address should start with '1', got {addr}"
 
     def test_testnet_address_starts_with_m_or_n(self, secp256k1_keys):
-        """Verify testnet address starts with m or n behavior."""
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed, network="testnet")
         assert addr[0] in ("m", "n"), f"Testnet address should start with 'm' or 'n', got {addr}"
 
     def test_address_length_reasonable(self, secp256k1_keys):
-        """Verify address length reasonable behavior."""
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed)
         # Bitcoin addresses are typically 25-34 characters
         assert 25 <= len(addr) <= 34, f"Unexpected address length: {len(addr)}"
 
     def test_generated_address_validates(self, secp256k1_keys):
-        """Verify generated address validates behavior."""
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed)
         assert validate_bitcoin_address(addr) is True
 
     def test_unknown_network_raises(self, secp256k1_keys):
-        """Verify unknown network raises behavior."""
         compressed, _ = secp256k1_keys
         with pytest.raises(WalletError):
             generate_bitcoin_address(compressed, network="dogecoin")
 
     def test_tampered_address_fails_validation(self, secp256k1_keys):
-        """Verify tampered address fails validation behavior."""
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed)
         # Flip a character in the middle
@@ -85,11 +79,9 @@ class TestBitcoinAddress:
         assert validate_bitcoin_address(tampered) is False
 
     def test_empty_string_fails_validation(self):
-        """Verify empty string fails validation behavior."""
         assert validate_bitcoin_address("") is False
 
     def test_random_string_fails_validation(self):
-        """Verify random string fails validation behavior."""
         assert validate_bitcoin_address("not_a_bitcoin_address") is False
 
 
@@ -102,25 +94,21 @@ class TestEthereumAddress:
     """Tests for Ethereum address generation and EIP-55 checksum."""
 
     def test_address_starts_with_0x(self, secp256k1_keys):
-        """Verify address starts with 0x behavior."""
         _, uncompressed = secp256k1_keys
         addr = generate_ethereum_address(uncompressed)
         assert addr.startswith("0x")
 
     def test_address_is_42_chars(self, secp256k1_keys):
-        """Verify address is 42 chars behavior."""
         _, uncompressed = secp256k1_keys
         addr = generate_ethereum_address(uncompressed)
         assert len(addr) == 42
 
     def test_generated_address_validates(self, secp256k1_keys):
-        """Verify generated address validates behavior."""
         _, uncompressed = secp256k1_keys
         addr = generate_ethereum_address(uncompressed)
         assert validate_ethereum_address(addr) is True
 
     def test_stripped_64_byte_key_accepted(self, secp256k1_keys):
-        """Verify stripped 64 byte key accepted behavior."""
         _, uncompressed = secp256k1_keys
         # Strip the 0x04 prefix
         stripped = uncompressed[1:]
@@ -129,7 +117,6 @@ class TestEthereumAddress:
         assert validate_ethereum_address(addr)
 
     def test_wrong_key_length_raises(self):
-        """Verify wrong key length raises behavior."""
         with pytest.raises(WalletError):
             generate_ethereum_address(b"\x00" * 32)
 
@@ -138,29 +125,23 @@ class TestEthereumValidation:
     """Tests for Ethereum address validation."""
 
     def test_all_lowercase_valid(self):
-        """Verify all lowercase valid behavior."""
         addr = "0x" + "a" * 40
         assert validate_ethereum_address(addr) is True
 
     def test_all_uppercase_valid(self):
-        """Verify all uppercase valid behavior."""
         addr = "0x" + "A" * 40
         assert validate_ethereum_address(addr) is True
 
     def test_no_0x_prefix_invalid(self):
-        """Verify no 0x prefix invalid behavior."""
         assert validate_ethereum_address("a" * 40) is False
 
     def test_short_address_invalid(self):
-        """Verify short address invalid behavior."""
         assert validate_ethereum_address("0x" + "a" * 39) is False
 
     def test_long_address_invalid(self):
-        """Verify long address invalid behavior."""
         assert validate_ethereum_address("0x" + "a" * 41) is False
 
     def test_non_hex_invalid(self):
-        """Verify non hex invalid behavior."""
         assert validate_ethereum_address("0x" + "g" * 40) is False
 
 
@@ -168,25 +149,21 @@ class TestChecksumEthereumAddress:
     """Tests for EIP-55 checksum encoding."""
 
     def test_produces_0x_prefix(self):
-        """Verify produces 0x prefix behavior."""
         addr = checksum_ethereum_address("0x" + "ab" * 20)
         assert addr.startswith("0x")
         assert len(addr) == 42
 
     def test_idempotent(self):
-        """Verify idempotent behavior."""
         raw = "0x" + "ab" * 20
         first = checksum_ethereum_address(raw)
         second = checksum_ethereum_address(first)
         assert first == second
 
     def test_checksummed_validates(self):
-        """Verify checksummed validates behavior."""
         raw = "0x" + "de" * 20
         checksummed = checksum_ethereum_address(raw)
         assert validate_ethereum_address(checksummed)
 
     def test_invalid_length_raises(self):
-        """Verify invalid length raises behavior."""
         with pytest.raises(WalletError):
             checksum_ethereum_address("0xabc")

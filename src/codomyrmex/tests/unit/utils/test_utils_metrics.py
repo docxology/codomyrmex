@@ -26,13 +26,11 @@ class TestMetricsCollectorSingleton:
         metrics.reset()
 
     def test_singleton_identity(self):
-        """Verify singleton identity behavior."""
         a = MetricsCollector()
         b = MetricsCollector()
         assert a is b
 
     def test_global_instance_is_singleton(self):
-        """Verify global instance is singleton behavior."""
         assert metrics is MetricsCollector()
 
 
@@ -44,13 +42,11 @@ class TestMetricsCollectorCounters:
         metrics.reset()
 
     def test_increment_creates_counter(self):
-        """Verify increment creates counter behavior."""
         metrics.increment("requests_total")
         all_m = metrics.get_all()
         assert all_m["counters"]["requests_total"] == 1.0
 
     def test_increment_multiple_times(self):
-        """Verify increment multiple times behavior."""
         metrics.increment("calls")
         metrics.increment("calls")
         metrics.increment("calls", value=2.0)
@@ -58,7 +54,6 @@ class TestMetricsCollectorCounters:
         assert all_m["counters"]["calls"] == 4.0
 
     def test_increment_with_labels(self):
-        """Verify increment with labels behavior."""
         metrics.increment("requests", labels={"method": "GET"})
         metrics.increment("requests", labels={"method": "POST"})
         all_m = metrics.get_all()
@@ -74,13 +69,11 @@ class TestMetricsCollectorGauges:
         metrics.reset()
 
     def test_set_gauge(self):
-        """Verify set gauge behavior."""
         metrics.set_gauge("cpu_usage", 75.5)
         all_m = metrics.get_all()
         assert all_m["gauges"]["cpu_usage"] == 75.5
 
     def test_set_gauge_overwrites(self):
-        """Verify set gauge overwrites behavior."""
         metrics.set_gauge("temp", 100.0)
         metrics.set_gauge("temp", 50.0)
         all_m = metrics.get_all()
@@ -95,13 +88,11 @@ class TestMetricsCollectorHistograms:
         metrics.reset()
 
     def test_observe_creates_histogram(self):
-        """Verify observe creates histogram behavior."""
         metrics.observe("latency_ms", 10.0)
         all_m = metrics.get_all()
         assert "latency_ms" in all_m["histograms"]
 
     def test_observe_aggregates_correctly(self):
-        """Verify observe aggregates correctly behavior."""
         metrics.observe("latency_ms", 10.0)
         metrics.observe("latency_ms", 20.0)
         metrics.observe("latency_ms", 30.0)
@@ -121,7 +112,6 @@ class TestMetricsCollectorReset:
         metrics.reset()
 
     def test_reset_clears_all(self):
-        """Verify reset clears all behavior."""
         metrics.increment("test_counter")
         metrics.set_gauge("test_gauge", 1.0)
         metrics.observe("test_hist", 5.0)
@@ -140,7 +130,6 @@ class TestTimedMetric:
         metrics.reset()
 
     def test_records_histogram_with_duration_suffix(self):
-        """Verify records histogram with duration suffix behavior."""
         with timed_metric("operation"):
             time.sleep(0.01)
         all_m = metrics.get_all()
@@ -149,7 +138,6 @@ class TestTimedMetric:
         assert all_m["histograms"]["operation_duration_ms"]["min"] > 0
 
     def test_records_positive_duration(self):
-        """Verify records positive duration behavior."""
         with timed_metric("fast_op"):
             pass
         h = metrics.get_all()["histograms"]["fast_op_duration_ms"]
@@ -164,7 +152,6 @@ class TestCountCalls:
         metrics.reset()
 
     def test_increments_call_counter(self):
-        """Verify increments call counter behavior."""
         @count_calls("my_func")
         def my_func():
             return 42
@@ -175,7 +162,6 @@ class TestCountCalls:
         assert all_m["counters"].get("my_func_calls_total", 0) == 2
 
     def test_increments_success_counter(self):
-        """Verify increments success counter behavior."""
         @count_calls("ok_func")
         def ok_func():
             return "ok"
@@ -185,7 +171,6 @@ class TestCountCalls:
         assert all_m["counters"].get("ok_func_success_total", 0) == 1
 
     def test_increments_error_counter_on_exception(self):
-        """Verify increments error counter on exception behavior."""
         @count_calls("failing_func")
         def failing_func():
             raise RuntimeError("boom")
@@ -197,7 +182,6 @@ class TestCountCalls:
         assert all_m["counters"].get("failing_func_errors_total", 0) == 1
 
     def test_preserves_return_value(self):
-        """Verify preserves return value behavior."""
         @count_calls("ret_func")
         def ret_func():
             return 99
@@ -205,7 +189,6 @@ class TestCountCalls:
         assert ret_func() == 99
 
     def test_preserves_exception(self):
-        """Verify preserves exception behavior."""
         @count_calls("exc_func")
         def exc_func():
             raise ValueError("test")
@@ -222,35 +205,29 @@ class TestModuleHealth:
         self.mh = ModuleHealth()
 
     def test_register_and_check(self):
-        """Verify register and check behavior."""
         self.mh.register("test_mod", lambda: True)
         assert self.mh.check("test_mod") is True
 
     def test_check_unregistered_returns_false(self):
-        """Verify check unregistered returns false behavior."""
         assert self.mh.check("unknown") is False
 
     def test_check_all_returns_dict(self):
-        """Verify check all returns dict behavior."""
         self.mh.register("mod_a", lambda: True)
         self.mh.register("mod_b", lambda: False)
         result = self.mh.check_all()
         assert result == {"mod_a": True, "mod_b": False}
 
     def test_is_healthy_all_pass(self):
-        """Verify is healthy all pass behavior."""
         self.mh.register("mod_a", lambda: True)
         self.mh.register("mod_b", lambda: True)
         assert self.mh.is_healthy() is True
 
     def test_is_healthy_one_fails(self):
-        """Verify is healthy one fails behavior."""
         self.mh.register("mod_a", lambda: True)
         self.mh.register("mod_b", lambda: False)
         assert self.mh.is_healthy() is False
 
     def test_check_handles_exception_as_unhealthy(self):
-        """Verify check handles exception as unhealthy behavior."""
         def bad_check():
             raise RuntimeError("broken")
 
@@ -266,12 +243,10 @@ class TestExportPrometheus:
         metrics.reset()
 
     def test_empty_metrics_returns_empty_string(self):
-        """Verify empty metrics returns empty string behavior."""
         result = export_prometheus()
         assert result == ""
 
     def test_counter_format(self):
-        """Verify counter format behavior."""
         metrics.increment("http_requests")
         output = export_prometheus()
         assert "counter" in output.lower()
@@ -279,14 +254,12 @@ class TestExportPrometheus:
         assert "1" in output
 
     def test_gauge_format(self):
-        """Verify gauge format behavior."""
         metrics.set_gauge("temperature", 42.5)
         output = export_prometheus()
         assert "gauge" in output.lower()
         assert "temperature" in output
 
     def test_histogram_format(self):
-        """Verify histogram format behavior."""
         metrics.observe("latency", 10.0)
         output = export_prometheus()
         assert "histogram" in output.lower()

@@ -36,23 +36,18 @@ class TestWebhookEventType:
     """WebhookEventType should expose the four canonical event members."""
 
     def test_created_member(self):
-        """Verify created member behavior."""
         assert WebhookEventType.CREATED.value == "created"
 
     def test_updated_member(self):
-        """Verify updated member behavior."""
         assert WebhookEventType.UPDATED.value == "updated"
 
     def test_deleted_member(self):
-        """Verify deleted member behavior."""
         assert WebhookEventType.DELETED.value == "deleted"
 
     def test_custom_member(self):
-        """Verify custom member behavior."""
         assert WebhookEventType.CUSTOM.value == "custom"
 
     def test_member_count(self):
-        """Verify member count behavior."""
         assert len(WebhookEventType) == 4
 
 
@@ -65,7 +60,6 @@ class TestWebhookConfig:
     """WebhookConfig should apply sensible defaults for optional fields."""
 
     def test_defaults(self):
-        """Verify defaults behavior."""
         config = WebhookConfig(url="https://example.com/hook", secret="s3cret")
         assert config.url == "https://example.com/hook"
         assert config.secret == "s3cret"
@@ -81,7 +75,6 @@ class TestWebhookEvent:
     """WebhookEvent should auto-generate event_id and timestamp."""
 
     def test_auto_event_id(self):
-        """Verify auto event id behavior."""
         event = WebhookEvent(
             event_type=WebhookEventType.CREATED,
             payload={"key": "value"},
@@ -90,7 +83,6 @@ class TestWebhookEvent:
         assert len(event.event_id) == 36  # UUID4 string length
 
     def test_auto_timestamp(self):
-        """Verify auto timestamp behavior."""
         event = WebhookEvent(
             event_type=WebhookEventType.UPDATED,
             payload={},
@@ -100,7 +92,6 @@ class TestWebhookEvent:
         assert isinstance(event.timestamp, datetime)
 
     def test_default_source(self):
-        """Verify default source behavior."""
         event = WebhookEvent(
             event_type=WebhookEventType.DELETED,
             payload={},
@@ -108,7 +99,6 @@ class TestWebhookEvent:
         assert event.source == ""
 
     def test_to_dict(self):
-        """Verify to dict behavior."""
         event = WebhookEvent(
             event_type=WebhookEventType.CUSTOM,
             payload={"action": "test"},
@@ -122,7 +112,6 @@ class TestWebhookEvent:
         assert "timestamp" in d
 
     def test_to_json(self):
-        """Verify to json behavior."""
         event = WebhookEvent(
             event_type=WebhookEventType.CREATED,
             payload={"n": 1},
@@ -133,7 +122,6 @@ class TestWebhookEvent:
         assert parsed["payload"] == {"n": 1}
 
     def test_unique_event_ids(self):
-        """Verify unique event ids behavior."""
         e1 = WebhookEvent(event_type=WebhookEventType.CREATED, payload={})
         e2 = WebhookEvent(event_type=WebhookEventType.CREATED, payload={})
         assert e1.event_id != e2.event_id
@@ -143,7 +131,6 @@ class TestDeliveryResult:
     """DeliveryResult.to_dict should faithfully represent all fields."""
 
     def test_to_dict(self):
-        """Verify to dict behavior."""
         result = DeliveryResult(
             webhook_id="wh-1",
             event_id="evt-1",
@@ -161,7 +148,6 @@ class TestDeliveryResult:
         assert "timestamp" in d
 
     def test_to_dict_with_error(self):
-        """Verify to dict with error behavior."""
         result = DeliveryResult(
             webhook_id="wh-2",
             event_id="evt-2",
@@ -183,26 +169,22 @@ class TestWebhookSignature:
     """WebhookSignature should produce and verify HMAC signatures."""
 
     def test_sign_returns_hex_string(self):
-        """Verify sign returns hex string behavior."""
         sig = WebhookSignature.sign("payload", "secret")
         assert isinstance(sig, str)
         assert len(sig) == 64  # SHA-256 hex digest length
 
     def test_verify_correct_signature(self):
-        """Verify verify correct signature behavior."""
         payload = '{"event":"test"}'
         secret = "my-secret"
         sig = WebhookSignature.sign(payload, secret)
         assert WebhookSignature.verify(payload, secret, sig) is True
 
     def test_verify_wrong_secret(self):
-        """Verify verify wrong secret behavior."""
         payload = '{"event":"test"}'
         sig = WebhookSignature.sign(payload, "correct-secret")
         assert WebhookSignature.verify(payload, "wrong-secret", sig) is False
 
     def test_hmac_sha512(self):
-        """Verify hmac sha512 behavior."""
         payload = "data"
         secret = "key"
         sig = WebhookSignature.sign(
@@ -214,7 +196,6 @@ class TestWebhookSignature:
         )
 
     def test_different_algorithms_produce_different_signatures(self):
-        """Verify different algorithms produce different signatures behavior."""
         payload = "same-payload"
         secret = "same-secret"
         sig256 = WebhookSignature.sign(
@@ -243,32 +224,27 @@ class TestWebhookRegistry:
         return WebhookConfig(**defaults)
 
     def test_register_and_get(self):
-        """Verify register and get behavior."""
         registry = WebhookRegistry()
         config = self._make_config()
         registry.register("wh-1", config)
         assert registry.get("wh-1") is config
 
     def test_get_missing_returns_none(self):
-        """Verify get missing returns none behavior."""
         registry = WebhookRegistry()
         assert registry.get("nonexistent") is None
 
     def test_unregister(self):
-        """Verify unregister behavior."""
         registry = WebhookRegistry()
         registry.register("wh-1", self._make_config())
         registry.unregister("wh-1")
         assert registry.get("wh-1") is None
 
     def test_unregister_unknown_raises_key_error(self):
-        """Verify unregister unknown raises key error behavior."""
         registry = WebhookRegistry()
         with pytest.raises(KeyError, match="not found"):
             registry.unregister("ghost")
 
     def test_list_all(self):
-        """Verify list all behavior."""
         registry = WebhookRegistry()
         c1 = self._make_config(url="https://a.com")
         c2 = self._make_config(url="https://b.com")
@@ -280,7 +256,6 @@ class TestWebhookRegistry:
         assert "b" in all_hooks
 
     def test_list_for_event_filters_by_type(self):
-        """Verify list for event filters by type behavior."""
         registry = WebhookRegistry()
         registry.register(
             "created-only",
@@ -295,14 +270,12 @@ class TestWebhookRegistry:
         assert "deleted-only" not in matches
 
     def test_list_for_event_includes_catch_all(self):
-        """Verify list for event includes catch all behavior."""
         registry = WebhookRegistry()
         registry.register("catch-all", self._make_config(events=[]))
         matches = registry.list_for_event(WebhookEventType.UPDATED)
         assert "catch-all" in matches
 
     def test_list_for_event_excludes_inactive(self):
-        """Verify list for event excludes inactive behavior."""
         registry = WebhookRegistry()
         registry.register(
             "inactive",
@@ -327,7 +300,6 @@ class TestWebhookDispatcher:
         return (500, "Internal Server Error")
 
     def test_dispatch_success(self):
-        """Verify dispatch success behavior."""
         registry = WebhookRegistry()
         registry.register(
             "wh-1",
@@ -351,7 +323,6 @@ class TestWebhookDispatcher:
         assert results[0].status_code == 200
 
     def test_dispatch_failure(self):
-        """Verify dispatch failure behavior."""
         registry = WebhookRegistry()
         registry.register(
             "wh-1",
@@ -444,20 +415,17 @@ class TestFactories:
     """Factory helpers should return correctly-typed instances."""
 
     def test_create_webhook_registry(self):
-        """Verify create webhook registry behavior."""
         registry = create_webhook_registry()
         assert isinstance(registry, WebhookRegistry)
         assert registry.list_all() == {}
 
     def test_create_webhook_dispatcher_defaults(self):
-        """Verify create webhook dispatcher defaults behavior."""
         dispatcher = create_webhook_dispatcher()
         assert isinstance(dispatcher, WebhookDispatcher)
         assert isinstance(dispatcher.registry, WebhookRegistry)
         assert isinstance(dispatcher.transport, HTTPWebhookTransport)
 
     def test_create_webhook_dispatcher_with_custom_registry(self):
-        """Verify create webhook dispatcher with custom registry behavior."""
         registry = create_webhook_registry()
         registry.register(
             "wh-1",
@@ -467,7 +435,6 @@ class TestFactories:
         assert dispatcher.registry.get("wh-1") is not None
 
     def test_create_webhook_dispatcher_with_custom_transport(self):
-        """Verify create webhook dispatcher with custom transport behavior."""
         transport = HTTPWebhookTransport(
             handler=lambda u, p, h, t: (201, "Created")
         )

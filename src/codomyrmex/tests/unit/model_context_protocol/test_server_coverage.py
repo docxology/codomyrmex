@@ -44,7 +44,6 @@ class TestCallToolFnInjection:
     """Tests for the call_tool_fn injection path (line 76)."""
 
     def test_call_tool_fn_overrides_default_dispatch(self):
-        """Verify custom call_tool_fn replaces _call_tool dispatch behavior."""
         call_log = []
 
         async def custom_call_tool(params):
@@ -84,7 +83,6 @@ class TestCallToolFnInjection:
         assert parsed["custom"] is True
 
     def test_server_without_call_tool_fn_uses_default(self):
-        """Verify server without call_tool_fn uses registry-based dispatch behavior."""
         cfg = MCPServerConfig(name="no-injection", version="0.1.0")
         srv = MCPServer(cfg)
 
@@ -116,7 +114,6 @@ class TestToolDecoratorTypedParams:
     """Tests for tool decorator schema building with typed annotations (lines 118-130)."""
 
     def test_int_param_becomes_integer_schema(self):
-        """Verify int annotation produces 'integer' type in schema behavior."""
         srv = MCPServer(MCPServerConfig(name="typed-test", version="0.1.0"))
 
         @srv.tool(name="add", description="Add numbers")
@@ -137,7 +134,6 @@ class TestToolDecoratorTypedParams:
         assert "b" in tool_schema["inputSchema"]["required"]
 
     def test_float_param_becomes_number_schema(self):
-        """Verify float annotation produces 'number' type in schema behavior."""
         srv = MCPServer(MCPServerConfig(name="float-test", version="0.1.0"))
 
         @srv.tool(name="scale", description="Scale a value")
@@ -159,7 +155,6 @@ class TestToolDecoratorTypedParams:
         assert "factor" not in tool_schema["inputSchema"]["required"]
 
     def test_bool_param_becomes_boolean_schema(self):
-        """Verify bool annotation produces 'boolean' type in schema behavior."""
         srv = MCPServer(MCPServerConfig(name="bool-test", version="0.1.0"))
 
         @srv.tool(name="toggle", description="Toggle something")
@@ -180,7 +175,6 @@ class TestToolDecoratorTypedParams:
         assert "verbose" not in tool_schema["inputSchema"]["required"]
 
     def test_mixed_types_in_single_tool(self):
-        """Verify tool with str, int, float, bool all build correct schema behavior."""
         srv = MCPServer(MCPServerConfig(name="mixed-test", version="0.1.0"))
 
         @srv.tool(name="mixed", description="Mixed types")
@@ -213,7 +207,6 @@ class TestToolDecoratorOutputSchema:
     """Tests for tool decorator with output_schema (line 148)."""
 
     def test_output_schema_added_to_tool_schema(self):
-        """Verify output_schema appears as outputSchema in tool listing behavior."""
         srv = MCPServer(MCPServerConfig(name="output-schema-test", version="0.1.0"))
 
         output_schema = {
@@ -242,7 +235,6 @@ class TestToolDecoratorOutputSchema:
         assert "result" in tool_schema["outputSchema"]["properties"]
 
     def test_tool_without_output_schema_has_no_outputSchema(self):
-        """Verify tool without output_schema does not include outputSchema behavior."""
         srv = MCPServer(MCPServerConfig(name="no-output-test", version="0.1.0"))
 
         @srv.tool(name="plain_tool", description="No output schema")
@@ -259,7 +251,6 @@ class TestToolDecoratorOutputSchema:
         assert "outputSchema" not in tool_schema
 
     def test_tool_decorator_with_title(self):
-        """Verify title param appears in tool schema (line 144) behavior."""
         srv = MCPServer(MCPServerConfig(name="title-test", version="0.1.0"))
 
         @srv.tool(
@@ -290,7 +281,6 @@ class TestRegisterToolWithTitleAndOutputSchema:
     """Tests for register_tool() with title and output_schema (lines 172-176)."""
 
     def test_register_tool_sets_title_in_schema(self):
-        """Verify register_tool with title adds title to schema behavior."""
         srv = MCPServer(MCPServerConfig(name="reg-title", version="0.1.0"))
         schema = {
             "name": "manual_tool",
@@ -314,7 +304,6 @@ class TestRegisterToolWithTitleAndOutputSchema:
         assert tool_schema["title"] == "Manual Tool Title"
 
     def test_register_tool_sets_output_schema(self):
-        """Verify register_tool with output_schema adds outputSchema behavior."""
         srv = MCPServer(MCPServerConfig(name="reg-output", version="0.1.0"))
         out_schema = {"type": "object", "properties": {"count": {"type": "integer"}}}
         schema = {
@@ -340,7 +329,6 @@ class TestRegisterToolWithTitleAndOutputSchema:
         assert tool_schema["outputSchema"]["type"] == "object"
 
     def test_register_tool_with_both_title_and_output_schema(self):
-        """Verify register_tool with both title and output_schema behavior."""
         srv = MCPServer(MCPServerConfig(name="reg-both", version="0.1.0"))
         out_schema = {"type": "string"}
         schema = {
@@ -377,7 +365,6 @@ class TestRegisterFileResource:
     """Tests for register_file_resource() (lines 199-219)."""
 
     def test_register_and_read_text_file(self, tmp_path):
-        """Verify register_file_resource registers .txt and reads content back behavior."""
         srv = MCPServer(MCPServerConfig(name="file-res", version="0.1.0"))
         test_file = tmp_path / "hello.txt"
         test_file.write_text("Hello, file resource!")
@@ -409,7 +396,6 @@ class TestRegisterFileResource:
         assert contents[0]["text"] == "Hello, file resource!"
 
     def test_register_json_file_gets_json_mime_type(self, tmp_path):
-        """Verify .json file gets application/json mime type behavior."""
         srv = MCPServer(MCPServerConfig(name="json-res", version="0.1.0"))
         json_file = tmp_path / "data.json"
         json_file.write_text('{"key": "value"}')
@@ -425,7 +411,6 @@ class TestRegisterFileResource:
         assert list_resp["result"]["resources"][0]["mimeType"] == "application/json"
 
     def test_register_markdown_file_gets_markdown_mime_type(self, tmp_path):
-        """Verify .md file gets text/markdown mime type behavior."""
         srv = MCPServer(MCPServerConfig(name="md-res", version="0.1.0"))
         md_file = tmp_path / "readme.md"
         md_file.write_text("# Title\n\nContent")
@@ -441,7 +426,6 @@ class TestRegisterFileResource:
         assert list_resp["result"]["resources"][0]["mimeType"] == "text/markdown"
 
     def test_register_python_file_gets_python_mime_type(self, tmp_path):
-        """Verify .py file gets text/x-python mime type behavior."""
         srv = MCPServer(MCPServerConfig(name="py-res", version="0.1.0"))
         py_file = tmp_path / "script.py"
         py_file.write_text("print('hello')")
@@ -457,7 +441,6 @@ class TestRegisterFileResource:
         assert list_resp["result"]["resources"][0]["mimeType"] == "text/x-python"
 
     def test_register_unknown_extension_defaults_to_text_plain(self, tmp_path):
-        """Verify unknown extension falls back to text/plain behavior."""
         srv = MCPServer(MCPServerConfig(name="unknown-ext", version="0.1.0"))
         unk_file = tmp_path / "data.xyz"
         unk_file.write_text("some data")
@@ -483,7 +466,6 @@ class TestPerToolTimeout:
     """Tests for per-tool timeout configuration (lines 380-382)."""
 
     def test_per_tool_timeout_used_for_matching_tool(self):
-        """Verify per_tool_timeouts overrides default for named tool behavior."""
         cfg = MCPServerConfig(
             name="timeout-test",
             version="0.1.0",
@@ -508,7 +490,6 @@ class TestPerToolTimeout:
         assert "isError" not in result
 
     def test_tool_not_in_per_tool_timeouts_uses_default(self):
-        """Verify tool not in per_tool_timeouts uses default_tool_timeout behavior."""
         cfg = MCPServerConfig(
             name="default-timeout-test",
             version="0.1.0",
@@ -542,7 +523,6 @@ class TestValidationErrorResponse:
     """Tests for validation error with FieldError creation (lines 368-377)."""
 
     def test_missing_required_arg_returns_validation_error(self):
-        """Verify calling a tool with missing required arg yields validation error behavior."""
         srv = MCPServer(MCPServerConfig(name="val-err", version="0.1.0"))
 
         @srv.tool(name="requires_path", description="Requires a path argument")
@@ -563,7 +543,6 @@ class TestValidationErrorResponse:
         assert "Validation failed" in error_data["message"]
 
     def test_wrong_type_arg_returns_validation_error(self):
-        """Verify calling a tool with wrong type returns validation error behavior."""
         srv = MCPServer(MCPServerConfig(name="type-err", version="0.1.0"))
 
         @srv.tool(name="int_tool", description="Takes an integer")
@@ -594,7 +573,6 @@ class TestStructuredContentResponse:
     """Tests for structuredContent response when outputSchema exists (lines 414-415)."""
 
     def test_tool_with_output_schema_returns_structured_content(self):
-        """Verify tool with outputSchema includes structuredContent in response behavior."""
         out_schema = {
             "type": "object",
             "properties": {"result": {"type": "string"}},
@@ -630,7 +608,6 @@ class TestStructuredContentResponse:
         assert result["structuredContent"]["result"] is not None
 
     def test_tool_without_output_schema_has_no_structured_content(self):
-        """Verify tool without outputSchema does not include structuredContent behavior."""
         srv = MCPServer(MCPServerConfig(name="no-struct", version="0.1.0"))
 
         @srv.tool(name="plain", description="Plain tool")
@@ -724,7 +701,6 @@ class TestGetPromptWithArgSubstitution:
     """Tests for _get_prompt with template argument substitution (line 478+)."""
 
     def test_simple_arg_substitution(self):
-        """Verify prompt template with {name} is substituted correctly behavior."""
         srv = MCPServer(MCPServerConfig(name="prompt-sub", version="0.1.0"))
         srv.register_prompt(
             name="greeting",
@@ -743,7 +719,6 @@ class TestGetPromptWithArgSubstitution:
         assert messages[0]["content"]["text"] == "Hello Alice!"
 
     def test_multiple_arg_substitution(self):
-        """Verify multiple template variables are all substituted behavior."""
         srv = MCPServer(MCPServerConfig(name="multi-prompt", version="0.1.0"))
         srv.register_prompt(
             name="intro",
@@ -765,7 +740,6 @@ class TestGetPromptWithArgSubstitution:
         assert text == "My name is Bob and I am 30 years old."
 
     def test_nonexistent_prompt_returns_error(self):
-        """Verify getting a nonexistent prompt returns error (line 478) behavior."""
         srv = MCPServer(MCPServerConfig(name="no-prompt", version="0.1.0"))
 
         resp = _run(srv.handle_request({
@@ -779,7 +753,6 @@ class TestGetPromptWithArgSubstitution:
         assert "Prompt not found" in resp["error"]["message"]
 
     def test_prompt_with_no_args_uses_template_as_is(self):
-        """Verify prompt with empty arguments returns template unchanged behavior."""
         srv = MCPServer(MCPServerConfig(name="no-args-prompt", version="0.1.0"))
         srv.register_prompt(
             name="static",
@@ -807,7 +780,6 @@ class TestUnknownMethodDispatch:
     """Tests for unknown method dispatch returning error (line 296)."""
 
     def test_completely_unknown_method_returns_error(self):
-        """Verify unknown method via dispatch returns -32603 error behavior."""
         srv = MCPServer(MCPServerConfig(name="unknown-method", version="0.1.0"))
 
         resp = _run(srv.handle_request({
@@ -821,7 +793,6 @@ class TestUnknownMethodDispatch:
         assert "Unknown method" in resp["error"]["message"]
 
     def test_empty_method_returns_error(self):
-        """Verify empty method string returns error behavior."""
         srv = MCPServer(MCPServerConfig(name="empty-method", version="0.1.0"))
 
         resp = _run(srv.handle_request({
@@ -844,7 +815,6 @@ class TestZeroTimeoutToolExecution:
     """Tests for tool execution with timeout=0 (synchronous path, line 398-399)."""
 
     def test_zero_timeout_executes_synchronously(self):
-        """Verify default_tool_timeout=0 uses synchronous execution behavior."""
         cfg = MCPServerConfig(
             name="zero-timeout",
             version="0.1.0",
@@ -880,7 +850,6 @@ class TestInitializeCapabilities:
     """Tests for initialize capability reporting when tools/resources/prompts exist."""
 
     def test_initialize_with_tools_resources_prompts(self):
-        """Verify initialize reports all three capabilities when populated behavior."""
         srv = MCPServer(MCPServerConfig(name="full-caps", version="0.1.0"))
 
         @srv.tool(name="t1", description="Tool 1")
@@ -906,7 +875,6 @@ class TestInitializeCapabilities:
         assert "prompts" in caps
 
     def test_initialize_with_only_tools(self):
-        """Verify initialize with only tools reports tools capability behavior."""
         srv = MCPServer(MCPServerConfig(name="tools-only", version="0.1.0"))
 
         @srv.tool(name="only_tool", description="Only tool")
@@ -935,7 +903,6 @@ class TestRateLimitPath:
     """Tests for rate-limiter error path (lines 357-362)."""
 
     def test_rate_limit_error_response_when_exhausted(self):
-        """Verify exhausted rate limiter returns RATE_LIMITED error behavior."""
         cfg = MCPServerConfig(
             name="rate-limit-test",
             version="0.1.0",
@@ -983,7 +950,6 @@ class TestToolNotFoundPath:
     """Tests for tool not found error path (lines 352-354)."""
 
     def test_empty_tool_name_returns_not_found(self):
-        """Verify empty tool name returns NOT_FOUND error behavior."""
         srv = MCPServer(MCPServerConfig(name="not-found", version="0.1.0"))
 
         resp = _run(srv.handle_request({
@@ -1008,7 +974,6 @@ class TestToolDecoratorSelfClsSkip:
     """Tests for tool decorator skipping 'self' and 'cls' parameters (line 122)."""
 
     def test_method_with_self_param_excluded_from_schema(self):
-        """Verify 'self' parameter is excluded from tool inputSchema behavior."""
         srv = MCPServer(MCPServerConfig(name="self-skip", version="0.1.0"))
 
         class MyService:
@@ -1034,7 +999,6 @@ class TestToolDecoratorSelfClsSkip:
         assert "data" in tool_schema["inputSchema"]["required"]
 
     def test_classmethod_with_cls_param_excluded_from_schema(self):
-        """Verify 'cls' parameter is excluded from tool inputSchema behavior."""
         srv = MCPServer(MCPServerConfig(name="cls-skip", version="0.1.0"))
 
         # Define a function that uses 'cls' as first param to test the branch

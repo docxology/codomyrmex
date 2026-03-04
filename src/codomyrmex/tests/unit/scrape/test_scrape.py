@@ -228,7 +228,6 @@ class TestCrawler:
     """Tests for Crawler."""
 
     def test_add_seeds_dedup(self):
-        """Verify add seeds dedup behavior."""
         from codomyrmex.scrape.extractors.crawler import CrawlConfig, Crawler
         crawler = Crawler(config=CrawlConfig(max_pages=10))
         added = crawler.add_seeds(["https://example.com", "https://example.com"])
@@ -236,7 +235,6 @@ class TestCrawler:
         assert crawler.frontier_size == 1
 
     def test_has_next_respects_max(self):
-        """Verify has next respects max behavior."""
         from codomyrmex.scrape.extractors.crawler import (
             CrawlConfig,
             Crawler,
@@ -250,7 +248,6 @@ class TestCrawler:
         assert crawler.has_next() is False
 
     def test_domain_filtering(self):
-        """Verify domain filtering behavior."""
         from codomyrmex.scrape.extractors.crawler import CrawlConfig, Crawler
         crawler = Crawler(config=CrawlConfig(allowed_domains=["example.com"]))
         assert crawler.is_allowed("https://example.com/page") is True
@@ -262,14 +259,12 @@ class TestContentExtractor:
     """Tests for ContentExtractor."""
 
     def test_extract_title(self):
-        """Verify extract title behavior."""
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor()
         result = ext.extract("<html><title>Hello World</title></html>")
         assert result.title == "Hello World"
 
     def test_extract_headings(self):
-        """Verify extract headings behavior."""
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor()
         html = "<h1>Main</h1><h2>Sub</h2>"
@@ -278,7 +273,6 @@ class TestContentExtractor:
         assert result.headings[0] == (1, "Main")
 
     def test_extract_links(self):
-        """Verify extract links behavior."""
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor(base_url="https://example.com")
         html = '<a href="/page">Link</a>'
@@ -287,7 +281,6 @@ class TestContentExtractor:
         assert result.links[0][0] == "https://example.com/page"
 
     def test_text_similarity(self):
-        """Verify text similarity behavior."""
         from codomyrmex.scrape.extractors.content_extractor import text_similarity
         assert text_similarity("hello world", "hello world") == 1.0
         assert text_similarity("hello", "goodbye") == 0.0

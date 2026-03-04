@@ -26,23 +26,18 @@ if not HAS_MODULE:
 class TestFaultType:
     """Test suite for FaultType."""
     def test_latency(self):
-        """Verify latency behavior."""
         assert FaultType.LATENCY is not None
 
     def test_error(self):
-        """Verify error behavior."""
         assert FaultType.ERROR is not None
 
     def test_timeout(self):
-        """Verify timeout behavior."""
         assert FaultType.TIMEOUT is not None
 
     def test_resource_exhaustion(self):
-        """Verify resource exhaustion behavior."""
         assert FaultType.RESOURCE_EXHAUSTION is not None
 
     def test_network_partition(self):
-        """Verify network partition behavior."""
         assert FaultType.NETWORK_PARTITION is not None
 
 
@@ -50,19 +45,16 @@ class TestFaultType:
 class TestFaultConfig:
     """Test suite for FaultConfig."""
     def test_create_config(self):
-        """Verify create config behavior."""
         config = FaultConfig(fault_type=FaultType.LATENCY)
         assert config.fault_type == FaultType.LATENCY
         assert config.probability == 0.1
 
     def test_config_defaults(self):
-        """Verify config defaults behavior."""
         config = FaultConfig(fault_type=FaultType.ERROR)
         assert config.duration_seconds == 0.0
         assert config.error_message == "Injected fault"
 
     def test_config_custom_probability(self):
-        """Verify config custom probability behavior."""
         config = FaultConfig(fault_type=FaultType.TIMEOUT, probability=0.5)
         assert config.probability == 0.5
 
@@ -71,12 +63,10 @@ class TestFaultConfig:
 class TestInjectedFaultError:
     """Test suite for InjectedFaultError."""
     def test_is_exception(self):
-        """Verify is exception behavior."""
         with pytest.raises(InjectedFaultError):
             raise InjectedFaultError("test fault")
 
     def test_message(self):
-        """Verify message behavior."""
         exc = InjectedFaultError("chaos error")
         assert "chaos error" in str(exc)
 
@@ -85,7 +75,6 @@ class TestInjectedFaultError:
 class TestFaultInjector:
     """Test suite for FaultInjector."""
     def test_create_injector(self):
-        """Verify create injector behavior."""
         injector = FaultInjector()
         assert injector is not None
 
@@ -94,7 +83,6 @@ class TestFaultInjector:
 class TestSteadyStateHypothesis:
     """Test suite for SteadyStateHypothesis."""
     def test_create_hypothesis(self):
-        """Verify create hypothesis behavior."""
         hypothesis = SteadyStateHypothesis(
             name="service is healthy",
             check_fn=lambda: True,
@@ -103,7 +91,6 @@ class TestSteadyStateHypothesis:
         assert hypothesis.description == ""
 
     def test_hypothesis_check(self):
-        """Verify hypothesis check behavior."""
         hypothesis = SteadyStateHypothesis(
             name="test",
             check_fn=lambda: True,
@@ -115,7 +102,6 @@ class TestSteadyStateHypothesis:
 class TestChaosExperiment:
     """Test suite for ChaosExperiment."""
     def test_create_experiment(self):
-        """Verify create experiment behavior."""
         hypothesis = SteadyStateHypothesis(name="test", check_fn=lambda: True)
         experiment = ChaosExperiment(
             name="test experiment",
@@ -125,7 +111,6 @@ class TestChaosExperiment:
         assert experiment.name == "test experiment"
 
     def test_experiment_with_rollback(self):
-        """Verify experiment with rollback behavior."""
         hypothesis = SteadyStateHypothesis(name="test", check_fn=lambda: True)
         experiment = ChaosExperiment(
             name="test",
@@ -140,12 +125,10 @@ class TestChaosExperiment:
 class TestChaosMonkey:
     """Test suite for ChaosMonkey."""
     def test_create_monkey(self):
-        """Verify create monkey behavior."""
         monkey = ChaosMonkey()
         assert monkey is not None
 
     def test_create_with_injector(self):
-        """Verify create with injector behavior."""
         injector = FaultInjector()
         monkey = ChaosMonkey(injector=injector)
         assert monkey is not None
@@ -155,7 +138,6 @@ class TestChaosMonkey:
 class TestExperimentResult:
     """Test suite for ExperimentResult."""
     def test_create_result(self):
-        """Verify create result behavior."""
         result = ExperimentResult(
             experiment_name="test",
             success=True,
@@ -171,5 +153,4 @@ class TestExperimentResult:
 class TestWithChaos:
     """Test suite for WithChaos."""
     def test_decorator_exists(self):
-        """Verify decorator exists behavior."""
         assert callable(with_chaos)

@@ -95,7 +95,6 @@ class TestRESTAPI:
 
         # Add endpoint
         def test_handler(request):
-            """Verify handler behavior."""
             return APIResponse.success({"result": "ok"})
 
         endpoint = APIEndpoint(
@@ -115,7 +114,6 @@ class TestRESTAPI:
         """Test handling API requests."""
         # Add a test endpoint
         def test_handler(request):
-            """Verify handler behavior."""
             return APIResponse.success({"path": request.path, "method": request.method.value})
 
         self.api.router.add_endpoint(APIEndpoint(
@@ -306,7 +304,6 @@ class TestOpenAPIGenerator:
 
         # Add a test endpoint
         def test_handler(request):
-            """Verify handler behavior."""
             return APIResponse.success({"test": "data"})
 
         endpoint = APIEndpoint(

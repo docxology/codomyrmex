@@ -166,13 +166,11 @@ from main import get_users_from_db, process_users
 class TestMain(unittest.TestCase):
     """Test suite for Main."""
     def test_get_users(self):
-        """Verify get users behavior."""
         users = get_users_from_db()
         self.assertEqual(len(users), 3)
         self.assertEqual(users[0]["name"], "Alice")
 
     def test_process_users(self):
-        """Verify process users behavior."""
         users = get_users_from_db()
         process_users(users)
         for user in users:
@@ -668,7 +666,6 @@ print(f"Fibonacci(10) = {result}")
                 from codomyrmex.performance import profile_function
 
                 def test_execution():
-                    """Verify execution behavior."""
                     exec(test_code)
 
                 profile_result = profile_function(test_execution)

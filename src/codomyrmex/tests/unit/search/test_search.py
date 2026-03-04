@@ -27,19 +27,16 @@ if not HAS_MODULE:
 class TestDocument:
     """Test suite for Document."""
     def test_create_document(self):
-        """Verify create document behavior."""
         doc = Document(id="doc-1", content="Hello world")
         assert doc.id == "doc-1"
         assert doc.content == "Hello world"
 
     def test_document_defaults(self):
-        """Verify document defaults behavior."""
         doc = Document(id="doc-2", content="test")
         assert doc.metadata == {}
         assert isinstance(doc.indexed_at, datetime)
 
     def test_document_with_metadata(self):
-        """Verify document with metadata behavior."""
         doc = Document(id="doc-3", content="test", metadata={"source": "web"})
         assert doc.metadata["source"] == "web"
 
@@ -48,7 +45,6 @@ class TestDocument:
 class TestSearchResult:
     """Test suite for SearchResult."""
     def test_create_result(self):
-        """Verify create result behavior."""
         doc = Document(id="doc-1", content="test")
         result = SearchResult(document=doc, score=0.95)
         assert result.score == 0.95
@@ -59,17 +55,14 @@ class TestSearchResult:
 class TestSimpleTokenizer:
     """Test suite for SimpleTokenizer."""
     def test_create_tokenizer(self):
-        """Verify create tokenizer behavior."""
         tokenizer = SimpleTokenizer()
         assert tokenizer is not None
 
     def test_tokenizer_lowercase(self):
-        """Verify tokenizer lowercase behavior."""
         tokenizer = SimpleTokenizer(lowercase=True)
         assert tokenizer is not None
 
     def test_tokenizer_min_length(self):
-        """Verify tokenizer min length behavior."""
         tokenizer = SimpleTokenizer(min_length=3)
         assert tokenizer is not None
 
@@ -78,12 +71,10 @@ class TestSimpleTokenizer:
 class TestInMemoryIndex:
     """Test suite for InMemoryIndex."""
     def test_create_index(self):
-        """Verify create index behavior."""
         index = InMemoryIndex()
         assert index is not None
 
     def test_create_with_tokenizer(self):
-        """Verify create with tokenizer behavior."""
         tokenizer = SimpleTokenizer()
         index = InMemoryIndex(tokenizer=tokenizer)
         assert index is not None
@@ -93,7 +84,6 @@ class TestInMemoryIndex:
 class TestFuzzyMatcher:
     """Test suite for FuzzyMatcher."""
     def test_class_exists(self):
-        """Verify class exists behavior."""
         assert FuzzyMatcher is not None
 
 
@@ -101,7 +91,6 @@ class TestFuzzyMatcher:
 class TestQueryParser:
     """Test suite for QueryParser."""
     def test_create_parser(self):
-        """Verify create parser behavior."""
         parser = QueryParser()
         assert parser is not None
 
@@ -110,12 +99,10 @@ class TestQueryParser:
 class TestCreateIndex:
     """Test suite for CreateIndex."""
     def test_default_creates_memory_index(self):
-        """Verify default creates memory index behavior."""
         index = create_index()
         assert isinstance(index, InMemoryIndex)
 
     def test_memory_backend(self):
-        """Verify memory backend behavior."""
         index = create_index(backend="memory")
         assert index is not None
 
@@ -124,13 +111,11 @@ class TestCreateIndex:
 class TestQuickSearch:
     """Test suite for QuickSearch."""
     def test_returns_results(self):
-        """Verify returns results behavior."""
         docs = ["Hello world", "Python programming", "Search engine"]
         results = quick_search(docs, "hello")
         assert isinstance(results, list)
 
     def test_top_k(self):
-        """Verify top k behavior."""
         docs = ["doc one", "doc two", "doc three", "doc four"]
         results = quick_search(docs, "doc", k=2)
         assert len(results) <= 2

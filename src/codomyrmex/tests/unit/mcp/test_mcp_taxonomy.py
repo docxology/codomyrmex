@@ -32,7 +32,6 @@ class TestToolCategory:
         ("codomyrmex.obsidian_vault_stats", ToolCategory.ANALYSIS),
     ])
     def test_analysis_tools(self, tool, expected):
-        """Verify analysis tools behavior."""
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize("tool,expected", [
@@ -43,7 +42,6 @@ class TestToolCategory:
         ("codomyrmex.create_ascii_art", ToolCategory.GENERATION),
     ])
     def test_generation_tools(self, tool, expected):
-        """Verify generation tools behavior."""
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize("tool,expected", [
@@ -54,7 +52,6 @@ class TestToolCategory:
         ("codomyrmex.call_module_function", ToolCategory.EXECUTION),
     ])
     def test_execution_tools(self, tool, expected):
-        """Verify execution tools behavior."""
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize("tool,expected", [
@@ -67,7 +64,6 @@ class TestToolCategory:
         ("codomyrmex.obsidian_read_note", ToolCategory.QUERY),
     ])
     def test_query_tools(self, tool, expected):
-        """Verify query tools behavior."""
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize("tool,expected", [
@@ -79,7 +75,6 @@ class TestToolCategory:
         ("codomyrmex.invalidate_cache", ToolCategory.MUTATION),
     ])
     def test_mutation_tools(self, tool, expected):
-        """Verify mutation tools behavior."""
         assert categorize_tool(tool) == expected
 
 
@@ -87,7 +82,6 @@ class TestCategorizeAll:
     """Bulk classification tests."""
 
     def test_categorize_all_returns_dict(self):
-        """Verify categorize all returns dict behavior."""
         names = ["codomyrmex.git_push", "codomyrmex.read_file"]
         result = categorize_all_tools(names)
         assert isinstance(result, dict)
@@ -101,7 +95,6 @@ class TestCategorizeAll:
         assert cat == ToolCategory.QUERY
 
     def test_empty_list(self):
-        """Verify empty list behavior."""
         result = categorize_all_tools([])
         assert result == {}
 
@@ -110,7 +103,6 @@ class TestTaxonomyReport:
     """Report generation tests."""
 
     def test_report_structure(self):
-        """Verify report structure behavior."""
         names = [
             "codomyrmex.analyze_file",
             "codomyrmex.git_push",
@@ -129,7 +121,6 @@ class TestTaxonomyReport:
         assert report.by_category["query"] == 1
 
     def test_report_summary(self):
-        """Verify report summary behavior."""
         report = generate_taxonomy_report(["codomyrmex.read_file"])
         summary = report.summary()
         assert summary["total"] == 1

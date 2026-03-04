@@ -25,7 +25,6 @@ from codomyrmex.orchestrator.workflows.workflow_templates import (
 class TestWorkflowStep:
     """Test suite for WorkflowStep."""
     def test_to_dict(self) -> None:
-        """Verify to dict behavior."""
         s = WorkflowStep("build")
         d = s.to_dict()
         assert d["name"] == "build"
@@ -35,7 +34,6 @@ class TestWorkflowStep:
 class TestWorkflowRunner:
     """Test suite for WorkflowRunner."""
     def test_linear_pipeline(self) -> None:
-        """Verify linear pipeline behavior."""
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a", action=lambda ctx: "done_a"))
         runner.add_step(WorkflowStep("b", action=lambda ctx: "done_b", depends_on=["a"]))
@@ -44,7 +42,6 @@ class TestWorkflowRunner:
         assert result.completed_count == 2
 
     def test_failed_step_skips_dependents(self) -> None:
-        """Verify failed step skips dependents behavior."""
         def fail(ctx):
             raise RuntimeError("boom")
 
@@ -56,7 +53,6 @@ class TestWorkflowRunner:
         assert result.failed_count == 1
 
     def test_parallel_roots(self) -> None:
-        """Verify parallel roots behavior."""
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a", action=lambda ctx: 1))
         runner.add_step(WorkflowStep("b", action=lambda ctx: 2))
@@ -66,7 +62,6 @@ class TestWorkflowRunner:
         assert result.completed_count == 3
 
     def test_cycle_detection(self) -> None:
-        """Verify cycle detection behavior."""
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a", depends_on=["b"]))
         runner.add_step(WorkflowStep("b", depends_on=["a"]))
@@ -74,7 +69,6 @@ class TestWorkflowRunner:
             runner.run()
 
     def test_context_passing(self) -> None:
-        """Verify context passing behavior."""
         def write_ctx(ctx):
             ctx["key"] = "value"
 
@@ -88,7 +82,6 @@ class TestWorkflowRunner:
         assert result.success
 
     def test_step_count(self) -> None:
-        """Verify step count behavior."""
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("x"))
         assert runner.step_count == 1
@@ -97,7 +90,6 @@ class TestWorkflowRunner:
 class TestWorkflowTemplates:
     """Test suite for WorkflowTemplates."""
     def test_ci_cd(self) -> None:
-        """Verify ci cd behavior."""
         t = ci_cd_template()
         assert len(t.steps) == 4
         runner = t.instantiate({
@@ -111,13 +103,11 @@ class TestWorkflowTemplates:
         assert result.success
 
     def test_code_review(self) -> None:
-        """Verify code review behavior."""
         t = code_review_template()
         assert t.name == "code_review"
         assert len(t.steps) == 4
 
     def test_data_pipeline(self) -> None:
-        """Verify data pipeline behavior."""
         t = data_pipeline_template()
         assert t.name == "data_pipeline"
 
@@ -128,39 +118,33 @@ class TestWorkflowTemplates:
 class TestMemoryStore:
     """Test suite for MemoryStore."""
     def test_put_get(self) -> None:
-        """Verify put get behavior."""
         store = MemoryStore()
         store.put("k", "v")
         assert store.get("k") == "v"
 
     def test_missing_key(self) -> None:
-        """Verify missing key behavior."""
         store = MemoryStore()
         assert store.get("nope", "default") == "default"
 
     def test_delete(self) -> None:
-        """Verify delete behavior."""
         store = MemoryStore()
         store.put("k", 1)
         assert store.delete("k")
         assert not store.has("k")
 
     def test_ttl_expiry(self) -> None:
-        """Verify ttl expiry behavior."""
         store = MemoryStore()
         store.put("k", "v", ttl=0.001)
         time.sleep(0.01)
         assert store.get("k") is None
 
     def test_search_by_tag(self) -> None:
-        """Verify search by tag behavior."""
         store = MemoryStore()
         store.put("a", 1, tags=["red"])
         store.put("b", 2, tags=["blue"])
         assert len(store.search_by_tag("red")) == 1
 
     def test_size(self) -> None:
-        """Verify size behavior."""
         store = MemoryStore()
         store.put("a", 1)
         store.put("b", 2)
@@ -173,14 +157,12 @@ class TestMemoryStore:
 class TestConversationHistory:
     """Test suite for ConversationHistory."""
     def test_add_and_count(self) -> None:
-        """Verify add and count behavior."""
         h = ConversationHistory()
         h.add("user", "hello")
         h.add("assistant", "hi")
         assert h.turn_count == 2
 
     def test_by_role(self) -> None:
-        """Verify by role behavior."""
         h = ConversationHistory()
         h.add("user", "a")
         h.add("assistant", "b")
@@ -188,7 +170,6 @@ class TestConversationHistory:
         assert len(h.by_role("user")) == 2
 
     def test_max_turns(self) -> None:
-        """Verify max turns behavior."""
         h = ConversationHistory(max_turns=2)
         h.add("user", "1")
         h.add("user", "2")
@@ -196,14 +177,12 @@ class TestConversationHistory:
         assert h.turn_count == 2
 
     def test_to_messages(self) -> None:
-        """Verify to messages behavior."""
         h = ConversationHistory()
         h.add("user", "hi")
         msgs = h.to_messages()
         assert msgs[0]["role"] == "user"
 
     def test_summary(self) -> None:
-        """Verify summary behavior."""
         h = ConversationHistory()
         h.add("user", "one two three")
         s = h.summary()
@@ -216,20 +195,17 @@ class TestConversationHistory:
 class TestLearningJournal:
     """Test suite for LearningJournal."""
     def test_record(self) -> None:
-        """Verify record behavior."""
         j = LearningJournal()
         j.record("python", "use generators")
         assert j.size == 1
 
     def test_by_topic(self) -> None:
-        """Verify by topic behavior."""
         j = LearningJournal()
         j.record("python", "a")
         j.record("rust", "b")
         assert len(j.by_topic("python")) == 1
 
     def test_detect_patterns(self) -> None:
-        """Verify detect patterns behavior."""
         j = LearningJournal()
         j.record("python", "x", tags=["performance"])
         j.record("python", "y", tags=["performance"])
@@ -238,7 +214,6 @@ class TestLearningJournal:
         assert patterns["top_topics"][0][0] == "python"
 
     def test_high_confidence(self) -> None:
-        """Verify high confidence behavior."""
         j = LearningJournal()
         j.record("a", confidence=0.9)
         j.record("b", confidence=0.3)

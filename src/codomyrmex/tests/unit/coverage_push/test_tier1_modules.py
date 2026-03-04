@@ -14,14 +14,12 @@ class TestCerebrumModel:
     """Test cerebrum Model dataclass."""
 
     def test_model_creation(self):
-        """Verify model creation behavior."""
         from codomyrmex.cerebrum.core.models import Model
         m = Model(name="test_model", model_type="bayesian")
         assert m.name == "test_model"
         assert m.model_type == "bayesian"
 
     def test_model_to_dict(self):
-        """Verify model to dict behavior."""
         from codomyrmex.cerebrum.core.models import Model
         m = Model(name="test", model_type="cbr", parameters={"k": 5})
         d = m.to_dict()
@@ -29,7 +27,6 @@ class TestCerebrumModel:
         assert d["parameters"]["k"] == 5
 
     def test_model_from_dict(self):
-        """Verify model from dict behavior."""
         from codomyrmex.cerebrum.core.models import Model
         d = {"name": "restored", "model_type": "neural", "parameters": {"lr": 0.01}}
         m = Model.from_dict(d)
@@ -37,7 +34,6 @@ class TestCerebrumModel:
         assert m.parameters["lr"] == 0.01
 
     def test_model_roundtrip(self):
-        """Verify model roundtrip behavior."""
         from codomyrmex.cerebrum.core.models import Model
         original = Model(name="rt", model_type="hybrid", parameters={"a": 1}, metadata={"v": "2"})
         restored = Model.from_dict(original.to_dict())
@@ -49,14 +45,12 @@ class TestReasoningResult:
     """Test ReasoningResult dataclass."""
 
     def test_creation(self):
-        """Verify creation behavior."""
         from codomyrmex.cerebrum.core.models import ReasoningResult
         r = ReasoningResult(prediction="yes", confidence=0.95)
         assert r.prediction == "yes"
         assert r.confidence == 0.95
 
     def test_to_dict(self):
-        """Verify to dict behavior."""
         from codomyrmex.cerebrum.core.models import ReasoningResult
         r = ReasoningResult(prediction=42, confidence=0.8, evidence={"key": "val"})
         d = r.to_dict()
@@ -70,7 +64,6 @@ class TestCerebrumConfig:
     """Test CerebrumConfig dataclass."""
 
     def test_defaults(self):
-        """Verify defaults behavior."""
         from codomyrmex.cerebrum.core.config import CerebrumConfig
         cfg = CerebrumConfig()
         assert cfg.case_similarity_threshold == 0.7
@@ -78,7 +71,6 @@ class TestCerebrumConfig:
         assert cfg.inference_method == "variable_elimination"
 
     def test_to_dict(self):
-        """Verify to dict behavior."""
         from codomyrmex.cerebrum.core.config import CerebrumConfig
         cfg = CerebrumConfig(learning_rate=0.05)
         d = cfg.to_dict()
@@ -86,7 +78,6 @@ class TestCerebrumConfig:
         assert "case_similarity_threshold" in d
 
     def test_from_dict(self):
-        """Verify from dict behavior."""
         from codomyrmex.cerebrum.core.config import CerebrumConfig
         cfg = CerebrumConfig()
         d = cfg.to_dict()
@@ -99,25 +90,21 @@ class TestTransformations:
     """Test cerebrum transformation classes."""
 
     def test_model_transformer_init(self):
-        """Verify model transformer init behavior."""
         from codomyrmex.cerebrum.core.transformations import AdaptationTransformer
         t = AdaptationTransformer()
         assert t is not None
 
     def test_adaptation_transformer_init(self):
-        """Verify adaptation transformer init behavior."""
         from codomyrmex.cerebrum.core.transformations import AdaptationTransformer
         t = AdaptationTransformer(adaptation_rate=0.2)
         assert t.adaptation_rate == 0.2
 
     def test_learning_transformer_init(self):
-        """Verify learning transformer init behavior."""
         from codomyrmex.cerebrum.core.transformations import LearningTransformer
         t = LearningTransformer(learning_rate=0.05)
         assert t.learning_rate == 0.05
 
     def test_transformation_manager_register(self):
-        """Verify transformation manager register behavior."""
         from codomyrmex.cerebrum.core.transformations import (
             AdaptationTransformer,
             TransformationManager,
@@ -127,7 +114,6 @@ class TestTransformations:
         assert "basic" in mgr.transformers
 
     def test_adaptation_update_parameters(self):
-        """Verify adaptation update parameters behavior."""
         from codomyrmex.cerebrum.core.models import Model
         from codomyrmex.cerebrum.core.transformations import AdaptationTransformer
         t = AdaptationTransformer(adaptation_rate=0.5)
@@ -147,51 +133,43 @@ class TestFPFModels:
     """Test FPF Pydantic models."""
 
     def test_pattern_status_enum(self):
-        """Verify pattern status enum behavior."""
         from codomyrmex.fpf.core.models import PatternStatus
         assert PatternStatus.STABLE == "Stable"
         assert PatternStatus.DRAFT == "Draft"
 
     def test_relationship_type_enum(self):
-        """Verify relationship type enum behavior."""
         from codomyrmex.fpf.core.models import RelationshipType
         assert RelationshipType.BUILDS_ON == "builds_on"
         assert RelationshipType.CONSTRAINS == "constrains"
 
     def test_concept_type_enum(self):
-        """Verify concept type enum behavior."""
         from codomyrmex.fpf.core.models import ConceptType
         assert ConceptType.MECHANISM == "Mechanism"
         assert ConceptType.PRINCIPLE == "Principle"
 
     def test_pattern_creation(self):
-        """Verify pattern creation behavior."""
         from codomyrmex.fpf.core.models import Pattern, PatternStatus
         p = Pattern(id="P1", title="Test Pattern", status=PatternStatus.DRAFT, content="body text")
         assert p.id == "P1"
         assert p.title == "Test Pattern"
 
     def test_concept_creation(self):
-        """Verify concept creation behavior."""
         from codomyrmex.fpf.core.models import Concept, ConceptType
         c = Concept(name="TestConcept", type=ConceptType.TERM, definition="A test concept", pattern_id="P1")
         assert c.name == "TestConcept"
 
     def test_relationship_creation(self):
-        """Verify relationship creation behavior."""
         from codomyrmex.fpf.core.models import Relationship, RelationshipType
         r = Relationship(source="P1", target="P2", type=RelationshipType.BUILDS_ON)
         assert r.source == "P1"
         assert r.target == "P2"
 
     def test_fpf_spec_creation(self):
-        """Verify fpf spec creation behavior."""
         from codomyrmex.fpf.core.models import FPFSpec
         spec = FPFSpec(version="1.0")
         assert spec.version == "1.0"
 
     def test_fpf_spec_get_pattern_by_id(self):
-        """Verify fpf spec get pattern by id behavior."""
         from codomyrmex.fpf.core.models import FPFSpec, Pattern, PatternStatus
         spec = FPFSpec(
             version="1.0",
@@ -202,19 +180,16 @@ class TestFPFModels:
         assert found.title == "First"
 
     def test_fpf_spec_pattern_not_found(self):
-        """Verify fpf spec pattern not found behavior."""
         from codomyrmex.fpf.core.models import FPFSpec
         spec = FPFSpec(version="1.0")
         assert spec.get_pattern_by_id("nonexistent") is None
 
     def test_fpf_index_creation(self):
-        """Verify fpf index creation behavior."""
         from codomyrmex.fpf.core.models import FPFIndex
         idx = FPFIndex()
         assert idx is not None
 
     def test_fpf_index_search(self):
-        """Verify fpf index search behavior."""
         from codomyrmex.fpf.core.models import FPFIndex, Pattern, PatternStatus
         idx = FPFIndex(
             pattern_index={"P1": Pattern(id="P1", title="Cognitive Architecture", status=PatternStatus.STABLE, content="desc")},
@@ -232,20 +207,17 @@ class TestContainerConfig:
     """Test ContainerConfig dataclass."""
 
     def test_creation(self):
-        """Verify creation behavior."""
         from codomyrmex.containerization.docker.docker_manager import ContainerConfig
         cfg = ContainerConfig(image_name="python", tag="3.12")
         assert cfg.image_name == "python"
         assert cfg.tag == "3.12"
 
     def test_get_full_image_name(self):
-        """Verify get full image name behavior."""
         from codomyrmex.containerization.docker.docker_manager import ContainerConfig
         cfg = ContainerConfig(image_name="python", tag="3.12-slim")
         assert cfg.get_full_image_name() == "python:3.12-slim"
 
     def test_defaults(self):
-        """Verify defaults behavior."""
         from codomyrmex.containerization.docker.docker_manager import ContainerConfig
         cfg = ContainerConfig(image_name="test")
         assert cfg.tag == "latest"
@@ -258,12 +230,10 @@ class TestDockerManagerImport:
     """Test DockerManager can be imported (Docker may not be available)."""
 
     def test_import(self):
-        """Verify import behavior."""
         from codomyrmex.containerization.docker.docker_manager import DockerManager
         assert DockerManager is not None
 
     def test_optimize_recommendations(self):
-        """Verify optimize recommendations behavior."""
         from codomyrmex.containerization.docker.docker_manager import DockerManager
         mgr = DockerManager.__new__(DockerManager)
         # optimize_container_image returns a string recommendation
@@ -280,12 +250,10 @@ class TestGitOperationsImport:
     """Test git_operations module imports."""
 
     def test_import_module(self):
-        """Verify import module behavior."""
         import codomyrmex.git_operations
         assert codomyrmex.git_operations is not None
 
     def test_mcp_tools_import(self):
-        """Verify mcp tools import behavior."""
         from codomyrmex.git_operations import mcp_tools
         # Module exports individual tool functions, not a list
         assert hasattr(mcp_tools, 'git_repo_status')

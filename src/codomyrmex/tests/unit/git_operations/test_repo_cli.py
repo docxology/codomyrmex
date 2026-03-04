@@ -93,7 +93,6 @@ class StubRepositoryManager:
 class TestCmdSync:
     """Test suite for CmdSync."""
     def test_cmd_sync_calls_manager(self):
-        """Verify cmd sync calls manager behavior."""
         manager = StubRepositoryManager()
         args = StubArgs(repository="owner/repo")
         cmd_sync(manager, args)
@@ -105,7 +104,6 @@ class TestCmdSync:
 class TestCmdPrune:
     """Test suite for CmdPrune."""
     def test_cmd_prune_calls_manager(self):
-        """Verify cmd prune calls manager behavior."""
         manager = StubRepositoryManager()
         args = StubArgs(repository="owner/repo")
         cmd_prune(manager, args)

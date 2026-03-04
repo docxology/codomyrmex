@@ -8,50 +8,42 @@ from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 class TestObsidianVault:
     """Test suite for ObsidianVault."""
     def test_load_vault(self, tmp_vault):
-        """Verify load vault behavior."""
         vault = ObsidianVault(tmp_vault)
         assert vault.path == tmp_vault.resolve()
         assert len(vault.notes) == 7  # 4 root + 1 nested + 1 daily + 1 template
 
     def test_vault_not_found(self, tmp_path):
-        """Verify vault not found behavior."""
         with pytest.raises(FileNotFoundError):
             ObsidianVault(tmp_path / "nonexistent")
 
     def test_vault_not_directory(self, tmp_path):
-        """Verify vault not directory behavior."""
         f = tmp_path / "file.txt"
         f.write_text("not a dir")
         with pytest.raises(ValueError):
             ObsidianVault(f)
 
     def test_get_note_by_path(self, tmp_vault):
-        """Verify get note by path behavior."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("My Test Note.md")
         assert hasattr(note, 'title')
         assert note.title == "My Test Note"
 
     def test_get_note_by_title(self, tmp_vault):
-        """Verify get note by title behavior."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("Simple Note")
         assert hasattr(note, 'title')
         assert note.title == "Simple Note"
 
     def test_get_note_without_extension(self, tmp_vault):
-        """Verify get note without extension behavior."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("My Test Note")
         assert note.title == "My Test Note"
 
     def test_get_note_not_found(self, tmp_vault):
-        """Verify get note not found behavior."""
         vault = ObsidianVault(tmp_vault)
         assert vault.get_note("Nonexistent") is None
 
     def test_metadata(self, tmp_vault):
-        """Verify metadata behavior."""
         vault = ObsidianVault(tmp_vault)
         meta = vault.metadata
         assert meta.note_count == 7
@@ -59,7 +51,6 @@ class TestObsidianVault:
         assert meta.link_count > 0
 
     def test_refresh(self, tmp_vault):
-        """Verify refresh behavior."""
         vault = ObsidianVault(tmp_vault)
         _ = vault.notes  # Load cache
         (tmp_vault / "New Note.md").write_text("# New\nContent.")
@@ -67,21 +58,18 @@ class TestObsidianVault:
         assert len(vault.notes) == 8
 
     def test_excludes_dotfiles(self, tmp_vault):
-        """Verify excludes dotfiles behavior."""
         vault = ObsidianVault(tmp_vault)
         # .obsidian/ files should not be in notes
         for path in vault.notes:
             assert ".obsidian" not in path
 
     def test_get_config(self, tmp_vault):
-        """Verify get config behavior."""
         vault = ObsidianVault(tmp_vault)
         config = vault.get_config()
         assert "app" in config
         assert config["app"]["vimMode"] is False
 
     def test_get_all_tags(self, tmp_vault):
-        """Verify get all tags behavior."""
         vault = ObsidianVault(tmp_vault)
         tags = vault.get_all_tags()
         assert len(tags) > 0
@@ -89,7 +77,6 @@ class TestObsidianVault:
         assert "testing" in tags or "obsidian" in tags
 
     def test_nested_note_found(self, tmp_vault):
-        """Verify nested note found behavior."""
         vault = ObsidianVault(tmp_vault)
         # The nested note should be accessible
         found = False

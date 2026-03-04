@@ -30,7 +30,6 @@ class TestBasicCounters:
     """Verify call and error counters."""
 
     def test_single_tool_call_increments(self) -> None:
-        """Verify single tool call increments behavior."""
         hooks = MCPObservabilityHooks()
         hooks.on_tool_call_end("search_code", duration=0.1, error=None)
 
@@ -40,7 +39,6 @@ class TestBasicCounters:
         assert m["per_tool"]["search_code"]["calls"] == 1
 
     def test_multiple_tool_calls(self) -> None:
-        """Verify multiple tool calls behavior."""
         hooks = MCPObservabilityHooks()
         for _ in range(5):
             hooks.on_tool_call_end("read_file", duration=0.05, error=None)
@@ -53,7 +51,6 @@ class TestBasicCounters:
         assert m["per_tool"]["write_file"]["calls"] == 3
 
     def test_error_counting(self) -> None:
-        """Verify error counting behavior."""
         hooks = MCPObservabilityHooks()
         hooks.on_tool_call_end("bad_tool", duration=0.01, error="timeout")
         hooks.on_tool_call_end("bad_tool", duration=0.02, error=None)
@@ -72,7 +69,6 @@ class TestDurationTracking:
     """Verify cumulative duration tracking."""
 
     def test_total_duration(self) -> None:
-        """Verify total duration behavior."""
         hooks = MCPObservabilityHooks()
         hooks.on_tool_call_end("tool_a", duration=0.1, error=None)
         hooks.on_tool_call_end("tool_a", duration=0.2, error=None)
@@ -82,7 +78,6 @@ class TestDurationTracking:
         assert abs(m["per_tool"]["tool_a"]["total_duration"] - 0.3) < 0.001
 
     def test_average_duration(self) -> None:
-        """Verify average duration behavior."""
         hooks = MCPObservabilityHooks()
         hooks.on_tool_call_end("tool_b", duration=0.1, error=None)
         hooks.on_tool_call_end("tool_b", duration=0.3, error=None)
@@ -91,7 +86,6 @@ class TestDurationTracking:
         assert abs(avg - 0.2) < 0.001
 
     def test_start_returns_timestamp(self) -> None:
-        """Verify start returns timestamp behavior."""
         hooks = MCPObservabilityHooks()
         t0 = hooks.on_tool_call_start("tool_c")
         assert isinstance(t0, float)
@@ -105,7 +99,6 @@ class TestMetricsResource:
     """Verify JSON serialisation for MCP resource."""
 
     def test_get_metrics_json(self) -> None:
-        """Verify get metrics json behavior."""
         hooks = MCPObservabilityHooks()
         hooks.on_tool_call_end("x", duration=0.1, error=None)
 
@@ -114,7 +107,6 @@ class TestMetricsResource:
         assert d["mcp_tool_call_total"] == 1
 
     def test_get_tool_metrics(self) -> None:
-        """Verify get tool metrics behavior."""
         hooks = MCPObservabilityHooks()
         hooks.on_tool_call_end("specific_tool", duration=0.5, error=None)
 
@@ -124,7 +116,6 @@ class TestMetricsResource:
         assert abs(tm.total_duration - 0.5) < 0.001
 
     def test_nonexistent_tool_returns_none(self) -> None:
-        """Verify nonexistent tool returns none behavior."""
         hooks = MCPObservabilityHooks()
         assert hooks.get_tool_metrics("nope") is None
 
@@ -136,7 +127,6 @@ class TestReset:
     """Verify counter reset."""
 
     def test_reset_clears_all_counters(self) -> None:
-        """Verify reset clears all counters behavior."""
         hooks = MCPObservabilityHooks()
         for _ in range(10):
             hooks.on_tool_call_end("tool", duration=0.01, error=None)
@@ -155,7 +145,6 @@ class TestSingleton:
     """Verify global singleton."""
 
     def test_get_mcp_observability_hooks_returns_same_instance(self) -> None:
-        """Verify get mcp observability hooks returns same instance behavior."""
         h1 = get_mcp_observability_hooks()
         h2 = get_mcp_observability_hooks()
         assert h1 is h2
@@ -168,7 +157,6 @@ class TestStructuredJsonToggle:
     """Verify enable_structured_json and configure_all_structured."""
 
     def test_enable_structured_json_adds_handler(self) -> None:
-        """Verify enable structured json adds handler behavior."""
         test_logger = logging.getLogger("codomyrmex.test_json_toggle")
         # Remove any existing handlers
         test_logger.handlers.clear()
@@ -179,7 +167,6 @@ class TestStructuredJsonToggle:
         assert isinstance(test_logger.handlers[0].formatter, JSONFormatter)
 
     def test_enable_structured_json_converts_existing_handler(self) -> None:
-        """Verify enable structured json converts existing handler behavior."""
         test_logger = logging.getLogger("codomyrmex.test_json_convert")
         test_logger.handlers.clear()
         handler = logging.StreamHandler()
@@ -191,7 +178,6 @@ class TestStructuredJsonToggle:
         assert isinstance(test_logger.handlers[0].formatter, JSONFormatter)
 
     def test_configure_all_structured(self) -> None:
-        """Verify configure all structured behavior."""
         # Create a test logger under codomyrmex namespace
         test_logger = logging.getLogger("codomyrmex.test_all_structured")
         test_logger.handlers.clear()

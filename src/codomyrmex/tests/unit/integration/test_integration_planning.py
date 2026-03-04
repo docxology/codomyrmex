@@ -19,7 +19,6 @@ from codomyrmex.orchestrator.module_connector import ModuleConnector
 class TestIntegrationBus:
     """Test suite for IntegrationBus."""
     def test_emit_and_subscribe(self) -> None:
-        """Verify emit and subscribe behavior."""
         bus = IntegrationBus()
         received: list[IntegrationEvent] = []
         bus.subscribe("build.done", lambda e: received.append(e))
@@ -28,13 +27,11 @@ class TestIntegrationBus:
         assert received[0].source == "ci"
 
     def test_no_subscriber(self) -> None:
-        """Verify no subscriber behavior."""
         bus = IntegrationBus()
         event = bus.emit("orphan.topic")
         assert event.topic == "orphan.topic"
 
     def test_wildcard_subscriber(self) -> None:
-        """Verify wildcard subscriber behavior."""
         bus = IntegrationBus()
         caught: list[str] = []
         bus.subscribe("*", lambda e: caught.append(e.topic))
@@ -43,7 +40,6 @@ class TestIntegrationBus:
         assert len(caught) == 2
 
     def test_history(self) -> None:
-        """Verify history behavior."""
         bus = IntegrationBus()
         bus.emit("x")
         bus.emit("y")
@@ -51,7 +47,6 @@ class TestIntegrationBus:
         assert len(bus.history_by_topic("x")) == 1
 
     def test_handler_error_isolation(self) -> None:
-        """Verify handler error isolation behavior."""
         bus = IntegrationBus()
         bus.subscribe("err", lambda e: (_ for _ in ()).throw(RuntimeError("boom")))
         event = bus.emit("err")
@@ -64,14 +59,12 @@ class TestIntegrationBus:
 class TestModuleConnector:
     """Test suite for ModuleConnector."""
     def test_register_and_resolve(self) -> None:
-        """Verify register and resolve behavior."""
         mc = ModuleConnector()
         mc.register("db", lambda: {"engine": "sqlite"})
         result = mc.resolve("db")
         assert result["engine"] == "sqlite"
 
     def test_singleton(self) -> None:
-        """Verify singleton behavior."""
         mc = ModuleConnector()
         mc.register("svc", lambda: object())
         a = mc.resolve("svc")
@@ -79,7 +72,6 @@ class TestModuleConnector:
         assert a is b
 
     def test_non_singleton(self) -> None:
-        """Verify non singleton behavior."""
         mc = ModuleConnector()
         mc.register("svc", lambda: object(), singleton=False)
         a = mc.resolve("svc")
@@ -87,20 +79,17 @@ class TestModuleConnector:
         assert a is not b
 
     def test_missing_service(self) -> None:
-        """Verify missing service behavior."""
         mc = ModuleConnector()
         with pytest.raises(KeyError):
             mc.resolve("nope")
 
     def test_by_tag(self) -> None:
-        """Verify by tag behavior."""
         mc = ModuleConnector()
         mc.register("a", lambda: 1, tags=["core"])
         mc.register("b", lambda: 2, tags=["ext"])
         assert mc.services_by_tag("core") == ["a"]
 
     def test_service_count(self) -> None:
-        """Verify service count behavior."""
         mc = ModuleConnector()
         mc.register("x", lambda: 1)
         assert mc.service_count == 1
@@ -112,35 +101,30 @@ class TestModuleConnector:
 class TestPlanEngine:
     """Test suite for PlanEngine."""
     def test_decompose_build(self) -> None:
-        """Verify decompose build behavior."""
         engine = PlanEngine()
         plan = engine.decompose("Build a REST API")
         assert len(plan.tasks) >= 3
         assert plan.total_tasks > 3  # Should have subtasks
 
     def test_decompose_fix(self) -> None:
-        """Verify decompose fix behavior."""
         engine = PlanEngine()
         plan = engine.decompose("Fix the login bug")
         task_names = [t.name for t in plan.tasks]
         assert "diagnose" in task_names
 
     def test_decompose_analyze(self) -> None:
-        """Verify decompose analyze behavior."""
         engine = PlanEngine()
         plan = engine.decompose("Analyze system performance")
         task_names = [t.name for t in plan.tasks]
         assert "analyze" in task_names
 
     def test_max_depth(self) -> None:
-        """Verify max depth behavior."""
         engine = PlanEngine()
         shallow = engine.decompose("Do something", max_depth=0)
         deep = engine.decompose("Do something", max_depth=2)
         assert deep.total_tasks > shallow.total_tasks
 
     def test_task_dependencies(self) -> None:
-        """Verify task dependencies behavior."""
         engine = PlanEngine()
         plan = engine.decompose("Build it")
         second_task = plan.tasks[1]
@@ -153,7 +137,6 @@ class TestPlanEngine:
 class TestPlanExecutor:
     """Test suite for PlanExecutor."""
     def test_execute_all_succeed(self) -> None:
-        """Verify execute all succeed behavior."""
         engine = PlanEngine()
         plan = engine.decompose("Build app", max_depth=0)
         executor = PlanExecutor()
@@ -162,7 +145,6 @@ class TestPlanExecutor:
         assert result.completed_tasks == len(plan.tasks)
 
     def test_execute_with_actions(self) -> None:
-        """Verify execute with actions behavior."""
         plan = Plan(goal="test", tasks=[PlanTask("step1"), PlanTask("step2")])
         results: list[str] = []
         executor = PlanExecutor()
@@ -173,7 +155,6 @@ class TestPlanExecutor:
         assert "step1" in results
 
     def test_execute_with_failure(self) -> None:
-        """Verify execute with failure behavior."""
         plan = Plan(goal="test", tasks=[PlanTask("fail_step")])
         executor = PlanExecutor()
         result = executor.execute(plan, actions={
@@ -183,7 +164,6 @@ class TestPlanExecutor:
         assert result.failed_tasks == 1
 
     def test_completion_rate(self) -> None:
-        """Verify completion rate behavior."""
         plan = Plan(goal="test", tasks=[PlanTask("a"), PlanTask("b")])
         executor = PlanExecutor()
         executor.execute(plan)

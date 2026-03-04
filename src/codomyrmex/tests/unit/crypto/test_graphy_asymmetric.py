@@ -47,16 +47,13 @@ def ec_keypair() -> KeyPair:
 class TestRSAKeypair:
     """Test suite for RSAKeypair."""
     def test_generate(self, rsa_keypair: KeyPair) -> None:
-        """Verify generate behavior."""
         assert isinstance(rsa_keypair.private_key, rsa.RSAPrivateKey)
         assert isinstance(rsa_keypair.public_key, rsa.RSAPublicKey)
 
     def test_key_size(self, rsa_keypair: KeyPair) -> None:
-        """Verify key size behavior."""
         assert rsa_keypair.private_key.key_size == 2048
 
     def test_encrypt_decrypt_roundtrip(self, rsa_keypair: KeyPair) -> None:
-        """Verify encrypt decrypt roundtrip behavior."""
         plaintext = b"RSA roundtrip test"
         ct = rsa_encrypt(plaintext, rsa_keypair.public_key)
         assert ct != plaintext
@@ -64,14 +61,12 @@ class TestRSAKeypair:
         assert pt == plaintext
 
     def test_encrypt_decrypt_empty(self, rsa_keypair: KeyPair) -> None:
-        """Verify encrypt decrypt empty behavior."""
         plaintext = b""
         ct = rsa_encrypt(plaintext, rsa_keypair.public_key)
         pt = rsa_decrypt(ct, rsa_keypair.private_key)
         assert pt == plaintext
 
     def test_wrong_key_decrypt_fails(self, rsa_keypair: KeyPair) -> None:
-        """Verify wrong key decrypt fails behavior."""
         other = generate_rsa_keypair(2048)
         ct = rsa_encrypt(b"secret", rsa_keypair.public_key)
         with pytest.raises(AsymmetricCipherError):
@@ -83,7 +78,6 @@ class TestRSAKeypair:
 class TestEd25519Keypair:
     """Test suite for Ed25519Keypair."""
     def test_generate(self, ed25519_keypair: KeyPair) -> None:
-        """Verify generate behavior."""
         assert isinstance(ed25519_keypair.private_key, ed25519.Ed25519PrivateKey)
         assert isinstance(ed25519_keypair.public_key, ed25519.Ed25519PublicKey)
 
@@ -93,12 +87,10 @@ class TestEd25519Keypair:
 class TestX25519Keypair:
     """Test suite for X25519Keypair."""
     def test_generate(self, x25519_keypair: KeyPair) -> None:
-        """Verify generate behavior."""
         assert isinstance(x25519_keypair.private_key, x25519.X25519PrivateKey)
         assert isinstance(x25519_keypair.public_key, x25519.X25519PublicKey)
 
     def test_key_exchange(self) -> None:
-        """Verify key exchange behavior."""
         alice = generate_x25519_keypair()
         bob = generate_x25519_keypair()
         shared_a = alice.private_key.exchange(bob.public_key)
@@ -112,17 +104,14 @@ class TestX25519Keypair:
 class TestECKeypair:
     """Test suite for ECKeypair."""
     def test_generate_secp256r1(self, ec_keypair: KeyPair) -> None:
-        """Verify generate secp256r1 behavior."""
         assert isinstance(ec_keypair.private_key, ec.EllipticCurvePrivateKey)
         assert isinstance(ec_keypair.public_key, ec.EllipticCurvePublicKey)
 
     def test_generate_secp384r1(self) -> None:
-        """Verify generate secp384r1 behavior."""
         kp = generate_ec_keypair("secp384r1")
         assert kp.private_key.key_size == 384
 
     def test_unsupported_curve(self) -> None:
-        """Verify unsupported curve behavior."""
         with pytest.raises(AsymmetricCipherError, match="Unsupported curve"):
             generate_ec_keypair("brainpoolP256r1")
 
@@ -132,7 +121,6 @@ class TestECKeypair:
 class TestKeySerialization:
     """Test suite for KeySerialization."""
     def test_public_key_pem_roundtrip(self, rsa_keypair: KeyPair) -> None:
-        """Verify public key pem roundtrip behavior."""
         pem = serialize_public_key(rsa_keypair.public_key, encoding="pem")
         assert pem.startswith(b"-----BEGIN PUBLIC KEY-----")
         loaded = load_public_key(pem)
@@ -141,7 +129,6 @@ class TestKeySerialization:
         assert pem == pem2
 
     def test_public_key_der_roundtrip(self, rsa_keypair: KeyPair) -> None:
-        """Verify public key der roundtrip behavior."""
         der = serialize_public_key(rsa_keypair.public_key, encoding="der")
         assert not der.startswith(b"-----")
         loaded = load_public_key(der)
@@ -149,7 +136,6 @@ class TestKeySerialization:
         assert der == der2
 
     def test_private_key_pem_roundtrip(self, rsa_keypair: KeyPair) -> None:
-        """Verify private key pem roundtrip behavior."""
         pem = serialize_private_key(rsa_keypair.private_key, encoding="pem")
         assert b"BEGIN PRIVATE KEY" in pem
         loaded = load_private_key(pem)
@@ -157,7 +143,6 @@ class TestKeySerialization:
         assert pem == pem2
 
     def test_private_key_encrypted_roundtrip(self, rsa_keypair: KeyPair) -> None:
-        """Verify private key encrypted roundtrip behavior."""
         password = b"test-password-123"
         pem = serialize_private_key(rsa_keypair.private_key, password=password)
         assert b"ENCRYPTED" in pem
@@ -168,26 +153,22 @@ class TestKeySerialization:
         assert pt == b"test"
 
     def test_ed25519_pem_roundtrip(self, ed25519_keypair: KeyPair) -> None:
-        """Verify ed25519 pem roundtrip behavior."""
         pem = serialize_public_key(ed25519_keypair.public_key)
         loaded = load_public_key(pem)
         pem2 = serialize_public_key(loaded)
         assert pem == pem2
 
     def test_ec_pem_roundtrip(self, ec_keypair: KeyPair) -> None:
-        """Verify ec pem roundtrip behavior."""
         pem = serialize_private_key(ec_keypair.private_key)
         loaded = load_private_key(pem)
         pem2 = serialize_private_key(loaded)
         assert pem == pem2
 
     def test_load_invalid_data(self) -> None:
-        """Verify load invalid data behavior."""
         with pytest.raises(AsymmetricCipherError):
             load_public_key(b"not a key")
 
     def test_load_wrong_password(self, rsa_keypair: KeyPair) -> None:
-        """Verify load wrong password behavior."""
         pem = serialize_private_key(rsa_keypair.private_key, password=b"correct")
         with pytest.raises(AsymmetricCipherError):
             load_private_key(pem, password=b"wrong")
