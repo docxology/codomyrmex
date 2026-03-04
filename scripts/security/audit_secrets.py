@@ -80,14 +80,14 @@ def should_skip(path: Path) -> bool:
 def scan_file(file_path: Path) -> list:
     """Scan a file for secrets."""
     findings = []
-    
+
     try:
         with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
             lines = content.split("\n")
     except Exception:
         return findings
-    
+
     for pattern_name, pattern in SECRET_PATTERNS.items():
         for i, line in enumerate(lines, 1):
             # Skip comments in code
@@ -95,14 +95,14 @@ def scan_file(file_path: Path) -> list:
             if stripped.startswith("#") or stripped.startswith("//"):
                 # But still check for actual secrets even in comments
                 pass
-            
+
             matches = re.findall(pattern, line)
             for match in matches:
                 # Skip example/placeholder values
                 match_str = match if isinstance(match, str) else str(match)
                 if any(x in match_str.lower() for x in ["example", "placeholder", "xxx", "your_", "replace"]):
                     continue
-                
+
                 findings.append({
                     "file": str(file_path),
                     "line": i,
@@ -110,7 +110,7 @@ def scan_file(file_path: Path) -> list:
                     "match": match_str[:50] + ("..." if len(match_str) > 50 else ""),
                     "context": line.strip()[:80]
                 })
-    
+
     return findings
 
 
@@ -118,18 +118,18 @@ def scan_directory(path: str, extensions: set = SCAN_EXTENSIONS) -> list:
     """Recursively scan directory for secrets."""
     findings = []
     root = Path(path)
-    
+
     for file_path in root.rglob("*"):
         if file_path.is_file():
             if should_skip(file_path):
                 continue
-            
+
             if extensions and file_path.suffix.lower() not in extensions and file_path.name != ".env":
                 continue
-            
+
             file_findings = scan_file(file_path)
             findings.extend(file_findings)
-    
+
     return findings
 
 
@@ -137,19 +137,19 @@ def check_gitignore(path: str) -> list:
     """Check if sensitive files are in .gitignore."""
     warnings = []
     gitignore = Path(path) / ".gitignore"
-    
+
     sensitive_patterns = [".env", "*.pem", "*.key", "secrets.json", "credentials.json"]
-    
+
     if gitignore.exists():
         with open(gitignore, "r") as f:
             content = f.read()
-        
+
         for pattern in sensitive_patterns:
             if pattern not in content:
                 warnings.append(f"Consider adding '{pattern}' to .gitignore")
     else:
         warnings.append(".gitignore file not found")
-    
+
     return warnings
 
 
@@ -159,10 +159,10 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Show all scanned files")
     parser.add_argument("--all-files", "-a", action="store_true", help="Scan all file types")
     args = parser.parse_args()
-    
+
     path = os.path.abspath(args.path)
     print(f"🔐 Secret Audit: {path}\n")
-    
+
     # Check .gitignore
     gitignore_warnings = check_gitignore(path)
     if gitignore_warnings:
@@ -170,22 +170,22 @@ def main():
         for w in gitignore_warnings:
             print(f"   ⚠️  {w}")
         print()
-    
+
     # Scan for secrets
     print("🔍 Scanning for secrets...")
     extensions = None if args.all_files else SCAN_EXTENSIONS
     findings = scan_directory(path, extensions)
-    
+
     if findings:
         print(f"\n⚠️  Found {len(findings)} potential secrets:\n")
-        
+
         # Group by file
         by_file = {}
         for f in findings:
             if f["file"] not in by_file:
                 by_file[f["file"]] = []
             by_file[f["file"]].append(f)
-        
+
         for file_path, file_findings in by_file.items():
             rel_path = os.path.relpath(file_path, path)
             print(f"📄 {rel_path}")
@@ -194,13 +194,13 @@ def main():
                 if args.verbose:
                     print(f"      Context: {f['context']}")
             print()
-        
+
         print("🔧 Recommendations:")
         print("   1. Remove secrets from code and use environment variables")
         print("   2. If committed to git, rotate the exposed credentials immediately")
         print("   3. Use git-filter-branch or BFG to remove from history if needed")
         print("   4. Add sensitive file patterns to .gitignore")
-        
+
         return 1
     else:
         print("\n✅ No secrets detected")

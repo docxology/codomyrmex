@@ -55,7 +55,7 @@ def analyze_file_ownership(path: str = ".") -> dict:
 def find_code_owners() -> list:
     """Find CODEOWNERS file entries."""
     codeowners_paths = [".github/CODEOWNERS", "CODEOWNERS", "docs/CODEOWNERS"]
-    
+
     for path in codeowners_paths:
         p = Path(path)
         if p.exists():
@@ -87,19 +87,19 @@ def main():
 
     parser = argparse.ArgumentParser(description="Team collaboration utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Contributors command
     subparsers.add_parser("contributors", help="List contributors")
-    
+
     # Ownership command
     ownership = subparsers.add_parser("ownership", help="Analyze file ownership")
     ownership.add_argument("path", nargs="?", default=".", help="Path to analyze")
-    
+
     # CODEOWNERS command
     subparsers.add_parser("codeowners", help="Show CODEOWNERS entries")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("👥 Team Collaboration Utilities\n")
         print("Commands:")
@@ -107,7 +107,7 @@ def main():
         print("  ownership    - Analyze file ownership")
         print("  codeowners   - Show CODEOWNERS entries")
         return 0
-    
+
     if args.command == "contributors":
         contributors = get_git_contributors()
         print(f"👥 Contributors ({len(contributors)}):\n")
@@ -115,13 +115,13 @@ def main():
             print(f"   {commits:4d} commits - {author}")
         if len(contributors) > 20:
             print(f"\n   ... and {len(contributors) - 20} more")
-    
+
     elif args.command == "ownership":
         ownership = analyze_file_ownership(args.path)
         print(f"📂 Ownership for: {args.path}\n")
         for author, changes in list(ownership.items())[:10]:
             print(f"   {changes:4d} changes - {author}")
-    
+
     elif args.command == "codeowners":
         entries = find_code_owners()
         if entries:
@@ -131,7 +131,7 @@ def main():
         else:
             print("📋 No CODEOWNERS file found")
             print("   Consider creating .github/CODEOWNERS")
-    
+
     return 0
 
 

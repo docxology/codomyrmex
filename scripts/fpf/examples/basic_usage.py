@@ -54,13 +54,13 @@ def main():
     try:
         spec = FPFSpec(title="Demo Spec", version="1.0.0")
         print_success(f"  FPFSpec instance created: {spec.title}")
-        
+
         concept = Concept(id="concept1", name="Test Concept")
         print_success(f"  Concept model instance created: {concept.name}")
-        
+
         pattern = Pattern(id="pattern1", name="Test Pattern")
         print_success(f"  Pattern model instance created: {pattern.name}")
-        
+
         rel = Relationship(id="rel1", source_id="concept1", target_id="pattern1")
         print_success(f"  Relationship model instance created.")
     except Exception as e:

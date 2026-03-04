@@ -41,7 +41,7 @@ def find_log_files(path: str) -> list:
     p = Path(path)
     if p.is_file():
         return [p]
-    
+
     patterns = ["*.log", "*.txt", "logs/*.log"]
     found = []
     for pattern in patterns:
@@ -53,7 +53,7 @@ def analyze_logs(lines: list) -> dict:
     """Analyze log content."""
     stats = {level: 0 for level in LOG_LEVELS}
     errors = []
-    
+
     for line in lines:
         parsed = parse_log_line(line)
         level = parsed.get("level")
@@ -61,7 +61,7 @@ def analyze_logs(lines: list) -> dict:
             stats[level] += 1
         if level in ["ERROR", "CRITICAL"]:
             errors.append(parsed["message"][:100])
-    
+
     return {"stats": stats, "errors": errors[:10]}
 
 
@@ -83,24 +83,24 @@ def main():
     parser.add_argument("--analyze", "-a", action="store_true", help="Analyze log statistics")
     parser.add_argument("--errors", "-e", action="store_true", help="Show only errors")
     args = parser.parse_args()
-    
+
     files = find_log_files(args.path)
-    
+
     if not files:
         print("📋 No log files found")
         print("   Searched for: *.log, logs/*.log")
         return 0
-    
+
     print(f"📋 Log Files ({len(files)}):\n")
-    
+
     for log_file in files[:5]:
         size = log_file.stat().st_size / 1024
         mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
         print(f"📄 {log_file.name} ({size:.1f} KB, {mtime.strftime('%Y-%m-%d %H:%M')})")
-        
+
         with open(log_file) as f:
             lines = f.readlines()
-        
+
         if args.analyze:
             analysis = analyze_logs(lines)
             print("   Level distribution:")
@@ -110,7 +110,7 @@ def main():
             if analysis["errors"]:
                 print(f"   Recent errors: {len(analysis['errors'])}")
             continue
-        
+
         # Filter lines
         filtered = lines
         if args.level:
@@ -119,14 +119,14 @@ def main():
             filtered = [l for l in lines if any(e in l.upper() for e in ["ERROR", "CRITICAL"])]
         if args.tail:
             filtered = filtered[-args.tail:]
-        
+
         print(f"   Lines: {len(filtered)}/{len(lines)}")
         for line in filtered[:10]:
             print(f"   {line.strip()[:80]}")
         if len(filtered) > 10:
             print(f"   ... ({len(filtered) - 10} more)")
         print()
-    
+
     return 0
 
 

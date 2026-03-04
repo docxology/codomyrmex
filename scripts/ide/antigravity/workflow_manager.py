@@ -21,24 +21,24 @@ logger = logging.getLogger("antigravity.workflow")
 
 def run_workflow():
     client = AntigravityClient()
-    
+
     if not client.connect():
         logger.error("❌ Not connected to Antigravity.")
         return False
-        
+
     logger.info(f"Using Conversation: {client.get_conversation_id()}")
-    
+
     # 1. Create a Task
     task_name = f"automated_task_{int(time.time())}"
     logger.info(f"\n1. Creating Task: {task_name}...")
-    
+
     content = f"""# Automated Task: {task_name}
 
 - [ ] Initialize system
 - [ ] Perform analysis
 - [ ] Report results
 """
-    
+
     try:
         artifact = client.create_artifact(
             name=task_name,
@@ -53,9 +53,9 @@ def run_workflow():
     # 2. Simulate Work & Update Task
     logger.info("\n2. Simulating work (Marking item 1 complete)...")
     time.sleep(1)
-    
+
     updated_content = content.replace("- [ ] Initialize system", "- [x] Initialize system")
-    
+
     try:
         client.update_artifact(task_name, updated_content)
         logger.info("   ✅ Updated task artifact")
@@ -71,7 +71,7 @@ def run_workflow():
     else:
         logger.error("   ❌ Verification Failed: Content mismatch")
         return False
-        
+
     logger.info("\n✨ Workflow demonstration complete!")
     return True
 

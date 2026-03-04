@@ -46,13 +46,13 @@ def main():
         discovery = SystemDiscovery()
         inventory = discovery.scan_system()
         print_success("  System scan completed.")
-        
+
         # Show some stats from the real scan
         modules_count = len(inventory.get("modules", []))
         health = inventory.get("health_status", "Unknown")
         print_success(f"  Discovered {modules_count} modules.")
         print_success(f"  System health status: {health}")
-        
+
     except Exception as e:
         print_error(f"  SystemDiscovery scan failed: {e}")
 

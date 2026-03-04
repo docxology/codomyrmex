@@ -34,7 +34,7 @@ def main():
         data = {"foo": "bar", "num": 42}
         serialized = serialize(data, format="json")
         print_success(f"  Serialized to JSON: {serialized}")
-        
+
         deserialized = deserialize(serialized, format="json")
         if deserialized == data:
             print_success("  JSON Deserialization successful.")
@@ -48,7 +48,7 @@ def main():
         data = {"list": [1, 2, 3], "nested": {"key": "value"}}
         serialized = serialize(data, format=SerializationFormat.YAML)
         print_success("  Serialized to YAML successfully.")
-        
+
         deserialized = deserialize(serialized, format=SerializationFormat.YAML)
         if deserialized["list"] == [1, 2, 3]:
             print_success("  YAML Deserialization successful.")

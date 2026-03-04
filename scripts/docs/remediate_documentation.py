@@ -87,7 +87,7 @@ def is_package(path: Path) -> bool:
 
 def remediate_module(path: Path, src_dir: Path):
     print(f"Checking {path.relative_to(src_dir)}")
-    
+
     # 1. Ensure py.typed
     py_typed = path / "py.typed"
     if not py_typed.exists():
@@ -97,7 +97,7 @@ def remediate_module(path: Path, src_dir: Path):
     # 2. Ensure RASP files
     name = path.name.replace("_", " ").title()
     summary = get_docstring_summary(path)
-    
+
     for doc_name, template in TEMPLATES.items():
         doc_path = path / doc_name
         if not doc_path.exists():
@@ -122,7 +122,7 @@ def main():
 
     root_dir = args.root
     src_dir = root_dir / "src" / "codomyrmex"
-    
+
     if not src_dir.exists():
         print(f"Error: Source directory {src_dir} does not exist.")
         return
@@ -130,7 +130,7 @@ def main():
     count = 0
     for root, dirs, files in os.walk(src_dir):
         root_path = Path(root)
-        
+
         # Skip hidden directories
         if any(part.startswith('.') for part in root_path.relative_to(src_dir).parts):
             continue
@@ -138,7 +138,7 @@ def main():
         if is_package(root_path):
             remediate_module(root_path, src_dir)
             count += 1
-            
+
     print(f"\nRemediation complete. Processed {count} modules.")
 
 if __name__ == "__main__":

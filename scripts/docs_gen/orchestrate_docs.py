@@ -57,14 +57,14 @@ def main():
             print(f"Loaded config from {config_path.name}")
 
     print("--- Starting Docs Generation Orchestrator ---")
-    
+
     # 1. Initialize SiteGenerator
     gen = SiteGenerator(title="Codomyrmex Improved Docs")
-    
+
     # 2. Add module source
     print("Extracting documentation from example source...")
     gen.add_module_source(SAMPLE_SOURCE, "example_mod")
-    
+
     # 3. Add a custom page
     print("Adding custom introduction page...")
     intro_content = """# Introduction
@@ -73,11 +73,11 @@ Welcome to the improved documentation system.
 This site was generated using the `docs_gen` orchestrator.
 """
     gen.add_page("index.md", intro_content, title="Welcome")
-    
+
     # 4. Search demonstration
     print("\n--- Search Index Demonstration ---")
     idx = gen.search_index
-    
+
     queries = ["ExampleClient", "process_data", "request", "connected"]
     for query in queries:
         results = idx.search(query, limit=3)
@@ -90,7 +90,7 @@ This site was generated using the `docs_gen` orchestrator.
     mkdocs_yaml = gen.to_mkdocs_yaml()
     print("Generated mkdocs.yml snippet (first 20 lines):")
     print("\n".join(mkdocs_yaml.splitlines()[:20]))
-    
+
     pages = gen.generate_pages()
     print(f"\nTotal pages generated: {len(pages)}")
     for path in pages:

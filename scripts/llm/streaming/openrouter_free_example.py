@@ -62,7 +62,7 @@ def main():
     print("  OpenRouter Free Example - Streaming")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -70,27 +70,27 @@ def main():
         print("   Get your free API key at: https://openrouter.ai/keys")
         print("\n   Setup: export OPENROUTER_API_KEY='key' or ~/.config/openrouter/api_key")
         return 1
-    
+
     config = ProviderConfig(api_key=api_key, timeout=60.0)
     prompt = "Write a short poem about coding (4 lines max)."
-    
+
     print(f"📝 Prompt: \"{prompt}\"")
     print()
     print("📡 Connecting to OpenRouter with free model...")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         messages = [
             Message(role="system", content="You are a creative poet. Be concise."),
             Message(role="user", content=prompt),
         ]
-        
+
         print("🌊 Streaming response:\n")
         print("-" * 40)
-        
+
         total_chars = 0
         chunk_count = 0
-        
+
         for chunk in provider.complete_stream(
             messages=messages,
             model="openrouter/free",
@@ -100,17 +100,17 @@ def main():
             print(chunk, end="", flush=True)
             total_chars += len(chunk)
             chunk_count += 1
-        
+
         print("\n" + "-" * 40)
         print()
         print(f"📊 Streaming stats:")
         print(f"   Chunks received: {chunk_count}")
         print(f"   Total characters: {total_chars}")
-    
+
     print()
     print("✅ Example completed successfully!")
     print("   💡 Streaming provides real-time output for better UX!")
-    
+
     return 0
 
 

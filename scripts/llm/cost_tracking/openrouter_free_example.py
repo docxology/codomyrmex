@@ -36,7 +36,7 @@ def get_api_key() -> str | None:
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if api_key:
         return api_key
-    
+
     # Check config files
     for path in CONFIG_PATHS:
         try:
@@ -47,7 +47,7 @@ def get_api_key() -> str | None:
                 return content
         except Exception:
             pass
-    
+
     return None
 
 
@@ -67,7 +67,7 @@ def main():
     print("  OpenRouter Free Example - Cost Tracking")
     print("=" * 60)
     print()
-    
+
     # Check for API key
     api_key = get_api_key()
     if not api_key:
@@ -77,20 +77,20 @@ def main():
         print("   1. export OPENROUTER_API_KEY='your-key-here'")
         print("   2. echo 'your-key' > ~/.config/openrouter/api_key")
         return 1
-    
+
     # Create provider
     config = ProviderConfig(api_key=api_key, timeout=60.0)
-    
+
     print("📡 Connecting to OpenRouter with free model...")
     print()
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         # Simple request
         messages = [
             Message(role="system", content="You are helpful. Be very brief."),
             Message(role="user", content="What is 2+2? Answer in one word."),
         ]
-        
+
         print("📤 Sending request...")
         response = provider.complete(
             messages=messages,
@@ -98,18 +98,18 @@ def main():
             temperature=0.1,
             max_tokens=50,
         )
-        
+
         print("📥 Response received!\n")
         print(f"  Model: {response.model}")
         print(f"  Content: {response.content}")
         print()
-        
+
         # Cost tracking
         if response.usage:
             prompt_tokens = response.usage.get("prompt_tokens", 0)
             completion_tokens = response.usage.get("completion_tokens", 0)
             total_tokens = response.usage.get("total_tokens", 0)
-            
+
             print("💰 Cost Tracking:")
             print(f"   Prompt tokens: {prompt_tokens}")
             print(f"   Completion tokens: {completion_tokens}")
@@ -117,11 +117,11 @@ def main():
             print(f"   Cost: $0.00 (free model!)")
         else:
             print("⚠️  No usage data returned")
-        
+
         print()
         print("✅ Example completed successfully!")
         print("   💡 Free models have no API cost - perfect for development!")
-    
+
     return 0
 
 

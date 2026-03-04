@@ -20,19 +20,19 @@ logger = logging.getLogger("antigravity.chat")
 
 def demo_chat():
     client = AntigravityClient()
-    
+
     if not client.connect():
         logger.error("❌ Not connected to Antigravity.")
         return False
-        
+
     logger.info(f"Connected to Conversation: {client.get_conversation_id()}\n")
-    
+
     # Send a simple message
     msg = "This is a programmatic message from the `chat_demo.py` script."
     logger.info(f"Sending message: '{msg}'")
-    
+
     result = client.send_chat_message(msg)
-    
+
     if result.success:
         logger.info("✅ Message sent successfully!")
         logger.info(f"   Command: {result.command}")

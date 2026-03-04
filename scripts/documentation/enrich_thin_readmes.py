@@ -140,9 +140,9 @@ def main():
             lc = sum(1 for _ in f)
         if lc < 30:
             thin_mods.append(d)
-    
+
     print(f"Found {len(thin_mods)} thin README files to enrich")
-    
+
     fixed = 0
     for mod in thin_mods:
         display = DISPLAY.get(mod, mod.replace("_", " ").title())
@@ -152,7 +152,7 @@ def main():
         submodules = get_submodules(mod)
         classes = get_classes_from_files(mod)
         functions = get_functions_from_files(mod)
-        
+
         lines = [
             f"# {display} Module Documentation",
             "",
@@ -163,20 +163,20 @@ def main():
             desc,
             "",
         ]
-        
+
         # Key Features from classes + functions
         features = []
         for name, doc, _ in classes[:6]:
             features.append(f"- **{name}** — {doc or name}")
         for name, doc in functions[:4]:
             features.append(f"- `{name}()` — {doc or name}")
-        
+
         if features:
             lines.append("## Key Features")
             lines.append("")
             lines.extend(features)
             lines.append("")
-        
+
         # Submodules
         if submodules:
             lines.append("## Submodules")
@@ -186,7 +186,7 @@ def main():
             for name, doc in submodules:
                 lines.append(f"| `{name}` | {doc} |")
             lines.append("")
-        
+
         # Quick Start
         lines.append("## Quick Start")
         lines.append("")
@@ -207,7 +207,7 @@ def main():
             lines.append(f"# See source module for available APIs")
         lines.append("```")
         lines.append("")
-        
+
         # Source Structure
         if py_files:
             lines.append("## Source Files")
@@ -217,7 +217,7 @@ def main():
             if len(py_files) > 8:
                 lines.append(f"- ...and {len(py_files) - 8} more")
             lines.append("")
-        
+
         # Directory Contents
         lines.append("## Directory Contents")
         lines.append("")
@@ -231,20 +231,20 @@ def main():
             if os.path.isdir(os.path.join(docs_dir, child)):
                 lines.append(f"| `{child}/` | {child.replace('_', ' ').title()} |")
         lines.append("")
-        
+
         # Navigation
         lines.append("## Navigation")
         lines.append("")
         lines.append(f"- **Source**: [src/codomyrmex/{mod}/](../../../src/codomyrmex/{mod}/)")
         lines.append("- **Parent**: [Modules](../README.md)")
         lines.append("")
-        
+
         readme_path = os.path.join(DOCS, mod, "README.md")
         with open(readme_path, "w") as f:
             f.write("\n".join(lines))
         fixed += 1
         print(f"  ✅ {mod}/README.md ({len(lines)} lines)")
-    
+
     print(f"\n✅ Enriched {fixed} README files")
 
 

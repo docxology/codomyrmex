@@ -78,7 +78,7 @@ def main():
     parser.add_argument("--fix", "-f", action="store_true", help="Auto-fix issues")
     parser.add_argument("--type", "-t", choices=list(TOOLS.keys()) + ["all"], default="all")
     args = parser.parse_args()
-    
+
     if args.path == "." and not Path("pyproject.toml").exists():
         print("🔧 Code Quality Tools\n")
         print("Usage:")
@@ -87,44 +87,44 @@ def main():
         print("  python code_quality.py script.py --type black")
         print("\nTools: black (formatting), ruff (linting), isort (imports)")
         return 0
-    
+
     target = Path(args.path)
     if not target.exists():
         print(f"❌ Path not found: {args.path}")
         return 1
-    
+
     mode = "fixing" if args.fix else "checking"
     print(f"🔧 Code Quality ({mode}): {target}\n")
-    
+
     tools_to_run = TOOLS if args.type == "all" else {args.type: TOOLS[args.type]}
-    
+
     all_passed = True
-    
+
     for name, check_fn in tools_to_run.items():
         result = check_fn(str(target), args.fix)
-        
+
         if result["success"]:
             print(f"   ✅ {name}")
         else:
             print(f"   ❌ {name}")
             all_passed = False
-            
+
             # Show first few lines of output
             lines = result["output"].strip().split("\n")
             for line in lines[:5]:
                 print(f"      {line}")
             if len(lines) > 5:
                 print(f"      ... ({len(lines) - 5} more lines)")
-    
+
     print()
-    
+
     if all_passed:
         print("✅ All checks passed")
     else:
         print("❌ Some checks failed")
         if not args.fix:
             print("   Run with --fix to auto-fix issues")
-    
+
     return 0 if all_passed else 1
 
 

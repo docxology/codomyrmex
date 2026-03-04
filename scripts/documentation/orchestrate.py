@@ -29,7 +29,7 @@ from codomyrmex.utils.cli_helpers import (
 
 def run_orchestration():
     print_section("Documentation Orchestrator")
-    
+
     # 1. Check environment
     print_info("Step 1: Checking environment...")
     if not check_doc_environment():
@@ -42,7 +42,7 @@ def run_orchestration():
     src_dir = project_root / "src" / "codomyrmex"
     report_dir = project_root / "output" / "reports"
     report_dir.mkdir(parents=True, exist_ok=True)
-    
+
     audit_report_file = report_dir / f"audit_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
     try:
         audit_documentation(src_dir, audit_report_file)
@@ -56,7 +56,7 @@ def run_orchestration():
     # Check the documentation module itself as an example
     doc_module_path = src_dir / "documentation"
     consistency_report = checker.check_directory(str(doc_module_path))
-    
+
     if consistency_report.passed:
         print_success(f"Consistency check passed for {doc_module_path}")
     else:

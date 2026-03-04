@@ -53,7 +53,7 @@ def main():
     try:
         doc = Doc(id="test-doc-id", name="Test Document")
         print_success(f"  Doc model instance created: {doc.name}")
-        
+
         page = Page(id="test-page-id", name="Test Page")
         print_success(f"  Page model instance created: {page.name}")
     except Exception as e:

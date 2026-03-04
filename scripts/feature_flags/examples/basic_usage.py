@@ -68,24 +68,24 @@ class FeatureFlagsScript(ScriptBase):
         self.log_info("Step 1: Basic Boolean Flags")
         manager.create_flag("dark_mode", enabled=True)
         manager.create_flag("new_sidebar", enabled=False)
-        
+
         dark_mode_on = manager.is_enabled("dark_mode")
         sidebar_on = manager.is_enabled("new_sidebar")
-        
+
         self.log_success(f"  dark_mode: {'ON' if dark_mode_on else 'OFF'}")
         self.log_success(f"  new_sidebar: {'ON' if sidebar_on else 'OFF'}")
-        
+
         results["demo_steps"].append({"step": 1, "dark_mode": dark_mode_on, "new_sidebar": sidebar_on})
 
         # Step 2: Percentage Rollout
         self.log_info(f"Step 2: Percentage Rollout ({args.rollout_percentage}%)")
         manager.create_flag("ai_search", percentage=args.rollout_percentage)
-        
+
         enabled_count = 0
         for i in range(args.test_users):
             if manager.is_enabled("ai_search", user_id=f"user_{i}"):
                 enabled_count += 1
-        
+
         actual_pct = (enabled_count / args.test_users) * 100
         self.log_success(f"  Rollout for {args.test_users} users: {enabled_count} enabled ({actual_pct:.1f}%)")
         results["demo_steps"].append({"step": 2, "enabled_count": enabled_count, "actual_percentage": actual_pct})
@@ -101,10 +101,10 @@ class FeatureFlagsScript(ScriptBase):
         self.log_info("Step 4: Targeting Rules")
         premium_rule = TargetingRule(attribute="tier", operator="eq", value="premium")
         manager.create_flag("early_access", targeting_rules=[premium_rule])
-        
+
         premium_user = manager.is_enabled("early_access", tier="premium")
         free_user = manager.is_enabled("early_access", tier="free")
-        
+
         self.log_success(f"  Premium user access: {'YES' if premium_user else 'NO'}")
         self.log_success(f"  Free user access: {'YES' if free_user else 'NO'}")
         results["demo_steps"].append({"step": 4, "premium_user": premium_user, "free_user": free_user})

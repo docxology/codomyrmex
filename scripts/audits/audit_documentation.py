@@ -37,13 +37,13 @@ def main():
     parser = argparse.ArgumentParser(description="Audit documentation completeness.")
     parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
     parser.add_argument("--report", type=Path, default=None, help="Output path for the report file")
-    
+
     args = parser.parse_args()
-    
+
     root_dir = args.root
     src_dir = root_dir / "src" / "codomyrmex"
     report_file = args.report or (root_dir / "docs_audit_report.md")
-    
+
     audit_documentation(src_dir, report_file)
 
 

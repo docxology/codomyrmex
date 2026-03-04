@@ -50,15 +50,15 @@ def benchmark_file_io(n=100):
     """Benchmark file write/read operations."""
     import tempfile
     import os
-    
+
     with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
         path = f.name
         for i in range(n):
             f.write(f"Line {i}\n" * 100)
-    
+
     with open(path, 'r') as f:
         lines = f.readlines()
-    
+
     os.unlink(path)
     return len(lines)
 
@@ -75,13 +75,13 @@ def run_benchmark(name: str, func, iterations: int = 5) -> dict:
     """Run a benchmark multiple times and collect stats."""
     times = []
     result = None
-    
+
     for _ in range(iterations):
         start = time.perf_counter()
         result = func()
         elapsed = time.perf_counter() - start
         times.append(elapsed)
-    
+
     return {
         "name": name,
         "iterations": iterations,
@@ -134,9 +134,9 @@ def main():
     parser.add_argument("--save-baseline", action="store_true", help="Save results as baseline")
     parser.add_argument("--compare", "-c", action="store_true", help="Compare to baseline")
     args = parser.parse_args()
-    
+
     print("⚡ Performance Benchmark Runner\n")
-    
+
     # Select benchmarks
     if args.suite == "all":
         benchmarks = BENCHMARKS
@@ -146,19 +146,19 @@ def main():
         print(f"❌ Unknown suite: {args.suite}")
         print(f"   Available: all, {', '.join(BENCHMARKS.keys())}")
         return 1
-    
+
     baseline_path = Path(__file__).parent / "benchmark_baseline.json"
     baseline = load_baseline(baseline_path) if args.compare else {}
-    
+
     results = []
-    
+
     print(f"Running {len(benchmarks)} benchmark(s) with {args.iterations} iterations each\n")
-    
+
     for name, func in benchmarks.items():
         print(f"🔄 {name}...", end=" ", flush=True)
         result = run_benchmark(name, func, args.iterations)
         results.append(result)
-        
+
         baseline_result = baseline.get(name)
         if baseline_result:
             diff = (result["mean"] - baseline_result["mean"]) / baseline_result["mean"] * 100
@@ -171,21 +171,21 @@ def main():
             print(f"{format_time(result['mean'])} (±{format_time(result['stdev'])}) {indicator}")
         else:
             print(f"{format_time(result['mean'])} (±{format_time(result['stdev'])})")
-    
+
     print("\n📊 Summary:")
     print("-" * 60)
     print(f"{'Benchmark':<15} {'Min':<12} {'Mean':<12} {'Max':<12} {'StdDev':<12}")
     print("-" * 60)
-    
+
     for r in results:
         print(f"{r['name']:<15} {format_time(r['min']):<12} {format_time(r['mean']):<12} {format_time(r['max']):<12} {format_time(r['stdev']):<12}")
-    
+
     if args.save_baseline:
         save_baseline(results, baseline_path)
         print(f"\n💾 Baseline saved to: {baseline_path}")
     elif not baseline and baseline_path.exists():
         print(f"\n💡 Use --compare to compare with baseline")
-    
+
     return 0
 
 

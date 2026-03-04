@@ -59,7 +59,7 @@ def check_deploy_env() -> dict:
         "staging": ["STAGING", "STAGE"],
         "development": ["DEVELOPMENT", "DEV", "NODE_ENV=development"],
     }
-    
+
     for env_name, vars in envs.items():
         for var in vars:
             if "=" in var:
@@ -68,25 +68,25 @@ def check_deploy_env() -> dict:
                     return {"env": env_name, "source": var}
             elif os.environ.get(var):
                 return {"env": env_name, "source": var}
-    
+
     return {"env": "unknown", "source": "none"}
 
 
 def main():
     parser = argparse.ArgumentParser(description="Deployment utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Status command
     subparsers.add_parser("status", help="Show deployment status")
-    
+
     # Configs command
     subparsers.add_parser("configs", help="Find deployment configs")
-    
+
     # Checklist command
     subparsers.add_parser("checklist", help="Pre-deploy checklist")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🚀 Deployment Utilities\n")
         print("Commands:")
@@ -94,18 +94,18 @@ def main():
         print("  configs   - Find deployment configs")
         print("  checklist - Pre-deploy checklist")
         return 0
-    
+
     if args.command == "status":
         env = check_deploy_env()
         print(f"🚀 Deployment Status\n")
         print(f"   Environment: {env['env'].upper()}")
-        
+
         services = get_docker_compose_services()
         if services:
             print(f"\n   Docker Compose services ({len(services)}):")
             for s in services[:10]:
                 print(f"      - {s}")
-    
+
     elif args.command == "configs":
         configs = find_deploy_configs()
         print(f"📋 Deployment Configs ({len(configs)}):\n")
@@ -113,7 +113,7 @@ def main():
             print(f"   📄 {c}")
         if not configs:
             print("   No deployment configs found")
-    
+
     elif args.command == "checklist":
         print("✅ Pre-Deploy Checklist:\n")
         checks = [
@@ -127,7 +127,7 @@ def main():
         for check, hint in checks:
             print(f"   [ ] {check}")
             print(f"       {hint}")
-    
+
     return 0
 
 

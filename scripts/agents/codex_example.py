@@ -40,7 +40,7 @@ def main():
         print_warning(f"Codex not configured: {e}")
         print_info("To configure: set OPENAI_API_KEY environment variable")
         return 0  # Exit gracefully - this is expected for demo scripts
-    
+
     # Test connection - wrap in try/except for safety
     try:
         if not client.test_connection():

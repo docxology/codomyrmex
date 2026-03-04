@@ -23,7 +23,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions: {}
+
 
 env:
   PYTHON_VERSION: "3.11"
@@ -262,6 +262,8 @@ jobs:
     name: Enforce Quality Gates
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout code

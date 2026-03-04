@@ -52,7 +52,7 @@ def main():
     try:
         cmd = IDECommand(name="openFile", args={"path": "README.md"})
         print_success(f"  IDECommand instance created for: {cmd.name}")
-        
+
         info = FileInfo(path="src/README.md", name="README.md", language="markdown")
         print_success(f"  FileInfo model instance created: {info.name}")
     except Exception as e:

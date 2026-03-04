@@ -48,7 +48,7 @@ def main():
     global RUNNING
     # Clean up any previous run
     AgentRelay(CHANNEL).clear()
-    
+
     print("=== Starting Long-Lived Relay Chat (Modular) ===")
     print("Press Ctrl+C to stop.")
 
@@ -60,7 +60,7 @@ def main():
         channel=CHANNEL,
         think_time=2.0
     )
-    
+
     # Claude Side
     cc_agent = AutonomousAgent(
         identity="claude_code",
@@ -73,10 +73,10 @@ def main():
     # The AutonomousAgent.start() method blocks if background=False
     # We want them parallel, so we run them in threads or async
     # AutonomousAgent uses ClaudeCodeEndpoint which is threaded, so .start() is non-blocking?
-    # Let's check implementation. created file says: 
+    # Let's check implementation. created file says:
     # self.endpoint.start() ... if not background: while loop
     # So start(background=True) is non-blocking.
-    
+
     ag_agent.start(background=True)
     cc_agent.start(background=True)
 
@@ -90,7 +90,7 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         print("\n[Main] Interrupted! Shutting down...")
-        
+
     ag_agent.stop()
     cc_agent.stop()
     print("\nDemo complete.")

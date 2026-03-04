@@ -47,7 +47,7 @@ def create_template(output_path: str = None):
     """Create the environment template file."""
     if output_path is None:
         output_path = ".env.infomaniak"
-    
+
     path = Path(output_path)
     if path.exists():
         print(f"⚠️  File already exists: {path}")
@@ -55,7 +55,7 @@ def create_template(output_path: str = None):
         if response.lower() != 'y':
             print("Aborted.")
             return False
-    
+
     path.write_text(ENV_TEMPLATE)
     print(f"✅ Created template: {path}")
     print("\n📋 Next steps:")
@@ -70,37 +70,37 @@ def create_template(output_path: str = None):
 def validate_environment():
     """Validate that all required environment variables are set."""
     print("\n🔍 Validating Infomaniak Environment\n" + "=" * 50)
-    
+
     required = {
         "INFOMANIAK_APP_CREDENTIAL_ID": "Application Credential ID",
         "INFOMANIAK_APP_CREDENTIAL_SECRET": "Application Credential Secret",
         "INFOMANIAK_AUTH_URL": "OpenStack Auth URL",
         "INFOMANIAK_REGION": "Region",
     }
-    
+
     optional = {
         "INFOMANIAK_S3_ACCESS_KEY": "S3 Access Key",
         "INFOMANIAK_S3_SECRET_KEY": "S3 Secret Key",
         "INFOMANIAK_S3_ENDPOINT": "S3 Endpoint",
         "INFOMANIAK_PROJECT_ID": "Project ID",
     }
-    
+
     missing = []
     found = []
-    
+
     for var, desc in required.items():
         value = os.environ.get(var)
         if value and value != f"your_{var.lower().replace('infomaniak_', '')}":
             found.append((desc, "✅"))
         else:
             missing.append((desc, "❌"))
-    
+
     print("\n📌 Required Variables:")
     for desc, status in found:
         print(f"   {status} {desc}")
     for desc, status in missing:
         print(f"   {status} {desc}")
-    
+
     print("\n📌 Optional Variables:")
     for var, desc in optional.items():
         value = os.environ.get(var)
@@ -108,7 +108,7 @@ def validate_environment():
             print(f"   ✅ {desc}")
         else:
             print(f"   ⚪ {desc} (not set)")
-    
+
     if missing:
         print(f"\n❌ Missing {len(missing)} required variable(s)")
         return False
@@ -120,27 +120,27 @@ def validate_environment():
 def test_connection():
     """Test the OpenStack connection."""
     print("\n🔌 Testing Infomaniak Connection\n" + "=" * 50)
-    
+
     try:
         from codomyrmex.cloud.infomaniak import InfomaniakComputeClient
-        
+
         print("   Creating compute client...")
         client = InfomaniakComputeClient.from_env()
-        
+
         print("   Testing API connectivity...")
         flavors = client.list_flavors()
-        
+
         print(f"\n   ✅ Connection successful!")
         print(f"   📊 Found {len(flavors)} available flavors")
-        
+
         # Show some flavors
         if flavors:
             print("\n   Sample flavors:")
             for f in flavors[:5]:
                 print(f"      - {f['name']}: {f.get('vcpus', '?')} vCPUs, {f.get('ram', 0) // 1024}GB RAM")
-        
+
         return True
-        
+
     except ImportError as e:
         print(f"   ❌ Import error: {e}")
         print("   Install: pip install openstacksdk")
@@ -162,7 +162,7 @@ def main():
             print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Environment Setup")
-    parser.add_argument("--create-template", action="store_true", 
+    parser.add_argument("--create-template", action="store_true",
                         help="Create .env.infomaniak template")
     parser.add_argument("--validate", action="store_true",
                         help="Validate environment variables")
@@ -172,15 +172,15 @@ def main():
                         help="Output file for template")
     parser.add_argument("--all", action="store_true",
                         help="Run all checks")
-    
+
     args = parser.parse_args()
-    
+
     if args.all:
         create_template(args.output)
         validate_environment()
         test_connection()
         return 0
-    
+
     if args.create_template:
         create_template(args.output)
     elif args.validate:
@@ -191,7 +191,7 @@ def main():
             return 1
     else:
         parser.print_help()
-    
+
     return 0
 
 

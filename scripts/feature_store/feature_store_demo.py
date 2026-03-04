@@ -26,16 +26,16 @@ from codomyrmex.feature_store import (
 
 def main() -> int:
     print("--- Codomyrmex Feature Store Orchestrator ---")
-    
+
     # 1. Initialize Service and Store
     store = InMemoryFeatureStore()
-    
+
     # Define a transform: Log transform for income
     transform = FeatureTransform()
     transform.add("income", lambda v: math.log(v + 1))
-    
+
     service = FeatureService(store=store, transform=transform)
-    
+
     # 2. Define Features and Groups
     print("\n[1] Registering features and groups...")
     user_features = FeatureGroup(
@@ -69,10 +69,10 @@ def main() -> int:
         ],
         entity_type="user"
     )
-    
+
     service.register_group(user_features)
     print(f"Registered group: {user_features.name} with {len(user_features.features)} features.")
-    
+
     # 3. Ingest Data
     print("\n[2] Ingesting batch data...")
     batch_data = [
@@ -80,16 +80,16 @@ def main() -> int:
         {"entity_id": "user_002", "age": 34, "income": 75000.0, "city": "New York"},
         {"entity_id": "user_003", "age": 45, "income": 120000.0, "is_active": False}
     ]
-    
+
     count = service.ingest_batch(batch_data)
     print(f"Successfully ingested {count} records.")
-    
+
     # 4. Retrieve Features
     print("\n[3] Retrieving feature vectors...")
     for user_id in ["user_001", "user_003", "user_999"]:
         print(f"\nFetching features for {user_id}:")
         vector = service.get_group_features(user_id, "user_demographics")
-        
+
         # income is log-transformed because of the transform we added
         income_val = vector.get('income')
         if income_val is not None:

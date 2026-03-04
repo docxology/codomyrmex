@@ -46,20 +46,20 @@ def main():
     # 1. Event Bus
     print_info("Testing Event Bus...")
     bus = get_event_bus()
-    
+
     received = []
     def handler(event):
         received.append(event)
-    
+
     subscribe_to_events([EventType.SYSTEM_STARTUP], handler)
-    
+
     event = Event(
         event_type=EventType.SYSTEM_STARTUP,
         source="basic_usage_script",
         data={"status": "running", "version": "1.0.0"}
     )
     publish_event(event)
-    
+
     if len(received) > 0:
         print_success("  Event Bus Publish/Subscribe functional.")
     else:

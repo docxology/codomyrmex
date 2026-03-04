@@ -78,7 +78,7 @@ def main():
 
     for script_name in EXAMPLE_SCRIPTS:
         script_path = scripts_dir / script_name
-        
+
         if not script_path.exists():
             print_warning(f"  SKIP: {script_name} (not found)")
             results[script_name] = ("skipped", "File not found")
@@ -104,7 +104,7 @@ def main():
     print_section("Summary")
     total = passed + failed
     print_info(f"Total: {total} | Passed: {passed} | Failed: {failed}")
-    
+
     if failed > 0:
         print_warning("\nFailed Scripts:")
         for name, (status, _) in results.items():

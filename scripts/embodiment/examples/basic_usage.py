@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Embodiment Module - Comprehensive Usage Script.
 
-Demonstrates ROS2 bridge, 3D transformations, sensors, and actuators with full 
+Demonstrates ROS2 bridge, 3D transformations, sensors, and actuators with full
 configurability, unified logging, and output saving.
 
 Usage:
@@ -134,7 +134,7 @@ class EmbodimentScript(ScriptBase):
             sensor.connect()
             reading = sensor.read()
             self.log_info(f"Sensor '{reading.sensor_id}' read: {reading.data}")
-            
+
             # Actuator
             actuator = MockActuator("gripper_1")
             actuator.connect()
