@@ -41,6 +41,7 @@ class Transcriber:
     Attributes:
         provider: The underlying STT provider
         model_size: Current model size (if applicable)
+
     """
 
     def __init__(
@@ -62,6 +63,7 @@ class Transcriber:
 
         Raises:
             ProviderNotAvailableError: If provider dependencies are missing
+
         """
         self._provider_name = provider
         self.model_size = model_size
@@ -104,6 +106,7 @@ class Transcriber:
         Raises:
             TranscriptionError: If transcription fails
             AudioFormatError: If audio format is not supported
+
         """
         config = TranscriptionConfig(
             language=language,
@@ -136,6 +139,7 @@ class Transcriber:
 
         Returns:
             TranscriptionResult with text and segments
+
         """
         config = TranscriptionConfig(
             language=language,
@@ -162,6 +166,7 @@ class Transcriber:
 
         Yields:
             Partial TranscriptionResult as segments complete
+
         """
         config = TranscriptionConfig(
             language=language,
@@ -182,6 +187,7 @@ class Transcriber:
 
         Returns:
             Tuple of (language_code, confidence)
+
         """
         return self._provider.detect_language(audio_path)
 
@@ -200,6 +206,7 @@ class Transcriber:
 
         Returns:
             List of TranscriptionResult objects
+
         """
         results = []
         for path in audio_paths:
@@ -224,6 +231,7 @@ class Transcriber:
 
         Returns:
             List of TranscriptionResult objects (in same order as input)
+
         """
         semaphore = asyncio.Semaphore(max_concurrent)
 
@@ -239,6 +247,7 @@ class Transcriber:
 
         Returns:
             List of ISO 639-1 language codes
+
         """
         return self._provider.get_supported_languages()
 

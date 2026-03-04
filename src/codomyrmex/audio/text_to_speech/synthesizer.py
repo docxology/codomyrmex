@@ -35,6 +35,7 @@ class Synthesizer:
 
     Attributes:
         provider: The underlying TTS provider
+
     """
 
     def __init__(
@@ -52,6 +53,7 @@ class Synthesizer:
 
         Raises:
             ProviderNotAvailableError: If provider dependencies are missing
+
         """
         self._provider_name = provider
         self._default_config = config or TTSConfig()
@@ -88,6 +90,7 @@ class Synthesizer:
         Raises:
             SynthesisError: If synthesis fails
             VoiceNotFoundError: If requested voice is not available
+
         """
         config = TTSConfig(
             voice=voice or self._default_config.voice,
@@ -122,6 +125,7 @@ class Synthesizer:
 
         Returns:
             SynthesisResult with audio data
+
         """
         config = TTSConfig(
             voice=voice or self._default_config.voice,
@@ -152,6 +156,7 @@ class Synthesizer:
 
         Returns:
             Path to the saved file
+
         """
         result = self.synthesize(text, voice=voice, rate=rate, **kwargs)
         return result.save(output_path)
@@ -175,6 +180,7 @@ class Synthesizer:
 
         Returns:
             Path to the saved file
+
         """
         result = await self.synthesize_async(text, voice=voice, rate=rate, **kwargs)
         return result.save(output_path)
@@ -194,6 +200,7 @@ class Synthesizer:
 
         Returns:
             List of SynthesisResult objects
+
         """
         results = []
         for text in texts:
@@ -218,6 +225,7 @@ class Synthesizer:
 
         Returns:
             List of SynthesisResult objects (in same order as input)
+
         """
         semaphore = asyncio.Semaphore(max_concurrent)
 
@@ -239,6 +247,7 @@ class Synthesizer:
 
         Returns:
             List of VoiceInfo objects
+
         """
         return self._provider.list_voices(language)
 
@@ -250,6 +259,7 @@ class Synthesizer:
 
         Returns:
             VoiceInfo if found, None otherwise
+
         """
         return self._provider.get_voice(voice_id)
 
@@ -258,6 +268,7 @@ class Synthesizer:
 
         Returns:
             List of language codes (e.g., ["en-US", "es-ES"])
+
         """
         return self._provider.get_supported_languages()
 
@@ -271,6 +282,7 @@ class Synthesizer:
 
         Args:
             voice_id: Voice identifier to use as default
+
         """
         self._default_config.voice = voice_id
 
@@ -279,6 +291,7 @@ class Synthesizer:
 
         Args:
             language: Language code (e.g., "en-US")
+
         """
         self._default_config.language = language
 

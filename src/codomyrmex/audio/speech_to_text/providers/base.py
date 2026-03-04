@@ -23,6 +23,7 @@ class STTProvider(ABC):
     Attributes:
         name: Provider name for identification
         is_available: Whether the provider's dependencies are installed
+
     """
 
     name: str = "base"
@@ -43,6 +44,7 @@ class STTProvider(ABC):
             device: Device to run on ("auto", "cpu", "cuda")
             compute_type: Computation type ("auto", "float16", "int8")
             **kwargs: Additional provider-specific arguments
+
         """
         pass
 
@@ -64,6 +66,7 @@ class STTProvider(ABC):
         Raises:
             TranscriptionError: If transcription fails
             AudioFormatError: If audio format is not supported
+
         """
         pass
 
@@ -84,6 +87,7 @@ class STTProvider(ABC):
 
         Raises:
             TranscriptionError: If transcription fails
+
         """
         pass
 
@@ -104,6 +108,7 @@ class STTProvider(ABC):
 
         Raises:
             TranscriptionError: If transcription fails
+
         """
         pass
         yield  # Make this a generator
@@ -123,6 +128,7 @@ class STTProvider(ABC):
 
         Raises:
             TranscriptionError: If detection fails
+
         """
         pass
 
@@ -132,6 +138,7 @@ class STTProvider(ABC):
 
         Returns:
             List of ISO 639-1 language codes
+
         """
         pass
 
@@ -142,6 +149,7 @@ class STTProvider(ABC):
 
         Returns:
             True if model is loaded
+
         """
         pass
 

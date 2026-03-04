@@ -41,18 +41,122 @@ except ImportError:
 
 
 # Supported audio formats
-SUPPORTED_FORMATS = {".wav", ".mp3", ".flac", ".ogg", ".m4a", ".webm", ".mp4", ".mpeg", ".mpga", ".oga", ".opus"}
+SUPPORTED_FORMATS = {
+    ".wav",
+    ".mp3",
+    ".flac",
+    ".ogg",
+    ".m4a",
+    ".webm",
+    ".mp4",
+    ".mpeg",
+    ".mpga",
+    ".oga",
+    ".opus",
+}
 
 # Language codes supported by Whisper
 WHISPER_LANGUAGES = [
-    "af", "am", "ar", "as", "az", "ba", "be", "bg", "bn", "bo", "br", "bs", "ca", "cs",
-    "cy", "da", "de", "el", "en", "es", "et", "eu", "fa", "fi", "fo", "fr", "gl", "gu",
-    "ha", "haw", "he", "hi", "hr", "ht", "hu", "hy", "id", "is", "it", "ja", "jw", "ka",
-    "kk", "km", "kn", "ko", "la", "lb", "ln", "lo", "lt", "lv", "mg", "mi", "mk", "ml",
-    "mn", "mr", "ms", "mt", "my", "ne", "nl", "nn", "no", "oc", "pa", "pl", "ps", "pt",
-    "ro", "ru", "sa", "sd", "si", "sk", "sl", "sn", "so", "sq", "sr", "su", "sv", "sw",
-    "ta", "te", "tg", "th", "tk", "tl", "tr", "tt", "uk", "ur", "uz", "vi", "yi", "yo",
-    "zh", "yue",
+    "af",
+    "am",
+    "ar",
+    "as",
+    "az",
+    "ba",
+    "be",
+    "bg",
+    "bn",
+    "bo",
+    "br",
+    "bs",
+    "ca",
+    "cs",
+    "cy",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "et",
+    "eu",
+    "fa",
+    "fi",
+    "fo",
+    "fr",
+    "gl",
+    "gu",
+    "ha",
+    "haw",
+    "he",
+    "hi",
+    "hr",
+    "ht",
+    "hu",
+    "hy",
+    "id",
+    "is",
+    "it",
+    "ja",
+    "jw",
+    "ka",
+    "kk",
+    "km",
+    "kn",
+    "ko",
+    "la",
+    "lb",
+    "ln",
+    "lo",
+    "lt",
+    "lv",
+    "mg",
+    "mi",
+    "mk",
+    "ml",
+    "mn",
+    "mr",
+    "ms",
+    "mt",
+    "my",
+    "ne",
+    "nl",
+    "nn",
+    "no",
+    "oc",
+    "pa",
+    "pl",
+    "ps",
+    "pt",
+    "ro",
+    "ru",
+    "sa",
+    "sd",
+    "si",
+    "sk",
+    "sl",
+    "sn",
+    "so",
+    "sq",
+    "sr",
+    "su",
+    "sv",
+    "sw",
+    "ta",
+    "te",
+    "tg",
+    "th",
+    "tk",
+    "tl",
+    "tr",
+    "tt",
+    "uk",
+    "ur",
+    "uz",
+    "vi",
+    "yi",
+    "yo",
+    "zh",
+    "yue",
 ]
 
 
@@ -73,6 +177,7 @@ class WhisperProvider(STTProvider):
         name: Provider identifier
         model_size: Current model size
         device: Compute device being used
+
     """
 
     name: str = "whisper"
@@ -99,6 +204,7 @@ class WhisperProvider(STTProvider):
 
         Raises:
             ProviderNotAvailableError: If faster-whisper is not installed
+
         """
         if not FASTER_WHISPER_AVAILABLE:
             raise ProviderNotAvailableError(
@@ -147,6 +253,7 @@ class WhisperProvider(STTProvider):
         Raises:
             TranscriptionError: If file doesn't exist
             AudioFormatError: If format is not supported
+
         """
         path = Path(audio_path)
 
@@ -182,6 +289,7 @@ class WhisperProvider(STTProvider):
         Raises:
             TranscriptionError: If transcription fails
             ModelNotLoadedError: If model is not loaded
+
         """
         if not self._model:
             raise ModelNotLoadedError(
@@ -261,7 +369,9 @@ class WhisperProvider(STTProvider):
             )
 
         except Exception as e:
-            if isinstance(e, (TranscriptionError, AudioFormatError, ModelNotLoadedError)):
+            if isinstance(
+                e, (TranscriptionError, AudioFormatError, ModelNotLoadedError)
+            ):
                 raise
             raise TranscriptionError(
                 f"Transcription failed: {e}",
@@ -286,6 +396,7 @@ class WhisperProvider(STTProvider):
 
         Returns:
             TranscriptionResult with text and segments
+
         """
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
@@ -306,6 +417,7 @@ class WhisperProvider(STTProvider):
 
         Yields:
             Partial TranscriptionResult with accumulated segments
+
         """
         if not self._model:
             raise ModelNotLoadedError(
@@ -385,6 +497,7 @@ class WhisperProvider(STTProvider):
 
         Returns:
             Tuple of (language_code, probability)
+
         """
         if not self._model:
             raise ModelNotLoadedError(
@@ -413,6 +526,7 @@ class WhisperProvider(STTProvider):
 
         Returns:
             List of ISO 639-1 language codes supported by Whisper
+
         """
         return WHISPER_LANGUAGES.copy()
 

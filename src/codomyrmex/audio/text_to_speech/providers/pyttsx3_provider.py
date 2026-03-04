@@ -63,6 +63,7 @@ class Pyttsx3Provider(TTSProvider):
     Attributes:
         name: Provider identifier
         is_available: Whether pyttsx3 is installed
+
     """
 
     name: str = "pyttsx3"
@@ -73,6 +74,7 @@ class Pyttsx3Provider(TTSProvider):
 
         Raises:
             ProviderNotAvailableError: If pyttsx3 is not installed
+
         """
         if not PYTTSX3_AVAILABLE:
             raise ProviderNotAvailableError(
@@ -141,6 +143,7 @@ class Pyttsx3Provider(TTSProvider):
         Raises:
             SynthesisError: If synthesis fails
             VoiceNotFoundError: If requested voice is not available
+
         """
         if not text or not text.strip():
             raise SynthesisError("Cannot synthesize empty text")
@@ -228,6 +231,7 @@ class Pyttsx3Provider(TTSProvider):
 
         Returns:
             SynthesisResult with audio data
+
         """
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
@@ -246,10 +250,12 @@ class Pyttsx3Provider(TTSProvider):
 
         Returns:
             List of available VoiceInfo objects
+
         """
         if language:
             return [
-                v for v in self._voices
+                v
+                for v in self._voices
                 if v.language.lower().startswith(language.lower())
             ]
         return self._voices.copy()
@@ -262,6 +268,7 @@ class Pyttsx3Provider(TTSProvider):
 
         Returns:
             VoiceInfo if found, None otherwise
+
         """
         for voice in self._voices:
             if voice.id == voice_id:
@@ -273,6 +280,7 @@ class Pyttsx3Provider(TTSProvider):
 
         Returns:
             List of unique language codes from available voices
+
         """
         languages = set()
         for voice in self._voices:
@@ -285,6 +293,7 @@ class Pyttsx3Provider(TTSProvider):
 
         Returns:
             Default voice identifier
+
         """
         if self._voices:
             return self._voices[0].id

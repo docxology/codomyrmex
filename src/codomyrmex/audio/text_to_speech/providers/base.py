@@ -17,6 +17,7 @@ class TTSProvider(ABC):
     Attributes:
         name: Provider name for identification
         is_available: Whether the provider's dependencies are installed
+
     """
 
     name: str = "base"
@@ -28,6 +29,7 @@ class TTSProvider(ABC):
 
         Args:
             **kwargs: Provider-specific configuration
+
         """
         pass
 
@@ -49,6 +51,7 @@ class TTSProvider(ABC):
         Raises:
             SynthesisError: If synthesis fails
             VoiceNotFoundError: If requested voice is not available
+
         """
         pass
 
@@ -66,6 +69,7 @@ class TTSProvider(ABC):
 
         Returns:
             SynthesisResult with audio data
+
         """
         pass
 
@@ -81,6 +85,7 @@ class TTSProvider(ABC):
 
         Returns:
             List of available VoiceInfo objects
+
         """
         pass
 
@@ -93,6 +98,7 @@ class TTSProvider(ABC):
 
         Returns:
             VoiceInfo if found, None otherwise
+
         """
         pass
 
@@ -102,6 +108,7 @@ class TTSProvider(ABC):
 
         Returns:
             List of language codes (e.g., ["en-US", "es-ES"])
+
         """
         pass
 
@@ -112,6 +119,7 @@ class TTSProvider(ABC):
 
         Returns:
             Default voice identifier
+
         """
         pass
 

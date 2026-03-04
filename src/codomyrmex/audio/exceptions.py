@@ -26,6 +26,7 @@ class AudioError(CodomyrmexError):
         message: The error message
         audio_path: Path to the audio file involved, if any
         context: Additional context information
+
     """
 
     def __init__(
@@ -34,6 +35,14 @@ class AudioError(CodomyrmexError):
         audio_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize AudioError.
+
+        Args:
+            message: The error message
+            audio_path: Path to the audio file involved, if any
+            **kwargs: Additional context
+
+        """
         super().__init__(message, **kwargs)
         if audio_path:
             self.context["audio_path"] = str(audio_path)
@@ -57,6 +66,16 @@ class TranscriptionError(AudioError):
         model_size: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize TranscriptionError.
+
+        Args:
+            message: The error message
+            audio_path: Path to the audio file involved
+            language: Language code involved
+            model_size: Model size involved
+            **kwargs: Additional context
+
+        """
         super().__init__(message, audio_path=audio_path, **kwargs)
         if language:
             self.context["language"] = language
@@ -81,6 +100,15 @@ class SynthesisError(AudioError):
         voice_id: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize SynthesisError.
+
+        Args:
+            message: The error message
+            text: Text that failed to synthesize
+            voice_id: Voice ID involved
+            **kwargs: Additional context
+
+        """
         super().__init__(message, **kwargs)
         if text:
             # Truncate long text for context
@@ -104,6 +132,15 @@ class AudioFormatError(AudioError):
         supported_formats: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize AudioFormatError.
+
+        Args:
+            message: The error message
+            format_type: The invalid format
+            supported_formats: List of supported formats
+            **kwargs: Additional context
+
+        """
         super().__init__(message, **kwargs)
         if format_type:
             self.context["format_type"] = format_type
@@ -128,6 +165,15 @@ class ModelNotLoadedError(AudioError):
         model_size: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize ModelNotLoadedError.
+
+        Args:
+            message: The error message
+            model_name: Name of the model
+            model_size: Size of the model
+            **kwargs: Additional context
+
+        """
         super().__init__(message, **kwargs)
         if model_name:
             self.context["model_name"] = model_name
@@ -149,6 +195,15 @@ class ProviderNotAvailableError(AudioError):
         missing_packages: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize ProviderNotAvailableError.
+
+        Args:
+            message: The error message
+            provider_name: Name of the provider
+            missing_packages: List of missing packages
+            **kwargs: Additional context
+
+        """
         super().__init__(message, **kwargs)
         if provider_name:
             self.context["provider_name"] = provider_name
@@ -172,11 +227,22 @@ class VoiceNotFoundError(AudioError):
         available_voices: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize VoiceNotFoundError.
+
+        Args:
+            message: The error message
+            voice_id: The missing voice ID
+            available_voices: List of available voices
+            **kwargs: Additional context
+
+        """
         super().__init__(message, **kwargs)
         if voice_id:
             self.context["voice_id"] = voice_id
         if available_voices:
-            self.context["available_voices"] = available_voices[:10]  # Limit for display
+            self.context["available_voices"] = available_voices[
+                :10
+            ]  # Limit for display
 
 
 __all__ = [

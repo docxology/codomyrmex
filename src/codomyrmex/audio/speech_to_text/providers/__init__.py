@@ -13,6 +13,7 @@ try:
         WHISPER_LANGUAGES,
         WhisperProvider,
     )
+
     WHISPER_AVAILABLE = True
 except ImportError:
     WhisperProvider = None  # type: ignore
@@ -37,6 +38,7 @@ def get_provider(
     Raises:
         ValueError: If provider name is not recognized
         ProviderNotAvailableError: If provider dependencies are missing
+
     """
     providers = {
         "whisper": WhisperProvider,
