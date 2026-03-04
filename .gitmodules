@@ -4,6 +4,3 @@
 [submodule "src/codomyrmex/git_analysis/vendor/gitnexus"]
 	path = src/codomyrmex/git_analysis/vendor/gitnexus
 	url = https://github.com/abhigyanpatwari/GitNexus
-[submodule "src/codomyrmex/skills/skills/upstream"]
-	path = src/codomyrmex/skills/skills/upstream
-	url = https://github.com/docxology/codomyrmex.git
