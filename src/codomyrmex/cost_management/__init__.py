@@ -1,5 +1,4 @@
-"""
-Cost Management Module
+"""Cost Management Module.
 
 Spend tracking, budgeting, and cost optimization.
 """

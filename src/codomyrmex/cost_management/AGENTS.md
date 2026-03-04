@@ -21,6 +21,7 @@ Provides comprehensive spend tracking, budgeting, and alerting. `CostTracker` re
 | `stores.py` | `JSONCostStore` | File-based JSON storage implementation of `CostStore` |
 | `tracker.py` | `CostTracker` | Main service: `record()` costs and `get_summary()` / `get_total()` for periods |
 | `tracker.py` | `BudgetManager` | Budget CRUD, utilization tracking, threshold alerting via `check_budgets()`, spend gating via `can_spend()` |
+| `mcp_tools.py` | MCP Tools | Exposes `@mcp_tool` decorated functions: `cost_management_record_cost`, `cost_management_get_summary`, `cost_management_create_budget`, `cost_management_check_budgets`, `cost_management_can_spend` |
 
 ## Operating Contracts
 

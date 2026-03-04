@@ -1,5 +1,4 @@
-"""
-Cost Management Models
+"""Cost Management Models.
 
 Data classes and enums for cost tracking and budgeting.
 """

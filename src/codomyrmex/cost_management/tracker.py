@@ -1,5 +1,4 @@
-"""
-Cost Management Tracker and Budget Manager
+"""Cost Management Tracker and Budget Manager.
 
 Cost tracking service and budget management with alerting.
 """
@@ -24,8 +23,7 @@ logger = get_logger(__name__)
 
 
 class CostTracker:
-    """
-    Main cost tracking service.
+    """Main cost tracking service.
 
     Usage:
         tracker = CostTracker()
@@ -44,6 +42,7 @@ class CostTracker:
     """
 
     def __init__(self, store: CostStore | None = None) -> None:
+        """Initialize CostTracker."""
         self.store = store or InMemoryCostStore()
         self._counter = 0
         self._lock = threading.Lock()
@@ -64,8 +63,7 @@ class CostTracker:
         metadata: dict[str, Any] | None = None,
         timestamp: datetime | None = None,
     ) -> CostEntry:
-        """
-        Record a cost entry.
+        """Record a cost entry.
 
         Args:
             amount: Cost amount in dollars
@@ -78,6 +76,7 @@ class CostTracker:
 
         Returns:
             The created CostEntry
+
         """
         entry = CostEntry(
             id=self._generate_id(),
@@ -104,8 +103,7 @@ class CostTracker:
         category: CostCategory | None = None,
         tags_filter: dict[str, str] | None = None,
     ) -> CostSummary:
-        """
-        Get cost summary for a period.
+        """Get cost summary for a period.
 
         Args:
             period: Budget period (uses current period)
@@ -116,6 +114,7 @@ class CostTracker:
 
         Returns:
             CostSummary with aggregated costs
+
         """
         if start is None:
             if period:
@@ -174,8 +173,7 @@ class CostTracker:
 
 
 class BudgetManager:
-    """
-    Budget management and alerting.
+    """Budget management and alerting.
 
     Usage:
         budgets = BudgetManager(tracker)
@@ -195,6 +193,7 @@ class BudgetManager:
     """
 
     def __init__(self, tracker: CostTracker) -> None:
+        """Initialize BudgetManager."""
         self.tracker = tracker
         self._budgets: dict[str, Budget] = {}
         self._triggered_alerts: set[str] = set()  # Track which thresholds were triggered
