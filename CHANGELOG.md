@@ -26,6 +26,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-03-04 — "Production Readiness"
+
+First feature release targeting external consumption. All 9 planned items implemented and triple-checked.
+
+### Added
+
+- **CLI doctor `--fix` mode** (`cli/doctor.py`): Auto-create missing RASP docs, `.env` from `.env.example`, suggest `uv sync --extra` for optional deps
+- **MCP deprecation timeline API** (`model_context_protocol/mcp_deprecation.py`): `get_deprecated_tools()`, `get_deprecation_timeline()`, `get_deprecation_summary()` — scans `@mcp_tool` decorators for `deprecated_in` metadata
+- **Bidirectional PAI communication**: `agents/pai/pai_webhook.py` (FastAPI router receiving PAI events) + `agents/pai/pai_client.py` (HTTP client sending events to PAI)
+- **Secret rotation with audit trail** (`config_management/secrets/secret_manager.py`): `rotate_secret()`, `get_rotation_history()`, `check_key_age()` — named-secret rotation, full event log, staleness detection
+- **detect-secrets pre-commit hook**: Yelp/detect-secrets v1.5.0 added to `.pre-commit-config.yaml`
+- **mkdocs-material documentation site**: `mkdocs.yml` with dark/light mode, code copy, mermaid diagrams + `docs/index.md` homepage
+- **GitHub Pages deploy workflow**: `.github/workflows/docs-deploy.yml` triggered on version tags
+- **Integration test CI workflow**: `.github/workflows/ci-integration.yml` runs `pytest -m integration`
+- **GETTING_STARTED_WITH_AGENTS.md**: 230+ line comprehensive guide covering agent architecture, orchestration, MCP tools, skills, memory, diagnostics, and event-driven communication
+- **CITATION.cff**: Academic citation metadata for GitHub "Cite this repository" button
+- **FUNDING.yml**: GitHub Sponsors funding configuration
+
+### Changed
+
+- **Version**: `1.0.8` → `1.1.0`
+- **Mutation testing expanded**: `[tool.mutmut]` 3→6 files (+`secrets_detector.py`, `orchestrator/core.py`, `event_bus.py`)
+- **mypy agents strict**: `disallow_untyped_defs=true` for `codomyrmex.agents.*`
+- **mypy events strict**: New strict override for `codomyrmex.events.*`
+- **Integration test markers**: 35 files marked with `@pytest.mark.integration` (was 0)
+- **Pytest markers registered**: `unit`, `integration`, `slow`
+- **Hatch build excludes**: 15 patterns (`.cursor`, `.cursorrules`, `__pycache__`, etc.)
+- **Project URLs**: Added `Changelog` URL
+- **README.md**: Complete rewrite with centered badges, architecture diagram, updated metrics
+- **GitHub description**: Updated to `🐜 AI-native modular coding workspace`
+- **GitHub topics**: 16 topics including `mcp`, `model-context-protocol`, `ai-agents`, `multi-agent`
+- **TODO.md**: All done items removed, v1.1.1 and v1.2.0 scoped
+- **docs/getting-started/**: `README.md`, `AGENTS.md`, `SPEC.md` updated to v1.1.0
+
+### Metrics
+
+- Modules: **127**
+- MCP tools: **424** dynamically discovered
+- Integration tests marked: **35/35**
+- Ruff violations: **0**
+- Twine check: **PASSED** (sdist + wheel)
+- Build artifacts: `codomyrmex-1.1.0.tar.gz` + `.whl`
+
+---
+
 ## [1.0.8] - 2026-03-04 — "Sprint 20–22 — Jules Swarm & Documentation Reconciliation"
 
 ### Added

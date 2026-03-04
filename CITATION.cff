@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: Codomyrmex
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - name: "The Codomyrmex Contributors"
+    alias: docxology
+repository-code: "https://github.com/docxology/codomyrmex"
+url: "https://docxology.github.io/codomyrmex/"
+license: MIT
+version: "1.1.0"
+date-released: "2026-03-04"
+keywords:
+  - ai-agents
+  - model-context-protocol
+  - mcp
+  - multi-agent
+  - orchestration
+  - developer-tools
+  - python
+  - zero-mock-testing
+abstract: >-
+  Codomyrmex is a modular, AI-native coding workspace with 127 composable
+  modules and 424 MCP tools. It provides multi-agent orchestration for
+  Claude, Gemini, GPT, and 10+ agent providers, integrated with the
+  Personal AI Infrastructure (PAI) via the Model Context Protocol.
