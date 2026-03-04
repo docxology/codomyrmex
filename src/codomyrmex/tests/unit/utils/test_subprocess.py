@@ -27,10 +27,9 @@ from codomyrmex.utils.process.subprocess import (
     quote_command,
     run_command,
     run_command_async,
-    run_with_retry,
     split_command,
-    stream_command,
 )
+from codomyrmex.utils.process.subprocess_advanced import run_with_retry, stream_command
 
 
 # ---------------------------------------------------------------------------
