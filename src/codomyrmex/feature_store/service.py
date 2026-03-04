@@ -28,6 +28,7 @@ class FeatureTransform:
     """
 
     def __init__(self):
+        """Initialize a new FeatureTransform instance."""
         self._transforms: dict[str, Callable[[Any], Any]] = {}
 
     def add(self, feature_name: str, func: Callable[[Any], Any]) -> "FeatureTransform":
@@ -85,6 +86,13 @@ class FeatureService:
         store: FeatureStore | None = None,
         transform: FeatureTransform | None = None,
     ):
+        """
+        Initialize the FeatureService.
+
+        Args:
+            store: An optional FeatureStore instance. Defaults to InMemoryFeatureStore.
+            transform: An optional FeatureTransform instance to apply during retrieval.
+        """
         self.store = store or InMemoryFeatureStore()
         self.transform = transform
         self._groups: dict[str, FeatureGroup] = {}
@@ -109,7 +117,9 @@ class FeatureService:
             try:
                 self.store.set_value(name, entity_id, value)
             except FeatureStoreError as e:
-                logger.error(f"Error ingesting feature '{name}' for entity '{entity_id}': {e}")
+                logger.error(
+                    f"Error ingesting feature '{name}' for entity '{entity_id}': {e}"
+                )
                 raise
 
     def ingest_batch(
@@ -127,7 +137,9 @@ class FeatureService:
                     self.ingest(features, entity_id)
                     count += 1
                 except FeatureStoreError as e:
-                    logger.warning(f"Skipping record for entity '{entity_id}' due to error: {e}")
+                    logger.warning(
+                        f"Skipping record for entity '{entity_id}' due to error: {e}"
+                    )
             else:
                 logger.warning(f"Skipping record: missing '{entity_id_field}' field")
         return count

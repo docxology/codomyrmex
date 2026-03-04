@@ -109,6 +109,14 @@ def get_group_features(self, entity_id: str, group_name: str) -> FeatureVector
 def list_groups(self) -> List[str]
 ```
 
+## MCP Tools
+
+The feature store module exposes tools for the Model Context Protocol (MCP) to manage features directly from agents:
+
+- `feature_store_register_feature`: Registers a new feature definition in the store.
+- `feature_store_ingest`: Ingests feature values for a specific entity.
+- `feature_store_get_features`: Retrieves feature values for an entity.
+
 ## Exceptions
 
 | Exception | Description |

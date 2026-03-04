@@ -21,6 +21,7 @@ Feature store module for ML inference and training pipelines. Provides typed fea
 | `service.py` | `FeatureTransform` | Registers per-feature callables; `apply()` transforms a `FeatureVector` immutably |
 | `service.py` | `FeatureService` | High-level facade: group registration, single/batch ingestion, transform-aware retrieval |
 | `exceptions.py` | `FeatureStoreError` | Module-specific exception hierarchy. |
+| `mcp_tools.py` | `get_mcp_tools` | Provides Model Context Protocol tools for registering, ingesting, and retrieving features. |
 
 ## Operating Contracts
 
