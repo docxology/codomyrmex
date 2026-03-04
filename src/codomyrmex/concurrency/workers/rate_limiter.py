@@ -14,6 +14,7 @@ __all__ = ["RateLimitConfig", "AsyncTokenBucket", "AsyncSlidingWindow"]
 @dataclass
 class RateLimitConfig:
     """Configuration for rate limiting."""
+
     max_requests: int = 10
     window_seconds: float = 1.0
     burst_size: int | None = None
@@ -27,6 +28,7 @@ class AsyncTokenBucket:
     """
 
     def __init__(self, rate: float, capacity: int | None = None) -> None:
+        """Initialize rate limiter."""
         self._rate = rate
         self._capacity = capacity or int(rate)
         self._tokens = float(self._capacity)
@@ -59,6 +61,7 @@ class AsyncSlidingWindow:
     """Sliding window rate limiter for async contexts."""
 
     def __init__(self, max_requests: int, window_seconds: float) -> None:
+        """Initialize sliding window rate limiter."""
         self._max_requests = max_requests
         self._window = window_seconds
         self._timestamps: list[float] = []

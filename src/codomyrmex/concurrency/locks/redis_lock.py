@@ -22,6 +22,7 @@ class RedisLock(BaseLock):
             name: The name of the lock.
             redis_client: A redis.Redis instance.
             ttl: Time-to-live for the lock in seconds.
+
         """
         super().__init__(name)
         self.redis = redis_client
@@ -38,6 +39,7 @@ class RedisLock(BaseLock):
 
         Returns:
             True if acquired, False otherwise.
+
         """
         start_time = time.time()
         while True:
@@ -86,6 +88,7 @@ class RedisLock(BaseLock):
 
         Returns:
             True if extension succeeded, False otherwise.
+
         """
         if not self.is_held:
             return False

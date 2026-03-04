@@ -12,20 +12,20 @@ def concurrency_pool_status() -> dict:
 
     Returns:
         Dictionary with pool size, capacity, and availability.
+
     """
     try:
         from codomyrmex.concurrency import AsyncWorkerPool
 
         pool = AsyncWorkerPool()
-        stats = pool.stats()
+        stats = pool.stats
         return {
             "status": "success",
             "pool_stats": {
-                "max_workers": stats.max_workers,
-                "active_workers": stats.active_workers,
-                "queued_tasks": stats.queued_tasks,
-                "completed_tasks": stats.completed_tasks,
-                "failed_tasks": stats.failed_tasks,
+                "submitted": stats.submitted,
+                "completed": stats.completed,
+                "failed": stats.failed,
+                "total_elapsed_ms": stats.total_elapsed_ms,
             },
         }
     except Exception as e:
@@ -41,6 +41,7 @@ def concurrency_list_locks() -> dict:
 
     Returns:
         Dictionary with a list of lock names and their count.
+
     """
     try:
         from codomyrmex.concurrency import LockManager

@@ -27,6 +27,7 @@ class TaskResult:
         error: Error message if failed.
         duration_ms: Processing time.
         timestamp: Completion timestamp.
+
     """
 
     task_id: str
@@ -56,6 +57,7 @@ class TaskWorker:
         handler: Callable[[Task], Any] | None = None,
         timeout_ms: float = 30000.0,
     ) -> None:
+        """Initialize the task worker."""
         self._worker_id = worker_id or f"worker-{uuid.uuid4().hex[:8]}"
         self._handler = handler or self._default_handler
         self._timeout_ms = timeout_ms
@@ -65,18 +67,22 @@ class TaskWorker:
 
     @property
     def worker_id(self) -> str:
+        """Return the worker ID."""
         return self._worker_id
 
     @property
     def is_running(self) -> bool:
+        """Return whether the worker is running."""
         return self._running
 
     @property
     def tasks_processed(self) -> int:
+        """Return the number of processed tasks."""
         return self._tasks_processed
 
     @property
     def tasks_failed(self) -> int:
+        """Return the number of failed tasks."""
         return self._tasks_failed
 
     @property
@@ -103,6 +109,7 @@ class TaskWorker:
 
         Returns:
             TaskResult with success/failure status.
+
         """
         start = time.time()
 

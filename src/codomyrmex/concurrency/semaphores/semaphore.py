@@ -13,6 +13,7 @@ class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
 
     def __init__(self, value: int = 1):
+        """Initialize base semaphore."""
         if value < 0:
             raise ValueError("Semaphore value must be >= 0")
         self.initial_value = value
@@ -41,6 +42,7 @@ class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
 
     def __init__(self, value: int = 1):
+        """Initialize a local thread-safe semaphore."""
         super().__init__(value)
         self._semaphore = threading.Semaphore(value)
 
@@ -56,6 +58,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
     """Asyncio-compatible local semaphore."""
 
     def __init__(self, value: int = 1):
+        """Initialize a local asyncio-compatible semaphore."""
         super().__init__(value)
         self._semaphore = asyncio.Semaphore(value)
         self._sync_lock = threading.Lock()
@@ -98,7 +101,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
                 self._sync_count += 1
 
     def acquire(self, timeout: float = 10.0) -> bool:
-        """Synchronous acquisition that bridges to async context safely.
+        """Acquire synchronously, bridging safely to an async context.
 
         If in an event loop, uses a fallback synchronous counter to avoid blocking.
         If no loop is running, creates a temporary one to execute the acquisition.
