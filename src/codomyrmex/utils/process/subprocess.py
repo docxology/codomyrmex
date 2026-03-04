@@ -1,17 +1,17 @@
 """Subprocess Execution Utilities.
 
-This module provides comprehensive utilities for subprocess execution, reducing
-code duplication across the codebase. It includes synchronous and asynchronous
-command execution, streaming output, retry logic, and proper error handling.
+This module provides core utilities for subprocess execution. For streaming
+and retry capabilities, use subprocess_advanced:
 
-Usage:
     from codomyrmex.utils.process.subprocess import (
         run_command,
         run_command_async,
-        stream_command,
-        run_with_retry,
         SubprocessResult,
         CommandError,
+    )
+    from codomyrmex.utils.process.subprocess_advanced import (
+        stream_command,
+        run_with_retry,
     )
 
     # Synchronous execution
@@ -21,13 +21,6 @@ Usage:
 
     # Async execution
     result = await run_command_async(["npm", "install"])
-
-    # Streaming output
-    for line in stream_command(["python", "-m", "pytest"]):
-        print(line)
-
-    # With retry logic
-    result = run_with_retry(["flaky-command"], max_attempts=3)
 """
 
 from __future__ import annotations
@@ -643,10 +636,6 @@ async def run_command_async(
         )
 
 
-# Re-export advanced functions from subprocess_advanced for backward compatibility
-from .subprocess_advanced import stream_command, run_with_retry  # noqa: E402, I001
-
-
 def check_command_available(command: str) -> bool:
     """Check if a command is available on the system.
 
@@ -729,8 +718,6 @@ __all__ = [
     # Main execution functions
     "run_command",
     "run_command_async",
-    "stream_command",
-    "run_with_retry",
     # Result and error types
     "SubprocessResult",
     "CommandError",

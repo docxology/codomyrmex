@@ -35,10 +35,9 @@ from .process.subprocess import (
     quote_command,
     run_command,
     run_command_async,
-    run_with_retry,
     split_command,
-    stream_command,
 )
+from .process.subprocess_advanced import run_with_retry, stream_command  # noqa: F401
 from .refined import RefinedUtilities
 
 logger = get_logger(__name__)
