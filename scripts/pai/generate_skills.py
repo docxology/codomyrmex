@@ -17,10 +17,10 @@ Usage::
     --list-categories     Show all discovered categories and exit
 """
 
-import re
-import sys
 import argparse
+import re
 import subprocess
+import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -253,7 +253,11 @@ SKILL_DESCRIPTIONS: dict[str, str] = {
 DEFAULT_PHASE_MAPS: dict[str, dict[str, list[str]]] = {
     "CodomyrmexGit": {
         "OBSERVE": ["git_repo_status", "git_log", "git_current_branch", "git_is_repo"],
-        "THINK": ["git_diff", "create_commit_timeline_diagram", "create_git_branch_diagram"],
+        "THINK": [
+            "git_diff",
+            "create_commit_timeline_diagram",
+            "create_git_branch_diagram",
+        ],
         "BUILD": ["git_create_branch", "git_switch_branch", "stash_changes"],
         "EXECUTE": ["git_commit", "git_push", "git_pull", "git_clone"],
         "VERIFY": ["git_repo_status", "git_diff", "list_tags"],
@@ -288,7 +292,11 @@ DEFAULT_PHASE_MAPS: dict[str, dict[str, list[str]]] = {
         "VERIFY": ["full_text_search"],
     },
     "CodomyrmexDeploy": {
-        "OBSERVE": ["container_list", "container_runtime_status", "list_cloud_instances"],
+        "OBSERVE": [
+            "container_list",
+            "container_runtime_status",
+            "list_cloud_instances",
+        ],
         "BUILD": ["container_build"],
         "EXECUTE": ["container_build", "upload_to_s3"],
         "VERIFY": ["container_security_scan", "container_list"],
@@ -341,6 +349,7 @@ _SRC_ROOT = _REPO_ROOT / "src" / "codomyrmex"
 # Data collection
 # ---------------------------------------------------------------------------
 
+
 def collect_tools() -> list[dict[str, Any]]:
     """Query get_skill_manifest() and return annotated tool list."""
     from codomyrmex.agents.pai.mcp_bridge import get_skill_manifest
@@ -375,6 +384,7 @@ def group_by_skill(tools: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]
 # Phase mapping extraction from module PAI.md files
 # ---------------------------------------------------------------------------
 
+
 def _find_pai_md_for_categories(categories: list[str]) -> list[Path]:
     """Find PAI.md files for module directories matching the given categories."""
     pai_mds: list[Path] = []
@@ -387,7 +397,9 @@ def _find_pai_md_for_categories(categories: list[str]) -> list[Path]:
     return pai_mds
 
 
-def extract_phase_mapping(categories: list[str], skill_name: str) -> dict[str, list[str]]:
+def extract_phase_mapping(
+    categories: list[str], skill_name: str
+) -> dict[str, list[str]]:
     """Extract phase → [tool_names] from module PAI.md files.
 
     Falls back to DEFAULT_PHASE_MAPS if no PAI.md found or no matches.
@@ -402,7 +414,15 @@ def extract_phase_mapping(categories: list[str], skill_name: str) -> dict[str, l
         except OSError:
             continue
 
-        for phase in ("OBSERVE", "THINK", "PLAN", "BUILD", "EXECUTE", "VERIFY", "LEARN"):
+        for phase in (
+            "OBSERVE",
+            "THINK",
+            "PLAN",
+            "BUILD",
+            "EXECUTE",
+            "VERIFY",
+            "LEARN",
+        ):
             # Match rows like: | **OBSERVE** | ... `tool_name` ... |
             pattern = rf"\|\s*\*\*{phase}\*\*\s*\|\s*(.+?)\s*\|"
             for match in re.finditer(pattern, content):
@@ -426,6 +446,7 @@ def extract_phase_mapping(categories: list[str], skill_name: str) -> dict[str, l
 # Manual section preservation
 # ---------------------------------------------------------------------------
 
+
 def extract_keep_blocks(existing_content: str) -> list[str]:
     """Extract <!-- keep-start --> ... <!-- keep-end --> blocks."""
     pattern = r"<!--\s*keep-start\s*-->(.*?)<!--\s*keep-end\s*-->"
@@ -435,6 +456,7 @@ def extract_keep_blocks(existing_content: str) -> list[str]:
 # ---------------------------------------------------------------------------
 # SKILL.md rendering
 # ---------------------------------------------------------------------------
+
 
 def _build_trust_note(tools: list[dict[str, Any]]) -> str:
     """Generate a trust note if any tool is TRUSTED (destructive)."""
@@ -467,7 +489,7 @@ def _build_common_operations(tools: list[dict[str, Any]], skill_name: str) -> st
         name = t["name"]
         # Build a simple call with placeholder args from schema
         schema = t.get("input_schema", {})
-        props = schema.get("properties", {}) if isinstance(schema, dict) else {}
+        schema.get("properties", {}) if isinstance(schema, dict) else {}
         required = schema.get("required", []) if isinstance(schema, dict) else []
         if required:
             args = ", ".join(f'{k}="..."' for k in required[:3])
@@ -480,7 +502,11 @@ def _build_common_operations(tools: list[dict[str, Any]], skill_name: str) -> st
 
 def _build_key_tools_table(tools: list[dict[str, Any]]) -> str:
     """Build the Key Tools markdown table."""
-    rows = ["## Key Tools\n", "| Tool | Description | Trust Level |", "|------|-------------|-------------|"]
+    rows = [
+        "## Key Tools\n",
+        "| Tool | Description | Trust Level |",
+        "|------|-------------|-------------|",
+    ]
     for t in sorted(tools, key=lambda x: x["name"]):
         name = t["name"]
         desc = (t.get("description") or "").split("\n")[0].strip()
@@ -515,7 +541,9 @@ def render_skill_md(
     existing_content: str = "",
 ) -> str:
     """Render a complete SKILL.md file for the given skill group."""
-    description = SKILL_DESCRIPTIONS.get(skill_name, _auto_description(skill_name, categories))
+    description = SKILL_DESCRIPTIONS.get(
+        skill_name, _auto_description(skill_name, categories)
+    )
     phase_map = extract_phase_mapping(categories, skill_name)
 
     # Preserve manual keep blocks
@@ -526,10 +554,10 @@ def render_skill_md(
     summary = f"{skill_name} operations using Codomyrmex modules: {module_str}."
 
     parts = [
-        f"---",
+        "---",
         f"name: {skill_name}",
         f"description: {description}",
-        f"---",
+        "---",
         f"# {skill_name}",
         "",
         summary,
@@ -581,6 +609,7 @@ def _auto_description(skill_name: str, categories: list[str]) -> str:
 # Write and index rebuild
 # ---------------------------------------------------------------------------
 
+
 def write_skill(
     skill_name: str,
     content: str,
@@ -591,9 +620,9 @@ def write_skill(
 ) -> None:
     """Write (or print) the SKILL.md for a skill."""
     if dry_run:
-        print(f"\n{'='*70}")
+        print(f"\n{'=' * 70}")
         print(f"DRY RUN: {output_dir / skill_name / 'SKILL.md'}")
-        print('='*70)
+        print("=" * 70)
         print(content)
         return
 
@@ -602,7 +631,7 @@ def write_skill(
 
     if skill_path.exists() and not force:
         # Merge: read existing, preserve keep blocks, regenerate rest
-        existing = skill_path.read_text(encoding="utf-8")
+        skill_path.read_text(encoding="utf-8")
         # Content was already rendered with keep blocks — just write it
         print(f"  [merge] {skill_path}")
     else:
@@ -614,7 +643,9 @@ def write_skill(
 
 def rebuild_index(output_dir: Path) -> None:
     """Run GenerateSkillIndex.ts to rebuild the skill index."""
-    index_script = Path.home() / ".claude" / "skills" / "PAI" / "Tools" / "GenerateSkillIndex.ts"
+    index_script = (
+        Path.home() / ".claude" / "skills" / "PAI" / "Tools" / "GenerateSkillIndex.ts"
+    )
     if not index_script.exists():
         print(f"  [skip] GenerateSkillIndex.ts not found at {index_script}")
         return
@@ -637,6 +668,7 @@ def rebuild_index(output_dir: Path) -> None:
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -686,7 +718,10 @@ def main() -> int:
         tools = collect_tools()
     except ImportError as exc:
         print(f"ERROR: Could not import codomyrmex: {exc}", file=sys.stderr)
-        print("Run this script via: uv run python scripts/pai/generate_skills.py", file=sys.stderr)
+        print(
+            "Run this script via: uv run python scripts/pai/generate_skills.py",
+            file=sys.stderr,
+        )
         return 1
 
     print(f"  Found {len(tools)} tools.")
@@ -709,7 +744,9 @@ def main() -> int:
     # Filter to specific skill if requested
     if args.category:
         if args.category not in groups:
-            print(f"ERROR: Skill '{args.category}' not found. Known: {', '.join(sorted(groups))}")
+            print(
+                f"ERROR: Skill '{args.category}' not found. Known: {', '.join(sorted(groups))}"
+            )
             return 1
         groups = {args.category: groups[args.category]}
 
@@ -751,17 +788,19 @@ def main() -> int:
 
     return 0
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/pai/config.yaml")
+
 
 if __name__ == "__main__":
     sys.exit(main())

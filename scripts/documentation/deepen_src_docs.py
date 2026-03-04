@@ -8,6 +8,7 @@ Adds:
 4. Cross-link to docs/modules/ counterpart
 5. Missing submodule SPEC.md files
 """
+
 import ast
 import os
 import sys
@@ -48,7 +49,11 @@ def get_module_exports(mod_path):
                         doc = ast.get_docstring(node) or ""
                         classes.append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_c.add(node.name)
-                    elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_") and node.name not in seen_f:
+                    elif (
+                        isinstance(node, ast.FunctionDef)
+                        and not node.name.startswith("_")
+                        and node.name not in seen_f
+                    ):
                         doc = ast.get_docstring(node) or ""
                         functions.append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_f.add(node.name)
@@ -80,7 +85,7 @@ def build_usage_example(mod_name, classes, functions):
         lines.append(f"{c[0].lower()} = {c[0]}()")
         if functions:
             fn = functions[0]
-            lines.append(f"")
+            lines.append("")
             lines.append(f"from codomyrmex.{mod_name} import {fn[0]}")
             lines.append(f"result = {fn[0]}()")
     elif functions and len(functions) >= 2:
@@ -135,19 +140,30 @@ def deepen_readme(mod_name):
 
     # 2. Add Installation section if missing
     content_lower = content.lower()
-    if "install" not in content_lower and "setup" not in content_lower and "pip" not in content_lower:
+    if (
+        "install" not in content_lower
+        and "setup" not in content_lower
+        and "pip" not in content_lower
+    ):
         install = (
-            f"\n## Installation\n\n"
-            f"```bash\n"
-            f"pip install codomyrmex\n"
-            f"```\n\n"
-            f"Or for development:\n\n"
-            f"```bash\n"
-            f"uv sync\n"
-            f"```\n"
+            "\n## Installation\n\n"
+            "```bash\n"
+            "pip install codomyrmex\n"
+            "```\n\n"
+            "Or for development:\n\n"
+            "```bash\n"
+            "uv sync\n"
+            "```\n"
         )
         # Insert after Overview/description, before Key Exports or Quick Start
-        for anchor in ["## Key Export", "## Quick Start", "## Feature", "## Source", "## Testing", "## Navigation"]:
+        for anchor in [
+            "## Key Export",
+            "## Quick Start",
+            "## Feature",
+            "## Source",
+            "## Testing",
+            "## Navigation",
+        ]:
             if anchor in content:
                 content = content.replace(anchor, install + "\n" + anchor)
                 break
@@ -158,12 +174,18 @@ def deepen_readme(mod_name):
     blocks = content.split("```")
     if len(blocks) >= 3:
         first_code = blocks[1]
-        code_lines = [l for l in first_code.strip().split("\n") if l.strip() and not l.strip().startswith("#")]
+        code_lines = [
+            l
+            for l in first_code.strip().split("\n")
+            if l.strip() and not l.strip().startswith("#")
+        ]
         if len(code_lines) <= 3:
             classes, functions = get_module_exports(os.path.join(SRC, mod_name))
             if classes or functions:
                 usage = build_usage_example(mod_name, classes, functions)
-                lang_line = first_code.split("\n")[0] if first_code.strip() else "python"
+                lang_line = (
+                    first_code.split("\n")[0] if first_code.strip() else "python"
+                )
                 new_code = lang_line + "\n" + "\n".join(usage) + "\n"
                 blocks[1] = new_code
                 content = "```".join(blocks)
@@ -193,11 +215,21 @@ def deepen_readme(mod_name):
 def get_display_name(name):
     """Get display name for module."""
     display_map = {
-        "api": "API", "cli": "CLI", "llm": "LLM", "ide": "IDE", "fpf": "FPF",
-        "i18n": "i18n", "ci_cd_automation": "CI/CD Automation", "utils": "Utilities",
-        "logging_monitoring": "Logging & Monitoring", "tree_sitter": "Tree-sitter",
-        "auth": "Authentication", "dark": "Dark Modes", "cerebrum": "CEREBRUM",
-        "graph_rag": "Graph RAG", "pdf": "PDF",
+        "api": "API",
+        "cli": "CLI",
+        "llm": "LLM",
+        "ide": "IDE",
+        "fpf": "FPF",
+        "i18n": "i18n",
+        "ci_cd_automation": "CI/CD Automation",
+        "utils": "Utilities",
+        "logging_monitoring": "Logging & Monitoring",
+        "tree_sitter": "Tree-sitter",
+        "auth": "Authentication",
+        "dark": "Dark Modes",
+        "cerebrum": "CEREBRUM",
+        "graph_rag": "Graph RAG",
+        "pdf": "PDF",
     }
     return display_map.get(name, name.replace("_", " ").title())
 
@@ -218,16 +250,20 @@ def create_submodule_spec(parent, sub):
     desc = f"{display} submodule."
     try:
         tree = ast.parse(open(init).read())
-        if tree.body and isinstance(tree.body[0], ast.Expr) and isinstance(tree.body[0].value, ast.Constant):
+        if (
+            tree.body
+            and isinstance(tree.body[0], ast.Expr)
+            and isinstance(tree.body[0].value, ast.Constant)
+        ):
             desc = tree.body[0].value.value.strip().split("\n")[0]
     except Exception:
         pass
 
     content = f"# {display} — Functional Specification\n\n"
     content += f"**Module**: `codomyrmex.{parent}.{sub}`\n"
-    content += f"**Status**: Active\n\n"
+    content += "**Status**: Active\n\n"
     content += f"## 1. Overview\n\n{desc}\n\n"
-    content += f"## 2. Architecture\n\n"
+    content += "## 2. Architecture\n\n"
 
     if classes:
         content += "### Components\n\n"
@@ -237,7 +273,7 @@ def create_submodule_spec(parent, sub):
             content += f"| `{name}` | Class | {doc or name} |\n"
         content += "\n"
 
-    content += f"## 3. API Usage\n\n```python\n"
+    content += "## 3. API Usage\n\n```python\n"
     if classes:
         content += f"from codomyrmex.{parent}.{sub} import {classes[0][0]}\n"
     elif functions:
@@ -247,15 +283,17 @@ def create_submodule_spec(parent, sub):
     content += "```\n\n"
 
     content += "## 4. Dependencies\n\n"
-    content += f"See `src/codomyrmex/{parent}/{sub}/__init__.py` for import dependencies.\n\n"
+    content += (
+        f"See `src/codomyrmex/{parent}/{sub}/__init__.py` for import dependencies.\n\n"
+    )
 
     content += "## 5. Testing\n\n```bash\n"
     content += f"uv run python -m pytest src/codomyrmex/tests/ -k {sub} -v\n"
     content += "```\n\n"
 
     content += "## References\n\n"
-    content += f"- [README.md](README.md)\n"
-    content += f"- [AGENTS.md](AGENTS.md)\n"
+    content += "- [README.md](README.md)\n"
+    content += "- [AGENTS.md](AGENTS.md)\n"
     content += f"- [Parent: {parent_display}](../SPEC.md)\n"
 
     with open(spec_path, "w") as f:
@@ -265,17 +303,24 @@ def create_submodule_spec(parent, sub):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "documentation"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
-        d for d in os.listdir(SRC)
+        d
+        for d in os.listdir(SRC)
         if os.path.isdir(os.path.join(SRC, d)) and d != "__pycache__"
     )
 

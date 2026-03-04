@@ -15,7 +15,12 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 
 def demo_basic_solving():
@@ -73,12 +78,17 @@ def demo_isc_consistency():
         {"id": "ISC-C1", "description": "Response time under 200ms"},
         {"id": "ISC-C2", "description": "Throughput at least 100 requests per second"},
         {"id": "ISC-C3", "description": "Error rate under 0.5 percent"},
-        {"id": "ISC-C4", "description": "Code quality is maintainable"},  # non-numeric, skipped
+        {
+            "id": "ISC-C4",
+            "description": "Code quality is maintainable",
+        },  # non-numeric, skipped
     ]
 
     result = verify_criteria_consistency(criteria)
     print_info(f"  Consistent: {result.consistent}")
-    print_info(f"  Analyzed: {result.criteria_analyzed}, Skipped: {result.criteria_skipped}")
+    print_info(
+        f"  Analyzed: {result.criteria_analyzed}, Skipped: {result.criteria_skipped}"
+    )
     print_info(f"  Skipped reasons: {result.skipped_reasons}")
     if result.satisfying_assignment:
         print_info(f"  Example assignment: {result.satisfying_assignment}")
@@ -91,10 +101,16 @@ def demo_conflict_detection():
     from codomyrmex.formal_verification import verify_criteria_consistency
 
     criteria = [
-        {"id": "ISC-C1", "description": "Conflicting",
-         "constraint": "x = Int('x')\nsolver.add(x > 100)"},
-        {"id": "ISC-C2", "description": "Conflicting",
-         "constraint": "solver.add(x < 50)"},
+        {
+            "id": "ISC-C1",
+            "description": "Conflicting",
+            "constraint": "x = Int('x')\nsolver.add(x > 100)",
+        },
+        {
+            "id": "ISC-C2",
+            "description": "Conflicting",
+            "constraint": "solver.add(x < 50)",
+        },
     ]
 
     result = verify_criteria_consistency(criteria)
@@ -130,14 +146,20 @@ def demo_mcp_workflow():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "formal_verification" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "formal_verification"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/formal_verification/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/formal_verification/config.yaml")
 
     setup_logging()
     print_info("Running Advanced formal_verification Workflow...")

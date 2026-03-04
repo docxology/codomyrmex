@@ -10,6 +10,7 @@ Demonstrates all Claude Code capabilities available in ClaudeClient v0.2.0:
 
 This script handles gracefully when API key is not configured.
 """
+
 import sys
 from pathlib import Path
 
@@ -19,11 +20,16 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.agents.exceptions import AgentConfigurationError
+
+from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_success, print_error, print_info, 
-    print_section, print_warning
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 
@@ -31,10 +37,12 @@ def demo_scan_directory(client: ClaudeClient) -> bool:
     """Demo scan_directory - works without API."""
     print_section("scan_directory")
     print_info("Scanning the Claude module directory...")
-    
-    claude_dir = Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents/claude"
+
+    claude_dir = (
+        Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents/claude"
+    )
     result = client.scan_directory(str(claude_dir), max_depth=1)
-    
+
     if result["success"]:
         print_success(f"Found {result['file_count']} files")
         for f in result["files"][:5]:
@@ -49,16 +57,16 @@ def demo_generate_diff(client: ClaudeClient) -> bool:
     """Demo generate_diff - works without API."""
     print_section("generate_diff")
     print_info("Generating diff between two code versions...")
-    
-    original = '''def add(a, b):
-    return a + b'''
-    
+
+    original = """def add(a, b):
+    return a + b"""
+
     modified = '''def add(a: int, b: int) -> int:
     """Add two integers."""
     return a + b'''
-    
+
     result = client.generate_diff(original, modified, "math.py")
-    
+
     if result["has_changes"]:
         print_success(f"Diff generated: +{result['additions']} -{result['deletions']}")
         print_info(result["diff"][:200])
@@ -72,9 +80,9 @@ def demo_run_command(client: ClaudeClient) -> bool:
     """Demo run_command - works without API."""
     print_section("run_command")
     print_info("Running 'uv --version' command...")
-    
+
     result = client.run_command("uv --version", timeout=10)
-    
+
     if result["success"]:
         print_success(f"Command succeeded in {result['duration']:.2f}s")
         print_info(f"Output: {result['stdout'].strip()}")
@@ -88,14 +96,18 @@ def demo_get_project_structure(client: ClaudeClient) -> bool:
     """Demo get_project_structure - works without API."""
     print_section("get_project_structure")
     print_info("Analyzing project structure...")
-    
-    project_dir = Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents"
+
+    project_dir = (
+        Path(__file__).resolve().parent.parent.parent / "src/codomyrmex/agents"
+    )
     result = client.get_project_structure(str(project_dir), max_depth=2)
-    
+
     if result["success"]:
         print_success(f"Found {result['file_count']} files")
         print_info("Language breakdown:")
-        for lang, count in sorted(result["language_breakdown"].items(), key=lambda x: -x[1])[:5]:
+        for lang, count in sorted(
+            result["language_breakdown"].items(), key=lambda x: -x[1]
+        )[:5]:
             print_info(f"  - {lang}: {count}")
         return True
     else:
@@ -109,45 +121,51 @@ def demo_api_methods(client: ClaudeClient) -> bool:
         print_warning("Skipping API-dependent demos (no API key configured)")
         print_info("To enable: set ANTHROPIC_API_KEY environment variable")
         return True
-    
+
     # review_code
     print_section("review_code")
     sample_code = "def divide(a, b): return a / b"
     result = client.review_code(sample_code, analysis_type="bugs")
     if result["success"]:
         print_success(f"Review complete, found {len(result['issues'])} issues")
-    
+
     # explain_code
     print_section("explain_code")
     sample_code = "def fib(n): return n if n < 2 else fib(n-1) + fib(n-2)"
     result = client.explain_code(sample_code, detail_level="brief")
     if result["success"]:
         print_success(f"Explanation: {result['summary'][:80]}...")
-    
+
     # suggest_tests
     print_section("suggest_tests")
     sample_code = "def is_prime(n):\n    if n < 2: return False\n    return all(n % i for i in range(2, int(n**0.5)+1))"
     result = client.suggest_tests(sample_code, framework="pytest")
     if result["success"]:
         print_success(f"Generated {len(result['test_cases'])} test cases")
-    
+
     return True
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "agents"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()
     print_section("Claude Code Methods Demo (v0.2.0)")
-    
+
     # Initialize client (skip __init__ for methods that don't need API)
     try:
         client = ClaudeClient()
@@ -155,10 +173,10 @@ def main():
         # Create client without full init for non-API methods
         client = ClaudeClient.__new__(ClaudeClient)
         print_warning("API key not configured - running local-only demos")
-    
+
     passed = 0
     total = 0
-    
+
     # Non-API methods
     demos = [
         ("scan_directory", demo_scan_directory),
@@ -166,7 +184,7 @@ def main():
         ("run_command", demo_run_command),
         ("get_project_structure", demo_get_project_structure),
     ]
-    
+
     for name, demo in demos:
         total += 1
         try:
@@ -174,7 +192,7 @@ def main():
                 passed += 1
         except Exception as e:
             print_error(f"{name} failed: {e}")
-    
+
     # API-dependent methods
     try:
         client = ClaudeClient()
@@ -185,11 +203,11 @@ def main():
         total += 1
         passed += 1  # Graceful skip counts as pass
         print_warning("Skipping API demos (no API key)")
-    
+
     # Summary
     print_section("Summary")
     print_info(f"Demos: {passed}/{total} passed")
-    
+
     return 0
 
 

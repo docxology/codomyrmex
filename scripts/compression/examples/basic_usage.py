@@ -10,8 +10,8 @@ Demonstrates actual compression capabilities:
 - Auto-detection of formats
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -21,25 +21,37 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.compression import (
-    compress,
+    ArchiveManager,
     auto_decompress,
+    compress,
     compress_file,
     decompress_file,
-    ArchiveManager
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "compression" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "compression"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/compression/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/compression/config.yaml")
 
     setup_logging()
     print_info("Running Compression Examples...")
@@ -49,24 +61,24 @@ def main():
     try:
         data = b"Hello Codomyrmex Compression " * 100
         original_size = len(data)
-        
+
         # Gzip
         compressed_gz = compress(data, format="gzip")
         print_info(f"  Gzip: {original_size} -> {len(compressed_gz)} bytes")
-        
+
         # Zlib
         compressed_zl = compress(data, format="zlib")
         print_info(f"  Zlib: {original_size} -> {len(compressed_zl)} bytes")
-        
+
         # Auto-decompress
         decompressed = auto_decompress(compressed_gz)
         if decompressed == data:
             print_success("  Auto-decompress (Gzip) successful.")
-            
+
         decompressed = auto_decompress(compressed_zl)
         if decompressed == data:
             print_success("  Auto-decompress (Zlib) successful.")
-            
+
     except Exception as e:
         print_error(f"  Byte compression failed: {e}")
 
@@ -75,20 +87,20 @@ def main():
     try:
         test_dir = Path("output/compression_test")
         test_dir.mkdir(parents=True, exist_ok=True)
-        
+
         input_file = test_dir / "test.txt"
         input_file.write_text("This is a test file for compression." * 1000)
-        
+
         # Compress file
         compressed_file = compress_file(str(input_file), format="gzip")
         if os.path.exists(compressed_file):
             print_success(f"  File compressed: {compressed_file}")
-            
+
         # Decompress file
         decompressed_file = decompress_file(compressed_file)
         if os.path.exists(decompressed_file):
             print_success(f"  File decompressed: {decompressed_file}")
-            
+
     except Exception as e:
         print_error(f"  File compression failed: {e}")
 
@@ -97,20 +109,21 @@ def main():
     try:
         archive_out = test_dir / "test_archive.zip"
         files_to_archive = [input_file]
-        
+
         mgr = ArchiveManager()
         if mgr.create_archive(files_to_archive, archive_out, format="zip"):
             print_success(f"  Archive created: {archive_out}")
-            
+
         extract_dir = test_dir / "extracted"
         if mgr.extract_archive(archive_out, extract_dir):
             print_success(f"  Archive extracted to: {extract_dir}")
-            
+
     except Exception as e:
         print_error(f"  Archive management failed: {e}")
 
     print_success("Compression examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

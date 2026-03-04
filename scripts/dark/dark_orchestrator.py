@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 try:
     import fitz
+
     from codomyrmex.dark.pdf import DarkPDF, apply_dark_mode
 except ImportError as e:
     print(f"Error: Required dependencies not found. {e}")
@@ -31,9 +32,14 @@ def create_sample_pdf(path: Path) -> None:
 
     # Add some text and shapes
     page.draw_rect(fitz.Rect(0, 0, 400, 400), color=(1, 1, 1), fill=(1, 1, 1))
-    page.insert_text((50, 50), "Codomyrmex Dark Mode Demo", fontsize=20, color=(0, 0, 0))
     page.insert_text(
-        (50, 100), "This PDF will be transformed to dark mode.", fontsize=12, color=(0.2, 0.2, 0.2)
+        (50, 50), "Codomyrmex Dark Mode Demo", fontsize=20, color=(0, 0, 0)
+    )
+    page.insert_text(
+        (50, 100),
+        "This PDF will be transformed to dark mode.",
+        fontsize=12,
+        color=(0.2, 0.2, 0.2),
     )
 
     page.draw_circle((200, 250), 50, color=(0.8, 0, 0), fill=(0.8, 0, 0))
@@ -89,26 +95,29 @@ def main() -> None:
         # 4. Batch processing
         batch_inputs = [input_path]
         batch_outputs = DarkPDF.batch(
-            batch_inputs,
-            output_dir=output_dir / "batch",
-            preset="high_contrast"
+            batch_inputs, output_dir=output_dir / "batch", preset="high_contrast"
         )
         print(f"Batch processed {len(batch_outputs)} files to: {output_dir / 'batch'}")
 
         print("\n--- All transformations complete! ---")
         print(f"View results in: {output_dir.absolute()}")
 
-
-
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "dark" / "config.yaml"
-    config_data = {}
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "dark"
+        / "config.yaml"
+    )
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/dark/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/dark/config.yaml")
+
 
 if __name__ == "__main__":
     main()
