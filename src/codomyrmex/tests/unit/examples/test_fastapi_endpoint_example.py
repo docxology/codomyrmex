@@ -1,5 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
+
 import codomyrmex.examples.fastapi_endpoint_example as example_module
 from codomyrmex.examples.fastapi_endpoint_example import create_app
 

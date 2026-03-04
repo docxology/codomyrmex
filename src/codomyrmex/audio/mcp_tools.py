@@ -1,9 +1,9 @@
 """MCP tools for the audio module."""
 
+from typing import Any
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
-
-from typing import Any
 
 @mcp_tool(category="audio")
 def audio_get_capabilities() -> dict[str, Any]:
