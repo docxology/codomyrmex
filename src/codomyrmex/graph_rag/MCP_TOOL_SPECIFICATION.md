@@ -10,7 +10,11 @@ Model Context Protocol tool specifications for the graph_rag module.
 
 ### Tools
 
-No MCP tools are currently defined for this module. Tools will be added as the module matures.
+The following MCP tools are available:
+
+- `graph_rag_search_entities`: Search the knowledge graph for entities matching a query string.
+- `graph_rag_get_neighbors`: Get neighboring entities for a given entity ID.
+- `graph_rag_get_stats`: Get statistics about the current knowledge graph.
 
 ### Tool Schema
 

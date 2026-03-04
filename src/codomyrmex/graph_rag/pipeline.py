@@ -32,6 +32,7 @@ class GraphRAGPipeline:
         graph: KnowledgeGraph,
         embedding_fn: Callable[[list[str]], list[list[float]]] | None = None,
     ):
+        """Initialize pipeline with a graph and optional embedding function."""
         self.graph = graph
         self.embedding_fn = embedding_fn
 

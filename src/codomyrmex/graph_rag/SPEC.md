@@ -19,6 +19,7 @@ graph_rag/
 ├── models.py            # EntityType, RelationType, Entity, Relationship, GraphContext
 ├── graph.py             # KnowledgeGraph in-memory store
 ├── pipeline.py          # GraphRAGPipeline retrieval pipeline
+├── mcp_tools.py         # MCP tools for graph operations
 ├── README.md            # Documentation
 ├── AGENTS.md            # Agent guidelines
 ├── SPEC.md              # This file
@@ -51,6 +52,7 @@ from codomyrmex.graph_rag import (
 #   models.py   - EntityType, RelationType, Entity, Relationship, GraphContext
 #   graph.py    - KnowledgeGraph
 #   pipeline.py - GraphRAGPipeline
+#   mcp_tools.py - graph_rag_search_entities, graph_rag_get_neighbors, graph_rag_get_stats
 
 # Key class signatures:
 class KnowledgeGraph:

@@ -32,6 +32,7 @@ class KnowledgeGraph:
     """
 
     def __init__(self):
+        """Initialize the knowledge graph."""
         self._entities: dict[str, Entity] = {}
         self._relationships: list[Relationship] = []
         self._adjacency: dict[str, list[str]] = {}  # source_id -> [target_ids]
@@ -62,7 +63,9 @@ class KnowledgeGraph:
 
             if relationship.target_id not in self._reverse_adjacency:
                 self._reverse_adjacency[relationship.target_id] = []
-            self._reverse_adjacency[relationship.target_id].append(relationship.source_id)
+            self._reverse_adjacency[relationship.target_id].append(
+                relationship.source_id
+            )
 
     def get_neighbors(
         self,
