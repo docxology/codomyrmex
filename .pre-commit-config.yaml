@@ -9,7 +9,7 @@ repos:
     rev: 26.1.0
     hooks:
       - id: black
-        language_version: python3.10
+        language_version: python3.11
         args: [--line-length=88]
 
   # Python linting and import sorting
@@ -25,15 +25,16 @@ repos:
     rev: v1.19.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-all]
-        args: [--ignore-missing-imports]
+        args: [--ignore-missing-imports, --scripts-are-modules]
+        additional_dependencies: [pydantic>=2.0.0, pytest, types-PyYAML]
 
   # Security scanning
   - repo: https://github.com/PyCQA/bandit
     rev: 1.9.4
     hooks:
       - id: bandit
-        args: [--recursive, --configfile=pyproject.toml, src/codomyrmex/]
+        args: [--recursive, --configfile=pyproject.toml]
+        exclude: ^src/codomyrmex/tests/.*$
 
   # Python syntax checking
   - repo: local
