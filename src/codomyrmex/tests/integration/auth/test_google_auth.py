@@ -5,6 +5,8 @@ import pytest
 
 from codomyrmex.auth.google import AUTH_AVAILABLE, GoogleAuthenticator
 
+pytestmark = pytest.mark.integration
+
 # Require auth module dependencies
 pytestmark = pytest.mark.skipif(
     not AUTH_AVAILABLE,

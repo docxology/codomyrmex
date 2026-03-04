@@ -36,7 +36,11 @@ class TestPidsOnPort:
 
     def test_unused_port_empty(self) -> None:
         """Unused port returns empty list."""
-        result = _pids_on_port(59999)
+        import socket
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind(("127.0.0.1", 0))
+            unused_port = s.getsockname()[1]
+        result = _pids_on_port(unused_port)
         assert result == []
 
     def test_active_port_returns_pids(self) -> None:

@@ -181,6 +181,8 @@ print("This should not print")
         # Code that tries to access file system (should be blocked by Docker)
         dangerous_code = '''
 import os
+
+pytestmark = pytest.mark.integration
 # Try to list root directory (should fail in sandbox)
 try:
     files = os.listdir('/')

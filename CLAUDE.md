@@ -312,14 +312,6 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: ~/.claude/Plans/modular-jingling-popcorn.md (create), src/codomyrmex/agentic_memory/mcp_tools.py (edit), src/codomyrmex/agents/pai/mcp/proxy_tools.py (edit), src/codomyrmex/agents/pai/mcp_bridge.py (edit), src/codomyrmex/agents/pai/trust_gateway.py (edit), docs/pai/README.md (edit), docs/pai/architecture.md (edit), PAI.md (edit), AGENTS.md (edit), CLAUDE.md (edit)
-  ... and 7 more
-
-## Crash Recovery
-Last session (2026-03-04T10:20:46.692834) was not properly closed (crash/kill).
-Recorded 22 file changes before crash.
-Last changed files: docs/pai/dashboard-setup.md, docs/pai/AGENTS.md, docs/pai/SPEC.md, docs/pai/PAI.md, src/codomyrmex/tests/unit/website/unit/test_server.py
-Bridge from previous session is valid (above).
-For details use: memory_search("changes last session")
+No changes or facts in this session.
 
 # === END COGNILAYER ===

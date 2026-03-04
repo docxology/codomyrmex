@@ -12,6 +12,8 @@ from codomyrmex.logistics.orchestration.project import (
 )
 from codomyrmex.performance.monitoring.performance_monitor import PerformanceMonitor
 
+pytestmark = pytest.mark.integration
+
 try:
     ORCHESTRATION_AVAILABLE = True
 except ImportError:

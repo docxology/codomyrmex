@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
-version = "1.0.8"
+version = "1.1.0"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -280,6 +280,26 @@ Homepage = "https://github.com/docxology/codomyrmex"
 Repository = "https://github.com/docxology/codomyrmex"
 Issues = "https://github.com/docxology/codomyrmex/issues"
 Documentation = "https://codomyrmex.readthedocs.io/"
+Changelog = "https://github.com/docxology/codomyrmex/blob/main/CHANGELOG.md"
+
+[tool.hatch.build]
+exclude = [
+    "**/.cursor",
+    "**/.cursorrules",
+    "**/__pycache__",
+    "**/htmlcov",
+    "**/.mypy_cache",
+    "**/.pytest_cache",
+    "**/tests",
+    "**/*.pyc",
+    "projects/",
+    "scripts/",
+    "docs/",
+    ".github/",
+    ".pre-commit-config.yaml",
+    "TODO.md",
+    "CLAUDE.md",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/codomyrmex"]
@@ -328,6 +348,13 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "unit: Unit tests (fast, isolated)",
+    "integration: Integration tests (may require external services)",
+    "slow: Slow tests (>10s execution time)",
 ]
 
 # Black configuration
@@ -434,30 +461,40 @@ disallow_untyped_defs = false
 disallow_untyped_decorators = false
 warn_return_any = false
 
-# Sprint 8: agents — baseline checks only (612 errors at strict)
+# Sprint 23 → v1.1.0: agents — intermediate strictness (ramped from baseline)
 [[tool.mypy.overrides]]
 module = "codomyrmex.agents.*"
-disallow_untyped_defs = false
-disallow_incomplete_defs = false
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
 disallow_untyped_decorators = false
 warn_return_any = false
 check_untyped_defs = false
 
-# Sprint 10: Mutation testing configuration
+# v1.1.0: events core — strict
+[[tool.mypy.overrides]]
+module = "codomyrmex.events.*"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+warn_return_any = true
+
+# v1.1.0: Mutation testing configuration (expanded from 3 → 6 files)
 [tool.mutmut]
 paths_to_mutate = [
     "src/codomyrmex/model_context_protocol/validation.py",
     "src/codomyrmex/agents/pai/trust_gateway.py",
     "src/codomyrmex/model_context_protocol/schemas/mcp_schemas.py",
+    "src/codomyrmex/security/digital/secrets_detector.py",
+    "src/codomyrmex/orchestrator/core.py",
+    "src/codomyrmex/events/core/event_bus.py",
 ]
-tests_dir = ["../src/codomyrmex/tests/unit/mcp/", "../src/codomyrmex/tests/unit/agents/", "../src/codomyrmex/tests/unit/validation/"]
+tests_dir = ["../src/codomyrmex/tests/unit/mcp/", "../src/codomyrmex/tests/unit/agents/", "../src/codomyrmex/tests/unit/validation/", "../src/codomyrmex/tests/unit/security/", "../src/codomyrmex/tests/unit/orchestrator/", "../src/codomyrmex/tests/unit/events/"]
 do_not_mutate = [
     "*/vendor/*",
     "*/htmlcov/*",
     "*/__pycache__/*",
     "*/tests/*",
 ]
-also_copy = ["src/codomyrmex/tests/unit/mcp/", "src/codomyrmex/tests/unit/agents/", "src/codomyrmex/tests/unit/validation/", "conftest.py"]
+also_copy = ["src/codomyrmex/tests/unit/mcp/", "src/codomyrmex/tests/unit/agents/", "src/codomyrmex/tests/unit/validation/", "src/codomyrmex/tests/unit/security/", "src/codomyrmex/tests/unit/orchestrator/", "src/codomyrmex/tests/unit/events/", "conftest.py"]
 pytest_add_cli_args = ["--no-cov", "-p", "no:timeout", "-p", "no:benchmark", "--override-ini=addopts=", "--rootdir=.."]
 debug = false
 

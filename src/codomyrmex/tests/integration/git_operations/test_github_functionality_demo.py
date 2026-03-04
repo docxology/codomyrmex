@@ -1,3 +1,5 @@
+import pytest
+
 #!/usr/bin/env python3
 """
 GitHub Operations Functionality Demo
@@ -21,6 +23,8 @@ from datetime import datetime
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from codomyrmex.git_operations import (
+
+pytestmark = pytest.mark.integration
     GitHubAPIError,
     add_files,
     # Local Git operations

@@ -1,20 +1,20 @@
 # Getting Started
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Everything you need to get up and running with Codomyrmex. From installation to your first visualization, these guides will have you productive in minutes.
+Everything you need to get up and running with Codomyrmex. From installation to your first agent deployment, these guides will have you productive in minutes.
 
 ## Contents
 
 | File | Description |
 |------|-------------|
 | [**quickstart.md**](quickstart.md) | Get running in 5 minutes |
-| [**installation.md**](installation.md) | Detailed installation instructions |
-| [**setup.md**](setup.md) | Environment configuration |
-| [**tutorials/**](tutorials/) | Step-by-step learning guides |
-| [AGENTS.md](AGENTS.md) | Agent coordination |
+| [**setup.md**](setup.md) | Installation and environment configuration |
+| [**GETTING_STARTED_WITH_AGENTS.md**](GETTING_STARTED_WITH_AGENTS.md) | Agent deployment, orchestration, MCP tools, skills |
+| [**tutorials/**](tutorials/) | Step-by-step learning guides (8 tutorials) |
+| [AGENTS.md](AGENTS.md) | Agent coordination guidelines |
 | [SPEC.md](SPEC.md) | Getting started specification |
 | [PAI.md](PAI.md) | Personal AI quick start |
 
@@ -24,24 +24,24 @@ Everything you need to get up and running with Codomyrmex. From installation to 
 
 Start with [quickstart.md](quickstart.md) to see Codomyrmex in action immediately.
 
-### 2. Installation (15 minutes)
+### 2. Installation & Setup (15 minutes)
 
-Follow [installation.md](installation.md) for a complete environment setup.
+Follow [setup.md](setup.md) for complete environment setup with `uv`.
 
-### 3. Configuration (10 minutes)
+### 3. Agent Operations (20 minutes)
 
-Use [setup.md](setup.md) to configure API keys and preferences.
+Read [GETTING_STARTED_WITH_AGENTS.md](GETTING_STARTED_WITH_AGENTS.md) for a comprehensive guide to agent modules, orchestration, MCP tools, skills, and event-driven communication.
 
 ### 4. Tutorials (30+ minutes)
 
-Work through [tutorials/](tutorials/) for hands-on learning.
-
-## Tutorials Available
+Work through [tutorials/](tutorials/) for hands-on learning:
 
 | Tutorial | Description |
 |----------|-------------|
 | [Creating a Module](tutorials/creating-a-module.md) | Build your own Codomyrmex module |
 | [Connecting PAI](tutorials/connecting-pai.md) | Connect PAI to Codomyrmex |
+| [Using MCP Tools](tutorials/using-mcp-tools.md) | Discover and invoke MCP tools |
+| [Running Tests](tutorials/running-tests.md) | Test suite execution and Zero-Mock policy |
 
 ## Prerequisites
 
@@ -60,15 +60,15 @@ cd codomyrmex
 # Install with uv
 uv sync
 
-# Verify installation
-codomyrmex check
+# Run diagnostics
+uv run codomyrmex doctor --all
 ```
 
 ## Related Documentation
 
-- [API Reference](../reference/api.md) - Complete API documentation
-- [Examples](../examples/) - Code examples
-- [Contributing](../project/contributing.md) - Contribution guidelines
+- [API Reference](../reference/api.md) — Complete API documentation
+- [Examples](../examples/) — Code examples
+- [Contributing](../project/contributing.md) — Contribution guidelines
 
 ## Navigation
 

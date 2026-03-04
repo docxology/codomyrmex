@@ -12,6 +12,8 @@ from pathlib import Path
 import matplotlib
 import pytest
 
+pytestmark = pytest.mark.integration
+
 matplotlib.use('Agg')  # Non-interactive backend for testing
 
 

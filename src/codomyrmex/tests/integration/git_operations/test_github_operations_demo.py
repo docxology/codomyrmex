@@ -1,3 +1,5 @@
+import pytest
+
 #!/usr/bin/env python3
 """
 GitHub Operations Demo Script
@@ -275,6 +277,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from demo_feature import DemoFeature
+
+pytestmark = pytest.mark.integration
 
 
 class TestDemoFeature(unittest.TestCase):

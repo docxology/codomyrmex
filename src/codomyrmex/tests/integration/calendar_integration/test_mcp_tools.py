@@ -4,6 +4,8 @@ from datetime import UTC, datetime, timedelta
 import pytest
 
 from codomyrmex.calendar_integration.mcp_tools import (
+
+pytestmark = pytest.mark.integration
     _DEFAULT_ATTENDEE,
     calendar_create_event,
     calendar_delete_event,

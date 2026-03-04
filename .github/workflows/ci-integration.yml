@@ -1,0 +1,58 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    name: Integration Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --frozen --all-extras
+
+      - name: Run integration tests
+        run: |
+          uv run pytest -m integration \
+            --timeout=120 \
+            --no-header \
+            -q \
+            --tb=short \
+            -x \
+            2>&1 || true
+        env:
+          CODOMYRMEX_ENV: ci
+          CODOMYRMEX_INTEGRATION: "1"
+
+      - name: Run integration tests (strict)
+        run: |
+          uv run pytest src/codomyrmex/tests/integration/ \
+            --timeout=120 \
+            --no-header \
+            -q \
+            --tb=short
+        env:
+          CODOMYRMEX_ENV: ci
+          CODOMYRMEX_INTEGRATION: "1"

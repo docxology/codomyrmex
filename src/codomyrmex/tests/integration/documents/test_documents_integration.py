@@ -17,6 +17,8 @@ from codomyrmex.documents import (
 )
 from codomyrmex.documents.exceptions import DocumentReadError
 
+pytestmark = pytest.mark.integration
+
 try:
     from codomyrmex.documents.transformation import convert_document, merge_documents
     TRANSFORMATION_AVAILABLE = True

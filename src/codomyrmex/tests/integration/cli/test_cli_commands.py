@@ -1,5 +1,9 @@
+import pytest
+
 import subprocess
 import sys
+
+pytestmark = pytest.mark.integration
 
 
 def test_check_command():

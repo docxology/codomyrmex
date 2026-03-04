@@ -36,6 +36,14 @@ repos:
         args: [--recursive, --configfile=pyproject.toml]
         exclude: ^src/codomyrmex/tests/.*$
 
+  # Secret detection
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: \.lock$|\.min\.js$
+
   # Python syntax checking
   - repo: local
     hooks:

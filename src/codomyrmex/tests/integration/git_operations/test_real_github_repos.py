@@ -1,3 +1,5 @@
+import pytest
+
 #!/usr/bin/env python3
 """
 Comprehensive Testing on Real GitHub Repositories
@@ -379,6 +381,8 @@ Repository Details:
 This commit demonstrates that all Git operations work correctly
 with real GitHub repositories, validating the complete workflow
 from local development to remote synchronization.'''
+
+pytestmark = pytest.mark.integration
 
 
 def main():

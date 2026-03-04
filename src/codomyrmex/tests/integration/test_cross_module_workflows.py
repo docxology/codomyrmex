@@ -514,6 +514,8 @@ print("Result:", algorithm_b({10000}))
 
             dangerous_code = '''
 import os
+
+pytestmark = pytest.mark.integration
 os.system("rm -rf /")  # Dangerous command
 eval(input("Enter code: "))  # Code injection
 '''

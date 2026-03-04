@@ -13,6 +13,8 @@ from codomyrmex.calendar_integration import (
 )
 from codomyrmex.calendar_integration.exceptions import CalendarAuthError
 
+pytestmark = pytest.mark.integration
+
 # Require calendar module dependencies
 pytestmark = pytest.mark.skipif(
     not CALENDAR_AVAILABLE,

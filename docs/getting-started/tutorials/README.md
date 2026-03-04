@@ -1,6 +1,6 @@
 # Tutorials
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -16,6 +16,8 @@ Step-by-step tutorials for learning Codomyrmex. From creating your first module 
 | [**Part 3: Test**](creating-a-module-03-test.md) | Zero-Mock test patterns, pytest markers, coverage | 45 min |
 | [**Part 4: Document**](creating-a-module-04-document.md) | RASP docs (README, AGENTS, SPEC, PAI) | 30 min |
 | [**Connecting PAI**](connecting-pai.md) | MCP bridge setup and Algorithm phase mapping | 30 min |
+| [**Using MCP Tools**](using-mcp-tools.md) | Discover, invoke, and create MCP tools | 20 min |
+| [**Running Tests**](running-tests.md) | Test suite execution, filtering, coverage, Zero-Mock policy | 15 min |
 
 > **Note:** Parts 1-4 are a sequential multi-part series building one module end-to-end. Start with Part 1 or use the overview for the full combined guide.
 

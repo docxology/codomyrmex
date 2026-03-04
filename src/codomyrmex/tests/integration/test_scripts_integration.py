@@ -10,6 +10,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.integration
+
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
 SCRIPTS_DIR = ROOT_DIR / "scripts"
 

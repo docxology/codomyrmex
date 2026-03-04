@@ -1,53 +1,37 @@
 # Codomyrmex Agents — docs/getting-started
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-User onboarding documentation. Covers installation, quick start, environment setup, and step-by-step tutorials for new users.
+Agent coordination guidelines for the `docs/getting-started/` directory.
 
-## Active Components
+## Key Files
 
-| File | Priority | Description |
-|------|----------|-------------|
-| [quickstart.md](quickstart.md) | **Critical** | 5-minute quick start |
-| [installation.md](installation.md) | **Critical** | Complete installation guide |
-| [setup.md](setup.md) | High | Environment configuration |
-| [tutorials/](tutorials/) | High | Step-by-step learning |
-| [README.md](README.md) | Medium | Directory overview |
-| [SPEC.md](SPEC.md) | Medium | Functional specification |
+| File | Purpose |
+|------|---------|
+| `quickstart.md` | 5-minute quick start |
+| `setup.md` | Full installation and environment config |
+| `GETTING_STARTED_WITH_AGENTS.md` | Agent deployment, orchestration, MCP, skills |
+| `tutorials/` | Hands-on learning guides (8 tutorials) |
+| `installation.md` | Redirect to `setup.md` (legacy) |
 
-## Agent Guidelines
+## Agent Interaction Rules
 
-### Onboarding Quality Standards
+1. **Use real examples**: All code snippets must use real, functional imports
+2. **Keep prerequisites minimal**: Default to `uv sync` without optional extras
+3. **Link to source**: Reference actual module paths (`src/codomyrmex/...`)
+4. **Maintain cross-references**: Ensure links between docs are valid
+5. **Zero-Mock policy**: No placeholder or mocked code examples
 
-1. **Accuracy**: Installation commands must work on fresh systems
-2. **Clarity**: Write for users new to the platform
-3. **Speed**: Quick start should complete in <5 minutes
-4. **Completeness**: Cover all supported platforms
+## Content Standards
 
-### When Modifying Getting Started Docs
+- Tutorials must include runnable code blocks
+- Version numbers must match `pyproject.toml`
+- All file references must use relative paths
+- Include navigation links (Parent, Root)
 
-- Test installation on Mac, Linux, and Windows (WSL)
-- Update uv/pip commands when versions change
-- Verify all quick start examples are runnable
-- Keep tutorials relevant to current module APIs
+## Navigation
 
-### User Journey
-
-1. **Quick Start**: First successful interaction
-2. **Installation**: Complete environment setup
-3. **Configuration**: API keys, preferences
-4. **Tutorials**: Deeper learning paths
-
-## Operating Contracts
-
-- Maintain alignment between docs and installation scripts
-- Ensure Model Context Protocol interfaces remain available for sibling agents
-- Record outcomes in shared telemetry and update TODO queues when necessary
-
-## Navigation Links
-
-- **📁 Parent Directory**: [docs/](../README.md)
-- **🏠 Project Root**: [../../README.md](../../README.md)
-- **📦 Related**: [Examples](../examples/) | [API Reference](../reference/api.md)
+- **Parent**: [README.md](README.md)
+- **Root**: [Project Root](../../README.md)

@@ -247,3 +247,4 @@ fix_*.py
 .desloppify/review_packet_blind.json
 src/codomyrmex/dark/pdf/vendor/dark-pdf
 src/codomyrmex/codomyrmex/codomyrmex.llm/
+/static_analysis_codeql_1/codeql.db

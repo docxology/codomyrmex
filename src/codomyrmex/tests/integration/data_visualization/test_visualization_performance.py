@@ -14,6 +14,8 @@ from typing import Any
 
 import pytest
 
+pytestmark = pytest.mark.integration
+
 # Import modules for integration testing
 try:
     from codomyrmex.data_visualization import (

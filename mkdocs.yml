@@ -1,0 +1,84 @@
+site_name: Codomyrmex
+site_url: https://docxology.github.io/codomyrmex/
+repo_url: https://github.com/docxology/codomyrmex
+repo_name: docxology/codomyrmex
+site_description: A Modular, Extensible Coding Workspace — Documentation
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+  - tables
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Overview: getting-started/README.md
+      - Tutorials:
+          - Overview: getting-started/tutorials/README.md
+          - Creating a Module: getting-started/tutorials/creating-a-module.md
+          - Connecting PAI: getting-started/tutorials/connecting-pai.md
+          - Using MCP Tools: getting-started/tutorials/using-mcp-tools.md
+          - Running Tests: getting-started/tutorials/running-tests.md
+      - Agent Operations: getting-started/GETTING_STARTED_WITH_AGENTS.md
+  - Architecture:
+      - Overview: architecture/README.md
+  - API Reference:
+      - Overview: api/README.md
+  - Contributing: CONTRIBUTING.md
+  - Changelog: CHANGELOG.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/docxology/codomyrmex
+  version:
+    provider: mike

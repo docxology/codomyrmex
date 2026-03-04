@@ -39,6 +39,7 @@ class SecretManager:
 
         self.fernet = Fernet(self.key)
         self._secrets: dict[str, dict[str, Any]] = {}
+        self._rotation_history: list[dict[str, Any]] = []
 
     def store_secret(self, name: str, value: str, metadata: dict[str, Any] | None = None) -> str:
         """Store a secret securely.
@@ -156,6 +157,77 @@ class SecretManager:
         new_key_id = secrets.token_hex(8)
         logger.info(f"Rotated encryption key: {new_key_id}")
         return new_key_id
+
+    def rotate_secret(self, name: str, new_value: str) -> dict[str, Any]:
+        """Rotate (replace) a named secret with a new value, keeping an audit trail.
+
+        Args:
+            name: Secret name to rotate.
+            new_value: New secret value.
+
+        Returns:
+            Dict with ``secret_id``, ``rotated_at``, ``previous_id``.
+        """
+        previous_id: str | None = None
+        for sid, secret in self._secrets.items():
+            if secret["name"] == name:
+                previous_id = sid
+                break
+
+        if previous_id is not None:
+            self.delete_secret(previous_id)
+
+        new_id = self.store_secret(
+            name,
+            new_value,
+            metadata={"rotated_from": previous_id, "rotation_time": datetime.now().isoformat()},
+        )
+
+        event = {
+            "secret_name": name,
+            "new_id": new_id,
+            "previous_id": previous_id,
+            "rotated_at": datetime.now().isoformat(),
+        }
+        self._rotation_history.append(event)
+        logger.info(f"Rotated secret {name!r}: {previous_id} → {new_id}")
+        return event
+
+    def get_rotation_history(self, name: str | None = None) -> list[dict[str, Any]]:
+        """Get the rotation event log.
+
+        Args:
+            name: If provided, filter history to this secret name only.
+
+        Returns:
+            List of rotation event dicts.
+        """
+        if name is None:
+            return list(self._rotation_history)
+        return [e for e in self._rotation_history if e["secret_name"] == name]
+
+    def check_key_age(self, name: str, max_age_days: int = 90) -> dict[str, Any]:
+        """Check whether a secret exceeds the maximum age threshold.
+
+        Args:
+            name: Secret name.
+            max_age_days: Maximum age in days before the secret is flagged.
+
+        Returns:
+            Dict with ``name``, ``age_days``, ``stale``, ``created_at``.
+        """
+        for secret in self._secrets.values():
+            if secret["name"] == name:
+                created = datetime.fromisoformat(secret["created_at"])
+                age = (datetime.now() - created).days
+                return {
+                    "name": name,
+                    "age_days": age,
+                    "stale": age > max_age_days,
+                    "created_at": secret["created_at"],
+                    "max_age_days": max_age_days,
+                }
+        return {"name": name, "age_days": -1, "stale": False, "created_at": None, "max_age_days": max_age_days}
 
 
 def manage_secrets(operation: str, **kwargs) -> Any:

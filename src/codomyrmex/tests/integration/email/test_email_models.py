@@ -15,6 +15,8 @@ from codomyrmex.email import (
 )
 from codomyrmex.email.exceptions import EmailAuthError
 
+pytestmark = pytest.mark.integration
+
 # Require email module dependencies
 pytestmark = pytest.mark.skipif(
     not EMAIL_AVAILABLE,

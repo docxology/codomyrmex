@@ -1,6 +1,10 @@
+import pytest
+
 from codomyrmex.documentation.education.curriculum import Curriculum
 from codomyrmex.relations.crm.crm import ContactManager
 from codomyrmex.relations.visualization import render_social_graph
+
+pytestmark = pytest.mark.integration
 
 
 def test_relations_visualization():

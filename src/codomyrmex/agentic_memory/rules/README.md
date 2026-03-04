@@ -54,6 +54,91 @@ Rules follow a specificity hierarchy (most specific wins):
 | 4 (Lowest) | General | `general.cursorrules` | 1 rule |
 | | **Total** | | **75 rules** |
 
+### Rule Index (auto-generated from filesystem scan)
+
+<details>
+<summary>Click to expand full rule index (75 rules)</summary>
+
+| # | Category | Rule Name | File |
+|---|----------|-----------|------|
+| 1 | general | general | `general.cursorrules` |
+| 2 | file-specific | CHANGELOG | `file-specific/CHANGELOG.cursorrules` |
+| 3 | file-specific | README.md | `file-specific/README.md.cursorrules` |
+| 4 | file-specific | SPEC | `file-specific/SPEC.cursorrules` |
+| 5 | file-specific | json | `file-specific/json.cursorrules` |
+| 6 | file-specific | python | `file-specific/python.cursorrules` |
+| 7 | file-specific | yaml | `file-specific/yaml.cursorrules` |
+| 8 | cross-module | build_synthesis | `cross-module/build_synthesis.cursorrules` |
+| 9 | cross-module | data_visualization | `cross-module/data_visualization.cursorrules` |
+| 10 | cross-module | logging_monitoring | `cross-module/logging_monitoring.cursorrules` |
+| 11 | cross-module | model_context_protocol | `cross-module/model_context_protocol.cursorrules` |
+| 12 | cross-module | output_module | `cross-module/output_module.cursorrules` |
+| 13 | cross-module | pattern_matching | `cross-module/pattern_matching.cursorrules` |
+| 14 | cross-module | static_analysis | `cross-module/static_analysis.cursorrules` |
+| 15 | cross-module | template_module | `cross-module/template_module.cursorrules` |
+| 16 | modules | agentic_memory | `modules/agentic_memory.cursorrules` |
+| 17 | modules | agents | `modules/agents.cursorrules` |
+| 18 | modules | ai_code_editing | `modules/ai_code_editing.cursorrules` |
+| 19 | modules | api | `modules/api.cursorrules` |
+| 20 | modules | api_documentation | `modules/api_documentation.cursorrules` |
+| 21 | modules | auth | `modules/auth.cursorrules` |
+| 22 | modules | build_synthesis | `modules/build_synthesis.cursorrules` |
+| 23 | modules | cache | `modules/cache.cursorrules` |
+| 24 | modules | cerebrum | `modules/cerebrum.cursorrules` |
+| 25 | modules | ci_cd_automation | `modules/ci_cd_automation.cursorrules` |
+| 26 | modules | cli | `modules/cli.cursorrules` |
+| 27 | modules | cloud | `modules/cloud.cursorrules` |
+| 28 | modules | code | `modules/code.cursorrules` |
+| 29 | modules | coding | `modules/coding.cursorrules` |
+| 30 | modules | config_management | `modules/config_management.cursorrules` |
+| 31 | modules | containerization | `modules/containerization.cursorrules` |
+| 32 | modules | data_visualization | `modules/data_visualization.cursorrules` |
+| 33 | modules | database_management | `modules/database_management.cursorrules` |
+| 34 | modules | defense | `modules/defense.cursorrules` |
+| 35 | modules | deployment | `modules/deployment.cursorrules` |
+| 36 | modules | documentation | `modules/documentation.cursorrules` |
+| 37 | modules | encryption | `modules/encryption.cursorrules` |
+| 38 | modules | environment_setup | `modules/environment_setup.cursorrules` |
+| 39 | modules | events | `modules/events.cursorrules` |
+| 40 | modules | git_operations | `modules/git_operations.cursorrules` |
+| 41 | modules | graph_rag | `modules/graph_rag.cursorrules` |
+| 42 | modules | identity | `modules/identity.cursorrules` |
+| 43 | modules | language_models | `modules/language_models.cursorrules` |
+| 44 | modules | llm | `modules/llm.cursorrules` |
+| 45 | modules | logging_monitoring | `modules/logging_monitoring.cursorrules` |
+| 46 | modules | market | `modules/market.cursorrules` |
+| 47 | modules | metrics | `modules/metrics.cursorrules` |
+| 48 | modules | model_context_protocol | `modules/model_context_protocol.cursorrules` |
+| 49 | modules | modeling_3d | `modules/modeling_3d.cursorrules` |
+| 50 | modules | module_template | `modules/module_template.cursorrules` |
+| 51 | modules | networking | `modules/networking.cursorrules` |
+| 52 | modules | notification | `modules/notification.cursorrules` |
+| 53 | modules | ollama_integration | `modules/ollama_integration.cursorrules` |
+| 54 | modules | orchestrator | `modules/orchestrator.cursorrules` |
+| 55 | modules | pattern_matching | `modules/pattern_matching.cursorrules` |
+| 56 | modules | performance | `modules/performance.cursorrules` |
+| 57 | modules | physical_management | `modules/physical_management.cursorrules` |
+| 58 | modules | plugin_system | `modules/plugin_system.cursorrules` |
+| 59 | modules | privacy | `modules/privacy.cursorrules` |
+| 60 | modules | project_orchestration | `modules/project_orchestration.cursorrules` |
+| 61 | modules | prompt_testing | `modules/prompt_testing.cursorrules` |
+| 62 | modules | security | `modules/security.cursorrules` |
+| 63 | modules | security_audit | `modules/security_audit.cursorrules` |
+| 64 | modules | serialization | `modules/serialization.cursorrules` |
+| 65 | modules | skills | `modules/skills.cursorrules` |
+| 66 | modules | static_analysis | `modules/static_analysis.cursorrules` |
+| 67 | modules | system_discovery | `modules/system_discovery.cursorrules` |
+| 68 | modules | telemetry | `modules/telemetry.cursorrules` |
+| 69 | modules | terminal_interface | `modules/terminal_interface.cursorrules` |
+| 70 | modules | testing | `modules/testing.cursorrules` |
+| 71 | modules | tree_sitter | `modules/tree_sitter.cursorrules` |
+| 72 | modules | utils | `modules/utils.cursorrules` |
+| 73 | modules | validation | `modules/validation.cursorrules` |
+| 74 | modules | wallet | `modules/wallet.cursorrules` |
+| 75 | modules | workflow_testing | `modules/workflow_testing.cursorrules` |
+
+</details>
+
 ## Mandatory Policies (Cannot Be Overridden)
 
 These policies are defined in `general.cursorrules §2` and enforced at all levels:

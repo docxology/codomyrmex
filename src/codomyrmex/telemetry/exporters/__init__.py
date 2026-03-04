@@ -86,8 +86,11 @@ class ConsoleExporter(SpanExporter):
         return True
 
     def shutdown(self) -> None:
-        """Shutdown."""
-        pass
+        """Shutdown the console exporter.
+
+        No resources to release — console output requires no cleanup.
+        """
+        logger.debug("ConsoleExporter shut down")
 
 class FileExporter(SpanExporter):
     """Exports spans to a JSON file."""
@@ -109,8 +112,12 @@ class FileExporter(SpanExporter):
             return False
 
     def shutdown(self) -> None:
-        """Shutdown."""
-        pass
+        """Shutdown the file exporter.
+
+        File handles are opened and closed per-export via ``with open()``,
+        so no handles need releasing.  Logs shutdown for observability.
+        """
+        logger.debug("FileExporter shut down (filepath=%s)", self.filepath)
 
 class OTLPExporter(SpanExporter):
     """Exports spans using the OTLP protocol."""
@@ -235,8 +242,9 @@ class OTLPExporter(SpanExporter):
             return False
 
     def shutdown(self) -> None:
-        """Shutdown."""
-        pass
+        """Shutdown the OTLP exporter and release resources."""
+        self._session = None
+        logger.debug("OTLPExporter shut down (endpoint=%s)", self.endpoint)
 
 class BatchExporter(SpanExporter):
     """Batches spans before exporting to reduce network calls."""

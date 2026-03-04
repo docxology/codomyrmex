@@ -84,6 +84,8 @@ class TestAnalysisSecurityCICDWorkflow:
 import os
 import sys
 
+pytestmark = pytest.mark.integration
+
 # Security issues
 def insecure_function(user_input):
     """Function with SQL injection vulnerability."""

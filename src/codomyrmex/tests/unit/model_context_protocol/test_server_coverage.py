@@ -750,7 +750,8 @@ class TestGetPromptWithArgSubstitution:
         }))
         assert "error" in resp
         assert resp["error"]["code"] == -32603
-        assert "Prompt not found" in resp["error"]["message"]
+        # CWE-209: server returns generic message to avoid leaking internal details
+        assert isinstance(resp["error"]["message"], str)
 
     def test_prompt_with_no_args_uses_template_as_is(self):
         srv = MCPServer(MCPServerConfig(name="no-args-prompt", version="0.1.0"))
@@ -790,7 +791,8 @@ class TestUnknownMethodDispatch:
         }))
         assert "error" in resp
         assert resp["error"]["code"] == -32603
-        assert "Unknown method" in resp["error"]["message"]
+        # CWE-209: server returns generic message to avoid leaking internal details
+        assert isinstance(resp["error"]["message"], str)
 
     def test_empty_method_returns_error(self):
         srv = MCPServer(MCPServerConfig(name="empty-method", version="0.1.0"))
