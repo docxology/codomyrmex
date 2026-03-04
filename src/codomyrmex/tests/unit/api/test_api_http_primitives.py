@@ -1,7 +1,5 @@
 """Unit tests for HTTP method and status code primitives."""
 
-import pytest
-
 
 class TestHTTPMethod:
     """Tests for HTTPMethod enum."""

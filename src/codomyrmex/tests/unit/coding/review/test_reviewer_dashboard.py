@@ -9,7 +9,6 @@ implementations.  No unittest.mock, MagicMock, monkeypatch, or patch is used.
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import Any
 
@@ -22,7 +21,6 @@ from codomyrmex.coding.review.models import (
     QualityDashboard,
 )
 from codomyrmex.coding.review.reviewer_impl.dashboard import DashboardMixin
-
 
 # ---------------------------------------------------------------------------
 # Real stub helpers — not mocks. Each method has a genuine implementation.
@@ -235,11 +233,11 @@ class TestCalculateOverallScore:
         # weights: complexity 0.25, dead_code 0.20, duplication 0.15,
         #          coupling 0.20, architecture 0.20
         result = reviewer._calculate_overall_score(
-            {"score": 80.0},   # 80 * 0.25 = 20.0
-            {"score": 60.0},   # 60 * 0.20 = 12.0
+            {"score": 80.0},  # 80 * 0.25 = 20.0
+            {"score": 60.0},  # 60 * 0.20 = 12.0
             {"score": 100.0},  # 100 * 0.15 = 15.0
-            {"score": 40.0},   # 40 * 0.20 = 8.0
-            {"score": 90.0},   # 90 * 0.20 = 18.0
+            {"score": 40.0},  # 40 * 0.20 = 8.0
+            {"score": 90.0},  # 90 * 0.20 = 18.0
         )
         assert abs(result - 73.0) < 0.01
 
@@ -429,7 +427,7 @@ class TestGetCouplingMetrics:
             pyscn_analyzer=_StubAnalyzer(
                 coupling_results=[
                     {"name": "A", "coupling": 12},  # high (> 10)
-                    {"name": "B", "coupling": 4},   # low
+                    {"name": "B", "coupling": 4},  # low
                 ]
             ),
         )
@@ -751,7 +749,10 @@ class TestCalculateMaintainabilityScore:
             project_root=str(empty_dir),
             pyscn_analyzer=_StubAnalyzer(complexity_results=[{"complexity": 20}]),
         )
-        assert rev_low._calculate_maintainability_score() > rev_high._calculate_maintainability_score()
+        assert (
+            rev_low._calculate_maintainability_score()
+            > rev_high._calculate_maintainability_score()
+        )
 
     def test_error_returns_50(self, empty_dir: Path) -> None:
         rev = _ConcreteReviewer(
@@ -840,9 +841,7 @@ class TestCalculateReliabilityScore:
         """Files with try/except patterns should improve error_handling_score."""
         rev = _ConcreteReviewer(
             project_root=str(try_except_project),
-            pyscn_analyzer=_StubAnalyzer(
-                dead_code_results=[{"severity": "critical"}]
-            ),
+            pyscn_analyzer=_StubAnalyzer(dead_code_results=[{"severity": "critical"}]),
         )
         score = rev._calculate_reliability_score()
         assert 0.0 <= score <= 100.0
@@ -939,7 +938,10 @@ class TestCalculatePerformanceScore:
             project_root=str(empty_dir),
             pyscn_analyzer=_StubAnalyzer(complexity_results=[{"complexity": 50}]),
         )
-        assert rev_low._calculate_performance_score() > rev_high._calculate_performance_score()
+        assert (
+            rev_low._calculate_performance_score()
+            > rev_high._calculate_performance_score()
+        )
 
     def test_error_returns_50(self, empty_dir: Path) -> None:
         rev = _ConcreteReviewer(
@@ -984,7 +986,12 @@ class TestGetTopComplexityIssues:
             project_root=str(empty_dir),
             pyscn_analyzer=_StubAnalyzer(
                 complexity_results=[
-                    {"name": "my_func", "complexity": 7, "file_path": "x.py", "line_number": 5}
+                    {
+                        "name": "my_func",
+                        "complexity": 7,
+                        "file_path": "x.py",
+                        "line_number": 5,
+                    }
                 ]
             ),
         )
@@ -1020,9 +1027,21 @@ class TestGetTopDeadCodeIssues:
 
     def test_severity_order_critical_first(self, empty_dir: Path) -> None:
         findings = [
-            {"severity": "info", "location": {"file_path": "a.py", "start_line": 1}, "reason": "r1"},
-            {"severity": "critical", "location": {"file_path": "b.py", "start_line": 2}, "reason": "r2"},
-            {"severity": "warning", "location": {"file_path": "c.py", "start_line": 3}, "reason": "r3"},
+            {
+                "severity": "info",
+                "location": {"file_path": "a.py", "start_line": 1},
+                "reason": "r1",
+            },
+            {
+                "severity": "critical",
+                "location": {"file_path": "b.py", "start_line": 2},
+                "reason": "r2",
+            },
+            {
+                "severity": "warning",
+                "location": {"file_path": "c.py", "start_line": 3},
+                "reason": "r3",
+            },
         ]
         rev = _ConcreteReviewer(
             project_root=str(empty_dir),
@@ -1035,7 +1054,11 @@ class TestGetTopDeadCodeIssues:
 
     def test_limited_to_five(self, empty_dir: Path) -> None:
         findings = [
-            {"severity": "critical", "location": {"file_path": f"{i}.py", "start_line": i}, "reason": "r"}
+            {
+                "severity": "critical",
+                "location": {"file_path": f"{i}.py", "start_line": i},
+                "reason": "r",
+            }
             for i in range(10)
         ]
         rev = _ConcreteReviewer(
@@ -1144,7 +1167,14 @@ class TestDeterminePriorityActions:
         assert reviewer._determine_priority_actions_from_dashboard([], [], []) == []
 
     def test_high_complexity_action(self, reviewer: _ConcreteReviewer) -> None:
-        issues = [{"function_name": "big", "file_path": "a.py", "complexity": 25, "line_number": 1}]
+        issues = [
+            {
+                "function_name": "big",
+                "file_path": "a.py",
+                "complexity": 25,
+                "line_number": 1,
+            }
+        ]
         actions = reviewer._determine_priority_actions_from_dashboard(issues, [], [])
         assert len(actions) == 1
         assert actions[0]["type"] == "complexity_reduction"
@@ -1152,28 +1182,72 @@ class TestDeterminePriorityActions:
         assert "big" in actions[0]["description"]
 
     def test_complexity_threshold_exactly_20(self, reviewer: _ConcreteReviewer) -> None:
-        issues = [{"function_name": "edge", "file_path": "b.py", "complexity": 20, "line_number": 5}]
+        issues = [
+            {
+                "function_name": "edge",
+                "file_path": "b.py",
+                "complexity": 20,
+                "line_number": 5,
+            }
+        ]
         actions = reviewer._determine_priority_actions_from_dashboard(issues, [], [])
         assert len(actions) == 1
 
     def test_below_threshold_no_action(self, reviewer: _ConcreteReviewer) -> None:
-        issues = [{"function_name": "ok", "file_path": "c.py", "complexity": 19, "line_number": 3}]
+        issues = [
+            {
+                "function_name": "ok",
+                "file_path": "c.py",
+                "complexity": 19,
+                "line_number": 3,
+            }
+        ]
         assert reviewer._determine_priority_actions_from_dashboard(issues, [], []) == []
 
     def test_critical_dead_code_action(self, reviewer: _ConcreteReviewer) -> None:
-        dead = [{"file_path": "d.py", "line_number": 10, "reason": "unused", "severity": "critical"}]
+        dead = [
+            {
+                "file_path": "d.py",
+                "line_number": 10,
+                "reason": "unused",
+                "severity": "critical",
+            }
+        ]
         actions = reviewer._determine_priority_actions_from_dashboard([], dead, [])
         assert len(actions) == 1
         assert actions[0]["type"] == "dead_code_removal"
 
     def test_warning_dead_code_no_action(self, reviewer: _ConcreteReviewer) -> None:
-        dead = [{"file_path": "e.py", "line_number": 1, "reason": "unused import", "severity": "warning"}]
+        dead = [
+            {
+                "file_path": "e.py",
+                "line_number": 1,
+                "reason": "unused import",
+                "severity": "warning",
+            }
+        ]
         assert reviewer._determine_priority_actions_from_dashboard([], dead, []) == []
 
     def test_combined_issues(self, reviewer: _ConcreteReviewer) -> None:
-        complexity = [{"function_name": "f", "file_path": "a.py", "complexity": 25, "line_number": 1}]
-        dead = [{"file_path": "b.py", "line_number": 5, "reason": "dead", "severity": "critical"}]
-        actions = reviewer._determine_priority_actions_from_dashboard(complexity, dead, [])
+        complexity = [
+            {
+                "function_name": "f",
+                "file_path": "a.py",
+                "complexity": 25,
+                "line_number": 1,
+            }
+        ]
+        dead = [
+            {
+                "file_path": "b.py",
+                "line_number": 5,
+                "reason": "dead",
+                "severity": "critical",
+            }
+        ]
+        actions = reviewer._determine_priority_actions_from_dashboard(
+            complexity, dead, []
+        )
         assert len(actions) == 2
 
 
@@ -1190,7 +1264,9 @@ class TestIdentifyQuickWins:
         assert reviewer._identify_quick_wins([]) == []
 
     def test_critical_produces_win(self, reviewer: _ConcreteReviewer) -> None:
-        issues = [{"file_path": "/a/b/file.py", "line_number": 7, "severity": "critical"}]
+        issues = [
+            {"file_path": "/a/b/file.py", "line_number": 7, "severity": "critical"}
+        ]
         wins = reviewer._identify_quick_wins(issues)
         assert len(wins) == 1
         assert wins[0]["effort"] == "low"
@@ -1228,13 +1304,17 @@ class TestIdentifyLongTermImprovements:
         assert reviewer._identify_long_term_improvements({"high_risk_count": 10}) == []
 
     def test_threshold_exceeded(self, reviewer: _ConcreteReviewer) -> None:
-        improvements = reviewer._identify_long_term_improvements({"high_risk_count": 11})
+        improvements = reviewer._identify_long_term_improvements(
+            {"high_risk_count": 11}
+        )
         assert len(improvements) == 1
         assert improvements[0]["type"] == "architecture_refactoring"
         assert improvements[0]["effort"] == "high"
 
     def test_large_count(self, reviewer: _ConcreteReviewer) -> None:
-        improvements = reviewer._identify_long_term_improvements({"high_risk_count": 100})
+        improvements = reviewer._identify_long_term_improvements(
+            {"high_risk_count": 100}
+        )
         assert len(improvements) == 1
 
 
@@ -1278,7 +1358,14 @@ class TestDetectCodeSmells:
         rev = _ConcreteReviewer(
             project_root=str(empty_dir),
             pyscn_analyzer=_StubAnalyzer(
-                complexity_results=[{"name": "f", "complexity": 3, "file_path": "a.py", "line_number": 1}],
+                complexity_results=[
+                    {
+                        "name": "f",
+                        "complexity": 3,
+                        "file_path": "a.py",
+                        "line_number": 1,
+                    }
+                ],
                 coupling_results=[{"name": "C", "coupling": 2, "file_path": "a.py"}],
             ),
         )
@@ -1292,7 +1379,12 @@ class TestDetectCodeSmells:
             project_root=str(empty_dir),
             pyscn_analyzer=_StubAnalyzer(
                 complexity_results=[
-                    {"name": "huge", "complexity": 25, "file_path": "big.py", "line_number": 1}
+                    {
+                        "name": "huge",
+                        "complexity": 25,
+                        "file_path": "big.py",
+                        "line_number": 1,
+                    }
                 ]
             ),
         )
@@ -1331,8 +1423,18 @@ class TestDetectCodeSmells:
             project_root=str(empty_dir),
             pyscn_analyzer=_StubAnalyzer(
                 complexity_results=[
-                    {"name": "border", "complexity": 21, "file_path": "x.py", "line_number": 1},
-                    {"name": "safe", "complexity": 20, "file_path": "x.py", "line_number": 10},
+                    {
+                        "name": "border",
+                        "complexity": 21,
+                        "file_path": "x.py",
+                        "line_number": 1,
+                    },
+                    {
+                        "name": "safe",
+                        "complexity": 20,
+                        "file_path": "x.py",
+                        "line_number": 10,
+                    },
                 ]
             ),
         )
@@ -1548,12 +1650,8 @@ class TestAnalyzeTechnicalDebt:
         suggestions = [
             ComplexityReductionSuggestion("f", "a.py", 20, "split", "high", [])
         ]
-        findings = [
-            DeadCodeFinding("b.py", 1, "x", "unused", "critical", "rm")
-        ]
-        violations = [
-            ArchitectureViolation("c.py", "circular", "d", "high", "fix")
-        ]
+        findings = [DeadCodeFinding("b.py", 1, "x", "unused", "critical", "rm")]
+        violations = [ArchitectureViolation("c.py", "circular", "d", "high", "fix")]
         rev = _ConcreteReviewer(
             project_root=str(empty_dir),
             complexity_suggestions=suggestions,
@@ -1568,12 +1666,8 @@ class TestAnalyzeTechnicalDebt:
         suggestions = [
             ComplexityReductionSuggestion("f", "a.py", 20, "split", "high", [])
         ]
-        violations = [
-            ArchitectureViolation("b.py", "circ", "d", "high", "fix")
-        ]
-        findings = [
-            DeadCodeFinding("c.py", 1, "x", "unused", "critical", "rm")
-        ]
+        violations = [ArchitectureViolation("b.py", "circ", "d", "high", "fix")]
+        findings = [DeadCodeFinding("c.py", 1, "x", "unused", "critical", "rm")]
         rev = _ConcreteReviewer(
             project_root=str(empty_dir),
             complexity_suggestions=suggestions,
@@ -1614,7 +1708,11 @@ class TestAnalyzeTechnicalDebt:
             complexity_suggestions=suggestions,
         )
         debt = rev.analyze_technical_debt()
-        items_by_type = {i["function_name"]: i for i in debt["top_debt_items"] if "function_name" in i}
+        items_by_type = {
+            i["function_name"]: i
+            for i in debt["top_debt_items"]
+            if "function_name" in i
+        }
         assert items_by_type["big"]["priority"] == "high"
         assert items_by_type["small"]["priority"] == "medium"
 
@@ -1633,7 +1731,12 @@ class TestGenerateQualityDashboard:
             project_root=str(small_project),
             pyscn_analyzer=_StubAnalyzer(
                 complexity_results=[
-                    {"name": "f", "complexity": 5, "file_path": "m.py", "line_number": 1}
+                    {
+                        "name": "f",
+                        "complexity": 5,
+                        "file_path": "m.py",
+                        "line_number": 1,
+                    }
                 ]
             ),
         )

@@ -5,12 +5,14 @@ Generates histograms.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-
 import matplotlib.pyplot as plt
 
+from codomyrmex.data_visualization.utils import (
+    DEFAULT_FIGURE_SIZE,
+    apply_theme_to_axes,
+    save_plot,
+)
 from codomyrmex.logging_monitoring import get_logger
-
-from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE, apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 
@@ -74,7 +76,7 @@ class Histogram:
         x_label: str = "Value",
         y_label: str = "Frequency",
         hist_color: str = "cornflowerblue",
-        edge_color: str = "black"
+        edge_color: str = "black",
     ):
         """
         Initialize a histogram.
@@ -113,7 +115,7 @@ class Histogram:
             output_path=output_path,
             show_plot=show_plot,
             hist_color=self.hist_color,
-            edge_color=self.edge_color
+            edge_color=self.edge_color,
         )
 
     def save(self, output_path: str):

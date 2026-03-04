@@ -10,12 +10,17 @@ from datetime import datetime
 import pytest
 
 try:
-    from codomyrmex.api.openapi_generator import OpenAPISpecification as _probe  # noqa: F401
+    from codomyrmex.api.openapi_generator import (
+        OpenAPISpecification as _probe,  # noqa: F401
+    )
+
     _API_AVAILABLE = True
 except ImportError:
     _API_AVAILABLE = False
 
-pytestmark = pytest.mark.skipif(not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api")
+pytestmark = pytest.mark.skipif(
+    not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api"
+)
 
 try:
     from codomyrmex.api.openapi_generator import OpenAPISpecification
@@ -46,7 +51,9 @@ try:
         HTTPStatus,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 
 @pytest.mark.unit
@@ -70,7 +77,7 @@ class TestRESTAPI:
             path="/test",
             headers={"content-type": "application/json"},
             query_params={"key": ["value"]},
-            body=b'{"test": "data"}'
+            body=b'{"test": "data"}',
         )
 
         assert request.method == HTTPMethod.GET
@@ -100,7 +107,7 @@ class TestRESTAPI:
             path="/test",
             method=HTTPMethod.GET,
             handler=test_handler,
-            summary="Test endpoint"
+            summary="Test endpoint",
         )
         router.add_endpoint(endpoint)
 
@@ -111,16 +118,17 @@ class TestRESTAPI:
 
     def test_api_handle_request(self):
         """Test handling API requests."""
+
         # Add a test endpoint
         def test_handler(request):
             """Test functionality: handler."""
-            return APIResponse.success({"path": request.path, "method": request.method.value})
+            return APIResponse.success(
+                {"path": request.path, "method": request.method.value}
+            )
 
-        self.api.router.add_endpoint(APIEndpoint(
-            path="/test",
-            method=HTTPMethod.GET,
-            handler=test_handler
-        ))
+        self.api.router.add_endpoint(
+            APIEndpoint(path="/test", method=HTTPMethod.GET, handler=test_handler)
+        )
 
         # Handle request
         response = self.api.handle_request("GET", "/test")
@@ -153,6 +161,7 @@ class TestGraphQLAPI:
 
     def test_resolver_registration(self):
         """Test registering GraphQL resolvers."""
+
         def user_resolver(parent, args, context):
             return {"id": "1", "name": "Test User"}
 
@@ -164,6 +173,7 @@ class TestGraphQLAPI:
 
     def test_mutation_registration(self):
         """Test registering GraphQL mutations."""
+
         def create_user(input_data, context):
             return {"id": "1", "name": input_data["name"]}
 
@@ -174,7 +184,7 @@ class TestGraphQLAPI:
             name="createUser",
             input_type=input_type,
             output_type="User",
-            resolver=create_user
+            resolver=create_user,
         )
 
         self.api.register_mutation(mutation)
@@ -220,7 +230,7 @@ class TestAPIVersioning:
             version="1.0.0",
             format=VersionFormat.SEMVER,
             release_date=datetime.now(),
-            description="Initial release"
+            description="Initial release",
         )
 
         assert version.version == "1.0.0"
@@ -246,6 +256,7 @@ class TestAPIVersioning:
 
     def test_versioned_endpoint(self):
         """Test versioned endpoints."""
+
         def handler_v1(request):
             return APIResponse.success({"version": "1.0"})
 
@@ -311,7 +322,7 @@ class TestOpenAPIGenerator:
             path="/test",
             method=HTTPMethod.GET,
             handler=test_handler,
-            summary="Test endpoint"
+            summary="Test endpoint",
         )
         api.router.add_endpoint(endpoint)
 
@@ -422,8 +433,10 @@ class TestIntegration:
 
         # Add REST API
         rest_api = RESTAPI("REST API", "1.0.0")
+
         def rest_handler(request):
             return APIResponse.success({"type": "rest"})
+
         rest_api.router.add_endpoint(APIEndpoint("/rest", HTTPMethod.GET, rest_handler))
         generator.add_rest_api(rest_api)
 

@@ -14,7 +14,6 @@ import pytest
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,
-    AgentIntegrationAdapter,
     AgentRequest,
     AgentResponse,
     BaseAgent,

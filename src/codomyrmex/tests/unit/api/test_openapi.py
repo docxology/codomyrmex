@@ -6,18 +6,20 @@ import tempfile
 
 import pytest
 
-
 try:
     from codomyrmex.api.openapi_generator import (
         APISchema,
         OpenAPISpecification,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ---------------------------------------------------------------------------
 # APISchema dataclass
 # ---------------------------------------------------------------------------
+
 
 class TestAPISchemaParametrized:
     """Parametrized tests for APISchema across different schema types."""
@@ -60,7 +62,11 @@ class TestAPISchemaParametrized:
         schema = APISchema(
             name="Multi",
             schema_type="object",
-            properties={"a": {"type": "string"}, "b": {"type": "integer"}, "c": {"type": "boolean"}},
+            properties={
+                "a": {"type": "string"},
+                "b": {"type": "integer"},
+                "c": {"type": "boolean"},
+            },
             required=["a", "b", "c"],
         )
         result = schema.to_dict()
@@ -86,6 +92,7 @@ class TestAPISchemaParametrized:
 # ---------------------------------------------------------------------------
 # OpenAPISpecification container
 # ---------------------------------------------------------------------------
+
 
 class TestOpenAPISpecificationExtended:
     """Extended tests for OpenAPISpecification beyond basic coverage."""

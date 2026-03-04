@@ -9,7 +9,6 @@ import json
 
 import pytest
 
-
 try:
     from codomyrmex.api.mocking import (
         MatchStrategy,
@@ -24,7 +23,9 @@ try:
         create_mock_server,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ---------------------------------------------------------------------------
 # Enums
@@ -166,13 +167,17 @@ class TestRequestMatcher:
     def test_exact_match_success(self, matcher):
         """Test functionality: exact match success."""
         incoming = {"method": "GET", "path": "/users"}
-        spec = MockRequest(method="GET", path="/users", match_strategy=MatchStrategy.EXACT)
+        spec = MockRequest(
+            method="GET", path="/users", match_strategy=MatchStrategy.EXACT
+        )
         assert matcher.match(incoming, spec) is True
 
     def test_exact_match_failure(self, matcher):
         """Test functionality: exact match failure."""
         incoming = {"method": "GET", "path": "/users/1"}
-        spec = MockRequest(method="GET", path="/users", match_strategy=MatchStrategy.EXACT)
+        spec = MockRequest(
+            method="GET", path="/users", match_strategy=MatchStrategy.EXACT
+        )
         assert matcher.match(incoming, spec) is False
 
     # -- Prefix match ------------------------------------------------------
@@ -180,13 +185,17 @@ class TestRequestMatcher:
     def test_prefix_match_success(self, matcher):
         """Test functionality: prefix match success."""
         incoming = {"method": "GET", "path": "/api/v1/users"}
-        spec = MockRequest(method="GET", path="/api/v1", match_strategy=MatchStrategy.PREFIX)
+        spec = MockRequest(
+            method="GET", path="/api/v1", match_strategy=MatchStrategy.PREFIX
+        )
         assert matcher.match(incoming, spec) is True
 
     def test_prefix_match_exact_path(self, matcher):
         """Test functionality: prefix match exact path."""
         incoming = {"method": "GET", "path": "/api"}
-        spec = MockRequest(method="GET", path="/api", match_strategy=MatchStrategy.PREFIX)
+        spec = MockRequest(
+            method="GET", path="/api", match_strategy=MatchStrategy.PREFIX
+        )
         assert matcher.match(incoming, spec) is True
 
     # -- Regex match -------------------------------------------------------
@@ -345,7 +354,9 @@ class TestMockAPIServer:
             mode=MockResponseMode.RANDOM,
         )
         server.add_route("rand", route)
-        seen_codes = {server.handle_request("GET", "/rand").status_code for _ in range(20)}
+        seen_codes = {
+            server.handle_request("GET", "/rand").status_code for _ in range(20)
+        }
         assert seen_codes.issubset({200, 201})
 
     def test_no_responses_returns_204(self, server):

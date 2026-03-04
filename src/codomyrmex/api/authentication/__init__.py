@@ -234,13 +234,9 @@ class BasicAuthenticator(Authenticator):
     ) -> None:
         """Register a user."""
         # Hash password
-        salt = secrets.token_bytes(16)
-        password_hash = hashlib.pbkdf2_hmac(
-            "sha256", password.encode("utf-8"), salt, 100000
-        )
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
         self._users[username] = {
             "password_hash": password_hash,
-            "salt": salt,
             "roles": roles or [],
         }
 
@@ -257,8 +253,8 @@ class BasicAuthenticator(Authenticator):
 
         try:
             encoded = auth_header[6:]  # Remove "Basic " prefix
-            decoded = base64.b64decode(encoded).decode("utf-8")
-            username, password = decoded.split(":", 1)
+            decoded = base64.b64decode(encoded).decode('utf-8')
+            username, password = decoded.split(':', 1)
         except Exception:
             return AuthResult(
                 authenticated=False,
@@ -267,18 +263,13 @@ class BasicAuthenticator(Authenticator):
 
         user = self._users.get(username)
         if not user:
-            # Hash a dummy password to mitigate timing attacks on unknown users
-            dummy_salt = b"dummy_salt"
-            hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), dummy_salt, 100000)
             return AuthResult(
                 authenticated=False,
                 error="User not found",
             )
 
-        password_hash = hashlib.pbkdf2_hmac(
-            "sha256", password.encode("utf-8"), user["salt"], 100000
-        )
-        if not hmac.compare_digest(password_hash, user["password_hash"]):
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        if password_hash != user["password_hash"]:
             return AuthResult(
                 authenticated=False,
                 error="Invalid password",

@@ -7,8 +7,6 @@ including stacked area charts.
 
 import matplotlib.pyplot as plt
 
-from codomyrmex.logging_monitoring import get_logger
-
 from codomyrmex.data_visualization.utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
@@ -16,6 +14,7 @@ from codomyrmex.data_visualization.utils import (
     get_color_palette,
     save_plot,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -71,14 +70,16 @@ def create_area_chart(
     if y_data and isinstance(y_data[0], list):
         series_list = y_data
         if not labels:
-            labels = [f"Series {i+1}" for i in range(len(series_list))]
+            labels = [f"Series {i + 1}" for i in range(len(series_list))]
 
         if stacked:
             ax.stackplot(x_data, *series_list, labels=labels, alpha=alpha)
         else:
             for i, series in enumerate(series_list):
                 color = colors[i % len(colors)]
-                ax.fill_between(x_data, series, alpha=alpha, color=color, label=labels[i])
+                ax.fill_between(
+                    x_data, series, alpha=alpha, color=color, label=labels[i]
+                )
                 ax.plot(x_data, series, color=color)
         ax.legend()
     else:

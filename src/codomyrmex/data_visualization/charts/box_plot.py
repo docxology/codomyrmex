@@ -6,14 +6,13 @@ Provides both functional and OO interfaces for creating box plots.
 
 import matplotlib.pyplot as plt
 
-from codomyrmex.logging_monitoring import get_logger
-
 from codomyrmex.data_visualization.utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
     apply_theme_to_axes,
     save_plot,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -71,7 +70,7 @@ def create_box_plot(
         data_list = [data]
 
     if not labels:
-        labels = [f"Group {i+1}" for i in range(len(data_list))]
+        labels = [f"Group {i + 1}" for i in range(len(data_list))]
 
     fig, ax = plt.subplots(figsize=figure_size)
 

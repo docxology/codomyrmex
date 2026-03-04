@@ -5,12 +5,14 @@ Generates pie charts.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-
 import matplotlib.pyplot as plt
 
+from codomyrmex.data_visualization.utils import (
+    DEFAULT_FIGURE_SIZE,
+    apply_theme_to_axes,
+    save_plot,
+)
 from codomyrmex.logging_monitoring import get_logger
-
-from codomyrmex.data_visualization.utils import DEFAULT_FIGURE_SIZE, apply_theme_to_axes, save_plot
 
 logger = get_logger(__name__)
 
@@ -98,7 +100,7 @@ class PieChart:
         title: str = "Pie Chart",
         autopct: str = "%1.1f%%",
         startangle: int = 90,
-        explode: list = None
+        explode: list = None,
     ):
         """
         Initialize a pie chart.
@@ -134,7 +136,7 @@ class PieChart:
             show_plot=show_plot,
             autopct=self.autopct,
             startangle=self.startangle,
-            explode=self.explode
+            explode=self.explode,
         )
 
     def save(self, output_path: str):

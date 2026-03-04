@@ -7,7 +7,6 @@ import tempfile
 import pytest
 
 
-
 # OpenAPI Generator Tests
 class TestAPISchema:
     """Tests for APISchema dataclass."""
@@ -19,11 +18,8 @@ class TestAPISchema:
         schema = APISchema(
             name="User",
             schema_type="object",
-            properties={
-                "id": {"type": "integer"},
-                "name": {"type": "string"}
-            },
-            required=["id", "name"]
+            properties={"id": {"type": "integer"}, "name": {"type": "string"}},
+            required=["id", "name"],
         )
 
         assert schema.name == "User"
@@ -37,7 +33,7 @@ class TestAPISchema:
             name="User",
             schema_type="object",
             properties={"id": {"type": "integer"}},
-            required=["id"]
+            required=["id"],
         )
 
         result = schema.to_dict()
@@ -58,7 +54,7 @@ class TestOpenAPISpecification:
         spec.spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test API", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
         assert spec.version == "3.0.3"
@@ -71,7 +67,7 @@ class TestOpenAPISpecification:
         spec.spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test API", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
         json_str = spec.to_json()
@@ -87,7 +83,7 @@ class TestOpenAPISpecification:
         spec.spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test API", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
         yaml_str = spec.to_yaml()
@@ -102,10 +98,10 @@ class TestOpenAPISpecification:
         spec.spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test API", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             filepath = f.name
 
         try:
@@ -133,14 +129,12 @@ class TestDocumentationOpenAPIGenerator:
                 "path": "/users",
                 "method": "GET",
                 "summary": "Get all users",
-                "description": "Returns a list of users"
+                "description": "Returns a list of users",
             }
         ]
 
         spec = generator.generate_spec(
-            title="Test API",
-            version="1.0.0",
-            endpoints=endpoints
+            title="Test API", version="1.0.0", endpoints=endpoints
         )
 
         assert spec["openapi"] == "3.0.3"
@@ -156,13 +150,7 @@ class TestDocumentationOpenAPIGenerator:
         spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test", "version": "1.0.0"},
-            "paths": {
-                "/test": {
-                    "get": {
-                        "responses": {"200": {"description": "OK"}}
-                    }
-                }
-            }
+            "paths": {"/test": {"get": {"responses": {"200": {"description": "OK"}}}}},
         }
 
         errors = generator.validate_spec(spec)
@@ -227,9 +215,7 @@ class TestStandardizationOpenAPIGenerator:
         from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
 
         generator = StandardizationOpenAPIGenerator(
-            title="Test API",
-            version="1.0.0",
-            description="Test description"
+            title="Test API", version="1.0.0", description="Test description"
         )
 
         assert generator.title == "Test API"
@@ -241,13 +227,9 @@ class TestStandardizationOpenAPIGenerator:
 
         generator = StandardizationOpenAPIGenerator()
 
-        generator.add_security_schemes({
-            "CustomAuth": {
-                "type": "apiKey",
-                "in": "header",
-                "name": "X-Custom-Key"
-            }
-        })
+        generator.add_security_schemes(
+            {"CustomAuth": {"type": "apiKey", "in": "header", "name": "X-Custom-Key"}}
+        )
 
         assert "CustomAuth" in generator.spec.spec["components"]["securitySchemes"]
 
@@ -257,9 +239,7 @@ class TestStandardizationOpenAPIGenerator:
 
         generator = StandardizationOpenAPIGenerator()
 
-        generator.add_tags([
-            {"name": "users", "description": "User operations"}
-        ])
+        generator.add_tags([{"name": "users", "description": "User operations"}])
 
         assert len(generator.spec.spec["tags"]) > 0
 
@@ -289,10 +269,7 @@ class TestStandardizationOpenAPIGenerator:
         """Test generating final specification."""
         from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
 
-        generator = StandardizationOpenAPIGenerator(
-            title="Final API",
-            version="2.0.0"
-        )
+        generator = StandardizationOpenAPIGenerator(title="Final API", version="2.0.0")
 
         spec = generator.generate_spec()
 
@@ -336,7 +313,7 @@ class TestOpenAPISpecificationEdgeCases:
                 "no-leading-slash": {
                     "get": {"responses": {"200": {"description": "OK"}}}
                 }
-            }
+            },
         }
 
         errors = generator.validate_spec(spec)
@@ -355,7 +332,7 @@ class TestOpenAPISpecificationEdgeCases:
                 "/test": {
                     "get": {}  # Missing responses
                 }
-            }
+            },
         }
 
         errors = generator.validate_spec(spec)
@@ -385,14 +362,11 @@ class TestOpenAPIGeneratorFromAPIs:
             path="/test",
             method=HTTPMethod.GET,
             handler=test_handler,
-            summary="Test endpoint"
+            summary="Test endpoint",
         )
         api.router.add_endpoint(endpoint)
 
-        generator = StandardizationOpenAPIGenerator(
-            title="Test API",
-            version="1.0.0"
-        )
+        generator = StandardizationOpenAPIGenerator(title="Test API", version="1.0.0")
         generator.add_rest_api(api)
 
         assert "/test" in generator.spec.spec["paths"]
@@ -406,8 +380,7 @@ class TestOpenAPIGeneratorFromAPIs:
         api = GraphQLAPI(schema)
 
         generator = StandardizationOpenAPIGenerator(
-            title="GraphQL Test API",
-            version="1.0.0"
+            title="GraphQL Test API", version="1.0.0"
         )
 
         # Due to circular import issues in the module, this may raise ImportError
@@ -428,8 +401,7 @@ class TestOpenAPIGeneratorFromAPIs:
         manager = APIVersionManager(default_version="1.0.0")
 
         generator = StandardizationOpenAPIGenerator(
-            title="Versioned API",
-            version="1.0.0"
+            title="Versioned API", version="1.0.0"
         )
 
         # Due to circular import issues in the module, this may raise ImportError
@@ -447,10 +419,12 @@ class TestOpenAPIGeneratorFromAPIs:
 
         generator = StandardizationOpenAPIGenerator()
 
-        generator.add_global_responses({
-            "NotFound": {"description": "Resource not found"},
-            "ServerError": {"description": "Internal server error"}
-        })
+        generator.add_global_responses(
+            {
+                "NotFound": {"description": "Resource not found"},
+                "ServerError": {"description": "Internal server error"},
+            }
+        )
 
         responses = generator.spec.spec["components"]["responses"]
         assert "NotFound" in responses
@@ -467,11 +441,8 @@ class TestAPISchemaEdgeCases:
         schema = APISchema(
             name="User",
             schema_type="object",
-            properties={
-                "id": {"type": "integer"},
-                "name": {"type": "string"}
-            },
-            example={"id": 1, "name": "John Doe"}
+            properties={"id": {"type": "integer"}, "name": {"type": "string"}},
+            example={"id": 1, "name": "John Doe"},
         )
 
         result = schema.to_dict()
@@ -486,7 +457,7 @@ class TestAPISchemaEdgeCases:
         schema = APISchema(
             name="OptionalData",
             schema_type="object",
-            properties={"optional_field": {"type": "string"}}
+            properties={"optional_field": {"type": "string"}},
         )
 
         result = schema.to_dict()
@@ -505,22 +476,24 @@ class TestHTMLDocGeneration:
 
         spec = {
             "openapi": "3.0.3",
-            "info": {"title": "HTML Test API", "version": "1.0.0", "description": "Test API"},
+            "info": {
+                "title": "HTML Test API",
+                "version": "1.0.0",
+                "description": "Test API",
+            },
             "paths": {
                 "/users": {
                     "get": {
                         "summary": "Get users",
                         "description": "Returns all users",
-                        "parameters": [
-                            {"name": "limit", "description": "Max results"}
-                        ],
-                        "responses": {"200": {"description": "Success"}}
+                        "parameters": [{"name": "limit", "description": "Max results"}],
+                        "responses": {"200": {"description": "Success"}},
                     }
                 }
-            }
+            },
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
             filepath = f.name
 
         try:
@@ -548,10 +521,10 @@ class TestHTMLDocGeneration:
         spec = {
             "openapi": "3.0.3",
             "info": {"title": "Empty API", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".html", delete=False) as f:
             filepath = f.name
 
         try:
@@ -566,15 +539,20 @@ class TestHTMLDocGeneration:
 class TestDocGeneratorBoost:
     def test_api_documentation(self):
         from codomyrmex.api.documentation.doc_generator import APIDocumentation
-        doc = APIDocumentation(title="Test API", version="1.0", description="A test", base_url="/api")
+
+        doc = APIDocumentation(
+            title="Test API", version="1.0", description="A test", base_url="/api"
+        )
         assert doc.title == "Test API"
 
     def test_api_endpoint(self):
         from codomyrmex.api.documentation.doc_generator import APIEndpoint
+
         ep = APIEndpoint(path="/users", method="GET", summary="List users")
         assert ep.method == "GET"
 
     def test_doc_generator_init(self):
         from codomyrmex.api.documentation.doc_generator import APIDocumentationGenerator
+
         gen = APIDocumentationGenerator()
         assert gen is not None

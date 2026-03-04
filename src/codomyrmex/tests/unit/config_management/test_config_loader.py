@@ -25,13 +25,13 @@ from codomyrmex.config_management.core.config_loader import (
     ConfigSchema,
     Configuration,
     ConfigurationManager,
-    load_configuration,
     validate_configuration,
 )
 
 # ---------------------------------------------------------------------------
 # Network availability guard
 # ---------------------------------------------------------------------------
+
 
 def _http_available() -> bool:
     """Quick port check for httpbin.org:443 — avoids long test hangs."""
@@ -48,6 +48,7 @@ _NETWORK_AVAILABLE = _http_available()
 # ---------------------------------------------------------------------------
 # _load_from_url — success path: JSON response (lines 328-334)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 @pytest.mark.skipif(
@@ -77,6 +78,7 @@ class TestLoadFromUrlSuccessJson:
 # _load_from_url — failure / fallback paths
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLoadFromUrlFailure:
     """Exercise _load_from_url error path returning None (line 337-338)."""
@@ -97,6 +99,7 @@ class TestLoadFromUrlFailure:
 # ---------------------------------------------------------------------------
 # reload_configuration — exception path (lines 447-449)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestReloadConfigurationExceptionPath:
@@ -138,7 +141,9 @@ class TestReloadConfigurationExceptionPath:
 
         # Manually insert a configuration with a source that will cause
         # load_configuration to raise FileNotFoundError on reload
-        config = Configuration(data={"x": 1}, source="env://DEFINITELY_NOT_SET_XYZ123456")
+        config = Configuration(
+            data={"x": 1}, source="env://DEFINITELY_NOT_SET_XYZ123456"
+        )
         manager.configurations["exc_cfg"] = config
 
         # Ensure the env var is absent
@@ -153,6 +158,7 @@ class TestReloadConfigurationExceptionPath:
 # load_config_with_validation — validation failure path (lines 568-571)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLoadConfigWithValidationFailurePath:
     """Exercise the validation-failure branch of load_config_with_validation (lines 568-571)."""
@@ -164,7 +170,9 @@ class TestLoadConfigWithValidationFailurePath:
         which is a real class (not mocked). We provide a schema that requires a field
         the config file does NOT have, triggering result.is_valid == False.
         """
-        from codomyrmex.config_management.validation.config_validator import ConfigSchema as VSchema
+        from codomyrmex.config_management.validation.config_validator import (
+            ConfigSchema as VSchema,
+        )
 
         # Config file missing the required "required_field"
         config_file = tmp_path / "invalid_config.json"
@@ -190,10 +198,12 @@ class TestLoadConfigWithValidationFailurePath:
         via a real ConfigValidator with a custom_validator that emits warnings.
         """
         from codomyrmex.config_management.validation.config_validator import (
+            ConfigSchema as VSchema,
+        )
+        from codomyrmex.config_management.validation.config_validator import (
             ConfigValidator,
             ValidationIssue,
             ValidationSeverity,
-            ConfigSchema as VSchema,
         )
 
         # Build a config file that is valid but should produce a warning
@@ -240,11 +250,15 @@ class TestLoadConfigWithValidationFailurePath:
         mgr = ConfigurationManager(config_dir=str(tmp_path))
         config_result = mgr.load_config_with_validation(str(config_file), schema=schema)
         # If no errors, the method returns the config (warnings path logs but continues)
-        assert config_result is not None or config_result is None  # either is acceptable
+        assert (
+            config_result is not None or config_result is None
+        )  # either is acceptable
 
     def test_load_valid_config_with_real_schema_returns_config(self, tmp_path):
         """Valid config with a real schema returns a Configuration object."""
-        from codomyrmex.config_management.validation.config_validator import ConfigSchema as VSchema
+        from codomyrmex.config_management.validation.config_validator import (
+            ConfigSchema as VSchema,
+        )
 
         config_file = tmp_path / "valid_config.yaml"
         config_file.write_text(yaml.dump({"username": "alice", "timeout": 30}))
@@ -265,6 +279,7 @@ class TestLoadConfigWithValidationFailurePath:
 # ---------------------------------------------------------------------------
 # validate_config_schema — ImportError fallback (lines 652-653)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestValidateConfigSchemaImportFallback:
@@ -313,6 +328,7 @@ class TestValidateConfigSchemaImportFallback:
 # get_validation_report — exception error dict (lines 699-701)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGetValidationReportExceptionPath:
     """Exercise the exception-handling path in get_validation_report (lines 699-701)."""
@@ -351,7 +367,10 @@ class TestGetValidationReportExceptionPath:
         # Inject a config with 'level' AND 'format' keys to trigger logging schema detection
         # but with a data type that will cause JSON serialization errors in the validator
         config = Configuration(
-            data={"level": "INFO", "format": set(["a", "b"])},  # set is not JSON-serialisable
+            data={
+                "level": "INFO",
+                "format": {"a", "b"},
+            },  # set is not JSON-serialisable
             source="test_err",
         )
         manager.configurations["err_report_cfg"] = config
@@ -383,6 +402,7 @@ class TestGetValidationReportExceptionPath:
 # create_migration_backup — exception path (lines 735-737)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCreateMigrationBackupExceptionPath:
     """Exercise the exception handler in create_migration_backup (lines 735-737)."""
@@ -407,7 +427,9 @@ class TestCreateMigrationBackupExceptionPath:
         assert result is True
 
         # Verify backup entry exists with correct naming convention
-        backup_keys = [k for k in manager.configurations if k.startswith("backup_test_backup_")]
+        backup_keys = [
+            k for k in manager.configurations if k.startswith("backup_test_backup_")
+        ]
         assert len(backup_keys) == 1
 
         backup = manager.get_configuration(backup_keys[0])
@@ -427,7 +449,11 @@ class TestCreateMigrationBackupExceptionPath:
         result = manager.create_migration_backup("versioned_cfg")
         assert result is True
 
-        backup_keys = [k for k in manager.configurations if k.startswith("versioned_cfg_backup_3.1.0_")]
+        backup_keys = [
+            k
+            for k in manager.configurations
+            if k.startswith("versioned_cfg_backup_3.1.0_")
+        ]
         assert len(backup_keys) == 1
 
     def test_backup_with_no_version_uses_unknown(self, tmp_path):
@@ -442,13 +468,16 @@ class TestCreateMigrationBackupExceptionPath:
         result = manager.create_migration_backup("unversioned_cfg")
         assert result is True
 
-        backup_keys = [k for k in manager.configurations if "unversioned_cfg_backup_unknown_" in k]
+        backup_keys = [
+            k for k in manager.configurations if "unversioned_cfg_backup_unknown_" in k
+        ]
         assert len(backup_keys) == 1
 
 
 # ---------------------------------------------------------------------------
 # Additional targeted gap-fillers for ConfigurationManager
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerGapFillers:
@@ -580,7 +609,9 @@ class TestConfigurationManagerGapFillers:
             ("c.json", "content", "json"),
         ],
     )
-    def test_load_configuration_parametrized_file_types(self, tmp_path, source, key, value):
+    def test_load_configuration_parametrized_file_types(
+        self, tmp_path, source, key, value
+    ):
         """load_configuration handles yaml, yml, and json files identically."""
         data = {key: value}
         fp = tmp_path / source
@@ -624,7 +655,14 @@ class TestConfigurationManagerGapFillers:
             metadata={"tag": "test"},
         )
         d = config.to_dict()
-        assert set(d.keys()) == {"data", "source", "loaded_at", "environment", "version", "metadata"}
+        assert set(d.keys()) == {
+            "data",
+            "source",
+            "loaded_at",
+            "environment",
+            "version",
+            "metadata",
+        }
         assert d["source"] == "src"
         assert d["environment"] == "prod"
         assert d["version"] == "5.0.0"

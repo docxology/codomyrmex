@@ -6,7 +6,6 @@ import tempfile
 
 import pytest
 
-
 try:
     from codomyrmex.api.openapi_generator import (
         DocumentationOpenAPIGenerator,
@@ -17,11 +16,14 @@ try:
         validate_openapi_spec,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ---------------------------------------------------------------------------
 # StandardizationOpenAPIGenerator
 # ---------------------------------------------------------------------------
+
 
 class TestStdGenInitialization:
     """Initialization and basic attribute tests for StandardizationOpenAPIGenerator."""
@@ -202,6 +204,7 @@ class TestStdGenGenerateSpec:
 # StandardizationOpenAPIGenerator with real REST API
 # ---------------------------------------------------------------------------
 
+
 class TestStdGenRESTIntegration:
     """Tests for add_rest_api with real RESTAPI objects."""
 
@@ -282,7 +285,10 @@ class TestStdGenRESTIntegration:
 
         gen = StandardizationOpenAPIGenerator()
         gen.add_rest_api(api)
-        assert gen.spec.spec["paths"]["/tagged"]["post"]["tags"] == ["admin", "internal"]
+        assert gen.spec.spec["paths"]["/tagged"]["post"]["tags"] == [
+            "admin",
+            "internal",
+        ]
 
     @pytest.mark.unit
     def test_rest_endpoint_with_parameters(self):
@@ -374,6 +380,7 @@ class TestStdGenRESTIntegration:
 # Convenience functions
 # ---------------------------------------------------------------------------
 
+
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions."""
 
@@ -388,7 +395,9 @@ class TestConvenienceFunctions:
     @pytest.mark.unit
     def test_create_openapi_generator_custom(self):
         """create_openapi_generator with custom args should propagate."""
-        gen = create_openapi_generator(title="Custom", version="2.0.0", description="Desc")
+        gen = create_openapi_generator(
+            title="Custom", version="2.0.0", description="Desc"
+        )
         assert gen.title == "Custom"
         assert gen.version == "2.0.0"
 
@@ -428,6 +437,7 @@ class TestConvenienceFunctions:
 # ---------------------------------------------------------------------------
 # GraphQL integration with StandardizationOpenAPIGenerator
 # ---------------------------------------------------------------------------
+
 
 class TestStdGenGraphQLIntegration:
     """Tests for add_graphql_api with real GraphQL objects."""
@@ -492,7 +502,9 @@ class TestStdGenGraphQLIntegration:
 
         user_type = GraphQLObjectType(name="User", description="A user")
         user_type.add_field(GraphQLField(name="id", type="ID", description="User ID"))
-        user_type.add_field(GraphQLField(name="name", type="String", description="User name"))
+        user_type.add_field(
+            GraphQLField(name="name", type="String", description="User name")
+        )
 
         schema = GraphQLSchema()
         schema.add_type(user_type)
@@ -558,12 +570,18 @@ class TestStdGenGraphQLIntegration:
         gen = StandardizationOpenAPIGenerator()
         gen.add_graphql_api(api)
 
-        assert gen.spec.spec["components"]["schemas"]["Described"]["properties"]["x"]["description"] == "X field"
+        assert (
+            gen.spec.spec["components"]["schemas"]["Described"]["properties"]["x"][
+                "description"
+            ]
+            == "X field"
+        )
 
 
 # ---------------------------------------------------------------------------
 # End-to-end workflow tests
 # ---------------------------------------------------------------------------
+
 
 class TestEndToEndWorkflow:
     """Full workflow tests combining multiple features."""
@@ -584,7 +602,9 @@ class TestEndToEndWorkflow:
                 "path": "/users",
                 "method": "POST",
                 "summary": "Create user",
-                "requestBody": {"content": {"application/json": {"schema": {"type": "object"}}}},
+                "requestBody": {
+                    "content": {"application/json": {"schema": {"type": "object"}}}
+                },
                 "responses": {"201": {"description": "Created"}},
             },
             {
@@ -592,7 +612,10 @@ class TestEndToEndWorkflow:
                 "method": "GET",
                 "summary": "Get user",
                 "parameters": [{"name": "id", "in": "path", "required": True}],
-                "responses": {"200": {"description": "OK"}, "404": {"description": "Not found"}},
+                "responses": {
+                    "200": {"description": "OK"},
+                    "404": {"description": "Not found"},
+                },
             },
             {
                 "path": "/users/{id}",
@@ -603,7 +626,9 @@ class TestEndToEndWorkflow:
             },
         ]
 
-        spec = gen.generate_spec("User API", "1.0.0", endpoints, base_url="https://api.example.com")
+        spec = gen.generate_spec(
+            "User API", "1.0.0", endpoints, base_url="https://api.example.com"
+        )
 
         # Validate
         errors = gen.validate_spec(spec)
@@ -634,18 +659,24 @@ class TestEndToEndWorkflow:
             base_url="/api/v2",
         )
 
-        gen.add_security_schemes({
-            "BearerAuth": {"type": "http", "scheme": "bearer"},
-        })
+        gen.add_security_schemes(
+            {
+                "BearerAuth": {"type": "http", "scheme": "bearer"},
+            }
+        )
 
-        gen.add_tags([
-            {"name": "widgets", "description": "Widget CRUD"},
-            {"name": "admin", "description": "Administration"},
-        ])
+        gen.add_tags(
+            [
+                {"name": "widgets", "description": "Widget CRUD"},
+                {"name": "admin", "description": "Administration"},
+            ]
+        )
 
-        gen.add_global_responses({
-            "Unauthorized": {"description": "Authentication required"},
-        })
+        gen.add_global_responses(
+            {
+                "Unauthorized": {"description": "Authentication required"},
+            }
+        )
 
         gen.set_external_docs("https://docs.widgets.io")
 

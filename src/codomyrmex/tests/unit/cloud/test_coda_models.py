@@ -12,10 +12,10 @@ Pure data-model tests — no network required.
 
 import pytest
 
-
 # ---------------------------------------------------------------------------
 # Enum exhaustive coverage
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestTableTypeEnum:
@@ -23,14 +23,17 @@ class TestTableTypeEnum:
 
     def test_table_type_table(self):
         from codomyrmex.cloud.coda_io.models import TableType
+
         assert TableType.TABLE.value == "table"
 
     def test_table_type_view(self):
         from codomyrmex.cloud.coda_io.models import TableType
+
         assert TableType.VIEW.value == "view"
 
     def test_table_type_membership(self):
         from codomyrmex.cloud.coda_io.models import TableType
+
         members = {t.value for t in TableType}
         assert members == {"table", "view"}
 
@@ -41,18 +44,22 @@ class TestPageTypeEnum:
 
     def test_canvas(self):
         from codomyrmex.cloud.coda_io.models import PageType
+
         assert PageType.CANVAS.value == "canvas"
 
     def test_embed(self):
         from codomyrmex.cloud.coda_io.models import PageType
+
         assert PageType.EMBED.value == "embed"
 
     def test_sync_page(self):
         from codomyrmex.cloud.coda_io.models import PageType
+
         assert PageType.SYNC_PAGE.value == "syncPage"
 
     def test_all_values(self):
         from codomyrmex.cloud.coda_io.models import PageType
+
         values = {pt.value for pt in PageType}
         assert values == {"canvas", "embed", "syncPage"}
 
@@ -63,62 +70,77 @@ class TestControlTypeEnum:
 
     def test_ai_block(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.AI_BLOCK.value == "aiBlock"
 
     def test_button(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.BUTTON.value == "button"
 
     def test_checkbox(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.CHECKBOX.value == "checkbox"
 
     def test_date_picker(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.DATE_PICKER.value == "datePicker"
 
     def test_date_range_picker(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.DATE_RANGE_PICKER.value == "dateRangePicker"
 
     def test_date_time_picker(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.DATE_TIME_PICKER.value == "dateTimePicker"
 
     def test_lookup(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.LOOKUP.value == "lookup"
 
     def test_multiselect(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.MULTISELECT.value == "multiselect"
 
     def test_select(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.SELECT.value == "select"
 
     def test_scale(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.SCALE.value == "scale"
 
     def test_slider(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.SLIDER.value == "slider"
 
     def test_reaction(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.REACTION.value == "reaction"
 
     def test_textbox(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.TEXTBOX.value == "textbox"
 
     def test_time_picker(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert ControlType.TIME_PICKER.value == "timePicker"
 
     def test_total_count(self):
         from codomyrmex.cloud.coda_io.models import ControlType
+
         assert len(list(ControlType)) == 14
 
 
@@ -128,18 +150,22 @@ class TestAccessTypeEnum:
 
     def test_none(self):
         from codomyrmex.cloud.coda_io.models import AccessType
+
         assert AccessType.NONE.value == "none"
 
     def test_readonly(self):
         from codomyrmex.cloud.coda_io.models import AccessType
+
         assert AccessType.READONLY.value == "readonly"
 
     def test_write(self):
         from codomyrmex.cloud.coda_io.models import AccessType
+
         assert AccessType.WRITE.value == "write"
 
     def test_comment(self):
         from codomyrmex.cloud.coda_io.models import AccessType
+
         assert AccessType.COMMENT.value == "comment"
 
 
@@ -149,14 +175,17 @@ class TestDocPublishModeEnum:
 
     def test_view(self):
         from codomyrmex.cloud.coda_io.models import DocPublishMode
+
         assert DocPublishMode.VIEW.value == "view"
 
     def test_play(self):
         from codomyrmex.cloud.coda_io.models import DocPublishMode
+
         assert DocPublishMode.PLAY.value == "play"
 
     def test_edit(self):
         from codomyrmex.cloud.coda_io.models import DocPublishMode
+
         assert DocPublishMode.EDIT.value == "edit"
 
 
@@ -166,14 +195,17 @@ class TestValueFormatEnum:
 
     def test_simple(self):
         from codomyrmex.cloud.coda_io.models import ValueFormat
+
         assert ValueFormat.SIMPLE.value == "simple"
 
     def test_simple_with_arrays(self):
         from codomyrmex.cloud.coda_io.models import ValueFormat
+
         assert ValueFormat.SIMPLE_WITH_ARRAYS.value == "simpleWithArrays"
 
     def test_rich(self):
         from codomyrmex.cloud.coda_io.models import ValueFormat
+
         assert ValueFormat.RICH.value == "rich"
 
 
@@ -181,23 +213,29 @@ class TestValueFormatEnum:
 # None-guard branches in from_dict() — the 19 uncovered lines
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestIconNoneGuard:
     """Icon.from_dict(None) returns None — covers line 89."""
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import Icon
+
         result = Icon.from_dict(None)
         assert result is None
 
     def test_from_dict_empty_dict(self):
         from codomyrmex.cloud.coda_io.models import Icon
+
         result = Icon.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import Icon
-        icon = Icon.from_dict({"name": "star", "type": "builtin", "browserLink": "https://x.com/star.png"})
+
+        icon = Icon.from_dict(
+            {"name": "star", "type": "builtin", "browserLink": "https://x.com/star.png"}
+        )
         assert icon is not None
         assert icon.name == "star"
         assert icon.type == "builtin"
@@ -205,6 +243,7 @@ class TestIconNoneGuard:
 
     def test_from_dict_partial(self):
         from codomyrmex.cloud.coda_io.models import Icon
+
         icon = Icon.from_dict({"name": "check"})
         assert icon is not None
         assert icon.name == "check"
@@ -218,22 +257,27 @@ class TestImageNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import Image
+
         result = Image.from_dict(None)
         assert result is None
 
     def test_from_dict_empty_dict(self):
         from codomyrmex.cloud.coda_io.models import Image
+
         result = Image.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import Image
-        image = Image.from_dict({
-            "browserLink": "https://example.com/img.png",
-            "type": "image/png",
-            "width": 800,
-            "height": 600,
-        })
+
+        image = Image.from_dict(
+            {
+                "browserLink": "https://example.com/img.png",
+                "type": "image/png",
+                "width": 800,
+                "height": 600,
+            }
+        )
         assert image is not None
         assert image.browser_link == "https://example.com/img.png"
         assert image.width == 800
@@ -241,6 +285,7 @@ class TestImageNoneGuard:
 
     def test_from_dict_dimensions_none(self):
         from codomyrmex.cloud.coda_io.models import Image
+
         image = Image.from_dict({"browserLink": "https://x.com/img.png"})
         assert image is not None
         assert image.width is None
@@ -253,23 +298,28 @@ class TestWorkspaceReferenceNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import WorkspaceReference
+
         result = WorkspaceReference.from_dict(None)
         assert result is None
 
     def test_from_dict_empty(self):
         from codomyrmex.cloud.coda_io.models import WorkspaceReference
+
         result = WorkspaceReference.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import WorkspaceReference
-        ws = WorkspaceReference.from_dict({
-            "id": "ws-abc",
-            "type": "workspace",
-            "name": "Acme Corp",
-            "organizationId": "org-123",
-            "browserLink": "https://coda.io/w/ws-abc",
-        })
+
+        ws = WorkspaceReference.from_dict(
+            {
+                "id": "ws-abc",
+                "type": "workspace",
+                "name": "Acme Corp",
+                "organizationId": "org-123",
+                "browserLink": "https://coda.io/w/ws-abc",
+            }
+        )
         assert ws is not None
         assert ws.id == "ws-abc"
         assert ws.name == "Acme Corp"
@@ -278,6 +328,7 @@ class TestWorkspaceReferenceNoneGuard:
 
     def test_from_dict_defaults(self):
         from codomyrmex.cloud.coda_io.models import WorkspaceReference
+
         ws = WorkspaceReference.from_dict({"id": "ws-xyz"})
         assert ws is not None
         assert ws.type == "workspace"
@@ -291,22 +342,27 @@ class TestFolderReferenceNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import FolderReference
+
         result = FolderReference.from_dict(None)
         assert result is None
 
     def test_from_dict_empty(self):
         from codomyrmex.cloud.coda_io.models import FolderReference
+
         result = FolderReference.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import FolderReference
-        folder = FolderReference.from_dict({
-            "id": "fl-xyz",
-            "type": "folder",
-            "name": "Projects",
-            "browserLink": "https://coda.io/f/fl-xyz",
-        })
+
+        folder = FolderReference.from_dict(
+            {
+                "id": "fl-xyz",
+                "type": "folder",
+                "name": "Projects",
+                "browserLink": "https://coda.io/f/fl-xyz",
+            }
+        )
         assert folder is not None
         assert folder.id == "fl-xyz"
         assert folder.name == "Projects"
@@ -314,6 +370,7 @@ class TestFolderReferenceNoneGuard:
 
     def test_from_dict_defaults(self):
         from codomyrmex.cloud.coda_io.models import FolderReference
+
         folder = FolderReference.from_dict({"id": "fl-abc"})
         assert folder is not None
         assert folder.type == "folder"
@@ -326,22 +383,27 @@ class TestDocSizeNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import DocSize
+
         result = DocSize.from_dict(None)
         assert result is None
 
     def test_from_dict_empty(self):
         from codomyrmex.cloud.coda_io.models import DocSize
+
         result = DocSize.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import DocSize
-        size = DocSize.from_dict({
-            "totalRowCount": 1000,
-            "tableAndViewCount": 5,
-            "pageCount": 20,
-            "overApiSizeLimit": True,
-        })
+
+        size = DocSize.from_dict(
+            {
+                "totalRowCount": 1000,
+                "tableAndViewCount": 5,
+                "pageCount": 20,
+                "overApiSizeLimit": True,
+            }
+        )
         assert size is not None
         assert size.total_row_count == 1000
         assert size.table_and_view_count == 5
@@ -350,6 +412,7 @@ class TestDocSizeNoneGuard:
 
     def test_from_dict_defaults(self):
         from codomyrmex.cloud.coda_io.models import DocSize
+
         # Non-empty dict but missing all keys — should use defaults
         size = DocSize.from_dict({"extra": "field"})
         assert size is not None
@@ -363,23 +426,28 @@ class TestPageReferenceNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import PageReference
+
         result = PageReference.from_dict(None)
         assert result is None
 
     def test_from_dict_empty(self):
         from codomyrmex.cloud.coda_io.models import PageReference
+
         result = PageReference.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import PageReference
-        ref = PageReference.from_dict({
-            "id": "canvas-abc",
-            "type": "page",
-            "href": "https://coda.io/apis/v1/docs/d/pages/canvas-abc",
-            "browserLink": "https://coda.io/d/_d/Page_s123",
-            "name": "My Page",
-        })
+
+        ref = PageReference.from_dict(
+            {
+                "id": "canvas-abc",
+                "type": "page",
+                "href": "https://coda.io/apis/v1/docs/d/pages/canvas-abc",
+                "browserLink": "https://coda.io/d/_d/Page_s123",
+                "name": "My Page",
+            }
+        )
         assert ref is not None
         assert ref.id == "canvas-abc"
         assert ref.name == "My Page"
@@ -387,6 +455,7 @@ class TestPageReferenceNoneGuard:
 
     def test_from_dict_defaults(self):
         from codomyrmex.cloud.coda_io.models import PageReference
+
         ref = PageReference.from_dict({"id": "canvas-xyz"})
         assert ref is not None
         assert ref.type == "page"
@@ -400,24 +469,29 @@ class TestTableReferenceNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import TableReference
+
         result = TableReference.from_dict(None)
         assert result is None
 
     def test_from_dict_empty(self):
         from codomyrmex.cloud.coda_io.models import TableReference
+
         result = TableReference.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import TableReference
-        ref = TableReference.from_dict({
-            "id": "grid-abc",
-            "type": "table",
-            "tableType": "view",
-            "href": "https://coda.io/apis/v1/docs/d/tables/grid-abc",
-            "browserLink": "https://coda.io/d/_d/#grid-abc",
-            "name": "Tasks View",
-        })
+
+        ref = TableReference.from_dict(
+            {
+                "id": "grid-abc",
+                "type": "table",
+                "tableType": "view",
+                "href": "https://coda.io/apis/v1/docs/d/tables/grid-abc",
+                "browserLink": "https://coda.io/d/_d/#grid-abc",
+                "name": "Tasks View",
+            }
+        )
         assert ref is not None
         assert ref.id == "grid-abc"
         assert ref.table_type == "view"
@@ -425,6 +499,7 @@ class TestTableReferenceNoneGuard:
 
     def test_from_dict_defaults(self):
         from codomyrmex.cloud.coda_io.models import TableReference
+
         ref = TableReference.from_dict({"id": "grid-xyz"})
         assert ref is not None
         assert ref.type == "table"
@@ -438,27 +513,33 @@ class TestColumnReferenceNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import ColumnReference
+
         result = ColumnReference.from_dict(None)
         assert result is None
 
     def test_from_dict_empty(self):
         from codomyrmex.cloud.coda_io.models import ColumnReference
+
         result = ColumnReference.from_dict({})
         assert result is None
 
     def test_from_dict_full(self):
         from codomyrmex.cloud.coda_io.models import ColumnReference
-        ref = ColumnReference.from_dict({
-            "id": "c-abc",
-            "type": "column",
-            "href": "https://coda.io/apis/v1/docs/d/tables/t/columns/c-abc",
-        })
+
+        ref = ColumnReference.from_dict(
+            {
+                "id": "c-abc",
+                "type": "column",
+                "href": "https://coda.io/apis/v1/docs/d/tables/t/columns/c-abc",
+            }
+        )
         assert ref is not None
         assert ref.id == "c-abc"
         assert ref.href is not None
 
     def test_from_dict_defaults(self):
         from codomyrmex.cloud.coda_io.models import ColumnReference
+
         ref = ColumnReference.from_dict({"id": "c-xyz"})
         assert ref is not None
         assert ref.type == "column"
@@ -471,16 +552,19 @@ class TestPersonValueNoneGuard:
 
     def test_from_dict_none(self):
         from codomyrmex.cloud.coda_io.models import PersonValue
+
         result = PersonValue.from_dict(None)
         assert result is None
 
     def test_from_dict_empty(self):
         from codomyrmex.cloud.coda_io.models import PersonValue
+
         result = PersonValue.from_dict({})
         assert result is None
 
     def test_from_dict_with_name_and_email(self):
         from codomyrmex.cloud.coda_io.models import PersonValue
+
         person = PersonValue.from_dict({"name": "Alice", "email": "alice@example.com"})
         assert person is not None
         assert person.name == "Alice"
@@ -488,6 +572,7 @@ class TestPersonValueNoneGuard:
 
     def test_from_dict_name_only(self):
         from codomyrmex.cloud.coda_io.models import PersonValue
+
         person = PersonValue.from_dict({"name": "Bob"})
         assert person is not None
         assert person.name == "Bob"
@@ -498,12 +583,14 @@ class TestPersonValueNoneGuard:
 # Pagination list models not previously tested
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPageListModel:
     """PageList.from_dict correctly builds a list of pages — covers line 398."""
 
     def test_empty_list(self):
         from codomyrmex.cloud.coda_io.models import PageList
+
         result = PageList.from_dict({"items": []})
         assert result.items == []
         assert result.href is None
@@ -512,6 +599,7 @@ class TestPageListModel:
 
     def test_single_page(self):
         from codomyrmex.cloud.coda_io.models import PageList
+
         data = {
             "items": [
                 {
@@ -565,6 +653,7 @@ class TestPageContentItemModel:
 
     def test_minimal(self):
         from codomyrmex.cloud.coda_io.models import PageContentItem
+
         item = PageContentItem.from_dict({"id": "item-1", "type": "paragraph"})
         assert item.id == "item-1"
         assert item.type == "paragraph"
@@ -572,11 +661,15 @@ class TestPageContentItemModel:
 
     def test_with_text(self):
         from codomyrmex.cloud.coda_io.models import PageContentItem
-        item = PageContentItem.from_dict({"id": "item-2", "type": "heading", "text": "Hello World"})
+
+        item = PageContentItem.from_dict(
+            {"id": "item-2", "type": "heading", "text": "Hello World"}
+        )
         assert item.text == "Hello World"
 
     def test_empty_defaults(self):
         from codomyrmex.cloud.coda_io.models import PageContentItem
+
         item = PageContentItem.from_dict({})
         assert item.id == ""
         assert item.type == ""
@@ -588,8 +681,13 @@ class TestSortModel:
 
     def test_with_column_data(self):
         from codomyrmex.cloud.coda_io.models import Sort
+
         data = {
-            "column": {"id": "c-name", "type": "column", "href": "https://coda.io/col/c-name"},
+            "column": {
+                "id": "c-name",
+                "type": "column",
+                "href": "https://coda.io/col/c-name",
+            },
             "direction": "ascending",
         }
         sort = Sort.from_dict(data)
@@ -598,6 +696,7 @@ class TestSortModel:
 
     def test_descending_direction(self):
         from codomyrmex.cloud.coda_io.models import Sort
+
         data = {
             "column": {"id": "c-date", "type": "column"},
             "direction": "descending",
@@ -607,6 +706,7 @@ class TestSortModel:
 
     def test_missing_column_falls_back_to_empty_reference(self):
         from codomyrmex.cloud.coda_io.models import Sort
+
         # ColumnReference.from_dict(None) returns None; Sort uses empty fallback
         sort = Sort.from_dict({"direction": "ascending"})
         assert sort.column.id == ""
@@ -614,6 +714,7 @@ class TestSortModel:
 
     def test_default_direction(self):
         from codomyrmex.cloud.coda_io.models import Sort
+
         sort = Sort.from_dict({"column": {"id": "c-x"}})
         assert sort.direction == "ascending"
 
@@ -624,6 +725,7 @@ class TestTableListModel:
 
     def test_empty_list(self):
         from codomyrmex.cloud.coda_io.models import TableList
+
         result = TableList.from_dict({"items": []})
         assert result.items == []
         assert result.href is None
@@ -655,6 +757,7 @@ class TestTableListModel:
 
     def test_pagination_fields(self):
         from codomyrmex.cloud.coda_io.models import TableList
+
         data = {
             "items": [],
             "href": "https://coda.io/apis/v1/docs/d/tables",
@@ -672,11 +775,13 @@ class TestColumnListModel:
 
     def test_empty_list(self):
         from codomyrmex.cloud.coda_io.models import ColumnList
+
         result = ColumnList.from_dict({"items": []})
         assert result.items == []
 
     def test_single_column(self):
         from codomyrmex.cloud.coda_io.models import ColumnList
+
         data = {
             "items": [
                 {
@@ -694,6 +799,7 @@ class TestColumnListModel:
 
     def test_pagination_none(self):
         from codomyrmex.cloud.coda_io.models import ColumnList
+
         result = ColumnList.from_dict({"items": []})
         assert result.next_page_token is None
         assert result.next_page_link is None
@@ -705,12 +811,14 @@ class TestRowListModel:
 
     def test_empty_list(self):
         from codomyrmex.cloud.coda_io.models import RowList
+
         result = RowList.from_dict({"items": []})
         assert result.items == []
         assert result.next_sync_token is None
 
     def test_with_sync_token(self):
         from codomyrmex.cloud.coda_io.models import RowList
+
         data = {
             "items": [],
             "href": "https://coda.io/rows",
@@ -746,6 +854,7 @@ class TestFormulaModel:
 
     def test_minimal(self):
         from codomyrmex.cloud.coda_io.models import Formula
+
         data = {
             "id": "f-abc",
             "type": "formula",
@@ -761,6 +870,7 @@ class TestFormulaModel:
 
     def test_with_parent(self):
         from codomyrmex.cloud.coda_io.models import Formula
+
         data = {
             "id": "f-xyz",
             "type": "formula",
@@ -775,6 +885,7 @@ class TestFormulaModel:
 
     def test_string_value(self):
         from codomyrmex.cloud.coda_io.models import Formula
+
         data = {
             "id": "f-str",
             "type": "formula",
@@ -787,6 +898,7 @@ class TestFormulaModel:
 
     def test_defaults(self):
         from codomyrmex.cloud.coda_io.models import Formula
+
         formula = Formula.from_dict({})
         assert formula.id == ""
         assert formula.type == "formula"
@@ -799,6 +911,7 @@ class TestFormulaListModel:
 
     def test_empty(self):
         from codomyrmex.cloud.coda_io.models import FormulaList
+
         result = FormulaList.from_dict({"items": []})
         assert result.items == []
         assert result.href is None
@@ -807,7 +920,13 @@ class TestFormulaListModel:
         from codomyrmex.cloud.coda_io.models import FormulaList
 
         def _f(fid: str, name: str) -> dict:
-            return {"id": fid, "type": "formula", "href": f"https://x/{fid}", "name": name, "value": 1}
+            return {
+                "id": fid,
+                "type": "formula",
+                "href": f"https://x/{fid}",
+                "name": name,
+                "value": 1,
+            }
 
         result = FormulaList.from_dict({"items": [_f("f1", "Alpha"), _f("f2", "Beta")]})
         assert len(result.items) == 2
@@ -815,6 +934,7 @@ class TestFormulaListModel:
 
     def test_pagination_fields(self):
         from codomyrmex.cloud.coda_io.models import FormulaList
+
         data = {
             "items": [],
             "href": "https://coda.io/formulas",
@@ -832,6 +952,7 @@ class TestControlModel:
 
     def test_minimal(self):
         from codomyrmex.cloud.coda_io.models import Control
+
         data = {
             "id": "ctrl-1",
             "type": "control",
@@ -848,6 +969,7 @@ class TestControlModel:
 
     def test_with_parent(self):
         from codomyrmex.cloud.coda_io.models import Control
+
         data = {
             "id": "ctrl-2",
             "type": "control",
@@ -863,6 +985,7 @@ class TestControlModel:
 
     def test_defaults(self):
         from codomyrmex.cloud.coda_io.models import Control
+
         ctrl = Control.from_dict({})
         assert ctrl.id == ""
         assert ctrl.type == "control"
@@ -876,6 +999,7 @@ class TestControlListModel:
 
     def test_empty(self):
         from codomyrmex.cloud.coda_io.models import ControlList
+
         result = ControlList.from_dict({"items": []})
         assert result.items == []
 
@@ -903,24 +1027,28 @@ class TestPrincipalModel:
 
     def test_email_principal(self):
         from codomyrmex.cloud.coda_io.models import Principal
+
         p = Principal.from_dict({"type": "email", "email": "user@example.com"})
         assert p.type == "email"
         assert p.email == "user@example.com"
 
     def test_domain_principal(self):
         from codomyrmex.cloud.coda_io.models import Principal
+
         p = Principal.from_dict({"type": "domain"})
         assert p.type == "domain"
         assert p.email is None
 
     def test_anyone_principal(self):
         from codomyrmex.cloud.coda_io.models import Principal
+
         p = Principal.from_dict({"type": "anyone"})
         assert p.type == "anyone"
         assert p.email is None
 
     def test_to_dict_with_email(self):
         from codomyrmex.cloud.coda_io.models import Principal
+
         p = Principal(type="email", email="dev@example.com")
         d = p.to_dict()
         assert d["type"] == "email"
@@ -929,6 +1057,7 @@ class TestPrincipalModel:
     def test_to_dict_without_email(self):
         """to_dict omits email key when email is None — covers conditional branch line 725."""
         from codomyrmex.cloud.coda_io.models import Principal
+
         p = Principal(type="anyone", email=None)
         d = p.to_dict()
         assert d == {"type": "anyone"}
@@ -936,6 +1065,7 @@ class TestPrincipalModel:
 
     def test_defaults_from_empty_dict(self):
         from codomyrmex.cloud.coda_io.models import Principal
+
         p = Principal.from_dict({})
         assert p.type == ""
         assert p.email is None
@@ -947,6 +1077,7 @@ class TestPermissionModel:
 
     def test_full(self):
         from codomyrmex.cloud.coda_io.models import Permission
+
         data = {
             "id": "perm-1",
             "principal": {"type": "email", "email": "alice@example.com"},
@@ -959,6 +1090,7 @@ class TestPermissionModel:
 
     def test_write_access(self):
         from codomyrmex.cloud.coda_io.models import Permission
+
         data = {
             "id": "perm-2",
             "principal": {"type": "domain"},
@@ -970,6 +1102,7 @@ class TestPermissionModel:
 
     def test_defaults(self):
         from codomyrmex.cloud.coda_io.models import Permission
+
         perm = Permission.from_dict({"principal": {}})
         assert perm.id == ""
         assert perm.access == ""
@@ -981,13 +1114,17 @@ class TestPermissionListModel:
 
     def test_empty(self):
         from codomyrmex.cloud.coda_io.models import PermissionList
-        result = PermissionList.from_dict({"items": [], "href": "https://coda.io/perms"})
+
+        result = PermissionList.from_dict(
+            {"items": [], "href": "https://coda.io/perms"}
+        )
         assert result.items == []
         assert result.href == "https://coda.io/perms"
         assert result.next_page_token is None
 
     def test_single_permission(self):
         from codomyrmex.cloud.coda_io.models import PermissionList
+
         data = {
             "items": [
                 {
@@ -1005,6 +1142,7 @@ class TestPermissionListModel:
 
     def test_pagination_fields(self):
         from codomyrmex.cloud.coda_io.models import PermissionList
+
         data = {
             "items": [],
             "href": "https://coda.io/perms",
@@ -1020,12 +1158,14 @@ class TestPermissionListModel:
 # Doc with all optional nested objects populated
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDocWithAllOptionals:
     """Doc.from_dict with icon, doc_size, source_doc, published all set."""
 
     def test_doc_with_icon(self):
         from codomyrmex.cloud.coda_io.models import Doc
+
         data = {
             "id": "AbCDeFGH",
             "type": "doc",
@@ -1034,7 +1174,11 @@ class TestDocWithAllOptionals:
             "name": "Full Doc",
             "owner": "user@example.com",
             "ownerName": "Test User",
-            "icon": {"name": "rocket", "type": "builtin", "browserLink": "https://coda.io/icons/rocket.png"},
+            "icon": {
+                "name": "rocket",
+                "type": "builtin",
+                "browserLink": "https://coda.io/icons/rocket.png",
+            },
             "docSize": {
                 "totalRowCount": 500,
                 "tableAndViewCount": 3,
@@ -1054,6 +1198,7 @@ class TestDocWithAllOptionals:
 
     def test_doc_deprecated_ids(self):
         from codomyrmex.cloud.coda_io.models import Doc
+
         data = {
             "id": "doc-dep",
             "type": "doc",
@@ -1074,12 +1219,14 @@ class TestDocWithAllOptionals:
 # Page with all optional fields
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPageWithAllOptionals:
     """Page.from_dict with authors, icon, image, parent, created_by, updated_by all set."""
 
     def test_page_with_full_metadata(self):
         from codomyrmex.cloud.coda_io.models import Page
+
         data = {
             "id": "canvas-full",
             "type": "page",
@@ -1092,7 +1239,11 @@ class TestPageWithAllOptionals:
             "contentType": "embed",
             "subtitle": "A page with everything",
             "icon": {"name": "fire", "type": "builtin"},
-            "image": {"browserLink": "https://example.com/cover.jpg", "width": 1200, "height": 630},
+            "image": {
+                "browserLink": "https://example.com/cover.jpg",
+                "width": 1200,
+                "height": 630,
+            },
             "parent": {"id": "canvas-parent", "type": "page", "name": "Parent"},
             "authors": [
                 {"name": "Alice", "email": "alice@example.com"},
@@ -1126,6 +1277,7 @@ class TestPageWithAllOptionals:
 
     def test_page_authors_empty_list(self):
         from codomyrmex.cloud.coda_io.models import Page
+
         data = {
             "id": "canvas-noauth",
             "type": "page",
@@ -1146,12 +1298,14 @@ class TestPageWithAllOptionals:
 # Table with sorts and nested parent
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTableWithSortsAndParent:
     """Table.from_dict with sorts list and parent/parentTable populated."""
 
     def test_table_with_sorts(self):
         from codomyrmex.cloud.coda_io.models import Table
+
         data = {
             "id": "grid-sorted",
             "type": "table",
@@ -1163,7 +1317,10 @@ class TestTableWithSortsAndParent:
             "layout": "default",
             "sorts": [
                 {"column": {"id": "c-due", "type": "column"}, "direction": "ascending"},
-                {"column": {"id": "c-pri", "type": "column"}, "direction": "descending"},
+                {
+                    "column": {"id": "c-pri", "type": "column"},
+                    "direction": "descending",
+                },
             ],
             "parent": {"id": "canvas-p1", "type": "page", "name": "Status Page"},
             "parentTable": {"id": "grid-base", "type": "table", "tableType": "table"},
@@ -1187,6 +1344,7 @@ class TestTableWithSortsAndParent:
 
     def test_table_no_sorts(self):
         from codomyrmex.cloud.coda_io.models import Table
+
         data = {
             "id": "grid-nosorts",
             "type": "table",
@@ -1205,12 +1363,14 @@ class TestTableWithSortsAndParent:
 # Row with parent table
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRowWithParent:
     """Row.from_dict with parent TableReference populated."""
 
     def test_row_with_parent(self):
         from codomyrmex.cloud.coda_io.models import Row
+
         data = {
             "id": "r-abc",
             "type": "row",
@@ -1227,6 +1387,7 @@ class TestRowWithParent:
 
     def test_row_empty_values(self):
         from codomyrmex.cloud.coda_io.models import Row
+
         data = {
             "id": "r-empty",
             "type": "row",
@@ -1245,12 +1406,14 @@ class TestRowWithParent:
 # Column with parent
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestColumnWithParent:
     """Column.from_dict with parent TableReference populated."""
 
     def test_column_with_parent(self):
         from codomyrmex.cloud.coda_io.models import Column
+
         data = {
             "id": "c-name",
             "type": "column",
@@ -1258,7 +1421,12 @@ class TestColumnWithParent:
             "name": "Name",
             "format": {"type": "text"},
             "display": True,
-            "parent": {"id": "grid-abc", "type": "table", "tableType": "table", "name": "Tasks"},
+            "parent": {
+                "id": "grid-abc",
+                "type": "table",
+                "tableType": "table",
+                "name": "Tasks",
+            },
         }
         col = Column.from_dict(data)
         assert col.display is True
@@ -1267,6 +1435,7 @@ class TestColumnWithParent:
 
     def test_column_default_value(self):
         from codomyrmex.cloud.coda_io.models import Column
+
         data = {
             "id": "c-dv",
             "type": "column",
@@ -1283,12 +1452,14 @@ class TestColumnWithParent:
 # User without workspace / without pictureLink
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestUserWithoutOptionals:
     """User.from_dict with no workspace and no picture_link."""
 
     def test_user_minimal(self):
         from codomyrmex.cloud.coda_io.models import User
+
         data = {
             "name": "Jane Smith",
             "loginId": "jane@example.com",
@@ -1305,6 +1476,7 @@ class TestUserWithoutOptionals:
 
     def test_user_scoped_with_picture(self):
         from codomyrmex.cloud.coda_io.models import User
+
         data = {
             "name": "Dev Bot",
             "loginId": "bot@example.com",
@@ -1322,18 +1494,21 @@ class TestUserWithoutOptionals:
 # InsertRowsResult edge cases
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestInsertRowsResultEdgeCases:
     """InsertRowsResult with no added_row_ids."""
 
     def test_no_row_ids(self):
         from codomyrmex.cloud.coda_io.models import InsertRowsResult
+
         result = InsertRowsResult.from_dict({"requestId": "req-xyz"})
         assert result.request_id == "req-xyz"
         assert result.added_row_ids is None
 
     def test_empty_row_ids(self):
         from codomyrmex.cloud.coda_io.models import InsertRowsResult
+
         result = InsertRowsResult.from_dict({"requestId": "req-abc", "addedRowIds": []})
         assert result.added_row_ids == []
 
@@ -1342,28 +1517,33 @@ class TestInsertRowsResultEdgeCases:
 # CellEdit with various value types
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCellEditValueTypes:
     """CellEdit handles various value types including None, int, bool, list."""
 
     def test_none_value(self):
         from codomyrmex.cloud.coda_io.models import CellEdit
+
         cell = CellEdit(column="c-x", value=None)
         result = cell.to_dict()
         assert result == {"column": "c-x", "value": None}
 
     def test_int_value(self):
         from codomyrmex.cloud.coda_io.models import CellEdit
+
         cell = CellEdit(column="c-count", value=42)
         assert cell.to_dict() == {"column": "c-count", "value": 42}
 
     def test_bool_value(self):
         from codomyrmex.cloud.coda_io.models import CellEdit
+
         cell = CellEdit(column="c-done", value=True)
         assert cell.to_dict() == {"column": "c-done", "value": True}
 
     def test_list_value(self):
         from codomyrmex.cloud.coda_io.models import CellEdit
+
         cell = CellEdit(column="c-tags", value=["urgent", "review"])
         result = cell.to_dict()
         assert result["value"] == ["urgent", "review"]
@@ -1373,18 +1553,21 @@ class TestCellEditValueTypes:
 # RowEdit with empty cells
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRowEditEdgeCases:
     """RowEdit handles zero-cell and single-cell cases."""
 
     def test_empty_cells(self):
         from codomyrmex.cloud.coda_io.models import RowEdit
+
         row = RowEdit(cells=[])
         result = row.to_dict()
         assert result == {"cells": []}
 
     def test_single_cell(self):
         from codomyrmex.cloud.coda_io.models import CellEdit, RowEdit
+
         row = RowEdit(cells=[CellEdit(column="Status", value="Done")])
         result = row.to_dict()
         assert len(result["cells"]) == 1
@@ -1395,17 +1578,20 @@ class TestRowEditEdgeCases:
 # _parse_datetime edge cases
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestParseDatetimeEdgeCases:
     """_parse_datetime handles various ISO 8601 edge cases."""
 
     def test_empty_string_returns_none(self):
         from codomyrmex.cloud.coda_io.models import _parse_datetime
+
         result = _parse_datetime("")
         assert result is None
 
     def test_datetime_without_timezone(self):
         from codomyrmex.cloud.coda_io.models import _parse_datetime
+
         result = _parse_datetime("2024-06-15T12:00:00")
         assert result is not None
         assert result.year == 2024
@@ -1414,12 +1600,14 @@ class TestParseDatetimeEdgeCases:
 
     def test_datetime_with_positive_offset(self):
         from codomyrmex.cloud.coda_io.models import _parse_datetime
+
         result = _parse_datetime("2024-01-01T08:00:00+05:30")
         assert result is not None
         assert result.year == 2024
 
     def test_z_suffix_converted_to_utc_offset(self):
         from codomyrmex.cloud.coda_io.models import _parse_datetime
+
         result = _parse_datetime("2024-12-31T23:59:59Z")
         assert result is not None
         assert result.year == 2024
@@ -1428,6 +1616,7 @@ class TestParseDatetimeEdgeCases:
 
     def test_type_error_returns_none(self):
         from codomyrmex.cloud.coda_io.models import _parse_datetime
+
         # Passing an integer where a string is expected — triggers TypeError
         result = _parse_datetime(12345)  # type: ignore[arg-type]
         assert result is None

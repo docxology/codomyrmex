@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 import pytest
 
-
 try:
     from codomyrmex.api.authentication import (
         APIKeyAuthenticator,
@@ -19,7 +18,9 @@ try:
         create_authenticator,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 
 class TestAuthType:
@@ -236,6 +237,7 @@ class TestBearerTokenAuthenticator:
 
     def test_custom_validator_takes_precedence(self):
         """Test functionality: custom validator takes precedence."""
+
         def my_validator(tok):
             if tok == "magic":
                 return {"identity": "wizard", "scopes": ["all"]}

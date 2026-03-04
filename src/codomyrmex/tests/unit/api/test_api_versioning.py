@@ -5,7 +5,6 @@ from datetime import datetime
 import pytest
 
 
-
 # API Versioning Tests
 class TestSimpleVersion:
     """Tests for SimpleVersion class."""
@@ -74,7 +73,7 @@ class TestAPIVersion:
             version="1.0.0",
             format=VersionFormat.SEMVER,
             release_date=datetime.now(),
-            description="Initial release"
+            description="Initial release",
         )
 
         assert version.version == "1.0.0"
@@ -88,9 +87,7 @@ class TestAPIVersion:
         )
 
         version = APIVersion(
-            version="2024-01-01",
-            format=VersionFormat.DATE,
-            release_date=datetime.now()
+            version="2024-01-01", format=VersionFormat.DATE, release_date=datetime.now()
         )
 
         assert version.version == "2024-01-01"
@@ -103,9 +100,7 @@ class TestAPIVersion:
         )
 
         version = APIVersion(
-            version="1",
-            format=VersionFormat.INTEGER,
-            release_date=datetime.now()
+            version="1", format=VersionFormat.INTEGER, release_date=datetime.now()
         )
 
         assert version.version == "1"
@@ -121,7 +116,7 @@ class TestAPIVersion:
             APIVersion(
                 version="invalid",
                 format=VersionFormat.SEMVER,
-                release_date=datetime.now()
+                release_date=datetime.now(),
             )
 
     def test_version_compatibility(self):
@@ -132,14 +127,10 @@ class TestAPIVersion:
         )
 
         v1 = APIVersion(
-            version="1.0.0",
-            format=VersionFormat.SEMVER,
-            release_date=datetime.now()
+            version="1.0.0", format=VersionFormat.SEMVER, release_date=datetime.now()
         )
         v2 = APIVersion(
-            version="1.5.0",
-            format=VersionFormat.SEMVER,
-            release_date=datetime.now()
+            version="1.5.0", format=VersionFormat.SEMVER, release_date=datetime.now()
         )
 
         assert v1.is_compatible_with(v2)
@@ -171,7 +162,7 @@ class TestAPIVersionManager:
             version="2.0.0",
             format=VersionFormat.SEMVER,
             release_date=datetime.now(),
-            description="Major update"
+            description="Major update",
         )
 
         manager.register_version(new_version)
@@ -196,11 +187,13 @@ class TestAPIVersionManager:
         )
 
         manager = APIVersionManager(default_version="1.0.0")
-        manager.register_version(APIVersion(
-            version="2.0.0",
-            format=VersionFormat.SEMVER,
-            release_date=datetime.now()
-        ))
+        manager.register_version(
+            APIVersion(
+                version="2.0.0",
+                format=VersionFormat.SEMVER,
+                release_date=datetime.now(),
+            )
+        )
 
         versions = manager.get_supported_versions()
 
@@ -256,9 +249,7 @@ class TestVersionedEndpoint:
             return "v1"
 
         endpoint = VersionedEndpoint(
-            path="/users",
-            versions={"1.0.0": handler_v1},
-            default_version="1.0.0"
+            path="/users", versions={"1.0.0": handler_v1}, default_version="1.0.0"
         )
 
         assert endpoint.path == "/users"
@@ -277,7 +268,7 @@ class TestVersionedEndpoint:
         endpoint = VersionedEndpoint(
             path="/users",
             versions={"1.0.0": handler_v1, "2.0.0": handler_v2},
-            default_version="1.0.0"
+            default_version="1.0.0",
         )
 
         assert endpoint.get_handler("2.0.0")() == "v2"
@@ -293,9 +284,7 @@ class TestVersionedEndpoint:
             return "v2"
 
         endpoint = VersionedEndpoint(
-            path="/users",
-            versions={"1.0.0": handler_v1},
-            default_version="1.0.0"
+            path="/users", versions={"1.0.0": handler_v1}, default_version="1.0.0"
         )
 
         endpoint.add_version("2.0.0", handler_v2)
@@ -340,16 +329,20 @@ class TestVersionManagerEdgeCases:
         )
 
         manager = APIVersionManager(default_version="1.0.0")
-        manager.register_version(APIVersion(
-            version="1.5.0",
-            format=VersionFormat.SEMVER,
-            release_date=datetime.now()
-        ))
-        manager.register_version(APIVersion(
-            version="2.0.0",
-            format=VersionFormat.SEMVER,
-            release_date=datetime.now()
-        ))
+        manager.register_version(
+            APIVersion(
+                version="1.5.0",
+                format=VersionFormat.SEMVER,
+                release_date=datetime.now(),
+            )
+        )
+        manager.register_version(
+            APIVersion(
+                version="2.0.0",
+                format=VersionFormat.SEMVER,
+                release_date=datetime.now(),
+            )
+        )
 
         latest = manager.get_latest_version()
         assert latest.version == "2.0.0"
@@ -364,7 +357,7 @@ class TestVersionManagerEdgeCases:
         endpoint = VersionedEndpoint(
             path="/test",
             versions={"1.0.0": handler, "2.0.0": handler},
-            default_version="1.0.0"
+            default_version="1.0.0",
         )
 
         endpoint.deprecate_version("1.0.0")
@@ -378,9 +371,7 @@ class TestVersionManagerEdgeCases:
             return "test"
 
         endpoint = VersionedEndpoint(
-            path="/test",
-            versions={"1.0.0": handler},
-            default_version="1.0.0"
+            path="/test", versions={"1.0.0": handler}, default_version="1.0.0"
         )
 
         with pytest.raises(ValueError) as exc_info:
@@ -432,7 +423,7 @@ class TestVersionMigration:
             version="0.9.0",
             format=VersionFormat.SEMVER,
             release_date=datetime.now(),
-            deprecated=True
+            deprecated=True,
         )
         manager.register_version(deprecated_version)
 
@@ -444,6 +435,7 @@ class TestVersionMigration:
 class TestAPIVersioningBoost:
     def test_simple_version(self):
         from codomyrmex.api.standardization.api_versioning import SimpleVersion
+
         v = SimpleVersion("1.2.3")
         assert v is not None
 
@@ -452,15 +444,22 @@ class TestAPIVersioningBoost:
             APIVersion,
             VersionFormat,
         )
-        v = APIVersion(version="1.0.0", format=VersionFormat.SEMVER, release_date=datetime.now())
+
+        v = APIVersion(
+            version="1.0.0", format=VersionFormat.SEMVER, release_date=datetime.now()
+        )
         assert v.version == "1.0.0"
 
     def test_versioned_endpoint(self):
         from codomyrmex.api.standardization.api_versioning import VersionedEndpoint
-        ep = VersionedEndpoint(path="/users", versions={"1.0": lambda: None}, default_version="1.0")
+
+        ep = VersionedEndpoint(
+            path="/users", versions={"1.0": lambda: None}, default_version="1.0"
+        )
         assert ep.path == "/users"
 
     def test_api_version_manager(self):
         from codomyrmex.api.standardization.api_versioning import APIVersionManager
+
         mgr = APIVersionManager()
         assert mgr is not None
