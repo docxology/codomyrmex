@@ -91,14 +91,22 @@ class ActiveDefense:
         return result["threat_level"]
 
     def update_patterns(self, new_patterns: list[str]) -> None:
-        """Add new exploit patterns dynamically."""
+        """Add new exploit patterns dynamically.
+
+        Args:
+            new_patterns: List of new exploit pattern strings to monitor.
+        """
         for p in new_patterns:
             if p not in self._exploit_patterns:
                 self._exploit_patterns.append(p)
                 logger.info("Updated defense with pattern: '%s'", p)
 
     def get_threat_report(self) -> dict[str, int]:
-        """Return current threat metrics."""
+        """Return current threat metrics.
+
+        Returns:
+            A dictionary containing threat reporting metrics.
+        """
         return {
             "active_patterns": len(self._exploit_patterns),
             "exploits_detected": self._metrics.get("exploits_detected", 0),
@@ -194,6 +202,10 @@ class ActiveDefense:
         return triggered
 
     def list_honeytokens(self) -> dict[str, dict[str, Any]]:
-        """List all active honeytokens with their status."""
+        """List all active honeytokens with their status.
+
+        Returns:
+            A dictionary mapping active honeytoken IDs to their detailed status.
+        """
         with self._honeytoken_lock:
             return dict(self._honeytokens)

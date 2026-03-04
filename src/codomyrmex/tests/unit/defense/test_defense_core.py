@@ -50,8 +50,8 @@ class TestResponseAction:
         assert ResponseAction.QUARANTINE.value == "quarantine"
 
     def test_count(self):
-        """Exactly five response actions."""
-        assert len(ResponseAction) == 5
+        """Exactly seven response actions."""
+        assert len(ResponseAction) == 7
 
 
 # ---------------------------------------------------------------------------

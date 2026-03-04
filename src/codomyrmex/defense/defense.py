@@ -80,6 +80,9 @@ class RateLimiter:
     def allow(self, identifier: str) -> bool:
         """Check if a request from this identifier should be allowed.
 
+        Args:
+            identifier: The unique source identifier (e.g. IP address).
+
         Returns:
             True if under the rate limit, False if throttled.
         """
@@ -98,7 +101,14 @@ class RateLimiter:
         return True
 
     def remaining(self, identifier: str) -> int:
-        """Return remaining requests for this identifier in the current window."""
+        """Return remaining requests for this identifier in the current window.
+
+        Args:
+            identifier: The unique source identifier.
+
+        Returns:
+            Number of remaining requests allowed.
+        """
         now = time.time()
         bucket = self._buckets[identifier]
         cutoff = now - self.window_seconds
@@ -107,7 +117,11 @@ class RateLimiter:
         return max(0, self.max_requests - len(bucket))
 
     def reset(self, identifier: str) -> None:
-        """Clear the rate limit state for an identifier."""
+        """Clear the rate limit state for an identifier.
+
+        Args:
+            identifier: The unique source identifier.
+        """
         self._buckets.pop(identifier, None)
 
 
@@ -147,11 +161,19 @@ class ThreatDetector:
         self._rules: list[DetectionRule] = []
 
     def add_rule(self, rule: DetectionRule) -> None:
-        """Register a detection rule."""
+        """Register a detection rule.
+
+        Args:
+            rule: The DetectionRule to add.
+        """
         self._rules.append(rule)
 
     def evaluate(self, request: dict[str, Any], source: str = "unknown") -> list[ThreatEvent]:
         """Evaluate a request against all rules.
+
+        Args:
+            request: The request payload to evaluate.
+            source: The source identifier.
 
         Returns:
             List of ThreatEvent for each triggered rule.
@@ -205,16 +227,28 @@ class Defense:
         logger.info("Defense engine initialized")
 
     def add_detection_rule(self, rule: DetectionRule) -> None:
-        """Register a threat detection rule."""
+        """Register a threat detection rule.
+
+        Args:
+            rule: The DetectionRule to add.
+        """
         self.detector.add_rule(rule)
 
     def block_source(self, source: str) -> None:
-        """Permanently block a source."""
+        """Permanently block a source.
+
+        Args:
+            source: The identifier to block.
+        """
         self._blocked_sources.add(source)
         logger.warning("Blocked source: %s", source)
 
     def unblock_source(self, source: str) -> None:
-        """Remove a source from the block list."""
+        """Remove a source from the block list.
+
+        Args:
+            source: The identifier to unblock.
+        """
         self._blocked_sources.discard(source)
 
     def process_request(
@@ -222,8 +256,13 @@ class Defense:
     ) -> tuple[bool, list[ThreatEvent]]:
         """Process an incoming request through the defense pipeline.
 
+        Args:
+            source: The unique identifier of the source.
+            request: The request data payload.
+
         Returns:
-            (allowed, threats): Whether the request is allowed and any detected threats.
+            A tuple of (allowed, threats) where allowed is True if permitted,
+            and threats is a list of detected ThreatEvents.
         """
         # 0. Check if already in Rabbit Hole
         if self.rabbithole.is_engaged(source):
@@ -314,5 +353,12 @@ class Defense:
 
 
 def create_defense(config: dict[str, Any] | None = None) -> Defense:
-    """Create a new Defense instance."""
+    """Create a new Defense instance.
+
+    Args:
+        config: Configuration dictionary for the defense system.
+
+    Returns:
+        A new initialized Defense instance.
+    """
     return Defense(config)
