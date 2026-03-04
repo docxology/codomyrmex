@@ -52,15 +52,15 @@ from .versioning import (
 try:
     from codomyrmex.validation.schemas import Config, Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
-    Config = None
+    Result = Any  # type: ignore
+    ResultStatus = Any  # type: ignore
+    Config = Any  # type: ignore
 
 # Try to import base exception for module error class
 try:
     from codomyrmex.exceptions import CodomyrmexError
 except ImportError:
-    CodomyrmexError = Exception
+    CodomyrmexError = Exception  # type: ignore
 
 
 class PromptEngineeringError(CodomyrmexError):
@@ -88,7 +88,7 @@ def list_strategies() -> list[str]:
     return PromptOptimizer().available_strategies()
 
 
-def quick_evaluate(prompt: str, response: str) -> dict:
+def quick_evaluate(prompt: str, response: str) -> dict[str, Any]:
     """
     Run a quick evaluation of a prompt-response pair using default criteria.
 
@@ -104,7 +104,7 @@ def quick_evaluate(prompt: str, response: str) -> dict:
     return result.to_dict()
 
 
-def cli_commands() -> dict:
+def cli_commands() -> dict[str, Any]:
     """
     Return CLI command definitions for the prompt_engineering module.
 

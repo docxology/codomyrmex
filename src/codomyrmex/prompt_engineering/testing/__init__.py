@@ -6,6 +6,8 @@ Systematic prompt evaluation and A/B testing.
 
 __version__ = "0.1.0"
 
+from typing import Any
+
 from .evaluators import (
     ContainsEvaluator,
     CustomEvaluator,
@@ -25,11 +27,11 @@ from .runner import ABTest, PromptTester, PromptTestSuite
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = Any  # type: ignore
+    ResultStatus = Any  # type: ignore
 
 
-def cli_commands():
+def cli_commands() -> dict[str, Any]:
     """Return CLI commands for the prompt_testing module."""
     return {
         "suites": lambda: print(

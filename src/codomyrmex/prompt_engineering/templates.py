@@ -7,6 +7,7 @@ storing, and rendering prompt templates with variable substitution.
 
 from __future__ import annotations
 
+import builtins
 import re
 from dataclasses import dataclass, field
 from typing import Any
@@ -14,9 +15,9 @@ from typing import Any
 try:
     from codomyrmex.validation.schemas import Config, Result, ResultStatus
 except ImportError:
-    Config = None
-    Result = None
-    ResultStatus = None
+    Config = Any  # type: ignore
+    Result = Any  # type: ignore
+    ResultStatus = Any  # type: ignore
 
 
 @dataclass
@@ -182,7 +183,7 @@ class TemplateRegistry:
             raise KeyError(f"Template '{name}' not found in registry.")
         return self._templates.pop(name)
 
-    def list(self) -> list[str]:
+    def list(self) -> builtins.list[str]:
         """
         List all registered template names.
 
@@ -191,7 +192,7 @@ class TemplateRegistry:
         """
         return sorted(self._templates.keys())
 
-    def list_templates(self) -> list[PromptTemplate]:
+    def list_templates(self) -> builtins.list[PromptTemplate]:
         """
         List all registered templates.
 
@@ -215,7 +216,7 @@ class TemplateRegistry:
         template = self.get(template_name)
         return template.render(**kwargs)
 
-    def search(self, query: str) -> list[PromptTemplate]:
+    def search(self, query: str) -> builtins.list[PromptTemplate]:
         """
         Search templates by name or metadata keyword.
 
@@ -238,7 +239,7 @@ class TemplateRegistry:
                 results.append(template)
         return sorted(results, key=lambda t: t.name)
 
-    def export_all(self) -> list[dict[str, Any]]:
+    def export_all(self) -> builtins.list[dict[str, Any]]:
         """
         Export all templates as a list of dictionaries.
 
@@ -247,7 +248,7 @@ class TemplateRegistry:
         """
         return [t.to_dict() for t in self.list_templates()]
 
-    def import_all(self, data: list[dict[str, Any]], overwrite: bool = False) -> int:
+    def import_all(self, data: builtins.list[dict[str, Any]], overwrite: bool = False) -> int:
         """
         Import templates from a list of dictionaries.
 
