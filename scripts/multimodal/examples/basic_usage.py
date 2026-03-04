@@ -14,6 +14,7 @@ Usage:
 """
 
 import os
+import argparse
 import sys
 from pathlib import Path
 
@@ -28,14 +29,24 @@ from codomyrmex.utils.cli_helpers import (
     print_info,
     print_section,
     print_success,
-    print_warning,
     setup_logging,
 )
 from codomyrmex.multimodal.image_generation import ImageGenerator
 
 
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Multimodal Basic Usage Example")
+    parser.add_argument("--prompt", default="A photorealistic blue butterfly resting on a dandelion, morning light", help="Input for generation")
+    parser.add_argument("--model", default="imagen-4.0-generate-001", help="Image generation model")
+    parser.add_argument("--aspect-ratio", default="1:1", choices=["1:1", "16:9", "9:16", "4:3", "3:4"], help="Aspect ratio for the image")
+    parser.add_argument("--images", type=int, default=1, help="Number of images to generate")
+    parser.add_argument("--output-dir", default="output/images", help="Output directory relative to repo root")
+    return parser.parse_args()
+
 def main() -> int:
     setup_logging()
+    args = parse_args()
     print_section("ImageGenerator — Basic Usage")
 
     # ── 1. Construction ────────────────────────────────────────────────
@@ -48,50 +59,51 @@ def main() -> int:
     # ── 2. API key check ───────────────────────────────────────────────
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        print_warning("2. GEMINI_API_KEY not set — skipping live generation.")
+        print_error("2. GEMINI_API_KEY not set — cannot run live generation.")
         print_info("   Export GEMINI_API_KEY=<key> to run actual generation.")
-        print_section("Basic Usage Complete (API skipped)")
-        return 0
+        return 1
 
     # ── 3. Generate a single image ─────────────────────────────────────
-    print_info("2. Generating a single image (Imagen 3, 1:1)...")
+    print_info(f"2. Generating {args.images} image(s) ({args.model}, {args.aspect_ratio})...")
     try:
         results = generator.generate(
-            prompt="A photorealistic blue butterfly resting on a dandelion, morning light, macro photography",
-            model="imagen-3.0-generate-002",
-            number_of_images=1,
-            aspect_ratio="1:1",
+            prompt=args.prompt,
+            model=args.model,
+            number_of_images=args.images,
+            aspect_ratio=args.aspect_ratio,
         )
         print_success(f"   Got {len(results)} result(s). Keys: {list(results[0].keys())}")
     except Exception as e:
-        print_error(f"   Single image generation failed: {e}")
+        print_error(f"   Image generation failed: {e}")
         return 1
 
     # ── 4. Save the image ──────────────────────────────────────────────
     print_info("3. Saving result...")
-    output_dir = Path(__file__).resolve().parents[3] / "outputs" / "images"
+    output_dir = Path(__file__).resolve().parents[3] / args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     img = results[0]
     image_bytes = img.get("image_bytes") or img.get("image_data")
     if image_bytes:
         out = output_dir / "basic_usage_image.png"
         out.write_bytes(image_bytes)
-        print_success(f"   Saved: outputs/images/basic_usage_image.png ({len(image_bytes):,} bytes)")
+        print_success(f"   Saved: {args.output_dir}/basic_usage_image.png ({len(image_bytes):,} bytes)")
     else:
         print_info(f"   No image_bytes in result — available keys: {list(img.keys())}")
 
     # ── 5. Different aspect ratio ──────────────────────────────────────
-    print_info("4. Generating a 16:9 landscape image...")
+    alt_ratio = "16:9" if args.aspect_ratio == "1:1" else "1:1"
+    print_info(f"4. Generating a {alt_ratio} landscape image...")
     try:
         wide_results = generator.generate(
-            prompt="A cinematic mountain panorama at golden hour, wide format",
-            model="imagen-3.0-generate-002",
+            prompt=args.prompt + " (alternative)",
+            model=args.model,
             number_of_images=1,
-            aspect_ratio="16:9",
+            aspect_ratio=alt_ratio,
         )
-        print_success(f"   16:9 image generated. Keys: {list(wide_results[0].keys())}")
+        print_success(f"   {alt_ratio} image generated. Keys: {list(wide_results[0].keys())}")
     except Exception as e:
-        print_error(f"   16:9 generation failed: {e}")
+        print_error(f"   {alt_ratio} generation failed: {e}")
+        return 1
 
     print_section("Basic Usage Complete")
     return 0

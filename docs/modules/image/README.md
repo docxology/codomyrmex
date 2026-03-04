@@ -1,25 +1,60 @@
-# Image
+# Image Module
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Placeholder | **Last Updated**: March 2026
 
 ## Overview
 
-Image processing, computer vision utilities, and vision model integrations.
+The `image` module is a reserved namespace for future image processing and analysis capabilities. It currently contains no Python source code or exports. The directory holds only RASP documentation files (AGENTS.md, SPEC.md, PAI.md). For image generation functionality, see the `multimodal` module which provides `ImageGenerator`.
 
-## Source
+## Current Status
 
-**Source code**: [`src/codomyrmex/image/`](../../../src/codomyrmex/image/)
+- **No source code**: No `__init__.py` or `.py` files exist in `src/codomyrmex/image/`
+- **No MCP tools**: No `mcp_tools.py`; not auto-discovered via the MCP bridge
+- **No tests**: No test coverage required for an empty module
+- **Documentation only**: AGENTS.md, SPEC.md, PAI.md, and README.md are present
 
-## MCP Tools
+## Planned Capabilities
 
-> Run `/codomyrmexVerify` to check if this module exposes registered MCP tools.
+This namespace is reserved for future implementation of:
 
-## Related Documentation
+- Image format conversion and optimization (PNG, JPEG, WebP, AVIF)
+- Image analysis and metadata extraction (EXIF, dimensions, color profiles)
+- Thumbnail generation and resizing
+- OCR integration for text extraction from images
+- Computer vision utility wrappers
 
-- [Source README](../../../src/codomyrmex/image/README.md)
-- [API Specification](../../../src/codomyrmex/image/API_SPECIFICATION.md)
+## Architecture
+
+```
+src/codomyrmex/image/
+    AGENTS.md   -- Agent coordination reference
+    PAI.md      -- PAI integration reference
+    README.md   -- Module documentation
+    SPEC.md     -- Functional specification
+```
+
+No Python modules or exports are available until implementation begins.
+
+## PAI Integration
+
+| Phase | Tool / Class | Usage |
+|-------|-------------|-------|
+| N/A | -- | No implementations yet |
+
+## Testing
+
+No tests exist for this module. Tests will be added when Python source code is implemented.
+
+## Related Modules
+
+- [video](../video/) -- Video processing (similarly structured)
+- [multimodal](../multimodal/) -- Image generation via `ImageGenerator`
+- [data_visualization](../data_visualization/) -- Chart and image export
 
 ## Navigation
 
+- **AGENTS**: [AGENTS.md](AGENTS.md)
+- **SPEC**: [SPEC.md](SPEC.md)
+- **Source**: [`src/codomyrmex/image/`](../../../src/codomyrmex/image/)
 - **Parent**: [Module Documentation](../README.md)
 - **Root**: [docs/](../../README.md)

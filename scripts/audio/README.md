@@ -42,7 +42,7 @@ All parameters in [`config/audio/config.yaml`](../../config/audio/config.yaml):
 | `generation.tts.rate` | `1.0` | Speaking rate (0.5–2.0) |
 | `generation.tts.pitch` | `1.0` | Pitch adjustment |
 | `generation.tts.volume` | `1.0` | Volume (0.0–1.0) |
-| `generation.tts.output_dir` | `outputs/audio` | Where to save audio files |
+| `generation.tts.output_dir` | `output/audio` | Where to save audio files |
 | `generation.tts.default_text` | (see config) | Text for single synthesis |
 | `generation.tts.batch_texts` | (list) | Texts for batch synthesis |
 
@@ -63,4 +63,4 @@ See [`src/codomyrmex/audio/README.md`](../../src/codomyrmex/audio/README.md) for
 
 ## Output Files
 
-Audio files are saved to `outputs/audio/` (created automatically, git-ignored).
+Audio files are saved to `output/audio/` (created automatically, git-ignored).

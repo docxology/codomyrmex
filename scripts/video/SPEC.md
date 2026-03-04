@@ -18,7 +18,7 @@ Thin orchestrator scripts that delegate video generation to `codomyrmex.video.ge
 
 | Output | Location | Format |
 |--------|----------|--------|
-| Generated videos | `outputs/videos/video_N.mp4` | MP4 |
+| Generated videos | `output/videos/video_N.mp4` | MP4 |
 | Console logs | stdout | CLI helper format |
 | Exit code | process | 0=success/skip, 1=error |
 

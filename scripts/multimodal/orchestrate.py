@@ -42,7 +42,6 @@ from codomyrmex.utils.cli_helpers import (
     print_info,
     print_section,
     print_success,
-    print_warning,
     setup_logging,
 )
 from codomyrmex.multimodal.image_generation import ImageGenerator
@@ -56,35 +55,42 @@ def load_config() -> dict:
         return yaml.safe_load(f)
 
 
-def run_image_generation(config: dict, prompt_override: str | None = None) -> bool:
+def run_image_generation(
+    config: dict,
+    prompt_override: str | None = None,
+    model_override: str | None = None,
+    aspect_ratio_override: str | None = None,
+    images_override: int | None = None,
+) -> bool:
     """Generate images using parameters from config.
 
-    Returns True on success or soft-skip (no API key), False on error.
+    Returns True on success, False on error or missing API key.
     """
     gen_cfg = config.get("generation", {}).get("image", {})
 
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        print_warning("GEMINI_API_KEY not set — skipping live generation.")
+        print_error("GEMINI_API_KEY not set — cannot run live generation.")
         print_info("  Export GEMINI_API_KEY=<your-key> to enable generation.")
         print_info(f"  Config: {_CONFIG_PATH.relative_to(_PROJECT_ROOT)}")
-        return True
+        return False
 
-    model = gen_cfg.get("model", "imagen-3.0-generate-002")
+    model = model_override or gen_cfg.get("model", "imagen-4.0-generate-001")
     prompt = prompt_override or gen_cfg.get(
         "default_prompt",
         "A photorealistic landscape at golden hour",
     )
-    number_of_images = gen_cfg.get("number_of_images", 1)
-    aspect_ratio = gen_cfg.get("aspect_ratio", "1:1")
-    output_dir = _PROJECT_ROOT / gen_cfg.get("output_dir", "outputs/images")
+    number_of_images = images_override or gen_cfg.get("number_of_images", 1)
+    aspect_ratio = aspect_ratio_override or gen_cfg.get("aspect_ratio", "1:1")
+    output_dir_str = config.get("output_dir_override") or gen_cfg.get("output_dir", "output")
+    output_dir = _PROJECT_ROOT / output_dir_str
     save_format = gen_cfg.get("save_format", "png")
 
     print_info(f"  Model:            {model}")
     print_info(f"  Prompt:           {prompt[:80]}")
     print_info(f"  Images:           {number_of_images}")
     print_info(f"  Aspect ratio:     {aspect_ratio}")
-    print_info(f"  Output dir:       {gen_cfg.get('output_dir', 'outputs/images')}")
+    print_info(f"  Output dir:       {output_dir_str}")
 
     try:
         generator = ImageGenerator()
@@ -114,7 +120,7 @@ def run_image_generation(config: dict, prompt_override: str | None = None) -> bo
             print_info(f"  [{i + 1}] Result keys: {list(img.keys())}")
 
     if saved:
-        print_success(f"  {saved} file(s) written to {gen_cfg.get('output_dir', 'outputs/images')}")
+        print_success(f"  {saved} file(s) written to {output_dir_str}")
 
     return True
 
@@ -124,6 +130,10 @@ def parse_args() -> argparse.Namespace:
         description="Multimodal image generation orchestrator"
     )
     parser.add_argument("--prompt", help="Override default prompt from config")
+    parser.add_argument("--model", help="Override default model from config")
+    parser.add_argument("--aspect-ratio", choices=["1:1", "16:9", "9:16", "4:3", "3:4"], help="Override aspect ratio")
+    parser.add_argument("--images", type=int, help="Override number of images to generate")
+    parser.add_argument("--output-dir", help="Override output directory")
     return parser.parse_args()
 
 
@@ -135,7 +145,13 @@ def main() -> int:
     print_info(f"Config: {_CONFIG_PATH.relative_to(_PROJECT_ROOT)}")
 
     config = load_config()
-    ok = run_image_generation(config, prompt_override=args.prompt)
+    ok = run_image_generation(
+        config,
+        prompt_override=args.prompt,
+        model_override=args.model,
+        aspect_ratio_override=args.aspect_ratio,
+        images_override=args.images,
+    )
 
     if ok:
         print_section("Orchestration Complete")

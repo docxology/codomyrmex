@@ -16,7 +16,7 @@ Runnable entry points for TTS audio generation. Agents use these to produce spee
 - **Requires audio extras**: `uv sync --extra audio`
 - **Soft skip** if audio extras not installed (exit 0, not error)
 - **Configurable via**: `config/audio/config.yaml`
-- **Output destination**: `outputs/audio/` (relative to repo root)
+- **Output destination**: `output/audio/` (relative to repo root)
 
 ## Provider Selection Logic
 

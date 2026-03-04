@@ -18,8 +18,8 @@ Thin orchestrator scripts delegating TTS synthesis to `codomyrmex.audio.text_to_
 
 | Output | Location | Format |
 |--------|----------|--------|
-| Single synthesized audio | `outputs/audio/orchestrate_single.mp3` | MP3 (edge-tts) or WAV (pyttsx3) |
-| Batch audio files | `outputs/audio/orchestrate_batch_N.mp3` | MP3 or WAV |
+| Single synthesized audio | `output/audio/orchestrate_single.mp3` | MP3 (edge-tts) or WAV (pyttsx3) |
+| Batch audio files | `output/audio/orchestrate_batch_N.mp3` | MP3 or WAV |
 | Console logs | stdout | CLI helper format |
 | Exit code | process | 0=success/skip, 1=error |
 

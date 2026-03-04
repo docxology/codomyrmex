@@ -30,7 +30,7 @@ generation:
     # Volume level (0.0 = silent, 1.0 = full)
     volume: 1.0
     # Output directory (relative to repo root) for saving audio files
-    output_dir: "outputs/audio"
+    output_dir: "output/audio"
     # Default synthesis text used by orchestrate.py when no --text is given
     default_text: "Hello! This is a test of the Codomyrmex audio synthesis system using edge-tts neural voice."
     # Batch synthesis examples for the orchestrator demo

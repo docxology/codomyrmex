@@ -5,17 +5,21 @@ Tests for API Circuit Breaker Module
 
 import pytest
 
-from codomyrmex.api.circuit_breaker import (
-    Bulkhead,
-    BulkheadFullError,
-    CircuitBreaker,
-    CircuitBreakerConfig,
-    CircuitOpenError,
-    CircuitState,
-    RetryPolicy,
-    circuit_breaker,
-    retry,
-)
+
+try:
+    from codomyrmex.api.circuit_breaker import (
+        Bulkhead,
+        BulkheadFullError,
+        CircuitBreaker,
+        CircuitBreakerConfig,
+        CircuitOpenError,
+        CircuitState,
+        RetryPolicy,
+        circuit_breaker,
+        retry,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 
 class TestCircuitBreaker:

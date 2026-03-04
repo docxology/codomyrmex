@@ -15,9 +15,8 @@ features:
 # Image generation via Google AI (Imagen 3)
 generation:
   image:
-    # Google AI model — use "imagen-3.0-generate-002" for Imagen 3 (recommended)
-    # or "imagen-3.0-fast-generate-001" for faster, lower-cost generation
-    model: "imagen-3.0-generate-002"
+    # Google AI model
+    model: "imagen-4.0-generate-001"
     # Default prompt used by orchestrate.py when no --prompt is given
     default_prompt: "A photorealistic blue butterfly resting on a sunlit dandelion, macro photography, golden hour"
     # Number of images to generate per request (1–4)
@@ -25,7 +24,7 @@ generation:
     # Aspect ratio: "1:1" | "16:9" | "9:16" | "4:3" | "3:4"
     aspect_ratio: "1:1"
     # Output directory (relative to repo root) for saving generated images
-    output_dir: "outputs/images"
+    output_dir: "output"
     # File format for saved images: "png" | "jpeg"
     save_format: "png"
     # Safety filter level: "block_low_and_above" | "block_medium_and_above" | "block_only_high"

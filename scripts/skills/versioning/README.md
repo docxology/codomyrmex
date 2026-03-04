@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# Skills Versioning Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for skill versioning, demonstrating semantic version management, upgrade paths, backward compatibility checks, and version pinning.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `versioning_demo.py` | Demonstrates skill version management, upgrade validation, and compatibility checks |
+
+## Usage
+
+```bash
+uv run python scripts/skills/versioning/versioning_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: skills/](../README.md) | [Scripts root](../../README.md)

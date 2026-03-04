@@ -6,7 +6,7 @@
 |-----------|--------|--------|
 | BUILD | Generate video from text prompt | `orchestrate.py` |
 | EXECUTE | Run generation with config params | `orchestrate.py --prompt "..."` |
-| OBSERVE | Check outputs in `outputs/videos/` | (filesystem) |
+| OBSERVE | Check output in `output/videos/` | (filesystem) |
 
 ## PAI Tool Invocation
 

@@ -19,20 +19,23 @@ except ImportError:
 
 pytestmark = pytest.mark.skipif(not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api")
 
-from codomyrmex.api.documentation.doc_generator import (
-    APIDocumentation,
-    APIDocumentationGenerator,
-    APIEndpoint,
-    extract_api_specs,
-    generate_api_docs,
-)
-from codomyrmex.api.openapi_generator import (
-    DocumentationOpenAPIGenerator as OpenAPIGenerator,
-)
-from codomyrmex.api.openapi_generator import (
-    generate_openapi_spec,
-    validate_openapi_spec,
-)
+try:
+    from codomyrmex.api.documentation.doc_generator import (
+        APIDocumentation,
+        APIDocumentationGenerator,
+        APIEndpoint,
+        extract_api_specs,
+        generate_api_docs,
+    )
+    from codomyrmex.api.openapi_generator import (
+        DocumentationOpenAPIGenerator as OpenAPIGenerator,
+    )
+    from codomyrmex.api.openapi_generator import (
+        generate_openapi_spec,
+        validate_openapi_spec,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 
 @pytest.mark.unit

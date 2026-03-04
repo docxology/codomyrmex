@@ -6,7 +6,7 @@
 |-----------|--------|--------|
 | BUILD | Synthesize speech from text | `orchestrate.py` |
 | EXECUTE | Run synthesis with config params | `orchestrate.py --text "..."` |
-| OBSERVE | Check outputs in `outputs/audio/` | (filesystem) |
+| OBSERVE | Check output in `output/audio/` | (filesystem) |
 
 ## PAI Tool Invocation
 
@@ -17,15 +17,15 @@ from codomyrmex.audio import Synthesizer
 # Neural TTS (edge-tts)
 synth = Synthesizer(provider="edge-tts")
 result = synth.synthesize("Hello, world!", voice="en-US-AriaNeural")
-result.save("outputs/audio/output.mp3")
+result.save("output/audio/output.mp3")
 
 # Offline TTS (pyttsx3)
 synth_offline = Synthesizer(provider="pyttsx3")
 result = synth_offline.synthesize("Hello, world!")
-result.save("outputs/audio/output.wav")
+result.save("output/audio/output.wav")
 
 # To file directly
-synth.synthesize_to_file("Text here", "outputs/audio/output.mp3")
+synth.synthesize_to_file("Text here", "output/audio/output.mp3")
 ```
 
 ## Config Control

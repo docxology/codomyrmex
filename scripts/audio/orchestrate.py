@@ -65,35 +65,37 @@ def run_audio_synthesis(
     config: dict,
     text_override: str | None = None,
     provider_override: str | None = None,
+    voice_override: str | None = None,
+    rate_override: float | None = None,
 ) -> bool:
     """Synthesize audio using parameters from config.
 
     Tries the configured default_provider first; falls back to fallback_provider.
-    Returns True on success or soft-skip, False on error.
+    Returns True on success, False on error.
     """
     # Late import — audio is an optional extra
     try:
         from codomyrmex.audio import Synthesizer, TTS_AVAILABLE
         from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
     except ImportError:
-        print_warning("Audio module not available.")
+        print_error("Audio module not available.")
         print_info("  Install audio extras: uv sync --extra audio")
-        return True  # Soft skip
+        return False  # Soft skip -> strict fail
 
     if not TTS_AVAILABLE:
-        print_warning("TTS providers not installed.")
+        print_error("TTS providers not installed.")
         print_info("  Install: uv sync --extra audio")
-        return True
+        return False
 
     tts_cfg = config.get("generation", {}).get("tts", {})
 
     default_provider = provider_override or tts_cfg.get("default_provider", "edge-tts")
     fallback_provider = tts_cfg.get("fallback_provider", "pyttsx3")
-    voice = tts_cfg.get("default_voice", "en-US-AriaNeural")
-    rate = tts_cfg.get("rate", 1.0)
+    voice = voice_override or tts_cfg.get("default_voice", "en-US-AriaNeural")
+    rate = rate_override or tts_cfg.get("rate", 1.0)
     pitch = tts_cfg.get("pitch", 1.0)
     volume = tts_cfg.get("volume", 1.0)
-    output_dir = _PROJECT_ROOT / tts_cfg.get("output_dir", "outputs/audio")
+    output_dir = _PROJECT_ROOT / tts_cfg.get("output_dir", "output/audio")
     text = text_override or tts_cfg.get(
         "default_text",
         "Hello! This is a test of the Codomyrmex audio synthesis system.",
@@ -103,7 +105,7 @@ def run_audio_synthesis(
     print_info(f"  Provider:         {default_provider} (fallback: {fallback_provider})")
     print_info(f"  Voice:            {voice}")
     print_info(f"  Rate/Pitch/Vol:   {rate} / {pitch} / {volume}")
-    print_info(f"  Output dir:       {tts_cfg.get('output_dir', 'outputs/audio')}")
+    print_info(f"  Output dir:       {tts_cfg.get('output_dir', 'output/audio')}")
     print_info(f"  Text:             {text[:72]}...")
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -159,6 +161,8 @@ def parse_args() -> argparse.Namespace:
         choices=["edge-tts", "pyttsx3"],
         help="Override default provider from config",
     )
+    parser.add_argument("--voice", help="Override specific voice to use")
+    parser.add_argument("--rate", type=float, help="Override speaking rate")
     return parser.parse_args()
 
 

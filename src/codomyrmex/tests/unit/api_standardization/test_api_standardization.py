@@ -17,33 +17,36 @@ except ImportError:
 
 pytestmark = pytest.mark.skipif(not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api")
 
-from codomyrmex.api.openapi_generator import OpenAPISpecification
-from codomyrmex.api.openapi_generator import (
-    StandardizationOpenAPIGenerator as OpenAPIGenerator,
-)
-from codomyrmex.api.standardization.api_versioning import (
-    APIVersion,
-    APIVersionManager,
-    VersionedEndpoint,
-    VersionFormat,
-)
-from codomyrmex.api.standardization.graphql_api import (
-    GraphQLAPI,
-    GraphQLField,
-    GraphQLMutation,
-    GraphQLObjectType,
-    GraphQLResolver,
-    GraphQLSchema,
-)
-from codomyrmex.api.standardization.rest_api import (
-    RESTAPI,
-    APIEndpoint,
-    APIRequest,
-    APIResponse,
-    APIRouter,
-    HTTPMethod,
-    HTTPStatus,
-)
+try:
+    from codomyrmex.api.openapi_generator import OpenAPISpecification
+    from codomyrmex.api.openapi_generator import (
+        StandardizationOpenAPIGenerator as OpenAPIGenerator,
+    )
+    from codomyrmex.api.standardization.api_versioning import (
+        APIVersion,
+        APIVersionManager,
+        VersionedEndpoint,
+        VersionFormat,
+    )
+    from codomyrmex.api.standardization.graphql_api import (
+        GraphQLAPI,
+        GraphQLField,
+        GraphQLMutation,
+        GraphQLObjectType,
+        GraphQLResolver,
+        GraphQLSchema,
+    )
+    from codomyrmex.api.standardization.rest_api import (
+        RESTAPI,
+        APIEndpoint,
+        APIRequest,
+        APIResponse,
+        APIRouter,
+        HTTPMethod,
+        HTTPStatus,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 
 @pytest.mark.unit

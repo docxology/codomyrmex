@@ -9,7 +9,7 @@ PAI (Personal AI Infrastructure) is the system at `~/.claude/PAI/`. It is **not*
 | Component | Count | Location |
 |-----------|-------|----------|
 | Algorithm | v3.5.0 | `~/.claude/PAI/SKILL.md` (CORE) |
-| Skills | 100 | `~/.claude/skills/` |
+| Skills | 103+ | `~/.claude/skills/` |
 | Hooks | 29 | `~/.claude/hooks/` |
 | Tools | 60+ | `~/.claude/PAI/Tools/` |
 | Agents | 13 + subagent types | `~/.claude/PAI/PAIAGENTSYSTEM.md` |
@@ -19,11 +19,11 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is a **122-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is a **124-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              122 modules of dev-platform tools
+     Algorithm + Skills + Hooks              124 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -36,7 +36,7 @@ The MCP server is the operational bridge between PAI and codomyrmex:
 graph LR
     subgraph PAI ["PAI System (~/.claude/)"]
         Algo["Algorithm v3.5.0"]
-        Skills["77+ Skills"]
+        Skills["101+ Skills"]
         Agents["Named Agents"]
     end
 
@@ -116,7 +116,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 │   ├── SKILL.md                    # CORE (the Algorithm v3.5.0)
 │   ├── Tools/                      # TypeScript CLI tools
 │   └── (PAIAGENTSYSTEM.md, etc.)   # PAI system docs
-├── skills/                         # 77+ skill packs (PAI, Codomyrmex, etc.)
+├── skills/                         # 103+ skill packs (PAI, Codomyrmex, visual-explainer, etc.)
 ├── hooks/                          # 22 hooks
 ├── MEMORY/                         # WORK, STATE, LEARNING
 ├── settings.json                   # Identity, preferences (pai.version=4.0.1)
@@ -182,6 +182,7 @@ Condensed view of what PAI agents can access:
 | **Data** | `data_visualization/`, `scrape/`, `config_management/` | 7 | Charting/dashboards, HTML extraction, config get/set/validate |
 | **Platform** | `system_discovery/`, `plugin_system/`, `maintenance/`, `logging_monitoring/`, `relations/`, `documentation/` | 8 | Health checks, plugin discovery, RASP auditing, log formatting |
 | **Interface** | `cli/`, `terminal_interface/`, `ide/` | — | User interaction, rich output (no MCP tools) |
+| **Ext. Skills** | `visual-explainer` (external) | 7 commands | BUILD/VERIFY — HTML diagrams, diff reviews, implementation plans, slide decks via `/generate-web-diagram` et al. |
 
 ## RASP Documentation Pattern
 

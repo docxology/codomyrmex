@@ -2,6 +2,8 @@
 
 import json
 
+import pytest
+
 
 class TestAPIRequest:
     """Tests for APIRequest dataclass."""

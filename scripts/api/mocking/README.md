@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# API Mocking Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for API mocking, demonstrating how to create mock API servers for testing and development without hitting real endpoints.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `mocking_demo.py` | Demonstrates API mock server setup and response simulation |
+
+## Usage
+
+```bash
+uv run python scripts/api/mocking/mocking_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: api/](../README.md) | [Scripts root](../../README.md)

@@ -1,0 +1,288 @@
+{
+  "assessments": {
+    "cross_module_architecture": 54,
+    "convention_outlier": 72,
+    "error_consistency": 48,
+    "abstraction_fitness": 61,
+    "dependency_health": 58,
+    "test_strategy": 42,
+    "ai_generated_debt": 51,
+    "package_organization": 55,
+    "high_level_elegance": 58,
+    "mid_level_elegance": 57,
+    "low_level_elegance": 60,
+    "design_coherence": 56
+  },
+  "findings": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "cli_handler_passthrough_hub",
+      "summary": "agents/cli/handlers.py has 15 public wrapper functions that each forward identically into 3 private helpers, creating a high-blast-radius pass-through hub with no added value at the seam.",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "evidence": "15 public functions (handle_jules_execute, handle_claude_execute, etc.) all delegate to _handle_agent_execute with (client_class, client_name, args) \u2014 same parameter bag, no transformation. This means any change to _handle_agent_execute signature breaks all 15 callers simultaneously.",
+      "suggestion": "Replace the 15 public wrappers with a single dispatch function that accepts an agent type enum, or expose _handle_agent_execute directly and let the 3 concrete handlers be the public surface.",
+      "confidence": 0.88
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "import_cycles_dependency_injection",
+      "summary": "3 real import cycles detected: dependency_injection/container\u2194scopes, utils/process/subprocess\u2194subprocess_advanced, api/openapi_generator\u2194openapi_standardization_generator.",
+      "related_files": [
+        "src/codomyrmex/dependency_injection/container.py",
+        "src/codomyrmex/dependency_injection/scopes.py",
+        "src/codomyrmex/utils/process/subprocess.py",
+        "src/codomyrmex/utils/process/subprocess_advanced.py",
+        "src/codomyrmex/api/openapi_generator.py"
+      ],
+      "evidence": "desloppify scan reports 18 import cycle instances (3 unique real cycles + worktree duplicates). Import cycles force both modules to be partially loaded at import time, creating fragile initialization order dependencies.",
+      "suggestion": "Break each cycle by extracting shared types/constants into a third neutral module (e.g., dependency_injection/types.py), or use TYPE_CHECKING guards for forward references.",
+      "confidence": 0.92
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "camelcase_leaks_in_transport_lora",
+      "summary": "camelCase identifier leaks in transport (9 instances) and lora (5 instances) modules break the otherwise consistent snake_case convention across the codebase.",
+      "related_files": [
+        "src/codomyrmex/transport/",
+        "src/codomyrmex/llm/lora/"
+      ],
+      "evidence": "Codebase is overwhelmingly snake_case. Isolated camelCase leaks: transport/9, lora/5, performance/5, git_operations/1, model_context_protocol/1, terminal_interface/1. cerebrum/core/utils.py places module docstring after the logger line rather than at the top of the file.",
+      "suggestion": "Rename camelCase identifiers in transport/ and lora/ to snake_case. Move the module docstring in cerebrum/core/utils.py to the very top of the file (before any imports).",
+      "confidence": 0.82
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "bridge_silent_swallowing",
+      "summary": "bridge/ directory has 13 returns_null and 10 try_catch patterns with 0 throws \u2014 errors are silently swallowed rather than propagated, violating the project's zero-silent-fallback policy.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/pai_bridge.py",
+        "src/codomyrmex/cli/utils.py"
+      ],
+      "evidence": "bridge/ has 13 returns_null, 10 try_catch, 0 throws. cloud/infomaniak/ subpackages use returns_null almost exclusively. cli/utils.py defines ImportError fallback stubs for TerminalFormatter/CommandRunner that return None silently \u2014 directly contradicting CLAUDE.md zero-silent-fallbacks policy.",
+      "suggestion": "Audit bridge/ for except blocks that return None or empty dict instead of re-raising. In cli/utils.py, replace the ImportError stub classes with explicit `raise ImportError(...)` so callers know the dependency is missing.",
+      "confidence": 0.9
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "no_per_layer_error_policy",
+      "summary": "The same module directories mix try_catch, throws, returns_null, and result_type with no documented policy, making error behavior unpredictable across the service layer.",
+      "related_files": [
+        "src/codomyrmex/cloud/infomaniak/compute/",
+        "src/codomyrmex/cloud/infomaniak/dns/"
+      ],
+      "evidence": "cloud/infomaniak/ compute/dns/network/object_storage all use returns_null almost exclusively with no throws. Other modules in the same layer (orchestrator, agents) use raises. No per-layer or per-module error strategy is documented.",
+      "suggestion": "Add an error strategy declaration to each module's AGENTS.md (e.g., 'This module raises on all errors'). Pick raises as the default for service-layer modules \u2014 returns_null is appropriate only for pure query functions.",
+      "confidence": 0.85
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "wide_param_bag_advanced_plotter",
+      "summary": "advanced_plotter.py has 9 wide functions with 452 config_bag instances total. PlotConfig dataclass exists to address this but is bypassed in the wide methods themselves.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/advanced_plotter.py"
+      ],
+      "evidence": "1,918 total indirection hotspots in the codebase. advanced_plotter.py has 9 wide functions with 50 config_bag mentions. PlotConfig was added as a dataclass solution but create_advanced_chart and related methods still accept individual keyword arguments rather than a config object.",
+      "suggestion": "Refactor advanced_plotter.py wide functions to accept PlotConfig as the first argument. Provide a builder or dataclass_fields helper for callers who prefer keyword style.",
+      "confidence": 0.83
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "event_logger_single_line_delegators",
+      "summary": "events/handlers/event_logger.py wraps get_event_stats and get_recent_events as single-line delegators with no transformation \u2014 pure indirection with no abstraction value.",
+      "related_files": [
+        "src/codomyrmex/events/handlers/event_logger.py"
+      ],
+      "evidence": "get_event_stats() and get_recent_events() in EventLogger each consist of a single return self.event_bus.get_*() call with no additional logic, type conversion, or filtering. These wrappers add a layer of indirection without any benefit.",
+      "suggestion": "Remove the delegator wrappers and let callers access self.event_bus directly, or add genuine value (filtering, projection, error handling) to justify the indirection.",
+      "confidence": 0.86
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "advanced_plotter_heavy_module_import",
+      "summary": "advanced_plotter.py hard-imports matplotlib, numpy, pandas, and seaborn at module level, pulling the full ML/viz stack into any module that imports it.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/advanced_plotter.py"
+      ],
+      "evidence": "Four heavy dependencies (matplotlib, numpy, pandas, seaborn) are unconditionally imported at the top of advanced_plotter.py. Any module that does `from data_visualization import X` will trigger all four imports even if it only needs a non-plotting utility.",
+      "suggestion": "Move matplotlib/numpy/pandas/seaborn imports inside the functions that use them, or split advanced_plotter.py into a lightweight entry module and a heavy rendering submodule that's only imported when needed.",
+      "confidence": 0.88
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "openapi_generator_silent_none_fallback",
+      "summary": "openapi_generator.py assigns None to RESTAPI and GraphQLAPI on ImportError, creating a silent degradation that produces misleading behavior at runtime.",
+      "related_files": [
+        "src/codomyrmex/api/openapi_generator.py"
+      ],
+      "evidence": "openapi_generator.py has try/except ImportError blocks that set RESTAPI = None and GraphQLAPI = None. Any code that later calls these as classes will get a TypeError: 'NoneType' is not callable \u2014 a confusing runtime error far from the actual missing import.",
+      "suggestion": "Replace the None fallbacks with explicit re-raise: `raise ImportError('openapi extra required: uv sync --extra openapi')` or use a lazy-import guard with a clear error message.",
+      "confidence": 0.9
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "critical_path_zero_coverage",
+      "summary": "The 10 most-imported files in the codebase (the true critical paths) all have zero test coverage: plots/_base.py (20 importers), exceptions/base.py (12), components/_base.py (11), charts/plot_utils.py (8), ci_cd_automation/pipeline/models.py (6).",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py",
+        "src/codomyrmex/data_visualization/components/_base.py",
+        "src/codomyrmex/data_visualization/charts/plot_utils.py",
+        "src/codomyrmex/ci_cd_automation/pipeline/models.py"
+      ],
+      "evidence": "desloppify scan reports 3,258 test files but the critical_untested list includes all of the highest-fan-in modules. Test effort is concentrated on leaf modules rather than the foundational abstractions that everything else builds on.",
+      "suggestion": "Add a test file specifically for each of the top-10 most-imported untested modules. Start with plots/_base.py and exceptions/base.py \u2014 they have the most dependents and will provide the highest regression safety.",
+      "confidence": 0.93
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "hasattr_guard_repetition_event_logger",
+      "summary": "event_logger.py repeats the same hasattr(event_type, 'value') guard pattern 5 times within ~100 lines without extraction into a helper.",
+      "related_files": [
+        "src/codomyrmex/events/handlers/event_logger.py"
+      ],
+      "evidence": "The pattern `event_type.value if hasattr(event_type, 'value') else str(event_type)` appears 5 times in event_logger.py. This is a hallmark of AI-generated code that copies snippets rather than extracting reusable helpers.",
+      "suggestion": "Extract a `_event_type_str(event_type) -> str` helper at module level and replace the 5 occurrences with a single call.",
+      "confidence": 0.89
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "cerebrum_utils_misplaced_docstring",
+      "summary": "cerebrum/core/utils.py has its module docstring placed after the imports and logger initialization rather than at the top of the file.",
+      "related_files": [
+        "src/codomyrmex/cerebrum/core/utils.py"
+      ],
+      "evidence": "Python convention (PEP 257) requires module docstrings to be the first statement in a file. Placing them after imports is a common AI code generation artifact where the model generates imports first and then adds a docstring.",
+      "suggestion": "Move the module docstring to line 1 of the file, before any import statements.",
+      "confidence": 0.85
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "maintenance_scripts_at_repo_root",
+      "summary": "Root-level maintenance scripts (fix_docstrings_v2.py, patch_basic_usage.py, patch_docs.py, test_gen.py, test_models.py) have 0 importers and no canonical home in a scripts/ or tools/ directory.",
+      "related_files": [
+        "fix_docstrings_v2.py",
+        "patch_basic_usage.py",
+        "patch_docs.py",
+        "test_gen.py",
+        "test_models.py"
+      ],
+      "evidence": "5 maintenance/utility scripts sit at the repository root with no importers. They are not part of the codomyrmex package, not in scripts/, and not documented as project tools. This pollutes the root namespace and makes them hard to discover.",
+      "suggestion": "Move to scripts/maintenance/ and add an entry to the root README or CONTRIBUTING.md that documents their purpose and usage.",
+      "confidence": 0.87
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "parallel_scripts_docs_directories",
+      "summary": "Two parallel directories (scripts/docs/ and scripts/documentation/) serve overlapping documentation-management purposes with no clear ownership boundary.",
+      "related_files": [
+        "scripts/docs/",
+        "scripts/documentation/"
+      ],
+      "evidence": "scripts/documentation/ has 21 files (flat overload). scripts/docs/ exists separately. data_visualization/ also has parallel engines/plot_utils.py and charts/plot_utils.py defining the same constants (DEFAULT_FIGURE_SIZE, DEFAULT_GRID_STYLE, DEFAULT_TITLE_FONTSIZE).",
+      "suggestion": "Merge scripts/docs/ and scripts/documentation/ into a single scripts/documentation/ directory with a clear sub-structure. Consolidate the duplicate plot_utils constants into a single source of truth.",
+      "confidence": 0.84
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "unexplained_bio_simulation_meme_modules",
+      "summary": "bio_simulation/ and meme/ modules sit alongside production infrastructure without clear product-level justification, blurring the codebase's stated scope as a 'development toolbox for the PAI system'.",
+      "related_files": [
+        "src/codomyrmex/bio_simulation/",
+        "src/codomyrmex/meme/"
+      ],
+      "evidence": "The codebase CLAUDE.md describes codomyrmex as a development platform / PAI toolbox with 122 modules. bio_simulation and meme have no documented connection to that mission. They are listed in the module map but have no PAI integration docs.",
+      "suggestion": "Add a brief rationale to each module's README.md explaining how it serves the PAI toolbox mission, or move experimental/tangential modules to a separate top-level experiments/ package.",
+      "confidence": 0.77
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "four_base_classes_in_data_visualization",
+      "summary": "data_visualization/ has four separate _base.py files (plots/_base.py, components/_base.py, reports/_base.py, and one implicit) with overlapping abstract method signatures.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py",
+        "src/codomyrmex/data_visualization/components/_base.py",
+        "src/codomyrmex/data_visualization/reports/_base.py"
+      ],
+      "evidence": "Three distinct _base.py files in data_visualization/ each define abstract render/save/to_html patterns. The proliferation of parallel base hierarchies suggests the module grew organically without a unified visualization contract.",
+      "suggestion": "Define a single VisualizationBase protocol (PEP 544) or ABC in data_visualization/_base.py that all chart types, components, and report types implement, eliminating the three parallel hierarchies.",
+      "confidence": 0.8
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "cli_handler_untyped_parameter_bag",
+      "summary": "agents/cli/handlers.py passes (client_class, client_name, args) as a positional-typed tuple to _handle_agent_execute rather than a typed AgentRequest dataclass, making the CLI\u2194agent domain seam fragile.",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "evidence": "15 public handler functions all call _handle_agent_execute(client_class, client_name, args) with three positional arguments. The seam between the CLI layer and the agent domain is a raw tuple rather than a typed contract. Any future parameter addition requires updating all 15 call sites.",
+      "suggestion": "Define an AgentInvocationRequest dataclass with client_class, client_name, and args fields. Have each of the 15 handler functions construct and pass a typed request object.",
+      "confidence": 0.87
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "event_logger_side_effect_at_init",
+      "summary": "EventLogger subscribes to the event bus with a wildcard pattern during __init__, creating an implicit side effect at construction that makes testing and teardown difficult.",
+      "related_files": [
+        "src/codomyrmex/events/handlers/event_logger.py"
+      ],
+      "evidence": "EventLogger.__init__ calls self.event_bus.subscribe(['*'], self.log_event) unconditionally. This means constructing an EventLogger has the side effect of registering a global listener. Tests that create EventLogger instances will inadvertently accumulate active listeners.",
+      "suggestion": "Separate construction from activation: add a start() / stop() method pair. __init__ should only set up state; start() registers the subscription and stop() deregisters it. Use as a context manager for test isolation.",
+      "confidence": 0.88
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "advanced_plotter_if_elif_chain_dispatch",
+      "summary": "_setup_style() and _get_color_palette() in advanced_plotter.py use 10+ branch if-elif chains where a dict dispatch table would be shorter and more maintainable.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/advanced_plotter.py"
+      ],
+      "evidence": "_setup_style() has an if-elif chain with 10+ branches mapping style names to matplotlib.style.use() calls. _get_color_palette() has a similar chain. Both would be 3-4 lines with a dict: STYLE_MAP = {'default': 'seaborn', 'dark': 'dark_background', ...}; plt.style.use(STYLE_MAP.get(style, 'default'))",
+      "suggestion": "Replace both if-elif chains with module-level dict constants (STYLE_MAP, PALETTE_MAP) and a single dict.get() lookup with a default fallback.",
+      "confidence": 0.86
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "security_analyzer_deep_nesting",
+      "summary": "security_analyzer.py has analysis methods with max_chain_depth 5 and chain_count 8, indicating deeply nested conditional logic that is hard to follow and test.",
+      "related_files": [
+        "src/codomyrmex/security/analyzers/security_analyzer.py"
+      ],
+      "evidence": "desloppify scan flags security_analyzer.py with max_chain_depth=5, chain_count=8. Deep nesting in security analysis logic suggests the methods are doing too much: scanning, pattern matching, severity classification, and reporting in a single pass.",
+      "suggestion": "Break the deep nesting by extracting classification steps into dedicated methods: one for pattern matching, one for severity scoring, one for report generation. Early returns can flatten 3-4 nesting levels.",
+      "confidence": 0.8
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "baseplot_mixed_concerns",
+      "summary": "BasePlot in data_visualization mixes data attributes (title, width, height, data, options) with rendering concerns (to_html, save) and serialization utilities (to_dict, _fig_to_base64) in a single class.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py"
+      ],
+      "evidence": "BasePlot has: data fields (title, data, options), render methods (render, to_html, show, save), and utility/serialization methods (to_dict, _fig_to_base64). These three concerns belong to different abstraction layers: the data model, the renderer, and the serializer.",
+      "suggestion": "Split BasePlot: keep data attributes in a PlotSpec dataclass, define a Renderer protocol with render/to_html/save, and move serialization helpers to a separate module-level utility. BasePlot can compose these via PlotRenderer(PlotSpec).",
+      "confidence": 0.82
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "conversation_orchestrator_namespace_mismatch",
+      "summary": "ConversationOrchestrator is a specialized infinite-conversation runner living in the generic 'agents' namespace rather than the orchestrator module where orchestration logic is centralized.",
+      "related_files": [
+        "src/codomyrmex/agents/orchestrator.py"
+      ],
+      "evidence": "agents/orchestrator.py contains ConversationOrchestrator, a specialized runner for infinite conversation loops. The orchestrator/ module already exists as the dedicated home for workflow/orchestration logic. Having an orchestrator class in the agents/ namespace creates design incoherence \u2014 users looking for orchestration functionality must check two places.",
+      "suggestion": "Move ConversationOrchestrator to orchestrator/conversation.py and import it in agents/ with a deprecation alias if backward compatibility is needed.",
+      "confidence": 0.84
+    }
+  ],
+  "provenance": {
+    "kind": "blind_review_batch_import",
+    "blind": true,
+    "runner": "claude",
+    "run_stamp": "ext_20260303_201459_06d5985a",
+    "created_at": "2026-03-03T20:22:40+00:00",
+    "packet_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/review_packet_blind.json",
+    "packet_sha256": "e3266f805f9e19fb685215829eb97b7f1a679e3945e0e8d49a4ef1e2d46cfcf0",
+    "external_session_id": "ext_20260303_201459_06d5985a"
+  }
+}

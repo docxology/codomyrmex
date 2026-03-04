@@ -1,0 +1,52 @@
+# Formal Verification -- Configuration Agent Coordination
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+
+## Overview
+
+Agent coordination guide for configuring and using the formal_verification module. Z3 constraint solving and model checking.
+
+## Configuration Requirements
+
+Before using formal_verification in any PAI workflow, ensure:
+
+1. The module is importable via `from codomyrmex.formal_verification import *`
+2. Any optional dependencies are installed (check with `codomyrmex check`)
+
+## Agent Instructions
+
+1. Import the module directly: `from codomyrmex.formal_verification import ...`
+2. Check module availability with `list_modules()` from system_discovery
+3. Available MCP tools: `clear_model`, `add_item`, `delete_item`, `replace_item`, `get_model`, `solve_model`
+4. Z3 solver timeout and memory limits can be configured per-solve operation. The model state is maintained in-memory.
+
+## Operating Contracts
+
+- **Import Safety**: Module import does not trigger side effects or network calls
+- **Error Handling**: All errors raise specific exceptions (never returns None silently)
+- **Thread Safety**: Configuration reads are thread-safe after initialization
+
+## Configuration Patterns
+
+```python
+from codomyrmex.config_management.mcp_tools import get_config, set_config
+
+# Read current configuration
+value = get_config("formal_verification.setting")
+
+# Update configuration
+set_config("formal_verification.setting", "new_value")
+```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Config Access | Notes |
+|-----------|--------------|-------|
+| Engineer | Read/Write | Can update configuration during setup |
+| Architect | Read | Reviews configuration for compliance |
+| QATester | Read | Validates configuration before test runs |
+| Researcher | Read | No configuration changes |
+
+## Navigation
+
+- [README.md](README.md) | [SPEC.md](SPEC.md) | [Source Module](../../src/codomyrmex/formal_verification/AGENTS.md)

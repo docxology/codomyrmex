@@ -6,17 +6,21 @@ cursor encoding/decoding, and the factory function.
 
 import pytest
 
-from codomyrmex.api.pagination import (
-    CursorPaginator,
-    KeysetPaginator,
-    OffsetPaginator,
-    PageInfo,
-    PaginatedResponse,
-    PaginationRequest,
-    PaginationStrategy,
-    SortDirection,
-    create_paginator,
-)
+
+try:
+    from codomyrmex.api.pagination import (
+        CursorPaginator,
+        KeysetPaginator,
+        OffsetPaginator,
+        PageInfo,
+        PaginatedResponse,
+        PaginationRequest,
+        PaginationStrategy,
+        SortDirection,
+        create_paginator,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 # ---------------------------------------------------------------------------
 # Fixtures

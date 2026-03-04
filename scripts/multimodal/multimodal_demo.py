@@ -36,7 +36,6 @@ from codomyrmex.utils.cli_helpers import (
     print_info,
     print_section,
     print_success,
-    print_warning,
     setup_logging,
 )
 from codomyrmex.multimodal.image_generation import ImageGenerator
@@ -52,23 +51,23 @@ def load_config() -> dict:
 
 
 def demo_image_generation(config: dict) -> bool:
-    """Run image generation demo — returns True on success or soft-skip."""
+    """Run image generation demo — returns True on success, False on failure."""
     gen_cfg = config.get("generation", {}).get("image", {})
 
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        print_warning("GEMINI_API_KEY not set — skipping live API call.")
+        print_error("GEMINI_API_KEY not set — cannot run live API call.")
         print_info("  Set GEMINI_API_KEY to run actual image generation.")
-        return True
+        return False
 
-    model = gen_cfg.get("model", "imagen-3.0-generate-002")
+    model = gen_cfg.get("model", "imagen-4.0-generate-001")
     prompt = gen_cfg.get(
         "default_prompt",
         "A photorealistic blue butterfly on a sunlit dandelion",
     )
     number_of_images = gen_cfg.get("number_of_images", 1)
     aspect_ratio = gen_cfg.get("aspect_ratio", "1:1")
-    output_dir = _PROJECT_ROOT / gen_cfg.get("output_dir", "outputs/images")
+    output_dir = _PROJECT_ROOT / gen_cfg.get("output_dir", "output/images")
     save_format = gen_cfg.get("save_format", "png")
 
     print_info(f"  Model:            {model}")

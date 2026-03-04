@@ -1,73 +1,259 @@
 {
-  "command": "show",
-  "query": "untested_critical",
-  "status_filter": "open",
-  "total": 0,
-  "findings": [],
+  "command": "next",
+  "items": [
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/orchestrator/workflows/deploy_preview.py::phantom_read::build_result::artifacts",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/orchestrator/workflows/deploy_preview.py",
+      "summary": "Dict key \"artifacts\" read at line 108 but never written to `build_result`",
+      "detail": {
+        "kind": "phantom_read",
+        "key": "artifacts",
+        "line": 108,
+        "info": "Created at line 106 in deploy_to_preview() \u2014 will raise KeyError or return None via .get()"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/orchestrator/workflows/deploy_preview.py::phantom_read::build_result::artifacts\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py::phantom_read::attrs_dict::content",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py",
+      "summary": "Dict key \"content\" read at line 64 but never written to `attrs_dict`",
+      "detail": {
+        "kind": "phantom_read",
+        "key": "content",
+        "line": 64,
+        "info": "Created at line 62 in handle_starttag() \u2014 will raise KeyError or return None via .get()"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py::phantom_read::attrs_dict::content\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py::phantom_read::attrs_dict::name",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py",
+      "summary": "Dict key \"name\" read at line 63 but never written to `attrs_dict`",
+      "detail": {
+        "kind": "phantom_read",
+        "key": "name",
+        "line": 63,
+        "info": "Created at line 62 in handle_starttag() \u2014 will raise KeyError or return None via .get()"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py::phantom_read::attrs_dict::name\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py::phantom_read::attrs_dict::property",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py",
+      "summary": "Dict key \"property\" read at line 63 but never written to `attrs_dict`",
+      "detail": {
+        "kind": "phantom_read",
+        "key": "property",
+        "line": 63,
+        "info": "Created at line 62 in handle_starttag() \u2014 will raise KeyError or return None via .get()"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/scrape/scrape_utils.py::phantom_read::attrs_dict::property\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/workflow_execution/workflow_runner.py::phantom_read::workflow::error",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/workflow_execution/workflow_runner.py",
+      "summary": "Dict key \"error\" read at line 112 but never written to `workflow`",
+      "detail": {
+        "kind": "phantom_read",
+        "key": "error",
+        "line": 112,
+        "info": "Created at line 98 in main() \u2014 will raise KeyError or return None via .get()"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/scripts/workflow_execution/workflow_runner.py::phantom_read::workflow::error\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py::schema_drift::cost_usd::133",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py",
+      "summary": "Schema drift: 42/48 dict literals use different key, but .claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py:133 uses \"cost_usd\".",
+      "detail": {
+        "kind": "schema_drift",
+        "key": "cost_usd",
+        "line": 133,
+        "info": "Cluster of 48 similar dict literals. Key \"cost_usd\" appears in only 6. Consensus keys: ['agent', 'content_length', 'execution_time', 'language']"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py::schema_drift::cost_usd::133\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py::schema_drift::tokens_used::133",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py",
+      "summary": "Schema drift: 36/48 dict literals use different key, but .claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py:133 uses \"tokens_used\".",
+      "detail": {
+        "kind": "schema_drift",
+        "key": "tokens_used",
+        "line": 133,
+        "info": "Cluster of 48 similar dict literals. Key \"tokens_used\" appears in only 12. Consensus keys: ['agent', 'content_length', 'execution_time', 'language']"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/claude/claude_integration.py::schema_drift::tokens_used::133\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/codex/codex_integration.py::schema_drift::tokens_used::49",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/codex/codex_integration.py",
+      "summary": "Schema drift: 36/48 dict literals use different key, but .claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/codex/codex_integration.py:49 uses \"tokens_used\".",
+      "detail": {
+        "kind": "schema_drift",
+        "key": "tokens_used",
+        "line": 49,
+        "info": "Cluster of 48 similar dict literals. Key \"tokens_used\" appears in only 12. Consensus keys: ['agent', 'content_length', 'execution_time', 'language']"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/codex/codex_integration.py::schema_drift::tokens_used::49\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/gemini/gemini_cli.py::phantom_read::parsed_json::text",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/gemini/gemini_cli.py",
+      "summary": "Dict key \"text\" read at line 87 but never written to `parsed_json`",
+      "detail": {
+        "kind": "phantom_read",
+        "key": "text",
+        "line": 87,
+        "info": "Created at line 83 in _execute_impl() \u2014 will raise KeyError or return None via .get()"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/agents/gemini/gemini_cli.py::phantom_read::parsed_json::text\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/coding/review/analyzer.py::schema_drift::risk_level::154",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dict_keys",
+      "file": ".claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/coding/review/analyzer.py",
+      "summary": "Schema drift: 42/48 dict literals use different key, but .claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/coding/review/analyzer.py:154 uses \"risk_level\".",
+      "detail": {
+        "kind": "schema_drift",
+        "key": "risk_level",
+        "line": 154,
+        "info": "Cluster of 48 similar dict literals. Key \"risk_level\" appears in only 6. Consensus keys: ['complexity', 'file_path', 'line_number', 'name']"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dict_keys::.claude/worktrees/agent-a2169dc4/.claude/worktrees/agent-a81fc169/src/codomyrmex/coding/review/analyzer.py::schema_drift::risk_level::154\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    }
+  ],
+  "queue": {
+    "tier_counts": {
+      "1": 2,
+      "2": 11075,
+      "3": 18320,
+      "4": 188
+    },
+    "requested_tier": 2,
+    "selected_tier": 2,
+    "fallback_reason": null,
+    "available_tiers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "total": 11075
+  },
   "narrative": {
-    "phase": "middle_grind",
-    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. All T1 items cleared! (16 review findings \u2014 run `desloppify issues`)",
+    "phase": "stagnation",
+    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. Score plateaued at 58.6 for 5 scans. Test health (0.0%) is where the breakthrough is.",
     "dimensions": {
       "lowest_dimensions": [
         {
           "name": "Test health",
-          "strict": 8.6,
-          "issues": 10210,
+          "strict": 0.0,
+          "issues": 10020,
           "impact": 0.0
         },
         {
-          "name": "AI generated debt",
-          "strict": 45.0,
-          "issues": 2,
-          "impact": 0.0,
-          "subjective": true,
-          "impact_description": "re-review to improve"
+          "name": "File health",
+          "strict": 35.8,
+          "issues": 2204,
+          "impact": 0.0
         },
         {
-          "name": "Dep health",
-          "strict": 47.0,
-          "issues": 1,
-          "impact": 0.0,
-          "subjective": true,
-          "impact_description": "re-review to improve"
+          "name": "Duplication",
+          "strict": 37.9,
+          "issues": 6815,
+          "impact": 0.0
         }
       ],
       "biggest_gap_dimensions": [],
       "stagnant_dimensions": [
         {
           "name": "File health",
-          "strict": 88.9,
+          "strict": 35.8,
           "stuck_scans": 5
         },
         {
           "name": "Code quality",
-          "strict": 96.1,
+          "strict": 75.3,
           "stuck_scans": 5
         },
         {
           "name": "Duplication",
-          "strict": 89.7,
+          "strict": 37.9,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Test health",
+          "strict": 0.0,
           "stuck_scans": 5
         },
         {
           "name": "Security",
-          "strict": 98.5,
+          "strict": 91.3,
           "stuck_scans": 5
         }
       ]
     },
     "actions": [
-      {
-        "type": "issue_queue",
-        "detector": "review",
-        "count": 16,
-        "description": "16 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
-        "command": "desloppify issues",
-        "impact": 0.0,
-        "dimension": "Unknown",
-        "priority": 1,
-        "lane": "refactor_0"
-      },
       {
         "type": "reorganize",
         "detector": "flat_dirs",
@@ -76,7 +262,7 @@
         "command": "desloppify show flat_dirs --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 2,
+        "priority": 1,
         "lane": "restructure"
       },
       {
@@ -87,7 +273,7 @@
         "command": "desloppify show coupling --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 3,
+        "priority": 2,
         "lane": "restructure"
       },
       {
@@ -98,18 +284,18 @@
         "command": "desloppify show cycles --status open",
         "impact": 0.0,
         "dimension": "Security",
-        "priority": 4,
+        "priority": 3,
         "lane": "restructure"
       },
       {
         "type": "reorganize",
         "detector": "facade",
-        "count": 1256,
-        "description": "1256 facade findings \u2014 flatten re-export facades or consolidate barrel files",
+        "count": 1255,
+        "description": "1255 facade findings \u2014 flatten re-export facades or consolidate barrel files",
         "command": "desloppify show facade --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 5,
+        "priority": 4,
         "lane": "restructure"
       },
       {
@@ -120,41 +306,41 @@
         "command": "desloppify show uncalled_functions --status open",
         "impact": 0.0,
         "dimension": "Unknown",
-        "priority": 6,
-        "lane": "refactor_1"
+        "priority": 5,
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
         "detector": "structural",
-        "count": 4139,
-        "description": "4139 structural findings \u2014 decompose large files \u2014 extract logic into focused modules",
+        "count": 4144,
+        "description": "4144 structural findings \u2014 decompose large files \u2014 extract logic into focused modules",
         "command": "desloppify show structural --status open",
         "impact": 0.0,
         "dimension": "File health",
-        "priority": 7,
-        "lane": "refactor_1"
+        "priority": 6,
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
         "detector": "props",
-        "count": 54,
-        "description": "54 props findings \u2014 split bloated components, extract sub-components",
+        "count": 51,
+        "description": "51 props findings \u2014 split bloated components, extract sub-components",
         "command": "desloppify show props --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 8,
-        "lane": "refactor_1"
+        "priority": 7,
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
         "detector": "dupes",
-        "count": 6652,
-        "description": "6652 dupes findings \u2014 extract shared utility or consolidate duplicates",
+        "count": 6815,
+        "description": "6815 dupes findings \u2014 extract shared utility or consolidate duplicates",
         "command": "desloppify show dupes --status open",
         "impact": 0.0,
         "dimension": "Duplication",
-        "priority": 9,
-        "lane": "refactor_1"
+        "priority": 8,
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
@@ -164,52 +350,52 @@
         "command": "desloppify show dict_keys --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 10,
-        "lane": "refactor_1"
+        "priority": 9,
+        "lane": "refactor_0"
       },
       {
         "type": "refactor",
         "detector": "test_coverage",
-        "count": 10210,
-        "description": "10210 test_coverage findings \u2014 add tests for untested production modules \u2014 prioritize by import count",
+        "count": 10020,
+        "description": "10020 test_coverage findings \u2014 add tests for untested production modules \u2014 prioritize by import count",
         "command": "desloppify show test_coverage --status open",
         "impact": 0.0,
         "dimension": "Test health",
-        "priority": 11,
+        "priority": 10,
         "lane": "test_coverage"
       },
       {
         "type": "refactor",
         "detector": "responsibility_cohesion",
-        "count": 425,
-        "description": "425 responsibility_cohesion findings \u2014 split modules with too many responsibilities \u2014 extract focused sub-modules",
+        "count": 426,
+        "description": "426 responsibility_cohesion findings \u2014 split modules with too many responsibilities \u2014 extract focused sub-modules",
         "command": "desloppify show responsibility_cohesion --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 12,
-        "lane": "refactor_1"
+        "priority": 11,
+        "lane": "refactor_0"
       },
       {
         "type": "manual_fix",
         "detector": "unused",
-        "count": 455,
-        "description": "455 unused findings \u2014 inspect with `desloppify next` and fix manually",
+        "count": 458,
+        "description": "458 unused findings \u2014 inspect with `desloppify next` and fix manually",
         "command": "desloppify show unused --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 13,
-        "lane": "refactor_1"
+        "priority": 12,
+        "lane": "refactor_0"
       },
       {
         "type": "manual_fix",
         "detector": "smells",
-        "count": 2313,
-        "description": "2313 smells findings \u2014 inspect with `desloppify next` and fix manually",
+        "count": 3306,
+        "description": "3306 smells findings \u2014 inspect with `desloppify next` and fix manually",
         "command": "desloppify show smells --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 14,
-        "lane": "refactor_1"
+        "priority": 13,
+        "lane": "refactor_0"
       },
       {
         "type": "manual_fix",
@@ -219,15 +405,26 @@
         "command": "desloppify show global_mutable_config --status open",
         "impact": 0.0,
         "dimension": "Code quality",
+        "priority": 14,
+        "lane": "refactor_0"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "private_imports",
+        "count": 60,
+        "description": "60 private_imports findings \u2014 stop importing private symbols across module boundaries",
+        "command": "desloppify show private_imports --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
         "priority": 15,
         "lane": "refactor_1"
       },
       {
         "type": "manual_fix",
-        "detector": "private_imports",
-        "count": 72,
-        "description": "72 private_imports findings \u2014 stop importing private symbols across module boundaries",
-        "command": "desloppify show private_imports --status open",
+        "detector": "stale_exclude",
+        "count": 1,
+        "description": "1 stale_exclude findings \u2014 remove stale exclusion or verify it's still needed",
+        "command": "desloppify show stale_exclude --status open",
         "impact": 0.0,
         "dimension": "Code quality",
         "priority": 16,
@@ -242,13 +439,13 @@
         "impact": 0.0,
         "dimension": "Security",
         "priority": 17,
-        "lane": "refactor_1"
+        "lane": "refactor_0"
       }
     ],
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 28663,
+        "total_count": 29575,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -256,39 +453,39 @@
       "lanes": {
         "restructure": {
           "actions": [
+            1,
             2,
             3,
-            4,
-            5
+            4
           ],
-          "file_count": 1514,
+          "file_count": 1513,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         },
         "refactor_0": {
           "actions": [
-            1
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            17
           ],
-          "file_count": 1,
+          "file_count": 6964,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         },
         "refactor_1": {
           "actions": [
-            6,
-            7,
-            8,
-            9,
-            10,
-            12,
-            13,
-            14,
-            15,
-            17
+            15
           ],
-          "file_count": 6809,
+          "file_count": 5,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
@@ -297,23 +494,23 @@
           "actions": [
             16
           ],
-          "file_count": 6,
+          "file_count": 1,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         },
         "test_coverage": {
           "actions": [
-            11
+            10
           ],
-          "file_count": 10210,
+          "file_count": 10020,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         }
       },
       "can_parallelize": true,
-      "hint": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 16 finding(s) \u2014 `desloppify issues`."
+      "hint": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify."
     },
     "tools": {
       "fixers": [],
@@ -341,12 +538,12 @@
       "worst_gap": 0.0,
       "trend": "stable"
     },
-    "milestone": "All T1 items cleared!",
+    "milestone": null,
     "primary_action": {
-      "command": "desloppify issues",
-      "description": "16 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
+      "command": "desloppify show flat_dirs --status open",
+      "description": "66 flat_dirs findings \u2014 create subdirectories and use `desloppify move`"
     },
-    "why_now": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 16 finding(s) \u2014 `desloppify issues`.",
+    "why_now": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify.",
     "verification_step": {
       "command": "desloppify scan",
       "reason": "revalidate after changes"
@@ -354,20 +551,336 @@
     "risk_flags": [],
     "strict_target": {
       "target": 95.0,
-      "current": 66.3,
-      "gap": 28.7,
+      "current": 58.6,
+      "gap": 36.4,
       "state": "below",
       "warning": null
     },
     "reminders": [],
     "reminder_history": {
       "zone_classification": 3,
-      "report_scores": 14,
+      "report_scores": 26,
       "feedback_nudge": 3,
       "stagnant_nudge": 14,
       "review_findings_pending": 3
     }
   },
+  "overall_score": 58.6,
+  "objective_score": 46.0,
+  "strict_score": 58.6,
+  "scorecard_dimensions": [
+    {
+      "name": "File health",
+      "score": 35.8,
+      "strict": 35.8,
+      "checks": 2238,
+      "issues": 2204,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "AI generated debt",
+      "score": 55.0,
+      "strict": 55.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 62.0,
+      "strict": 62.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Code quality",
+      "score": 75.3,
+      "strict": 75.3,
+      "checks": 16525,
+      "issues": 6974,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Convention drift",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 70.0,
+      "strict": 70.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 69.0,
+      "strict": 69.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 65.0,
+      "strict": 65.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Duplication",
+      "score": 37.9,
+      "strict": 37.9,
+      "checks": 10924,
+      "issues": 6815,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Elegance",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 30,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 52.0,
+      "strict": 52.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Security",
+      "score": 91.3,
+      "strict": 91.3,
+      "checks": 4434,
+      "issues": 798,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Structure nav",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test health",
+      "score": 0.0,
+      "strict": 0.0,
+      "checks": 24791,
+      "issues": 10020,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Test strategy",
+      "score": 63.0,
+      "strict": 63.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
+  "subjective_measures": [
+    {
+      "name": "AI generated debt",
+      "score": 55.0,
+      "strict": 55.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 62.0,
+      "strict": 62.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Convention drift",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 70.0,
+      "strict": 70.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 69.0,
+      "strict": 69.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 65.0,
+      "strict": 65.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Elegance",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 30,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 52.0,
+      "strict": 52.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Structure nav",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test strategy",
+      "score": 63.0,
+      "strict": 63.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
   "config": {
     "target_strict_score": 95,
     "review_max_age_days": 30,
@@ -377,10 +890,12 @@
     "badge_path": "scorecard.png",
     "exclude": [
       ".claude",
+      ".claude/worktrees",
       ".gemini",
       ".benchmarks",
       ".pipelines",
-      ".mypy_cache"
+      ".mypy_cache",
+      "projects"
     ],
     "ignore": [],
     "ignore_metadata": {},

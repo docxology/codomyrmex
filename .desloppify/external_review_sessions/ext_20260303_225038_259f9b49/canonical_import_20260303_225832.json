@@ -1,0 +1,334 @@
+{
+  "assessments": {
+    "cross_module_architecture": 62,
+    "convention_outlier": 74,
+    "error_consistency": 61,
+    "abstraction_fitness": 71,
+    "dependency_health": 63,
+    "test_strategy": 54,
+    "ai_generated_debt": 72,
+    "package_organization": 60,
+    "high_level_elegance": 65,
+    "mid_level_elegance": 67,
+    "low_level_elegance": 72,
+    "design_coherence": 68
+  },
+  "findings": [
+    {
+      "id": "subprocess_circular_import",
+      "dimension": "cross_module_architecture",
+      "summary": "subprocess.py imports subprocess_advanced.py which already imports from subprocess.py, creating a two-file circular import cycle.",
+      "detail": "src/codomyrmex/utils/process/subprocess.py re-exports stream_command and run_with_retry from subprocess_advanced.py at line 647 (after the module body, with a noqa comment acknowledging the late import). subprocess_advanced.py in turn imports SubprocessResult, _prepare_command, _prepare_environment, _validate_working_directory, and run_command from subprocess.py at its top. This is a live circular dependency \u2014 Python resolves it only because subprocess.py's late import avoids a NameError by the time subprocess_advanced.py finishes loading, but it is still a real import cycle flagged by the static analyser. The backward-compat re-export has no documented sunset plan. The same cycle is reproduced verbatim in three worktree copies, confirming this is not a transitional artifact.",
+      "evidence": [
+        "src/codomyrmex/utils/process/subprocess.py:647",
+        "src/codomyrmex/utils/process/subprocess_advanced.py:18-24"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/utils/process/subprocess.py",
+        "src/codomyrmex/utils/process/subprocess_advanced.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "dependency_injection_cycle",
+      "dimension": "cross_module_architecture",
+      "summary": "container.py and scopes.py mutually import each other, forming a circular dependency even though scopes uses TYPE_CHECKING to guard the forward reference.",
+      "detail": "src/codomyrmex/dependency_injection/container.py imports Scope and ScopeContext from .scopes at the top of the file unconditionally. src/codomyrmex/dependency_injection/scopes.py uses 'if TYPE_CHECKING: from .container import Container', which correctly avoids a runtime import cycle, but the analyser still reports a live cycle because container.py imports scopes at runtime. The dependency direction is ambiguous: Scope is a plain enum that should not need to know about Container at all. Placing ScopeContext (which takes a Container) in scopes.py forces the bidirectional relationship. Moving ScopeContext to container.py or a dedicated scopes_context.py would eliminate the cycle cleanly.",
+      "evidence": [
+        "src/codomyrmex/dependency_injection/container.py:38-39",
+        "src/codomyrmex/dependency_injection/scopes.py:31-32"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/dependency_injection/container.py",
+        "src/codomyrmex/dependency_injection/scopes.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "critical_paths_zero_tests",
+      "dimension": "test_strategy",
+      "summary": "The ten most-imported files in the project have no direct unit tests, including BasePlot (20 importers), exceptions/base.py (12 importers), and BaseComponent (11 importers).",
+      "detail": "The holistic context confirms that all ten files listed as critical_untested have zero associated test coverage. BasePlot._base.py is imported by 20 other modules and provides the core rendering primitive for every chart type. exceptions/base.py is imported by 12 modules and is the root of the entire error hierarchy. BaseComponent._base.py is imported by 11 modules. ci_cd_automation/pipeline/models.py provides the PipelineStatus and StageStatus enums used by the full pipeline stack. Since none of these are tested directly, a breaking change to any one of them would go silently undetected until integration tests run (or the build breaks). The project has 22k+ tests in total, which makes the absence of tests for the most-shared foundation files a notable structural gap rather than a general coverage problem.",
+      "evidence": [
+        "src/codomyrmex/data_visualization/plots/_base.py:1",
+        "src/codomyrmex/exceptions/base.py:1",
+        "src/codomyrmex/data_visualization/components/_base.py:1",
+        "src/codomyrmex/data_visualization/charts/plot_utils.py:1",
+        "src/codomyrmex/ci_cd_automation/pipeline/models.py:1",
+        "src/codomyrmex/llm/providers/models.py:1",
+        "src/codomyrmex/operating_system/base.py:1",
+        "src/codomyrmex/formal_verification/backends/base.py:1"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py",
+        "src/codomyrmex/exceptions/base.py",
+        "src/codomyrmex/data_visualization/components/_base.py",
+        "src/codomyrmex/ci_cd_automation/pipeline/models.py"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "cli_utils_silent_fallback_logger",
+      "dimension": "error_consistency",
+      "summary": "cli/utils.py defines a silent inline fallback for get_logger that returns a standard logging.Logger instead of raising, violating the project's zero-silent-fallback policy.",
+      "detail": "src/codomyrmex/cli/utils.py lines 4-8 define a fallback get_logger implementation that returns logging.getLogger(name) when codomyrmex.logging_monitoring is unavailable. The project's CLAUDE.md explicitly prohibits 'Fallback patterns that silently degrade functionality'. The codomyrmex.logging_monitoring module is listed as a Foundation Layer module that is expected to be always available. Providing a silent fallback here hides import failures rather than surfacing them. The same file also silently sets TERMINAL_INTERFACE_AVAILABLE and PERFORMANCE_MONITORING_AVAILABLE to False on ImportError and then uses conditional logic to work around them \u2014 this is legitimate optional-dependency gating. Only the logging fallback is a violation.",
+      "evidence": [
+        "src/codomyrmex/cli/utils.py:4-8"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/cli/utils.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "error_strategy_returns_null_dominant_in_several_modules",
+      "dimension": "error_consistency",
+      "summary": "Multiple modules use returns_null as the dominant error strategy in contexts where exceptions would be more appropriate, creating inconsistent failure modes across the codebase.",
+      "detail": "The error strategy data reveals that ide/ (15 returns_null vs 12 throws), physical_management/ (15 returns_null vs 6 throws), identity/ (10 returns_null vs 4 throws), bridge/ (13 returns_null, 0 throws), and cloud/network/ (14 returns_null, 0 throws) all predominantly return None on failure rather than raising. These modules sit next to siblings like utils/ (65 throws, 3 returns_null) and events/ (16 throws, 0 returns_null) that use throw-dominant strategies. Callers of the returns_null modules must check return values defensively or silently continue with None \u2014 a pattern that often leads to AttributeError exceptions at unexpected call sites downstream. The inconsistency is not justified by a layering rule; it appears to be accidental.",
+      "evidence": [
+        "src/codomyrmex/ide/antigravity/live_bridge.py:1",
+        "src/codomyrmex/cloud/infomaniak/network/client.py:1"
+      ],
+      "confidence": "medium",
+      "related_files": [
+        "src/codomyrmex/ide/antigravity/live_bridge.py",
+        "src/codomyrmex/cloud/infomaniak/network/client.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "handlers_cli_pass_through_boilerplate",
+      "dimension": "abstraction_fitness",
+      "summary": "agents/cli/handlers.py has 15 public functions that are pure one-liner pass-through delegates with no added logic, contributing to a needless indirection layer.",
+      "detail": "handle_jules_execute, handle_jules_stream, handle_jules_check, handle_claude_execute, handle_claude_stream, handle_codex_execute, handle_codex_stream, handle_opencode_execute, handle_opencode_stream, handle_opencode_check, handle_gemini_execute, handle_gemini_stream, handle_gemini_check and two more are single-line wrappers that simply pass their argument to _handle_agent_execute or _handle_agent_stream with a different class and label string. The wrappers add no policy, transformation, or error handling of their own. This is precisely the 'functions that only forward args/kwargs to another function without policy or translation' pattern called out by the abstraction_fitness dimension. The correct design is to register these via a dispatch table keyed by agent name at module init time, eliminating the repetition.",
+      "evidence": [
+        "src/codomyrmex/agents/cli/handlers.py:259-262",
+        "src/codomyrmex/agents/cli/handlers.py:264-265",
+        "src/codomyrmex/agents/cli/handlers.py:326-327",
+        "src/codomyrmex/agents/cli/handlers.py:329-330",
+        "src/codomyrmex/agents/cli/handlers.py:339-340",
+        "src/codomyrmex/agents/cli/handlers.py:342-343",
+        "src/codomyrmex/agents/cli/handlers.py:352-353",
+        "src/codomyrmex/agents/cli/handlers.py:355-356",
+        "src/codomyrmex/agents/cli/handlers.py:360-361",
+        "src/codomyrmex/agents/cli/handlers.py:418-419",
+        "src/codomyrmex/agents/cli/handlers.py:421-422",
+        "src/codomyrmex/agents/cli/handlers.py:426-427"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "severity": "low"
+    },
+    {
+      "id": "module_docstring_after_import",
+      "dimension": "convention_outlier",
+      "summary": "website/accessibility/utils.py places its module docstring after the first import statement, making it an orphaned string literal rather than a recognised module docstring.",
+      "detail": "In src/codomyrmex/website/accessibility/utils.py line 1 is 'from codomyrmex.logging_monitoring import get_logger' and line 3 is the triple-quoted string 'Accessibility utility functions.' Python only recognises a module docstring if it is the very first statement in the module; a string literal appearing after any import or assignment is just a discarded expression. This means utils.__doc__ will be None, and any documentation tooling that reads __doc__ will find no description for this module. All other modules in the codebase follow the correct convention of placing the module docstring first.",
+      "evidence": [
+        "src/codomyrmex/website/accessibility/utils.py:1-3"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/website/accessibility/utils.py"
+      ],
+      "severity": "low"
+    },
+    {
+      "id": "data_visualization_duplicate_utils",
+      "dimension": "package_organization",
+      "summary": "data_visualization has two separate plot_utils files (charts/plot_utils.py and engines/plot_utils.py implied by comments) that duplicate styling constants, creating maintenance drift risk.",
+      "detail": "src/codomyrmex/data_visualization/charts/plot_utils.py at lines 20-23 explicitly defines constants 'for consistency with engines/plot_utils': DEFAULT_GRID_STYLE, DEFAULT_TITLE_FONTSIZE, DEFAULT_LABEL_FONTSIZE, and DEFAULT_FIGURE_SIZE. The existence of a second plot_utils in a sibling engines/ directory that requires these constants to be duplicated rather than imported indicates that either (a) the engines/plot_utils.py was the original and charts/plot_utils.py is a partial copy, or (b) both share common constants but depend on each other in a direction that prevents importing. Neither is a good outcome. There are 8 importers of charts/plot_utils.py, making it a de-facto shared utility that should be the single source of truth.",
+      "evidence": [
+        "src/codomyrmex/data_visualization/charts/plot_utils.py:17-23",
+        "src/codomyrmex/data_visualization/charts/plot_utils.py:99-101"
+      ],
+      "confidence": "medium",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/plot_utils.py"
+      ],
+      "severity": "low"
+    },
+    {
+      "id": "root_level_maintenance_scripts",
+      "dimension": "package_organization",
+      "summary": "The repository root contains six standalone maintenance scripts (fix_docstrings_v2.py, list_all_models.py, list_models.py, patch_basic_usage.py, patch_docs.py, fail.py) with low or zero fan-in that should live in scripts/maintenance/ or scripts/documentation/.",
+      "detail": "The directory_profiles data shows that root-level files include fail.py, fix_docstrings_v2.py, list_all_models.py, list_models.py, patch_basic_usage.py, and patch_docs.py alongside the canonical project root artifacts (pyproject.toml, README.md, CLAUDE.md). These files have average fan-in of 0 (nothing imports them) and are operational scripts, not configuration or entry-point files. The project already has a well-established scripts/ tree with purpose-named subdirectories. Scattering maintenance utilities in the root blurs the signal-to-noise ratio of what belongs at the root of the project.",
+      "evidence": [
+        "fail.py:1",
+        "fix_docstrings_v2.py:1",
+        "list_all_models.py:1",
+        "list_models.py:1",
+        "patch_basic_usage.py:1",
+        "patch_docs.py:1"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "fix_docstrings_v2.py",
+        "patch_docs.py",
+        "list_all_models.py"
+      ],
+      "severity": "low"
+    },
+    {
+      "id": "image_generator_violated_zero_mock",
+      "dimension": "test_strategy",
+      "summary": "test_image_generation.py introduces a FakeGeminiClient subclass that hardcodes fake return values, which is a test stub and violates the project's zero-mock policy.",
+      "detail": "src/codomyrmex/tests/unit/multimodal/test_image_generation.py defines FakeGeminiClient, a subclass of GeminiClient that overrides __init__ to skip all real initialisation and overrides generate_images to return hardcoded bytes [{'image_bytes': b'fake_data'}]. This is a hand-written stub. The project CLAUDE.md states 'No mocking: Tests never use unittest.mock, MagicMock, monkeypatch. External dependencies use @pytest.mark.skipif guards.' The correct approach per policy is to guard the real-API test with @pytest.mark.skipif(not _GEMINI_KEY) and test interface-level contracts (argument types, return structure) against the real object with a valid key, or omit the test entirely if no key is available. The stub creates a false sense of coverage because it never exercises the actual GeminiClient code path.",
+      "evidence": [
+        "src/codomyrmex/tests/unit/multimodal/test_image_generation.py:17-33",
+        "src/codomyrmex/tests/unit/multimodal/test_image_generation.py:68-80"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/tests/unit/multimodal/test_image_generation.py",
+        "src/codomyrmex/multimodal/image_generation.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "mcp_server_missing_auth_on_rest_endpoints",
+      "dimension": "cross_module_architecture",
+      "summary": "MCPServer.run_http() exposes REST endpoints (GET /tools, POST /tools/{name}/call, GET /resources) without any authentication or origin restriction, making the HTTP transport unsuitable for non-local deployment.",
+      "detail": "src/codomyrmex/model_context_protocol/transport/server.py lines 572-578 configure the FastAPI app with CORSMiddleware set to allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*']. The POST /tools/{tool_name}/call endpoint at line 632 executes any registered tool with arbitrary caller-supplied JSON body, including the destructive tools (write_file, run_command, run_tests, call_module_function). The trust gateway exists as a separate layer but is not consulted during HTTP dispatch \u2014 the server.handle_request path calls self._call_tool directly, bypassing trust-level checks. A local-only deployment would be unaffected, but the server's public README presents HTTP transport as a supported mode, which could lead users to expose the endpoint on a network without understanding the risk.",
+      "evidence": [
+        "src/codomyrmex/model_context_protocol/transport/server.py:572-578",
+        "src/codomyrmex/model_context_protocol/transport/server.py:632-648"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/model_context_protocol/transport/server.py",
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "severity": "high"
+    },
+    {
+      "id": "wide_param_bags_advanced_plotter",
+      "dimension": "design_coherence",
+      "summary": "advanced_plotter.py has 9 functions with wide parameter bags (50+ config bag mentions) that should be refactored into named configuration dataclasses.",
+      "detail": "The holistic abstractions data shows src/codomyrmex/data_visualization/engines/advanced_plotter.py as the top file with 9 wide-parameter functions and 50 config_bag_mentions. Inspecting the module header reveals it has a 1,023-LOC body that also imports seaborn, matplotlib, numpy, and pandas all at module level \u2014 meaning any module importing it pays the full cost of those imports. The wide parameter functions (e.g., functions accepting style, color_palette, theme, dpi, figsize, alpha, etc. as separate positional or keyword arguments across 6+ parameters) should be consolidated into typed dataclasses like PlotConfig or ChartStyle. This would make call sites self-documenting and prevent argument-order mistakes.",
+      "evidence": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py:13-23",
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py:37-39"
+      ],
+      "confidence": "medium",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py",
+        "src/codomyrmex/data_visualization/_compat.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "openapi_generator_circular_import_and_re_export",
+      "dimension": "cross_module_architecture",
+      "summary": "api/openapi_generator.py and api/openapi_standardization_generator.py form a circular import cycle, and openapi_generator.py explicitly documents itself as a backward-compatibility shim with no sunset plan.",
+      "detail": "The dependency scanner reports a two-file cycle between src/codomyrmex/api/openapi_generator.py and src/codomyrmex/api/openapi_standardization_generator.py. openapi_generator.py's module docstring states 'This module retains the shared data classes and re-exports the generator classes for backward compatibility' but gives no version or date by which the backward-compatibility shim should be removed. The TYPE_CHECKING guard used in openapi_generator.py at lines 36-47 avoids the runtime cycle for type annotations but the non-TYPE_CHECKING branch unconditionally imports from the standardization module at runtime. The documented architecture contract (openapi_generator owns the data models; generators live in submodules) has drifted: callers who use the old import path get the re-exports, while new callers importing from submodules get the originals. Two maintained import paths for the same symbols is a maintenance liability.",
+      "evidence": [
+        "src/codomyrmex/api/openapi_generator.py:12-18",
+        "src/codomyrmex/api/openapi_generator.py:40-47"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/api/openapi_generator.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "ai_generated_restating_comments_widespread",
+      "dimension": "ai_generated_debt",
+      "summary": "Restating inline comments appear throughout source files, duplicating what the code already expresses",
+      "detail": "Multiple source files contain inline comments that merely restate the operation being performed (e.g., '# Basic availability check' before a conditional block, '# Count critical vs non-critical issues' before an obvious counter). These comments add no information and suggest AI-generated scaffolding that was not pruned. They inflate line counts without improving comprehension.",
+      "evidence": [
+        "system_discovery/health/health_checker.py:134: # Basic availability check",
+        "system_discovery/health/health_checker.py:141: # Perform module-specific checks",
+        "system_discovery/health/health_checker.py:173: # Count critical vs non-critical issues"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/system_discovery/health/health_checker.py"
+      ],
+      "severity": "low"
+    },
+    {
+      "id": "optional_heavy_deps_transitive_risk",
+      "dimension": "dependency_health",
+      "summary": "Several modules declare optional extras but import them unconditionally in non-optional code paths",
+      "detail": "The advanced_plotter.py raises ImportError at module import time if matplotlib, numpy, pandas, or seaborn are missing \u2014 even if no chart is ever created. While this is a fail-fast approach, it means importing data_visualization.engines fails entirely in minimal environments. Similarly, some cloud modules import boto3 unconditionally in __init__.py rather than at call sites. This forces optional heavy dependencies to be present even for unrelated MCP tool calls.",
+      "evidence": [
+        "data_visualization/engines/advanced_plotter.py:13-23: raises ImportError at module level",
+        "cloud/infomaniak/object_storage/client.py: unconditional boto3 import at top level"
+      ],
+      "confidence": "medium",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py",
+        "src/codomyrmex/cloud/infomaniak/object_storage/client.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "high_level_elegance_deep_nesting_in_agent_handlers",
+      "dimension": "high_level_elegance",
+      "summary": "Agent CLI handlers use 4-5 levels of nesting instead of early returns, reducing top-level readability",
+      "detail": "agents/cli/handlers.py contains handler functions with deeply nested conditional logic (4-5 indentation levels). The happy path is buried deep inside nested ifs rather than using guard clauses and early returns. This makes the overall control flow opaque when reading the function at a high level \u2014 a key high-level elegance concern.",
+      "evidence": [
+        "agents/cli/handlers.py: multiple handlers with 4+ nesting levels",
+        "agents/cli/handlers.py: success path is not the primary reading path"
+      ],
+      "confidence": "medium",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "severity": "low"
+    },
+    {
+      "id": "mid_level_elegance_god_class_advanced_plotter",
+      "dimension": "mid_level_elegance",
+      "summary": "AdvancedPlotter is a 786-line class combining factory, rendering, and styling responsibilities",
+      "detail": "The AdvancedPlotter class in engines/advanced_plotter.py contains 786 lines handling 10 different plot types (line, scatter, bar, histogram, heatmap, box, violin, correlation, timeseries, dashboard), style management, and finalization. These are three distinct concerns that would be more elegantly expressed as separate focused classes or mixins. The class violates the single responsibility principle at the component level.",
+      "evidence": [
+        "engines/advanced_plotter.py:128-913: AdvancedPlotter class 786 lines",
+        "engines/advanced_plotter.py:131-160: __init__ + _setup_style (config responsibility)",
+        "engines/advanced_plotter.py:217-657: 8 plot type methods (rendering responsibility)",
+        "engines/advanced_plotter.py:746-912: finalize + styling helpers (presentation responsibility)"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py"
+      ],
+      "severity": "medium"
+    },
+    {
+      "id": "low_level_elegance_f_string_in_logger_format_calls",
+      "dimension": "low_level_elegance",
+      "summary": "Multiple source files use f-strings in logger calls instead of % formatting, defeating lazy evaluation",
+      "detail": "Throughout the codebase, logger calls use f-strings (e.g., logger.info(f'Pie chart {title} generated')) rather than lazy % formatting (logger.info('Pie chart %s generated', title)). F-strings evaluate immediately even when the log level is too high to emit the message, wasting CPU cycles on string formatting that will be discarded. This pattern appears in data_visualization/charts/ and other modules.",
+      "evidence": [
+        "data_visualization/charts/pie_chart.py:83: logger.info(f\"Pie chart '{title}' generated successfully.\")",
+        "data_visualization/charts/bar_chart.py:74: logger.info(f\"Bar chart '{title}' generated successfully.\")",
+        "data_visualization/charts/line_plot.py:87: logger.info(f\"Line plot '{title}' generated successfully.\")"
+      ],
+      "confidence": "high",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/pie_chart.py",
+        "src/codomyrmex/data_visualization/charts/bar_chart.py",
+        "src/codomyrmex/data_visualization/charts/line_plot.py"
+      ],
+      "severity": "low"
+    }
+  ],
+  "provenance": {
+    "kind": "blind_review_batch_import",
+    "blind": true,
+    "runner": "claude",
+    "run_stamp": "ext_20260303_225038_259f9b49",
+    "created_at": "2026-03-03T22:58:32+00:00",
+    "packet_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/review_packet_blind.json",
+    "packet_sha256": "be7804a84fa23d3bc53dfce9c0f121a87f6d81160d01efeb0a68934feb3c3622",
+    "external_session_id": "ext_20260303_225038_259f9b49"
+  }
+}

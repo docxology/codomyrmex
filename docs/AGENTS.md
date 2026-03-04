@@ -1,10 +1,10 @@
 # Codomyrmex Agents — docs
 
-**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 122 specialized modules.
+Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 124 specialized modules.
 
 ## Documentation Organization
 
@@ -14,7 +14,7 @@ Central documentation hub for the Codomyrmex platform. Contains user guides, dev
 | [**development/**](development/) | Dev environment, testing | Medium - dev workflows |
 | [**reference/**](reference/) | API, CLI, troubleshooting | High - technical reference |
 | [**deployment/**](deployment/) | Production deployment | Medium - operations |
-| [**modules/**](modules/) | Per-module docs (122) | High - module details |
+| [**modules/**](modules/) | Per-module docs (124) | High - module details |
 | [**integration/**](integration/) | External integrations | Medium - integrations |
 | [**examples/**](examples/) | Code examples | Medium - learning |
 | [**project/**](project/) | Architecture, contributing | Low - project info |

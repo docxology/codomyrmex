@@ -1,0 +1,306 @@
+{
+  "session": {
+    "id": "ext_20260303_224105_1ea2e951",
+    "token": "8d285fc2e1977559a31b6f02f9918f0b"
+  },
+  "assessments": {
+    "cross_module_architecture": 70,
+    "convention_outlier": 68,
+    "error_consistency": 52,
+    "abstraction_fitness": 62,
+    "dependency_health": 69,
+    "test_strategy": 63,
+    "ai_generated_debt": 55,
+    "package_organization": 68,
+    "high_level_elegance": 74,
+    "mid_level_elegance": 68,
+    "low_level_elegance": 62,
+    "design_coherence": 65
+  },
+  "findings": [
+    {
+      "dimension": "error_consistency",
+      "identifier": "cloud_infomaniak_silent_none_returns",
+      "summary": "DNS client returns None on all exceptions, swallowing errors silently instead of raising",
+      "related_files": [
+        "src/codomyrmex/cloud/infomaniak/dns/client.py"
+      ],
+      "evidence": [
+        "The file has 11+ methods that each follow the pattern: `except Exception as e: logger.error(...); return None`. For example, `get_zone()`, `create_record()`, `delete_record()`, `update_record()` all return None on any exception. Callers cannot distinguish a missing zone from a network error from a permission denied response \u2014 all silently return None. This violates the stated no-silent-fallbacks policy."
+      ],
+      "suggestion": "Replace `return None` with `raise` (or a typed domain exception) after logging. If None is a valid sentinel for 'not found', define a typed result such as a dataclass or Optional with a distinct NotFound exception class. Callers should never have to check `if result is None` to detect infrastructure failures.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "cli_handlers_bare_return_false",
+      "summary": "All 19 CLI handler functions catch bare Exception and return False without re-raising",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "evidence": [
+        "Every public handler in `handlers.py` wraps its body in `try: ... except Exception as e: logger.error(...); return False`. This pattern means the caller receives a boolean status but loses all exception context. The 15 pass-through wrappers like `handle_jules_execute`, `handle_claude_execute` etc. all delegate to private helpers that also swallow exceptions this way."
+      ],
+      "suggestion": "Let exceptions propagate to a single top-level error boundary in the CLI dispatcher rather than silencing them per-handler. If a boolean return is required by the interface contract, at minimum chain the original exception: `raise RuntimeError('Jules execute failed') from e` and catch only at the dispatch boundary.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "cli_handlers_15_passthrough_wrappers",
+      "summary": "15 public handler functions are pure one-line delegations that add no policy or transformation",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "evidence": [
+        "Functions like `handle_jules_execute(args)`, `handle_claude_execute(args)`, `handle_gemini_execute(args)`, `handle_openai_execute(args)`, and their stream counterparts each contain a single return statement: `return _handle_agent_execute(JulesClient, 'Jules', args)`. No validation, no transformation, no added policy. The only variation is the client class and agent name string passed to the private helper. The blind packet reports 126 pass-through wrappers codebase-wide; these 15 are the densest cluster in a single file."
+      ],
+      "suggestion": "Collapse the 15 wrappers into a registry: `AGENT_REGISTRY = {'jules': JulesClient, 'claude': ClaudeClient, ...}` and dispatch through `handle_agent_execute(agent_name, args)`. This eliminates 14 of the 15 functions while making the set of supported agents data-driven and extension-point-clear.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "image_generator_trivial_wrapper",
+      "summary": "ImageGenerator.generate() is a single-line pass-through over GeminiClient with no added policy",
+      "related_files": [
+        "src/codomyrmex/multimodal/image_generation.py"
+      ],
+      "evidence": [
+        "The entire `generate()` method body is: `return self.client.generate_images(prompt=prompt, model=model, **kwargs)`. The class wraps GeminiClient but adds no input validation, no output normalization, no retry logic, no error translation, and no interface decoupling. If the provider interface changes, callers are coupled to GeminiClient's parameter names via **kwargs."
+      ],
+      "suggestion": "Either delete the wrapper and have callers use GeminiClient directly, or have `ImageGenerator` earn its abstraction boundary by adding concrete value: normalize the response shape, validate prompt length, translate provider-specific exceptions into a domain ImageGenerationError, or enforce a provider-agnostic interface so GeminiClient can be swapped.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "placeholder_docstrings_return_dict",
+      "summary": "152 occurrences of 'Return a dictionary representation of this object.' as a to_dict docstring across 91 files",
+      "related_files": [
+        "src/codomyrmex/events/handlers/event_logger.py",
+        "src/codomyrmex/finance/account.py",
+        "src/codomyrmex/data_visualization/plots/_base.py"
+      ],
+      "evidence": [
+        "Grep for 'Return a dictionary representation of this object.' yields 152 matches across 91 source files. These are identical placeholder strings generated by an AI model. They describe no fields, no return shape, and no side effects. They are indistinguishable from autogenerated stubs and provide zero information to callers about what keys the dict contains."
+      ],
+      "suggestion": "Replace with docstrings that describe the actual return keys. For example, `EventLogEntry.to_dict()` should say: 'Returns a dict with keys: event_id, event_type, priority, timestamp, handler_count, processing_time, source, data, metadata, correlation_id.' Any automated sweep tool (grep + sed) can identify and batch-replace these.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "placeholder_docstrings_initialize_instance",
+      "summary": "17 occurrences of 'Initialize this instance.' as __init__ docstrings across 11 files",
+      "related_files": [
+        "src/codomyrmex/finance/account.py",
+        "src/codomyrmex/deployment/strategies/strategies.py",
+        "src/codomyrmex/config_management/monitoring/watcher.py",
+        "src/codomyrmex/model_ops/feature_store/service.py"
+      ],
+      "evidence": [
+        "Grep for 'Initialize this instance.' yields 17 matches. `finance/account.py` `__init__` has this docstring; `account.py` also contains `unfreeze` with docstring 'unfreeze .' (trailing space and no content). These were generated by an AI that inserts the method name as a verb phrase without examining the actual parameters or state setup being performed."
+      ],
+      "suggestion": "For each __init__, write a docstring that describes the parameters and their effects on the object's initial state. The 'Initialize this instance.' form is never acceptable because it contains exactly zero information not already conveyed by the method name.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "hardcoded_personal_email_default",
+      "summary": "Personal email address hardcoded as default fallback in production MCP tool module",
+      "related_files": [
+        "src/codomyrmex/calendar_integration/mcp_tools.py"
+      ],
+      "evidence": [
+        "Line 21-23 of `calendar_integration/mcp_tools.py`: `_DEFAULT_ATTENDEE: str = os.environ.get('CODOMYRMEX_CALENDAR_ATTENDEE', 'FristonBlanket@gmail.com')`. A specific personal email address is hardcoded as the fallback when the env var is absent. This will be injected into every calendar event created or updated via the MCP tool if the environment variable is not set. This is both a no-hardcoded-values violation and a potential privacy/security issue."
+      ],
+      "suggestion": "Remove the hardcoded fallback entirely. If a default attendee is required, either make the parameter mandatory (no default) or default to empty string and skip injection when empty. Any email address that should be default should come from configuration, not source code.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "radar_unconditional_matplotlib_backend",
+      "summary": "radar.py calls matplotlib.use('Agg') unconditionally at module import, unlike every other plot module",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/radar.py",
+        "src/codomyrmex/data_visualization/plots/_base.py"
+      ],
+      "evidence": [
+        "Line 6 of `radar.py`: `matplotlib.use('Agg')` executes at module import time with no guard. In contrast, `_base.py` uses: `if matplotlib.get_backend().lower() != 'agg': matplotlib.use('Agg')`. Calling `matplotlib.use()` after pyplot has already been imported by another module raises a warning and may silently do nothing or corrupt rendering state. All other plot files do not call `matplotlib.use()` at all \u2014 they inherit from `_base.py`'s initialization."
+      ],
+      "suggestion": "Remove the `matplotlib.use('Agg')` call from `radar.py` entirely. The `_base.py` pattern already handles backend initialization correctly and all plot classes inherit from it. If standalone use of `radar.py` is a concern, the check-then-set pattern from `_base.py` should be replicated, not an unconditional call.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "event_logger_oneliner_module_functions",
+      "summary": "Five module-level functions in event_logger.py are compressed to single lines, breaking the file's own style",
+      "related_files": [
+        "src/codomyrmex/events/handlers/event_logger.py"
+      ],
+      "evidence": [
+        "Lines 184-189 of `event_logger.py` contain five single-line function definitions with no docstrings: `def get_event_stats(): return get_event_logger().get_event_statistics()` and four similar. The rest of the 190-line file consists of properly documented classes and methods with multi-line bodies. These compressed one-liners cannot carry docstrings, type annotations on separate lines, or explanatory comments without reformatting."
+      ],
+      "suggestion": "Expand each one-liner to standard multi-line form with a docstring describing what it delegates to. Alternatively, if these are truly just convenience aliases, document them with a single comment block above the group and add type annotations at minimum.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "radar_module_level_backend_side_effect",
+      "summary": "Importing radar.py unconditionally mutates global matplotlib backend state",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/radar.py"
+      ],
+      "evidence": [
+        "Any code that imports `radar.py` \u2014 even indirectly via `data_visualization` package-level imports \u2014 will trigger `matplotlib.use('Agg')`. If the importing code or another test/script has already loaded pyplot with a different backend (e.g., TkAgg in a GUI test or Qt in an interactive session), this call will either fail with a warning or silently downgrade the backend. This is a hidden global mutation side effect from an import statement."
+      ],
+      "suggestion": "Move backend initialization into a class method or a `__init__` guard that only runs when a `RadarChart` is actually instantiated. The `_base.py` guard pattern: `if matplotlib.get_backend().lower() != 'agg': matplotlib.use('Agg')` should be placed inside `BasePlot.__init__` (or the subclass constructor) rather than at module level.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "cli_utils_none_fallback_stubs",
+      "summary": "cli/utils.py assigns None to optional dependency classes on ImportError, enabling silent None-dereference at call sites",
+      "related_files": [
+        "src/codomyrmex/cli/utils.py"
+      ],
+      "evidence": [
+        "The file contains blocks like: `try: from codomyrmex.terminal_interface import TerminalFormatter except ImportError: TerminalFormatter = None`. Then downstream code must defensively check `if TerminalFormatter is not None:` before use. This is a silent degradation pattern. If a call site forgets the None check, it gets an AttributeError on NoneType instead of a clear ImportError with the missing package name."
+      ],
+      "suggestion": "Per the zero-mock / no-silent-fallbacks policy: re-raise a clear error on import failure: `raise ImportError('terminal_interface required: uv sync --extra cli') from e`. If the CLI must work without some optional extras, use `@pytest.mark.skipif`-style guards in tests and explicit feature flags in the CLI dispatcher, not None sentinels in module scope.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "coverage_32_percent_with_9776_new_tests",
+      "summary": "Test suite has 22,131 tests but only 32% coverage, suggesting many tests exercise a narrow surface",
+      "related_files": [
+        "src/codomyrmex/tests/"
+      ],
+      "evidence": [
+        "According to the codebase's own tracking, Sprint 21 added 9,776 new tests bringing total to ~22,131, yet coverage moved only from 31.50% to 32.83% \u2014 a 1.33 percentage point gain for nearly 10,000 new tests. This ratio (0.000136% coverage gain per test) suggests the new tests are heavily concentrated on already-covered modules or are exercising shallow paths. The gate is set at 31%, which provides no improvement pressure."
+      ],
+      "suggestion": "Profile coverage by module and target the zero-coverage or sub-10% modules first with new tests rather than adding more tests to well-covered modules. Consider raising the gate incrementally (e.g., 35%, then 40%) to create ongoing improvement pressure. The discrepancy between test count and coverage gain is a signal that test strategy is optimizing for quantity over coverage breadth.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "xfail_markers_as_bug_documentation",
+      "summary": "xfail test markers are used to document known bugs rather than as temporary skips during development",
+      "related_files": [
+        "src/codomyrmex/tests/"
+      ],
+      "evidence": [
+        "The codebase notes ~5 xfail markers as 'valid bug documentation'. While pytest xfail is a legitimate mechanism, using it as long-term bug documentation means failing tests are invisible in normal CI output. The test suite passes even when known bugs are present, which masks technical debt. Sprint 7 notes removed 4 xfail markers as part of quality work, suggesting these accumulate over time."
+      ],
+      "suggestion": "Replace xfail-as-bug-documentation with skip-with-issue-reference (e.g., `@pytest.mark.skip(reason='Known bug: github.com/org/repo/issues/123')`) and open actual issues for each. xfail should only mark tests that are expected to fail transiently during active development, not as a permanent state for known defects.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "root_level_straggler_scripts",
+      "summary": "Root directory contains loose utility scripts that belong in scripts/ or should be removed",
+      "related_files": [
+        "list_all_models.py",
+        "list_models.py",
+        "patch_docs.py",
+        "patch_basic_usage.py"
+      ],
+      "evidence": [
+        "The repository root contains at minimum four straggler Python scripts: `list_all_models.py`, `list_models.py`, `patch_docs.py`, `patch_basic_usage.py`. These are one-off utility or maintenance scripts. The repository has a `scripts/` directory specifically for such files. Root-level scripts make the repo root noisy and are not importable as part of the package."
+      ],
+      "suggestion": "Move these files to `scripts/` or delete them if they are one-time migration tools that have already served their purpose. Ensure `scripts/` has a README or is at minimum documented in the project-level README.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "plot_utils_cross_subdirectory_coupling",
+      "summary": "plot_utils.py lives in charts/ but is imported and re-exported by engines/, creating a sideways dependency",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/plot_utils.py",
+        "src/codomyrmex/data_visualization/engines/__init__.py"
+      ],
+      "evidence": [
+        "`data_visualization/engines/__init__.py` re-exports `apply_style` and `save_plot` from `charts/plot_utils.py`. This means `charts/` is a peer of `engines/` but `engines/` depends on `charts/`. A consumer of `engines` ends up with a transitive dependency on `charts/`. Utilities shared between sibling subpackages should live in a shared utility module at the parent level."
+      ],
+      "suggestion": "Move `plot_utils.py` to `data_visualization/utils.py` (or `data_visualization/shared.py`) so it sits at the common parent level rather than inside one of the peer subpackages. Both `charts/` and `engines/` then import from `data_visualization.utils` without creating a sideways dependency.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "baseplot_two_html_renderers",
+      "summary": "BasePlot has two HTML rendering methods with different output shapes and no clear separation of concern",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py"
+      ],
+      "evidence": [
+        "`BasePlot.render()` returns a `<div>` placeholder string. `BasePlot.to_html()` returns a base64-encoded `<img>` tag. `__str__` delegates to `to_html()`. These two methods produce HTML but with fundamentally different semantics: one is a placeholder, the other embeds the actual rendered figure. Callers that use `render()` expecting an image will silently get an empty div. The intent of `render()` is not documented to explain why a placeholder is acceptable."
+      ],
+      "suggestion": "Clarify the contract: if `render()` is meant to be overridden by subclasses to return interactive HTML (div + JS), document it as an abstract method. If `to_html()` is the canonical static export, make `render()` call it or deprecate one of the two. The current split means two methods with similar names produce incompatible output shapes without warning.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "plotter_class_minimal_policy_addition",
+      "summary": "Plotter wraps chart functions but adds policy only on two of seven methods, making the abstraction incoherent",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/plotter.py"
+      ],
+      "evidence": [
+        "`Plotter.bar_chart()` and `Plotter.scatter_plot()` are pure pass-throughs. `Plotter.line_plot()` and `Plotter.heatmap()` add a default `figure_size` kwarg. The remaining methods vary inconsistently. If `Plotter` is meant to be a policy layer that enforces consistent defaults across all chart types, it should apply that policy uniformly. If it is just a namespace aggregator, it adds no value over a module-level import."
+      ],
+      "suggestion": "Decide the role of `Plotter` explicitly: (a) pure namespace \u2014 then replace with a module import and remove the class, or (b) policy layer \u2014 then apply consistent defaults and validation to all methods. The current hybrid approach makes it unclear which methods can be relied upon for consistent behavior.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "baseplot_20_importers_god_module",
+      "summary": "data_visualization/plots/_base.py has 20 direct importers making it a high-coupling hub",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py"
+      ],
+      "evidence": [
+        "The blind packet identifies `data_visualization/plots/_base.py` as the top god module with 20 importers. Any breaking change to the `BasePlot` interface (method signature, import path, base class) cascades to all 20 importing modules. The file combines the base class, the backend initialization logic, the HTML rendering methods, and the `__str__` protocol \u2014 multiple concerns in a single high-fanout module."
+      ],
+      "suggestion": "Consider splitting: a `BasePlot` ABC (abstract interface only) plus a `PlotMixin` (HTML rendering utilities) and a `BackendManager` (matplotlib backend initialization). Importers that only need the interface import only the ABC; those that need HTML export import the mixin. This reduces the blast radius of changes to any single concern.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "mcp_autodiscovery_clean_pattern",
+      "summary": "The @mcp_tool decorator + pkgutil scan pattern is a well-designed extensibility mechanism",
+      "related_files": [
+        "src/codomyrmex/model_context_protocol/decorators.py",
+        "src/codomyrmex/model_context_protocol/discovery/__init__.py"
+      ],
+      "evidence": [
+        "The auto-discovery system: any module with an `mcp_tools.py` file using `@mcp_tool` decorators is automatically surfaced via the PAI MCP bridge without manual registration. The `MCPDiscovery.scan_package()` method uses error isolation (per-module try/except) so a broken module never kills the full scan. The `DiscoveryReport` cleanly separates discovered tools from failed modules. This is an elegant extensibility pattern that scales to 87+ modules."
+      ],
+      "suggestion": "No change needed. This is a positive finding. The pattern is worth propagating to other discovery scenarios in the codebase (e.g., plugin_system, skills).",
+      "confidence": "high"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "event_logger_mixed_abstraction_levels",
+      "summary": "event_logger.py mixes a full class implementation with compressed module-level shortcut functions, mixing abstraction levels",
+      "related_files": [
+        "src/codomyrmex/events/handlers/event_logger.py"
+      ],
+      "evidence": [
+        "The first 170 lines of `event_logger.py` define `EventLogEntry` and `EventLogger` with proper multi-line methods, docstrings, and type annotations. Lines 173-189 switch to a singleton getter plus five one-liner module conveniences. The singleton pattern (`_logger`, `_logger_lock`, double-checked locking) is reasonable, but the five compressed convenience functions (`get_event_stats`, `get_recent_events`, etc.) belong in a separate `convenience.py` or should be properly formatted alongside the class. The abrupt style shift makes the file feel like two different authors wrote different halves."
+      ],
+      "suggestion": "Either expand the one-liners to standard format with docstrings in the same file, or move them to a separate `event_monitoring_shortcuts.py` module. The singleton getter and the convenience wrappers serve different consumers and can be cleanly separated.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "calendar_mcp_default_attendee_injection",
+      "summary": "Default attendee injection logic is duplicated identically in calendar_create_event and calendar_update_event",
+      "related_files": [
+        "src/codomyrmex/calendar_integration/mcp_tools.py"
+      ],
+      "evidence": [
+        "Both `calendar_create_event` (lines 167-170) and `calendar_update_event` (lines 293-296) contain the identical three-line block: `if attendees is None: attendees = [_DEFAULT_ATTENDEE] elif _DEFAULT_ATTENDEE not in attendees: attendees.append(_DEFAULT_ATTENDEE)`. This is identical logic copy-pasted with no extraction to a helper function."
+      ],
+      "suggestion": "Extract to a private helper: `def _inject_default_attendee(attendees: list[str] | None) -> list[str]: ...` and call it from both create and update. This is a straightforward DRY fix that also makes it easier to change the injection policy in one place.",
+      "confidence": "high"
+    }
+  ]
+}

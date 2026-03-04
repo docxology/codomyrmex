@@ -1,8 +1,43 @@
-# Codomyrmex Root
+# Agentic Memory Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo and utility scripts for the `agentic_memory` module, which provides persistent memory storage, retrieval, and semantic search for autonomous agents within the Codomyrmex ecosystem.
+
+## Purpose
+
+These scripts demonstrate agent memory lifecycle operations including storing context, retrieving memories by key, and performing semantic search across stored agent knowledge.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `agentic_memory_demo.py` | Demonstrates memory put, get, and semantic search operations |
+
+## Usage
+
+**Prerequisites:**
+```bash
+uv sync
+```
+
+**Run:**
+```bash
+uv run python scripts/agentic_memory/agentic_memory_demo.py
+```
+
+## Agent Usage
+
+Agents operating in this directory should understand the agentic memory storage model (key-value with semantic embeddings). The demo script exercises the `memory_put`, `memory_get`, and `memory_search` MCP tools.
+
+## Related Module
+
+- Source: `src/codomyrmex/agentic_memory/`
+- MCP Tools: `memory_put`, `memory_get`, `memory_search`
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: scripts/](../README.md)

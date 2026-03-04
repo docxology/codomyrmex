@@ -9,18 +9,22 @@ import json
 
 import pytest
 
-from codomyrmex.api.mocking import (
-    MatchStrategy,
-    MockAPIServer,
-    MockRequest,
-    MockResponse,
-    MockResponseMode,
-    MockRoute,
-    RequestMatcher,
-    ResponseFixture,
-    create_fixture,
-    create_mock_server,
-)
+
+try:
+    from codomyrmex.api.mocking import (
+        MatchStrategy,
+        MockAPIServer,
+        MockRequest,
+        MockResponse,
+        MockResponseMode,
+        MockRoute,
+        RequestMatcher,
+        ResponseFixture,
+        create_fixture,
+        create_mock_server,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 # ---------------------------------------------------------------------------
 # Enums

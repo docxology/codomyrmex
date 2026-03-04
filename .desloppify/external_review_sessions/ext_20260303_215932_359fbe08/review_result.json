@@ -1,0 +1,422 @@
+{
+  "session": {
+    "id": "ext_20260303_215932_359fbe08",
+    "token": "6cbbfa9220c1e4bdb4e94e3f640b0e1a"
+  },
+  "assessments": {
+    "cross_module_architecture": 52,
+    "convention_outlier": 58,
+    "error_consistency": 50,
+    "abstraction_fitness": 60,
+    "dependency_health": 72,
+    "test_strategy": 68,
+    "ai_generated_debt": 63,
+    "package_organization": 55,
+    "high_level_elegance": 58,
+    "mid_level_elegance": 57,
+    "low_level_elegance": 65,
+    "design_coherence": 60
+  },
+  "findings": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "duplicate_mcp_tool_registration_git_ops",
+      "summary": "The git_operations module registers MCP tools in two conflicting locations: top-level mcp_tools.py delegates through core/git.py, while core/commands/*.py files also apply @mcp_tool decorators directly to the same tool names, creating duplicate registrations that collide in the discovery engine.",
+      "related_files": [
+        "src/codomyrmex/git_operations/mcp_tools.py",
+        "src/codomyrmex/git_operations/core/commands/status.py",
+        "src/codomyrmex/git_operations/core/commands/repository.py",
+        "src/codomyrmex/git_operations/core/commands/commit.py",
+        "src/codomyrmex/git_operations/core/commands/history.py",
+        "src/codomyrmex/git_operations/core/commands/branching.py"
+      ],
+      "evidence": [
+        "mcp_tools.py:24 defines git_check_availability() with @mcp_tool; core/commands/repository.py:13 also applies @mcp_tool(name='git_check_availability') to the underlying function",
+        "mcp_tools.py:50 defines git_repo_status; core/commands/status.py:40 also has @mcp_tool(name='git_repo_status')",
+        "mcp_tools.py:89 defines git_log with @mcp_tool; core/commands/history.py:9 also has @mcp_tool(name='git_log')",
+        "mcp_tools.py:76 defines git_diff; core/commands/status.py:148 also has @mcp_tool(name='git_diff')",
+        "The discovery engine scans the entire codomyrmex package tree including git_operations/core/commands/, so both layers are discovered and the later registration silently overwrites the former in _ToolRegistry"
+      ],
+      "suggestion": "Remove @mcp_tool decorators from all core/commands/*.py files; keep the decorator only in the canonical mcp_tools.py. Alternatively, remove mcp_tools.py entirely and rely solely on the commands-level decorators. Choose one pattern and enforce it consistently.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "git_ops_duplicated_in_mcp_tools_layer",
+      "summary": "model_context_protocol/tools.py implements its own git_status() and git_diff() functions duplicating logic already present in git_operations/mcp_tools.py, creating two independent code paths for the same capability with diverging output schemas.",
+      "related_files": [
+        "src/codomyrmex/model_context_protocol/tools.py",
+        "src/codomyrmex/git_operations/mcp_tools.py",
+        "src/codomyrmex/agents/pai/mcp/definitions.py"
+      ],
+      "evidence": [
+        "model_context_protocol/tools.py:306-364 implements git_status() using subprocess directly, returning 'branch', 'changes', 'changed_files', 'recent_commits' keys",
+        "git_operations/mcp_tools.py:50 implements git_repo_status() delegating to git.get_status(), returning 'git_status' key — completely different output schema",
+        "definitions.py:107-120 registers both codomyrmex.git_status and the git_operations tools, so two distinct git status tools exist in the registry simultaneously",
+        "model_context_protocol/tools.py also has git_diff() at line 367, parallel to git_operations mcp_tools git_diff"
+      ],
+      "suggestion": "Delete the git_status() and git_diff() implementations from model_context_protocol/tools.py and point the static tool definitions in definitions.py to the git_operations module's canonical implementations instead.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "data_viz_mcp_tools_scattered_in_charts",
+      "summary": "The @mcp_tool decorator is applied inside data_visualization/charts/bar_chart.py, line_plot.py, and pie_chart.py — non-mcp_tools.py files inside a deeply nested subpackage — violating the convention that only mcp_tools.py files are the MCP registration surface.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/bar_chart.py",
+        "src/codomyrmex/data_visualization/charts/line_plot.py",
+        "src/codomyrmex/data_visualization/charts/pie_chart.py",
+        "src/codomyrmex/data_visualization/mcp_tools.py"
+      ],
+      "evidence": [
+        "charts/bar_chart.py:20 applies @mcp_tool() to create_bar_chart() directly inside a chart implementation file",
+        "charts/line_plot.py:23 and charts/pie_chart.py:20 do the same",
+        "data_visualization/mcp_tools.py separately registers generate_chart() that dispatches to these same functions via dv.create_bar_chart etc.",
+        "This means create_bar_chart is both directly discoverable as codomyrmex.create_bar_chart AND callable indirectly via codomyrmex.generate_chart — two separate tool identities for the same operation"
+      ],
+      "suggestion": "Remove @mcp_tool decorators from charts/*.py implementation files. MCP exposure should live exclusively in mcp_tools.py at each module's root. The existing generate_chart() in mcp_tools.py already provides the correct abstraction.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "mixed_error_strategy_git_commands_vs_mcp_wrapper",
+      "summary": "The git_operations core commands return None or False on error while swallowing exceptions, whereas the mcp_tools.py wrapper layer catches exceptions and returns structured dict errors — creating two incompatible error strategies for the same operations.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/commit.py",
+        "src/codomyrmex/git_operations/core/commands/status.py",
+        "src/codomyrmex/git_operations/core/commands/remote.py",
+        "src/codomyrmex/git_operations/mcp_tools.py"
+      ],
+      "evidence": [
+        "commit.py:114-121: CalledProcessError caught, logger.error called, then return None — error is silently absorbed, not raised",
+        "commit.py:119-121: bare 'except Exception as e' also returns None after logging",
+        "status.py:31-38: add_files() catches CalledProcessError and returns False after logging",
+        "mcp_tools.py:27-30: wraps the same git functions in try/except returning {'status': 'error', 'message': str(exc)}",
+        "Commands layer: 58 occurrences of 'return None' or 'return False' in error paths across 10 files in core/commands/",
+        "When a command-layer function returns None, the mcp_tools wrapper receives None and returns {'status': 'success', 'result': None} — a false success"
+      ],
+      "suggestion": "Commands layer functions should raise domain exceptions (e.g., GitOperationError from exceptions/git.py) instead of returning sentinel values. The mcp_tools wrapper should catch those exceptions and translate them to error dicts. This separates concerns cleanly.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "reason_tool_silent_stub_on_exception",
+      "summary": "The reason() MCP tool in llm/mcp_tools.py silently returns a fake successful result when the underlying ChainOfThought raises any exception, violating the zero-mock/zero-stub policy and giving callers false confidence in a failed operation.",
+      "related_files": [
+        "src/codomyrmex/llm/mcp_tools.py"
+      ],
+      "evidence": [
+        "llm/mcp_tools.py:131-141: 'except Exception as e: # If CoT hasn't been fully initialized, return a structured stub' — explicit comment acknowledging stub behavior",
+        "Returns {'status': 'success', 'steps': [...placeholder...], 'conclusion': f'Reasoned response to: {prompt}', 'confidence': 0.7} on failure",
+        "The 'note' field contains the exception string but callers relying on 'status' == 'success' would proceed as if reasoning worked",
+        "This directly contradicts the project-stated 'No silent fallbacks' and 'No production stubs' rules"
+      ],
+      "suggestion": "Replace the stub fallback with a proper error return: {'status': 'error', 'message': str(e)}. If ChainOfThought is genuinely incomplete, mark reason() as NotImplementedError or gate it behind a feature flag.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "subprocess_calls_without_timeout_git_commands",
+      "summary": "All subprocess.run() calls across git_operations/core/commands/ lack a timeout parameter, meaning a hung git process (e.g., network fetch, credential prompt) will block the calling thread indefinitely.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py",
+        "src/codomyrmex/git_operations/core/commands/commit.py",
+        "src/codomyrmex/git_operations/core/commands/status.py",
+        "src/codomyrmex/git_operations/core/commands/sync.py",
+        "src/codomyrmex/git_operations/core/commands/remote.py"
+      ],
+      "evidence": [
+        "branching.py:18-24: subprocess.run(['git', 'checkout', '-b', branch_name], ...) — no timeout",
+        "commit.py:93-99: subprocess.run(['git', 'commit', ...]) — no timeout",
+        "Zero occurrences of 'timeout=' in any file under git_operations/core/commands/ (confirmed by search returning 0 matches)",
+        "sync.py push/pull/fetch operations are especially dangerous without timeout since they involve network I/O"
+      ],
+      "suggestion": "Add a configurable timeout (default 60s for local ops, 120s for network ops) to all subprocess.run() calls. Use the lang_guidance flag from the review spec: 'Flag subprocess calls without timeout parameter'.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "plotter_class_pure_passthrough_wrapper",
+      "summary": "The Plotter class in data_visualization/engines/plotter.py is a pure wrapper that does nothing but forward calls to standalone chart functions, adding no policy, caching, validation, or other behavior — an abstraction without fitness.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/plotter.py"
+      ],
+      "evidence": [
+        "plotter.py:39-41: def bar_chart(self, categories, values, **kwargs): return create_bar_chart(categories, values, **kwargs) — pure forward",
+        "plotter.py:43-46: def line_plot(self, x_data, y_data, **kwargs): kwargs.setdefault('figure_size', self.figure_size); return create_line_plot(...) — only adds one default",
+        "plotter.py:48-50: scatter_plot, histogram, pie_chart all pure forwards with zero added behavior",
+        "Plotter.__init__ stores figure_size but only one method (line_plot) actually uses it; others ignore it entirely"
+      ],
+      "suggestion": "Either make Plotter carry real cross-cutting responsibilities (theme management, output format selection, batch rendering, figure lifecycle) that justify the class, or delete it and let callers use the chart functions directly. The current class provides false abstraction.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "image_generator_single_line_wrapper",
+      "summary": "ImageGenerator in multimodal/image_generation.py is a class whose sole method is a one-line delegation to client.generate_images() with no added logic — a class that exists only to wrap a method call.",
+      "related_files": [
+        "src/codomyrmex/multimodal/image_generation.py"
+      ],
+      "evidence": [
+        "image_generation.py:42: return self.client.generate_images(prompt=prompt, model=model, **kwargs) — the entire generate() body is this one line",
+        "The __init__ only creates a GeminiClient if one is not provided",
+        "There is no batching, retry, caching, format conversion, or other cross-cutting concern added by this class"
+      ],
+      "suggestion": "Delete ImageGenerator and let callers use GeminiClient.generate_images() directly. If a stable interface boundary is needed for mocking or substitution, a Protocol or TypeAlias is more appropriate than a trivial delegation class.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "data_viz_dual_chart_hierarchy",
+      "summary": "The data_visualization module contains two parallel chart hierarchies: charts/ (function-based, matplotlib) and plots/ (class-based, extending BasePlot), implementing overlapping chart types (bar, histogram, line, scatter, pie) with no clear owner for each type.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/bar_chart.py",
+        "src/codomyrmex/data_visualization/plots/bar_chart.py",
+        "src/codomyrmex/data_visualization/charts/histogram.py",
+        "src/codomyrmex/data_visualization/plots/histogram.py",
+        "src/codomyrmex/data_visualization/charts/line_plot.py",
+        "src/codomyrmex/data_visualization/plots/line_plot.py",
+        "src/codomyrmex/data_visualization/__init__.py"
+      ],
+      "evidence": [
+        "charts/bar_chart.py and plots/bar_chart.py both implement bar charts with different interfaces and rendering strategies",
+        "charts/histogram.py and plots/histogram.py both implement histograms",
+        "data_visualization/__init__.py imports from BOTH hierarchies: BarChart from .charts.bar_chart AND BarPlot alias = BarChart, while BasePlot hierarchy provides another BarChart via plots/bar_chart.py",
+        "__init__.py:57 BarPlot = BarChart creates an alias but BarChart itself comes from charts/, while plots/ provides a completely different BarChart class that extends BasePlot",
+        "AGENTS.md acknowledges both 'functional (create_*) and class-based (BarChart, etc.) interfaces' but does not explain the split or when to use each"
+      ],
+      "suggestion": "Consolidate to one chart hierarchy. The class-based plots/ hierarchy extending BasePlot is architecturally cleaner (inheritance, consistent render()/to_html() contract). Migrate the charts/ functional API to thin wrappers over the plot classes, or eliminate plots/ and add to_html() rendering to the charts/ classes.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "mcp_tools_scattered_outside_canonical_files",
+      "summary": "The @mcp_tool decorator appears in non-mcp_tools.py source files across multiple modules, scattering MCP registration decisions into implementation files and breaking the convention that mcp_tools.py is the sole MCP surface per module.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/status.py",
+        "src/codomyrmex/git_operations/core/commands/commit.py",
+        "src/codomyrmex/git_operations/core/commands/repository.py",
+        "src/codomyrmex/data_visualization/charts/bar_chart.py",
+        "src/codomyrmex/data_visualization/charts/line_plot.py",
+        "src/codomyrmex/data_visualization/charts/pie_chart.py"
+      ],
+      "evidence": [
+        "grep of @mcp_tool across git_operations/ shows 35+ occurrences in mcp_tools.py AND 40+ occurrences scattered across core/commands/*.py",
+        "data_visualization/charts/*.py contains @mcp_tool in bar_chart.py, line_plot.py, pie_chart.py — implementation files not named mcp_tools.py",
+        "The module discovery engine scans the full package tree, so tools in non-canonical files are discovered separately, leading to duplicate or shadow registrations"
+      ],
+      "suggestion": "Enforce a project lint rule that @mcp_tool may only appear in files named mcp_tools.py. Remove all @mcp_tool decorators from implementation files, consolidating into each module's single mcp_tools.py.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "logging_import_path_inconsistency",
+      "summary": "Modules use two different import paths for get_logger — the internal core path (codomyrmex.logging_monitoring.core.logger_config) and the public API path (codomyrmex.logging_monitoring) — creating a style island in every module that bypasses the public API.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/branching.py",
+        "src/codomyrmex/git_operations/core/commands/status.py",
+        "src/codomyrmex/git_operations/core/git.py",
+        "src/codomyrmex/model_context_protocol/decorators.py",
+        "src/codomyrmex/data_visualization/charts/bar_chart.py"
+      ],
+      "evidence": [
+        "branching.py:4: 'from codomyrmex.logging_monitoring.core.logger_config import get_logger' — direct internal path",
+        "model_context_protocol/decorators.py:14: 'from codomyrmex.logging_monitoring import get_logger' — public API path",
+        "data_visualization/charts/bar_chart.py:12: 'from codomyrmex.logging_monitoring import get_logger' — public API",
+        "Search confirms over 40 files use the internal core.logger_config path and many others use the public API — both patterns present throughout the codebase",
+        "logging_monitoring/core/logger_config.py:25-28 itself imports 'import uuid' and 'import uuid as _uuid' on separate lines — duplicate import of the same module"
+      ],
+      "suggestion": "Standardize on 'from codomyrmex.logging_monitoring import get_logger' (the public API) everywhere. The internal path bypasses module encapsulation and will break if the internal structure is reorganized.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "duplicate_import_in_logger_config",
+      "summary": "logging_monitoring/core/logger_config.py imports both 'import uuid' and 'import uuid as _uuid' on separate lines, and 'from datetime import datetime' alongside 'from datetime import datetime as _datetime' — the same module imported twice under different names.",
+      "related_files": [
+        "src/codomyrmex/logging_monitoring/core/logger_config.py"
+      ],
+      "evidence": [
+        "logger_config.py:25: 'import uuid'",
+        "logger_config.py:26: 'import uuid as _uuid'",
+        "logger_config.py:27: 'from datetime import datetime'",
+        "logger_config.py:28: 'from datetime import datetime as _datetime'",
+        "Both forms are used in the file body, suggesting incremental patching that was never cleaned up"
+      ],
+      "suggestion": "Choose one import form and use it consistently throughout the file. If the underscore-prefixed alias was intended to avoid name collisions, remove the non-aliased duplicate. If not, remove the alias.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "restating_docstrings_on_trivial_functions",
+      "summary": "Multiple short functions across the codebase have multi-line docstrings that restate the function name and signature without adding domain insight, a hallmark of AI-generated documentation bloat.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/commit.py",
+        "src/codomyrmex/git_operations/core/commands/branching.py",
+        "src/codomyrmex/data_visualization/charts/plot_utils.py",
+        "src/codomyrmex/logging_monitoring/core/logger_config.py"
+      ],
+      "evidence": [
+        "branching.py:72-76: def get_current_branch — docstring says only 'Get the name of the current Git branch. Raises: subprocess.CalledProcessError: If git reports a non-zero exit code.' — exact restatement of function name and standard behavior",
+        "commit.py:12-30: commit_changes docstring lists all 6 params with descriptions that restate the param names (message: 'Commit message', repository_path: 'Path to repository')",
+        "plot_utils.py:26-50: apply_common_aesthetics has a 12-line docstring for a function that sets 3 optional properties on an axes object",
+        "logger_config.py:60-75: JSONFormatter.format docstring lists 9 return fields, mirroring what any reader would see from the dict literal 8 lines below"
+      ],
+      "suggestion": "Trim docstrings to document WHY and WHAT IS NON-OBVIOUS. For functions whose name fully explains their behavior, a one-line docstring or none is preferable to a multi-paragraph restatement. Reserve detailed param docs for functions with non-obvious parameter semantics.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "noisy_logging_in_git_commands",
+      "summary": "The git_operations command layer logs entry/exit events for every operation at info/debug level, creating verbose log noise that provides no investigative value beyond what a stack trace would show.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/commit.py",
+        "src/codomyrmex/git_operations/core/commands/status.py"
+      ],
+      "evidence": [
+        "commit.py:38: logger.info(f'Committing changes with message: {message}') — logs the action being taken at INFO level before doing it",
+        "commit.py:55: logger.debug('Staged all tracked, modified files') — logs a sub-step at DEBUG",
+        "commit.py:111: logger.info(f'Changes committed successfully: {commit_sha[:8]}') — logs success after the fact",
+        "status.py:47: logger.debug('Getting Git repository status') — entry log on a read-only status call",
+        "status.py:28: logger.info(f'Adding files to staging area: {file_paths}') — info-level log for each staging call",
+        "The pattern is repeated across all command files with entry/pre-operation/post-operation logs that duplicate what the operation itself communicates"
+      ],
+      "suggestion": "Keep only error-level logs for failure paths and sparse debug-level tracing at the most important boundaries. Remove entry/success confirmation logs from command internals — these belong in integration/audit logging, not per-function log spam.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "trust_gateway_disk_reload_on_every_query",
+      "summary": "TrustRegistry._load() is called at the start of every read operation (level(), verify_all_safe(), trust_tool()), meaning every trust check re-reads the full JSON ledger from disk, creating unnecessary I/O and race conditions in any concurrent scenario.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": [
+        "trust_gateway.py:366: def level(self, tool_name): self._load() — called on every single tool level query",
+        "trust_gateway.py:373: def verify_all_safe(self): self._load() — reads disk before promoting safe tools",
+        "trust_gateway.py:387: def trust_tool(self, tool_name): self._load() — reads disk before trusting a tool",
+        "trust_gateway.py:426: def get_report(self): self._load() — reads disk before returning the trust report",
+        "The comment at line 365 says 'Reload to ensure we see updates from other processes' but does so on EVERY access, not only when staleness is suspected. No timestamp or inode check is used to avoid unnecessary reads."
+      ],
+      "suggestion": "Add an mtime-based staleness check: store the file's modification time on the last load and only reload if the file has changed. For single-process use (the stated assumption), eliminate the per-query reload entirely and let explicit invalidate calls refresh state.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "data_viz_mcp_generate_chart_unvalidated_data_passthrough",
+      "summary": "The generate_chart MCP tool blindly unpacks the user-supplied data dict as **kwargs into chart factory functions, with no validation of which keys are valid for the requested chart type, producing unhelpful errors at the matplotlib layer.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/mcp_tools.py"
+      ],
+      "evidence": [
+        "mcp_tools.py:43-45: call_data = {**data}; call_data.setdefault('title', title); result = factory(**call_data)",
+        "If data contains unexpected keys (e.g. {'labels': [...], 'wrong_key': 1}), the error is a TypeError from the factory function with a stack trace into matplotlib internals",
+        "The only validation is the chart_type key check at line 37; the structure of data is never verified against the expected factory signature",
+        "Different chart factories (bar vs pie vs line) expect completely different data shapes, but generate_chart gives no guidance and does no translation"
+      ],
+      "suggestion": "Add per-chart-type data schemas and validate them before calling the factory. Return a structured validation error with expected keys if the data dict does not match. This makes the tool usable from agents without requiring knowledge of matplotlib internals.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "commit_changes_author_handling_deep_nesting",
+      "summary": "The commit_changes() function contains deeply nested conditional chains for handling partial author information (name only, email only, both, neither), requiring subprocess calls to git config in the middle of building the commit command.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/commands/commit.py"
+      ],
+      "evidence": [
+        "commit.py:60-88: nested if/elif/elif block for author handling, each branch running subprocess.run(['git', 'config', ...]) to fetch missing author data",
+        "The function mixes author resolution logic with commit command construction and file staging — three distinct responsibilities in one function body",
+        "Lines 60-88 could be extracted to a _resolve_author(name, email, repo_path) -> str helper that returns the --author argument string, simplifying the main function to a linear sequence",
+        "commit.py:63-64: 'elif author_name: # If only name provided, try to get email from config or use name only' — the comment is longer than the action it describes"
+      ],
+      "suggestion": "Extract a _resolve_author_arg(name, email, repo_path) helper that encapsulates all git config lookups and returns the --author string or None. This flattens the nesting in commit_changes() and makes it testable in isolation.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "logger_config_json_formatter_dumps_all_record_attrs",
+      "summary": "JSONFormatter.format() in logger_config.py iterates over all record.__dict__ keys and adds anything not in an exclusion list to the output JSON, meaning any attribute added to a log record (by middleware, filters, etc.) silently leaks into production logs.",
+      "related_files": [
+        "src/codomyrmex/logging_monitoring/core/logger_config.py"
+      ],
+      "evidence": [
+        "logger_config.py:89-97: 'for key, value in record.__dict__.items(): if key not in [exclusion list]: log_data[key] = value'",
+        "The exclusion list has 15 entries but Python's LogRecord has additional internal attributes and any handler/filter can attach arbitrary keys",
+        "This pattern produces non-deterministic JSON output shapes that cannot be reliably parsed by downstream log aggregators",
+        "The approach is also a potential information disclosure vector — any object attached to a log record will be stringified and emitted"
+      ],
+      "suggestion": "Replace the attribute-dumping loop with an explicit allowlist of additional fields to forward (e.g., context, correlation_id, request_id). Use a structured logging library like structlog that handles this safely, or at minimum add a JSON-serialization guard per field.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "trust_gateway_mixes_registry_singleton_and_module_functions",
+      "summary": "trust_gateway.py mixes three different access patterns for the same trust state: a module-level _registry singleton, module-level public functions that delegate to the singleton (verify_capabilities, trust_tool, trusted_call_tool), and module-level lazy __getattr__ attributes (SAFE_TOOLS, DESTRUCTIVE_TOOL_COUNT) — three patterns for one concept.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": [
+        "trust_gateway.py:488: _registry = TrustRegistry() — module-level singleton instantiated at import time",
+        "trust_gateway.py:495+: verify_capabilities() and trust_tool() delegate to _registry — functional API over the singleton",
+        "trust_gateway.py:296-311: __getattr__ lazy module-level attributes SAFE_TOOLS, SAFE_TOOL_COUNT, DESTRUCTIVE_TOOL_COUNT — attribute-style access to derived data",
+        "trust_gateway.py:280-293: _LazyToolSets class with static methods (safe_tools, destructive_tools_set) — yet another access pattern",
+        "Callers have four possible ways to query trust state and none of the patterns are clearly preferred over the others in the public API"
+      ],
+      "suggestion": "Pick one access pattern. Since TrustRegistry encapsulates all state, make it the sole public interface. Remove the module-level __getattr__, _LazyToolSets class, and the module-level singleton wrappers. Expose a get_registry() factory and let callers use the registry object directly.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "mcp_tool_decorator_stores_metadata_twice",
+      "summary": "The @mcp_tool decorator in model_context_protocol/decorators.py attaches the same metadata dict to both func._mcp_tool and func._mcp_tool_meta as well as wrapper._mcp_tool and wrapper._mcp_tool_meta — four attribute assignments for a single metadata object.",
+      "related_files": [
+        "src/codomyrmex/model_context_protocol/decorators.py"
+      ],
+      "evidence": [
+        "decorators.py:69: func._mcp_tool = tool_meta",
+        "decorators.py:70: func._mcp_tool_meta = tool_meta",
+        "decorators.py:84: wrapper._mcp_tool = tool_meta",
+        "decorators.py:85: wrapper._mcp_tool_meta = tool_meta",
+        "Both _mcp_tool and _mcp_tool_meta point to the identical dict object — no different data, no different purpose documented",
+        "The discovery engine in model_context_protocol/discovery/__init__.py:251 checks 'hasattr(obj, _mcp_tool_meta)' but not '_mcp_tool', suggesting one of the two is vestigial"
+      ],
+      "suggestion": "Use a single canonical attribute name (_mcp_tool_meta) and remove the duplicate _mcp_tool assignments. Update the discovery engine and any other scanner to use only the canonical attribute. Document the choice in a comment so future contributors do not re-add the alias.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "no_integration_tests_for_mcp_tool_name_collision",
+      "summary": "Despite the critical defect where multiple modules register @mcp_tool with the same tool names (git_log, git_diff, git_repo_status, git_check_availability), there are no integration tests verifying that the discovery engine returns exactly one registration per tool name.",
+      "related_files": [
+        "src/codomyrmex/tests/unit/agents/test_mcp_discovery.py",
+        "src/codomyrmex/agents/pai/mcp/discovery.py"
+      ],
+      "evidence": [
+        "test_mcp_discovery.py exists but its scope is not confirmed to include duplicate-name collision detection",
+        "discovery.py:173-174: '_DISCOVERY_ENGINE.scan_package(target)' followed by implicit overwrite: '_registry[tool.name] = tool' — later scan silently overwrites earlier registration with no warning",
+        "No test in the test suite checks that 'codomyrmex.git_log' maps to exactly one handler after full discovery",
+        "The silent overwrite means the final registered tool depends on package scan order, which is an implementation detail of pkgutil.walk_packages"
+      ],
+      "suggestion": "Add an integration test that runs discover_dynamic_tools() and asserts that no tool name appears more than once, printing the duplicate names if found. This would catch the existing collision and prevent future regressions.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "performance_module_import_guard_conditional_definition",
+      "summary": "git_operations/core/git.py conditionally imports monitor_performance and performance_context only when PERFORMANCE_MONITOR_AVAILABLE is True, but then exports PERFORMANCE_MONITORING_AVAILABLE as a flag — any module that imports from git.py without checking this flag will silently lack performance instrumentation.",
+      "related_files": [
+        "src/codomyrmex/git_operations/core/git.py",
+        "src/codomyrmex/git_operations/core/commands/repository.py"
+      ],
+      "evidence": [
+        "git.py:8-14: 'if PERFORMANCE_MONITOR_AVAILABLE: from codomyrmex.performance import monitor_performance, performance_context' — conditional import means these names may not exist in the module namespace",
+        "git.py:61: 'PERFORMANCE_MONITORING_AVAILABLE = PERFORMANCE_MONITOR_AVAILABLE' — redundant alias of the same bool",
+        "repository.py:6-9: same conditional import pattern repeated independently",
+        "If code elsewhere attempts 'from codomyrmex.git_operations.core.git import monitor_performance' when psutil is unavailable, it will get an ImportError with no guidance"
+      ],
+      "suggestion": "Move the conditional performance import to a central shim (like data_visualization/_compat.py) and import from there. This avoids repeating the guard in every consumer and makes the fallback explicit and testable.",
+      "confidence": "medium"
+    }
+  ]
+}

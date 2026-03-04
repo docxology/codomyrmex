@@ -49,7 +49,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 122 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 124 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -312,7 +312,14 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: /Users/mini/.claude/MEMORY/WORK/20260302-160000_pai-upgrade-check/PRD.md (edit), ~/.claude/Plans/modular-tumbling-flask.md (create), ~/.claude/Plans/splendid-doodling-toast.md (create), pyproject.toml (edit), src/codomyrmex/soul/exceptions.py (create), src/codomyrmex/soul/agent.py (create), src/codomyrmex/soul/mcp_tools.py (create), src/codomyrmex/soul/__init__.py (create), src/codomyrmex/soul/py.typed (create), src/codomyrmex/tests/unit/soul/__init__.py (create)
-  ... and 34 more
+Files: src/codomyrmex/events/handlers/event_logger.py (edit), src/codomyrmex/calendar_integration/mcp_tools.py (edit), src/codomyrmex/agents/cli/handlers.py (edit), src/codomyrmex/logging_monitoring/__init__.py (edit), src/codomyrmex/tests/unit/api_documentation/test_api_documentation.py (edit), src/codomyrmex/tests/unit/deployment/test_deployment_pipeline.py (edit), src/codomyrmex/tests/unit/api_standardization/test_api_standardization.py (edit), src/codomyrmex/data_visualization/engines/plotter.py (edit), src/codomyrmex/data_visualization/charts/bar_chart.py (edit), src/codomyrmex/data_visualization/charts/scatter_plot.py (edit)
+  ... and 3 more
+
+## Crash Recovery
+Last session (2026-03-03T15:13:02.765035) was not properly closed (crash/kill).
+Recorded 26 file changes before crash.
+Last changed files: src/codomyrmex/tests/unit/autograd/test_autograd.py, src/codomyrmex/data_visualization/charts/pie_chart.py, src/codomyrmex/data_visualization/charts/histogram.py, src/codomyrmex/data_visualization/charts/scatter_plot.py, src/codomyrmex/data_visualization/charts/bar_chart.py
+Bridge from previous session is valid (above).
+For details use: memory_search("changes last session")
 
 # === END COGNILAYER ===

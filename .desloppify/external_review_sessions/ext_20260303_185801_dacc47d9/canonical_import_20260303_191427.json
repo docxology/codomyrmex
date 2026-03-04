@@ -1,0 +1,284 @@
+{
+  "assessments": {
+    "cross_module_architecture": 58,
+    "convention_outlier": 62,
+    "error_consistency": 45,
+    "abstraction_fitness": 52,
+    "dependency_health": 55,
+    "test_strategy": 60,
+    "ai_generated_debt": 50,
+    "package_organization": 57,
+    "high_level_elegance": 60,
+    "mid_level_elegance": 48,
+    "low_level_elegance": 55,
+    "design_coherence": 52
+  },
+  "findings": [
+    {
+      "dimension": "error_consistency",
+      "identifier": "mcp_tools_error_key_split",
+      "summary": "MCP tool error responses use two different keys for the error message \u2014 `message` in git_operations and llm modules, and `error` in coding module \u2014 making callers unable to handle errors uniformly.",
+      "related_files": [
+        "src/codomyrmex/git_operations/mcp_tools.py",
+        "src/codomyrmex/coding/mcp_tools.py",
+        "src/codomyrmex/llm/mcp_tools.py",
+        "src/codomyrmex/ide/mcp_tools.py",
+        "src/codomyrmex/encryption/mcp_tools.py"
+      ],
+      "evidence": "git_operations/mcp_tools.py:40: `return {\"status\": \"error\", \"message\": str(exc)}` (repeated at lines 53, 66, 79, \u2026 303 \u2014 all 35 error returns use `message`). coding/mcp_tools.py:39,67,82,103: `return {\"status\": \"error\", \"error\": str(exc)}` \u2014 all 4 error returns use `error` instead. Counting across all mcp_tools.py files: 152 returns use `message` versus 77 returns use `error`, with no shared contract.",
+      "suggestion": "Adopt a single canonical error envelope \u2014 e.g. `{\"status\": \"error\", \"message\": str(exc)}` \u2014 and apply it in all mcp_tools.py files. Document the contract in model_context_protocol/decorators.py or a shared errors module, and enforce it via a linting rule.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "mcp_tools_success_key_split",
+      "summary": "MCP tool success responses use both `ok` and `success` as the status value with no consistent rule, making callers unable to distinguish success without inspecting each tool's documentation.",
+      "related_files": [
+        "src/codomyrmex/git_operations/mcp_tools.py",
+        "src/codomyrmex/coding/mcp_tools.py",
+        "src/codomyrmex/llm/mcp_tools.py",
+        "src/codomyrmex/agents/mcp_tools.py"
+      ],
+      "evidence": "Across all mcp_tools.py files: 80 occurrences of `\"status\": \"ok\"` versus 156 occurrences of `\"status\": \"success\"`. git_operations/mcp_tools.py:27 uses `\"status\": \"success\"`, while coding/mcp_tools.py:37,51 uses `\"status\": \"ok\"`. agents/mcp_tools.py:31 uses `\"status\": \"success\"`. No module-level README or type annotation enforces which string to use.",
+      "suggestion": "Standardise on `\"status\": \"success\"` (matching HTTP semantics) across all mcp_tools.py files. Add a typed TypedDict or dataclass in model_context_protocol for the canonical tool response shape so the decorator can validate at call time.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "dataviz_get_codomyrmex_logger_wrapper",
+      "summary": "data_visualization/charts/plot_utils.py defines a `get_codomyrmex_logger` wrapper that only calls `get_logger` from logging_monitoring with no added behaviour, creating a trivial forwarding layer imported by 8 sibling modules.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/plot_utils.py",
+        "src/codomyrmex/data_visualization/charts/bar_chart.py",
+        "src/codomyrmex/data_visualization/charts/histogram.py",
+        "src/codomyrmex/data_visualization/charts/pie_chart.py",
+        "src/codomyrmex/data_visualization/charts/scatter_plot.py"
+      ],
+      "evidence": "plot_utils.py:16-18: `def get_codomyrmex_logger(name: str): return get_logger(name)` \u2014 a three-line function that adds no logic. Eight consumers (bar_chart.py, histogram.py, pie_chart.py, scatter_plot.py, box_plot.py, area_chart.py, line_plot.py, heatmap.py) import this wrapper instead of calling `get_logger` directly. The engines/__init__.py and engines/plotter.py also import directly from `charts.plot_utils` crossing the charts\u2192engines boundary.",
+      "suggestion": "Delete `get_codomyrmex_logger` and replace all call sites with a direct import of `get_logger` from `codomyrmex.logging_monitoring`. This also eliminates the intra-package cross-boundary import from engines to charts.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "performance_monitoring_fallback_stub_repeated",
+      "summary": "A large no-op fallback `monitor_performance` decorator and `performance_context` class is copy-pasted verbatim into two sibling engine files instead of being factored into one guarded import helper.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py",
+        "src/codomyrmex/data_visualization/engines/plotter.py"
+      ],
+      "evidence": "advanced_plotter.py:23-46: `try: from codomyrmex.performance import \u2026` then identical no-op stubs for `monitor_performance` and `performance_context` on ImportError. plotter.py:37-60: identical block repeated verbatim (both classes include `return None  # Intentional no-op` in `__init__`). Neither file is the engines subpackage `__init__`; they each carry a full 25-line stub independently.",
+      "suggestion": "Move the guarded import and fallback stubs into `data_visualization/engines/__init__.py` or a dedicated `data_visualization/_compat.py` module, and have both files import from there.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "system_discovery_health_duplicate",
+      "summary": "system_discovery contains two parallel health_checker.py files \u2014 one under core/ and one under health/ \u2014 with overlapping class names but different dependency footprints, creating ambiguity about which is canonical.",
+      "related_files": [
+        "src/codomyrmex/system_discovery/core/health_checker.py",
+        "src/codomyrmex/system_discovery/health/health_checker.py"
+      ],
+      "evidence": "system_discovery/core/health_checker.py:35 defines `class SystemHealthChecker` and imports `execute_code`, `create_line_plot`. system_discovery/health/health_checker.py:46 defines `class HealthStatus` Enum plus a different health-check class hierarchy importing `logistics`, `performance`, `security`, and `git_operations`. Both files are named `health_checker.py` in the same package, causing ambiguity for any `from codomyrmex.system_discovery.*.health_checker import *` style access.",
+      "suggestion": "Consolidate into a single health_checker.py under the appropriate sub-directory, deleting or merging the duplicate. Rename the survivor to clearly signal its role (e.g. `module_health.py`).",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "logging_monitoring_events_circular_boundary",
+      "summary": "events module imports from logging_monitoring for structured logging, while logging_monitoring/handlers/event_bridge.py imports from events, creating a circular boundary that is only broken by TYPE_CHECKING guards and lazy imports \u2014 a fragile workaround rather than a proper layering fix.",
+      "related_files": [
+        "src/codomyrmex/events/core/event_schema.py",
+        "src/codomyrmex/events/core/event_bus.py",
+        "src/codomyrmex/logging_monitoring/handlers/event_bridge.py"
+      ],
+      "evidence": "events/core/event_schema.py:9: `from codomyrmex.logging_monitoring.core.logger_config import get_logger`. events/core/event_bus.py:19-25: same import. logging_monitoring/handlers/event_bridge.py:13-21: comment explicitly notes 'TYPE_CHECKING guard breaks the runtime circular import'. The guard only prevents import-time circularity; the conceptual boundary violation remains, and any refactoring that adds a runtime import will re-trigger the cycle.",
+      "suggestion": "Define logging_monitoring as a leaf dependency with no knowledge of events. Create a third mediator module (e.g. `observability`) that depends on both, which owns the event-bridge handler. This eliminates the circular boundary.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "silent_fallback_stubs_violate_zero_mock",
+      "summary": "558 `except ImportError` blocks in production code silently replace real implementations with no-op stubs, directly violating the stated zero-mock/no-silent-fallback policy and making it impossible to detect misconfigured environments at runtime.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py",
+        "src/codomyrmex/data_visualization/engines/plotter.py",
+        "src/codomyrmex/ide/antigravity/__init__.py",
+        "src/codomyrmex/ide/antigravity/agent_bridge.py",
+        "src/codomyrmex/agents/pai/mcp/proxy_tools.py"
+      ],
+      "evidence": "advanced_plotter.py:18-21: `try: from codomyrmex.logging_monitoring\u2026 except ImportError: from logging import getLogger as get_logger` \u2014 silently downgrades to stdlib logging. ide/antigravity/__init__.py:31-92: nine consecutive `try\u2026except ImportError: <symbol> = None` blocks setting public exports to None with no warning. agents/pai/mcp/proxy_tools.py:18-23: `get_package_version` silently returns `'unknown'` on ImportError. Total count: 558 such blocks across production code.",
+      "suggestion": "Replace silent ImportError catches with explicit `skipif` guards in tests and hard import failures (with helpful error messages) in production. Use `uv sync --extra <module>` as the documented resolution path; document optional imports in pyproject.toml optional-dependencies instead of hiding them.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "two_logging_libraries_in_core",
+      "summary": "The codebase declares loguru as a core dependency and installs it, yet almost all production modules bypass it entirely by calling stdlib `logging.getLogger` directly, resulting in two logging systems running in parallel with no coordination.",
+      "related_files": [
+        "pyproject.toml",
+        "src/codomyrmex/ide/antigravity/message_scheduler.py",
+        "src/codomyrmex/documentation/documentation_website.py",
+        "src/codomyrmex/terminal_interface/shells/__init__.py"
+      ],
+      "evidence": "pyproject.toml:62: `\"loguru>=0.7.0\"` listed as a core (non-optional) dependency. Only 2 files `import loguru` in all of src/. At least 20 production files call `logging.getLogger(__name__)` directly bypassing the centralised `get_logger` wrapper: ide/antigravity/message_scheduler.py:39, documentation/documentation_website.py:70,86,99, terminal_interface/shells/__init__.py:21, containerization/docker/build_generator.py:13, plugin_system/core/plugin_loader.py:21, and others.",
+      "suggestion": "Either (a) move loguru to an optional dependency and remove it from core if it is not actually used, or (b) wire loguru as the backend for the centralised `get_logger` wrapper and remove all direct `logging.getLogger` calls from production modules.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "performance_context_noop_boilerplate_repeated",
+      "summary": "Identical 22-line no-op `performance_context` class with AI-hallmark docstrings (`\"Enter the context manager.\"`, `\"Exit the context manager and clean up.\"`, `return None  # Intentional no-op`) is copy-pasted verbatim into at least two sibling production files.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py",
+        "src/codomyrmex/data_visualization/engines/plotter.py"
+      ],
+      "evidence": "advanced_plotter.py:36-45 and plotter.py:51-60 are byte-for-byte identical: `class performance_context: def __init__(self, *args, **kwargs): return None  # Intentional no-op` with `\"\"\"Enter the context manager.\"\"\"` on `__enter__` and `\"\"\"Exit the context manager and clean up.\"\"\"` on `__exit__`. The `# Intentional no-op` inline comment and the verbatim docstrings are characteristic AI-generation markers. The same pattern also appears in networking/ssh_sftp.py:48,53 and concurrency/semaphores/semaphore.py:31,37.",
+      "suggestion": "Extract the guarded import and fallback stubs into a single shared location. Remove the restating docstrings from `__enter__`/`__exit__` \u2014 the method names already express their purpose.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "generate_chart_narrating_comments",
+      "summary": "data_visualization/mcp_tools.py contains inline comments that narrate the code rather than explain intent, a characteristic AI-generation pattern.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/mcp_tools.py"
+      ],
+      "evidence": "mcp_tools.py:43: `# Some factories might have different signatures, mapping basic ones` immediately before a two-branch if/else that already expresses this. mcp_tools.py:47: `# Fallback for dynamic unpacking based on the provided dictionary` before `result = factory(**data)` \u2014 the code is self-evident. Neither comment explains why bar needs positional invocation while others use kwargs.",
+      "suggestion": "Replace with a comment explaining the business reason: why bar_chart has a different call signature than the other factories, or restructure all factory functions to accept a uniform signature so no branching is needed.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "mcp_server_get_and_get_tool_duplicate",
+      "summary": "_ToolRegistry in agents/pai/mcp/server.py exposes two methods with identical implementation \u2014 `get` and `get_tool` \u2014 creating an ambiguous surface that callers must guess from.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp/server.py"
+      ],
+      "evidence": "server.py:28-29: `def get(self, name: str) -> dict[str, Any] | None: return self._tools.get(name)`. server.py:31-32: `def get_tool(self, name: str) -> dict[str, Any] | None: return self._tools.get(name)`. Both are identical one-liners with no difference in behaviour. trust_gateway.py:463 calls `.get(name)` while call_tool (server.py:205) uses `.get(name)` also \u2014 no caller uses `get_tool`, making it dead surface.",
+      "suggestion": "Remove `get_tool` (or `get`) and standardise all callers on one name. Add `__contains__` for membership checks to avoid callers checking `registry.get(name) is not None`.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "trust_gateway_dual_state_global_and_registry",
+      "summary": "trust_gateway.py maintains two parallel representations of the current trust level \u2014 a module-level `_trust_level` global and the TrustRegistry per-tool ledger \u2014 requiring manual synchronisation in multiple places and creating a category of bugs where the two diverge.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": "trust_gateway.py:64: `_trust_level: TrustLevel = TrustLevel.UNTRUSTED` \u2014 module-level global. trust_gateway.py:615-624: `trust_tool()` must explicitly sync `_trust_level` from registry with a comment 'Keep _trust_level global in sync'. trust_gateway.py:642-644: `trust_all()` directly sets `_trust_level = TrustLevel.TRUSTED`. trust_gateway.py:787: `get_current_trust_level()` now correctly derives from `_registry.get_aggregate_level()` \u2014 but `reset_trust()` at line:799-801 still mutates the global directly before calling `_registry.reset()`.",
+      "suggestion": "Eliminate the `_trust_level` global entirely. Route all callers of `get_current_trust_level()` through the registry's `get_aggregate_level()`. The synchronisation comments and manual mutation sites are symptoms of the dual-state design.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "matplotlib_global_backend_import_side_effect",
+      "summary": "data_visualization/plots/_base.py calls `matplotlib.use(\"Agg\")` at module import time as a global side effect, which silently changes the matplotlib backend for every other module in the process that imports from data_visualization.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/plots/_base.py",
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py"
+      ],
+      "evidence": "plots/_base.py:14-17: `import matplotlib; matplotlib.use(\"Agg\"); import matplotlib.pyplot as plt` \u2014 executes at module load time with a `# non-interactive backend` comment. advanced_plotter.py:55-56: `plt.style.use(\"default\"); sns.set_palette(\"husl\")` also runs at module-level, mutating global seaborn and matplotlib state for every importer. Eight test files independently re-set the Agg backend as a workaround, confirming the global mutation is a known pain point.",
+      "suggestion": "Move `matplotlib.use(\"Agg\")` inside `to_html()` or guard it with a `if matplotlib.get_backend() != 'Agg':` check. Better: accept a `backend` parameter in the plot setup function. Move `plt.style.use` and `sns.set_palette` out of module scope and into a `configure_defaults()` function callers can opt into.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "generate_chart_bar_only_special_cased",
+      "summary": "generate_chart in data_visualization/mcp_tools.py special-cases bar charts with positional invocation while all other chart types use `**data` unpacking, producing fragile asymmetric calling logic that breaks if bar_chart's signature ever changes.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/mcp_tools.py"
+      ],
+      "evidence": "mcp_tools.py:44-48: `if chart_type == 'bar': result = factory(data, title=title)` but `else: result = factory(**data)`. This means the caller must know that `bar` takes positional `data` while others take keyword arguments. There is no validation that `data` dict for non-bar types contains the required keys, so a missing key raises a bare `TypeError` that is then swallowed by the outer `except Exception` at line 65 and returned as a generic error string.",
+      "suggestion": "Normalise all chart factory signatures to accept a `data` dict as the first positional argument plus keyword options, eliminating the special case. Add input validation before dispatching so missing keys produce a descriptive error rather than a bare TypeError.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "agent_interface_overspecified_abstract_methods",
+      "summary": "AgentInterface declares four abstract methods \u2014 execute, stream, setup, test_connection \u2014 but ThinkingAgent, the primary concrete implementation, implements only execute and supports_capability, relying on the abstract contract to raise NotImplementedError for stream, setup, and test_connection.",
+      "related_files": [
+        "src/codomyrmex/agents/core/base.py",
+        "src/codomyrmex/agents/core/thinking_agent.py"
+      ],
+      "evidence": "agents/core/base.py:81-138: `AgentInterface` declares `@abstractmethod` for `get_capabilities`, `execute`, `stream`, `setup`, `test_connection`, and `supports_capability` \u2014 six abstract methods. agents/core/thinking_agent.py:88-186: implements only `get_capabilities`, `execute`, and `supports_capability`. `stream`, `setup`, and `test_connection` are not implemented, meaning calling them on any ThinkingAgent raises `TypeError: Can't instantiate abstract class` \u2014 yet ThinkingAgent is documented as the primary agent. If Python is not raising errors it is because BaseAgent (line 186) provides concrete no-op implementations, but they silently succeed with empty behaviour.",
+      "suggestion": "Split AgentInterface into a minimal callable protocol (just `execute`) and optional mixin interfaces (Streamable, Connectable, Configurable). This way an agent only advertises contracts it actually fulfils.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "trust_gateway_module_level_eager_evaluation",
+      "summary": "trust_gateway.py triggers full MCP tool discovery at import time by evaluating `SAFE_TOOLS`, `SAFE_TOOL_COUNT`, and `DESTRUCTIVE_TOOL_COUNT` as module-level constants, coupling every importer to a potentially slow pkgutil.walk_packages scan.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": "trust_gateway.py:304-306: `SAFE_TOOLS: frozenset[str] = _get_safe_tools()`, `SAFE_TOOL_COUNT: int = len(SAFE_TOOLS)`, `DESTRUCTIVE_TOOL_COUNT: int = len(_get_destructive_tools())` \u2014 all three evaluated unconditionally at module load time. `_get_safe_tools()` calls `get_tool_registry()` which calls `discover_dynamic_tools()` which calls `_find_mcp_modules()` which calls `pkgutil.walk_packages`. A comment at line 300 acknowledges 'Module-level convenience accessors \u2014 eagerly evaluated' but does not explain the performance implication for every test that imports trust_gateway.",
+      "suggestion": "Convert the module-level constants to lazy properties or cached function calls (e.g. using `functools.cached_property` on a singleton object). Tests that import trust_gateway should not pay the full discovery cost unless they exercise discovery-related behaviour.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "system_discovery_health_and_core_split",
+      "summary": "system_discovery contains two structurally near-identical sub-packages \u2014 core/ and health/ \u2014 where the health logic is split across both, making it unclear which sub-directory owns health-checking concerns and requiring callers to know the split.",
+      "related_files": [
+        "src/codomyrmex/system_discovery/core/health_checker.py",
+        "src/codomyrmex/system_discovery/health/health_checker.py",
+        "src/codomyrmex/system_discovery/core/",
+        "src/codomyrmex/system_discovery/health/"
+      ],
+      "evidence": "Both core/health_checker.py and health/health_checker.py exist with the same filename. core/ also contains discovery_engine.py, capability_scanner.py, dependency_analyzer.py \u2014 modules that conceptually belong to discovery, not health. health/ adds health_reporter.py but shares AGENTS.md and README.md boilerplate identical to core/. The mcp_tools.py at the package root must choose between the two; the same concern owns two homes.",
+      "suggestion": "Merge health/ into core/, rename core/health_checker.py to system_health.py, and consolidate health_reporter.py there. This reduces navigational ambiguity and eliminates the duplicate filename problem.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "stdlib_logging_islands_in_core_modules",
+      "summary": "At least 20 production modules bypass the project-wide `get_logger` convention and call `logging.getLogger` directly, creating style islands in ide/antigravity, documentation, terminal_interface, and containerization that produce unstructured log output inconsistent with the rest of the codebase.",
+      "related_files": [
+        "src/codomyrmex/ide/antigravity/message_scheduler.py",
+        "src/codomyrmex/ide/antigravity/relay_endpoint.py",
+        "src/codomyrmex/documentation/documentation_website.py",
+        "src/codomyrmex/terminal_interface/shells/__init__.py",
+        "src/codomyrmex/containerization/docker/build_generator.py",
+        "src/codomyrmex/plugin_system/core/plugin_loader.py"
+      ],
+      "evidence": "ide/antigravity/message_scheduler.py:39: `logger = logging.getLogger(__name__)` inside an `except ImportError` block, falling back to stdlib. ide/antigravity/relay_endpoint.py:30: same pattern. documentation/documentation_website.py:70,86,99: three separate logger instances created with `logging.getLogger`. terminal_interface/shells/__init__.py:21: module-level `logging.getLogger`. The standard pattern throughout 90%+ of the codebase is `from codomyrmex.logging_monitoring import get_logger; logger = get_logger(__name__)`.",
+      "suggestion": "Remove the `except ImportError` fallback guards that create stdlib logger instances \u2014 logging_monitoring is a core module that must always be importable. Replace all bare `logging.getLogger` calls in production code with the project-standard `get_logger` from logging_monitoring.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "agents_orchestrator_misplaced_in_agents",
+      "summary": "agents/orchestrator.py implements a ConversationOrchestrator for multi-turn LLM conversations but lives inside the agents package rather than the orchestrator package, blurring the boundary between agent execution and workflow orchestration.",
+      "related_files": [
+        "src/codomyrmex/agents/orchestrator.py",
+        "src/codomyrmex/orchestrator/",
+        "src/codomyrmex/website/handlers/api_handler.py"
+      ],
+      "evidence": "agents/orchestrator.py:1: module docstring describes 'Orchestrates sustained multi-turn conversations between Ollama, Claude Code, and Antigravity agents'. The `orchestrator/` package already owns workflow orchestration and has its own `ConversationOrchestrator`-like structures (process_orchestrator.py, core.py). website/handlers/api_handler.py:501: imports `from codomyrmex.agents.orchestrator import ConversationOrchestrator` \u2014 a Service-layer module importing from a Core-layer module in the wrong direction. agents/planner/plan_evaluator.py:14 also imports from `codomyrmex.orchestrator.workflows` directly, indicating the intended boundary.",
+      "suggestion": "Move `agents/orchestrator.py` into `orchestrator/conversation.py` or merge its ConversationOrchestrator into the existing orchestrator package. Update the website handler import to use the orchestrator package path.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "trust_gateway_module_level_constants_bypass_tests",
+      "summary": "SAFE_TOOLS and DESTRUCTIVE_TOOL_COUNT are computed eagerly at module import time in trust_gateway.py, so test isolation is broken \u2014 any test that imports trust_gateway sees the full live tool count from the real discovery scan rather than a deterministic value.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py",
+        "src/codomyrmex/tests/unit/agents/test_trust_gateway.py"
+      ],
+      "evidence": "trust_gateway.py:304-306: module-level `SAFE_TOOLS = _get_safe_tools()` runs full discovery at import. test_trust_gateway.py:73-76: `test_safe_tools_count` asserts `SAFE_TOOL_COUNT == total - DESTRUCTIVE_TOOL_COUNT` \u2014 this test passes only if the discovery scan in CI produces the same count as local dev. Any new module with an mcp_tools.py will silently shift the counts and may cause other assertions to drift. The test is effectively testing the discovery scan rather than the trust gateway logic.",
+      "suggestion": "Make SAFE_TOOLS lazy (compute on first access via a cached function). In tests, either skip the count assertion entirely or pin it to the result of a fresh `get_total_tool_count()` call that is documented as the source of truth.",
+      "confidence": "medium"
+    }
+  ],
+  "provenance": {
+    "kind": "blind_review_batch_import",
+    "blind": true,
+    "runner": "claude",
+    "run_stamp": "ext_20260303_185801_dacc47d9",
+    "created_at": "2026-03-03T19:14:27+00:00",
+    "packet_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/review_packet_blind.json",
+    "packet_sha256": "4cd64e6056f96e30d7bd395b431b2bf1326499103b8d63dc3812d5cb3bc1837a",
+    "external_session_id": "ext_20260303_185801_dacc47d9"
+  }
+}

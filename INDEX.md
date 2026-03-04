@@ -1,6 +1,6 @@
 # Codomyrmex Project Index
 
-**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 > [!TIP]
 > Master index for the Codomyrmex project. Use this as the entry point for navigating the entire repository.
@@ -11,7 +11,7 @@
 |:--------------|:------------|
 | Run the CLI | `codomyrmex --help` → [cli/](src/codomyrmex/cli/) |
 | Understand PAI integration | [PAI.md](PAI.md) — algorithm phase ↔ module mapping |
-| Browse all 122 modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
+| Browse all 124 modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
 | MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — ~367 tools across 74 modules |
 | Check system health | `codomyrmex status` or `codomyrmex check` |
 | Run tests | `uv run pytest` |
@@ -29,7 +29,7 @@
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | Tests collected | 21,035 | `uv run pytest --co -q` |
 | RASP doc coverage | 100% | [AGENTS.md](AGENTS.md) |
-| Version | v1.0.7 | [pyproject.toml](pyproject.toml) |
+| Version | v1.0.8 | [pyproject.toml](pyproject.toml) |
 
 ## Module Layer Browser
 
@@ -64,7 +64,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 | Directory | Description |
 | :--- | :--- |
 | [src/](src/INDEX.md) | Source root — namespace package |
-| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **122 modules** across 4 layers |
+| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **124 modules** across 4 layers |
 
 ### Infrastructure
 

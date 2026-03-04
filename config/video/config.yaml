@@ -26,4 +26,4 @@ generation:
     # Duration in seconds (typically 5 or 10)
     duration_seconds: 5
     # Output directory (relative to repo root) for saving generated videos
-    output_dir: "outputs/videos"
+    output_dir: "output"

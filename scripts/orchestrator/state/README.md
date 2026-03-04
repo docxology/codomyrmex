@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# Orchestrator State Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for workflow state management, demonstrating state persistence, checkpoint/restore, and state machine transitions for long-running workflows.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `state_demo.py` | Demonstrates workflow state persistence, checkpointing, and recovery |
+
+## Usage
+
+```bash
+uv run python scripts/orchestrator/state/state_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: orchestrator/](../README.md) | [Scripts root](../../README.md)

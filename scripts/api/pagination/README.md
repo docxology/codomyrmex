@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# API Pagination Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for API pagination, demonstrating cursor-based, offset-based, and keyset pagination patterns for large result sets.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `pagination_demo.py` | Demonstrates pagination strategies for API responses |
+
+## Usage
+
+```bash
+uv run python scripts/api/pagination/pagination_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: api/](../README.md) | [Scripts root](../../README.md)

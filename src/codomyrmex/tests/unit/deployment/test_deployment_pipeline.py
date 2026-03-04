@@ -18,12 +18,15 @@ except ImportError:
 
 pytestmark = pytest.mark.skipif(not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api")
 
-from codomyrmex.api.health import (
-    ComponentHealth,
-    HealthChecker,
-    HealthReport,
-    HealthStatus,
-)
+try:
+    from codomyrmex.api.health import (
+        ComponentHealth,
+        HealthChecker,
+        HealthReport,
+        HealthStatus,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 from codomyrmex.containerization.auto_build import (
     AutoBuilder,
     DockerfileSpec,

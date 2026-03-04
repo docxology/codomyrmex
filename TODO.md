@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.0.7 | **Date**: 2026-03-02 | **Modules**: 124 | **Active Sprint**: 19+
+**Version**: v1.0.8 | **Date**: 2026-03-03 | **Modules**: 124 | **Active Sprint**: 19+
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -241,8 +241,10 @@ Architectural extensions and research directions. Aspirational and may require s
 
 ## ✅ COMPLETED — Sprint History
 
-### Sprint 19 (March 2026) — Documentation Audit + MCP Expansion
+### Sprint 19 (March 2026) — Google AI Ultra Integration + MCP Expansion
 
+- [x] **Multimedia Unity**: Unified `multimodal` and `video` configurators, CLI arguments, and native generation engines to export all `.mp4`, `.png`, `.wav`, and `.mp3` cleanly into the repository's native root `output/` directory dynamically.
+- [x] **Google AI Ultra Adoption**: Deprecated legacy Gemini models, actively migrating to `gemini-3.1-pro-preview`, `gemini-3.1-flash-image-preview` (Nano Banana 2), and `veo-3.1-generate` comprehensively across `agents/`, `llm/`, `audio/`, `video/`, and `multimodal/`.
 - [x] **Repo-wide documentation audit**: 10 files corrected (README, SPEC, AGENTS, PAI, CLAUDE, INDEX, docs/README, docs/AGENTS, .github/README)
 - [x] Version alignment: all docs updated v1.0.3/v1.0.5 → v1.0.6 → v1.0.7
 - [x] Module count alignment: 88/95 → 124 across all documentation
@@ -390,4 +392,4 @@ Architectural extensions and research directions. Aspirational and may require s
 
 ---
 
-*Last updated: 2026-03-02 — Metrics reconciled to Sprint 19 verified actuals (v1.0.7).*
+*Last updated: 2026-03-03 — Metrics reconciled to Sprint 19 verified actuals (v1.0.8).*

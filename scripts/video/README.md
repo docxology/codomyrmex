@@ -30,7 +30,7 @@ All generation parameters are in [`config/video/config.yaml`](../../config/video
 | `generation.video.number_of_videos` | `1` | Videos per request (1–4) |
 | `generation.video.aspect_ratio` | `16:9` | `"16:9"` or `"9:16"` |
 | `generation.video.duration_seconds` | `5` | Video duration |
-| `generation.video.output_dir` | `outputs/videos` | Where to save generated files |
+| `generation.video.output_dir` | `output/videos` | Where to save generated files |
 
 ## Scripts
 
@@ -49,5 +49,5 @@ See [`src/codomyrmex/video/README.md`](../../src/codomyrmex/video/README.md) for
 
 ## Output Files
 
-Generated videos are saved to `outputs/videos/` (created automatically).
+Generated videos are saved to `output/videos/` (created automatically).
 The directory is git-ignored by default.

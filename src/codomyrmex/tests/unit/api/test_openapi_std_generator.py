@@ -6,14 +6,18 @@ import tempfile
 
 import pytest
 
-from codomyrmex.api.openapi_generator import (
-    DocumentationOpenAPIGenerator,
-    OpenAPISpecification,
-    StandardizationOpenAPIGenerator,
-    create_openapi_generator,
-    generate_openapi_spec,
-    validate_openapi_spec,
-)
+
+try:
+    from codomyrmex.api.openapi_generator import (
+        DocumentationOpenAPIGenerator,
+        OpenAPISpecification,
+        StandardizationOpenAPIGenerator,
+        create_openapi_generator,
+        generate_openapi_spec,
+        validate_openapi_spec,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 # ---------------------------------------------------------------------------
 # StandardizationOpenAPIGenerator

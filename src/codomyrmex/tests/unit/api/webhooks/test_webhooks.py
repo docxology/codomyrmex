@@ -9,20 +9,24 @@ import json
 
 import pytest
 
-from codomyrmex.api.webhooks import (
-    DeliveryResult,
-    HTTPWebhookTransport,
-    SignatureAlgorithm,
-    WebhookConfig,
-    WebhookDispatcher,
-    WebhookEvent,
-    WebhookEventType,
-    WebhookRegistry,
-    WebhookSignature,
-    WebhookStatus,
-    create_webhook_dispatcher,
-    create_webhook_registry,
-)
+
+try:
+    from codomyrmex.api.webhooks import (
+        DeliveryResult,
+        HTTPWebhookTransport,
+        SignatureAlgorithm,
+        WebhookConfig,
+        WebhookDispatcher,
+        WebhookEvent,
+        WebhookEventType,
+        WebhookRegistry,
+        WebhookSignature,
+        WebhookStatus,
+        create_webhook_dispatcher,
+        create_webhook_registry,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 # ---------------------------------------------------------------------------
 # Enum tests

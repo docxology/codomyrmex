@@ -1,0 +1,199 @@
+{
+  "session": {
+    "id": "ext_20260303_174324_e83f60d4",
+    "token": "ceb8ac2fe437104b6ac15b81350a76e9"
+  },
+  "assessments": {
+    "ai_generated_debt": 62,
+    "cross_module_architecture": 48,
+    "abstraction_fitness": 55
+  },
+  "findings": [
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "restating_docstrings_on_trivial_wrappers",
+      "summary": "Trivial one-line wrapper functions carry multi-line docstrings that restate what the code already makes obvious. The inner `decorator` and `wrapper` functions inside `retry_on_failure` have docstrings of only a single word ('Decorator.' and 'Wrapper.') that add no information.",
+      "related_files": [
+        "src/codomyrmex/agents/generic/cli_agent_base.py",
+        "src/codomyrmex/model_context_protocol/decorators.py",
+        "src/codomyrmex/model_context_protocol/discovery/__init__.py"
+      ],
+      "evidence": [
+        "cli_agent_base.py lines 27-28: inner functions inside retry_on_failure have docstrings 'Decorator.' and 'Wrapper.' that carry zero semantic content",
+        "decorators.py line 46: inner decorator function has docstring 'Decorator.' — identical pattern",
+        "discovery/__init__.py line 354: same 'Decorator.' placeholder docstring on the inner function of the mcp_tool decorator",
+        "This is a hallmark LLM pattern: generating placeholder docstrings to satisfy a linter without providing real information"
+      ],
+      "suggestion": "Remove the one-word placeholder docstrings from inner decorator/wrapper functions. They satisfy no reader need and signal generated-without-thought code.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "duplicate_styling_functions_in_plot_utils",
+      "summary": "plot_utils.py contains two functions, apply_common_aesthetics and apply_codomyrmex_style, that perform the exact same sequence of matplotlib axis operations. A third function, apply_style, simply delegates to apply_theme_to_axes with no added logic. This is verbatim boilerplate duplication.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/plot_utils.py"
+      ],
+      "evidence": [
+        "apply_common_aesthetics (line 46): sets ax.spines top/right invisible, ax.grid alpha=0.3, optional title/x_label/y_label",
+        "apply_codomyrmex_style (line 119): identical body — sets ax.spines top/right invisible, ax.grid alpha=0.3, optional title",
+        "apply_style (line 217): single-line body that calls apply_theme_to_axes, adding no policy or translation",
+        "All three are in __all__ and imported by 8 other modules, multiplying the confusion"
+      ],
+      "suggestion": "Consolidate apply_common_aesthetics and apply_codomyrmex_style into a single function. Remove the pass-through apply_style or give it a clear contract distinct from the other two.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "noisy_verbose_entry_logging_in_cli_handlers",
+      "summary": "handlers.py gates entry-level logger.info calls behind getattr(args, 'verbose', False), producing entry/exit-style debug noise when verbose mode is on. The logger calls restate the action name and first 50 characters of the prompt — information already visible in the surrounding print_section call.",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "evidence": [
+        "Line 93: if getattr(args, 'verbose', False): logger.info(f'Executing {client_name} request: {prompt[:50]}...')",
+        "Line 133: identical pattern for stream path",
+        "Line 94 logger call immediately precedes line 101 print_section which announces the same action to the user",
+        "The same verbose-guard/restate pattern appears 7+ times in the file (jules, opencode, gemini, droid paths)"
+      ],
+      "suggestion": "Replace scattered verbose-gated logger.info lines with structured logger.debug calls that do not need a verbose flag. Structured logging already captures the relevant context through the extra dict pattern used elsewhere in cli_agent_base.py.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "defensive_null_check_on_well_typed_return",
+      "summary": "In discovery.py, the discover_dynamic_tools function holds the _DYNAMIC_TOOLS_CACHE_LOCK, checks the cache, exits the lock, then re-enters conditions outside the lock. More critically, get_discovery_metrics uses getattr with fallback for every field of a typed DiscoveryMetrics dataclass whose fields are defined with known types — the defensive getattr calls suggest the author did not trust the type.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp/discovery.py"
+      ],
+      "evidence": [
+        "Lines 166-170: getattr(metrics, 'failed_modules', []), getattr(metrics, 'scan_duration_ms', 0.0), getattr(metrics, 'last_scan_time', None) — all fields are defined in DiscoveryMetrics dataclass with explicit types and defaults",
+        "The DiscoveryMetrics dataclass (model_context_protocol/discovery/__init__.py lines 101-109) has all three fields with typed defaults, making the defensive getattr unnecessary",
+        "This is a hallmark LLM pattern: adding defensive checks on values that the type system already guarantees"
+      ],
+      "suggestion": "Access DiscoveryMetrics fields directly (metrics.failed_modules, metrics.scan_duration_ms, metrics.last_scan_time) without the getattr wrappers. Add an except AttributeError to the outer try block if duck-typing is genuinely required.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "duplicate_mcp_tool_decorator_implementations",
+      "summary": "Two separate, incompatible implementations of the @mcp_tool decorator exist at different import paths. model_context_protocol/decorators.py stores metadata under the key 'schema' with a category field. model_context_protocol/discovery/__init__.py stores it under 'parameters' with a requires field. All 100+ production mcp_tools.py files import from decorators.py, while the discovery engine in agents/pai/mcp/discovery.py reads the 'parameters' key from _mcp_tool_meta. The two implementations disagree on the schema key name.",
+      "related_files": [
+        "src/codomyrmex/model_context_protocol/decorators.py",
+        "src/codomyrmex/model_context_protocol/discovery/__init__.py",
+        "src/codomyrmex/agents/pai/mcp/discovery.py"
+      ],
+      "evidence": [
+        "decorators.py line 70-71: stores func._mcp_tool = tool_meta and func._mcp_tool_meta = tool_meta where tool_meta contains key 'schema'",
+        "discovery/__init__.py line 376: stores func._mcp_tool_meta = {'name':..., 'parameters':..., 'requires':...} — different key name for the JSON schema ('parameters' not 'schema')",
+        "agents/pai/mcp/discovery.py line 136: reads tool.parameters from DiscoveredTool, which MCPDiscovery._scan_module sets from meta.get('parameters', {}) — so decorators.py tools produce an empty parameters dict because their key is 'schema'",
+        "All ~100 production mcp_tools.py files use 'from codomyrmex.model_context_protocol.decorators import mcp_tool', confirming decorators.py is the canonical version",
+        "The discovery/__init__.py decorator is a second independent implementation that is not used by any production module but is imported by the discovery engine's own decorator path"
+      ],
+      "suggestion": "Retire the duplicate decorator in model_context_protocol/discovery/__init__.py. Consolidate on decorators.py as the single definition. Update MCPDiscovery._scan_module to read the 'schema' key from _mcp_tool_meta rather than 'parameters'. The mismatch means all auto-discovered tools silently expose empty parameter schemas.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "four_independent_tool_registry_classes",
+      "summary": "Four separate ToolRegistry-like classes exist in different modules: MCPToolRegistry (model_context_protocol/schemas/mcp_schemas.py), _ToolRegistry (agents/pai/mcp/server.py), ToolRegistry (agents/core/registry.py), and ToolRegistry (tool_use/registry.py and llm/tools/__init__.py). The agents/pai/mcp/server.py version was created explicitly to replace the MCP SDK's registry but does not extend or adapt MCPToolRegistry. This creates a blast-radius problem: changes to the registration contract require updates in four places.",
+      "related_files": [
+        "src/codomyrmex/model_context_protocol/schemas/mcp_schemas.py",
+        "src/codomyrmex/agents/pai/mcp/server.py",
+        "src/codomyrmex/agents/core/registry.py",
+        "src/codomyrmex/tool_use/registry.py",
+        "src/codomyrmex/llm/tools/__init__.py"
+      ],
+      "evidence": [
+        "server.py lines 16-33: _ToolRegistry class with register/list_tools/get/get_tool methods — the comment on line 17 says 'replaces MCPToolRegistry from mcp SDK' but does not import or extend it",
+        "mcp_schemas.py line 126: MCPToolRegistry is the canonical MCP registry, imported by transport/server.py and tested by 6+ test files",
+        "agents/core/registry.py line 35: ToolRegistry — a third distinct registry for agent-level tools",
+        "llm/tools/__init__.py line 128: ToolRegistry — a fourth registry scoped to LLM tool use",
+        "server.py get and get_tool are identical (lines 28-31), indicating copy-paste without review"
+      ],
+      "suggestion": "Establish MCPToolRegistry from model_context_protocol as the single authoritative registry. Adapt _ToolRegistry in server.py to either extend it or delegate to it. Eliminate the duplicate get/get_tool methods. Document the agent-level and LLM-level registries as intentionally scoped if they must remain.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "silent_fallback_import_in_plot_utils_violates_boundary",
+      "summary": "data_visualization/charts/plot_utils.py uses a try/except ImportError pattern to either import from codomyrmex.logging_monitoring or fall back to configuring standard logging. This is a silent fallback that blurs the foundation-layer dependency contract and violates the project's stated zero-silent-fallback policy.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/charts/plot_utils.py"
+      ],
+      "evidence": [
+        "Lines 15-32: try block imports get_logger from logging_monitoring; except block defines a local get_codomyrmex_logger that configures raw logging.StreamHandler",
+        "The fallback silently degrades to a different logger configuration without notifying the caller or raising",
+        "logging_monitoring is a Foundation Layer module — it is a required dependency of all modules per the architecture. A data_visualization module should not need a fallback for it.",
+        "The fallback adds 12 lines of handler-configuration boilerplate that duplicates what logging_monitoring already provides"
+      ],
+      "suggestion": "Remove the try/except fallback. Import get_logger from codomyrmex.logging_monitoring directly. If logging_monitoring truly cannot be guaranteed, that is an architecture issue to fix at the dependency level, not paper over with a local fallback.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "discovery_cache_lock_acquired_twice_per_call",
+      "summary": "discover_dynamic_tools in agents/pai/mcp/discovery.py acquires _DYNAMIC_TOOLS_CACHE_LOCK to check the cache, releases it, then re-acquires it to write the result. The check-release-work-reacquire pattern is a classic TOCTOU: a second thread can invalidate the cache between the two lock acquisitions, causing duplicate scans and a last-writer-wins cache update that may overwrite a fresher scan.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp/discovery.py"
+      ],
+      "evidence": [
+        "Lines 110-116: with _DYNAMIC_TOOLS_CACHE_LOCK: ... return _DYNAMIC_TOOLS_CACHE — first lock acquisition for read",
+        "Lines 118-146: the expensive scan runs outside any lock",
+        "Lines 144-146: with _DYNAMIC_TOOLS_CACHE_LOCK: _DYNAMIC_TOOLS_CACHE = tools — second lock acquisition for write",
+        "Between lines 116 and 144, another thread could call invalidate_tool_cache() and set _DYNAMIC_TOOLS_CACHE = None, then this thread overwrites it with a now-stale scan result"
+      ],
+      "suggestion": "Hold the lock for the entire check-or-compute cycle, or use a double-checked locking pattern where after re-acquiring the write lock the code verifies the cache is still None before writing. Alternatively, consider using threading.Event or a future/promise to let the first scanning thread be the authority.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "pass_through_wrapper_is_available",
+      "summary": "CLIAgentBase.is_available is a zero-logic public wrapper that does nothing except call the private method _check_command_available with no arguments. The docstring says it exists so callers do not need to reach into private details, but this is an abstraction without a boundary: _check_command_available is already called directly by setup, test_connection, and health_check within the same class.",
+      "related_files": [
+        "src/codomyrmex/agents/generic/cli_agent_base.py"
+      ],
+      "evidence": [
+        "Lines 198-205: is_available calls self._check_command_available() with no arguments, no policy, no translation",
+        "Lines 86, 101, 116: setup, test_connection, and health_check all call self._check_command_available() directly rather than using is_available",
+        "The private method is already used in 3 places inside the class — it is not effectively private",
+        "The wrapper adds an indirection hop for external callers (e.g. handlers.py lines 388, 479, etc.) without adding any value"
+      ],
+      "suggestion": "Either rename _check_command_available to is_available and use it consistently throughout the class, or keep the private method and route all internal callers through is_available. The current split creates two names for one concept.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "per_agent_check_handlers_are_pure_boilerplate",
+      "summary": "handlers.py defines 5+ agent-specific handle_*_check functions (handle_jules_check, handle_claude_check, handle_codex_check, handle_opencode_check, handle_gemini_check). Three of these (jules, opencode, gemini) follow the identical pattern of instantiating the client, calling is_available(), and printing availability details. The remaining two (claude, codex) share a second identical pattern based on config key presence. Neither pattern is abstracted into a generic handler despite the generic _handle_agent_execute and _handle_agent_stream already existing in the same file.",
+      "related_files": [
+        "src/codomyrmex/agents/cli/handlers.py"
+      ],
+      "evidence": [
+        "Lines 209-234: handle_jules_check: client = JulesClient(); available = client.is_available(); print availability block",
+        "Lines 381-406: handle_opencode_check: identical structure with OpenCodeClient",
+        "Lines 472-499: handle_gemini_check: identical structure with GeminiClient plus one extra config field",
+        "Lines 301-329: handle_claude_check: config = get_config(); has_api_key = bool(config.claude_api_key); identical pattern to handle_codex_check lines 341-369",
+        "The file already demonstrates the pattern can be generalized: _handle_agent_execute and _handle_agent_stream take client_class and client_name and are reused across all agents"
+      ],
+      "suggestion": "Extract two generic handlers: _handle_cli_agent_check(client_class, client_name, args) for CLI agents and _handle_api_key_check(config, key_attr, client_name, args) for API-key agents. The 5 specific handlers become single-line delegations, matching the style of handle_jules_execute.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "get_skill_manifest_builds_tool_list_inline",
+      "summary": "server.py's get_skill_manifest rebuilds the full tool list from scratch by iterating TOOL_DEFINITIONS and calling discover_dynamic_tools() directly, duplicating the merging logic that get_tool_registry already performs. The function manually deduplicates static and dynamic tools with a seen dict — logic that the registry already encapsulates by overwriting on registration.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/mcp/server.py"
+      ],
+      "evidence": [
+        "Lines 245-280: get_skill_manifest constructs static_tools list from TOOL_DEFINITIONS, calls discover_dynamic_tools(), constructs dynamic_tools list, then manually deduplicates with seen dict",
+        "Lines 41-68: get_tool_registry already merges TOOL_DEFINITIONS and discover_dynamic_tools() into a single registry where dynamic tools overwrite static ones on name collision",
+        "The deduplication logic in get_skill_manifest (lines 275-279: for t in static_tools: seen[t['name']] = t; for t in dynamic_tools: seen[t['name']] = t) replicates the registry's own behavior",
+        "This means get_skill_manifest calls discover_dynamic_tools() a second time independently, potentially causing a second full scan if the cache has expired between calls"
+      ],
+      "suggestion": "Replace the inline tool-list construction in get_skill_manifest with a call to get_tool_registry() and iterate its list_tools(). This eliminates the duplicate scan risk and the duplicated deduplication logic.",
+      "confidence": "high"
+    }
+  ]
+}

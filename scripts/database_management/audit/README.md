@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# Database Audit Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for database auditing, demonstrating change tracking, access logging, schema drift detection, and audit trail generation.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `audit_demo.py` | Demonstrates database audit trail creation and schema change tracking |
+
+## Usage
+
+```bash
+uv run python scripts/database_management/audit/audit_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: database_management/](../README.md) | [Scripts root](../../README.md)

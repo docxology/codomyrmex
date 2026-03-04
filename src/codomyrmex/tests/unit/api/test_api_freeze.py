@@ -6,14 +6,18 @@ and APISurface analyzer.
 
 import pytest
 
-from codomyrmex.api.api_contract import (
-    APIContract,
-    APIEndpoint,
-    BreakingChangeKind,
-    ContractValidator,
-)
-from codomyrmex.api.api_surface import APISurface
-from codomyrmex.api.migration_engine import MigrationEngine
+
+try:
+    from codomyrmex.api.api_contract import (
+        APIContract,
+        APIEndpoint,
+        BreakingChangeKind,
+        ContractValidator,
+    )
+    from codomyrmex.api.api_surface import APISurface
+    from codomyrmex.api.migration_engine import MigrationEngine
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 # ─── APIContract ──────────────────────────────────────────────────────
 

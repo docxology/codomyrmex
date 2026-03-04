@@ -6,16 +6,20 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from codomyrmex.api.authentication import (
-    APIKeyAuthenticator,
-    AuthCredentials,
-    AuthResult,
-    AuthType,
-    BasicAuthenticator,
-    BearerTokenAuthenticator,
-    HMACAuthenticator,
-    create_authenticator,
-)
+
+try:
+    from codomyrmex.api.authentication import (
+        APIKeyAuthenticator,
+        AuthCredentials,
+        AuthResult,
+        AuthType,
+        BasicAuthenticator,
+        BearerTokenAuthenticator,
+        HMACAuthenticator,
+        create_authenticator,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 
 class TestAuthType:

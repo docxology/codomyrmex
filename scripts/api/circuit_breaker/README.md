@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# API Circuit Breaker Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for the circuit breaker pattern, demonstrating fault-tolerant API calls with automatic failure detection, fallback behavior, and recovery.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `circuit_breaker_demo.py` | Demonstrates circuit breaker states (closed, open, half-open) and recovery |
+
+## Usage
+
+```bash
+uv run python scripts/api/circuit_breaker/circuit_breaker_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: api/](../README.md) | [Scripts root](../../README.md)

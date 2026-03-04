@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# Agent History Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for agent history management, demonstrating how to store, retrieve, and query agent conversation histories and execution traces.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `history_demo.py` | Demonstrates agent history storage, retrieval, and replay |
+
+## Usage
+
+```bash
+uv run python scripts/agents/history/history_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: agents/](../README.md) | [Scripts root](../../README.md)

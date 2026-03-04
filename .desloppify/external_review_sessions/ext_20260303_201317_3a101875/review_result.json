@@ -1,0 +1,197 @@
+{
+  "session": {
+    "id": "ext_20260303_201317_3a101875",
+    "token": "30b715c8b6a3fa5e155ff3f12de80aad"
+  },
+  "assessments": {
+    "cross_module_architecture": 58,
+    "convention_outlier": 62,
+    "error_consistency": 71,
+    "abstraction_fitness": 65,
+    "dependency_health": 52,
+    "test_strategy": 55,
+    "ai_generated_debt": 59,
+    "package_organization": 63,
+    "high_level_elegance": 66,
+    "mid_level_elegance": 68,
+    "low_level_elegance": 67,
+    "design_coherence": 64
+  },
+  "findings": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "duplicate_health_checker_files",
+      "summary": "Two health_checker.py files coexist in system_discovery/core/ and system_discovery/health/ with incompatible import sets, indicating unresolved module split leaving both alive.",
+      "related_files": [
+        "src/codomyrmex/system_discovery/core/health_checker.py",
+        "src/codomyrmex/system_discovery/health/health_checker.py"
+      ],
+      "evidence": [
+        "system_discovery/core/health_checker.py imports numpy, data_visualization.create_line_plot, and coding.execute_code — heavyweight cross-layer deps for a discovery module",
+        "system_discovery/health/health_checker.py imports docker, logistics.orchestration.project.workflow_dag, performance, security.digital — an entirely different dependency set from the sibling file with the same name",
+        "Both files carry docstrings describing 'health and status checking' with no indication which is canonical"
+      ],
+      "suggestion": "Delete one of the two health_checker.py files (the core/ version appears vestigial); move the surviving file to a single, unambiguous location and update all importers.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "system_discovery_imports_data_visualization",
+      "summary": "system_discovery/core/health_checker.py imports data_visualization and coding at module level, pulling heavy optional dependencies into what should be a lightweight foundation module.",
+      "related_files": [
+        "src/codomyrmex/system_discovery/core/health_checker.py"
+      ],
+      "evidence": [
+        "Line 19: 'from codomyrmex.data_visualization import create_line_plot' — visualization in a discovery health-check module is a layer violation",
+        "Line 18: 'from codomyrmex.coding import execute_code' — code execution pulled into system-discovery layer at import time",
+        "Line 16: 'import numpy as np' — hard dep on numpy in a foundation-layer module"
+      ],
+      "suggestion": "Remove data_visualization and coding imports from health_checker; if demo workflows need them, move that logic to a separate demo or reporting file.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "misplaced_module_docstring_after_imports",
+      "summary": "Multiple source files place the module docstring after import statements instead of as the first token, violating Python convention and breaking automated docstring extraction.",
+      "related_files": [
+        "src/codomyrmex/events/core/event_schema.py",
+        "src/codomyrmex/agents/generic/agent_orchestrator.py",
+        "src/codomyrmex/agents/core/base.py"
+      ],
+      "evidence": [
+        "events/core/event_schema.py: imports (lines 1-7) appear before the triple-quoted module docstring (lines 11-16)",
+        "agents/generic/agent_orchestrator.py: imports on lines 1-10, module docstring 'Multi-agent orchestration utilities.' on line 12",
+        "agents/core/base.py: imports on lines 1-7, module docstring 'Core agent interfaces and base classes.' on line 9"
+      ],
+      "suggestion": "Move module docstrings to be the very first statement in each file (before all imports); enforce this in ruff or a pre-commit hook.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "mcp_tools_mixed_error_strategies",
+      "summary": "MCP tool modules follow different error-handling contracts: git_operations wraps exceptions with try/except returning error dicts, but llm/mcp_tools.py has a success path that returns early without a try/except for the Ollama provider.",
+      "related_files": [
+        "src/codomyrmex/git_operations/mcp_tools.py",
+        "src/codomyrmex/llm/mcp_tools.py",
+        "src/codomyrmex/coding/mcp_tools.py"
+      ],
+      "evidence": [
+        "git_operations/mcp_tools.py line 36-40: git_is_repo wraps everything in try/except returning {status: error, message: str(exc)}",
+        "llm/mcp_tools.py lines 20-38: generate_text has try/except per provider branch, but the function falls through to a bare 'return {status: error ...}' without an outer guard — a missing provider raises no exception, just falls through",
+        "calendar_integration/mcp_tools.py raises RuntimeError from _get_provider() — a different error surface than the dict-based error returns used by git/coding tools"
+      ],
+      "suggestion": "Establish a single MCP tool error contract: all tools should catch exceptions and return {status: error, message: ...}; no tool should raise to callers. Apply consistently including calendar_integration._get_provider().",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "plotter_class_pure_forwarder",
+      "summary": "The Plotter class in engines/plotter.py is a thin wrapper that only forwards calls to standalone chart functions with no added policy, translation, or state.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/plotter.py"
+      ],
+      "evidence": [
+        "Plotter.bar_chart() body: 'return create_bar_chart(categories, values, **kwargs)' — pure argument forwarding with no added logic",
+        "The class stores only figure_size but passes no sizing to the delegated functions, so the stored state is unused",
+        "A separate AdvancedPlotter class exists in the same engines/ package, making Plotter a redundant abstraction with one concrete implementation and no callers distinguishing it"
+      ],
+      "suggestion": "Either remove the Plotter wrapper and expose the chart functions directly through the package __init__, or give Plotter a real role (e.g., apply stored figure_size, theme, logging) that the functions do not provide.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "heavy_core_dependencies",
+      "summary": "Core (non-optional) dependencies in pyproject.toml include fastapi, uvicorn, pydantic, pylint, bandit, radon, and numpy — making every install heavyweight even for modules that need none of these.",
+      "related_files": [
+        "pyproject.toml"
+      ],
+      "evidence": [
+        "pyproject.toml lines 35-60: fastapi, uvicorn, pydantic listed as unconditional [project.dependencies] alongside pylint, bandit, radon, lizard",
+        "numpy is a core dependency yet is only imported in visualization and a vestigial health_checker — not truly cross-cutting",
+        "Static analysis tools (pylint, bandit, radon, lizard) bundled as runtime deps alongside application deps — typically these belong in dev or optional groups"
+      ],
+      "suggestion": "Move fastapi/uvicorn, numpy, and all static-analysis tools (pylint, bandit, radon, lizard) into optional dependency groups; keep core deps to truly universal requirements.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "agents_pai_trust_gateway_no_test_file",
+      "summary": "The trust gateway — the critical security enforcement point for all destructive tool calls — has no dedicated test file in the agents/pai/ test directory.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py",
+        "src/codomyrmex/tests/unit/agents/"
+      ],
+      "evidence": [
+        "Glob of src/codomyrmex/tests/unit/agents/ shows: test_integrations.py, test_opencode_integration.py, test_orchestration.py, test_modularity.py, test_orchestration_advanced.py, test_error_handling.py — no test_trust_gateway.py visible",
+        "trust_gateway.py is ~820 lines covering TrustRegistry, audit log, confirmation tokens, and security enforcement — a high-value target for test coverage",
+        "The agents/pai/ subdirectory of tests contains only README/PAI/SPEC/AGENTS markdown files, no Python test files"
+      ],
+      "suggestion": "Create src/codomyrmex/tests/unit/agents/pai/test_trust_gateway.py covering TrustRegistry state machine, SecurityError raising on untrusted calls, confirmation token TTL, and audit log entries.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "advanced_plotter_global_side_effects_on_import",
+      "summary": "advanced_plotter.py executes side-effecting calls (plt.style.use, sns.set_palette, warnings.filterwarnings) at module import time, creating invisible global state mutation.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/engines/advanced_plotter.py"
+      ],
+      "evidence": [
+        "Line 33: 'plt.style.use(\"default\")' — sets global matplotlib style on every import of this module",
+        "Line 34: 'sns.set_palette(\"husl\")' — sets global seaborn palette, overriding any caller preference",
+        "Line 35: 'warnings.filterwarnings(\"ignore\", category=UserWarning)' — globally silences UserWarning for the entire process"
+      ],
+      "suggestion": "Move these global configuration calls inside AdvancedPlotter.__init__ or a dedicated configure() method that callers invoke explicitly; never mutate global state at import time.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "generate_chart_inconsistent_bar_dispatch",
+      "summary": "mcp_tools.generate_chart has a special-cased if/else for 'bar' vs all other chart types, suggesting copy-paste generation rather than a uniform calling convention.",
+      "related_files": [
+        "src/codomyrmex/data_visualization/mcp_tools.py"
+      ],
+      "evidence": [
+        "Lines 43-46: 'if chart_type == \"bar\": result = factory(data, title=title)' vs 'else: result = factory(**data)' — two incompatible call signatures handled by branching on type name",
+        "This suggests the underlying chart functions have inconsistent signatures that were papered over with a conditional rather than normalised",
+        "The comment 'Generate a visualization chart and optionally save it' in the docstring merely restates the function name"
+      ],
+      "suggestion": "Normalise the chart factory signatures so all accept (data, title=..., **kwargs); remove the bar-specific branch.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "agents_package_flat_file_overload",
+      "summary": "The agents/ package root mixes integration adapters, protocol files, and MCP tooling at top level with no grouping, making navigation unpredictable.",
+      "related_files": [
+        "src/codomyrmex/agents/__init__.py",
+        "src/codomyrmex/agents/mcp_tools.py",
+        "src/codomyrmex/agents/education.py",
+        "src/codomyrmex/agents/editing_loop.py"
+      ],
+      "evidence": [
+        "Top-level agents/ contains: education.py, editing_loop.py, mcp_tools.py alongside 15+ provider subdirs (claude/, codex/, jules/, etc.) — mixed concerns at the same level",
+        "agents/__init__.py imports from 10+ optional try/except blocks covering ClaudeClient, CodeEditor, AgentInterface etc. — a 50+ line import surface that is effectively a god init",
+        "education.py and editing_loop.py are standalone files with no clear ownership group, while provider-specific files live in named subdirs"
+      ],
+      "suggestion": "Move education.py and editing_loop.py into appropriate subdirs (e.g., agents/utils/ or agents/workflows/); reduce __init__.py to a minimal re-export surface.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "trust_gateway_module_getattr_for_constants",
+      "summary": "SAFE_TOOLS and SAFE_TOOL_COUNT are exported in __all__ with noqa F822 comments, indicating they are defined via module __getattr__ rather than as normal module-level names — an unusual pattern for simple constant access.",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py"
+      ],
+      "evidence": [
+        "Line 804: '\"SAFE_TOOLS\",  # noqa: F822 — defined via module __getattr__'",
+        "Line 805: '\"SAFE_TOOL_COUNT\",  # noqa: F822'",
+        "Line 796: comment '# Constants (use the lazy definitions from lines ~198-199)' suggests the constants are generated lazily via __getattr__ rather than defined at module scope",
+        "Using __getattr__ for constants that callers import directly is non-obvious and prevents static analysis tools from resolving the names"
+      ],
+      "suggestion": "Define SAFE_TOOLS and SAFE_TOOL_COUNT as plain module-level variables (computed once after the tool registry is built); remove the __getattr__ indirection and the noqa suppressions.",
+      "confidence": "medium"
+    }
+  ]
+}

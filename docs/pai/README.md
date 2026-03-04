@@ -17,7 +17,7 @@ graph TB
     subgraph PAI["🧠 PAI System (~/.claude/)"]
         direction TB
         ALGO["Algorithm v3.5.0<br/>7 Phases"]
-        SKILLS["77+ Skills"]
+        SKILLS["103+ Skills"]
         HOOKS["50 Hooks"]
         TOOLS_TS["60 TypeScript Tools"]
         AGENTS_PAI["13+ Named Agents"]
@@ -130,6 +130,31 @@ stateDiagram-v2
         FullAccess: call_module_function
     }
 ```
+
+---
+
+## External Skills
+
+Beyond the MCP-based Python modules, PAI includes **external Claude Code skills** — markdown-prompt-based capabilities that extend what Claude Code can do in a session without any Python dependencies.
+
+Full documentation: **[skills-and-commands.md](skills-and-commands.md)**
+
+### visual-explainer (installed)
+
+**Source**: [nicobailon/visual-explainer](https://github.com/nicobailon/visual-explainer) v0.4.4 · 5.2k stars · MIT
+**Location**: `~/.claude/skills/visual-explainer/` · **Output**: `~/.agent/diagrams/`
+
+Converts terminal output and structured data into styled, self-contained HTML pages using Mermaid, Chart.js, and CSS Grid. Generates diagrams instead of ASCII art.
+
+| Slash Command | Purpose |
+|---------------|---------|
+| `/generate-web-diagram` | HTML diagram — flowchart, architecture, ER, state machine |
+| `/generate-visual-plan` | Implementation plan with state machines and code snippets |
+| `/generate-slides` | Magazine-quality slide deck (100dvh per slide) |
+| `/diff-review` | Before/after architecture comparison |
+| `/plan-review` | Current codebase vs. proposed plan audit |
+| `/project-recap` | Project mental model snapshot |
+| `/fact-check` | Validate document accuracy against source code |
 
 ---
 
@@ -393,6 +418,7 @@ uv run python scripts/pai/dashboard.py
 | MCP bridge | [mcp_bridge.py](../../src/codomyrmex/agents/pai/mcp_bridge.py) |
 | Trust gateway | [trust_gateway.py](../../src/codomyrmex/agents/pai/trust_gateway.py) |
 | PAI bridge | [pai_bridge.py](../../src/codomyrmex/agents/pai/pai_bridge.py) |
+| External skills | [skills-and-commands.md](skills-and-commands.md) |
 | PAI upstream | [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) |
 
 ---

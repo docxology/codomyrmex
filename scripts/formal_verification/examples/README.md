@@ -1,8 +1,30 @@
-# Codomyrmex Root
+# Formal Verification Examples
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Example scripts demonstrating advanced formal verification workflows using Z3 constraint solving, including incremental solving, optimization, and multi-constraint scenarios.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `advanced_workflow.py` | Demonstrates advanced Z3 workflows: incremental solving, optimization, unsat cores |
+
+## Usage
+
+**Prerequisites:**
+```bash
+uv sync --extra formal_verification  # requires z3-solver
+```
+
+**Run:**
+```bash
+uv run python scripts/formal_verification/examples/advanced_workflow.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: formal_verification/](../README.md) | [Scripts root](../../README.md)

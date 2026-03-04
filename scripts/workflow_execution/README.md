@@ -1,8 +1,47 @@
-# Codomyrmex Root
+# Workflow Execution Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Workflow execution utilities for running defined workflow files with optional dry-run support, providing a CLI interface to the codomyrmex orchestration engine.
+
+## Purpose
+
+These scripts provide a command-line runner for workflow definition files, supporting dry-run validation, step-by-step execution, and subprocess orchestration of multi-step workflows.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `workflow_runner.py` | CLI workflow executor with `--dry-run` support for workflow definition files |
+
+## Usage
+
+**Prerequisites:**
+```bash
+uv sync
+```
+
+**Run:**
+```bash
+# Execute a workflow
+uv run python scripts/workflow_execution/workflow_runner.py workflow.json
+
+# Dry run (validate without executing)
+uv run python scripts/workflow_execution/workflow_runner.py workflow.json --dry-run
+```
+
+## Agent Usage
+
+Agents orchestrating multi-step tasks should use `workflow_runner.py` with `--dry-run` first to validate workflow definitions before execution. The runner integrates with the codomyrmex orchestrator module.
+
+## Related Module
+
+- Source: `src/codomyrmex/orchestrator/`
+- MCP Tools: `get_scheduler_metrics`, `analyze_workflow_dependencies`
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: scripts/](../README.md)

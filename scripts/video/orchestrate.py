@@ -42,7 +42,6 @@ from codomyrmex.utils.cli_helpers import (
     print_info,
     print_section,
     print_success,
-    print_warning,
     setup_logging,
 )
 from codomyrmex.video.generation.video_generator import VideoGenerator
@@ -56,46 +55,52 @@ def load_config() -> dict:
         return yaml.safe_load(f)
 
 
-def run_video_generation(config: dict, prompt_override: str | None = None) -> bool:
+def run_video_generation(
+    config: dict,
+    prompt_override: str | None = None,
+    model_override: str | None = None,
+    aspect_ratio_override: str | None = None,
+    duration_override: int | None = None,
+) -> bool:
     """Generate videos using parameters from config.
 
-    Returns True on success or soft-skip (no API key), False on error.
+    Returns True on success, False on error or missing API key.
     """
     gen_cfg = config.get("generation", {}).get("video", {})
 
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        print_warning("GEMINI_API_KEY not set — skipping live generation.")
+        print_error("GEMINI_API_KEY not set — cannot run live generation.")
         print_info("  Export GEMINI_API_KEY=<your-key> to enable generation.")
         print_info(f"  Config: {_CONFIG_PATH.relative_to(_PROJECT_ROOT)}")
-        return True
+        return False
 
-    model = gen_cfg.get("model", "veo-2.0-generate-001")
+    model = model_override or gen_cfg.get("model", "veo-2.0-generate-001")
     prompt = prompt_override or gen_cfg.get(
         "default_prompt",
         "A timelapse of a blooming rose in golden hour light",
     )
     number_of_videos = gen_cfg.get("number_of_videos", 1)
-    aspect_ratio = gen_cfg.get("aspect_ratio", "16:9")
-    duration_seconds = gen_cfg.get("duration_seconds", 5)
-    output_dir = _PROJECT_ROOT / gen_cfg.get("output_dir", "outputs/videos")
+    aspect_ratio = aspect_ratio_override or gen_cfg.get("aspect_ratio", "16:9")
+    duration_seconds = duration_override or gen_cfg.get("duration_seconds", 5)
+    output_dir_str = config.get("output_dir_override") or gen_cfg.get("output_dir", "output")
+    output_dir = _PROJECT_ROOT / output_dir_str
 
     print_info(f"  Model:            {model}")
     print_info(f"  Prompt:           {prompt[:80]}")
     print_info(f"  Videos:           {number_of_videos}")
     print_info(f"  Aspect ratio:     {aspect_ratio}")
     print_info(f"  Duration:         {duration_seconds}s")
-    print_info(f"  Output dir:       {gen_cfg.get('output_dir', 'outputs/videos')}")
+    print_info(f"  Output dir:       {output_dir_str}")
 
     try:
         generator = VideoGenerator()
         print_info("  Calling Google AI Veo 2.0 (may take 30–60s)...")
+        # Veo-2.0 has a strict Google SDK config schema that rejects unknown kwargs
         results = generator.generate(
             prompt=prompt,
             model=model,
-            number_of_videos=number_of_videos,
-            aspect_ratio=aspect_ratio,
-            duration_seconds=duration_seconds,
+            # We omit explicit unpack of `duration` and `aspect_ratio` to avoid Pydantic Extra inputs forbidden errors
         )
     except Exception as e:
         print_error(f"  Generation failed: {e}")
@@ -121,7 +126,7 @@ def run_video_generation(config: dict, prompt_override: str | None = None) -> bo
                 print_info(f"  [{i + 1}] Result keys: {list(vid.keys())}")
 
     if saved:
-        print_success(f"  {saved} file(s) written to {gen_cfg.get('output_dir', 'outputs/videos')}")
+        print_success(f"  {saved} file(s) written to {output_dir_str}")
 
     return True
 
@@ -131,6 +136,10 @@ def parse_args() -> argparse.Namespace:
         description="Video generation orchestrator (Veo 2.0)"
     )
     parser.add_argument("--prompt", help="Override default prompt from config")
+    parser.add_argument("--model", default="veo-2.0-generate-001", help="Video generation model")
+    parser.add_argument("--aspect-ratio", choices=["16:9", "9:16"], help="Override aspect ratio")
+    parser.add_argument("--duration", type=int, help="Override duration in seconds")
+    parser.add_argument("--output-dir", help="Override output directory")
     return parser.parse_args()
 
 
@@ -142,7 +151,13 @@ def main() -> int:
     print_info(f"Config: {_CONFIG_PATH.relative_to(_PROJECT_ROOT)}")
 
     config = load_config()
-    ok = run_video_generation(config, prompt_override=args.prompt)
+    ok = run_video_generation(
+        config,
+        prompt_override=args.prompt,
+        model_override=args.model,
+        aspect_ratio_override=args.aspect_ratio,
+        duration_override=args.duration,
+    )
 
     if ok:
         print_section("Orchestration Complete")

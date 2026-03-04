@@ -15,7 +15,7 @@ These scripts are the **runnable entry points** for video generation. AI agents 
 - **Safe to run without API key**: Both scripts print a warning and exit 0 (not a failure)
 - **Requires `GEMINI_API_KEY`** for live generation via Veo 2.0
 - **Configurable via**: `config/video/config.yaml` — change model, prompt, aspect ratio, duration
-- **Output destination**: `outputs/videos/` (relative to repo root, auto-created)
+- **Output destination**: `output/videos/` (relative to repo root, auto-created)
 
 ## Invocation Pattern
 

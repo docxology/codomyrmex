@@ -10,15 +10,19 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from codomyrmex.api.rate_limiting import (
-    CompositeRateLimiter,
-    FixedWindowLimiter,
-    RateLimiterMiddleware,
-    RateLimitResult,
-    SlidingWindowLimiter,
-    TokenBucketLimiter,
-    create_rate_limiter,
-)
+
+try:
+    from codomyrmex.api.rate_limiting import (
+        CompositeRateLimiter,
+        FixedWindowLimiter,
+        RateLimiterMiddleware,
+        RateLimitResult,
+        SlidingWindowLimiter,
+        TokenBucketLimiter,
+        create_rate_limiter,
+    )
+except ImportError:
+    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
 
 # ---------------------------------------------------------------------------
 # RateLimitResult

@@ -163,9 +163,53 @@ Plus 3 dotted prompts for structured analysis:
 | `codomyrmex.debug_issue` | Debug using search → analysis → diff → tests |
 | `codomyrmex.create_test` | Generate zero-mock tests for a module |
 
+## External Skill Invocation
+
+External skills (installed under `~/.claude/skills/`) operate **outside the MCP protocol**. They are loaded directly by Claude Code and do not go through the Trust Gateway.
+
+> **Key difference**: MCP tools run Python code in the codomyrmex process. External skills are markdown instructions that guide Claude's own generation. No subprocess, no trust check, no server.
+
+### `/generate-web-diagram` — Visual Diagram Generation
+
+**Trigger**: User asks for a diagram, mentions "architecture diagram", "flowchart", "visual", or invokes `/generate-web-diagram`
+
+**Skill file**: `~/.claude/skills/visual-explainer/SKILL.md`
+
+**Purpose**: Generates a self-contained HTML page visualizing any technical system, data table, or implementation plan. Opens automatically in the browser.
+
+**What it does:**
+
+1. Reads `SKILL.md` to load aesthetic rules and content routing logic
+2. Reads the relevant template (`templates/architecture.html`, `templates/mermaid-flowchart.html`, etc.)
+3. Reads `references/css-patterns.md` and `references/libraries.md`
+4. Selects rendering approach: Mermaid (topology), CSS Grid (text-heavy), `<table>` (data), Chart.js (dashboards)
+5. Commits to a constrained aesthetic (Blueprint, Editorial, Paper-ink, or IDE-inspired)
+6. Writes HTML to `~/.agent/diagrams/<descriptive-filename>.html`
+7. Opens the file in the browser via `open` (macOS) or `xdg-open` (Linux)
+
+**Related commands**: `/generate-visual-plan`, `/generate-slides`, `/diff-review`, `/plan-review`, `/project-recap`, `/fact-check`
+
+**Full reference**: [skills-and-commands.md](skills-and-commands.md)
+
+### Slash Command Activation
+
+Slash commands (`.md` files in `~/.claude/commands/`) require a `/clear` or new Claude Code session to become active after installation:
+
+```bash
+# Install commands
+cp ~/.claude/skills/visual-explainer/prompts/*.md ~/.claude/commands/
+
+# In Claude Code: reload with
+# /clear
+# Then /generate-web-diagram is available
+```
+
+Skills (SKILL.md) are active immediately in the current session without `/clear`.
+
 ## Navigation
 
 - **Index**: [README.md](README.md)
 - **Architecture**: [architecture.md](architecture.md)
 - **Tools**: [tools-reference.md](tools-reference.md)
 - **API**: [api-reference.md](api-reference.md)
+- **External Skills**: [skills-and-commands.md](skills-and-commands.md)

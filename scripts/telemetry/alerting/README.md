@@ -1,8 +1,24 @@
-# Codomyrmex Root
+# Telemetry Alerting Scripts
+
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
-This directory contains the real, functional implementations and components for the `Codomyrmex Root` module within the Codomyrmex ecosystem.
 
-## Principles
-- **Functional Integrity**: All methods and classes within this directory are designed to be fully operational and production-ready.
-- **Zero-Mock Policy**: Code herein adheres to the strict Zero-Mock testing policy, ensuring all tests run against real logic.
+Demo scripts for telemetry alerting, demonstrating alert rule configuration, threshold monitoring, notification routing, and alert lifecycle management.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `alerting_demo.py` | Demonstrates alert rule creation, threshold triggers, and notification dispatch |
+
+## Usage
+
+```bash
+uv run python scripts/telemetry/alerting/alerting_demo.py
+```
+
+## Navigation
+
+- [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [Parent: telemetry/](../README.md) | [Scripts root](../../README.md)
