@@ -58,7 +58,7 @@ License:
     MIT License (see LICENSE file for details)
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.8"
 __author__ = "Codomyrmex Contributors"
 __email__ = "codomyrmex@example.com"
 __license__ = "MIT"

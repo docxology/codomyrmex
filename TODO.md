@@ -379,7 +379,7 @@ Architectural extensions and research directions. Aspirational and may require s
 
 ## Reference
 
-- **Coverage gate**: `pyproject.toml [tool.pytest.ini_options] --cov-fail-under=68`
+- **Coverage gate**: `pyproject.toml [tool.pytest.ini_options] --cov-fail-under=31`
 - **Test runner**: `uv run pytest`
 - **Lint**: `uv run ruff check src/`
 - **Type check**: `uv run mypy src/`

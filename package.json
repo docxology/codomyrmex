@@ -1,6 +1,6 @@
 {
   "name": "codomyrmex",
-  "version": "0.1.9",
+  "version": "1.0.8",
   "description": "Codomyrmex - AI-powered code analysis and automation toolkit",
   "private": true,
   "scripts": {

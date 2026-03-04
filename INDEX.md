@@ -22,9 +22,9 @@
 
 | Metric | Value | Source |
 |:-------|:------|:-------|
-| Python modules | 122 (some require optional SDK deps) | [src/codomyrmex/](src/codomyrmex/) |
-| MCP tools | ~367 total across 74 auto-discovered modules | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Auto-discovered modules | 74 (via `@mcp_tool` decorator) | [src/codomyrmex/agents/pai/mcp_bridge.py](src/codomyrmex/agents/pai/mcp_bridge.py) |
+| Python modules | 124 (some require optional SDK deps) | [src/codomyrmex/](src/codomyrmex/) |
+| MCP tools | ~407 total across 121 auto-discovered modules | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
+| Auto-discovered modules | 121 (via `@mcp_tool` decorator) | [src/codomyrmex/agents/pai/mcp_bridge.py](src/codomyrmex/agents/pai/mcp_bridge.py) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | Tests collected | 21,035 | `uv run pytest --co -q` |
@@ -97,7 +97,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 ```
 INDEX.md                           ← You are here
 ├── src/INDEX.md                   ← Source directory index
-│   └── src/codomyrmex/INDEX.md    ← 122-module catalog by layer
+│   └── src/codomyrmex/INDEX.md    ← 124-module catalog by layer
 └── docs/                          ← Documentation site
 ```
 

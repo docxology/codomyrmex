@@ -1,10 +1,10 @@
 # src - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 88 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
+Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 124 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
 
 ## Design Principles
 
@@ -38,7 +38,7 @@ Source code directory containing the core Codomyrmex platform implementation. Pr
 
 ### Testing
 
-- ≥80% test coverage per module
+- Test coverage gate: ≥31% (project-wide, ratcheting upward)
 - Unit tests for all public functions
 - Integration tests for module interactions
 - Real data analysis (no mocks)
@@ -206,7 +206,7 @@ Each module must provide:
 
 ### Testing Standards
 
-- ≥80% coverage per module
+- Project-wide coverage gate: ≥31% (ratcheting upward)
 - Unit tests for public APIs
 - Integration tests for workflows
 - Performance benchmarks where applicable

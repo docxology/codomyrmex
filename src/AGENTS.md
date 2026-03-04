@@ -1,10 +1,10 @@
 # Codomyrmex Agents — src
 
-**Version**: v1.0.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 88 specialized modules organized by architectural layer.
+Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 124 specialized modules organized by architectural layer.
 
 ## Directory Structure
 
@@ -34,7 +34,7 @@ src/
 
 | Component                | Type    | Description                                   |
 | ------------------------ | ------- | --------------------------------------------- |
-| `codomyrmex/`            | Package | Main module package (88 modules)              |
+| `codomyrmex/`            | Package | Main module package (124 modules)             |
 | `codomyrmex.llm/`        | Package | LLM integration subpackage                    |
 | `__init__.py`            | Module  | Package initialization                        |
 | [README.md](README.md)   | Doc     | Directory overview                            |
@@ -45,7 +45,7 @@ src/
 
 ### Module Quality Standards
 
-1. **Testing**: Each module must have ≥80% test coverage
+1. **Testing**: Each module must have test coverage (project gate: ≥31%)
 2. **Documentation**: All public APIs must be documented
 3. **RASP Compliance**: Each module directory must have README, AGENTS, SPEC, PAI
 4. **MCP Tools**: Register tools in `MCP_TOOL_SPECIFICATION.md`

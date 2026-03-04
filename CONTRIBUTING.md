@@ -80,7 +80,7 @@ uv run pre-commit install
 ## Testing
 
 - Write tests for all new features
-- Maintain minimum 80% code coverage (target: ≥80%)
+- Maintain test coverage above the project gate (≥31%, ratcheting upward)
 - Place unit tests in `src/codomyrmex/tests/unit/`
 - Place integration tests in `src/codomyrmex/tests/integration/`
 

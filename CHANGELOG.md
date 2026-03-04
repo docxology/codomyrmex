@@ -26,6 +26,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.8] - 2026-03-04 — "Sprint 20–22 — Jules Swarm & Documentation Reconciliation"
+
+### Added
+
+- **Jules AI swarm**: 25 PRs merged from 113+ concurrent Jules sessions covering MCP expansion, Ruff auto-fixing, and test coverage improvements
+- **New modules**: `dark/`, `git_analysis/`, `meme/`, `operating_system/`, `quantum/`, `evolutionary_ai/` — 124 total modules (was 88)
+- **MCP tool expansion**: ~407 registered tools across 121 auto-discovered modules (was 171/33)
+- **Git submodules**: `dark-pdf` vendor, `gitnexus` vendor
+
+### Changed
+
+- **Version synced** across all root and `src/` documentation files to v1.0.8
+- **Module count corrected** from stale "88" → **124** in 6 `src/` docs
+- **Coverage gate clarified**: All docs now reference actual `--cov-fail-under=31` (was misleadingly quoting 80%, 67%, or 68%)
+- **SKILL.md / skill.json**: Updated tool counts (171→~407), module counts (33→121), version (1.0.3–1.0.4→1.0.8)
+- **PAI.md trust model**: Updated safe tool count from 169 → ~403
+- **INDEX.md**: Harmonized Python module count (122→124), MCP tools (~367→~407), auto-discovered modules (74→121)
+
+### Fixed
+
+- **`skill.json` repository URL**: `danielmiessler/codomyrmex` → `docxology/codomyrmex`
+- **`package.json` version**: `0.1.9` → `1.0.8`
+- **`src/__init__.py` version**: `1.0.0` → `1.0.8`
+- **`TODO.md` Reference section**: Coverage gate corrected from `68` → `31`
+- **`.gitignore`**: Removed 2 duplicate `.desloppify/` entries
+- **Empty `tool` file**: Deleted accidental 0-byte file at root
+
+### Metrics
+
+- Modules: 88 → **124** (+36)
+- MCP tools: 171 → **~407** (+236)
+- Auto-discovered modules: 33 → **121** (+88)
+- Version-synced files: **16** files updated to v1.0.8
+
+---
+
 ## [1.0.7] - 2026-03-02 — "Sprint 19 — Documentation Audit & TODO Reconciliation"
 
 ### Added

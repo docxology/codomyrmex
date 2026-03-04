@@ -1,12 +1,12 @@
 {
   "name": "codomyrmex",
   "displayName": "Codomyrmex",
-  "version": "1.0.3",
+  "version": "1.0.8",
   "type": "infrastructure-skill",
   "mcp_server": "codomyrmex-mcp-server",
-  "tools": 208,
+  "tools": 407,
   "skills": 15,
-  "modules": 33,
+  "modules": 121,
   "triggers": [
     "codomyrmex",
     "verify codomyrmex",
@@ -108,5 +108,5 @@
       "trigger": "run tests"
     }
   ],
-  "repository": "https://github.com/danielmiessler/codomyrmex"
+  "repository": "https://github.com/docxology/codomyrmex"
 }

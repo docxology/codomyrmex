@@ -76,10 +76,10 @@ that gates destructive operations behind explicit approval:
 ```
 UNTRUSTED ──/codomyrmexVerify──> VERIFIED ──/codomyrmexTrust──> TRUSTED
    │                                │                              │
-   └── All tools start here         └── 169 safe tools promoted    └── 4 destructive tools enabled
+   └── All tools start here         └── ~403 safe tools promoted   └── 4 destructive tools enabled
 ```
 
-**Safe tools (169)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
+**Safe tools (~403)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
 analyze, search, git status/diff, and discovery tools.
 
 **Destructive tools (4)**: Require explicit `/codomyrmexTrust`:
