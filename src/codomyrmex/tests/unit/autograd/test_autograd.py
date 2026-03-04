@@ -598,7 +598,7 @@ class TestMCPTools:
             autograd_gradient_check,
         )
 
-        assert hasattr(autograd_compute, "_mcp_tool")
-        assert autograd_compute._mcp_tool["category"] == "autograd"
-        assert hasattr(autograd_gradient_check, "_mcp_tool")
-        assert autograd_gradient_check._mcp_tool["category"] == "autograd"
+        assert hasattr(autograd_compute, "_mcp_tool_meta")
+        assert autograd_compute._mcp_tool_meta["category"] == "autograd"
+        assert hasattr(autograd_gradient_check, "_mcp_tool_meta")
+        assert autograd_gradient_check._mcp_tool_meta["category"] == "autograd"
