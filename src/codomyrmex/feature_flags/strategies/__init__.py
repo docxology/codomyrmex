@@ -32,7 +32,7 @@ class EvaluationContext:
     def get_hash_key(self) -> str:
         """Get a consistent hash key for this context."""
         key = f"{self.user_id or ''}-{self.session_id or ''}"
-        return hashlib.md5(key.encode()).hexdigest()
+        return hashlib.sha256(key.encode()).hexdigest()
 
 @dataclass
 class EvaluationResult:

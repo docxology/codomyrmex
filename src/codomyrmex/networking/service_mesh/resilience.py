@@ -177,7 +177,9 @@ class RetryPolicy:
                 last_error = e
                 if attempt < self.max_retries:
                     time.sleep(self.get_delay(attempt))
-        raise last_error
+        if last_error is not None:
+            raise last_error
+        raise RuntimeError("Retry exhausted without capturing an exception")
 
 
 class ServiceProxy:

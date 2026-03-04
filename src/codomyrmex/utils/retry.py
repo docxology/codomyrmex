@@ -91,7 +91,9 @@ def retry(
                             func.__name__, delay, e,
                         )
                         time.sleep(delay)
-            raise last_exception  # type: ignore[misc]
+            if last_exception is not None:
+                raise last_exception
+            raise RuntimeError("Retry exhausted without capturing an exception")
         return wrapper  # type: ignore[return-value]
     return decorator
 
@@ -132,6 +134,8 @@ def async_retry(
                             func.__name__, delay, e,
                         )
                         await asyncio.sleep(delay)
-            raise last_exception  # type: ignore[misc]
+            if last_exception is not None:
+                raise last_exception
+            raise RuntimeError("Retry exhausted without capturing an exception")
         return wrapper
     return decorator

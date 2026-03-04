@@ -114,7 +114,7 @@ class ConfigManager:
                         filtered_config[key] = value
 
                 self.config = OllamaConfig(**filtered_config)
-                self.logger.info(f"Loaded configuration from: {self.config_file}")
+                self.logger.debug(f"Loaded configuration from: {self.config_file}")
                 return True
             else:
                 self.logger.info("Configuration file not found, using defaults")

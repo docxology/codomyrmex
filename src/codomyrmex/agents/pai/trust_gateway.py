@@ -277,22 +277,6 @@ def _get_safe_tools() -> frozenset[str]:
 
 
 
-class _LazyToolSets:
-    """Non-caching lazy evaluator for tool sets.
-
-    Each access computes fresh from the registry, avoiding
-    import-ordering issues with dynamic tool discovery.
-    """
-
-    @staticmethod
-    def safe_tools() -> frozenset[str]:
-        return _get_safe_tools()
-
-    @staticmethod
-    def destructive_tools_set() -> frozenset[str]:
-        return _get_destructive_tools()
-
-
 def __getattr__(name: str):  # noqa: N802
     """Lazy module-level accessors — computed on first access and cached."""
     if name == "SAFE_TOOLS":

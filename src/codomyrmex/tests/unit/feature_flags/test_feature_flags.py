@@ -117,7 +117,7 @@ class TestEvaluationContext:
         h1 = ctx.get_hash_key()
         h2 = ctx.get_hash_key()
         assert h1 == h2
-        assert len(h1) == 32  # MD5 hex digest
+        assert len(h1) == 64  # SHA-256 hex digest
 
 
 # ---------------------------------------------------------------------------

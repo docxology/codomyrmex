@@ -15,7 +15,29 @@ This module provides the detailed reference layer in the PAI-Codomyrmex document
 
 ![PAI Board — Kanban mission tracker with ACTIVE, PLANNING, IN PROGRESS, BLOCKED, PAUSED columns](screenshots/pai_board.png)
 
-## Algorithm Phase Mapping
+## Algorithm Phase → MCP Tool Mapping
+
+When the PAI Algorithm runs its 7 phases, it consumes codomyrmex tools in a predictable pattern. Use this table to know which tool to call at each phase:
+
+| Phase | Primary MCP Tools | Codomyrmex Modules |
+|-------|------------------|-------------------|
+| **OBSERVE (1/7)** | `codomyrmex.list_modules`, `codomyrmex.read_file`, `codomyrmex.git_status`, `codomyrmex.git_diff`, `search_documents` | `system_discovery`, `search`, `git_operations`, `config_management` |
+| **THINK (2/7)** | `query_knowledge_base`, `think`, `get_thinking_depth`, `relations_score_strength` | `cerebrum`, `agents/core` (ThinkingAgent), `relations` |
+| **PLAN (3/7)** | `get_scheduler_metrics`, `analyze_workflow_dependencies`, `plugin_resolve_dependencies` | `orchestrator`, `logistics`, `plugin_system` |
+| **BUILD (4/7)** | `codomyrmex.write_file`, `code_execute`, `aider_edit`, `aider_architect`, `generate_module_docs` | `coding`, `aider`, `documentation`, `ci_cd_automation` |
+| **EXECUTE (5/7)** | `codomyrmex.run_command`, `codomyrmex.run_tests`, `git_commit`, `git_push`, `container_build` | `git_operations`, `containerization`, `cloud`, `events` |
+| **VERIFY (6/7)** | `scan_vulnerabilities`, `scan_secrets`, `audit_code_security`, `performance_compare_benchmarks`, `validate_schema` | `security`, `performance`, `formal_verification`, `validation` |
+| **LEARN (7/7)** | `memory_put`, `memory_search`, `logging_format_structured` | `agentic_memory`, `logging_monitoring`, `scrape` |
+
+### Trust Requirements by Phase
+
+- **OBSERVE / THINK / PLAN / VERIFY**: All tools are safe → auto-promoted by `/codomyrmexVerify`
+- **BUILD**: Requires `TRUSTED` for `write_file` and `call_module_function`
+- **EXECUTE**: Requires `TRUSTED` for `run_command`, `run_tests`
+
+Run `/codomyrmexTrust` before BUILD or EXECUTE phases.
+
+## Algorithm Phase Mapping (Dashboard Context)
 
 | Phase | Role | Screenshot |
 |-------|------|------------|

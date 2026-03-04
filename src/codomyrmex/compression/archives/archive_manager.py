@@ -78,7 +78,19 @@ class ArchiveManager:
             elif archive.suffix in [".tar", ".gz"] or archive.name.endswith(".tar.gz"):
                 mode = "r:gz" if archive.name.endswith(".tar.gz") or archive.suffix == ".gz" else "r"
                 with tarfile.open(archive, mode) as tf:
-                    tf.extractall(output)
+                    # CWE-22: Prevent path traversal during tarfile extraction.
+                    # Use data_filter (Python 3.12+) when available for safe extraction.
+                    if hasattr(tarfile, "data_filter"):
+                        tf.extractall(output, filter="data")
+                    else:
+                        # Fallback: validate each member path manually
+                        for member in tf.getmembers():
+                            member_path = Path(output / member.name).resolve()
+                            if not str(member_path).startswith(str(output.resolve())):
+                                raise CompressionError(
+                                    f"Blocked path traversal attempt: {member.name}"
+                                )
+                        tf.extractall(output)
                 return True
             else:
                 raise ValueError(f"Unknown archive format: {archive.suffix}")

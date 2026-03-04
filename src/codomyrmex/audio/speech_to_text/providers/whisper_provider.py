@@ -213,6 +213,7 @@ class WhisperProvider(STTProvider):
                 missing_packages=["faster-whisper"],
             )
 
+        super().__init__()
         self.model_size = model_size
         self.device = device
         self.compute_type = compute_type

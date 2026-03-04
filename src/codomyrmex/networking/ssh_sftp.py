@@ -9,14 +9,28 @@ logger = get_logger(__name__)
 class SSHClient:
     """Wrapper for SSH operations using Paramiko."""
 
-    def __init__(self, hostname: str, username: str, password: str | None = None, key_filename: str | None = None, port: int = 22):
+    def __init__(
+        self,
+        hostname: str,
+        username: str,
+        password: str | None = None,
+        key_filename: str | None = None,
+        port: int = 22,
+        known_hosts_file: str | None = None,
+    ):
         self.hostname = hostname
         self.username = username
         self.password = password
         self.key_filename = key_filename
         self.port = port
         self.client = paramiko.SSHClient()
-        self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # Load system known_hosts if available; use WarningPolicy instead of
+        # AutoAddPolicy to avoid silently trusting unknown host keys (MITM risk).
+        if known_hosts_file:
+            self.client.load_host_keys(known_hosts_file)
+        else:
+            self.client.load_system_host_keys()
+        self.client.set_missing_host_key_policy(paramiko.WarningPolicy())
 
     def connect(self) -> None:
         """Establish SSH connection."""

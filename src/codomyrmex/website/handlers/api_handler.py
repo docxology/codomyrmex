@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import threading
@@ -213,11 +214,26 @@ class APIHandler:
             return
 
         script_name = data.get('script')
-        args = data.get('args', [])
+        raw_args = data.get('args', [])
 
         if not script_name:
             self.send_error(400, "Script name required")
             return
+
+        # CWE-78: Validate args are plain strings with no shell metacharacters
+        if not isinstance(raw_args, list):
+            self.send_error(400, "args must be a list of strings")
+            return
+        _SHELL_META = set(';&|`$(){}\n\r')
+        sanitized_args: list[str] = []
+        for arg in raw_args:
+            if not isinstance(arg, str):
+                self.send_error(400, f"Invalid arg type: {type(arg).__name__}")
+                return
+            if any(ch in _SHELL_META for ch in arg):
+                self.send_error(400, f"Arg contains forbidden characters: {arg!r}")
+                return
+            sanitized_args.append(arg)
 
         # Security check: ensure script is within scripts dir
         script_path = (self.root_dir / "scripts" / script_name).resolve()
@@ -229,7 +245,7 @@ class APIHandler:
 
         try:
             # Run the script using the current python executable
-            cmd = [sys.executable, str(script_path)] + args
+            cmd = [sys.executable, str(script_path)] + sanitized_args
             env = os.environ.copy()
             env["PYTHONUNBUFFERED"] = "1"
 
@@ -428,16 +444,13 @@ class APIHandler:
                     "system": summary,
                 }
             elif action == "search":
-                import re
                 query = data.get("query", "").strip()
                 if not query:
                     self.send_json_response({"error": "search requires 'query' field", "success": False}, status=400)
                     return
-                try:
-                    pattern = re.compile(query, re.IGNORECASE)
-                except re.error as exc:
-                    self.send_json_response({"error": f"Invalid regex: {exc}", "success": False}, status=400)
-                    return
+                # CWE-1333: Escape user input to prevent regex injection / ReDoS
+                escaped_query = re.escape(query)
+                pattern = re.compile(escaped_query, re.IGNORECASE)
                 modules = self.data_provider.get_modules() if self.data_provider else []
                 hits = [
                     m for m in modules

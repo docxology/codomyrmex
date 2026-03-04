@@ -324,7 +324,9 @@ class TestHandlePaiAction:
         h.handle_pai_action()
         assert h.responses[0]["status"] == 400
 
-    def test_search_invalid_regex_returns_400(self):
+    def test_search_special_chars_treated_as_literal(self):
+        # re.escape() is applied to prevent ReDoS — special regex chars are
+        # treated as literals, so "[invalid" is a valid literal search query.
         body = json.dumps({"action": "search", "query": "[invalid"}).encode()
         h = FakeAPIHandler(
             content_length=len(body),
@@ -332,8 +334,7 @@ class TestHandlePaiAction:
             data_provider=_FakeDataProvider(),
         )
         h.handle_pai_action()
-        assert h.responses[0]["status"] == 400
-        assert "Invalid regex" in str(h.responses[0]["data"])
+        assert h.responses[0]["status"] == 200
 
     def test_docs_missing_module_returns_400(self):
         body = json.dumps({"action": "docs", "module": ""}).encode()

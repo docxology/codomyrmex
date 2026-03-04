@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from codomyrmex.agentic_memory.models import Memory, MemoryImportance
+from codomyrmex.agentic_memory.rules.engine import RuleEngine
 
 
 @dataclass
@@ -30,6 +31,7 @@ class ConsolidationConfig:
     min_importance: MemoryImportance = MemoryImportance.MEDIUM
     min_content_length: int = 20
     batch_size: int = 50
+    rule_engine: RuleEngine | None = None
 
 
 class MemoryConsolidator:
@@ -52,7 +54,23 @@ class MemoryConsolidator:
                 break
             if mem.id in self._seen:
                 continue
-            if mem.importance.value < self.config.min_importance.value:
+            # Rule-aware importance boost
+            if self.config.rule_engine is not None and (
+                "file_path" in mem.metadata or "module_name" in mem.metadata
+            ):
+                rules = self.config.rule_engine.get_applicable_rules(
+                    file_path=mem.metadata.get("file_path"),
+                    module_name=mem.metadata.get("module_name"),
+                )
+                if list(rules.resolved()):
+                    # If rules apply, treat it as at least MEDIUM importance to avoid getting filtered
+                    effective_importance = max(mem.importance.value, MemoryImportance.MEDIUM.value)
+                else:
+                    effective_importance = mem.importance.value
+            else:
+                effective_importance = mem.importance.value
+
+            if effective_importance < self.config.min_importance.value:
                 continue
             if len(mem.content) < self.config.min_content_length:
                 continue

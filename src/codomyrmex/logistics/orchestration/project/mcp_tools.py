@@ -3,6 +3,16 @@ MCP (Model Context Protocol) Tools for Codomyrmex Orchestration
 
 This module provides MCP tools that allow AI models to interact with the
 orchestration system, enabling AI-driven project management and task execution.
+
+**ARCHITECTURAL NOTE ON CLASS-BASED MCP PATTERN:**
+This module implements a legacy, manual class-based routing pattern
+(via `OrchestrationMCPTools.execute_tool` and `get_tool_definitions`) rather
+than using the modern `@mcp_tool` auto-discovery decorators found elsewhere
+in Codomyrmex. This manual approach is preserved here because it allows
+dynamic initialization of the orchestration engine and fine-grained, centralized
+control over tool schemas for highly complex orchestration workflows.
+Auto-discovery tools like PAI Bridge may need special handling or an 
+explicit adapter to register these tools if they rely solely on `@mcp_tool`.
 """
 
 from datetime import UTC, datetime
@@ -45,7 +55,12 @@ from .workflow_manager import WorkflowStep, get_workflow_manager
 
 
 class OrchestrationMCPTools:
-    """MCP tools for orchestration operations."""
+    """MCP tools for orchestration operations.
+    
+    Note: This class uses manual method routing (via `execute_tool`) and 
+    schema definition (via `get_tool_definitions`) rather than relying on 
+    the project's standard `@mcp_tool` decorator for auto-discovery.
+    """
 
     def __init__(self):
         """Initialize MCP tools."""

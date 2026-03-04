@@ -971,7 +971,10 @@ class TestDeadLetterQueueList:
             path.unlink(missing_ok=True)
 
     def test_nonexistent_file(self):
-        path = Path(tempfile.mktemp(suffix=".jsonl"))
+        f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+        path = Path(f.name)
+        f.close()
+        path.unlink()  # Remove to simulate nonexistent file
         dlq = DeadLetterQueue(path=path)
         assert dlq.list_entries() == []
 

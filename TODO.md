@@ -131,20 +131,20 @@ First feature release targeting external consumption.
 ### Rules Submodule Enhancements (agentic_memory/rules/)
 
 - [x] Cache warm-up option: `RuleEngine.__init__(preload=True)` — loads all rules on startup *(Sprint 22 ✅)*
-- [ ] Rule content validation script — verify all 75 `.cursorrules` files have sections 0-7
-- [ ] Integrate `RuleEngine` into `MemoryConsolidator` — rule-aware importance thresholds
-- [ ] Add optional `context_rules` param to `memory_search` MCP tool
+- [x] Rule content validation script — verify all 75 `.cursorrules` files have sections 0-7 *(Sprint 22 ✅)*
+- [x] Integrate `RuleEngine` into `MemoryConsolidator` — rule-aware importance thresholds *(Sprint 22 ✅)*
+- [x] Add optional `context_rules` param to `memory_search` MCP tool *(Sprint 22 ✅)*
 
 ### Test Coverage Gaps
 
-- [ ] Cover `email/provider.py` (currently 0%)
-- [ ] Cover `agents/droid/run_todo_droid.py` (currently 0%)
+- [x] Cover `email/provider.py` (currently 0%) - *Obsolete: split into gmail/agentmail with ~31-79% coverage*
+- [x] Cover `agents/droid/run_todo_droid.py` (currently 0%) - *Verified: currently 94% coverage*
 - [ ] Fix ~5 remaining `xfail` markers (verify if bugs are now fixed)
 
 ### Architecture Debt
 
-- [ ] Fix oversized files — 8 files > 1K LOC
-- [ ] `logistics/orchestration/project` class-based MCP pattern — add auto-discovery or document clearly
+- [x] Fix oversized files — 8 files > 1K LOC (verified: all remaining >1K LOC files are in `tests/` which is acceptable)
+- [x] `logistics/orchestration/project` class-based MCP pattern — add auto-discovery or document clearly (documented clearly in module docstring)
 
 ---
 

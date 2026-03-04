@@ -233,10 +233,14 @@ class BasicAuthenticator(Authenticator):
         roles: list[str] | None = None,
     ) -> None:
         """Register a user."""
-        # Hash password
-        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        # CWE-327/328: Use PBKDF2 instead of plain SHA-256 for password hashing
+        salt = secrets.token_hex(16)
+        password_hash = hashlib.pbkdf2_hmac(
+            "sha256", password.encode(), salt.encode(), iterations=600_000
+        ).hex()
         self._users[username] = {
             "password_hash": password_hash,
+            "salt": salt,
             "roles": roles or [],
         }
 
@@ -268,8 +272,11 @@ class BasicAuthenticator(Authenticator):
                 error="User not found",
             )
 
-        password_hash = hashlib.sha256(password.encode()).hexdigest()
-        if password_hash != user["password_hash"]:
+        salt = user.get("salt", "")
+        password_hash = hashlib.pbkdf2_hmac(
+            "sha256", password.encode(), salt.encode(), iterations=600_000
+        ).hex()
+        if not hmac.compare_digest(password_hash, user["password_hash"]):
             return AuthResult(
                 authenticated=False,
                 error="Invalid password",

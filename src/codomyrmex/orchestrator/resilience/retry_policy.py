@@ -239,7 +239,9 @@ def with_retry(
                                 "%s failed after %d attempts: %s",
                                 func.__name__, policy.max_attempts, exc,
                             )
-                raise last_exc  # type: ignore[misc]
+                if last_exc is not None:
+                    raise last_exc
+                raise RuntimeError("Retry exhausted without capturing an exception")
 
             return async_wrapper  # type: ignore[return-value]
 
@@ -266,7 +268,9 @@ def with_retry(
                                 "%s failed after %d attempts: %s",
                                 func.__name__, policy.max_attempts, exc,
                             )
-                raise last_exc  # type: ignore[misc]
+                if last_exc is not None:
+                    raise last_exc
+                raise RuntimeError("Retry exhausted without capturing an exception")
 
             return sync_wrapper  # type: ignore[return-value]
 

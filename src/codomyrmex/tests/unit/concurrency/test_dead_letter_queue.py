@@ -127,7 +127,10 @@ class TestDeadLetterQueueListEntries:
             path.unlink(missing_ok=True)
 
     def test_nonexistent_file_returns_empty(self):
-        path = Path(tempfile.mktemp(suffix=".jsonl"))
+        f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+        path = Path(f.name)
+        f.close()
+        path.unlink()  # Remove to simulate nonexistent file
         dlq = DeadLetterQueue(path=path)
         # File never created
         assert dlq.list_entries() == []
@@ -350,7 +353,10 @@ class TestDeadLetterQueuePurge:
             path.unlink(missing_ok=True)
 
     def test_purge_nonexistent_file_returns_zero(self):
-        path = Path(tempfile.mktemp(suffix=".jsonl"))
+        f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+        path = Path(f.name)
+        f.close()
+        path.unlink()  # Remove to simulate nonexistent file
         dlq = DeadLetterQueue(path=path)
         assert dlq.purge() == 0
 

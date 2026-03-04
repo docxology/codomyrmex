@@ -66,10 +66,15 @@ class WebsiteServer(
         super().__init__(*args, **kwargs)
 
     def _cors_origin(self) -> str:
-        """Return the matching CORS origin for the current request, or the first allowed origin."""
+        """Return the matching CORS origin for the current request, or the first allowed origin.
+
+        CWE-113: Sanitizes output by stripping CR/LF to prevent HTTP response splitting.
+        """
         origin = self.headers.get("Origin", "")
-        if origin in _ALLOWED_ORIGINS:
-            return origin
+        # Strip any CR/LF to prevent HTTP response splitting (CWE-113)
+        clean_origin = origin.replace("\r", "").replace("\n", "")
+        if clean_origin in _ALLOWED_ORIGINS:
+            return clean_origin
         return next(iter(_ALLOWED_ORIGINS))
 
     def do_OPTIONS(self) -> None:
@@ -181,3 +186,11 @@ class WebsiteServer(
         self.send_header('Vary', 'Origin')
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))
+
+    def log_message(self, format: str, *args) -> None:
+        """Override to suppress high-frequency access logs like /api/health."""
+        if len(args) > 0 and type(args[0]) is str:
+            req = args[0]
+            if "GET /api/health" in req or "GET /api/status" in req:
+                return  # Suppress
+        super().log_message(format, *args)

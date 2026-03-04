@@ -19,7 +19,7 @@ try:
     import codomyrmex  # noqa: F401
 except ImportError:
     # Add src to sys.path if running from source without install
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
@@ -47,7 +47,7 @@ def main():
     setup_logging(level="INFO")
     
     # Determine project root
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parent.parent.parent
     print_info(f"Project Root: {project_root}")
 
     # 1. Auto-Generate Dashboard

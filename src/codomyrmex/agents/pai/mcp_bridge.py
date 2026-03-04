@@ -52,6 +52,8 @@ __all__ = [
     "tool_run_tests",
 ]
 
+# Static-only counts (evaluated at import time; dynamic tools not included).
+# For the full live count use: get_tool_registry().list_tools()
 TOOL_COUNT: int = len(TOOL_DEFINITIONS)
 RESOURCE_COUNT: int = len(RESOURCE_DEFINITIONS)
 PROMPT_COUNT: int = len(PROMPT_DEFINITIONS)

@@ -432,7 +432,7 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.0.8** (March 2026) - Repo-wide doc audit: module count updated to 126; MCP auto-discovered updated to 118; all metric references reconciled
+- **v1.0.8** (March 2026) - Repo-wide doc audit: module count updated to 126; MCP auto-discovered updated to 121 (Sprint 22); ~407 dynamic tools; all metric references reconciled
 - **v1.0.7** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
 - **v1.0.5** (March 2026) - Sprint 16 MCP coverage, ruff violations zeroed, circular imports resolved
 - **v1.0.3** (March 2026) - Documentation audit: experimental/stub labels added to non-MCP-exposed and stub-only modules; accuracy review across phantom module references
@@ -448,7 +448,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (58140 symbols, 137331 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 relationships, 300 execution flows).
 
 ## Always Start Here
 

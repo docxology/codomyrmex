@@ -44,3 +44,10 @@ When editing, pay attention to maintaining the integrity and clarity of these ke
 -   Ensure consistency with the overall project vision.
 -   If adding a new module, confirm its directory exists and the link is valid.
 
+## 6. Architecture & Patterns
+- The root README must reflect the macro-architecture of the system.
+- Any mention of design patterns (e.g. MCP, Zero-Mock) must be consistent with the project's established conventions.
+
+## 7. Testing
+- While the README itself is not code, any scripts or commands provided in the README must be tested to ensure they run correctly.
+- Verify that status badges and coverage links are pointing to the correct and active pipelines.

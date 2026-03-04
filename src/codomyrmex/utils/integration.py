@@ -149,7 +149,9 @@ def with_retry(config: RetryConfig | None = None):
                         time.sleep(min(delay, cfg.max_delay))
                         delay *= cfg.exponential_base
 
-            raise last_exception
+            if last_exception is not None:
+                raise last_exception
+            raise RuntimeError("Retry exhausted without capturing an exception")
         return wrapper
     return decorator
 
@@ -177,7 +179,9 @@ async def async_retry(
                 await asyncio.sleep(min(delay, cfg.max_delay))
                 delay *= cfg.exponential_base
 
-    raise last_exception
+    if last_exception is not None:
+        raise last_exception
+    raise RuntimeError("Retry exhausted without capturing an exception")
 
 
 # ============================================================================

@@ -90,6 +90,7 @@ class EdgeTTSProvider(TTSProvider):
                 missing_packages=["edge-tts"],
             )
 
+        super().__init__()
         self._voices: list[VoiceInfo] = []
         self._voices_loaded = False
 

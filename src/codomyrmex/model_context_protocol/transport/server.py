@@ -286,12 +286,19 @@ class MCPServer:
                     "result": result,
                 }
             except Exception as e:
+                # CWE-209: Do not expose internal exception details to clients.
+                # Log the full error server-side for debugging.
+                import logging
+                logging.getLogger(__name__).error(
+                    "Internal error processing request %s: %s", request_id, e,
+                    exc_info=True,
+                )
                 return {
                     "jsonrpc": "2.0",
                     "id": request_id,
                     "error": {
                         "code": -32603,
-                        "message": str(e),
+                        "message": "Internal server error",
                     }
                 }
 

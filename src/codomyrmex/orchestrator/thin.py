@@ -499,7 +499,9 @@ def retry(
                     await asyncio.sleep(current_delay)
                     current_delay *= backoff
 
-        raise last_error
+        if last_error is not None:
+            raise last_error
+        raise RuntimeError("Retry exhausted without capturing an exception")
 
     return wrapper
 

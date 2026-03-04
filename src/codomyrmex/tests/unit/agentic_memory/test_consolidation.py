@@ -111,3 +111,39 @@ class TestMemoryConsolidator:
         ids = {c.case_id for c in cases}
         assert "memory-high" in ids
         assert "memory-med" in ids
+
+    def test_rule_aware_importance_boost(self) -> None:
+        from codomyrmex.agentic_memory.rules.engine import RuleEngine
+        from codomyrmex.agentic_memory.rules.models import RuleSet, Rule, RulePriority
+        from unittest.mock import MagicMock
+        from pathlib import Path
+
+        # Create a mock RuleEngine
+        mock_engine = MagicMock(spec=RuleEngine)
+        
+        # When get_applicable_rules is called for a known file, return a rule
+        def mock_get_rules(file_path=None, module_name=None):
+            if file_path == "important.py":
+                return RuleSet(rules=[Rule(name="test", priority=RulePriority.MODULE, file_path=Path(""), sections=[], raw_content="cwd")])
+            return RuleSet(rules=[])
+            
+        mock_engine.get_applicable_rules.side_effect = mock_get_rules
+
+        consolidator = MemoryConsolidator(
+            config=ConsolidationConfig(
+                min_importance=MemoryImportance.MEDIUM,
+                rule_engine=mock_engine
+            )
+        )
+
+        low_important_file = _make_memory(importance=MemoryImportance.LOW, memory_id="low1")
+        low_important_file.metadata["file_path"] = "important.py"
+        
+        low_normal_file = _make_memory(importance=MemoryImportance.LOW, memory_id="low2")
+        low_normal_file.metadata["file_path"] = "normal.py"
+
+        cases = consolidator.consolidate([low_important_file, low_normal_file])
+        
+        # Only the 'important.py' one gets boosted to MEDIUM and passes the filter
+        assert len(cases) == 1
+        assert cases[0].case_id == "memory-low1"

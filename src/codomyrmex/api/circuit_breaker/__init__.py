@@ -447,7 +447,9 @@ def retry(
                     if not policy.should_retry(e) or attempt >= max_retries:
                         raise
 
-            raise last_exception  # type: ignore
+            if last_exception is not None:
+                raise last_exception
+            raise RuntimeError("Retry exhausted without capturing an exception")
 
         return wrapper
 

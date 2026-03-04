@@ -122,8 +122,18 @@ def _copy_and_customize(
                         break
                 content = '\n'.join(lines)
 
-        dst.write_text(content, encoding='utf-8')
-    except Exception as e:
+        import tempfile
+        import os
+        
+        fd, temp_path = tempfile.mkstemp(dir=dst.parent)
+        try:
+            with open(fd, 'w', encoding='utf-8') as f:
+                f.write(content)
+            os.replace(temp_path, dst)
+        except Exception:
+            os.unlink(temp_path)
+            raise
+    except OSError as e:
         logger.error(f"Error customizing {src}: {e}")
         # Fall back to simple copy
         shutil.copy2(src, dst)
@@ -186,7 +196,17 @@ def create_{module_name}(config: Optional[Dict[str, Any]] = None) -> {class_name
     """
     return {class_name}(config)
 '''
-    path.write_text(content, encoding='utf-8')
+    import tempfile
+    import os
+    
+    fd, temp_path = tempfile.mkstemp(dir=path.parent)
+    try:
+        with open(fd, 'w', encoding='utf-8') as f:
+            f.write(content)
+        os.replace(temp_path, path)
+    except Exception:
+        os.unlink(temp_path)
+        raise
     logger.debug(f"Created core module: {path}")
 
 

@@ -228,17 +228,20 @@ class HealthProviderMixin:
                     "default_model": config_manager.config.default_model,
                     "preferred_models": config_manager.config.preferred_models,
                     "available_models": config_manager.get_available_models(),
-                    "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}"
+                    "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}",
+                    "ollama_reachable": True,
                 }
         except Exception as e:
             logger.warning(f"Failed to load LLM config: {e}")
 
-        # Fallback defaults
+        # Fallback defaults — Ollama unreachable or not configured
         return {
             "default_model": "llama3.1:latest",
             "preferred_models": ["llama3.1:latest", "codellama:latest"],
-            "available_models": ["llama3.1:latest"],
-            "ollama_host": os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL).replace("http://", "")
+            "available_models": [],
+            "ollama_host": os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL).replace("http://", ""),
+            "ollama_reachable": False,
+            "message": "Ollama not reachable — start Ollama to enable chat",
         }
 
     def _get_git_info(self) -> dict[str, str]:

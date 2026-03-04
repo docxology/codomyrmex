@@ -5,10 +5,9 @@ from pathlib import Path
 import pytest
 
 from codomyrmex.config_monitoring.mcp_tools import (
-    config_monitoring_audit,
-    config_monitoring_create_snapshot,
     config_monitoring_detect_changes,
-    config_monitoring_detect_drift,
+    config_monitoring_hash_file,
+    config_monitoring_summary,
 )
 
 
@@ -26,48 +25,44 @@ def config_dir(workspace_dir: Path) -> Path:
 
 @pytest.mark.unit
 def test_mcp_detect_changes(workspace_dir: Path, config_dir: Path) -> None:
+    """Test detecting configuration changes via MCP."""
     config_file = config_dir / "app.yaml"
     config_file.write_text("key: value")
 
     changes = config_monitoring_detect_changes([str(config_file)], str(workspace_dir))
-    assert len(changes) == 1
-    assert changes[0]["change_type"] == "created"
+    assert changes["status"] == "success"
+    assert changes["paths_checked"] == 1
+    assert changes["changes_detected"] == 1
+    assert changes["changes"][0]["change_type"] == "created"
 
+    # Modify and check again
     config_file.write_text("key: new_value")
     changes2 = config_monitoring_detect_changes([str(config_file)], str(workspace_dir))
-    assert len(changes2) == 1
-    assert changes2[0]["change_type"] == "modified"
+    assert changes2["status"] == "success"
+    assert changes2["changes_detected"] == 1
+    assert changes2["changes"][0]["change_type"] == "modified"
 
 
 @pytest.mark.unit
-def test_mcp_create_snapshot_and_drift(workspace_dir: Path, config_dir: Path) -> None:
+def test_mcp_summary(workspace_dir: Path) -> None:
+    """Test getting monitoring summary via MCP."""
+    summary = config_monitoring_summary(str(workspace_dir))
+    assert summary["status"] == "success"
+    assert isinstance(summary["summary"], dict)
+
+
+@pytest.mark.unit
+def test_mcp_hash_file(config_dir: Path) -> None:
+    """Test hashing a file via MCP."""
     config_file = config_dir / "app.yaml"
     config_file.write_text("key: value")
 
-    snapshot = config_monitoring_create_snapshot(
-        "prod", str(config_dir), str(workspace_dir)
-    )
-    assert snapshot["environment"] == "prod"
-    assert snapshot["total_files"] == 1
+    result = config_monitoring_hash_file(str(config_file))
+    assert result["status"] == "success"
+    assert result["file_path"] == str(config_file)
+    assert "sha256" in result
 
-    drift = config_monitoring_detect_drift(
-        snapshot["snapshot_id"], str(config_dir), str(workspace_dir)
-    )
-    assert drift["drift_detected"] is False
-
-    config_file.write_text("key: new_value")
-    drift_after = config_monitoring_detect_drift(
-        snapshot["snapshot_id"], str(config_dir), str(workspace_dir)
-    )
-    assert drift_after["drift_detected"] is True
-
-
-@pytest.mark.unit
-def test_mcp_audit(workspace_dir: Path, config_dir: Path) -> None:
-    secret_file = config_dir / "secrets.yaml"
-    secret_file.write_text("password: 'supersecret'")
-
-    audit = config_monitoring_audit("prod", str(config_dir), str(workspace_dir))
-    assert audit["environment"] == "prod"
-    assert audit["compliance_status"] == "non_compliant"
-    assert len(audit["issues_found"]) > 0
+    # Non-existent file
+    bad_result = config_monitoring_hash_file(str(config_dir / "missing.yaml"))
+    assert bad_result["status"] == "error"
+    assert "File not found" in bad_result["message"]

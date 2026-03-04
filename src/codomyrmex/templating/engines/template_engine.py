@@ -2,7 +2,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from mako.template import Template as MakoTemplate
 
 from codomyrmex.exceptions import CodomyrmexError
@@ -43,13 +43,15 @@ class Template:
 class TemplateEngine:
     """Template engine interface."""
 
-    def __init__(self, engine: str = "jinja2"):
+    def __init__(self, engine: str = "jinja2", autoescape: bool = True):
         """Initialize template engine.
 
         Args:
             engine: Template engine (jinja2, mako)
+            autoescape: Enable HTML autoescape for XSS prevention (Jinja2 only, default True).
         """
         self.engine = engine
+        self.autoescape = autoescape
         self._filters: dict[str, Callable] = {}
         self._cache: dict[str, Template] = {}
 
@@ -131,8 +133,8 @@ class TemplateEngine:
     def _render_jinja2(self, template: str, context: dict) -> str:
         """Render using Jinja2."""
         try:
-
-            env = Environment()
+            # CWE-79: Enable autoescape to prevent XSS
+            env = Environment(autoescape=self.autoescape)
             # Register custom filters
             for name, func in self._filters.items():
                 env.filters[name] = func
@@ -145,9 +147,12 @@ class TemplateEngine:
     def _load_jinja2(self, path: str) -> Any:
         """Load template using Jinja2."""
         try:
-
             path_obj = Path(path)
-            env = Environment(loader=FileSystemLoader(str(path_obj.parent)))
+            # CWE-79: Use select_autoescape for file-based templates
+            env = Environment(
+                loader=FileSystemLoader(str(path_obj.parent)),
+                autoescape=select_autoescape() if self.autoescape else False,
+            )
             # Register custom filters
             for name, func in self._filters.items():
                 env.filters[name] = func

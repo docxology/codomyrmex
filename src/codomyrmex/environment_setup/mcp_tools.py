@@ -18,7 +18,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
         "environment. Returns a dict of boolean checks."
     ),
 )
-def env_check() -> dict:
+def env_check() -> dict[str, bool]:
     """Run environment validation checks.
 
     Returns:

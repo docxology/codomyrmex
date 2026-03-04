@@ -2,7 +2,7 @@
 
 **Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
-> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is the 122-module Python toolbox it consumes via MCP. This folder documents the bridge between them.
+> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 126-module Python toolbox (121 auto-discovered via MCP) it consumes via MCP. This folder documents the bridge between them.
 
 ## 🎬 Interface Tour
 
@@ -32,9 +32,9 @@ graph TB
 
     subgraph CDM["🐜 Codomyrmex (this repo)"]
         direction TB
-        MODULES["122 Python Modules"]
+        MODULES["126 Python Modules (121 auto-discovered)"]
         STATIC["20 Static Tools"]
-        DYNAMIC["~347 Dynamic Tools"]
+        DYNAMIC["~407 Dynamic Tools"]
         RESOURCES["2 Resources"]
         PROMPTS["10 Prompts"]
     end

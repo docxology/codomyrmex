@@ -83,6 +83,7 @@ class Pyttsx3Provider(TTSProvider):
                 missing_packages=["pyttsx3"],
             )
 
+        super().__init__()
         self._engine = pyttsx3.init()
         self._voices: list[VoiceInfo] = []
         self._load_voices()

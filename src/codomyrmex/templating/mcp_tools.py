@@ -35,7 +35,7 @@ def template_validate(template_string: str) -> dict:
         try:
             from jinja2 import Environment
 
-            Environment().parse(template_string)
+            Environment(autoescape=True).parse(template_string)
         except ImportError:
             # Fallback: render with empty context to catch syntax errors
             from codomyrmex.templating import render

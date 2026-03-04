@@ -35,7 +35,9 @@ def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
                     if attempt < max_retries:
                         delay = backoff_factor * (2 ** attempt)
                         time_module.sleep(delay)
-            raise last_exception
+            if last_exception is not None:
+                raise last_exception
+            raise RuntimeError("Retry exhausted without capturing an exception")
         return wrapper
     return decorator
 

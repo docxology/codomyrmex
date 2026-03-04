@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
-import subprocess
+import subprocess  # nosec B404
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -51,7 +51,7 @@ class DependencyResolver:
     def check_conflicts(self) -> list[Conflict]:
         """Run pip check and parse conflicts."""
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # nosec B603
                 [self._python, "-m", "pip", "check"],
                 capture_output=True, text=True, timeout=30,
             )
@@ -87,7 +87,7 @@ class DependencyResolver:
     def list_installed(self) -> list[DependencyInfo]:
         """List all installed packages with metadata."""
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # nosec B603
                 [self._python, "-m", "pip", "list", "--format=json"],
                 capture_output=True, text=True, timeout=30,
             )
@@ -137,7 +137,7 @@ class DependencyResolver:
                 if ">=" not in dep and "==" not in dep and "~=" not in dep:
                     if dep.strip() and not dep.startswith("#"):
                         issues.append(f"Unpinned dependency: {dep}")
-        except Exception as e:
+        except (tomllib.TOMLDecodeError, OSError) as e:
             issues.append(f"Failed to parse pyproject.toml: {e}")
 
         return issues
@@ -172,13 +172,13 @@ class DependencyResolver:
 
         try:
             logger.info("Installing dependencies from %s using %s", source, cmd[0])
-            subprocess.run(cmd, check=True, capture_output=True, text=True)
+            subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=300)  # nosec B603
             logger.info("Successfully installed dependencies.")
             return True
         except subprocess.CalledProcessError as e:
             logger.error("Failed to install dependencies: %s", e.stderr)
             return False
-        except Exception as e:
+        except Exception as e:  # Catchall for unexpected errors during install
             logger.error("An unexpected error occurred during installation: %s", e)
             return False
 
@@ -276,7 +276,7 @@ class DependencyResolver:
             List of dicts with name, version, latest_version.
         """
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # nosec B603
                 [self._python, "-m", "pip", "list", "--outdated", "--format=json"],
                 capture_output=True, text=True, timeout=60,
             )

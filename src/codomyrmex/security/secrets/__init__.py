@@ -327,9 +327,14 @@ class SecretVault:
             self._load()
 
     def _derive_key(self, password: str) -> bytes:
-        """Derive encryption key from password."""
-        # Simple key derivation (use PBKDF2 in production)
-        return hashlib.sha256(password.encode()).digest()
+        """Derive encryption key from password using PBKDF2."""
+        # CWE-327: Use PBKDF2 instead of bare SHA-256 for key derivation
+        return hashlib.pbkdf2_hmac(
+            "sha256",
+            password.encode(),
+            b"codomyrmex-vault-salt",  # Static salt for vault KDF
+            iterations=600_000,
+        )
 
     def _encrypt(self, value: str) -> str:
         """Simple XOR encryption (use proper encryption in production)."""

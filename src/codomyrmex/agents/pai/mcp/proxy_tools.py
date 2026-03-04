@@ -170,10 +170,18 @@ def tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
             return {"error": f"No README.md or SPEC.md found in {mod_dir}"}
 
     content = readme.read_text()
-    if len(content) > 5000:
+    full_length = len(content)
+    truncated = full_length > 5000
+    if truncated:
         content = content[:5000] + "\n\n... (truncated)"
 
-    return {"module": full_path, "path": str(readme), "content": content}
+    return {
+        "module": full_path,
+        "path": str(readme),
+        "content": content,
+        "truncated": truncated,
+        "full_length": full_length,
+    }
 
 def tool_pai_status(**_kwargs: Any) -> dict[str, Any]:
     """Get PAI installation status via PAIBridge."""

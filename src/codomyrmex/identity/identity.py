@@ -73,7 +73,10 @@ class PasswordProvider(AuthProvider):
     def register(self, user_id: str, password: str) -> None:
         """Register a user with a password."""
         salt = secrets.token_hex(16)
-        pw_hash = hashlib.sha256(f"{salt}{password}".encode()).hexdigest()
+        # CWE-327: Use PBKDF2 instead of bare SHA-256 for password hashing
+        pw_hash = hashlib.pbkdf2_hmac(
+            "sha256", f"{salt}{password}".encode(), salt.encode(), iterations=600_000
+        ).hex()
         self._users[user_id] = (salt, pw_hash)
 
     def authenticate(self, credentials: dict[str, Any]) -> bool:
@@ -83,7 +86,9 @@ class PasswordProvider(AuthProvider):
         if user_id not in self._users:
             return False
         salt, expected_hash = self._users[user_id]
-        actual_hash = hashlib.sha256(f"{salt}{password}".encode()).hexdigest()
+        actual_hash = hashlib.pbkdf2_hmac(
+            "sha256", f"{salt}{password}".encode(), salt.encode(), iterations=600_000
+        ).hex()
         return secrets.compare_digest(actual_hash, expected_hash)
 
 

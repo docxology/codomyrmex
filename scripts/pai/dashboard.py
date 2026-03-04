@@ -168,10 +168,19 @@ def phase_pai_pm(restart: bool, port: int = _PAI_PM_PORT) -> subprocess.Popen | 
 
     proc = subprocess.Popen(
         [bun, str(_PAI_PM_SERVER), f"--port={port}"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1,
     )
     print_info(f"  PAI PM process started (PID {proc.pid}) — waiting for :{port}…")
+
+    def _tail_logs(p: subprocess.Popen):
+        for line in p.stdout:
+            sys.stdout.write(f"\033[90m[PAI PM]\033[0m {line}")
+            sys.stdout.flush()
+            
+    threading.Thread(target=_tail_logs, args=(proc,), daemon=True).start()
 
     if _port_is_live(port, timeout=8.0):
         print_success(f"  PAI Project Manager live → http://localhost:{port}")

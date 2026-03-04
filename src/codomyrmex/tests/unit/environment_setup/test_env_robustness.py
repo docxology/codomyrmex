@@ -11,7 +11,7 @@ class TestEnvironmentRobustness:
 
     def test_missing_env_file(self, tmp_path):
         """Verify check_and_setup_env_vars returns False if .env is missing."""
-        assert check_and_setup_env_vars(str(tmp_path)) is False
+        assert check_and_setup_env_vars(str(tmp_path)) == []
 
     def test_malformed_env_file(self, tmp_path):
         """Verify check_and_setup_env_vars handles malformed .env files."""
@@ -20,7 +20,7 @@ class TestEnvironmentRobustness:
 
         # python-dotenv typically warns but doesn't crash on many malformed lines
         # But if it loads, it returns True. We verify it doesn't crash.
-        assert check_and_setup_env_vars(str(tmp_path)) is True
+        assert check_and_setup_env_vars(str(tmp_path)) == []
 
     def test_permission_error(self, tmp_path):
         """Verify behavior when .env is not readable."""

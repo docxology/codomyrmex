@@ -850,11 +850,11 @@ class TestPaiActionNewBackends:
         assert isinstance(result["hits"], list)
         assert isinstance(result["count"], int)
 
-    def test_search_invalid_regex_returns_400(self, live_server):
-        """search with an invalid regex pattern returns 400 with success=False."""
+    def test_search_special_chars_treated_as_literal(self, live_server):
+        """search with regex special chars returns 200 — re.escape() prevents ReDoS."""
         status, data = live_server.post("/api/pai/action", {"action": "search", "query": "[invalid"})
-        assert status == 400
-        assert data.get("success") is False
+        assert status == 200
+        assert data.get("success") is True
 
     def test_docs_without_module_returns_400(self, live_server):
         """docs action without 'module' field returns 400 with success=False."""
