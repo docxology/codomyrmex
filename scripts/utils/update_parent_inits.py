@@ -69,39 +69,39 @@ UPDATES = {
 def update_init_file(module_name: str, info: dict) -> bool:
     """Update an __init__.py file to include new submodules."""
     init_path = SRC_BASE / module_name / "__init__.py"
-    
+
     if not init_path.exists():
         print(f"  ⚠️  {init_path} not found")
         return False
-    
+
     content = init_path.read_text()
     modified = False
-    
+
     # Add imports for new submodules
     import_lines = []
     for submod in info["submodules"]:
         import_line = f"from . import {submod}"
         if import_line not in content:
             import_lines.append(import_line)
-    
+
     if import_lines:
         # Find a good place to insert imports (after existing imports)
         lines = content.split('\n')
         insert_idx = len(lines)
-        
+
         for i, line in enumerate(lines):
             if line.startswith('__all__') or line.startswith('__version__'):
                 insert_idx = i
                 break
-        
+
         # Insert new imports
         for import_line in import_lines:
             lines.insert(insert_idx, import_line)
             insert_idx += 1
-        
+
         content = '\n'.join(lines)
         modified = True
-    
+
     # Add submodules to __all__ if it exists
     for submod in info["submodules"]:
         all_entry = f"'{submod}'"
@@ -110,11 +110,11 @@ def update_init_file(module_name: str, info: dict) -> bool:
             if "__all__ = [" in content:
                 content = content.replace("__all__ = [", f"__all__ = [\n    '{submod}',")
                 modified = True
-    
+
     if modified:
         init_path.write_text(content)
         return True
-    
+
     return False
 
 
@@ -133,7 +133,7 @@ def main():
     print("=" * 60)
     print("UPDATING PARENT MODULE __init__.py FILES")
     print("=" * 60)
-    
+
     updated = 0
     for module_name, info in UPDATES.items():
         print(f"\n  {module_name}/")
@@ -142,7 +142,7 @@ def main():
             updated += 1
         else:
             print(f"    ○ No changes needed")
-    
+
     print(f"\n✅ Updated {updated} modules")
     return 0
 

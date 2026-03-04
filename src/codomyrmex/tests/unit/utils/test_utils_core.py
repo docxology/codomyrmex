@@ -111,6 +111,16 @@ class TestEnsureDirectory:
 
         assert isinstance(result, Path)
 
+    def test_ensure_directory_with_existing_file(self, tmp_path):
+        """Test ensure_directory when path is an existing file."""
+        from codomyrmex.utils import ensure_directory
+
+        file_path = tmp_path / "existing_file.txt"
+        file_path.touch()
+
+        with pytest.raises(FileExistsError):
+            ensure_directory(file_path)
+
 
 @pytest.mark.unit
 class TestGetTimestamp:

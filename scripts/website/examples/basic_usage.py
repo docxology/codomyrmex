@@ -51,7 +51,7 @@ def main():
         if summary:
             print_success(f"  System summary status: {summary.get('status')}")
             print_success(f"  Environment: {summary.get('environment')}")
-            
+
         modules = provider.get_modules()
         print_success(f"  Discovered {len(modules)} modules via DataProvider.")
     except Exception as e:
@@ -64,7 +64,7 @@ def main():
         if output_dir.exists():
             shutil.rmtree(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
-            
+
         generator = WebsiteGenerator(output_dir=output_dir)
         print_success(f"  WebsiteGenerator initialized for output: {output_dir}")
     except Exception as e:
