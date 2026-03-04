@@ -307,6 +307,39 @@ class TestFlattenDict:
 
         assert result == {"a": [1, 2, 3]}
 
+    def test_non_string_keys(self):
+        """Test flattening dict with non-string keys."""
+        from codomyrmex.utils import flatten_dict
+
+        result = flatten_dict({1: {2: 3}})
+
+        assert result == {"1.2": 3}
+
+    def test_dict_with_none_values(self):
+        """Test flattening dict with None values."""
+        from codomyrmex.utils import flatten_dict
+
+        result = flatten_dict({"a": None, "b": {"c": None}})
+
+        assert result == {"a": None, "b.c": None}
+
+    def test_dict_with_empty_nested_dict(self):
+        """Test flattening dict with an empty nested dict."""
+        from codomyrmex.utils import flatten_dict
+
+        # Flattening an empty dict simply yields no keys for that path
+        result = flatten_dict({"a": {"b": {}}, "c": {}})
+
+        assert result == {}
+
+    def test_dict_with_empty_string_keys(self):
+        """Test flattening dict with empty string keys."""
+        from codomyrmex.utils import flatten_dict
+
+        result = flatten_dict({"": {"": 1}})
+
+        assert result == {"": 1}
+
 
 @pytest.mark.unit
 class TestDeepMerge:
