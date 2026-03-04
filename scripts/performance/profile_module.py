@@ -17,10 +17,10 @@ except ImportError:
 
 import argparse
 import cProfile
-import pstats
-import io
-import time
 import importlib.util
+import io
+import pstats
+import time
 
 
 def load_module(module_path: str):
@@ -62,14 +62,14 @@ def format_time(seconds: float) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "performance" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/performance/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/performance/config.yaml")
 
     parser = argparse.ArgumentParser(description="Profile Python module/function")
     parser.add_argument("module_path", nargs="?", help="Path to Python module")

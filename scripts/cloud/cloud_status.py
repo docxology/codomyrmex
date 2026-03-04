@@ -17,8 +17,8 @@ except ImportError:
 
 import argparse
 import os
-import subprocess
 import shutil
+import subprocess
 
 
 def check_aws_cli() -> dict:
@@ -86,14 +86,14 @@ def check_cloud_env_vars() -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Cloud service status")
     parser.add_argument("--provider", "-p", choices=["aws", "gcp", "azure", "all"], default="all")
@@ -110,7 +110,7 @@ def main():
 
     to_check = providers if args.provider == "all" else {args.provider: providers[args.provider]}
 
-    for key, (name, check_fn) in to_check.items():
+    for _key, (name, check_fn) in to_check.items():
         status = check_fn()
         icon = "✅" if status.get("installed") else "⚪"
         print(f"{icon} {name}:")

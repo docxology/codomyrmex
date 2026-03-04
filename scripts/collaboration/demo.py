@@ -18,13 +18,14 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.collaboration import (
-    SwarmManager,
-    SwarmAgent,
     AgentRole,
-    Vote,
+    SwarmAgent,
+    SwarmManager,
     SwarmMessage,
-    SwarmMessageType
+    SwarmMessageType,
+    Vote,
 )
+
 
 class SimulatedAgent:
     """A helper to simulate a real agent reacting to messages."""
@@ -103,7 +104,7 @@ async def run_demo():
     ]
 
     consensus = await manager.request_consensus("Deploy to production", votes, strategy="majority")
-    print(f"  Proposal: Deploy to production")
+    print("  Proposal: Deploy to production")
     print(f"  Decision: {consensus.decision.value}")
     print(f"  Approval Score: {consensus.approval_score:.2f}")
 
@@ -117,14 +118,14 @@ async def run_demo():
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "collaboration" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/collaboration/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/collaboration/config.yaml")
 
 if __name__ == "__main__":
     asyncio.run(run_demo())

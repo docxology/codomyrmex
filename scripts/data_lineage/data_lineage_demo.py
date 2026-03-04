@@ -13,7 +13,8 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.data_lineage import LineageTracker, ImpactAnalyzer, NodeType, EdgeType
+from codomyrmex.data_lineage import EdgeType, ImpactAnalyzer, LineageTracker, NodeType
+
 
 def main() -> int:
     print("--- Starting Data Lineage Demo ---")
@@ -54,7 +55,7 @@ def main() -> int:
     # 4. Register Downstream Consumers (Models/Dashboards)
     print("Registering downstream consumers...")
     # Manual node creation for specific types
-    from codomyrmex.data_lineage import LineageNode, LineageEdge
+    from codomyrmex.data_lineage import LineageEdge, LineageNode
 
     # Model
     model_node = LineageNode(id="revenue_forecast", name="Revenue Forecast Model", node_type=NodeType.MODEL)
@@ -104,14 +105,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_lineage" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/data_lineage/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/data_lineage/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

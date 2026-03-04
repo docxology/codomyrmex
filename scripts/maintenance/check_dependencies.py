@@ -62,7 +62,7 @@ def check_dependencies(repo_root: Path) -> int:
     # Check for pyproject.toml
     pyproject = repo_root / "pyproject.toml"
     if pyproject.exists():
-        print(f"\n✅ pyproject.toml exists")
+        print("\n✅ pyproject.toml exists")
 
         # Count dependencies (basic check)
         with open(pyproject) as f:

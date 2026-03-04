@@ -8,6 +8,7 @@ and automatically applies their changes to the local repository.
 
 import subprocess
 
+
 def get_completed_sessions() -> list[str]:
     """Parse 'jules remote list --session' to find Completed session IDs."""
     try:

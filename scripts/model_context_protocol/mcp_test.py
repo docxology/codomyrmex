@@ -23,11 +23,12 @@ except ImportError:
 import argparse
 import asyncio
 
-from codomyrmex.model_context_protocol import MCPServer
 from codomyrmex.model_context_protocol.testing import (
-    ServerTester,
     MockMCPClient,
+    ServerTester,
 )
+
+from codomyrmex.model_context_protocol import MCPServer
 from codomyrmex.model_context_protocol.validators import (
     MessageValidator,
 )
@@ -108,12 +109,12 @@ async def run_tool_tests(server, tool_name: str) -> None:
     response = await client.call_tool(tool_name, test_args)
 
     if "result" in response:
-        print(f"  ✓ Call succeeded")
+        print("  ✓ Call succeeded")
         content = response["result"].get("content", [])
         if content:
             print(f"    Output: {content[0].get('text', '')[:100]}")
     else:
-        print(f"  ✗ Call failed")
+        print("  ✗ Call failed")
         if "error" in response:
             print(f"    Error: {response['error'].get('message')}")
 
@@ -183,14 +184,14 @@ async def run_all_tests() -> None:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_context_protocol/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="MCP Test Runner",

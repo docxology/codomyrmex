@@ -65,14 +65,14 @@ def find_related(mod):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/documentation/config.yaml")
 
     modules = sorted(
         d for d in os.listdir(DOCS)
@@ -93,9 +93,9 @@ def main():
             with open(spec_path) as f:
                 content = f.read()
             if "README.md" not in content:
-                ref = f"\n## References\n\n"
-                ref += f"- [README.md](README.md) — Human-readable documentation\n"
-                ref += f"- [AGENTS.md](AGENTS.md) — Agent coordination guide\n"
+                ref = "\n## References\n\n"
+                ref += "- [README.md](README.md) — Human-readable documentation\n"
+                ref += "- [AGENTS.md](AGENTS.md) — Agent coordination guide\n"
                 ref += f"- [Source Code](../../../src/codomyrmex/{mod}/)\n"
                 with open(spec_path, "w") as f:
                     f.write(content.rstrip() + "\n" + ref)

@@ -5,11 +5,11 @@ Demonstrates LocalLock, RedisLock (via fakeredis), ReadWriteLock,
 LocalSemaphore, and AsyncWorkerPool.
 """
 
-import sys
-import time
-import random
-import threading
 import asyncio
+import random
+import sys
+import threading
+import time
 from pathlib import Path
 
 try:
@@ -19,12 +19,12 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.concurrency import (
+    AsyncWorkerPool,
     LocalLock,
+    LocalSemaphore,
     LockManager,
     ReadWriteLock,
-    LocalSemaphore,
-    AsyncWorkerPool,
-    RedisLock
+    RedisLock,
 )
 
 # Use fakeredis for zero-mock demonstration
@@ -148,13 +148,13 @@ async def demo_async_worker_pool():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "concurrency" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     print("🚀 Codomyrmex Concurrency Module Demo")

@@ -114,10 +114,10 @@ def create_app_credential(client, name: str, description: str = None, expires: s
     )
 
     if result:
-        print(f"\n   ✅ Created application credential")
+        print("\n   ✅ Created application credential")
         print(f"   ID: {result['id']}")
         print(f"   Name: {result['name']}")
-        print(f"\n   ⚠️  SAVE THESE CREDENTIALS - the secret cannot be retrieved later!")
+        print("\n   ⚠️  SAVE THESE CREDENTIALS - the secret cannot be retrieved later!")
         print(f"\n   Application Credential ID: {result['id']}")
         print(f"   Application Credential Secret: {result.get('secret')}")
     else:
@@ -186,8 +186,8 @@ def create_ec2_credentials(client):
 
     result = client.create_ec2_credentials()
     if result:
-        print(f"\n   ✅ Created EC2 credentials")
-        print(f"\n   ⚠️  SAVE THESE CREDENTIALS!")
+        print("\n   ✅ Created EC2 credentials")
+        print("\n   ⚠️  SAVE THESE CREDENTIALS!")
         print(f"\n   Access Key: {result.get('access')}")
         print(f"   Secret Key: {result.get('secret')}")
     else:
@@ -196,14 +196,14 @@ def create_ec2_credentials(client):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Identity Examples")
 

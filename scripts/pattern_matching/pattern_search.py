@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import re
 import ast
+import re
 
 
 def search_regex(pattern: str, path: Path, file_extensions: list = None) -> list:
@@ -40,7 +40,7 @@ def search_regex(pattern: str, path: Path, file_extensions: list = None) -> list
             continue
 
         try:
-            with open(f, "r", errors="ignore") as file:
+            with open(f, errors="ignore") as file:
                 for i, line in enumerate(file, 1):
                     if compiled.search(line):
                         matches.append({

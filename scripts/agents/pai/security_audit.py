@@ -25,16 +25,18 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    PAIBridge,
-    TrustLevel,
-    SAFE_TOOLS,
+    DESTRUCTIVE_TOOL_COUNT,
     DESTRUCTIVE_TOOLS,
     SAFE_TOOL_COUNT,
-    DESTRUCTIVE_TOOL_COUNT,
+    SAFE_TOOLS,
+    PAIBridge,
+    TrustLevel,
     get_trust_report,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_warning,
+    print_info,
+    print_warning,
+    setup_logging,
 )
 
 SECTIONS = ["security", "telos", "classification", "env", "trust"]
@@ -125,7 +127,7 @@ def section_env(bridge: PAIBridge) -> dict:
         security_keys = [k for k in settings if any(s in k.lower() for s in ["key", "token", "secret", "auth"])]
         if security_keys:
             print(f"  ⚠️  Security-sensitive keys detected: {security_keys}")
-            print(f"     (values hidden for security)")
+            print("     (values hidden for security)")
     else:
         print_info("  settings.json: not found")
 
@@ -199,14 +201,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/agents/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

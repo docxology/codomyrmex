@@ -12,15 +12,15 @@ Usage:
     python openrouter_free_example.py
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
+from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
 
 # Config file locations
 CONFIG_PATHS = [
@@ -76,14 +76,14 @@ def render_template(template_name: str, **kwargs) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/llm/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/llm/config.yaml")
 
     """Demonstrate prompt templates with OpenRouter free models."""
     print("=" * 60)
@@ -125,7 +125,7 @@ def main():
             max_tokens=150,
         )
 
-        print(f"\n📤 Response:\n")
+        print("\n📤 Response:\n")
         print(f"   {response.content}")
         print()
 

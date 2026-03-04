@@ -31,14 +31,14 @@ Usage:
     python openrouter_long_output.py --template dissertation --topic "Machine Learning" --pages 100 --output thesis.md
 """
 
-import sys
-import os
 import argparse
 import json
+import os
+import sys
 import time
-from pathlib import Path
-from datetime import datetime
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
@@ -48,11 +48,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.llm.providers import (
-    get_provider,
-    ProviderType,
-    ProviderConfig,
     Message,
     OpenRouterProvider,
+    ProviderConfig,
+    ProviderType,
+    get_provider,
 )
 
 # Default config file locations
@@ -414,14 +414,14 @@ class LongOutputGenerator:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/llm/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="OpenRouter Long Output Generator - Extended Content Creation",

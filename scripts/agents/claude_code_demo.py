@@ -19,11 +19,16 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.agents.exceptions import AgentConfigurationError
+
+from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_success, print_error, print_info,
-    print_section, print_warning
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 
@@ -136,13 +141,13 @@ def demo_api_methods(client: ClaudeClient) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()

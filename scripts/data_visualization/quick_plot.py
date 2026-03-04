@@ -17,8 +17,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 import csv
+import json
 
 
 def load_data(file_path: str) -> tuple:
@@ -31,7 +31,7 @@ def load_data(file_path: str) -> tuple:
     suffix = path.suffix.lower()
 
     if suffix == ".csv":
-        with open(path, "r") as f:
+        with open(path) as f:
             reader = csv.DictReader(f)
             rows = list(reader)
             if not rows:
@@ -40,7 +40,7 @@ def load_data(file_path: str) -> tuple:
             return headers, rows
 
     elif suffix == ".json":
-        with open(path, "r") as f:
+        with open(path) as f:
             data = json.load(f)
             if isinstance(data, list) and data:
                 headers = list(data[0].keys())
@@ -77,7 +77,7 @@ def create_text_plot(data: list, x_col: str, y_col: str, plot_type: str, width: 
         max_label_len = min(15, max(len(str(x)) for x in x_values))
         bar_width = width - max_label_len - 10
 
-        for x, y in zip(x_values, y_values):
+        for x, y in zip(x_values, y_values, strict=False):
             bar_len = int((y - min_y) / y_range * bar_width) if y_range > 0 else 0
             bar = "█" * bar_len
             label = str(x)[:max_label_len].ljust(max_label_len)
@@ -107,7 +107,7 @@ def create_text_plot(data: list, x_col: str, y_col: str, plot_type: str, width: 
             x_min, x_max = min(x_nums), max(x_nums)
             x_range = x_max - x_min if x_max != x_min else 1
 
-            for x, y in zip(x_nums, y_values):
+            for x, y in zip(x_nums, y_values, strict=False):
                 col = int((x - x_min) / x_range * (width - 1)) if x_range > 0 else width // 2
                 row = int((1 - (y - min_y) / y_range) * (height - 1)) if y_range > 0 else height // 2
                 col = max(0, min(width - 1, col))
@@ -127,14 +127,14 @@ def create_text_plot(data: list, x_col: str, y_col: str, plot_type: str, width: 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_visualization" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/data_visualization/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/data_visualization/config.yaml")
 
     parser = argparse.ArgumentParser(description="Create quick plots from data files")
     parser.add_argument("data_file", help="CSV or JSON data file")

@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import subprocess
 import json as json_lib
+import subprocess
 
 
 def run_command(cmd: list) -> tuple:
@@ -93,14 +93,14 @@ def get_images() -> list:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "containerization" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/containerization/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/containerization/config.yaml")
 
     parser = argparse.ArgumentParser(description="Check container status")
     parser.add_argument("--all", "-a", action="store_true", help="Show all containers")

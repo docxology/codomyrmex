@@ -8,8 +8,8 @@ Demonstrates core document capabilities:
 - Document transformation and search
 """
 
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -19,19 +19,25 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.documents import (
-    read_document,
-    write_document,
     Document,
     DocumentFormat,
     convert_document,
-    merge_documents,
-    split_document,
     create_index,
     index_document,
-    search_documents
+    merge_documents,
+    read_document,
+    search_documents,
+    split_document,
+    write_document,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     setup_logging()

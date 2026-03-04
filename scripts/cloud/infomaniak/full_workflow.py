@@ -39,9 +39,9 @@ def get_clients():
     """Get all required clients."""
     from codomyrmex.cloud.infomaniak import (
         InfomaniakComputeClient,
-        InfomaniakVolumeClient,
         InfomaniakNetworkClient,
         InfomaniakS3Client,
+        InfomaniakVolumeClient,
     )
 
     return {
@@ -109,7 +109,7 @@ def deploy_infrastructure(clients, name: str,
                     router["id"],
                     resources["subnet"]
                 )
-                print(f"   ✅ Attached subnet to router")
+                print("   ✅ Attached subnet to router")
 
         # 3. Create Security Group
         print("\n🛡️  Step 3: Creating Security Group...")
@@ -130,7 +130,7 @@ def deploy_infrastructure(clients, name: str,
                 port_range_max=22,
                 remote_ip_prefix="0.0.0.0/0"
             )
-            print(f"   ✅ Added SSH rule (port 22)")
+            print("   ✅ Added SSH rule (port 22)")
 
             # Add HTTP rule
             clients["network"].add_security_group_rule(
@@ -141,7 +141,7 @@ def deploy_infrastructure(clients, name: str,
                 port_range_max=80,
                 remote_ip_prefix="0.0.0.0/0"
             )
-            print(f"   ✅ Added HTTP rule (port 80)")
+            print("   ✅ Added HTTP rule (port 80)")
 
             # Add HTTPS rule
             clients["network"].add_security_group_rule(
@@ -152,7 +152,7 @@ def deploy_infrastructure(clients, name: str,
                 port_range_max=443,
                 remote_ip_prefix="0.0.0.0/0"
             )
-            print(f"   ✅ Added HTTPS rule (port 443)")
+            print("   ✅ Added HTTPS rule (port 443)")
 
         # 4. Create SSH Keypair
         print("\n🔑 Step 4: Creating SSH Keypair...")
@@ -197,17 +197,17 @@ def deploy_infrastructure(clients, name: str,
         if instance:
             resources["instance"] = instance["id"]
             print(f"   ✅ Instance: {instance['id']}")
-            print(f"   ⏳ Waiting for instance to become ACTIVE...")
+            print("   ⏳ Waiting for instance to become ACTIVE...")
 
             # Wait for instance
             for _ in range(30):
                 time.sleep(5)
                 inst = clients["compute"].get_instance(instance["id"])
                 if inst and inst["status"] == "ACTIVE":
-                    print(f"   ✅ Instance is ACTIVE")
+                    print("   ✅ Instance is ACTIVE")
                     break
                 elif inst and inst["status"] == "ERROR":
-                    print(f"   ❌ Instance failed")
+                    print("   ❌ Instance failed")
                     break
 
         # 7. Allocate and Assign Floating IP
@@ -223,7 +223,7 @@ def deploy_infrastructure(clients, name: str,
                 # Get instance port
                 inst = clients["compute"].get_instance(resources["instance"])
                 if inst and inst.get("addresses"):
-                    for net_name, addrs in inst["addresses"].items():
+                    for _net_name, addrs in inst["addresses"].items():
                         for addr in addrs:
                             port_id = addr.get("port_id")
                             if port_id:
@@ -231,7 +231,7 @@ def deploy_infrastructure(clients, name: str,
                                     fip["id"],
                                     port_id
                                 )
-                                print(f"   ✅ Associated with instance")
+                                print("   ✅ Associated with instance")
                                 break
 
         # 8. Create Volume
@@ -243,14 +243,14 @@ def deploy_infrastructure(clients, name: str,
         if volume:
             resources["volume"] = volume["id"]
             print(f"   ✅ Volume: {volume['id']} ({volume_size}GB)")
-            print(f"   ⏳ Waiting for volume to become available...")
+            print("   ⏳ Waiting for volume to become available...")
 
             # Wait for volume
             for _ in range(12):
                 time.sleep(5)
                 vol = clients["volume"].get_volume(volume["id"])
                 if vol and vol["status"] == "available":
-                    print(f"   ✅ Volume is available")
+                    print("   ✅ Volume is available")
 
                     # Attach to instance
                     if resources.get("instance"):
@@ -258,7 +258,7 @@ def deploy_infrastructure(clients, name: str,
                             volume["id"],
                             resources["instance"]
                         )
-                        print(f"   ✅ Attached to instance")
+                        print("   ✅ Attached to instance")
                     break
 
         # 9. Create S3 Bucket
@@ -304,56 +304,56 @@ def teardown_infrastructure(clients, name: str):
 
     # Delete in reverse order
     if resources.get("bucket"):
-        print(f"\n   Deleting S3 bucket...")
+        print("\n   Deleting S3 bucket...")
         clients["s3"].delete_bucket(resources["bucket"])
-        print(f"   ✅ Deleted bucket")
+        print("   ✅ Deleted bucket")
 
     if resources.get("volume"):
-        print(f"\n   Detaching and deleting volume...")
+        print("\n   Detaching and deleting volume...")
         clients["volume"].detach_volume(resources["volume"])
         time.sleep(5)
         clients["volume"].delete_volume(resources["volume"])
-        print(f"   ✅ Deleted volume")
+        print("   ✅ Deleted volume")
 
     if resources.get("floating_ip"):
-        print(f"\n   Releasing floating IP...")
+        print("\n   Releasing floating IP...")
         clients["network"].release_floating_ip(resources["floating_ip"])
-        print(f"   ✅ Released floating IP")
+        print("   ✅ Released floating IP")
 
     if resources.get("instance"):
-        print(f"\n   Deleting instance...")
+        print("\n   Deleting instance...")
         clients["compute"].delete_instance(resources["instance"])
-        print(f"   ✅ Deleted instance")
+        print("   ✅ Deleted instance")
 
     if resources.get("keypair"):
-        print(f"\n   Deleting keypair...")
+        print("\n   Deleting keypair...")
         clients["compute"].delete_keypair(resources["keypair"])
-        print(f"   ✅ Deleted keypair")
+        print("   ✅ Deleted keypair")
 
     if resources.get("router"):
-        print(f"\n   Removing router interfaces and deleting...")
+        print("\n   Removing router interfaces and deleting...")
         if resources.get("subnet"):
             clients["network"].remove_router_interface(
                 resources["router"],
                 resources["subnet"]
             )
         clients["network"].delete_router(resources["router"])
-        print(f"   ✅ Deleted router")
+        print("   ✅ Deleted router")
 
     if resources.get("security_group"):
-        print(f"\n   Deleting security group...")
+        print("\n   Deleting security group...")
         time.sleep(5)  # Wait for instance to be fully deleted
         clients["network"].delete_security_group(resources["security_group"])
-        print(f"   ✅ Deleted security group")
+        print("   ✅ Deleted security group")
 
     if resources.get("network"):
-        print(f"\n   Deleting network...")
+        print("\n   Deleting network...")
         clients["network"].delete_network(resources["network"])
-        print(f"   ✅ Deleted network")
+        print("   ✅ Deleted network")
 
     # Remove state file
     state_file.unlink()
-    print(f"\n✅ Teardown complete")
+    print("\n✅ Teardown complete")
 
 
 def check_status(clients, name: str):
@@ -388,14 +388,14 @@ def check_status(clients, name: str):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cloud" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cloud/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Full Workflow")
 

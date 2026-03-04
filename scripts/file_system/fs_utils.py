@@ -7,8 +7,8 @@ Usage:
     python fs_utils.py <command> [options]
 """
 
-import sys
 import argparse
+import sys
 from pathlib import Path
 
 # Add src to sys.path for local development
@@ -29,14 +29,14 @@ def format_size(bytes: int) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "file_system" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/file_system/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/file_system/config.yaml")
 
     parser = argparse.ArgumentParser(description="Codomyrmex File System Utilities")
     subparsers = parser.add_subparsers(dest="command")

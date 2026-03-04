@@ -8,8 +8,8 @@ Phase 2: Defense & Market
 Phase 3: Privacy
 """
 
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).parent.parent
@@ -40,14 +40,14 @@ def run_script(script_name: str) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "verification" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/verification/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/verification/config.yaml")
 
     print("=== Secure Cognitive Agent - Full System Verification ===")
 

@@ -9,10 +9,10 @@ Usage:
     uv run python scripts/agents/orchestrate_with_ollama.py
 """
 
-import sys
-import os
-from pathlib import Path
 import logging
+import os
+import sys
+from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
@@ -22,7 +22,13 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.llm.ollama import OllamaManager
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error, print_warning
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
+)
 
 # Import the demo main function
 # We need to add the current dir to path to import sibling scripts if not using package relative imports
@@ -35,17 +41,17 @@ except ImportError:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()
-    logger = logging.getLogger("orchestrator")
+    logging.getLogger("orchestrator")
 
     print_info("Initializing Real Ollama Orchestration...")
 

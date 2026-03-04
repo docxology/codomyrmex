@@ -19,7 +19,6 @@ except ImportError:
 import argparse
 import subprocess
 
-
 # Conventional commit types
 COMMIT_TYPES = {
     "feat": "A new feature",
@@ -99,7 +98,7 @@ def infer_type(files: list) -> str:
     # Check for common patterns
     if any("test" in p for p in paths):
         return "test"
-    if any("readme" in p or "docs/" in p or ".md" in e for p, e in zip(paths, extensions)):
+    if any("readme" in p or "docs/" in p or ".md" in e for p, e in zip(paths, extensions, strict=False)):
         return "docs"
     if any("ci" in p or ".github" in p or "workflow" in p for p in paths):
         return "ci"
@@ -122,14 +121,14 @@ def build_commit_message(commit_type: str, scope: str, message: str, breaking: b
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "git_operations" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/git_operations/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/git_operations/config.yaml")
 
     parser = argparse.ArgumentParser(description="Build conventional commit messages")
     parser.add_argument("--type", "-t", choices=list(COMMIT_TYPES.keys()), default=None,
@@ -186,7 +185,7 @@ def main():
     # Build commit message
     full_message = build_commit_message(commit_type, scope, args.message, args.breaking)
 
-    print(f"\n📝 Commit message:")
+    print("\n📝 Commit message:")
     print(f"   {full_message}")
 
     if args.commit:

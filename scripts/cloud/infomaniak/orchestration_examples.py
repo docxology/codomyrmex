@@ -159,7 +159,7 @@ def validate_template(client, template_path: str):
     print(f"\n🔍 Validating template: {template_path}")
 
     try:
-        with open(template_path, 'r') as f:
+        with open(template_path) as f:
             template = f.read()
     except Exception as e:
         print(f"   ❌ Failed to read template: {e}")

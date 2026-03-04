@@ -15,13 +15,20 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 import asyncio
+
 from codomyrmex.orchestrator import Workflow
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+
 
 async def main() -> int:
     setup_logging()
-    print_info(f"Running Basic orchestrator Usage...")
+    print_info("Running Basic orchestrator Usage...")
 
     # 1. Workflow Creation
     print_info("Creating a real orchestration workflow...")
@@ -52,7 +59,7 @@ async def main() -> int:
         # Actually, the provided Workflow doesn't seem to pass results down.
         # Let's check _execute_task again.
 
-        results = await workflow.run()
+        await workflow.run()
         print_success(f"Workflow '{workflow.name}' completed.")
         for name, task in workflow.tasks.items():
             print_info(f"  Task '{name}': {task.status.value}")
@@ -61,19 +68,19 @@ async def main() -> int:
     except Exception as e:
         print_error(f"Workflow execution failed: {e}")
 
-    print_success(f"Basic orchestrator Usage completed successfully")
+    print_success("Basic orchestrator Usage completed successfully")
     return 0
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

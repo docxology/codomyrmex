@@ -1,7 +1,8 @@
 """Test configuration and fixtures for test_project."""
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture
@@ -22,10 +23,10 @@ from dataclasses import dataclass
 @dataclass
 class SampleClass:
     """A sample dataclass."""
-    
+
     name: str
     value: int = 0
-    
+
     def process(self) -> str:
         """Process and return formatted value."""
         return f"{self.name}: {self.value}"
@@ -60,14 +61,14 @@ def main():
 if __name__ == "__main__":
     main()
 ''')
-    
+
     # Create utils.py
     (tmp_path / "utils.py").write_text('''"""Utility functions."""
 
 def helper(x):
     return x * 2
 ''')
-    
+
     # Create subdir
     subdir = tmp_path / "subdir"
     subdir.mkdir()
@@ -76,7 +77,7 @@ def helper(x):
 class SubClass:
     pass
 ''')
-    
+
     return tmp_path
 
 

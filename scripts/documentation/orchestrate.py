@@ -5,8 +5,8 @@ Utilizes the documentation module's API to perform a full audit and quality repo
 """
 
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # Ensure codomyrmex is in path
 project_root = Path(__file__).resolve().parent.parent.parent
@@ -14,18 +14,19 @@ if str(project_root / "src") not in sys.path:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.documentation import (
-    audit_documentation,
-    generate_quality_report,
     DocumentationConsistencyChecker,
-    check_doc_environment
+    audit_documentation,
+    check_doc_environment,
+    generate_quality_report,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_section,
+    print_error,
     print_info,
+    print_section,
     print_success,
     print_warning,
-    print_error
 )
+
 
 def run_orchestration():
     print_section("Documentation Orchestrator")
@@ -80,14 +81,14 @@ def run_orchestration():
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/documentation/config.yaml")
 
 if __name__ == "__main__":
     run_orchestration()

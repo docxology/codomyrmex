@@ -23,34 +23,35 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import (
-    setup_logging,
-    print_success,
-    print_info,
-    print_error,
-    print_section
-)
 from codomyrmex.encryption import (
     AESGCMEncryptor,
+    EncryptionError,
     Encryptor,
-    Signer,
     KeyManager,
-    encrypt_file,
+    Signer,
     decrypt_file,
-    hash_data,
+    encrypt_file,
     generate_key,
-    EncryptionError
+    hash_data,
 )
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_section,
+    print_success,
+    setup_logging,
+)
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "encryption" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()
@@ -66,7 +67,7 @@ def main():
         # AAD (Additional Authenticated Data)
         aad = b"context-v1"
         ciphertext = gcm.encrypt(data, associated_data=aad)
-        print_success(f"  AES-GCM encryption successful.")
+        print_success("  AES-GCM encryption successful.")
 
         decrypted = gcm.decrypt(ciphertext, associated_data=aad)
         if decrypted == data:
@@ -151,11 +152,11 @@ def main():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", DeprecationWarning)
                 if encrypt_file(input_file, enc_file, key):
-                    print_success(f"  File encrypted via AES-CBC (legacy).")
+                    print_success("  File encrypted via AES-CBC (legacy).")
 
                 dec_file = test_dir / "secret.dec.txt"
                 if decrypt_file(enc_file, dec_file, key):
-                    print_success(f"  File decrypted.")
+                    print_success("  File decrypted.")
                     if dec_file.read_text() == "This is a secret file content.":
                         print_success("  Decrypted content matches original.")
     except Exception as e:

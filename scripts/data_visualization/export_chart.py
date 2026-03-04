@@ -17,8 +17,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 import csv
+import json
 
 
 def load_data(file_path: str) -> tuple:
@@ -27,13 +27,13 @@ def load_data(file_path: str) -> tuple:
     suffix = path.suffix.lower()
 
     if suffix == ".csv":
-        with open(path, "r") as f:
+        with open(path) as f:
             reader = csv.DictReader(f)
             rows = list(reader)
             headers = list(rows[0].keys()) if rows else []
             return headers, rows
     elif suffix == ".json":
-        with open(path, "r") as f:
+        with open(path) as f:
             data = json.load(f)
             if isinstance(data, list) and data:
                 return list(data[0].keys()), data
@@ -64,7 +64,7 @@ def create_svg_bar_chart(data: list, x_col: str, y_col: str, width: int = 600, h
         f'<line x1="50" y1="{height-50}" x2="{width-30}" y2="{height-50}" class="axis"/>',
     ]
 
-    for i, (x, y) in enumerate(zip(x_values, y_values)):
+    for i, (x, y) in enumerate(zip(x_values, y_values, strict=False)):
         bar_height = (y / max_y) * (height - 120) if max_y > 0 else 0
         x_pos = 60 + i * (bar_width + 5)
         y_pos = height - 50 - bar_height
@@ -123,14 +123,14 @@ def create_html_chart(data: list, x_col: str, y_col: str, chart_type: str = "bar
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_visualization" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/data_visualization/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/data_visualization/config.yaml")
 
     parser = argparse.ArgumentParser(description="Export data visualizations")
     parser.add_argument("data_file", help="CSV or JSON data file")

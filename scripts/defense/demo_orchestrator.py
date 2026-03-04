@@ -4,7 +4,16 @@ Demonstrates the use of ActiveDefense, RabbitHole, and the combined Defense engi
 """
 
 import asyncio
-from codomyrmex.defense import Defense, ActiveDefense, RabbitHole, DetectionRule, Severity, ResponseAction
+
+from codomyrmex.defense import (
+    ActiveDefense,
+    Defense,
+    DetectionRule,
+    RabbitHole,
+    ResponseAction,
+    Severity,
+)
+
 
 async def demo_defense_pipeline():
     print("--- 1. Defense Engine (Rate Limiting + Rules) ---")
@@ -72,14 +81,14 @@ async def demo_defense_pipeline():
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "defense" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/defense/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/defense/config.yaml")
 
 if __name__ == "__main__":
     asyncio.run(demo_defense_pipeline())

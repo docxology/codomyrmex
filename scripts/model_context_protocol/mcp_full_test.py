@@ -25,8 +25,7 @@ import asyncio
 import json
 import tempfile
 import time
-from typing import Dict, List, Any
-
+from typing import Any
 
 # ============================================================================
 # TEST INFRASTRUCTURE
@@ -37,7 +36,7 @@ class TestRunner:
 
     def __init__(self, verbose: bool = False):
         self.verbose = verbose
-        self.results: Dict[str, List[Dict]] = {}
+        self.results: dict[str, list[dict]] = {}
         self.start_time = None
 
     def run_test(self, category: str, name: str, test_func):
@@ -80,7 +79,7 @@ class TestRunner:
 
             return False
 
-    def summary(self) -> Dict[str, Any]:
+    def summary(self) -> dict[str, Any]:
         """Generate test summary."""
         total = sum(len(tests) for tests in self.results.values())
         passed = sum(
@@ -138,9 +137,14 @@ class TestRunner:
 def run_tool_tests(runner: TestRunner):
     """Test functional MCP tools."""
     from codomyrmex.model_context_protocol.tools import (
-        read_file, write_file, list_directory,
-        analyze_python_file, search_codebase,
-        run_shell_command, json_query, checksum_file,
+        analyze_python_file,
+        checksum_file,
+        json_query,
+        list_directory,
+        read_file,
+        run_shell_command,
+        search_codebase,
+        write_file,
     )
 
     print("\n📦 Testing MCP Tools...")
@@ -227,8 +231,9 @@ def run_tool_tests(runner: TestRunner):
 
 def run_server_tests(runner: TestRunner):
     """Test MCP server implementation."""
-    from codomyrmex.model_context_protocol import MCPServer
     from codomyrmex.model_context_protocol.testing import MockMCPClient
+
+    from codomyrmex.model_context_protocol import MCPServer
 
     print("\n🖥️  Testing MCP Server...")
 
@@ -308,7 +313,9 @@ def run_server_tests(runner: TestRunner):
 def run_validator_tests(runner: TestRunner):
     """Test MCP validators."""
     from codomyrmex.model_context_protocol.validators import (
-        SchemaValidator, MessageValidator, ToolCallValidator
+        MessageValidator,
+        SchemaValidator,
+        ToolCallValidator,
     )
 
     print("\n✅ Testing Validators...")
@@ -405,7 +412,9 @@ def run_validator_tests(runner: TestRunner):
 def run_discovery_tests(runner: TestRunner):
     """Test MCP discovery."""
     from codomyrmex.model_context_protocol.discovery import (
-        SpecificationScanner, ToolCatalog, DiscoveredTool
+        DiscoveredTool,
+        SpecificationScanner,
+        ToolCatalog,
     )
 
     print("\n🔍 Testing Discovery...")
@@ -461,9 +470,10 @@ def run_discovery_tests(runner: TestRunner):
 
 def run_integration_tests(runner: TestRunner):
     """Test end-to-end MCP workflows."""
-    from codomyrmex.model_context_protocol import MCPServer
     from codomyrmex.model_context_protocol.testing import MockMCPClient
-    from codomyrmex.model_context_protocol.tools import read_file, checksum_file
+
+    from codomyrmex.model_context_protocol import MCPServer
+    from codomyrmex.model_context_protocol.tools import checksum_file, read_file
 
     print("\n🔗 Testing Integration...")
 
@@ -527,14 +537,14 @@ def run_integration_tests(runner: TestRunner):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "model_context_protocol" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/model_context_protocol/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(description="MCP Comprehensive Test Suite")
     parser.add_argument("--category", "-c", help="Run specific category")

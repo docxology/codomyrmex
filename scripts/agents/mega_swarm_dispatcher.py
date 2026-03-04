@@ -44,7 +44,7 @@ def get_valid_modules() -> list[str]:
             if item.is_dir() and item.name not in EXCLUDES:
                 modules.add(item.name)
 
-    return sorted(list(modules))
+    return sorted(modules)
 
 def dispatch_jules(module_name: str) -> None:
     """Launch a Jules agent for the given module."""

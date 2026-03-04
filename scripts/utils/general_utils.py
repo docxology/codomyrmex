@@ -16,9 +16,9 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import uuid
 import hashlib
 import re
+import uuid
 from datetime import datetime
 
 
@@ -74,14 +74,14 @@ def count_words(text: str) -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "utils" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/utils/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/utils/config.yaml")
 
     parser = argparse.ArgumentParser(description="General utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -120,7 +120,7 @@ def main():
         return 0
 
     if args.command == "uuid":
-        print(f"🆔 UUID(s):\n")
+        print("🆔 UUID(s):\n")
         for _ in range(args.count):
             print(f"   {generate_uuid()}")
 

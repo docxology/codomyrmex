@@ -5,17 +5,19 @@ Demonstrates change detection, snapshots, drift analysis, auditing, and watching
 """
 
 import time
+
 from codomyrmex.config_monitoring import ConfigurationMonitor, ConfigWatcher
+
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "config_monitoring" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     workspace = Path("config_monitoring_demo")

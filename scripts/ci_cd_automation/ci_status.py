@@ -80,14 +80,14 @@ def main():
     parser.add_argument("--provider", "-p", choices=["github", "gitlab", "all"], default="all")
     parser.add_argument("--list-workflows", "-l", action="store_true", help="List workflows")
     parser.add_argument("--context", "-c", action="store_true", help="Show CI context")
-    args = parser.parse_args()
+    parser.parse_args()
 
     print("🔄 CI/CD Status\n")
 
     # Git context
     git_info = get_git_info()
     if git_info:
-        print(f"📌 Current context:")
+        print("📌 Current context:")
         print(f"   Branch: {git_info.get('branch', 'unknown')}")
         print(f"   Commit: {git_info.get('commit', 'unknown')}")
         print(f"   Message: {git_info.get('message', '')}")

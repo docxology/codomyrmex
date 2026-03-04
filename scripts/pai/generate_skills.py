@@ -17,10 +17,10 @@ Usage::
     --list-categories     Show all discovered categories and exit
 """
 
-import re
-import sys
 import argparse
+import re
 import subprocess
+import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -467,7 +467,7 @@ def _build_common_operations(tools: list[dict[str, Any]], skill_name: str) -> st
         name = t["name"]
         # Build a simple call with placeholder args from schema
         schema = t.get("input_schema", {})
-        props = schema.get("properties", {}) if isinstance(schema, dict) else {}
+        schema.get("properties", {}) if isinstance(schema, dict) else {}
         required = schema.get("required", []) if isinstance(schema, dict) else []
         if required:
             args = ", ".join(f'{k}="..."' for k in required[:3])
@@ -526,10 +526,10 @@ def render_skill_md(
     summary = f"{skill_name} operations using Codomyrmex modules: {module_str}."
 
     parts = [
-        f"---",
+        "---",
         f"name: {skill_name}",
         f"description: {description}",
-        f"---",
+        "---",
         f"# {skill_name}",
         "",
         summary,
@@ -602,7 +602,7 @@ def write_skill(
 
     if skill_path.exists() and not force:
         # Merge: read existing, preserve keep blocks, regenerate rest
-        existing = skill_path.read_text(encoding="utf-8")
+        skill_path.read_text(encoding="utf-8")
         # Content was already rendered with keep blocks — just write it
         print(f"  [merge] {skill_path}")
     else:
@@ -754,14 +754,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "pai" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/pai/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/pai/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

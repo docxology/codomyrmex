@@ -30,11 +30,11 @@ def print_table(headers: list, rows: list, widths: list = None):
     if not widths:
         widths = [max(len(str(r[i])) for r in [headers] + rows) + 2 for i in range(len(headers))]
 
-    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths))
+    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths, strict=False))
     print(header_row)
     print("-" * sum(widths))
     for row in rows:
-        print("".join(str(c).ljust(w) for c, w in zip(row, widths)))
+        print("".join(str(c).ljust(w) for c, w in zip(row, widths, strict=False)))
 
 
 def print_progress(current: int, total: int, width: int = 40):
@@ -61,14 +61,14 @@ def colorize(text: str, color: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/cli/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/cli/config.yaml")
 
     parser = argparse.ArgumentParser(description="CLI utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -98,7 +98,7 @@ def main():
 
     if args.command == "info":
         cols, rows = get_terminal_size()
-        print(f"🖥️  Terminal Info:\n")
+        print("🖥️  Terminal Info:\n")
         print(f"   Size: {cols}x{rows}")
         print(f"   Python: {sys.version.split()[0]}")
         print(f"   Platform: {sys.platform}")

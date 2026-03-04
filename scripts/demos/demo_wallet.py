@@ -8,15 +8,20 @@ Demonstrates:
 3. Key Rotation.
 """
 
+import hashlib
 import sys
 from pathlib import Path
-import hashlib
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
-from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, RitualStep
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
+from codomyrmex.wallet import NaturalRitualRecovery, RitualStep, WalletManager
 
 
 def demo_self_custody():
@@ -73,13 +78,13 @@ def demo_recovery():
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()

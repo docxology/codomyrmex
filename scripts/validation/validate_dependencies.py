@@ -36,7 +36,7 @@ def parse_pyproject(path: Path) -> dict[str, Any]:
 
     # Optional dependencies
     optional_deps = project.get("optional-dependencies", {})
-    for group, group_deps in optional_deps.items():
+    for _group, group_deps in optional_deps.items():
         for dep in group_deps:
             name = dep.split("[")[0].split(">=")[0].split("==")[0].split("<")[0].strip()
             deps[name.lower()] = dep
@@ -86,7 +86,7 @@ def validate_dependencies(repo_root: Path) -> int:
     if not pyproject_path.exists():
         issues.append("pyproject.toml not found")
     else:
-        print(f"✅ Found pyproject.toml")
+        print("✅ Found pyproject.toml")
         pyproject_deps = parse_pyproject(pyproject_path)
         print(f"   Found {len(pyproject_deps)} dependencies")
 
@@ -97,7 +97,7 @@ def validate_dependencies(repo_root: Path) -> int:
     # Check for requirements.txt (optional)
     requirements = repo_root / "requirements.txt"
     if requirements.exists():
-        print(f"✅ Found requirements.txt")
+        print("✅ Found requirements.txt")
         req_deps = parse_requirements(requirements)
         print(f"   Found {len(req_deps)} dependencies")
 
@@ -115,14 +115,14 @@ def validate_dependencies(repo_root: Path) -> int:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "validation" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/validation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/validation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Validate dependency consistency")
     parser.add_argument(

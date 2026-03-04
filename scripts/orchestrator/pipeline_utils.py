@@ -114,7 +114,7 @@ def main() -> int:
         errors = validate_pipeline(pipeline)
 
         if errors:
-            print(f"❌ Validation failed:\n")
+            print("❌ Validation failed:\n")
             for e in errors:
                 print(f"   - {e}")
             return 1
@@ -164,14 +164,14 @@ def main() -> int:
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "orchestrator" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/orchestrator/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/orchestrator/config.yaml")
 
 if __name__ == "__main__":
     sys.exit(main())

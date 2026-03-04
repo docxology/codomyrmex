@@ -7,8 +7,8 @@ Remediates documentation gaps:
 2. Generates missing RASP files (README, AGENTS, SPEC, PAI) with template content.
 """
 
-import os
 import argparse
+import os
 from pathlib import Path
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
@@ -107,14 +107,14 @@ def remediate_module(path: Path, src_dir: Path):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/docs/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/docs/config.yaml")
 
     parser = argparse.ArgumentParser(description="Remediate documentation gaps.")
     parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
@@ -128,7 +128,7 @@ def main():
         return
 
     count = 0
-    for root, dirs, files in os.walk(src_dir):
+    for root, _dirs, _files in os.walk(src_dir):
         root_path = Path(root)
 
         # Skip hidden directories

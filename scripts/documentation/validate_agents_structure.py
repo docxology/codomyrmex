@@ -14,7 +14,6 @@ import sys
 from pathlib import Path
 from typing import NamedTuple
 
-
 REQUIRED_SECTIONS = [
     "Purpose",
     "Key Files",
@@ -158,14 +157,14 @@ def validate_agents_structure(repo_root: Path, output_dir: Path = None,
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
-    config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/documentation/config.yaml")
+        with open(config_path) as f:
+            yaml.safe_load(f) or {}
+            print("Loaded config from config/documentation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Validate AGENTS.md structure")
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())

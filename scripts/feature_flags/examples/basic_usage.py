@@ -12,7 +12,7 @@ Usage:
 
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # Setup project root and src path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -20,6 +20,7 @@ sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
 
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
@@ -51,7 +52,7 @@ class FeatureFlagsScript(ScriptBase):
             help="Percentage for rollout tests (default: 25.0)"
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute feature flags demonstrations."""
         results = {
             "demo_steps": [],
@@ -121,14 +122,15 @@ class FeatureFlagsScript(ScriptBase):
 
 
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "feature_flags" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/feature_flags/config.yaml")
+            print("Loaded config from config/feature_flags/config.yaml")
 
 if __name__ == "__main__":
     script = FeatureFlagsScript()
