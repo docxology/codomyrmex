@@ -26,6 +26,7 @@ def get_config(key: str, repository_path: str = None, global_config: bool = Fals
             capture_output=True,
             text=True,
             check=True,
+            timeout=30,
         )
 
         value = result.stdout.strip()
@@ -61,6 +62,7 @@ def set_config(
             capture_output=True,
             text=True,
             check=True,
+            timeout=30,
         )
 
         logger.info(f"Config '{key}' set successfully")

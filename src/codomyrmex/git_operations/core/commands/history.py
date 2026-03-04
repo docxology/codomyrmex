@@ -30,6 +30,7 @@ def get_commit_history(
             capture_output=True,
             text=True,
             check=True,
+            timeout=60,
         )
 
         commits = []
@@ -70,6 +71,7 @@ def get_blame(file_path: str, repository_path: str = None) -> str:
             capture_output=True,
             text=True,
             check=True,
+            timeout=60,
         )
         return result.stdout
     except subprocess.CalledProcessError as e:
@@ -96,6 +98,7 @@ def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
             capture_output=True,
             text=True,
             check=True,
+            timeout=60,
         )
 
         parts = result.stdout.strip().split("|", 5)
@@ -178,6 +181,7 @@ def get_commit_history_filtered(
             capture_output=True,
             text=True,
             check=True,
+            timeout=60,
         )
 
         commits = []

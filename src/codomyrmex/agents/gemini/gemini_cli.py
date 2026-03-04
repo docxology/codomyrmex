@@ -120,7 +120,7 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "--list-sessions"]
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to list sessions: {e}") from e
@@ -132,7 +132,7 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "--delete-session", str(session_identifier)]
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to delete session {session_identifier}: {e}") from e
@@ -144,7 +144,7 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "--list-extensions"]
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to list extensions: {e}") from e
@@ -156,7 +156,7 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "mcp"] + mcp_args
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to manage mcp with args {mcp_args}: {e}") from e
@@ -168,7 +168,7 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "extensions"] + ext_args
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to manage extensions with args {ext_args}: {e}") from e

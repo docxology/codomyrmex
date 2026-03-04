@@ -191,7 +191,7 @@ def run_command_stream_output(command_parts, cwd):
             for line in iter(process.stdout.readline, ""):
                 logger.info(line.strip())
 
-        process.wait()
+        process.wait(timeout=300)
 
         if process.returncode == 0:
             logger.info(f"Command '{' '.join(command_parts)}' executed successfully.")
@@ -252,7 +252,7 @@ def start_dev_server(package_manager="npm"):
         logger.info(
             f"Try opening your browser at {EFFECTIVE_DOCS_URL} if it doesn't open automatically."
         )
-        subprocess.run(cmd, cwd=DOCUSAURUS_ROOT_DIR, check=False)
+        subprocess.run(cmd, cwd=DOCUSAURUS_ROOT_DIR, check=False, timeout=300)
         logger.info("Development server process finished or was stopped.")
         return True
     except FileNotFoundError:
@@ -343,7 +343,7 @@ def serve_static_site(package_manager="npm"):
         logger.info(
             f"Try opening your browser at {EFFECTIVE_DOCS_URL} if it doesn't open automatically."
         )
-        subprocess.run(cmd, cwd=DOCUSAURUS_ROOT_DIR, check=False)
+        subprocess.run(cmd, cwd=DOCUSAURUS_ROOT_DIR, check=False, timeout=300)
         logger.info("Static site server process finished or was stopped.")
         return True
     except FileNotFoundError:

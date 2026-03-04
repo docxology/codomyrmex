@@ -15,7 +15,7 @@ def check_git_availability() -> bool:
     """Check if Git is available on the system."""
     try:
         result = subprocess.run(
-            ["git", "--version"], capture_output=True, text=True, check=True
+            ["git", "--version"], capture_output=True, text=True, check=True, timeout=60
         )
         version = result.stdout.strip()
         logger.debug(f"Git is available: {version}")
@@ -40,6 +40,7 @@ def is_git_repository(repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=False,
+            timeout=60,
         )
         return result.returncode == 0
     except Exception as e:
@@ -61,7 +62,7 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
         os.makedirs(repository_path, exist_ok=True)
 
         subprocess.run(
-            ["git", "init"], cwd=repository_path, capture_output=True, text=True, check=True
+            ["git", "init"], cwd=repository_path, capture_output=True, text=True, check=True, timeout=300
         )
 
         if initial_commit:
@@ -73,6 +74,7 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
                     capture_output=True,
                     text=True,
                     check=False,
+                    timeout=60,
                 )
                 has_commits = result.returncode == 0 and int(result.stdout.strip()) > 0
             except (ValueError, subprocess.SubprocessError):
@@ -85,7 +87,7 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
                     with open(readme_path, "w") as f:
                         f.write("# Project\n\nInitial commit.\n")
 
-                subprocess.run(["git", "add", "README.md"], cwd=repository_path, check=True)
+                subprocess.run(["git", "add", "README.md"], cwd=repository_path, check=True, timeout=60)
                 subprocess.run(
                     [
                         "git",
@@ -99,6 +101,7 @@ def initialize_git_repository(repository_path: str, initial_commit: bool = True)
                     ],
                     cwd=repository_path,
                     check=True,
+                    timeout=60,
                 )
 
         logger.info("Git repository initialized successfully")
@@ -124,7 +127,7 @@ def clone_repository(url: str, destination: str, branch: str = None) -> bool:
             cmd.extend(["-b", branch])
         cmd.extend([url, destination])
 
-        subprocess.run(cmd, capture_output=True, text=True, check=True)
+        subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=300)
 
         logger.info("Repository cloned successfully")
         return True
