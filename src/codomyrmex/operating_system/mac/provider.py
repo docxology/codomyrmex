@@ -11,7 +11,7 @@ import platform
 import re
 import subprocess
 
-from src.codomyrmex.operating_system.base import (
+from codomyrmex.operating_system.base import (
     DiskInfo,
     NetworkInfo,
     OSPlatform,
