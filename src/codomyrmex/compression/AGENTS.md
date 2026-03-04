@@ -72,6 +72,9 @@ assert len(compressed) < len(data)
 ### QATester Agent
 **Use Cases**: Verifying compression ratios and decompression correctness during VERIFY.
 
+## MCP Tooling
+Agents can access the module's capabilities using the provided MCP tools (`compression_compress_data`, `compression_decompress_data`, `compression_get_stats`). These tools are auto-discovered and ready to use without additional setup.
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

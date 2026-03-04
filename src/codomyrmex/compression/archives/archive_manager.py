@@ -85,5 +85,3 @@ class ArchiveManager:
         except Exception as e:
             logger.error(f"Archive extraction error: {e}")
             raise CompressionError(f"Failed to extract archive: {str(e)}") from e
-
-

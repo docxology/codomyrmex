@@ -120,7 +120,15 @@ class ParallelCompressor:
         data_list: list[bytes],
         on_progress: Callable[[int, int], None] | None = None,
     ) -> list[bytes]:
-        """Decompress a list of data blobs in parallel."""
+        """Decompress a list of data blobs in parallel.
+
+        Args:
+            data_list: List of compressed byte strings.
+            on_progress: Optional callback function indicating completion progress.
+
+        Returns:
+            List of decompressed byte strings in the original order.
+        """
         start = time.time()
         compressor = Compressor(self.format)
         total = len(data_list)
@@ -173,7 +181,15 @@ class ParallelCompressor:
         compressed_chunks: list[bytes],
         on_progress: Callable[[int, int], None] | None = None,
     ) -> bytes:
-        """Decompress chunks and merge back into a single byte string."""
+        """Decompress chunks and merge back into a single byte string.
+
+        Args:
+            compressed_chunks: List of compressed chunks to decompress and merge.
+            on_progress: Optional callback function.
+
+        Returns:
+            The single combined decompressed byte string.
+        """
         decompressed = self.decompress_batch(compressed_chunks, on_progress=on_progress)
         return b"".join(decompressed)
 

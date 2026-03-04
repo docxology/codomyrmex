@@ -75,6 +75,7 @@ graph TD
 - `documents/` - Document compression
 - `deployment/` - Build artifact compression
 - `cache/` - Cache compression
+- `mcp_tools.py` - Auto-discovered MCP tools for data compression
 
 ## Quality Standards
 

@@ -345,19 +345,19 @@ __all__ = []
 
 
 def create_module_structure(
-    base_path: Path, 
-    name: str, 
-    description: str, 
+    base_path: Path,
+    name: str,
+    description: str,
     parent: str = None,
     dry_run: bool = False
 ) -> list:
     """Create the full module/submodule structure."""
     created_files = []
     module_path = base_path / name
-    
+
     if not dry_run:
         module_path.mkdir(parents=True, exist_ok=True)
-    
+
     files = {
         "README.md": generate_readme(name, description, parent),
         "AGENTS.md": generate_agents(name, description, parent),
@@ -365,7 +365,7 @@ def create_module_structure(
         "PAI.md": generate_pai(name, description, parent),
         "__init__.py": generate_init(name, description, parent),
     }
-    
+
     for filename, content in files.items():
         file_path = module_path / filename
         if not dry_run:
@@ -374,33 +374,33 @@ def create_module_structure(
                 created_files.append(str(file_path))
         else:
             created_files.append(f"[DRY RUN] Would create: {file_path}")
-    
+
     return created_files
 
 
 def create_script_structure(
     scripts_base: Path,
-    name: str, 
+    name: str,
     description: str,
     parent: str = None,
     dry_run: bool = False
 ) -> list:
     """Create corresponding script directory."""
     created_files = []
-    
+
     if parent:
         script_path = scripts_base / parent / name
     else:
         script_path = scripts_base / name
-    
+
     if not dry_run:
         script_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Construct components
     title = name.replace("_", " ").title()
     submod_type = "submodule" if parent else "module"
     parent_levels = "/.." if parent else ""
-    
+
     demo_script = f'''#!/usr/bin/env python3
 """
 {title} Demo Script
@@ -444,7 +444,7 @@ if __name__ == "__main__":
             created_files.append(str(demo_path))
     else:
         created_files.append(f"[DRY RUN] Would create: {demo_path}")
-    
+
     return created_files
 
 
@@ -452,18 +452,18 @@ def main() -> int:
     """Main execution."""
     setup_logging()
     dry_run = "--dry-run" in sys.argv
-    
+
     src_base = PROJECT_ROOT / "src" / "codomyrmex"
     scripts_base = PROJECT_ROOT / "scripts"
-    
+
     all_created = []
-    
+
     print("=" * 60)
     print_info("CODOMYRMEX MODULE SCAFFOLDING")
     print("=" * 60)
     if dry_run:
         print_info("DRY RUN MODE - No files will be created")
-    
+
     # Phase 1: Create submodules
     print_info("Phase 1: Creating Submodules")
     for parent, submodules in SUBMODULES.items():
@@ -471,7 +471,7 @@ def main() -> int:
         if not parent_path.exists():
             print_warning(f"Parent module not found: {parent}")
             continue
-            
+
         print(f"\n  {parent}/")
         for name, description in submodules:
             files = create_module_structure(parent_path, name, description, parent, dry_run)
@@ -479,7 +479,7 @@ def main() -> int:
             script_files = create_script_structure(scripts_base, name, description, parent, dry_run)
             all_created.extend(script_files)
             print_success(f"  {name}")
-    
+
     # Phase 2: Create new modules
     print_info("Phase 2: Creating New Modules")
     for name, description in NEW_MODULES:
@@ -488,17 +488,17 @@ def main() -> int:
         script_files = create_script_structure(scripts_base, name, description, None, dry_run)
         all_created.extend(script_files)
         print_success(f"  {name}")
-    
+
     # Summary
     print("\n" + "=" * 60)
     print_info(f"{'Would create' if dry_run else 'Created'} {len(all_created)} files")
     print("=" * 60)
-    
+
     if dry_run:
         print_info("Run without --dry-run to create files")
     else:
         print_success("All modules scaffolded successfully")
-    
+
     return 0
 
 

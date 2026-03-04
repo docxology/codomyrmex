@@ -26,6 +26,9 @@ class ZstdCompressor:
         Args:
             data: Raw bytes to compress.
             level: Optional compression level override (1-22).
+
+        Returns:
+            The compressed bytes.
         """
         if level is not None and level != self.level:
             ctx = zstd.ZstdCompressor(level=level)
@@ -33,5 +36,12 @@ class ZstdCompressor:
         return self.cctx.compress(data)
 
     def decompress(self, data: bytes) -> bytes:
-        """Decompress data using Zstd."""
+        """Decompress data using Zstd.
+
+        Args:
+            data: Compressed bytes.
+
+        Returns:
+            The decompressed bytes.
+        """
         return self.dctx.decompress(data)
