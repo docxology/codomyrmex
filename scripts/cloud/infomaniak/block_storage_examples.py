@@ -43,11 +43,11 @@ def list_volumes(client):
     """List all block storage volumes."""
     print("\n💾 Block Storage Volumes\n" + "=" * 50)
     volumes = client.list_volumes()
-    
+
     if not volumes:
         print("   No volumes found.")
         return
-    
+
     for vol in volumes:
         status_icon = "🟢" if vol["status"] == "available" else "🔵" if vol["status"] == "in-use" else "🔴"
         print(f"   {status_icon} {vol['name']} ({vol['size']}GB)")
@@ -65,11 +65,11 @@ def list_snapshots(client):
     """List volume snapshots."""
     print("\n📸 Volume Snapshots\n" + "=" * 50)
     snapshots = client.list_snapshots()
-    
+
     if not snapshots:
         print("   No snapshots found.")
         return
-    
+
     for snap in snapshots:
         status_icon = "✅" if snap["status"] == "available" else "⏳"
         print(f"   {status_icon} {snap['name']} ({snap['size']}GB)")
@@ -83,11 +83,11 @@ def list_backups(client):
     """List volume backups."""
     print("\n💿 Volume Backups\n" + "=" * 50)
     backups = client.list_backups()
-    
+
     if not backups:
         print("   No backups found.")
         return
-    
+
     for backup in backups:
         status_icon = "✅" if backup["status"] == "available" else "⏳"
         print(f"   {status_icon} {backup['name']} ({backup['size']}GB)")
@@ -101,14 +101,14 @@ def create_volume(client, name: str, size: int, volume_type: str = None, zone: s
     """Create a new volume."""
     print(f"\n💾 Creating volume: {name}")
     print(f"   Size: {size}GB")
-    
+
     result = client.create_volume(
         size=size,
         name=name,
         volume_type=volume_type,
         availability_zone=zone
     )
-    
+
     if result:
         print(f"\n   ✅ Created volume: {result['id']}")
         print(f"   Status: {result['status']}")
@@ -119,7 +119,7 @@ def create_volume(client, name: str, size: int, volume_type: str = None, zone: s
 def get_volume(client, volume_id: str):
     """Get volume details."""
     print(f"\n💾 Volume Details: {volume_id}\n" + "=" * 50)
-    
+
     vol = client.get_volume(volume_id)
     if vol:
         print(json.dumps(vol, indent=2, default=str))
@@ -131,13 +131,13 @@ def create_snapshot(client, volume_id: str, name: str, description: str = None):
     """Create a volume snapshot."""
     print(f"\n📸 Creating snapshot: {name}")
     print(f"   Volume: {volume_id}")
-    
+
     result = client.create_snapshot(
         volume_id=volume_id,
         name=name,
         description=description
     )
-    
+
     if result:
         print(f"\n   ✅ Created snapshot: {result['id']}")
     else:
@@ -149,14 +149,14 @@ def create_backup(client, volume_id: str, name: str, description: str = None, in
     print(f"\n💿 Creating backup: {name}")
     print(f"   Volume: {volume_id}")
     print(f"   Incremental: {incremental}")
-    
+
     result = client.create_backup(
         volume_id=volume_id,
         name=name,
         description=description,
         incremental=incremental
     )
-    
+
     if result:
         print(f"\n   ✅ Created backup: {result['id']}")
     else:
@@ -166,7 +166,7 @@ def create_backup(client, volume_id: str, name: str, description: str = None, in
 def extend_volume(client, volume_id: str, new_size: int):
     """Extend a volume."""
     print(f"\n📈 Extending volume {volume_id} to {new_size}GB")
-    
+
     if client.extend_volume(volume_id, new_size):
         print("   ✅ Volume extended successfully")
     else:
@@ -176,7 +176,7 @@ def extend_volume(client, volume_id: str, new_size: int):
 def delete_volume(client, volume_id: str, force: bool = False):
     """Delete a volume."""
     print(f"\n🗑️  Deleting volume: {volume_id}")
-    
+
     if client.delete_volume(volume_id, force=force):
         print("   ✅ Volume deleted")
     else:
@@ -195,24 +195,24 @@ def main():
             print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Block Storage Examples")
-    
+
     # List operations
     parser.add_argument("--list-volumes", action="store_true", help="List volumes")
     parser.add_argument("--list-snapshots", action="store_true", help="List snapshots")
     parser.add_argument("--list-backups", action="store_true", help="List backups")
-    
+
     # Get operations
     parser.add_argument("--get-volume", type=str, metavar="ID", help="Get volume details")
-    
+
     # Create operations
     parser.add_argument("--create-volume", action="store_true", help="Create a volume")
     parser.add_argument("--create-snapshot", action="store_true", help="Create a snapshot")
     parser.add_argument("--create-backup", action="store_true", help="Create a backup")
-    
+
     # Modify operations
     parser.add_argument("--extend-volume", type=str, metavar="ID", help="Extend a volume")
     parser.add_argument("--delete-volume", type=str, metavar="ID", help="Delete a volume")
-    
+
     # Creation options
     parser.add_argument("--name", type=str, help="Resource name")
     parser.add_argument("--size", type=int, help="Volume size in GB")
@@ -223,24 +223,24 @@ def main():
     parser.add_argument("--description", type=str, help="Description")
     parser.add_argument("--incremental", action="store_true", help="Incremental backup")
     parser.add_argument("--force", action="store_true", help="Force operation")
-    
+
     # All operations
     parser.add_argument("--all", action="store_true", help="Show all information")
-    
+
     args = parser.parse_args()
-    
+
     try:
         client = get_client()
     except Exception as e:
         print(f"❌ Failed to create client: {e}")
         return 1
-    
+
     if args.all:
         list_volumes(client)
         list_snapshots(client)
         list_backups(client)
         return 0
-    
+
     if args.list_volumes:
         list_volumes(client)
     elif args.list_snapshots:
@@ -273,7 +273,7 @@ def main():
         delete_volume(client, args.delete_volume, args.force)
     else:
         parser.print_help()
-    
+
     return 0
 
 

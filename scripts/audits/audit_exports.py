@@ -40,7 +40,7 @@ def main():
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"
-    
+
     findings = audit_exports(src_dir)
 
     if args.json:

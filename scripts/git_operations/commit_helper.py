@@ -62,12 +62,12 @@ def infer_scope(files: list) -> str:
     """Infer scope from staged files."""
     if not files:
         return ""
-    
+
     # Find common directory
     parts_list = [Path(f).parts for f in files]
     if not parts_list or not parts_list[0]:
         return ""
-    
+
     # Check if all files share a common parent
     common = []
     for i in range(len(parts_list[0])):
@@ -76,7 +76,7 @@ def infer_scope(files: list) -> str:
             common.append(part)
         else:
             break
-    
+
     if common:
         # Return the most specific directory
         scope = common[-1] if common else ""
@@ -84,7 +84,7 @@ def infer_scope(files: list) -> str:
         if scope in ("src", "scripts", "tests", "docs"):
             return common[-2] if len(common) > 1 else ""
         return scope
-    
+
     return ""
 
 
@@ -92,10 +92,10 @@ def infer_type(files: list) -> str:
     """Infer commit type from staged files."""
     if not files:
         return "chore"
-    
+
     extensions = [Path(f).suffix for f in files]
     paths = [str(f).lower() for f in files]
-    
+
     # Check for common patterns
     if any("test" in p for p in paths):
         return "test"
@@ -105,7 +105,7 @@ def infer_type(files: list) -> str:
         return "ci"
     if any("package.json" in p or "requirements" in p or "pyproject" in p for p in paths):
         return "build"
-    
+
     return "feat"  # Default
 
 
@@ -114,7 +114,7 @@ def build_commit_message(commit_type: str, scope: str, message: str, breaking: b
     type_part = commit_type
     if breaking:
         type_part += "!"
-    
+
     if scope:
         return f"{type_part}({scope}): {message}"
     return f"{type_part}: {message}"
@@ -145,50 +145,50 @@ def main():
     parser.add_argument("--list-types", "-l", action="store_true",
                         help="List available commit types")
     args = parser.parse_args()
-    
+
     if args.list_types:
         print("📋 Conventional commit types:\n")
         for t, desc in COMMIT_TYPES.items():
             print(f"   {t:10} - {desc}")
         return 0
-    
+
     # Get staged files
     staged = get_staged_files()
-    
+
     if not staged:
         print("⚠️  No files staged for commit")
         print("   Stage files with: git add <files>")
         return 1
-    
+
     print(f"📁 Staged files ({len(staged)}):")
     for f in staged[:10]:
         print(f"   + {f}")
     if len(staged) > 10:
         print(f"   ... and {len(staged) - 10} more")
     print()
-    
+
     # Determine type
     commit_type = args.type or infer_type(staged)
     if not args.type:
         print(f"🔍 Auto-detected type: {commit_type}")
-    
+
     # Determine scope
     scope = args.scope if args.scope is not None else infer_scope(staged)
     if scope and not args.scope:
         print(f"🔍 Auto-detected scope: {scope}")
-    
+
     # Get message
     if not args.message:
         print("\n❌ Message required. Use --message or -m flag")
         print(f"\n   Example: python commit_helper.py -t {commit_type} -m \"your message here\"")
         return 1
-    
+
     # Build commit message
     full_message = build_commit_message(commit_type, scope, args.message, args.breaking)
-    
+
     print(f"\n📝 Commit message:")
     print(f"   {full_message}")
-    
+
     if args.commit:
         success, output = run_git(["commit", "-m", full_message])
         if success:
@@ -200,7 +200,7 @@ def main():
     else:
         print("\n💡 To commit, add --commit or run:")
         print(f'   git commit -m "{full_message}"')
-    
+
     return 0
 
 

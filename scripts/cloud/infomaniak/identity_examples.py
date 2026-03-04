@@ -42,7 +42,7 @@ def show_current_user(client):
     """Show current user information."""
     print("\n👤 Current User\n" + "=" * 50)
     user = client.get_current_user()
-    
+
     if user:
         print(f"   Name: {user.get('name')}")
         print(f"   ID: {user.get('id')}")
@@ -57,7 +57,7 @@ def show_current_project(client):
     """Show current project information."""
     print("\n📁 Current Project\n" + "=" * 50)
     project = client.get_current_project()
-    
+
     if project:
         print(f"   Name: {project.get('name')}")
         print(f"   ID: {project.get('id')}")
@@ -70,11 +70,11 @@ def list_projects(client):
     """List accessible projects."""
     print("\n📁 Projects\n" + "=" * 50)
     projects = client.list_projects()
-    
+
     if not projects:
         print("   No projects found.")
         return
-    
+
     for p in projects:
         enabled = "🟢" if p.get("is_enabled") else "🔴"
         print(f"   {enabled} {p['name']}")
@@ -88,11 +88,11 @@ def list_app_credentials(client):
     """List application credentials."""
     print("\n🔑 Application Credentials\n" + "=" * 50)
     creds = client.list_application_credentials()
-    
+
     if not creds:
         print("   No application credentials found.")
         return
-    
+
     for cred in creds:
         expires = cred.get("expires_at", "Never")
         print(f"   🔐 {cred['name']}")
@@ -106,13 +106,13 @@ def list_app_credentials(client):
 def create_app_credential(client, name: str, description: str = None, expires: str = None):
     """Create an application credential."""
     print(f"\n🔑 Creating application credential: {name}")
-    
+
     result = client.create_application_credential(
         name=name,
         description=description,
         expires_at=expires
     )
-    
+
     if result:
         print(f"\n   ✅ Created application credential")
         print(f"   ID: {result['id']}")
@@ -127,7 +127,7 @@ def create_app_credential(client, name: str, description: str = None, expires: s
 def delete_app_credential(client, cred_id: str):
     """Delete an application credential."""
     print(f"\n🗑️  Deleting application credential: {cred_id}")
-    
+
     if client.delete_application_credential(cred_id):
         print("   ✅ Credential deleted")
     else:
@@ -138,11 +138,11 @@ def list_roles(client):
     """List available roles."""
     print("\n👑 Available Roles\n" + "=" * 50)
     roles = client.list_roles()
-    
+
     if not roles:
         print("   No roles found.")
         return
-    
+
     for role in roles:
         print(f"   🎭 {role['name']}")
         print(f"      ID: {role['id']}")
@@ -155,11 +155,11 @@ def list_user_roles(client):
     """List roles assigned to current user."""
     print("\n👑 User Roles\n" + "=" * 50)
     roles = client.list_user_roles()
-    
+
     if not roles:
         print("   No roles assigned.")
         return
-    
+
     for role in roles:
         print(f"   🎭 {role['name']} (ID: {role['id']})")
 
@@ -168,11 +168,11 @@ def list_ec2_credentials(client):
     """List EC2 credentials (for S3)."""
     print("\n🔑 EC2 Credentials (S3 Access)\n" + "=" * 50)
     creds = client.list_ec2_credentials()
-    
+
     if not creds:
         print("   No EC2 credentials found.")
         return
-    
+
     for cred in creds:
         print(f"   🔐 Access Key: {cred['access']}")
         print(f"      ID: {cred['id']}")
@@ -183,7 +183,7 @@ def list_ec2_credentials(client):
 def create_ec2_credentials(client):
     """Create EC2 credentials for S3 access."""
     print("\n🔑 Creating EC2 credentials for S3 access")
-    
+
     result = client.create_ec2_credentials()
     if result:
         print(f"\n   ✅ Created EC2 credentials")
@@ -206,41 +206,41 @@ def main():
             print(f"Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Identity Examples")
-    
+
     # User/Project info
     parser.add_argument("--user", action="store_true", help="Show current user")
     parser.add_argument("--project", action="store_true", help="Show current project")
     parser.add_argument("--projects", action="store_true", help="List all projects")
-    
+
     # Application credentials
     parser.add_argument("--app-credentials", action="store_true", help="List app credentials")
     parser.add_argument("--create-app-cred", action="store_true", help="Create app credential")
     parser.add_argument("--delete-app-cred", type=str, metavar="ID", help="Delete app credential")
-    
+
     # Roles
     parser.add_argument("--roles", action="store_true", help="List available roles")
     parser.add_argument("--user-roles", action="store_true", help="List user's roles")
-    
+
     # EC2 credentials
     parser.add_argument("--ec2-credentials", action="store_true", help="List EC2 credentials")
     parser.add_argument("--create-ec2-cred", action="store_true", help="Create EC2 credentials")
-    
+
     # Options
     parser.add_argument("--name", type=str, help="Credential name")
     parser.add_argument("--description", type=str, help="Description")
     parser.add_argument("--expires", type=str, help="Expiration datetime (ISO format)")
-    
+
     # All operations
     parser.add_argument("--all", action="store_true", help="Show all information")
-    
+
     args = parser.parse_args()
-    
+
     try:
         client = get_client()
     except Exception as e:
         print(f"❌ Failed to create client: {e}")
         return 1
-    
+
     if args.all:
         show_current_user(client)
         show_current_project(client)
@@ -249,7 +249,7 @@ def main():
         list_app_credentials(client)
         list_ec2_credentials(client)
         return 0
-    
+
     if args.user:
         show_current_user(client)
     elif args.project:
@@ -275,7 +275,7 @@ def main():
         create_ec2_credentials(client)
     else:
         parser.print_help()
-    
+
     return 0
 
 

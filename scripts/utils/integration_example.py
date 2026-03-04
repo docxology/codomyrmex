@@ -38,7 +38,7 @@ def main():
     setup_logging()
     print_info("Cross-Module Integration Example")
     print_info("=" * 50)
-    
+
     # Step 1: Initialize logging
     print_info("\n1. Setting up structured logging...")
     try:
@@ -86,7 +86,7 @@ def main():
         "operation": "analyze",
         "data": {"file": "example.py", "depth": 3},
     }
-    
+
     # Validate input
     if is_valid:
         try:

@@ -46,24 +46,24 @@ def main():
 
     setup_logging()
     logger = logging.getLogger("orchestrator")
-    
+
     print_info("Initializing Real Ollama Orchestration...")
-    
+
     # 1. Initialize Manager (starts server if needed)
     try:
         manager = OllamaManager(auto_start_server=True)
     except Exception as e:
         print_error(f"Failed to initialize OllamaManager: {e}")
         sys.exit(1)
-        
+
     # 2. Check/Pull Model
     target_model = "codellama:latest"
     print_info(f"Ensuring model '{target_model}' is available...")
-    
+
     # Check if target is available
     if not manager.is_model_available(target_model):
         print_info(f"Model '{target_model}' not found in local registry.")
-        
+
         # Check for alternatives BEFORE pulling
         try:
             models = manager.list_models(force_refresh=True)
@@ -73,7 +73,7 @@ def main():
                 if "llama3" in name or "codellama" in name:
                     alternative = name
                     break
-            
+
             if alternative:
                 print_info(f"Found compatible local model '{alternative}'. Skipping pull.")
                 target_model = alternative
@@ -93,7 +93,7 @@ def main():
 
     # 2b. Set Env Var for agent_utils.py to pick it up
     os.environ["OLLAMA_MODEL"] = target_model
-    
+
     # 2c. Debug Dump - List what Ollama sees
     print_info(f"Setting OLLAMA_MODEL={target_model}")
     print_info("Verifying model visibility...")
@@ -103,16 +103,16 @@ def main():
         print_info(f"Available models in Ollama: {available_names}")
         if target_model not in available_names:
              print_warning(f"⚠️  Target model '{target_model}' not found in listing despite pull attempts.")
-             
+
              # Fallback Strategy
              fallback_model = None
-             
+
              # 1. Try close match
              for name in available_names:
                  if target_model.split(':')[0] in name:
                      fallback_model = name
                      break
-            
+
              # 2. Try any llama3 (common for coding)
              if not fallback_model:
                  for name in available_names:
@@ -144,7 +144,7 @@ def main():
     except Exception as e:
         print_error(f"Demo failed: {e}")
         # We don't exit here, we let finally clean up if we added cleanup logic
-        
+
     print("-" * 50)
     print_success("Orchestration complete.")
 

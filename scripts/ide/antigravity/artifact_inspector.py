@@ -21,16 +21,16 @@ logger = logging.getLogger("antigravity.inspector")
 
 def inspect_artifacts():
     client = AntigravityClient()
-    
+
     if not client.connect():
         logger.error("❌ Not connected to Antigravity.")
         return False
-        
+
     logger.info(f"🔍 Inspecting Conversation: {client.get_conversation_id()}")
-    
+
     artifacts = client.list_artifacts()
     logger.info(f"Found {len(artifacts)} artifacts.\n")
-    
+
     for i, art in enumerate(artifacts, 1):
         modified_time = datetime.fromtimestamp(art['modified']).strftime('%Y-%m-%d %H:%M:%S')
         logger.info(f"[{i}] {art['name']} ({art['type']})")
@@ -38,7 +38,7 @@ def inspect_artifacts():
         logger.info(f"    Size: {art['size']} bytes")
         logger.info(f"    Modified: {modified_time}")
         logger.info("-" * 40)
-        
+
     return True
 
 if __name__ == "__main__":

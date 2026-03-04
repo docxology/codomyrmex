@@ -14,22 +14,22 @@ API Key Sources (in order of precedence):
 Usage:
     # List available free models
     python openrouter_usage.py --list-models
-    
+
     # Simple completion with default free model
     python openrouter_usage.py --prompt "Explain Python decorators in one sentence"
-    
+
     # Completion with specific model
     python openrouter_usage.py --prompt "Hello" --model "nvidia/nemotron-3-nano-30b-a3b:free"
-    
+
     # Streaming response
     python openrouter_usage.py --prompt "Write a haiku about coding" --stream
-    
+
     # Using API key from command line
     python openrouter_usage.py --api-key "sk-..." --prompt "Hello"
-    
+
     # Using custom config file
     python openrouter_usage.py --config /path/to/api_key.txt --prompt "Hello"
-    
+
     # Prompt for API key interactively
     python openrouter_usage.py --prompt-key --prompt "Hello"
 """
@@ -84,7 +84,7 @@ def get_api_key(
     prompt_for_key: bool = False,
 ) -> str:
     """Get OpenRouter API key from multiple sources.
-    
+
     Priority:
         1. CLI argument (--api-key)
         2. Environment variable (OPENROUTER_API_KEY)
@@ -95,13 +95,13 @@ def get_api_key(
     if cli_key:
         print_info("📍 Using API key from command line argument")
         return cli_key
-    
+
     # 2. Environment variable
     env_key = os.environ.get("OPENROUTER_API_KEY")
     if env_key:
         print_info("📍 Using API key from OPENROUTER_API_KEY environment variable")
         return env_key
-    
+
     # 3. Config file
     if config_path:
         # User-specified config file
@@ -118,7 +118,7 @@ def get_api_key(
             if key:
                 print_info(f"📍 Using API key from config file: {path}")
                 return key
-    
+
     # 4. Interactive prompt
     if prompt_for_key:
         print_info("📍 No API key found. Enter it interactively:")
@@ -127,7 +127,7 @@ def get_api_key(
             return key
         print_error("No API key entered")
         sys.exit(1)
-    
+
     # No key found
     print_error("OPENROUTER_API_KEY not found")
     print_info("""
@@ -141,7 +141,7 @@ Get your free API key at: https://openrouter.ai/keys
 
 Quick setup:
   export OPENROUTER_API_KEY='your-key-here'
-  
+
 Or save to config file:
   mkdir -p ~/.config/openrouter
   echo 'your-key-here' > ~/.config/openrouter/api_key
@@ -153,17 +153,17 @@ Or save to config file:
 def list_models():
     """List available free models on OpenRouter."""
     print_info("📋 Available Free Models on OpenRouter:\n")
-    
+
     # Create provider without API key just to list models
     config = ProviderConfig(api_key="dummy")
     provider = OpenRouterProvider(config)
-    
+
     for model in provider.list_models():
         if model == "openrouter/free":
             print(f"  ✨ {model} (auto-selects best available)")
         else:
             print(f"  • {model}")
-    
+
     print_info("\nFor full model list, see: https://openrouter.ai/models")
 
 
@@ -177,23 +177,23 @@ def complete_prompt(
 ):
     """Run a completion with OpenRouter."""
     key = get_api_key(api_key, config_path, prompt_for_key)
-    
+
     config = ProviderConfig(
         api_key=key,
         timeout=60.0,
         max_retries=3,
     )
-    
+
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         messages = [
             Message(role="system", content="You are a helpful assistant. Be concise."),
             Message(role="user", content=prompt),
         ]
-        
+
         model_name = model or provider._default_model()
         print_info(f"🤖 Model: {model_name}")
         print_info(f"📝 Prompt: {prompt}\n")
-        
+
         if stream:
             print_info("📡 Streaming response:\n")
             print("─" * 50)
@@ -208,13 +208,13 @@ def complete_prompt(
             print("─" * 50)
             print(response.content)
             print("─" * 50)
-            
+
             if response.usage:
                 print_info(f"\n📊 Token usage:")
                 print(f"   Prompt: {response.usage.get('prompt_tokens', 'N/A')}")
                 print(f"   Completion: {response.usage.get('completion_tokens', 'N/A')}")
                 print(f"   Total: {response.usage.get('total_tokens', 'N/A')}")
-            
+
             print_success(f"\n✅ Completion successful (model: {response.model})")
 
 
@@ -225,17 +225,17 @@ def demonstrate_context_manager(
 ):
     """Demonstrate context manager pattern for resource cleanup."""
     print_info("🔧 Context Manager Pattern:\n")
-    
+
     key = get_api_key(api_key, config_path, prompt_for_key)
     config = ProviderConfig(api_key=key)
-    
+
     # Using context manager ensures cleanup
     with get_provider(ProviderType.OPENROUTER, config=config) as provider:
         print_info(f"  Provider type: {provider.provider_type.value}")
         print_info(f"  Base URL: {provider.config.base_url}")
         print_info(f"  Default model: {provider._default_model()}")
         # Client is automatically cleaned up on exit
-    
+
     print_success("  ✅ Resources cleaned up automatically")
 
 
@@ -275,7 +275,7 @@ Examples:
                         help="Use streaming response")
     parser.add_argument("--demo", "-d", action="store_true",
                         help="Run demonstration of features")
-    
+
     # API key arguments
     parser.add_argument("--api-key", "-k", type=str, default=None,
                         help="OpenRouter API key (overrides env var and config file)")
@@ -283,16 +283,16 @@ Examples:
                         help="Path to config file containing API key")
     parser.add_argument("--prompt-key", action="store_true",
                         help="Prompt for API key interactively if not found")
-    
+
     args = parser.parse_args()
-    
+
     setup_logging()
     print_info("🚀 OpenRouter LLM Provider Examples\n")
-    
+
     if args.list_models:
         list_models()
         return 0
-    
+
     if args.demo:
         demonstrate_context_manager(
             api_key=args.api_key,
@@ -300,7 +300,7 @@ Examples:
             prompt_for_key=args.prompt_key,
         )
         return 0
-    
+
     if args.prompt:
         complete_prompt(
             args.prompt,
@@ -311,7 +311,7 @@ Examples:
             prompt_for_key=args.prompt_key,
         )
         return 0
-    
+
     # No arguments - show help
     parser.print_help()
     print_info("\n💡 Quick start:")

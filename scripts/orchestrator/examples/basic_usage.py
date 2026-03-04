@@ -26,7 +26,7 @@ async def main() -> int:
     # 1. Workflow Creation
     print_info("Creating a real orchestration workflow...")
     workflow = Workflow(name="demo_workflow")
-    
+
     # 2. Add Tasks
     def process_data(data):
         print_info(f"  Processing: {data}")
@@ -47,11 +47,11 @@ async def main() -> int:
         # Workflow._execute_task doesn't automatically inject results into deps.
         # But wait, looking at Workflow.add_task it takes Callable[..., Any].
         # The Workflow class provided seems to run action(*args, **kwargs).
-        
+
         # Let's adjust task3 to use results if possible, or just run.
         # Actually, the provided Workflow doesn't seem to pass results down.
         # Let's check _execute_task again.
-        
+
         results = await workflow.run()
         print_success(f"Workflow '{workflow.name}' completed.")
         for name, task in workflow.tasks.items():

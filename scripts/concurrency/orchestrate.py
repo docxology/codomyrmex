@@ -24,20 +24,20 @@ def main():
 
     """Run all concurrency scripts via the orchestrator."""
     current_dir = Path(__file__).resolve().parent
-    
+
     # Configure arguments for orchestrator to target this directory
     args = [
         f"--scripts-dir={current_dir}",
         "--verbose",
         "--timeout=30"
     ]
-    
+
     # Support filtering from command line
     if len(sys.argv) > 1:
         args.extend(sys.argv[1:])
-        
+
     print(f"🚀 Running concurrency module orchestrator in {current_dir}...")
-    
+
     try:
         return orchestrator_main(args)
     except Exception as e:

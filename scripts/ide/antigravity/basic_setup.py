@@ -24,17 +24,17 @@ def verify_connection():
     """Verify connection to Antigravity session."""
     logger.info("Initializing Antigravity Client...")
     client = AntigravityClient()
-    
+
     logger.info(f"Artifact Directory: {client.artifact_dir}")
-    
+
     if client.connect():
         logger.info("✅ Successfully connected to Antigravity session!")
         logger.info(f"   Conversation ID: {client.get_conversation_id()}")
-        
+
         caps = client.get_capabilities()
         logger.info(f"   Provider: {caps.get('provider')}")
         logger.info(f"   Status: {caps.get('status')}")
-        
+
         return True
     else:
         logger.error("❌ Failed to connect to Antigravity session.")

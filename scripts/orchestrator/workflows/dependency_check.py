@@ -151,7 +151,7 @@ async def generate_dependency_report(task_results: dict = None, _task_results: d
     """Generate comprehensive dependency report."""
     # Handle both parameter naming conventions
     raw_results = task_results or _task_results or {}
-    
+
     report = {
         "timestamp": __import__("datetime").datetime.now().isoformat(),
         "summary": {},

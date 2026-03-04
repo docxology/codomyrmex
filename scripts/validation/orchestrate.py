@@ -33,5 +33,5 @@ if __name__ == "__main__":
     # Check if --scripts-dir is already passed
     if not any(arg.startswith("--scripts-dir") for arg in sys.argv):
         sys.argv.append(f"--scripts-dir={current_dir}")
-        
+
     sys.exit(main())

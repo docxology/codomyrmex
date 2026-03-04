@@ -23,7 +23,7 @@ except ImportError:
 from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.agents.exceptions import AgentConfigurationError
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_success, print_error, print_info, 
+    setup_logging, print_success, print_error, print_info,
     print_section, print_warning
 )
 
@@ -41,7 +41,7 @@ def main():
 
     setup_logging()
     print_section("Claude Code Workflow Demo")
-    
+
     # Sample code to work with
     sample_code = '''
 def calculate_discount(price, discount_percent):
@@ -51,7 +51,7 @@ def calculate_discount(price, discount_percent):
     discount = price * (discount_percent / 100)
     return price - discount
 '''
-    
+
     # Step 1: Scan project context
     print_section("Step 1: Scan Project Context")
     try:
@@ -65,7 +65,7 @@ def calculate_discount(price, discount_percent):
             print_warning(f"Scan failed: {result.get('error')}")
     except Exception as e:
         print_warning(f"Scan error: {e}")
-    
+
     # Check API connection for remaining steps
     print_section("Step 2: Initialize Claude Client")
     try:
@@ -82,7 +82,7 @@ def calculate_discount(price, discount_percent):
     except AgentConfigurationError:
         print_warning("API key not configured. Set ANTHROPIC_API_KEY to enable full workflow.")
         return 0
-    
+
     # Step 3: Explain the code
     print_section("Step 3: Explain Code")
     result = client.explain_code(sample_code, language="python", detail_level="medium")
@@ -93,7 +93,7 @@ def calculate_discount(price, discount_percent):
             print_info(f"Key concepts: {', '.join(result['concepts'][:3])}")
     else:
         print_error(f"Failed: {result.get('error')}")
-    
+
     # Step 4: Review for issues
     print_section("Step 4: Review Code")
     result = client.review_code(sample_code, language="python", analysis_type="general")
@@ -103,7 +103,7 @@ def calculate_discount(price, discount_percent):
             print_info(f"  Issue: {issue[:60]}...")
     else:
         print_error(f"Failed: {result.get('error')}")
-    
+
     # Step 5: Suggest tests
     print_section("Step 5: Suggest Tests")
     result = client.suggest_tests(sample_code, language="python", framework="pytest")
@@ -113,20 +113,20 @@ def calculate_discount(price, discount_percent):
             print_info(f"  - {case[:50]}...")
     else:
         print_error(f"Failed: {result.get('error')}")
-    
+
     # Step 6: Generate improvement diff
     print_section("Step 6: Generate Improvement Diff")
     improved_code = '''
 def calculate_discount(price: float, discount_percent: float) -> float:
     """Calculate discounted price.
-    
+
     Args:
         price: Original price
         discount_percent: Discount percentage (0-100)
-    
+
     Returns:
         Discounted price, or original if invalid percentage
-    
+
     Raises:
         ValueError: If price is negative
     """
@@ -139,7 +139,7 @@ def calculate_discount(price: float, discount_percent: float) -> float:
 '''
     result = client.generate_diff(sample_code, improved_code, "discount.py")
     print_success(f"Diff: +{result['additions']} lines, -{result['deletions']} lines")
-    
+
     print_section("Workflow Complete")
     print_success("Claude Code workflow demonstrated successfully!")
     return 0

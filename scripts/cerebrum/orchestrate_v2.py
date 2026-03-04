@@ -27,7 +27,7 @@ from codomyrmex.cerebrum import (
 def setup_demo_environment(engine: CerebrumEngine):
     """Setup a demo environment with some initial cases and a Bayesian network."""
     print_info("Setting up demo environment...")
-    
+
     # 1. Add some initial cases (Bug fixing domain)
     cases = [
         Case(case_id="bug_001", features={"type": "null_pointer", "severity": 5}, outcome="Check for null before access"),
@@ -37,22 +37,22 @@ def setup_demo_environment(engine: CerebrumEngine):
     ]
     for case in cases:
         engine.add_case(case)
-    
+
     # 2. Setup a Bayesian Network for bug diagnostics
     # Root nodes: BugType, CodeQuality
     # Child node: FixDifficulty (depends on BugType and CodeQuality)
     network = BayesianNetwork(name="bug_diagnostics")
-    
+
     # BugType: NullPointer, Syntax, Performance
     network.add_node("BugType", ["NullPointer", "Syntax", "Performance"], [0.4, 0.4, 0.2])
     # CodeQuality: High, Low
     network.add_node("CodeQuality", ["High", "Low"], [0.6, 0.4])
-    
+
     # FixDifficulty: Easy, Hard
     network.add_node("FixDifficulty", ["Easy", "Hard"])
     network.add_edge("BugType", "FixDifficulty")
     network.add_edge("CodeQuality", "FixDifficulty")
-    
+
     # Set CPT for FixDifficulty
     # P(FixDifficulty | BugType, CodeQuality)
     cpt = {
@@ -64,29 +64,29 @@ def setup_demo_environment(engine: CerebrumEngine):
         ("Performance", "Low"): {"Easy": 0.1, "Hard": 0.9},
     }
     network.set_cpt("FixDifficulty", cpt)
-    
+
     engine.set_bayesian_network(network)
     print_success("Demo environment setup complete.")
 
 def run_workflow(engine: CerebrumEngine):
     """Run a complete cognitive workflow."""
     print_info("Starting cognitive workflow...")
-    
+
     # 1. Define a query (A new bug to solve)
     query_case = Case(case_id="new_bug", features={"type": "null_pointer", "severity": 4})
     print_info(f"Query: {query_case.features}")
-    
+
     # 2. Use Reasoning Chain for step-by-step process
     chain = engine.create_reasoning_chain()
-    
+
     # Step 1: Retrieve similar cases
     def step_retrieve(memory):
         result = engine.reason(query_case)
         memory.store("reasoning_result", result)
         return f"Found {len(result.retrieved_cases)} similar cases"
-    
+
     chain.add_step("Retrieve similar cases", step_retrieve)
-    
+
     # Step 2: Diagnostic inference
     def step_diagnose(memory):
         # We know it's a null_pointer, but let's assume CodeQuality is unknown
@@ -96,9 +96,9 @@ def run_workflow(engine: CerebrumEngine):
         posterior = inf_engine.infer({"FixDifficulty": None}, evidence)
         memory.store("diagnostic_posterior", posterior)
         return f"Posterior for FixDifficulty: {posterior['FixDifficulty'].probabilities}"
-    
+
     chain.add_step("Perform diagnostic inference", step_diagnose)
-    
+
     # Step 3: Active Inference for policy selection
     def step_active_inf(memory):
         # Setup agent if not exists
@@ -118,22 +118,22 @@ def run_workflow(engine: CerebrumEngine):
                 "Risky": {"Success": 0.3, "Failure": 0.7},
             })
             engine.set_active_inference_agent(agent)
-            
+
         action = engine.active_inference_agent.select_action()
         memory.store("agent_action", action)
         return f"Active Inference Agent selected action: {action}"
-    
+
     chain.add_step("Select action via Active Inference", step_active_inf)
-    
+
     # Step 4: Make final decision
     def step_decide(memory):
         options = ["Quick fix", "Comprehensive refactor", "Decline"]
         criteria = {"Reliability": 0.8, "Speed": 0.2}
-        
+
         # Pull data from previous steps
         reasoning_result = memory.retrieve("reasoning_result")
         agent_action = memory.retrieve("agent_action")
-        
+
         # Mock some scores for the DecisionModule to evaluate
         decision_context = {
             "scores": {
@@ -144,23 +144,23 @@ def run_workflow(engine: CerebrumEngine):
             "confidence": reasoning_result.confidence,
             "agent_hint": agent_action
         }
-        
+
         decision = engine.decide(options, criteria, decision_context)
         memory.store("final_decision", decision)
         return f"Decision: {decision.choice} (Rationale: {decision.rationale})"
-    
+
     chain.add_step("Make final decision", step_decide)
-    
+
     # Execute chain
     execution_result = chain.execute(engine.working_memory)
-    
+
     if execution_result.success:
         print_success("Reasoning chain executed successfully.")
         for i, step in enumerate(execution_result.steps):
             print(f"  [{i+1}] {step.description}: {step.result}")
     else:
         print_error("Reasoning chain failed.")
-        
+
     final_decision = engine.working_memory.retrieve("final_decision")
     print_success(f"FINAL WORKFLOW OUTPUT: {final_decision.choice if final_decision else 'None'}")
 
@@ -177,14 +177,14 @@ def main():
 
     setup_logging()
     print_info("CEREBRUM Comprehensive Orchestrator starting...")
-    
+
     try:
         config = CerebrumConfig()
         engine = CerebrumEngine(config=config)
-        
+
         setup_demo_environment(engine)
         run_workflow(engine)
-        
+
         print_success("CEREBRUM orchestration demo completed.")
         return 0
     except Exception as e:

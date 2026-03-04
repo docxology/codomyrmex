@@ -60,14 +60,14 @@ def main():
 
     setup_logging()
     verbose = "--verbose" in sys.argv or "-v" in sys.argv
-    
+
     print_info("Codomyrmex Module Health Check")
     print_info(f"Checking {len(CORE_MODULES)} core modules...")
     print()
-    
+
     healthy = 0
     unhealthy = 0
-    
+
     for module_name in CORE_MODULES:
         try:
             __import__(module_name)
@@ -80,12 +80,12 @@ def main():
         except Exception as e:
             print_warning(f"  ⚠ {module_name}: {type(e).__name__}: {e}")
             unhealthy += 1
-    
+
     print()
     print_info("Summary:")
     print(f"  Healthy: {healthy}/{len(CORE_MODULES)}")
     print(f"  Unhealthy: {unhealthy}/{len(CORE_MODULES)}")
-    
+
     if unhealthy == 0:
         print_success("All modules healthy!")
         return 0

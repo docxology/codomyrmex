@@ -57,16 +57,16 @@ def get_module_info(mod_name):
     init = os.path.join(SRC, mod_name, "__init__.py")
     if not os.path.exists(init):
         return {"desc": "", "classes": [], "functions": [], "submodules": [], "version": "0.1.0"}
-    
+
     try:
         with open(init) as f:
             content = f.read()
         tree = ast.parse(content)
     except Exception:
         return {"desc": "", "classes": [], "functions": [], "submodules": [], "version": "0.1.0"}
-    
+
     info = {"desc": "", "classes": [], "functions": [], "submodules": [], "version": "0.1.0"}
-    
+
     # Module docstring
     if tree.body and isinstance(tree.body[0], ast.Expr) and isinstance(tree.body[0].value, ast.Constant):
         raw = tree.body[0].value.value.strip()
@@ -75,10 +75,10 @@ def get_module_info(mod_name):
             if s and not s.endswith("Module") and s.lower().replace("_", " ") != mod_name.replace("_", " "):
                 info["desc"] = s
                 break
-    
+
     if not info["desc"]:
         info["desc"] = f"{DISPLAY.get(mod_name, mod_name)} module."
-    
+
     # Top-level classes and functions ONLY (not methods)
     seen_classes = set()
     seen_funcs = set()
@@ -95,7 +95,7 @@ def get_module_info(mod_name):
             for target in node.targets:
                 if isinstance(target, ast.Name) and target.id == "__version__" and isinstance(node.value, ast.Constant):
                     info["version"] = str(node.value.value)
-    
+
     # Submodules
     mod_dir = os.path.join(SRC, mod_name)
     for child in sorted(os.listdir(mod_dir)):
@@ -109,7 +109,7 @@ def get_module_info(mod_name):
             except Exception:
                 pass
             info["submodules"].append((child, sub_doc or child.replace("_", " ").title()))
-    
+
     return info
 
 
@@ -125,20 +125,20 @@ def generate_enriched_readme(mod, info, display):
         info["desc"],
         "",
     ]
-    
+
     # Key Features
     features = []
     for name, doc in info["classes"][:6]:
         features.append(f"- **{name}** — {doc or name}")
     for name, doc in info["functions"][:4]:
         features.append(f"- `{name}()` — {doc or name}")
-    
+
     if features:
         lines.append("## Key Features")
         lines.append("")
         lines.extend(features)
         lines.append("")
-    
+
     # Submodules
     if info["submodules"]:
         lines.append("## Submodules")
@@ -148,7 +148,7 @@ def generate_enriched_readme(mod, info, display):
         for name, doc in info["submodules"]:
             lines.append(f"| `{name}` | {doc} |")
         lines.append("")
-    
+
     # Quick Start
     lines.append("## Quick Start")
     lines.append("")
@@ -168,7 +168,7 @@ def generate_enriched_readme(mod, info, display):
         lines.append(f"from codomyrmex.{mod} import *")
     lines.append("```")
     lines.append("")
-    
+
     # API Reference (deduplicated)
     if len(info["classes"]) > 2 or len(info["functions"]) > 2:
         lines.append("## API Reference")
@@ -182,7 +182,7 @@ def generate_enriched_readme(mod, info, display):
                 lines.append(f"| `{name}` | {doc or name} |")
             lines.append("")
     lines.append("")
-    
+
     # Directory Contents
     lines.append("## Directory Contents")
     lines.append("")
@@ -196,14 +196,14 @@ def generate_enriched_readme(mod, info, display):
         if os.path.isdir(os.path.join(docs_dir, child)):
             lines.append(f"| `{child}/` | {child.replace('_', ' ').title()} |")
     lines.append("")
-    
+
     # Navigation
     lines.append("## Navigation")
     lines.append("")
     lines.append(f"- **Source**: [src/codomyrmex/{mod}/](../../../src/codomyrmex/{mod}/)")
     lines.append("- **Parent**: [Modules](../README.md)")
     lines.append("")
-    
+
     return "\n".join(lines)
 
 
@@ -211,21 +211,21 @@ def fix_duplicates_in_readme(readme_path):
     """Remove duplicate function entries from API tables in an existing README."""
     with open(readme_path) as f:
         lines = f.readlines()
-    
+
     new_lines = []
     seen_entries = set()
     in_func_table = False
-    
+
     for line in lines:
         stripped = line.strip()
-        
+
         # Detect function table header
         if "| Function |" in stripped:
             in_func_table = True
             seen_entries = set()
             new_lines.append(line)
             continue
-        
+
         if in_func_table:
             if stripped.startswith("|---"):
                 new_lines.append(line)
@@ -241,9 +241,9 @@ def fix_duplicates_in_readme(readme_path):
                 if fn_name in seen_entries:
                     continue  # Skip duplicate
                 seen_entries.add(fn_name)
-        
+
         new_lines.append(line)
-    
+
     with open(readme_path, "w") as f:
         f.writelines(new_lines)
 
@@ -263,21 +263,21 @@ def main():
         d for d in os.listdir(DOCS)
         if os.path.isdir(os.path.join(DOCS, d))
     )
-    
+
     dupes_fixed = 0
     thin_fixed = 0
-    
+
     for mod in modules:
         readme_path = os.path.join(DOCS, mod, "README.md")
         if not os.path.exists(readme_path):
             continue
-        
+
         with open(readme_path) as f:
             content = f.read()
         line_count = content.count("\n")
-        
+
         display = DISPLAY.get(mod, mod.replace("_", " ").title())
-        
+
         # Fix duplicates
         if "| Function |" in content:
             # Check for actual duplicates
@@ -296,11 +296,11 @@ def main():
                     parts = line.split("|")
                     if len(parts) > 1:
                         func_lines.append(parts[1].strip())
-            
+
             if len(func_lines) != len(set(func_lines)):
                 fix_duplicates_in_readme(readme_path)
                 dupes_fixed += 1
-        
+
         # Enrich thin READMEs (under 30 lines)
         if line_count < 30:
             info = get_module_info(mod)
@@ -310,10 +310,10 @@ def main():
                 with open(readme_path, "w") as f:
                     f.write(new_content)
                 thin_fixed += 1
-        
+
         sys.stdout.write(".")
         sys.stdout.flush()
-    
+
     print()
     print(f"✅ Fixed duplicate API entries in {dupes_fixed} README files")
     print(f"✅ Enriched {thin_fixed} thin README files")

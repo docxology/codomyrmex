@@ -46,8 +46,12 @@ except ImportError:
     ResultStatus = None
 
 
-def cli_commands():
-    """Return CLI commands for the dark module."""
+def cli_commands() -> dict:
+    """Return CLI commands for the dark module.
+
+    Returns:
+        A dictionary mapping command names to command configurations.
+    """
     return {
         "status": {
             "help": "Show dark mode status",

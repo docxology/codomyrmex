@@ -14,11 +14,11 @@ from pathlib import Path
 def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
     """Generate HTML dashboard from validation results."""
     print("📊 Generating validation dashboard...\n")
-    
+
     if output_dir is None:
         output_dir = repo_root / "output"
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Collect data from validation outputs
     data = {
         'generated': datetime.now().isoformat(),
@@ -26,7 +26,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
         'quality': {},
         'agents': {}
     }
-    
+
     # Load link validation results
     links_path = output_dir / "link_validation.json"
     if links_path.exists():
@@ -38,7 +38,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                 'valid': len([l for l in link_data if l['status'] == 'ok']),
                 'external': len([l for l in link_data if l['status'] == 'external'])
             }
-    
+
     # Load quality results
     quality_path = output_dir / "content_quality.json"
     if quality_path.exists():
@@ -51,7 +51,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                 'min_score': min(scores) if scores else 0,
                 'max_score': max(scores) if scores else 0
             }
-    
+
     # Load agents validation results
     agents_path = output_dir / "agents_validation.json"
     if agents_path.exists():
@@ -62,7 +62,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                 'valid': len([a for a in agents_data if a['valid']]),
                 'avg_score': sum(a['score'] for a in agents_data) / len(agents_data) if agents_data else 0
             }
-    
+
     # Generate HTML
     html_content = f'''<!DOCTYPE html>
 <html lang="en">
@@ -72,7 +72,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
     <title>Documentation Quality Dashboard</title>
     <style>
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                background: #f5f5f5; padding: 20px; color: #333; }}
         .container {{ max-width: 1200px; margin: 0 auto; }}
         h1 {{ color: #2c3e50; margin-bottom: 20px; }}
@@ -91,7 +91,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
 <body>
     <div class="container">
         <h1>📊 Documentation Quality Dashboard</h1>
-        
+
         <div class="grid">
             <div class="card">
                 <h2>🔗 Link Validation</h2>
@@ -112,7 +112,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                     <span class="metric-value">{data['links'].get('external', 'N/A')}</span>
                 </div>
             </div>
-            
+
             <div class="card">
                 <h2>📝 Content Quality</h2>
                 <div class="metric">
@@ -128,7 +128,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                     <span class="metric-value">{data['quality'].get('min_score', 'N/A')}</span>
                 </div>
             </div>
-            
+
             <div class="card">
                 <h2>🤖 AGENTS.md Validation</h2>
                 <div class="metric">
@@ -145,25 +145,25 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                 </div>
             </div>
         </div>
-        
+
         <p class="timestamp">Generated: {data['generated']}</p>
     </div>
 </body>
 </html>'''
-    
+
     # Write dashboard
     dashboard_path = output_dir / "dashboard.html"
     with open(dashboard_path, 'w') as f:
         f.write(html_content)
-    
+
     print(f"✅ Dashboard generated: {dashboard_path}")
-    
+
     # Also write JSON data
     json_path = output_dir / "dashboard_data.json"
     with open(json_path, 'w') as f:
         json.dump(data, f, indent=2)
     print(f"📄 Dashboard data: {json_path}")
-    
+
     return 0
 
 
@@ -181,7 +181,7 @@ def main():
     parser = argparse.ArgumentParser(description="Generate validation dashboard")
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path)
-    
+
     args = parser.parse_args()
     return generate_dashboard(args.repo_root, args.output)
 

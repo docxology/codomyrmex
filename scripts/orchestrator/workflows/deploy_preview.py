@@ -96,7 +96,7 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
     """Deploy to preview environment."""
     # Handle both naming conventions and TaskResult objects
     results = task_results or _task_results or {}
-    
+
     # Get build artifacts - handle TaskResult objects
     build_result_obj = results.get("build")
     if build_result_obj is not None:
@@ -104,7 +104,7 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
         build_result = getattr(build_result_obj, "value", build_result_obj) or {}
     else:
         build_result = {}
-    
+
     artifacts = build_result.get("artifacts", []) if isinstance(build_result, dict) else []
 
     if not artifacts:
@@ -158,7 +158,7 @@ async def run_smoke_tests(task_results: dict = None, _task_results: dict = None,
     deploy_obj = results.get("deploy")
     deployment = getattr(deploy_obj, "value", deploy_obj) if deploy_obj else {}
     deployment = deployment or {}
-    
+
     if deployment.get("dry_run"):
         return {
             "success": True,
@@ -199,7 +199,7 @@ async def generate_deployment_report(task_results: dict = None, _task_results: d
     """Generate deployment report."""
     # Handle both naming conventions
     results = task_results or _task_results or {}
-    
+
     report = {
         "timestamp": datetime.now().isoformat(),
         "status": "success",

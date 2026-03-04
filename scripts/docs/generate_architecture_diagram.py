@@ -25,19 +25,19 @@ except ImportError as e:
 
 def generate_mermaid(src_dir: Path) -> str:
     edges = scan_imports(src_dir)
-    
+
     # Extract all unique modules
     modules = set()
     # Extract unique edges between modules (ignore file-level granularity)
     unique_links = set()
-    
+
     for edge in edges:
         src = edge["src"]
         dst = edge["dst"]
         modules.add(src)
         modules.add(dst)
         unique_links.add((src, dst))
-        
+
     # Group modules by layer
     layers = {
         "foundation": [],
@@ -46,13 +46,13 @@ def generate_mermaid(src_dir: Path) -> str:
         "specialized": [],
         "other": []
     }
-    
+
     for mod in modules:
         layers[get_layer(mod)].append(mod)
-        
+
     for k in layers:
         layers[k] = sorted(layers[k])
-        
+
     # Build mermaid diagram
     lines = [
         "# Codomyrmex System Architecture",
@@ -62,7 +62,7 @@ def generate_mermaid(src_dir: Path) -> str:
         "```mermaid",
         "graph TD",
     ]
-    
+
     # Subgraphs
     for layer_name in ["foundation", "core", "service", "specialized", "other"]:
         mods = layers[layer_name]
@@ -72,12 +72,12 @@ def generate_mermaid(src_dir: Path) -> str:
         for m in mods:
             lines.append(f"    {m}")
         lines.append("  end")
-        
+
     # Edges
     lines.append("")
     for src, dst in sorted(unique_links):
         lines.append(f"  {src} --> {dst}")
-        
+
     lines.append("```")
     lines.append("")
     return "\n".join(lines)
@@ -104,11 +104,11 @@ def main():
         sys.exit(1)
 
     mermaid_content = generate_mermaid(src_dir)
-    
+
     docs_dir = args.root / "docs"
     docs_dir.mkdir(exist_ok=True)
     out_file = docs_dir / "ARCHITECTURE.md"
-    
+
     out_file.write_text(mermaid_content, encoding="utf-8")
     print(f"✅ Architecture diagram written to {out_file.relative_to(PROJ_ROOT)}")
 

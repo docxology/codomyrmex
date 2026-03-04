@@ -42,16 +42,16 @@ def main():
     try:
         auth = Authenticator()
         akm = auth.api_key_manager
-        
+
         # 1. Generate key
         key = akm.generate_api_key(user_id="dev_user", permissions=["read", "data_access"])
         print_success(f"  Generated API Key: {key[:15]}...")
-        
+
         # 2. Authenticate with key
         token = auth.authenticate(credentials={"api_key": key})
         if token:
             print_success(f"  Authenticated successfully. Session Token: {token.token_id[:10]}...")
-            
+
             # 3. Check Authorization
             if auth.authorize(token, resource="database", permission="data_access"):
                 print_success("  Authorization check passed for 'data_access'.")

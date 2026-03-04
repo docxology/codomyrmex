@@ -50,7 +50,7 @@ def main():
             },
             "required": ["name"]
         }
-        
+
         if is_valid(data, schema):
             print_success("  Data validated successfully via is_valid.")
     except Exception as e:

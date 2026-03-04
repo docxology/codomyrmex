@@ -38,7 +38,7 @@ def main():
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"
-    
+
     if not src_dir.exists():
         print(f"Error: Source directory {src_dir} does not exist.")
         return

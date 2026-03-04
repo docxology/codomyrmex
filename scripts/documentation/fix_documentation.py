@@ -37,23 +37,23 @@ class DocumentationFixer(ScriptBase):
         name_title = module_name.replace("_", " ").title()
         return textwrap.dedent(f"""\
             # Personal AI Infrastructure - {name_title} Context
-            
+
             **Module**: {module_name}
             **Status**: Active
-            
+
             ## Context
             This module provides {name_title} capabilities to the Codomyrmex ecosystem.
-            
+
             ## AI Strategy
             As an AI agent, when working with this module:
             1.  **Respect Interfaces**: Use the public API defined in `__init__.py`.
             2.  **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
             3.  **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
-            
+
             ## Key Files
             - `__init__.py`: Public API export.
             - `SPEC.md`: Technical specification.
-            
+
             ## Future Considerations
             - Modularization: Keep dependencies minimal.
             - Telemetry: Ensure operations emit performace metrics.
@@ -63,20 +63,20 @@ class DocumentationFixer(ScriptBase):
         name_title = module_name.replace("_", " ").title()
         return textwrap.dedent(f"""\
             # {name_title} Specification
-            
+
             ## 1. Functional Requirements
             The `{module_name}` module must:
             - Provide robust implementations of {name_title} logic.
             - Handle errors gracefully without crashing the host process.
             - Expose a clean, type-hinted API.
-            
+
             ## 2. API Surface
             See `API_SPECIFICATION.md` (if available) or `__init__.py` for exact signatures.
-            
+
             ## 3. Dependencies
             - **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.utils`.
             - **External**: Standard library.
-            
+
             ## 4. Constraints
             - **Performance**: Operations should be non-blocking where possible.
             - **Security**: Validate all inputs; sanity check paths.
@@ -86,14 +86,14 @@ class DocumentationFixer(ScriptBase):
         name_title = module_name.replace("_", " ").title()
         return textwrap.dedent(f"""\
             # Codomyrmex Agents - {name_title}
-            
+
             **Scope**: `{module_name}` directory.
-            
+
             ## Operating Rules
             1.  **Modularity**: Do not import from sibling modules unless necessary.
             2.  **Testing**: Create unit tests in `src/codomyrmex/tests/unit/{module_name}/`.
             3.  **Documentation**: Keep `README.md` updated with new features.
-            
+
             ## Task Queue
             - [ ] Review implementation for edge cases.
             - [ ] Add type hints to all public methods.
@@ -103,38 +103,38 @@ class DocumentationFixer(ScriptBase):
         name_title = module_name.replace("_", " ").title()
         return textwrap.dedent(f"""\
             # {name_title}
-            
+
             **Version**: v0.1.0 | **Status**: Active
-            
+
             ## Overview
             The `{module_name}` module provides core functionality for {name_title}.
-            
+
             ## Architecture
-            
+
             ```mermaid
             graph TD
                 {module_name} --> Utils[codomyrmex.utils]
                 {module_name} --> Logs[codomyrmex.logging_monitoring]
-                
+
                 subgraph {module_name}
                     Core[Core Logic]
                     API[Public Interface]
                 end
             ```
-            
+
             ## Components
             - **Core**: Implementation logic.
             - **API**: Exposed functions and classes.
-            
+
             ## Usage
-            
+
             ```python
             from codomyrmex.{module_name} import ...
-            
+
             # Example usage
             # result = process(...)
             ```
-            
+
             ## Navigation
             - **Parent**: [codomyrmex](../README.md)
             - **Spec**: [SPEC.md](SPEC.md)
@@ -155,7 +155,7 @@ class DocumentationFixer(ScriptBase):
                  return
 
         module_name = path.name
-        
+
         # Files to check/generate
         generators = {
             "PAI.md": self.generate_pai,
@@ -163,21 +163,21 @@ class DocumentationFixer(ScriptBase):
             "AGENTS.md": self.generate_agents,
             "README.md": self.generate_readme
         }
-        
+
         for filename, generator in generators.items():
             file_path = path / filename
             content = generator(module_name)
-            
+
             should_write = False
             action = ""
-            
+
             if not file_path.exists():
                 should_write = True
                 action = "Created"
             elif filename == "README.md" and file_path.stat().st_size < self.stub_threshold:
                 should_write = True
                 action = "Upgraded Stub"
-                
+
             if should_write:
                 if self.config and self.config.dry_run:
                     self.log_info(f"[DRY RUN] Would write {file_path}")
@@ -193,7 +193,7 @@ class DocumentationFixer(ScriptBase):
         for root, dirs, files in os.walk(self.target_dir):
             path = Path(root)
             self.fix_directory(path)
-            
+
         return {"status": "completed"}
 
 if __name__ == "__main__":

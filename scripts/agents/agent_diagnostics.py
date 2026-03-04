@@ -72,7 +72,7 @@ def main():
     print_section("Diagnostics Summary")
     connected_count = sum(1 for v in results.values() if v == "connected")
     print_info(f"Connected Agents: {connected_count}/{len(AGENT_CLASSES)}")
-    
+
     for name, status in results.items():
         icon = "✓" if status == "connected" else "✗"
         print_info(f"  {icon} {name}: {status}")

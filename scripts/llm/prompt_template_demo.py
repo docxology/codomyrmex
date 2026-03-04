@@ -59,11 +59,11 @@ def load_template(template_path: str) -> str:
     """Load template from file or use built-in."""
     if template_path in DEMO_TEMPLATES:
         return DEMO_TEMPLATES[template_path]
-    
+
     path = Path(template_path)
     if path.exists():
         return path.read_text()
-    
+
     raise ValueError(f"Template not found: {template_path}")
 
 
@@ -109,7 +109,7 @@ def main():
     parser.add_argument("--show", "-s", action="store_true",
                         help="Show template without rendering")
     args = parser.parse_args()
-    
+
     if args.list:
         print("📋 Available built-in templates:\n")
         for name, template in DEMO_TEMPLATES.items():
@@ -118,22 +118,22 @@ def main():
             print(f"    Variables: {', '.join(variables)}")
             print()
         return 0
-    
+
     try:
         template = load_template(args.template)
     except ValueError as e:
         print(f"❌ Error: {e}")
         return 1
-    
+
     variables = extract_variables(template)
-    
+
     if args.show:
         print(f"📄 Template: {args.template}\n")
         print("Variables:", ", ".join(variables))
         print("\n--- Template Content ---\n")
         print(template)
         return 0
-    
+
     # Parse provided variables
     var_dict = {}
     for var_str in args.vars:
@@ -143,7 +143,7 @@ def main():
         except ValueError as e:
             print(f"❌ Error: {e}")
             return 1
-    
+
     # Check for missing variables
     missing = [v for v in variables if v not in var_dict]
     if missing:
@@ -154,15 +154,15 @@ def main():
         example_vars = " ".join(f'-v {v}="<value>"' for v in missing)
         print(f"   python prompt_template_demo.py -t {args.template} {example_vars}")
         return 1
-    
+
     # Render template
     rendered = render_template(template, var_dict)
-    
+
     print(f"📄 Template: {args.template}")
     print(f"   Variables: {var_dict}")
     print("\n--- Rendered Prompt ---\n")
     print(rendered)
-    
+
     return 0
 
 

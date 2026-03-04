@@ -44,7 +44,7 @@ def main():
     print_info("Defining REST API and Router...")
     try:
         router = APIRouter(prefix="/users")
-        
+
         @router.get("/profile")
         def get_profile(request):
             return APIResponse.success({"user": "test"})

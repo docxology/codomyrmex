@@ -62,16 +62,16 @@ def main():
         data = b"Highly sensitive secret data"
         key = generate_key(algorithm="AES")
         gcm = AESGCMEncryptor(key)
-        
+
         # AAD (Additional Authenticated Data)
         aad = b"context-v1"
         ciphertext = gcm.encrypt(data, associated_data=aad)
         print_success(f"  AES-GCM encryption successful.")
-        
+
         decrypted = gcm.decrypt(ciphertext, associated_data=aad)
         if decrypted == data:
             print_success("  AES-GCM decryption successful (Data matches).")
-            
+
         # Tampering detection
         tampered = bytearray(ciphertext)
         tampered[-1] ^= 0xFF
@@ -88,11 +88,11 @@ def main():
     try:
         rsa_enc = Encryptor(algorithm="RSA")
         priv, pub = rsa_enc.generate_key_pair(2048)
-        
+
         plaintext = b"RSA Secret Message"
         ciphertext = rsa_enc.encrypt(plaintext, pub)
         print_success("  RSA encryption successful.")
-        
+
         decrypted = rsa_enc.decrypt(ciphertext, priv)
         if decrypted == plaintext:
             print_success("  RSA decryption successful.")
@@ -106,10 +106,10 @@ def main():
         obj = {"action": "deploy", "version": "1.2.3"}
         signed_obj = signer.sign_json(obj)
         print_success("  JSON object signed.")
-        
+
         if signer.verify_json(signed_obj):
             print_success("  JSON signature verified.")
-            
+
         signed_obj["action"] = "malicious-deploy"
         if not signer.verify_json(signed_obj):
             print_success("  JSON tampering detected.")
@@ -124,11 +124,11 @@ def main():
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = KeyManager(key_dir=Path(tmpdir))
             key_id = "master_vault_key"
-            
+
             old_key = generate_key("AES")
             mgr.store_key(key_id, old_key)
             print_success(f"  Stored key '{key_id}'.")
-            
+
             # Rotate
             new_key = generate_key("AES")
             returned_old = mgr.rotate_key(key_id, new_key)
@@ -143,16 +143,16 @@ def main():
         with tempfile.TemporaryDirectory() as tmpdir:
             test_dir = Path(tmpdir)
             key = generate_key("AES")
-            
+
             input_file = test_dir / "secret.txt"
             input_file.write_text("This is a secret file content.")
-            
+
             enc_file = test_dir / "secret.enc"
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", DeprecationWarning)
                 if encrypt_file(input_file, enc_file, key):
                     print_success(f"  File encrypted via AES-CBC (legacy).")
-                    
+
                 dec_file = test_dir / "secret.dec.txt"
                 if decrypt_file(enc_file, dec_file, key):
                     print_success(f"  File decrypted.")

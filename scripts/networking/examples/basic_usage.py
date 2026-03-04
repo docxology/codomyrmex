@@ -37,7 +37,7 @@ def main():
         from codomyrmex.networking import HTTPClient
         client = HTTPClient(timeout=5)
         print_success("  HTTPClient initialized successfully.")
-        
+
         # Test a local or well-known URL check (simulated)
         # We catch exceptions so the script passes even if offline
         print_info("  Attempting simulated request to localhost...")
@@ -46,7 +46,7 @@ def main():
             client.get("http://localhost:8080/health", timeout=1)
         except Exception:
             print_success("  HTTPClient error handling functional (Request failed as expected).")
-            
+
     except Exception as e:
         print_error(f"  HTTPClient flow failed: {e}")
 

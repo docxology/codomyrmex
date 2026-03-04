@@ -78,15 +78,15 @@ def main():
         d for d in os.listdir(DOCS)
         if os.path.isdir(os.path.join(DOCS, d))
     )
-    
+
     spec_fixed = 0
     readme_fixed = 0
     agents_fixed = 0
-    
+
     for mod in modules:
         mod_docs = os.path.join(DOCS, mod)
         related = find_related(mod)
-        
+
         # 1. Add References to SPEC.md
         spec_path = os.path.join(mod_docs, "SPEC.md")
         if os.path.exists(spec_path):
@@ -100,7 +100,7 @@ def main():
                 with open(spec_path, "w") as f:
                     f.write(content.rstrip() + "\n" + ref)
                 spec_fixed += 1
-        
+
         # 2. Add Related Modules to README.md
         readme_path = os.path.join(mod_docs, "README.md")
         if os.path.exists(readme_path) and related:
@@ -115,7 +115,7 @@ def main():
                 with open(readme_path, "w") as f:
                     f.write(content)
                 readme_fixed += 1
-        
+
         # 3. Add Related Modules to AGENTS.md
         agents_path = os.path.join(mod_docs, "AGENTS.md")
         if os.path.exists(agents_path) and related:
@@ -129,10 +129,10 @@ def main():
                 with open(agents_path, "w") as f:
                     f.write(content.rstrip() + "\n" + section)
                 agents_fixed += 1
-        
+
         sys.stdout.write(".")
         sys.stdout.flush()
-    
+
     print()
     print(f"✅ SPEC.md: Added References to {spec_fixed} files")
     print(f"✅ README.md: Added Related Modules to {readme_fixed} files")

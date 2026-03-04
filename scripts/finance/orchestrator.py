@@ -24,7 +24,7 @@ def main():
 
     # 1. Initialize Ledger
     ledger = Ledger("Autonomous Corp")
-    
+
     # 2. Setup Chart of Accounts
     bank = ledger.create_account("Assets:Bank", AccountType.ASSET)
     equity = ledger.create_account("Equity:InitialCapital", AccountType.EQUITY)
@@ -115,7 +115,7 @@ def main():
     sheet = ledger.get_balance_sheet()
     print(f"Balance Sheet Balanced: {sheet['balanced']}")
     print(f"Total Assets: ${sheet['total_assets']:,.2f}")
-    
+
     income = ledger.get_income_statement()
     print(f"Net Income: ${income['net_income']:,.2f}")
 

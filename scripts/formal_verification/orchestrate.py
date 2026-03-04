@@ -89,7 +89,7 @@ def run_isc_demo():
     print_info(f"Consistent: {result.consistent}")
     if result.consistent:
         print_success(f"Satisfying assignment: {result.satisfying_assignment}")
-    
+
     print_info("\nAdding a conflicting criterion...")
     criteria.append({"id": "ISC-C4", "description": "Response time above 500ms"})
     result = verify_criteria_consistency(criteria)
@@ -131,7 +131,7 @@ def main():
 
     setup_logging()
     print_section("Codomyrmex Formal Verification Orchestrator", separator="=")
-    
+
     try:
         import z3  # noqa: F401
     except ImportError:
@@ -142,7 +142,7 @@ def main():
     run_incremental_demo()
     run_isc_demo()
     run_optimization_demo()
-    
+
     print_section("Demos completed successfully", separator="=")
     return 0
 

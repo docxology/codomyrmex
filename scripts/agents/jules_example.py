@@ -33,7 +33,7 @@ def main():
     print_info("Initializing Jules Agent...")
 
     client = JulesClient()
-    
+
     # Test connection - gracefully handle when CLI not available
     if not client.test_connection():
         print_warning("Jules CLI not available. Skipping execution.")

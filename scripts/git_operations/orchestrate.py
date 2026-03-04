@@ -50,7 +50,7 @@ def run_workflow():
     # Create a temporary directory for the demo repository
     temp_dir = tempfile.mkdtemp(prefix="git_demo_")
     repo_path = os.path.join(temp_dir, "demo_repo")
-    
+
     try:
         # 1. Initialize repository
         print_info(f"Initializing repository at: {repo_path}")
@@ -64,7 +64,7 @@ def run_workflow():
         file1 = os.path.join(repo_path, "feature.txt")
         with open(file1, "w") as f:
             f.write("New feature content\n")
-        
+
         if not add_files(["feature.txt"], repository_path=repo_path):
             print_error("Failed to add files")
             return 1
@@ -84,7 +84,7 @@ def run_workflow():
         if not create_branch(branch_name, repository_path=repo_path):
             print_error(f"Failed to create branch {branch_name}")
             return 1
-        
+
         current = get_current_branch(repository_path=repo_path)
         print_success(f"Now on branch: {current}")
 
@@ -92,7 +92,7 @@ def run_workflow():
         print_info("Modifying file on feature branch...")
         with open(file1, "a") as f:
             f.write("Experimental changes\n")
-        
+
         sha2 = commit_changes("feat: experimental updates", repository_path=repo_path)
         print_success(f"Committed on branch. SHA: {sha2[:8]}")
 
@@ -100,14 +100,14 @@ def run_workflow():
         main_branch = "main"
         # Check if it's main or master
         status = get_status(repo_path)
-        
+
         print_info("Switching back to main and merging...")
         if not switch_branch("main", repository_path=repo_path):
             if not switch_branch("master", repository_path=repo_path):
                 print_error("Failed to switch back to main branch")
                 return 1
             main_branch = "master"
-        
+
         if not merge_branch(branch_name, repository_path=repo_path):
             print_error(f"Failed to merge {branch_name}")
             return 1
@@ -115,12 +115,12 @@ def run_workflow():
 
         # 7. Final inspection
         print_section("Final Repository State")
-        
+
         history = get_commit_history(limit=5, repository_path=repo_path)
         print_info("Recent History:")
         for commit in history:
             print(f"  {commit['hash'][:7]} - {commit['message']} ({commit['author_name']})")
-            
+
         status = get_status(repo_path)
         if status.get("clean"):
             print_success("Working directory is clean.")

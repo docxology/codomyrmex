@@ -27,7 +27,7 @@ def analyze_reasoning_chain(steps: list) -> dict:
         "confidence_scores": [],
         "missing_evidence": []
     }
-    
+
     for step in steps:
         if isinstance(step, dict):
             if step.get("type") == "conclusion":
@@ -36,10 +36,10 @@ def analyze_reasoning_chain(steps: list) -> dict:
                 analysis["confidence_scores"].append(step["confidence"])
             if step.get("evidence") is None:
                 analysis["missing_evidence"].append(step.get("claim", "unnamed"))
-    
+
     if analysis["confidence_scores"]:
         analysis["avg_confidence"] = sum(analysis["confidence_scores"]) / len(analysis["confidence_scores"])
-    
+
     return analysis
 
 
@@ -75,17 +75,17 @@ def main():
 
     parser = argparse.ArgumentParser(description="Cerebrum utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Analyze command
     analyze = subparsers.add_parser("analyze", help="Analyze reasoning chain")
     analyze.add_argument("file", help="Reasoning chain file (JSON)")
-    
+
     # Create command
     create = subparsers.add_parser("create", help="Create reasoning template")
     create.add_argument("--output", "-o", default="reasoning.json")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🧠 Cerebrum Utilities\n")
         print("Brain/reasoning chain tools.\n")
@@ -93,17 +93,17 @@ def main():
         print("  analyze - Analyze reasoning chain")
         print("  create  - Create reasoning template")
         return 0
-    
+
     if args.command == "analyze":
         path = Path(args.file)
         if not path.exists():
             print(f"❌ File not found: {args.file}")
             return 1
-        
+
         data = json.loads(path.read_text())
         chain = data.get("chain", data.get("steps", []))
         analysis = analyze_reasoning_chain(chain)
-        
+
         print(f"🧠 Reasoning Analysis: {path.name}\n")
         print(f"   Steps: {analysis['total_steps']}")
         print(f"   Has conclusion: {'Yes' if analysis['has_conclusion'] else 'No'}")
@@ -111,12 +111,12 @@ def main():
             print(f"   Avg confidence: {analysis['avg_confidence']:.1%}")
         if analysis["missing_evidence"]:
             print(f"   Missing evidence: {len(analysis['missing_evidence'])} claims")
-    
+
     elif args.command == "create":
         template = create_reasoning_template()
         Path(args.output).write_text(json.dumps(template, indent=2))
         print(f"✅ Created: {args.output}")
-    
+
     return 0
 
 
