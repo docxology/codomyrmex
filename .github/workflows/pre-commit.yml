@@ -220,15 +220,20 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            if (fs.existsSync('change-analysis.md')) {
+            if (fs.existsSync('change-analysis.md') && context.issue.number) {
               const analysis = fs.readFileSync('change-analysis.md', 'utf8');
-              
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `## 📊 File Changes Analysis\n\n${analysis}`
-              });
+              try {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `## 📊 File Changes Analysis
+
+${analysis}`
+                });
+              } catch (e) {
+                console.log('Failed to post comment:', e.message);
+              }
             }
 
   size-check:

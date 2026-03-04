@@ -1,4 +1,5 @@
 """Flash Attention (Dao et al. 2022) -- memory-efficient attention via tiled online softmax."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -41,6 +42,7 @@ def flash_attention(
 
     Returns:
         output: Same shape as Q, but last dim = d_v
+
     """
     orig_ndim = Q.ndim
     if orig_ndim == 3:  # (batch, seq, d) -> add head dim
@@ -95,8 +97,7 @@ def flash_attention(
             l_new = rescale * l_i + l_ij
 
             O_i = (
-                rescale[..., np.newaxis] * l_i[..., np.newaxis] * O_i
-                + exp_S @ V_block
+                rescale[..., np.newaxis] * l_i[..., np.newaxis] * O_i + exp_S @ V_block
             ) / (l_new[..., np.newaxis] + 1e-9)
 
             m_i = m_new
@@ -117,6 +118,7 @@ def verify_flash_vs_standard(
 
     Returns:
         (max_abs_error, standard_output, flash_output)
+
     """
     from codomyrmex.neural.attention import scaled_dot_product_attention
 
