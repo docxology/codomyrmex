@@ -958,6 +958,21 @@ class TestLoadSaveJsonFile:
         with pytest.raises(json.JSONDecodeError):
             load_json_file(bad)
 
+    def test_load_json_file_exception_handling(self, tmp_path, monkeypatch):
+        # We simulate a generic exception during open() via monkeypatch.
+        # This covers the `except Exception as e:` block.
+        bad = tmp_path / "test.json"
+        bad.write_text("{}")
+
+        def mock_open(*args, **kwargs):
+            raise OSError("mocked os error")
+
+        import builtins
+        monkeypatch.setattr(builtins, "open", mock_open)
+
+        with pytest.raises(OSError):
+            load_json_file(bad)
+
     def test_save_returns_path(self, tmp_path):
         out = tmp_path / "result.json"
         returned = save_json_file({"a": 1}, out)
@@ -976,6 +991,23 @@ class TestLoadSaveJsonFile:
         save_json_file(data, out)
         loaded = load_json_file(out)
         assert loaded["greeting"] == "Bonjour le monde"
+
+    def test_save_json_file_exception_handling(self, tmp_path):
+        out = tmp_path / "fail.json"
+        with pytest.raises(TypeError):
+            save_json_file({"a": set([1, 2, 3])}, out)
+
+    def test_save_json_file_os_error_handling(self, tmp_path, monkeypatch):
+        out = tmp_path / "fail_os.json"
+
+        def mock_open(*args, **kwargs):
+            raise OSError("mocked os error")
+
+        import builtins
+        monkeypatch.setattr(builtins, "open", mock_open)
+
+        with pytest.raises(OSError):
+            save_json_file({"a": 1}, out)
 
 
 # ---------------------------------------------------------------------------
