@@ -42,6 +42,13 @@ High-fidelity biological simulation engine for ant colony modeling, emergent beh
 - **perception**: Multiplier for food detection radius.
 - **endurance**: Multiplier for energy depletion rate and recovery.
 
+### MCP Tools
+
+| Tool | Signature | Description |
+|------|-----------|-------------|
+| `bio_simulation_run_colony` | `(population: int, hours: int) → dict` | Runs a colony simulation and returns stats. |
+| `bio_simulation_evolve_population` | `(generations: int, size: int) → dict` | Evolves a population and returns trait distributions. |
+
 ## Error Conditions
 
 - `ValueError`: If population or hours are negative.

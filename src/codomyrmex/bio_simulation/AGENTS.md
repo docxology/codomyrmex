@@ -24,6 +24,8 @@ The Bio-Simulation module provides high-fidelity ant colony simulation. It is us
 
 6. **Safety**: Dead ants are automatically removed from `colony.ants` during `step()`.
 
+7. **MCP Tools**: Use `bio_simulation_run_colony` and `bio_simulation_evolve_population` exposed in `mcp_tools.py` for agentic interactions and retrieving stats/distributions easily via the MCP framework.
+
 ## Navigation
 
 - [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)

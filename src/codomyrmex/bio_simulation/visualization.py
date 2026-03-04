@@ -4,8 +4,13 @@ from .colony import Colony
 
 
 def render_colony_state(colony: Colony) -> ScatterPlot:
-    """
-    Renders a scatter plot of current ant positions.
+    """Renders a scatter plot of current ant positions.
+
+    Args:
+        colony: The colony to visualize.
+
+    Returns:
+        A ScatterPlot of the colony state.
     """
     # Assuming ants have x and y attributes
     # If not, use mock data or fix based on Colony implementation
