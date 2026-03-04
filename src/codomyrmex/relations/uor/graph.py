@@ -22,9 +22,11 @@ class UORGraph:
 
     Args:
         quantum: Quantum level for the underlying PrismEngine (default 0).
+
     """
 
     def __init__(self, quantum: int = 0) -> None:
+        """Initialize UORGraph."""
         self._manager = EntityManager(quantum=quantum)
         self._relationships: dict[str, UORRelationship] = {}
 
@@ -58,6 +60,7 @@ class UORGraph:
 
         Returns:
             True if the entity was found and removed.
+
         """
         if not self._manager.remove_entity(entity_id):
             return False
@@ -94,6 +97,7 @@ class UORGraph:
 
         Returns:
             The created relationship, or None if either entity is missing.
+
         """
         if self._manager.get_entity(source_id) is None:
             return None
@@ -127,6 +131,7 @@ class UORGraph:
 
         Returns:
             List of relationships where entity is source or target.
+
         """
         results: list[UORRelationship] = []
         for rel in self._relationships.values():
@@ -142,6 +147,7 @@ class UORGraph:
 
         Returns:
             True if removed.
+
         """
         if relationship_id in self._relationships:
             del self._relationships[relationship_id]
@@ -159,6 +165,7 @@ class UORGraph:
 
         Returns:
             List of neighbor entities (deduplicated).
+
         """
         neighbor_ids: set[str] = set()
         for rel in self._relationships.values():
@@ -184,6 +191,7 @@ class UORGraph:
         Returns:
             Ordered list of entity IDs from source to target (inclusive).
             Empty list if no path exists or entities are missing.
+
         """
         if self._manager.get_entity(source_id) is None:
             return []
@@ -235,7 +243,7 @@ class UORGraph:
         return list(self._relationships.values())
 
     def __len__(self) -> int:
-        """Number of entities in the graph."""
+        """Return the number of entities in the graph."""
         return self.entity_count
 
     def to_dict(self) -> dict[str, Any]:
@@ -243,12 +251,8 @@ class UORGraph:
         return {
             "entity_count": self.entity_count,
             "relationship_count": self.relationship_count,
-            "entities": [
-                e.to_dict() for e in self._manager.all_entities
-            ],
-            "relationships": [
-                r.to_dict() for r in self._relationships.values()
-            ],
+            "entities": [e.to_dict() for e in self._manager.all_entities],
+            "relationships": [r.to_dict() for r in self._relationships.values()],
         }
 
     def __repr__(self) -> str:

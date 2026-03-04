@@ -22,6 +22,7 @@ class Interaction:
         type: Interaction category (email, call, meeting, note, etc.).
         notes: Free-text description of the interaction.
         timestamp: When the interaction occurred.
+
     """
 
     id: str = field(default_factory=lambda: str(uuid4()))
@@ -42,6 +43,7 @@ class Contact:
         metadata: Arbitrary key-value metadata.
         created_at: ISO-format creation timestamp.
         interactions: History of interactions with this contact.
+
     """
 
     id: str = field(default_factory=lambda: str(uuid4()))
@@ -86,6 +88,7 @@ class ContactManager:
 
         Returns:
             The newly created Contact instance.
+
         """
         tags = kwargs.pop("tags", [])
         metadata = kwargs.pop("metadata", {})
@@ -101,6 +104,7 @@ class ContactManager:
 
         Returns:
             The Contact if found, otherwise None.
+
         """
         return self._contacts.get(contact_id)
 
@@ -122,6 +126,7 @@ class ContactManager:
 
         Returns:
             List of matching Contact instances.
+
         """
         q = query.lower()
         results: list[Contact] = []
@@ -143,6 +148,7 @@ class ContactManager:
 
         Returns:
             True if the contact was found and updated.
+
         """
         contact = self._contacts.get(contact_id)
         if contact is None:
@@ -163,6 +169,7 @@ class ContactManager:
         Returns:
             List of interaction dicts sorted by timestamp (newest first),
             or an empty list if the contact is not found.
+
         """
         contact = self._contacts.get(contact_id)
         if contact is None:
@@ -177,7 +184,9 @@ class ContactManager:
             for i in interactions
         ]
 
-    def add_interaction(self, contact_id: str, type: str, notes: str) -> Interaction | None:
+    def add_interaction(
+        self, contact_id: str, type: str, notes: str
+    ) -> Interaction | None:
         """Log a new interaction with a contact.
 
         Args:
@@ -187,6 +196,7 @@ class ContactManager:
 
         Returns:
             The created Interaction, or None if the contact was not found.
+
         """
         contact = self._contacts.get(contact_id)
         if contact is None:

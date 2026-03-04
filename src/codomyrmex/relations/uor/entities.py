@@ -7,6 +7,7 @@ for structural identity.
 References:
     - https://github.com/UOR-Foundation/UOR-Framework
     - https://github.com/UOR-Foundation/prism
+
 """
 
 from __future__ import annotations
@@ -46,6 +47,7 @@ class UOREntity:
         content_hash: SHA256 hash of (name, entity_type, attributes).
         triadic_coordinates: PRISM coordinates if computed.
         created_at: ISO-format creation timestamp.
+
     """
 
     id: str = field(default_factory=lambda: str(uuid4()))
@@ -54,9 +56,7 @@ class UOREntity:
     attributes: dict[str, Any] = field(default_factory=dict)
     content_hash: str = ""
     triadic_coordinates: TriadicCoordinate | None = None
-    created_at: str = field(
-        default_factory=lambda: datetime.now(UTC).isoformat()
-    )
+    created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     def __post_init__(self) -> None:
         """Compute content hash from intrinsic attributes if not set."""
@@ -65,17 +65,20 @@ class UOREntity:
 
     def _compute_hash(self) -> str:
         """Compute content hash from name, type, and attributes."""
-        return _content_hash({
-            "name": self.name,
-            "entity_type": self.entity_type,
-            "attributes": self.attributes,
-        })
+        return _content_hash(
+            {
+                "name": self.name,
+                "entity_type": self.entity_type,
+                "attributes": self.attributes,
+            }
+        )
 
     def recompute_hash(self) -> str:
         """Recompute and update the content hash after attribute changes.
 
         Returns:
             The new content hash.
+
         """
         self.content_hash = self._compute_hash()
         return self.content_hash
@@ -121,6 +124,7 @@ class UOREntity:
         Args:
             other: Source entity to merge from.
             overwrite: If True, overwrite existing keys.
+
         """
         for k, v in other.attributes.items():
             if overwrite or k not in self.attributes:
@@ -135,8 +139,7 @@ class UOREntity:
         if not all_keys:
             return 0.0
         matching = sum(
-            1 for k in all_keys
-            if self.attributes.get(k) == other.attributes.get(k)
+            1 for k in all_keys if self.attributes.get(k) == other.attributes.get(k)
         )
         return matching / len(all_keys)
 
@@ -159,6 +162,7 @@ class UORRelationship:
         weight: Numeric strength of the relationship (default 1.0).
         bidirectional: Whether the relationship is undirected.
         created_at: ISO-format creation timestamp.
+
     """
 
     id: str = field(default_factory=lambda: str(uuid4()))
@@ -169,9 +173,7 @@ class UORRelationship:
     relationship_hash: str = ""
     weight: float = 1.0
     bidirectional: bool = False
-    created_at: str = field(
-        default_factory=lambda: datetime.now(UTC).isoformat()
-    )
+    created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     def __post_init__(self) -> None:
         """Compute relationship hash if not set."""
@@ -180,12 +182,14 @@ class UORRelationship:
 
     def _compute_hash(self) -> str:
         """Compute content hash from relationship attributes."""
-        return _content_hash({
-            "source_id": self.source_id,
-            "target_id": self.target_id,
-            "relationship_type": self.relationship_type,
-            "attributes": self.attributes,
-        })
+        return _content_hash(
+            {
+                "source_id": self.source_id,
+                "target_id": self.target_id,
+                "relationship_type": self.relationship_type,
+                "attributes": self.attributes,
+            }
+        )
 
     def inverse(self) -> UORRelationship:
         """Create the inverse relationship (swap source and target)."""
@@ -215,4 +219,3 @@ class UORRelationship:
             "bidirectional": self.bidirectional,
             "created_at": self.created_at,
         }
-

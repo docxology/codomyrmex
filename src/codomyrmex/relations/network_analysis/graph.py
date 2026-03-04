@@ -20,6 +20,7 @@ class SocialGraph:
     Attributes:
         nodes: Mapping of node ID to attribute dict.
         edges: Adjacency list mapping node ID to {neighbor: weight}.
+
     """
 
     def __init__(self) -> None:
@@ -35,6 +36,7 @@ class SocialGraph:
         Args:
             id: Unique node identifier.
             attributes: Optional key-value metadata.
+
         """
         if id in self._nodes:
             if attributes:
@@ -54,6 +56,7 @@ class SocialGraph:
             source: First node ID.
             target: Second node ID.
             weight: Edge weight (default 1.0).
+
         """
         if source not in self._nodes:
             self.add_node(source)
@@ -72,6 +75,7 @@ class SocialGraph:
 
         Returns:
             List of sets, each set containing node IDs in a community.
+
         """
         labels: dict[str, str] = {n: n for n in self._nodes}
         max_iterations = 50
@@ -114,15 +118,13 @@ class SocialGraph:
 
         Returns:
             Mapping of node ID to centrality score in [0, 1].
+
         """
         n = len(self._nodes)
         if n <= 1:
             return dict.fromkeys(self._nodes, 0.0)
 
-        return {
-            nid: len(self._edges.get(nid, {})) / (n - 1)
-            for nid in self._nodes
-        }
+        return {nid: len(self._edges.get(nid, {})) / (n - 1) for nid in self._nodes}
 
     def shortest_path(self, source: str, target: str) -> list[str]:
         """Find the shortest (fewest hops) path between two nodes via BFS.
@@ -134,6 +136,7 @@ class SocialGraph:
         Returns:
             Ordered list of node IDs from source to target inclusive.
             Empty list if no path exists or nodes are missing.
+
         """
         if source not in self._nodes or target not in self._nodes:
             return []
@@ -168,6 +171,7 @@ class SocialGraph:
 
         Returns:
             Influence score in [0, 1], or 0.0 if the node is absent.
+
         """
         if node_id not in self._nodes:
             return 0.0
@@ -216,6 +220,7 @@ class GraphMetrics:
 
         Returns:
             Density value in [0, 1].
+
         """
         n = graph.node_count
         if n <= 1:
@@ -236,6 +241,7 @@ class GraphMetrics:
 
         Returns:
             Average clustering coefficient in [0, 1].
+
         """
         coefficients: list[float] = []
 
@@ -268,6 +274,7 @@ class GraphMetrics:
 
         Returns:
             Mapping of degree value to the count of nodes with that degree.
+
         """
         distribution: dict[int, int] = defaultdict(int)
         for node_id in graph.nodes:
