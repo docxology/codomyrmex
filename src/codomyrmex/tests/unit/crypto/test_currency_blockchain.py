@@ -28,18 +28,18 @@ class TestBlockCreation:
     """Tests for block creation and hash computation."""
 
     def test_create_block_sets_index(self):
-        """Test functionality: create block sets index."""
+        """Verify create block sets index behavior."""
         block = create_block(0, "genesis", "0" * 64)
         assert block.index == 0
 
     def test_create_block_computes_hash(self):
-        """Test functionality: create block computes hash."""
+        """Verify create block computes hash behavior."""
         block = create_block(0, "genesis", "0" * 64)
         assert block.hash
         assert len(block.hash) == 64  # SHA-256 hex digest
 
     def test_hash_is_deterministic_for_same_block(self):
-        """Test functionality: hash is deterministic for same block."""
+        """Verify hash is deterministic for same block behavior."""
         block = Block(
             index=1,
             timestamp=1000000.0,
@@ -52,13 +52,13 @@ class TestBlockCreation:
         assert h1 == h2
 
     def test_different_data_different_hash(self):
-        """Test functionality: different data different hash."""
+        """Verify different data different hash behavior."""
         b1 = Block(index=0, timestamp=1.0, data="A", previous_hash="0")
         b2 = Block(index=0, timestamp=1.0, data="B", previous_hash="0")
         assert calculate_block_hash(b1) != calculate_block_hash(b2)
 
     def test_different_nonce_different_hash(self):
-        """Test functionality: different nonce different hash."""
+        """Verify different nonce different hash behavior."""
         b1 = Block(index=0, timestamp=1.0, data="X", previous_hash="0", nonce=0)
         b2 = Block(index=0, timestamp=1.0, data="X", previous_hash="0", nonce=1)
         assert calculate_block_hash(b1) != calculate_block_hash(b2)
@@ -78,20 +78,20 @@ class TestMerkleTree:
     """Tests for Merkle tree construction."""
 
     def test_single_leaf_root_equals_leaf(self):
-        """Test functionality: single leaf root equals leaf."""
+        """Verify single leaf root equals leaf behavior."""
         leaves = [_leaf("a")]
         tree = build_merkle_tree(leaves)
         assert tree.root == leaves[0]
 
     def test_two_leaves_root_is_hash_of_pair(self):
-        """Test functionality: two leaves root is hash of pair."""
+        """Verify two leaves root is hash of pair behavior."""
         a, b = _leaf("a"), _leaf("b")
         tree = build_merkle_tree([a, b])
         expected = hashlib.sha256(a + b).digest()
         assert tree.root == expected
 
     def test_four_leaves_known_structure(self):
-        """Test functionality: four leaves known structure."""
+        """Verify four leaves known structure behavior."""
         leaves = [_leaf(c) for c in "abcd"]
         tree = build_merkle_tree(leaves)
 
@@ -101,7 +101,7 @@ class TestMerkleTree:
         assert tree.root == root
 
     def test_odd_leaf_count_duplicates_last(self):
-        """Test functionality: odd leaf count duplicates last."""
+        """Verify odd leaf count duplicates last behavior."""
         leaves = [_leaf(c) for c in "abc"]
         tree = build_merkle_tree(leaves)
 
@@ -111,12 +111,12 @@ class TestMerkleTree:
         assert tree.root == root
 
     def test_empty_leaves_raises(self):
-        """Test functionality: empty leaves raises."""
+        """Verify empty leaves raises behavior."""
         with pytest.raises(BlockchainError):
             build_merkle_tree([])
 
     def test_levels_count(self):
-        """Test functionality: levels count."""
+        """Verify levels count behavior."""
         leaves = [_leaf(c) for c in "abcd"]
         tree = build_merkle_tree(leaves)
         # 4 leaves -> level0(4) -> level1(2) -> level2(1) = 3 levels
@@ -137,33 +137,33 @@ class TestMerkleProof:
         return build_merkle_tree(leaves)
 
     def test_valid_proof_for_each_leaf(self, four_leaf_tree):
-        """Test functionality: valid proof for each leaf."""
+        """Verify valid proof for each leaf behavior."""
         tree = four_leaf_tree
         for i in range(len(tree.leaves)):
             proof_obj = get_merkle_proof(tree, i)
             assert verify_merkle_proof(proof_obj.leaf, proof_obj.proof, proof_obj.root)
 
     def test_tampered_leaf_fails_verification(self, four_leaf_tree):
-        """Test functionality: tampered leaf fails verification."""
+        """Verify tampered leaf fails verification behavior."""
         tree = four_leaf_tree
         proof_obj = get_merkle_proof(tree, 0)
         tampered_leaf = b"\x00" * 32
         assert not verify_merkle_proof(tampered_leaf, proof_obj.proof, proof_obj.root)
 
     def test_tampered_root_fails_verification(self, four_leaf_tree):
-        """Test functionality: tampered root fails verification."""
+        """Verify tampered root fails verification behavior."""
         tree = four_leaf_tree
         proof_obj = get_merkle_proof(tree, 0)
         tampered_root = b"\xff" * 32
         assert not verify_merkle_proof(proof_obj.leaf, proof_obj.proof, tampered_root)
 
     def test_out_of_range_index_raises(self, four_leaf_tree):
-        """Test functionality: out of range index raises."""
+        """Verify out of range index raises behavior."""
         with pytest.raises(BlockchainError):
             get_merkle_proof(four_leaf_tree, 99)
 
     def test_proof_for_odd_tree(self):
-        """Test functionality: proof for odd tree."""
+        """Verify proof for odd tree behavior."""
         leaves = [_leaf(c) for c in "abc"]
         tree = build_merkle_tree(leaves)
         for i in range(3):

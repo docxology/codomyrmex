@@ -2,7 +2,7 @@ from codomyrmex.bio_simulation import Colony
 
 
 def test_colony_simulation():
-    """Test functionality: colony simulation."""
+    """Verify colony simulation behavior."""
     colony = Colony(population=10)
     assert len(colony.ants) == 10
     assert colony.tick == 0
@@ -14,7 +14,7 @@ def test_colony_simulation():
     assert colony.ants[0].energy < 1.0
 
 def test_census():
-    """Test functionality: state distribution."""
+    """Verify state distribution behavior."""
     colony = Colony(population=10)
     stats = colony.stats()
     assert stats["state_distribution"]["FORAGING"] == 10

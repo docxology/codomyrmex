@@ -17,27 +17,27 @@ from codomyrmex.model_context_protocol.reliability.rate_limiter import (
 
 
 def test_bucket_starts_full():
-    """Test functionality: bucket starts full."""
+    """Verify bucket starts full behavior."""
     b = _TokenBucket(rate=10, burst=10)
     assert b.tokens == pytest.approx(10, abs=0.1)
 
 
 def test_bucket_consume_reduces_tokens():
-    """Test functionality: bucket consume reduces tokens."""
+    """Verify bucket consume reduces tokens behavior."""
     b = _TokenBucket(rate=10, burst=10)
     assert b.consume(1)
     assert b.tokens < 10
 
 
 def test_bucket_rejects_when_empty():
-    """Test functionality: bucket rejects when empty."""
+    """Verify bucket rejects when empty behavior."""
     b = _TokenBucket(rate=1, burst=2)
     assert b.consume(2)
     assert not b.consume(1)
 
 
 def test_bucket_refills_over_time():
-    """Test functionality: bucket refills over time."""
+    """Verify bucket refills over time behavior."""
     b = _TokenBucket(rate=100, burst=10)
     b.consume(10)
     assert b.tokens < 1
@@ -46,7 +46,7 @@ def test_bucket_refills_over_time():
 
 
 def test_bucket_caps_at_burst():
-    """Test functionality: bucket caps at burst."""
+    """Verify bucket caps at burst behavior."""
     b = _TokenBucket(rate=1000, burst=5)
     time.sleep(0.01)  # would add 10 tokens at rate 1000
     assert b.tokens <= 5
@@ -56,14 +56,14 @@ def test_bucket_caps_at_burst():
 
 
 def test_limiter_allows_under_rate():
-    """Test functionality: limiter allows under rate."""
+    """Verify limiter allows under rate behavior."""
     rl = RateLimiter(RateLimiterConfig(rate=100, burst=100))
     for _ in range(50):
         assert rl.allow("test-tool")
 
 
 def test_limiter_rejects_over_burst():
-    """Test functionality: limiter rejects over burst."""
+    """Verify limiter rejects over burst behavior."""
     rl = RateLimiter(RateLimiterConfig(rate=1, burst=3))
     assert rl.allow("t1")
     assert rl.allow("t2")
@@ -72,7 +72,7 @@ def test_limiter_rejects_over_burst():
 
 
 def test_per_tool_rate_limit():
-    """Test functionality: per tool rate limit."""
+    """Verify per tool rate limit behavior."""
     rl = RateLimiter(RateLimiterConfig(
         rate=1000,
         burst=1000,
@@ -86,7 +86,7 @@ def test_per_tool_rate_limit():
 
 
 def test_per_tool_does_not_affect_other_tools():
-    """Test functionality: per tool does not affect other tools."""
+    """Verify per tool does not affect other tools behavior."""
     rl = RateLimiter(RateLimiterConfig(
         rate=100,
         burst=100,
@@ -101,7 +101,7 @@ def test_per_tool_does_not_affect_other_tools():
 
 
 def test_limiter_recovers_over_time():
-    """Test functionality: limiter recovers over time."""
+    """Verify limiter recovers over time behavior."""
     rl = RateLimiter(RateLimiterConfig(rate=100, burst=2))
     rl.allow("a")
     rl.allow("a")
@@ -114,7 +114,7 @@ def test_limiter_recovers_over_time():
 
 
 def test_metrics_structure():
-    """Test functionality: metrics structure."""
+    """Verify metrics structure behavior."""
     rl = RateLimiter(RateLimiterConfig(
         rate=10, burst=20,
         per_tool_rate={"x": 5}, per_tool_burst={"x": 10},
@@ -132,7 +132,7 @@ def test_metrics_structure():
 
 
 def test_reset_restores_full_capacity():
-    """Test functionality: reset restores full capacity."""
+    """Verify reset restores full capacity behavior."""
     rl = RateLimiter(RateLimiterConfig(rate=1, burst=2))
     rl.allow("a")
     rl.allow("a")

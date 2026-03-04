@@ -16,32 +16,32 @@ from codomyrmex.agents.meta.strategies import Strategy, StrategyLibrary
 class TestOutcomeScorer:
     """Test suite for OutcomeScorer."""
     def test_perfect_score(self) -> None:
-        """Test functionality: perfect score."""
+        """Verify perfect score behavior."""
         scorer = OutcomeScorer()
         s = scorer.score(tests_passed=10, tests_total=10)
         assert s.correctness == 1.0
         assert s.composite > 0.0
 
     def test_zero_correctness(self) -> None:
-        """Test functionality: zero correctness."""
+        """Verify zero correctness behavior."""
         scorer = OutcomeScorer()
         s = scorer.score(tests_passed=0, tests_total=10, tokens_used=1000)
         assert s.correctness == 0.0
 
     def test_efficiency(self) -> None:
-        """Test functionality: efficiency."""
+        """Verify efficiency behavior."""
         scorer = OutcomeScorer()
         s = scorer.score(tokens_used=200, token_budget=1000)
         assert s.efficiency == 0.8
 
     def test_quality(self) -> None:
-        """Test functionality: quality."""
+        """Verify quality behavior."""
         scorer = OutcomeScorer()
         s = scorer.score(quality_issues=3, max_quality_issues=10)
         assert s.quality == 0.7
 
     def test_to_dict(self) -> None:
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         s = OutcomeScore(correctness=0.9, composite=0.85)
         d = s.to_dict()
         assert d["correctness"] == 0.9
@@ -53,7 +53,7 @@ class TestOutcomeScorer:
 class TestStrategy:
     """Test suite for Strategy."""
     def test_record_outcome(self) -> None:
-        """Test functionality: record outcome."""
+        """Verify record outcome behavior."""
         s = Strategy("fast")
         s.record_outcome(True)
         assert s.usage_count == 1
@@ -62,7 +62,7 @@ class TestStrategy:
         assert s.usage_count == 2
 
     def test_to_dict(self) -> None:
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         s = Strategy("test", prompt_template="Do: {task}")
         assert s.to_dict()["name"] == "test"
 
@@ -70,21 +70,21 @@ class TestStrategy:
 class TestStrategyLibrary:
     """Test suite for StrategyLibrary."""
     def test_add_and_get(self) -> None:
-        """Test functionality: add and get."""
+        """Verify add and get behavior."""
         lib = StrategyLibrary()
         lib.add(Strategy("fast"))
         assert lib.get("fast") is not None
         assert lib.size == 1
 
     def test_remove(self) -> None:
-        """Test functionality: remove."""
+        """Verify remove behavior."""
         lib = StrategyLibrary()
         lib.add(Strategy("fast"))
         assert lib.remove("fast") is True
         assert lib.size == 0
 
     def test_best_strategy(self) -> None:
-        """Test functionality: best strategy."""
+        """Verify best strategy behavior."""
         lib = StrategyLibrary()
         low = Strategy("low", success_rate=0.3)
         high = Strategy("high", success_rate=0.9)
@@ -94,7 +94,7 @@ class TestStrategyLibrary:
         assert lib.best_strategy().name == "high"
 
     def test_list_sorted(self) -> None:
-        """Test functionality: list sorted."""
+        """Verify list sorted behavior."""
         lib = StrategyLibrary()
         lib.add(Strategy("a", success_rate=0.5))
         lib.add(Strategy("b", success_rate=0.9))
@@ -108,20 +108,20 @@ class TestStrategyLibrary:
 class TestABTestEngine:
     """Test suite for ABEngine."""
     def test_clear_winner(self) -> None:
-        """Test functionality: clear winner."""
+        """Verify clear winner behavior."""
         engine = ABTestEngine()
         result = engine.compare_scores("a", [0.9, 0.8, 0.85], "b", [0.5, 0.4, 0.3])
         assert result.winner == "a"
         assert result.wins_a == 3
 
     def test_tie(self) -> None:
-        """Test functionality: tie."""
+        """Verify tie behavior."""
         engine = ABTestEngine()
         result = engine.compare_scores("a", [0.5], "b", [0.5])
         assert result.winner == "tie"
 
     def test_to_dict(self) -> None:
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         r = ABTestResult(strategy_a="x", strategy_b="y", winner="x")
         d = r.to_dict()
         assert d["winner"] == "x"
@@ -133,7 +133,7 @@ class TestABTestEngine:
 class TestMetaAgent:
     """Test suite for MetaAgent."""
     def test_run_basic(self) -> None:
-        """Test functionality: run basic."""
+        """Verify run basic behavior."""
         meta = MetaAgent()
         meta.library.add(Strategy("fast", "go fast"))
         meta.library.add(Strategy("careful", "go careful"))
@@ -146,7 +146,7 @@ class TestMetaAgent:
         assert len(meta.history) == 3
 
     def test_improvement_tracked(self) -> None:
-        """Test functionality: improvement tracked."""
+        """Verify improvement tracked behavior."""
         meta = MetaAgent()
         meta.library.add(Strategy("s1"))
         counter = {"n": 0}
@@ -160,13 +160,13 @@ class TestMetaAgent:
         assert meta.history[-1].score >= meta.history[0].score
 
     def test_no_strategies(self) -> None:
-        """Test functionality: no strategies."""
+        """Verify no strategies behavior."""
         meta = MetaAgent()
         result = meta.run(lambda n: {}, iterations=3)
         assert len(result) == 0
 
     def test_task_failure_handled(self) -> None:
-        """Test functionality: task failure handled."""
+        """Verify task failure handled behavior."""
         meta = MetaAgent()
         meta.library.add(Strategy("bad"))
 

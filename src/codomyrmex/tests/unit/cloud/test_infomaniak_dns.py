@@ -452,7 +452,7 @@ class TestInfomaniakDNSClientExpanded:
         return InfomaniakDNSClient(connection=mock_conn), mock_conn
 
     def test_get_zone(self):
-        """Test functionality: get zone."""
+        """Verify get zone behavior."""
         client, mc = self._make_client()
         z = Stub(id="z1", email="a@b.com",
                       status="ACTIVE", ttl=3600)
@@ -463,13 +463,13 @@ class TestInfomaniakDNSClientExpanded:
         assert result["name"] == "example.com."
 
     def test_update_zone(self):
-        """Test functionality: update zone."""
+        """Verify update zone behavior."""
         client, mc = self._make_client()
         assert client.update_zone("z1", email="new@b.com") is True
         mc.dns.update_zone.assert_called_once_with("z1", email="new@b.com")
 
     def test_get_record(self):
-        """Test functionality: get record."""
+        """Verify get record behavior."""
         client, mc = self._make_client()
         r = Stub(id="r1", name="www.example.com.", type="A",
                       records=["1.2.3.4"], ttl=300)
@@ -479,12 +479,12 @@ class TestInfomaniakDNSClientExpanded:
         assert result["type"] == "A"
 
     def test_update_record(self):
-        """Test functionality: update record."""
+        """Verify update record behavior."""
         client, mc = self._make_client()
         assert client.update_record("z1", "r1", records=["5.6.7.8"]) is True
 
     def test_list_ptr_records(self):
-        """Test functionality: list ptr records."""
+        """Verify list ptr records behavior."""
         client, mc = self._make_client()
         ptr = Stub(id="ptr1", ptrdname="host.example.com.",
                         address="1.2.3.4", status="ACTIVE")
@@ -494,7 +494,7 @@ class TestInfomaniakDNSClientExpanded:
         assert result[0]["ptrdname"] == "host.example.com."
 
     def test_set_reverse_dns(self):
-        """Test functionality: set reverse dns."""
+        """Verify set reverse dns behavior."""
         client, mc = self._make_client()
         fip = Stub(id="fip1")
         mc.network.find_ip.return_value = fip
@@ -505,7 +505,7 @@ class TestInfomaniakDNSClientExpanded:
         assert result["ptrdname"] == "host.example.com."
 
     def test_get_reverse_dns(self):
-        """Test functionality: get reverse dns."""
+        """Verify get reverse dns behavior."""
         client, mc = self._make_client()
         fip = Stub(id="fip1")
         mc.network.find_ip.return_value = fip
@@ -515,7 +515,7 @@ class TestInfomaniakDNSClientExpanded:
         assert result["ptrdname"] == "host.example.com."
 
     def test_delete_reverse_dns(self):
-        """Test functionality: delete reverse dns."""
+        """Verify delete reverse dns behavior."""
         client, mc = self._make_client()
         fip = Stub(id="fip1")
         mc.network.find_ip.return_value = fip
@@ -523,7 +523,7 @@ class TestInfomaniakDNSClientExpanded:
         mc.dns.delete_ptr_record.assert_called_once_with("fip1")
 
     def test_list_zones_error(self):
-        """Test functionality: list zones error."""
+        """Verify list zones error behavior."""
         client, mc = self._make_client()
         mc.dns.zones.side_effect = Exception("fail")
         assert client.list_zones() == []

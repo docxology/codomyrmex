@@ -31,7 +31,7 @@ def _make_memory(
 class TestConsolidationConfig:
     """Test suite for ConsolidationConfig."""
     def test_defaults(self) -> None:
-        """Test functionality: defaults."""
+        """Verify defaults behavior."""
         cfg = ConsolidationConfig()
         assert cfg.min_importance == MemoryImportance.MEDIUM
         assert cfg.min_content_length == 20
@@ -41,7 +41,7 @@ class TestConsolidationConfig:
 class TestMemoryConsolidator:
     """Test suite for MemoryConsolidator."""
     def test_consolidate_basic(self) -> None:
-        """Test functionality: consolidate basic."""
+        """Verify consolidate basic behavior."""
         consolidator = MemoryConsolidator()
         memories = [_make_memory(memory_id="m1")]
         cases = consolidator.consolidate(memories)
@@ -49,7 +49,7 @@ class TestMemoryConsolidator:
         assert cases[0].case_id == "memory-m1"
 
     def test_features_populated(self) -> None:
-        """Test functionality: features populated."""
+        """Verify features populated behavior."""
         consolidator = MemoryConsolidator()
         memories = [_make_memory(memory_id="m1")]
         cases = consolidator.consolidate(memories)
@@ -59,14 +59,14 @@ class TestMemoryConsolidator:
         assert "importance" in case.features
 
     def test_context_populated(self) -> None:
-        """Test functionality: context populated."""
+        """Verify context populated behavior."""
         consolidator = MemoryConsolidator()
         memories = [_make_memory(memory_id="m1")]
         cases = consolidator.consolidate(memories)
         assert "full_content" in cases[0].context
 
     def test_skip_low_importance(self) -> None:
-        """Test functionality: skip low importance."""
+        """Verify skip low importance behavior."""
         consolidator = MemoryConsolidator(
             config=ConsolidationConfig(min_importance=MemoryImportance.HIGH)
         )
@@ -75,7 +75,7 @@ class TestMemoryConsolidator:
         assert len(cases) == 0
 
     def test_skip_short_content(self) -> None:
-        """Test functionality: skip short content."""
+        """Verify skip short content behavior."""
         consolidator = MemoryConsolidator(
             config=ConsolidationConfig(min_content_length=100)
         )
@@ -84,7 +84,7 @@ class TestMemoryConsolidator:
         assert len(cases) == 0
 
     def test_no_duplicate_consolidation(self) -> None:
-        """Test functionality: no duplicate consolidation."""
+        """Verify no duplicate consolidation behavior."""
         consolidator = MemoryConsolidator()
         m = _make_memory(memory_id="dup-1")
         consolidator.consolidate([m])
@@ -92,7 +92,7 @@ class TestMemoryConsolidator:
         assert len(cases) == 0
 
     def test_batch_size_respected(self) -> None:
-        """Test functionality: batch size respected."""
+        """Verify batch size respected behavior."""
         consolidator = MemoryConsolidator(
             config=ConsolidationConfig(batch_size=3)
         )
@@ -101,14 +101,14 @@ class TestMemoryConsolidator:
         assert len(cases) == 3
 
     def test_metadata_source(self) -> None:
-        """Test functionality: metadata source."""
+        """Verify metadata source behavior."""
         consolidator = MemoryConsolidator()
         cases = consolidator.consolidate([_make_memory(memory_id="src")])
         assert cases[0].metadata["source"] == "consolidation"
         assert cases[0].metadata["memory_id"] == "src"
 
     def test_mixed_importance(self) -> None:
-        """Test functionality: mixed importance."""
+        """Verify mixed importance behavior."""
         consolidator = MemoryConsolidator()
         memories = [
             _make_memory(importance=MemoryImportance.HIGH, memory_id="high"),

@@ -212,7 +212,7 @@ class TestWithRetryDecorator:
             await always_fails()
 
     def test_sync_retry_succeeds_eventually(self) -> None:
-        """Test functionality: sync retry succeeds eventually."""
+        """Verify sync retry succeeds eventually behavior."""
         attempts = [0]
 
         @with_retry(max_attempts=3, base_delay=0.01)
@@ -227,7 +227,7 @@ class TestWithRetryDecorator:
         assert attempts[0] == 3
 
     def test_sync_retry_exhausts_and_raises(self) -> None:
-        """Test functionality: sync retry exhausts and raises."""
+        """Verify sync retry exhausts and raises behavior."""
         @with_retry(max_attempts=2, base_delay=0.01)
         def always_fails_sync() -> None:
             raise RuntimeError("always")
@@ -236,7 +236,7 @@ class TestWithRetryDecorator:
             always_fails_sync()
 
     def test_retry_only_on_specified_exceptions(self) -> None:
-        """Test functionality: retry only on specified exceptions."""
+        """Verify retry only on specified exceptions behavior."""
         @with_retry(max_attempts=5, base_delay=0.01, retry_on=(ValueError,))
         def raises_type_error() -> None:
             raise TypeError("wrong type")
@@ -260,7 +260,7 @@ class TestExports:
     """Verify Stream 5 types are exported from orchestrator package."""
 
     def test_async_runner_exports(self) -> None:
-        """Test functionality: async runner exports."""
+        """Verify async runner exports behavior."""
         from codomyrmex.orchestrator import (
             AsyncExecutionResult as _AER,
         )
@@ -275,6 +275,6 @@ class TestExports:
         assert _AER is not None
 
     def test_with_retry_export(self) -> None:
-        """Test functionality: with retry export."""
+        """Verify with retry export behavior."""
         from codomyrmex.orchestrator import with_retry as _wr
         assert _wr is not None

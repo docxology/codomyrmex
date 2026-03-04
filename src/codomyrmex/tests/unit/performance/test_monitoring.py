@@ -572,7 +572,7 @@ class TestRegressionDetector:
     """Tests for RegressionDetector."""
 
     def test_no_regression(self):
-        """Test functionality: no regression."""
+        """Verify no regression behavior."""
         from codomyrmex.performance.analysis.regression_detector import (
             Baseline,
             BenchmarkResult,
@@ -585,7 +585,7 @@ class TestRegressionDetector:
         assert report.severity.value == "info"
 
     def test_warning_regression(self):
-        """Test functionality: warning regression."""
+        """Verify warning regression behavior."""
         from codomyrmex.performance.analysis.regression_detector import (
             Baseline,
             BenchmarkResult,
@@ -599,7 +599,7 @@ class TestRegressionDetector:
         assert report.is_regression is True
 
     def test_critical_regression(self):
-        """Test functionality: critical regression."""
+        """Verify critical regression behavior."""
         from codomyrmex.performance.analysis.regression_detector import (
             Baseline,
             BenchmarkResult,
@@ -612,7 +612,7 @@ class TestRegressionDetector:
         assert report.severity.value == "critical"
 
     def test_missing_baseline_raises(self):
-        """Test functionality: missing baseline raises."""
+        """Verify missing baseline raises behavior."""
         from codomyrmex.performance.analysis.regression_detector import (
             BenchmarkResult,
             RegressionDetector,
@@ -627,7 +627,7 @@ class TestBenchmarkComparison:
     """Tests for benchmark comparison utilities."""
 
     def test_compute_delta_improvement(self):
-        """Test functionality: compute delta improvement."""
+        """Verify compute delta improvement behavior."""
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             compute_delta,
         )
@@ -636,7 +636,7 @@ class TestBenchmarkComparison:
         assert delta.absolute_delta == -20.0
 
     def test_compute_delta_regression(self):
-        """Test functionality: compute delta regression."""
+        """Verify compute delta regression behavior."""
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             compute_delta,
         )
@@ -645,7 +645,7 @@ class TestBenchmarkComparison:
         assert delta.relative_delta == pytest.approx(20.0)
 
     def test_mean_and_stddev(self):
-        """Test functionality: mean and stddev."""
+        """Verify mean and stddev behavior."""
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             mean,
             stddev,
@@ -655,7 +655,7 @@ class TestBenchmarkComparison:
         assert stddev(vals) > 0
 
     def test_cv(self):
-        """Test functionality: cv."""
+        """Verify cv behavior."""
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             coefficient_of_variation,
         )

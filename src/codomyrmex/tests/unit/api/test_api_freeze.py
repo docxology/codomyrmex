@@ -24,7 +24,7 @@ class TestAPIContract:
     """Test suite for APIContract."""
 
     def test_add_and_freeze(self):
-        """Test functionality: add and freeze."""
+        """Verify add and freeze behavior."""
         contract = APIContract(name="test")
         contract.add_endpoint(APIEndpoint(name="search", signature="(query: str)"))
         checksum = contract.freeze()
@@ -32,14 +32,14 @@ class TestAPIContract:
         assert len(checksum) > 0
 
     def test_frozen_blocks_modification(self):
-        """Test functionality: frozen blocks modification."""
+        """Verify frozen blocks modification behavior."""
         contract = APIContract()
         contract.freeze()
         with pytest.raises(RuntimeError):
             contract.add_endpoint(APIEndpoint(name="x"))
 
     def test_checksum_deterministic(self):
-        """Test functionality: checksum deterministic."""
+        """Verify checksum deterministic behavior."""
         c1 = APIContract()
         c1.add_endpoint(APIEndpoint(name="a", signature="(x)"))
         c2 = APIContract()
@@ -47,7 +47,7 @@ class TestAPIContract:
         assert c1.freeze() == c2.freeze()
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         contract = APIContract(name="test")
         contract.add_endpoint(APIEndpoint(name="foo"))
         d = contract.to_dict()
@@ -61,7 +61,7 @@ class TestContractValidator:
     """Test suite for ContractValidator."""
 
     def test_compatible(self):
-        """Test functionality: compatible."""
+        """Verify compatible behavior."""
         baseline = APIContract()
         baseline.add_endpoint(APIEndpoint(name="search", signature="(q)"))
         baseline.freeze()
@@ -73,7 +73,7 @@ class TestContractValidator:
         assert validator.is_compatible(current)
 
     def test_detects_removal(self):
-        """Test functionality: detects removal."""
+        """Verify detects removal behavior."""
         baseline = APIContract()
         baseline.add_endpoint(APIEndpoint(name="old_fn", signature="()"))
         baseline.freeze()
@@ -86,7 +86,7 @@ class TestContractValidator:
         assert changes[0].kind == BreakingChangeKind.REMOVED
 
     def test_detects_signature_change(self):
-        """Test functionality: detects signature change."""
+        """Verify detects signature change behavior."""
         baseline = APIContract()
         baseline.add_endpoint(APIEndpoint(name="fn", signature="(x)"))
         baseline.freeze()
@@ -105,14 +105,14 @@ class TestMigrationEngine:
     """Test suite for MigrationEngine."""
 
     def test_add_steps(self):
-        """Test functionality: add steps."""
+        """Verify add steps behavior."""
         engine = MigrationEngine()
         engine.add_rename("search", "search_code")
         engine.add_removal("deprecated_fn")
         assert engine.total_steps == 2
 
     def test_generate_plan(self):
-        """Test functionality: generate plan."""
+        """Verify generate plan behavior."""
         engine = MigrationEngine()
         engine.add_rename("a", "b")
         plan = engine.generate_plan("0.9.0", "1.0.0")
@@ -121,14 +121,14 @@ class TestMigrationEngine:
         assert plan.breaking_count == 1
 
     def test_safe_plan(self):
-        """Test functionality: safe plan."""
+        """Verify safe plan behavior."""
         engine = MigrationEngine()
         engine.add_deprecation("old", replacement="new")
         plan = engine.generate_plan("0.9.0", "1.0.0")
         assert plan.is_safe
 
     def test_markdown_output(self):
-        """Test functionality: markdown output."""
+        """Verify markdown output behavior."""
         engine = MigrationEngine()
         engine.add_rename("x", "y")
         plan = engine.generate_plan("0.9", "1.0")
@@ -143,7 +143,7 @@ class TestAPISurface:
     """Test suite for APISurface."""
 
     def test_analyze(self):
-        """Test functionality: analyze."""
+        """Verify analyze behavior."""
         contract = APIContract()
         contract.add_endpoint(APIEndpoint(name="a", module="mod1", signature="()"))
         contract.add_endpoint(APIEndpoint(name="b", module="mod1"))
@@ -154,7 +154,7 @@ class TestAPISurface:
         assert report.modules == 2
 
     def test_frozen_percentage(self):
-        """Test functionality: frozen percentage."""
+        """Verify frozen percentage behavior."""
         contract = APIContract()
         contract.add_endpoint(APIEndpoint(name="a"))
         contract.add_endpoint(APIEndpoint(name="b"))
@@ -163,7 +163,7 @@ class TestAPISurface:
         assert surface.frozen_percentage() == pytest.approx(1.0)
 
     def test_unfrozen_endpoints(self):
-        """Test functionality: unfrozen endpoints."""
+        """Verify unfrozen endpoints behavior."""
         contract = APIContract()
         contract.add_endpoint(APIEndpoint(name="a"))
         contract.add_endpoint(APIEndpoint(name="b", frozen=True))

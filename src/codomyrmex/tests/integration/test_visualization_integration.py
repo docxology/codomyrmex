@@ -4,7 +4,7 @@ from codomyrmex.relations.visualization import render_social_graph
 
 
 def test_relations_visualization():
-    """Test functionality: relations visualization."""
+    """Verify relations visualization behavior."""
     cm = ContactManager()
     cm.add_contact("Alice", email="alice@example.com")
     diagram = render_social_graph(cm)
@@ -14,7 +14,7 @@ def test_relations_visualization():
 
 
 def test_education_curriculum_structure():
-    """Test functionality: education curriculum structure."""
+    """Verify education curriculum structure behavior."""
     curr = Curriculum("Test", "beginner")
     lesson = curr.add_module("Intro", content="Introduction content", duration_minutes=10)
     assert lesson.title == "Intro"

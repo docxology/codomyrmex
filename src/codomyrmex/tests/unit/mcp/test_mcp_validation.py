@@ -86,7 +86,7 @@ SCHEMA_ARRAY = {
 # ── Basic validation ─────────────────────────────────────────────────
 
 def test_valid_args_pass():
-    """Test functionality: valid args pass."""
+    """Verify valid args pass behavior."""
     result = validate_tool_arguments(TOOL, {"name": "hello", "count": 5}, SCHEMA_SIMPLE)
     assert result.valid
     assert result.errors == []
@@ -94,14 +94,14 @@ def test_valid_args_pass():
 
 
 def test_missing_required_field_rejected():
-    """Test functionality: missing required field rejected."""
+    """Verify missing required field rejected behavior."""
     result = validate_tool_arguments(TOOL, {"count": 5}, SCHEMA_SIMPLE)
     assert not result.valid
     assert any("name" in e for e in result.errors)
 
 
 def test_invalid_type_rejected():
-    """Test functionality: invalid type rejected."""
+    """Verify invalid type rejected behavior."""
     result = validate_tool_arguments(
         TOOL, {"name": "hello", "count": "not_a_number"}, SCHEMA_SIMPLE, coerce=False
     )
@@ -120,14 +120,14 @@ def test_extra_field_ignored():
 # ── Type coercion ────────────────────────────────────────────────────
 
 def test_coerce_str_to_int():
-    """Test functionality: coerce str to int."""
+    """Verify coerce str to int behavior."""
     result = validate_tool_arguments(TOOL, {"name": "x", "count": "42"}, SCHEMA_SIMPLE)
     assert result.valid
     assert result.coerced_args["count"] == 42
 
 
 def test_coerce_str_to_bool_true():
-    """Test functionality: coerce str to bool true."""
+    """Verify coerce str to bool true behavior."""
     result = validate_tool_arguments(
         TOOL, {"name": "x", "enabled": "true"}, SCHEMA_SIMPLE
     )
@@ -136,7 +136,7 @@ def test_coerce_str_to_bool_true():
 
 
 def test_coerce_str_to_bool_false():
-    """Test functionality: coerce str to bool false."""
+    """Verify coerce str to bool false behavior."""
     result = validate_tool_arguments(
         TOOL, {"name": "x", "enabled": "false"}, SCHEMA_SIMPLE
     )
@@ -147,13 +147,13 @@ def test_coerce_str_to_bool_false():
 # ── Enum validation ──────────────────────────────────────────────────
 
 def test_enum_valid():
-    """Test functionality: enum valid."""
+    """Verify enum valid behavior."""
     result = validate_tool_arguments(TOOL, {"level": "high"}, SCHEMA_ENUM)
     assert result.valid
 
 
 def test_enum_invalid():
-    """Test functionality: enum invalid."""
+    """Verify enum invalid behavior."""
     result = validate_tool_arguments(TOOL, {"level": "extreme"}, SCHEMA_ENUM)
     assert not result.valid
     assert any("level" in e for e in result.errors)
@@ -162,21 +162,21 @@ def test_enum_invalid():
 # ── Numeric range ────────────────────────────────────────────────────
 
 def test_minimum_violated():
-    """Test functionality: minimum violated."""
+    """Verify minimum violated behavior."""
     result = validate_tool_arguments(TOOL, {"value": -1}, SCHEMA_NUMERIC)
     assert not result.valid
     assert any("minimum" in e.lower() or "value" in e for e in result.errors)
 
 
 def test_maximum_violated():
-    """Test functionality: maximum violated."""
+    """Verify maximum violated behavior."""
     result = validate_tool_arguments(TOOL, {"value": 101}, SCHEMA_NUMERIC)
     assert not result.valid
     assert any("maximum" in e.lower() or "value" in e for e in result.errors)
 
 
 def test_in_range_passes():
-    """Test functionality: in range passes."""
+    """Verify in range passes behavior."""
     result = validate_tool_arguments(TOOL, {"value": 50}, SCHEMA_NUMERIC)
     assert result.valid
 
@@ -184,13 +184,13 @@ def test_in_range_passes():
 # ── Pattern validation ───────────────────────────────────────────────
 
 def test_pattern_match():
-    """Test functionality: pattern match."""
+    """Verify pattern match behavior."""
     result = validate_tool_arguments(TOOL, {"email": "a@b.com"}, SCHEMA_PATTERN)
     assert result.valid
 
 
 def test_pattern_mismatch():
-    """Test functionality: pattern mismatch."""
+    """Verify pattern mismatch behavior."""
     result = validate_tool_arguments(TOOL, {"email": "not-an-email"}, SCHEMA_PATTERN)
     assert not result.valid
     assert any("pattern" in e.lower() or "email" in e for e in result.errors)
@@ -199,19 +199,19 @@ def test_pattern_mismatch():
 # ── Nested / array schemas ──────────────────────────────────────────
 
 def test_nested_schema_valid():
-    """Test functionality: nested schema valid."""
+    """Verify nested schema valid behavior."""
     result = validate_tool_arguments(TOOL, {"config": {"timeout": 30}}, SCHEMA_NESTED)
     assert result.valid
 
 
 def test_nested_schema_missing_inner_required():
-    """Test functionality: nested schema missing inner required."""
+    """Verify nested schema missing inner required behavior."""
     result = validate_tool_arguments(TOOL, {"config": {}}, SCHEMA_NESTED)
     assert not result.valid
 
 
 def test_array_schema_valid():
-    """Test functionality: array schema valid."""
+    """Verify array schema valid behavior."""
     result = validate_tool_arguments(TOOL, {"tags": ["a", "b"]}, SCHEMA_ARRAY)
     assert result.valid
 
@@ -225,7 +225,7 @@ def test_no_schema_passes_through():
 
 
 def test_empty_args_with_no_required():
-    """Test functionality: empty args with no required."""
+    """Verify empty args with no required behavior."""
     schema = {"inputSchema": {"type": "object", "properties": {"x": {"type": "string"}}}}
     result = validate_tool_arguments(TOOL, {}, schema)
     assert result.valid

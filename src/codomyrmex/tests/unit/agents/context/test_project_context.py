@@ -27,12 +27,12 @@ from codomyrmex.agents.context.project import (
 class TestFileInfo:
     """Test suite for FileInfo."""
     def test_auto_extension(self) -> None:
-        """Test functionality: auto extension."""
+        """Verify auto extension behavior."""
         fi = FileInfo(path="module.py")
         assert fi.extension == "py"
 
     def test_to_dict(self) -> None:
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         fi = FileInfo(path="a.py", module="mymod")
         d = fi.to_dict()
         assert d["module"] == "mymod"
@@ -41,12 +41,12 @@ class TestFileInfo:
 class TestProjectContext:
     """Test suite for ProjectContext."""
     def test_file_count(self) -> None:
-        """Test functionality: file count."""
+        """Verify file count behavior."""
         ctx = ProjectContext(files=[FileInfo("a.py"), FileInfo("b.py")])
         assert ctx.file_count == 2
 
     def test_files_by_extension(self) -> None:
-        """Test functionality: files by extension."""
+        """Verify files by extension behavior."""
         ctx = ProjectContext(files=[
             FileInfo("a.py"), FileInfo("b.md"), FileInfo("c.py"),
         ])
@@ -59,7 +59,7 @@ class TestProjectContext:
 class TestProjectScanner:
     """Test suite for ProjectScanner."""
     def test_scan_real_dir(self) -> None:
-        """Test functionality: scan real dir."""
+        """Verify scan real dir behavior."""
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "mod").mkdir()
             Path(tmpdir, "mod", "hello.py").write_text("def greet(): pass\n")
@@ -70,7 +70,7 @@ class TestProjectScanner:
             assert ctx.module_count >= 1
 
     def test_scan_nonexistent(self) -> None:
-        """Test functionality: scan nonexistent."""
+        """Verify scan nonexistent behavior."""
         scanner = ProjectScanner()
         ctx = scanner.scan("/nonexistent/path")
         assert ctx.file_count == 0
@@ -82,19 +82,19 @@ class TestProjectScanner:
 class TestToolSelector:
     """Test suite for ToolSelector."""
     def test_python_review(self) -> None:
-        """Test functionality: python review."""
+        """Verify python review behavior."""
         ts = ToolSelector()
         tools = ts.select("py", "review")
         assert "code_reviewer" in tools
 
     def test_toml_audit(self) -> None:
-        """Test functionality: toml audit."""
+        """Verify toml audit behavior."""
         ts = ToolSelector()
         tools = ts.select("toml", "audit")
         assert "dependency_scanner" in tools
 
     def test_unknown_type(self) -> None:
-        """Test functionality: unknown type."""
+        """Verify unknown type behavior."""
         ts = ToolSelector()
         tools = ts.select("xyz", "magic")
         assert tools == []
@@ -106,7 +106,7 @@ class TestToolSelector:
 class TestSymbol:
     """Test suite for Symbol."""
     def test_to_dict(self) -> None:
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         s = Symbol(name="foo", kind="function", line=42)
         d = s.to_dict()
         assert d["name"] == "foo"
@@ -116,7 +116,7 @@ class TestSymbol:
 class TestRepoIndex:
     """Test suite for RepoIndex."""
     def test_filter_by_kind(self) -> None:
-        """Test functionality: filter by kind."""
+        """Verify filter by kind behavior."""
         idx = RepoIndex(symbols=[
             Symbol("foo", "function"),
             Symbol("Bar", "class"),
@@ -131,7 +131,7 @@ class TestRepoIndex:
 class TestRepoIndexer:
     """Test suite for RepoIndexer."""
     def test_index_file(self) -> None:
-        """Test functionality: index file."""
+        """Verify index file behavior."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write('"""Module doc."""\n\nimport os\nfrom pathlib import Path\n\n')
             f.write("def hello():\n    '''Say hi.'''\n    pass\n\n")
@@ -150,13 +150,13 @@ class TestRepoIndexer:
         assert len(idx.imports) >= 2
 
     def test_missing_file(self) -> None:
-        """Test functionality: missing file."""
+        """Verify missing file behavior."""
         indexer = RepoIndexer()
         idx = indexer.index_file("/nonexistent.py")
         assert idx.symbol_count == 0
 
     def test_index_directory(self) -> None:
-        """Test functionality: index directory."""
+        """Verify index directory behavior."""
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "a.py").write_text("def fa(): pass\n")
             Path(tmpdir, "b.py").write_text("class Cb: pass\n")

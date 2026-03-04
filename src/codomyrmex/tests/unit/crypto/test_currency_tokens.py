@@ -23,7 +23,7 @@ class TestCreateERC20Interface:
     """Tests for ERC-20 token descriptor creation."""
 
     def test_basic_creation(self):
-        """Test functionality: basic creation."""
+        """Verify basic creation behavior."""
         token = create_erc20_interface("Tether USD", "USDT", 6)
         assert token.name == "Tether USD"
         assert token.symbol == "USDT"
@@ -31,12 +31,12 @@ class TestCreateERC20Interface:
         assert token.total_supply == 0
 
     def test_default_decimals_is_18(self):
-        """Test functionality: default decimals is 18."""
+        """Verify default decimals is 18 behavior."""
         token = create_erc20_interface("MyToken", "MTK")
         assert token.decimals == 18
 
     def test_negative_decimals_raises(self):
-        """Test functionality: negative decimals raises."""
+        """Verify negative decimals raises behavior."""
         with pytest.raises(WalletError):
             create_erc20_interface("Bad", "BAD", decimals=-1)
 
@@ -50,20 +50,20 @@ class TestEncodeTransfer:
     """Tests for ABI-encoding transfer calls."""
 
     def test_encoded_length_is_68_bytes(self):
-        """Test functionality: encoded length is 68 bytes."""
+        """Verify encoded length is 68 bytes behavior."""
         addr = "0x" + "ab" * 20
         encoded = encode_transfer(addr, 1000)
         assert len(encoded) == 68
 
     def test_function_selector_is_4_bytes(self):
-        """Test functionality: function selector is 4 bytes."""
+        """Verify function selector is 4 bytes behavior."""
         addr = "0x" + "00" * 20
         encoded = encode_transfer(addr, 0)
         selector = encoded[:4]
         assert len(selector) == 4
 
     def test_address_embedded_correctly(self):
-        """Test functionality: address embedded correctly."""
+        """Verify address embedded correctly behavior."""
         addr_hex = "ab" * 20
         encoded = encode_transfer("0x" + addr_hex, 100)
         # Address occupies bytes 4-35, right-aligned (last 20 bytes = addr)
@@ -72,24 +72,24 @@ class TestEncodeTransfer:
         assert embedded[12:].hex() == addr_hex
 
     def test_amount_embedded_correctly(self):
-        """Test functionality: amount embedded correctly."""
+        """Verify amount embedded correctly behavior."""
         encoded = encode_transfer("0x" + "00" * 20, 256)
         amount_bytes = encoded[36:68]
         amount = int.from_bytes(amount_bytes, "big")
         assert amount == 256
 
     def test_invalid_address_length_raises(self):
-        """Test functionality: invalid address length raises."""
+        """Verify invalid address length raises behavior."""
         with pytest.raises(WalletError):
             encode_transfer("0xabc", 100)
 
     def test_negative_amount_raises(self):
-        """Test functionality: negative amount raises."""
+        """Verify negative amount raises behavior."""
         with pytest.raises(WalletError):
             encode_transfer("0x" + "ab" * 20, -1)
 
     def test_zero_amount_allowed(self):
-        """Test functionality: zero amount allowed."""
+        """Verify zero amount allowed behavior."""
         encoded = encode_transfer("0x" + "00" * 20, 0)
         assert len(encoded) == 68
 
@@ -110,7 +110,7 @@ class TestDecodeTransferEvent:
         return from_bytes + to_bytes + value_bytes
 
     def test_basic_decode(self):
-        """Test functionality: basic decode."""
+        """Verify basic decode behavior."""
         from_hex = "aa" * 20
         to_hex = "bb" * 20
         data = self._make_log_data(from_hex, to_hex, 5000)
@@ -120,20 +120,20 @@ class TestDecodeTransferEvent:
         assert event.value == 5000
 
     def test_zero_value(self):
-        """Test functionality: zero value."""
+        """Verify zero value behavior."""
         data = self._make_log_data("00" * 20, "ff" * 20, 0)
         event = decode_transfer_event(data)
         assert event.value == 0
 
     def test_large_value(self):
-        """Test functionality: large value."""
+        """Verify large value behavior."""
         large = 10**18  # 1 ETH in wei
         data = self._make_log_data("ab" * 20, "cd" * 20, large)
         event = decode_transfer_event(data)
         assert event.value == large
 
     def test_wrong_length_raises(self):
-        """Test functionality: wrong length raises."""
+        """Verify wrong length raises behavior."""
         with pytest.raises(WalletError):
             decode_transfer_event(b"\x00" * 64)
 

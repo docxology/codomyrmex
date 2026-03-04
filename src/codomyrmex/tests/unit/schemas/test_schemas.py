@@ -100,7 +100,7 @@ class TestResultStatusEnum:
     """Tests for ResultStatus enum values."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert ResultStatus.SUCCESS.value == "success"
         assert ResultStatus.FAILURE.value == "failure"
         assert ResultStatus.PARTIAL.value == "partial"
@@ -108,7 +108,7 @@ class TestResultStatusEnum:
         assert ResultStatus.TIMEOUT.value == "timeout"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(ResultStatus) == 5
 
 
@@ -117,7 +117,7 @@ class TestTaskStatusEnum:
     """Tests for TaskStatus enum values."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert TaskStatus.PENDING.value == "pending"
         assert TaskStatus.IN_PROGRESS.value == "in_progress"
         assert TaskStatus.COMPLETED.value == "completed"
@@ -125,7 +125,7 @@ class TestTaskStatusEnum:
         assert TaskStatus.CANCELLED.value == "cancelled"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(TaskStatus) == 5
 
 
@@ -139,7 +139,7 @@ class TestResult:
     """Tests for the Result dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         r = Result(status=ResultStatus.SUCCESS)
         assert r.status == ResultStatus.SUCCESS
         assert r.data is None
@@ -149,7 +149,7 @@ class TestResult:
         assert r.duration_ms is None
 
     def test_construction_with_all_fields(self):
-        """Test functionality: construction with all fields."""
+        """Verify construction with all fields behavior."""
         r = Result(
             status=ResultStatus.FAILURE,
             data={"key": "val"},
@@ -166,27 +166,27 @@ class TestResult:
         assert r.duration_ms == 42.5
 
     def test_ok_property_true_for_success(self):
-        """Test functionality: ok property true for success."""
+        """Verify ok property true for success behavior."""
         r = Result(status=ResultStatus.SUCCESS)
         assert r.ok is True
 
     def test_ok_property_false_for_failure(self):
-        """Test functionality: ok property false for failure."""
+        """Verify ok property false for failure behavior."""
         r = Result(status=ResultStatus.FAILURE)
         assert r.ok is False
 
     def test_ok_property_false_for_partial(self):
-        """Test functionality: ok property false for partial."""
+        """Verify ok property false for partial behavior."""
         r = Result(status=ResultStatus.PARTIAL)
         assert r.ok is False
 
     def test_ok_property_false_for_timeout(self):
-        """Test functionality: ok property false for timeout."""
+        """Verify ok property false for timeout behavior."""
         r = Result(status=ResultStatus.TIMEOUT)
         assert r.ok is False
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         r = Result(
             status=ResultStatus.SUCCESS,
             data="hello",
@@ -204,7 +204,7 @@ class TestResult:
         assert d["duration_ms"] == 10.0
 
     def test_to_dict_returns_plain_dict(self):
-        """Test functionality: to dict returns plain dict."""
+        """Verify to dict returns plain dict behavior."""
         r = Result(status=ResultStatus.SUCCESS)
         d = r.to_dict()
         assert isinstance(d, dict)
@@ -215,7 +215,7 @@ class TestTask:
     """Tests for the Task dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         t = Task(id="t1", name="build")
         assert t.id == "t1"
         assert t.name == "build"
@@ -228,7 +228,7 @@ class TestTask:
         assert t.metadata == {}
 
     def test_construction_with_all_fields(self):
-        """Test functionality: construction with all fields."""
+        """Verify construction with all fields behavior."""
         t = Task(
             id="t2",
             name="deploy",
@@ -244,7 +244,7 @@ class TestTask:
         assert t.dependencies == ["t1"]
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         t = Task(id="t1", name="build", status=TaskStatus.IN_PROGRESS)
         d = t.to_dict()
         assert d["id"] == "t1"
@@ -257,7 +257,7 @@ class TestConfig:
     """Tests for the Config dataclass including get/set methods."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         c = Config(name="myconf")
         assert c.name == "myconf"
         assert c.values == {}
@@ -265,28 +265,28 @@ class TestConfig:
         assert c.module == ""
 
     def test_get_returns_value(self):
-        """Test functionality: get returns value."""
+        """Verify get returns value behavior."""
         c = Config(name="c", values={"debug": True})
         assert c.get("debug") is True
 
     def test_get_returns_default_for_missing_key(self):
-        """Test functionality: get returns default for missing key."""
+        """Verify get returns default for missing key behavior."""
         c = Config(name="c")
         assert c.get("missing", 42) == 42
 
     def test_get_returns_none_for_missing_key_no_default(self):
-        """Test functionality: get returns none for missing key no default."""
+        """Verify get returns none for missing key no default behavior."""
         c = Config(name="c")
         assert c.get("missing") is None
 
     def test_set_adds_new_key(self):
-        """Test functionality: set adds new key."""
+        """Verify set adds new key behavior."""
         c = Config(name="c")
         c.set("port", 8080)
         assert c.get("port") == 8080
 
     def test_set_overwrites_existing_key(self):
-        """Test functionality: set overwrites existing key."""
+        """Verify set overwrites existing key behavior."""
         c = Config(name="c", values={"port": 80})
         c.set("port", 443)
         assert c.get("port") == 443
@@ -297,7 +297,7 @@ class TestModuleInfo:
     """Tests for ModuleInfo dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         m = ModuleInfo(name="schemas")
         assert m.name == "schemas"
         assert m.version == "0.1.0"
@@ -309,7 +309,7 @@ class TestModuleInfo:
         assert m.has_events is False
 
     def test_construction_with_all_fields(self):
-        """Test functionality: construction with all fields."""
+        """Verify construction with all fields behavior."""
         m = ModuleInfo(
             name="logging_monitoring",
             version="0.2.0",
@@ -330,7 +330,7 @@ class TestToolDefinition:
     """Tests for ToolDefinition dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         td = ToolDefinition(name="analyze", description="Run analysis", module="static_analysis")
         assert td.name == "analyze"
         assert td.description == "Run analysis"
@@ -345,7 +345,7 @@ class TestNotification:
     """Tests for Notification dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         n = Notification(title="Alert", message="Something happened")
         assert n.title == "Alert"
         assert n.message == "Something happened"
@@ -364,7 +364,7 @@ class TestCodeEntityTypeEnum:
     """Tests for CodeEntityType enum."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert CodeEntityType.FILE.value == "file"
         assert CodeEntityType.CLASS.value == "class"
         assert CodeEntityType.FUNCTION.value == "function"
@@ -375,7 +375,7 @@ class TestCodeEntityTypeEnum:
         assert CodeEntityType.IMPORT.value == "import"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(CodeEntityType) == 8
 
 
@@ -384,7 +384,7 @@ class TestAnalysisSeverityEnum:
     """Tests for AnalysisSeverity enum."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert AnalysisSeverity.INFO.value == "info"
         assert AnalysisSeverity.LOW.value == "low"
         assert AnalysisSeverity.MEDIUM.value == "medium"
@@ -392,7 +392,7 @@ class TestAnalysisSeverityEnum:
         assert AnalysisSeverity.CRITICAL.value == "critical"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(AnalysisSeverity) == 5
 
 
@@ -401,14 +401,14 @@ class TestSecuritySeverityEnum:
     """Tests for SecuritySeverity enum."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert SecuritySeverity.LOW.value == "low"
         assert SecuritySeverity.MEDIUM.value == "medium"
         assert SecuritySeverity.HIGH.value == "high"
         assert SecuritySeverity.CRITICAL.value == "critical"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(SecuritySeverity) == 4
 
 
@@ -417,7 +417,7 @@ class TestSchemaTestStatusEnum:
     """Tests for TestStatus enum."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert SchemaTestStatus.PASSED.value == "passed"
         assert SchemaTestStatus.FAILED.value == "failed"
         assert SchemaTestStatus.SKIPPED.value == "skipped"
@@ -425,7 +425,7 @@ class TestSchemaTestStatusEnum:
         assert SchemaTestStatus.XFAIL.value == "xfail"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(SchemaTestStatus) == 5
 
 
@@ -439,7 +439,7 @@ class TestCodeEntity:
     """Tests for CodeEntity dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         ce = CodeEntity(name="main", entity_type=CodeEntityType.FUNCTION)
         assert ce.name == "main"
         assert ce.entity_type == CodeEntityType.FUNCTION
@@ -451,7 +451,7 @@ class TestCodeEntity:
         assert ce.metadata == {}
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         ce = CodeEntity(
             name="MyClass",
             entity_type=CodeEntityType.CLASS,
@@ -473,7 +473,7 @@ class TestAnalysisResult:
     """Tests for AnalysisResult dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         ar = AnalysisResult(analyzer="ruff", target="src/")
         assert ar.analyzer == "ruff"
         assert ar.target == "src/"
@@ -481,7 +481,7 @@ class TestAnalysisResult:
         assert ar.message == ""
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         ar = AnalysisResult(
             analyzer="mypy",
             target="core.py",
@@ -505,7 +505,7 @@ class TestSecurityFinding:
     """Tests for SecurityFinding dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         sf = SecurityFinding(title="SQL Injection", severity=SecuritySeverity.CRITICAL)
         assert sf.title == "SQL Injection"
         assert sf.severity == SecuritySeverity.CRITICAL
@@ -513,7 +513,7 @@ class TestSecurityFinding:
         assert sf.cwe_id == ""
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         sf = SecurityFinding(
             title="XSS",
             severity=SecuritySeverity.HIGH,
@@ -536,7 +536,7 @@ class TestSchemaTestResult:
     """Tests for TestResult dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         tr = SchemaTestResult(test_name="test_login", status=SchemaTestStatus.PASSED)
         assert tr.test_name == "test_login"
         assert tr.status == SchemaTestStatus.PASSED
@@ -546,7 +546,7 @@ class TestSchemaTestResult:
         assert tr.stderr == ""
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         tr = SchemaTestResult(
             test_name="test_auth",
             status=SchemaTestStatus.FAILED,
@@ -571,7 +571,7 @@ class TestDeploymentStatusEnum:
     """Tests for DeploymentStatus enum."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert DeploymentStatus.PENDING.value == "pending"
         assert DeploymentStatus.IN_PROGRESS.value == "in_progress"
         assert DeploymentStatus.DEPLOYED.value == "deployed"
@@ -580,7 +580,7 @@ class TestDeploymentStatusEnum:
         assert DeploymentStatus.ROLLED_BACK.value == "rolled_back"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(DeploymentStatus) == 6
 
 
@@ -589,7 +589,7 @@ class TestPipelineStatusEnum:
     """Tests for PipelineStatus enum."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert PipelineStatus.QUEUED.value == "queued"
         assert PipelineStatus.RUNNING.value == "running"
         assert PipelineStatus.SUCCEEDED.value == "succeeded"
@@ -597,7 +597,7 @@ class TestPipelineStatusEnum:
         assert PipelineStatus.CANCELLED.value == "cancelled"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(PipelineStatus) == 5
 
 
@@ -606,14 +606,14 @@ class TestMetricTypeEnum:
     """Tests for MetricType enum."""
 
     def test_values(self):
-        """Test functionality: values."""
+        """Verify values behavior."""
         assert MetricType.COUNTER.value == "counter"
         assert MetricType.GAUGE.value == "gauge"
         assert MetricType.HISTOGRAM.value == "histogram"
         assert MetricType.SUMMARY.value == "summary"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(MetricType) == 4
 
 
@@ -627,7 +627,7 @@ class TestDeployment:
     """Tests for Deployment dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         dep = Deployment(id="d1", name="prod-deploy")
         assert dep.id == "d1"
         assert dep.name == "prod-deploy"
@@ -639,7 +639,7 @@ class TestDeployment:
         assert dep.metadata == {}
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         dep = Deployment(
             id="d2",
             name="staging",
@@ -660,7 +660,7 @@ class TestPipeline:
     """Tests for Pipeline dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         p = Pipeline(id="p1", name="ci-main")
         assert p.id == "p1"
         assert p.status == PipelineStatus.QUEUED
@@ -668,7 +668,7 @@ class TestPipeline:
         assert p.current_stage == ""
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         p = Pipeline(
             id="p2",
             name="deploy-pipe",
@@ -687,7 +687,7 @@ class TestResource:
     """Tests for Resource dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         r = Resource(id="r1", name="web-server")
         assert r.status == "active"
         assert r.resource_type == ""
@@ -695,7 +695,7 @@ class TestResource:
         assert r.properties == {}
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         r = Resource(
             id="r2",
             name="db-instance",
@@ -715,7 +715,7 @@ class TestBuildArtifact:
     """Tests for BuildArtifact dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         ba = BuildArtifact(name="app.whl", path="/dist/app.whl")
         assert ba.name == "app.whl"
         assert ba.path == "/dist/app.whl"
@@ -724,7 +724,7 @@ class TestBuildArtifact:
         assert ba.checksum == ""
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         ba = BuildArtifact(
             name="image.tar",
             path="/builds/image.tar",
@@ -743,7 +743,7 @@ class TestMetric:
     """Tests for Metric dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         m = Metric(name="cpu_usage", value=72.5)
         assert m.name == "cpu_usage"
         assert m.value == 72.5
@@ -752,7 +752,7 @@ class TestMetric:
         assert m.unit == ""
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         m = Metric(
             name="request_count",
             value=1500,
@@ -771,7 +771,7 @@ class TestCredential:
     """Tests for Credential dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         c = Credential(id="c1", name="github-token")
         assert c.id == "c1"
         assert c.name == "github-token"
@@ -781,7 +781,7 @@ class TestCredential:
         assert c.metadata == {}
 
     def test_construction_with_all_fields(self):
-        """Test functionality: construction with all fields."""
+        """Verify construction with all fields behavior."""
         c = Credential(
             id="c2",
             name="aws-key",
@@ -799,7 +799,7 @@ class TestPermission:
     """Tests for Permission dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         p = Permission(subject="user:admin", action="write", resource="repo:main")
         assert p.subject == "user:admin"
         assert p.action == "write"
@@ -808,7 +808,7 @@ class TestPermission:
         assert p.conditions == {}
 
     def test_construction_with_deny(self):
-        """Test functionality: construction with deny."""
+        """Verify construction with deny behavior."""
         p = Permission(
             subject="user:guest",
             action="delete",
@@ -825,7 +825,7 @@ class TestWorkflowStep:
     """Tests for WorkflowStep dataclass."""
 
     def test_construction_with_defaults(self):
-        """Test functionality: construction with defaults."""
+        """Verify construction with defaults behavior."""
         ws = WorkflowStep(id="s1", name="lint", action="run_linter")
         assert ws.id == "s1"
         assert ws.name == "lint"
@@ -836,7 +836,7 @@ class TestWorkflowStep:
         assert ws.dependencies == []
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         ws = WorkflowStep(
             id="s2",
             name="deploy",

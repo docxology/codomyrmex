@@ -21,7 +21,7 @@ PASSWORD = b"correct horse battery staple"
 class TestPBKDF2:
     """Test suite for PBKDF2."""
     def test_basic_derivation(self) -> None:
-        """Test functionality: basic derivation."""
+        """Verify basic derivation behavior."""
         result = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=1000)
         assert isinstance(result, DerivedKey)
         assert len(result.key) == 32
@@ -30,31 +30,31 @@ class TestPBKDF2:
         assert result.parameters["iterations"] == 1000
 
     def test_deterministic_with_fixed_salt(self) -> None:
-        """Test functionality: deterministic with fixed salt."""
+        """Verify deterministic with fixed salt behavior."""
         r1 = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=1000)
         r2 = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=1000)
         assert r1.key == r2.key
 
     def test_different_passwords_different_keys(self) -> None:
-        """Test functionality: different passwords different keys."""
+        """Verify different passwords different keys behavior."""
         r1 = derive_pbkdf2(b"password1", salt=FIXED_SALT, iterations=1000)
         r2 = derive_pbkdf2(b"password2", salt=FIXED_SALT, iterations=1000)
         assert r1.key != r2.key
 
     def test_different_salts_different_keys(self) -> None:
-        """Test functionality: different salts different keys."""
+        """Verify different salts different keys behavior."""
         r1 = derive_pbkdf2(PASSWORD, salt=b"\x00" * 16, iterations=1000)
         r2 = derive_pbkdf2(PASSWORD, salt=b"\x01" * 16, iterations=1000)
         assert r1.key != r2.key
 
     def test_different_iterations_different_keys(self) -> None:
-        """Test functionality: different iterations different keys."""
+        """Verify different iterations different keys behavior."""
         r1 = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=1000)
         r2 = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=2000)
         assert r1.key != r2.key
 
     def test_auto_salt_generation(self) -> None:
-        """Test functionality: auto salt generation."""
+        """Verify auto salt generation behavior."""
         result = derive_pbkdf2(PASSWORD, iterations=1000)
         assert len(result.salt) == 16
         # Salt should be random each time
@@ -62,7 +62,7 @@ class TestPBKDF2:
         assert result.salt != result2.salt
 
     def test_custom_key_length(self) -> None:
-        """Test functionality: custom key length."""
+        """Verify custom key length behavior."""
         result = derive_pbkdf2(PASSWORD, salt=FIXED_SALT, iterations=1000, key_length=64)
         assert len(result.key) == 64
         assert result.parameters["key_length"] == 64
@@ -73,32 +73,32 @@ class TestPBKDF2:
 class TestScrypt:
     """Test suite for Scrypt."""
     def test_basic_derivation(self) -> None:
-        """Test functionality: basic derivation."""
+        """Verify basic derivation behavior."""
         result = derive_scrypt(PASSWORD, salt=FIXED_SALT, n=2**14, r=8, p=1)
         assert isinstance(result, DerivedKey)
         assert len(result.key) == 32
         assert result.algorithm == "scrypt"
 
     def test_deterministic_with_fixed_salt(self) -> None:
-        """Test functionality: deterministic with fixed salt."""
+        """Verify deterministic with fixed salt behavior."""
         r1 = derive_scrypt(PASSWORD, salt=FIXED_SALT, n=2**14, r=8, p=1)
         r2 = derive_scrypt(PASSWORD, salt=FIXED_SALT, n=2**14, r=8, p=1)
         assert r1.key == r2.key
 
     def test_different_passwords_different_keys(self) -> None:
-        """Test functionality: different passwords different keys."""
+        """Verify different passwords different keys behavior."""
         r1 = derive_scrypt(b"pw1", salt=FIXED_SALT, n=2**14, r=8, p=1)
         r2 = derive_scrypt(b"pw2", salt=FIXED_SALT, n=2**14, r=8, p=1)
         assert r1.key != r2.key
 
     def test_different_params_different_keys(self) -> None:
-        """Test functionality: different params different keys."""
+        """Verify different params different keys behavior."""
         r1 = derive_scrypt(PASSWORD, salt=FIXED_SALT, n=2**14, r=8, p=1)
         r2 = derive_scrypt(PASSWORD, salt=FIXED_SALT, n=2**15, r=8, p=1)
         assert r1.key != r2.key
 
     def test_auto_salt(self) -> None:
-        """Test functionality: auto salt."""
+        """Verify auto salt behavior."""
         result = derive_scrypt(PASSWORD, n=2**14, r=8, p=1)
         assert len(result.salt) == 16
 
@@ -108,7 +108,7 @@ class TestScrypt:
 class TestArgon2id:
     """Test suite for Argon2id."""
     def test_basic_derivation(self) -> None:
-        """Test functionality: basic derivation."""
+        """Verify basic derivation behavior."""
         result = derive_argon2id(PASSWORD, salt=FIXED_SALT)
         assert isinstance(result, DerivedKey)
         assert len(result.key) == 32
@@ -116,19 +116,19 @@ class TestArgon2id:
         assert result.algorithm.startswith("argon2id")
 
     def test_deterministic_with_fixed_salt(self) -> None:
-        """Test functionality: deterministic with fixed salt."""
+        """Verify deterministic with fixed salt behavior."""
         r1 = derive_argon2id(PASSWORD, salt=FIXED_SALT)
         r2 = derive_argon2id(PASSWORD, salt=FIXED_SALT)
         assert r1.key == r2.key
 
     def test_different_passwords_different_keys(self) -> None:
-        """Test functionality: different passwords different keys."""
+        """Verify different passwords different keys behavior."""
         r1 = derive_argon2id(b"pw1", salt=FIXED_SALT)
         r2 = derive_argon2id(b"pw2", salt=FIXED_SALT)
         assert r1.key != r2.key
 
     def test_auto_salt(self) -> None:
-        """Test functionality: auto salt."""
+        """Verify auto salt behavior."""
         result = derive_argon2id(PASSWORD)
         assert len(result.salt) == 16
 
@@ -138,7 +138,7 @@ class TestArgon2id:
 class TestHKDF:
     """Test suite for HKDF."""
     def test_basic_derivation(self) -> None:
-        """Test functionality: basic derivation."""
+        """Verify basic derivation behavior."""
         ikm = b"\x0b" * 32
         info = b"test info"
         key = derive_hkdf(ikm, info=info, salt=FIXED_SALT)
@@ -146,7 +146,7 @@ class TestHKDF:
         assert len(key) == 32
 
     def test_deterministic(self) -> None:
-        """Test functionality: deterministic."""
+        """Verify deterministic behavior."""
         ikm = b"\x0b" * 32
         info = b"context"
         k1 = derive_hkdf(ikm, info=info, salt=FIXED_SALT)
@@ -154,18 +154,18 @@ class TestHKDF:
         assert k1 == k2
 
     def test_different_info_different_keys(self) -> None:
-        """Test functionality: different info different keys."""
+        """Verify different info different keys behavior."""
         ikm = b"\x0b" * 32
         k1 = derive_hkdf(ikm, info=b"context-a", salt=FIXED_SALT)
         k2 = derive_hkdf(ikm, info=b"context-b", salt=FIXED_SALT)
         assert k1 != k2
 
     def test_custom_length(self) -> None:
-        """Test functionality: custom length."""
+        """Verify custom length behavior."""
         key = derive_hkdf(b"\x0b" * 32, info=b"info", length=64)
         assert len(key) == 64
 
     def test_no_salt(self) -> None:
-        """Test functionality: no salt."""
+        """Verify no salt behavior."""
         key = derive_hkdf(b"\x0b" * 32, info=b"info")
         assert len(key) == 32

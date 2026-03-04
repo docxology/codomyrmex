@@ -23,20 +23,20 @@ class TestModels:
     """Test suite for Models."""
 
     def test_knowledge_entry_cite(self):
-        """Test functionality: knowledge entry cite."""
+        """Verify knowledge entry cite behavior."""
         entry = KnowledgeEntry(key="k", value="v", source_agent="a")
         assert entry.citation_count == 0
         entry.cite()
         assert entry.citation_count == 1
 
     def test_namespace_acl_owner_access(self):
-        """Test functionality: namespace acl owner access."""
+        """Verify namespace acl owner access behavior."""
         acl = NamespaceACL(owner="agent-a")
         assert acl.can_read("agent-a") is True
         assert acl.can_write("agent-a") is True
 
     def test_namespace_acl_read_only(self):
-        """Test functionality: namespace acl read only."""
+        """Verify namespace acl read only behavior."""
         acl = NamespaceACL(owner="agent-a", permissions={"agent-b": AccessLevel.READ})
         assert acl.can_read("agent-b") is True
         assert acl.can_write("agent-b") is False
@@ -59,7 +59,7 @@ class TestSharedMemoryPool:
         assert result is None
 
     def test_owner_can_read_write(self):
-        """Test functionality: owner can read write."""
+        """Verify owner can read write behavior."""
         pool = SharedMemoryPool()
         pool.create_namespace("agent-a")
         pool.put("agent-a", "key", "value")
@@ -68,7 +68,7 @@ class TestSharedMemoryPool:
         assert entry.value == "value"
 
     def test_global_search_cross_namespace(self):
-        """Test functionality: global search cross namespace."""
+        """Verify global search cross namespace behavior."""
         pool = SharedMemoryPool()
         pool.create_namespace("agent-a")
         pool.create_namespace("agent-b")
@@ -80,7 +80,7 @@ class TestSharedMemoryPool:
         assert results[0].key == "pytest-tip"
 
     def test_conflict_last_write_wins(self):
-        """Test functionality: conflict last write wins."""
+        """Verify conflict last write wins behavior."""
         pool = SharedMemoryPool(conflict_strategy=ConflictStrategy.LAST_WRITE_WINS)
         pool.create_namespace("a")
         pool.put("a", "key", "v1")
@@ -89,7 +89,7 @@ class TestSharedMemoryPool:
         assert entry.value == "v2"
 
     def test_acl_enforcement(self):
-        """Test functionality: acl enforcement."""
+        """Verify acl enforcement behavior."""
         pool = SharedMemoryPool()
         pool.create_namespace("owner")
         pool.grant_access("owner", "reader", AccessLevel.READ)
@@ -104,7 +104,7 @@ class TestSharedMemoryPool:
         assert wrote is False  # reader has no own namespace
 
     def test_namespace_stats(self):
-        """Test functionality: namespace stats."""
+        """Verify namespace stats behavior."""
         pool = SharedMemoryPool()
         pool.create_namespace("a")
         pool.put("a", "k1", "v1", domain="testing")
@@ -120,7 +120,7 @@ class TestKnowledgeRouter:
     """Test suite for KnowledgeRouter."""
 
     def test_route_to_correct_expert(self):
-        """Test functionality: route to correct expert."""
+        """Verify route to correct expert behavior."""
         pool = SharedMemoryPool()
         router = KnowledgeRouter(pool=pool)
         router.register_expert(ExpertiseProfile(
@@ -139,14 +139,14 @@ class TestKnowledgeRouter:
         assert confidence > 0
 
     def test_route_empty_experts(self):
-        """Test functionality: route empty experts."""
+        """Verify route empty experts behavior."""
         router = KnowledgeRouter()
         agent_id, confidence = router.route("anything")
         assert agent_id == ""
         assert confidence == 0.0
 
     def test_query_returns_results(self):
-        """Test functionality: query returns results."""
+        """Verify query returns results behavior."""
         pool = SharedMemoryPool()
         pool.create_namespace("tester")
         pool.put("tester", "tip-1", "Use parametrize", domain="testing", tags=["pytest"])
@@ -163,7 +163,7 @@ class TestKnowledgeRouter:
         assert len(result.entries) >= 1
 
     def test_suggest_experts(self):
-        """Test functionality: suggest experts."""
+        """Verify suggest experts behavior."""
         router = KnowledgeRouter()
         router.register_expert(ExpertiseProfile(
             agent_id="a", domains={"testing": 0.9}, tags=["pytest"],

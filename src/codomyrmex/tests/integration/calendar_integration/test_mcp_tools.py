@@ -38,7 +38,7 @@ else:
     reason=_GCAL_SKIP_REASON,
 )
 def test_calendar_mcp_flow():
-    """Test functionality: calendar mcp flow."""
+    """Verify calendar mcp flow behavior."""
     # 1. List
     res = calendar_list_events(days_ahead=2)
     assert res["status"] == "ok"

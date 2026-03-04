@@ -21,13 +21,13 @@ from codomyrmex.model_context_protocol.reliability.circuit_breaker import (
 
 
 def test_initial_state_is_closed():
-    """Test functionality: initial state is closed."""
+    """Verify initial state is closed behavior."""
     cb = CircuitBreaker("test")
     assert cb.state == CircuitState.CLOSED
 
 
 def test_stays_closed_under_threshold():
-    """Test functionality: stays closed under threshold."""
+    """Verify stays closed under threshold behavior."""
     cb = CircuitBreaker("test", CircuitBreakerConfig(failure_threshold=3))
     cb.record_failure()
     cb.record_failure()
@@ -36,7 +36,7 @@ def test_stays_closed_under_threshold():
 
 
 def test_opens_at_failure_threshold():
-    """Test functionality: opens at failure threshold."""
+    """Verify opens at failure threshold behavior."""
     cb = CircuitBreaker("test", CircuitBreakerConfig(failure_threshold=3))
     for _ in range(3):
         cb.record_failure()
@@ -44,7 +44,7 @@ def test_opens_at_failure_threshold():
 
 
 def test_success_resets_failure_count():
-    """Test functionality: success resets failure count."""
+    """Verify success resets failure count behavior."""
     cb = CircuitBreaker("test", CircuitBreakerConfig(failure_threshold=5))
     cb.record_failure()
     cb.record_failure()
@@ -53,7 +53,7 @@ def test_success_resets_failure_count():
 
 
 def test_open_transitions_to_half_open_after_timeout():
-    """Test functionality: open transitions to half open after timeout."""
+    """Verify open transitions to half open after timeout behavior."""
     cb = CircuitBreaker("test", CircuitBreakerConfig(
         failure_threshold=1, reset_timeout=0.05,
     ))
@@ -64,7 +64,7 @@ def test_open_transitions_to_half_open_after_timeout():
 
 
 def test_half_open_closes_after_success_threshold():
-    """Test functionality: half open closes after success threshold."""
+    """Verify half open closes after success threshold behavior."""
     cb = CircuitBreaker("test", CircuitBreakerConfig(
         failure_threshold=1, reset_timeout=0.01, success_threshold=2,
     ))
@@ -78,7 +78,7 @@ def test_half_open_closes_after_success_threshold():
 
 
 def test_half_open_reopens_on_failure():
-    """Test functionality: half open reopens on failure."""
+    """Verify half open reopens on failure behavior."""
     cb = CircuitBreaker("test", CircuitBreakerConfig(
         failure_threshold=1, reset_timeout=0.01,
     ))
@@ -90,7 +90,7 @@ def test_half_open_reopens_on_failure():
 
 
 def test_manual_reset():
-    """Test functionality: manual reset."""
+    """Verify manual reset behavior."""
     cb = CircuitBreaker("test", CircuitBreakerConfig(failure_threshold=1))
     cb.record_failure()
     assert cb.state == CircuitState.OPEN
@@ -103,7 +103,7 @@ def test_manual_reset():
 
 
 def test_check_state_raises_when_open():
-    """Test functionality: check state raises when open."""
+    """Verify check state raises when open behavior."""
     cb = CircuitBreaker("test-open", CircuitBreakerConfig(
         failure_threshold=1, reset_timeout=60,
     ))
@@ -163,7 +163,7 @@ async def test_execute_awaitable():
 
 
 def test_metrics_structure():
-    """Test functionality: metrics structure."""
+    """Verify metrics structure behavior."""
     cb = CircuitBreaker("metrics-test")
     cb.record_failure()
     m = cb.metrics
@@ -184,14 +184,14 @@ async def test_get_circuit_breaker_returns_same_instance():
 
 
 def test_get_all_metrics_returns_list():
-    """Test functionality: get all metrics returns list."""
+    """Verify get all metrics returns list behavior."""
     reset_all_circuits()
     metrics = get_all_circuit_metrics()
     assert isinstance(metrics, list)
 
 
 def test_reset_all_circuits():
-    """Test functionality: reset all circuits."""
+    """Verify reset all circuits behavior."""
     # Create and open a breaker
     cb = CircuitBreaker("reset-all", CircuitBreakerConfig(failure_threshold=1))
     cb.record_failure()

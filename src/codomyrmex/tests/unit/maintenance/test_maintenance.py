@@ -989,7 +989,7 @@ class TestMaintenanceScheduler:
     """Tests for MaintenanceScheduler."""
 
     def test_register_and_execute(self):
-        """Test functionality: register and execute."""
+        """Verify register and execute behavior."""
         from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler,
             MaintenanceTask,
@@ -1009,7 +1009,7 @@ class TestMaintenanceScheduler:
         assert result.output == "done"
 
     def test_due_tasks(self):
-        """Test functionality: due tasks."""
+        """Verify due tasks behavior."""
         from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler,
             MaintenanceTask,
@@ -1027,7 +1027,7 @@ class TestMaintenanceScheduler:
         assert len(due) == 1
 
     def test_failed_task_retries(self):
-        """Test functionality: failed task retries."""
+        """Verify failed task retries behavior."""
         from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler,
             MaintenanceTask,
@@ -1058,7 +1058,7 @@ class TestHealthChecker:
     """Tests for HealthChecker."""
 
     def test_healthy_check(self):
-        """Test functionality: healthy check."""
+        """Verify healthy check behavior."""
         from codomyrmex.maintenance.health.health_check import (
             HealthCheck,
             HealthChecker,
@@ -1075,7 +1075,7 @@ class TestHealthChecker:
         assert report.healthy_count == 1
 
     def test_unhealthy_check(self):
-        """Test functionality: unhealthy check."""
+        """Verify unhealthy check behavior."""
         from codomyrmex.maintenance.health.health_check import (
             HealthCheck,
             HealthChecker,
@@ -1092,7 +1092,7 @@ class TestHealthChecker:
         assert report.overall_status == HealthStatus.UNHEALTHY
 
     def test_exception_handling(self):
-        """Test functionality: exception handling."""
+        """Verify exception handling behavior."""
         from codomyrmex.maintenance.health.health_check import (
             HealthCheck,
             HealthChecker,

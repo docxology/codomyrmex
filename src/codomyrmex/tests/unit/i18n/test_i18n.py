@@ -32,23 +32,23 @@ class TestLocale:
     """Test suite for Locale."""
     # --- original 4 tests ---
     def test_create_locale(self):
-        """Test functionality: create locale."""
+        """Verify create locale behavior."""
         locale = Locale(language="en")
         assert locale.language == "en"
         assert locale.region == ""
 
     def test_locale_with_region(self):
-        """Test functionality: locale with region."""
+        """Verify locale with region behavior."""
         locale = Locale(language="en", region="US")
         assert locale.region == "US"
 
     def test_from_string(self):
-        """Test functionality: from string."""
+        """Verify from string behavior."""
         locale = Locale.from_string("en-US")
         assert locale.language == "en"
 
     def test_from_string_language_only(self):
-        """Test functionality: from string language only."""
+        """Verify from string language only behavior."""
         locale = Locale.from_string("fr")
         assert locale.language == "fr"
 
@@ -103,7 +103,7 @@ class TestMessageBundle:
     """Test suite for MessageBundle."""
     # --- original 1 test ---
     def test_create_bundle(self):
-        """Test functionality: create bundle."""
+        """Verify create bundle behavior."""
         locale = Locale(language="en")
         bundle = MessageBundle(locale=locale)
         assert bundle is not None
@@ -173,12 +173,12 @@ class TestTranslator:
     """Test suite for Translator."""
     # --- original 2 tests ---
     def test_create_translator(self):
-        """Test functionality: create translator."""
+        """Verify create translator behavior."""
         translator = Translator()
         assert translator is not None
 
     def test_create_with_default_locale(self):
-        """Test functionality: create with default locale."""
+        """Verify create with default locale behavior."""
         locale = Locale(language="fr")
         translator = Translator(default_locale=locale)
         assert translator is not None
@@ -274,7 +274,7 @@ class TestPluralRules:
     """Test suite for PluralRules."""
     # --- original 1 test ---
     def test_class_exists(self):
-        """Test functionality: class exists."""
+        """Verify class exists behavior."""
         assert PluralRules is not None
 
     # --- new behavioral tests ---
@@ -339,7 +339,7 @@ class TestNumberFormatter:
     """Test suite for NumberFormatter."""
     # --- original 1 test ---
     def test_class_exists(self):
-        """Test functionality: class exists."""
+        """Verify class exists behavior."""
         assert NumberFormatter is not None
 
     # --- new behavioral tests ---
@@ -491,12 +491,12 @@ class TestInit:
     """Test suite for Init."""
     # --- original 2 tests ---
     def test_init_returns_translator(self):
-        """Test functionality: init returns translator."""
+        """Verify init returns translator behavior."""
         translator = init()
         assert isinstance(translator, Translator)
 
     def test_init_with_locale(self):
-        """Test functionality: init with locale."""
+        """Verify init with locale behavior."""
         translator = init(default_locale="fr")
         assert translator is not None
 
@@ -512,7 +512,7 @@ class TestTranslateFunction:
     """Test suite for TranslateFunction."""
     # --- original 1 test ---
     def test_t_returns_string(self):
-        """Test functionality: t returns string."""
+        """Verify t returns string behavior."""
         init()
         result = t("hello")
         assert isinstance(result, str)

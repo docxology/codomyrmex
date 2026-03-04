@@ -336,7 +336,7 @@ class TestPluginRegistry:
         # Register handler
         results = []
         def test_handler(data):
-            """Test functionality: handler."""
+            """Verify handler behavior."""
             results.append(f"processed_{data}")
             return f"result_{data}"
 
@@ -502,7 +502,7 @@ class TestPluginBaseClass:
 
         # Register hook
         def test_handler():
-            """Test functionality: handler."""
+            """Verify handler behavior."""
             return "handled"
 
         plugin.register_hook("test_hook", test_handler)

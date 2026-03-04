@@ -71,14 +71,14 @@ def bare_remote(tmp_path):
 
 @pytest.mark.unit
 def test_add_remote(git_repo, bare_remote):
-    """Test functionality: add remote."""
+    """Verify add remote behavior."""
     result = add_remote("upstream", bare_remote, git_repo)
     assert result is True
 
 
 @pytest.mark.unit
 def test_list_remotes(git_repo, bare_remote):
-    """Test functionality: list remotes."""
+    """Verify list remotes behavior."""
     add_remote("upstream", bare_remote, git_repo)
     remotes = list_remotes(git_repo)
     assert isinstance(remotes, list)
@@ -88,7 +88,7 @@ def test_list_remotes(git_repo, bare_remote):
 
 @pytest.mark.unit
 def test_remove_remote(git_repo, bare_remote):
-    """Test functionality: remove remote."""
+    """Verify remove remote behavior."""
     add_remote("upstream", bare_remote, git_repo)
     result = remove_remote("upstream", git_repo)
     assert result is True
@@ -99,7 +99,7 @@ def test_remove_remote(git_repo, bare_remote):
 
 @pytest.mark.unit
 def test_fetch_remote(git_repo, bare_remote):
-    """Test functionality: fetch remote."""
+    """Verify fetch remote behavior."""
     add_remote("upstream", bare_remote, git_repo)
     result = fetch_remote("upstream", git_repo)
     assert result is True
@@ -111,7 +111,7 @@ def test_fetch_remote(git_repo, bare_remote):
 
 @pytest.mark.unit
 def test_reset_changes(git_repo):
-    """Test functionality: reset changes."""
+    """Verify reset changes behavior."""
     # Create a second commit so we can reset back
     f = os.path.join(git_repo, "extra.txt")
     with open(f, "w") as fh:
@@ -126,7 +126,7 @@ def test_reset_changes(git_repo):
 
 @pytest.mark.unit
 def test_revert_commit(git_repo):
-    """Test functionality: revert commit."""
+    """Verify revert commit behavior."""
     # Create a second commit to revert
     f = os.path.join(git_repo, "revertme.txt")
     with open(f, "w") as fh:
@@ -141,7 +141,7 @@ def test_revert_commit(git_repo):
 
 @pytest.mark.unit
 def test_clean_repository(git_repo):
-    """Test functionality: clean repository."""
+    """Verify clean repository behavior."""
     # Create untracked file
     junk = os.path.join(git_repo, "junk.tmp")
     with open(junk, "w") as f:
@@ -158,14 +158,14 @@ def test_clean_repository(git_repo):
 
 @pytest.mark.unit
 def test_get_diff(git_repo):
-    """Test functionality: get diff."""
+    """Verify get diff behavior."""
     diff = get_diff("HEAD", git_repo)
     assert isinstance(diff, str)
 
 
 @pytest.mark.unit
 def test_get_commit_details(git_repo):
-    """Test functionality: get commit details."""
+    """Verify get commit details behavior."""
     sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=git_repo, capture_output=True, text=True).stdout.strip()
     details = get_commit_details(sha, git_repo)
     assert details["hash"] == sha
@@ -178,7 +178,7 @@ def test_get_commit_details(git_repo):
 
 @pytest.mark.unit
 def test_config_ops(git_repo):
-    """Test functionality: config ops."""
+    """Verify config ops behavior."""
     assert set_config("user.name", "NewTester", repository_path=git_repo) is True
     assert get_config("user.name", git_repo) == "NewTester"
 
@@ -189,7 +189,7 @@ def test_config_ops(git_repo):
 
 @pytest.mark.unit
 def test_cherry_pick(git_repo):
-    """Test functionality: cherry pick."""
+    """Verify cherry pick behavior."""
     # Create branch with a commit, then cherry-pick it to main
     subprocess.run(["git", "checkout", "-b", "feature"], cwd=git_repo, capture_output=True)
     f = os.path.join(git_repo, "feature.txt")
@@ -211,7 +211,7 @@ def test_cherry_pick(git_repo):
 
 @pytest.mark.unit
 def test_submodules(git_repo):
-    """Test functionality: submodules."""
+    """Verify submodules behavior."""
     result_init = init_submodules(git_repo)
     result_update = update_submodules(git_repo)
     assert isinstance(result_init, bool)

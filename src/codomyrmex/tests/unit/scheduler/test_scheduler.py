@@ -28,15 +28,15 @@ if not HAS_MODULE:
 class TestJobStatus:
     """Test suite for JobStatus."""
     def test_pending_status(self):
-        """Test functionality: pending status."""
+        """Verify pending status behavior."""
         assert JobStatus.PENDING is not None
 
     def test_running_status(self):
-        """Test functionality: running status."""
+        """Verify running status behavior."""
         assert JobStatus.RUNNING is not None
 
     def test_completed_status(self):
-        """Test functionality: completed status."""
+        """Verify completed status behavior."""
         assert JobStatus.COMPLETED is not None
 
 
@@ -44,15 +44,15 @@ class TestJobStatus:
 class TestTriggerType:
     """Test suite for TriggerType."""
     def test_once_type(self):
-        """Test functionality: once type."""
+        """Verify once type behavior."""
         assert TriggerType.ONCE is not None
 
     def test_interval_type(self):
-        """Test functionality: interval type."""
+        """Verify interval type behavior."""
         assert TriggerType.INTERVAL is not None
 
     def test_cron_type(self):
-        """Test functionality: cron type."""
+        """Verify cron type behavior."""
         assert TriggerType.CRON is not None
 
 
@@ -60,19 +60,19 @@ class TestTriggerType:
 class TestOnceTrigger:
     """Test suite for OnceTrigger."""
     def test_create_trigger(self):
-        """Test functionality: create trigger."""
+        """Verify create trigger behavior."""
         trigger = OnceTrigger(run_at=datetime.now() + timedelta(hours=1))
         assert trigger is not None
 
     def test_get_next_run(self):
-        """Test functionality: get next run."""
+        """Verify get next run behavior."""
         future = datetime.now() + timedelta(hours=1)
         trigger = OnceTrigger(run_at=future)
         next_time = trigger.get_next_run()
         assert next_time is not None
 
     def test_get_type(self):
-        """Test functionality: get type."""
+        """Verify get type behavior."""
         trigger = OnceTrigger(run_at=datetime.now())
         assert trigger.get_type() == TriggerType.ONCE
 
@@ -81,18 +81,18 @@ class TestOnceTrigger:
 class TestIntervalTrigger:
     """Test suite for IntervalTrigger."""
     def test_create_trigger(self):
-        """Test functionality: create trigger."""
+        """Verify create trigger behavior."""
         trigger = IntervalTrigger(seconds=30)
         assert trigger is not None
 
     def test_get_next_run(self):
-        """Test functionality: get next run."""
+        """Verify get next run behavior."""
         trigger = IntervalTrigger(seconds=60)
         next_time = trigger.get_next_run()
         assert next_time is not None
 
     def test_interval_seconds(self):
-        """Test functionality: interval seconds."""
+        """Verify interval seconds behavior."""
         trigger = IntervalTrigger(minutes=5)
         assert trigger.interval_seconds == 300
 
@@ -101,12 +101,12 @@ class TestIntervalTrigger:
 class TestCronTrigger:
     """Test suite for CronTrigger."""
     def test_create_trigger(self):
-        """Test functionality: create trigger."""
+        """Verify create trigger behavior."""
         trigger = CronTrigger(minute="*", hour="*")
         assert trigger is not None
 
     def test_from_expression(self):
-        """Test functionality: from expression."""
+        """Verify from expression behavior."""
         trigger = CronTrigger.from_expression("0 9 * * 1-5")
         assert trigger is not None
         assert trigger.minute == "0"
@@ -117,7 +117,7 @@ class TestCronTrigger:
 class TestJob:
     """Test suite for Job."""
     def test_create_job(self):
-        """Test functionality: create job."""
+        """Verify create job behavior."""
         job = Job(
             id="test-1",
             name="Test Job",
@@ -128,7 +128,7 @@ class TestJob:
         assert job.name == "Test Job"
 
     def test_job_status_default(self):
-        """Test functionality: job status default."""
+        """Verify job status default behavior."""
         job = Job(
             id="test-2",
             name="Test Job 2",
@@ -142,12 +142,12 @@ class TestJob:
 class TestScheduler:
     """Test suite for Scheduler."""
     def test_create_scheduler(self):
-        """Test functionality: create scheduler."""
+        """Verify create scheduler behavior."""
         scheduler = Scheduler()
         assert scheduler is not None
 
     def test_schedule_job(self):
-        """Test functionality: schedule job."""
+        """Verify schedule job behavior."""
         scheduler = Scheduler()
         job_id = scheduler.schedule(
             name="Test Job",
@@ -157,7 +157,7 @@ class TestScheduler:
         assert job_id is not None
 
     def test_get_job(self):
-        """Test functionality: get job."""
+        """Verify get job behavior."""
         scheduler = Scheduler()
         job_id = scheduler.schedule(
             name="Test Job",
@@ -168,7 +168,7 @@ class TestScheduler:
         assert job is not None
 
     def test_cancel_job(self):
-        """Test functionality: cancel job."""
+        """Verify cancel job behavior."""
         scheduler = Scheduler()
         job_id = scheduler.schedule(
             name="Test Job",
@@ -185,11 +185,11 @@ class TestScheduler:
 class TestConvenienceFunctions:
     """Test suite for ConvenienceFunctions."""
     def test_every_creates_trigger(self):
-        """Test functionality: every creates trigger."""
+        """Verify every creates trigger behavior."""
         trigger = every(seconds=30)
         assert isinstance(trigger, IntervalTrigger)
 
     def test_cron_creates_trigger(self):
-        """Test functionality: cron creates trigger."""
+        """Verify cron creates trigger behavior."""
         trigger = cron("0 * * * *")
         assert isinstance(trigger, CronTrigger)

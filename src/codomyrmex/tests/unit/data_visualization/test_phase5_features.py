@@ -4,7 +4,7 @@ from codomyrmex.data_visualization.plots.treemap import TreeMap
 
 
 def test_treemap_render():
-    """Test functionality: treemap render."""
+    """Verify treemap render behavior."""
     data = [
         {"label": "A", "value": 10},
         {"label": "B", "value": 20},
@@ -16,7 +16,7 @@ def test_treemap_render():
     assert 'alt="Test Tree"' in html
 
 def test_network_graph_render():
-    """Test functionality: network graph render."""
+    """Verify network graph render behavior."""
     nodes = ["A", "B", "C"]
     edges = [("A", "B"), ("B", "C"), ("C", "A")]
     plot = NetworkGraph("Test Net", nodes, edges)
@@ -25,7 +25,7 @@ def test_network_graph_render():
     assert 'alt="Test Net"' in html
 
 def test_heatmap_table_component():
-    """Test functionality: heatmap table component."""
+    """Verify heatmap table component behavior."""
     headers = ["Col A", "Col B"]
     rows = [
         [10, 20],

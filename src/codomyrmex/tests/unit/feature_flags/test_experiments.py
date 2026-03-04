@@ -23,11 +23,11 @@ if not HAS_MODULE:
 class TestVariantType:
     """Test suite for VariantType."""
     def test_control(self):
-        """Test functionality: control."""
+        """Verify control behavior."""
         assert VariantType.CONTROL.value == "control" or isinstance(VariantType.CONTROL.value, (str, int))
 
     def test_treatment(self):
-        """Test functionality: treatment."""
+        """Verify treatment behavior."""
         assert VariantType.TREATMENT.value == "treatment" or isinstance(VariantType.TREATMENT.value, (str, int))
 
 
@@ -35,13 +35,13 @@ class TestVariantType:
 class TestVariant:
     """Test suite for Variant."""
     def test_create_variant(self):
-        """Test functionality: create variant."""
+        """Verify create variant behavior."""
         variant = Variant(name="control")
         assert variant.name == "control"
         assert variant.weight == 0.5
 
     def test_variant_with_value(self):
-        """Test functionality: variant with value."""
+        """Verify variant with value behavior."""
         variant = Variant(name="treatment", weight=0.3, value={"color": "blue"})
         assert variant.value == {"color": "blue"}
 
@@ -50,14 +50,14 @@ class TestVariant:
 class TestExperiment:
     """Test suite for Experiment."""
     def test_create_experiment(self):
-        """Test functionality: create experiment."""
+        """Verify create experiment behavior."""
         experiment = Experiment(id="exp-1", name="Button Color Test")
         assert experiment.id == "exp-1"
         assert experiment.enabled is True
         assert experiment.traffic_percentage == 100.0
 
     def test_experiment_with_variants(self):
-        """Test functionality: experiment with variants."""
+        """Verify experiment with variants behavior."""
         variants = [
             Variant(name="control", weight=0.5),
             Variant(name="treatment", weight=0.5),
@@ -70,7 +70,7 @@ class TestExperiment:
 class TestAssignment:
     """Test suite for Assignment."""
     def test_create_assignment(self):
-        """Test functionality: create assignment."""
+        """Verify create assignment behavior."""
         assignment = Assignment(
             experiment_id="exp-1",
             variant_name="control",
@@ -84,7 +84,7 @@ class TestAssignment:
 class TestExperimentEvent:
     """Test suite for ExperimentEvent."""
     def test_create_event(self):
-        """Test functionality: create event."""
+        """Verify create event behavior."""
         event = ExperimentEvent(
             experiment_id="exp-1",
             variant_name="treatment",
@@ -94,7 +94,7 @@ class TestExperimentEvent:
         assert event.event_type == "conversion"
 
     def test_event_with_value(self):
-        """Test functionality: event with value."""
+        """Verify event with value behavior."""
         event = ExperimentEvent(
             experiment_id="exp-1",
             variant_name="control",
@@ -109,19 +109,19 @@ class TestExperimentEvent:
 class TestExperimentManager:
     """Test suite for ExperimentManager."""
     def test_create_manager(self):
-        """Test functionality: create manager."""
+        """Verify create manager behavior."""
         manager = ExperimentManager()
         assert isinstance(manager, ExperimentManager)
 
     def test_create_experiment(self):
-        """Test functionality: create experiment."""
+        """Verify create experiment behavior."""
         manager = ExperimentManager()
         experiment = manager.create_experiment("exp-1", "Test Experiment")
         assert isinstance(experiment, Experiment)
         assert experiment.id == "exp-1"
 
     def test_get_experiment(self):
-        """Test functionality: get experiment."""
+        """Verify get experiment behavior."""
         manager = ExperimentManager()
         manager.create_experiment("exp-1", "Test")
         experiment = manager.get_experiment("exp-1")
@@ -129,13 +129,13 @@ class TestExperimentManager:
         assert experiment.id == "exp-1"
 
     def test_get_nonexistent_experiment(self):
-        """Test functionality: get nonexistent experiment."""
+        """Verify get nonexistent experiment behavior."""
         manager = ExperimentManager()
         experiment = manager.get_experiment("nonexistent")
         assert experiment is None
 
     def test_get_variant_assignment(self):
-        """Test functionality: get variant assignment."""
+        """Verify get variant assignment behavior."""
         manager = ExperimentManager()
         variants = [
             Variant(name="control", weight=0.5),

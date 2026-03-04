@@ -48,7 +48,7 @@ class TestMCPServerConfig:
     """Tests for MCPServerConfig defaults and customization."""
 
     def test_default_config_values(self):
-        """Test functionality: default config has expected field values."""
+        """Verify default config has expected field values behavior."""
         cfg = MCPServerConfig()
         assert cfg.name == "codomyrmex-mcp-server"
         assert cfg.version == "1.0.0"
@@ -61,7 +61,7 @@ class TestMCPServerConfig:
         assert cfg.warm_up is True
 
     def test_custom_config_values(self):
-        """Test functionality: custom values are applied."""
+        """Verify custom values are applied behavior."""
         cfg = MCPServerConfig(
             name="test-server",
             version="2.0.0",
@@ -86,7 +86,7 @@ class TestMCPClientConfig:
     """Tests for MCPClientConfig defaults and customization."""
 
     def test_default_client_config(self):
-        """Test functionality: client config defaults are correct."""
+        """Verify client config defaults are correct behavior."""
         cfg = MCPClientConfig()
         assert cfg.name == "codomyrmex-mcp-client"
         assert cfg.version == "0.1.0"
@@ -98,7 +98,7 @@ class TestMCPClientConfig:
         assert cfg.connection_pool_size == 10
 
     def test_custom_client_config(self):
-        """Test functionality: custom client config values applied."""
+        """Verify custom client config values applied behavior."""
         cfg = MCPClientConfig(
             name="test-client",
             timeout_seconds=10.0,
@@ -121,16 +121,16 @@ class TestMCPClientError:
     """Tests for MCPClientError exception class."""
 
     def test_client_error_is_exception(self):
-        """Test functionality: MCPClientError is a subclass of Exception."""
+        """Verify MCPClientError is a subclass of Exception behavior."""
         assert issubclass(MCPClientError, Exception)
 
     def test_client_error_message(self):
-        """Test functionality: MCPClientError carries the message."""
+        """Verify MCPClientError carries the message behavior."""
         err = MCPClientError("Connection failed")
         assert str(err) == "Connection failed"
 
     def test_client_error_can_be_raised_and_caught(self):
-        """Test functionality: MCPClientError can be raised and caught."""
+        """Verify MCPClientError can be raised and caught behavior."""
         with pytest.raises(MCPClientError, match="timeout"):
             raise MCPClientError("Request timeout")
 
@@ -152,7 +152,7 @@ class TestMCPServerBasicProtocol:
         return srv
 
     def test_initialize_returns_protocol_version(self, server):
-        """Test functionality: initialize returns protocolVersion."""
+        """Verify initialize returns protocolVersion behavior."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 1,
@@ -165,7 +165,7 @@ class TestMCPServerBasicProtocol:
         assert resp["result"]["protocolVersion"] == "2025-06-18"
 
     def test_initialize_returns_server_info(self, server):
-        """Test functionality: initialize returns serverInfo with name and version."""
+        """Verify initialize returns serverInfo with name and version behavior."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 1,
@@ -177,7 +177,7 @@ class TestMCPServerBasicProtocol:
         assert info["version"] == "0.1.0"
 
     def test_notification_returns_none(self, server):
-        """Test functionality: notification (no id) returns None."""
+        """Verify notification (no id) returns None behavior."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "method": "notifications/initialized",
@@ -186,7 +186,7 @@ class TestMCPServerBasicProtocol:
         assert resp is None
 
     def test_unknown_method_returns_error_code(self, server):
-        """Test functionality: unknown method returns error with code -32603."""
+        """Verify unknown method returns error with code -32603 behavior."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 99,
@@ -197,7 +197,7 @@ class TestMCPServerBasicProtocol:
         assert resp["error"]["code"] == -32603
 
     def test_empty_tools_list(self, server):
-        """Test functionality: server with no tools returns empty tools list."""
+        """Verify server with no tools returns empty tools list behavior."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 2,
@@ -207,7 +207,7 @@ class TestMCPServerBasicProtocol:
         assert resp["result"]["tools"] == []
 
     def test_empty_resources_list(self, server):
-        """Test functionality: server with no resources returns empty list."""
+        """Verify server with no resources returns empty list behavior."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 3,
@@ -217,7 +217,7 @@ class TestMCPServerBasicProtocol:
         assert resp["result"]["resources"] == []
 
     def test_empty_prompts_list(self, server):
-        """Test functionality: server with no prompts returns empty list."""
+        """Verify server with no prompts returns empty list behavior."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 4,
@@ -244,7 +244,7 @@ class TestMCPServerToolRegistration:
         return srv
 
     def test_registered_tool_appears_in_list(self, server_with_tool):
-        """Test functionality: registered tool appears in tools/list."""
+        """Verify registered tool appears in tools/list behavior."""
         resp = _run(server_with_tool.handle_request({
             "jsonrpc": "2.0",
             "id": 1,
@@ -256,7 +256,7 @@ class TestMCPServerToolRegistration:
         assert "echo" in names
 
     def test_tool_schema_has_input_schema(self, server_with_tool):
-        """Test functionality: tool schema includes inputSchema."""
+        """Verify tool schema includes inputSchema behavior."""
         resp = _run(server_with_tool.handle_request({
             "jsonrpc": "2.0",
             "id": 1,
@@ -268,7 +268,7 @@ class TestMCPServerToolRegistration:
         assert tool["inputSchema"]["type"] == "object"
 
     def test_register_resource_and_list(self):
-        """Test functionality: register a resource and retrieve it in list."""
+        """Verify register a resource and retrieve it in list behavior."""
         srv = MCPServer(MCPServerConfig(name="res-test", version="0.1.0"))
         srv.register_resource(
             uri="test://data",
@@ -288,7 +288,7 @@ class TestMCPServerToolRegistration:
         assert resources[0]["name"] == "Test Data"
 
     def test_read_resource_returns_content(self):
-        """Test functionality: resources/read returns the content from provider."""
+        """Verify resources/read returns the content from provider behavior."""
         srv = MCPServer(MCPServerConfig(name="res-read", version="0.1.0"))
         srv.register_resource(
             uri="test://hello",
@@ -305,7 +305,7 @@ class TestMCPServerToolRegistration:
         assert contents[0]["text"] == "Hello World"
 
     def test_read_nonexistent_resource_returns_error(self):
-        """Test functionality: reading unknown resource returns error."""
+        """Verify reading unknown resource returns error behavior."""
         srv = MCPServer(MCPServerConfig(name="res-err", version="0.1.0"))
         resp = _run(srv.handle_request({
             "jsonrpc": "2.0",
@@ -316,7 +316,7 @@ class TestMCPServerToolRegistration:
         assert "error" in resp
 
     def test_register_prompt_and_get(self):
-        """Test functionality: registered prompt can be rendered."""
+        """Verify registered prompt can be rendered behavior."""
         srv = MCPServer(MCPServerConfig(name="prompt-test", version="0.1.0"))
         srv.register_prompt(
             name="greet",
@@ -352,7 +352,7 @@ class TestMCPErrorCode:
     """Tests for MCPErrorCode enum."""
 
     def test_all_error_codes_exist(self):
-        """Test functionality: all expected error codes are defined."""
+        """Verify all expected error codes are defined behavior."""
         expected = {
             "VALIDATION_ERROR", "EXECUTION_ERROR", "TIMEOUT",
             "NOT_FOUND", "RATE_LIMITED", "CIRCUIT_OPEN",
@@ -362,7 +362,7 @@ class TestMCPErrorCode:
         assert expected == actual
 
     def test_error_code_is_string_enum(self):
-        """Test functionality: MCPErrorCode values are strings."""
+        """Verify MCPErrorCode values are strings behavior."""
         for code in MCPErrorCode:
             assert isinstance(code.value, str)
 
@@ -372,7 +372,7 @@ class TestFieldError:
     """Tests for the FieldError dataclass."""
 
     def test_field_error_to_dict_minimal(self):
-        """Test functionality: FieldError.to_dict with no value."""
+        """Verify FieldError.to_dict with no value behavior."""
         fe = FieldError(field="name", constraint="required")
         d = fe.to_dict()
         assert d["field"] == "name"
@@ -380,13 +380,13 @@ class TestFieldError:
         assert "value" not in d
 
     def test_field_error_to_dict_with_value(self):
-        """Test functionality: FieldError.to_dict includes value when set."""
+        """Verify FieldError.to_dict includes value when set behavior."""
         fe = FieldError(field="age", constraint="min:0", value=-5)
         d = fe.to_dict()
         assert d["value"] == -5
 
     def test_field_error_is_frozen(self):
-        """Test functionality: FieldError is immutable (frozen dataclass)."""
+        """Verify FieldError is immutable (frozen dataclass) behavior."""
         fe = FieldError(field="f", constraint="c")
         with pytest.raises(AttributeError):
             fe.field = "new"
@@ -397,7 +397,7 @@ class TestMCPToolError:
     """Tests for the MCPToolError dataclass and its serialization."""
 
     def test_to_dict_basic(self):
-        """Test functionality: to_dict includes code, message, correlation_id."""
+        """Verify to_dict includes code, message, correlation_id behavior."""
         err = MCPToolError(
             code=MCPErrorCode.VALIDATION_ERROR,
             message="Bad input",
@@ -411,7 +411,7 @@ class TestMCPToolError:
         assert len(d["correlation_id"]) == 12
 
     def test_to_dict_includes_field_errors(self):
-        """Test functionality: field_errors appear in dict when present."""
+        """Verify field_errors appear in dict when present behavior."""
         err = MCPToolError(
             code=MCPErrorCode.VALIDATION_ERROR,
             message="Validation failed",
@@ -425,7 +425,7 @@ class TestMCPToolError:
         assert d["field_errors"][0]["field"] == "path"
 
     def test_to_dict_includes_suggestion(self):
-        """Test functionality: suggestion appears in dict when set."""
+        """Verify suggestion appears in dict when set behavior."""
         err = MCPToolError(
             code=MCPErrorCode.NOT_FOUND,
             message="Not found",
@@ -435,7 +435,7 @@ class TestMCPToolError:
         assert d["suggestion"] == "Did you mean 'read_file'?"
 
     def test_to_json_produces_valid_json(self):
-        """Test functionality: to_json produces parseable JSON."""
+        """Verify to_json produces parseable JSON behavior."""
         err = MCPToolError(
             code=MCPErrorCode.EXECUTION_ERROR,
             message="Crash",
@@ -446,7 +446,7 @@ class TestMCPToolError:
         assert parsed["message"] == "Crash"
 
     def test_to_mcp_response_shape(self):
-        """Test functionality: to_mcp_response has isError and content."""
+        """Verify to_mcp_response has isError and content behavior."""
         err = MCPToolError(
             code=MCPErrorCode.TIMEOUT,
             message="Timed out",
@@ -460,7 +460,7 @@ class TestMCPToolError:
         assert inner["code"] == "TIMEOUT"
 
     def test_from_dict_roundtrip(self):
-        """Test functionality: from_dict reconstructs the error."""
+        """Verify from_dict reconstructs the error behavior."""
         original = MCPToolError(
             code=MCPErrorCode.ACCESS_DENIED,
             message="No permission",
@@ -479,7 +479,7 @@ class TestMCPToolError:
         assert len(restored.field_errors) == 1
 
     def test_from_json_roundtrip(self):
-        """Test functionality: from_json reconstructs the error."""
+        """Verify from_json reconstructs the error behavior."""
         original = MCPToolError(
             code=MCPErrorCode.INTERNAL,
             message="Unexpected error",
@@ -491,7 +491,7 @@ class TestMCPToolError:
         assert restored.correlation_id == original.correlation_id
 
     def test_from_mcp_response_parses_error(self):
-        """Test functionality: from_mcp_response parses structured error."""
+        """Verify from_mcp_response parses structured error behavior."""
         err = MCPToolError(
             code=MCPErrorCode.RATE_LIMITED,
             message="Too many requests",
@@ -504,12 +504,12 @@ class TestMCPToolError:
         assert parsed.tool_name == "busy_tool"
 
     def test_from_mcp_response_returns_none_for_non_error(self):
-        """Test functionality: from_mcp_response returns None for success."""
+        """Verify from_mcp_response returns None for success behavior."""
         resp = {"content": [{"type": "text", "text": "ok"}]}
         assert MCPToolError.from_mcp_response(resp) is None
 
     def test_from_mcp_response_handles_unstructured_error(self):
-        """Test functionality: unstructured isError text wrapped as INTERNAL."""
+        """Verify unstructured isError text wrapped as INTERNAL behavior."""
         resp = {
             "isError": True,
             "content": [{"type": "text", "text": "Something broke badly"}],
@@ -525,7 +525,7 @@ class TestConvenienceConstructors:
     """Tests for error convenience constructors."""
 
     def test_validation_error_constructor(self):
-        """Test functionality: validation_error creates VALIDATION_ERROR."""
+        """Verify validation_error creates VALIDATION_ERROR behavior."""
         err = validation_error(
             tool_name="check_input",
             message="Invalid data",
@@ -536,20 +536,20 @@ class TestConvenienceConstructors:
         assert len(err.field_errors) == 1
 
     def test_not_found_error_constructor(self):
-        """Test functionality: not_found_error creates NOT_FOUND."""
+        """Verify not_found_error creates NOT_FOUND behavior."""
         err = not_found_error("missing_tool")
         assert err.code == MCPErrorCode.NOT_FOUND
         assert "missing_tool" in err.message
 
     def test_timeout_error_constructor(self):
-        """Test functionality: timeout_error creates TIMEOUT with seconds."""
+        """Verify timeout_error creates TIMEOUT with seconds behavior."""
         err = timeout_error("slow_tool", 30.0)
         assert err.code == MCPErrorCode.TIMEOUT
         assert "30" in err.message
         assert err.tool_name == "slow_tool"
 
     def test_execution_error_constructor(self):
-        """Test functionality: execution_error wraps exception."""
+        """Verify execution_error wraps exception behavior."""
         exc = RuntimeError("segfault")
         err = execution_error(
             "crashy_tool",

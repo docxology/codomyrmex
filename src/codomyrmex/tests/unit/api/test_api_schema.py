@@ -377,7 +377,7 @@ class TestOpenAPIGeneratorFromAPIs:
         api = RESTAPI(title="Test REST API", version="1.0.0")
 
         def test_handler(request):
-            """Test functionality: handler."""
+            """Verify handler behavior."""
             return APIResponse.success({})
 
         endpoint = APIEndpoint(

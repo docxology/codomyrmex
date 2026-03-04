@@ -33,39 +33,39 @@ class TestAnalysisTypeEnum:
     """Tests for AnalysisType enum."""
 
     def test_quality_value(self):
-        """Test functionality: quality value."""
+        """Verify quality value behavior."""
         assert AnalysisType.QUALITY.value == "quality"
 
     def test_security_value(self):
-        """Test functionality: security value."""
+        """Verify security value behavior."""
         assert AnalysisType.SECURITY.value == "security"
 
     def test_performance_value(self):
-        """Test functionality: performance value."""
+        """Verify performance value behavior."""
         assert AnalysisType.PERFORMANCE.value == "performance"
 
     def test_maintainability_value(self):
-        """Test functionality: maintainability value."""
+        """Verify maintainability value behavior."""
         assert AnalysisType.MAINTAINABILITY.value == "maintainability"
 
     def test_complexity_value(self):
-        """Test functionality: complexity value."""
+        """Verify complexity value behavior."""
         assert AnalysisType.COMPLEXITY.value == "complexity"
 
     def test_style_value(self):
-        """Test functionality: style value."""
+        """Verify style value behavior."""
         assert AnalysisType.STYLE.value == "style"
 
     def test_documentation_value(self):
-        """Test functionality: documentation value."""
+        """Verify documentation value behavior."""
         assert AnalysisType.DOCUMENTATION.value == "documentation"
 
     def test_testing_value(self):
-        """Test functionality: testing value."""
+        """Verify testing value behavior."""
         assert AnalysisType.TESTING.value == "testing"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(list(AnalysisType)) == 8
 
 
@@ -73,23 +73,23 @@ class TestSeverityLevelEnum:
     """Tests for SeverityLevel enum."""
 
     def test_info_value(self):
-        """Test functionality: info value."""
+        """Verify info value behavior."""
         assert SeverityLevel.INFO.value == "info"
 
     def test_warning_value(self):
-        """Test functionality: warning value."""
+        """Verify warning value behavior."""
         assert SeverityLevel.WARNING.value == "warning"
 
     def test_error_value(self):
-        """Test functionality: error value."""
+        """Verify error value behavior."""
         assert SeverityLevel.ERROR.value == "error"
 
     def test_critical_value(self):
-        """Test functionality: critical value."""
+        """Verify critical value behavior."""
         assert SeverityLevel.CRITICAL.value == "critical"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(list(SeverityLevel)) == 4
 
 
@@ -97,7 +97,7 @@ class TestAnalysisResult:
     """Tests for AnalysisResult dataclass."""
 
     def test_creation_with_required_fields(self):
-        """Test functionality: creation with required fields."""
+        """Verify creation with required fields behavior."""
         result = AnalysisResult(
             file_path="test.py",
             line_number=10,
@@ -116,7 +116,7 @@ class TestAnalysisResult:
         assert result.category == "style"
 
     def test_optional_fields_have_defaults(self):
-        """Test functionality: optional fields have defaults."""
+        """Verify optional fields have defaults behavior."""
         result = AnalysisResult(
             file_path="f.py",
             line_number=1,
@@ -130,7 +130,7 @@ class TestAnalysisResult:
         assert result.confidence == 1.0
 
     def test_creation_with_all_fields(self):
-        """Test functionality: creation with all fields."""
+        """Verify creation with all fields behavior."""
         result = AnalysisResult(
             file_path="main.py",
             line_number=1,
@@ -152,17 +152,17 @@ class TestAnalysisSummary:
     """Tests for AnalysisSummary dataclass."""
 
     def test_creation_with_total_issues(self):
-        """Test functionality: creation with total issues."""
+        """Verify creation with total issues behavior."""
         summary = AnalysisSummary(total_issues=5)
         assert summary.total_issues == 5
 
     def test_default_files_analyzed_is_zero(self):
-        """Test functionality: default files analyzed is zero."""
+        """Verify default files analyzed is zero behavior."""
         summary = AnalysisSummary(total_issues=0)
         assert summary.files_analyzed == 0
 
     def test_default_by_severity_is_empty(self):
-        """Test functionality: default by severity is empty."""
+        """Verify default by severity is empty behavior."""
         summary = AnalysisSummary(total_issues=0)
         assert summary.by_severity == {}
 
@@ -171,7 +171,7 @@ class TestCodeMetrics:
     """Tests for CodeMetrics dataclass."""
 
     def test_creation_with_required_fields(self):
-        """Test functionality: creation with required fields."""
+        """Verify creation with required fields behavior."""
         m = CodeMetrics(
             lines_of_code=100,
             cyclomatic_complexity=5,
@@ -184,7 +184,7 @@ class TestCodeMetrics:
         assert m.maintainability_index == 75.0
 
     def test_optional_test_coverage_defaults_none(self):
-        """Test functionality: optional coverage defaults none."""
+        """Verify optional coverage defaults none behavior."""
         m = CodeMetrics(
             lines_of_code=50,
             cyclomatic_complexity=1,
@@ -199,17 +199,17 @@ class TestStaticAnalyzerInit:
     """Tests for StaticAnalyzer initialization."""
 
     def test_init_default_project_root(self):
-        """Test functionality: init default project root."""
+        """Verify init default project root behavior."""
         analyzer = StaticAnalyzer()
         assert analyzer.project_root is not None
 
     def test_init_custom_project_root(self, tmp_path):
-        """Test functionality: init custom project root."""
+        """Verify init custom project root behavior."""
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
         assert analyzer.project_root == str(tmp_path)
 
     def test_tools_available_is_dict(self):
-        """Test functionality: tools available is dict."""
+        """Verify tools available is dict behavior."""
         analyzer = StaticAnalyzer()
         assert isinstance(analyzer.tools_available, dict)
         for tool_name, available in analyzer.tools_available.items():
@@ -217,12 +217,12 @@ class TestStaticAnalyzerInit:
             assert isinstance(available, bool)
 
     def test_results_starts_empty(self):
-        """Test functionality: results starts empty."""
+        """Verify results starts empty behavior."""
         analyzer = StaticAnalyzer()
         assert analyzer.results == []
 
     def test_analyze_file_on_real_python_file(self, tmp_path):
-        """Test functionality: analyze file on real python file."""
+        """Verify analyze file on real python file behavior."""
         code_file = tmp_path / "sample.py"
         code_file.write_text("x = 1\n")
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
@@ -230,7 +230,7 @@ class TestStaticAnalyzerInit:
         assert isinstance(results, list)
 
     def test_analyze_file_nonexistent_returns_empty_or_error(self):
-        """Test functionality: analyze file nonexistent returns empty or error."""
+        """Verify analyze file nonexistent returns empty or error behavior."""
         analyzer = StaticAnalyzer()
         results = analyzer.analyze_file("/nonexistent/path/file.py")
         assert isinstance(results, list)

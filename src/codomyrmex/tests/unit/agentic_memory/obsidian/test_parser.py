@@ -16,7 +16,7 @@ from codomyrmex.agentic_memory.obsidian.parser import (
 class TestParseFrontmatter:
     """Test suite for ParseFrontmatter."""
     def test_basic_frontmatter(self):
-        """Test functionality: basic frontmatter."""
+        """Verify basic frontmatter behavior."""
         raw = "---\ntitle: Test\ntags:\n  - a\n  - b\n---\nBody content."
         fm, body = parse_frontmatter(raw)
         assert fm["title"] == "Test"
@@ -24,21 +24,21 @@ class TestParseFrontmatter:
         assert body == "Body content."
 
     def test_no_frontmatter(self):
-        """Test functionality: no frontmatter."""
+        """Verify no frontmatter behavior."""
         raw = "# Just a heading\nSome text."
         fm, body = parse_frontmatter(raw)
         assert fm == {}
         assert body == raw
 
     def test_empty_frontmatter(self):
-        """Test functionality: empty frontmatter."""
+        """Verify empty frontmatter behavior."""
         raw = "---\n---\nBody."
         fm, body = parse_frontmatter(raw)
         assert fm == {}
         assert body == "Body."
 
     def test_complex_frontmatter(self):
-        """Test functionality: complex frontmatter."""
+        """Verify complex frontmatter behavior."""
         raw = "---\ntitle: Complex\ndate: 2024-01-15\nnested:\n  key: value\n---\nContent."
         fm, body = parse_frontmatter(raw)
         assert fm["title"] == "Complex"
@@ -48,7 +48,7 @@ class TestParseFrontmatter:
 class TestExtractWikilinks:
     """Test suite for ExtractWikilinks."""
     def test_simple_link(self):
-        """Test functionality: simple link."""
+        """Verify simple link behavior."""
         links = extract_wikilinks("Link to [[My Note]] here.")
         assert len(links) == 1
         assert links[0].target == "My Note"
@@ -56,21 +56,21 @@ class TestExtractWikilinks:
         assert links[0].heading is None
 
     def test_aliased_link(self):
-        """Test functionality: aliased link."""
+        """Verify aliased link behavior."""
         links = extract_wikilinks("[[Target|Display Text]]")
         assert len(links) == 1
         assert links[0].target == "Target"
         assert links[0].alias == "Display Text"
 
     def test_heading_link(self):
-        """Test functionality: heading link."""
+        """Verify heading link behavior."""
         links = extract_wikilinks("[[Note#Section One]]")
         assert len(links) == 1
         assert links[0].target == "Note"
         assert links[0].heading == "Section One"
 
     def test_block_link(self):
-        """Test functionality: block link."""
+        """Verify block link behavior."""
         links = extract_wikilinks("[[Note#^block-id]]")
         assert len(links) == 1
         assert links[0].target == "Note"
@@ -78,18 +78,18 @@ class TestExtractWikilinks:
         assert links[0].heading is None
 
     def test_multiple_links(self):
-        """Test functionality: multiple links."""
+        """Verify multiple links behavior."""
         content = "[[A]] text [[B|alias]] more [[C#heading]]"
         links = extract_wikilinks(content)
         assert len(links) == 3
 
     def test_no_embeds_captured(self):
-        """Test functionality: no embeds captured."""
+        """Verify no embeds captured behavior."""
         links = extract_wikilinks("![[image.png]]")
         assert len(links) == 0
 
     def test_heading_and_alias(self):
-        """Test functionality: heading and alias."""
+        """Verify heading and alias behavior."""
         links = extract_wikilinks("[[Note#Section|Custom Text]]")
         assert len(links) == 1
         assert links[0].target == "Note"
@@ -100,14 +100,14 @@ class TestExtractWikilinks:
 class TestExtractEmbeds:
     """Test suite for ExtractEmbeds."""
     def test_simple_embed(self):
-        """Test functionality: simple embed."""
+        """Verify simple embed behavior."""
         embeds = extract_embeds("![[image.png]]")
         assert len(embeds) == 1
         assert embeds[0].target == "image.png"
         assert embeds[0].width is None
 
     def test_embed_with_width(self):
-        """Test functionality: embed with width."""
+        """Verify embed with width behavior."""
         embeds = extract_embeds("![[diagram.png|400]]")
         assert len(embeds) == 1
         assert embeds[0].target == "diagram.png"
@@ -115,14 +115,14 @@ class TestExtractEmbeds:
         assert embeds[0].height is None
 
     def test_embed_with_dimensions(self):
-        """Test functionality: embed with dimensions."""
+        """Verify embed with dimensions behavior."""
         embeds = extract_embeds("![[photo.jpg|800x600]]")
         assert len(embeds) == 1
         assert embeds[0].width == 800
         assert embeds[0].height == 600
 
     def test_multiple_embeds(self):
-        """Test functionality: multiple embeds."""
+        """Verify multiple embeds behavior."""
         content = "![[a.png]] text ![[b.png|200]]"
         embeds = extract_embeds(content)
         assert len(embeds) == 2
@@ -131,34 +131,34 @@ class TestExtractEmbeds:
 class TestExtractTags:
     """Test suite for ExtractTags."""
     def test_inline_tag(self):
-        """Test functionality: inline tag."""
+        """Verify inline tag behavior."""
         tags = extract_tags("Some text with #mytag here.")
         assert len(tags) == 1
         assert tags[0].name == "mytag"
         assert tags[0].source == "content"
 
     def test_nested_tag(self):
-        """Test functionality: nested tag."""
+        """Verify nested tag behavior."""
         tags = extract_tags("A #parent/child tag.")
         assert len(tags) == 1
         assert tags[0].name == "parent/child"
 
     def test_frontmatter_tags(self):
-        """Test functionality: frontmatter tags."""
+        """Verify frontmatter tags behavior."""
         tags = extract_tags("Content", {"tags": ["fm-tag-1", "fm-tag-2"]})
         fm_tags = [t for t in tags if t.source == "frontmatter"]
         assert len(fm_tags) == 2
         assert fm_tags[0].name == "fm-tag-1"
 
     def test_both_sources(self):
-        """Test functionality: both sources."""
+        """Verify both sources behavior."""
         tags = extract_tags("#inline here", {"tags": ["fm"]})
         assert len(tags) == 2
         sources = {t.source for t in tags}
         assert sources == {"content", "frontmatter"}
 
     def test_no_hashtag_in_url(self):
-        """Test functionality: no hashtag in url."""
+        """Verify no hashtag in url behavior."""
         # Tags should not match inside URLs ideally,
         # but our simple regex may catch some. Test basic case.
         tags = extract_tags("Visit #real-tag for info.")
@@ -168,7 +168,7 @@ class TestExtractTags:
 class TestExtractCallouts:
     """Test suite for ExtractCallouts."""
     def test_basic_callout(self):
-        """Test functionality: basic callout."""
+        """Verify basic callout behavior."""
         content = "> [!note] My Title\n> Some content here.\n> More content."
         callouts = extract_callouts(content)
         assert len(callouts) == 1
@@ -178,7 +178,7 @@ class TestExtractCallouts:
         assert not callouts[0].foldable
 
     def test_foldable_closed(self):
-        """Test functionality: foldable closed."""
+        """Verify foldable closed behavior."""
         content = "> [!warning]- Hidden\n> Secret content."
         callouts = extract_callouts(content)
         assert len(callouts) == 1
@@ -186,7 +186,7 @@ class TestExtractCallouts:
         assert callouts[0].default_open is False
 
     def test_foldable_open(self):
-        """Test functionality: foldable open."""
+        """Verify foldable open behavior."""
         content = "> [!tip]+ Visible\n> Tip content."
         callouts = extract_callouts(content)
         assert len(callouts) == 1
@@ -194,7 +194,7 @@ class TestExtractCallouts:
         assert callouts[0].default_open is True
 
     def test_no_title(self):
-        """Test functionality: no title."""
+        """Verify no title behavior."""
         content = "> [!info]\n> Just content."
         callouts = extract_callouts(content)
         assert len(callouts) == 1
@@ -205,7 +205,7 @@ class TestExtractCallouts:
 class TestExtractHeadings:
     """Test suite for ExtractHeadings."""
     def test_headings(self):
-        """Test functionality: headings."""
+        """Verify headings behavior."""
         content = "# H1\n## H2\n### H3\nText\n#### H4"
         headings = extract_headings(content)
         assert len(headings) == 4
@@ -218,7 +218,7 @@ class TestExtractHeadings:
 class TestParseNote:
     """Test suite for ParseNote."""
     def test_full_parse(self, tmp_path, sample_frontmatter_note):
-        """Test functionality: full parse."""
+        """Verify full parse behavior."""
         note_path = tmp_path / "test.md"
         note_path.write_text(sample_frontmatter_note)
         note = parse_note(note_path)
@@ -231,7 +231,7 @@ class TestParseNote:
         assert len(note.headings) >= 4
 
     def test_parse_from_raw(self, tmp_path):
-        """Test functionality: parse from raw."""
+        """Verify parse from raw behavior."""
         note_path = tmp_path / "raw.md"
         raw = "# Raw\nContent with [[link]]."
         note = parse_note(note_path, raw=raw)
@@ -242,7 +242,7 @@ class TestParseNote:
 class TestSerializeNote:
     """Test suite for SerializeNote."""
     def test_round_trip(self, tmp_path, sample_frontmatter_note):
-        """Test functionality: round trip."""
+        """Verify round trip behavior."""
         note_path = tmp_path / "roundtrip.md"
         note_path.write_text(sample_frontmatter_note)
         note = parse_note(note_path)
@@ -256,7 +256,7 @@ class TestSerializeNote:
         assert len(note2.embeds) == len(note.embeds)
 
     def test_no_frontmatter_serialize(self, tmp_path):
-        """Test functionality: no frontmatter serialize."""
+        """Verify no frontmatter serialize behavior."""
         note_path = tmp_path / "no_fm.md"
         raw = "# No FM\nContent."
         note = parse_note(note_path, raw=raw)

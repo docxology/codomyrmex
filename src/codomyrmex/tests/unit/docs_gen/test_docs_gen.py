@@ -32,40 +32,40 @@ class TestAPIDocExtractor:
     """Test suite for APIDocExtractor."""
 
     def test_extract_module_docstring(self):
-        """Test functionality: extract module docstring."""
+        """Verify extract module docstring behavior."""
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SAMPLE_SOURCE, "sample")
         assert doc.docstring == "Sample module docstring."
 
     def test_extract_class(self):
-        """Test functionality: extract class."""
+        """Verify extract class behavior."""
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SAMPLE_SOURCE, "sample")
         assert len(doc.classes) == 1
         assert doc.classes[0].name == "Greeter"
 
     def test_extract_methods(self):
-        """Test functionality: extract methods."""
+        """Verify extract methods behavior."""
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SAMPLE_SOURCE, "sample")
         methods = doc.classes[0].methods
         assert any(m.name == "hello" for m in methods)
 
     def test_extract_function(self):
-        """Test functionality: extract function."""
+        """Verify extract function behavior."""
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SAMPLE_SOURCE, "sample")
         assert len(doc.functions) >= 1
         assert doc.functions[0].name == "standalone"
 
     def test_extract_exports(self):
-        """Test functionality: extract exports."""
+        """Verify extract exports behavior."""
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SAMPLE_SOURCE, "sample")
         assert "Greeter" in doc.exports
 
     def test_to_markdown(self):
-        """Test functionality: to markdown."""
+        """Verify to markdown behavior."""
         ext = APIDocExtractor()
         doc = ext.extract_from_source(SAMPLE_SOURCE, "sample")
         md = ext.to_markdown(doc)
@@ -79,7 +79,7 @@ class TestSearchIndex:
     """Test suite for SearchIndex."""
 
     def test_add_and_search(self):
-        """Test functionality: add and search."""
+        """Verify add and search behavior."""
         idx = SearchIndex()
         idx.add("doc1", title="Agent API", content="The agent processes tasks")
         results = idx.search("agent")
@@ -87,7 +87,7 @@ class TestSearchIndex:
         assert results[0].doc_id == "doc1"
 
     def test_title_boosted(self):
-        """Test functionality: title boosted."""
+        """Verify title boosted behavior."""
         idx = SearchIndex()
         idx.add("a", title="Agent Guide", content="some content")
         idx.add("b", title="Other", content="agent mentioned here")
@@ -95,13 +95,13 @@ class TestSearchIndex:
         assert results[0].doc_id == "a"  # Title match ranked higher
 
     def test_no_results(self):
-        """Test functionality: no results."""
+        """Verify no results behavior."""
         idx = SearchIndex()
         idx.add("a", title="test", content="test content")
         assert len(idx.search("nonexistent")) == 0
 
     def test_remove(self):
-        """Test functionality: remove."""
+        """Verify remove behavior."""
         idx = SearchIndex()
         idx.add("a", title="doc", content="hello world")
         idx.remove("a")
@@ -114,21 +114,21 @@ class TestSiteGenerator:
     """Test suite for SiteGenerator."""
 
     def test_add_module(self):
-        """Test functionality: add module."""
+        """Verify add module behavior."""
         gen = SiteGenerator()
         doc = gen.add_module_source(SAMPLE_SOURCE, "sample")
         assert gen.module_count == 1
         assert "sample" in doc.name
 
     def test_generate_pages(self):
-        """Test functionality: generate pages."""
+        """Verify generate pages behavior."""
         gen = SiteGenerator()
         gen.add_module_source(SAMPLE_SOURCE, "sample")
         pages = gen.generate_pages()
         assert "api/sample.md" in pages
 
     def test_mkdocs_yaml(self):
-        """Test functionality: mkdocs yaml."""
+        """Verify mkdocs yaml behavior."""
         gen = SiteGenerator(title="Test Docs")
         gen.add_module_source(SAMPLE_SOURCE, "sample")
         yaml = gen.to_mkdocs_yaml()
@@ -136,7 +136,7 @@ class TestSiteGenerator:
         assert "sample" in yaml
 
     def test_search_integrated(self):
-        """Test functionality: search integrated."""
+        """Verify search integrated behavior."""
         gen = SiteGenerator()
         gen.add_module_source(SAMPLE_SOURCE, "sample")
         results = gen.search_index.search("greeter")

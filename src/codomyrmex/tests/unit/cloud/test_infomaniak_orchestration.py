@@ -486,25 +486,25 @@ class TestInfomaniakHeatClientExpanded:
         return InfomaniakHeatClient(connection=mock_conn), mock_conn
 
     def test_update_stack(self):
-        """Test functionality: update stack."""
+        """Verify update stack behavior."""
         client, mc = self._make_client()
         assert client.update_stack("stk1", template="heat: {}") is True
         mc.orchestration.update_stack.assert_called_once()
 
     def test_suspend_stack(self):
-        """Test functionality: suspend stack."""
+        """Verify suspend stack behavior."""
         client, mc = self._make_client()
         assert client.suspend_stack("stk1") is True
         mc.orchestration.suspend_stack.assert_called_once_with("stk1")
 
     def test_resume_stack(self):
-        """Test functionality: resume stack."""
+        """Verify resume stack behavior."""
         client, mc = self._make_client()
         assert client.resume_stack("stk1") is True
         mc.orchestration.resume_stack.assert_called_once_with("stk1")
 
     def test_get_stack_resource(self):
-        """Test functionality: get stack resource."""
+        """Verify get stack resource behavior."""
         client, mc = self._make_client()
         res = Stub(name="srv", resource_type="OS::Nova::Server",
                         status="CREATE_COMPLETE", physical_resource_id="inst1",
@@ -514,7 +514,7 @@ class TestInfomaniakHeatClientExpanded:
         assert result["resource_type"] == "OS::Nova::Server"
 
     def test_list_stack_events(self):
-        """Test functionality: list stack events."""
+        """Verify list stack events behavior."""
         client, mc = self._make_client()
         ev = Stub(id="ev1", resource_name="srv",
                        resource_status="CREATE_COMPLETE",
@@ -525,14 +525,14 @@ class TestInfomaniakHeatClientExpanded:
         assert result[0]["resource_name"] == "srv"
 
     def test_get_stack_template(self):
-        """Test functionality: get stack template."""
+        """Verify get stack template behavior."""
         client, mc = self._make_client()
         tpl = "heat_template_version: 2021-04-16"
         mc.orchestration.get_stack_template.return_value = tpl
         assert client.get_stack_template("stk1") == tpl
 
     def test_get_stack_outputs(self):
-        """Test functionality: get stack outputs."""
+        """Verify get stack outputs behavior."""
         client, mc = self._make_client()
         stk = Stub()
         stk.outputs = [
@@ -543,7 +543,7 @@ class TestInfomaniakHeatClientExpanded:
         assert result["server_ip"] == "10.0.0.5"
 
     def test_list_stacks_error(self):
-        """Test functionality: list stacks error."""
+        """Verify list stacks error behavior."""
         client, mc = self._make_client()
         mc.orchestration.stacks.side_effect = Exception("fail")
         assert client.list_stacks() == []

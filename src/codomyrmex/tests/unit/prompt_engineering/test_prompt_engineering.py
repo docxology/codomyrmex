@@ -37,42 +37,42 @@ if not HAS_MODULE:
 class TestPromptTemplate:
     """Test suite for PromptTemplate."""
     def test_create_template(self):
-        """Test functionality: create template."""
+        """Verify create template behavior."""
         t = PromptTemplate(name="greet", template_str="Hello, {name}!")
         assert t.name == "greet"
         assert t.variables == ["name"]
 
     def test_auto_detect_variables(self):
-        """Test functionality: auto detect variables."""
+        """Verify auto detect variables behavior."""
         t = PromptTemplate(name="t", template_str="{a} and {b} and {a}")
         assert sorted(t.variables) == ["a", "b"]
 
     def test_render(self):
-        """Test functionality: render."""
+        """Verify render behavior."""
         t = PromptTemplate(name="t", template_str="Say {word} to {person}")
         rendered = t.render(word="hello", person="Alice")
         assert rendered == "Say hello to Alice"
 
     def test_render_missing_variable_raises(self):
-        """Test functionality: render missing variable raises."""
+        """Verify render missing variable raises behavior."""
         t = PromptTemplate(name="t", template_str="Hello {name}")
         with pytest.raises(KeyError, match="Missing required"):
             t.render()
 
     def test_validate_returns_missing(self):
-        """Test functionality: validate returns missing."""
+        """Verify validate returns missing behavior."""
         t = PromptTemplate(name="t", template_str="{a} {b}")
         missing = t.validate(a="ok")
         assert missing == ["b"]
 
     def test_validate_all_present(self):
-        """Test functionality: validate all present."""
+        """Verify validate all present behavior."""
         t = PromptTemplate(name="t", template_str="{x}")
         missing = t.validate(x="present")
         assert missing == []
 
     def test_to_dict_and_from_dict(self):
-        """Test functionality: to dict and from dict."""
+        """Verify to dict and from dict behavior."""
         t = PromptTemplate(
             name="test",
             template_str="Do {action}",
@@ -87,7 +87,7 @@ class TestPromptTemplate:
         assert "action" in restored.variables
 
     def test_explicit_variables(self):
-        """Test functionality: explicit variables."""
+        """Verify explicit variables behavior."""
         t = PromptTemplate(
             name="t",
             template_str="{x} {y}",
@@ -108,21 +108,21 @@ class TestTemplateRegistry:
         return PromptTemplate(name=name, template_str=f"Template {name}: {{var}}")
 
     def test_add_and_get(self):
-        """Test functionality: add and get."""
+        """Verify add and get behavior."""
         reg = TemplateRegistry()
         t = self._make_template("greet")
         reg.add(t)
         assert reg.get("greet") is t
 
     def test_add_duplicate_raises(self):
-        """Test functionality: add duplicate raises."""
+        """Verify add duplicate raises behavior."""
         reg = TemplateRegistry()
         reg.add(self._make_template("dup"))
         with pytest.raises(ValueError, match="already exists"):
             reg.add(self._make_template("dup"))
 
     def test_update_replaces(self):
-        """Test functionality: update replaces."""
+        """Verify update replaces behavior."""
         reg = TemplateRegistry()
         reg.add(self._make_template("t"))
         new_t = PromptTemplate(name="t", template_str="Updated: {var}")
@@ -130,7 +130,7 @@ class TestTemplateRegistry:
         assert "Updated" in reg.get("t").template_str
 
     def test_remove(self):
-        """Test functionality: remove."""
+        """Verify remove behavior."""
         reg = TemplateRegistry()
         reg.add(self._make_template("rm"))
         removed = reg.remove("rm")
@@ -139,13 +139,13 @@ class TestTemplateRegistry:
             reg.get("rm")
 
     def test_remove_nonexistent_raises(self):
-        """Test functionality: remove nonexistent raises."""
+        """Verify remove nonexistent raises behavior."""
         reg = TemplateRegistry()
         with pytest.raises(KeyError):
             reg.remove("missing")
 
     def test_list_and_size(self):
-        """Test functionality: list and size."""
+        """Verify list and size behavior."""
         reg = TemplateRegistry()
         reg.add(self._make_template("b"))
         reg.add(self._make_template("a"))
@@ -153,14 +153,14 @@ class TestTemplateRegistry:
         assert reg.size == 2
 
     def test_render_via_registry(self):
-        """Test functionality: render via registry."""
+        """Verify render via registry behavior."""
         reg = TemplateRegistry()
         reg.add(PromptTemplate(name="greet", template_str="Hi {name}"))
         result = reg.render("greet", name="World")
         assert result == "Hi World"
 
     def test_search_by_name(self):
-        """Test functionality: search by name."""
+        """Verify search by name behavior."""
         reg = TemplateRegistry()
         reg.add(PromptTemplate(name="code_review", template_str="Review {code}"))
         reg.add(PromptTemplate(name="code_fix", template_str="Fix {code}"))
@@ -169,7 +169,7 @@ class TestTemplateRegistry:
         assert len(results) == 2
 
     def test_export_import(self):
-        """Test functionality: export import."""
+        """Verify export import behavior."""
         reg = TemplateRegistry()
         reg.add(PromptTemplate(name="a", template_str="A: {x}"))
         reg.add(PromptTemplate(name="b", template_str="B: {y}"))
@@ -191,7 +191,7 @@ class TestTemplateRegistry:
 class TestVersionManager:
     """Test suite for VersionManager."""
     def test_create_first_version(self):
-        """Test functionality: create first version."""
+        """Verify create first version behavior."""
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="Q: {question}")
         v = vm.create_version(t, changelog="Initial")
@@ -199,7 +199,7 @@ class TestVersionManager:
         assert v.changelog == "Initial"
 
     def test_auto_increment_patch(self):
-        """Test functionality: auto increment patch."""
+        """Verify auto increment patch behavior."""
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="V1: {q}")
         vm.create_version(t)
@@ -208,7 +208,7 @@ class TestVersionManager:
         assert v2.version == "1.0.1"
 
     def test_bump_minor(self):
-        """Test functionality: bump minor."""
+        """Verify bump minor behavior."""
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="V1: {q}")
         vm.create_version(t)
@@ -217,7 +217,7 @@ class TestVersionManager:
         assert v2.version == "1.1.0"
 
     def test_get_version_latest(self):
-        """Test functionality: get version latest."""
+        """Verify get version latest behavior."""
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="V1: {q}")
         vm.create_version(t)
@@ -227,7 +227,7 @@ class TestVersionManager:
         assert latest.version == "1.0.1"
 
     def test_get_specific_version(self):
-        """Test functionality: get specific version."""
+        """Verify get specific version behavior."""
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="V1: {q}")
         vm.create_version(t)
@@ -237,13 +237,13 @@ class TestVersionManager:
         assert "V1" in v1.template.template_str
 
     def test_get_version_not_found(self):
-        """Test functionality: get version not found."""
+        """Verify get version not found behavior."""
         vm = VersionManager()
         with pytest.raises(KeyError):
             vm.get_version("nonexistent")
 
     def test_list_versions(self):
-        """Test functionality: list versions."""
+        """Verify list versions behavior."""
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="V1")
         vm.create_version(t)
@@ -253,7 +253,7 @@ class TestVersionManager:
         assert len(versions) == 2
 
     def test_diff(self):
-        """Test functionality: diff."""
+        """Verify diff behavior."""
         vm = VersionManager()
         t1 = PromptTemplate(name="qa", template_str="Original text")
         vm.create_version(t1)
@@ -263,7 +263,7 @@ class TestVersionManager:
         assert "Original" in diff_output or "Modified" in diff_output
 
     def test_rollback(self):
-        """Test functionality: rollback."""
+        """Verify rollback behavior."""
         vm = VersionManager()
         t1 = PromptTemplate(name="qa", template_str="Original: {q}")
         vm.create_version(t1)
@@ -274,7 +274,7 @@ class TestVersionManager:
         assert vm.version_count("qa") == 3
 
     def test_version_count(self):
-        """Test functionality: version count."""
+        """Verify version count behavior."""
         vm = VersionManager()
         assert vm.version_count("missing") == 0
         t = PromptTemplate(name="qa", template_str="V1")
@@ -282,7 +282,7 @@ class TestVersionManager:
         assert vm.version_count("qa") == 1
 
     def test_export_history(self):
-        """Test functionality: export history."""
+        """Verify export history behavior."""
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="V1")
         vm.create_version(t)
@@ -301,7 +301,7 @@ class TestVersionManager:
 class TestPromptOptimizer:
     """Test suite for PromptOptimizer."""
     def test_concise_optimization(self):
-        """Test functionality: concise optimization."""
+        """Verify concise optimization behavior."""
         optimizer = PromptOptimizer()
         t = PromptTemplate(
             name="verbose",
@@ -313,21 +313,21 @@ class TestPromptOptimizer:
         assert len(result.changes) > 0
 
     def test_detailed_optimization(self):
-        """Test functionality: detailed optimization."""
+        """Verify detailed optimization behavior."""
         optimizer = PromptOptimizer()
         t = PromptTemplate(name="simple", template_str="Explain {topic}")
         result = optimizer.optimize(t, OptimizationStrategy.DETAILED)
         assert "Task" in result.optimized.template_str
 
     def test_chain_of_thought_optimization(self):
-        """Test functionality: chain of thought optimization."""
+        """Verify chain of thought optimization behavior."""
         optimizer = PromptOptimizer()
         t = PromptTemplate(name="solve", template_str="Solve {problem}")
         result = optimizer.optimize(t, OptimizationStrategy.CHAIN_OF_THOUGHT)
         assert "step" in result.optimized.template_str.lower()
 
     def test_few_shot_optimization(self):
-        """Test functionality: few shot optimization."""
+        """Verify few shot optimization behavior."""
         optimizer = PromptOptimizer()
         optimizer.set_few_shot_examples([
             {"input": "2+2", "output": "4"},
@@ -338,7 +338,7 @@ class TestPromptOptimizer:
         assert "Example" in result.optimized.template_str
 
     def test_token_reduction_estimate(self):
-        """Test functionality: token reduction estimate."""
+        """Verify token reduction estimate behavior."""
         optimizer = PromptOptimizer()
         t = PromptTemplate(
             name="verbose",
@@ -348,7 +348,7 @@ class TestPromptOptimizer:
         assert result.token_reduction_estimate <= 1.0
 
     def test_bulk_optimize(self):
-        """Test functionality: bulk optimize."""
+        """Verify bulk optimize behavior."""
         optimizer = PromptOptimizer()
         templates = [
             PromptTemplate(name="a", template_str="Do {x}"),
@@ -358,7 +358,7 @@ class TestPromptOptimizer:
         assert len(results) == 2
 
     def test_available_strategies(self):
-        """Test functionality: available strategies."""
+        """Verify available strategies behavior."""
         optimizer = PromptOptimizer()
         strategies = optimizer.available_strategies()
         assert "concise" in strategies
@@ -376,36 +376,36 @@ class TestPromptOptimizer:
 class TestScorerFunctions:
     """Test suite for ScorerFunctions."""
     def test_score_response_length_short(self):
-        """Test functionality: score response length short."""
+        """Verify score response length short behavior."""
         score = score_response_length("prompt", "short")
         assert 0.0 <= score <= 1.0
 
     def test_score_response_length_ideal(self):
-        """Test functionality: score response length ideal."""
+        """Verify score response length ideal behavior."""
         response = " ".join(["word"] * 100)
         score = score_response_length("prompt", response)
         assert score == 1.0
 
     def test_score_relevance_with_overlap(self):
-        """Test functionality: score relevance with overlap."""
+        """Verify score relevance with overlap behavior."""
         prompt = "Explain machine learning algorithms"
         response = "Machine learning algorithms include decision trees and neural networks."
         score = score_relevance(prompt, response)
         assert score > 0.0
 
     def test_score_relevance_no_overlap(self):
-        """Test functionality: score relevance no overlap."""
+        """Verify score relevance no overlap behavior."""
         score = score_relevance("quantum physics", "cats and dogs")
         assert score == 0.0
 
     def test_score_structure_with_formatting(self):
-        """Test functionality: score structure with formatting."""
+        """Verify score structure with formatting behavior."""
         response = "# Title\n\n- Point one\n- Point two\n\nConclusion."
         score = score_structure("prompt", response)
         assert score > 0.5
 
     def test_score_completeness_with_question(self):
-        """Test functionality: score completeness with question."""
+        """Verify score completeness with question behavior."""
         score = score_completeness(
             "What is Python?",
             "Python is a high-level programming language known for readability and versatility."
@@ -422,7 +422,7 @@ class TestScorerFunctions:
 class TestPromptEvaluator:
     """Test suite for PromptEvaluator."""
     def test_evaluate_returns_result(self):
-        """Test functionality: evaluate returns result."""
+        """Verify evaluate returns result behavior."""
         evaluator = PromptEvaluator()
         result = evaluator.evaluate(
             prompt="Explain testing",
@@ -434,7 +434,7 @@ class TestPromptEvaluator:
         assert len(result.scores) > 0
 
     def test_evaluate_with_default_criteria(self):
-        """Test functionality: evaluate with default criteria."""
+        """Verify evaluate with default criteria behavior."""
         criteria = get_default_criteria()
         assert len(criteria) == 4
         names = [c.name for c in criteria]
@@ -442,7 +442,7 @@ class TestPromptEvaluator:
         assert "completeness" in names
 
     def test_evaluate_batch(self):
-        """Test functionality: evaluate batch."""
+        """Verify evaluate batch behavior."""
         evaluator = PromptEvaluator()
         pairs = [
             ("What is AI?", "AI is artificial intelligence."),
@@ -452,7 +452,7 @@ class TestPromptEvaluator:
         assert len(results) == 2
 
     def test_compare_responses(self):
-        """Test functionality: compare responses."""
+        """Verify compare responses behavior."""
         evaluator = PromptEvaluator()
         comparison = evaluator.compare_responses(
             prompt="What is Python?",
@@ -467,7 +467,7 @@ class TestPromptEvaluator:
         assert "statistics" in comparison
 
     def test_add_and_remove_criteria(self):
-        """Test functionality: add and remove criteria."""
+        """Verify add and remove criteria behavior."""
         evaluator = PromptEvaluator(criteria=[])
         custom = EvaluationCriteria(
             name="custom",
@@ -481,7 +481,7 @@ class TestPromptEvaluator:
         assert "custom" not in evaluator.criteria_names()
 
     def test_evaluation_result_to_dict(self):
-        """Test functionality: evaluation result to dict."""
+        """Verify evaluation result to dict behavior."""
         evaluator = PromptEvaluator()
         result = evaluator.evaluate("test prompt", "test response")
         d = result.to_dict()

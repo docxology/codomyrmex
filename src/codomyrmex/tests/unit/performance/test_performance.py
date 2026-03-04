@@ -396,7 +396,7 @@ class TestPerformanceMonitor:
 
         @monitor_performance()
         def test_function(x):
-            """Test functionality: function."""
+            """Verify function behavior."""
             nonlocal call_count
             call_count += 1
             time.sleep(0.01)  # Small delay

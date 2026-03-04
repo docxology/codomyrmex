@@ -21,7 +21,7 @@ class TestTaskQueue:
     """Test suite for TaskQueue."""
 
     def test_priority_ordering(self):
-        """Test functionality: priority ordering."""
+        """Verify priority ordering behavior."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="low", priority=TaskPriority.LOW))
         queue.enqueue(Task(task_id="high", priority=TaskPriority.HIGH))
@@ -32,14 +32,14 @@ class TestTaskQueue:
         assert queue.dequeue().task_id == "low"
 
     def test_deduplication(self):
-        """Test functionality: deduplication."""
+        """Verify deduplication behavior."""
         queue = TaskQueue()
         assert queue.enqueue(Task(task_id="a")) is True
         assert queue.enqueue(Task(task_id="a")) is False
         assert queue.pending_count == 1
 
     def test_ack_completes_task(self):
-        """Test functionality: ack completes task."""
+        """Verify ack completes task behavior."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1"))
         queue.dequeue()
@@ -48,7 +48,7 @@ class TestTaskQueue:
         assert queue.in_flight_count == 0
 
     def test_nack_requeues(self):
-        """Test functionality: nack requeues."""
+        """Verify nack requeues behavior."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1", max_retries=3))
         queue.dequeue()
@@ -57,7 +57,7 @@ class TestTaskQueue:
         assert queue.pending_count == 1
 
     def test_nack_dead_letters_after_max_retries(self):
-        """Test functionality: nack dead letters after max retries."""
+        """Verify nack dead letters after max retries behavior."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1", max_retries=1))
         queue.dequeue()
@@ -65,7 +65,7 @@ class TestTaskQueue:
         assert queue.dead_letter_count == 1
 
     def test_requeue_dead_letters(self):
-        """Test functionality: requeue dead letters."""
+        """Verify requeue dead letters behavior."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1", max_retries=1))
         queue.dequeue()
@@ -81,7 +81,7 @@ class TestTaskWorker:
     """Test suite for TaskWorker."""
 
     def test_process_success(self):
-        """Test functionality: process success."""
+        """Verify process success behavior."""
         worker = TaskWorker(worker_id="w1")
         task = Task(task_id="t1")
         result = worker.process_one(task)
@@ -101,7 +101,7 @@ class TestTaskWorker:
         assert worker.tasks_failed == 1
 
     def test_lifecycle(self):
-        """Test functionality: lifecycle."""
+        """Verify lifecycle behavior."""
         worker = TaskWorker()
         assert worker.is_running is False
         worker.start()
@@ -116,7 +116,7 @@ class TestTaskScheduler:
     """Test suite for TaskScheduler."""
 
     def test_round_robin(self):
-        """Test functionality: round robin."""
+        """Verify round robin behavior."""
         scheduler = TaskScheduler(strategy=SchedulingStrategy.ROUND_ROBIN)
         scheduler.register_worker("w1")
         scheduler.register_worker("w2")
@@ -127,7 +127,7 @@ class TestTaskScheduler:
         assert "w2" in assignments
 
     def test_least_loaded(self):
-        """Test functionality: least loaded."""
+        """Verify least loaded behavior."""
         scheduler = TaskScheduler(strategy=SchedulingStrategy.LEAST_LOADED)
         scheduler.register_worker("w1")
         scheduler.register_worker("w2")
@@ -139,7 +139,7 @@ class TestTaskScheduler:
         assert assigned == "w2"
 
     def test_affinity_routing(self):
-        """Test functionality: affinity routing."""
+        """Verify affinity routing behavior."""
         scheduler = TaskScheduler(strategy=SchedulingStrategy.AFFINITY)
         scheduler.register_worker("w1")
         scheduler.register_worker("w2")
@@ -149,7 +149,7 @@ class TestTaskScheduler:
         assert assigned == "w2"
 
     def test_capability_filter(self):
-        """Test functionality: capability filter."""
+        """Verify capability filter behavior."""
         scheduler = TaskScheduler()
         scheduler.register_worker("w1", capabilities=["analyze"])
         scheduler.register_worker("w2", capabilities=["deploy"])
@@ -164,7 +164,7 @@ class TestResultAggregator:
     """Test suite for ResultAggregator."""
 
     def test_aggregate_stats(self):
-        """Test functionality: aggregate stats."""
+        """Verify aggregate stats behavior."""
         agg = ResultAggregator()
         agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=100))
         agg.add(TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=200))

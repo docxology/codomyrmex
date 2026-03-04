@@ -379,7 +379,7 @@ class TestMessageBus:
 
     @pytest.mark.asyncio
     async def test_multi_segment_wildcard(self) -> None:
-        """Test functionality: multi segment wildcard."""
+        """Verify multi segment wildcard behavior."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
         bus.subscribe("alice", "task.#", lambda m: received.append(m))
@@ -388,7 +388,7 @@ class TestMessageBus:
 
     @pytest.mark.asyncio
     async def test_handler_error_isolated(self) -> None:
-        """Test functionality: handler error isolated."""
+        """Verify handler error isolated behavior."""
         bus = MessageBus()
         good: list[SwarmMessage] = []
         bus.subscribe("bad", "topic", lambda m: 1 / 0)  # Will raise

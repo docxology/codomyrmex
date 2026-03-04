@@ -5,7 +5,7 @@ from codomyrmex.data_visualization.plots.wordcloud import WordCloud
 
 
 def test_word_cloud_render():
-    """Test functionality: word cloud render."""
+    """Verify word cloud render behavior."""
     words = [("Hello", 10), ("World", 20)]
     plot = WordCloud("Test Cloud", words)
     html = plot.to_html()
@@ -13,7 +13,7 @@ def test_word_cloud_render():
     assert 'alt="Test Cloud"' in html
 
 def test_confusion_matrix_render():
-    """Test functionality: confusion matrix render."""
+    """Verify confusion matrix render behavior."""
     matrix = [[10, 2], [3, 8]]
     labels = ["A", "B"]
     plot = ConfusionMatrix("Test CM", matrix, labels)
@@ -22,7 +22,7 @@ def test_confusion_matrix_render():
     assert 'alt="Test CM"' in html
 
 def test_chat_bubble_component():
-    """Test functionality: chat bubble component."""
+    """Verify chat bubble component behavior."""
     b1 = ChatBubble(message="Hello", role="user", timestamp="10:00")
     html1 = str(b1)
     assert "Hello" in html1
@@ -36,7 +36,7 @@ def test_chat_bubble_component():
     assert "float: left" in html2  # Agent aligned left
 
 def test_json_view_component():
-    """Test functionality: json view component."""
+    """Verify json view component behavior."""
     data = {"key": "value", "list": [1, 2]}
     view = JsonView(data=data, label="Config")
     html = str(view)

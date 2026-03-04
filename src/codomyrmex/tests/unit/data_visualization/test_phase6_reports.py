@@ -7,7 +7,7 @@ from codomyrmex.data_visualization.reports.marketing import MarketingReport
 
 
 def test_finance_report_generation(tmp_path):
-    """Test functionality: finance report generation."""
+    """Verify finance report generation behavior."""
     report = FinanceReport()
     report.generate()
     output_path = tmp_path / "finance.html"
@@ -19,7 +19,7 @@ def test_finance_report_generation(tmp_path):
     assert "CDMX Stock" in html
 
 def test_marketing_report_generation(tmp_path):
-    """Test functionality: marketing report generation."""
+    """Verify marketing report generation behavior."""
     report = MarketingReport()
     report.generate()
     output_path = tmp_path / "marketing.html"
@@ -31,7 +31,7 @@ def test_marketing_report_generation(tmp_path):
     assert "User Acquisition" in html
 
 def test_logistics_report_generation(tmp_path):
-    """Test functionality: logistics report generation."""
+    """Verify logistics report generation behavior."""
     report = LogisticsReport()
     report.generate()
     output_path = tmp_path / "logistics.html"
@@ -44,7 +44,7 @@ def test_logistics_report_generation(tmp_path):
     assert "sankey-beta" in html  # Diagram content
 
 def test_generate_report_wrapper(tmp_path):
-    """Test functionality: generate report wrapper."""
+    """Verify generate report wrapper behavior."""
     output_dir = str(tmp_path)
 
     # General (Default)

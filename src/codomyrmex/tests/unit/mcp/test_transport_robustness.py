@@ -30,7 +30,7 @@ from codomyrmex.model_context_protocol.transport.server import (
 class TestClientConfig:
     """Test suite for ClientConfig."""
     def test_default_retry_fields(self):
-        """Test functionality: default retry fields."""
+        """Verify default retry fields behavior."""
         cfg = MCPClientConfig()
         assert cfg.max_retries == 3
         assert cfg.retry_delay == 0.5
@@ -38,7 +38,7 @@ class TestClientConfig:
         assert cfg.connection_pool_size == 10
 
     def test_custom_retry_fields(self):
-        """Test functionality: custom retry fields."""
+        """Verify custom retry fields behavior."""
         cfg = MCPClientConfig(max_retries=5, retry_delay=1.0, connection_pool_size=20)
         assert cfg.max_retries == 5
         assert cfg.retry_delay == 1.0
@@ -228,7 +228,7 @@ def test_http_transport_pool_size():
 
 
 def test_http_transport_default_pool_size():
-    """Test functionality: http transport default pool size."""
+    """Verify http transport default pool size behavior."""
     t = _HTTPTransport("http://localhost:8080")
     assert t._pool_size == 10
 
@@ -241,7 +241,7 @@ def test_http_transport_default_pool_size():
 class TestServerConfig:
     """Test suite for ServerConfig."""
     def test_default_timeout_fields(self):
-        """Test functionality: default timeout fields."""
+        """Verify default timeout fields behavior."""
         cfg = MCPServerConfig()
         assert cfg.default_tool_timeout == 60.0
         assert cfg.per_tool_timeouts is None
@@ -249,7 +249,7 @@ class TestServerConfig:
         assert cfg.rate_limit_burst == 100
 
     def test_custom_timeout(self):
-        """Test functionality: custom timeout."""
+        """Verify custom timeout behavior."""
         cfg = MCPServerConfig(
             default_tool_timeout=10,
             per_tool_timeouts={"slow": 120},
@@ -295,13 +295,13 @@ async def test_server_rate_limit_rejects():
 
 
 def test_server_has_rate_limiter():
-    """Test functionality: server has rate limiter."""
+    """Verify server has rate limiter behavior."""
     server = MCPServer()
     assert hasattr(server, "_rate_limiter")
 
 
 def test_per_tool_timeout_config():
-    """Test functionality: per tool timeout config."""
+    """Verify per tool timeout config behavior."""
     cfg = MCPServerConfig(
         per_tool_timeouts={"heavy_tool": 300, "quick_tool": 5},
     )

@@ -5,7 +5,7 @@ from codomyrmex.data_visualization.plots.violin import ViolinPlot
 
 
 def test_violin_plot_render():
-    """Test functionality: violin plot render."""
+    """Verify violin plot render behavior."""
     data = [[1, 2, 3], [2, 3, 4]]
     plot = ViolinPlot("Test Violin", data, labels=['G1', 'G2'])
     html = plot.to_html()
@@ -13,7 +13,7 @@ def test_violin_plot_render():
     assert 'alt="Test Violin"' in html
 
 def test_radar_chart_render():
-    """Test functionality: radar chart render."""
+    """Verify radar chart render behavior."""
     categories = ['A', 'B', 'C']
     values = [4, 5, 3]
     plot = RadarChart("Test Radar", categories, values)
@@ -22,7 +22,7 @@ def test_radar_chart_render():
     assert 'alt="Test Radar"' in html
 
 def test_candlestick_chart_render():
-    """Test functionality: candlestick chart render."""
+    """Verify candlestick chart render behavior."""
     dates = ["2023-01-01", "2023-01-02"]
     opens = [10, 11]
     highs = [12, 13]
@@ -34,7 +34,7 @@ def test_candlestick_chart_render():
     assert 'alt="Test Candle"' in html
 
 def test_gantt_chart_render():
-    """Test functionality: gantt chart render."""
+    """Verify gantt chart render behavior."""
     tasks = ["Task 1", "Task 2"]
     starts = [1, 2]
     durations = [3, 2]

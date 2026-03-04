@@ -119,28 +119,28 @@ class TestCoerceTypes:
     """Kill surviving BoolOpMutator in _coerce_types."""
 
     def test_string_to_int(self) -> None:
-        """Test functionality: string to int."""
+        """Verify string to int behavior."""
         schema = {"properties": {"x": {"type": "integer"}}}
         result = _coerce_types({"x": "42"}, schema)
         assert result["x"] == 42
         assert isinstance(result["x"], int)
 
     def test_string_to_float(self) -> None:
-        """Test functionality: string to float."""
+        """Verify string to float behavior."""
         schema = {"properties": {"x": {"type": "number"}}}
         result = _coerce_types({"x": "3.14"}, schema)
         assert result["x"] == pytest.approx(3.14)
         assert isinstance(result["x"], float)
 
     def test_string_to_bool_true(self) -> None:
-        """Test functionality: string to bool true."""
+        """Verify string to bool true behavior."""
         schema = {"properties": {"x": {"type": "boolean"}}}
         for val in ("true", "1", "yes", "on", "True", "YES"):
             result = _coerce_types({"x": val}, schema)
             assert result["x"] is True, f"Failed for {val}"
 
     def test_string_to_bool_false(self) -> None:
-        """Test functionality: string to bool false."""
+        """Verify string to bool false behavior."""
         schema = {"properties": {"x": {"type": "boolean"}}}
         for val in ("false", "0", "no", "off", "False", "NO"):
             result = _coerce_types({"x": val}, schema)
@@ -184,37 +184,37 @@ class TestValidateBuiltin:
     """Kill surviving ComparisonMutator and BoolOpMutator in _validate_builtin."""
 
     def test_required_missing(self) -> None:
-        """Test functionality: required missing."""
+        """Verify required missing behavior."""
         schema = {"required": ["x"], "properties": {}}
         errors = _validate_builtin({}, schema, "t")
         assert any("required" in e for e in errors)
 
     def test_required_present(self) -> None:
-        """Test functionality: required present."""
+        """Verify required present behavior."""
         schema = {"required": ["x"], "properties": {"x": {"type": "string"}}}
         errors = _validate_builtin({"x": "hello"}, schema, "t")
         assert len(errors) == 0
 
     def test_type_mismatch(self) -> None:
-        """Test functionality: type mismatch."""
+        """Verify type mismatch behavior."""
         schema = {"properties": {"x": {"type": "integer"}}}
         errors = _validate_builtin({"x": "hello"}, schema, "t")
         assert any("type" in e for e in errors)
 
     def test_type_correct(self) -> None:
-        """Test functionality: type correct."""
+        """Verify type correct behavior."""
         schema = {"properties": {"x": {"type": "string"}}}
         errors = _validate_builtin({"x": "hello"}, schema, "t")
         assert len(errors) == 0
 
     def test_enum_valid(self) -> None:
-        """Test functionality: enum valid."""
+        """Verify enum valid behavior."""
         schema = {"properties": {"x": {"type": "string", "enum": ["a", "b"]}}}
         errors = _validate_builtin({"x": "a"}, schema, "t")
         assert len(errors) == 0
 
     def test_enum_invalid(self) -> None:
-        """Test functionality: enum invalid."""
+        """Verify enum invalid behavior."""
         schema = {"properties": {"x": {"type": "string", "enum": ["a", "b"]}}}
         errors = _validate_builtin({"x": "c"}, schema, "t")
         assert any("allowed" in e for e in errors)
@@ -234,7 +234,7 @@ class TestValidateBuiltin:
         assert len(_validate_builtin({"x": 9}, schema, "t")) == 0  # below = OK
 
     def test_pattern_match(self) -> None:
-        """Test functionality: pattern match."""
+        """Verify pattern match behavior."""
         schema = {"properties": {"x": {"type": "string", "pattern": "^[a-z]+$"}}}
         assert len(_validate_builtin({"x": "hello"}, schema, "t")) == 0
         assert len(_validate_builtin({"x": "Hello"}, schema, "t")) > 0
@@ -253,62 +253,62 @@ class TestGenerateSchemaFromFunc:
     """Kill surviving ComparisonMutator in _generate_schema_from_func."""
 
     def test_str_annotation(self) -> None:
-        """Test functionality: str annotation."""
+        """Verify str annotation behavior."""
         def f(x: str) -> None: pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "string"
 
     def test_int_annotation(self) -> None:
-        """Test functionality: int annotation."""
+        """Verify int annotation behavior."""
         def f(x: int) -> None: pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "integer"
 
     def test_float_annotation(self) -> None:
-        """Test functionality: float annotation."""
+        """Verify float annotation behavior."""
         def f(x: float) -> None: pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "number"
 
     def test_bool_annotation(self) -> None:
-        """Test functionality: bool annotation."""
+        """Verify bool annotation behavior."""
         def f(x: bool) -> None: pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "boolean"
 
     def test_list_annotation(self) -> None:
-        """Test functionality: list annotation."""
+        """Verify list annotation behavior."""
         def f(x: list) -> None: pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "array"
 
     def test_dict_annotation(self) -> None:
-        """Test functionality: dict annotation."""
+        """Verify dict annotation behavior."""
         def f(x: dict) -> None: pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "object"
 
     def test_no_annotation_defaults_string(self) -> None:
-        """Test functionality: no annotation defaults string."""
+        """Verify no annotation defaults string behavior."""
         def f(x): pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "string"
 
     def test_complex_type_defaults_string(self) -> None:
-        """Test functionality: complex type defaults string."""
+        """Verify complex type defaults string behavior."""
         def f(x: Any) -> None: pass
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "string"
 
     def test_required_vs_optional(self) -> None:
-        """Test functionality: required vs optional."""
+        """Verify required vs optional behavior."""
         def f(x: str, y: str = "default") -> None: pass
         schema = _generate_schema_from_func(f)
         assert "x" in schema["required"]
         assert "y" not in schema["required"]
 
     def test_self_cls_excluded(self) -> None:
-        """Test functionality: self cls excluded."""
+        """Verify self cls excluded behavior."""
         class C:
             def m(self, x: int) -> None: pass
         schema = _generate_schema_from_func(C.m)
@@ -323,7 +323,7 @@ class TestMCPToolRegistryMutationKill:
     """Kill ReturnConst and NoneReturn mutants in mcp_schemas.py."""
 
     def test_register_and_get(self) -> None:
-        """Test functionality: register and get."""
+        """Verify register and get behavior."""
         reg = MCPToolRegistry()
         reg.register(
             tool_name="t1",
@@ -335,18 +335,18 @@ class TestMCPToolRegistryMutationKill:
         assert tool["name"] == "t1"
 
     def test_get_nonexistent_returns_none(self) -> None:
-        """Test functionality: get nonexistent returns none."""
+        """Verify get nonexistent returns none behavior."""
         reg = MCPToolRegistry()
         assert reg.get("nonexistent") is None
 
     def test_list_tools_empty(self) -> None:
-        """Test functionality: list tools empty."""
+        """Verify list tools empty behavior."""
         reg = MCPToolRegistry()
         tools = reg.list_tools()
         assert tools == []
 
     def test_list_tools_multiple(self) -> None:
-        """Test functionality: list tools multiple."""
+        """Verify list tools multiple behavior."""
         reg = MCPToolRegistry()
         for i in range(3):
             reg.register(
@@ -358,7 +358,7 @@ class TestMCPToolRegistryMutationKill:
         assert len(tools) == 3
 
     def test_has_tool(self) -> None:
-        """Test functionality: has tool."""
+        """Verify has tool behavior."""
         reg = MCPToolRegistry()
         reg.register(
             tool_name="t1",
@@ -369,7 +369,7 @@ class TestMCPToolRegistryMutationKill:
         assert reg.get("t1") is not None
 
     def test_tool_count(self) -> None:
-        """Test functionality: tool count."""
+        """Verify tool count behavior."""
         reg = MCPToolRegistry()
         assert len(reg.list_tools()) == 0
         reg.register(
@@ -384,20 +384,20 @@ class TestMCPToolCallResult:
     """Kill surviving mutants in MCPToolCall/MCPToolResult."""
 
     def test_tool_call_fields(self) -> None:
-        """Test functionality: tool call fields."""
+        """Verify tool call fields behavior."""
         call = MCPToolCall(tool_name="test_tool", arguments={"x": 1})
         assert call.tool_name == "test_tool"
         assert call.arguments == {"x": 1}
 
     def test_tool_result_success(self) -> None:
-        """Test functionality: tool result success."""
+        """Verify tool result success behavior."""
         result = MCPToolResult(status="success", data={"key": "val"})
         assert result.status == "success"
         assert result.data == {"key": "val"}
         assert result.error is None
 
     def test_tool_result_with_explanation(self) -> None:
-        """Test functionality: tool result with explanation."""
+        """Verify tool result with explanation behavior."""
         result = MCPToolResult(status="no_change_needed", explanation="Already up to date")
         assert result.status == "no_change_needed"
         assert result.explanation == "Already up to date"

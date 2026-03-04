@@ -27,7 +27,7 @@ class TestPlatformDetection:
     """Test platform detection returns valid enum."""
 
     def test_detect_platform_returns_enum(self):
-        """Test functionality: detect_platform returns an OSPlatform enum."""
+        """Verify detect_platform returns an OSPlatform enum behavior."""
         from codomyrmex.operating_system.base import OSPlatform
         from codomyrmex.operating_system.detector import detect_platform
         result = detect_platform()
@@ -35,7 +35,7 @@ class TestPlatformDetection:
         assert result != OSPlatform.UNKNOWN
 
     def test_detect_platform_matches_system(self):
-        """Test functionality: detected platform matches platform.system()."""
+        """Verify detected platform matches platform.system() behavior."""
         import platform
 
         from codomyrmex.operating_system.detector import detect_platform
@@ -54,21 +54,21 @@ class TestProviderDispatch:
     """Test provider dispatch returns correct platform provider."""
 
     def test_get_provider_returns_base_subclass(self):
-        """Test functionality: get_provider returns an OSProviderBase subclass."""
+        """Verify get_provider returns an OSProviderBase subclass behavior."""
         from codomyrmex.operating_system.base import OSProviderBase
         from codomyrmex.operating_system.detector import get_provider
         provider = get_provider()
         assert isinstance(provider, OSProviderBase)
 
     def test_get_provider_is_cached(self):
-        """Test functionality: get_provider returns same instance on repeat call."""
+        """Verify get_provider returns same instance on repeat call behavior."""
         from codomyrmex.operating_system.detector import get_provider
         p1 = get_provider()
         p2 = get_provider()
         assert p1 is p2
 
     def test_provider_class_name_matches_platform(self):
-        """Test functionality: provider class name matches detected platform."""
+        """Verify provider class name matches detected platform behavior."""
         import platform as _platform
 
         from codomyrmex.operating_system.detector import get_provider
@@ -92,7 +92,7 @@ class TestSystemInfo:
     """Test real system information retrieval."""
 
     def test_get_system_info(self):
-        """Test functionality: get_system_info returns populated SystemInfo."""
+        """Verify get_system_info returns populated SystemInfo behavior."""
         from codomyrmex.operating_system.detector import get_system_info
         info = get_system_info()
         assert info.hostname != ""
@@ -101,7 +101,7 @@ class TestSystemInfo:
         assert info.kernel_version != ""
 
     def test_system_info_to_dict(self):
-        """Test functionality: SystemInfo.to_dict produces valid dict."""
+        """Verify SystemInfo.to_dict produces valid dict behavior."""
         from codomyrmex.operating_system.detector import get_system_info
         info = get_system_info()
         d = info.to_dict()
@@ -111,13 +111,13 @@ class TestSystemInfo:
         assert "memory_total_bytes" in d
 
     def test_memory_is_positive(self):
-        """Test functionality: memory_total_bytes is a positive integer."""
+        """Verify memory_total_bytes is a positive integer behavior."""
         from codomyrmex.operating_system.detector import get_system_info
         info = get_system_info()
         assert info.memory_total_bytes > 0
 
     def test_platform_version_populated(self):
-        """Test functionality: platform_version is non-empty."""
+        """Verify platform_version is non-empty behavior."""
         from codomyrmex.operating_system.detector import get_system_info
         info = get_system_info()
         assert info.platform_version != ""
@@ -132,28 +132,28 @@ class TestProcesses:
     """Test real process listing."""
 
     def test_list_processes_returns_list(self):
-        """Test functionality: list_processes returns a non-empty list."""
+        """Verify list_processes returns a non-empty list behavior."""
         from codomyrmex.operating_system.detector import list_processes
         procs = list_processes(limit=10)
         assert isinstance(procs, list)
         assert len(procs) > 0
 
     def test_process_has_pid(self):
-        """Test functionality: each process has a positive pid."""
+        """Verify each process has a positive pid behavior."""
         from codomyrmex.operating_system.detector import list_processes
         procs = list_processes(limit=5)
         for p in procs:
             assert p.pid > 0
 
     def test_process_has_name(self):
-        """Test functionality: each process has a non-empty name."""
+        """Verify each process has a non-empty name behavior."""
         from codomyrmex.operating_system.detector import list_processes
         procs = list_processes(limit=5)
         for p in procs:
             assert p.name != ""
 
     def test_process_to_dict(self):
-        """Test functionality: ProcessInfo.to_dict produces valid dict."""
+        """Verify ProcessInfo.to_dict produces valid dict behavior."""
         from codomyrmex.operating_system.detector import list_processes
         procs = list_processes(limit=1)
         if procs:
@@ -172,28 +172,28 @@ class TestDiskUsage:
     """Test real disk usage retrieval."""
 
     def test_get_disk_usage_returns_list(self):
-        """Test functionality: get_disk_usage returns a list."""
+        """Verify get_disk_usage returns a list behavior."""
         from codomyrmex.operating_system.detector import get_disk_usage
         disks = get_disk_usage()
         assert isinstance(disks, list)
         assert len(disks) > 0
 
     def test_disk_has_mountpoint(self):
-        """Test functionality: each disk has a mountpoint."""
+        """Verify each disk has a mountpoint behavior."""
         from codomyrmex.operating_system.detector import get_disk_usage
         disks = get_disk_usage()
         for d in disks:
             assert d.mountpoint != ""
 
     def test_disk_total_positive(self):
-        """Test functionality: disk total_bytes is positive."""
+        """Verify disk total_bytes is positive behavior."""
         from codomyrmex.operating_system.detector import get_disk_usage
         disks = get_disk_usage()
         for d in disks:
             assert d.total_bytes > 0
 
     def test_disk_to_dict(self):
-        """Test functionality: DiskInfo.to_dict produces valid dict."""
+        """Verify DiskInfo.to_dict produces valid dict behavior."""
         from codomyrmex.operating_system.detector import get_disk_usage
         disks = get_disk_usage()
         if disks:
@@ -212,26 +212,26 @@ class TestCommandExecution:
     """Test real command execution."""
 
     def test_execute_echo(self):
-        """Test functionality: execute echo command."""
+        """Verify execute echo command behavior."""
         from codomyrmex.operating_system.detector import execute_command
         result = execute_command("echo hello_os_test")
         assert result.success
         assert "hello_os_test" in result.stdout
 
     def test_execute_returns_duration(self):
-        """Test functionality: execute_command records duration_ms."""
+        """Verify execute_command records duration_ms behavior."""
         from codomyrmex.operating_system.detector import execute_command
         result = execute_command("echo fast")
         assert result.duration_ms >= 0
 
     def test_execute_bad_command(self):
-        """Test functionality: non-zero exit code for bad command."""
+        """Verify non-zero exit code for bad command behavior."""
         from codomyrmex.operating_system.detector import execute_command
         result = execute_command("false")
         assert not result.success
 
     def test_command_result_to_dict(self):
-        """Test functionality: CommandResult.to_dict produces valid dict."""
+        """Verify CommandResult.to_dict produces valid dict behavior."""
         from codomyrmex.operating_system.detector import execute_command
         result = execute_command("echo test")
         d = result.to_dict()
@@ -249,20 +249,20 @@ class TestEnvironmentVariables:
     """Test real environment variable retrieval."""
 
     def test_get_all_env_vars(self):
-        """Test functionality: get_environment_variables returns dict."""
+        """Verify get_environment_variables returns dict behavior."""
         from codomyrmex.operating_system.detector import get_environment_variables
         env = get_environment_variables()
         assert isinstance(env, dict)
         assert len(env) > 0
 
     def test_path_in_env(self):
-        """Test functionality: PATH variable exists."""
+        """Verify PATH variable exists behavior."""
         from codomyrmex.operating_system.detector import get_environment_variables
         env = get_environment_variables()
         assert "PATH" in env
 
     def test_filter_by_prefix(self):
-        """Test functionality: prefix filter works."""
+        """Verify prefix filter works behavior."""
         from codomyrmex.operating_system.detector import get_environment_variables
         env = get_environment_variables(prefix="PATH")
         assert all(k.startswith("PATH") for k in env)
@@ -277,21 +277,21 @@ class TestNetworkInterfaces:
     """Test real network interface retrieval."""
 
     def test_get_network_interfaces_returns_list(self):
-        """Test functionality: get_network_interfaces returns list."""
+        """Verify get_network_interfaces returns list behavior."""
         from codomyrmex.operating_system.detector import get_network_interfaces
         ifaces = get_network_interfaces()
         assert isinstance(ifaces, list)
         assert len(ifaces) > 0
 
     def test_interface_has_name(self):
-        """Test functionality: each interface has a name."""
+        """Verify each interface has a name behavior."""
         from codomyrmex.operating_system.detector import get_network_interfaces
         ifaces = get_network_interfaces()
         for iface in ifaces:
             assert iface.interface != ""
 
     def test_network_info_to_dict(self):
-        """Test functionality: NetworkInfo.to_dict produces valid dict."""
+        """Verify NetworkInfo.to_dict produces valid dict behavior."""
         from codomyrmex.operating_system.detector import get_network_interfaces
         ifaces = get_network_interfaces()
         if ifaces:
@@ -309,7 +309,7 @@ class TestDataModels:
     """Test data model types and ABC enforcement."""
 
     def test_os_platform_enum_values(self):
-        """Test functionality: OSPlatform enum has expected values."""
+        """Verify OSPlatform enum has expected values behavior."""
         from codomyrmex.operating_system.base import OSPlatform
         assert OSPlatform.MACOS.value == "macos"
         assert OSPlatform.LINUX.value == "linux"
@@ -317,19 +317,19 @@ class TestDataModels:
         assert OSPlatform.UNKNOWN.value == "unknown"
 
     def test_service_status_enum(self):
-        """Test functionality: ServiceStatus enum values."""
+        """Verify ServiceStatus enum values behavior."""
         from codomyrmex.operating_system.base import ServiceStatus
         assert ServiceStatus.RUNNING.value == "running"
         assert ServiceStatus.STOPPED.value == "stopped"
 
     def test_process_status_enum(self):
-        """Test functionality: ProcessStatus enum values."""
+        """Verify ProcessStatus enum values behavior."""
         from codomyrmex.operating_system.base import ProcessStatus
         assert ProcessStatus.RUNNING.value == "running"
         assert ProcessStatus.ZOMBIE.value == "zombie"
 
     def test_cannot_instantiate_base_directly(self):
-        """Test functionality: OSProviderBase cannot be instantiated directly."""
+        """Verify OSProviderBase cannot be instantiated directly behavior."""
         from codomyrmex.operating_system.base import OSProviderBase
         with pytest.raises(TypeError):
             OSProviderBase()
@@ -344,7 +344,7 @@ class TestMCPTools:
     """Test MCP tools import and callable."""
 
     def test_import_mcp_tools(self):
-        """Test functionality: mcp_tools module imports cleanly."""
+        """Verify mcp_tools module imports cleanly behavior."""
         from codomyrmex.operating_system import mcp_tools
         assert hasattr(mcp_tools, "os_system_info")
         assert hasattr(mcp_tools, "os_list_processes")
@@ -354,7 +354,7 @@ class TestMCPTools:
         assert hasattr(mcp_tools, "os_environment_variables")
 
     def test_mcp_tools_callable(self):
-        """Test functionality: MCP tool functions are callable."""
+        """Verify MCP tool functions are callable behavior."""
         from codomyrmex.operating_system import mcp_tools
         assert callable(mcp_tools.os_system_info)
         assert callable(mcp_tools.os_execute_command)
@@ -369,7 +369,7 @@ class TestModuleImports:
     """Test top-level module imports."""
 
     def test_import_operating_system(self):
-        """Test functionality: operating_system module imports."""
+        """Verify operating_system module imports behavior."""
         import codomyrmex.operating_system as os_mod
         assert hasattr(os_mod, "detect_platform")
         assert hasattr(os_mod, "get_system_info")
@@ -377,7 +377,7 @@ class TestModuleImports:
         assert hasattr(os_mod, "SystemInfo")
 
     def test_cli_commands(self):
-        """Test functionality: cli_commands returns dict."""
+        """Verify cli_commands returns dict behavior."""
         from codomyrmex.operating_system import cli_commands
         cmds = cli_commands()
         assert isinstance(cmds, dict)

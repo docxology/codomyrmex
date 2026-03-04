@@ -334,7 +334,7 @@ class TestModulePerformanceBaselines:
         test_file = tmp_path / "analysis_test.py"
         test_file.write_text('''
 def test_function():
-    """Test functionality: function."""
+    """Verify function behavior."""
     x = 1
     y = 2
     return x + y
@@ -511,7 +511,7 @@ class TestPerformanceBenchmarking:
         from codomyrmex.performance import profile_function, run_benchmark
 
         def test_function():
-            """Test functionality: function."""
+            """Verify function behavior."""
             return sum(range(1000))
 
         # Profile the function

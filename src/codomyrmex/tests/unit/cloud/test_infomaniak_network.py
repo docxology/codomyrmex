@@ -548,7 +548,7 @@ class TestInfomaniakNetworkClientExpanded:
         return InfomaniakNetworkClient(connection=mock_conn), mock_conn
 
     def test_create_subnet(self):
-        """Test functionality: create subnet."""
+        """Verify create subnet behavior."""
         client, mc = self._make_client()
         sn = Stub(id="sn1", name="sub1", cidr="10.0.0.0/24")
         mc.network.create_subnet.return_value = sn
@@ -556,7 +556,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "sn1"
 
     def test_create_router(self):
-        """Test functionality: create router."""
+        """Verify create router behavior."""
         client, mc = self._make_client()
         rt = Stub(id="rt1", name="router1")
         mc.network.create_router.return_value = rt
@@ -564,19 +564,19 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "rt1"
 
     def test_add_router_interface(self):
-        """Test functionality: add router interface."""
+        """Verify add router interface behavior."""
         client, mc = self._make_client()
         assert client.add_router_interface("rt1", "sn1") is True
         mc.network.add_interface_to_router.assert_called_once_with("rt1", subnet_id="sn1")
 
     def test_delete_router(self):
-        """Test functionality: delete router."""
+        """Verify delete router behavior."""
         client, mc = self._make_client()
         assert client.delete_router("rt1") is True
         mc.network.delete_router.assert_called_once_with("rt1")
 
     def test_create_security_group(self):
-        """Test functionality: create security group."""
+        """Verify create security group behavior."""
         client, mc = self._make_client()
         sg = Stub(id="sg1", name="web")
         mc.network.create_security_group.return_value = sg
@@ -584,12 +584,12 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "sg1"
 
     def test_delete_security_group(self):
-        """Test functionality: delete security group."""
+        """Verify delete security group behavior."""
         client, mc = self._make_client()
         assert client.delete_security_group("sg1") is True
 
     def test_allocate_floating_ip(self):
-        """Test functionality: allocate floating ip."""
+        """Verify allocate floating ip behavior."""
         client, mc = self._make_client()
         ext = Stub(id="ext1")
         mc.network.find_network.return_value = ext
@@ -599,13 +599,13 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["floating_ip_address"] == "1.2.3.4"
 
     def test_associate_floating_ip(self):
-        """Test functionality: associate floating ip."""
+        """Verify associate floating ip behavior."""
         client, mc = self._make_client()
         assert client.associate_floating_ip("fip1", "port1") is True
         mc.network.update_ip.assert_called_once_with("fip1", port_id="port1")
 
     def test_create_loadbalancer(self):
-        """Test functionality: create loadbalancer."""
+        """Verify create loadbalancer behavior."""
         client, mc = self._make_client()
         lb = Stub(id="lb1", name="web-lb", vip_address="10.0.0.5")
         mc.load_balancer.create_load_balancer.return_value = lb
@@ -613,12 +613,12 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "lb1"
 
     def test_delete_loadbalancer(self):
-        """Test functionality: delete loadbalancer."""
+        """Verify delete loadbalancer behavior."""
         client, mc = self._make_client()
         assert client.delete_loadbalancer("lb1") is True
 
     def test_list_subnets(self):
-        """Test functionality: list subnets."""
+        """Verify list subnets behavior."""
         client, mc = self._make_client()
         sn = Stub(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
                        ip_version=4, gateway_ip="10.0.0.1", is_dhcp_enabled=True)
@@ -628,7 +628,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result[0]["id"] == "sn1"
 
     def test_get_subnet(self):
-        """Test functionality: get subnet."""
+        """Verify get subnet behavior."""
         client, mc = self._make_client()
         sn = Stub(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
                        ip_version=4, gateway_ip="10.0.0.1")
@@ -637,24 +637,24 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "sn1"
 
     def test_delete_subnet(self):
-        """Test functionality: delete subnet."""
+        """Verify delete subnet behavior."""
         client, mc = self._make_client()
         assert client.delete_subnet("sn1") is True
 
     def test_release_floating_ip(self):
-        """Test functionality: release floating ip."""
+        """Verify release floating ip behavior."""
         client, mc = self._make_client()
         assert client.release_floating_ip("fip1") is True
         mc.network.delete_ip.assert_called_once_with("fip1")
 
     def test_disassociate_floating_ip(self):
-        """Test functionality: disassociate floating ip."""
+        """Verify disassociate floating ip behavior."""
         client, mc = self._make_client()
         assert client.disassociate_floating_ip("fip1") is True
         mc.network.update_ip.assert_called_once_with("fip1", port_id=None)
 
     def test_list_listeners(self):
-        """Test functionality: list listeners."""
+        """Verify list listeners behavior."""
         client, mc = self._make_client()
         li = Stub(id="li1", name="http", protocol="HTTP", protocol_port=80)
         mc.load_balancer.listeners.return_value = [li]
@@ -662,7 +662,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert len(result) == 1
 
     def test_create_listener(self):
-        """Test functionality: create listener."""
+        """Verify create listener behavior."""
         client, mc = self._make_client()
         li = Stub(id="li1", name="http")
         mc.load_balancer.create_listener.return_value = li
@@ -670,12 +670,12 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "li1"
 
     def test_delete_listener(self):
-        """Test functionality: delete listener."""
+        """Verify delete listener behavior."""
         client, mc = self._make_client()
         assert client.delete_listener("li1") is True
 
     def test_list_pools(self):
-        """Test functionality: list pools."""
+        """Verify list pools behavior."""
         client, mc = self._make_client()
         p = Stub(id="p1", name="pool1", protocol="HTTP", lb_algorithm="ROUND_ROBIN")
         mc.load_balancer.pools.return_value = [p]
@@ -683,7 +683,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert len(result) == 1
 
     def test_create_pool(self):
-        """Test functionality: create pool."""
+        """Verify create pool behavior."""
         client, mc = self._make_client()
         p = Stub(id="p1", name="pool1")
         mc.load_balancer.create_pool.return_value = p
@@ -691,12 +691,12 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "p1"
 
     def test_delete_pool(self):
-        """Test functionality: delete pool."""
+        """Verify delete pool behavior."""
         client, mc = self._make_client()
         assert client.delete_pool("p1") is True
 
     def test_list_pool_members(self):
-        """Test functionality: list pool members."""
+        """Verify list pool members behavior."""
         client, mc = self._make_client()
         m = Stub(id="m1", name="srv1", address="10.0.0.2",
                       protocol_port=80, weight=1)
@@ -705,7 +705,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert len(result) == 1
 
     def test_add_pool_member(self):
-        """Test functionality: add pool member."""
+        """Verify add pool member behavior."""
         client, mc = self._make_client()
         m = Stub(id="m1")
         mc.load_balancer.create_member.return_value = m
@@ -713,13 +713,13 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "m1"
 
     def test_remove_pool_member(self):
-        """Test functionality: remove pool member."""
+        """Verify remove pool member behavior."""
         client, mc = self._make_client()
         assert client.remove_pool_member("p1", "m1") is True
         mc.load_balancer.delete_member.assert_called_once_with("m1", "p1")
 
     def test_list_health_monitors(self):
-        """Test functionality: list health monitors."""
+        """Verify list health monitors behavior."""
         client, mc = self._make_client()
         hm = Stub(id="hm1", name="check", type="HTTP",
                        delay=5, timeout=3, max_retries=3)
@@ -737,18 +737,18 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["type"] == "HTTP"
 
     def test_delete_health_monitor(self):
-        """Test functionality: delete health monitor."""
+        """Verify delete health monitor behavior."""
         client, mc = self._make_client()
         assert client.delete_health_monitor("hm1") is True
 
     def test_remove_router_interface(self):
-        """Test functionality: remove router interface."""
+        """Verify remove router interface behavior."""
         client, mc = self._make_client()
         assert client.remove_router_interface("rt1", "sn1") is True
         mc.network.remove_interface_from_router.assert_called_once_with("rt1", subnet_id="sn1")
 
     def test_remove_router_interface_error(self):
-        """Test functionality: remove router interface error."""
+        """Verify remove router interface error behavior."""
         client, mc = self._make_client()
         mc.network.remove_interface_from_router.side_effect = Exception("fail")
         assert client.remove_router_interface("rt1", "sn1") is False
@@ -762,97 +762,97 @@ class TestInfomaniakNetworkClientExpanded:
     # --- Error-path tests for get/create/delete methods ---
 
     def test_create_network_error(self):
-        """Test functionality: create network error."""
+        """Verify create network error behavior."""
         client, mc = self._make_client()
         mc.network.create_network.side_effect = Exception("fail")
         assert client.create_network("test") is None
 
     def test_delete_network_error(self):
-        """Test functionality: delete network error."""
+        """Verify delete network error behavior."""
         client, mc = self._make_client()
         mc.network.delete_network.side_effect = Exception("fail")
         assert client.delete_network("n1") is False
 
     def test_create_subnet_error(self):
-        """Test functionality: create subnet error."""
+        """Verify create subnet error behavior."""
         client, mc = self._make_client()
         mc.network.create_subnet.side_effect = Exception("fail")
         assert client.create_subnet("n1", "s1", "10.0.0.0/24") is None
 
     def test_get_subnet_error(self):
-        """Test functionality: get subnet error."""
+        """Verify get subnet error behavior."""
         client, mc = self._make_client()
         mc.network.get_subnet.side_effect = Exception("fail")
         assert client.get_subnet("sn1") is None
 
     def test_delete_subnet_error(self):
-        """Test functionality: delete subnet error."""
+        """Verify delete subnet error behavior."""
         client, mc = self._make_client()
         mc.network.delete_subnet.side_effect = Exception("fail")
         assert client.delete_subnet("sn1") is False
 
     def test_create_router_error(self):
-        """Test functionality: create router error."""
+        """Verify create router error behavior."""
         client, mc = self._make_client()
         mc.network.create_router.side_effect = Exception("fail")
         assert client.create_router("r1") is None
 
     def test_add_router_interface_error(self):
-        """Test functionality: add router interface error."""
+        """Verify add router interface error behavior."""
         client, mc = self._make_client()
         mc.network.add_interface_to_router.side_effect = Exception("fail")
         assert client.add_router_interface("rt1", "sn1") is False
 
     def test_delete_router_error(self):
-        """Test functionality: delete router error."""
+        """Verify delete router error behavior."""
         client, mc = self._make_client()
         mc.network.delete_router.side_effect = Exception("fail")
         assert client.delete_router("rt1") is False
 
     def test_create_security_group_error(self):
-        """Test functionality: create security group error."""
+        """Verify create security group error behavior."""
         client, mc = self._make_client()
         mc.network.create_security_group.side_effect = Exception("fail")
         assert client.create_security_group("sg") is None
 
     def test_delete_security_group_error(self):
-        """Test functionality: delete security group error."""
+        """Verify delete security group error behavior."""
         client, mc = self._make_client()
         mc.network.delete_security_group.side_effect = Exception("fail")
         assert client.delete_security_group("sg1") is False
 
     def test_allocate_floating_ip_error(self):
-        """Test functionality: allocate floating ip error."""
+        """Verify allocate floating ip error behavior."""
         client, mc = self._make_client()
         mc.network.find_network.side_effect = Exception("fail")
         assert client.allocate_floating_ip("ext-net") is None
 
     def test_create_loadbalancer_error(self):
-        """Test functionality: create loadbalancer error."""
+        """Verify create loadbalancer error behavior."""
         client, mc = self._make_client()
         mc.load_balancer.create_load_balancer.side_effect = Exception("fail")
         assert client.create_loadbalancer("lb", "sn1") is None
 
     def test_delete_loadbalancer_error(self):
-        """Test functionality: delete loadbalancer error."""
+        """Verify delete loadbalancer error behavior."""
         client, mc = self._make_client()
         mc.load_balancer.delete_load_balancer.side_effect = Exception("fail")
         assert client.delete_loadbalancer("lb1") is False
 
     def test_create_listener_error(self):
-        """Test functionality: create listener error."""
+        """Verify create listener error behavior."""
         client, mc = self._make_client()
         mc.load_balancer.create_listener.side_effect = Exception("fail")
         assert client.create_listener("lb1", "http", "HTTP", 80) is None
 
     def test_delete_listener_error(self):
-        """Test functionality: delete listener error."""
+        """Verify delete listener error behavior."""
         client, mc = self._make_client()
         mc.load_balancer.delete_listener.side_effect = Exception("fail")
         assert client.delete_listener("li1") is False
 
     def test_add_security_group_rule_error(self):
-        """Test functionality: add security group rule error."""
+        """Verify add security group rule error behavior."""
         client, mc = self._make_client()
         mc.network.create_security_group_rule.side_effect = Exception("fail")
         assert client.add_security_group_rule("sg1") is None

@@ -35,13 +35,13 @@ class TestDHKeyExchange:
         return dh_generate_parameters(key_size=1024)
 
     def test_generate_parameters_returns_parameters(self, dh_params) -> None:
-        """Test functionality: generate parameters returns parameters."""
+        """Verify generate parameters returns parameters behavior."""
         from cryptography.hazmat.primitives.asymmetric import dh
 
         assert isinstance(dh_params, dh.DHParameters)
 
     def test_generate_keypair_returns_dh_keypair(self, dh_params) -> None:
-        """Test functionality: generate keypair returns dh keypair."""
+        """Verify generate keypair returns dh keypair behavior."""
         kp = dh_generate_keypair(dh_params)
         assert isinstance(kp, DHKeyPair)
         assert kp.parameters is dh_params
@@ -58,7 +58,7 @@ class TestDHKeyExchange:
         assert len(secret_alice) > 0
 
     def test_different_keypairs_yield_different_public_keys(self, dh_params) -> None:
-        """Test functionality: different keypairs yield different public keys."""
+        """Verify different keypairs yield different public keys behavior."""
         from cryptography.hazmat.primitives.serialization import (
             Encoding,
             PublicFormat,
@@ -71,7 +71,7 @@ class TestDHKeyExchange:
         assert pub1 != pub2
 
     def test_invalid_key_size_raises(self) -> None:
-        """Test functionality: invalid key size raises."""
+        """Verify invalid key size raises behavior."""
         with pytest.raises(ProtocolError, match="key_size must be >= 512"):
             dh_generate_parameters(key_size=128)
 
@@ -87,7 +87,7 @@ class TestECDHKeyExchange:
     """X25519 Elliptic Curve Diffie-Hellman tests."""
 
     def test_generate_keypair_returns_ecdh_keypair(self) -> None:
-        """Test functionality: generate keypair returns ecdh keypair."""
+        """Verify generate keypair returns ecdh keypair behavior."""
         kp = ecdh_generate_keypair()
         assert isinstance(kp, ECDHKeyPair)
 
@@ -103,14 +103,14 @@ class TestECDHKeyExchange:
         assert len(secret_alice) == 32
 
     def test_shared_secret_is_32_bytes(self) -> None:
-        """Test functionality: shared secret is 32 bytes."""
+        """Verify shared secret is 32 bytes behavior."""
         alice = ecdh_generate_keypair()
         bob = ecdh_generate_keypair()
         secret = ecdh_compute_shared_secret(alice.private_key, bob.public_key)
         assert len(secret) == 32
 
     def test_different_keypairs_yield_different_secrets(self) -> None:
-        """Test functionality: different keypairs yield different secrets."""
+        """Verify different keypairs yield different secrets behavior."""
         alice = ecdh_generate_keypair()
         bob = ecdh_generate_keypair()
         carol = ecdh_generate_keypair()

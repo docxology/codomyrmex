@@ -34,23 +34,23 @@ if not HAS_MODULE:
 class TestGateType:
     """Test suite for GateType."""
     def test_hadamard(self):
-        """Test functionality: hadamard."""
+        """Verify hadamard behavior."""
         assert GateType.H is not None
 
     def test_pauli_x(self):
-        """Test functionality: pauli x."""
+        """Verify pauli x behavior."""
         assert GateType.X is not None
 
     def test_cnot(self):
-        """Test functionality: cnot."""
+        """Verify cnot behavior."""
         assert GateType.CNOT is not None
 
     def test_swap(self):
-        """Test functionality: swap."""
+        """Verify swap behavior."""
         assert GateType.SWAP is not None
 
     def test_rotation_gates(self):
-        """Test functionality: rotation gates."""
+        """Verify rotation gates behavior."""
         assert GateType.RX is not None
         assert GateType.RY is not None
         assert GateType.RZ is not None
@@ -60,20 +60,20 @@ class TestGateType:
 class TestGate:
     """Test suite for Gate."""
     def test_create_gate(self):
-        """Test functionality: create gate."""
+        """Verify create gate behavior."""
         gate = Gate(gate_type=GateType.H, target=0)
         assert gate.gate_type == GateType.H
         assert gate.target == 0
         assert gate.control is None
 
     def test_cnot_gate(self):
-        """Test functionality: cnot gate."""
+        """Verify cnot gate behavior."""
         gate = Gate(gate_type=GateType.CNOT, target=1, control=0)
         assert gate.control == 0
         assert gate.target == 1
 
     def test_parametric_gate(self):
-        """Test functionality: parametric gate."""
+        """Verify parametric gate behavior."""
         gate = Gate(gate_type=GateType.RX, target=0, parameter=math.pi / 2)
         assert gate.parameter is not None
 
@@ -82,28 +82,28 @@ class TestGate:
 class TestQubit:
     """Test suite for Qubit."""
     def test_create_qubit(self):
-        """Test functionality: create qubit."""
+        """Verify create qubit behavior."""
         qubit = Qubit()
         assert qubit.alpha == 1.0 + 0j
         assert qubit.beta == 0.0 + 0j
 
     def test_zero_state(self):
-        """Test functionality: zero state."""
+        """Verify zero state behavior."""
         qubit = Qubit.zero()
         assert qubit is not None
 
     def test_one_state(self):
-        """Test functionality: one state."""
+        """Verify one state behavior."""
         qubit = Qubit.one()
         assert qubit is not None
 
     def test_plus_state(self):
-        """Test functionality: plus state."""
+        """Verify plus state behavior."""
         qubit = Qubit.plus()
         assert qubit is not None
 
     def test_minus_state(self):
-        """Test functionality: minus state."""
+        """Verify minus state behavior."""
         qubit = Qubit.minus()
         assert qubit is not None
 
@@ -112,12 +112,12 @@ class TestQubit:
 class TestQuantumCircuit:
     """Test suite for QuantumCircuit."""
     def test_create_circuit(self):
-        """Test functionality: create circuit."""
+        """Verify create circuit behavior."""
         circuit = QuantumCircuit(num_qubits=2)
         assert circuit is not None
 
     def test_circuit_with_classical_bits(self):
-        """Test functionality: circuit with classical bits."""
+        """Verify circuit with classical bits behavior."""
         circuit = QuantumCircuit(num_qubits=3, num_classical_bits=3)
         assert circuit is not None
 
@@ -126,7 +126,7 @@ class TestQuantumCircuit:
 class TestQuantumSimulator:
     """Test suite for QuantumSimulator."""
     def test_create_simulator(self):
-        """Test functionality: create simulator."""
+        """Verify create simulator behavior."""
         sim = QuantumSimulator()
         assert sim is not None
 
@@ -135,7 +135,7 @@ class TestQuantumSimulator:
 class TestBellState:
     """Test suite for BellState."""
     def test_creates_circuit(self):
-        """Test functionality: creates circuit."""
+        """Verify creates circuit behavior."""
         circuit = bell_state()
         assert isinstance(circuit, QuantumCircuit)
 
@@ -144,7 +144,7 @@ class TestBellState:
 class TestGHZState:
     """Test suite for GHZState."""
     def test_creates_circuit(self):
-        """Test functionality: creates circuit."""
+        """Verify creates circuit behavior."""
         circuit = ghz_state(3)
         assert isinstance(circuit, QuantumCircuit)
 
@@ -153,7 +153,7 @@ class TestGHZState:
 class TestQFT:
     """Test suite for QFT."""
     def test_creates_circuit(self):
-        """Test functionality: creates circuit."""
+        """Verify creates circuit behavior."""
         circuit = qft(3)
         assert isinstance(circuit, QuantumCircuit)
 
@@ -168,62 +168,62 @@ class TestQubitAmplitudes:
     """Verify qubit state amplitudes and probability distributions."""
 
     def test_zero_state_amplitudes(self):
-        """Test functionality: zero state amplitudes."""
+        """Verify zero state amplitudes behavior."""
         q = Qubit.zero()
         assert q.alpha == 1.0 + 0j
         assert q.beta == 0.0 + 0j
 
     def test_zero_state_probabilities(self):
-        """Test functionality: zero state probabilities."""
+        """Verify zero state probabilities behavior."""
         q = Qubit.zero()
         assert q.prob_0 == pytest.approx(1.0)
         assert q.prob_1 == pytest.approx(0.0)
 
     def test_one_state_amplitudes(self):
-        """Test functionality: one state amplitudes."""
+        """Verify one state amplitudes behavior."""
         q = Qubit.one()
         assert q.alpha == 0.0 + 0j
         assert q.beta == 1.0 + 0j
 
     def test_one_state_probabilities(self):
-        """Test functionality: one state probabilities."""
+        """Verify one state probabilities behavior."""
         q = Qubit.one()
         assert q.prob_0 == pytest.approx(0.0)
         assert q.prob_1 == pytest.approx(1.0)
 
     def test_plus_state_equal_superposition(self):
-        """Test functionality: plus state equal superposition."""
+        """Verify plus state equal superposition behavior."""
         q = Qubit.plus()
         assert q.prob_0 == pytest.approx(0.5)
         assert q.prob_1 == pytest.approx(0.5)
 
     def test_plus_state_amplitudes_positive(self):
-        """Test functionality: plus state amplitudes positive."""
+        """Verify plus state amplitudes positive behavior."""
         q = Qubit.plus()
         s = 1 / math.sqrt(2)
         assert q.alpha == pytest.approx(s)
         assert q.beta == pytest.approx(s)
 
     def test_minus_state_equal_superposition(self):
-        """Test functionality: minus state equal superposition."""
+        """Verify minus state equal superposition behavior."""
         q = Qubit.minus()
         assert q.prob_0 == pytest.approx(0.5)
         assert q.prob_1 == pytest.approx(0.5)
 
     def test_minus_state_amplitudes_differ_in_sign(self):
-        """Test functionality: minus state amplitudes differ in sign."""
+        """Verify minus state amplitudes differ in sign behavior."""
         q = Qubit.minus()
         s = 1 / math.sqrt(2)
         assert q.alpha == pytest.approx(s)
         assert q.beta == pytest.approx(-s)
 
     def test_probabilities_sum_to_one_zero(self):
-        """Test functionality: probabilities sum to one zero."""
+        """Verify probabilities sum to one zero behavior."""
         q = Qubit.zero()
         assert q.prob_0 + q.prob_1 == pytest.approx(1.0)
 
     def test_probabilities_sum_to_one_plus(self):
-        """Test functionality: probabilities sum to one plus."""
+        """Verify probabilities sum to one plus behavior."""
         q = Qubit.plus()
         assert q.prob_0 + q.prob_1 == pytest.approx(1.0)
 
@@ -233,7 +233,7 @@ class TestQubitMeasurement:
     """Verify measurement collapses qubit state."""
 
     def test_measure_zero_always_collapses_to_zero(self):
-        """Test functionality: measure zero always collapses to zero."""
+        """Verify measure zero always collapses to zero behavior."""
         q = Qubit.zero()
         result = q.measure()
         assert result == 0
@@ -241,7 +241,7 @@ class TestQubitMeasurement:
         assert q.prob_1 == pytest.approx(0.0)
 
     def test_measure_one_always_collapses_to_one(self):
-        """Test functionality: measure one always collapses to one."""
+        """Verify measure one always collapses to one behavior."""
         q = Qubit.one()
         result = q.measure()
         assert result == 1
@@ -281,7 +281,7 @@ class TestCircuitGateOperations:
     """Each gate method adds the correct gate to the gates list."""
 
     def test_h_adds_hadamard_gate(self):
-        """Test functionality: h adds hadamard gate."""
+        """Verify h adds hadamard gate behavior."""
         c = QuantumCircuit(1)
         c.h(0)
         assert len(c.gates) == 1
@@ -289,7 +289,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].target == 0
 
     def test_x_adds_pauli_x_gate(self):
-        """Test functionality: x adds pauli x gate."""
+        """Verify x adds pauli x gate behavior."""
         c = QuantumCircuit(1)
         c.x(0)
         assert len(c.gates) == 1
@@ -297,7 +297,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].target == 0
 
     def test_y_adds_pauli_y_gate(self):
-        """Test functionality: y adds pauli y gate."""
+        """Verify y adds pauli y gate behavior."""
         c = QuantumCircuit(1)
         c.y(0)
         assert len(c.gates) == 1
@@ -305,7 +305,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].target == 0
 
     def test_z_adds_pauli_z_gate(self):
-        """Test functionality: z adds pauli z gate."""
+        """Verify z adds pauli z gate behavior."""
         c = QuantumCircuit(1)
         c.z(0)
         assert len(c.gates) == 1
@@ -313,7 +313,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].target == 0
 
     def test_cnot_adds_cnot_gate_with_control(self):
-        """Test functionality: cnot adds cnot gate with control."""
+        """Verify cnot adds cnot gate with control behavior."""
         c = QuantumCircuit(2)
         c.cnot(0, 1)
         assert len(c.gates) == 1
@@ -322,7 +322,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].control == 0
 
     def test_cz_adds_cz_gate_with_control(self):
-        """Test functionality: cz adds cz gate with control."""
+        """Verify cz adds cz gate with control behavior."""
         c = QuantumCircuit(2)
         c.cz(0, 1)
         assert len(c.gates) == 1
@@ -331,7 +331,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].control == 0
 
     def test_rx_adds_rotation_with_parameter(self):
-        """Test functionality: rx adds rotation with parameter."""
+        """Verify rx adds rotation with parameter behavior."""
         c = QuantumCircuit(1)
         c.rx(0, math.pi / 4)
         assert len(c.gates) == 1
@@ -339,7 +339,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].parameter == pytest.approx(math.pi / 4)
 
     def test_ry_adds_rotation_with_parameter(self):
-        """Test functionality: ry adds rotation with parameter."""
+        """Verify ry adds rotation with parameter behavior."""
         c = QuantumCircuit(1)
         c.ry(0, math.pi / 3)
         assert len(c.gates) == 1
@@ -347,7 +347,7 @@ class TestCircuitGateOperations:
         assert c.gates[0].parameter == pytest.approx(math.pi / 3)
 
     def test_rz_adds_rotation_with_parameter(self):
-        """Test functionality: rz adds rotation with parameter."""
+        """Verify rz adds rotation with parameter behavior."""
         c = QuantumCircuit(1)
         c.rz(0, math.pi / 6)
         assert len(c.gates) == 1
@@ -355,19 +355,19 @@ class TestCircuitGateOperations:
         assert c.gates[0].parameter == pytest.approx(math.pi / 6)
 
     def test_measure_all_sets_measurements(self):
-        """Test functionality: measure all sets measurements."""
+        """Verify measure all sets measurements behavior."""
         c = QuantumCircuit(3)
         c.measure_all()
         assert c.measurements == {0: 0, 1: 1, 2: 2}
 
     def test_measure_single_qubit(self):
-        """Test functionality: measure single qubit."""
+        """Verify measure single qubit behavior."""
         c = QuantumCircuit(2)
         c.measure(0, 0)
         assert c.measurements == {0: 0}
 
     def test_multiple_gates_accumulate(self):
-        """Test functionality: multiple gates accumulate."""
+        """Verify multiple gates accumulate behavior."""
         c = QuantumCircuit(2)
         c.h(0).x(1).cnot(0, 1)
         assert len(c.gates) == 3
@@ -381,62 +381,62 @@ class TestCircuitFluentAPI:
     """Fluent API: each gate method returns self for chaining."""
 
     def test_h_returns_self(self):
-        """Test functionality: h returns self."""
+        """Verify h returns self behavior."""
         c = QuantumCircuit(1)
         assert c.h(0) is c
 
     def test_x_returns_self(self):
-        """Test functionality: x returns self."""
+        """Verify x returns self behavior."""
         c = QuantumCircuit(1)
         assert c.x(0) is c
 
     def test_y_returns_self(self):
-        """Test functionality: y returns self."""
+        """Verify y returns self behavior."""
         c = QuantumCircuit(1)
         assert c.y(0) is c
 
     def test_z_returns_self(self):
-        """Test functionality: z returns self."""
+        """Verify z returns self behavior."""
         c = QuantumCircuit(1)
         assert c.z(0) is c
 
     def test_cnot_returns_self(self):
-        """Test functionality: cnot returns self."""
+        """Verify cnot returns self behavior."""
         c = QuantumCircuit(2)
         assert c.cnot(0, 1) is c
 
     def test_cz_returns_self(self):
-        """Test functionality: cz returns self."""
+        """Verify cz returns self behavior."""
         c = QuantumCircuit(2)
         assert c.cz(0, 1) is c
 
     def test_rx_returns_self(self):
-        """Test functionality: rx returns self."""
+        """Verify rx returns self behavior."""
         c = QuantumCircuit(1)
         assert c.rx(0, 0.5) is c
 
     def test_ry_returns_self(self):
-        """Test functionality: ry returns self."""
+        """Verify ry returns self behavior."""
         c = QuantumCircuit(1)
         assert c.ry(0, 0.5) is c
 
     def test_rz_returns_self(self):
-        """Test functionality: rz returns self."""
+        """Verify rz returns self behavior."""
         c = QuantumCircuit(1)
         assert c.rz(0, 0.5) is c
 
     def test_measure_returns_self(self):
-        """Test functionality: measure returns self."""
+        """Verify measure returns self behavior."""
         c = QuantumCircuit(1)
         assert c.measure(0, 0) is c
 
     def test_measure_all_returns_self(self):
-        """Test functionality: measure all returns self."""
+        """Verify measure all returns self behavior."""
         c = QuantumCircuit(2)
         assert c.measure_all() is c
 
     def test_full_chain(self):
-        """Test functionality: full chain."""
+        """Verify full chain behavior."""
         c = QuantumCircuit(2)
         result = c.h(0).cnot(0, 1).measure_all()
         assert result is c
@@ -448,28 +448,28 @@ class TestSimulatorBellState:
     """Bell state simulation must produce only correlated outcomes."""
 
     def test_bell_state_only_00_and_11(self):
-        """Test functionality: bell state only 00 and 11."""
+        """Verify bell state only 00 and 11 behavior."""
         sim = QuantumSimulator()
         counts = sim.run(bell_state(), shots=1000)
         for key in counts:
             assert key in ("00", "11"), f"Unexpected outcome: {key}"
 
     def test_bell_state_both_outcomes_present(self):
-        """Test functionality: bell state both outcomes present."""
+        """Verify bell state both outcomes present behavior."""
         sim = QuantumSimulator()
         counts = sim.run(bell_state(), shots=1000)
         assert counts.get("00", 0) > 0, "Expected '00' outcome"
         assert counts.get("11", 0) > 0, "Expected '11' outcome"
 
     def test_bell_state_no_anticorrelated_outcomes(self):
-        """Test functionality: bell state no anticorrelated outcomes."""
+        """Verify bell state no anticorrelated outcomes behavior."""
         sim = QuantumSimulator()
         counts = sim.run(bell_state(), shots=1000)
         assert "01" not in counts, "Bell state should not produce '01'"
         assert "10" not in counts, "Bell state should not produce '10'"
 
     def test_bell_state_total_shots(self):
-        """Test functionality: bell state total shots."""
+        """Verify bell state total shots behavior."""
         sim = QuantumSimulator()
         shots = 500
         counts = sim.run(bell_state(), shots=shots)
@@ -481,21 +481,21 @@ class TestSimulatorXGate:
     """X gate flips |0> to |1>, so all measurements should be '1'."""
 
     def test_x_gate_all_ones(self):
-        """Test functionality: x gate all ones."""
+        """Verify x gate all ones behavior."""
         circuit = QuantumCircuit(1).x(0).measure_all()
         sim = QuantumSimulator()
         counts = sim.run(circuit, shots=500)
         assert counts == {"1": 500}
 
     def test_x_gate_no_zeros(self):
-        """Test functionality: x gate no zeros."""
+        """Verify x gate no zeros behavior."""
         circuit = QuantumCircuit(1).x(0).measure_all()
         sim = QuantumSimulator()
         counts = sim.run(circuit, shots=200)
         assert "0" not in counts
 
     def test_double_x_gate_returns_to_zero(self):
-        """Test functionality: double x gate returns to zero."""
+        """Verify double x gate returns to zero behavior."""
         circuit = QuantumCircuit(1).x(0).x(0).measure_all()
         sim = QuantumSimulator()
         counts = sim.run(circuit, shots=200)
@@ -507,21 +507,21 @@ class TestSimulatorGHZState:
     """GHZ state for n qubits: only all-zeros and all-ones outcomes."""
 
     def test_ghz_3_only_000_and_111(self):
-        """Test functionality: ghz 3 only 000 and 111."""
+        """Verify ghz 3 only 000 and 111 behavior."""
         sim = QuantumSimulator()
         counts = sim.run(ghz_state(3), shots=1000)
         for key in counts:
             assert key in ("000", "111"), f"Unexpected GHZ outcome: {key}"
 
     def test_ghz_3_both_outcomes_present(self):
-        """Test functionality: ghz 3 both outcomes present."""
+        """Verify ghz 3 both outcomes present behavior."""
         sim = QuantumSimulator()
         counts = sim.run(ghz_state(3), shots=1000)
         assert counts.get("000", 0) > 0
         assert counts.get("111", 0) > 0
 
     def test_ghz_4_only_extreme_outcomes(self):
-        """Test functionality: ghz 4 only extreme outcomes."""
+        """Verify ghz 4 only extreme outcomes behavior."""
         sim = QuantumSimulator()
         counts = sim.run(ghz_state(4), shots=1000)
         for key in counts:
@@ -533,14 +533,14 @@ class TestSimulatorHadamard:
     """Hadamard on |0> should give roughly equal 0 and 1."""
 
     def test_hadamard_produces_both_outcomes(self):
-        """Test functionality: hadamard produces both outcomes."""
+        """Verify hadamard produces both outcomes behavior."""
         circuit = QuantumCircuit(1).h(0).measure_all()
         sim = QuantumSimulator()
         counts = sim.run(circuit, shots=1000)
         assert "0" in counts and "1" in counts
 
     def test_hadamard_roughly_balanced(self):
-        """Test functionality: hadamard roughly balanced."""
+        """Verify hadamard roughly balanced behavior."""
         circuit = QuantumCircuit(1).h(0).measure_all()
         sim = QuantumSimulator()
         counts = sim.run(circuit, shots=2000)
@@ -563,13 +563,13 @@ class TestQFTGateCounts:
         assert len(c.gates) == 6
 
     def test_qft_contains_hadamard_gates(self):
-        """Test functionality: qft contains hadamard gates."""
+        """Verify qft contains hadamard gates behavior."""
         c = qft(3)
         h_count = sum(1 for g in c.gates if g.gate_type == GateType.H)
         assert h_count == 3, "QFT(3) should have 3 Hadamard gates"
 
     def test_qft_contains_rz_gates(self):
-        """Test functionality: qft contains rz gates."""
+        """Verify qft contains rz gates behavior."""
         c = qft(3)
         rz_count = sum(1 for g in c.gates if g.gate_type == GateType.RZ)
         assert rz_count == 3, "QFT(3) should have 3 RZ gates"
@@ -592,14 +592,14 @@ class TestCircuitToAscii:
     """Tests for circuit_to_ascii rendering."""
 
     def test_single_h_gate(self):
-        """Test functionality: single h gate."""
+        """Verify single h gate behavior."""
         c = QuantumCircuit(1).h(0)
         output = circuit_to_ascii(c)
         assert "q0:" in output
         assert "H" in output
 
     def test_bell_state_ascii(self):
-        """Test functionality: bell state ascii."""
+        """Verify bell state ascii behavior."""
         output = circuit_to_ascii(bell_state())
         lines = output.strip().split("\n")
         assert len(lines) == 2
@@ -614,34 +614,34 @@ class TestCircuitToAscii:
         assert "M" in lines[1]
 
     def test_x_gate_renders(self):
-        """Test functionality: x gate renders."""
+        """Verify x gate renders behavior."""
         c = QuantumCircuit(1).x(0).measure_all()
         output = circuit_to_ascii(c)
         assert "X" in output
         assert "M" in output
 
     def test_multi_qubit_lines(self):
-        """Test functionality: multi qubit lines."""
+        """Verify multi qubit lines behavior."""
         c = QuantumCircuit(3).h(0).h(1).h(2)
         output = circuit_to_ascii(c)
         lines = output.strip().split("\n")
         assert len(lines) == 3
 
     def test_empty_circuit_no_crash(self):
-        """Test functionality: empty circuit no crash."""
+        """Verify empty circuit no crash behavior."""
         c = QuantumCircuit(2)
         output = circuit_to_ascii(c)
         assert "q0:" in output
         assert "q1:" in output
 
     def test_measurement_symbols(self):
-        """Test functionality: measurement symbols."""
+        """Verify measurement symbols behavior."""
         c = QuantumCircuit(2).measure_all()
         output = circuit_to_ascii(c)
         assert output.count("M") == 2
 
     def test_rotation_gate_symbol(self):
-        """Test functionality: rotation gate symbol."""
+        """Verify rotation gate symbol behavior."""
         c = QuantumCircuit(1).rx(0, math.pi / 4)
         output = circuit_to_ascii(c)
         assert "Rx" in output
@@ -652,20 +652,20 @@ class TestCircuitStats:
     """Tests for circuit_stats statistics."""
 
     def test_bell_state_stats(self):
-        """Test functionality: bell state stats."""
+        """Verify bell state stats behavior."""
         stats = circuit_stats(bell_state())
         assert stats["num_qubits"] == 2
         assert stats["num_gates"] == 2  # H + CNOT
         assert stats["has_measurements"] is True
 
     def test_bell_state_gate_counts(self):
-        """Test functionality: bell state gate counts."""
+        """Verify bell state gate counts behavior."""
         stats = circuit_stats(bell_state())
         assert stats["gate_counts"]["H"] == 1
         assert stats["gate_counts"]["CNOT"] == 1
 
     def test_empty_circuit_stats(self):
-        """Test functionality: empty circuit stats."""
+        """Verify empty circuit stats behavior."""
         stats = circuit_stats(QuantumCircuit(3))
         assert stats["num_qubits"] == 3
         assert stats["num_gates"] == 0
@@ -674,7 +674,7 @@ class TestCircuitStats:
         assert stats["has_measurements"] is False
 
     def test_depth_single_qubit(self):
-        """Test functionality: depth single qubit."""
+        """Verify depth single qubit behavior."""
         c = QuantumCircuit(1).h(0).x(0).z(0)
         stats = circuit_stats(c)
         assert stats["depth"] == 3
@@ -686,7 +686,7 @@ class TestCircuitStats:
         assert stats["depth"] == 1
 
     def test_ghz_3_stats(self):
-        """Test functionality: ghz 3 stats."""
+        """Verify ghz 3 stats behavior."""
         stats = circuit_stats(ghz_state(3))
         assert stats["num_qubits"] == 3
         # H on q0, CNOT(0,1), CNOT(0,2) = 3 gates
@@ -694,7 +694,7 @@ class TestCircuitStats:
         assert stats["has_measurements"] is True
 
     def test_qft_3_stats(self):
-        """Test functionality: qft 3 stats."""
+        """Verify qft 3 stats behavior."""
         stats = circuit_stats(qft(3))
         assert stats["num_qubits"] == 3
         assert stats["num_gates"] == 6
@@ -710,7 +710,7 @@ class TestCircuitStats:
         assert stats["depth"] == 1
 
     def test_stats_returns_all_keys(self):
-        """Test functionality: stats returns all keys."""
+        """Verify stats returns all keys behavior."""
         stats = circuit_stats(QuantumCircuit(1))
         expected_keys = {"num_qubits", "num_gates", "gate_counts", "depth", "has_measurements"}
         assert set(stats.keys()) == expected_keys

@@ -22,14 +22,14 @@ class TestMCPToolError:
     """Core dataclass behaviour."""
 
     def test_create_with_defaults(self):
-        """Test functionality: create with defaults."""
+        """Verify create with defaults behavior."""
         err = MCPToolError(code=MCPErrorCode.INTERNAL, message="boom")
         assert err.code == MCPErrorCode.INTERNAL
         assert err.message == "boom"
         assert len(err.correlation_id) == 12
 
     def test_correlation_id_unique(self):
-        """Test functionality: correlation id unique."""
+        """Verify correlation id unique behavior."""
         ids = {MCPToolError(code=MCPErrorCode.INTERNAL, message="x").correlation_id for _ in range(20)}
         assert len(ids) == 20, "correlation_ids should be unique"
 
@@ -46,7 +46,7 @@ class TestSerialisation:
     """JSON serialisation / deserialisation."""
 
     def test_to_dict_minimal(self):
-        """Test functionality: to dict minimal."""
+        """Verify to dict minimal behavior."""
         err = MCPToolError(code=MCPErrorCode.TIMEOUT, message="slow", correlation_id="abc123")
         d = err.to_dict()
         assert d["code"] == "TIMEOUT"
@@ -55,7 +55,7 @@ class TestSerialisation:
         assert "tool_name" not in d  # empty string omitted
 
     def test_to_dict_full(self):
-        """Test functionality: to dict full."""
+        """Verify to dict full behavior."""
         err = MCPToolError(
             code=MCPErrorCode.VALIDATION_ERROR,
             message="bad input",
@@ -73,7 +73,7 @@ class TestSerialisation:
         assert d["suggestion"] == "Provide a valid file path"
 
     def test_to_json_roundtrip(self):
-        """Test functionality: to json roundtrip."""
+        """Verify to json roundtrip behavior."""
         err = MCPToolError(
             code=MCPErrorCode.EXECUTION_ERROR,
             message="RuntimeError: fail",
@@ -88,14 +88,14 @@ class TestSerialisation:
         assert restored.correlation_id == err.correlation_id
 
     def test_from_dict(self):
-        """Test functionality: from dict."""
+        """Verify from dict behavior."""
         d = {"code": "NOT_FOUND", "message": "nope", "correlation_id": "abc"}
         err = MCPToolError.from_dict(d)
         assert err.code == MCPErrorCode.NOT_FOUND
         assert err.message == "nope"
 
     def test_field_error_serialises(self):
-        """Test functionality: field error serialises."""
+        """Verify field error serialises behavior."""
         fe = FieldError(field="count", constraint="minimum 1", value=-5)
         d = fe.to_dict()
         assert d["field"] == "count"
@@ -108,7 +108,7 @@ class TestMCPResponse:
     """Compatibility with MCP ``isError: true`` protocol."""
 
     def test_to_mcp_response_shape(self):
-        """Test functionality: to mcp response shape."""
+        """Verify to mcp response shape behavior."""
         err = MCPToolError(code=MCPErrorCode.RATE_LIMITED, message="slow down")
         resp = err.to_mcp_response()
         assert resp["isError"] is True
@@ -119,7 +119,7 @@ class TestMCPResponse:
         assert parsed["code"] == "RATE_LIMITED"
 
     def test_from_mcp_response_structured(self):
-        """Test functionality: from mcp response structured."""
+        """Verify from mcp response structured behavior."""
         err = MCPToolError(code=MCPErrorCode.CIRCUIT_OPEN, message="circuit open")
         resp = err.to_mcp_response()
         restored = MCPToolError.from_mcp_response(resp)
@@ -135,7 +135,7 @@ class TestMCPResponse:
         assert "plain error message" in restored.message
 
     def test_from_mcp_response_non_error_returns_none(self):
-        """Test functionality: from mcp response non error returns none."""
+        """Verify from mcp response non error returns none behavior."""
         success = {"content": [{"type": "text", "text": "ok"}]}
         assert MCPToolError.from_mcp_response(success) is None
 
@@ -146,26 +146,26 @@ class TestConvenienceConstructors:
     """Test suite for ConvenienceConstructors."""
 
     def test_validation_error(self):
-        """Test functionality: validation error."""
+        """Verify validation error behavior."""
         err = validation_error("tool.a", "bad args", [FieldError("x", "required")])
         assert err.code == MCPErrorCode.VALIDATION_ERROR
         assert err.tool_name == "tool.a"
         assert len(err.field_errors) == 1
 
     def test_not_found_error(self):
-        """Test functionality: not found error."""
+        """Verify not found error behavior."""
         err = not_found_error("tool.missing")
         assert err.code == MCPErrorCode.NOT_FOUND
         assert "tool.missing" in err.message
 
     def test_timeout_error(self):
-        """Test functionality: timeout error."""
+        """Verify timeout error behavior."""
         err = timeout_error("slow_tool", 30.0)
         assert err.code == MCPErrorCode.TIMEOUT
         assert "30" in err.message
 
     def test_execution_error(self):
-        """Test functionality: execution error."""
+        """Verify execution error behavior."""
         err = execution_error(
             "tool.crash",
             RuntimeError("kaboom"),

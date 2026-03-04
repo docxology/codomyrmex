@@ -26,23 +26,23 @@ if not HAS_MODULE:
 class TestFaultType:
     """Test suite for FaultType."""
     def test_latency(self):
-        """Test functionality: latency."""
+        """Verify latency behavior."""
         assert FaultType.LATENCY is not None
 
     def test_error(self):
-        """Test functionality: error."""
+        """Verify error behavior."""
         assert FaultType.ERROR is not None
 
     def test_timeout(self):
-        """Test functionality: timeout."""
+        """Verify timeout behavior."""
         assert FaultType.TIMEOUT is not None
 
     def test_resource_exhaustion(self):
-        """Test functionality: resource exhaustion."""
+        """Verify resource exhaustion behavior."""
         assert FaultType.RESOURCE_EXHAUSTION is not None
 
     def test_network_partition(self):
-        """Test functionality: network partition."""
+        """Verify network partition behavior."""
         assert FaultType.NETWORK_PARTITION is not None
 
 
@@ -50,19 +50,19 @@ class TestFaultType:
 class TestFaultConfig:
     """Test suite for FaultConfig."""
     def test_create_config(self):
-        """Test functionality: create config."""
+        """Verify create config behavior."""
         config = FaultConfig(fault_type=FaultType.LATENCY)
         assert config.fault_type == FaultType.LATENCY
         assert config.probability == 0.1
 
     def test_config_defaults(self):
-        """Test functionality: config defaults."""
+        """Verify config defaults behavior."""
         config = FaultConfig(fault_type=FaultType.ERROR)
         assert config.duration_seconds == 0.0
         assert config.error_message == "Injected fault"
 
     def test_config_custom_probability(self):
-        """Test functionality: config custom probability."""
+        """Verify config custom probability behavior."""
         config = FaultConfig(fault_type=FaultType.TIMEOUT, probability=0.5)
         assert config.probability == 0.5
 
@@ -71,12 +71,12 @@ class TestFaultConfig:
 class TestInjectedFaultError:
     """Test suite for InjectedFaultError."""
     def test_is_exception(self):
-        """Test functionality: is exception."""
+        """Verify is exception behavior."""
         with pytest.raises(InjectedFaultError):
             raise InjectedFaultError("test fault")
 
     def test_message(self):
-        """Test functionality: message."""
+        """Verify message behavior."""
         exc = InjectedFaultError("chaos error")
         assert "chaos error" in str(exc)
 
@@ -85,7 +85,7 @@ class TestInjectedFaultError:
 class TestFaultInjector:
     """Test suite for FaultInjector."""
     def test_create_injector(self):
-        """Test functionality: create injector."""
+        """Verify create injector behavior."""
         injector = FaultInjector()
         assert injector is not None
 
@@ -94,7 +94,7 @@ class TestFaultInjector:
 class TestSteadyStateHypothesis:
     """Test suite for SteadyStateHypothesis."""
     def test_create_hypothesis(self):
-        """Test functionality: create hypothesis."""
+        """Verify create hypothesis behavior."""
         hypothesis = SteadyStateHypothesis(
             name="service is healthy",
             check_fn=lambda: True,
@@ -103,7 +103,7 @@ class TestSteadyStateHypothesis:
         assert hypothesis.description == ""
 
     def test_hypothesis_check(self):
-        """Test functionality: hypothesis check."""
+        """Verify hypothesis check behavior."""
         hypothesis = SteadyStateHypothesis(
             name="test",
             check_fn=lambda: True,
@@ -115,7 +115,7 @@ class TestSteadyStateHypothesis:
 class TestChaosExperiment:
     """Test suite for ChaosExperiment."""
     def test_create_experiment(self):
-        """Test functionality: create experiment."""
+        """Verify create experiment behavior."""
         hypothesis = SteadyStateHypothesis(name="test", check_fn=lambda: True)
         experiment = ChaosExperiment(
             name="test experiment",
@@ -125,7 +125,7 @@ class TestChaosExperiment:
         assert experiment.name == "test experiment"
 
     def test_experiment_with_rollback(self):
-        """Test functionality: experiment with rollback."""
+        """Verify experiment with rollback behavior."""
         hypothesis = SteadyStateHypothesis(name="test", check_fn=lambda: True)
         experiment = ChaosExperiment(
             name="test",
@@ -140,12 +140,12 @@ class TestChaosExperiment:
 class TestChaosMonkey:
     """Test suite for ChaosMonkey."""
     def test_create_monkey(self):
-        """Test functionality: create monkey."""
+        """Verify create monkey behavior."""
         monkey = ChaosMonkey()
         assert monkey is not None
 
     def test_create_with_injector(self):
-        """Test functionality: create with injector."""
+        """Verify create with injector behavior."""
         injector = FaultInjector()
         monkey = ChaosMonkey(injector=injector)
         assert monkey is not None
@@ -155,7 +155,7 @@ class TestChaosMonkey:
 class TestExperimentResult:
     """Test suite for ExperimentResult."""
     def test_create_result(self):
-        """Test functionality: create result."""
+        """Verify create result behavior."""
         result = ExperimentResult(
             experiment_name="test",
             success=True,
@@ -171,5 +171,5 @@ class TestExperimentResult:
 class TestWithChaos:
     """Test suite for WithChaos."""
     def test_decorator_exists(self):
-        """Test functionality: decorator exists."""
+        """Verify decorator exists behavior."""
         assert callable(with_chaos)

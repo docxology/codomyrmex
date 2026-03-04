@@ -22,7 +22,7 @@ class TestMCPToolDecoratorMetadata:
     """Tests that @mcp_tool attaches correct metadata to decorated functions."""
 
     def test_decorator_attaches_mcp_tool_attribute(self):
-        """Test functionality: decorated function gains _mcp_tool attribute."""
+        """Verify decorated function gains _mcp_tool attribute behavior."""
         @mcp_tool(category="testing", description="A unit test tool")
         def sample(x: int) -> int:
             """Sample doc."""
@@ -32,7 +32,7 @@ class TestMCPToolDecoratorMetadata:
         assert isinstance(sample._mcp_tool, dict)
 
     def test_decorator_attaches_mcp_tool_meta_alias(self):
-        """Test functionality: decorated function also has _mcp_tool_meta alias."""
+        """Verify decorated function also has _mcp_tool_meta alias behavior."""
         @mcp_tool()
         def another():
             """Another."""
@@ -42,7 +42,7 @@ class TestMCPToolDecoratorMetadata:
         assert another._mcp_tool is another._mcp_tool_meta
 
     def test_category_stored_correctly(self):
-        """Test functionality: category parameter persists in metadata."""
+        """Verify category parameter persists in metadata behavior."""
         @mcp_tool(category="math")
         def add(a: int, b: int) -> int:
             """Add numbers."""
@@ -51,7 +51,7 @@ class TestMCPToolDecoratorMetadata:
         assert add._mcp_tool["category"] == "math"
 
     def test_description_from_explicit_param(self):
-        """Test functionality: explicit description overrides docstring."""
+        """Verify explicit description overrides docstring behavior."""
         @mcp_tool(description="Explicit description")
         def func():
             """Docstring description."""
@@ -60,7 +60,7 @@ class TestMCPToolDecoratorMetadata:
         assert func._mcp_tool["description"] == "Explicit description"
 
     def test_description_falls_back_to_docstring(self):
-        """Test functionality: omitted description uses docstring."""
+        """Verify omitted description uses docstring behavior."""
         @mcp_tool()
         def documented():
             """Docstring used as description."""
@@ -69,7 +69,7 @@ class TestMCPToolDecoratorMetadata:
         assert documented._mcp_tool["description"] == "Docstring used as description."
 
     def test_description_empty_when_no_docstring(self):
-        """Test functionality: no docstring and no explicit description yields empty string."""
+        """Verify no docstring and no explicit description yields empty string behavior."""
         @mcp_tool()
         def undocumented():
             pass
@@ -77,7 +77,7 @@ class TestMCPToolDecoratorMetadata:
         assert undocumented._mcp_tool["description"] == ""
 
     def test_name_auto_prefixed_with_codomyrmex(self):
-        """Test functionality: auto-generated name is prefixed with codomyrmex."""
+        """Verify auto-generated name is prefixed with codomyrmex behavior."""
         @mcp_tool()
         def my_tool():
             """Tool."""
@@ -87,7 +87,7 @@ class TestMCPToolDecoratorMetadata:
         assert "my_tool" in my_tool._mcp_tool["name"]
 
     def test_explicit_name_used_when_provided(self):
-        """Test functionality: explicit name parameter is respected."""
+        """Verify explicit name parameter is respected behavior."""
         @mcp_tool(name="codomyrmex.custom_name")
         def irrelevant_name():
             """Tool."""
@@ -96,7 +96,7 @@ class TestMCPToolDecoratorMetadata:
         assert irrelevant_name._mcp_tool["name"] == "codomyrmex.custom_name"
 
     def test_name_without_prefix_gets_prefixed(self):
-        """Test functionality: a bare name gets codomyrmex prefix."""
+        """Verify a bare name gets codomyrmex prefix behavior."""
         @mcp_tool(name="bare_name")
         def tool():
             """Tool."""
@@ -105,7 +105,7 @@ class TestMCPToolDecoratorMetadata:
         assert tool._mcp_tool["name"] == "codomyrmex.bare_name"
 
     def test_module_field_present_in_metadata(self):
-        """Test functionality: module path is captured in metadata."""
+        """Verify module path is captured in metadata behavior."""
         @mcp_tool()
         def tracked():
             """Tool."""
@@ -116,7 +116,7 @@ class TestMCPToolDecoratorMetadata:
         assert tracked._mcp_tool["module"] is not None
 
     def test_version_defaults_to_one_point_zero(self):
-        """Test functionality: version defaults to '1.0' when not specified."""
+        """Verify version defaults to '1.0' when not specified behavior."""
         @mcp_tool()
         def versioned():
             """Tool."""
@@ -125,7 +125,7 @@ class TestMCPToolDecoratorMetadata:
         assert versioned._mcp_tool["version"] == "1.0"
 
     def test_explicit_version_stored(self):
-        """Test functionality: explicit version parameter is stored."""
+        """Verify explicit version parameter is stored behavior."""
         @mcp_tool(version="2.5")
         def v2():
             """Tool."""
@@ -134,7 +134,7 @@ class TestMCPToolDecoratorMetadata:
         assert v2._mcp_tool["version"] == "2.5"
 
     def test_deprecated_in_stored(self):
-        """Test functionality: deprecated_in metadata is stored."""
+        """Verify deprecated_in metadata is stored behavior."""
         @mcp_tool(deprecated_in="1.5")
         def old_tool():
             """Old tool."""
@@ -148,7 +148,7 @@ class TestMCPToolDecoratorBehavior:
     """Tests that @mcp_tool preserves the original function behavior."""
 
     def test_decorated_function_returns_correct_result(self):
-        """Test functionality: decorated function still computes correctly."""
+        """Verify decorated function still computes correctly behavior."""
         @mcp_tool()
         def multiply(a: int, b: int) -> int:
             """Multiply."""
@@ -157,7 +157,7 @@ class TestMCPToolDecoratorBehavior:
         assert multiply(3, 7) == 21
 
     def test_decorated_function_with_kwargs(self):
-        """Test functionality: keyword arguments work after decoration."""
+        """Verify keyword arguments work after decoration behavior."""
         @mcp_tool()
         def greet(name: str, greeting: str = "Hello") -> str:
             """Greet someone."""
@@ -167,7 +167,7 @@ class TestMCPToolDecoratorBehavior:
         assert greet(name="World", greeting="Hi") == "Hi, World!"
 
     def test_decorated_function_preserves_name(self):
-        """Test functionality: functools.wraps preserves __name__."""
+        """Verify functools.wraps preserves __name__ behavior."""
         @mcp_tool()
         def original_name():
             """Original."""
@@ -176,7 +176,7 @@ class TestMCPToolDecoratorBehavior:
         assert original_name.__name__ == "original_name"
 
     def test_decorated_function_preserves_docstring(self):
-        """Test functionality: functools.wraps preserves __doc__."""
+        """Verify functools.wraps preserves __doc__ behavior."""
         @mcp_tool()
         def with_doc():
             """My docstring."""
@@ -185,7 +185,7 @@ class TestMCPToolDecoratorBehavior:
         assert with_doc.__doc__ == "My docstring."
 
     def test_deprecation_warning_emitted_when_deprecated(self):
-        """Test functionality: calling a deprecated tool emits DeprecationWarning."""
+        """Verify calling a deprecated tool emits DeprecationWarning behavior."""
         @mcp_tool(deprecated_in="0.9")
         def legacy():
             """Legacy tool."""
@@ -201,7 +201,7 @@ class TestMCPToolDecoratorBehavior:
             assert "0.9" in str(w[0].message)
 
     def test_no_warning_when_not_deprecated(self):
-        """Test functionality: non-deprecated tool does not emit warnings."""
+        """Verify non-deprecated tool does not emit warnings behavior."""
         @mcp_tool()
         def current():
             """Current tool."""
@@ -220,7 +220,7 @@ class TestSchemaGeneration:
     """Tests for _generate_schema_from_signature and related helpers."""
 
     def test_schema_for_typed_parameters(self):
-        """Test functionality: schema generated from type hints."""
+        """Verify schema generated from type hints behavior."""
         def func(name: str, count: int, ratio: float, flag: bool) -> str:
             pass
 
@@ -233,7 +233,7 @@ class TestSchemaGeneration:
         assert props["flag"]["type"] == "boolean"
 
     def test_schema_required_vs_optional(self):
-        """Test functionality: params without defaults are required."""
+        """Verify params without defaults are required behavior."""
         def func(required_param: str, optional_param: int = 42) -> None:
             pass
 
@@ -242,7 +242,7 @@ class TestSchemaGeneration:
         assert "optional_param" not in schema["required"]
 
     def test_schema_skips_self_and_cls(self):
-        """Test functionality: self and cls are excluded from schema."""
+        """Verify self and cls are excluded from schema behavior."""
         class MyClass:
             def method(self, x: int) -> int:
                 return x
@@ -252,7 +252,7 @@ class TestSchemaGeneration:
         assert "x" in schema["properties"]
 
     def test_schema_skips_var_positional_and_var_keyword(self):
-        """Test functionality: *args and **kwargs are excluded from schema."""
+        """Verify *args and **kwargs are excluded from schema behavior."""
         def func(a: int, *args, **kwargs) -> None:
             pass
 
@@ -262,7 +262,7 @@ class TestSchemaGeneration:
         assert "a" in schema["properties"]
 
     def test_schema_default_value_captured(self):
-        """Test functionality: default values appear in schema."""
+        """Verify default values appear in schema behavior."""
         def func(name: str = "world") -> str:
             return name
 
@@ -270,7 +270,7 @@ class TestSchemaGeneration:
         assert schema["properties"]["name"].get("default") == "world"
 
     def test_schema_list_type_mapped_to_array(self):
-        """Test functionality: list type maps to JSON array."""
+        """Verify list type maps to JSON array behavior."""
         def func(items: list) -> None:
             pass
 
@@ -278,7 +278,7 @@ class TestSchemaGeneration:
         assert schema["properties"]["items"]["type"] == "array"
 
     def test_schema_dict_type_mapped_to_object(self):
-        """Test functionality: dict type maps to JSON object."""
+        """Verify dict type maps to JSON object behavior."""
         def func(data: dict) -> None:
             pass
 
@@ -286,7 +286,7 @@ class TestSchemaGeneration:
         assert schema["properties"]["data"]["type"] == "object"
 
     def test_schema_auto_generated_by_decorator(self):
-        """Test functionality: decorator auto-generates schema in metadata."""
+        """Verify decorator auto-generates schema in metadata behavior."""
         @mcp_tool()
         def auto_schema(name: str, count: int = 1) -> str:
             """Has schema."""
@@ -299,7 +299,7 @@ class TestSchemaGeneration:
         assert "count" not in schema["required"]
 
     def test_explicit_schema_overrides_auto(self):
-        """Test functionality: explicit schema parameter overrides auto-generation."""
+        """Verify explicit schema parameter overrides auto-generation behavior."""
         custom_schema = {
             "type": "object",
             "properties": {"custom": {"type": "string"}},
@@ -319,31 +319,31 @@ class TestTypeMapping:
     """Tests for _map_python_type_to_json helper."""
 
     def test_str_maps_to_string(self):
-        """Test functionality: Python str maps to JSON string."""
+        """Verify Python str maps to JSON string behavior."""
         assert _map_python_type_to_json(str) == "string"
 
     def test_int_maps_to_integer(self):
-        """Test functionality: Python int maps to JSON integer."""
+        """Verify Python int maps to JSON integer behavior."""
         assert _map_python_type_to_json(int) == "integer"
 
     def test_float_maps_to_number(self):
-        """Test functionality: Python float maps to JSON number."""
+        """Verify Python float maps to JSON number behavior."""
         assert _map_python_type_to_json(float) == "number"
 
     def test_bool_maps_to_boolean(self):
-        """Test functionality: Python bool maps to JSON boolean."""
+        """Verify Python bool maps to JSON boolean behavior."""
         assert _map_python_type_to_json(bool) == "boolean"
 
     def test_list_maps_to_array(self):
-        """Test functionality: Python list maps to JSON array."""
+        """Verify Python list maps to JSON array behavior."""
         assert _map_python_type_to_json(list) == "array"
 
     def test_dict_maps_to_object(self):
-        """Test functionality: Python dict maps to JSON object."""
+        """Verify Python dict maps to JSON object behavior."""
         assert _map_python_type_to_json(dict) == "object"
 
     def test_unknown_type_defaults_to_string(self):
-        """Test functionality: unrecognized types default to string."""
+        """Verify unrecognized types default to string behavior."""
         assert _map_python_type_to_json(bytes) == "string"
 
 
@@ -352,32 +352,32 @@ class TestSafeDefault:
     """Tests for _safe_default helper that converts defaults to JSON-safe values."""
 
     def test_none_returns_none(self):
-        """Test functionality: None input returns None."""
+        """Verify None input returns None behavior."""
         assert _safe_default(None) is None
 
     def test_primitive_types_passthrough(self):
-        """Test functionality: str, int, float, bool pass through unchanged."""
+        """Verify str, int, float, bool pass through unchanged behavior."""
         assert _safe_default("hello") == "hello"
         assert _safe_default(42) == 42
         assert _safe_default(3.14) == 3.14
         assert _safe_default(True) is True
 
     def test_list_recursively_converted(self):
-        """Test functionality: lists are recursively converted."""
+        """Verify lists are recursively converted behavior."""
         assert _safe_default([1, "two", 3.0]) == [1, "two", 3.0]
 
     def test_dict_recursively_converted(self):
-        """Test functionality: dicts have keys stringified and values converted."""
+        """Verify dicts have keys stringified and values converted behavior."""
         result = _safe_default({1: "one", "two": 2})
         assert result == {"1": "one", "two": 2}
 
     def test_callable_returns_none(self):
-        """Test functionality: callables (factory defaults) return None."""
+        """Verify callables (factory defaults) return None behavior."""
         assert _safe_default(list) is None
         assert _safe_default(lambda: 42) is None
 
     def test_enum_returns_value(self):
-        """Test functionality: enum members return their .value."""
+        """Verify enum members return their .value behavior."""
         import enum
 
         class Color(enum.Enum):
@@ -387,7 +387,7 @@ class TestSafeDefault:
         assert _safe_default(Color.RED) == "red"
 
     def test_arbitrary_object_stringified(self):
-        """Test functionality: other objects are stringified as fallback."""
+        """Verify other objects are stringified as fallback behavior."""
         class Custom:
             def __str__(self):
                 return "custom_str"

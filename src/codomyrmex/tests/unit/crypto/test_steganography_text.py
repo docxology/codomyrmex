@@ -19,7 +19,7 @@ class TestEmbedExtractRoundtrip:
     """Tests for embed_in_text and extract_from_text roundtrip."""
 
     def test_simple_message(self):
-        """Test functionality: simple message."""
+        """Verify simple message behavior."""
         cover = "This is a normal sentence."
         secret = "hidden"
 
@@ -28,7 +28,7 @@ class TestEmbedExtractRoundtrip:
         assert extracted == secret
 
     def test_empty_secret_message(self):
-        """Test functionality: empty secret message."""
+        """Verify empty secret message behavior."""
         cover = "Hello world"
         secret = ""
 
@@ -37,7 +37,7 @@ class TestEmbedExtractRoundtrip:
         assert extracted == secret
 
     def test_longer_secret_message(self):
-        """Test functionality: longer secret message."""
+        """Verify longer secret message behavior."""
         cover = "The weather today is quite pleasant."
         secret = "Meet at the bridge at midnight. Bring the documents."
 
@@ -46,7 +46,7 @@ class TestEmbedExtractRoundtrip:
         assert extracted == secret
 
     def test_unicode_secret_message(self):
-        """Test functionality: unicode secret message."""
+        """Verify unicode secret message behavior."""
         cover = "Just a regular email."
         secret = "Hello World"
 
@@ -55,7 +55,7 @@ class TestEmbedExtractRoundtrip:
         assert extracted == secret
 
     def test_multiline_cover_text(self):
-        """Test functionality: multiline cover text."""
+        """Verify multiline cover text behavior."""
         cover = "Line one.\nLine two.\nLine three."
         secret = "secret data"
 
@@ -70,7 +70,7 @@ class TestCoverTextPreservation:
     """Tests that cover text appears unchanged to human readers."""
 
     def test_visible_chars_unchanged(self):
-        """Test functionality: visible chars unchanged."""
+        """Verify visible chars unchanged behavior."""
         cover = "This is a test sentence with words."
         secret = "hidden message"
 
@@ -90,7 +90,7 @@ class TestCoverTextPreservation:
         assert visible_text == cover
 
     def test_stego_text_longer_than_cover(self):
-        """Test functionality: stego text longer than cover."""
+        """Verify stego text longer than cover behavior."""
         cover = "Hello world"
         secret = "test"
 
@@ -99,7 +99,7 @@ class TestCoverTextPreservation:
         assert len(stego) > len(cover)
 
     def test_printable_chars_same(self):
-        """Test functionality: printable chars same."""
+        """Verify printable chars same behavior."""
         cover = "Important business communication."
         secret = "buy low sell high"
 
@@ -120,17 +120,17 @@ class TestEdgeCases:
     """Tests for edge cases and error handling."""
 
     def test_empty_cover_text_raises(self):
-        """Test functionality: empty cover text raises."""
+        """Verify empty cover text raises behavior."""
         with pytest.raises(SteganographyError):
             embed_in_text("", "secret")
 
     def test_no_hidden_message_raises(self):
-        """Test functionality: no hidden message raises."""
+        """Verify no hidden message raises behavior."""
         with pytest.raises(SteganographyError):
             extract_from_text("Normal text with no hidden message")
 
     def test_single_word_cover_text(self):
-        """Test functionality: single word cover text."""
+        """Verify single word cover text behavior."""
         cover = "Hello"
         secret = "test"
 
@@ -139,7 +139,7 @@ class TestEdgeCases:
         assert extracted == secret
 
     def test_special_characters_in_secret(self):
-        """Test functionality: special characters in secret."""
+        """Verify special characters in secret behavior."""
         cover = "Regular cover text here."
         secret = "Special: !@#$%^&*()\n\ttabs and newlines"
 

@@ -28,7 +28,7 @@ class TestBasicSubscription:
     """Verify bridge subscribes to events and captures them."""
 
     def test_captures_workflow_event(self) -> None:
-        """Test functionality: captures workflow event."""
+        """Verify captures workflow event behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.WORKFLOW_STARTED])
         bridge.start()
@@ -41,7 +41,7 @@ class TestBasicSubscription:
         assert entry["data"]["total_tasks"] == 5
 
     def test_captures_task_event(self) -> None:
-        """Test functionality: captures task event."""
+        """Verify captures task event behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.TASK_COMPLETED])
         bridge.start()
@@ -58,7 +58,7 @@ class TestBasicSubscription:
         assert entry["data"]["task_name"] == "build"
 
     def test_captures_multiple_event_types(self) -> None:
-        """Test functionality: captures multiple event types."""
+        """Verify captures multiple event types behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[
             EventType.TASK_STARTED,
@@ -81,7 +81,7 @@ class TestStructuredOutput:
     """Verify structured dict format."""
 
     def test_event_contains_required_fields(self) -> None:
-        """Test functionality: event contains required fields."""
+        """Verify event contains required fields behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.SYSTEM_STARTUP])
         bridge.start()
@@ -95,7 +95,7 @@ class TestStructuredOutput:
         assert "data" in entry
 
     def test_event_type_is_string_value(self) -> None:
-        """Test functionality: event type is string value."""
+        """Verify event type is string value behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.WORKFLOW_FAILED])
         bridge.start()
@@ -112,7 +112,7 @@ class TestCorrelationId:
     """Verify correlation_id threading."""
 
     def test_correlation_id_extracted_from_data(self) -> None:
-        """Test functionality: correlation id extracted from data."""
+        """Verify correlation id extracted from data behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.TASK_COMPLETED])
         bridge.start()
@@ -127,7 +127,7 @@ class TestCorrelationId:
         assert entry["correlation_id"] == "req-abc-123"
 
     def test_no_correlation_id_when_absent(self) -> None:
-        """Test functionality: no correlation id when absent."""
+        """Verify no correlation id when absent behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.TASK_STARTED])
         bridge.start()
@@ -145,7 +145,7 @@ class TestSchedulerEvents:
     """Verify bridge captures Stream 5 scheduler events."""
 
     def test_captures_job_scheduled(self) -> None:
-        """Test functionality: captures job scheduled."""
+        """Verify captures job scheduled behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.JOB_SCHEDULED])
         bridge.start()
@@ -156,7 +156,7 @@ class TestSchedulerEvents:
         assert bridge.events_captured[0]["event_type"] == "job.scheduled"
 
     def test_captures_job_completed_and_failed(self) -> None:
-        """Test functionality: captures job completed and failed."""
+        """Verify captures job completed and failed behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[
             EventType.JOB_COMPLETED,
@@ -180,7 +180,7 @@ class TestLifecycle:
     """Verify start/stop behavior."""
 
     def test_stop_unsubscribes(self) -> None:
-        """Test functionality: stop unsubscribes."""
+        """Verify stop unsubscribes behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.SYSTEM_STARTUP])
         bridge.start()
@@ -190,7 +190,7 @@ class TestLifecycle:
         assert bridge.capture_count == 0  # Not captured after stop
 
     def test_is_active_property(self) -> None:
-        """Test functionality: is active property."""
+        """Verify is active property behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus)
         assert not bridge.is_active
@@ -200,7 +200,7 @@ class TestLifecycle:
         assert not bridge.is_active
 
     def test_double_start_is_idempotent(self) -> None:
-        """Test functionality: double start is idempotent."""
+        """Verify double start is idempotent behavior."""
         bus = EventBus()
         bridge = EventLoggingBridge(bus, event_types=[EventType.SYSTEM_STARTUP])
         bridge.start()

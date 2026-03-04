@@ -519,7 +519,7 @@ class TestInfomaniakIdentityClientExpanded:
         return InfomaniakIdentityClient(connection=mock_conn), mock_conn
 
     def test_get_user(self):
-        """Test functionality: get user."""
+        """Verify get user behavior."""
         client, mc = self._make_client()
         u = Stub(id="u1", domain_id="d1")
         u.name = "alice"
@@ -529,7 +529,7 @@ class TestInfomaniakIdentityClientExpanded:
         assert result["name"] == "alice"
 
     def test_get_current_project(self):
-        """Test functionality: get current project."""
+        """Verify get current project behavior."""
         client, mc = self._make_client()
         p = Stub(id="proj-1", name="default", description="desc")
         mc.identity.get_project.return_value = p
@@ -537,7 +537,7 @@ class TestInfomaniakIdentityClientExpanded:
         assert result["id"] == "proj-1"
 
     def test_create_application_credential(self):
-        """Test functionality: create application credential."""
+        """Verify create application credential behavior."""
         client, mc = self._make_client()
         cred = Stub(id="ac1", name="mycred", secret="s3cret", expires_at=None)
         mc.identity.create_application_credential.return_value = cred
@@ -546,7 +546,7 @@ class TestInfomaniakIdentityClientExpanded:
         assert result["secret"] == "s3cret"
 
     def test_get_application_credential(self):
-        """Test functionality: get application credential."""
+        """Verify get application credential behavior."""
         client, mc = self._make_client()
         cred = Stub(id="ac1", name="mycred", expires_at=None)
         mc.identity.get_application_credential.return_value = cred
@@ -554,12 +554,12 @@ class TestInfomaniakIdentityClientExpanded:
         assert result["id"] == "ac1"
 
     def test_delete_application_credential(self):
-        """Test functionality: delete application credential."""
+        """Verify delete application credential behavior."""
         client, mc = self._make_client()
         assert client.delete_application_credential("ac1") is True
 
     def test_list_roles(self):
-        """Test functionality: list roles."""
+        """Verify list roles behavior."""
         client, mc = self._make_client()
         r = Stub(id="r1", description="Full access")
         r.name = "admin"
@@ -569,7 +569,7 @@ class TestInfomaniakIdentityClientExpanded:
         assert result[0]["name"] == "admin"
 
     def test_list_user_roles(self):
-        """Test functionality: list user roles."""
+        """Verify list user roles behavior."""
         client, mc = self._make_client()
         ra = Stub()
         ra.role = {"id": "r1"}
@@ -582,7 +582,7 @@ class TestInfomaniakIdentityClientExpanded:
         assert result[0]["name"] == "member"
 
     def test_list_ec2_credentials(self):
-        """Test functionality: list ec2 credentials."""
+        """Verify list ec2 credentials behavior."""
         client, mc = self._make_client()
         cred = Stub(id="ec1", access="AK123", project_id="proj-1", type="ec2")
         mc.identity.credentials.return_value = [cred]
@@ -591,7 +591,7 @@ class TestInfomaniakIdentityClientExpanded:
         assert result[0]["access"] == "AK123"
 
     def test_list_projects_error(self):
-        """Test functionality: list projects error."""
+        """Verify list projects error behavior."""
         client, mc = self._make_client()
         mc.identity.projects.side_effect = Exception("fail")
         assert client.list_projects() == []

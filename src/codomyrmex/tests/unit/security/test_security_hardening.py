@@ -31,7 +31,7 @@ from codomyrmex.wallet.security.encrypted_storage import (
 class TestEncryptedEntry:
     """Test suite for EncryptedEntry."""
     def test_round_trip_dict(self) -> None:
-        """Test functionality: round trip dict."""
+        """Verify round trip dict behavior."""
         entry = EncryptedEntry(
             key="test", ciphertext="abc", nonce="def", tag="ghi",
             created_at=1.0, rotated_at=2.0,
@@ -45,25 +45,25 @@ class TestEncryptedEntry:
 class TestEncryptedStore:
     """Test suite for EncryptedStore."""
     def test_put_and_get(self) -> None:
-        """Test functionality: put and get."""
+        """Verify put and get behavior."""
         store = EncryptedStore()
         store.put("api_key", "sk-secret-12345")
         assert store.get("api_key") == "sk-secret-12345"
 
     def test_get_missing(self) -> None:
-        """Test functionality: get missing."""
+        """Verify get missing behavior."""
         store = EncryptedStore()
         assert store.get("nonexistent") is None
 
     def test_has(self) -> None:
-        """Test functionality: has."""
+        """Verify has behavior."""
         store = EncryptedStore()
         assert not store.has("key")
         store.put("key", "value")
         assert store.has("key")
 
     def test_delete(self) -> None:
-        """Test functionality: delete."""
+        """Verify delete behavior."""
         store = EncryptedStore()
         store.put("key", "value")
         assert store.delete("key") is True
@@ -71,21 +71,21 @@ class TestEncryptedStore:
         assert store.delete("key") is False
 
     def test_list_keys(self) -> None:
-        """Test functionality: list keys."""
+        """Verify list keys behavior."""
         store = EncryptedStore()
         store.put("b", "1")
         store.put("a", "2")
         assert store.list_keys() == ["a", "b"]
 
     def test_size(self) -> None:
-        """Test functionality: size."""
+        """Verify size behavior."""
         store = EncryptedStore()
         assert store.size == 0
         store.put("k", "v")
         assert store.size == 1
 
     def test_rotate_master_key(self) -> None:
-        """Test functionality: rotate master key."""
+        """Verify rotate master key behavior."""
         store = EncryptedStore()
         store.put("key1", "secret1")
         store.put("key2", "secret2")
@@ -96,14 +96,14 @@ class TestEncryptedStore:
         assert store.get("key2") == "secret2"
 
     def test_different_keys_different_ciphertext(self) -> None:
-        """Test functionality: different keys different ciphertext."""
+        """Verify different keys different ciphertext behavior."""
         store = EncryptedStore()
         e1 = store.put("k1", "same_value")
         e2 = store.put("k2", "same_value")
         assert e1.ciphertext != e2.ciphertext  # Different nonces
 
     def test_large_value(self) -> None:
-        """Test functionality: large value."""
+        """Verify large value behavior."""
         store = EncryptedStore()
         large = "x" * 10000
         store.put("big", large)
@@ -116,7 +116,7 @@ class TestEncryptedStore:
 class TestVulnerability:
     """Test suite for Vulnerability."""
     def test_to_dict(self) -> None:
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         v = Vulnerability(package="requests", severity="high", cve_id="CVE-123")
         d = v.to_dict()
         assert d["package"] == "requests"
@@ -126,7 +126,7 @@ class TestVulnerability:
 class TestDependencyScanner:
     """Test suite for DependencyScanner."""
     def test_scan_direct(self) -> None:
-        """Test functionality: scan direct."""
+        """Verify scan direct behavior."""
         scanner = DependencyScanner()
         report = scanner.scan_dependencies({"requests": ">=2.28.0"})
         assert report.packages_scanned == 1
@@ -134,13 +134,13 @@ class TestDependencyScanner:
         assert len(report.vulnerabilities) >= 1
 
     def test_scan_clean_package(self) -> None:
-        """Test functionality: scan clean package."""
+        """Verify scan clean package behavior."""
         scanner = DependencyScanner()
         report = scanner.scan_dependencies({"my_private_pkg": "1.0.0"})
         assert report.is_clean
 
     def test_scan_pyproject_file(self) -> None:
-        """Test functionality: scan pyproject file."""
+        """Verify scan pyproject file behavior."""
         content = '''
 [project]
 name = "test-project"
@@ -162,20 +162,20 @@ dependencies = [
         assert "requests" in pkg_names
 
     def test_scan_missing_file(self) -> None:
-        """Test functionality: scan missing file."""
+        """Verify scan missing file behavior."""
         scanner = DependencyScanner()
         report = scanner.scan_pyproject("/nonexistent/pyproject.toml")
         assert report.scan_source == "file_not_found"
 
     def test_report_has_critical(self) -> None:
-        """Test functionality: report has critical."""
+        """Verify report has critical behavior."""
         report = ScanReport(vulnerabilities=[
             Vulnerability(package="x", severity="critical"),
         ])
         assert report.has_critical
 
     def test_report_count_by_severity(self) -> None:
-        """Test functionality: report count by severity."""
+        """Verify report count by severity behavior."""
         report = ScanReport(vulnerabilities=[
             Vulnerability(package="a", severity="high"),
             Vulnerability(package="b", severity="medium"),
@@ -190,17 +190,17 @@ dependencies = [
 class TestSBOMComponent:
     """Test suite for SBOMComponent."""
     def test_auto_purl(self) -> None:
-        """Test functionality: auto purl."""
+        """Verify auto purl behavior."""
         c = SBOMComponent(name="requests", version="2.31.0")
         assert c.purl == "pkg:pypi/requests@2.31.0"
 
     def test_purl_no_version(self) -> None:
-        """Test functionality: purl no version."""
+        """Verify purl no version behavior."""
         c = SBOMComponent(name="requests")
         assert c.purl == "pkg:pypi/requests"
 
     def test_to_dict(self) -> None:
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         c = SBOMComponent(name="numpy", version="1.24.0")
         d = c.to_dict()
         assert d["name"] == "numpy"
@@ -210,7 +210,7 @@ class TestSBOMComponent:
 class TestSBOMDocument:
     """Test suite for SBOMDocument."""
     def test_cyclonedx_format(self) -> None:
-        """Test functionality: cyclonedx format."""
+        """Verify cyclonedx format behavior."""
         doc = SBOMDocument(
             project_name="test", project_version="1.0.0",
             components=[SBOMComponent(name="a", version="1.0")],
@@ -221,14 +221,14 @@ class TestSBOMDocument:
         assert len(cdx["components"]) == 1
 
     def test_to_json(self) -> None:
-        """Test functionality: to json."""
+        """Verify to json behavior."""
         doc = SBOMDocument(project_name="test", project_version="1.0")
         j = doc.to_json()
         parsed = json.loads(j)
         assert parsed["bomFormat"] == "CycloneDX"
 
     def test_component_count(self) -> None:
-        """Test functionality: component count."""
+        """Verify component count behavior."""
         doc = SBOMDocument(components=[
             SBOMComponent(name="a"), SBOMComponent(name="b"),
         ])
@@ -238,14 +238,14 @@ class TestSBOMDocument:
 class TestSBOMGenerator:
     """Test suite for SBOMGenerator."""
     def test_from_dependencies(self) -> None:
-        """Test functionality: from dependencies."""
+        """Verify from dependencies behavior."""
         gen = SBOMGenerator()
         sbom = gen.from_dependencies("proj", "1.0", {"requests": "2.31.0", "numpy": "1.24"})
         assert sbom.project_name == "proj"
         assert sbom.component_count == 2
 
     def test_from_pyproject(self) -> None:
-        """Test functionality: from pyproject."""
+        """Verify from pyproject behavior."""
         content = '''
 [project]
 name = "my-project"
@@ -267,7 +267,7 @@ dependencies = [
         assert sbom.component_count >= 2
 
     def test_missing_file(self) -> None:
-        """Test functionality: missing file."""
+        """Verify missing file behavior."""
         gen = SBOMGenerator()
         sbom = gen.from_pyproject("/nonexistent/pyproject.toml")
         assert sbom.component_count == 0

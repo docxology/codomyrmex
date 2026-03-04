@@ -471,7 +471,7 @@ class TestInfomaniakMeteringClientExpanded:
         return InfomaniakMeteringClient(connection=mock_conn), mock_conn
 
     def test_get_object_storage_usage(self):
-        """Test functionality: get object storage usage."""
+        """Verify get object storage usage behavior."""
         client, mc = self._make_client()
         c = Stub(count=100, bytes=2048000)
         mc.object_store.containers.return_value = [c]
@@ -481,7 +481,7 @@ class TestInfomaniakMeteringClientExpanded:
         assert result["total_bytes"] == 2048000
 
     def test_list_resources_with_usage(self):
-        """Test functionality: list resources with usage."""
+        """Verify list resources with usage behavior."""
         client, mc = self._make_client()
         srv = Stub(id="s1", name="web", status="ACTIVE", created_at=None)
         vol = Stub(id="v1", name="data", status="in-use", size=50)
@@ -497,7 +497,7 @@ class TestInfomaniakMeteringClientExpanded:
         assert "network.floating_ip" in types
 
     def test_get_network_quotas(self):
-        """Test functionality: get network quotas."""
+        """Verify get network quotas behavior."""
         client, mc = self._make_client()
         q = Stub(networks=10, subnets=20, routers=5,
                       floatingips=3, security_groups=10, security_group_rules=50)
@@ -507,7 +507,7 @@ class TestInfomaniakMeteringClientExpanded:
         assert result["floating_ips"] == 3
 
     def test_get_storage_quotas(self):
-        """Test functionality: get storage quotas."""
+        """Verify get storage quotas behavior."""
         client, mc = self._make_client()
         q = Stub(volumes=20, gigabytes=1000, snapshots=10, backups=5)
         mc.block_storage.get_quota_set.return_value = q
@@ -516,7 +516,7 @@ class TestInfomaniakMeteringClientExpanded:
         assert result["gigabytes"] == 1000
 
     def test_get_compute_usage_error(self):
-        """Test functionality: get compute usage error."""
+        """Verify get compute usage error behavior."""
         client, mc = self._make_client()
         mc.compute.servers.side_effect = Exception("fail")
         assert client.get_compute_usage() == {}

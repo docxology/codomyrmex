@@ -127,7 +127,7 @@ class TestPlugin:
 
         # Register handler and emit
         def test_handler():
-            """Test functionality: handler."""
+            """Verify handler behavior."""
             return "handled"
 
         hook.register(test_handler)
@@ -408,7 +408,7 @@ class TestDependencyResolver:
     """Tests for DependencyResolver."""
 
     def test_simple_resolution(self):
-        """Test functionality: simple resolution."""
+        """Verify simple resolution behavior."""
         from codomyrmex.plugin_system.dependency_resolver import (
             DependencyNode,
             DependencyResolver,
@@ -422,7 +422,7 @@ class TestDependencyResolver:
         assert result.load_order.index("db") < result.load_order.index("auth")
 
     def test_missing_dependency(self):
-        """Test functionality: missing dependency."""
+        """Verify missing dependency behavior."""
         from codomyrmex.plugin_system.dependency_resolver import (
             DependencyNode,
             DependencyResolver,
@@ -435,7 +435,7 @@ class TestDependencyResolver:
         assert "nonexistent" in result.missing
 
     def test_circular_dependency(self):
-        """Test functionality: circular dependency."""
+        """Verify circular dependency behavior."""
         from codomyrmex.plugin_system.dependency_resolver import (
             DependencyNode,
             DependencyResolver,

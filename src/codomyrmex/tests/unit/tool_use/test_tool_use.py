@@ -32,19 +32,19 @@ if not HAS_MODULE:
 class TestValidationResult:
     """Test suite for ValidationResult."""
     def test_default_valid(self):
-        """Test functionality: default valid."""
+        """Verify default valid behavior."""
         vr = ValidationResult()
         assert vr.valid is True
         assert vr.errors == []
 
     def test_invalid_with_errors(self):
-        """Test functionality: invalid with errors."""
+        """Verify invalid with errors behavior."""
         vr = ValidationResult(valid=False, errors=["field missing"])
         assert vr.valid is False
         assert len(vr.errors) == 1
 
     def test_merge_two_valid(self):
-        """Test functionality: merge two valid."""
+        """Verify merge two valid behavior."""
         a = ValidationResult(valid=True)
         b = ValidationResult(valid=True)
         merged = a.merge(b)
@@ -52,7 +52,7 @@ class TestValidationResult:
         assert merged.errors == []
 
     def test_merge_valid_and_invalid(self):
-        """Test functionality: merge valid and invalid."""
+        """Verify merge valid and invalid behavior."""
         a = ValidationResult(valid=True)
         b = ValidationResult(valid=False, errors=["bad"])
         merged = a.merge(b)
@@ -60,7 +60,7 @@ class TestValidationResult:
         assert "bad" in merged.errors
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         vr = ValidationResult(valid=False, errors=["err1", "err2"])
         d = vr.to_dict()
         assert d["valid"] is False
@@ -76,49 +76,49 @@ class TestValidationResult:
 class TestValidation:
     """Test suite for Validation."""
     def test_empty_schema_is_valid(self):
-        """Test functionality: empty schema is valid."""
+        """Verify empty schema is valid behavior."""
         result = validate_input({"anything": True}, {})
         assert result.valid
 
     def test_type_check_string(self):
-        """Test functionality: type check string."""
+        """Verify type check string behavior."""
         schema = {"type": "string"}
         assert validate_input("hello", schema).valid
         assert not validate_input(42, schema).valid
 
     def test_type_check_integer(self):
-        """Test functionality: type check integer."""
+        """Verify type check integer behavior."""
         schema = {"type": "integer"}
         assert validate_input(10, schema).valid
         assert not validate_input("10", schema).valid
 
     def test_type_check_number_accepts_int_and_float(self):
-        """Test functionality: type check number accepts int and float."""
+        """Verify type check number accepts int and float behavior."""
         schema = {"type": "number"}
         assert validate_input(10, schema).valid
         assert validate_input(3.14, schema).valid
         assert not validate_input("3.14", schema).valid
 
     def test_type_check_boolean(self):
-        """Test functionality: type check boolean."""
+        """Verify type check boolean behavior."""
         schema = {"type": "boolean"}
         assert validate_input(True, schema).valid
         assert not validate_input(1, schema).valid
 
     def test_type_check_array(self):
-        """Test functionality: type check array."""
+        """Verify type check array behavior."""
         schema = {"type": "array"}
         assert validate_input([1, 2], schema).valid
         assert not validate_input("not array", schema).valid
 
     def test_enum_constraint(self):
-        """Test functionality: enum constraint."""
+        """Verify enum constraint behavior."""
         schema = {"type": "string", "enum": ["a", "b", "c"]}
         assert validate_input("a", schema).valid
         assert not validate_input("d", schema).valid
 
     def test_string_min_max_length(self):
-        """Test functionality: string min max length."""
+        """Verify string min max length behavior."""
         schema = {"type": "string", "minLength": 2, "maxLength": 5}
         assert validate_input("ab", schema).valid
         assert validate_input("abcde", schema).valid
@@ -126,28 +126,28 @@ class TestValidation:
         assert not validate_input("abcdef", schema).valid
 
     def test_numeric_min_max(self):
-        """Test functionality: numeric min max."""
+        """Verify numeric min max behavior."""
         schema = {"type": "integer", "minimum": 0, "maximum": 100}
         assert validate_input(50, schema).valid
         assert not validate_input(-1, schema).valid
         assert not validate_input(101, schema).valid
 
     def test_array_min_max_items(self):
-        """Test functionality: array min max items."""
+        """Verify array min max items behavior."""
         schema = {"type": "array", "minItems": 1, "maxItems": 3}
         assert validate_input([1], schema).valid
         assert not validate_input([], schema).valid
         assert not validate_input([1, 2, 3, 4], schema).valid
 
     def test_array_items_validation(self):
-        """Test functionality: array items validation."""
+        """Verify array items validation behavior."""
         schema = {"type": "array", "items": {"type": "string"}}
         assert validate_input(["a", "b"], schema).valid
         result = validate_input(["a", 1], schema)
         assert not result.valid
 
     def test_object_required_fields(self):
-        """Test functionality: object required fields."""
+        """Verify object required fields behavior."""
         schema = {
             "type": "object",
             "required": ["name"],
@@ -157,7 +157,7 @@ class TestValidation:
         assert not validate_input({}, schema).valid
 
     def test_object_additional_properties_false(self):
-        """Test functionality: object additional properties false."""
+        """Verify object additional properties false behavior."""
         schema = {
             "type": "object",
             "properties": {"a": {"type": "string"}},
@@ -167,13 +167,13 @@ class TestValidation:
         assert not validate_input({"a": "ok", "b": "extra"}, schema).valid
 
     def test_validate_output_works_same_as_input(self):
-        """Test functionality: validate output works same as input."""
+        """Verify validate output works same as input behavior."""
         schema = {"type": "string"}
         assert validate_output("hello", schema).valid
         assert not validate_output(42, schema).valid
 
     def test_nested_object_validation(self):
-        """Test functionality: nested object validation."""
+        """Verify nested object validation behavior."""
         schema = {
             "type": "object",
             "properties": {
@@ -198,7 +198,7 @@ class TestValidation:
 class TestToolEntry:
     """Test suite for ToolEntry."""
     def test_create_entry(self):
-        """Test functionality: create entry."""
+        """Verify create entry behavior."""
         entry = ToolEntry(
             name="test",
             description="A test tool",
@@ -211,7 +211,7 @@ class TestToolEntry:
         assert entry.tags == []
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         entry = ToolEntry(
             name="greet",
             description="Say hello",
@@ -241,21 +241,21 @@ class TestToolRegistry:
         )
 
     def test_register_and_get(self):
-        """Test functionality: register and get."""
+        """Verify register and get behavior."""
         reg = ToolRegistry()
         entry = self._make_entry("greet")
         reg.register(entry)
         assert reg.get("greet") is entry
 
     def test_register_duplicate_raises(self):
-        """Test functionality: register duplicate raises."""
+        """Verify register duplicate raises behavior."""
         reg = ToolRegistry()
         reg.register(self._make_entry("dup"))
         with pytest.raises(ValueError, match="already registered"):
             reg.register(self._make_entry("dup"))
 
     def test_unregister(self):
-        """Test functionality: unregister."""
+        """Verify unregister behavior."""
         reg = ToolRegistry()
         reg.register(self._make_entry("rm"))
         assert reg.unregister("rm") is True
@@ -263,7 +263,7 @@ class TestToolRegistry:
         assert reg.unregister("rm") is False
 
     def test_list_and_list_names(self):
-        """Test functionality: list and list names."""
+        """Verify list and list names behavior."""
         reg = ToolRegistry()
         reg.register(self._make_entry("b"))
         reg.register(self._make_entry("a"))
@@ -272,7 +272,7 @@ class TestToolRegistry:
         assert [e.name for e in entries] == ["a", "b"]
 
     def test_search_by_name(self):
-        """Test functionality: search by name."""
+        """Verify search by name behavior."""
         reg = ToolRegistry()
         reg.register(self._make_entry("fetch_data"))
         reg.register(self._make_entry("parse_data"))
@@ -281,7 +281,7 @@ class TestToolRegistry:
         assert len(results) == 2
 
     def test_search_by_tags(self):
-        """Test functionality: search by tags."""
+        """Verify search by tags behavior."""
         reg = ToolRegistry()
         reg.register(self._make_entry("a", tags=["io", "network"]))
         reg.register(self._make_entry("b", tags=["io"]))
@@ -292,7 +292,7 @@ class TestToolRegistry:
         assert len(results) == 1
 
     def test_len_and_contains(self):
-        """Test functionality: len and contains."""
+        """Verify len and contains behavior."""
         reg = ToolRegistry()
         reg.register(self._make_entry("x"))
         assert len(reg) == 1
@@ -300,7 +300,7 @@ class TestToolRegistry:
         assert "y" not in reg
 
     def test_invoke_success(self):
-        """Test functionality: invoke success."""
+        """Verify invoke success behavior."""
         reg = ToolRegistry()
         reg.register(
             ToolEntry(
@@ -314,14 +314,14 @@ class TestToolRegistry:
         assert result.data == {"value": "hello"}
 
     def test_invoke_not_found(self):
-        """Test functionality: invoke not found."""
+        """Verify invoke not found behavior."""
         reg = ToolRegistry()
         result = reg.invoke("missing", {})
         assert not result.ok
         assert "not found" in result.message
 
     def test_invoke_input_validation_failure(self):
-        """Test functionality: invoke input validation failure."""
+        """Verify invoke input validation failure behavior."""
         reg = ToolRegistry()
         reg.register(
             ToolEntry(
@@ -336,7 +336,7 @@ class TestToolRegistry:
         assert "validation failed" in result.message.lower()
 
     def test_invoke_handler_exception(self):
-        """Test functionality: invoke handler exception."""
+        """Verify invoke handler exception behavior."""
         def bad_handler(d):
             raise RuntimeError("boom")
 
@@ -358,7 +358,7 @@ class TestToolRegistry:
 class TestToolDecorator:
     """Test suite for ToolDecorator."""
     def test_decorator_creates_tool_entry(self):
-        """Test functionality: decorator creates tool entry."""
+        """Verify decorator creates tool entry behavior."""
         @tool(name="add", description="Add numbers")
         def add(data):
             return {"sum": data["a"] + data["b"]}
@@ -368,7 +368,7 @@ class TestToolDecorator:
         assert add.tool_entry.description == "Add numbers"
 
     def test_decorator_auto_registers(self):
-        """Test functionality: decorator auto registers."""
+        """Verify decorator auto registers behavior."""
         reg = ToolRegistry()
 
         @tool(name="mul", description="Multiply", registry=reg)
@@ -380,7 +380,7 @@ class TestToolDecorator:
         assert result.ok
 
     def test_decorated_function_still_callable(self):
-        """Test functionality: decorated function still callable."""
+        """Verify decorated function still callable behavior."""
         @tool(name="fn", description="Test")
         def fn(data):
             return data * 2
@@ -415,7 +415,7 @@ class TestToolChain:
         return reg
 
     def test_chain_execute_sequential(self):
-        """Test functionality: chain execute sequential."""
+        """Verify chain execute sequential behavior."""
         reg = self._setup_registry()
         chain = ToolChain(registry=reg)
         chain.add_step(ChainStep(tool_name="double"))
@@ -425,7 +425,7 @@ class TestToolChain:
         assert result.context["value"] == 20  # (5*2) + 10
 
     def test_chain_with_output_key(self):
-        """Test functionality: chain with output key."""
+        """Verify chain with output key behavior."""
         reg = self._setup_registry()
         chain = ToolChain(registry=reg)
         chain.add_step(ChainStep(tool_name="double", output_key="doubled"))
@@ -435,7 +435,7 @@ class TestToolChain:
         assert result.context["doubled"]["value"] == 14
 
     def test_chain_validate_missing_tool(self):
-        """Test functionality: chain validate missing tool."""
+        """Verify chain validate missing tool behavior."""
         reg = ToolRegistry()
         chain = ToolChain(registry=reg)
         chain.add_step(ChainStep(tool_name="nonexistent"))
@@ -444,7 +444,7 @@ class TestToolChain:
         assert any("not found" in e for e in vr.errors)
 
     def test_chain_validate_empty(self):
-        """Test functionality: chain validate empty."""
+        """Verify chain validate empty behavior."""
         reg = ToolRegistry()
         chain = ToolChain(registry=reg)
         vr = chain.validate()
@@ -452,14 +452,14 @@ class TestToolChain:
         assert any("no steps" in e.lower() for e in vr.errors)
 
     def test_chain_fluent_api(self):
-        """Test functionality: chain fluent api."""
+        """Verify chain fluent api behavior."""
         reg = self._setup_registry()
         chain = ToolChain(registry=reg)
         returned = chain.add_step(ChainStep(tool_name="double"))
         assert returned is chain
 
     def test_chain_stop_on_failure(self):
-        """Test functionality: chain stop on failure."""
+        """Verify chain stop on failure behavior."""
         reg = ToolRegistry()
         reg.register(
             ToolEntry(
@@ -483,7 +483,7 @@ class TestToolChain:
         assert len(result.step_results) == 1
 
     def test_chain_len_and_repr(self):
-        """Test functionality: chain len and repr."""
+        """Verify chain len and repr behavior."""
         reg = self._setup_registry()
         chain = ToolChain(registry=reg)
         chain.add_step(ChainStep(tool_name="double"))
@@ -492,7 +492,7 @@ class TestToolChain:
         assert "double" in repr(chain)
 
     def test_chain_clear(self):
-        """Test functionality: chain clear."""
+        """Verify chain clear behavior."""
         reg = self._setup_registry()
         chain = ToolChain(registry=reg)
         chain.add_step(ChainStep(tool_name="double"))
@@ -500,7 +500,7 @@ class TestToolChain:
         assert len(chain) == 0
 
     def test_chain_result_has_duration(self):
-        """Test functionality: chain result has duration."""
+        """Verify chain result has duration behavior."""
         reg = self._setup_registry()
         chain = ToolChain(registry=reg)
         chain.add_step(ChainStep(tool_name="double"))
@@ -508,7 +508,7 @@ class TestToolChain:
         assert result.duration_ms >= 0
 
     def test_chain_input_mapping(self):
-        """Test functionality: chain input mapping."""
+        """Verify chain input mapping behavior."""
         reg = ToolRegistry()
         reg.register(
             ToolEntry(

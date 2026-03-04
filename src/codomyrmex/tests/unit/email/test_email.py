@@ -34,19 +34,19 @@ class TestEmailAddress:
     """Tests for the EmailAddress data model."""
 
     def test_minimal_address(self):
-        """Test functionality: minimal address with email only."""
+        """Verify minimal address with email only behavior."""
         addr = EmailAddress(email="alice@example.com")
         assert addr.email == "alice@example.com"
         assert addr.name is None
 
     def test_address_with_name(self):
-        """Test functionality: address with display name."""
+        """Verify address with display name behavior."""
         addr = EmailAddress(email="bob@example.com", name="Bob Smith")
         assert addr.name == "Bob Smith"
         assert addr.email == "bob@example.com"
 
     def test_address_str(self):
-        """Test functionality: address string representation."""
+        """Verify address string representation behavior."""
         addr1 = EmailAddress(email="alice@example.com")
         assert str(addr1) == "alice@example.com"
         addr2 = EmailAddress(email="bob@example.com", name="Bob Smith")
@@ -69,7 +69,7 @@ class TestEmailMessage:
         return EmailMessage(**defaults)
 
     def test_minimal_message_creation(self):
-        """Test functionality: minimal message creation."""
+        """Verify minimal message creation behavior."""
         msg = self._msg()
         assert msg.subject == "Test Subject"
         assert msg.id is None
@@ -82,7 +82,7 @@ class TestEmailMessage:
         assert msg.labels == []
 
     def test_message_with_all_fields(self):
-        """Test functionality: message with all fields."""
+        """Verify message with all fields behavior."""
         msg = self._msg(
             id="msg_123",
             thread_id="thread_abc",
@@ -105,13 +105,13 @@ class TestEmailMessage:
         assert "INBOX" in msg.labels
 
     def test_date_is_stored(self):
-        """Test functionality: date is stored correctly."""
+        """Verify date is stored correctly behavior."""
         dt = datetime(2026, 3, 1, 9, 0, tzinfo=UTC)
         msg = self._msg(date=dt)
         assert msg.date == dt
 
     def test_subject_is_required(self):
-        """Test functionality: subject is required."""
+        """Verify subject is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             EmailMessage(
@@ -120,7 +120,7 @@ class TestEmailMessage:
             )
 
     def test_sender_is_required(self):
-        """Test functionality: sender is required."""
+        """Verify sender is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             EmailMessage(
@@ -129,7 +129,7 @@ class TestEmailMessage:
             )
 
     def test_date_is_required(self):
-        """Test functionality: date is required."""
+        """Verify date is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             EmailMessage(
@@ -138,7 +138,7 @@ class TestEmailMessage:
             )
 
     def test_message_summary(self):
-        """Test functionality: message summary property."""
+        """Verify message summary property behavior."""
         msg = self._msg(subject="Summary Test")
         # [2026-03-01T10:00:00+00:00] sender@example.com: Summary Test
         assert "sender@example.com: Summary Test" in msg.summary
@@ -151,7 +151,7 @@ class TestEmailDraft:
     """Tests for the EmailDraft data model."""
 
     def test_minimal_draft(self):
-        """Test functionality: minimal draft creation."""
+        """Verify minimal draft creation behavior."""
         draft = EmailDraft(subject="Draft Subject", body_text="Draft body")
         assert draft.subject == "Draft Subject"
         assert draft.body_text == "Draft body"
@@ -161,7 +161,7 @@ class TestEmailDraft:
         assert draft.body_html is None
 
     def test_draft_with_recipients(self):
-        """Test functionality: draft with all recipient types."""
+        """Verify draft with all recipient types behavior."""
         draft = EmailDraft(
             subject="Multi-Recipient",
             to=["a@example.com", "b@example.com"],
@@ -176,13 +176,13 @@ class TestEmailDraft:
         assert draft.body_html is not None
 
     def test_subject_is_required(self):
-        """Test functionality: draft subject is required."""
+        """Verify draft subject is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             EmailDraft(body_text="no subject")
 
     def test_body_text_is_required(self):
-        """Test functionality: draft body_text is required."""
+        """Verify draft body_text is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             EmailDraft(subject="no body")
@@ -195,7 +195,7 @@ class TestEmailProviderAbstractInterface:
     """Tests that EmailProvider is abstract and cannot be instantiated directly."""
 
     def test_cannot_instantiate_abstract_provider(self):
-        """Test functionality: cannot instantiate abstract provider."""
+        """Verify cannot instantiate abstract provider behavior."""
         with pytest.raises(TypeError):
             EmailProvider()  # type: ignore
 
@@ -240,7 +240,7 @@ class TestEmailProviderAbstractInterface:
         assert provider is not None
 
     def test_complete_provider_list_messages_returns_list(self):
-        """Test functionality: complete provider list_messages returns list."""
+        """Verify complete provider list_messages returns list behavior."""
 
         class MinimalProvider(EmailProvider):
             def list_messages(self, query="", max_results=100):
@@ -263,7 +263,7 @@ class TestEmailProviderAbstractInterface:
         assert isinstance(result, list)
 
     def test_batch_get_messages_default_impl(self):
-        """Test functionality: batch_get_messages default implementation."""
+        """Verify batch_get_messages default implementation behavior."""
 
         class MinimalProvider(EmailProvider):
             def list_messages(self, query="", max_results=100):
@@ -298,19 +298,19 @@ class TestEmailAvailabilityFlag:
     """Tests for module-level availability flags."""
 
     def test_email_available_flag_is_bool(self):
-        """Test functionality: email available flag is bool."""
+        """Verify email available flag is bool behavior."""
         assert isinstance(email_module.EMAIL_AVAILABLE, bool)
 
     def test_gmail_available_flag_is_bool(self):
-        """Test functionality: gmail available flag is bool."""
+        """Verify gmail available flag is bool behavior."""
         assert isinstance(email_module.GMAIL_AVAILABLE, bool)
 
     def test_agentmail_available_flag_is_bool(self):
-        """Test functionality: agentmail available flag is bool."""
+        """Verify agentmail available flag is bool behavior."""
         assert isinstance(email_module.AGENTMAIL_AVAILABLE, bool)
 
     def test_gmail_none_when_unavailable(self):
-        """Test functionality: GmailProvider is None when SDK unavailable."""
+        """Verify GmailProvider is None when SDK unavailable behavior."""
         if not email_module.GMAIL_AVAILABLE:
             assert email_module.GmailProvider is None
 
@@ -322,38 +322,38 @@ class TestEmailExceptions:
     """Tests for exception classes and hierarchy."""
 
     def test_email_error_is_base(self):
-        """Test functionality: all email exceptions inherit from EmailError."""
+        """Verify all email exceptions inherit from EmailError behavior."""
         assert issubclass(EmailAuthError, EmailError)
         assert issubclass(EmailAPIError, EmailError)
         assert issubclass(MessageNotFoundError, EmailError)
         assert issubclass(InvalidMessageError, EmailError)
 
     def test_email_error_is_exception(self):
-        """Test functionality: EmailError is an Exception."""
+        """Verify EmailError is an Exception behavior."""
         assert issubclass(EmailError, Exception)
 
     def test_email_auth_error_can_be_raised(self):
-        """Test functionality: EmailAuthError can be raised."""
+        """Verify EmailAuthError can be raised behavior."""
         with pytest.raises(EmailAuthError):
             raise EmailAuthError("Invalid credentials")
 
     def test_email_api_error_can_be_raised(self):
-        """Test functionality: EmailAPIError can be raised."""
+        """Verify EmailAPIError can be raised behavior."""
         with pytest.raises(EmailAPIError):
             raise EmailAPIError("API returned 500")
 
     def test_message_not_found_error_can_be_raised(self):
-        """Test functionality: MessageNotFoundError can be raised."""
+        """Verify MessageNotFoundError can be raised behavior."""
         with pytest.raises(MessageNotFoundError):
             raise MessageNotFoundError("msg_xyz")
 
     def test_invalid_message_error_can_be_raised(self):
-        """Test functionality: InvalidMessageError can be raised."""
+        """Verify InvalidMessageError can be raised behavior."""
         with pytest.raises(InvalidMessageError):
             raise InvalidMessageError("Missing required field")
 
     def test_all_exceptions_caught_by_base(self):
-        """Test functionality: all exceptions caught by base EmailError."""
+        """Verify all exceptions caught by base EmailError behavior."""
         for exc_class in [EmailAuthError, EmailAPIError, MessageNotFoundError, InvalidMessageError]:
             with pytest.raises(EmailError):
                 raise exc_class("test")
@@ -366,29 +366,29 @@ class TestEmailModuleExports:
     """Tests that the email module exports expected symbols."""
 
     def test_email_message_exported(self):
-        """Test functionality: EmailMessage exported."""
+        """Verify EmailMessage exported behavior."""
         assert hasattr(email_module, "EmailMessage")
 
     def test_email_draft_exported(self):
-        """Test functionality: EmailDraft exported."""
+        """Verify EmailDraft exported behavior."""
         assert hasattr(email_module, "EmailDraft")
 
     def test_email_address_exported(self):
-        """Test functionality: EmailAddress exported."""
+        """Verify EmailAddress exported behavior."""
         assert hasattr(email_module, "EmailAddress")
 
     def test_email_provider_exported(self):
-        """Test functionality: EmailProvider exported."""
+        """Verify EmailProvider exported behavior."""
         assert hasattr(email_module, "EmailProvider")
 
     def test_exceptions_exported(self):
-        """Test functionality: all exception types exported."""
+        """Verify all exception types exported behavior."""
         for name in ["EmailError", "EmailAuthError", "EmailAPIError",
                      "MessageNotFoundError", "InvalidMessageError"]:
             assert hasattr(email_module, name), f"Missing export: {name}"
 
     def test_cli_commands_exported(self):
-        """Test functionality: cli_commands exported and functional."""
+        """Verify cli_commands exported and functional behavior."""
         assert hasattr(email_module, "cli_commands")
         commands = email_module.cli_commands()
         assert isinstance(commands, dict)
@@ -402,7 +402,7 @@ class TestAgentMailModels:
     """Tests for AgentMail-native Pydantic models."""
 
     def test_agentmail_inbox_model(self):
-        """Test functionality: AgentMailInbox instantiation."""
+        """Verify AgentMailInbox instantiation behavior."""
         from codomyrmex.email.agentmail.models import AgentMailInbox
         inbox = AgentMailInbox(inbox_id="test@agentmail.to")
         assert inbox.inbox_id == "test@agentmail.to"
@@ -410,7 +410,7 @@ class TestAgentMailModels:
         assert inbox.display_name is None
 
     def test_agentmail_thread_model(self):
-        """Test functionality: AgentMailThread instantiation."""
+        """Verify AgentMailThread instantiation behavior."""
         from codomyrmex.email.agentmail.models import AgentMailThread
         thread = AgentMailThread(thread_id="th_123", inbox_id="inbox_456")
         assert thread.thread_id == "th_123"
@@ -418,7 +418,7 @@ class TestAgentMailModels:
         assert thread.labels == []
 
     def test_agentmail_draft_model(self):
-        """Test functionality: AgentMailDraft instantiation."""
+        """Verify AgentMailDraft instantiation behavior."""
         from codomyrmex.email.agentmail.models import AgentMailDraft
         draft = AgentMailDraft(
             draft_id="dr_123",
@@ -432,7 +432,7 @@ class TestAgentMailModels:
         assert draft.subject == "Test Draft"
 
     def test_agentmail_webhook_model(self):
-        """Test functionality: AgentMailWebhook instantiation."""
+        """Verify AgentMailWebhook instantiation behavior."""
         from codomyrmex.email.agentmail.models import AgentMailWebhook
         webhook = AgentMailWebhook(
             webhook_id="wh_123",
@@ -444,14 +444,14 @@ class TestAgentMailModels:
         assert "message.received" in webhook.event_types
 
     def test_agentmail_pod_model(self):
-        """Test functionality: AgentMailPod instantiation."""
+        """Verify AgentMailPod instantiation behavior."""
         from codomyrmex.email.agentmail.models import AgentMailPod
         pod = AgentMailPod(pod_id="pod_123", name="Test Pod")
         assert pod.pod_id == "pod_123"
         assert pod.name == "Test Pod"
 
     def test_agentmail_domain_model(self):
-        """Test functionality: AgentMailDomain instantiation."""
+        """Verify AgentMailDomain instantiation behavior."""
         from codomyrmex.email.agentmail.models import AgentMailDomain
         domain = AgentMailDomain(domain_id="dom_123", domain="example.com", verified=True)
         assert domain.domain_id == "dom_123"
@@ -459,7 +459,7 @@ class TestAgentMailModels:
         assert domain.verified is True
 
     def test_agentmail_attachment_model(self):
-        """Test functionality: AgentMailAttachment instantiation."""
+        """Verify AgentMailAttachment instantiation behavior."""
         from codomyrmex.email.agentmail.models import AgentMailAttachment
         att = AgentMailAttachment(
             attachment_id="att_123",
@@ -480,7 +480,7 @@ class TestAgentMailProvider:
     """Tests for AgentMail email provider."""
 
     def test_import(self):
-        """Test functionality: AgentMailProvider is importable."""
+        """Verify AgentMailProvider is importable behavior."""
         from codomyrmex.email.agentmail.provider import AgentMailProvider
         assert AgentMailProvider is not None
 

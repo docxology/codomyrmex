@@ -26,15 +26,15 @@ if not HAS_MODULE:
 class TestSBOMFormat:
     """Test suite for SBOMFormat."""
     def test_spdx(self):
-        """Test functionality: spdx."""
+        """Verify spdx behavior."""
         assert SBOMFormat.SPDX is not None
 
     def test_cyclonedx(self):
-        """Test functionality: cyclonedx."""
+        """Verify cyclonedx behavior."""
         assert SBOMFormat.CYCLONEDX is not None
 
     def test_swid(self):
-        """Test functionality: swid."""
+        """Verify swid behavior."""
         assert SBOMFormat.SWID is not None
 
 
@@ -42,19 +42,19 @@ class TestSBOMFormat:
 class TestLicenseType:
     """Test suite for LicenseType."""
     def test_mit(self):
-        """Test functionality: mit."""
+        """Verify mit behavior."""
         assert LicenseType.MIT is not None
 
     def test_apache(self):
-        """Test functionality: apache."""
+        """Verify apache behavior."""
         assert LicenseType.APACHE_2 is not None
 
     def test_gpl(self):
-        """Test functionality: gpl."""
+        """Verify gpl behavior."""
         assert LicenseType.GPL_3 is not None
 
     def test_unknown(self):
-        """Test functionality: unknown."""
+        """Verify unknown behavior."""
         assert LicenseType.UNKNOWN is not None
 
 
@@ -62,13 +62,13 @@ class TestLicenseType:
 class TestComponent:
     """Test suite for Component."""
     def test_create_component(self):
-        """Test functionality: create component."""
+        """Verify create component behavior."""
         comp = Component(name="requests", version="2.31.0")
         assert comp.name == "requests"
         assert comp.version == "2.31.0"
 
     def test_component_defaults(self):
-        """Test functionality: component defaults."""
+        """Verify component defaults behavior."""
         comp = Component(name="test", version="1.0")
         assert comp.purl == ""
         assert comp.license == LicenseType.UNKNOWN
@@ -78,7 +78,7 @@ class TestComponent:
         assert comp.vulnerabilities == []
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         comp = Component(name="test", version="1.0", license=LicenseType.MIT)
         d = comp.to_dict()
         assert isinstance(d, dict)
@@ -89,14 +89,14 @@ class TestComponent:
 class TestSBOM:
     """Test suite for SBOM."""
     def test_create_sbom(self):
-        """Test functionality: create sbom."""
+        """Verify create sbom behavior."""
         sbom = SBOM(name="my-project", version="1.0.0")
         assert sbom.name == "my-project"
         assert sbom.format == SBOMFormat.CYCLONEDX
         assert sbom.components == []
 
     def test_sbom_with_components(self):
-        """Test functionality: sbom with components."""
+        """Verify sbom with components behavior."""
         components = [
             Component(name="requests", version="2.31.0"),
             Component(name="flask", version="3.0.0"),
@@ -105,13 +105,13 @@ class TestSBOM:
         assert len(sbom.components) == 2
 
     def test_to_dict(self):
-        """Test functionality: to dict."""
+        """Verify to dict behavior."""
         sbom = SBOM(name="test", version="1.0")
         d = sbom.to_dict()
         assert isinstance(d, dict)
 
     def test_to_json(self):
-        """Test functionality: to json."""
+        """Verify to json behavior."""
         sbom = SBOM(name="test", version="1.0")
         j = sbom.to_json()
         parsed = json.loads(j)
@@ -122,7 +122,7 @@ class TestSBOM:
 class TestSBOMGenerator:
     """Test suite for SBOMGenerator."""
     def test_create_generator(self):
-        """Test functionality: create generator."""
+        """Verify create generator behavior."""
         gen = SBOMGenerator()
         assert gen is not None
 
@@ -131,12 +131,12 @@ class TestSBOMGenerator:
 class TestVulnerabilityScanner:
     """Test suite for VulnerabilityScanner."""
     def test_create_scanner(self):
-        """Test functionality: create scanner."""
+        """Verify create scanner behavior."""
         scanner = VulnerabilityScanner()
         assert scanner is not None
 
     def test_scan_empty_sbom(self):
-        """Test functionality: scan empty sbom."""
+        """Verify scan empty sbom behavior."""
         scanner = VulnerabilityScanner()
         sbom = SBOM(name="test", version="1.0")
         results = scanner.scan(sbom)
@@ -147,6 +147,6 @@ class TestVulnerabilityScanner:
 class TestSupplyChainVerifier:
     """Test suite for SupplyChainVerifier."""
     def test_create_verifier(self):
-        """Test functionality: create verifier."""
+        """Verify create verifier behavior."""
         verifier = SupplyChainVerifier()
         assert verifier is not None

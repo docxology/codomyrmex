@@ -23,7 +23,7 @@ class TestDiscoveredTool:
     """Tests for the DiscoveredTool dataclass."""
 
     def test_to_mcp_schema_basic(self):
-        """Test functionality: to_mcp_schema produces expected dict shape."""
+        """Verify to_mcp_schema produces expected dict shape behavior."""
         tool = DiscoveredTool(
             name="codomyrmex.test_tool",
             description="A test tool",
@@ -43,7 +43,7 @@ class TestDiscoveredTool:
         assert schema["x-codomyrmex"]["available"] is True
 
     def test_to_mcp_schema_unavailable_appends_reason(self):
-        """Test functionality: unavailable tool appends reason to description."""
+        """Verify unavailable tool appends reason to description behavior."""
         tool = DiscoveredTool(
             name="codomyrmex.unavailable_tool",
             description="Needs special dep",
@@ -58,7 +58,7 @@ class TestDiscoveredTool:
         assert schema["x-codomyrmex"]["available"] is False
 
     def test_default_available_is_true(self):
-        """Test functionality: DiscoveredTool defaults to available."""
+        """Verify DiscoveredTool defaults to available behavior."""
         tool = DiscoveredTool(
             name="t",
             description="d",
@@ -74,7 +74,7 @@ class TestDiscoveryReport:
     """Tests for the DiscoveryReport dataclass."""
 
     def test_empty_report_defaults(self):
-        """Test functionality: empty report has zero counts."""
+        """Verify empty report has zero counts behavior."""
         report = DiscoveryReport()
         assert report.tools == []
         assert report.failed_modules == []
@@ -82,7 +82,7 @@ class TestDiscoveryReport:
         assert report.modules_scanned == 0
 
     def test_report_with_tools_and_failures(self):
-        """Test functionality: report carries both tools and failures."""
+        """Verify report carries both tools and failures behavior."""
         tool = DiscoveredTool(
             name="t1", description="d", module_path="m", callable_name="c"
         )
@@ -104,7 +104,7 @@ class TestFailedModule:
     """Tests for the FailedModule dataclass."""
 
     def test_failed_module_fields(self):
-        """Test functionality: FailedModule stores module, error, and error_type."""
+        """Verify FailedModule stores module, error, and error_type behavior."""
         fm = FailedModule(
             module="codomyrmex.broken",
             error="No module named 'missing_dep'",
@@ -120,13 +120,13 @@ class TestMCPDiscoveryEngine:
     """Tests for the MCPDiscovery engine class."""
 
     def test_empty_registry_initially(self):
-        """Test functionality: new MCPDiscovery has zero tools."""
+        """Verify new MCPDiscovery has zero tools behavior."""
         engine = MCPDiscovery()
         assert engine.tool_count == 0
         assert engine.list_tools() == []
 
     def test_register_tool_manually(self):
-        """Test functionality: manual tool registration adds to registry."""
+        """Verify manual tool registration adds to registry behavior."""
         engine = MCPDiscovery()
         tool = DiscoveredTool(
             name="codomyrmex.manual_tool",
@@ -141,12 +141,12 @@ class TestMCPDiscoveryEngine:
         assert retrieved.description == "Manually registered"
 
     def test_get_tool_returns_none_for_missing(self):
-        """Test functionality: get_tool returns None for unknown name."""
+        """Verify get_tool returns None for unknown name behavior."""
         engine = MCPDiscovery()
         assert engine.get_tool("nonexistent") is None
 
     def test_list_tools_with_tag_filter(self):
-        """Test functionality: list_tools filters by tag."""
+        """Verify list_tools filters by tag behavior."""
         engine = MCPDiscovery()
         tool_a = DiscoveredTool(
             name="a", description="A", module_path="m", callable_name="a",
@@ -174,7 +174,7 @@ class TestMCPDiscoveryEngine:
         assert len(math_tools) == 2
 
     def test_list_tools_no_filter_returns_all(self):
-        """Test functionality: list_tools without tag returns everything."""
+        """Verify list_tools without tag returns everything behavior."""
         engine = MCPDiscovery()
         for i in range(5):
             engine.register_tool(DiscoveredTool(
@@ -183,7 +183,7 @@ class TestMCPDiscoveryEngine:
         assert len(engine.list_tools()) == 5
 
     def test_scan_module_with_decorated_functions(self):
-        """Test functionality: scan_module finds functions with _mcp_tool_meta."""
+        """Verify scan_module finds functions with _mcp_tool_meta behavior."""
         # Create a real module with a decorated function
         mod = types.ModuleType("test_scan_module")
         mod.__name__ = "test_scan_module"
@@ -209,7 +209,7 @@ class TestMCPDiscoveryEngine:
         assert "codomyrmex.test_scan" in names
 
     def test_scan_module_no_tools_returns_empty(self):
-        """Test functionality: scanning a module without tools returns empty list."""
+        """Verify scanning a module without tools returns empty list behavior."""
         mod = types.ModuleType("empty_module")
         mod.__name__ = "empty_module"
         mod.regular_func = lambda: None  # No _mcp_tool_meta
@@ -219,7 +219,7 @@ class TestMCPDiscoveryEngine:
         assert tools == []
 
     def test_scan_module_with_missing_requirement(self):
-        """Test functionality: tool with missing require is marked unavailable."""
+        """Verify tool with missing require is marked unavailable behavior."""
         mod = types.ModuleType("req_module")
         mod.__name__ = "req_module"
 
@@ -244,7 +244,7 @@ class TestMCPDiscoveryEngine:
         assert "this_package_definitely_does_not_exist_xyzzy" in tools[0].unavailable_reason
 
     def test_scan_single_module_incremental(self):
-        """Test functionality: scan_module (by name) for a real codomyrmex module."""
+        """Verify scan_module (by name) for a real codomyrmex module behavior."""
         engine = MCPDiscovery()
         # Scan the model_context_protocol's own mcp_tools module which has @mcp_tool decorators
         report = engine.scan_module("codomyrmex.model_context_protocol.mcp_tools")
@@ -257,14 +257,14 @@ class TestMCPDiscoveryEngine:
             assert len(report.tools) >= 1
 
     def test_scan_nonexistent_module_records_failure(self):
-        """Test functionality: scanning a nonexistent module records failure."""
+        """Verify scanning a nonexistent module records failure behavior."""
         engine = MCPDiscovery()
         report = engine.scan_module("codomyrmex.this_module_does_not_exist_xyzzy")
         assert len(report.failed_modules) == 1
         assert "this_module_does_not_exist_xyzzy" in report.failed_modules[0].module
 
     def test_record_cache_hit_increments(self):
-        """Test functionality: record_cache_hit increments metrics counter."""
+        """Verify record_cache_hit increments metrics counter behavior."""
         engine = MCPDiscovery()
         assert engine.get_metrics().cache_hits == 0
         engine.record_cache_hit()
@@ -277,7 +277,7 @@ class TestDiscoveryMetrics:
     """Tests for the DiscoveryMetrics dataclass."""
 
     def test_default_metrics(self):
-        """Test functionality: default metrics are zeroed out."""
+        """Verify default metrics are zeroed out behavior."""
         m = DiscoveryMetrics()
         assert m.total_tools == 0
         assert m.scan_duration_ms == 0.0
@@ -287,7 +287,7 @@ class TestDiscoveryMetrics:
         assert m.last_scan_time is None
 
     def test_metrics_after_scan(self):
-        """Test functionality: metrics update after a real scan."""
+        """Verify metrics update after a real scan behavior."""
         engine = MCPDiscovery()
         engine.scan_module("codomyrmex.model_context_protocol.mcp_tools")
         metrics = engine.get_metrics()

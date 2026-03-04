@@ -2,7 +2,7 @@ from codomyrmex.relations.crm.crm import Contact, ContactManager, Interaction
 
 
 def test_contact_management():
-    """Test functionality: contact management."""
+    """Verify contact management behavior."""
     cm = ContactManager()
     cm.add_contact("Alice", email="alice@example.com")
 
@@ -12,7 +12,7 @@ def test_contact_management():
 
 
 def test_interaction_logging():
-    """Test functionality: interaction logging."""
+    """Verify interaction logging behavior."""
     contact = Contact(name="Bob", email="bob@example.com")
     interaction = Interaction(type="email", notes="Intro")
     contact.interactions.append(interaction)

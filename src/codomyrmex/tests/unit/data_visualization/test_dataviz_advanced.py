@@ -18,7 +18,7 @@ class TestThemes:
     """Test theme system."""
 
     def test_get_all_themes(self):
-        """Test functionality: get all themes."""
+        """Verify get all themes behavior."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         for name in ThemeName:
             theme = get_theme(name)
@@ -26,19 +26,19 @@ class TestThemes:
             assert theme.name == name
 
     def test_default_theme(self):
-        """Test functionality: default theme."""
+        """Verify default theme behavior."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         theme = get_theme(ThemeName.DEFAULT)
         assert theme.colors.primary == "#1f77b4"
 
     def test_dark_theme(self):
-        """Test functionality: dark theme."""
+        """Verify dark theme behavior."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         theme = get_theme(ThemeName.DARK)
         assert theme.figure_facecolor == "#1a1a2e"
 
     def test_theme_to_rcparams(self):
-        """Test functionality: theme to rcparams."""
+        """Verify theme to rcparams behavior."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         theme = get_theme(ThemeName.DEFAULT)
         params = theme.to_matplotlib_rcparams()
@@ -48,7 +48,7 @@ class TestThemes:
         assert 'font.family' in params
 
     def test_apply_theme(self):
-        """Test functionality: apply theme."""
+        """Verify apply theme behavior."""
         from codomyrmex.data_visualization.themes import (
             ThemeName,
             apply_theme,
@@ -59,7 +59,7 @@ class TestThemes:
         assert plt.rcParams['figure.facecolor'] == theme.figure_facecolor
 
     def test_list_themes(self):
-        """Test functionality: list themes."""
+        """Verify list themes behavior."""
         from codomyrmex.data_visualization.themes import list_themes
         themes = list_themes()
         assert isinstance(themes, list)
@@ -68,7 +68,7 @@ class TestThemes:
         assert "dark" in themes
 
     def test_color_palette_cycling(self):
-        """Test functionality: color palette cycling."""
+        """Verify color palette cycling behavior."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         theme = get_theme(ThemeName.DEFAULT)
         palette = theme.colors
@@ -78,13 +78,13 @@ class TestThemes:
         assert color0 == color_cycle
 
     def test_minimal_theme_no_grid(self):
-        """Test functionality: minimal theme no grid."""
+        """Verify minimal theme no grid behavior."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         theme = get_theme(ThemeName.MINIMAL)
         assert theme.grid.show is False
 
     def test_scientific_theme_serif(self):
-        """Test functionality: scientific theme serif."""
+        """Verify scientific theme serif behavior."""
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         theme = get_theme(ThemeName.SCIENTIFIC)
         assert theme.fonts.family == "serif"
@@ -98,7 +98,7 @@ class TestAdvancedPlotter:
     """Test the AdvancedPlotter class."""
 
     def test_create_figure(self):
-        """Test functionality: create figure."""
+        """Verify create figure behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -109,7 +109,7 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_line(self):
-        """Test functionality: plot line."""
+        """Verify plot line behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -120,7 +120,7 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_scatter(self):
-        """Test functionality: plot scatter."""
+        """Verify plot scatter behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -131,7 +131,7 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_bar(self):
-        """Test functionality: plot bar."""
+        """Verify plot bar behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -142,7 +142,7 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_histogram(self):
-        """Test functionality: plot histogram."""
+        """Verify plot histogram behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -153,7 +153,7 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_heatmap(self):
-        """Test functionality: plot heatmap."""
+        """Verify plot heatmap behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -169,7 +169,7 @@ class TestAdvancedPlotter:
             plotter.clear_figures()
 
     def test_plot_box(self):
-        """Test functionality: plot box."""
+        """Verify plot box behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -180,7 +180,7 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_save_plot(self, tmp_path):
-        """Test functionality: save plot."""
+        """Verify save plot behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -194,7 +194,7 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_clear_figures(self):
-        """Test functionality: clear figures."""
+        """Verify clear figures behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             AdvancedPlotter,
         )
@@ -207,7 +207,7 @@ class TestAdvancedPlotter:
         assert plotter.current_figure is None
 
     def test_convenience_functions(self):
-        """Test functionality: convenience functions."""
+        """Verify convenience functions behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             create_advanced_bar_chart,
             create_advanced_line_plot,
@@ -224,7 +224,7 @@ class TestAdvancedPlotter:
         assert len(get_available_plot_types()) > 0
 
     def test_plot_config_dataclass(self):
-        """Test functionality: plot config dataclass."""
+        """Verify plot config dataclass behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import PlotConfig
         config = PlotConfig(title="Test", figsize=(8, 5), dpi=150)
         assert config.title == "Test"
@@ -232,7 +232,7 @@ class TestAdvancedPlotter:
         assert config.dpi == 150
 
     def test_enums(self):
-        """Test functionality: enums."""
+        """Verify enums behavior."""
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             ChartStyle,
             ColorPalette,
@@ -251,7 +251,7 @@ class TestMermaidBuilders:
     """Test Mermaid diagram builder classes."""
 
     def test_flowchart_creation(self):
-        """Test functionality: flowchart creation."""
+        """Verify flowchart creation behavior."""
         from codomyrmex.data_visualization.mermaid import (
             Flowchart,
             FlowDirection,
@@ -267,7 +267,7 @@ class TestMermaidBuilders:
         assert "B" in content
 
     def test_sequence_diagram(self):
-        """Test functionality: sequence diagram."""
+        """Verify sequence diagram behavior."""
         from codomyrmex.data_visualization.mermaid import SequenceDiagram
         sd = SequenceDiagram()
         sd.add_participant("Alice")
@@ -279,7 +279,7 @@ class TestMermaidBuilders:
         assert "Bob" in content
 
     def test_class_diagram(self):
-        """Test functionality: class diagram."""
+        """Verify class diagram behavior."""
         from codomyrmex.data_visualization.mermaid import ClassDiagram
         cd = ClassDiagram()
         cd.add_class("Animal", attributes=["name: str"], methods=["speak()"])
@@ -288,7 +288,7 @@ class TestMermaidBuilders:
         assert "Animal" in content
 
     def test_flowchart_subgraph(self):
-        """Test functionality: flowchart subgraph."""
+        """Verify flowchart subgraph behavior."""
         from codomyrmex.data_visualization.mermaid import (
             Flowchart,
             FlowDirection,
@@ -302,7 +302,7 @@ class TestMermaidBuilders:
         assert "subgraph" in content
 
     def test_to_markdown(self):
-        """Test functionality: to markdown."""
+        """Verify to markdown behavior."""
         from codomyrmex.data_visualization.mermaid import Flowchart, FlowDirection
         fc = Flowchart(direction=FlowDirection.TOP_DOWN)
         md = fc.to_markdown()
@@ -318,7 +318,7 @@ class TestMermaidGenerator:
     """Test MermaidDiagramGenerator."""
 
     def test_git_branch_diagram(self):
-        """Test functionality: git branch diagram."""
+        """Verify git branch diagram behavior."""
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
@@ -331,7 +331,7 @@ class TestMermaidGenerator:
         assert content  # non-empty
 
     def test_git_workflow_diagram(self):
-        """Test functionality: git workflow diagram."""
+        """Verify git workflow diagram behavior."""
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
@@ -345,7 +345,7 @@ class TestMermaidGenerator:
         assert len(content) > 0
 
     def test_commit_timeline_diagram(self):
-        """Test functionality: commit timeline diagram."""
+        """Verify commit timeline diagram behavior."""
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             create_commit_timeline_diagram,
         )
@@ -357,7 +357,7 @@ class TestMermaidGenerator:
         assert content
 
     def test_repository_structure_diagram(self):
-        """Test functionality: repository structure diagram."""
+        """Verify repository structure diagram behavior."""
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
@@ -367,7 +367,7 @@ class TestMermaidGenerator:
         assert content
 
     def test_save_mermaid_to_file(self, tmp_path):
-        """Test functionality: save mermaid to file."""
+        """Verify save mermaid to file behavior."""
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
@@ -391,7 +391,7 @@ class TestGitVisualizer:
     """Test GitVisualizer class."""
 
     def test_instantiation(self):
-        """Test functionality: instantiation."""
+        """Verify instantiation behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
         assert isinstance(viz, GitVisualizer)
@@ -399,7 +399,7 @@ class TestGitVisualizer:
         assert "main" in viz.colors
 
     def test_git_tree_png_with_sample_data(self, tmp_path):
-        """Test functionality: git tree png with sample data."""
+        """Verify git tree png with sample data behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
         output = str(tmp_path / "git_tree.png")
@@ -408,7 +408,7 @@ class TestGitVisualizer:
         assert Path(output).exists()
 
     def test_git_tree_mermaid_with_sample_data(self, tmp_path):
-        """Test functionality: git tree mermaid with sample data."""
+        """Verify git tree mermaid with sample data behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
         output = str(tmp_path / "git_tree.mmd")
@@ -416,7 +416,7 @@ class TestGitVisualizer:
         assert content  # non-empty string
 
     def test_commit_activity_png(self, tmp_path):
-        """Test functionality: commit activity png."""
+        """Verify commit activity png behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
         output = str(tmp_path / "activity.png")
@@ -425,7 +425,7 @@ class TestGitVisualizer:
         assert Path(output).exists()
 
     def test_repository_summary_png(self, tmp_path):
-        """Test functionality: repository summary png."""
+        """Verify repository summary png behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
         output = str(tmp_path / "summary.png")
@@ -436,7 +436,7 @@ class TestGitVisualizer:
         assert Path(output).exists()
 
     def test_branch_color_mapping(self):
-        """Test functionality: branch color mapping."""
+        """Verify branch color mapping behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
         assert viz._get_branch_color("main") == viz.colors["main"]
@@ -447,7 +447,7 @@ class TestGitVisualizer:
         assert viz._get_branch_color("other") == viz.colors["commit"]
 
     def test_sample_commits_generation(self):
-        """Test functionality: sample commits generation."""
+        """Verify sample commits generation behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
         commits = viz._generate_sample_commits(10)
@@ -455,7 +455,7 @@ class TestGitVisualizer:
         assert all("hash" in c and "message" in c for c in commits)
 
     def test_convenience_functions(self, tmp_path):
-        """Test functionality: convenience functions."""
+        """Verify convenience functions behavior."""
         from codomyrmex.data_visualization.git.git_visualizer import (
             create_git_tree_mermaid,
             create_git_tree_png,
@@ -477,7 +477,7 @@ class TestExceptions:
     """Test exception hierarchy."""
 
     def test_exception_hierarchy(self):
-        """Test functionality: exception hierarchy."""
+        """Verify exception hierarchy behavior."""
         from codomyrmex.data_visualization.exceptions import (
             ChartCreationError,
             DataVisualizationError,
@@ -503,7 +503,7 @@ class TestExceptions:
         assert issubclass(PlotSaveError, DataVisualizationError)
 
     def test_exceptions_are_raisable(self):
-        """Test functionality: exceptions are raisable."""
+        """Verify exceptions are raisable behavior."""
         from codomyrmex.data_visualization.exceptions import (
             ChartCreationError,
             DataVisualizationError,
@@ -520,7 +520,7 @@ class TestExceptions:
             raise InvalidDataError("bad data")
 
     def test_exception_message(self):
-        """Test functionality: exception message."""
+        """Verify exception message behavior."""
         from codomyrmex.data_visualization.exceptions import DataVisualizationError
         err = DataVisualizationError("something went wrong")
         assert "something went wrong" in str(err)
@@ -534,28 +534,28 @@ class TestPlotter:
     """Test the Plotter wrapper class."""
 
     def test_plotter_bar_chart(self, tmp_path):
-        """Test functionality: plotter bar chart."""
+        """Verify plotter bar chart behavior."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
         p = Plotter()
         fig = p.bar_chart(['A', 'B'], [1, 2], output_path=str(tmp_path / "p_bar.png"))
         assert isinstance(fig, plt.Figure)
 
     def test_plotter_line_plot(self, tmp_path):
-        """Test functionality: plotter line plot."""
+        """Verify plotter line plot behavior."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
         p = Plotter()
         fig = p.line_plot([1, 2, 3], [4, 5, 6], output_path=str(tmp_path / "p_line.png"))
         assert isinstance(fig, plt.Figure)
 
     def test_plotter_heatmap(self, tmp_path):
-        """Test functionality: plotter heatmap."""
+        """Verify plotter heatmap behavior."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
         p = Plotter()
         fig = p.heatmap([[1, 2], [3, 4]], output_path=str(tmp_path / "p_hm.png"))
         assert isinstance(fig, plt.Figure)
 
     def test_plotter_default_figure_size(self):
-        """Test functionality: plotter default figure size."""
+        """Verify plotter default figure size behavior."""
         from codomyrmex.data_visualization.engines.plotter import (
             DEFAULT_FIGURE_SIZE,
             Plotter,

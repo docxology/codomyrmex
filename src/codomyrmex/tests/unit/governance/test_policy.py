@@ -2,7 +2,7 @@ from codomyrmex.security.governance.policy import PolicyEngine, PolicyRule
 
 
 def test_policy_enforcement():
-    """Test functionality: policy enforcement."""
+    """Verify policy enforcement behavior."""
     engine = PolicyEngine()
     engine.create_policy("limits", "Spending limits")
 
@@ -20,7 +20,7 @@ def test_policy_enforcement():
 
 
 def test_multiple_policies():
-    """Test functionality: multiple policies."""
+    """Verify multiple policies behavior."""
     engine = PolicyEngine()
     engine.create_policy("checks", "Multi-rule checks")
 

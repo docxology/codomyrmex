@@ -37,7 +37,7 @@ class TestCalendarEvent:
         return CalendarEvent(**defaults)
 
     def test_minimal_event_creation(self):
-        """Test functionality: minimal event creation."""
+        """Verify minimal event creation behavior."""
         event = self._event()
         assert event.summary == "Test Event"
         assert event.id is None
@@ -47,7 +47,7 @@ class TestCalendarEvent:
         assert event.html_link is None
 
     def test_event_with_all_fields(self):
-        """Test functionality: event with all fields."""
+        """Verify event with all fields behavior."""
         event = self._event(
             id="evt_123",
             summary="Full Event",
@@ -64,7 +64,7 @@ class TestCalendarEvent:
         assert event.html_link.startswith("https://")
 
     def test_start_end_times_are_stored(self):
-        """Test functionality: start end times are stored."""
+        """Verify start end times are stored behavior."""
         start = datetime(2026, 3, 1, 9, 0, tzinfo=UTC)
         end = datetime(2026, 3, 1, 10, 30, tzinfo=UTC)
         event = self._event(start_time=start, end_time=end)
@@ -72,7 +72,7 @@ class TestCalendarEvent:
         assert event.end_time == end
 
     def test_event_with_timezone_aware_datetimes(self):
-        """Test functionality: event with timezone aware datetimes."""
+        """Verify event with timezone aware datetimes behavior."""
         from zoneinfo import ZoneInfo
         tz = ZoneInfo("America/Los_Angeles")
         start = datetime(2026, 3, 1, 10, 0, tzinfo=tz)
@@ -82,13 +82,13 @@ class TestCalendarEvent:
         assert event.end_time.tzinfo is not None
 
     def test_attendees_default_empty_list(self):
-        """Test functionality: attendees default empty list."""
+        """Verify attendees default empty list behavior."""
         event = self._event()
         assert isinstance(event.attendees, list)
         assert len(event.attendees) == 0
 
     def test_summary_is_required(self):
-        """Test functionality: summary is required."""
+        """Verify summary is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             CalendarEvent(
@@ -97,7 +97,7 @@ class TestCalendarEvent:
             )
 
     def test_start_time_is_required(self):
-        """Test functionality: start time is required."""
+        """Verify start time is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             CalendarEvent(
@@ -106,7 +106,7 @@ class TestCalendarEvent:
             )
 
     def test_end_time_is_required(self):
-        """Test functionality: end time is required."""
+        """Verify end time is required behavior."""
         from pydantic import ValidationError
         with pytest.raises(ValidationError):
             CalendarEvent(
@@ -122,7 +122,7 @@ class TestCalendarProviderAbstractInterface:
     """Tests that CalendarProvider is abstract and cannot be instantiated directly."""
 
     def test_cannot_instantiate_abstract_provider(self):
-        """Test functionality: cannot instantiate abstract provider."""
+        """Verify cannot instantiate abstract provider behavior."""
         with pytest.raises(TypeError):
             CalendarProvider()  # type: ignore
 
@@ -160,7 +160,7 @@ class TestCalendarProviderAbstractInterface:
         assert provider is not None
 
     def test_complete_provider_list_events_returns_list(self):
-        """Test functionality: complete provider list events returns list."""
+        """Verify complete provider list events returns list behavior."""
         class MinimalProvider(CalendarProvider):
             def list_events(self, time_min, time_max):
                 return []
@@ -190,20 +190,20 @@ class TestCalendarAvailabilityFlag:
     """Tests for the CALENDAR_AVAILABLE module-level flag."""
 
     def test_calendar_available_flag_is_bool(self):
-        """Test functionality: calendar available flag is bool."""
+        """Verify calendar available flag is bool behavior."""
         assert isinstance(cal_module.CALENDAR_AVAILABLE, bool)
 
     def test_gcal_available_flag_is_bool(self):
-        """Test functionality: gcal available flag is bool."""
+        """Verify gcal available flag is bool behavior."""
         assert isinstance(cal_module.GCAL_AVAILABLE, bool)
 
     def test_calendar_available_and_gcal_consistent(self):
-        """Test functionality: calendar available and gcal consistent."""
+        """Verify calendar available and gcal consistent behavior."""
         # CALENDAR_AVAILABLE is True iff GCAL_AVAILABLE is True
         assert cal_module.CALENDAR_AVAILABLE == cal_module.GCAL_AVAILABLE
 
     def test_google_calendar_none_when_unavailable(self):
-        """Test functionality: google calendar none when unavailable."""
+        """Verify google calendar none when unavailable behavior."""
         if not cal_module.CALENDAR_AVAILABLE:
             assert cal_module.GoogleCalendar is None
 
@@ -215,38 +215,38 @@ class TestCalendarExceptions:
     """Tests for exception classes and hierarchy."""
 
     def test_calendar_error_is_base(self):
-        """Test functionality: calendar error is base."""
+        """Verify calendar error is base behavior."""
         assert issubclass(CalendarAuthError, CalendarError)
         assert issubclass(CalendarAPIError, CalendarError)
         assert issubclass(EventNotFoundError, CalendarError)
         assert issubclass(InvalidEventError, CalendarError)
 
     def test_calendar_error_is_exception(self):
-        """Test functionality: calendar error is exception."""
+        """Verify calendar error is exception behavior."""
         assert issubclass(CalendarError, Exception)
 
     def test_calendar_auth_error_can_be_raised(self):
-        """Test functionality: calendar auth error can be raised."""
+        """Verify calendar auth error can be raised behavior."""
         with pytest.raises(CalendarAuthError):
             raise CalendarAuthError("Invalid credentials")
 
     def test_calendar_api_error_can_be_raised(self):
-        """Test functionality: calendar api error can be raised."""
+        """Verify calendar api error can be raised behavior."""
         with pytest.raises(CalendarAPIError):
             raise CalendarAPIError("API returned 500")
 
     def test_event_not_found_error_can_be_raised(self):
-        """Test functionality: event not found error can be raised."""
+        """Verify event not found error can be raised behavior."""
         with pytest.raises(EventNotFoundError):
             raise EventNotFoundError("event_id_xyz")
 
     def test_invalid_event_error_can_be_raised(self):
-        """Test functionality: invalid event error can be raised."""
+        """Verify invalid event error can be raised behavior."""
         with pytest.raises(InvalidEventError):
             raise InvalidEventError("Missing timezone info")
 
     def test_all_exceptions_caught_by_base(self):
-        """Test functionality: all exceptions caught by base."""
+        """Verify all exceptions caught by base behavior."""
         for exc_class in [CalendarAuthError, CalendarAPIError, EventNotFoundError, InvalidEventError]:
             with pytest.raises(CalendarError):
                 raise exc_class("test")
@@ -259,21 +259,21 @@ class TestCalendarModuleExports:
     """Tests that the calendar module exports expected symbols."""
 
     def test_calendar_event_exported(self):
-        """Test functionality: calendar event exported."""
+        """Verify calendar event exported behavior."""
         assert hasattr(cal_module, "CalendarEvent")
 
     def test_calendar_provider_exported(self):
-        """Test functionality: calendar provider exported."""
+        """Verify calendar provider exported behavior."""
         assert hasattr(cal_module, "CalendarProvider")
 
     def test_exceptions_exported(self):
-        """Test functionality: exceptions exported."""
+        """Verify exceptions exported behavior."""
         for name in ["CalendarError", "CalendarAuthError", "CalendarAPIError",
                      "EventNotFoundError", "InvalidEventError"]:
             assert hasattr(cal_module, name), f"Missing export: {name}"
 
     def test_cli_commands_exported(self):
-        """Test functionality: cli commands exported."""
+        """Verify cli commands exported behavior."""
         assert hasattr(cal_module, "cli_commands")
         commands = cal_module.cli_commands()
         assert isinstance(commands, dict)
@@ -359,6 +359,6 @@ class TestGoogleCalendarLive:
 
     @pytest.mark.network
     def test_google_calendar_provider_is_importable(self):
-        """Test functionality: google calendar provider is importable."""
+        """Verify google calendar provider is importable behavior."""
         from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
         assert GoogleCalendar is not None

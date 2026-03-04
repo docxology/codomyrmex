@@ -494,13 +494,13 @@ class TestInfomaniakSwiftClientExpanded:
         return InfomaniakObjectStorageClient(connection=mock_conn), mock_conn
 
     def test_delete_container(self):
-        """Test functionality: delete container."""
+        """Verify delete container behavior."""
         client, mc = self._make_client()
         assert client.delete_container("mybucket") is True
         mc.object_store.delete_container.assert_called_once_with("mybucket")
 
     def test_get_container_metadata(self):
-        """Test functionality: get container metadata."""
+        """Verify get container metadata behavior."""
         client, mc = self._make_client()
         meta = Stub()
         meta.metadata = {"x-count": "5"}
@@ -509,7 +509,7 @@ class TestInfomaniakSwiftClientExpanded:
         assert isinstance(result, dict)
 
     def test_list_objects(self):
-        """Test functionality: list objects."""
+        """Verify list objects behavior."""
         client, mc = self._make_client()
         obj = Stub()
         obj.name = "file.txt"
@@ -518,14 +518,14 @@ class TestInfomaniakSwiftClientExpanded:
         assert result == ["file.txt"]
 
     def test_list_objects_with_prefix(self):
-        """Test functionality: list objects with prefix."""
+        """Verify list objects with prefix behavior."""
         client, mc = self._make_client()
         mc.object_store.objects.return_value = []
         client.list_objects("mybucket", prefix="logs/")
         mc.object_store.objects.assert_called_once_with("mybucket", prefix="logs/")
 
     def test_get_object_metadata(self):
-        """Test functionality: get object metadata."""
+        """Verify get object metadata behavior."""
         client, mc = self._make_client()
         obj = Stub(content_length=1024,
                         content_type="text/plain", etag="abc",
@@ -537,18 +537,18 @@ class TestInfomaniakSwiftClientExpanded:
         assert result["content_length"] == 1024
 
     def test_set_container_read_acl(self):
-        """Test functionality: set container read acl."""
+        """Verify set container read acl behavior."""
         client, mc = self._make_client()
         assert client.set_container_read_acl("mybucket", ".r:*") is True
         mc.object_store.set_container_metadata.assert_called_once()
 
     def test_set_container_write_acl(self):
-        """Test functionality: set container write acl."""
+        """Verify set container write acl behavior."""
         client, mc = self._make_client()
         assert client.set_container_write_acl("mybucket", "user:admin") is True
 
     def test_list_containers_error(self):
-        """Test functionality: list containers error."""
+        """Verify list containers error behavior."""
         client, mc = self._make_client()
         mc.object_store.containers.side_effect = Exception("fail")
         assert client.list_containers() == []
@@ -570,37 +570,37 @@ class TestInfomaniakS3ClientExpanded:
         return InfomaniakS3Client(client=mock_s3), mock_s3
 
     def test_create_bucket(self):
-        """Test functionality: create bucket."""
+        """Verify create bucket behavior."""
         client, s3 = self._make_client()
         assert client.create_bucket("mybucket") is True
         s3.create_bucket.assert_called_once_with(Bucket="mybucket")
 
     def test_delete_bucket(self):
-        """Test functionality: delete bucket."""
+        """Verify delete bucket behavior."""
         client, s3 = self._make_client()
         assert client.delete_bucket("mybucket") is True
         s3.delete_bucket.assert_called_once_with(Bucket="mybucket")
 
     def test_upload_file(self):
-        """Test functionality: upload file."""
+        """Verify upload file behavior."""
         client, s3 = self._make_client()
         assert client.upload_file("bkt", "key.txt", "/tmp/f.txt") is True
         s3.upload_file.assert_called_once_with("/tmp/f.txt", "bkt", "key.txt", ExtraArgs=None)
 
     def test_download_file(self):
-        """Test functionality: download file."""
+        """Verify download file behavior."""
         client, s3 = self._make_client()
         assert client.download_file("bkt", "key.txt", "/tmp/out.txt") is True
         s3.download_file.assert_called_once_with("bkt", "key.txt", "/tmp/out.txt")
 
     def test_delete_file_delegates(self):
-        """Test functionality: delete file delegates."""
+        """Verify delete file delegates behavior."""
         client, s3 = self._make_client()
         assert client.delete_file("bkt", "key.txt") is True
         s3.delete_object.assert_called_once_with(Bucket="bkt", Key="key.txt")
 
     def test_get_metadata(self):
-        """Test functionality: get metadata."""
+        """Verify get metadata behavior."""
         client, s3 = self._make_client()
         s3.head_object.return_value = {
             "ContentLength": 100, "ContentType": "text/plain",
@@ -612,7 +612,7 @@ class TestInfomaniakS3ClientExpanded:
         assert result["content_type"] == "text/plain"
 
     def test_copy_object(self):
-        """Test functionality: copy object."""
+        """Verify copy object behavior."""
         client, s3 = self._make_client()
         assert client.copy_object("src", "sk", "dst", "dk") is True
         s3.copy_object.assert_called_once_with(
@@ -621,7 +621,7 @@ class TestInfomaniakS3ClientExpanded:
         )
 
     def test_list_objects_paginated(self):
-        """Test functionality: list objects paginated."""
+        """Verify list objects paginated behavior."""
         client, s3 = self._make_client()
         paginator = Stub()
         paginator.paginate.return_value = [
@@ -632,7 +632,7 @@ class TestInfomaniakS3ClientExpanded:
         assert result == ["a.txt", "b.txt"]
 
     def test_delete_objects_batch(self):
-        """Test functionality: delete objects batch."""
+        """Verify delete objects batch behavior."""
         client, s3 = self._make_client()
         s3.delete_objects.return_value = {
             "Deleted": [{"Key": "a.txt"}, {"Key": "b.txt"}],
@@ -643,31 +643,31 @@ class TestInfomaniakS3ClientExpanded:
         assert result["errors"] == []
 
     def test_enable_versioning(self):
-        """Test functionality: enable versioning."""
+        """Verify enable versioning behavior."""
         client, s3 = self._make_client()
         assert client.enable_versioning("bkt") is True
         s3.put_bucket_versioning.assert_called_once()
 
     def test_get_versioning(self):
-        """Test functionality: get versioning."""
+        """Verify get versioning behavior."""
         client, s3 = self._make_client()
         s3.get_bucket_versioning.return_value = {"Status": "Enabled"}
         assert client.get_versioning("bkt") == "Enabled"
 
     def test_get_bucket_policy(self):
-        """Test functionality: get bucket policy."""
+        """Verify get bucket policy behavior."""
         client, s3 = self._make_client()
         s3.get_bucket_policy.return_value = {"Policy": '{"Version":"2012"}'}
         assert client.get_bucket_policy("bkt") == '{"Version":"2012"}'
 
     def test_put_bucket_policy(self):
-        """Test functionality: put bucket policy."""
+        """Verify put bucket policy behavior."""
         client, s3 = self._make_client()
         assert client.put_bucket_policy("bkt", '{"Version":"2012"}') is True
         s3.put_bucket_policy.assert_called_once()
 
     def test_list_buckets_error(self):
-        """Test functionality: list buckets error."""
+        """Verify list buckets error behavior."""
         client, s3 = self._make_client()
         s3.list_buckets.side_effect = Exception("fail")
         assert client.list_buckets() == []

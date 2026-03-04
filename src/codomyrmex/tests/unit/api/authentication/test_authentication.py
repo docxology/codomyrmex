@@ -25,31 +25,31 @@ class TestAuthType:
     """Verify AuthType enum members and values."""
 
     def test_api_key_member(self):
-        """Test functionality: api key member."""
+        """Verify api key member behavior."""
         assert AuthType.API_KEY.value == "api_key"
 
     def test_bearer_token_member(self):
-        """Test functionality: bearer token member."""
+        """Verify bearer token member behavior."""
         assert AuthType.BEARER_TOKEN.value == "bearer_token"
 
     def test_basic_auth_member(self):
-        """Test functionality: basic auth member."""
+        """Verify basic auth member behavior."""
         assert AuthType.BASIC_AUTH.value == "basic_auth"
 
     def test_oauth2_member(self):
-        """Test functionality: oauth2 member."""
+        """Verify oauth2 member behavior."""
         assert AuthType.OAUTH2.value == "oauth2"
 
     def test_hmac_member(self):
-        """Test functionality: hmac member."""
+        """Verify hmac member behavior."""
         assert AuthType.HMAC.value == "hmac"
 
     def test_jwt_member(self):
-        """Test functionality: jwt member."""
+        """Verify jwt member behavior."""
         assert AuthType.JWT.value == "jwt"
 
     def test_member_count(self):
-        """Test functionality: member count."""
+        """Verify member count behavior."""
         assert len(AuthType) == 6
 
 
@@ -57,7 +57,7 @@ class TestAuthCredentials:
     """Verify AuthCredentials dataclass field access and defaults."""
 
     def test_field_access(self):
-        """Test functionality: field access."""
+        """Verify field access behavior."""
         creds = AuthCredentials(
             auth_type=AuthType.API_KEY,
             identifier="user-123",
@@ -69,12 +69,12 @@ class TestAuthCredentials:
         assert creds.metadata == {}
 
     def test_metadata_default_is_empty_dict(self):
-        """Test functionality: metadata default is empty dict."""
+        """Verify metadata default is empty dict behavior."""
         creds = AuthCredentials(AuthType.BASIC_AUTH, "u", "p")
         assert creds.metadata == {}
 
     def test_metadata_custom(self):
-        """Test functionality: metadata custom."""
+        """Verify metadata custom behavior."""
         creds = AuthCredentials(AuthType.HMAC, "c", "s", metadata={"env": "prod"})
         assert creds.metadata["env"] == "prod"
 
@@ -83,7 +83,7 @@ class TestAuthResult:
     """Verify AuthResult defaults and to_dict serialization."""
 
     def test_defaults(self):
-        """Test functionality: defaults."""
+        """Verify defaults behavior."""
         result = AuthResult(authenticated=False)
         assert result.authenticated is False
         assert result.identity is None
@@ -94,7 +94,7 @@ class TestAuthResult:
         assert result.metadata == {}
 
     def test_to_dict_unauthenticated(self):
-        """Test functionality: to dict unauthenticated."""
+        """Verify to dict unauthenticated behavior."""
         result = AuthResult(authenticated=False, error="denied")
         d = result.to_dict()
         assert d["authenticated"] is False
@@ -102,7 +102,7 @@ class TestAuthResult:
         assert d["expires_at"] is None
 
     def test_to_dict_authenticated_with_expiry(self):
-        """Test functionality: to dict authenticated with expiry."""
+        """Verify to dict authenticated with expiry behavior."""
         exp = datetime(2030, 1, 1, 0, 0, 0)
         result = AuthResult(
             authenticated=True,
@@ -128,7 +128,7 @@ class TestAPIKeyAuthenticator:
         self.auth.register_key(self.valid_key, identity="svc-billing", scopes=["read"])
 
     def test_authenticate_success_via_header(self):
-        """Test functionality: authenticate success via header."""
+        """Verify authenticate success via header behavior."""
         request = {"headers": {"X-API-Key": self.valid_key}}
         result = self.auth.authenticate(request)
         assert result.authenticated is True
@@ -136,7 +136,7 @@ class TestAPIKeyAuthenticator:
         assert "read" in result.scopes
 
     def test_authenticate_success_via_query_param(self):
-        """Test functionality: authenticate success via query param."""
+        """Verify authenticate success via query param behavior."""
         auth = APIKeyAuthenticator(query_param="api_key")
         auth.register_key("qk_1", identity="web")
         request = {"headers": {}, "query": {"api_key": "qk_1"}}
@@ -145,20 +145,20 @@ class TestAPIKeyAuthenticator:
         assert result.identity == "web"
 
     def test_authenticate_missing_key(self):
-        """Test functionality: authenticate missing key."""
+        """Verify authenticate missing key behavior."""
         result = self.auth.authenticate({"headers": {}})
         assert result.authenticated is False
         assert result.error == "API key not provided"
 
     def test_authenticate_invalid_key(self):
-        """Test functionality: authenticate invalid key."""
+        """Verify authenticate invalid key behavior."""
         request = {"headers": {"X-API-Key": "bad-key"}}
         result = self.auth.authenticate(request)
         assert result.authenticated is False
         assert result.error == "Invalid API key"
 
     def test_authenticate_expired_key(self):
-        """Test functionality: authenticate expired key."""
+        """Verify authenticate expired key behavior."""
         expired = datetime.now() - timedelta(hours=1)
         self.auth.register_key("exp_key", identity="old", expires_at=expired)
         request = {"headers": {"X-API-Key": "exp_key"}}
@@ -167,24 +167,24 @@ class TestAPIKeyAuthenticator:
         assert result.error == "API key expired"
 
     def test_revoke_key(self):
-        """Test functionality: revoke key."""
+        """Verify revoke key behavior."""
         self.auth.revoke_key(self.valid_key)
         request = {"headers": {"X-API-Key": self.valid_key}}
         result = self.auth.authenticate(request)
         assert result.authenticated is False
 
     def test_revoke_nonexistent_key_does_not_raise(self):
-        """Test functionality: revoke nonexistent key does not raise."""
+        """Verify revoke nonexistent key does not raise behavior."""
         self.auth.revoke_key("nonexistent")  # should not raise
 
     def test_generate_key_default_prefix(self):
-        """Test functionality: generate key default prefix."""
+        """Verify generate key default prefix behavior."""
         key = APIKeyAuthenticator.generate_key()
         assert key.startswith("sk_")
         assert len(key) > 10
 
     def test_generate_key_custom_prefix(self):
-        """Test functionality: generate key custom prefix."""
+        """Verify generate key custom prefix behavior."""
         key = APIKeyAuthenticator.generate_key(prefix="pk")
         assert key.startswith("pk_")
 
@@ -196,7 +196,7 @@ class TestBearerTokenAuthenticator:
         self.auth = BearerTokenAuthenticator()
 
     def test_create_token_and_authenticate(self):
-        """Test functionality: create token and authenticate."""
+        """Verify create token and authenticate behavior."""
         token = self.auth.create_token("alice", scopes=["read"])
         request = {"headers": {"Authorization": f"Bearer {token}"}}
         result = self.auth.authenticate(request)
@@ -205,26 +205,26 @@ class TestBearerTokenAuthenticator:
         assert "read" in result.scopes
 
     def test_authenticate_missing_bearer_prefix(self):
-        """Test functionality: authenticate missing bearer prefix."""
+        """Verify authenticate missing bearer prefix behavior."""
         request = {"headers": {"Authorization": "Token abc"}}
         result = self.auth.authenticate(request)
         assert result.authenticated is False
         assert result.error == "Bearer token not provided"
 
     def test_authenticate_missing_authorization_header(self):
-        """Test functionality: authenticate missing authorization header."""
+        """Verify authenticate missing authorization header behavior."""
         result = self.auth.authenticate({"headers": {}})
         assert result.authenticated is False
 
     def test_authenticate_invalid_token(self):
-        """Test functionality: authenticate invalid token."""
+        """Verify authenticate invalid token behavior."""
         request = {"headers": {"Authorization": "Bearer invalid_tok"}}
         result = self.auth.authenticate(request)
         assert result.authenticated is False
         assert result.error == "Invalid token"
 
     def test_authenticate_expired_token(self):
-        """Test functionality: authenticate expired token."""
+        """Verify authenticate expired token behavior."""
         token = self.auth.create_token("bob", ttl_seconds=0)
         # Allow token to expire
         time.sleep(0.05)
@@ -234,7 +234,7 @@ class TestBearerTokenAuthenticator:
         assert result.error == "Token expired"
 
     def test_custom_validator_takes_precedence(self):
-        """Test functionality: custom validator takes precedence."""
+        """Verify custom validator takes precedence behavior."""
         def my_validator(tok):
             if tok == "magic":
                 return {"identity": "wizard", "scopes": ["all"]}
@@ -247,7 +247,7 @@ class TestBearerTokenAuthenticator:
         assert result.identity == "wizard"
 
     def test_custom_validator_returns_none_falls_through(self):
-        """Test functionality: custom validator returns none falls through."""
+        """Verify custom validator returns none falls through behavior."""
         auth = BearerTokenAuthenticator(validator=lambda t: None)
         request = {"headers": {"Authorization": "Bearer unknown"}}
         result = auth.authenticate(request)
@@ -267,7 +267,7 @@ class TestBasicAuthenticator:
         return {"headers": {"Authorization": f"Basic {encoded}"}}
 
     def test_authenticate_success(self):
-        """Test functionality: authenticate success."""
+        """Verify authenticate success behavior."""
         request = self._make_request("admin", "hunter2")
         result = self.auth.authenticate(request)
         assert result.authenticated is True
@@ -275,27 +275,27 @@ class TestBasicAuthenticator:
         assert "admin" in result.roles
 
     def test_authenticate_wrong_password(self):
-        """Test functionality: authenticate wrong password."""
+        """Verify authenticate wrong password behavior."""
         request = self._make_request("admin", "wrong")
         result = self.auth.authenticate(request)
         assert result.authenticated is False
         assert result.error == "Invalid password"
 
     def test_authenticate_unknown_user(self):
-        """Test functionality: authenticate unknown user."""
+        """Verify authenticate unknown user behavior."""
         request = self._make_request("nobody", "pass")
         result = self.auth.authenticate(request)
         assert result.authenticated is False
         assert result.error == "User not found"
 
     def test_authenticate_missing_header(self):
-        """Test functionality: authenticate missing header."""
+        """Verify authenticate missing header behavior."""
         result = self.auth.authenticate({"headers": {}})
         assert result.authenticated is False
         assert result.error == "Basic auth not provided"
 
     def test_authenticate_malformed_base64(self):
-        """Test functionality: authenticate malformed base64."""
+        """Verify authenticate malformed base64 behavior."""
         request = {"headers": {"Authorization": "Basic %%%invalid%%"}}
         result = self.auth.authenticate(request)
         assert result.authenticated is False
@@ -324,7 +324,7 @@ class TestHMACAuthenticator:
         }
 
     def test_authenticate_success(self):
-        """Test functionality: authenticate success."""
+        """Verify authenticate success behavior."""
         request = self._signed_request()
         result = self.auth.authenticate(request)
         assert result.authenticated is True
@@ -332,13 +332,13 @@ class TestHMACAuthenticator:
         assert "webhook" in result.scopes
 
     def test_authenticate_missing_headers(self):
-        """Test functionality: authenticate missing headers."""
+        """Verify authenticate missing headers behavior."""
         result = self.auth.authenticate({"headers": {}})
         assert result.authenticated is False
         assert result.error == "Missing authentication headers"
 
     def test_authenticate_old_timestamp(self):
-        """Test functionality: authenticate old timestamp."""
+        """Verify authenticate old timestamp behavior."""
         old_ts = int(time.time()) - 600
         request = self._signed_request(ts=old_ts)
         result = self.auth.authenticate(request)
@@ -346,7 +346,7 @@ class TestHMACAuthenticator:
         assert result.error == "Request too old"
 
     def test_authenticate_invalid_signature(self):
-        """Test functionality: authenticate invalid signature."""
+        """Verify authenticate invalid signature behavior."""
         request = self._signed_request()
         request["headers"]["X-Signature"] = "tampered"
         result = self.auth.authenticate(request)
@@ -354,7 +354,7 @@ class TestHMACAuthenticator:
         assert result.error == "Invalid signature"
 
     def test_authenticate_unknown_client(self):
-        """Test functionality: authenticate unknown client."""
+        """Verify authenticate unknown client behavior."""
         ts = int(time.time())
         request = {
             "headers": {
@@ -369,7 +369,7 @@ class TestHMACAuthenticator:
         assert result.error == "Unknown client"
 
     def test_sign_request_unknown_client_raises(self):
-        """Test functionality: sign request unknown client raises."""
+        """Verify sign request unknown client raises behavior."""
         with pytest.raises(ValueError, match="Unknown client"):
             self.auth.sign_request("ghost", "body")
 
@@ -378,31 +378,31 @@ class TestCreateAuthenticator:
     """Verify the factory function returns correct authenticator types."""
 
     def test_creates_api_key_authenticator(self):
-        """Test functionality: creates api key authenticator."""
+        """Verify creates api key authenticator behavior."""
         auth = create_authenticator(AuthType.API_KEY)
         assert isinstance(auth, APIKeyAuthenticator)
 
     def test_creates_bearer_token_authenticator(self):
-        """Test functionality: creates bearer token authenticator."""
+        """Verify creates bearer token authenticator behavior."""
         auth = create_authenticator(AuthType.BEARER_TOKEN)
         assert isinstance(auth, BearerTokenAuthenticator)
 
     def test_creates_basic_authenticator(self):
-        """Test functionality: creates basic authenticator."""
+        """Verify creates basic authenticator behavior."""
         auth = create_authenticator(AuthType.BASIC_AUTH)
         assert isinstance(auth, BasicAuthenticator)
 
     def test_creates_hmac_authenticator(self):
-        """Test functionality: creates hmac authenticator."""
+        """Verify creates hmac authenticator behavior."""
         auth = create_authenticator(AuthType.HMAC)
         assert isinstance(auth, HMACAuthenticator)
 
     def test_unsupported_type_raises(self):
-        """Test functionality: unsupported type raises."""
+        """Verify unsupported type raises behavior."""
         with pytest.raises(ValueError, match="Unsupported auth type"):
             create_authenticator(AuthType.OAUTH2)
 
     def test_passes_kwargs_to_constructor(self):
-        """Test functionality: passes kwargs to constructor."""
+        """Verify passes kwargs to constructor behavior."""
         auth = create_authenticator(AuthType.API_KEY, header_name="X-Custom")
         assert auth.header_name == "X-Custom"
