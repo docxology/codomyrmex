@@ -5,7 +5,6 @@ Generates histograms.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-import logging
 
 import matplotlib.pyplot as plt
 
@@ -127,6 +126,7 @@ class Histogram:
 
 
 if __name__ == "__main__":
+    import logging
     import random
     from pathlib import Path
 

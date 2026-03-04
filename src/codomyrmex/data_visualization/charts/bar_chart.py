@@ -5,7 +5,6 @@ Generates bar charts.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-import logging
 
 import matplotlib.pyplot as plt
 
@@ -148,6 +147,7 @@ class BarChart:
 
 
 if __name__ == "__main__":
+    import logging
     from pathlib import Path
 
     output_dir = Path(__file__).parent.parent / "output" / "data_visualization_examples"
