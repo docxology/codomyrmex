@@ -21,7 +21,6 @@ except ImportError:
 
 from codomyrmex.data_visualization.plots._base import BasePlot
 
-
 # ─────────────────────────────────────────────────────────────────────────────
 #  Construction and dataclass defaults
 # ─────────────────────────────────────────────────────────────────────────────

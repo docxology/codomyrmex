@@ -1,93 +1,95 @@
-# CLI Module
+# CLI Module - Codomyrmex
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The CLI module provides the primary command-line interface for the Codomyrmex development platform. Built on Python Fire, it exposes all platform capabilities through a nested subcommand structure including workflow management, project operations, AI code generation, code analysis, FPF operations, skills management, self-diagnostics, and an interactive REPL shell.
+The `cli` module provides the primary command-line interface for the Codomyrmex platform. It is built using the `fire` library, allowing for a nested, intuitive command structure. The CLI serves as a unified entry point for all Codomyrmex capabilities, from environment diagnostics to AI-assisted coding and complex workflow orchestration.
+
+## Design Principles
+
+- **Unified Interface**: One command (`codomyrmex`) to rule them all.
+- **Zero-Mock Testing**: All CLI handlers and core components are verified with real functional tests.
+- **Robust Error Handling**: Graceful degradation when optional modules are missing.
+- **Rich Feedback**: Uses `TerminalFormatter` for colored, structured output.
+- **Extensibility**: Command handlers are modularized in `src/codomyrmex/cli/handlers/`.
 
 ## PAI Integration
 
-| Algorithm Phase | CLI Role |
-|----------------|----------|
-| EXECUTE | Primary user-facing entry point for invoking platform commands |
-| OBSERVE | `codomyrmex status`, `codomyrmex modules`, `codomyrmex doctor` for system inspection |
-| VERIFY | `codomyrmex doctor --all` runs self-diagnostics on PAI, MCP, RASP, workflows, and imports |
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | List available modules and current system status | `codomyrmex modules`, `codomyrmex status` |
+| **EXECUTE** | Trigger code generation, workflows, and build operations | `codomyrmex ai`, `codomyrmex workflow run`, `codomyrmex build` |
+| **VERIFY** | Confirm environment health and run module tests | `codomyrmex check`, `codomyrmex doctor`, `codomyrmex test <module>` |
 
-## Key Exports
+PAI agents invoke the CLI as a subprocess to trigger codomyrmex operations. `codomyrmex check` gates Algorithm cycles by verifying environment health. `codomyrmex test <module>` drives VERIFY-phase validation. `codomyrmex ai generate` and `codomyrmex workflow run` are primary EXECUTE-phase entry points.
 
-| Export | Type | Description |
-|--------|------|-------------|
-| `main` | function | CLI entry point via Python Fire |
-| `check_environment` | function | Verify environment setup and dependencies |
-| `show_info` | function | Display platform information |
-| `show_modules` | function | List available modules and descriptions |
-| `show_system_status` | function | Comprehensive system status dashboard |
-| `run_interactive_shell` | function | Launch the codomyrmex REPL shell |
-| `handle_workflow_create` | function | Create a new workflow definition |
-| `list_workflows` | function | List available workflows |
-| `run_workflow` | function | Execute a named workflow |
-| `handle_project_create` | function | Initialize a new project |
-| `handle_ai_generate` | function | Generate code with AI assistance |
-| `handle_ai_refactor` | function | Refactor existing code |
-| `handle_code_analysis` | function | Run code analysis and linting |
-| `handle_fpf_fetch` | function | Fetch FPF repository data |
-| `handle_skills_list` | function | List available skills |
+## Key Python Exports
 
-## Quick Start
+| Symbol | Description |
+|--------|-------------|
+| `main` | CLI entry point — the `codomyrmex` command |
+| `check_environment` | Verify dependencies and module health |
+| `show_modules` | List all available Codomyrmex modules |
+| `show_system_status` | Full system status dashboard |
+| `run_interactive_shell` | Launch interactive REPL |
+| `handle_ai_generate` | AI code generation handler |
+| `handle_ai_refactor` | AI code refactoring handler |
+| `handle_code_analysis` | Static analysis and linting handler |
+| `run_workflow` | Execute a named workflow |
+| `handle_module_test` | Run tests for a specific module |
+| `handle_skills_sync` | Sync skill definitions from upstream |
 
-```python
-from codomyrmex.cli import main, check_environment, show_modules
+## Command Structure
 
-# Run environment check
-check_environment()
+The CLI is organized into several command groups:
 
-# List available modules
-show_modules()
-```
+### System & Diagnostics
+- `codomyrmex info`: Show platform information.
+- `codomyrmex check`: Verify environment setup and dependencies.
+- `codomyrmex modules`: List all available modules.
+- `codomyrmex status`: Show comprehensive system status dashboard.
+- `codomyrmex doctor`: Run self-diagnostics on the ecosystem.
 
-## Architecture
+### Development Tools
+- `codomyrmex ai [generate|refactor]`: AI-powered code operations.
+- `codomyrmex analyze [code|git]`: Static code and git history analysis.
+- `codomyrmex build project`: Orchestrate build pipelines.
+- `codomyrmex test <module_name>`: Run unit tests for a specific module.
+- `codomyrmex demo <module_name>`: Run module demonstrations.
 
-```
-cli/
-  __init__.py          # Module exports (main + 40 handler functions)
-  core.py              # Cli class (Python Fire entry point)
-  doctor.py            # Self-diagnostic checks (PAI, MCP, RASP, workflows, imports)
-  commands.py          # Command definitions
-  completion.py        # Shell completion support
-  utils.py             # Shared utilities (logger, performance monitoring check)
-  mcp_tools.py         # MCP tool definitions
-  handlers/            # Command handler implementations
-    ai.py              # AI generate and refactor handlers
-    analysis.py        # Code and git analysis handlers
-    chat.py            # Infinite conversation handler
-    demos.py           # Module demonstration handlers
-    fpf.py             # FPF operation handlers
-    orchestration.py   # Orchestration status and health handlers
-    quick.py           # Quick run/pipe/batch handlers
-    skills.py          # Skills management handlers
-    system.py          # System info/modules/status/shell handlers
-  completions/         # Shell completion scripts
-  formatters/          # Output formatting utilities
-  parsers/             # Input parsing utilities
-  themes/              # Terminal color themes
-```
+### Orchestration & Workflows
+- `codomyrmex workflow [list|run|create]`: Manage and execute workflows.
+- `codomyrmex project [list|create]`: Project-level management.
+- `codomyrmex orchestration [status|health]`: Monitor the orchestration engine.
 
-## MCP Tools
+### Advanced Features
+- `codomyrmex fpf [fetch|parse|search|visualize|...]`: First Principles Framework tools.
+- `codomyrmex skills [sync|list|get|search]`: Manage agentic skills.
+- `codomyrmex chat`: Launch AI-agent conversation loop.
+- `codomyrmex shell`: Interactive REPL shell.
 
-| Tool Name | Description | Parameters |
-|-----------|-------------|------------|
-| `cli_list_commands` | List all available CLI commands by introspecting the Cli class | None |
-| `cli_run_command` | Execute a CLI command by name | `command` (str), `args` (JSON string, optional) |
+### Quick Orchestration
+- `codomyrmex run <target>`: Quick run a script or module.
+- `codomyrmex pipe <commands>`: Chain commands sequentially.
+- `codomyrmex batch <targets>`: Run multiple targets in parallel.
+
+## Directory Layout
+
+- `core.py`: Main CLI entry point and `Cli` class definition.
+- `doctor.py`: System diagnostic implementation.
+- `handlers/`: Domain-specific command implementations.
+- `utils.py`: Shared CLI utilities and formatting.
 
 ## Testing
 
+Verified with integrated tests using the Zero-Mock policy:
 ```bash
-uv run pytest src/codomyrmex/tests/unit/cli/ -v
+uv run pytest src/codomyrmex/tests/unit/cli/test_cli_integrated.py
 ```
 
 ## Navigation
 
-- [AGENTS.md](AGENTS.md) -- Agent coordination documentation
-- [SPEC.md](SPEC.md) -- Technical specification
-- [Source Module](../../../../cli/)
+- [Technical Specification](SPEC.md)
+- [Agent Guidelines](AGENTS.md)
+- [Parent Directory](../README.md)

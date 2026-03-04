@@ -1,48 +1,100 @@
-# Model Ops
+# Model Ops Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Model Operations module for Codomyrmex.
+ML model operations module providing dataset management, fine-tuning job orchestration, and model evaluation with pluggable metrics. The `Dataset` class manages training/evaluation data collections with JSONL I/O and validation for prompt/completion and messages formats. `DatasetSanitizer` filters and cleans datasets by length and key stripping. `FineTuningJob` simulates fine-tuning workflows with status tracking. The `evaluation` submodule provides a comprehensive metrics framework with accuracy, precision, recall, F1, confusion matrix, MSE, MAE, RMSE, R-squared, and AUC-ROC.
 
-## Architecture Overview
+## PAI Integration
 
-```
-model_ops/
-    __init__.py              # Public API exports
-    mcp_tools.py             # MCP tool definitions
-```
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Monitor model metrics and training status | Direct Python import |
+| **VERIFY** | Evaluate model quality with pluggable scorers | Direct Python import |
+| **LEARN** | Capture model performance data for iteration | Direct Python import |
+
+PAI agents access this module via direct Python import through the MCP bridge. The Engineer agent imports `ModelEvaluator` and metric classes during VERIFY to score model outputs against ground truth.
 
 ## Key Exports
 
-- **`optimization`**
-- **`registry`**
-- **`cli_commands`**
-- **`evaluation`**
-- **`training`**
-- **`Dataset`**
-- **`DatasetSanitizer`**
-- **`FineTuningJob`**
-- **`Evaluator`**
-- **`Scorer`**
-- **`ExactMatchScorer`**
-- **`ContainsScorer`**
-- **`LengthScorer`**
-- **`RegexScorer`**
-- **`CompositeScorer`**
+### Submodules
 
-## MCP Tools Reference
+- **`evaluation`** -- Comprehensive model evaluation framework with typed metrics
+- **`training`** -- Training pipeline configuration and execution
 
-| Tool | Trust Level |
-|------|-------------|
-| `model_ops_list_scorers` | Safe |
+### Core Classes
 
-## Related Modules
+- **`Dataset`** -- Collection of training/evaluation examples with JSONL I/O, validation for prompt/completion and messages formats
+- **`DatasetSanitizer`** -- Utilities for filtering datasets by content length and stripping unwanted keys
+- **`FineTuningJob`** -- Fine-tuning job lifecycle management with status tracking (pending/running/completed)
+- **`Evaluator`** -- Model output evaluator with pluggable custom metric functions
 
-See [All Modules](../README.md) for the complete module listing.
+### Evaluation Framework
+
+- **`TaskType`** -- Enum of evaluation task types (classification, regression, etc.)
+- **`EvaluationResult`** -- Container for evaluation results across metrics
+- **`Metric`** -- Base metric class for evaluation
+- **`AccuracyMetric`** -- Classification accuracy metric
+- **`PrecisionMetric`** -- Classification precision metric
+- **`RecallMetric`** -- Classification recall metric
+- **`F1Metric`** -- F1 score (harmonic mean of precision and recall)
+- **`ConfusionMatrix`** -- Confusion matrix computation and analysis
+- **`MSEMetric`** -- Mean Squared Error for regression tasks
+- **`MAEMetric`** -- Mean Absolute Error for regression tasks
+- **`RMSEMetric`** -- Root Mean Squared Error for regression tasks
+- **`R2Metric`** -- R-squared (coefficient of determination) for regression
+- **`AUCROCMetric`** -- Area Under ROC Curve for binary classification
+- **`ModelEvaluator`** -- High-level evaluator orchestrating multiple metrics
+- **`create_evaluator()`** -- Factory function to create a configured ModelEvaluator
+
+### Convenience Metric Functions
+
+- **`exact_match_metric()`** -- Calculate exact match ratio between predictions and references (strips whitespace)
+- **`length_ratio_metric()`** -- Calculate average length ratio between predictions and references
+
+## Directory Contents
+
+- `__init__.py` - Module entry point with Dataset, DatasetSanitizer, FineTuningJob, Evaluator, and metric functions
+- `evaluation/` - Comprehensive metrics framework (Metric base class, typed metrics, ModelEvaluator)
+- `training/` - Training pipeline configuration and execution
+- `datasets/` - Additional dataset utilities and loaders
+- `fine_tuning/` - Fine-tuning job management extensions
+- `evaluators.py` - Legacy evaluator implementations
+
+## Quick Start
+
+```python
+from codomyrmex.model_ops import Dataset, DatasetSanitizer
+
+# Create a Dataset instance
+dataset = Dataset()
+
+# Use DatasetSanitizer for additional functionality
+datasetsanitizer = DatasetSanitizer()
+```
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
+```
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`evaluation/`** | LLM output scoring, benchmark suites, A/B comparison |
+| **`registry/`** | Model versioning and artifact management |
+| **`optimization/`** | Model quantization, ONNX export, inference acceleration |
+| **`vector_store/`** | ML feature management and storage |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/model_ops/](../../../../src/codomyrmex/model_ops/)
-- **Parent**: [All Modules](../README.md)
+- **Full Documentation**: [docs/modules/model_ops/](../../../docs/modules/model_ops/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

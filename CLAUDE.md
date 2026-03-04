@@ -312,12 +312,13 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: .desloppify/external_review_sessions/ext_20260304_020207_d630a6ce/review_result.json (create), src/codomyrmex/utils/process/subprocess.py (edit), src/codomyrmex/utils/process/__init__.py (edit), src/codomyrmex/utils/__init__.py (edit), src/codomyrmex/tests/unit/utils/test_subprocess.py (edit)
+Files: src/codomyrmex/agents/jules/jules_client.py (edit), src/codomyrmex/agents/jules/mcp_tools.py (edit), MEMORY/WORK/20260304-120000_collab-unit-tests/PRD.md (create), MEMORY/WORK/20260304-120000_collab-unit-tests/PRD.md (edit), MEMORY/WORK/20260304-120000_events-module-tests/PRD.md (create), MEMORY/WORK/20260304-000000_meme-unit-tests/PRD.md (create), MEMORY/WORK/20260304-000000_meme-unit-tests/PRD.md (edit), src/codomyrmex/tests/unit/meme/test_cultural_dynamics.py (create), src/codomyrmex/tests/unit/meme/test_swarm.py (create), src/codomyrmex/tests/unit/collaboration/test_collaboration_comprehensive.py (create)
+  ... and 132 more
 
 ## Crash Recovery
-Last session (2026-03-03T17:59:01.058726) was not properly closed (crash/kill).
-Recorded 8 file changes before crash.
-Last changed files: src/codomyrmex/tests/unit/utils/test_subprocess.py, src/codomyrmex/utils/__init__.py, src/codomyrmex/utils/process/__init__.py, src/codomyrmex/utils/process/subprocess.py, .desloppify/external_review_sessions/ext_20260304_020207_d630a6ce/review_result.json
+Last session (2026-03-04T05:02:54.227253) was not properly closed (crash/kill).
+Recorded 176 file changes before crash.
+Last changed files: src/codomyrmex/tests/unit/coding/test_debugging_extended.py, src/codomyrmex/tests/unit/security/test_vulnerability_scanner.py, src/codomyrmex/tests/unit/coding/test_mcp_tools_coding.py, src/codomyrmex/tests/unit/security/test_mcp_tools.py, src/codomyrmex/tests/unit/coding/test_coding_exceptions.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

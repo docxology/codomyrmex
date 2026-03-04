@@ -1,41 +1,73 @@
-# Meme
+# Meme Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-codomyrmex.meme — Unified Memetic Warfare & Information Dynamics Module.
+The Meme module is Codomyrmex's advanced memetic analysis engine, providing multi-layered capabilities for studying information propagation, narrative dynamics, and cultural evolution. It bridges semiotics, network theory, and computational linguistics.
 
-## Architecture Overview
+## PAI Integration
 
-```
-meme/
-    __init__.py              # Public API exports
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Generate meme content and visual compositions | Direct Python import |
+| **EXECUTE** | Render and export meme artifacts | Direct Python import |
+
+PAI Engineer agents access this module directly via Python import during BUILD phase for content generation. No MCP tools are exposed; invoke via `from codomyrmex.meme import ...`.
+
+## Installation
+
+```bash
+uv add codomyrmex
 ```
 
 ## Key Exports
 
-- **`Meme`**
-- **`Memeplex`**
-- **`MemeticCode`**
-- **`FitnessMap`**
-- **`MemeticEngine`**
-- **`Sign`**
-- **`SignType`**
-- **`DriftReport`**
-- **`SemioticAnalyzer`**
-- **`ContagionModel`**
-- **`CascadeDetector`**
-- **`PropagationTrace`**
-- **`Cascade`**
-- **`CascadeType`**
-- **`ResonanceMap`**
+### Core Memetics
 
-## Related Modules
+| Submodule | Classes | Purpose |
+|-----------|---------|---------|
+| `memetics` | `MemeticAnalyzer`, `MemeticPattern`, `MutationTracker` | Core meme analysis and mutation tracking |
+| `semiotic` | `Sign`, `CodeSystem`, `Signifier`, `Signified`, `SemioticAnalyzer` | Sign theory and semiotic analysis |
+| `contagion` | `ContagionModel`, `ContagionResult`, `Strain` | Information contagion and propagation modeling |
+| `narrative` | `NarrativeEngine`, `StoryArc`, `NarrativeElement` | Narrative construction and analysis |
 
-See [All Modules](../README.md) for the complete module listing.
+### Advanced Analysis
+
+| Submodule | Classes | Purpose |
+|-----------|---------|---------|
+| `cultural_dynamics` | Cultural evolution modeling | Track cultural shift patterns |
+| `swarm` | Swarm intelligence integration | Collective decision-making |
+| `neurolinguistic` | Neuro-linguistic processing | Language influence modeling |
+| `hyperreality` | Simulation/hyperreality analysis | Baudrillard-inspired reality layers |
+| `ideoscape` | Ideological landscape mapping | Idea migration and clustering |
+| `rhizome` | Non-hierarchical network analysis | Deleuze & Guattari-inspired connections |
+| `epistemic` | Epistemic verification | Knowledge validation and truthfulness |
+
+## Quick Start
+
+```python
+from codomyrmex.meme import MemeticAnalyzer, MemeticPattern, ContagionModel
+
+# Analyze memetic patterns in content
+analyzer = MemeticAnalyzer()
+patterns = analyzer.detect(content="AI agents will revolutionize coding")
+
+# Model information contagion
+model = ContagionModel()
+result = model.simulate(
+    initial_carriers=10,
+    population=1000,
+    virality=0.3,
+    duration=30
+)
+```
+
+## Architecture
+
+The module has 11 specialized submodules spanning sign theory, network theory, and computational linguistics. See [SPEC.md](SPEC.md) for the full architecture details.
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/meme/](../../../../src/codomyrmex/meme/)
-- **Parent**: [All Modules](../README.md)
+- **Extended Docs**: [docs/modules/meme/](../../../docs/modules/meme/)
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

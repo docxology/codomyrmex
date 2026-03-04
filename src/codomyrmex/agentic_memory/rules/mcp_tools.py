@@ -1,10 +1,12 @@
 """MCP tools for the rules submodule.
 
-Exposes three safe, auto-discovered tools that allow AI agents to query
+Exposes safe, auto-discovered tools that allow AI agents to query
 the .cursorrules hierarchy programmatically via the PAI MCP bridge.
 """
 
 from __future__ import annotations
+
+from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -162,3 +164,24 @@ def rules_list_all() -> list[dict]:
         }
         for r in RuleEngine().list_all_rules()
     ]
+
+
+@mcp_tool(
+    category="agentic_memory",
+    description=(
+        "Generate a Mermaid flowchart of the rule priority hierarchy. "
+        "Shows GENERAL -> CROSS_MODULE -> MODULE -> FILE_SPECIFIC with actual rule names."
+    ),
+)
+def rules_visualize() -> dict[str, Any]:
+    """Return Mermaid diagram of all rules organized by priority."""
+    from .engine import RuleEngine
+
+    engine = RuleEngine()
+    diagram = engine.visualize()
+    rule_count = len(engine.list_all_rules())
+    return {
+        "status": "success",
+        "diagram": diagram,
+        "rule_count": rule_count,
+    }

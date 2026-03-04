@@ -34,6 +34,8 @@ from .handlers import (
     handle_quick_pipe,
     handle_quick_run,
     handle_quick_workflow,
+    handle_rules_check,
+    handle_rules_list,
     handle_skills_get,
     handle_skills_list,
     handle_skills_search,
@@ -274,6 +276,17 @@ class Cli:
         def search(self, query: str):
             """Search skills by query"""
             return handle_skills_search(query)
+
+    class rules:
+        """Rules management — query .cursorrules governance hierarchy"""
+
+        def list(self):
+            """List all rules with their priority and file path"""
+            return handle_rules_list()
+
+        def check(self, file: str):
+            """Check applicable rules for a given file path"""
+            return handle_rules_check(file)
 
     def test(self, module_name):
         """Run tests for a specific module"""

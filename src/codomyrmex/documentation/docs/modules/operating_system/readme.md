@@ -1,53 +1,96 @@
-# Operating System
+# Operating System Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+Cross-platform operating system abstraction with generic methods and platform-specific submodules for macOS, Linux, and Windows.
 
-Codomyrmex Operating System Module.
+## PAI Integration
 
-## Architecture Overview
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **OBSERVE** | Gather system info, detect platform, enumerate processes | `os_system_info`, `os_list_processes` |
+| **PLAN** | Check disk space and network before resource-heavy tasks | `os_disk_usage`, `os_network_info` |
+| **VERIFY** | Confirm command execution results | `os_execute_command` |
 
+## Installation
+
+```bash
+uv sync
 ```
-operating_system/
-    __init__.py              # Public API exports
-    mcp_tools.py             # MCP tool definitions
-```
+
+No external dependencies — uses `subprocess` + native OS commands only.
 
 ## Key Exports
 
-- **`OSPlatform`**
-- **`ServiceStatus`**
-- **`ProcessStatus`**
-- **`SystemInfo`**
-- **`ProcessInfo`**
-- **`DiskInfo`**
-- **`ServiceInfo`**
-- **`NetworkInfo`**
-- **`CommandResult`**
-- **`OSProviderBase`**
-- **`detect_platform`**
-- **`get_provider`**
-- **`get_system_info`**
-- **`list_processes`**
-- **`get_disk_usage`**
+### Enums
 
-## MCP Tools Reference
+- **`OSPlatform`** — `MACOS`, `LINUX`, `WINDOWS`, `UNKNOWN`
+- **`ServiceStatus`** — `RUNNING`, `STOPPED`, `UNKNOWN`
+- **`ProcessStatus`** — `RUNNING`, `SLEEPING`, `STOPPED`, `ZOMBIE`, `UNKNOWN`
 
-| Tool | Trust Level |
-|------|-------------|
-| `os_system_info` | Safe |
-| `os_list_processes` | Safe |
-| `os_disk_usage` | Safe |
-| `os_network_info` | Safe |
-| `os_execute_command` | Safe |
-| `os_environment_variables` | Safe |
+### Data Models
 
-## Related Modules
+- **`SystemInfo`** — hostname, platform, architecture, CPU, memory, kernel, uptime
+- **`ProcessInfo`** — pid, name, status, cpu_percent, memory, user, command
+- **`DiskInfo`** — device, mountpoint, fstype, total/used/free bytes, percent
+- **`ServiceInfo`** — name, status, pid, enabled
+- **`NetworkInfo`** — interface, IP, MAC, is_up
+- **`CommandResult`** — command, exit_code, stdout, stderr, duration_ms
 
-See [All Modules](../README.md) for the complete module listing.
+### Generic Functions
 
-## Navigation
+- **`detect_platform()`** — Detect current OS
+- **`get_provider()`** — Get platform-specific provider (cached)
+- **`get_system_info()`** — System info for current platform
+- **`list_processes(limit=50)`** — Running processes
+- **`get_disk_usage()`** — Mounted filesystem usage
+- **`get_services(pattern="")`** — System services
+- **`get_network_interfaces()`** — Network interface info
+- **`execute_command(cmd, timeout=30)`** — Run a shell command
+- **`get_environment_variables(prefix="")`** — Env vars
 
-- **Source**: [src/codomyrmex/operating_system/](../../../../src/codomyrmex/operating_system/)
-- **Parent**: [All Modules](../README.md)
+## Quick Start
+
+```python
+from codomyrmex.operating_system import (
+    detect_platform, get_system_info, list_processes,
+    get_disk_usage, execute_command,
+)
+
+# Detect current platform
+print(detect_platform())  # OSPlatform.MACOS
+
+# System information
+info = get_system_info()
+print(f"{info.hostname} — {info.architecture} — {info.cpu_count} cores")
+
+# Running processes
+for proc in list_processes(limit=10):
+    print(f"  [{proc.pid}] {proc.name}")
+
+# Disk usage
+for disk in get_disk_usage():
+    print(f"  {disk.mountpoint}: {disk.percent_used}%")
+
+# Execute a command
+result = execute_command("echo hello")
+print(result.stdout)  # "hello"
+```
+
+## Platform Submodules
+
+| Platform | Provider | Native Commands |
+|----------|----------|----------------|
+| macOS | `MacOSProvider` | `sw_vers`, `sysctl`, `ps`, `df`, `launchctl`, `ifconfig` |
+| Linux | `LinuxProvider` | `/proc`, `uname`, `df`, `systemctl`, `ip`, `ps` |
+| Windows | `WindowsProvider` | `wmic`, `PowerShell`, `tasklist`, `Get-Service`, `Get-NetAdapter` |
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/unit/operating_system/ -v
+```
+
+## Documentation
+
+- [Agent Guide](AGENTS.md) | [Specification](SPEC.md) | [PAI](PAI.md)

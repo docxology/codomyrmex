@@ -1,11 +1,12 @@
 """Strictly zero-mock unit tests for concurrency MCP tools."""
 
 import pytest
+
+from codomyrmex.concurrency import LocalLock, LockManager
 from codomyrmex.concurrency.mcp_tools import (
-    concurrency_pool_status,
     concurrency_list_locks,
+    concurrency_pool_status,
 )
-from codomyrmex.concurrency import LockManager, LocalLock
 
 
 @pytest.mark.unit

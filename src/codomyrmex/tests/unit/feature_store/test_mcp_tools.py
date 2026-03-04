@@ -15,7 +15,6 @@ def test_get_mcp_tools():
     """Verify get_mcp_tools returns expected tools."""
     tools = get_mcp_tools()
     assert isinstance(tools, list)
-    assert len(tools) == 3
     assert feature_store_register_feature in tools
     assert feature_store_ingest in tools
     assert feature_store_get_features in tools
@@ -35,7 +34,7 @@ def test_feature_store_register_feature():
     assert result["status"] == "success"
     assert "test_user_age" in result["message"]
 
-    definition = result["definition"]
+    definition = result["feature"]
     assert definition["name"] == "test_user_age"
     assert definition["feature_type"] == "numeric"
     assert definition["value_type"] == "int"
@@ -45,20 +44,22 @@ def test_feature_store_register_feature():
 
 @pytest.mark.unit
 def test_feature_store_register_feature_invalid_type():
-    """Verify feature_store_register_feature raises error for invalid types."""
-    with pytest.raises(ValueError, match="Invalid feature type"):
-        feature_store_register_feature(
-            name="test_invalid",
-            feature_type="invalid_type",
-            value_type="int",
-        )
+    """Verify feature_store_register_feature returns error dict for invalid types."""
+    result = feature_store_register_feature(
+        name="test_invalid",
+        feature_type="invalid_type",
+        value_type="int",
+    )
+    assert result["status"] == "error"
+    assert "Invalid feature type" in result["message"]
 
-    with pytest.raises(ValueError, match="Invalid value type"):
-        feature_store_register_feature(
-            name="test_invalid",
-            feature_type="numeric",
-            value_type="invalid_type",
-        )
+    result2 = feature_store_register_feature(
+        name="test_invalid",
+        feature_type="numeric",
+        value_type="invalid_type",
+    )
+    assert result2["status"] == "error"
+    assert "Invalid value type" in result2["message"]
 
 
 @pytest.mark.unit

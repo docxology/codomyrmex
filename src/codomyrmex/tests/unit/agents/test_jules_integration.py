@@ -16,7 +16,11 @@ try:
         BaseAgent,
     )
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-    from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
+    from codomyrmex.agents.jules import (
+        JulesClient,
+        JulesIntegrationAdapter,
+        JulesSwarmDispatcher,
+    )
     from codomyrmex.tests.unit.agents.helpers import JULES_AVAILABLE
     _HAS_AGENTS = True
 except ImportError:
@@ -50,6 +54,11 @@ class TestJulesClient:
         assert AgentCapabilities.CODE_ANALYSIS in capabilities
         assert AgentCapabilities.TEXT_COMPLETION in capabilities
         assert AgentCapabilities.STREAMING in capabilities
+
+    def test_jules_client_task_decomposition_capability(self):
+        """Test JulesClient now declares TASK_DECOMPOSITION capability."""
+        client = JulesClient()
+        assert AgentCapabilities.TASK_DECOMPOSITION in client.get_capabilities()
 
     @pytest.mark.skipif(not JULES_AVAILABLE, reason="jules CLI not installed")
     def test_jules_client_execute_success(self):
@@ -143,6 +152,131 @@ class TestJulesClient:
         except Exception:
             # Expected if authentication fails or CLI error
             pytest.skip("Jules CLI authentication or execution failed")
+
+
+class TestJulesBuildArgs:
+    """Test _build_jules_args argument construction logic."""
+
+    def test_build_args_default_new_subcommand(self):
+        """Without a direct command context, args should start with 'new'."""
+        client = JulesClient()
+        args = client._build_jules_args("fix the bug", {})
+        assert args[0] == "new"
+        assert "fix the bug" in args
+
+    def test_build_args_with_repo_and_parallel(self):
+        """Repo and parallel context keys are forwarded to args."""
+        client = JulesClient()
+        args = client._build_jules_args("add tests", {"repo": "acme/myrepo", "parallel": 5})
+        assert "--repo" in args
+        assert "acme/myrepo" in args
+        assert "--parallel" in args
+        assert "5" in args
+
+    def test_build_args_direct_command_passthrough(self):
+        """Known direct commands (auth, list, status) bypass 'new'."""
+        client = JulesClient()
+        for cmd in ["auth", "list", "status", "cancel"]:
+            args = client._build_jules_args("", {"command": cmd})
+            assert args[0] == cmd
+            assert "new" not in args
+
+    def test_build_args_unknown_command_falls_back_to_new(self):
+        """Unknown command values should fall through to 'new' subcommand."""
+        client = JulesClient()
+        args = client._build_jules_args("task", {"command": "unknownxyz"})
+        assert args[0] == "new"
+
+    def test_build_args_direct_command_with_extra_args(self):
+        """Extra args are appended when using a direct command."""
+        client = JulesClient()
+        args = client._build_jules_args("", {"command": "auth", "args": ["login"]})
+        assert args == ["auth", "login"]
+
+
+class TestJulesConfigOverride:
+    """Test that config overrides do not corrupt base-class defaults."""
+
+    def test_empty_config_keeps_default_command(self):
+        """An empty config dict must not overwrite self.command with None."""
+        client = JulesClient(config={})
+        assert client.command is not None
+        assert isinstance(client.command, str)
+
+    def test_none_config_keeps_default_command(self):
+        """config=None must not overwrite self.command with None."""
+        client = JulesClient(config=None)
+        assert client.command is not None
+        assert isinstance(client.command, str)
+
+    def test_explicit_command_config_is_applied(self):
+        """Explicit jules_command in config must override the default."""
+        client = JulesClient(config={"jules_command": "julius"})
+        assert client.command == "julius"
+
+    def test_explicit_timeout_config_is_applied(self):
+        """Explicit jules_timeout in config must override the default."""
+        client = JulesClient(config={"jules_timeout": 60})
+        assert client.timeout == 60
+
+
+class TestJulesSwarmDispatcher:
+    """Test JulesSwarmDispatcher task parsing and batching."""
+
+    def test_dispatcher_initialization(self):
+        """Test dispatcher initializes with client, repo, and empty tasks."""
+        client = JulesClient()
+        dispatcher = JulesSwarmDispatcher(client=client, repo="owner/repo")
+        assert dispatcher.client is client
+        assert dispatcher.repo == "owner/repo"
+        assert dispatcher.tasks == []
+
+    def test_dispatcher_initialization_with_tasks(self):
+        """Test dispatcher accepts a pre-built task list."""
+        client = JulesClient()
+        tasks = ["fix bug A", "add test B", "refactor C"]
+        dispatcher = JulesSwarmDispatcher(client=client, repo="owner/repo", tasks=tasks)
+        assert dispatcher.tasks == tasks
+
+    def test_from_todo_md_parses_open_items(self, tmp_path):
+        """from_todo_md extracts all unchecked '- [ ]' items."""
+        todo = tmp_path / "TODO.md"
+        todo.write_text(
+            "# Backlog\n\n"
+            "- [ ] Fix the coverage gate\n"
+            "- [x] Already done item\n"
+            "- [ ] Add MCP tools\n"
+            "- Regular line\n"
+        )
+        client = JulesClient()
+        dispatcher = JulesSwarmDispatcher.from_todo_md(client, "owner/repo", todo)
+        assert len(dispatcher.tasks) == 2
+        assert "Fix the coverage gate" in dispatcher.tasks
+        assert "Add MCP tools" in dispatcher.tasks
+        assert "Already done item" not in dispatcher.tasks
+
+    def test_from_todo_md_empty_file(self, tmp_path):
+        """from_todo_md on a file with no checkboxes returns empty task list."""
+        todo = tmp_path / "TODO.md"
+        todo.write_text("# No tasks here\n\nJust prose.\n")
+        client = JulesClient()
+        dispatcher = JulesSwarmDispatcher.from_todo_md(client, "r/r", todo)
+        assert dispatcher.tasks == []
+
+    def test_from_todo_md_missing_file_raises(self, tmp_path):
+        """from_todo_md raises FileNotFoundError for non-existent files."""
+        client = JulesClient()
+        with pytest.raises(FileNotFoundError):
+            JulesSwarmDispatcher.from_todo_md(
+                client, "r/r", tmp_path / "nonexistent.md"
+            )
+
+    def test_dispatch_empty_tasks_returns_empty(self):
+        """dispatch() with no tasks returns an empty list without calling Jules."""
+        client = JulesClient(config={"jules_command": "nonexistent-jules-xyz"})
+        dispatcher = JulesSwarmDispatcher(client=client, repo="r/r", tasks=[])
+        responses = dispatcher.dispatch()
+        assert responses == []
 
 
 class TestJulesIntegrationAdapter:

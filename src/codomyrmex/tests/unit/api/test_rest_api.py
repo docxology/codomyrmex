@@ -589,7 +589,7 @@ class TestRESTAPI:
     def test_endpoint_middleware_can_short_circuit(self):
         """Per-endpoint middleware fires before the handler."""
         api = create_api()
-        router = create_router()
+        create_router()
 
         def reject_all(req):
             return APIResponse.error("blocked", HTTPStatus.FORBIDDEN)

@@ -16,7 +16,6 @@ from codomyrmex.exceptions.base import (
     format_exception_chain,
 )
 
-
 # ─────────────────────────────────────────────────────────────────────────────
 #  CodomyrmexError construction
 # ─────────────────────────────────────────────────────────────────────────────

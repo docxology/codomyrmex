@@ -1,108 +1,122 @@
-"""MCP tools for configuration monitoring."""
+"""MCP tool definitions for the config_monitoring module.
+
+Exposes configuration change detection, drift analysis, and monitoring summaries.
+"""
+
+from __future__ import annotations
 
 from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
-from .config_monitor import ConfigurationMonitor
+
+def _get_monitor():
+    """Lazy import of ConfigurationMonitor to avoid circular deps."""
+    from codomyrmex.config_monitoring.config_monitor import ConfigurationMonitor
+
+    return ConfigurationMonitor
 
 
-@mcp_tool(category="config_monitoring")
+@mcp_tool(
+    category="config_monitoring",
+    description="Detect changes in configuration files by comparing current hashes to stored baselines.",
+)
 def config_monitoring_detect_changes(
-    config_paths: list[str], workspace_dir: str | None = None
-) -> list[dict[str, Any]]:
-    """Detect changes in configuration files.
+    config_paths: list[str],
+    workspace_dir: str | None = None,
+) -> dict[str, Any]:
+    """Detect configuration file changes by hashing and comparing to stored baselines.
 
     Args:
-        config_paths: List of configuration file paths to monitor.
-        workspace_dir: Optional workspace directory.
+        config_paths: List of file paths to check for changes.
+        workspace_dir: Optional workspace directory for storing monitoring state.
 
     Returns:
-        List of configuration changes detected.
-
+        dict with status, changes detected, and per-file change details.
     """
-    monitor = ConfigurationMonitor(workspace_dir)
-    # Type cast needed because detect_config_changes expects list[str | Path]
-    changes = monitor.detect_config_changes(list(config_paths))
-    return [
-        {
-            "change_id": c.change_id,
-            "config_path": c.config_path,
-            "change_type": c.change_type,
-            "timestamp": c.timestamp.isoformat(),
-            "previous_hash": c.previous_hash,
-            "current_hash": c.current_hash,
+    try:
+        Monitor = _get_monitor()
+        monitor = Monitor(workspace_dir=workspace_dir)
+        changes = monitor.detect_config_changes(config_paths)
+
+        change_list = [
+            {
+                "change_id": c.change_id,
+                "config_path": c.config_path,
+                "change_type": c.change_type,
+                "timestamp": c.timestamp.isoformat(),
+            }
+            for c in changes
+        ]
+
+        return {
+            "status": "success",
+            "paths_checked": len(config_paths),
+            "changes_detected": len(changes),
+            "changes": change_list,
         }
-        for c in changes
-    ]
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
 
 
-@mcp_tool(category="config_monitoring")
-def config_monitoring_create_snapshot(
-    environment: str, config_dir: str, workspace_dir: str | None = None
+@mcp_tool(
+    category="config_monitoring",
+    description="Get a summary of the configuration monitoring state including snapshots, changes, and audits.",
+)
+def config_monitoring_summary(
+    workspace_dir: str | None = None,
 ) -> dict[str, Any]:
-    """Create a configuration snapshot.
+    """Return a summary of current configuration monitoring state.
 
     Args:
-        environment: Environment name.
-        config_dir: Directory containing configuration files.
-        workspace_dir: Optional workspace directory.
+        workspace_dir: Optional workspace directory for monitoring data.
 
     Returns:
-        The created configuration snapshot.
-
+        dict with status and monitoring summary (snapshots, changes, audits counts).
     """
-    monitor = ConfigurationMonitor(workspace_dir)
-    snapshot = monitor.create_snapshot(environment, config_dir)
-    return {
-        "snapshot_id": snapshot.snapshot_id,
-        "timestamp": snapshot.timestamp.isoformat(),
-        "environment": snapshot.environment,
-        "total_files": snapshot.total_files,
-    }
+    try:
+        Monitor = _get_monitor()
+        monitor = Monitor(workspace_dir=workspace_dir)
+        summary = monitor.get_monitoring_summary()
+
+        return {
+            "status": "success",
+            "summary": summary,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
 
 
-@mcp_tool(category="config_monitoring")
-def config_monitoring_detect_drift(
-    snapshot_id: str, config_dir: str, workspace_dir: str | None = None
+@mcp_tool(
+    category="config_monitoring",
+    description="Calculate the SHA-256 hash of a configuration file for change detection.",
+)
+def config_monitoring_hash_file(
+    file_path: str,
 ) -> dict[str, Any]:
-    """Detect drift between a snapshot and the current configuration directory.
+    """Calculate the SHA-256 hash of a file.
 
     Args:
-        snapshot_id: ID of the snapshot to compare against.
-        config_dir: Current configuration directory to compare.
-        workspace_dir: Optional workspace directory.
+        file_path: Path to the file to hash.
 
     Returns:
-        Drift analysis report.
-
+        dict with status, file_path, and sha256 hash.
     """
-    monitor = ConfigurationMonitor(workspace_dir)
-    return monitor.detect_drift(snapshot_id, config_dir)
+    try:
+        Monitor = _get_monitor()
+        monitor = Monitor()
+        file_hash = monitor.calculate_file_hash(file_path)
 
+        if not file_hash:
+            return {
+                "status": "error",
+                "message": f"File not found or not a regular file: {file_path}",
+            }
 
-@mcp_tool(category="config_monitoring")
-def config_monitoring_audit(
-    environment: str, config_dir: str, workspace_dir: str | None = None
-) -> dict[str, Any]:
-    """Perform a compliance audit on configuration files.
-
-    Args:
-        environment: Environment name.
-        config_dir: Directory to audit.
-        workspace_dir: Optional workspace directory.
-
-    Returns:
-        Audit results including compliance status and issues found.
-
-    """
-    monitor = ConfigurationMonitor(workspace_dir)
-    audit = monitor.audit_configuration(environment, config_dir)
-    return {
-        "audit_id": audit.audit_id,
-        "timestamp": audit.timestamp.isoformat(),
-        "environment": audit.environment,
-        "compliance_status": audit.compliance_status,
-        "issues_found": audit.issues_found,
-        "recommendations": audit.recommendations,
-    }
+        return {
+            "status": "success",
+            "file_path": file_path,
+            "sha256": file_hash,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

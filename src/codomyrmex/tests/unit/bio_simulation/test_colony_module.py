@@ -8,8 +8,6 @@ Coverage goal: >80% of the 137 statements in bio_simulation/colony.py.
 
 from __future__ import annotations
 
-import math
-
 import pytest
 
 from codomyrmex.bio_simulation.colony import (
@@ -18,7 +16,6 @@ from codomyrmex.bio_simulation.colony import (
     Colony,
     FoodSource,
 )
-
 
 # ---------------------------------------------------------------------------
 # AntState enum

@@ -29,6 +29,7 @@ class AgentCapabilities(Enum):
     BATCH = "batch"
     CLOUD_INFRASTRUCTURE = "cloud_infrastructure"
     CLOUD_STORAGE = "cloud_storage"
+    TASK_DECOMPOSITION = "task_decomposition"
 
 
 @dataclass

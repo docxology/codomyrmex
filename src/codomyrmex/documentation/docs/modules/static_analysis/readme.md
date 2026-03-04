@@ -1,77 +1,132 @@
-# static_analysis
+# Static Analysis Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Static analysis utilities for auditing Python module exports and imports. The top-level `static_analysis` module focuses on `__all__` definition auditing, dead export detection, and import layer violation checking. A separate `coding/static_analysis` sub-package handles linter integration (pylint, flake8, pyrefly) and is documented under the `coding` module.
+The Static Analysis module provides AST-based import scanning, architectural layer
+violation detection, export auditing, dead export detection, and unused function
+detection for the Codomyrmex Python codebase. It uses only Python stdlib (`ast`,
+`os`, `pathlib`) and never imports the code it analyzes, making it safe to run
+against any source tree.
+
+This module is distinct from `coding/static_analysis/`, which provides a broader
+`StaticAnalyzer` class with external tool integration (pylint, flake8, bandit, etc.).
+This root-level `static_analysis/` module focuses specifically on import graph
+analysis and architectural enforcement.
 
 ## PAI Integration
 
-| PAI Phase | Capability |
-|-----------|-----------|
-| VERIFY | Audit `__all__` definitions, detect dead exports, check layer violations |
-| OBSERVE | Full audit report with summary counts |
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Engineer agent runs static analysis to validate code quality before EXECUTE | Direct Python import; `StaticAnalyzer`, `LintRunner` |
+| **VERIFY** | QATester runs full lint/security scan suite to confirm quality gates | Direct Python import; `SecurityScanner` |
+
+PAI's Engineer subagent invokes static analysis during BUILD to catch issues early. QATester runs security and lint scans during VERIFY to confirm code meets quality standards before LEARN phase.
+
+## Installation
+
+```bash
+uv add codomyrmex
+```
 
 ## Key Exports
 
-From `src/codomyrmex/static_analysis/`:
+| Export | Type | Source | Purpose |
+|--------|------|--------|---------|
+| `scan_imports` | Function | `imports.py` | Scan all imports across a source tree, returning structured edges |
+| `check_layer_violations` | Function | `imports.py` | Detect architectural layer boundary violations |
+| `extract_imports_ast` | Function | `imports.py` | AST-based import extraction from a single file |
+| `audit_exports` | Function | `exports.py` | Audit `__all__` declarations across all modules |
+| `check_all_defined` | Function | `exports.py` | Check whether a single `__init__.py` defines `__all__` |
 
-- **`scan_imports(path)`** -- Scan a directory for all import statements
-- **`check_layer_violations(path)`** -- Detect import violations across architectural layers
-- **`extract_imports_ast(path)`** -- AST-based import extraction from a single file
-- **`audit_exports(path)`** -- Audit modules for missing `__all__` definitions
-- **`check_all_defined(path)`** -- Check whether `__all__` is properly defined
+Additional functions available via direct import from `exports.py`:
 
-From `src/codomyrmex/coding/static_analysis/`:
-
-- **`StaticAnalyzer`** -- Main analyzer class for multi-tool analysis
-- **`analyze_file(path)`** -- Analyze a single file
-- **`analyze_project(paths)`** -- Analyze an entire project
-- **`get_available_tools()`** -- List available analysis tools
-- **`PyreflyRunner`** -- Pyrefly integration for type checking
-
-## MCP Tools
-
-| Tool | Description |
-|------|-------------|
-| `static_analysis_audit_exports` | Audit modules for missing `__all__` definitions |
-| `static_analysis_find_dead_exports` | Find `__all__` entries never imported elsewhere |
-| `static_analysis_full_audit` | Run all static analysis audits with summary counts |
+| Function | Purpose |
+|----------|---------|
+| `find_dead_exports` | Find exports in `__all__` that are never imported elsewhere |
+| `find_unused_functions` | Find top-level public functions never referenced in the codebase |
+| `full_audit` | Run all export/dead-code audits and return a unified report |
 
 ## Quick Start
 
 ```python
-from codomyrmex.static_analysis import audit_exports, check_layer_violations
 from pathlib import Path
+from codomyrmex.static_analysis import scan_imports, check_layer_violations, audit_exports
 
-findings = audit_exports(Path("src/codomyrmex"))
-violations = check_layer_violations(Path("src/codomyrmex"))
+src = Path("src/codomyrmex")
+
+# Scan all cross-module imports
+edges = scan_imports(src)
+# Each edge: {"src": str, "dst": str, "file": str, "src_layer": str, "dst_layer": str}
+
+# Check for architectural violations
+violations = check_layer_violations(edges)
+for v in violations:
+    print(f"{v['src']} -> {v['dst']}: {v['reason']}")
+
+# Audit __all__ completeness
+findings = audit_exports(src)
+for f in findings:
+    print(f"{f['module']}: {f['detail']}")
 ```
+
+### Dead Export and Unused Function Detection
+
+```python
+from pathlib import Path
+from codomyrmex.static_analysis.exports import find_dead_exports, find_unused_functions, full_audit
+
+src = Path("src/codomyrmex")
+
+# Find exports declared in __all__ but never imported
+dead = find_dead_exports(src)
+
+# Find public functions that are defined but never referenced
+unused = find_unused_functions(src)
+
+# Or run all audits at once
+report = full_audit(src)
+print(report["summary"])
+# {"modules_missing_all": N, "dead_export_count": N, "unused_function_count": N}
+```
+
+## Architectural Layer System
+
+The module classifies every Codomyrmex module into one of four layers, matching
+the hierarchy defined in `SPEC.md`:
+
+| Layer | Rank | Example Modules |
+|-------|------|----------------|
+| Foundation | 0 | `config_management`, `logging_monitoring`, `telemetry`, `terminal_interface` |
+| Core | 1 | `cache`, `coding`, `git_operations`, `llm`, `security`, `static_analysis` |
+| Service | 2 | `api`, `auth`, `ci_cd_automation`, `containerization`, `orchestrator` |
+| Specialized | 3 | `agents`, `cerebrum`, `cli`, `simulation`, `testing` |
+
+**Violation rule**: A module at rank N must not import a module at rank > N.
+Foundation modules cannot import Core, Service, or Specialized. Core cannot import
+Service or Specialized. Service cannot import Specialized.
 
 ## Architecture
 
 ```
-static_analysis/          (top-level module)
-  __init__.py             -- Exports scan_imports, audit_exports, etc.
-  exports.py              -- audit_exports, find_dead_exports, full_audit
-  imports.py              -- scan_imports, check_layer_violations, extract_imports_ast
-  mcp_tools.py            -- 3 MCP tool definitions
-
-coding/static_analysis/   (sub-package within coding)
-  __init__.py             -- StaticAnalyzer, models, pyrefly, tool runners
-  static_analyzer.py      -- Main analyzer class
-  pyrefly_runner.py       -- Pyrefly integration
-  tool_runners.py         -- External tool subprocess execution
-  models.py               -- AnalysisResult, AnalysisSummary, etc.
+static_analysis/
+  __init__.py    # Re-exports: scan_imports, check_layer_violations, extract_imports_ast, audit_exports, check_all_defined
+  imports.py     # Import graph: scan_imports, check_layer_violations, extract_imports_ast, get_layer
+  exports.py     # Export audit: audit_exports, check_all_defined, find_dead_exports, find_unused_functions, full_audit
+  tests/         # Zero-mock tests
 ```
 
-## Testing
+## Relationship to coding/static_analysis
 
-```bash
-uv run pytest src/codomyrmex/tests/unit/static_analysis/ -v
-```
+| Aspect | `static_analysis/` (this module) | `coding/static_analysis/` |
+|--------|--------------------------------|--------------------------|
+| Focus | Import graph, layer violations, export auditing | Multi-language code quality, security, style |
+| Dependencies | Python stdlib only | External tools (pylint, flake8, bandit, mypy, radon, vulture) |
+| Scope | Codomyrmex internal architecture enforcement | General-purpose file/project analysis |
+| MCP tools | None | `analyze_file`, `analyze_project` |
 
 ## Navigation
 
-- [Root](../../../../../../README.md)
+- **Extended Docs**: [docs/modules/static_analysis/](../../../docs/modules/static_analysis/)
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

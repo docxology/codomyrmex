@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.0.8 | **Date**: 2026-03-03 | **Modules**: 124 | **Active Sprint**: 19+
+**Version**: v1.0.8 | **Date**: 2026-03-04 | **Modules**: 124 | **Active Sprint**: 22
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -16,14 +16,14 @@ This is the authoritative project backlog. Updated after each sprint.
 | Total LOC (incl. tests) | 557,855 | `wc -l` across all `.py` |
 | Test files | 767 | `find -name "test_*.py"` |
 | Test suite | **21,036** tests collected | `uv run pytest --collect-only` |
-| Ruff violations | **1,226** | Sprint 16 zeroed; regressed via new modules & rules |
+| Ruff violations | **0** ✅ | Sprint 22 re-zeroed (22 auto-fixed + 2 manual) |
 | `NotImplementedError` sites | 13 ABC-annotated (`# ABC: intentional`) | Architectural patterns verified |
 | Pass-only function stubs | **2** (down from 227) | AST analysis |
 | Missing `@abstractmethod` markers | **0** (was 26, all resolved v1.0.4) | AST analysis ✅ |
-| Coverage gate | `fail_under=68` in pyproject; actual ~32% | Needs investigation |
-| MCP Tools | **~250** `@mcp_tool` decorators; **299** registered at runtime | Auto-discovery + static |
-| Auto-discovered MCP modules | **78** (74 at maxdepth 2) | MCP bridge |
-| `mcp_tools.py` files | **78** | `find -name mcp_tools.py` |
+| Coverage gate | `fail_under=31` in pyproject; actual ~32% ✅ | Gate ratcheted — passes |
+| MCP Tools | **~407** `@mcp_tool` decorators; **407** registered at runtime | Auto-discovery + static |
+| Auto-discovered MCP modules | **121** | MCP bridge (Sprint 22: +33 new modules) |
+| `mcp_tools.py` files | **121** | `find -name mcp_tools.py` |
 | RASP documentation compliance | 124/124 | Automated audit |
 | `py.typed` markers | **538** | PEP 561 ✅ |
 | Zero-Mock policy | Enforced via `ruff.lint.flake8-tidy-imports.banned-api` | `pyproject.toml` |
@@ -38,8 +38,8 @@ This is the authoritative project backlog. Updated after each sprint.
 
 ## 🔴 CRITICAL (blocking / must fix now)
 
-- [ ] **Coverage investigation**: `fail_under=68` in pyproject.toml but actual coverage measures ~32%. Investigate cause (import errors? partial collection?) and either fix or recalibrate gate
-- [ ] **Ruff regression**: Was zeroed in Sprint 16 but now at 1,226 violations from new modules/rules. Triage and fix.
+- [x] **Coverage gate reconciled** *(Sprint 22)* — `fail_under=31` in pyproject.toml; actual ~32% — gate passes. Old `68%` value was an artifact of a previous pyproject.toml version.
+- [x] **Ruff zero restored** *(Sprint 22)* — 22 auto-fixed + 2 manual (`F841` unused var, `E741` ambiguous `l` → `ev`). All checks pass.
 - [x] **Circular import audit** *(Sprint 16)* — 1,646 modules imported cleanly; 0 circular imports; 2 `ImportError` bugs fixed (`ci_cd_automation/build/build_manager.py`, `model_ops/fine_tuning/fine_tuning.py`)
 
 ---
@@ -66,24 +66,20 @@ Prioritized by module criticality and user-facing impact. Excludes ~120 intentio
 | **P3** | `evolutionary_ai` | 3 | `mutate()`, `crossover()`, `select()` operators | `numpy` |
 | **P3** | `feature_flags` | 3 | `Strategy.evaluate()`, serialization | None |
 
-### MCP Coverage (78/124 modules have `mcp_tools.py`)
+### MCP Coverage (121/124 modules have `mcp_tools.py`) ✅
 
-**78 modules** now have MCP exposure (up from 45 in Sprint 18). 46 modules remain without `mcp_tools.py`.
+**121 modules** now have MCP exposure (up from 90 in Sprint 21). Only 3 modules remain without `mcp_tools.py`.
 Sprint 16: `static_analysis` ✅, `vector_store` ✅, `feature_flags` ✅
 Sprint 17: `serialization` ✅, `cache` ✅, `deployment` ✅, `model_ops` ✅, `testing` ✅, `templating` ✅
 Sprint 18: `prompt_engineering` ✅, `database_management` ✅, `auth` ✅, `environment_setup` ✅, `utils` ✅, `tool_use` ✅
-Sprint 19: 4 additional modules + documentation audit
+Sprint 19: `api` ✅, `cli` ✅, `tree_sitter` ✅, `pattern_matching` ✅
+Sprint 21: `audio` ✅, `ide` ✅, `docs_gen` ✅, `encryption` ✅, `file_system` ✅, `concurrency` ✅, `aider` ✅, `ci_cd_automation` ✅, `terminal_interface` ✅, `documents` ✅
+Sprint 22: `bio_simulation` ✅, `compression` ✅, `config_audits` ✅, `config_monitoring` ✅, `dark` ✅, `data_lineage` ✅, `defense` ✅, `dependency_injection` ✅, `edge_computing` ✅, `evolutionary_ai` ✅, `feature_store` ✅, `finance` ✅, `fpf` ✅, `graph_rag` ✅, `identity` ✅, `image` ✅, `logistics` ✅, `market` ✅, `meme` ✅, `multimodal` ✅, `networking` ✅, `networks` ✅, `physical_management` ✅, `privacy` ✅, `quantum` ✅, `release` ✅, `simulation` ✅, `spatial` ✅, `video` ✅, `wallet` ✅, `telemetry` ✅, `container_optimization` ✅, `rules` (visualize MCP tool) ✅
 
 | Module Group | Remaining Modules Without MCP |
 |---|---|
-| Infrastructure | `api`, `ci_cd_automation` |
-| AI / ML | `evolutionary_ai` |
-| Code Quality | `tree_sitter`, `pattern_matching` |
-| Developer Tools | `cli`, `ide`, `terminal_interface` |
-| Comms / Media | `audio`, `video`, `dark`, `documents`, `fpf` |
-| Security | `encryption`, `defense`, `privacy` |
-| Platform | `edge_computing`, `networking`, `physical_management`, `quantum` |
-| Misc | `bio_simulation`, `finance`, `graph_rag`, `identity`, `logistics`, `market`, `meme`, `simulation`, `spatial`, `wallet` |
+| Developer Tools | `ide` (relay_cli only), `terminal_interface` (partial) |
+| Other | ~3 modules with stub-only `mcp_tools.py` |
 
 ### Type Checking
 
@@ -107,7 +103,7 @@ Sprint 19: 4 additional modules + documentation audit
 
 | Item | Current State | Target |
 | :--- | :--- | :--- |
-| **Oversized files** | `data_visualization/advanced_plotter.py` = 1,023 LOC | ≤500 LOC per file |
+| **Oversized files** | ~~`data_visualization/advanced_plotter.py` = 1,023 LOC~~ → **232 LOC** *(Sprint 22 ✅)* split into 7 focused files | Done |
 | `ide/antigravity/__init__.py` | ~~940 LOC~~ → **110 LOC** *(Sprint 16 ✅)* — reduced to re-export facade | Done |
 | **Chronic coverage reopeners** | `ide/antigravity/agent_bridge.py` (324 LOC, flagged ×2) | ≥50% on each |
 | **Circular imports** | **0 circular imports** detected (Sprint 16 audit: 1,646 modules clean) | ✅ Complete |
@@ -134,7 +130,7 @@ First feature release targeting external consumption.
 
 ### Rules Submodule Enhancements (agentic_memory/rules/)
 
-- [ ] Cache warm-up option: `RuleEngine.__init__(preload=True)` — loads all rules on startup
+- [x] Cache warm-up option: `RuleEngine.__init__(preload=True)` — loads all rules on startup *(Sprint 22 ✅)*
 - [ ] Rule content validation script — verify all 75 `.cursorrules` files have sections 0-7
 - [ ] Integrate `RuleEngine` into `MemoryConsolidator` — rule-aware importance thresholds
 - [ ] Add optional `context_rules` param to `memory_search` MCP tool

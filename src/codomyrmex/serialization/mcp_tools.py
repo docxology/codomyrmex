@@ -43,6 +43,7 @@ def serialize_data(data: dict[str, Any] | list[Any], format: str = "json") -> st
 def deserialize_data(data: str, format: str = "json") -> dict[str, Any] | list[Any]:
     """Deserialize a string to a Python object."""
     from typing import cast
+
     from codomyrmex.serialization import SerializationFormat, deserialize
 
     fmt = SerializationFormat(format)
@@ -61,7 +62,7 @@ def deserialize_data(data: str, format: str = "json") -> dict[str, Any] | list[A
             raw = base64.b64decode(data.encode("utf-8"))
             return cast("dict[str, Any] | list[Any]", deserialize(raw, fmt))
         except Exception:
-            raise e
+            raise e from None
 
 
 @mcp_tool(

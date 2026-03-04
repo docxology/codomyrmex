@@ -17,6 +17,16 @@ from .store import InMemoryFeatureStore
 _STORE = InMemoryFeatureStore()
 _SERVICE = FeatureService(store=_STORE)
 
+# Type → Python type mapping for validation
+_VALUE_TYPE_MAP: dict[str, type] = {
+    "int": int,
+    "float": float,
+    "string": str,
+    "bool": bool,
+    "list": list,
+    "dict": dict,
+}
+
 
 def _get_feature_type(type_str: str) -> FeatureType:
     try:
@@ -39,7 +49,20 @@ def _get_value_type(type_str: str) -> ValueType:
 
 
 @mcp_tool(
-    name="feature_store_register_feature",
+    category="feature_store",
+    description="List all available FeatureType and ValueType enum values.",
+)
+def feature_store_list_types() -> dict[str, Any]:
+    """Return all supported feature types and value types."""
+    return {
+        "status": "success",
+        "feature_types": [t.value for t in FeatureType],
+        "value_types": [t.value for t in ValueType],
+    }
+
+
+@mcp_tool(
+    category="feature_store",
     description="Register a new feature definition in the feature store.",
 )
 def feature_store_register_feature(
@@ -50,8 +73,7 @@ def feature_store_register_feature(
     default_value: Any = None,
     tags: list[str] | None = None,
 ) -> dict[str, Any]:
-    """
-    Register a new feature definition in the feature store.
+    """Register a new feature definition in the feature store.
 
     Args:
         name: The name of the feature.
@@ -61,8 +83,11 @@ def feature_store_register_feature(
         default_value: Optional default value.
         tags: Optional list of tags.
     """
-    ft = _get_feature_type(feature_type)
-    vt = _get_value_type(value_type)
+    try:
+        ft = _get_feature_type(feature_type)
+        vt = _get_value_type(value_type)
+    except ValueError as exc:
+        return {"status": "error", "message": str(exc)}
 
     definition = FeatureDefinition(
         name=name,
@@ -77,12 +102,46 @@ def feature_store_register_feature(
     return {
         "status": "success",
         "message": f"Feature '{name}' registered successfully.",
-        "definition": definition.to_dict(),
+        "feature": definition.to_dict(),
     }
 
 
 @mcp_tool(
-    name="feature_store_ingest",
+    category="feature_store",
+    description="Validate a value against a named ValueType.",
+)
+def feature_store_validate_value(
+    value: Any,
+    value_type: str,
+) -> dict[str, Any]:
+    """Validate that *value* conforms to *value_type*.
+
+    Args:
+        value: The value to validate (None is always valid — represents missing).
+        value_type: One of int, float, string, bool, list, dict.
+    """
+    try:
+        _get_value_type(value_type)
+    except ValueError as exc:
+        return {"status": "error", "message": str(exc)}
+
+    if value is None:
+        return {"status": "success", "valid": True, "reason": "null values are always valid"}
+
+    expected_type = _VALUE_TYPE_MAP.get(value_type.lower())
+    if expected_type is None:
+        return {"status": "error", "message": f"Unsupported value_type '{value_type}'"}
+
+    is_valid = isinstance(value, expected_type)
+    return {
+        "status": "success",
+        "valid": is_valid,
+        "reason": None if is_valid else f"Expected {expected_type.__name__}, got {type(value).__name__}",
+    }
+
+
+@mcp_tool(
+    category="feature_store",
     description="Ingest feature values for a specific entity into the feature store.",
 )
 def feature_store_ingest(
@@ -105,7 +164,7 @@ def feature_store_ingest(
 
 
 @mcp_tool(
-    name="feature_store_get_features",
+    category="feature_store",
     description="Retrieve feature values for an entity from the feature store.",
 )
 def feature_store_get_features(
@@ -133,7 +192,9 @@ def feature_store_get_features(
 def get_mcp_tools() -> list[Callable[..., Any]]:
     """Return a list of all MCP tools defined in this module."""
     return [
+        feature_store_list_types,
         feature_store_register_feature,
+        feature_store_validate_value,
         feature_store_ingest,
         feature_store_get_features,
     ]

@@ -57,7 +57,7 @@ def test_serialize_deserialize_roundtrip() -> None:
 
 def test_serialize_binary_format() -> None:
     """serialize_data handles binary formats like pickle via base64 encoding."""
-    from codomyrmex.serialization.mcp_tools import serialize_data, deserialize_data
+    from codomyrmex.serialization.mcp_tools import deserialize_data, serialize_data
 
     original = {"data": [1, 2, 3], "nested": {"a": "b"}}
     serialized = serialize_data(original, format="pickle")
@@ -65,7 +65,7 @@ def test_serialize_binary_format() -> None:
     assert isinstance(serialized, str)
     assert len(serialized) > 0
 
-    recovered = deserialize_data(serialized, format="pickle")
+    deserialize_data(serialized, format="pickle")
     import base64
     import pickle
     decoded = base64.b64decode(serialized)

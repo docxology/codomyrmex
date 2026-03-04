@@ -1,50 +1,104 @@
-# Deployment
+# Deployment Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Deployment module for Codomyrmex.
+The deployment module provides deployment strategy implementations and orchestration for service rollouts. It supports rolling, blue-green, and canary deployment patterns with configurable health checks, batch sizing, traffic switching, and staged percentage-based rollouts. Includes a high-level deployment manager for simplified orchestration and a GitOps synchronizer for Git-based configuration management.
 
-## Architecture Overview
+## PAI Integration
 
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **EXECUTE** | Deploy built artifacts to target environments | Direct Python import |
+| **VERIFY** | Confirm deployment health and rollback availability | Direct Python import |
+
+PAI's EXECUTE phase uses this module to push deployments to target environments. Engineer agents configure deployment strategies; QATester validates deployment health during VERIFY. Rollback procedures are tested as part of the VERIFY phase checklist.
+
+## Installation
+
+```bash
+uv add codomyrmex
 ```
-deployment/
-    __init__.py              # Public API exports
-    mcp_tools.py             # MCP tool definitions
+
+Or for development:
+
+```bash
+uv sync
 ```
 
 ## Key Exports
 
-- **`health_checks`**
-- **`strategies`**
-- **`rollback`**
-- **`DeploymentState`**
-- **`DeploymentTarget`**
-- **`DeploymentResult`**
-- **`DeploymentStrategy`**
-- **`RollingDeployment`**
-- **`BlueGreenDeployment`**
-- **`CanaryDeployment`**
-- **`create_strategy`**
-- **`StrategyProgress`**
-- **`CanaryStrategy`**
-- **`BlueGreenStrategy`**
-- **`RollingStrategy`**
+### Strategy Classes
 
-## MCP Tools Reference
+- **`DeploymentState`** -- Enum representing deployment lifecycle states: PENDING, IN_PROGRESS, COMPLETED, FAILED, ROLLED_BACK, PAUSED.
+- **`DeploymentTarget`** -- Dataclass representing a deployment target (server, pod) with id, name, address, health status, version, and metadata.
+- **`DeploymentResult`** -- Dataclass capturing deployment outcomes: success flag, targets updated/failed counts, duration, errors, and state.
+- **`DeploymentStrategy`** -- Abstract base class defining the `deploy()` and `rollback()` contract for all strategies.
+- **`RollingDeployment`** -- Updates targets incrementally in configurable batch sizes with inter-batch delays and optional health checks.
+- **`BlueGreenDeployment`** -- Deploys to all targets in a green environment, then atomically switches traffic. Supports instant rollback via traffic switch reversal.
+- **`CanaryDeployment`** -- Gradual rollout through percentage-based stages (default: 10%, 25%, 50%, 100%) with configurable stage duration and success threshold (default 95%).
+- **`create_strategy()`** -- Factory function that instantiates deployment strategies by name string ("rolling", "blue_green", "canary").
 
-| Tool | Trust Level |
-|------|-------------|
-| `deployment_execute` | Safe |
-| `deployment_list_strategies` | Safe |
-| `deployment_get_history` | Safe |
+### Convenience Aliases
 
-## Related Modules
+- **`CanaryStrategy`** -- Alias for `CanaryDeployment`
+- **`BlueGreenStrategy`** -- Alias for `BlueGreenDeployment`
+- **`RollingStrategy`** -- Alias for `RollingDeployment`
 
-See [All Modules](../README.md) for the complete module listing.
+### Manager Classes
+
+- **`DeploymentManager`** -- High-level orchestrator providing a simple `deploy()` / `rollback()` interface with deployment history tracking. Defaults to rolling strategy.
+- **`GitOpsSynchronizer`** -- Synchronizes deployment configurations from a Git repository. Supports `sync()`, `get_version()` via git rev-parse, and `checkout()` checks.
+
+### Submodules
+
+- **`health_checks`** -- Health check utilities for deployment targets
+- **`strategies`** -- All deployment strategy implementations
+- **`rollback`** -- Rollback orchestration utilities
+- **`canary`** -- Canary analysis tools
+
+## Directory Contents
+
+- `__init__.py` - Module entry point with `DeploymentManager`, `GitOpsSynchronizer`, and all exports
+- `strategies/` - Strategy implementations (rolling, blue-green, canary) and factory function
+- `health_checks/` - Health check utilities for verifying deployment target readiness
+- `rollback/` - Rollback orchestration and automation
+- `manager/` - Extended deployment management utilities
+- `gitops/` - GitOps synchronization and Git-based configuration management
+- `canary.py` - Canary analysis logic
+- `AGENTS.md` - Agent integration specification
+- `API_SPECIFICATION.md` - Programmatic interface documentation
+- `SPEC.md` - Module specification
+- `PAI.md` - PAI integration notes
+
+## Quick Start
+
+```python
+from codomyrmex.deployment import DeploymentManager, RollingStrategy
+
+# Initialize DeploymentManager
+manager = DeploymentManager()
+
+# Deploy service
+result = manager.deploy(
+    service_name="web-api",
+    version="v1.2.3",
+    strategy=RollingStrategy(batch_size=2)
+)
+
+if result.success:
+    print("Deployment successful!")
+```
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/unit/deployment/ -v
+```
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/deployment/](../../../../src/codomyrmex/deployment/)
-- **Parent**: [All Modules](../README.md)
+- **Full Documentation**: [docs/modules/deployment/](../../../docs/modules/deployment/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

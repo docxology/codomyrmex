@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -35,8 +36,8 @@ def extract_metadata(file_path: str | Path) -> dict[str, Any]:
         # File system metadata
         stat = file_path.stat()
         metadata["file_size"] = stat.st_size
-        metadata["created_at"] = stat.st_ctime
-        metadata["modified_at"] = stat.st_mtime
+        metadata["created_at"] = datetime.fromtimestamp(stat.st_ctime)
+        metadata["modified_at"] = datetime.fromtimestamp(stat.st_mtime)
 
         # Format-specific metadata
         suffix = file_path.suffix.lower()

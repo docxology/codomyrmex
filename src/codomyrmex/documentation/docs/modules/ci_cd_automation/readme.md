@@ -1,58 +1,83 @@
-# CI/CD Automation
+# CI/CD Automation Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The CI/CD Automation module provides continuous integration and deployment capabilities for the codomyrmex platform, including pipeline management, automated testing orchestration, deployment orchestration, build automation, rollback management, performance optimization, and pipeline monitoring. It sits at the Service layer, orchestrating Foundation and Core layer modules.
+CI/CD pipeline management module providing end-to-end continuous integration and deployment capabilities. This module supports programmatic pipeline construction, multi-platform workflow generation, and robust deployment orchestration.
 
-## Architecture Overview
+### Key Components
 
+- **`PipelineBuilder`** -- Programmatically create CI/CD pipelines with stages and jobs.
+- **`WorkflowGenerator`** -- Generate platform-specific CI/CD workflows (GitHub Actions, GitLab CI).
+- **`PipelineManager`** -- Orchestrate and execute pipelines locally with parallel/sequential support.
+- **`DeploymentOrchestrator`** -- Manage deployments to target environments (dev, staging, prod).
+- **`ArtifactManager`** -- Handle build artifacts with versioning and storage.
+- **`RollbackManager`** -- Implement automated and manual rollback strategies.
+- **`PipelineOptimizer`** -- Identify and apply performance improvements.
+
+## PAI Integration
+
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **PLAN** | Review pipeline dependencies and workflow structure | Direct Python import |
+| **EXECUTE** | Trigger CI/CD pipelines for automated build and test | Direct Python import |
+| **VERIFY** | Confirm pipeline results meet quality gates | Direct Python import |
+
+PAI's EXECUTE phase triggers CI/CD workflows for automated validation. Engineer agents manage pipeline configuration during BUILD; QATester validates pipeline outputs during VERIFY.
+
+## Key Exports
+
+### Pipeline Management
+
+- **`PipelineBuilder(name)`** -- Builder for creating pipelines programmatically.
+- **`WorkflowGenerator(platform)`** -- Generator for CI/CD workflow files.
+- **`PipelineManager(workspace_dir)`** -- Orchestrator for local pipeline execution.
+- **`create_pipeline(config_path)`** -- Create a pipeline from a configuration file.
+- **`run_pipeline(pipeline_name)`** -- Execute a pipeline with full orchestration.
+
+### Deployment Orchestration
+
+- **`DeploymentOrchestrator(config_path)`** -- Manages deployment lifecycle.
+- **`manage_deployments(config_path)`** -- Convenience function for deployment orchestration.
+- **`Deployment`** -- Deployment configuration and status.
+- **`Environment`** -- Target environment definition.
+
+### Artifact Management
+
+- **`ArtifactManager(storage_dir)`** -- Manage build artifacts with versioning.
+
+### Pipeline Monitoring & Optimization
+
+- **`PipelineMonitor`** -- Tracks pipeline execution health and metrics.
+- **`PipelineOptimizer`** -- Analyzes and optimizes pipeline performance.
+- **`RollbackManager`** -- Manages rollback operations for failed deployments.
+
+## Quick Start
+
+```python
+from codomyrmex.ci_cd_automation import PipelineBuilder, WorkflowGenerator
+
+# Build a pipeline
+builder = PipelineBuilder("my-ci")
+builder.add_stage("lint", ["ruff check ."])
+builder.add_stage("test", ["pytest"], dependencies=["lint"])
+pipeline = builder.build()
+
+# Generate GitHub Actions workflow
+generator = WorkflowGenerator("github")
+workflow = generator.from_pipeline(pipeline)
+workflow.save(".github/workflows/ci.yml")
 ```
-ci_cd_automation/
-├── __init__.py              # Public API (30+ exports)
-├── mcp_tools.py             # MCP tool definitions
-├── exceptions.py            # PipelineError, BuildError, DeploymentError, etc.
-├── deployment_orchestrator.py  # DeploymentOrchestrator, Deployment, Environment
-├── performance_optimizer.py    # PipelineOptimizer
-├── rollback_manager.py        # RollbackManager, RollbackStrategy
-├── pipeline/                   # Core pipeline management
-│   ├── pipeline.py            # Pipeline, PipelineBuilder, PipelineManager
-│   ├── pipeline_monitor.py    # PipelineMonitor, PipelineReport
-│   └── ...
-└── build/                     # Build automation
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k ci_cd_automation -v
 ```
-
-## Key Classes and Functions
-
-**`Pipeline`** / **`PipelineBuilder`** / **`PipelineManager`** -- Pipeline definition, construction, and lifecycle management.
-
-**`DeploymentOrchestrator`** -- Manages deployment to target environments.
-
-**`RollbackManager`** -- Automated rollback with configurable strategies.
-
-**`PipelineMonitor`** -- Real-time pipeline health monitoring and reporting.
-
-**`PipelineOptimizer`** -- Pipeline performance optimization.
-
-### Factory Functions
-
-- `create_pipeline()` -- Create and configure a CI/CD pipeline
-- `run_pipeline()` -- Execute a pipeline with full orchestration
-- `manage_deployments()` -- Handle deployment orchestration
-- `handle_rollback()` -- Automated rollback
-
-## Error Handling
-
-- `PipelineError` / `BuildError` / `DeploymentError` / `ArtifactError` / `StageError` / `RollbackError`
-
-## Related Modules
-
-- [`containerization`](../containerization/readme.md) -- Docker/K8s container management
-- [`deployment`](../deployment/readme.md) -- Deployment configuration
-- [`testing`](../testing/readme.md) -- Test execution in CI pipelines
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/ci_cd_automation/](../../../../src/codomyrmex/ci_cd_automation/)
-- **Parent**: [All Modules](../README.md)
+- **Full Documentation**: [docs/modules/ci_cd_automation/](../../../docs/modules/ci_cd_automation/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

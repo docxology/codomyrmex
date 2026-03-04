@@ -1,77 +1,118 @@
-# coding
+# Coding Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Unified module for code execution, sandboxing, review, monitoring, and debugging. Provides a comprehensive toolkit for running, analyzing, and fixing code programmatically. Contains six submodules: `execution`, `sandbox`, `review`, `monitoring`, `debugging`, and two consolidated sub-packages (`pattern_matching`, `static_analysis`).
+Unified module for code execution, sandboxing, review, monitoring, and debugging. Provides a comprehensive toolkit for running code in isolated environments with resource limits, performing static analysis and quality assessment, tracking execution metrics, and automatically analyzing errors to generate patches. Supports multiple programming languages and Docker-based container isolation.
 
 ## PAI Integration
 
-| PAI Phase | Capability |
-|-----------|-----------|
-| BUILD | `execute_code()` runs code in sandboxed environments |
-| VERIFY | `CodeReviewer` analyzes quality; `analyze_file()` / `analyze_project()` scan for issues |
-| THINK | `Debugger` analyzes errors and generates patches |
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Engineer agent executes code in sandbox, generates and reviews code | `code_execute`, `code_review_file` |
+| **EXECUTE** | Runs scripts and code artifacts produced in BUILD phase | `code_execute` |
+| **VERIFY** | QATester runs `code_debug` to diagnose failures; `code_review_project` for quality | `code_review_project`, `code_debug` |
+
+PAI's Engineer subagent uses `code_execute` for sandbox execution and `code_review_file`/`code_review_project` for quality assurance during BUILD. QATester uses `code_debug` during VERIFY to diagnose test failures.
 
 ## Key Exports
 
-- **`execute_code(language, code, timeout)`** -- Execute code in a sandboxed environment
-- **`CodeReviewer`** -- Main code review orchestrator
-- **`Debugger`** -- Automated error analysis and fix generation
-- **`ErrorAnalyzer`**, **`PatchGenerator`**, **`FixVerifier`** -- Debug pipeline components
-- **`analyze_file()`**, **`analyze_project()`** -- Static analysis convenience functions
-- **`check_quality_gates()`** -- Verify quality thresholds
-- **`generate_report()`** -- Produce HTML/JSON review reports
-- **`ExecutionLimits`**, **`run_code_in_docker()`** -- Sandbox isolation
-- **`ExecutionMonitor`**, **`MetricsCollector`**, **`ResourceMonitor`** -- Execution tracking
+### Execution
 
-## MCP Tools
+- **`execute_code(language, code)`** -- Execute code in a sandboxed environment with language auto-detection
+- **`SUPPORTED_LANGUAGES`** -- Set of supported programming language identifiers
+- **`validate_language()`** -- Validate that a language string is supported
+- **`validate_session_id()`** -- Validate session ID format for execution tracking
 
-| Tool | Description |
-|------|-------------|
-| `code_execute` | Execute code in a sandboxed environment |
-| `code_list_languages` | List supported programming languages |
-| `code_review_file` | Analyze a Python file for quality metrics |
-| `code_review_project` | Analyze a project directory for quality and architecture |
-| `code_debug` | Analyze an error and suggest fixes |
+### Sandbox
+
+- **`ExecutionLimits`** -- Dataclass defining CPU time, memory, and disk limits for sandboxed execution
+- **`check_docker_available()`** -- Check if Docker is installed and running for container isolation
+- **`execute_with_limits()`** -- Run code with enforced resource limits (CPU, memory, time)
+- **`run_code_in_docker()`** -- Execute code inside a Docker container for full isolation
+- **`sandbox_process_isolation()`** -- Apply OS-level process isolation (cgroups, namespaces)
+- **`resource_limits_context()`** -- Context manager that applies and removes resource limits
+- **`prepare_code_file()` / `prepare_stdin_file()`** -- Prepare temporary files for sandboxed execution
+- **`cleanup_temp_files()`** -- Clean up temporary files after execution
+
+### Review
+
+- **`CodeReviewer`** -- Orchestrates static analysis across multiple tools for a project or file
+- **`analyze_file()` / `analyze_project()`** -- Analyze a single file or entire project for code quality
+- **`check_quality_gates()`** -- Evaluate code against configurable quality thresholds
+- **`generate_report()`** -- Produce human-readable reports from analysis results
+- **`PyscnAnalyzer`** -- Python-specific code analysis tool
+- **`QualityDashboard`** -- Aggregated quality metrics display
+- **`AnalysisResult` / `AnalysisSummary` / `AnalysisType`** -- Result containers and type enums
+- **`CodeMetrics`** -- Computed code metrics (complexity, LOC, coupling, etc.)
+- **`ArchitectureViolation` / `DeadCodeFinding` / `ComplexityReductionSuggestion`** -- Specific finding types
+- **`QualityGateResult`** -- Result of a quality gate evaluation
+- **`Language` / `SeverityLevel`** -- Enums for language classification and issue severity
+- **`CodeReviewError` / `ConfigurationError` / `PyscnError` / `ToolNotFoundError`** -- Review exceptions
+
+### Monitoring
+
+- **`ExecutionMonitor`** -- Tracks code execution lifecycle events and timing
+- **`MetricsCollector`** -- Collects and aggregates execution metrics across runs
+- **`ResourceMonitor`** -- Monitors real-time CPU, memory, and I/O during execution
+
+### Debugging
+
+- **`Debugger`** -- High-level interface combining error analysis and fix generation
+- **`ErrorAnalyzer`** -- Analyzes error output to classify root causes and suggest fixes
+- **`ErrorDiagnosis`** -- Structured diagnosis result with cause, category, and suggestions
+- **`PatchGenerator`** -- Generates code patches to fix identified errors
+- **`Patch`** -- Represents a single code modification (file, line range, replacement)
+- **`FixVerifier`** -- Verifies that a generated patch actually resolves the error
+- **`VerificationResult`** -- Result of fix verification (pass/fail with details)
+
+## Directory Contents
+
+- `execution/` -- Code executor, language support detection, and session management
+- `sandbox/` -- Container isolation, resource limits, process isolation, and security policies
+- `review/` -- Code reviewer, static analyzer, models, and quality dashboard
+- `monitoring/` -- Execution monitor, metrics collector, and resource tracker
+- `debugging/` -- Debugger, error analyzer, patch generator, and fix verifier
+- `analysis/` -- Additional code analysis utilities
+- `generation/` -- Code generation tools
+- `refactoring/` -- Automated refactoring operations
+- `testing/` -- Test generation and execution support
+- `exceptions.py` -- Module-level exception definitions
 
 ## Quick Start
 
 ```python
-from codomyrmex.coding import execute_code, CodeReviewer, Debugger
+from codomyrmex.coding import execute_code, CodeReviewer, Debugger, generate_report
 
-result = execute_code("python", "print('Hello!')")
+# Execute Python code in a sandboxed environment
+result = execute_code("python", "print('Hello from sandbox!')")
+print(f"Output: {result}")
 
+# Review code quality for a project directory
 reviewer = CodeReviewer("./src")
 issues = reviewer.analyze_file("module.py")
+report = generate_report(issues)
 
+# Debug a failed execution
 debugger = Debugger()
-fixed = debugger.debug(code, stdout, stderr, exit_code=1)
+diagnosis = debugger.debug(code="x = 1/0", stdout="", stderr="ZeroDivisionError", exit_code=1)
+print(f"Root cause: {diagnosis}")
 ```
 
-## Architecture
+## Consolidated Sub-modules
 
-```
-coding/
-  execution/       -- Sandboxed code execution with multi-language support
-  sandbox/         -- Container isolation and resource limits
-  review/          -- Static analysis and code quality assessment
-    mixins/        -- Analysis mixin classes (9 mixins)
-    reviewer_impl/ -- CodeReviewer decomposition (5 mixins)
-  monitoring/      -- Execution metrics and resource tracking
-  debugging/       -- Automated error analysis and fix generation
-  pattern_matching/ -- Code pattern recognition
-  static_analysis/ -- Code quality, linting, security scanning
-  mcp_tools.py     -- MCP tool definitions (5 tools)
-```
+The following modules have been consolidated into this module as sub-packages:
 
-## Testing
+| Sub-module | Description |
+|------------|-------------|
+| **`static_analysis/`** | Code quality metrics, security scanning, linting |
+| **`pattern_matching/`** | Code analysis and pattern recognition |
 
-```bash
-uv run pytest src/codomyrmex/tests/unit/coding/ -v
-```
+Original standalone modules remain as backward-compatible re-export wrappers.
 
 ## Navigation
 
-- [Root](../../../../../../README.md)
+- **Full Documentation**: [docs/modules/coding/](../../../docs/modules/coding/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

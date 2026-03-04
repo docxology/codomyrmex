@@ -38,6 +38,10 @@ from .quick import (
     handle_quick_run,
     handle_quick_workflow,
 )
+from .rules import (
+    handle_rules_check,
+    handle_rules_list,
+)
 from .skills import (
     handle_skills_get,
     handle_skills_list,

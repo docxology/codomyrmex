@@ -34,17 +34,20 @@ class RuleEngine:
             print(rule.priority.name, rule.name)
     """
 
-    def __init__(self, rules_root: Path | None = None) -> None:
+    def __init__(self, rules_root: Path | None = None, preload: bool = False) -> None:
         """Initialise the engine.
 
         Args:
             rules_root: Path to the directory containing ``general.cursorrules``
                 and the ``modules/``, ``cross-module/``, and ``file-specific/``
                 subdirectories.  Defaults to the ``rules/`` package directory.
+            preload: If True, load all rules into cache at startup.
         """
         if rules_root is None:
             rules_root = _DEFAULT_RULES_ROOT
         self._registry = RuleRegistry(rules_root)
+        if preload:
+            self.preload()
 
     # ------------------------------------------------------------------
     # Public API
@@ -114,3 +117,54 @@ class RuleEngine:
     def list_all_rules(self) -> list[Rule]:
         """Return all rules across all categories sorted by priority (FILE_SPECIFIC first)."""
         return self._registry.list_all_rules()
+
+    def preload(self) -> int:
+        """Load all rules into the registry cache.
+
+        Returns:
+            The number of rules loaded.
+        """
+        rules = self._registry.list_all_rules()
+        return len(rules)
+
+    def visualize(self) -> str:
+        """Return a Mermaid flowchart of the rule priority hierarchy.
+
+        Builds a ``graph TD`` diagram showing the four priority levels
+        (GENERAL -> CROSS_MODULE -> MODULE -> FILE_SPECIFIC) with actual
+        rule names discovered from the loader listed under each level.
+
+        Returns:
+            Mermaid diagram source string.
+        """
+        all_rules = self._registry.list_all_rules()
+
+        # Group rules by priority
+        groups: dict[str, list[str]] = {
+            "GENERAL": [],
+            "CROSS_MODULE": [],
+            "MODULE": [],
+            "FILE_SPECIFIC": [],
+        }
+        for rule in all_rules:
+            groups[rule.priority.name].append(rule.name)
+
+        lines = ["graph TD"]
+        # Priority flow edges (lowest to highest specificity)
+        lines.append("    GENERAL --> CROSS_MODULE")
+        lines.append("    CROSS_MODULE --> MODULE")
+        lines.append("    MODULE --> FILE_SPECIFIC")
+
+        # Node labels with rule counts
+        for level, names in groups.items():
+            count = len(names)
+            label = f"{level} ({count} rules)"
+            lines.append(f"    {level}[\"{label}\"]")
+
+        # Sub-nodes for each rule
+        for level, names in groups.items():
+            for name in sorted(names):
+                node_id = f"{level}_{name.replace('.', '_').replace('-', '_')}"
+                lines.append(f"    {level} --- {node_id}[\"{name}\"]")
+
+        return "\n".join(lines)

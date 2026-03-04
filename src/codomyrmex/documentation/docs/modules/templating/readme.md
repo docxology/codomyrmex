@@ -1,34 +1,111 @@
-# Templating
+# Templating Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+Template engine support (Jinja2, Mako) for code generation and dynamic content.
 
-Templating module for Codomyrmex.
+## PAI Integration
 
-## Architecture Overview
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **BUILD** | Render code and documentation templates | Direct Python import |
+| **EXECUTE** | Apply templates during code generation workflows | Direct Python import |
+| **OBSERVE** | Inspect template variables and engine configuration | Direct Python import |
 
+PAI agents access this module via direct Python import through the MCP bridge for Jinja2/Mako template rendering in generation pipelines.
+
+## Installation
+
+```bash
+uv add codomyrmex
 ```
-templating/
-    __init__.py              # Public API exports
-    mcp_tools.py             # MCP tool definitions
+
+Or for development:
+
+```bash
+uv sync
 ```
 
 ## Key Exports
 
-- **`engines`**
-- **`filters`**
-- **`context`**
-- **`render`**
-- **`render_file`**
-- **`get_default_engine`**
-- **`cli_commands`**
+### Classes
+- **`TemplatingError`** — Raised when templating operations fail.
 
-## Related Modules
+### Functions
+- **`get_default_engine()`** — Get or create default template engine instance.
+- **`render()`** — Render a template string with context data.
+- **`render_file()`** — Load and render a template file.
 
-See [All Modules](../README.md) for the complete module listing.
+### Submodules
+- **`context/`** — Context builders submodule.
+- **`engines/`** — Template engine implementations.
+- **`filters/`** — Template filters submodule.
+- **`loaders/`** — Template loaders submodule.
+
+## Quick Start
+
+```python
+from codomyrmex.templating import render, render_file, TemplateEngine
+
+# Simple template rendering
+result = render("Hello {{ name }}!", {"name": "World"})
+print(result)  # Hello World!
+
+# Render from file
+output = render_file("templates/email.html", {
+    "recipient": "John",
+    "subject": "Welcome"
+})
+
+# Use specific engine
+jinja_output = render("{% for i in items %}{{ i }}{% endfor %}", 
+                      {"items": [1, 2, 3]}, engine="jinja2")
+
+# Use TemplateEngine directly
+from codomyrmex.templating import TemplateEngine
+
+engine = TemplateEngine(engine="jinja2")
+template = engine.load_template("report.html.j2")
+result = template.render({"data": report_data})
+```
+
+## Exports
+
+| Item | Description |
+|------|-------------|
+| `render(template, context)` | Render template string |
+| `render_file(path, context)` | Render template file |
+| `get_default_engine()` | Get singleton engine instance |
+| `TemplateEngine` | Configurable template engine |
+| `Template` | Loaded template object |
+| `TemplateManager` | Template directory management |
+
+## Submodules
+
+- `engines/` — Jinja2 and Mako engine implementations
+- `filters/` — Custom template filters
+- `context/` — Context processors
+- `loaders/` — Template loaders
+
+## Engines
+
+| Engine | Syntax | Best For |
+|--------|--------|----------|
+| jinja2 | `{{ }}` | HTML, configs, general |
+| mako | `${}` | Python-heavy templates |
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k templating -v
+```
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/templating/README.md)
+- [Agent Guide](../../../docs/modules/templating/AGENTS.md)
+- [Specification](../../../docs/modules/templating/SPEC.md)
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/templating/](../../../../src/codomyrmex/templating/)
-- **Parent**: [All Modules](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

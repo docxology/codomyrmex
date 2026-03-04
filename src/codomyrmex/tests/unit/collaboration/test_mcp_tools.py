@@ -1,5 +1,11 @@
 import pytest
-from codomyrmex.collaboration.mcp_tools import swarm_submit_task, pool_status, list_agents
+
+from codomyrmex.collaboration.mcp_tools import (
+    list_agents,
+    pool_status,
+    swarm_submit_task,
+)
+
 
 @pytest.mark.unit
 def test_swarm_submit_task():

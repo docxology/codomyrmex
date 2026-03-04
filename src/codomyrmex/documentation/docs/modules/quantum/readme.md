@@ -1,37 +1,113 @@
-# Quantum
+# Quantum Module
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
-## Overview
+Quantum algorithm primitives, circuit simulation, and gate operations.
 
-Quantum Computing Module
+## PAI Integration
 
-## Architecture Overview
+| Algorithm Phase | Role | Tools Used |
+|----------------|------|-----------|
+| **THINK** | Quantum algorithm design and gate selection | Direct Python import |
+| **BUILD** | Configure quantum circuits and parameters | Direct Python import |
+| **VERIFY** | Validate gate operations and measurement outputs | Direct Python import |
 
+PAI agents access this module via direct Python import through the MCP bridge for quantum circuit construction and simulation tasks.
+
+## Installation
+
+```bash
+uv add codomyrmex
 ```
-quantum/
-    __init__.py              # Public API exports
+
+Or for development:
+
+```bash
+uv sync
 ```
 
 ## Key Exports
 
-- **`QuantumCircuit`**
-- **`QuantumSimulator`**
-- **`Gate`**
-- **`GateType`**
-- **`Qubit`**
-- **`bell_state`**
-- **`ghz_state`**
-- **`qft`**
-- **`circuit_to_ascii`**
-- **`circuit_stats`**
-- **`cli_commands`**
+### Classes
+- **`GateType`** — Quantum gate types.
+- **`Gate`** — A quantum gate.
+- **`Qubit`** — A quantum bit state.
+- **`QuantumCircuit`** — A quantum circuit.
+- **`QuantumSimulator`** — Simple statevector quantum simulator.
 
-## Related Modules
+### Functions
+- **`bell_state()`** — Create Bell state circuit.
+- **`ghz_state()`** — Create GHZ state circuit.
+- **`qft()`** — Quantum Fourier Transform circuit.
 
-See [All Modules](../README.md) for the complete module listing.
+## Directory Structure
+
+- `models.py` — Data models (GateType, Gate, Qubit)
+- `circuit.py` — Quantum circuit construction (QuantumCircuit)
+- `simulator.py` — Statevector simulation (QuantumSimulator)
+- `algorithms.py` — Pre-built algorithms (bell_state, ghz_state, qft)
+- `visualization.py` — Circuit ASCII rendering and statistics (circuit_to_ascii, circuit_stats)
+- `__init__.py` — Public API re-exports
+
+## Quick Start
+
+```python
+from codomyrmex.quantum import QuantumCircuit, QuantumSimulator, bell_state
+
+# Create and run Bell state
+circuit = bell_state()
+simulator = QuantumSimulator()
+counts = simulator.run(circuit, shots=1000)
+print(counts)  # {'00': ~500, '11': ~500}
+
+# Build custom circuit
+qc = QuantumCircuit(2)
+qc.h(0)           # Hadamard on qubit 0
+qc.cnot(0, 1)     # CNOT: control=0, target=1
+qc.measure_all()
+
+results = simulator.run(qc, shots=1024)
+```
+
+## Exports
+
+| Class/Function | Description |
+|----------------|-------------|
+| `QuantumCircuit` | Build circuits with h, x, y, z, cnot, rx, ry, rz gates |
+| `QuantumSimulator` | Statevector simulator with measurement |
+| `Gate` | Single gate with type, target, control, parameter |
+| `GateType` | Enum: H, X, Y, Z, CNOT, CZ, RX, RY, RZ, T, S, SWAP |
+| `Qubit` | Qubit state with alpha/beta amplitudes |
+| `bell_state()` | Pre-built Bell state circuit |
+| `ghz_state(n)` | GHZ entanglement for n qubits |
+| `qft(n)` | Quantum Fourier Transform circuit |
+
+## Supported Gates
+
+| Gate | Method | Description |
+|------|--------|-------------|
+| Hadamard | `.h(q)` | Superposition |
+| Pauli-X | `.x(q)` | NOT / bit flip |
+| Pauli-Y | `.y(q)` | Y rotation |
+| Pauli-Z | `.z(q)` | Phase flip |
+| CNOT | `.cnot(c, t)` | Controlled-NOT |
+| CZ | `.cz(c, t)` | Controlled-Z |
+| RX | `.rx(q, θ)` | X-axis rotation |
+| RY | `.ry(q, θ)` | Y-axis rotation |
+| RZ | `.rz(q, θ)` | Z-axis rotation |
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k quantum -v
+```
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/quantum/README.md)
+- [Agent Guide](../../../docs/modules/quantum/AGENTS.md)
+- [Specification](../../../docs/modules/quantum/SPEC.md)
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/quantum/](../../../../src/codomyrmex/quantum/)
-- **Parent**: [All Modules](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

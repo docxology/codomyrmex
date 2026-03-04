@@ -13,6 +13,8 @@ except ImportError:
     Result = None  # type: ignore[assignment, misc]
     ResultStatus = None  # type: ignore[assignment, misc]
 
+from collections.abc import Callable
+
 from .binary_formats import AvroSerializer, MsgpackSerializer, ParquetSerializer
 from .exceptions import (
     BinaryFormatError,
@@ -27,8 +29,6 @@ from .exceptions import (
 from .serialization_manager import SerializationManager
 from .serializer import SerializationFormat, Serializer
 
-
-from typing import Callable
 
 def cli_commands() -> dict[str, dict[str, Any]]:
     """Return CLI commands for the serialization module."""
