@@ -46,6 +46,14 @@ class LoRALayer:
     """
 
     def __init__(self, weight: np.ndarray, config: LoRAConfig | None = None):
+        """
+        Initialize the LoRA layer.
+
+        Args:
+            weight: The pretrained weight matrix W_0 (d, k).
+            config: Optional configuration for the LoRA layer. If None,
+                default LoRAConfig is used.
+        """
         self.config = config or LoRAConfig()
         self.W_0 = weight.copy()  # Frozen base weight
         d, k = weight.shape
@@ -107,12 +115,31 @@ class LoRALayer:
 def apply_lora(
     weight: np.ndarray, rank: int = 4, alpha: float = 8.0
 ) -> LoRALayer:
-    """Wrap a weight matrix with LoRA adaptation."""
+    """
+    Wrap a weight matrix with LoRA adaptation.
+
+    Args:
+        weight: The pretrained weight matrix (d, k) to wrap.
+        rank: The low-rank dimension r for the LoRA adaptation.
+        alpha: The scaling factor alpha for the LoRA adaptation.
+
+    Returns:
+        A LoRALayer instance that wraps the original weight matrix
+        with LoRA parameters A and B.
+    """
     config = LoRAConfig(rank=rank, alpha=alpha)
     return LoRALayer(weight, config)
 
 
 def merge_lora(lora_layer: LoRALayer) -> np.ndarray:
-    """Merge LoRA into base weight and return merged weight matrix."""
+    """
+    Merge LoRA into base weight and return merged weight matrix.
+
+    Args:
+        lora_layer: The LoRALayer instance to merge.
+
+    Returns:
+        The merged weight matrix W_0 + B @ A * scaling.
+    """
     lora_layer.merge()
     return lora_layer.W_0.copy()
