@@ -14,8 +14,13 @@ _GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
 _skip_no_key = pytest.mark.skipif(not _GEMINI_KEY, reason="GEMINI_API_KEY not set")
 
 
-class FakeGeminiClient(GeminiClient):
-    """Fake GeminiClient for testing without API calls."""
+class _StubGeminiClient(GeminiClient):
+    """Concrete stub for GeminiClient — records calls, returns minimal data.
+
+    Not a mock: does not use unittest.mock or MagicMock. It is a real
+    subclass whose generate_images override is used to verify the calling
+    convention of ImageGenerator without needing a live API key.
+    """
 
     def __init__(self, config=None):
         self.calls = []
@@ -29,7 +34,7 @@ class FakeGeminiClient(GeminiClient):
                 "kwargs": kwargs,
             }
         )
-        return [{"image_bytes": b"fake_data"}]
+        return [{"image_bytes": b"stub_data"}]
 
 
 class TestImageGenerator:
@@ -67,7 +72,7 @@ class TestImageGenerator:
 
     def test_generate_calls_client(self):
         """Test that generate calls the client with correct arguments using a fake."""
-        fake_client = FakeGeminiClient()
+        fake_client = _StubGeminiClient()
         generator = ImageGenerator(client=fake_client)
 
         prompt = "test prompt"
@@ -81,4 +86,4 @@ class TestImageGenerator:
         assert call["prompt"] == prompt
         assert call["model"] == "imagen-4.0-generate-001"
         assert call["kwargs"] == kwargs
-        assert results == [{"image_bytes": b"fake_data"}]
+        assert results == [{"image_bytes": b"stub_data"}]
