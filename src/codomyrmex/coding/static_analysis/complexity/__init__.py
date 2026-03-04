@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 
 class ComplexityLevel(Enum):
     """Complexity classification levels."""
+
     LOW = "low"
     MODERATE = "moderate"
     HIGH = "high"
@@ -38,6 +39,7 @@ def _level_from_value(value: int) -> ComplexityLevel:
 @dataclass
 class ComplexityMetric:
     """A single complexity measurement."""
+
     name: str
     value: int
     level: ComplexityLevel
@@ -51,6 +53,7 @@ class ComplexityMetric:
 @dataclass
 class FunctionMetrics:
     """Metrics for a single function."""
+
     name: str
     file_path: str
     line_number: int
@@ -67,18 +70,23 @@ class FunctionMetrics:
 @dataclass
 class FileMetrics:
     """Metrics for a file."""
+
     file_path: str
     functions: list[FunctionMetrics] = field(default_factory=list)
 
     @property
     def function_count(self) -> int:
+        """function_count function/class."""
         return len(self.functions)
 
     @property
     def average_complexity(self) -> float:
+        """average_complexity function/class."""
         if not self.functions:
             return 0.0
-        return sum(f.cyclomatic_complexity for f in self.functions) / len(self.functions)
+        return sum(f.cyclomatic_complexity for f in self.functions) / len(
+            self.functions
+        )
 
 
 def calculate_cyclomatic_complexity(code: str) -> int:
@@ -250,7 +258,8 @@ class ComplexityAnalyzer:
             List of FunctionMetrics above threshold.
         """
         return [
-            f for f in metrics.functions
+            f
+            for f in metrics.functions
             if f.cyclomatic_complexity > self.complexity_threshold
         ]
 

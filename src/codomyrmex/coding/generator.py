@@ -37,6 +37,7 @@ class CodeBundle:
 
     @property
     def line_count(self) -> int:
+        """line_count function/class."""
         return len(self.source.strip().splitlines())
 
     def to_dict(self) -> dict[str, Any]:
@@ -76,7 +77,12 @@ class CodeGenerator:
         imports: list[str] = []
         functions: list[str] = []
         classes: list[str] = []
-        lines: list[str] = [f'"""Auto-generated from spec: {spec[:60]}."""', "", "from __future__ import annotations", ""]
+        lines: list[str] = [
+            f'"""Auto-generated from spec: {spec[:60]}."""',
+            "",
+            "from __future__ import annotations",
+            "",
+        ]
 
         # Extract operation names from spec
         ops = self._extract_operations(spec)
@@ -124,7 +130,9 @@ class CodeGenerator:
             classes=classes,
         )
 
-        logger.info("Code generated", extra={"funcs": len(functions), "classes": len(classes)})
+        logger.info(
+            "Code generated", extra={"funcs": len(functions), "classes": len(classes)}
+        )
         return bundle
 
     @staticmethod
@@ -132,17 +140,17 @@ class CodeGenerator:
         """Extract operation names from spec via keyword detection."""
         ops = []
         # Look for "with X and Y" or "X, Y, and Z" patterns
-        pattern = r'\b(?:with|including|that can|to)\s+(.+?)(?:\.|$)'
+        pattern = r"\b(?:with|including|that can|to)\s+(.+?)(?:\.|$)"
         match = re.search(pattern, spec, re.IGNORECASE)
         if match:
             part = match.group(1)
-            items = re.split(r',\s*(?:and\s+)?|\s+and\s+', part)
+            items = re.split(r",\s*(?:and\s+)?|\s+and\s+", part)
             ops = [item.strip() for item in items if item.strip()]
         return ops
 
     @staticmethod
     def _extract_class_name(spec: str) -> str:
-        pattern = r'\b(?:create|build|make)\s+(?:a\s+)?(\w+)'
+        pattern = r"\b(?:create|build|make)\s+(?:a\s+)?(\w+)"
         match = re.search(pattern, spec, re.IGNORECASE)
         if match:
             name = match.group(1)
@@ -151,7 +159,7 @@ class CodeGenerator:
 
     @staticmethod
     def _to_snake_case(name: str) -> str:
-        clean = re.sub(r'[^a-zA-Z0-9\s]', '', name)
+        clean = re.sub(r"[^a-zA-Z0-9\s]", "", name)
         return "_".join(clean.lower().split())
 
 

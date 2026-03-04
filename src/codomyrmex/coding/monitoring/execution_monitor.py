@@ -1,3 +1,5 @@
+"""Module execution_monitor.py."""
+
 import time
 from typing import Any
 
@@ -11,6 +13,7 @@ Monitors code execution status and provides execution tracking capabilities.
 
 logger = get_logger(__name__)
 
+
 class ExecutionMonitor:
     """Monitor execution status and track execution metrics."""
 
@@ -20,19 +23,25 @@ class ExecutionMonitor:
         self.start_time = None
         self.end_time = None
 
-    def start_execution(self, execution_id: str, language: str, code_length: int) -> None:
+    def start_execution(
+        self, execution_id: str, language: str, code_length: int
+    ) -> None:
         """Start tracking an execution."""
         self.start_time = time.time()
-        self.executions.append({
-            "execution_id": execution_id,
-            "language": language,
-            "code_length": code_length,
-            "start_time": self.start_time,
-            "status": "running",
-        })
+        self.executions.append(
+            {
+                "execution_id": execution_id,
+                "language": language,
+                "code_length": code_length,
+                "start_time": self.start_time,
+                "status": "running",
+            }
+        )
         logger.info(f"Started execution {execution_id} ({language})")
 
-    def end_execution(self, execution_id: str, status: str, result: dict[str, Any] | None = None) -> None:
+    def end_execution(
+        self, execution_id: str, status: str, result: dict[str, Any] | None = None
+    ) -> None:
         """End tracking an execution."""
         self.end_time = time.time()
         execution_time = self.end_time - self.start_time if self.start_time else 0
@@ -46,7 +55,9 @@ class ExecutionMonitor:
                     execution["result"] = result
                 break
 
-        logger.info(f"Ended execution {execution_id} ({status}) in {execution_time:.3f}s")
+        logger.info(
+            f"Ended execution {execution_id} ({status}) in {execution_time:.3f}s"
+        )
 
     def get_execution_stats(self) -> dict[str, Any]:
         """Get statistics about all tracked executions."""
@@ -72,4 +83,3 @@ class ExecutionMonitor:
             "success_count": success_count,
             "error_count": error_count,
         }
-

@@ -47,6 +47,7 @@ class VerificationResult:
         ...     exit_code=0
         ... )
     """
+
     success: bool
     stdout: str
     stderr: str
@@ -66,7 +67,9 @@ class FixVerifier:
         >>> print(f"Verification {'passed' if result.success else 'failed'}")
     """
 
-    def verify(self, original_source: str, patch: Patch, test_input: str | None = None) -> VerificationResult:
+    def verify(
+        self, original_source: str, patch: Patch, test_input: str | None = None
+    ) -> VerificationResult:
         """Apply a patch and verify the fix by executing the patched code.
 
         Applies the patch to the original source code and runs it in a
@@ -106,15 +109,15 @@ class FixVerifier:
             success=False,
             stdout="",
             stderr="Verification not fully implemented without active execution module linking",
-            exit_code=1
+            exit_code=1,
         )
 
     def _apply_patch(self, source: str, patch: Patch) -> str:
         """Apply a unified diff patch to a source string."""
         # Functional fallback: if a unified diff engine isn't present,
         # we check if patch has a full replacement content string
-        if hasattr(patch, 'content') and patch.content:
+        if hasattr(patch, "content") and patch.content:
             return patch.content
-        if hasattr(patch, 'diff') and not patch.diff:
+        if hasattr(patch, "diff") and not patch.diff:
             return source
         return source

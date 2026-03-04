@@ -100,7 +100,9 @@ class ToolRunner:
                                 ln = int(line_num)
                                 col = int(col_num)
                             except ValueError:
-                                logger.debug("flake8: could not parse line/col from: %r", line)
+                                logger.debug(
+                                    "flake8: could not parse line/col from: %r", line
+                                )
                                 continue
 
                             results.append(
@@ -244,7 +246,9 @@ class ToolRunner:
                             try:
                                 ln = int(line_num)
                             except ValueError:
-                                logger.debug("vulture: could not parse line from: %r", line)
+                                logger.debug(
+                                    "vulture: could not parse line from: %r", line
+                                )
                                 continue
 
                             results.append(
@@ -330,7 +334,12 @@ class ToolRunner:
                     f"Pyrefly reported error for {file_path}: {pyrefly_result.error_message}"
                 )
 
-        except (ImportError, subprocess.SubprocessError, FileNotFoundError, Exception) as e:
+        except (
+            ImportError,
+            subprocess.SubprocessError,
+            FileNotFoundError,
+            Exception,
+        ) as e:
             logger.error(f"Error running Pyrefly on {file_path}: {e}")
 
         return results

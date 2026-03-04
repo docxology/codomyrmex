@@ -182,4 +182,3 @@ def execute_code(
         # Clean up temporary files
         if temp_dir and os.path.exists(temp_dir):
             cleanup_temp_files(temp_dir)
-

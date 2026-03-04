@@ -15,6 +15,7 @@ from typing import Any, Optional
 
 class RefactoringType(Enum):
     """Types of refactoring operations."""
+
     RENAME = "rename"
     EXTRACT_FUNCTION = "extract_function"
     EXTRACT_CLASS = "extract_class"
@@ -25,9 +26,11 @@ class RefactoringType(Enum):
     PUSH_DOWN = "push_down"
     REPLACE_CONDITIONAL = "replace_conditional"
 
+
 @dataclass
 class Location:
     """Source code location."""
+
     file_path: str
     line: int
     column: int = 0
@@ -38,9 +41,11 @@ class Location:
         """Return human-readable string."""
         return f"{self.file_path}:{self.line}:{self.column}"
 
+
 @dataclass
 class Change:
     """A single code change."""
+
     location: Location
     old_text: str
     new_text: str
@@ -56,9 +61,11 @@ class Change:
             "description": self.description,
         }
 
+
 @dataclass
 class RefactoringResult:
     """Result of a refactoring operation."""
+
     success: bool
     changes: list[Change]
     description: str
@@ -85,12 +92,12 @@ class RefactoringResult:
                 line_idx = change.location.line - 1
                 if 0 <= line_idx < len(lines):
                     lines[line_idx] = lines[line_idx].replace(
-                        change.old_text,
-                        change.new_text
+                        change.old_text, change.new_text
                     )
 
-            with open(file_path, 'w') as f:
+            with open(file_path, "w") as f:
                 f.writelines(lines)
+
 
 class Refactoring(ABC):
     """Abstract base class for refactorings."""
@@ -112,6 +119,7 @@ class Refactoring(ABC):
         """Generate a preview of the changes."""
         pass
 
+
 class RenameRefactoring(Refactoring):
     """Rename a symbol (variable, function, class, etc.)."""
 
@@ -132,15 +140,15 @@ class RenameRefactoring(Refactoring):
 
     def _is_valid_identifier(self, name: str) -> bool:
         """Check if name is a valid Python identifier."""
-        return name.isidentifier() and not name.startswith('_')
+        return name.isidentifier() and not name.startswith("_")
 
     def _find_occurrences(self, content: str) -> list[tuple[int, int, int]]:
         """Find all occurrences of the old name."""
         occurrences = []
-        lines = content.split('\n')
+        lines = content.split("\n")
 
         # Pattern to match whole word only
-        pattern = re.compile(r'\b' + re.escape(self.old_name) + r'\b')
+        pattern = re.compile(r"\b" + re.escape(self.old_name) + r"\b")
 
         for line_num, line in enumerate(lines, 1):
             for match in pattern.finditer(line):
@@ -162,7 +170,7 @@ class RenameRefactoring(Refactoring):
         with open(self.file_path) as f:
             content = f.read()
 
-        if re.search(r'\b' + re.escape(self.new_name) + r'\b', content):
+        if re.search(r"\b" + re.escape(self.new_name) + r"\b", content):
             warnings.append(f"'{self.new_name}' already exists in the file")
 
         return warnings
@@ -179,12 +187,16 @@ class RenameRefactoring(Refactoring):
 
             changes = []
             for line_num, start, end in occurrences:
-                changes.append(Change(
-                    location=Location(self.file_path, line_num, start, line_num, end),
-                    old_text=self.old_name,
-                    new_text=self.new_name,
-                    description=f"Rename '{self.old_name}' to '{self.new_name}'",
-                ))
+                changes.append(
+                    Change(
+                        location=Location(
+                            self.file_path, line_num, start, line_num, end
+                        ),
+                        old_text=self.old_name,
+                        new_text=self.new_name,
+                        description=f"Rename '{self.old_name}' to '{self.new_name}'",
+                    )
+                )
 
             return RefactoringResult(
                 success=True,
@@ -209,12 +221,15 @@ class RenameRefactoring(Refactoring):
         lines.append(f"Changes: {len(result.changes)}")
 
         for change in result.changes[:10]:
-            lines.append(f"  Line {change.location.line}: {change.old_text} -> {change.new_text}")
+            lines.append(
+                f"  Line {change.location.line}: {change.old_text} -> {change.new_text}"
+            )
 
         if len(result.changes) > 10:
             lines.append(f"  ... and {len(result.changes) - 10} more")
 
         return "\n".join(lines)
+
 
 class ExtractFunctionRefactoring(Refactoring):
     """Extract selected code into a new function."""
@@ -241,13 +256,14 @@ class ExtractFunctionRefactoring(Refactoring):
         # In production, use AST analysis
 
         # Find assignments (defined)
-        defined = set(re.findall(r'^\s*(\w+)\s*=', code, re.MULTILINE))
+        defined = set(re.findall(r"^\s*(\w+)\s*=", code, re.MULTILINE))
 
         # Find all identifiers (used)
-        used = set(re.findall(r'\b([a-zA-Z_]\w*)\b', code))
+        used = set(re.findall(r"\b([a-zA-Z_]\w*)\b", code))
 
         # Filter out Python keywords and builtins
         import keyword
+
         used = used - set(keyword.kwlist) - set(dir(__builtins__))
 
         # External variables = used but not defined
@@ -279,8 +295,8 @@ class ExtractFunctionRefactoring(Refactoring):
                 lines = f.readlines()
 
             # Extract the code
-            extracted_lines = lines[self.start_line - 1:self.end_line]
-            extracted_code = ''.join(extracted_lines)
+            extracted_lines = lines[self.start_line - 1 : self.end_line]
+            extracted_code = "".join(extracted_lines)
 
             # Detect variables
             params, returns = self._detect_variables(extracted_code)
@@ -297,13 +313,15 @@ class ExtractFunctionRefactoring(Refactoring):
             func_lines = [f"def {self.function_name}({', '.join(self.parameters)}):\n"]
             for line in extracted_lines:
                 # Adjust indentation
-                stripped = line[original_indent:] if len(line) > original_indent else line
+                stripped = (
+                    line[original_indent:] if len(line) > original_indent else line
+                )
                 func_lines.append(f"    {stripped}")
 
             if returns:
                 func_lines.append(f"    return {', '.join(returns)}\n")
 
-            ''.join(func_lines)
+            "".join(func_lines)
 
             # Build function call
             if returns:
@@ -338,9 +356,12 @@ class ExtractFunctionRefactoring(Refactoring):
     def preview(self) -> str:
         """Preview."""
         self.execute()
-        return f"Extract Function: {self.function_name}\n" + \
-               f"Lines: {self.start_line}-{self.end_line}\n" + \
-               f"Parameters: {', '.join(self.parameters)}"
+        return (
+            f"Extract Function: {self.function_name}\n"
+            + f"Lines: {self.start_line}-{self.end_line}\n"
+            + f"Parameters: {', '.join(self.parameters)}"
+        )
+
 
 class InlineRefactoring(Refactoring):
     """Inline a function or variable."""
@@ -363,11 +384,13 @@ class InlineRefactoring(Refactoring):
             content = f.read()
 
         # Count usages
-        pattern = re.compile(r'\b' + re.escape(self.symbol_name) + r'\b')
+        pattern = re.compile(r"\b" + re.escape(self.symbol_name) + r"\b")
         count = len(pattern.findall(content))
 
         if count > 5:
-            warnings.append(f"Symbol has {count} usages, inlining may increase code size")
+            warnings.append(
+                f"Symbol has {count} usages, inlining may increase code size"
+            )
 
         return warnings
 
@@ -381,8 +404,7 @@ class InlineRefactoring(Refactoring):
 
             # Find the definition (simple variable assignment)
             definition_pattern = re.compile(
-                rf'^(\s*){re.escape(self.symbol_name)}\s*=\s*(.+)$',
-                re.MULTILINE
+                rf"^(\s*){re.escape(self.symbol_name)}\s*=\s*(.+)$", re.MULTILINE
             )
             match = definition_pattern.search(content)
 
@@ -397,22 +419,24 @@ class InlineRefactoring(Refactoring):
             value = match.group(2).strip()
 
             # Find all usages (excluding the definition)
-            usage_pattern = re.compile(r'\b' + re.escape(self.symbol_name) + r'\b')
+            usage_pattern = re.compile(r"\b" + re.escape(self.symbol_name) + r"\b")
 
             changes = []
-            lines = content.split('\n')
+            lines = content.split("\n")
 
             for line_num, line in enumerate(lines, 1):
-                if line_num == content[:match.start()].count('\n') + 1:
+                if line_num == content[: match.start()].count("\n") + 1:
                     continue  # Skip the definition line
 
                 for m in usage_pattern.finditer(line):
-                    changes.append(Change(
-                        location=Location(self.file_path, line_num, m.start()),
-                        old_text=self.symbol_name,
-                        new_text=value,
-                        description=f"Inline '{self.symbol_name}'",
-                    ))
+                    changes.append(
+                        Change(
+                            location=Location(self.file_path, line_num, m.start()),
+                            old_text=self.symbol_name,
+                            new_text=value,
+                            description=f"Inline '{self.symbol_name}'",
+                        )
+                    )
 
             return RefactoringResult(
                 success=True,
@@ -432,14 +456,14 @@ class InlineRefactoring(Refactoring):
     def preview(self) -> str:
         """Preview."""
         result = self.execute()
-        return f"Inline: {self.symbol_name}\n" + \
-               f"Changes: {len(result.changes)}\n" + \
-               result.description
+        return (
+            f"Inline: {self.symbol_name}\n"
+            + f"Changes: {len(result.changes)}\n"
+            + result.description
+        )
 
-def create_refactoring(
-    refactoring_type: RefactoringType,
-    **kwargs
-) -> Refactoring:
+
+def create_refactoring(refactoring_type: RefactoringType, **kwargs) -> Refactoring:
     """Factory function to create refactoring instances."""
     refactorings = {
         RefactoringType.RENAME: RenameRefactoring,
@@ -452,6 +476,7 @@ def create_refactoring(
         raise ValueError(f"Unsupported refactoring type: {refactoring_type}")
 
     return refactoring_class(**kwargs)
+
 
 __all__ = [
     "RefactoringType",

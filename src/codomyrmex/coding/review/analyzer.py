@@ -30,6 +30,7 @@ logger = get_logger(__name__)
 # Try to import performance monitoring
 try:
     from codomyrmex.performance import monitor_performance
+
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
@@ -47,9 +48,11 @@ except ImportError:
         Returns:
             A decorator function that returns the original function.
         """
+
         def decorator(func):
             """Inner decorator that returns the function unchanged."""
             return func
+
         return decorator
 
 
@@ -94,14 +97,15 @@ class PyscnAnalyzer:
         try:
             # Try to run pyscn --version
             result = subprocess.run(
-                ["pyscn", "--version"],
-                capture_output=True,
-                text=True,
-                timeout=10
+                ["pyscn", "--version"], capture_output=True, text=True, timeout=10
             )
             if result.returncode != 0:
                 raise ToolNotFoundError("pyscn not available or not working")
-        except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
+        except (
+            subprocess.CalledProcessError,
+            FileNotFoundError,
+            subprocess.TimeoutExpired,
+        ):
             raise ToolNotFoundError(
                 "pyscn not found. Install with: pipx install pyscn"
             ) from None
@@ -146,14 +150,18 @@ class PyscnAnalyzer:
                         functions = []
                         for func_data in complexity_data["Functions"]:
                             # Extract complexity from Metrics
-                            complexity = func_data.get("Metrics", {}).get("Complexity", 0)
-                            functions.append({
-                                "name": func_data.get("Name", ""),
-                                "complexity": complexity,
-                                "line_number": func_data.get("StartLine", 0),
-                                "file_path": func_data.get("FilePath", ""),
-                                "risk_level": func_data.get("RiskLevel", "")
-                            })
+                            complexity = func_data.get("Metrics", {}).get(
+                                "Complexity", 0
+                            )
+                            functions.append(
+                                {
+                                    "name": func_data.get("Name", ""),
+                                    "complexity": complexity,
+                                    "line_number": func_data.get("StartLine", 0),
+                                    "file_path": func_data.get("FilePath", ""),
+                                    "risk_level": func_data.get("RiskLevel", ""),
+                                }
+                            )
                         return functions
             return []
 
@@ -206,7 +214,9 @@ class PyscnAnalyzer:
             return []
 
     @monitor_performance("pyscn_find_clones")
-    def find_clones(self, files: list[str], threshold: float = 0.8) -> list[dict[str, Any]]:
+    def find_clones(
+        self, files: list[str], threshold: float = 0.8
+    ) -> list[dict[str, Any]]:
         """Find code clones using APTED with LSH acceleration.
 
         Detects duplicate or similar code patterns across the specified files
@@ -231,22 +241,32 @@ class PyscnAnalyzer:
             # For single file analysis, pyscn doesn't need a file list
             if len(files) == 1:
                 cmd = [
-                    "pyscn", "analyze", "--select", "clones",
-                    "--json", f"--clone-threshold={threshold}",
-                    files[0]
+                    "pyscn",
+                    "analyze",
+                    "--select",
+                    "clones",
+                    "--json",
+                    f"--clone-threshold={threshold}",
+                    files[0],
                 ]
             else:
                 # For multiple files, create temporary file list
-                with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+                with tempfile.NamedTemporaryFile(
+                    mode="w", suffix=".txt", delete=False
+                ) as f:
                     for file_path in files:
-                        f.write(file_path + '\n')
+                        f.write(file_path + "\n")
                     file_list_path = f.name
 
                 try:
                     cmd = [
-                        "pyscn", "analyze", "--select", "clones",
-                        "--json", f"--clone-threshold={threshold}",
-                        f"@{file_list_path}"
+                        "pyscn",
+                        "analyze",
+                        "--select",
+                        "clones",
+                        "--json",
+                        f"--clone-threshold={threshold}",
+                        f"@{file_list_path}",
                     ]
 
                     subprocess.run(cmd, capture_output=True, text=True, timeout=120)
@@ -349,7 +369,9 @@ class PyscnAnalyzer:
                 if os.path.exists(report_path):
                     return os.path.abspath(report_path)
                 else:
-                    logger.warning("Pyscn report generation completed but no HTML file found")
+                    logger.warning(
+                        "Pyscn report generation completed but no HTML file found"
+                    )
                     return ""
             finally:
                 os.chdir(old_cwd)
@@ -357,4 +379,3 @@ class PyscnAnalyzer:
         except (subprocess.TimeoutExpired, Exception) as e:
             logger.error(f"Error generating pyscn report: {e}")
             return ""
-
