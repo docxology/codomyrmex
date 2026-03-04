@@ -246,6 +246,7 @@ llm_providers = [
     "google-genai>=0.1.0",
     "absl-py>=1.4.0",       # Required by google-generativeai
     "tiktoken>=0.5.0",      # OpenAI tokenizer (optional, co-installed with openai)
+    "pillow>=10.0.0",       # Used by GeminiClient for image loading
 ]
 
 # Semantic search and vector DB — install with: uv sync --extra embedding

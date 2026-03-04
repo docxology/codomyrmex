@@ -1,11 +1,5 @@
 from typing import Any
 
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-from matplotlib.figure import Figure
-from matplotlib.patches import Patch
-
 from codomyrmex.cerebrum.core.cases import Case
 from codomyrmex.cerebrum.inference.bayesian import BayesianNetwork
 from codomyrmex.cerebrum.visualization.base import (
@@ -18,12 +12,17 @@ from codomyrmex.cerebrum.visualization.theme import (
 from codomyrmex.logging_monitoring import get_logger
 
 try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.figure import Figure
+    from matplotlib.patches import Patch
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     Figure = Any
     Patch = Any
     plt = None
+    np = Any
 
 try:
     import networkx as nx

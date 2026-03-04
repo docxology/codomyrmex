@@ -44,6 +44,21 @@ except ImportError:
     PerformanceMonitor = None
     PERFORMANCE_MONITOR_AVAILABLE = False
 
+    # Provide no-op fallbacks to prevent ImportErrors when psutil is missing
+    from contextlib import contextmanager
+
+    def monitor_performance(function_name=None, monitor=None):
+        def decorator(func):
+            return func
+        return decorator
+
+    @contextmanager
+    def performance_context(operation: str):
+        yield
+
+    def get_system_metrics():
+        return {}
+
 
 __version__ = "0.1.0"
 
@@ -88,11 +103,11 @@ __all__ = [
     "profile_function",
     "run_benchmark",
     "cli_commands",
+    "monitor_performance",
+    "performance_context",
+    "get_system_metrics",
 ]
 
 if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("PerformanceMonitor")
-    __all__.append("monitor_performance")
-    __all__.append("performance_context")
-    __all__.append("get_system_metrics")
 

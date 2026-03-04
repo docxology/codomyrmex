@@ -1,14 +1,6 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-import matplotlib
-import matplotlib.colors
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-from matplotlib.axes import Axes
-from matplotlib.figure import Figure
-
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.theme import (
     VisualizationTheme,
@@ -17,12 +9,19 @@ from codomyrmex.cerebrum.visualization.theme import (
 from codomyrmex.logging_monitoring import get_logger
 
 try:
+    import matplotlib
+    import matplotlib.colors
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.axes import Axes
+    from matplotlib.figure import Figure
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
     Figure = Any
     Axes = Any
     plt = None
+    np = Any
 
 try:
     import networkx as nx
@@ -372,10 +371,17 @@ class BaseChartVisualizer(BaseVisualizer):
             normalized = max(0.0, min(1.0, normalized))
 
         try:
-            cmap = plt.cm.get_cmap(colormap)
-        except ValueError:
+            # Use modern Matplotlib API if available (3.7+), otherwise fallback
+            if hasattr(matplotlib, "colormaps"):
+                cmap = matplotlib.colormaps[colormap]
+            else:
+                cmap = plt.cm.get_cmap(colormap)
+        except (ValueError, KeyError):
             # Fallback to viridis
-            cmap = plt.cm.get_cmap("viridis")
+            if hasattr(matplotlib, "colormaps"):
+                cmap = matplotlib.colormaps["viridis"]
+            else:
+                cmap = plt.cm.get_cmap("viridis")
         rgba = cmap(normalized)
         return matplotlib.colors.rgb2hex(rgba)
 
@@ -474,7 +480,7 @@ class BaseHeatmapVisualizer(BaseVisualizer):
 
     def create_heatmap(
         self,
-        data: np.ndarray,
+        data: Any,
         row_labels: list[str],
         col_labels: list[str],
         ax: Axes | None = None,
