@@ -1,255 +1,178 @@
-# Codomyrmex
+<p align="center">
+  <h1 align="center">🐜 Codomyrmex</h1>
+  <p align="center">
+    <strong>A modular, AI-native coding workspace with 127 composable modules and 424 MCP tools</strong>
+  </p>
+</p>
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.8-blue.svg)](https://github.com/docxology/codomyrmex)
-[![Tests](https://img.shields.io/badge/tests-21,036%20collected-brightgreen.svg)](https://github.com/docxology/codomyrmex)
-[![Coverage](https://img.shields.io/badge/coverage-~32%25-blue.svg)](https://github.com/docxology/codomyrmex)
+<p align="center">
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.0"><img src="https://img.shields.io/badge/release-v1.1.0-blueviolet?style=flat-square" alt="Release"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License: MIT"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-≥3.10-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/docxology/codomyrmex/actions"><img src="https://img.shields.io/badge/CI-passing-brightgreen?style=flat-square&logo=github-actions&logoColor=white" alt="CI"></a>
+  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/tests-21%2C000%2B-brightgreen?style=flat-square" alt="Tests"></a>
+  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/MCP_tools-424-orange?style=flat-square" alt="MCP Tools"></a>
+</p>
 
-> **A modular, extensible coding workspace designed for AI development workflows**
+<p align="center">
+  <a href="docs/getting-started/quickstart.md">Quick Start</a> •
+  <a href="docs/getting-started/GETTING_STARTED_WITH_AGENTS.md">Agent Guide</a> •
+  <a href="docs/">Documentation</a> •
+  <a href="CONTRIBUTING.md">Contributing</a> •
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.0">v1.1.0 Release</a>
+</p>
 
-Codomyrmex integrates tools for building, documenting, analyzing, executing, and visualizing code across multiple languages. Built with modularity and AI integration at its core, it provides a comprehensive platform for modern software development.
+---
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 126 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
-
-### Key Features
-
-- **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- **Modular Architecture** - 126 independent, composable modules with clear interfaces
-- **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
-- **Build & Deploy** - Multi-language builds, CI/CD automation, container management
-- **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
-- **Documentation** - Automated documentation generation, API specs, and tutorials
-- **Security First** - Built-in security scanning, vulnerability detection, and compliance checking
-- **Polyglot Support** - Language-agnostic interfaces supporting Python, JavaScript, Go, Rust, Java
+Codomyrmex is a **modular development platform** that brings together **127 specialized modules** for AI-assisted development, code analysis, orchestration, security, and documentation. Every module is self-contained, zero-mock tested, and composable — use what you need.
 
 ### Why Codomyrmex?
 
-- **Modularity First**: Self-contained modules with clear boundaries - use what you need, when you need it
-- **AI Integration**: Seamless integration with LLMs through standardized Model Context Protocol
-- **Tested**: Over twenty-one thousand unit, integration, and workflow tests exercise core functionality across modules
-- **Well-Documented**: RASP documentation (README, AGENTS, SPEC, PAI) and API references for modules and tools
-- **Robust Interfaces**: Stable public APIs with structured error handling and telemetry
+| | |
+|---|---|
+| 🧩 **127 Modules** | Self-contained, composable units with clear interfaces |
+| 🤖 **424 MCP Tools** | AI agents invoke tools via Model Context Protocol |
+| 🧪 **21,000+ Tests** | Zero-mock policy — every test exercises real code |
+| 🔒 **Security First** | Secret scanning, SBOM generation, detect-secrets integration |
+| 🎛️ **Multi-Agent Orchestration** | Claude, Gemini, GPT, and 10+ agent providers |
+| 📦 **PyPI Ready** | `hatch build` + `twine check` verified |
 
 ## Quick Start
 
-Get started with Codomyrmex in minutes:
-
 ```bash
-# Clone the repository
+# Clone & install
 git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
-
-# Install with uv (recommended)
 uv sync
 
-# Launch interactive shell
-./start_here.sh
+# Verify everything works
+uv run codomyrmex doctor --all
+
+# Run the test suite
+uv run pytest src/codomyrmex/tests/ -x -q
 ```
 
-**New to Codomyrmex?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or explore [executable examples](scripts/documentation/examples/).
+> **New here?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or dive into [Agent Operations](docs/getting-started/GETTING_STARTED_WITH_AGENTS.md).
 
-## Documentation Hub
+## Architecture
 
-Codomyrmex documentation is organized into focused guides for different needs:
-
-### Getting Started
-
-| Guide | Description |
-|-------|-------------|
-| [**Quick Start**](docs/getting-started/quickstart.md) | Get up and running in 5 minutes |
-| [**Installation**](docs/getting-started/installation.md) | Detailed installation instructions |
-| [**Setup**](docs/getting-started/setup.md) | Environment configuration |
-| [**Tutorials**](docs/getting-started/tutorials/) | Step-by-step learning paths |
-
-### Architecture & Design
-
-| Guide | Description |
-|-------|-------------|
-| [**Architecture**](docs/project/architecture.md) | System design and principles |
-| [**Full Setup Guide**](docs/getting-started/full-setup.md) | Complete architecture, module tables, and development guide |
-| [**Module Overview**](docs/modules/overview.md) | Understanding the module system |
-| [**Contributing**](docs/project/contributing.md) | How to contribute to Codomyrmex |
-| [**Project Roadmap**](docs/project/README.md) | Current priorities and future plans |
-
-### Development
-
-| Guide | Description |
-|-------|-------------|
-| [**Environment Setup**](docs/development/environment-setup.md) | Development environment configuration |
-| [**Testing Strategy**](docs/development/testing-strategy.md) | Testing approach and best practices |
-| [**Documentation Guide**](docs/development/documentation.md) | Writing documentation |
-| [**uv Usage Guide**](docs/development/uv-usage-guide.md) | Package management with uv |
-
-### Reference
-
-| Guide | Description |
-|-------|-------------|
-| [**API Reference**](docs/reference/api.md) | Complete API documentation |
-| [**CLI Reference**](docs/reference/cli.md) | Command-line interface |
-| [**Orchestrator**](docs/reference/orchestrator.md) | Workflow orchestration |
-| [**Performance**](docs/reference/performance.md) | Performance optimization |
-| [**Troubleshooting**](docs/reference/troubleshooting.md) | Common issues and solutions |
-
-### Deployment & Operations
-
-| Guide | Description |
-|-------|-------------|
-| [**Production Deployment**](docs/deployment/production.md) | Production deployment guide |
-| [**Security**](docs/reference/security.md) | Security best practices |
-| [**Migration Guide**](docs/reference/migration-guide.md) | Upgrading between versions |
-
-### Integration
-
-| Guide | Description |
-|-------|-------------|
-| [**Integration Overview**](docs/integration/) | External service integration |
-| [**Examples**](docs/examples/) | Working code examples |
-| [**Project Orchestration**](docs/project_orchestration/) | Multi-project workflows |
-
-- [**AGENTS.md**](AGENTS.md) | Agent coordination protocols
-- [**PAI.md**](PAI.md) | Personal AI Infrastructure
-- [**SPEC.md**](SPEC.md) | Functional specification
-
-## Examples & Tutorials
-
-Codomyrmex provides comprehensive examples to help you get started quickly:
-
-### Hands-on Examples
-
-- [**Basic Usage**](scripts/documentation/examples/basic_usage.py) - Core module interactions
-- [**Advanced Workflows**](scripts/documentation/examples/advanced_workflow.py) - Multi-module orchestration
-- [**Agent Demos**](src/codomyrmex/agents/ai_code_editing/README.md#examples) - AI-assisted coding examples
-
-### Executable Demos
-
-Run these from the root using `uv run python`:
-
-```bash
-uv run scripts/documentation/examples/basic_usage.py
-uv run scripts/documentation/examples/advanced_workflow.py
+```text
+┌─────────────────────────────────────────────────────────┐
+│                  User / IDE / CLI                       │
+├─────────────────────────────────────────────────────────┤
+│              Agent Orchestrator                         │
+│   ┌───────┬───────┬──────┬───────┬───────┬──────────┐   │
+│   │Claude │Gemini │ GPT  │Droid  │Aider  │Antigrav  │   │
+│   └───┬───┴───┬───┴──┬───┴───┬───┴───┬───┴────┬─────┘   │
+│       └───────┴──────┴───────┴───────┴────────┘          │
+│          PAI Trust Gateway · MCP Bridge                  │
+│          EventBus · Skills · Memory                      │
+├─────────────────────────────────────────────────────────┤
+│  coding │ security │ llm │ orchestrator │ telemetry     │
+│  events │ search   │ api │ docs_gen     │ testing       │
+└─────────────────────────────────────────────────────────┘
 ```
 
----
+## Core Modules
 
-**Quick Links:**
-
-- [Source Code](src/codomyrmex/README.md) - Browse all modules
-- [Full Documentation](docs/) - Complete documentation
-- [Module Documentation](docs/modules/) - Per-module guides
-- [Scripts](scripts/) - Utility and automation scripts
-
-## Core Modules at a Glance
-
-| Category | Key Modules |
-| :--- | :--- |
-| **Foundation** | [logging_monitoring](src/codomyrmex/logging_monitoring/) - [environment_setup](src/codomyrmex/environment_setup/) - [model_context_protocol](src/codomyrmex/model_context_protocol/) - [terminal_interface](src/codomyrmex/terminal_interface/) |
-| **Core** | [agents](src/codomyrmex/agents/) - [coding](src/codomyrmex/coding/) - [llm](src/codomyrmex/llm/) - [security](src/codomyrmex/security/) - [git_operations](src/codomyrmex/git_operations/) - [data_visualization](src/codomyrmex/data_visualization/) |
-| **Service** | [documentation](src/codomyrmex/documentation/) - [api](src/codomyrmex/api/) - [ci_cd_automation](src/codomyrmex/ci_cd_automation/) - [containerization](src/codomyrmex/containerization/) - [orchestrator](src/codomyrmex/orchestrator/) |
-| **Specialized** | [spatial](src/codomyrmex/spatial/) - [cerebrum](src/codomyrmex/cerebrum/) - [events](src/codomyrmex/events/) - [plugin_system](src/codomyrmex/plugin_system/) - [agentic_memory](src/codomyrmex/agentic_memory/) |
-
-See the **[Full Setup Guide](docs/getting-started/full-setup.md)** for complete module tables, architecture diagrams, and the module quick reference.
+| Layer | Key Modules |
+|:------|:------------|
+| **Foundation** | [`logging_monitoring`](src/codomyrmex/logging_monitoring/) · [`environment_setup`](src/codomyrmex/environment_setup/) · [`model_context_protocol`](src/codomyrmex/model_context_protocol/) · [`events`](src/codomyrmex/events/) |
+| **Agents** | [`agents/`](src/codomyrmex/agents/) (13 providers) · [`ide/`](src/codomyrmex/ide/) · [`skills/`](src/codomyrmex/skills/) · [`agentic_memory/`](src/codomyrmex/agentic_memory/) |
+| **Core** | [`coding`](src/codomyrmex/coding/) · [`llm`](src/codomyrmex/llm/) · [`security`](src/codomyrmex/security/) · [`git_operations`](src/codomyrmex/git_operations/) · [`orchestrator`](src/codomyrmex/orchestrator/) |
+| **Infrastructure** | [`api`](src/codomyrmex/api/) · [`ci_cd_automation`](src/codomyrmex/ci_cd_automation/) · [`containerization`](src/codomyrmex/containerization/) · [`telemetry`](src/codomyrmex/telemetry/) |
+| **Specialized** | [`spatial`](src/codomyrmex/spatial/) · [`cerebrum`](src/codomyrmex/cerebrum/) · [`quantum`](src/codomyrmex/quantum/) · [`graph_rag`](src/codomyrmex/graph_rag/) · [`meme`](src/codomyrmex/meme/) |
 
 ## PAI Integration
 
-Codomyrmex is the **toolbox** for [PAI v4.0.1](https://github.com/danielmiessler/Personal_AI_Infrastructure) (Personal AI Infrastructure). PAI agents invoke codomyrmex capabilities via the Model Context Protocol (MCP) during every phase of The Algorithm:
+Codomyrmex is the **toolbox** for the [Personal AI Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure) (PAI). Agents invoke capabilities via MCP during every phase of The Algorithm:
 
-| Algorithm Phase | Primary Codomyrmex Modules |
-|----------------|---------------------------|
-| OBSERVE | `system_discovery`, `git_operations`, `search` |
-| THINK | `cerebrum`, `agents/core` (ThinkingAgent) |
-| PLAN | `orchestrator`, `formal_verification` |
-| BUILD | `agents`, `coding`, `git_operations` |
-| EXECUTE | `agents` (all 12 providers), `containerization` |
-| VERIFY | `static_analysis`, `security`, `validation` |
-| LEARN | `agentic_memory`, `logging_monitoring` |
+| Phase | Modules | Purpose |
+|-------|---------|---------|
+| **Observe** | `system_discovery`, `search` | Scan environment and codebase |
+| **Think** | `cerebrum`, `agents/core` | Reasoning and analysis |
+| **Plan** | `orchestrator`, `formal_verification` | Design workflows |
+| **Build** | `agents`, `coding` | Write and edit code |
+| **Execute** | `agents` (13 providers), `containerization` | Run code in sandboxes |
+| **Verify** | `static_analysis`, `security`, `validation` | Test and validate |
+| **Learn** | `agentic_memory`, `telemetry` | Store insights |
 
-**MCP Bridge**: ~303 dynamic tools across 118 auto-discovered modules — see [`PAI.md`](PAI.md)
-**Trust Model**: UNTRUSTED → VERIFIED (`/codomyrmexVerify`) → TRUSTED (`/codomyrmexTrust`)
-**Deep Dive**: [`PAI.md`](PAI.md) · [`docs/pai/README.md`](docs/pai/README.md) · [`docs/pai/architecture.md`](docs/pai/architecture.md)
+**MCP Bridge**: 424 dynamic tools across 126 auto-discovered modules  
+**Trust model**: `UNTRUSTED` → `VERIFIED` → `TRUSTED`  
+**Deep dive**: [`PAI.md`](PAI.md) · [`docs/pai/`](docs/pai/)
+
+## CLI
+
+```bash
+codomyrmex doctor                # Environment diagnostics
+codomyrmex doctor --fix          # Auto-fix common issues
+codomyrmex doctor --all --json   # Full check, JSON output
+codomyrmex modules               # List available modules
+codomyrmex status                # System status dashboard
+```
 
 ## Development
 
-### Running Tests
-
 ```bash
-# Run all tests
-uv run pytest
+# Tests
+uv run pytest                                    # Full suite
+uv run pytest -m integration                     # Integration only
+uv run pytest --cov=src/codomyrmex               # With coverage
 
-# Run with coverage
-uv run pytest --cov=src/codomyrmex --cov-report=html
+# Quality
+uv run ruff check src/                           # Lint (0 violations ✅)
+uv run mypy src/                                 # Type check
+uv run hatch build && uv run twine check dist/*  # Build validation
 
-# Run specific test suite
-uv run pytest src/codomyrmex/tests/unit/
+# Mutation testing
+uv run mutmut run                                # 6-file mutation suite
 ```
 
-### Code Quality
+## Documentation
 
-```bash
-# Format code
-uv run black src/
+| Section | Link |
+|---------|------|
+| Quick Start | [quickstart.md](docs/getting-started/quickstart.md) |
+| Setup Guide | [setup.md](docs/getting-started/setup.md) |
+| Agent Operations | [GETTING_STARTED_WITH_AGENTS.md](docs/getting-started/GETTING_STARTED_WITH_AGENTS.md) |
+| Tutorials (8) | [tutorials/](docs/getting-started/tutorials/) |
+| Architecture | [architecture.md](docs/project/architecture.md) |
+| Testing Strategy | [testing-strategy.md](docs/development/testing-strategy.md) |
+| API Reference | [api.md](docs/reference/api.md) |
+| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
-# Lint code
-uv run ruff check src/
+## Metrics
 
-# Type checking
-uv run mypy src/
-```
-
-### Module Development
-
-See **[Creating a Module Tutorial](docs/getting-started/tutorials/creating-a-module.md)** for detailed guidance on developing new modules.
-
-## Key Metrics
-
-- **Lines of Code**: ~100K+ across 126 modules
-- **Test Coverage**: ~32% (21,036 tests collected)
-- **Module Count**: 126 modules across 4 architectural layers
-- **Language Support**: Python, JavaScript, Go, Rust, Java
-- **AI Integration**: 5+ LLM providers supported
-- **Documentation**: 900+ pages across all modules
+| Metric | Value |
+|--------|-------|
+| Modules | **127** |
+| MCP tools | **424** dynamically discovered |
+| Test suite | **21,000+** tests |
+| Coverage | ~32% (gate: 31%) |
+| `@mcp_tool` decorators | **917** |
+| Ruff violations | **0** |
+| PAI skills | **81** installed |
+| RASP docs compliance | **127/127** |
+| Python compatibility | 3.10 – 3.14 |
 
 ## Contributing
 
-We welcome contributions! Please see our **[Contributing Guide](docs/project/contributing.md)** for code standards, development workflow, pull request process, and testing requirements.
+We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for standards, workflow, and testing requirements.
 
 ## Security
 
-Security is a priority. See **[SECURITY.md](SECURITY.md)** for vulnerability reporting, security best practices, and module-specific security considerations.
+See [SECURITY.md](SECURITY.md) for vulnerability reporting and security policies. Automated secret scanning via `detect-secrets` pre-commit hook.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License — see [LICENSE](LICENSE) for details.
 
-Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
-
-## Links
-
-- **Repository**: [github.com/docxology/codomyrmex](https://github.com/docxology/codomyrmex)
-- **Issues**: [github.com/docxology/codomyrmex/issues](https://github.com/docxology/codomyrmex/issues)
+Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://github.com/docxology))
 
 ---
 
-**Built with a focus on modularity, clarity, and professional development practices.**
-
-## Example Usage
-
-```bash
-# CLI usage (primary entry point)
-codomyrmex check                 # Verify environment setup
-codomyrmex modules               # List available modules
-codomyrmex status                # System status dashboard
-codomyrmex shell                 # Interactive shell
-```
-
-> Full documentation: [Architecture & Setup](docs/getting-started/full-setup.md) | [Module Reference](docs/getting-started/tutorials/creating-a-module.md)
-
-## Navigation Links
-
-- **Documentation**: [Reference Guides](docs/README.md)
-- **All Agents**: [AGENTS.md](AGENTS.md)
-- **Functional Spec**: [SPEC.md](SPEC.md)
-- **Source Index**: [src/README.md](src/README.md)
+<p align="center">
+  <sub>Built with modularity, zero-mock testing, and AI-native design.</sub>
+</p>
