@@ -1,5 +1,4 @@
-"""
-Database Connections Module
+"""Database Connections Module.
 
 Connection pooling, health checks, and connection management.
 """
@@ -25,6 +24,7 @@ T = TypeVar('T')
 
 class ConnectionState(Enum):
     """State of a database connection."""
+
     IDLE = "idle"
     IN_USE = "in_use"
     CLOSED = "closed"
@@ -33,6 +33,7 @@ class ConnectionState(Enum):
 @dataclass
 class ConnectionStats:
     """Statistics for connection pool."""
+
     total_connections: int = 0
     active_connections: int = 0
     idle_connections: int = 0
@@ -51,6 +52,7 @@ class ConnectionStats:
 @dataclass
 class PoolConfig:
     """Configuration for connection pool."""
+
     min_connections: int = 1
     max_connections: int = 10
     acquire_timeout_s: float = 30.0
@@ -63,6 +65,7 @@ class Connection(ABC, Generic[T]):
     """Base class for database connections."""
 
     def __init__(self):
+        """Initialize connection metrics."""
         self.created_at: datetime = datetime.now()
         self.last_used_at: datetime = datetime.now()
         self.state: ConnectionState = ConnectionState.IDLE
@@ -112,6 +115,7 @@ class InMemoryConnection(Connection[dict]):
     """In-memory connection for lightweight or test usage."""
 
     def __init__(self, connection_id: int = 0):
+        """Initialize dummy connection."""
         super().__init__()
         self.connection_id = connection_id
         self._closed = False
@@ -145,6 +149,7 @@ class InMemoryConnectionFactory(ConnectionFactory[dict]):
     """Factory for in-memory connections."""
 
     def __init__(self):
+        """Initialize connection factory."""
         self._counter = 0
         self._lock = threading.Lock()
 
@@ -155,8 +160,7 @@ class InMemoryConnectionFactory(ConnectionFactory[dict]):
             return InMemoryConnection(self._counter)
 
 class ConnectionPool(Generic[T]):
-    """
-    Thread-safe database connection pool.
+    """Thread-safe database connection pool.
 
     Usage:
         factory = PostgresConnectionFactory(dsn="...")
@@ -179,6 +183,7 @@ class ConnectionPool(Generic[T]):
         factory: ConnectionFactory[T],
         config: PoolConfig | None = None,
     ):
+        """Initialize connection pool."""
         self.factory = factory
         self.config = config or PoolConfig()
         self._pool: queue.Queue = queue.Queue()
@@ -233,8 +238,7 @@ class ConnectionPool(Generic[T]):
             return False
 
     def acquire(self, timeout: float | None = None) -> Connection[T]:
-        """
-        Acquire a connection from the pool.
+        """Acquire a connection from the pool.
 
         Args:
             timeout: Timeout in seconds (uses config default if None)
@@ -244,6 +248,7 @@ class ConnectionPool(Generic[T]):
 
         Raises:
             TimeoutError: If no connection available within timeout
+
         """
         if self._closed:
             raise RuntimeError("Pool is closed")
@@ -360,8 +365,7 @@ class ConnectionPool(Generic[T]):
             logger.debug("Connection pool queue drained: %s", e)
 
 class HealthChecker:
-    """
-    Health checker for database connections.
+    """Health checker for database connections.
 
     Usage:
         checker = HealthChecker(pool, check_interval=60)
@@ -377,6 +381,7 @@ class HealthChecker:
         check_interval: float = 60.0,
         health_query: str = "SELECT 1",
     ):
+        """Initialize health checker."""
         self.pool = pool
         self.check_interval = check_interval
         self.health_query = health_query

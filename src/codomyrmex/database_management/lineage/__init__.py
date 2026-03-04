@@ -1,5 +1,4 @@
-"""
-Data Lineage Module (Legacy)
+"""Data Lineage Module (Legacy).
 
 This module is now deprecated in favor of codomyrmex.data_lineage.
 It is maintained for backward compatibility.

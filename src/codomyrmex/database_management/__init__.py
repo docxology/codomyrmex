@@ -1,5 +1,4 @@
-"""
-Database Management Module for Codomyrmex.
+"""Database Management Module for Codomyrmex.
 
 The Database Management module provides database management,
 migration, and administration capabilities for the Codomyrmex ecosystem.

@@ -1,5 +1,4 @@
-"""
-Migration Module
+"""Migration Module.
 
 Data migration with versioned steps, rollbacks, and transformers.
 """

@@ -50,44 +50,45 @@ class TestQueryExecution:
 
     def test_select_query_execution(self, db_connection):
         """Test SELECT query execution returns results."""
-        result = db_connection.execute_query("SELECT * FROM users")
+        result = db_connection.execute("SELECT * FROM users")
 
-        assert isinstance(result, list)
-        assert len(result) == 2
-        assert result[0]["id"] == 1
-        assert result[0]["name"] == "Alice"
+        assert isinstance(result.to_dict_list(), list)
+        assert len(result.to_dict_list()) == 2
+        assert result.to_dict_list()[0]["id"] == 1
+        assert result.to_dict_list()[0]["name"] == "Alice"
 
     def test_insert_query_execution(self, db_connection):
         """Test INSERT query execution."""
-        db_connection.execute_query(
+        db_connection.execute(
             "INSERT INTO users VALUES (3, 'Charlie', 'charlie@example.com')"
         )
 
-        result = db_connection.execute_query("SELECT * FROM users WHERE id = 3")
-        assert len(result) == 1
-        assert result[0]["name"] == "Charlie"
+        result = db_connection.execute("SELECT * FROM users WHERE id = 3")
+        assert len(result.to_dict_list()) == 1
+        assert result.to_dict_list()[0]["name"] == "Charlie"
 
     def test_update_query_execution(self, db_connection):
         """Test UPDATE query execution."""
-        db_connection.execute_query(
+        db_connection.execute(
             "UPDATE users SET name = 'Alice Updated' WHERE id = 1"
         )
 
-        result = db_connection.execute_query("SELECT name FROM users WHERE id = 1")
-        assert result[0]["name"] == "Alice Updated"
+        result = db_connection.execute("SELECT name FROM users WHERE id = 1")
+        assert result.to_dict_list()[0]["name"] == "Alice Updated"
 
     def test_delete_query_execution(self, db_connection):
         """Test DELETE query execution."""
-        db_connection.execute_query("DELETE FROM users WHERE id = 2")
+        db_connection.execute("DELETE FROM users WHERE id = 2")
 
-        result = db_connection.execute_query("SELECT * FROM users")
-        assert len(result) == 1
-        assert result[0]["id"] == 1
+        result = db_connection.execute("SELECT * FROM users")
+        assert len(result.to_dict_list()) == 1
+        assert result.to_dict_list()[0]["id"] == 1
 
     def test_query_with_invalid_table(self, db_connection):
-        """Test query with non-existent table raises error."""
-        with pytest.raises(sqlite3.OperationalError):
-            db_connection.execute_query("SELECT * FROM invalid_table")
+        """Test query with non-existent table sets error in result."""
+        result = db_connection.execute("SELECT * FROM invalid_table")
+        assert not result.success
+        assert "no such table: invalid_table" in result.error_message
 
 
 # ==============================================================================
@@ -121,43 +122,43 @@ class TestParameterizedQueries:
 
     def test_parameterized_select(self, db_connection):
         """Test parameterized SELECT query."""
-        result = db_connection.execute_query(
+        result = db_connection.execute(
             "SELECT * FROM products WHERE id = ?",
             (1,)
         )
 
-        assert len(result) == 1
-        assert result[0]["name"] == "Widget"
+        assert len(result.to_dict_list()) == 1
+        assert result.to_dict_list()[0]["name"] == "Widget"
 
     def test_parameterized_select_multiple_params(self, db_connection):
         """Test parameterized SELECT with multiple parameters."""
-        result = db_connection.execute_query(
+        result = db_connection.execute(
             "SELECT * FROM products WHERE price > ? AND price < ?",
             (20.0, 40.0)
         )
 
-        assert len(result) == 2
+        assert len(result.to_dict_list()) == 2
 
     def test_parameterized_insert(self, db_connection):
         """Test parameterized INSERT query."""
-        db_connection.execute_query(
+        db_connection.execute(
             "INSERT INTO products VALUES (?, ?, ?)",
             (4, "Thingamajig", 49.99)
         )
 
-        result = db_connection.execute_query("SELECT * FROM products WHERE id = 4")
-        assert len(result) == 1
-        assert result[0]["name"] == "Thingamajig"
+        result = db_connection.execute("SELECT * FROM products WHERE id = 4")
+        assert len(result.to_dict_list()) == 1
+        assert result.to_dict_list()[0]["name"] == "Thingamajig"
 
     def test_parameterized_update(self, db_connection):
         """Test parameterized UPDATE query."""
-        db_connection.execute_query(
+        db_connection.execute(
             "UPDATE products SET price = ? WHERE id = ?",
             (24.99, 1)
         )
 
-        result = db_connection.execute_query("SELECT price FROM products WHERE id = 1")
-        assert result[0]["price"] == 24.99
+        result = db_connection.execute("SELECT price FROM products WHERE id = 1")
+        assert result.to_dict_list()[0]["price"] == 24.99
 
 
 # ==============================================================================
@@ -239,8 +240,8 @@ class TestErrorHandling:
         """Test error when connection not found."""
         manager = DatabaseManager()
 
-        with pytest.raises(ValueError, match="Database connection not found"):
-            manager.execute_query("nonexistent", "SELECT 1")
+        with pytest.raises(Exception, match="No database connection available"):
+            manager.execute("SELECT 1", connection_name="nonexistent")
 
     def test_execute_without_connection(self):
         """Test error when executing on connector without connection."""

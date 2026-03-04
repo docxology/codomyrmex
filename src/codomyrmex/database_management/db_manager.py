@@ -27,6 +27,7 @@ logger = get_logger(__name__)
 
 class DatabaseType(Enum):
     """Supported database types."""
+
     SQLITE = "sqlite"
     POSTGRESQL = "postgresql"
     MYSQL = "mysql"
@@ -38,6 +39,7 @@ class DatabaseType(Enum):
 @dataclass
 class QueryResult:
     """Result of a query execution."""
+
     success: bool
     rows: list[tuple]
     columns: list[str]
@@ -58,6 +60,7 @@ class QueryResult:
 @dataclass
 class DatabaseConnection:
     """Database connection information and low-level operations."""
+
     name: str
     db_type: DatabaseType
     database: str
@@ -135,6 +138,7 @@ class DatabaseConnection:
             query: SQL query string.
             params: Optional tuple of parameters.
             commit: Whether to commit after execution if it's a DDL/DML query.
+
         """
         if not self._connection:
             self.connect()
@@ -344,7 +348,7 @@ class DatabaseManager:
 
 # Convenience functions
 def connect_database(database_url: str) -> DatabaseManager:
-    """Convenience function to connect to a database."""
+    """Connect to a database."""
     return DatabaseManager(database_url)
 
 def manage_databases(database_url: str | None = None) -> DatabaseManager:
@@ -352,7 +356,7 @@ def manage_databases(database_url: str | None = None) -> DatabaseManager:
     return DatabaseManager(database_url)
 
 def execute_query(database_url: str, query: str, params: tuple | None = None) -> QueryResult:
-    """Convenience function to execute a single query."""
+    """Execute a single query on a database."""
     manager = DatabaseManager(database_url)
     try:
         return manager.execute(query, params)

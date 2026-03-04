@@ -1,5 +1,4 @@
-"""
-Migration Runner
+"""Migration Runner.
 
 Executes migrations and data transformations.
 """
@@ -19,8 +18,7 @@ from .models import (
 
 
 class MigrationRunner:
-    """
-    Runs migrations.
+    """Runs migrations.
 
     Usage:
         runner = MigrationRunner()
@@ -37,6 +35,7 @@ class MigrationRunner:
     """
 
     def __init__(self):
+        """Initialize migration runner."""
         self._completed: list[str] = []
         self._lock = threading.Lock()
 
@@ -94,8 +93,7 @@ class MigrationRunner:
 
 
 class DataMigrator:
-    """
-    Migrates data with transformations.
+    """Migrates data with transformations.
 
     Usage:
         migrator = DataMigrator()
@@ -104,6 +102,7 @@ class DataMigrator:
     """
 
     def __init__(self):
+        """Initialize data pipeline runner."""
         self._transformers: list[DataTransformer] = []
 
     def add_transformer(self, transformer: DataTransformer) -> "DataMigrator":

@@ -24,6 +24,7 @@ __all__ = ["BackupFormat", "BackupMetadata", "DatabaseBackup"]
 
 class BackupFormat(Enum):
     """Supported backup formats."""
+
     SQL_DUMP = "sql_dump"
     FILE_COPY = "file_copy"
     COMPRESSED = "compressed"
@@ -32,6 +33,7 @@ class BackupFormat(Enum):
 @dataclass
 class BackupMetadata:
     """Metadata for a backup."""
+
     backup_id: str
     source: str
     destination: str
@@ -64,6 +66,7 @@ class DatabaseBackup:
     """
 
     def __init__(self, backup_dir: Path) -> None:
+        """Initialize DatabaseBackup."""
         self._backup_dir = backup_dir
         self._backup_dir.mkdir(parents=True, exist_ok=True)
         self._manifest_path = self._backup_dir / "manifest.json"
@@ -154,6 +157,7 @@ class DatabaseBackup:
         return True
 
     def list_backups(self) -> list[dict[str, Any]]:
+        """List all available backups in local storage."""
         return list(self._manifest)
 
     def _find_backup(self, backup_id: str) -> dict[str, Any] | None:

@@ -1,5 +1,4 @@
-"""
-Migration Models
+"""Migration Models.
 
 Data classes, enums, and transformers for data migration.
 """
@@ -18,6 +17,7 @@ logger = get_logger(__name__)
 
 class MigrationStatus(Enum):
     """Status of a migration."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -27,6 +27,7 @@ class MigrationStatus(Enum):
 
 class MigrationDirection(Enum):
     """Direction of migration."""
+
     UP = "up"
     DOWN = "down"
 
@@ -34,6 +35,7 @@ class MigrationDirection(Enum):
 @dataclass
 class MigrationStep:
     """A single migration step."""
+
     id: str
     name: str
     description: str = ""
@@ -57,6 +59,7 @@ class MigrationStep:
 @dataclass
 class MigrationResult:
     """Result of a migration."""
+
     migration_id: str
     status: MigrationStatus
     started_at: datetime = field(default_factory=datetime.now)
@@ -93,6 +96,7 @@ class MigrationResult:
 @dataclass
 class Migration:
     """A complete migration definition."""
+
     id: str
     name: str
     version: str
@@ -130,6 +134,7 @@ class FieldRenameTransformer(DataTransformer):
     """Renames fields in dictionaries."""
 
     def __init__(self, mapping: dict[str, str]):
+        """Initialize FieldRenameTransformer."""
         self.mapping = mapping
 
     def transform(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -145,6 +150,7 @@ class FieldTypeTransformer(DataTransformer):
     """Converts field types."""
 
     def __init__(self, conversions: dict[str, type]):
+        """Initialize FieldTypeTransformer."""
         self.conversions = conversions
 
     def transform(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -163,6 +169,7 @@ class CompositeTransformer(DataTransformer):
     """Combines multiple transformers."""
 
     def __init__(self, transformers: list[DataTransformer]):
+        """Initialize CompositeTransformer."""
         self.transformers = transformers
 
     def transform(self, data: Any) -> Any:

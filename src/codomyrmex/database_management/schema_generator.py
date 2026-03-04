@@ -61,6 +61,7 @@ TYPE_MAPPINGS = {
 @dataclass
 class Column:
     """Database column definition."""
+
     name: str
     data_type: str
     length: int | None = None
@@ -113,6 +114,7 @@ class Column:
 @dataclass
 class Index:
     """Database index definition."""
+
     name: str
     columns: list[str]
     unique: bool = False
@@ -133,6 +135,7 @@ class Index:
 @dataclass
 class SchemaTable:
     """Database table schema definition."""
+
     name: str
     columns: list[Column] = field(default_factory=list)
     indexes: list[Index] = field(default_factory=list)
@@ -186,6 +189,7 @@ class SchemaTable:
 @dataclass
 class SchemaMigration:
     """Database schema migration."""
+
     migration_id: str
     name: str
     description: str
@@ -203,6 +207,7 @@ class SchemaMigration:
 @dataclass
 class SchemaDefinition:
     """Complete database schema definition."""
+
     name: str
     version: str
     tables: list[SchemaTable] = field(default_factory=list)
@@ -239,6 +244,7 @@ class SchemaGenerator:
         Args:
             workspace_dir: Directory for storing schema data
             dialect: SQL dialect ("sqlite", "postgresql", "mysql")
+
         """
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
         self.schemas_dir = self.workspace_dir / "database_schemas"
@@ -262,6 +268,7 @@ class SchemaGenerator:
 
         Returns:
             Table ID
+
         """
         table_id = f"table_{table.name}"
         self._tables[table_id] = table
@@ -282,6 +289,7 @@ class SchemaGenerator:
 
         Returns:
             Table ID
+
         """
         columns = []
         for col_def in table_def.get("columns", []):
@@ -330,6 +338,7 @@ class SchemaGenerator:
 
         Returns:
             Generated migration
+
         """
         migration_id = f"migration_{int(time.time())}_{name.replace(' ', '_').lower()}"
 
@@ -497,6 +506,7 @@ class SchemaGenerator:
 
         Returns:
             Schema differences with migration recommendations
+
         """
         differences = {
             "tables_to_add": [],
@@ -568,6 +578,7 @@ class SchemaGenerator:
 
         Returns:
             Drift analysis report
+
         """
         differences = self.compare_schemas(current_schema, target_schema)
 
@@ -611,6 +622,7 @@ class SchemaGenerator:
 
         Returns:
             Complete SQL schema
+
         """
         schema = SchemaDefinition(
             name=schema_name,
@@ -629,6 +641,7 @@ class SchemaGenerator:
 
         Returns:
             Path to exported file
+
         """
         output = Path(output_path)
 
@@ -671,6 +684,7 @@ def generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]:
 
     Returns:
         Generated schema information
+
     """
     return generate_schema_from_models(models, output_dir)
 
@@ -683,6 +697,7 @@ def generate_schema_from_models(models: list[Any], output_dir: str) -> dict[str,
 
     Returns:
         Generated schema information
+
     """
     generator = SchemaGenerator(workspace_dir=output_dir)
     tables_generated = 0

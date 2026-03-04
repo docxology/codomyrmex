@@ -1,7 +1,6 @@
-"""
-Audit Submodule
+"""Audit Submodule.
 
-Query logging, analysis, and slow query detection
+Query logging, analysis, and slow query detection.
 """
 
 __version__ = "0.1.0"
