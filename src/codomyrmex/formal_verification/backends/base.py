@@ -34,10 +34,12 @@ class SolverResult:
 
     @property
     def is_sat(self) -> bool:
+        """Return True if the solver status is SAT."""
         return self.status == SolverStatus.SAT
 
     @property
     def is_unsat(self) -> bool:
+        """Return True if the solver status is UNSAT."""
         return self.status == SolverStatus.UNSAT
 
 
@@ -62,6 +64,7 @@ class SolverBackend(ABC):
 
         Returns:
             The index where the item was inserted.
+
         """
 
     @abstractmethod
@@ -85,6 +88,7 @@ class SolverBackend(ABC):
 
         Returns:
             SolverResult with status, model values, and statistics.
+
         """
 
     @abstractmethod

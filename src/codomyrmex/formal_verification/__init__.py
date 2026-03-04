@@ -19,6 +19,7 @@ References:
     - Z3 Prover: https://github.com/Z3Prover/z3
     - mcp-solver: https://github.com/szeider/mcp-solver
     - PAI Discussion: https://github.com/danielmiessler/Personal_AI_Infrastructure/discussions/707
+
 """
 
 __version__ = "0.1.0"

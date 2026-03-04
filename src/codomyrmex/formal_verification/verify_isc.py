@@ -13,6 +13,7 @@ confidence without removing flexibility.
 References:
     - PAI Discussion #707: https://github.com/danielmiessler/Personal_AI_Infrastructure/discussions/707
     - PAI Algorithm: https://github.com/danielmiessler/TheAlgorithm
+
 """
 
 from __future__ import annotations
@@ -71,6 +72,7 @@ def verify_criteria_consistency(
     Returns:
         ISCVerificationResult — always returns, never raises on UNSAT.
         This ensures the solver is advisory, not blocking.
+
     """
     from .solver import ConstraintSolver
 

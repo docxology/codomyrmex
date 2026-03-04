@@ -6,6 +6,7 @@ discovered and invoked by Claude Code and other MCP-compatible agents.
 References:
     - mcp-solver: https://github.com/szeider/mcp-solver
     - PAI Discussion #707: https://github.com/danielmiessler/Personal_AI_Infrastructure/discussions/707
+
 """
 
 from __future__ import annotations
@@ -59,6 +60,7 @@ def add_item(item: str, index: int | None = None) -> dict[str, Any]:
     Args:
         item: Z3 Python code string (e.g., "x = Int('x')" or "solver.add(x > 0)").
         index: Optional position to insert at. Appends if None.
+
     """
     solver, err = _get_solver_safe()
     if err:
@@ -76,6 +78,7 @@ def delete_item(index: int) -> dict[str, Any]:
 
     Args:
         index: Zero-based index of the item to remove.
+
     """
     solver, err = _get_solver_safe()
     if err:
@@ -97,6 +100,7 @@ def replace_item(index: int, new_item: str) -> dict[str, Any]:
     Args:
         index: Zero-based index of the item to replace.
         new_item: New Z3 Python code string.
+
     """
     solver, err = _get_solver_safe()
     if err:
@@ -134,6 +138,7 @@ def solve_model(timeout_ms: int = 30000) -> dict[str, Any]:
 
     Args:
         timeout_ms: Maximum solving time in milliseconds (default 30000).
+
     """
     solver, err = _get_solver_safe()
     if err:

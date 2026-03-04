@@ -37,6 +37,7 @@ class ConstraintSolver:
 
         Raises:
             BackendNotAvailableError: If the backend is not installed.
+
         """
         self._backend = self._create_backend(backend)
 
@@ -54,6 +55,7 @@ class ConstraintSolver:
 
     @property
     def backend_name(self) -> str:
+        """Return the name of the backend."""
         return self._backend.backend_name()
 
     # --- mcp-solver 6-tool interface ---
@@ -71,6 +73,7 @@ class ConstraintSolver:
 
         Returns:
             Index where the item was placed.
+
         """
         return self._backend.add_item(item, index)
 
@@ -94,6 +97,7 @@ class ConstraintSolver:
 
         Returns:
             SolverResult with status, model, and statistics.
+
         """
         return self._backend.solve_model(timeout_ms)
 
@@ -108,7 +112,7 @@ class ConstraintSolver:
         return len(self.get_model())
 
     def is_satisfiable(self, timeout_ms: int = 30000) -> bool | None:
-        """Quick check: is the model satisfiable?
+        """Quick check: is the model satisfiable.
 
         Returns True/False, or None if unknown/timeout.
         """
