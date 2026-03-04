@@ -312,12 +312,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/tests/unit/api/test_api_http_primitives.py (edit), src/codomyrmex/tests/unit/api/test_api_request_response.py (edit)
+Files: src/codomyrmex/tests/unit/model_context_protocol/test_discovery.py (edit), .desloppify/external_review_sessions/ext_20260304_003440_d2ca13a0/review_result.json (create)
 
 ## Crash Recovery
-Last session (2026-03-03T16:05:36.926478) was not properly closed (crash/kill).
+Last session (2026-03-03T16:39:06.616351) was not properly closed (crash/kill).
 Recorded 2 file changes before crash.
-Last changed files: src/codomyrmex/tests/unit/api/test_api_request_response.py, src/codomyrmex/tests/unit/api/test_api_http_primitives.py
+Last changed files: .desloppify/external_review_sessions/ext_20260304_003440_d2ca13a0/review_result.json, src/codomyrmex/tests/unit/model_context_protocol/test_discovery.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 
