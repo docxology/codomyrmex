@@ -6,6 +6,8 @@ and full audit reports — via the PAI MCP bridge.
 
 from __future__ import annotations
 
+from typing import Any
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
@@ -16,7 +18,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
         "Returns a list of findings, each with module name and issue detail."
     ),
 )
-def static_analysis_audit_exports(src_dir: str) -> list[dict]:
+def static_analysis_audit_exports(src_dir: str) -> list[dict[str, Any]]:
     """Return modules missing __all__ definitions under *src_dir*.
 
     Args:
@@ -39,7 +41,7 @@ def static_analysis_audit_exports(src_dir: str) -> list[dict]:
         "Returns a list of dead exports with module, export_name, and detail."
     ),
 )
-def static_analysis_find_dead_exports(src_dir: str) -> list[dict]:
+def static_analysis_find_dead_exports(src_dir: str) -> list[dict[str, Any]]:
     """Return __all__ entries never imported elsewhere under *src_dir*.
 
     Args:
@@ -62,7 +64,7 @@ def static_analysis_find_dead_exports(src_dir: str) -> list[dict]:
         "on a source directory. Returns a unified report dict with summary counts."
     ),
 )
-def static_analysis_full_audit(src_dir: str) -> dict:
+def static_analysis_full_audit(src_dir: str) -> dict[str, Any]:
     """Run the full static analysis audit suite on *src_dir*.
 
     Args:
