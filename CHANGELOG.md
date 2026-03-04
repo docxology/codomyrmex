@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Jules AI swarm**: 25 PRs merged from 113+ concurrent Jules sessions covering MCP expansion, Ruff auto-fixing, and test coverage improvements
 - **New modules**: `dark/`, `git_analysis/`, `meme/`, `operating_system/`, `quantum/`, `evolutionary_ai/` — 124 total modules (was 88)
-- **MCP tool expansion**: ~407 registered tools across 121 auto-discovered modules (was 171/33)
+- **MCP tool expansion**: ~407 registered tools across 118 auto-discovered modules (was 171/33)
 - **Git submodules**: `dark-pdf` vendor, `gitnexus` vendor
 
 ### Changed

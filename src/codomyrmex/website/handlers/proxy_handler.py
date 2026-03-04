@@ -21,6 +21,12 @@ logger = get_logger(__name__)
 
 _OLLAMA_URL = os.getenv("CODOMYRMEX_OLLAMA_URL", DEFAULT_OLLAMA_URL)
 _DEFAULT_MODEL = os.getenv("CODOMYRMEX_DEFAULT_MODEL", DEFAULT_OLLAMA_MODEL)
+_OLLAMA_TIMEOUT = int(os.getenv("CODOMYRMEX_OLLAMA_TIMEOUT", "60"))
+
+
+def _sanitize_prompt_field(value: str, max_len: int = 100) -> str:
+    """Strip newlines and truncate to prevent prompt injection."""
+    return value.replace("\n", " ").replace("\r", " ")[:max_len]
 
 
 class ProxyHandler:
@@ -32,6 +38,14 @@ class ProxyHandler:
     - self.rfile: request input stream
     - self.send_json_response(data, status): JSON response sender
     """
+
+    def _resolve_model(self, requested: str | None) -> str:
+        """Return the model to use: requested > data_provider default > _DEFAULT_MODEL."""
+        default = _DEFAULT_MODEL
+        if self.data_provider:
+            llm_config = self.data_provider.get_llm_config()
+            default = llm_config.get("default_model", default)
+        return requested or default
 
     def handle_chat(self) -> None:
         """Proxy chat requests to Ollama."""
@@ -53,13 +67,7 @@ class ProxyHandler:
 
         # Get the message from frontend
         user_message = data.get('message', '')
-        # Use provided model or fall back to system default
-        system_model = _DEFAULT_MODEL
-        if self.data_provider:
-            llm_config = self.data_provider.get_llm_config()
-            system_model = llm_config.get("default_model", _DEFAULT_MODEL)
-
-        model = data.get('model') or system_model
+        model = self._resolve_model(data.get("model"))
 
         # Format for Ollama API
         ollama_payload = {
@@ -73,13 +81,13 @@ class ProxyHandler:
             # If the frontend already sends proper format, use it
         if 'messages' in data:
             ollama_payload = {
-                "model": data.get('model') or system_model,
+                "model": model,
                 "messages": data['messages'],
                 "stream": False
             }
 
         try:
-            ollama_resp = requests.post(ollama_url, json=ollama_payload, timeout=60)
+            ollama_resp = requests.post(ollama_url, json=ollama_payload, timeout=_OLLAMA_TIMEOUT)
 
             if ollama_resp.status_code == 200:
                 result = ollama_resp.json()
@@ -119,13 +127,7 @@ class ProxyHandler:
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
 
-        if self.data_provider:
-            llm_config = self.data_provider.get_llm_config()
-            system_model = llm_config.get("default_model", _DEFAULT_MODEL)
-        else:
-            system_model = _DEFAULT_MODEL
-
-        model = data.get('model') or system_model
+        model = self._resolve_model(data.get("model"))
 
         if not self.data_provider:
             self.send_json_response({"error": "Data provider missing"}, status=500)
@@ -134,10 +136,11 @@ class ProxyHandler:
         awareness = self.data_provider.get_pai_awareness_data()
         metrics = awareness.get("metrics", {})
         missions_summary = ", ".join(
-            f"{m['title']} ({m['status']})" for m in awareness.get("missions", [])
+            f"{_sanitize_prompt_field(m['title'])} ({_sanitize_prompt_field(m['status'], 30)})"
+            for m in awareness.get("missions", [])
         )
         projects_summary = ", ".join(
-            f"{p['title']} ({p['completion_percentage']}%)"
+            f"{_sanitize_prompt_field(p['title'])} ({p['completion_percentage']}%)"
             for p in awareness.get("projects", [])
         )
 
@@ -161,7 +164,7 @@ class ProxyHandler:
             ollama_resp = requests.post(
                 f"{_OLLAMA_URL}/api/chat",
                 json=ollama_payload,
-                timeout=60,
+                timeout=_OLLAMA_TIMEOUT,
             )
             if ollama_resp.status_code == 200:
                 result = ollama_resp.json()

@@ -34,6 +34,21 @@ class APIHandler:
     # Store latest test results for async retrieval
     _test_results: dict | None = None
 
+    # Config files must carry one of these extensions to be readable/writable.
+    _ALLOWED_CONFIG_EXTENSIONS: frozenset[str] = frozenset({
+        ".json", ".toml", ".yaml", ".yml",
+    })
+
+    def _is_allowed_config_file(self, filename: str) -> bool:
+        """Return True if *filename* has an allowed config file extension.
+
+        Uses a static extension whitelist so the check does not depend on the
+        data provider being present — callers must separately guard against a
+        missing data provider before invoking this method.
+        """
+        _, ext = os.path.splitext(filename)
+        return ext.lower() in self._ALLOWED_CONFIG_EXTENSIONS
+
     def handle_modules_list(self) -> None:
         """Handle GET /api/modules -- return all modules."""
         if self.data_provider:
@@ -89,18 +104,24 @@ class APIHandler:
     def handle_config_get(self, path: str) -> None:
         """Handle config get request."""
         filename = path.replace("/api/config/", "")
-        if self.data_provider:
-            try:
-                content = self.data_provider.get_config_content(filename)
-                self.send_json_response({"content": content})
-            except FileNotFoundError as e:
-                self.send_json_response({"error": str(e)}, status=404)
-            except ValueError as e:
-                self.send_json_response({"error": str(e)}, status=403)
-            except Exception as e:
-                self.send_json_response({"error": str(e)}, status=500)
-        else:
+        if not self.data_provider:
             self.send_json_response({"error": "Data provider missing"}, status=500)
+            return
+        if not self._is_allowed_config_file(filename):
+            self.send_json_response(
+                {"error": f"Config file '{filename}' is not in the allowed list"},
+                status=403,
+            )
+            return
+        try:
+            content = self.data_provider.get_config_content(filename)
+            self.send_json_response({"content": content})
+        except FileNotFoundError as e:
+            self.send_json_response({"error": str(e)}, status=404)
+        except ValueError as e:
+            self.send_json_response({"error": str(e)}, status=403)
+        except Exception as e:
+            self.send_json_response({"error": str(e)}, status=500)
 
     def handle_config_save(self) -> None:
         """Handle config save request."""
@@ -123,16 +144,24 @@ class APIHandler:
             self.send_error(400, "Missing filename or content")
             return
 
-        if self.data_provider:
-            try:
-                self.data_provider.save_config_content(filename, content)
-                self.send_json_response({"success": True, "filename": filename})
-            except ValueError as e:
-                self.send_json_response({"success": False, "error": str(e)}, status=403)
-            except Exception as e:
-                self.send_json_response({"success": False, "error": str(e)}, status=500)
-        else:
+        if not self.data_provider:
             self.send_error(500, "Data provider missing")
+            return
+
+        if not self._is_allowed_config_file(filename):
+            self.send_json_response(
+                {"error": f"Config file '{filename}' is not in the allowed list"},
+                status=403,
+            )
+            return
+
+        try:
+            self.data_provider.save_config_content(filename, content)
+            self.send_json_response({"success": True, "filename": filename})
+        except ValueError as e:
+            self.send_json_response({"success": False, "error": str(e)}, status=403)
+        except Exception as e:
+            self.send_json_response({"success": False, "error": str(e)}, status=500)
 
     def handle_docs_list(self) -> None:
         """Handle docs list request."""

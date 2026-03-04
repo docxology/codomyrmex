@@ -10,7 +10,7 @@ Source code directory containing all Python packages and modules for the Codomyr
 
 | Directory                      | Description                                |
 | ------------------------------ | ------------------------------------------ |
-| [**codomyrmex/**](codomyrmex/) | Main Python package with 124 modules       |
+| [**codomyrmex/**](codomyrmex/) | Main Python package with 126 modules       |
 
 ### Key Files
 
@@ -23,14 +23,14 @@ Source code directory containing all Python packages and modules for the Codomyr
 
 ```text
 src/
-├── codomyrmex/           # Main package (124 modules)
+├── codomyrmex/           # Main package (126 modules)
 │   ├── agents/           # AI agent integrations
 │   ├── llm/              # LLM infrastructure
 │   ├── orchestrator/     # Workflow orchestration
 │   ├── meme/             # Memetics & Info War
 │   ├── coding/           # Code execution
 │   ├── documentation/    # Doc generation
-│   └── ...               # 124 modules total
+│   └── ...               # 126 modules total
 ```
 
 ## Usage

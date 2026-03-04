@@ -11,8 +11,8 @@
 |:--------------|:------------|
 | Run the CLI | `codomyrmex --help` → [cli/](src/codomyrmex/cli/) |
 | Understand PAI integration | [PAI.md](PAI.md) — algorithm phase ↔ module mapping |
-| Browse all 124 modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
-| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — ~367 tools across 74 modules |
+| Browse all 126 modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
+| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — ~303 tools across 118 modules |
 | Check system health | `codomyrmex status` or `codomyrmex check` |
 | Run tests | `uv run pytest` |
 | Install dependencies | `uv sync` |
@@ -22,12 +22,12 @@
 
 | Metric | Value | Source |
 |:-------|:------|:-------|
-| Python modules | 124 (some require optional SDK deps) | [src/codomyrmex/](src/codomyrmex/) |
-| MCP tools | ~407 total across 121 auto-discovered modules | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Auto-discovered modules | 121 (via `@mcp_tool` decorator) | [src/codomyrmex/agents/pai/mcp_bridge.py](src/codomyrmex/agents/pai/mcp_bridge.py) |
+| Python modules | 126 (some require optional SDK deps) | [src/codomyrmex/](src/codomyrmex/) |
+| MCP tools | ~303 total across 118 auto-discovered modules | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
+| Auto-discovered modules | 118 (via `@mcp_tool` decorator) | [src/codomyrmex/agents/pai/mcp_bridge.py](src/codomyrmex/agents/pai/mcp_bridge.py) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests collected | 21,035 | `uv run pytest --co -q` |
+| Tests collected | 21,036 | `uv run pytest --co -q` |
 | RASP doc coverage | 100% | [AGENTS.md](AGENTS.md) |
 | Version | v1.0.8 | [pyproject.toml](pyproject.toml) |
 
@@ -64,7 +64,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 | Directory | Description |
 | :--- | :--- |
 | [src/](src/INDEX.md) | Source root — namespace package |
-| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **124 modules** across 4 layers |
+| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **126 modules** across 4 layers |
 
 ### Infrastructure
 
@@ -97,7 +97,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 ```
 INDEX.md                           ← You are here
 ├── src/INDEX.md                   ← Source directory index
-│   └── src/codomyrmex/INDEX.md    ← 124-module catalog by layer
+│   └── src/codomyrmex/INDEX.md    ← 126-module catalog by layer
 └── docs/                          ← Documentation site
 ```
 

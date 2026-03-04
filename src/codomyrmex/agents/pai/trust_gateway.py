@@ -320,6 +320,7 @@ class TrustRegistry:
 
     def __init__(self) -> None:
         self._ledger_path = Path.home() / ".codomyrmex" / "trust_ledger.json"
+        self._disk_loaded: bool = False
 
         # Initialize default state with ALL known tools (static + dynamic)
         registry = get_tool_registry()
@@ -333,8 +334,11 @@ class TrustRegistry:
         self._load()
 
     def _load(self) -> None:
-        """Load trust state from disk."""
+        """Load trust state from disk (skipped if already loaded this process)."""
+        if getattr(self, "_disk_loaded", False):
+            return
         if not self._ledger_path.exists():
+            self._disk_loaded = True
             return
 
         try:
@@ -347,29 +351,34 @@ class TrustRegistry:
                         logger.warning("Invalid trust level %r for %r in ledger, skipping: %s", level_val, name, e)
         except (json.JSONDecodeError, OSError, KeyError) as e:
             logger.warning(f"Failed to load trust ledger: {e}")
+        self._disk_loaded = True
 
     def _save(self) -> None:
-        """Save trust state to disk."""
+        """Save trust state to disk (write-through keeps in-memory cache valid)."""
         try:
             self._ledger_path.parent.mkdir(parents=True, exist_ok=True)
             data = {name: lvl.value for name, lvl in self._levels.items()}
             self._ledger_path.write_text(json.dumps(data, indent=2))
+            self._disk_loaded = True  # cache is now consistent with disk
         except OSError as e:
             logger.error(f"Failed to save trust ledger: {e}")
 
     # ── Queries ───────────────────────────────────────────────────
 
     def level(self, tool_name: str) -> TrustLevel:
-        """Get the current trust level for *tool_name*."""
-        # Reload to ensure we see updates from other processes
-        self._load()
+        """Get the current trust level for *tool_name*.
+
+        Uses in-memory cache (populated on init and kept consistent via
+        write-through in ``_save``), avoiding disk I/O on every call.
+        """
+        if not getattr(self, "_disk_loaded", False):
+            self._load()
         return self._levels.get(tool_name, TrustLevel.UNTRUSTED)
 
     # ── Mutations ─────────────────────────────────────────────────
 
     def verify_all_safe(self) -> list[str]:
         """Promote all safe (read-only) tools to VERIFIED. Return promoted names."""
-        self._load() # Refresh first
         promoted = []
         for name in _get_safe_tools():
             if name in self._levels and self._levels[name] == TrustLevel.UNTRUSTED:
@@ -383,7 +392,6 @@ class TrustRegistry:
 
     def trust_tool(self, tool_name: str) -> TrustLevel:
         """Promote *tool_name* to TRUSTED."""
-        self._load() # Refresh first
         if tool_name not in self._levels:
             raise KeyError(
                 f"Unknown tool: {tool_name!r}. "
@@ -398,7 +406,6 @@ class TrustRegistry:
 
     def trust_all(self) -> list[str]:
         """Promote **all** tools to TRUSTED. Return promoted names."""
-        self._load() # Refresh first
         promoted = []
         for name in self._levels:
             if self._levels[name] != TrustLevel.TRUSTED:
@@ -421,8 +428,6 @@ class TrustRegistry:
 
     def get_report(self) -> dict[str, Any]:
         """Return current trust state as a JSON-serializable dict."""
-        # Reload before reporting
-        self._load()
         by_level: dict[str, list[str]] = {
             "untrusted": [],
             "verified": [],
@@ -438,7 +443,6 @@ class TrustRegistry:
 
     def get_aggregate_level(self) -> str:
         """Highest trust level present across all tools; 'untrusted' if nothing promoted."""
-        self._load()
         levels = set(self._levels.values())
         if TrustLevel.TRUSTED in levels:
             return "trusted"

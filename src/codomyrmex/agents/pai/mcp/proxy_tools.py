@@ -1,7 +1,12 @@
+"""Core MCP proxy tool implementations for Codomyrmex module introspection and execution.
 
-"""MCP proxy tools."""
+Provides tool_list_modules, tool_module_info, tool_call_module_function,
+tool_run_tests, tool_list_workflows, and tool_pai_status for the MCP server.
+"""
+
 import importlib
 import inspect
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -12,6 +17,8 @@ import yaml
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+_TEST_TIMEOUT: int = int(os.getenv("CODOMYRMEX_TEST_TIMEOUT", "120"))
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[5]
 
@@ -204,7 +211,7 @@ def tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict[
             cwd=str(_PROJECT_ROOT),
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=_TEST_TIMEOUT,
         )
         return {
             "returncode": result.returncode,
@@ -213,7 +220,7 @@ def tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict[
             "stderr": result.stderr[-1000:] if result.stderr else "",
         }
     except subprocess.TimeoutExpired:
-        return {"error": "Test execution timed out (120s limit)"}
+        return {"error": f"Test execution timed out ({_TEST_TIMEOUT}s limit)"}
     except (subprocess.SubprocessError, OSError) as exc:
         return {"error": str(exc)}
 

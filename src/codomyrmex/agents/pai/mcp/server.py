@@ -64,6 +64,17 @@ def get_tool_registry() -> _ToolRegistry:
 
     return registry
 
+def _modules_provider() -> str:
+    """Provide JSON list of all Codomyrmex modules."""
+    import codomyrmex
+    return json.dumps({"modules": codomyrmex.list_modules()})
+
+
+def _status_provider() -> str:
+    """Provide JSON PAI status."""
+    return json.dumps(tool_pai_status())
+
+
 def create_codomyrmex_mcp_server(
     *,
     name: str = "codomyrmex-mcp-server",
@@ -109,13 +120,8 @@ def create_codomyrmex_mcp_server(
     # ── Register resources ────────────────────────────────────────
     for uri, res_name, res_desc, mime in RESOURCE_DEFINITIONS:
         if uri == "codomyrmex://modules":
-            def _modules_provider() -> str:
-                import codomyrmex
-                return json.dumps({"modules": codomyrmex.list_modules()})
             provider = _modules_provider
         elif uri == "codomyrmex://status":
-            def _status_provider() -> str:
-                return json.dumps(tool_pai_status())
             provider = _status_provider
         else:
             provider = None

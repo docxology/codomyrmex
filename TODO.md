@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.0.8 | **Date**: 2026-03-04 | **Modules**: 124 | **Active Sprint**: 22
+**Version**: v1.0.8 | **Date**: 2026-03-04 | **Modules**: 126 | **Active Sprint**: 22
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -10,7 +10,7 @@ This is the authoritative project backlog. Updated after each sprint.
 
 | Metric | Value | Method |
 | :--- | :--- | :--- |
-| Top-level source modules | **124** | `ls -d src/codomyrmex/*/` |
+| Top-level source modules | **126** | `ls -d src/codomyrmex/*/` |
 | Source files (non-test) | 1,793 | `find -name "*.py" -not -path "*/tests/*"` |
 | Source LOC (non-test) | 307,504 | `wc -l` across source files |
 | Total LOC (incl. tests) | 557,855 | `wc -l` across all `.py` |
@@ -22,9 +22,9 @@ This is the authoritative project backlog. Updated after each sprint.
 | Missing `@abstractmethod` markers | **0** (was 26, all resolved v1.0.4) | AST analysis ✅ |
 | Coverage gate | `fail_under=31` in pyproject; actual ~32% ✅ | Gate ratcheted — passes |
 | MCP Tools | **~407** `@mcp_tool` decorators; **407** registered at runtime | Auto-discovery + static |
-| Auto-discovered MCP modules | **121** | MCP bridge (Sprint 22: +33 new modules) |
-| `mcp_tools.py` files | **121** | `find -name mcp_tools.py` |
-| RASP documentation compliance | 124/124 | Automated audit |
+| Auto-discovered MCP modules | **118** | MCP bridge (Sprint 22: +33 new modules) |
+| `mcp_tools.py` files | **118** | `find -name mcp_tools.py` |
+| RASP documentation compliance | 126/126 | Automated audit |
 | `py.typed` markers | **538** | PEP 561 ✅ |
 | Zero-Mock policy | Enforced via `ruff.lint.flake8-tidy-imports.banned-api` | `pyproject.toml` |
 | Python compatibility | 3.10 – 3.14 | `pyproject.toml classifiers` + `conftest.py` namespace guard |
@@ -66,9 +66,9 @@ Prioritized by module criticality and user-facing impact. Excludes ~120 intentio
 | **P3** | `evolutionary_ai` | 3 | `mutate()`, `crossover()`, `select()` operators | `numpy` |
 | **P3** | `feature_flags` | 3 | `Strategy.evaluate()`, serialization | None |
 
-### MCP Coverage (121/124 modules have `mcp_tools.py`) ✅
+### MCP Coverage (118/126 modules have `mcp_tools.py`) ✅
 
-**121 modules** now have MCP exposure (up from 90 in Sprint 21). Only 3 modules remain without `mcp_tools.py`.
+**118 modules** now have MCP exposure (up from 90 in Sprint 21). Only 8 modules remain without `mcp_tools.py`.
 Sprint 16: `static_analysis` ✅, `vector_store` ✅, `feature_flags` ✅
 Sprint 17: `serialization` ✅, `cache` ✅, `deployment` ✅, `model_ops` ✅, `testing` ✅, `templating` ✅
 Sprint 18: `prompt_engineering` ✅, `database_management` ✅, `auth` ✅, `environment_setup` ✅, `utils` ✅, `tool_use` ✅
@@ -83,7 +83,7 @@ Sprint 22: `bio_simulation` ✅, `compression` ✅, `config_audits` ✅, `config
 
 ### Type Checking
 
-- [x] Add `py.typed` markers across all modules with type hints (PEP 561) — **538 markers** across 124 modules *(Sprint 15+)*
+- [x] Add `py.typed` markers across all modules with type hints (PEP 561) — **538 markers** across 126 modules *(Sprint 15+)*
 - [ ] Check and complete type hint coverage: `cerebrum/`, `events/`, `search/`, `config_management/`, etc.
 
 ### Documentation — Completed ✅
@@ -126,7 +126,7 @@ First feature release targeting external consumption.
 | **Mutation testing expansion** | `pyproject.toml [tool.mutmut]` | Extend beyond 3 files to cover `security/secrets/`, `orchestrator/core.py`, `events/core/event_bus.py` |
 | **mypy strict ramp** | `pyproject.toml [[tool.mypy.overrides]]` | Promote `agents` to `disallow_untyped_defs = true`. Current: ~612 errors. Target: ≤300 |
 | **Integration test formalization** | `tests/integration/` | Formalize 11 workflow files into CI pipeline with `pytest -m integration` marker |
-| **Documentation site deployment** | `docs_gen/site_generator.py`, `mkdocs.yml` (new) | `mkdocs-material` site from 124 module RASP docs → GitHub Pages |
+| **Documentation site deployment** | `docs_gen/site_generator.py`, `mkdocs.yml` (new) | `mkdocs-material` site from 126 module RASP docs → GitHub Pages |
 
 ### Rules Submodule Enhancements (agentic_memory/rules/)
 

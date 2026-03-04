@@ -49,7 +49,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 124 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 126 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -92,7 +92,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 87 modules are auto-discovered.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 118 modules are auto-discovered.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -129,7 +129,7 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~303 dynamic tools across 87 auto-discovered modules, with 3 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~303 dynamic tools across 118 auto-discovered modules, with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -254,13 +254,16 @@ This project is indexed by GitNexus as **codomyrmex** (58140 symbols, 137331 rel
 # === COGNILAYER (auto-generated, do not delete) ===
 
 ## CogniLayer v3 Active
+
 Persistent memory is ON.
 ON FIRST USER MESSAGE in this session, briefly tell the user:
   'CogniLayer v3 active — persistent memory is on. Type /cognihelp for available commands.'
 Say it ONCE, keep it short, then continue with their request.
 
 ## Memory Tools
+
 You have access to the `cognilayer` MCP server:
+
 - memory_search(query) — search memory semantically
 - memory_write(content) — save important information
 - file_search(query) — search project files (PRD, docs...)
@@ -272,13 +275,17 @@ When you need info from PRD or docs, use file_search
 INSTEAD of reading the entire file.
 
 ## VERIFY-BEFORE-ACT — MANDATORY
+
 When memory_search returns a fact marked with ⚠ STALE:
+
 1. ALWAYS read the source file and verify the fact still holds
 2. If the fact changed -> update it via memory_write
 3. NEVER make changes based on STALE facts without verification
 
 ## PROACTIVE MEMORY — IMPORTANT
+
 When you discover something important during work, SAVE IT IMMEDIATELY:
+
 - Bug and fix -> memory_write(type="error_fix")
 - Pitfall/danger -> memory_write(type="gotcha")
 - Exact procedure -> memory_write(type="procedure")
@@ -288,21 +295,25 @@ When you discover something important during work, SAVE IT IMMEDIATELY:
 DO NOT wait for /harvest — session may crash.
 
 ## RUNNING BRIDGE — CRITICAL
+
 After completing each task AUTOMATICALLY update session bridge:
   session_bridge(action="save", content="Progress: ...; Open: ...")
 This is Tier 1 — do it yourself, don't announce, it's part of the job.
 
 ## Safety Rules — MANDATORY
+
 - Before ANY deploy, push, ssh, pm2, docker, db migration:
   1. ALWAYS call verify_identity(action_type="...") first
   2. If it returns BLOCKED — STOP and ask the user
   3. If it returns VERIFIED — READ the target server to the user and request confirmation
 
 ## Git Rules
+
 - Commit often, small atomic changes. Format: "[type] what and why"
 - commit = Tier 1 (do it yourself). push = Tier 3 (verify_identity).
 
 ## Project DNA: codomyrmex
+
 Stack: unknown
 Style: [unknown]
 Structure: .agent, .benchmarks, .desloppify, .gemini, .github, .gitnexus, .mypy_cache, .pipelines
@@ -311,15 +322,8 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
-[Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/agents/jules/jules_client.py (edit), src/codomyrmex/agents/jules/mcp_tools.py (edit), MEMORY/WORK/20260304-120000_collab-unit-tests/PRD.md (create), MEMORY/WORK/20260304-120000_collab-unit-tests/PRD.md (edit), MEMORY/WORK/20260304-120000_events-module-tests/PRD.md (create), MEMORY/WORK/20260304-000000_meme-unit-tests/PRD.md (create), MEMORY/WORK/20260304-000000_meme-unit-tests/PRD.md (edit), src/codomyrmex/tests/unit/meme/test_cultural_dynamics.py (create), src/codomyrmex/tests/unit/meme/test_swarm.py (create), src/codomyrmex/tests/unit/collaboration/test_collaboration_comprehensive.py (create)
-  ... and 132 more
 
-## Crash Recovery
-Last session (2026-03-04T05:02:54.227253) was not properly closed (crash/kill).
-Recorded 176 file changes before crash.
-Last changed files: src/codomyrmex/tests/unit/coding/test_debugging_extended.py, src/codomyrmex/tests/unit/security/test_vulnerability_scanner.py, src/codomyrmex/tests/unit/coding/test_mcp_tools_coding.py, src/codomyrmex/tests/unit/security/test_mcp_tools.py, src/codomyrmex/tests/unit/coding/test_coding_exceptions.py
-Bridge from previous session is valid (above).
-For details use: memory_search("changes last session")
+[Emergency bridge — running bridge was not updated]
+Files: src/codomyrmex/tests/unit/coding/test_coding_exceptions.py (edit), src/codomyrmex/tests/unit/coding/test_execution_core.py (edit), src/codomyrmex/tests/unit/coding/test_mcp_tools_coding.py (edit), src/codomyrmex/tests/unit/security/test_secrets_detector.py (edit), src/codomyrmex/tests/unit/security/test_mcp_tools.py (edit), MEMORY/WORK/20250304-120000_security-unit-tests/PRD.md (edit), MEMORY/WORK/20260304-coding-tests/PRD.md (edit), src/codomyrmex/documents/metadata/extractor.py (edit), TODO.md (edit)
 
 # === END COGNILAYER ===

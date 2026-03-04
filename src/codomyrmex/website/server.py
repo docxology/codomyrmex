@@ -87,14 +87,12 @@ class WebsiteServer(
         origin = self.headers.get("Origin", "")
         referer = self.headers.get("Referer", "")
         if origin:
-            if origin.startswith("http://localhost:") or origin.startswith("http://127.0.0.1:"):
-                return True
             return origin in _ALLOWED_ORIGINS
         if referer:
-            if referer.startswith("http://localhost:") or referer.startswith("http://127.0.0.1:"):
-                return True
-            return any(referer.startswith(o) for o in _ALLOWED_ORIGINS)
-        # Allow requests with no origin (e.g. same-origin, curl)
+            parsed = urlparse(referer)
+            referer_origin = f"{parsed.scheme}://{parsed.netloc}"
+            return referer_origin in _ALLOWED_ORIGINS
+        # No Origin/Referer = same-origin request or curl — allow
         return True
 
     def do_POST(self) -> None:

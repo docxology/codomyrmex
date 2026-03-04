@@ -28,7 +28,7 @@ Dependencies flow upward only. No module may depend on a module in a higher laye
 
 - Auto-discovery via `pkgutil` scan of all `mcp_tools.py` submodules
 - `@mcp_tool` decorator registers tools with 5-minute TTL cache
-- 87 modules currently auto-discovered, ~235 total MCP tools
+- 118 modules currently auto-discovered, ~303 total MCP tools
 - Discovery entry point: `src/codomyrmex/agents/pai/mcp/discovery.py`
 
 ## Cross-Cutting Requirements

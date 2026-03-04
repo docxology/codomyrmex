@@ -25,6 +25,7 @@ All methods use **real filesystem operations** — zero mocks.
 
 from __future__ import annotations
 
+import itertools
 import json
 import re
 from dataclasses import dataclass, field
@@ -357,7 +358,7 @@ class PAIBridge:
                 skill_md = entry / "SKILL.md"
                 tools_dir = entry / "Tools"
                 workflows_dir = entry / "Workflows"
-                file_count = sum(1 for _ in entry.rglob("*") if _.is_file())
+                file_count = sum(1 for _ in itertools.islice(entry.rglob("*"), 10000) if _.is_file())
                 result.append(PAISkillInfo(
                     name=entry.name,
                     path=str(entry),
@@ -528,7 +529,7 @@ class PAIBridge:
         try:
             for entry in sorted(memory_dir.iterdir()):
                 if entry.is_dir():
-                    item_count = sum(1 for _ in entry.rglob("*") if _.is_file())
+                    item_count = sum(1 for _ in itertools.islice(entry.rglob("*"), 10000) if _.is_file())
                     result.append(PAIMemoryStore(
                         name=entry.name,
                         path=str(entry),

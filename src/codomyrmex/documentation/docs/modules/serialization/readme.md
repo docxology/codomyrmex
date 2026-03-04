@@ -47,6 +47,12 @@ uv sync
 - **`serialize()`** -- Serialize an object to bytes in a given format (defaults to JSON)
 - **`deserialize()`** -- Deserialize bytes back to an object in a given format (defaults to JSON)
 
+### MCP Tools
+
+- **`serialize_data`** -- Serialize a Python object to a string using the specified format
+- **`deserialize_data`** -- Deserialize a string back to a Python object using the specified format
+- **`serialization_list_formats`** -- List all supported serialization format names
+
 ### Exceptions
 
 - **`SerializationError`** -- Base exception for serialization failures

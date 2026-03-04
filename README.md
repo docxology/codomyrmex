@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-1.0.8-blue.svg)](https://github.com/docxology/codomyrmex)
-[![Tests](https://img.shields.io/badge/tests-21,035%20collected-brightgreen.svg)](https://github.com/docxology/codomyrmex)
+[![Tests](https://img.shields.io/badge/tests-21,036%20collected-brightgreen.svg)](https://github.com/docxology/codomyrmex)
 [![Coverage](https://img.shields.io/badge/coverage-~32%25-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
@@ -13,12 +13,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 122 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 126 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- **Modular Architecture** - 122 independent, composable modules with clear interfaces
+- **Modular Architecture** - 126 independent, composable modules with clear interfaces
 - **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -167,7 +167,7 @@ Codomyrmex is the **toolbox** for [PAI v4.0.1](https://github.com/danielmiessler
 | VERIFY | `static_analysis`, `security`, `validation` |
 | LEARN | `agentic_memory`, `logging_monitoring` |
 
-**MCP Bridge**: ~303 dynamic tools across 87 auto-discovered modules — see [`PAI.md`](PAI.md)
+**MCP Bridge**: ~303 dynamic tools across 118 auto-discovered modules — see [`PAI.md`](PAI.md)
 **Trust Model**: UNTRUSTED → VERIFIED (`/codomyrmexVerify`) → TRUSTED (`/codomyrmexTrust`)
 **Deep Dive**: [`PAI.md`](PAI.md) · [`docs/pai/README.md`](docs/pai/README.md) · [`docs/pai/architecture.md`](docs/pai/architecture.md)
 
@@ -205,9 +205,9 @@ See **[Creating a Module Tutorial](docs/getting-started/tutorials/creating-a-mod
 
 ## Key Metrics
 
-- **Lines of Code**: ~100K+ across 122 modules
-- **Test Coverage**: ~32% (21,035 tests collected)
-- **Module Count**: 122 modules across 4 architectural layers
+- **Lines of Code**: ~100K+ across 126 modules
+- **Test Coverage**: ~32% (21,036 tests collected)
+- **Module Count**: 126 modules across 4 architectural layers
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 900+ pages across all modules

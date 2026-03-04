@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive documentation for the Codomyrmex platform — 124 modules, 1,800+ Python files, 900+ documentation files. This directory contains guides for users, developers, and AI agents working with the system.
+Comprehensive documentation for the Codomyrmex platform — 126 modules, 1,800+ Python files, 900+ documentation files. This directory contains guides for users, developers, and AI agents working with the system.
 
 ## Documentation Structure
 
@@ -14,7 +14,7 @@ Comprehensive documentation for the Codomyrmex platform — 124 modules, 1,800+ 
 | [**development/**](development/) | 9 | Dev environment, testing strategy, contribution guides |
 | [**reference/**](reference/) | 15 | API reference, CLI reference, troubleshooting |
 | [**deployment/**](deployment/) | 5 | Production deployment guides and checklists |
-| [**modules/**](modules/) | 740 | Per-module documentation for all 124 modules |
+| [**modules/**](modules/) | 740 | Per-module documentation for all 126 modules |
 | [**agents/**](agents/) | 9 | Agent rules, coordination, autonomous operation |
 | [**integration/**](integration/) | 11 | External service integration (Google, GitHub, etc.) |
 | [**security/**](security/) | 11 | Security theory, threat models, audit procedures |

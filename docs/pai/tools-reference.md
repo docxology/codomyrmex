@@ -198,7 +198,7 @@ These tools provide generic access to **any** Codomyrmex module's public API:
 
 Beyond the 9 static proxy tools, the MCP bridge auto-discovers additional tools at runtime:
 
-1. **Decorated tools**: Functions with `@mcp_tool` decorator in any `mcp_tools.py` submodule — **87 modules auto-discovered**
+1. **Decorated tools**: Functions with `@mcp_tool` decorator in any `mcp_tools.py` submodule — **118 modules auto-discovered**
 2. **pkgutil scan**: All `mcp_tools.py` files are scanned at startup (5-minute TTL cache)
 
 ### Trust Classification for Dynamic Tools
@@ -272,7 +272,7 @@ The Email tab in the PAI Dashboard provides a browser-accessible interface for a
 | Dynamic destructive | 4 | Requires TRUSTED |
 | **Total** | **~303** | — |
 
-> Run `/codomyrmexVerify` to get the current exact count. Total reflects 87 auto-discovered modules (Sprint 21).
+> Run `/codomyrmexVerify` to get the current exact count. Total reflects 118 auto-discovered modules (Sprint 22).
 
 ## Navigation
 

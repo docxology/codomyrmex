@@ -50,7 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ script: scriptName, args: args })
                 });
 
-                const data = await response.json();
+                let data;
+                try {
+                    data = await response.json();
+                } catch (_e) {
+                    outputArea.textContent = `Server error: non-JSON response (HTTP ${response.status})`;
+                    return;
+                }
 
                 if (data.success) {
                     outputArea.textContent = data.stdout + (data.stderr ? `\nSTDERR:\n${data.stderr}` : '');
@@ -75,7 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Fetch LLM config
         fetch('/api/llm/config')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json().catch(() => {
+                    throw new Error(`non-JSON response (HTTP ${res.status})`);
+                });
+            })
             .then(data => {
                 const select = document.getElementById('model-select');
                 if (select && data.available_models) {
@@ -142,7 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 });
 
-                const data = await response.json();
+                let data;
+                try {
+                    data = await response.json();
+                } catch (_e) {
+                    document.getElementById(typingId).remove();
+                    appendMessage('system', `Server error: non-JSON response (HTTP ${response.status})`);
+                    return;
+                }
 
                 // Remove Typing Indicator
                 document.getElementById(typingId).remove();
@@ -194,7 +212,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(`/api/config/${filename}`);
-                const data = await response.json();
+                let data;
+                try {
+                    data = await response.json();
+                } catch (_e) {
+                    configEditor.value = `Server error: non-JSON response (HTTP ${response.status})`;
+                    return;
+                }
 
                 if (data.content !== undefined) {
                     configEditor.value = data.content;
@@ -221,7 +245,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: configEditor.value })
                 });
-                const data = await response.json();
+                let data;
+                try {
+                    data = await response.json();
+                } catch (_e) {
+                    showSaveStatus(`Server error: non-JSON response (HTTP ${response.status})`, true);
+                    return;
+                }
 
                 if (data.success) {
                     showSaveStatus('Saved successfully!', false);
@@ -266,7 +296,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const response = await fetch(`/api/docs/${path}`);
-                const data = await response.json();
+                let data;
+                try {
+                    data = await response.json();
+                } catch (_e) {
+                    docContentForBrowser.innerHTML = `<p style="color: var(--error-color)">Server error: non-JSON response (HTTP ${response.status})</p>`;
+                    return;
+                }
 
                 if (data.content !== undefined) {
                     if (typeof marked !== 'undefined' && typeof DOMPurify !== 'undefined') {
@@ -319,7 +355,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(body)
                     });
-                    const data = await response.json();
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (_e) {
+                        resultsDiv.textContent = '';
+                        const errP = document.createElement('p');
+                        errP.className = 'status-err';
+                        errP.textContent = `Server error: non-JSON response (HTTP ${response.status})`;
+                        resultsDiv.appendChild(errP);
+                        return;
+                    }
 
                     if (data.error) {
                         // Fix #4: use textContent instead of innerHTML for error
@@ -385,7 +431,12 @@ document.addEventListener('DOMContentLoaded', () => {
             setInterval(async () => {
                 try {
                     const resp = await fetch('/api/health');
-                    const data = await resp.json();
+                    let data;
+                    try {
+                        data = await resp.json();
+                    } catch (_e) {
+                        throw new Error(`non-JSON response (HTTP ${resp.status})`);
+                    }
                     healthFailCount = 0;
 
                     // Update connection status

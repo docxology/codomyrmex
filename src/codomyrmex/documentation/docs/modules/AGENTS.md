@@ -10,7 +10,7 @@ This document is the top-level agent integration guide for all codomyrmex module
 
 Agents interact with codomyrmex modules through three channels:
 
-1. **MCP Tools** (primary) -- Auto-discovered via `@mcp_tool` decorators in each module's `mcp_tools.py`. Currently 87 modules expose ~235 tools.
+1. **MCP Tools** (primary) -- Auto-discovered via `@mcp_tool` decorators in each module's `mcp_tools.py`. Currently 118 modules expose ~303 tools.
 2. **Direct Python Import** -- For modules without MCP tools, agents import classes directly (e.g., `from codomyrmex.compression import compress`).
 3. **CLI** -- The `codomyrmex` CLI exposes module functionality as shell commands.
 

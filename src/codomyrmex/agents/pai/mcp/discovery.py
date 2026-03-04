@@ -49,7 +49,15 @@ _DYNAMIC_TOOLS_CACHE_LOCK = threading.Lock()
 
 _CACHE_EXPIRY: float | None = None  # monotonic timestamp when cache expires
 
-_DEFAULT_CACHE_TTL: float = float(os.environ.get("CODOMYRMEX_MCP_CACHE_TTL", "300"))
+_raw_ttl = os.environ.get("CODOMYRMEX_MCP_CACHE_TTL", "300")
+try:
+    _parsed_ttl = float(_raw_ttl)
+    if not (0 < _parsed_ttl < 86400):
+        raise ValueError(f"TTL out of range: {_parsed_ttl}")
+    _DEFAULT_CACHE_TTL: float = _parsed_ttl
+except ValueError:
+    logger.warning("Invalid CODOMYRMEX_MCP_CACHE_TTL %r, using 300s", _raw_ttl)
+    _DEFAULT_CACHE_TTL = 300.0
 
 _DISCOVERY_ENGINE: Any | None = None
 
