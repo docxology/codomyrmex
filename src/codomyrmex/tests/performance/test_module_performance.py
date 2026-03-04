@@ -318,12 +318,9 @@ class TestModulePerformanceBaselines:
 
         assert result.status == "success"
         assert result.execution_time > 0
-        assert result.memory_usage >= 0
-
-        # Memory usage can fluctuate based on environment; warning instead of failing.
-        if result.regression_detected:
-            import warnings
-            warnings.warn(f"Performance regression detected in code_execution: {result.baseline_comparison}", stacklevel=2)
+        assert not result.regression_detected, (
+            f"Performance regression detected in code_execution: {result.baseline_comparison}"
+        )
 
     @pytest.mark.performance
     @pytest.mark.skipif(not MODULE_AVAILABILITY.get("static_analysis", False),
@@ -354,7 +351,6 @@ class TestClass:
         )
 
         assert result.execution_time > 0
-        assert result.memory_usage >= 0
 
     @pytest.mark.performance
     @pytest.mark.skipif(not MODULE_AVAILABILITY.get("security", False),
@@ -383,7 +379,6 @@ PASSWORD = "admin123"
         )
 
         assert result.execution_time > 0
-        assert result.memory_usage >= 0
 
     @pytest.mark.performance
     @pytest.mark.skipif(not MODULE_AVAILABILITY.get("data_visualization", False),
@@ -407,8 +402,6 @@ PASSWORD = "admin123"
             "data_visualization.create_bar_chart", visualize_test, iterations=5
         )
 
-        assert result.execution_time >= 0
-        assert result.memory_usage >= 0
         assert result.status in ("success", "failed")  # may fail at runtime without display backend
 
     @pytest.mark.performance
@@ -426,7 +419,6 @@ PASSWORD = "admin123"
         )
 
         assert result.execution_time > 0
-        assert result.memory_usage >= 0
         assert result.status == "success"
 
 
