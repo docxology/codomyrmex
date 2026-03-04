@@ -286,8 +286,39 @@ class TestAIGatewayMCPTools:
         assert result["status"] == "error"
         assert "No providers" in result["message"]
 
+    def test_gateway_complete_success(self):
+        """gateway_complete returns success with valid providers.
+
+        Note: The gateway complete tool defaults model_fn to None,
+        triggering safe local string generation without network calls.
+        """
+        from codomyrmex.ai_gateway.mcp_tools import gateway_complete
+        providers = [
+            {"name": "test_provider", "endpoint": "http://localhost", "weight": 1.0}
+        ]
+        result = gateway_complete(prompt="hello", providers=providers)
+        assert result["status"] == "success"
+        assert result["provider"] == "test_provider"
+        assert result["success"] is True
+
+    def test_gateway_complete_failure(self):
+        """gateway_complete returns error on internal exception (e.g., all providers down)."""
+        from codomyrmex.ai_gateway.mcp_tools import gateway_complete
+        # Pass an invalid type to trigger an exception in the tool's try/except block.
+        result = gateway_complete(prompt="hello", providers=[None]) # type: ignore
+        assert result["status"] == "error"
+
     def test_gateway_health_no_providers(self):
         """gateway_health returns error when no providers given."""
         from codomyrmex.ai_gateway.mcp_tools import gateway_health
         result = gateway_health()
         assert result["status"] == "error"
+
+    def test_gateway_health_success(self):
+        """gateway_health returns successful status for valid providers."""
+        from codomyrmex.ai_gateway.mcp_tools import gateway_health
+        providers = [{"name": "p1", "endpoint": "http://localhost"}]
+        result = gateway_health(providers=providers)
+        assert result["status"] == "success"
+        assert "p1" in result["providers"]
+        assert result["providers"]["p1"]["healthy"] is True

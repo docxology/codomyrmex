@@ -38,6 +38,7 @@ class CircuitBreaker:
     """Per-provider circuit breaker with closed/open/half-open states."""
 
     def __init__(self, failure_threshold: int = 5, recovery_timeout_s: float = 60.0):
+        """Initialize the circuit breaker."""
         self.failure_threshold = failure_threshold
         self.recovery_timeout_s = recovery_timeout_s
         self.failure_count = 0
@@ -87,6 +88,7 @@ class AIGateway:
     """
 
     def __init__(self, providers: list[Provider], config: GatewayConfig = None):
+        """Initialize the AI Gateway."""
         self.providers = providers
         self.config = config or GatewayConfig()
         self.circuit_breakers = {
