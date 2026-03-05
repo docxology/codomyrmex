@@ -109,7 +109,7 @@ class GitVisualizer:
                     {
                         "hash": commit["hash"][:8],
                         "message": commit["message"],
-                        "author": commit["author_name"],
+                        "author_name": commit["author_name"],
                         "date": commit["date"],
                         "branch": current_branch or "main",
                     }

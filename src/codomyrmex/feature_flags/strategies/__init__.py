@@ -75,7 +75,6 @@ class BooleanStrategy(EvaluationStrategy):
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {"type": "boolean", "enabled": self.enabled}
 
     @classmethod
@@ -106,7 +105,6 @@ class PercentageStrategy(EvaluationStrategy):
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "type": "percentage",
             "percentage": self.percentage,
@@ -171,7 +169,6 @@ class UserListStrategy(EvaluationStrategy):
         self.blocked_users.add(user_id)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "type": "user_list",
             "allowed_users": list(self.allowed_users),
@@ -250,7 +247,6 @@ class AttributeStrategy(EvaluationStrategy):
             return False
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "type": "attribute",
             "attribute": self.attribute,
@@ -284,7 +280,6 @@ class EnvironmentStrategy(EvaluationStrategy):
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "type": "environment",
             "enabled_environments": list(self.enabled_environments)
@@ -389,7 +384,6 @@ class CompositeStrategy(EvaluationStrategy):
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "type": "composite",
             "operator": self.operator,

@@ -91,9 +91,9 @@ class LoRALayer:
             self._merged = True
         return self
 
-    def unmerge(self, original_W: np.ndarray) -> "LoRALayer":
+    def unmerge(self, original_weight: np.ndarray) -> "LoRALayer":
         """Restore original weights (for continued training)."""
-        self.W_0 = original_W.copy()
+        self.W_0 = original_weight.copy()
         self._merged = False
         return self
 

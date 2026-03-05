@@ -123,15 +123,3 @@ class QwenClient(APIAgentBase):
             self.logger.error(f"Qwen streaming error: {e}", exc_info=True)
             yield f"Error: {str(e)}"
 
-    def _build_messages(self, request: AgentRequest) -> list[dict[str, str]]:
-        """Build chat messages from agent request."""
-        messages = []
-
-        if request.context and request.context.get("system"):
-            messages.append({"role": "system", "content": request.context["system"]})
-
-        if request.context and request.context.get("history"):
-            messages.extend(request.context["history"])
-
-        messages.append({"role": "user", "content": request.prompt})
-        return messages

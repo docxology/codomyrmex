@@ -11,7 +11,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 class UtilsMixin:
-    """UtilsMixin class."""
+    """Reusable Coda API utility endpoints: current user info, URL resolution, and mutation status."""
 
     def whoami(self) -> User:
         """

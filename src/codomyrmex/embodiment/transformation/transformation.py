@@ -62,7 +62,6 @@ class Vec3:
         return (self.x, self.y, self.z)
 
     def to_dict(self) -> dict[str, float]:
-        """Returns a dictionary representation of this object's fields."""
         return {"x": self.x, "y": self.y, "z": self.z}
 
 

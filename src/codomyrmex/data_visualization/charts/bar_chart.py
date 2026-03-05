@@ -35,17 +35,12 @@ def create_bar_chart(
     Generates a bar chart (vertical or horizontal).
     Uses logging_monitoring for logging.
     """
-    logger.debug(f"Generating bar chart titled '{title}'")
     if not categories or not values:
-        logger.warning(
-            "Empty data for categories or values in bar chart. No plot generated."
-        )
-        return None
+        raise ValueError("categories and values must be non-empty for bar chart")
     if len(categories) != len(values):
-        logger.warning(
-            f"Length mismatch for bar chart: categories ({len(categories)}) vs values ({len(values)}). Plot not generated."
+        raise ValueError(
+            f"Length mismatch for bar chart: categories ({len(categories)}) vs values ({len(values)})"
         )
-        return None
 
     fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:

@@ -11,7 +11,7 @@ from codomyrmex.collaboration.swarm.consensus import (
     ConsensusEngine,
     ConsensusResult,
     Decision,
-    Vote,
+    SwarmVote as Vote,
 )
 from codomyrmex.collaboration.swarm.decomposer import (
     CyclicDependencyError,

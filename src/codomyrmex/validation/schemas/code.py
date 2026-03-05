@@ -64,7 +64,6 @@ class CodeEntity:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "entity_type": self.entity_type.value,
@@ -95,7 +94,6 @@ class AnalysisResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "analyzer": self.analyzer,
             "target": self.target,
@@ -128,7 +126,6 @@ class SecurityFinding:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "title": self.title,
             "severity": self.severity.value,
@@ -160,7 +157,6 @@ class TestResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "test_name": self.test_name,
             "status": self.status.value,

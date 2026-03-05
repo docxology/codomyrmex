@@ -9,6 +9,7 @@ import os
 import time
 import urllib.error
 import urllib.request
+from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.agents.core.base import AgentRequest
@@ -18,6 +19,22 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 _OLLAMA_ALLOWED_PREFIXES = ("http://localhost:", "http://127.0.0.1:", "https://localhost:", "https://127.0.0.1:")
+
+
+@dataclass
+class _OllamaResponse:
+    """Response from an Ollama API call.
+
+    A real, structured response object — no mocking.
+    """
+
+    content: str = ""
+    tokens_used: int = 0
+    execution_time: float = 0.0
+
+    def is_success(self) -> bool:
+        """Return True if the response contains content."""
+        return len(self.content) > 0
 
 
 class OllamaClient:
@@ -85,16 +102,11 @@ class OllamaClient:
 
         elapsed = time.monotonic() - start_time
 
-        class Response:
-            """Minimal response object returned by OllamaClient.execute_with_session."""
-            def is_success(self): return True
-            pass
-
-        resp = Response()
-        resp.content = content
-        resp.tokens_used = 0
-        resp.execution_time = elapsed
-        return resp
+        return _OllamaResponse(
+            content=content,
+            tokens_used=0,
+            execution_time=elapsed,
+        )
 
 def get_llm_client(identity: str = "agent") -> Any:
     """Factory to get the best available REAL LLM client.
@@ -133,3 +145,11 @@ def get_llm_client(identity: str = "agent") -> Any:
         "OR ensure Ollama is running at http://localhost:11434.\n"
         "Mocks are strictly forbidden."
     )
+
+
+__all__ = [
+    "OllamaClient",
+    "get_llm_client",
+    "AgentRequest",
+    "_OllamaResponse",
+]

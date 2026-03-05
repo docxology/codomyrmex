@@ -32,7 +32,6 @@ class MemoryMessage:
     token_count: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "role": self.role,
             "content": self.content,

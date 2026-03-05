@@ -20,9 +20,13 @@ from typing import Any
 
 from . import exceptions, export
 
+# Canonical chart surface: engines.AdvancedPlotter (full-featured, matplotlib-backed).
+# charts/ — high-level functional API with file I/O (create_bar_chart, create_scatter_plot, …)
+# plots/  — thin BasePlot adapters; delegates core rendering to engines/_scatter.apply_scatter etc.
+# Both charts/ and plots/ are convenience layers over engines/; prefer engines/ for new code.
 # Charts & Plotting Functions
 from .charts.area_chart import AreaChart, create_area_chart
-from .charts.bar_chart import BarChart
+from .charts.bar_chart import BarChart, create_bar_chart
 from .charts.box_plot import BoxPlot, create_box_plot
 from .charts.heatmap import Heatmap, create_heatmap
 from .charts.histogram import Histogram, create_histogram
@@ -45,8 +49,11 @@ from .reports.logistics import LogisticsReport
 from .reports.marketing import MarketingReport
 
 
-def create_bar_chart(data: Any, title: str = "Bar Chart") -> Any:
-    """Create a bar chart from a dictionary of data."""
+def create_bar_chart_from_dict(data: Any, title: str = "Bar Chart") -> Any:
+    """Create a bar chart from a dict with 'categories' and 'values' keys.
+
+    Distinct from charts.bar_chart.create_bar_chart which takes (categories, values, ...) directly.
+    """
     categories = data.get("categories", []) if isinstance(data, dict) else []
     values = data.get("values", []) if isinstance(data, dict) else []
     chart = BarChart(categories=categories, values=values, title=title)
@@ -112,6 +119,7 @@ __all__ = [
     # Chart Creation Functions
     "create_area_chart",
     "create_bar_chart",
+    "create_bar_chart_from_dict",
     "create_box_plot",
     "create_heatmap",
     "create_histogram",

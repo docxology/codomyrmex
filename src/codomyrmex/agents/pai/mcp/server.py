@@ -1,6 +1,7 @@
 """MCP server setup and execution."""
 
 import json
+import threading
 import time
 from typing import Any
 
@@ -11,6 +12,10 @@ from .discovery import discover_dynamic_tools
 from .proxy_tools import get_package_version, tool_pai_status
 
 logger = get_logger(__name__)
+
+_REGISTRY_CACHE: "_ToolRegistry | None" = None
+_REGISTRY_EXPIRY: float = 0.0
+_REGISTRY_LOCK = threading.Lock()
 
 
 class _ToolRegistry:
@@ -29,40 +34,51 @@ class _ToolRegistry:
         return self._tools.get(name)
 
 
-def get_tool_registry() -> _ToolRegistry:
-    """Build a registry populated with all Codomyrmex tools (static + dynamic).
+def _build_registry() -> "_ToolRegistry":
+    """Construct a fresh registry from static + dynamic tools."""
+    registry = _ToolRegistry()
+    for name, description, handler, input_schema in TOOL_DEFINITIONS:
+        registry.register(
+            tool_name=name,
+            schema={"name": name, "description": description, "inputSchema": input_schema},
+            handler=handler,
+        )
+    for name, description, handler, input_schema in discover_dynamic_tools():
+        registry.register(
+            tool_name=name,
+            schema={"name": name, "description": description, "inputSchema": input_schema},
+            handler=handler,
+        )
+    return registry
+
+
+def get_tool_registry(ttl: float = 300.0) -> "_ToolRegistry":
+    """Return the tool registry, rebuilding it at most once per *ttl* seconds.
+
+    Args:
+        ttl: Cache lifetime in seconds (matches the dynamic tool discovery TTL).
 
     Returns:
         A :class:`_ToolRegistry` with core static tools + dynamically discovered module tools.
     """
-    registry = _ToolRegistry()
+    global _REGISTRY_CACHE, _REGISTRY_EXPIRY
+    now = time.monotonic()
+    if _REGISTRY_CACHE is not None and now < _REGISTRY_EXPIRY:
+        return _REGISTRY_CACHE
+    with _REGISTRY_LOCK:
+        # Double-checked locking
+        now = time.monotonic()
+        if _REGISTRY_CACHE is not None and now < _REGISTRY_EXPIRY:
+            return _REGISTRY_CACHE
+        _REGISTRY_CACHE = _build_registry()
+        _REGISTRY_EXPIRY = now + ttl
+        return _REGISTRY_CACHE
 
-    # 1. Register Core Static Tools
-    for name, description, handler, input_schema in TOOL_DEFINITIONS:
-        registry.register(
-            tool_name=name,
-            schema={
-                "name": name,
-                "description": description,
-                "inputSchema": input_schema,
-            },
-            handler=handler,
-        )
 
-    # 2. Register Dynamic Module Tools
-    dynamic_tools = discover_dynamic_tools()
-    for name, description, handler, input_schema in dynamic_tools:
-        registry.register(
-            tool_name=name,
-            schema={
-                "name": name,
-                "description": description,
-                "inputSchema": input_schema,
-            },
-            handler=handler,
-        )
-
-    return registry
+def invalidate_tool_registry() -> None:
+    """Force the next :func:`get_tool_registry` call to rebuild the registry."""
+    global _REGISTRY_EXPIRY
+    _REGISTRY_EXPIRY = 0.0
 
 def _modules_provider() -> str:
     """Provide JSON list of all Codomyrmex modules."""
@@ -209,9 +225,12 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         try:
             return trusted_call_tool(name, **kwargs)
         except KeyError:
-            # Re-raise KeyError to maintain contract if tool not found
             all_static = sorted(t[0] for t in TOOL_DEFINITIONS)
-            raise KeyError(f"Unknown tool: {name!r}. Available (static): {all_static}") from None
+            return {"error": MCPToolError(
+                code=MCPErrorCode.NOT_FOUND,
+                message=f"Unknown tool: {name!r}. Available (static): {all_static}",
+                tool_name=name,
+            ).to_dict()}
         except SecurityError as exc:
             return {"error": MCPToolError(
                 code=MCPErrorCode.ACCESS_DENIED,

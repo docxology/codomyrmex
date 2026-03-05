@@ -75,6 +75,16 @@ class NASSearchSpace:
         )
 
 
+def size_heuristic_eval(config: ArchConfig) -> float:
+    """Default eval heuristic: score peaks at ~10M parameters (log10 = 7).
+
+    Returns a negative absolute distance from the 10M-param sweet spot so that
+    moderate-sized architectures score highest and very small/large ones score lower.
+    """
+    import math
+    return -abs(math.log10(config.total_params_estimate + 1) - 7.0)
+
+
 class NASSearcher:
     """Neural Architecture Search with pluggable evaluation function."""
 

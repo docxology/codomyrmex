@@ -54,6 +54,24 @@ class ExecutionResult:
         }
 
 
+@dataclass
+class ExecutionContext:
+    """Execution environment settings for a parallel run.
+
+    Groups timeout, working directory, and environment overrides
+    so callers can pass one object instead of three separate params.
+
+    Attributes:
+        timeout: Per-script timeout in seconds. None uses the runner default.
+        cwd: Working directory for all scripts. None uses the process cwd.
+        env: Extra environment variables merged over ``os.environ``.
+    """
+
+    timeout: int | None = None
+    cwd: Path | None = None
+    env: dict[str, str] | None = None
+
+
 ProgressCallback = Callable[[str, str, dict[str, Any]], None]
 
 
@@ -96,7 +114,8 @@ class ParallelRunner:
         timeout: int | None = None,
         cwd: Path | None = None,
         env: dict[str, str] | None = None,
-        configs: dict[str, dict[str, Any]] | None = None
+        configs: dict[str, dict[str, Any]] | None = None,
+        context: ExecutionContext | None = None,
     ) -> ExecutionResult:
         """Run scripts in parallel.
 
@@ -106,12 +125,19 @@ class ParallelRunner:
             cwd: Working directory
             env: Environment variables
             configs: Per-script configurations keyed by script name
+            context: Optional ExecutionContext grouping timeout/cwd/env;
+                values in context override the individual params when provided.
 
         Returns:
             ExecutionResult with aggregated results
         """
         if not scripts:
             return ExecutionResult()
+
+        if context is not None:
+            timeout = context.timeout if context.timeout is not None else timeout
+            cwd = context.cwd if context.cwd is not None else cwd
+            env = context.env if context.env is not None else env
 
         timeout = timeout or self.default_timeout
         configs = configs or {}

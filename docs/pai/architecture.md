@@ -4,7 +4,7 @@
 
 ## System Overview
 
-PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on every Claude Code prompt. Codomyrmex is the toolbox that PAI agents consume via MCP (Model Context Protocol). The PAI Dashboard (port 8787) is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure).
+PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on every Claude Code prompt. Codomyrmex is the toolbox that PAI agents consume via MCP (Model Context Protocol). The PAI Command Center (port 8888) is a 15-tab modular SPA served from `src/codomyrmex/agents/pai/pm/`.
 
 ![PAI Analytics Dashboard — The primary interface showing missions, projects, tasks, and completion metrics](screenshots/pai_analytics.png)
 
@@ -165,7 +165,7 @@ PAI runs in TypeScript/Bun. Codomyrmex runs in Python. Communication happens thr
 1. **MCP Protocol** (primary): PAI's Claude Code integration consumes the Codomyrmex MCP server registered in `claude_desktop_config.json`
 2. **Direct Python calls** (internal): Codomyrmex modules call each other directly — `call_tool()` bypasses MCP overhead
 3. **Filesystem** (shared state): Both systems read shared config files (`settings.json`, trust ledger)
-4. **Dashboard REST API** (browser): PMServer.ts exposes all capabilities via HTTP endpoints
+4. **Dashboard REST API** (browser): `src/codomyrmex/agents/pai/pm/server.ts` exposes all capabilities via HTTP endpoints at `:8888`, with modular route handlers in `routes/`
 
 ### Integration Hub
 
@@ -176,6 +176,7 @@ The Integration tab visualizes the GitHub ↔ PAI bridge, sync status, and data 
 ## Navigation
 
 - **Index**: [README.md](README.md)
+- **Dashboard Setup**: [dashboard-setup.md](dashboard-setup.md)
 - **Tools**: [tools-reference.md](tools-reference.md)
 - **API**: [api-reference.md](api-reference.md)
 - **Workflows**: [workflows.md](workflows.md)

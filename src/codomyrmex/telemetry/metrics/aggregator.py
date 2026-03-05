@@ -48,7 +48,6 @@ class HistogramBucket:
         return self.total_sum / max(self.total_count, 1)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         buckets = {f"le_{b}": c for b, c in zip(self.boundaries, self.counts, strict=False)}
         buckets["le_inf"] = self.counts[-1]
         return {

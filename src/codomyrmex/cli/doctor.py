@@ -55,7 +55,6 @@ class CheckResult:
         self.details = details or {}
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         d: dict[str, Any] = {"name": self.name, "status": self.status}
         if self.message:
             d["message"] = self.message

@@ -163,6 +163,7 @@ class AnalysisSummary:
     by_category: dict[str, int] = field(default_factory=dict)
     by_rule: dict[str, int] = field(default_factory=dict)
     files_analyzed: int = 0
+    files_errored: list[str] = field(default_factory=list)
     analysis_time: float = 0.0
     language: Language | None = None
     pyscn_metrics: dict[str, Any] | None = None

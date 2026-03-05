@@ -34,7 +34,6 @@ class ExecutionResult:
     duration_ms: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "success": self.success,
             "completed": self.completed_tasks,

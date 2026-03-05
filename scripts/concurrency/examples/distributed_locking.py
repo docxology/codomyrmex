@@ -71,7 +71,6 @@ def main():
         # Show distributed lock pattern
         print_info("\n2. Distributed lock pattern (cross-process)")
         if args.redis_url:
-            from codomyrmex.concurrency import RedisLock
             print_info(f"   Using Redis at: {args.redis_url}")
             # Would create RedisLock here
         else:

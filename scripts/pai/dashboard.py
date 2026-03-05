@@ -6,7 +6,7 @@ Launches BOTH PAI interfaces in one command:
 
   🚀 PAI Project Manager  → http://localhost:8888  (primary)
      Missions, projects, tasks, Kanban, Gantt, GitHub sync, AI agent dispatch
-     Powered by: bun ~/.claude/skills/PAI/Tools/PMServer.ts
+     Powered by: bun scripts/pai/pm/server.ts
 
   ◆  Codomyrmex Admin     → http://localhost:8787  (secondary)
      Module health, MCP tools, trust gateway, system audit
@@ -38,7 +38,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(_PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
-_PAI_PM_SERVER = Path.home() / ".claude" / "skills" / "PAI" / "Tools" / "PMServer.ts"
+_PAI_PM_SERVER = _PROJECT_ROOT / "src" / "codomyrmex" / "agents" / "pai" / "pm" / "server.ts"
 _PAI_PM_PORT   = 8888
 _CODO_PORT     = 8787
 
@@ -145,7 +145,7 @@ def phase_setup(project_root: Path) -> bool:
 
 def phase_pai_pm(restart: bool, port: int = _PAI_PM_PORT) -> subprocess.Popen | None:
     """
-    Start the PAI Project Manager (PMServer.ts) in the background.
+    Start the PAI Project Manager (modular server) in the background.
     Returns the Popen handle, or None if unavailable.
     """
     print_info(f"=== PAI PM: Starting PAI Project Manager on :{port} ===")
@@ -157,7 +157,7 @@ def phase_pai_pm(restart: bool, port: int = _PAI_PM_PORT) -> subprocess.Popen | 
         return None
 
     if not _PAI_PM_SERVER.exists():
-        print_error(f"  PMServer.ts not found at {_PAI_PM_SERVER}")
+        print_error(f"  server.ts not found at {_PAI_PM_SERVER}")
         return None
 
     if restart:

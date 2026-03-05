@@ -28,8 +28,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
 
     def list_networks(self) -> list[dict[str, Any]]:
         """List all networks."""
-        try:
-            networks = list(self._conn.network.networks())
+        def _op():
             return [
                 {
                     "id": n.id,
@@ -39,11 +38,9 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                     "is_external": n.is_router_external,
                     "subnets": n.subnet_ids or [],
                 }
-                for n in networks
+                for n in self._conn.network.networks()
             ]
-        except Exception as e:
-            logger.error(f"Failed to list networks: {e}")
-            return []
+        return self._safe_call(_op, "list", "networks", default=[])
 
     def create_network(
         self,
@@ -53,7 +50,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         **kwargs
     ) -> dict[str, Any] | None:
         """Create a new network."""
-        try:
+        def _op():
             network = self._conn.network.create_network(
                 name=name,
                 description=description,
@@ -62,19 +59,15 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             )
             logger.info(f"Created network: {network.id}")
             return {"id": network.id, "name": network.name}
-        except Exception as e:
-            logger.error(f"Failed to create network {name}: {e}")
-            return None
+        return self._safe_call(_op, "create", f"network {name}")
 
     def delete_network(self, network_id: str) -> bool:
         """Delete a network."""
-        try:
+        def _op():
             self._conn.network.delete_network(network_id)
             logger.info(f"Deleted network: {network_id}")
             return True
-        except Exception as e:
-            logger.error(f"Failed to delete network {network_id}: {e}")
-            return False
+        return self._safe_call(_op, "delete", f"network {network_id}", default=False)
 
     def create_subnet(
         self,

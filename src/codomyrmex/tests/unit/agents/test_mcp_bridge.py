@@ -121,8 +121,10 @@ class TestCallToolDiscovery:
         assert "error" in result
 
     def test_unknown_tool_raises(self):
-        with pytest.raises(KeyError, match="Unknown tool"):
-            call_tool("codomyrmex.does_not_exist")
+        """call_tool returns error dict (NOT_FOUND) for unknown tools."""
+        result = call_tool("codomyrmex.does_not_exist")
+        assert "error" in result
+        assert result["error"]["code"] == "NOT_FOUND"
 
 
 class TestCallToolFileOps:

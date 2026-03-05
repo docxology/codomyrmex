@@ -22,7 +22,7 @@ Test files and validation suites.
 - `test_agents_core_session.py` – Session management tests
 - `test_agents_core_tools.py` – Tool registry tests
 - `test_agents_core_orchestration.py` – Multi-agent orchestration tests
-- `conftest.py` – Shared fixtures (FakeLLMClient, ConcreteAgent)
+- `conftest.py` – Shared fixtures (InMemoryLLMClient, ConcreteAgent)
 - `test_cli_configurations.py` – File
 - `test_cli_orchestration.py` – File
 - `test_configuration.py` – File

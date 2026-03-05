@@ -53,11 +53,9 @@ def create_area_chart(
     Returns:
         The matplotlib Figure, or None if data is invalid.
     """
-    logger.debug(f"Generating area chart titled '{title}'")
 
     if not x_data or not y_data:
-        logger.warning("Empty data provided for area chart. No plot generated.")
-        return None
+        raise ValueError("Empty data provided for area chart. No plot generated.")
 
     fig, ax = plt.subplots(figsize=figure_size)
 

@@ -39,6 +39,7 @@ from .container import (
     CircularDependencyError,
     Container,
     ResolutionError,
+    ScopeContext,
     ServiceDescriptor,
 )
 from .decorators import (
@@ -49,7 +50,7 @@ from .decorators import (
     injectable,
     is_injectable,
 )
-from .scopes import Scope, ScopeContext
+from .scopes import Scope
 
 __all__ = [
     # Container

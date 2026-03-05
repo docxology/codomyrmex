@@ -40,7 +40,6 @@ class ElectionResult:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "leader_id": self.leader_id,
             "success": self.success,
@@ -83,6 +82,10 @@ class LeaderElection(ABC):
         This is the base implementation - subclasses should override.
         """
         raise NotImplementedError("Subclasses must implement elect()")  # ABC: intentional
+
+    def _filter_healthy(self, agents: list[CollaborativeAgent]) -> list[CollaborativeAgent]:
+        """Return only agents not in ERROR state."""
+        return [a for a in agents if a.state != AgentState.ERROR]
 
     def _record_result(self, result: ElectionResult) -> None:
         """Record an election result."""
@@ -144,7 +147,7 @@ class BullyElection(LeaderElection):
         self._participants = {a.agent_id for a in agents}
 
         # Filter to healthy agents only
-        healthy_agents = [a for a in agents if a.state != AgentState.ERROR]
+        healthy_agents = self._filter_healthy(agents)
 
         if not healthy_agents:
             result = ElectionResult(
@@ -213,7 +216,7 @@ class RingElection(LeaderElection):
         self._participants = {a.agent_id for a in agents}
 
         # Filter to healthy agents
-        healthy_agents = [a for a in agents if a.state != AgentState.ERROR]
+        healthy_agents = self._filter_healthy(agents)
 
         if not healthy_agents:
             result = ElectionResult(
@@ -277,7 +280,7 @@ class RandomElection(LeaderElection):
         self._participants = {a.agent_id for a in agents}
 
         # Filter to healthy agents
-        healthy_agents = [a for a in agents if a.state != AgentState.ERROR]
+        healthy_agents = self._filter_healthy(agents)
 
         if not healthy_agents:
             result = ElectionResult(

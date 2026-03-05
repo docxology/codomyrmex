@@ -31,14 +31,17 @@ class TestBarChart:
         assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
-    def test_empty_data_returns_none(self):
+    def test_empty_data_raises(self):
         from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
-        assert create_bar_chart([], [1, 2]) is None
-        assert create_bar_chart(['A'], []) is None
+        with pytest.raises(ValueError):
+            create_bar_chart([], [1, 2])
+        with pytest.raises(ValueError):
+            create_bar_chart(['A'], [])
 
-    def test_mismatched_lengths_returns_none(self):
+    def test_mismatched_lengths_raises(self):
         from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
-        assert create_bar_chart(['A', 'B'], [1, 2, 3]) is None
+        with pytest.raises(ValueError):
+            create_bar_chart(['A', 'B'], [1, 2, 3])
 
     def test_bar_chart_with_theme(self, tmp_path):
         from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
@@ -80,9 +83,10 @@ class TestLinePlot:
         assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
-    def test_empty_data_returns_none(self):
+    def test_empty_data_raises(self):
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
-        assert create_line_plot([], []) is None
+        with pytest.raises(ValueError):
+            create_line_plot([], [])
 
     def test_with_markers(self, tmp_path):
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
@@ -119,17 +123,19 @@ class TestScatterPlot:
         assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
-    def test_empty_data_returns_none(self):
+    def test_empty_data_raises(self):
         from codomyrmex.data_visualization.charts.scatter_plot import (
             create_scatter_plot,
         )
-        assert create_scatter_plot([], []) is None
+        with pytest.raises(ValueError):
+            create_scatter_plot([], [])
 
-    def test_mismatched_data_returns_none(self):
+    def test_mismatched_data_raises(self):
         from codomyrmex.data_visualization.charts.scatter_plot import (
             create_scatter_plot,
         )
-        assert create_scatter_plot([1, 2], [1, 2, 3]) is None
+        with pytest.raises(ValueError):
+            create_scatter_plot([1, 2], [1, 2, 3])
 
     def test_custom_styling(self, tmp_path):
         from codomyrmex.data_visualization.charts.scatter_plot import (
@@ -172,9 +178,10 @@ class TestHistogram:
         assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
-    def test_empty_data_returns_none(self):
+    def test_empty_data_raises(self):
         from codomyrmex.data_visualization.charts.histogram import create_histogram
-        assert create_histogram([]) is None
+        with pytest.raises(ValueError):
+            create_histogram([])
 
     def test_custom_bins(self, tmp_path):
         from codomyrmex.data_visualization.charts.histogram import create_histogram
@@ -219,9 +226,10 @@ class TestPieChart:
         )
         assert isinstance(fig, plt.Figure)
 
-    def test_empty_data_returns_none(self):
+    def test_empty_data_raises(self):
         from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
-        assert create_pie_chart([], []) is None
+        with pytest.raises(ValueError):
+            create_pie_chart([], [])
 
     def test_mismatched_explode_ignored(self, tmp_path):
         from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
@@ -277,11 +285,14 @@ class TestHeatmap:
         fig = create_heatmap([[1, 2], [3, 4]], annot=True, output_path=output)
         assert isinstance(fig, plt.Figure)
 
-    def test_heatmap_invalid_data_returns_none(self):
+    def test_heatmap_invalid_data_raises(self):
         from codomyrmex.data_visualization.charts.heatmap import create_heatmap
-        assert create_heatmap(None) is None
-        assert create_heatmap([]) is None
-        assert create_heatmap("not a list") is None
+        with pytest.raises(ValueError):
+            create_heatmap(None)
+        with pytest.raises(ValueError):
+            create_heatmap([])
+        with pytest.raises(ValueError):
+            create_heatmap("not a list")
 
     def test_heatmap_with_theme(self, tmp_path):
         from codomyrmex.data_visualization.charts.heatmap import create_heatmap
@@ -329,10 +340,12 @@ class TestBoxPlot:
         )
         assert isinstance(fig, plt.Figure)
 
-    def test_box_plot_empty_returns_none(self):
+    def test_box_plot_empty_raises(self):
         from codomyrmex.data_visualization.charts.box_plot import create_box_plot
-        assert create_box_plot([]) is None
-        assert create_box_plot(None) is None
+        with pytest.raises(ValueError):
+            create_box_plot([])
+        with pytest.raises(ValueError):
+            create_box_plot(None)
 
     def test_box_plot_class(self, tmp_path):
         from codomyrmex.data_visualization.charts.box_plot import BoxPlot
@@ -378,9 +391,10 @@ class TestAreaChart:
         )
         assert isinstance(fig, plt.Figure)
 
-    def test_empty_data_returns_none(self):
+    def test_empty_data_raises(self):
         from codomyrmex.data_visualization.charts.area_chart import create_area_chart
-        assert create_area_chart([], []) is None
+        with pytest.raises(ValueError):
+            create_area_chart([], [])
 
     def test_area_chart_class(self, tmp_path):
         from codomyrmex.data_visualization.charts.area_chart import AreaChart

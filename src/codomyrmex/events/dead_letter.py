@@ -27,7 +27,6 @@ class DeadLetter:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "event_type": self.event_type,
             "payload": self.payload,

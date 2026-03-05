@@ -1,0 +1,31 @@
+{
+    "name": "@codomyrmex/pai-pm",
+    "version": "1.0.0",
+    "description": "PAI Project Manager — Mission/Project/Task CLI tools and GitHub sync engine",
+    "type": "module",
+    "scripts": {
+        "create-mission": "bun CreateMission.ts",
+        "list-missions": "bun ListMissions.ts",
+        "create-project": "bun CreateProject.ts",
+        "list-projects": "bun ListProjects.ts",
+        "add-task": "bun AddTask.ts",
+        "list-tasks": "bun ListTasks.ts",
+        "dashboard": "bun PMDashboard.ts",
+        "github-sync": "bun GitHubSync.ts"
+    },
+    "dependencies": {
+        "js-yaml": "^4.1.0"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/docxology/codomyrmex.git",
+        "directory": "scripts/pai/pm"
+    },
+    "engines": {
+        "bun": ">=1.0.0"
+    }
+}

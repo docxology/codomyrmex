@@ -1,6 +1,8 @@
 """Swarm orchestration subpackage."""
 
-from .consensus import ConsensusEngine, ConsensusResult, Decision, Vote
+from .consensus import ConsensusEngine, ConsensusResult, Decision, SwarmVote
+
+Vote = SwarmVote  # backward-compat alias
 from .decomposer import SubTask, TaskDecomposer
 from .manager import SwarmManager
 from .message_bus import MessageBus
@@ -21,7 +23,7 @@ __all__ = [
     "TaskDecomposer",
     "SubTask",
     "ConsensusEngine",
-    "Vote",
+    "SwarmVote",
     "ConsensusResult",
     "Decision",
     "AgentRole",

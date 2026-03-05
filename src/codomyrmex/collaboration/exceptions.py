@@ -68,18 +68,8 @@ class TaskDependencyError(CollaborationError):
 class ConsensusError(CollaborationError):
     """Raised when consensus cannot be reached among agents."""
 
-    def __init__(self, proposal: str, votes_for: int, votes_against: int, quorum: float):
-        message = f"Consensus failed for '{proposal}': {votes_for} for, {votes_against} against (quorum: {quorum})"
-        super().__init__(message, {
-            "proposal": proposal,
-            "votes_for": votes_for,
-            "votes_against": votes_against,
-            "quorum": quorum,
-        })
-        self.proposal = proposal
-        self.votes_for = votes_for
-        self.votes_against = votes_against
-        self.quorum = quorum
+    def __init__(self, message: str, details: dict = None):
+        super().__init__(message, details or {})
 
 
 class ChannelError(CollaborationError):

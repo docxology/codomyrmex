@@ -35,10 +35,8 @@ def create_histogram(
     Generates a histogram.
     Uses logging_monitoring for logging.
     """
-    logger.debug(f"Generating histogram titled '{title}'")
     if not data:
-        logger.warning("Empty data provided for histogram. No plot generated.")
-        return None
+        raise ValueError("Empty data provided for histogram. No plot generated.")
 
     fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:

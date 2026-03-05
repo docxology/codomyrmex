@@ -56,10 +56,8 @@ def create_heatmap(
     Returns:
         The matplotlib Figure, or None if data is invalid.
     """
-    logger.debug(f"Generating heatmap titled '{title}'")
     if not data or not isinstance(data, list) or not isinstance(data[0], list):
-        logger.warning("Invalid or empty 2D data provided for heatmap. No plot generated.")
-        return None
+        raise ValueError("Invalid or empty 2D data provided for heatmap. No plot generated.")
 
     fig, ax = plt.subplots(figsize=figure_size)
 

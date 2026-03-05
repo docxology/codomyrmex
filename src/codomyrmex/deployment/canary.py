@@ -59,7 +59,6 @@ class MetricComparison:
             self.message = f"Value {self.canary_value} vs threshold {self.threshold}"
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "metric": self.metric_name,
             "baseline": round(self.baseline_value, 4),
@@ -85,7 +84,6 @@ class CanaryReport:
     pass_rate: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "decision": self.decision.value,
             "pass_rate": round(self.pass_rate, 3),

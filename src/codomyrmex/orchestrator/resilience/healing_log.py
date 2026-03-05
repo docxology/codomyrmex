@@ -44,7 +44,6 @@ class HealingEvent:
             self.timestamp = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "event_id": self.event_id,
             "error_category": self.error_category,

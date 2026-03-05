@@ -12,7 +12,7 @@ from typing import Any
 from codomyrmex.collaboration.swarm.consensus import (
     ConsensusEngine,
     ConsensusResult,
-    Vote,
+    SwarmVote,
 )
 from codomyrmex.collaboration.swarm.decomposer import TaskDecomposer
 from codomyrmex.collaboration.swarm.message_bus import MessageBus
@@ -159,7 +159,7 @@ class SwarmManager:
 
         return results
 
-    async def request_consensus(self, proposal: str, votes: list[Vote], strategy: str = "majority") -> ConsensusResult:
+    async def request_consensus(self, proposal: str, votes: list[SwarmVote], strategy: str = "majority") -> ConsensusResult:
         """Request a consensus decision from the swarm.
 
         Args:

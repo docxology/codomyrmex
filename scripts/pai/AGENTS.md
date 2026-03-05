@@ -2,7 +2,7 @@
 
 ## Objective
 
-This directory (`scripts/pai/`) encapsulates the orchestration logic to spin up the **Personal AI (PAI) Infrastructure** and its ecosystem dashboards. Agents interacting with the PAI server should use the HTTP APIs exposed by `PMServer.ts` at `http://localhost:8888`.
+This directory (`scripts/pai/`) encapsulates the orchestration logic to spin up the **Personal AI (PAI) Infrastructure** and its ecosystem dashboards. Agents interacting with the PAI server should use the HTTP APIs exposed by the modular server (`pm/server.ts`) at `http://localhost:8888`.
 
 ## Core Orchestration
 
@@ -12,7 +12,7 @@ To start the PAI web servers, you should execute:
 uv run python scripts/pai/dashboard.py
 ```
 
-This script ensures `bun ~/.claude/skills/PAI/Tools/PMServer.ts` is running on `:8888` and the localized `WebsiteServer` admin dashboard is running on `:8787`.
+This script ensures `bun scripts/pai/pm/server.ts` is running on `:8888` and the localized `WebsiteServer` admin dashboard is running on `:8787`.
 
 ## Interfacing with PAI (Agents)
 
@@ -105,7 +105,7 @@ uv run python scripts/pai/test_email_compose.py --template daily-schedule
 ## Constraints & Requirements
 
 - Always verify the server is running on `http://localhost:8888` before trying to mutate or query PM state. If not, trigger `scripts/pai/dashboard.py` in the background.
-- Respect the Zero-Mock constraint: all HTTP API calls to PAI must be real, interacting with the actual filesystem backing `PMServer.ts`.
+- Respect the Zero-Mock constraint: all HTTP API calls to PAI must be real, interacting with the actual filesystem backing the modular server.
 
 ---
 

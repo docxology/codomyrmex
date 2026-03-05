@@ -256,16 +256,50 @@ def _handle_api_key_check(client_class, client_name: str, config_prefix: str, ap
         return False
 
 
-def handle_jules_execute(args):
-    return _handle_agent_execute(JulesClient, "Jules", args)
+# ─────────────────────────────────────────────────────────────────────────────
+# Dispatch table — replaces 15 trivial one-liner pass-throughs
+#
+# CLI agents: availability checked via command lookup (e.g. jules/gemini/opencode)
+# API-key agents: availability checked via config key + env-var hint
+# ─────────────────────────────────────────────────────────────────────────────
 
+_CLI_AGENTS = [
+    ("jules", JulesClient, "Jules"),
+    ("gemini", GeminiClient, "Gemini"),
+    ("opencode", OpenCodeClient, "OpenCode"),
+]
 
-def handle_jules_stream(args):
-    return _handle_agent_stream(JulesClient, "Jules", args)
+_API_KEY_AGENTS = [
+    ("claude", ClaudeClient, "Claude", "claude", "ANTHROPIC_API_KEY"),
+    ("codex", CodexClient, "Codex", "codex", "OPENAI_API_KEY"),
+]
 
+# Generate execute/stream/check handlers from the registry tables.
+# The resulting names (handle_<agent>_execute, etc.) are identical to what
+# was previously written out by hand, so all importers see the same interface.
+for _name, _cls, _display in _CLI_AGENTS:
+    globals()[f"handle_{_name}_execute"] = (
+        lambda args, c=_cls, d=_display: _handle_agent_execute(c, d, args)
+    )
+    globals()[f"handle_{_name}_stream"] = (
+        lambda args, c=_cls, d=_display: _handle_agent_stream(c, d, args)
+    )
+    globals()[f"handle_{_name}_check"] = (
+        lambda args, c=_cls, d=_display: _handle_cli_agent_check(c, d, args)
+    )
 
-def handle_jules_check(args):
-    return _handle_cli_agent_check(JulesClient, "Jules", args)
+for _name, _cls, _display, _prefix, _env in _API_KEY_AGENTS:
+    globals()[f"handle_{_name}_execute"] = (
+        lambda args, c=_cls, d=_display: _handle_agent_execute(c, d, args)
+    )
+    globals()[f"handle_{_name}_stream"] = (
+        lambda args, c=_cls, d=_display: _handle_agent_stream(c, d, args)
+    )
+    globals()[f"handle_{_name}_check"] = (
+        lambda args, c=_cls, d=_display, p=_prefix, e=_env: _handle_api_key_check(c, d, p, e, args)
+    )
+
+del _name, _cls, _display  # clean up loop variables from module namespace
 
 
 def handle_jules_help(args):
@@ -323,42 +357,6 @@ def handle_jules_command(args):
 
 
 
-def handle_claude_execute(args):
-    return _handle_agent_execute(ClaudeClient, "Claude", args)
-
-
-def handle_claude_stream(args):
-    return _handle_agent_stream(ClaudeClient, "Claude", args)
-
-
-def handle_claude_check(args):
-    return _handle_api_key_check(ClaudeClient, "Claude", "claude", "ANTHROPIC_API_KEY", args)
-
-
-
-def handle_codex_execute(args):
-    return _handle_agent_execute(CodexClient, "Codex", args)
-
-
-def handle_codex_stream(args):
-    return _handle_agent_stream(CodexClient, "Codex", args)
-
-
-def handle_codex_check(args):
-    return _handle_api_key_check(CodexClient, "Codex", "codex", "OPENAI_API_KEY", args)
-
-
-
-def handle_opencode_execute(args):
-    return _handle_agent_execute(OpenCodeClient, "OpenCode", args)
-
-
-def handle_opencode_stream(args):
-    return _handle_agent_stream(OpenCodeClient, "OpenCode", args)
-
-
-def handle_opencode_check(args):
-    return _handle_cli_agent_check(OpenCodeClient, "OpenCode", args)
 
 
 def handle_opencode_init(args):
@@ -413,18 +411,6 @@ def handle_opencode_version(args):
         print_error("Error getting OpenCode version", exception=e)
         return False
 
-
-
-def handle_gemini_execute(args):
-    return _handle_agent_execute(GeminiClient, "Gemini", args)
-
-
-def handle_gemini_stream(args):
-    return _handle_agent_stream(GeminiClient, "Gemini", args)
-
-
-def handle_gemini_check(args):
-    return _handle_cli_agent_check(GeminiClient, "Gemini", args)
 
 
 def handle_gemini_chat_save(args):

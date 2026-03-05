@@ -13,6 +13,7 @@ from enum import Enum
 from typing import Any
 
 from codomyrmex.collaboration.agents.base import CollaborativeAgent
+from codomyrmex.collaboration.exceptions import ConsensusError
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -36,7 +37,6 @@ class Vote:
     reason: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "voter_id": self.voter_id,
             "vote": self.vote.value,
@@ -58,7 +58,6 @@ class Proposal:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "proposal_id": self.proposal_id,
             "title": self.title,
@@ -91,7 +90,6 @@ class VotingResult:
         return (self.votes_for + self.votes_against + self.abstentions) / self.total_voters
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "proposal_id": self.proposal_id,
             "passed": self.passed,
@@ -123,9 +121,9 @@ class VotingMechanism:
         threshold: float = 0.5,
     ):
         if not 0 <= quorum <= 1:
-            raise ValueError("Quorum must be between 0 and 1")
+            raise ConsensusError("Quorum must be between 0 and 1")
         if not 0 <= threshold <= 1:
-            raise ValueError("Threshold must be between 0 and 1")
+            raise ConsensusError("Threshold must be between 0 and 1")
 
         self._quorum = quorum
         self._threshold = threshold
@@ -165,15 +163,15 @@ class VotingMechanism:
         """Cast a vote on a proposal.
 
         Raises:
-            ValueError: If proposal not found or voting closed.
+            ConsensusError: If proposal not found or voting deadline has passed.
 
         """
         if proposal_id not in self._active_proposals:
-            raise ValueError(f"Proposal not found: {proposal_id}")
+            raise ConsensusError(f"Proposal not found: {proposal_id}")
 
         proposal = self._active_proposals[proposal_id]
         if proposal.deadline and datetime.now() > proposal.deadline:
-            raise ValueError("Voting deadline has passed")
+            raise ConsensusError("Voting deadline has passed")
 
         vote_obj = Vote(
             voter_id=voter_id,
@@ -204,7 +202,7 @@ class VotingMechanism:
 
         """
         if proposal_id not in self._active_proposals:
-            raise ValueError(f"Proposal not found: {proposal_id}")
+            raise ConsensusError(f"Proposal not found: {proposal_id}")
 
         votes = self.get_votes(proposal_id)
 
@@ -343,12 +341,19 @@ class ConsensusBuilder:
 
         """
         for round_num in range(max_rounds):
+            failures = 0
             for agent in agents:
                 try:
                     value = value_fn(agent)
                     self.propose_value(key, agent.agent_id, value)
                 except Exception as e:
                     logger.warning(f"Agent {agent.agent_id} failed to propose: {e}")
+                    failures += 1
+
+            if failures == len(agents):
+                raise ConsensusError(
+                    f"All {len(agents)} agents failed to propose a value for '{key}' in round {round_num + 1}"
+                )
 
             consensus = self.check_consensus(key, len(agents))
             if consensus is not None:
@@ -357,7 +362,7 @@ class ConsensusBuilder:
 
             await asyncio.sleep(0.1)  # Brief delay between rounds
 
-        logger.warning(f"Consensus not reached for {key} after {max_rounds} rounds")
+        logger.warning(f"Consensus not reached for '{key}' after {max_rounds} rounds")
         return None
 
 

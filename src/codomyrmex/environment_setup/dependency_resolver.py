@@ -119,11 +119,8 @@ class DependencyResolver:
         try:
             import tomllib
         except ImportError:
-            try:
-                import tomli as tomllib  # type: ignore[no-redef]
-            except ImportError:
-                issues.append("tomllib/tomli not available for pyproject parsing")
-                return issues
+            issues.append("tomllib not available (requires Python 3.11+)")
+            return issues
 
         try:
             with open(pyproject_path, "rb") as f:

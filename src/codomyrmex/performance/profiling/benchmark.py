@@ -73,7 +73,6 @@ class BenchmarkResult:
         return sorted_t[lo] + frac * (sorted_t[hi] - sorted_t[lo])
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "iterations": self.iterations,

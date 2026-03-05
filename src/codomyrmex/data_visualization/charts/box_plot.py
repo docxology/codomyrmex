@@ -54,11 +54,9 @@ def create_box_plot(
     Returns:
         The matplotlib Figure, or None if data is invalid.
     """
-    logger.debug(f"Generating box plot titled '{title}'")
 
     if not data:
-        logger.warning("Empty data provided for box plot. No plot generated.")
-        return None
+        raise ValueError("Empty data provided for box plot. No plot generated.")
 
     # Normalize data
     if isinstance(data, dict):

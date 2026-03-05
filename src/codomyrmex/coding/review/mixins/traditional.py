@@ -12,13 +12,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-try:
-    from codomyrmex.performance import monitor_performance
-except ImportError:
-    def monitor_performance(*args, **kwargs):
-        def decorator(func):
-            return func
-        return decorator
 
 
 class TraditionalMixin:

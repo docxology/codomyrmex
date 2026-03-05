@@ -45,7 +45,6 @@ class ReviewFinding:
     suggestion: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "category": self.category,
             "message": self.message,
@@ -83,7 +82,6 @@ class CodeReviewReport:
         return len(self.findings) == 0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "findings": [f.to_dict() for f in self.findings],
             "files_reviewed": self.files_reviewed,

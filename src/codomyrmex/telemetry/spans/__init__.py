@@ -23,7 +23,6 @@ class SpanContext:
     sampled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "trace_id": self.trace_id,
             "span_id": self.span_id,
@@ -56,7 +55,6 @@ class SpanEvent:
     attributes: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "timestamp": self.timestamp.isoformat(),
@@ -168,7 +166,6 @@ class Span:
         return 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "trace_id": self.context.trace_id,

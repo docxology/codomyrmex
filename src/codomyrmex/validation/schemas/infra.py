@@ -20,12 +20,28 @@ class DeploymentStatus(Enum):
 
 
 class PipelineStatus(Enum):
-    """Status of a CI/CD pipeline."""
+    """Canonical pipeline status — single source of truth for ci_cd_automation and orchestrator.
+
+    Values cover all three historical namespaces to avoid breaking existing callers:
+    - ci_cd_automation: SUCCESS, FAILURE, PENDING, SKIPPED
+    - orchestrator.pipelines: CREATED, SUCCESS, FAILED
+    - validation (original): QUEUED, SUCCEEDED, FAILED, CANCELLED
+    """
+    # Pending / queued states
     QUEUED = "queued"
+    PENDING = "pending"
+    CREATED = "created"
+    # Active
     RUNNING = "running"
+    # Terminal — success
     SUCCEEDED = "succeeded"
+    SUCCESS = "success"
+    # Terminal — failure
     FAILED = "failed"
+    FAILURE = "failure"
+    # Terminal — other
     CANCELLED = "cancelled"
+    SKIPPED = "skipped"
 
 
 class MetricType(Enum):
@@ -53,7 +69,6 @@ class Deployment:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,
@@ -81,7 +96,6 @@ class Pipeline:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,
@@ -108,7 +122,6 @@ class Resource:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,
@@ -135,7 +148,6 @@ class BuildArtifact:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "path": self.path,
@@ -161,7 +173,6 @@ class Metric:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "value": self.value,
@@ -218,7 +229,6 @@ class WorkflowStep:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,

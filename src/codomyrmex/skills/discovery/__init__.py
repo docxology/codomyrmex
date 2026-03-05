@@ -42,7 +42,6 @@ class ParameterSchema:
     enum_values: list[Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         result = {
             "name": self.name,
             "type": self.param_type,
@@ -73,7 +72,6 @@ class SkillMetadata:
     enabled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,

@@ -40,7 +40,6 @@ class ABTestResult:
         return self.wins_a + self.wins_b + self.ties
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "strategy_a": self.strategy_a,
             "strategy_b": self.strategy_b,

@@ -51,7 +51,6 @@ class ToolEntry:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "description": self.description,

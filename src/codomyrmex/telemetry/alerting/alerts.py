@@ -87,7 +87,6 @@ class Alert:
             self.fired_at = time.time()
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "rule": self.rule_name,
             "severity": self.severity.value,

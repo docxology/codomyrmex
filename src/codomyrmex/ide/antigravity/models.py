@@ -52,7 +52,6 @@ class Artifact:
     modified: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "path": self.path,
@@ -71,7 +70,6 @@ class ConversationContext:
     artifacts: list[Artifact] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "conversation_id": self.conversation_id,
             "task_name": self.task_name,

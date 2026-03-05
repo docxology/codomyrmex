@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
-from .search import ArchConfig, NASSearcher, NASSearchSpace
+from .search import NASSearcher, NASSearchSpace, size_heuristic_eval
 
 
 @mcp_tool(category="nas")
@@ -49,16 +49,7 @@ def nas_random_search(n_trials: int = 20, seed: int = 42) -> dict:
         total_evaluated (int)
     """
     space = NASSearchSpace()
-
-    def eval_fn(config: ArchConfig) -> float:
-        """Heuristic score: prefer moderate-sized architectures."""
-        params = config.total_params_estimate
-        # Bell-curve around 10M params
-        import math
-
-        return -abs(math.log10(params + 1) - 7.0)
-
-    searcher = NASSearcher(space, eval_fn)
+    searcher = NASSearcher(space, size_heuristic_eval)
     best = searcher.random_search(n_trials=n_trials, seed=seed)
     _, best_score = searcher.best()
 

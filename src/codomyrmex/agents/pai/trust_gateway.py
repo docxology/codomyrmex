@@ -76,6 +76,7 @@ _audit_lock = threading.Lock()
 # Confirmation
 _REQUIRE_CONFIRMATION: bool = False
 _pending_confirmations: dict[str, dict[str, Any]] = {}
+_confirmations_lock = threading.Lock()
 _CONFIRMATION_TTL = 60.0  # seconds
 
 
@@ -126,8 +127,8 @@ def set_require_confirmation(enabled: bool) -> None:
     _REQUIRE_CONFIRMATION = enabled
 
 
-def _cleanup_expired_confirmations() -> None:
-    """Remove expired confirmation tokens."""
+def _cleanup_expired_confirmations_locked() -> None:
+    """Remove expired confirmation tokens. Caller MUST hold _confirmations_lock."""
     now = time.monotonic()
     expired = [
         token for token, data in _pending_confirmations.items()
@@ -336,13 +337,23 @@ class TrustRegistry:
         except (json.JSONDecodeError, OSError, KeyError) as e:
             logger.warning(f"Failed to load trust ledger: {e}")
         self._disk_loaded = True
+        # One-time migration: restrict existing file permissions
+        try:
+            current_mode = self._ledger_path.stat().st_mode & 0o777
+            if current_mode != 0o600:
+                self._ledger_path.chmod(0o600)
+        except OSError:
+            pass
 
     def _save(self) -> None:
-        """Save trust state to disk (write-through keeps in-memory cache valid)."""
+        """Save trust state to disk (atomic write + restricted permissions)."""
         try:
             self._ledger_path.parent.mkdir(parents=True, exist_ok=True)
             data = {name: lvl.value for name, lvl in self._levels.items()}
-            self._ledger_path.write_text(json.dumps(data, indent=2))
+            tmp_path = self._ledger_path.with_suffix(".tmp")
+            tmp_path.write_text(json.dumps(data, indent=2))
+            tmp_path.chmod(0o600)  # set before rename — avoids brief readable window
+            tmp_path.rename(self._ledger_path)
             self._disk_loaded = True  # cache is now consistent with disk
         except OSError as e:
             logger.error(f"Failed to save trust ledger: {e}")
@@ -697,46 +708,47 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
 
     # Destructive Tool Confirmation
     if _REQUIRE_CONFIRMATION and name in DESTRUCTIVE_TOOLS:
-        _cleanup_expired_confirmations()
+        with _confirmations_lock:
+            _cleanup_expired_confirmations_locked()
 
-        # Check for token
-        token = kwargs.pop("confirmation_token", None)
+            # Check for token
+            token = kwargs.pop("confirmation_token", None)
 
-        if token:
-            # Validate token
-            if token not in _pending_confirmations:
-                _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
-                               error=SecurityError("Invalid or expired confirmation token"))
-                raise SecurityError("Invalid or expired confirmation token")
+            if token:
+                # Validate token
+                if token not in _pending_confirmations:
+                    _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
+                                   error=SecurityError("Invalid or expired confirmation token"))
+                    raise SecurityError("Invalid or expired confirmation token")
 
-            saved = _pending_confirmations[token]
-            if saved["tool_name"] != name:
-                 _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
-                               error=SecurityError("Token mismatch"))
-                 raise SecurityError("Confirmation token does not match tool")
+                saved = _pending_confirmations[token]
+                if saved["tool_name"] != name:
+                    _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
+                                   error=SecurityError("Token mismatch"))
+                    raise SecurityError("Confirmation token does not match tool")
 
-            # Token valid, proceed. Remove used token.
-            del _pending_confirmations[token]
+                # Token valid, proceed. Remove used token.
+                del _pending_confirmations[token]
 
-        else:
-            # Require confirmation
-            import uuid
-            new_token = str(uuid.uuid4())
-            _pending_confirmations[new_token] = {
-                "timestamp": time.monotonic(),
-                "tool_name": name,
-                "args": kwargs
-            }
+            else:
+                # Require confirmation
+                import uuid
+                new_token = str(uuid.uuid4())
+                _pending_confirmations[new_token] = {
+                    "timestamp": time.monotonic(),
+                    "tool_name": name,
+                    "args": kwargs
+                }
 
-            _log_audit_entry(name, kwargs, "pending_confirmation", _registry.level(name).name, 0.0)
+                _log_audit_entry(name, kwargs, "pending_confirmation", _registry.level(name).name, 0.0)
 
-            return {
-                "confirmation_required": True,
-                "tool_name": name,
-                "args_preview": kwargs,
-                "confirm_token": new_token,
-                "message": f"Destructive tool '{name}' requires confirmation. Call again with 'confirmation_token': '{new_token}'."
-            }
+                return {
+                    "confirmation_required": True,
+                    "tool_name": name,
+                    "args_preview": kwargs,
+                    "confirm_token": new_token,
+                    "message": f"Destructive tool '{name}' requires confirmation. Call again with 'confirmation_token': '{new_token}'."
+                }
 
     t0 = time.monotonic()
     status = "success"

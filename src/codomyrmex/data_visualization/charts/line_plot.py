@@ -38,10 +38,8 @@ def create_line_plot(
     If y_data is a list of lists, and x_data is a single list, multiple lines are plotted.
     If line_labels are provided, they will be used for the legend.
     """
-    logger.debug(f"Generating line plot titled '{title}'")
     if len(x_data) == 0 or len(y_data) == 0:
-        logger.warning("Empty data provided for line plot. No plot generated.")
-        return None
+        raise ValueError("Empty data provided for line plot. No plot generated.")
 
     fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:

@@ -75,7 +75,6 @@ class CommandResult:
         return self.exit_code == 0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "command": self.command,
             "exit_code": self.exit_code,

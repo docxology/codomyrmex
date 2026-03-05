@@ -31,3 +31,8 @@ class TestGeneratedMathFunctions:
         """Test multiplying by zero."""
         result = multiply(5, 0)
         assert result == 0
+
+    def test_multiply_identity(self):
+        """Test multiplying by one."""
+        result = multiply(5, 1)
+        assert result == 5

@@ -66,7 +66,6 @@ class Theme:
         }
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "primary": self.primary_color,

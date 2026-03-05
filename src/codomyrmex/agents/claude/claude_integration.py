@@ -135,8 +135,8 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
                 "language": language,
                 "content_length": len(response.content),
                 "execution_time": response.execution_time,
-                "tokens_used": response.tokens_used,
-                "cost_usd": response.metadata.get("cost_usd"),
+                "total_tokens": response.tokens_used,
+                "cost_usd": response.metadata.get("cost_usd", 0),
             },
         )
 

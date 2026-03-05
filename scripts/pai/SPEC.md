@@ -2,12 +2,12 @@
 
 ## Purpose
 
-This specification details the expected behavior and HTTP interface definitions for the `scripts/pai/` orchestrator and the underlying `PMServer.ts` PAI system.
+This specification details the expected behavior and HTTP interface definitions for the `scripts/pai/` orchestrator and the underlying modular PAI PM server (`pm/server.ts`).
 
 ## Architectural Constraints
 
-- **Double Binding**: The `scripts/pai/dashboard.py` daemon must guarantee that both `PMServer.ts` (`:8888`) and `WebsiteServer` (`:8787`) are operational.
-- **REST Compliance**: The `PMServer.ts` must expose fully functional GET, POST, PUT, and DELETE handlers conforming to standard application/json signatures.
+- **Double Binding**: The `scripts/pai/dashboard.py` daemon must guarantee that both the modular server (`pm/server.ts` on `:8888`) and `WebsiteServer` (`:8787`) are operational.
+- **REST Compliance**: The modular server must expose fully functional GET, POST, PUT, and DELETE handlers conforming to standard application/json signatures.
 
 ## HTTP API Specification (`http://localhost:8888`)
 

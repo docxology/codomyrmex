@@ -39,7 +39,6 @@ class ComponentHealth:
     message: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "status": self.status.value,
@@ -77,7 +76,6 @@ class HealthReport:
         return len(self.components)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "status": self.status.value,
             "is_healthy": self.is_healthy,

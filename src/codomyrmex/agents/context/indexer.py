@@ -36,7 +36,6 @@ class Symbol:
     docstring: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "kind": self.kind,
@@ -91,7 +90,6 @@ class RepoIndex:
         return [s for s in self.symbols if s.kind == "class"]
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "files_indexed": self.files_indexed,
             "symbol_count": self.symbol_count,

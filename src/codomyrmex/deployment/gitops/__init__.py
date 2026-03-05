@@ -46,7 +46,6 @@ class SyncStatus:
     drift_details: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "state": self.state.value,
             "desired_revision": self.desired_revision,

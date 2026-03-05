@@ -64,9 +64,9 @@ from .swarm import (
     SwarmManager,
     SwarmMessage,
     SwarmMessageType,
+    SwarmVote,
     TaskAssignment,
     TaskDecomposer,
-    Vote,
 )
 
 # Shared schemas for cross-module interop

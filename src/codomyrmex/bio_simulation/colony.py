@@ -97,7 +97,6 @@ class Ant:
         return math.sqrt(self.x ** 2 + self.y ** 2)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id, "state": self.state.name, "energy": self.energy,
             "x": self.x, "y": self.y, "carrying": self.carrying, "age": self.age,

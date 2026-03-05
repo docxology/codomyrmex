@@ -24,7 +24,7 @@ class Decision(Enum):
 
 
 @dataclass
-class Vote:
+class SwarmVote:
     """A single agent's vote.
 
     Attributes:
@@ -54,12 +54,11 @@ class ConsensusResult:
     """
 
     decision: Decision
-    votes: list[Vote] = field(default_factory=list)
+    votes: list[SwarmVote] = field(default_factory=list)
     approval_score: float = 0.0
     strategy: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "decision": self.decision.value,
             "approval_score": round(self.approval_score, 3),
@@ -81,14 +80,14 @@ class ConsensusEngine:
     Usage::
 
         engine = ConsensusEngine()
-        votes = [Vote("alice", True), Vote("bob", False), Vote("carol", True)]
+        votes = [SwarmVote("alice", True), SwarmVote("bob", False), SwarmVote("carol", True)]
         result = engine.resolve(votes, strategy="majority")
         assert result.decision == Decision.APPROVED
     """
 
     def resolve(
         self,
-        votes: list[Vote],
+        votes: list[SwarmVote],
         strategy: str = "majority",
         threshold: float = 0.5,
     ) -> ConsensusResult:
@@ -117,7 +116,7 @@ class ConsensusEngine:
         else:
             return self._majority(votes, threshold)
 
-    def _majority(self, votes: list[Vote], threshold: float) -> ConsensusResult:
+    def _majority(self, votes: list[SwarmVote], threshold: float) -> ConsensusResult:
         """Calculate simple majority vote."""
         approvals = sum(1 for v in votes if v.approve)
         total = len(votes)
@@ -144,7 +143,7 @@ class ConsensusEngine:
 
         return result
 
-    def _weighted(self, votes: list[Vote], threshold: float) -> ConsensusResult:
+    def _weighted(self, votes: list[SwarmVote], threshold: float) -> ConsensusResult:
         """Weight-based voting."""
         total_weight = sum(v.weight for v in votes)
         approval_weight = sum(v.weight for v in votes if v.approve)
@@ -164,7 +163,7 @@ class ConsensusEngine:
             strategy="weighted",
         )
 
-    def _veto(self, votes: list[Vote]) -> ConsensusResult:
+    def _veto(self, votes: list[SwarmVote]) -> ConsensusResult:
         """Any rejection = vetoed."""
         all_approve = all(v.approve for v in votes)
         score = sum(1 for v in votes if v.approve) / len(votes)
@@ -181,5 +180,5 @@ __all__ = [
     "ConsensusEngine",
     "ConsensusResult",
     "Decision",
-    "Vote",
+    "SwarmVote",
 ]

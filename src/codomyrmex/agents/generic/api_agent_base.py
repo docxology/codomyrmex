@@ -1,3 +1,5 @@
+"""Base class for API-based agents with common API patterns."""
+
 from collections.abc import Callable, Iterator
 from typing import Any
 
@@ -5,8 +7,6 @@ from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
 from codomyrmex.agents.core.config import AgentConfig, get_config
 from codomyrmex.agents.core.exceptions import AgentConfigurationError, AgentError
 from codomyrmex.logging_monitoring import get_logger
-
-"""Base class for API-based agents with common API patterns."""
 
 logger = get_logger(__name__)
 
@@ -139,10 +139,10 @@ class APIAgentBase(BaseAgent):
 
         Prompts user for API key if not configured.
         """
-        if not self.config.get(self.api_key_config_key):
+        if not self.config.get(self._api_key_config_key):
             import getpass
-            print(f"Configuring {self.name}...")
-            api_key = getpass.getpass(f"Enter {self.api_key_config_key} (or env var name): ")
+            self.logger.info("Configuring %s — API key not found in config", self.name)
+            api_key = getpass.getpass(f"Enter {self._api_key_config_key} (or env var name): ")
             if api_key:
                 # In a real app we might save this to a config file
                 # For now we just check if it looks like an ENV var or a key
@@ -202,30 +202,17 @@ class APIAgentBase(BaseAgent):
         )
 
         if api_error_class and isinstance(error, api_error_class):
-            if isinstance(error, BaseException):
-                raise self._error_class(
-                    f"{self.name} API error: {api_error_str}",
-                    api_error=api_error_str,
-                    status_code=status_code,
-                ) from error
-            else:
-                raise self._error_class(
-                    f"{self.name} API error: {api_error_str}",
-                    api_error=api_error_str,
-                    status_code=status_code,
-                )
+            raise self._error_class(
+                f"{self.name} API error: {api_error_str}",
+                api_error=api_error_str,
+                status_code=status_code,
+            ) from error
 
         # Generic error
-        if isinstance(error, BaseException):
-            raise self._error_class(
-                f"Unexpected error: {api_error_str}",
-                api_error=api_error_str,
-            ) from error
-        else:
-            raise self._error_class(
-                f"Unexpected error: {api_error_str}",
-                api_error=api_error_str,
-            )
+        raise self._error_class(
+            f"Unexpected error: {api_error_str}",
+            api_error=api_error_str,
+        ) from error
 
     def _extract_tokens_from_response(
         self, response: Any, provider: str
@@ -288,6 +275,19 @@ class APIAgentBase(BaseAgent):
             tokens_used=tokens_used,
             execution_time=execution_time,
         )
+
+    def _build_messages(self, request: AgentRequest) -> list[dict[str, str]]:
+        """Build chat messages from agent request."""
+        messages = []
+
+        if request.context and request.context.get("system"):
+            messages.append({"role": "system", "content": request.context["system"]})
+
+        if request.context and request.context.get("history"):
+            messages.extend(request.context["history"])
+
+        messages.append({"role": "user", "content": request.prompt})
+        return messages
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """

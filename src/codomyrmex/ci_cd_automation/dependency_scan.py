@@ -38,7 +38,6 @@ class Vulnerability:
     fixed_in: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "package": self.package,
             "version": self.version,
@@ -79,7 +78,6 @@ class ScanReport:
         return counts
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "packages_scanned": self.packages_scanned,
             "vulnerabilities": [v.to_dict() for v in self.vulnerabilities],

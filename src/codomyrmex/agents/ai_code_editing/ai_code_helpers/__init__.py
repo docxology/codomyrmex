@@ -9,6 +9,7 @@ from .config import (
     DEFAULT_LLM_MODEL,
     DEFAULT_LLM_PROVIDER,
     MAX_RETRIES,
+    OLLAMA_AVAILABLE,
     RETRY_DELAY,
     get_llm_client,
 )
@@ -47,6 +48,7 @@ __all__ = [
     "DEFAULT_LLM_PROVIDER",
     "DEFAULT_LLM_MODEL",
     "MAX_RETRIES",
+    "OLLAMA_AVAILABLE",
     "RETRY_DELAY",
     "generate_code_snippet",
     "generate_code_batch",

@@ -20,19 +20,12 @@ compatibility.
 import json
 import os
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL
+from codomyrmex.logging_monitoring import get_logger
 
-try:
-    from codomyrmex.logging_monitoring import get_logger
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-    logger = logging.getLogger(__name__)
-
-# Import from standardization submodule for type annotations in convenience functions
-from typing import TYPE_CHECKING
+logger = get_logger(__name__)
 
 if TYPE_CHECKING:
     from .standardization.graphql_api import GraphQLAPI
@@ -110,9 +103,18 @@ class OpenAPISpecification:
             raise ValueError(f"Unsupported format: {format}")
 
 
-# Re-export generator classes from their dedicated modules
+# Re-export generator classes from their dedicated modules for backward compatibility
 from .openapi_documentation_generator import DocumentationOpenAPIGenerator  # noqa: E402, I001
-from .openapi_standardization_generator import StandardizationOpenAPIGenerator  # noqa: E402, I001
+
+
+def __getattr__(name: str):
+    # Lazy import breaks the import cycle:
+    # openapi_standardization_generator imports OpenAPISpecification from here;
+    # importing it eagerly would create a circular dependency.
+    if name == "StandardizationOpenAPIGenerator":
+        from .openapi_standardization_generator import StandardizationOpenAPIGenerator
+        return StandardizationOpenAPIGenerator
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 # Convenience functions for documentation module
@@ -155,31 +157,15 @@ def validate_openapi_spec(spec: dict[str, Any]) -> list[str]:
 
 # Convenience functions for standardization module
 def create_openapi_generator(title: str = "Codomyrmex API", version: str = "1.0.0",
-                             description: str = "API for Codomyrmex") -> StandardizationOpenAPIGenerator:
-    """
-    Create a new OpenAPI generator for standardization.
-
-    Args:
-        title: API title
-        version: API version
-        description: API description
-
-    Returns:
-        StandardizationOpenAPIGenerator instance
-    """
+                             description: str = "API for Codomyrmex") -> Any:
+    """Create a new OpenAPI generator for standardization."""
+    from .openapi_standardization_generator import StandardizationOpenAPIGenerator
     return StandardizationOpenAPIGenerator(title=title, version=version, description=description)
 
 
-def create_openapi_from_rest_api(api: RESTAPI) -> OpenAPISpecification:
-    """
-    Create OpenAPI spec from a REST API.
-
-    Args:
-        api: REST API instance
-
-    Returns:
-        OpenAPI specification
-    """
+def create_openapi_from_rest_api(api: "RESTAPI") -> OpenAPISpecification:
+    """Create OpenAPI spec from a REST API."""
+    from .openapi_standardization_generator import StandardizationOpenAPIGenerator
     generator = StandardizationOpenAPIGenerator(
         title=api.title,
         version=api.version,
@@ -189,16 +175,9 @@ def create_openapi_from_rest_api(api: RESTAPI) -> OpenAPISpecification:
     return generator.generate_spec()
 
 
-def create_openapi_from_graphql_api(api: GraphQLAPI) -> OpenAPISpecification:
-    """
-    Create OpenAPI spec from a GraphQL API.
-
-    Args:
-        api: GraphQL API instance
-
-    Returns:
-        OpenAPI specification
-    """
+def create_openapi_from_graphql_api(api: "GraphQLAPI") -> OpenAPISpecification:
+    """Create OpenAPI spec from a GraphQL API."""
+    from .openapi_standardization_generator import StandardizationOpenAPIGenerator
     generator = StandardizationOpenAPIGenerator(
         title="GraphQL API",
         version="1.0.0",

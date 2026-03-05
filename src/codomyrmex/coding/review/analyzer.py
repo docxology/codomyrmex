@@ -21,36 +21,12 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
+from ._compat import monitor_performance
 from .models import (
     ToolNotFoundError,
 )
 
 logger = get_logger(__name__)
-
-# Try to import performance monitoring
-try:
-    from codomyrmex.performance import monitor_performance
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    PERFORMANCE_MONITORING_AVAILABLE = False
-
-    def monitor_performance(*args, **kwargs):
-        """Decorator for performance monitoring (fallback).
-
-        A no-op fallback decorator used when the performance module
-        is not available. Simply returns the decorated function unchanged.
-
-        Args:
-            *args: Ignored positional arguments.
-            **kwargs: Ignored keyword arguments.
-
-        Returns:
-            A decorator function that returns the original function.
-        """
-        def decorator(func):
-            """Inner decorator that returns the function unchanged."""
-            return func
-        return decorator
 
 
 class PyscnAnalyzer:

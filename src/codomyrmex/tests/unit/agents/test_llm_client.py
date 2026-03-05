@@ -27,7 +27,7 @@ class TestAgentRequest:
     def test_basic_construction(self):
         req = AgentRequest(prompt="hello")
         assert req.prompt == "hello"
-        assert req.metadata is None
+        assert req.metadata == {}  # __post_init__ coerces None → {}
 
     def test_prompt_required(self):
         with pytest.raises(TypeError):
@@ -39,9 +39,11 @@ class TestAgentRequest:
         assert req.metadata == meta
         assert req.metadata["source"] == "cli"
 
-    def test_metadata_defaults_to_none(self):
+    def test_metadata_defaults_to_empty_dict(self):
+        """AgentRequest.__post_init__ coerces None metadata to empty dict."""
         req = AgentRequest(prompt="x")
-        assert req.metadata is None
+        assert req.metadata == {}
+        assert isinstance(req.metadata, dict)
 
     def test_prompt_empty_string_is_valid(self):
         req = AgentRequest(prompt="")
@@ -109,26 +111,32 @@ class TestOllamaClientConstruction:
         client = OllamaClient(model="codellama:7b")
         assert client.model == "codellama:7b"
 
-    def test_custom_base_url(self):
-        client = OllamaClient(base_url="http://gpu-box:11434")
-        assert client.base_url == "http://gpu-box:11434"
+    def test_custom_base_url_rejects_non_localhost(self):
+        """SSRF protection: non-localhost URLs are rejected."""
+        with pytest.raises(ValueError, match="localhost address"):
+            OllamaClient(base_url="http://gpu-box:11434")
+
+    def test_custom_base_url_accepts_localhost(self):
+        """Localhost URLs are accepted."""
+        client = OllamaClient(base_url="http://localhost:11434")
+        assert client.base_url == "http://localhost:11434"
+
+    def test_custom_base_url_accepts_127(self):
+        """127.0.0.1 URLs are accepted."""
+        client = OllamaClient(base_url="http://127.0.0.1:11434")
+        assert client.base_url == "http://127.0.0.1:11434"
 
     def test_session_manager_initially_none(self):
         client = OllamaClient()
         assert client.session_manager is None
 
-    def test_create_session(self):
+    def test_create_session_not_implemented(self):
+        """create_session raises NotImplementedError (session management placeholder)."""
         client = OllamaClient()
-        client.create_session("sess-1")
-        assert client.session_manager is not None
-        assert "sess-1" in client.session_manager
+        with pytest.raises(NotImplementedError):
+            client.create_session("sess-1")
 
-    def test_close_session(self):
+    def test_no_close_session_method(self):
+        """OllamaClient does not expose close_session (not implemented)."""
         client = OllamaClient()
-        client.create_session("sess-2")
-        client.close_session("sess-2")
-        assert "sess-2" not in client.session_manager
-
-    def test_close_nonexistent_session_is_noop(self):
-        client = OllamaClient()
-        client.close_session("no-such-session")  # should not raise
+        assert not hasattr(client, "close_session")

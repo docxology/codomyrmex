@@ -158,7 +158,7 @@ uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_orches
 
 ### Zero-Mock Policy
 
-Tests use `FakeLLMClient` and real `BaseAgent` implementations (`ConcreteAgent`, `FailingAgent`) instead of `unittest.mock.MagicMock`. This ensures robust integration testing of the agent framework's core logic.
+Tests use `InMemoryLLMClient` and real `BaseAgent` implementations (`ConcreteAgent`, `FailingAgent`) instead of `unittest.mock.MagicMock`. This ensures robust integration testing of the agent framework's core logic.
 
 ## Navigation
 

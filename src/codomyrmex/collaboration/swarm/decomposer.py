@@ -7,12 +7,12 @@ and produces a topological execution order.
 from __future__ import annotations
 
 import uuid
-from collections import deque
 from dataclasses import dataclass, field
 from typing import Any
 
 from codomyrmex.collaboration.swarm.protocol import AgentRole
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.utils.graph import kahn_topological_sort
 
 logger = get_logger(__name__)
 
@@ -42,7 +42,6 @@ class SubTask:
             self.task_id = str(uuid.uuid4())[:8]
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "task_id": self.task_id,
             "description": self.description,
@@ -146,35 +145,17 @@ class TaskDecomposer:
 
         """
         task_map = {st.task_id: st for st in subtasks}
-        in_degree: dict[str, int] = {st.task_id: 0 for st in subtasks}
-        adj: dict[str, list[str]] = {st.task_id: [] for st in subtasks}
+        valid_ids = set(task_map)
 
-        for st in subtasks:
-            for dep_id in st.depends_on:
-                if dep_id and dep_id in adj:
-                    adj[dep_id].append(st.task_id)
-                    in_degree[st.task_id] += 1
-
-        # Kahn's algorithm
-        queue: deque[str] = deque(
-            tid for tid, deg in in_degree.items() if deg == 0
-        )
-        result: list[SubTask] = []
-
-        while queue:
-            tid = queue.popleft()
-            result.append(task_map[tid])
-            for neighbor in adj[tid]:
-                in_degree[neighbor] -= 1
-                if in_degree[neighbor] == 0:
-                    queue.append(neighbor)
-
-        if len(result) != len(subtasks):
-            raise CyclicDependencyError(
-                f"Cycle detected: processed {len(result)}/{len(subtasks)}"
+        try:
+            ordered_ids = kahn_topological_sort(
+                task_map,
+                lambda tid: [d for d in task_map[tid].depends_on if d and d in valid_ids],
             )
+        except ValueError as exc:
+            raise CyclicDependencyError(str(exc)) from exc
 
-        return result
+        return [task_map[tid] for tid in ordered_ids]
 
     @staticmethod
     def leaf_tasks(subtasks: list[SubTask]) -> list[SubTask]:

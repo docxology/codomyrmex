@@ -2,25 +2,15 @@
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from enum import Enum
 from typing import Any
 
+from codomyrmex.validation.schemas.infra import PipelineStatus
 
-class ExecutionStatus(Enum):
-    """Shared execution status for pipelines, stages, and jobs."""
-
-    PENDING = "pending"
-    RUNNING = "running"
-    SUCCESS = "success"
-    FAILURE = "failure"
-    CANCELLED = "cancelled"
-    SKIPPED = "skipped"
-
-
-# Aliases for backward compatibility — all three share the same values.
-PipelineStatus = ExecutionStatus
-StageStatus = ExecutionStatus
-JobStatus = ExecutionStatus
+# ExecutionStatus is the local alias for the canonical PipelineStatus.
+# ci_cd_automation values (SUCCESS, FAILURE, PENDING, SKIPPED) are all present in PipelineStatus.
+ExecutionStatus = PipelineStatus
+StageStatus = PipelineStatus
+JobStatus = PipelineStatus
 
 
 @dataclass

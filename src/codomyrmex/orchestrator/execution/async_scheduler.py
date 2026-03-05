@@ -68,7 +68,6 @@ class SchedulerMetrics:
     total_execution_time: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "jobs_scheduled": self.jobs_scheduled,
             "jobs_completed": self.jobs_completed,

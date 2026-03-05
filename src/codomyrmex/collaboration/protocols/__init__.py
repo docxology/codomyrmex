@@ -13,6 +13,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Optional
 
+from codomyrmex.collaboration.exceptions import CollaborationError
+
 
 class AgentState(Enum):
     """States an agent can be in."""
@@ -22,6 +24,7 @@ class AgentState(Enum):
     WAITING = "waiting"
     ERROR = "error"
     TERMINATED = "terminated"
+
 
 class MessageType(Enum):
     """Types of messages between agents."""
@@ -47,7 +50,6 @@ class AgentMessage:
     reply_to: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "sender_id": self.sender_id,
@@ -80,13 +82,13 @@ class AgentCapability:
     output_schema: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "description": self.description,
             "input_schema": self.input_schema,
             "output_schema": self.output_schema,
         }
+
 
 class AgentProtocol(ABC):
     """Abstract base class for agent coordination protocols."""
@@ -144,7 +146,6 @@ class BaseAgent(ABC):
         return [c.name for c in self.capabilities]
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "agent_id": self.agent_id,
             "name": self.name,
@@ -191,7 +192,7 @@ class AgentCoordinator:
     async def execute_protocol(self, protocol_name: str, task: Any) -> Any:
         """Execute a coordination protocol."""
         if protocol_name not in self.protocols:
-            raise ValueError(f"Unknown protocol: {protocol_name}")
+            raise CollaborationError(f"Unknown protocol: {protocol_name}")
 
         protocol = self.protocols[protocol_name]
         available_agents = list(self.agents.values())
@@ -206,6 +207,7 @@ class AgentCoordinator:
     def get_idle_agents(self) -> list[BaseAgent]:
         """Get all idle agents."""
         return [a for a in self.agents.values() if a.state == AgentState.IDLE]
+
 
 class RoundRobinProtocol(AgentProtocol):
     """Distributes tasks to agents in round-robin fashion."""
@@ -226,7 +228,7 @@ class RoundRobinProtocol(AgentProtocol):
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
         """Execute task."""
         if not agents:
-            raise ValueError("No agents available")
+            raise CollaborationError("No agents available")
 
         agent = agents[0]
         agent.state = AgentState.BUSY
@@ -271,7 +273,7 @@ class CapabilityRoutingProtocol(AgentProtocol):
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
         """Execute task."""
         if not agents:
-            raise ValueError(f"No agents with capability: {self.required_capability}")
+            raise CollaborationError(f"No agents with capability: {self.required_capability}")
 
         # Use first available agent
         agent = next((a for a in agents if a.state == AgentState.IDLE), agents[0])
@@ -296,7 +298,7 @@ class ConsensusProtocol(AgentProtocol):
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
         """Execute task."""
         if not agents:
-            raise ValueError("No agents available for consensus")
+            raise CollaborationError("No agents available for consensus")
 
         tasks = [agent.process_task(task) for agent in agents]
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -305,7 +307,7 @@ class ConsensusProtocol(AgentProtocol):
         valid_results = [r for r in results if not isinstance(r, Exception)]
 
         if not valid_results:
-            raise ValueError("All agents failed")
+            raise CollaborationError("All agents failed")
 
         # Simple consensus: most common result
         result_counts: dict[str, int] = {}
@@ -318,7 +320,7 @@ class ConsensusProtocol(AgentProtocol):
             max_key = max(result_counts.keys(), key=lambda k: result_counts[k])
             return json.loads(max_key)
 
-        raise ValueError("Consensus not reached")
+        raise CollaborationError("Consensus not reached")
 
 __all__ = [
     "AgentState",

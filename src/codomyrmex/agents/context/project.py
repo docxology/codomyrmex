@@ -37,7 +37,6 @@ class FileInfo:
             self.extension = self.path.rsplit(".", 1)[-1]
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "path": self.path,
             "extension": self.extension,
@@ -74,7 +73,6 @@ class ProjectContext:
         return [f for f in self.files if f.extension == ext]
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "root": self.root,
             "file_count": self.file_count,

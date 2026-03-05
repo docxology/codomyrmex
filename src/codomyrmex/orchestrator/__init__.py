@@ -16,11 +16,7 @@ Submodules:
     scheduler: Consolidated scheduler capabilities."""
 
 # Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
+from codomyrmex.validation.schemas import Result, ResultStatus
 
 # New submodule exports
 from . import (
@@ -128,19 +124,30 @@ def cli_commands():
 
 
 __all__ = [
+    # ── submodules ─────────────────────────────────────────────────────────────
     "scheduler",
-    # CLI integration
+    "templates",
+    "state",
+    "triggers",
+    "pipelines",
+    "engines",
+    "execution",
+    "monitors",
+    "observability",
+    "resilience",
+    "workflows",
+    # ── CLI integration ────────────────────────────────────────────────────────
     "cli_commands",
-    'templates',
-    'state',
-    'triggers',
-    'pipelines',
-    # Core orchestration
-    "run_orchestrator",
-    "load_config",
-    "get_script_config",
-    "discover_scripts",
-    # Workflow
+    # ── async execution ────────────────────────────────────────────────────────
+    "AsyncScheduler",
+    "AsyncJob",
+    "AsyncJobStatus",
+    "SchedulerMetrics",
+    "AsyncParallelRunner",
+    "AsyncTaskResult",
+    "AsyncExecutionResult",
+    "with_retry",
+    # ── workflow ───────────────────────────────────────────────────────────────
     "Workflow",
     "Task",
     "TaskStatus",
@@ -149,17 +156,14 @@ __all__ = [
     "WorkflowError",
     "CycleError",
     "TaskFailedError",
-    # Additional exceptions
-    "StepError",
-    "OrchestratorTimeoutError",
-    "StateError",
-    "DependencyResolutionError",
-    "ConcurrencyError",
-    # Workflow helpers
     "chain",
     "parallel",
     "fan_out_fan_in",
-    # Runners
+    # ── runners ────────────────────────────────────────────────────────────────
+    "run_orchestrator",
+    "load_config",
+    "get_script_config",
+    "discover_scripts",
     "run_script",
     "run_function",
     "ParallelRunner",
@@ -167,18 +171,7 @@ __all__ = [
     "ExecutionResult",
     "run_parallel",
     "run_parallel_async",
-    # Async runner (Stream 5)
-    "AsyncParallelRunner",
-    "AsyncTaskResult",
-    "AsyncExecutionResult",
-    # Async scheduler (Stream 5)
-    "AsyncScheduler",
-    "AsyncJob",
-    "AsyncJobStatus",
-    "SchedulerMetrics",
-    # Retry decorator (Stream 5)
-    "with_retry",
-    # Thin orchestration
+    # ── thin orchestration DSL ─────────────────────────────────────────────────
     "run",
     "run_async",
     "pipe",
@@ -193,7 +186,7 @@ __all__ = [
     "retry",
     "timeout",
     "condition",
-    # Integration bridges
+    # ── integration ────────────────────────────────────────────────────────────
     "OrchestratorBridge",
     "CICDBridge",
     "AgentOrchestrator",
@@ -202,12 +195,11 @@ __all__ = [
     "create_pipeline_workflow",
     "run_ci_stage",
     "run_agent_task",
-    # Submodules
-    "engines",
-    "execution",
-    "monitors",
-    "observability",
-    "resilience",
-    "workflows",
+    # ── exceptions ─────────────────────────────────────────────────────────────
+    "StepError",
+    "OrchestratorTimeoutError",
+    "StateError",
+    "DependencyResolutionError",
+    "ConcurrencyError",
 ]
 

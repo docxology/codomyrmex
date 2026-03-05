@@ -62,8 +62,8 @@ class SwarmManager(NewSwarmManager):
         """Perform simple majority vote among agents (Legacy Compatibility)."""
         import asyncio
 
-        from codomyrmex.collaboration.swarm import Decision, Vote
-        votes = [Vote(aid, True) for aid in self.pool._agents]
+        from codomyrmex.collaboration.swarm import Decision, SwarmVote
+        votes = [SwarmVote(aid, True) for aid in self.pool._agents]
         if not votes:
             return False
         try:

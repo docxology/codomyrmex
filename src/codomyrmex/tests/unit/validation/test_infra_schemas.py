@@ -70,8 +70,10 @@ class TestPipelineStatus:
     def test_cancelled_value(self):
         assert PipelineStatus.CANCELLED.value == "cancelled"
 
-    def test_five_members(self):
-        assert len(PipelineStatus) == 5
+    def test_member_count(self):
+        # Canonical enum expanded to cover ci_cd_automation (SUCCESS/FAILURE/PENDING/SKIPPED),
+        # orchestrator (CREATED), and original (QUEUED/RUNNING/SUCCEEDED/FAILED/CANCELLED).
+        assert len(PipelineStatus) == 10
 
 
 # ── MetricType ────────────────────────────────────────────────────────

@@ -76,8 +76,7 @@ class TelemetryScript(ScriptBase):
         # Import telemetry module (requires opentelemetry)
         try:
             from codomyrmex.telemetry import (
-                TraceContext, start_span, get_current_span, traced,
-                SimpleSpanProcessor, BatchSpanProcessor, OTLPExporter
+                TraceContext, start_span, traced,
             )
         except ImportError as e:
             self.log_info(f"Telemetry dependencies not available: {e}")

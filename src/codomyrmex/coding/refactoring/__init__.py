@@ -47,7 +47,6 @@ class Change:
     description: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "file": self.location.file_path,
             "line": self.location.line,

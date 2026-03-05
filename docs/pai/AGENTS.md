@@ -4,18 +4,20 @@
 
 ## Purpose
 
-Documentation module for the PAI-Codomyrmex integration. Provides architecture references, tool inventories, API documentation, and workflow guides. The PAI Dashboard (port 8889) is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure).
+Documentation module for the PAI-Codomyrmex integration. Provides architecture references, tool inventories, API documentation, and workflow guides. The PAI Command Center (port 8888) is a 15-tab modular SPA served from `src/codomyrmex/agents/pai/pm/`.
 
 ## Active Components
 
-| File | Description | Screenshot |
-|------|-------------|------------|
-| `README.md` | Index page with full screenshot gallery | All 8 tabs |
-| `architecture.md` | MCP bridge architecture and trust model | Analytics, Network, Integration |
-| `tools-reference.md` | Complete tool inventory (22 static + dynamic) | Git, Email |
-| `api-reference.md` | Python API reference (PAIBridge, TrustRegistry) | Analytics |
-| `workflows.md` | Workflow documentation and Algorithm mapping | Dispatch, Board, Calendar |
-| `screenshots/` | PAI Dashboard interface screenshots (8 tabs) | — |
+| File | Description |
+|------|-------------|
+| `README.md` | Index page with full 15-tab screenshot gallery |
+| `architecture.md` | MCP bridge architecture and trust model |
+| `dashboard-setup.md` | Both dashboards, modular server architecture, API endpoints |
+| `tools-reference.md` | Complete tool inventory (22 static + dynamic) |
+| `api-reference.md` | Python API reference (PAIBridge, TrustRegistry) |
+| `workflows.md` | Workflow documentation and Algorithm mapping |
+| `skills-and-commands.md` | External Claude Code skills and slash commands |
+| `screenshots/` | PAI Dashboard interface screenshots (15 tabs) |
 
 ## Visual Reference
 
@@ -59,6 +61,7 @@ When PAI sub-agents (Engineer, Architect, QATester, etc.) use codomyrmex tools f
 ### Inter-Agent Communication
 
 Agents do not communicate directly. PAI orchestrates via:
+
 - Filesystem: `MEMORY/WORK/<task>/` for handoffs
 - MCP protocol: Codomyrmex tools shared across all agents in a session
 - Trust ledger: Shared trust state persists across agent calls in same session
@@ -76,5 +79,6 @@ Agents do not communicate directly. PAI orchestrates via:
 - **README**: [README.md](README.md)
 - **SPEC**: [SPEC.md](SPEC.md)
 - **PAI**: [PAI.md](PAI.md)
+- **Dashboard Setup**: [dashboard-setup.md](dashboard-setup.md)
 - **Parent**: [docs/](../)
 - **Root PAI Bridge**: [../../PAI.md](../../PAI.md)

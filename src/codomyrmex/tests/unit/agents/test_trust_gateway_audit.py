@@ -17,7 +17,8 @@ from codomyrmex.agents.pai.trust_gateway import (
     DESTRUCTIVE_TOOLS,
     TrustLevel,
     TrustRegistry,
-    _cleanup_expired_confirmations,
+    _cleanup_expired_confirmations_locked,
+    _confirmations_lock,
     _is_destructive,
     _log_audit_entry,
     _pending_confirmations,
@@ -327,7 +328,8 @@ class TestConfirmationTTL:
             "timestamp": time.monotonic() - 9999,
         }
         assert expired_token in _pending_confirmations
-        _cleanup_expired_confirmations()
+        with _confirmations_lock:
+            _cleanup_expired_confirmations_locked()
         assert expired_token not in _pending_confirmations
 
     def test_fresh_confirmations_are_kept(self):
@@ -338,6 +340,7 @@ class TestConfirmationTTL:
             "tool_name": "codomyrmex.test",
             "timestamp": time.monotonic(),
         }
-        _cleanup_expired_confirmations()
+        with _confirmations_lock:
+            _cleanup_expired_confirmations_locked()
         assert fresh_token in _pending_confirmations
         _pending_confirmations.clear()

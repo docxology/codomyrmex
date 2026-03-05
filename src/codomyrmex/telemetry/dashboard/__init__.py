@@ -57,7 +57,6 @@ class MetricValue:
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "value": self.value,
@@ -90,7 +89,6 @@ class Alert:
         return end - self.created_at
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,
@@ -112,7 +110,6 @@ class Panel:
     config: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "title": self.title,
@@ -152,7 +149,6 @@ class Dashboard:
         return None
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,

@@ -835,19 +835,12 @@ dependencies = [
     { name = "cased-kit" },
     { name = "cryptography" },
     { name = "diff-match-patch" },
-    { name = "fastapi" },
-    { name = "fastavro" },
     { name = "gitpython" },
     { name = "jsonschema" },
     { name = "lizard" },
     { name = "loguru" },
     { name = "mako" },
     { name = "markdownify" },
-    { name = "mnemonic" },
-    { name = "msgpack" },
-    { name = "networkx" },
-    { name = "numpy" },
-    { name = "paramiko" },
     { name = "pydantic" },
     { name = "pygments" },
     { name = "pylint" },
@@ -856,15 +849,16 @@ dependencies = [
     { name = "pyyaml" },
     { name = "radon" },
     { name = "requests" },
-    { name = "scipy" },
-    { name = "tomli" },
     { name = "tqdm" },
     { name = "unidiff" },
-    { name = "uvicorn" },
     { name = "watchdog" },
 ]
 
 [package.optional-dependencies]
+api = [
+    { name = "fastapi" },
+    { name = "uvicorn" },
+]
 audio = [
     { name = "edge-tts" },
     { name = "faster-whisper" },
@@ -888,7 +882,6 @@ cloud = [
     { name = "openstacksdk" },
 ]
 code-review = [
-    { name = "pathlib" },
     { name = "safety" },
     { name = "typing-extensions" },
     { name = "vulture" },
@@ -897,6 +890,7 @@ containerization = [
     { name = "docker" },
 ]
 crypto = [
+    { name = "mnemonic" },
     { name = "pillow" },
 ]
 dark = [
@@ -906,6 +900,9 @@ dark = [
 data-visualization = [
     { name = "matplotlib" },
     { name = "seaborn" },
+]
+deployment = [
+    { name = "paramiko" },
 ]
 documents = [
     { name = "chardet" },
@@ -927,9 +924,14 @@ formal-verification = [
 fpf = [
     { name = "pillow" },
 ]
+google-workspace = [
+    { name = "google-api-python-client" },
+    { name = "google-auth" },
+    { name = "google-auth-httplib2" },
+    { name = "google-auth-oauthlib" },
+]
 language-models = [
     { name = "certifi" },
-    { name = "pytest-asyncio" },
     { name = "typing-extensions" },
     { name = "urllib3" },
 ]
@@ -973,10 +975,14 @@ physical-management = [
     { name = "mkdocs" },
     { name = "mkdocs-material" },
     { name = "pyserial" },
-    { name = "pytest-asyncio" },
     { name = "smbus2" },
     { name = "sqlalchemy" },
     { name = "websockets" },
+]
+scientific = [
+    { name = "networkx" },
+    { name = "numpy" },
+    { name = "scipy" },
 ]
 scrape = [
     { name = "firecrawl-py" },
@@ -988,6 +994,8 @@ security-audit = [
     { name = "safety" },
 ]
 serialization = [
+    { name = "fastavro" },
+    { name = "msgpack" },
     { name = "pandas" },
     { name = "protobuf" },
     { name = "pyarrow" },
@@ -1044,17 +1052,21 @@ requires-dist = [
     { name = "docker", marker = "extra == 'containerization'", specifier = ">=6.0.0" },
     { name = "dynaconf", marker = "extra == 'physical-management'", specifier = ">=3.1.0" },
     { name = "edge-tts", marker = "extra == 'audio'", specifier = ">=6.1.0" },
-    { name = "fastapi", specifier = ">=0.100.0" },
-    { name = "fastavro", specifier = ">=1.12.1" },
+    { name = "fastapi", marker = "extra == 'api'", specifier = ">=0.100.0" },
+    { name = "fastavro", marker = "extra == 'serialization'", specifier = ">=1.12.1" },
     { name = "faster-whisper", marker = "extra == 'audio'", specifier = ">=1.0.0" },
     { name = "firecrawl-py", marker = "extra == 'scrape'", specifier = ">=1.0.0" },
     { name = "gitpython", specifier = ">=3.1.0" },
     { name = "google-api-python-client", marker = "extra == 'calendar'", specifier = ">=2.0.0" },
     { name = "google-api-python-client", marker = "extra == 'email'", specifier = ">=2.0.0" },
+    { name = "google-api-python-client", marker = "extra == 'google-workspace'", specifier = ">=2.100.0" },
+    { name = "google-auth", marker = "extra == 'google-workspace'", specifier = ">=2.23.0" },
     { name = "google-auth-httplib2", marker = "extra == 'calendar'", specifier = ">=0.2.0" },
     { name = "google-auth-httplib2", marker = "extra == 'email'", specifier = ">=0.2.0" },
+    { name = "google-auth-httplib2", marker = "extra == 'google-workspace'", specifier = ">=0.2.0" },
     { name = "google-auth-oauthlib", marker = "extra == 'calendar'", specifier = ">=1.0.0" },
     { name = "google-auth-oauthlib", marker = "extra == 'email'", specifier = ">=1.0.0" },
+    { name = "google-auth-oauthlib", marker = "extra == 'google-workspace'", specifier = ">=1.1.0" },
     { name = "google-cloud-storage", marker = "extra == 'cloud'", specifier = ">=2.10.0" },
     { name = "google-genai", marker = "extra == 'llm-providers'", specifier = ">=0.1.0" },
     { name = "google-generativeai", marker = "extra == 'llm-providers'", specifier = ">=0.3.0" },
@@ -1068,12 +1080,12 @@ requires-dist = [
     { name = "matplotlib", marker = "extra == 'data-visualization'", specifier = ">=3.10.0" },
     { name = "mkdocs", marker = "extra == 'physical-management'", specifier = ">=1.2.0" },
     { name = "mkdocs-material", marker = "extra == 'physical-management'", specifier = ">=7.3.0" },
-    { name = "mnemonic", specifier = ">=0.21" },
+    { name = "mnemonic", marker = "extra == 'crypto'", specifier = ">=0.21" },
     { name = "moderngl", marker = "extra == 'modeling-3d'", specifier = ">=5.6.0" },
     { name = "moviepy", marker = "extra == 'video'", specifier = ">=1.0.3" },
-    { name = "msgpack", specifier = ">=1.1.2" },
-    { name = "networkx", specifier = ">=3.0.0" },
-    { name = "numpy", specifier = ">=2.2.0" },
+    { name = "msgpack", marker = "extra == 'serialization'", specifier = ">=1.1.2" },
+    { name = "networkx", marker = "extra == 'scientific'", specifier = ">=3.0.0" },
+    { name = "numpy", marker = "extra == 'scientific'", specifier = ">=2.2.0" },
     { name = "openai", marker = "extra == 'llm-providers'", specifier = ">=1.0.0" },
     { name = "opencv-python", marker = "extra == 'video'", specifier = ">=4.8.0" },
     { name = "openstacksdk", marker = "extra == 'cloud'", specifier = ">=1.0.0" },
@@ -1081,8 +1093,7 @@ requires-dist = [
     { name = "opentelemetry-exporter-otlp", marker = "extra == 'observability'", specifier = ">=1.20.0" },
     { name = "opentelemetry-sdk", marker = "extra == 'observability'", specifier = ">=1.20.0" },
     { name = "pandas", marker = "extra == 'serialization'", specifier = ">=2.0.0" },
-    { name = "paramiko", specifier = ">=3.3.0" },
-    { name = "pathlib", marker = "extra == 'code-review'", specifier = ">=1.0.1" },
+    { name = "paramiko", marker = "extra == 'deployment'", specifier = ">=3.3.0" },
     { name = "pillow", marker = "extra == 'crypto'", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'dark'", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'fpf'", specifier = ">=10.0.0" },
@@ -1104,8 +1115,6 @@ requires-dist = [
     { name = "pyrefly", marker = "extra == 'static-analysis'", specifier = ">=0.16.0" },
     { name = "pyrr", marker = "extra == 'modeling-3d'", specifier = ">=0.10.3" },
     { name = "pyserial", marker = "extra == 'physical-management'", specifier = ">=3.5" },
-    { name = "pytest-asyncio", marker = "extra == 'language-models'", specifier = ">=0.21.0" },
-    { name = "pytest-asyncio", marker = "extra == 'physical-management'", specifier = ">=0.21.0" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
     { name = "python-frontmatter", marker = "extra == 'obsidian'", specifier = ">=1.0.0" },
     { name = "pyttsx3", marker = "extra == 'audio'", specifier = ">=2.90" },
@@ -1117,7 +1126,7 @@ requires-dist = [
     { name = "requests", specifier = ">=2.31.0" },
     { name = "safety", marker = "extra == 'code-review'", specifier = ">=2.3.0" },
     { name = "safety", marker = "extra == 'security-audit'", specifier = ">=2.3.0" },
-    { name = "scipy", specifier = ">=1.7.0" },
+    { name = "scipy", marker = "extra == 'scientific'", specifier = ">=1.7.0" },
     { name = "seaborn", marker = "extra == 'data-visualization'", specifier = ">=0.13.0" },
     { name = "sentence-transformers", marker = "extra == 'embedding'", specifier = ">=2.0.0" },
     { name = "smbus2", marker = "extra == 'physical-management'", specifier = ">=0.4.0" },
@@ -1126,7 +1135,6 @@ requires-dist = [
     { name = "sqlalchemy", marker = "extra == 'physical-management'", specifier = ">=1.4.0" },
     { name = "statsd", marker = "extra == 'observability'", specifier = ">=4.0.0" },
     { name = "tiktoken", marker = "extra == 'llm-providers'", specifier = ">=0.5.0" },
-    { name = "tomli", specifier = ">=2.0.0" },
     { name = "tqdm", specifier = ">=4.65.0" },
     { name = "tree-sitter", marker = "extra == 'parsing'", specifier = ">=0.20.0" },
     { name = "trimesh", marker = "extra == 'modeling-3d'", specifier = ">=3.9.0" },
@@ -1134,13 +1142,13 @@ requires-dist = [
     { name = "typing-extensions", marker = "extra == 'language-models'", specifier = ">=4.0.0" },
     { name = "unidiff", specifier = ">=0.7.0" },
     { name = "urllib3", marker = "extra == 'language-models'", specifier = ">=1.26.0" },
-    { name = "uvicorn", specifier = ">=0.23.0" },
+    { name = "uvicorn", marker = "extra == 'api'", specifier = ">=0.23.0" },
     { name = "vulture", marker = "extra == 'code-review'", specifier = ">=2.7.0" },
     { name = "watchdog", specifier = ">=3.0.0" },
     { name = "websockets", marker = "extra == 'physical-management'", specifier = ">=10.0" },
     { name = "z3-solver", marker = "extra == 'formal-verification'", specifier = ">=4.8.0" },
 ]
-provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email", "llm-providers", "embedding", "containerization", "data-visualization", "cache", "soul"]
+provides-extras = ["scientific", "api", "deployment", "code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email", "llm-providers", "embedding", "containerization", "data-visualization", "cache", "soul", "pai-pm", "google-workspace"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -4561,15 +4569,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/1f/e7/81fdcbc7f190cdb058cffc9431587eb289833bdd633e2002455ca9bb13d4/paramiko-4.0.0.tar.gz", hash = "sha256:6a25f07b380cc9c9a88d2b920ad37167ac4667f8d9886ccebd8f90f654b5d69f", size = 1630743, upload-time = "2025-08-04T01:02:03.711Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a9/90/a744336f5af32c433bd09af7854599682a383b37cfd78f7de263de6ad6cb/paramiko-4.0.0-py3-none-any.whl", hash = "sha256:0e20e00ac666503bf0b4eda3b6d833465a2b7aff2e2b3d79a8bba5ef144ee3b9", size = 223932, upload-time = "2025-08-04T01:02:02.029Z" },
-]
-
-[[package]]
-name = "pathlib"
-version = "1.0.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ac/aa/9b065a76b9af472437a0059f77e8f962fe350438b927cb80184c32f075eb/pathlib-1.0.1.tar.gz", hash = "sha256:6940718dfc3eff4258203ad5021090933e5c04707d5ca8cc9e73c94a7894ea9f", size = 49298, upload-time = "2014-09-03T15:41:57.18Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/78/f9/690a8600b93c332de3ab4a344a4ac34f00c8f104917061f779db6a918ed6/pathlib-1.0.1-py3-none-any.whl", hash = "sha256:f35f95ab8b0f59e6d354090350b44a80a80635d22efdedfa84c7ad1cf0a74147", size = 14363, upload-time = "2022-05-04T13:37:20.585Z" },
 ]
 
 [[package]]

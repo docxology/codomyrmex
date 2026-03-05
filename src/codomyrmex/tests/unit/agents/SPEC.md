@@ -4,7 +4,7 @@
 
 ## Core Concept
 
-The agents test suite validates the multi-provider agent framework using the Zero-Mock policy. All tests use `ConcreteAgent`, `FailingAgent`, `AsyncAgent`, and `FakeLLMClient` (defined in `conftest.py`) instead of `unittest.mock.MagicMock`.
+The agents test suite validates the multi-provider agent framework using the Zero-Mock policy. All tests use `ConcreteAgent`, `FailingAgent`, `AsyncAgent`, and `InMemoryLLMClient` (defined in `conftest.py`) instead of `unittest.mock.MagicMock`.
 
 ## Test Coverage
 
@@ -45,7 +45,7 @@ Tests use concrete test implementations from `conftest.py`:
 - `ConcreteAgent(BaseAgent)` — configurable response, tracks execution
 - `FailingAgent(BaseAgent)` — always raises `AgentError`
 - `AsyncAgent(BaseAgent)` — configurable delay for async testing
-- `FakeLLMClient` — records calls, returns configurable responses
+- `InMemoryLLMClient` — records calls, returns configurable responses
 
 ## Navigation
 

@@ -40,7 +40,6 @@ class ChannelInfo:
     created_at: datetime
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "channel_id": self.channel_id,
             "name": self.name,
@@ -298,7 +297,7 @@ class ChannelManager:
         if channel_type == "queue":
             channel = QueueChannel(name=name, **kwargs)
         else:
-            raise ValueError(f"Unknown channel type: {channel_type}")
+            raise ChannelError("channel_manager", f"Unknown channel type: {channel_type}")
 
         self._channels[channel.channel_id] = channel
         logger.info(f"Created channel: {name} ({channel.channel_id})")

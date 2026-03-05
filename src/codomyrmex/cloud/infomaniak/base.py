@@ -93,6 +93,25 @@ class InfomaniakOpenStackBase:
             except Exception as e:
                 logger.warning(f"Error closing {self._service_name} connection: {e}")
 
+    def _safe_call(self, operation_fn, verb: str, resource: str, *, default=None):
+        """Execute an OpenStack API call with standardized error logging.
+
+        Args:
+            operation_fn: Zero-argument callable wrapping the API call and
+                any result transformation.
+            verb: Action name for the error message (e.g., "list", "create").
+            resource: Resource name for the error message (e.g., "networks").
+            default: Value to return when the call fails.
+
+        Returns:
+            The return value of operation_fn, or default on any exception.
+        """
+        try:
+            return operation_fn()
+        except Exception as e:
+            logger.error("Failed to %s %s: %s", verb, resource, e)
+            return default
+
     def validate_connection(self) -> bool:
         """
         Lightweight health check by listing projects.

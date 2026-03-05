@@ -1,10 +1,29 @@
 
 import asyncio
+import json
+import os
 import time
+import urllib.error
+import urllib.request
 from collections.abc import Iterator
 from typing import Any
 
 import pytest
+
+# ---------------------------------------------------------------------------
+# Auto-detect OLLAMA_MODEL if not set — avoids skipping tests on machines
+# that have Ollama running with models other than the default codellama:latest.
+# ---------------------------------------------------------------------------
+if not os.environ.get("OLLAMA_MODEL"):
+    _base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+    try:
+        with urllib.request.urlopen(f"{_base}/api/tags", timeout=2) as _resp:
+            _data = json.loads(_resp.read().decode())
+            _models = sorted(m.get("name", "") for m in _data.get("models", []))
+            if _models:
+                os.environ["OLLAMA_MODEL"] = _models[0]  # smallest first
+    except (urllib.error.URLError, OSError, TimeoutError, json.JSONDecodeError):
+        pass
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
@@ -16,11 +35,15 @@ from codomyrmex.agents.core import (
 )
 
 # =============================================================================
-# MOCK REPLACEMENTS (ZERO-MOCK COMPLIANCE)
+# CONCRETE TEST IMPLEMENTATIONS (ZERO-MOCK COMPLIANCE)
 # =============================================================================
 
-class FakeLLMClient:
-    """A concrete fake for LLM clients, replacing MagicMock."""
+class InMemoryLLMClient:
+    """In-memory LLM client for test isolation.
+
+    Records all calls and returns configurable responses.
+    Uses real data structures — no mocking frameworks.
+    """
 
     def __init__(self):
         self.chat_calls = []
@@ -56,17 +79,17 @@ class ConcreteAgent(BaseAgent):
         super().__init__(name, caps, config)
         self._execute_called = False
         self._stream_called = False
-        self._mock_response = "Default test response"
+        self._response = "Default test response"
 
-    def set_mock_response(self, response: str):
-        """Set the mock response to return."""
-        self._mock_response = response
+    def set_response(self, response: str):
+        """Set the response to return from execute."""
+        self._response = response
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """Implementation of execute."""
         self._execute_called = True
         return AgentResponse(
-            content=self._mock_response,
+            content=self._response,
             metadata={"agent": self.name},
             execution_time=0.1,
             tokens_used=10,
@@ -76,7 +99,7 @@ class ConcreteAgent(BaseAgent):
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Implementation of stream."""
         self._stream_called = True
-        yield from self._mock_response.split()
+        yield from self._response.split()
 
 
 class FailingAgent(BaseAgent):
@@ -126,9 +149,9 @@ class AsyncAgent(BaseAgent):
 # =============================================================================
 
 @pytest.fixture
-def fake_llm_client():
-    """Create a fake LLM client for testing."""
-    return FakeLLMClient()
+def in_memory_llm_client():
+    """Create an in-memory LLM client for testing."""
+    return InMemoryLLMClient()
 
 
 @pytest.fixture

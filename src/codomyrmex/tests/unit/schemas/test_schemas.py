@@ -553,7 +553,8 @@ class TestPipelineStatusEnum:
         assert PipelineStatus.CANCELLED.value == "cancelled"
 
     def test_member_count(self):
-        assert len(PipelineStatus) == 5
+        # Canonical enum expanded to 10 members covering ci_cd_automation, orchestrator, and validation.
+        assert len(PipelineStatus) == 10
 
 
 @pytest.mark.unit

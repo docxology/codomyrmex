@@ -49,7 +49,7 @@ uv run python scripts/pai/dashboard.py --no-setup --restart
           │                            │
           ▼                            ▼
 ┌─────────────────┐          ┌─────────────────────────┐
-│  PMServer.ts    │          │  WebsiteServer (Python)  │
+│  pm/server.ts   │          │  WebsiteServer (Python)  │
 │  :8888 (bun)   │          │  :8787                   │
 │  PRIMARY        │          │  ADMIN                   │
 │                 │          │                           │
@@ -70,7 +70,7 @@ Both servers read from the same underlying data files — no sync layer is neede
 
 | Port | Server | Role | Technology |
 |------|--------|------|------------|
-| **8888** | PMServer.ts | Primary PAI Project Manager | Bun/TypeScript |
+| **8888** | pm/server.ts | Primary PAI Project Manager (modular) | Bun/TypeScript |
 | **8787** | WebsiteServer | Admin module dashboard | Python/Jinja2 |
 
 ## Security
@@ -107,7 +107,7 @@ uv run python -m pytest src/codomyrmex/tests/unit/website/ -v
 |---------|-----------|
 | **Port already in use** | `uv run python scripts/pai/dashboard.py --restart`, or: `lsof -ti :8888 \| xargs kill -9` |
 | **`bun` not found** | Install Bun: `curl -fsSL https://bun.sh/install \| bash` |
-| **PMServer crashes** | Run manually: `bun ~/.claude/skills/PAI/Tools/PMServer.ts` |
+| **PMServer crashes** | Run manually: `bun scripts/pai/pm/server.ts --port 8888` |
 | **Dashboard shows no data** | Re-run setup: `uv run python scripts/pai/dashboard.py --setup-only` |
 | **`uv` not found** | Install uv: `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
 

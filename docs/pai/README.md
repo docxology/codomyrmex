@@ -2,11 +2,11 @@
 
 **Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
-> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 126-module Python toolbox (121 auto-discovered via MCP) it consumes via MCP. This folder documents the bridge between them.
+> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 127-module Python toolbox (121 auto-discovered via MCP) it consumes via MCP. The PAI Command Center is a 15-tab SPA served from `src/codomyrmex/agents/pai/pm/`.
 
 ## 🎬 Interface Tour
 
-![PAI Dashboard — Full interface tour through all 14 tabs](screenshots/pai_interface_tour.webp)
+![PAI Dashboard — Full interface tour through all 15 tabs](screenshots/pai_interface_tour.webp)
 
 ---
 
@@ -39,9 +39,9 @@ graph TB
         PROMPTS["10 Prompts"]
     end
 
-    subgraph DASH["📊 Dashboard (PMServer.ts:8888)"]
+    subgraph DASH["📊 Dashboard (pm/server.ts:8888)"]
         direction TB
-        TABS["14 Interface Tabs"]
+        TABS["15 Interface Tabs"]
         REST["REST API Endpoints"]
         WS["WebSocket Events"]
     end
@@ -160,15 +160,23 @@ Converts terminal output and structured data into styled, self-contained HTML pa
 
 ## 📊 Dashboard Tabs
 
-The PAI Dashboard serves 14 interface tabs at `http://localhost:8888/`. It is a Codomyrmex-integrated fork of [danielmiessler/Personal\_AI\_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure), extended with email, calendar, git sync, and network visualization.
+The PAI Command Center serves **15 interface tabs** at `http://localhost:8888/`. The modular server lives in `src/codomyrmex/agents/pai/pm/` with route handlers in `routes/`. It is a Codomyrmex-managed fork of [danielmiessler/Personal\_AI\_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure).
 
 ### Analytics — Mission & Project Overview
 
 ![PAI Analytics — Missions, Projects, Tasks overview with completion metrics](screenshots/pai_analytics.png)
 
+### Awareness — Systems State
+
+![PAI Awareness — Mission/project awareness data and system context](screenshots/pai_awareness.png)
+
+### Blockers — Dependency Tracking
+
+![PAI Blockers — Blocked items and dependency visualization](screenshots/pai_blockers.png)
+
 ### Board — Kanban Mission Tracker
 
-![PAI Board — Mission status tracking across ACTIVE, PLANNING, IN PROGRESS, BLOCKED, PAUSED](screenshots/pai_board.png)
+![PAI Board — Mission status tracking across ACTIVE, PLANNING, IN PROGRESS, BLOCKED, PAUSED, COMPLETED](screenshots/pai_board.png)
 
 ### Calendar — Google Calendar Integration
 
@@ -178,21 +186,41 @@ The PAI Dashboard serves 14 interface tabs at `http://localhost:8888/`. It is a 
 
 ![PAI Email — AgentMail + Gmail with inbox, compose, and AI-assisted drafting](screenshots/pai_email.png)
 
-### Network — Force-Directed Graph
+### Data — Full CRUD Tables
 
-![PAI Network — Mission→project→task relationships visualized](screenshots/pai_network.png)
-
-### Git — Repository Sync Manager
-
-![PAI Git — Push/Pull/Sync controls for 18 linked repos](screenshots/pai_git.png)
+![PAI Data — Missions, Projects, and Tasks tables with status badges, filters, and CRUD actions](screenshots/pai_data.png)
 
 ### Dispatch — Algorithm Action Center
 
 ![PAI Dispatch — Summarize, Scope & Plan, Review, Enact Next Step](screenshots/pai_dispatch.png)
 
+### Git — Repository Sync Manager
+
+![PAI Git — Push/Pull/Sync controls for linked repos](screenshots/pai_git.png)
+
 ### Integration — GitHub Bridge & Export
 
 ![PAI Integration — Sync, diff, cleanup, JSON/CSV export](screenshots/pai_integration.png)
+
+### Interview — Task Specification
+
+![PAI Interview — Task requirement gathering through structured interviews](screenshots/pai_interview.png)
+
+### Network — Force-Directed Graph
+
+![PAI Network — Mission→project→task relationships visualized as interactive graph](screenshots/pai_network.png)
+
+### Projects — Per-Project Drill-Down
+
+![PAI Projects — Individual project view with task breakdown](screenshots/pai_projects.png)
+
+### Timeline — Temporal Visualization
+
+![PAI Timeline — Gantt-style temporal project visualization](screenshots/pai_timeline.png)
+
+### 🚴 Bike Ride — LLM Email Briefing
+
+![PAI Bike Ride — Unanswered Gmail threads with LLM-generated summaries, A/B/C draft responses, and TTS](screenshots/pai_bikeride.png)
 
 ---
 
@@ -289,7 +317,7 @@ graph LR
         CAL_TAB["Calendar Tab"]
     end
 
-    subgraph Backend["PMServer.ts"]
+    subgraph Backend["pm/routes/email.ts"]
         AM_API["AgentMail API v0"]
         GM_API["Gmail API"]
         GCAL_API["Google Calendar v3"]
@@ -340,20 +368,22 @@ graph TD
 
 ## Contents
 
-| Document | Lines | Scope |
-|----------|------:|-------|
-| [architecture.md](architecture.md) | 182 | MCP bridge, trust model, data flow, network visualization |
-| [tools-reference.md](tools-reference.md) | 248 | 22 static + dynamic tools, email/calendar tool tables |
-| [api-reference.md](api-reference.md) | 217 | PAIBridge (24 methods), TrustRegistry, dataclasses |
-| [workflows.md](workflows.md) | 172 | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm phase mapping |
-| [screenshots/](screenshots/) | — | 8 PNG screenshots + 1 WebP tour recording |
+| Document | Scope |
+|----------|-------|
+| [architecture.md](architecture.md) | MCP bridge, trust model, data flow, network visualization |
+| [dashboard-setup.md](dashboard-setup.md) | Both dashboards, modular server architecture, all API endpoints |
+| [tools-reference.md](tools-reference.md) | 22 static + dynamic tools, email/calendar tool tables |
+| [api-reference.md](api-reference.md) | PAIBridge (24 methods), TrustRegistry, dataclasses |
+| [workflows.md](workflows.md) | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm phase mapping |
+| [skills-and-commands.md](skills-and-commands.md) | External Claude Code skills and slash commands |
+| [screenshots/](screenshots/) | 15 PNG screenshots + 1 WebP tour recording |
 
 ### RASP Documentation
 
 | Document | Scope |
 |----------|-------|
 | [AGENTS.md](AGENTS.md) | Agent coordination, visual reference, operating contracts |
-| [SPEC.md](SPEC.md) | Functional spec, tab→screenshot mapping |
+| [SPEC.md](SPEC.md) | Functional spec, 15-tab→screenshot mapping |
 | [PAI.md](PAI.md) | Algorithm phase mapping, communication channels |
 
 ---
@@ -384,7 +414,7 @@ sequenceDiagram
     Note over DB: Dashboard runs independently
     U->>DB: Browse :8888
     DB->>DB: Load DataModels
-    DB-->>U: 14-tab interface
+    DB-->>U: 15-tab interface
 ```
 
 ---
@@ -399,10 +429,10 @@ cd codomyrmex && uv sync
 # 2. Start MCP server (for Claude Code integration)
 uv run python scripts/model_context_protocol/run_mcp_server.py --transport stdio
 
-# 3. Start Dashboard (for browser interface)
+# 3. Start both dashboards (browser interface)
 set -a && source .env && set +a
 uv run python scripts/pai/dashboard.py
-# → http://localhost:8787/ (Codomyrmex Admin) + http://localhost:8888/ (PAI PM)
+# → http://localhost:8787/ (Codomyrmex Admin) + http://localhost:8888/ (PAI Command Center)
 
 # 4. In Claude Code: /codomyrmexVerify then /codomyrmexTrust
 ```

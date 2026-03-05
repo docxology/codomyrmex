@@ -32,7 +32,6 @@ class OutcomeScore:
     composite: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "correctness": round(self.correctness, 3),
             "efficiency": round(self.efficiency, 3),

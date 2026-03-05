@@ -76,30 +76,82 @@ open http://localhost:8787/
 
 ## PAI Project Manager Dashboard (port 8888)
 
-A TypeScript/Bun dashboard for managing PAI missions, projects, and tasks.
+A TypeScript/Bun dashboard for managing PAI missions, projects, and tasks. The modular server lives in `src/codomyrmex/agents/pai/pm/` with route handlers split into separate files under `routes/`.
 
 ### Starting
 
 ```bash
-# Requires Bun and PAI v4+:
-bun run ~/.claude/PAI/Tools/PMServer.ts
+# Recommended — launches both dashboards (:8787 + :8888):
+uv run python scripts/pai/dashboard.py
+
+# Or start the PM server directly:
+bun run src/codomyrmex/agents/pai/pm/server.ts
 
 # Then open:
 open http://localhost:8888/
 ```
 
-### Tabs
+### 15 Interface Tabs
 
 | Tab | Purpose |
 |-----|---------|
-| **Analytics** | Mission/project KPIs, completion rates, status badges |
-| **Board** | Kanban: ACTIVE, PLANNING, IN PROGRESS, BLOCKED, PAUSED |
-| **Calendar** | Google Calendar integration, event creation |
-| **Email** | AgentMail + Gmail dual-provider, AI-assisted drafting |
-| **Network** | Force-directed mission→project→task relationship graph |
-| **Git** | Repository sync, branch management |
+| **Analytics** | Mission/project/task KPIs, status/priority charts, completion bars |
+| **Awareness** | PAI awareness data — mission/project context and system state |
+| **Blockers** | Blocked items and dependency tracking |
+| **Board** | Kanban: ACTIVE, PLANNING, IN PROGRESS, BLOCKED, PAUSED, COMPLETED |
+| **Calendar** | Google Calendar integration, event creation, attendee management |
+| **Email** | AgentMail + Gmail dual-provider, AI-assisted compose (ollama/gemini/claude) |
+| **Data** | Full CRUD tables — Missions (7), Projects (19), Tasks (831) with status badges |
 | **Dispatch** | Algorithm phase execution (Summarize, Scope & Plan, Review, Enact) |
-| **Integration** | GitHub bridge, PR/issue tracking |
+| **Git** | Repository sync, branch management, push/pull/unlink per project |
+| **Integration** | GitHub bridge, PR/issue tracking, JSON/CSV data export |
+| **Interview** | Task specification interviews for requirement gathering |
+| **Network** | Force-directed mission→project→task graph visualization |
+| **Projects** | Per-project drill-down with task breakdown |
+| **Timeline** | Temporal project view with Gantt-style visualization |
+| **🚴 Bike Ride** | LLM-powered email briefing — unanswered Gmail threads, A/B/C drafts, TTS |
+
+### Modular Server Architecture
+
+```
+src/codomyrmex/agents/pai/pm/
+├── server.ts           # Bun HTTP server entry point
+├── config.ts           # Port, paths, environment
+├── helpers.ts          # Utility functions (JSON, CORS, parsing)
+├── PMDashboard.ts      # Dashboard HTML generator (fallback)
+├── spa/
+│   └── index.html      # Full 15-tab SPA (served as static file)
+├── routes/
+│   ├── missions.ts     # /api/missions CRUD
+│   ├── projects.ts     # /api/projects CRUD
+│   ├── tasks.ts        # /api/tasks CRUD
+│   ├── github.ts       # /api/github/* sync
+│   ├── dispatch.ts     # /api/dispatch/*
+│   ├── interview.ts    # /api/interview/*
+│   ├── awareness.ts    # /api/awareness
+│   ├── calendar.ts     # /api/calendar/* (Google Calendar OAuth)
+│   └── email.ts        # /api/email/*, /api/bikeride/*
+└── services/
+    └── oauth.ts        # Gmail/Calendar OAuth helpers
+```
+
+### API Endpoints
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/health` | GET | Server health check |
+| `/api/awareness` | GET | Full PAI awareness data |
+| `/api/missions` | GET/POST/PUT/DELETE | Mission CRUD |
+| `/api/projects` | GET/POST/PUT/DELETE | Project CRUD |
+| `/api/tasks` | GET/POST/PUT/DELETE | Task CRUD |
+| `/api/github/sync` | POST | GitHub repository sync |
+| `/api/dispatch/execute` | POST | Algorithm phase execution |
+| `/api/interview/start` | POST | Task specification interview |
+| `/api/calendar/*` | GET/POST | Google Calendar integration |
+| `/api/email/compose` | POST | LLM-powered email drafting |
+| `/api/bikeride/load` | POST | Load unanswered Gmail threads + generate drafts |
+| `/api/bikeride/send` | POST | Send a selected draft reply |
+| `/api/bikeride/tts` | POST | Text-to-speech for email briefings |
 
 ---
 

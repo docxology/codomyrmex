@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Expanded reference documentation for the PAI-Codomyrmex integration. Supplements the root `PAI.md` bridge document with detailed architecture, API, and tool references. The PAI Dashboard (port 8889) is a Codomyrmex-integrated fork of [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure).
+Expanded reference documentation for the PAI-Codomyrmex integration. Supplements the root `PAI.md` bridge document with detailed architecture, API, and tool references. The PAI Command Center (port 8888) is a 15-tab modular SPA served from `src/codomyrmex/agents/pai/pm/`.
 
 ![PAI Analytics — Primary dashboard interface showing mission, project, and task metrics](screenshots/pai_analytics.png)
 
@@ -12,11 +12,14 @@ Expanded reference documentation for the PAI-Codomyrmex integration. Supplements
 
 | Document | Covers |
 |----------|--------|
+| `README.md` | Index with full 15-tab screenshot gallery |
 | `architecture.md` | Component diagram, data flow, trust model, cross-language communication |
+| `dashboard-setup.md` | Both dashboards (:8787 + :8888), modular server architecture, all API endpoints |
 | `tools-reference.md` | All 22 static tools with parameters, trust levels; dynamic discovery mechanism |
 | `api-reference.md` | PAIBridge (24 methods), TrustRegistry, module functions, dataclasses, constants |
 | `workflows.md` | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm phase mapping |
-| `screenshots/` | PAI Dashboard interface screenshots (8 tabs) |
+| `skills-and-commands.md` | External Claude Code skills (visual-explainer, slash commands) |
+| `screenshots/` | PAI Dashboard interface screenshots (15 tabs + 1 WebP tour) |
 
 ## Capability Specifications
 
@@ -41,20 +44,29 @@ Started with: `uv run python -m codomyrmex.website.server` or `scripts/website/l
 | Awareness | `GET /api/awareness` | `~/.claude/` PAI filesystem | Static |
 | Dispatch | `POST /api/agent/dispatch` | `ConversationOrchestrator` | Async poll |
 
-### PAI Project Manager Dashboard (port 8888)
+### PAI Command Center (port 8888)
 
-Started with: `bun run ~/.claude/PAI/Tools/PMServer.ts` (TypeScript/Bun)
+Started with: `uv run python scripts/pai/dashboard.py` or `bun run src/codomyrmex/agents/pai/pm/server.ts`
 
-| Tab | Purpose |
-|-----|---------|
-| Analytics | Mission/project/task KPIs, completion rates |
-| Board | Kanban with ACTIVE, PLANNING, IN PROGRESS, BLOCKED, PAUSED columns |
-| Calendar | Google Calendar integration, event creation |
-| Email | AgentMail + Gmail dual-provider, AI-assisted drafting |
-| Network | Force-directed project→task relationship graph |
-| Git | Repository sync, branch management |
-| Dispatch | Algorithm phase execution buttons (Summarize, Scope & Plan, Review, Enact) |
-| Integration | GitHub bridge, PR/issue tracking |
+**Server**: `src/codomyrmex/agents/pai/pm/server.ts` (TypeScript/Bun, modular routes)
+
+| Tab | Purpose | Screenshot |
+|-----|---------|------------|
+| Analytics | Mission/project/task KPIs, status/priority charts, completion bars | `pai_analytics.png` |
+| Awareness | PAI awareness data — mission/project context | `pai_awareness.png` |
+| Blockers | Blocked items and dependency tracking | `pai_blockers.png` |
+| Board | Kanban with drag-drop: ACTIVE → PLANNING → IN PROGRESS → BLOCKED → COMPLETED | `pai_board.png` |
+| Calendar | Google Calendar OAuth integration, event creation | `pai_calendar.png` |
+| Email | AgentMail + Gmail dual-provider, LLM-assisted compose | `pai_email.png` |
+| Data | Full CRUD tables for missions, projects, tasks with filters | `pai_data.png` |
+| Dispatch | Algorithm execution: Summarize, Scope & Plan, Review, Enact | `pai_dispatch.png` |
+| Git | Repository sync — push/pull/sync per project | `pai_git.png` |
+| Integration | GitHub bridge, issue tracking, JSON/CSV export | `pai_integration.png` |
+| Interview | Task specification interviews | `pai_interview.png` |
+| Network | Force-directed mission→project→task graph | `pai_network.png` |
+| Projects | Per-project drill-down view | `pai_projects.png` |
+| Timeline | Temporal Gantt-style project visualization | `pai_timeline.png` |
+| 🚴 Bike Ride | LLM email briefing — unanswered threads + A/B/C drafts + TTS | `pai_bikeride.png` |
 
 ### MCP Tool Counts (v1.0.8)
 
@@ -72,23 +84,12 @@ Started with: `bun run ~/.claude/PAI/Tools/PMServer.ts` (TypeScript/Bun)
 2. **No duplication**: Each document has a unique scope — no verbatim copying from root PAI.md
 3. **Synchronized**: All counts (22 tools, 10 prompts, 3 resources, 4 destructive) match implementation
 4. **Visual**: Interface screenshots embedded in context alongside the features they document
-
-## Dashboard Tabs Covered
-
-| Tab | Screenshot | Primary Doc |
-|-----|-----------|-------------|
-| Analytics | `screenshots/pai_analytics.png` | `api-reference.md` — PAI status/awareness |
-| Board | `screenshots/pai_board.png` | `workflows.md` — Mission lifecycle tracking |
-| Calendar | `screenshots/pai_calendar.png` | `workflows.md` — Scheduling integration |
-| Email | `screenshots/pai_email.png` | `tools-reference.md` — MCP email tools |
-| Network | `screenshots/pai_network.png` | `architecture.md` — Graph visualization |
-| Git | `screenshots/pai_git.png` | `tools-reference.md` — Git operations |
-| Dispatch | `screenshots/pai_dispatch.png` | `workflows.md` — Algorithm execution |
-| Integration | `screenshots/pai_integration.png` | `architecture.md` — GitHub bridge |
+5. **Modular**: PM server codebase split into routes/, services/, spa/ — not monolithic
 
 ## Navigation
 
 - **Human Documentation**: [README.md](README.md)
 - **Agent Documentation**: [AGENTS.md](AGENTS.md)
 - **PAI Integration**: [PAI.md](PAI.md)
+- **Dashboard Setup**: [dashboard-setup.md](dashboard-setup.md)
 - **Parent**: [docs/](../)

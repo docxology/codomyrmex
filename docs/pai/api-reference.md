@@ -10,7 +10,7 @@ All public API is importable from the top-level package:
 from codomyrmex.agents.pai import PAIBridge, TrustLevel, call_tool, verify_capabilities
 ```
 
-The PAI Dashboard (port 8889) uses this API to render the Analytics tab with live mission, project, and task data:
+The PAI Command Center (port 8888) uses this API to render the Analytics tab with live mission, project, and task data:
 
 ![PAI Analytics — Live dashboard showing 7 missions, 19 projects, 831 tasks with status badges and completion bars](screenshots/pai_analytics.png)
 

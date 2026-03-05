@@ -48,7 +48,6 @@ class Result:
         return self.status == ResultStatus.SUCCESS
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "status": self.status.value,
             "data": self.data,
@@ -78,7 +77,6 @@ class Task:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "id": self.id,
             "name": self.name,

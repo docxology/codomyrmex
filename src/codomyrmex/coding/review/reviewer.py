@@ -35,41 +35,6 @@ from .reviewer_impl import (
 
 logger = get_logger(__name__)
 
-# Import performance monitoring
-try:
-    from codomyrmex.performance import monitor_performance, performance_context
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    logger.warning("Performance monitoring not available - decorators will be no-op")
-    PERFORMANCE_MONITORING_AVAILABLE = False
-
-    def monitor_performance(*args, **kwargs):
-        """Decorator for performance monitoring (fallback)."""
-        def decorator(func):
-            """Decorator."""
-
-            return func
-        return decorator
-
-    class performance_context:
-        """No-op context manager used when PerformanceMonitor is not installed."""
-
-        def __init__(self, context_name: str = "unknown_context", *args, **kwargs):
-            """Initialize performance context (fallback)."""
-            self.context_name = context_name
-            self.start_time = 0
-
-        def __enter__(self):
-            """Enter performance context."""
-            self.start_time = time.time()
-            logger.debug(f"Entering performance context: {self.context_name}")
-            return self
-
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            """Exit performance context."""
-            duration = time.time() - self.start_time
-            logger.debug(f"Exiting performance context: {self.context_name} (Duration: {duration:.4f}s)")
-
 
 class CodeReviewer(
     LintToolsMixin,
@@ -133,9 +98,9 @@ class CodeReviewer(
         # Try to load from .pyscn.toml or pyproject.toml
         if self.config_path and os.path.exists(self.config_path):
             try:
-                import tomli
+                import tomllib
                 with open(self.config_path, "rb") as f:
-                    file_config = tomli.load(f)
+                    file_config = tomllib.load(f)
 
                 # Merge with defaults
                 if "tool" in file_config and "pyscn" in file_config["tool"]:
@@ -143,8 +108,8 @@ class CodeReviewer(
                 elif "pyscn" in file_config:
                     config.update(file_config["pyscn"])
 
-            except Exception as e:
-                logger.warning(f"Error loading config from {self.config_path}: {e}")
+            except (OSError, tomllib.TOMLDecodeError, KeyError) as e:
+                logger.warning("Error loading config from %s: %s", self.config_path, e, exc_info=True)
 
         return config
 
@@ -265,6 +230,7 @@ class CodeReviewer(
 
         start_time = time.time()
         files_analyzed = 0
+        files_errored: list[str] = []
 
         # Find all files to analyze
         files_to_analyze = []
@@ -288,20 +254,22 @@ class CodeReviewer(
                 self.analyze_file(file_path, analysis_types)
                 files_analyzed += 1
             except Exception as e:
-                logger.error(f"Error analyzing file {file_path}: {e}")
+                logger.error("Error analyzing file %s: %s", file_path, e, exc_info=True)
+                files_errored.append(file_path)
 
         analysis_time = time.time() - start_time
 
         # Generate summary
-        summary = self._generate_summary(files_analyzed, analysis_time)
+        summary = self._generate_summary(files_analyzed, analysis_time, files_errored)
 
         return summary
 
-    def _generate_summary(self, files_analyzed: int, analysis_time: float) -> AnalysisSummary:
+    def _generate_summary(self, files_analyzed: int, analysis_time: float, files_errored: list[str] | None = None) -> AnalysisSummary:
         """Generate analysis summary."""
         summary = AnalysisSummary(
             total_issues=len(self.results),
             files_analyzed=files_analyzed,
+            files_errored=files_errored or [],
             analysis_time=analysis_time,
         )
 

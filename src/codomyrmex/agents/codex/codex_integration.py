@@ -1,8 +1,9 @@
+"""Codex integration adapters for Codomyrmex modules."""
+
 from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 
-"""Codex integration adapters for Codomyrmex modules."""
 
 class CodexIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Codex with Codomyrmex modules."""
@@ -102,16 +103,20 @@ class CodexIntegrationAdapter(AgentIntegrationAdapter):
         """
         Adapt Codex for code execution sandbox.
 
+        Note: Codex's implementation performs static analysis rather than
+        execution, since Codex is a language model without a runtime sandbox.
+        The result dict mirrors the execution result contract (success, output,
+        error, metadata) so callers can use the adapter polymorphically.
+
         Args:
-            code: Code to execute
+            code: Code to analyse
             language: Programming language
             **kwargs: Additional parameters
 
         Returns:
-            Execution result dictionary
+            Analysis result dictionary with keys: success, output, error, metadata
         """
 
-        # Use Codex to analyze or validate code
         prompt = f"Analyze this {language} code:\n\n{code}"
 
         request = AgentRequest(

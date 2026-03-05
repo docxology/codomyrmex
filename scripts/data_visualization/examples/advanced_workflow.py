@@ -37,12 +37,6 @@ def main():
 
     try:
         from codomyrmex.data_visualization import (
-            MermaidDiagramGenerator,
-            create_git_branch_diagram,
-            create_repository_structure_diagram,
-            GitVisualizer,
-            AdvancedPlotter,
-            PlotConfig,
             ChartStyle,
             ColorPalette,
         )

@@ -51,11 +51,7 @@ class ScatterMixin:
         if self.current_axes is None:
             self.create_figure()
 
-        axes = (
-            self.current_axes
-            if hasattr(self.current_axes, "scatter")
-            else self.current_axes[0]
-        )
+        axes = next(self._iter_axes())
 
         scatter = axes.scatter(
             x_data,
@@ -69,6 +65,11 @@ class ScatterMixin:
         )
 
         return scatter
+
+
+def apply_scatter(ax, x_data, y_data, **kwargs):
+    """Apply scatter to an axes — canonical delegate; eliminates duplication in charts/ and plots/."""
+    return ax.scatter(x_data, y_data, **kwargs)
 
 
 def create_advanced_scatter_plot(

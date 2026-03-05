@@ -24,11 +24,11 @@ else:
         print(f"Has generated_videos: {len(result.generated_videos)}")
     if hasattr(result, "videos"):
         print(f"Has videos: {len(result.videos)}")
-    import json
     try:
         print(f"Dump: {result.model_dump()}")
     except Exception as e:
         print(f"Dump error: {e}")
         try:
             print(f"Dict: {result.__dict__}")
-        except: pass
+        except AttributeError:
+            pass

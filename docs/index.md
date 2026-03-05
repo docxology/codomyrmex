@@ -21,8 +21,8 @@ uv run pytest src/codomyrmex/tests/ -x -q
 
 ## Key Features
 
-- **127+ modules** covering AI agents, code analysis, security, and more
-- **545+ MCP tools** for AI agent integration
+- **121 auto-discovered modules** covering AI agents, code analysis, security, and more
+- **407 dynamic MCP tools** for AI agent integration
 - **Zero-Mock testing** policy with real functional verification
 - **PAI integration** via the Personal AI Algorithm bridge
 - **CLI doctor** with `--fix` auto-repair mode

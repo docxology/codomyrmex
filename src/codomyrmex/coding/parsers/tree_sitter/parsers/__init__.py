@@ -93,7 +93,6 @@ class ASTNode:
             yield from child.walk()
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "type": self.type,
             "text": self.text[:100] if len(self.text) > 100 else self.text,

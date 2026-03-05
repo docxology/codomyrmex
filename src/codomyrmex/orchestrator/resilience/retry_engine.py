@@ -39,7 +39,6 @@ class RetryResult:
     adjustments: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "success": self.success,
             "attempts": self.attempts,

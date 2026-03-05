@@ -74,3 +74,100 @@ def upload_file_to_s3(file_path: str, bucket: str, object_name: str | None = Non
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to upload file: {e}"}
+
+
+@mcp_tool(category="google_workspace", description="List Google Drive files via SDK.")
+def gws_sdk_drive_list_files(query: str = "", page_size: int = 20) -> dict:
+    """List files in Google Drive using the Python SDK.
+
+    Args:
+        query: Drive search query (e.g., "name contains 'report'").
+        page_size: Maximum number of files to return.
+
+    Returns:
+        dict with keys: status, files, count
+    """
+    try:
+        from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
+
+        client = GoogleDriveClient.from_env()
+        files = client.list_files(query=query, page_size=page_size)
+        return {"status": "success", "files": files, "count": len(files)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(category="google_workspace", description="List Gmail messages via SDK.")
+def gws_sdk_gmail_list_messages(query: str = "", max_results: int = 20) -> dict:
+    """List Gmail messages using the Python SDK.
+
+    Args:
+        query: Gmail search query (e.g., "is:unread").
+        max_results: Maximum number of messages to return.
+
+    Returns:
+        dict with keys: status, messages, count
+    """
+    try:
+        from codomyrmex.cloud.google_workspace.gmail import GoogleGmailClient
+
+        client = GoogleGmailClient.from_env()
+        messages = client.list_messages(query=query, max_results=max_results)
+        return {"status": "success", "messages": messages, "count": len(messages)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="google_workspace",
+    description="List Google Calendar events via SDK.",
+)
+def gws_sdk_calendar_list_events(
+    calendar_id: str = "primary",
+    time_min: str = "",
+    time_max: str = "",
+) -> dict:
+    """List Google Calendar events using the Python SDK.
+
+    Args:
+        calendar_id: Calendar ID (default: 'primary').
+        time_min: RFC3339 lower bound for event start time.
+        time_max: RFC3339 upper bound for event start time.
+
+    Returns:
+        dict with keys: status, events, count
+    """
+    try:
+        from codomyrmex.cloud.google_workspace.calendar import GoogleCalendarClient
+
+        client = GoogleCalendarClient.from_env()
+        events = client.list_events(
+            calendar_id=calendar_id, time_min=time_min, time_max=time_max
+        )
+        return {"status": "success", "events": events, "count": len(events)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="google_workspace",
+    description="Get Google Sheets values via SDK.",
+)
+def gws_sdk_sheets_get_values(spreadsheet_id: str, range_notation: str) -> dict:
+    """Read values from a Google Sheets range using the Python SDK.
+
+    Args:
+        spreadsheet_id: The spreadsheet ID.
+        range_notation: A1 notation range (e.g., 'Sheet1!A1:D10').
+
+    Returns:
+        dict with keys: status, values, range
+    """
+    try:
+        from codomyrmex.cloud.google_workspace.sheets import GoogleSheetsClient
+
+        client = GoogleSheetsClient.from_env()
+        values = client.get_values(spreadsheet_id, range_notation)
+        return {"status": "success", "values": values, "range": range_notation}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}

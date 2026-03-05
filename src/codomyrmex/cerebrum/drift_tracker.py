@@ -34,7 +34,6 @@ class DriftEvent:
     category: str = "shifted"
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "term": self.term,
             "old_context": self.old_context,
@@ -73,7 +72,6 @@ class DriftSnapshot:
         return sum(1 for e in self.events if e.category == "lost")
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "events": [e.to_dict() for e in self.events],
             "magnitude": self.magnitude,

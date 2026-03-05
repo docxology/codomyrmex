@@ -158,3 +158,8 @@ class AutonomousAgent:
             logger.error(f"[{self.identity}] Generation error: {e}")
             if self._scheduler is not None:
                 self._scheduler.record_error()
+
+
+__all__ = [
+    "AutonomousAgent",
+]

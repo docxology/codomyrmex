@@ -6,18 +6,13 @@ Used primarily by the standardization submodule.
 """
 
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-try:
-    from codomyrmex.logging_monitoring import get_logger
-    logger = get_logger(__name__)
-except ImportError:
-    import logging
-    logger = logging.getLogger(__name__)
-
-from typing import TYPE_CHECKING
+from codomyrmex.logging_monitoring import get_logger
 
 from .openapi_generator import OpenAPISpecification
+
+logger = get_logger(__name__)
 
 if TYPE_CHECKING:
     from .standardization.api_versioning import APIVersion, APIVersionManager

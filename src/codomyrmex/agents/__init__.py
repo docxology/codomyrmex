@@ -16,14 +16,14 @@ Available classes:
 - AgentInterface: Abstract base class for all agents
 - AgentRequest, AgentResponse: Request/response data structures
 - AgentCapabilities: Enum of agent capabilities
-- AgentConfig: Configuration management for all 12 agents
+- AgentConfig: Configuration management for all 13 agents
 
 Available submodules:
 - agent_setup: Agent discovery, YAML config, interactive setup wizard
 - generic: Base agent classes (APIAgentBase, CLIAgentBase, AgentOrchestrator)
 - theory: Theoretical foundations for agentic systems
 - claude, codex, o1, deepseek, qwen: API-based agent clients
-- jules, opencode, gemini, mistral_vibe, every_code: CLI-based agent clients
+- jules, opencode, gemini, mistral_vibe, every_code, openclaw, agentic_seek: CLI-based agent clients
 - pooling: Multi-agent load balancing and failover
 - evaluation: Agent benchmarking and quality metrics
 - history: Conversation and context persistence
@@ -305,4 +305,4 @@ __all__ = [
     "AgenticSeekClient",
 ]
 
-__version__ = "0.2.0"
+__version__ = "1.1.0"

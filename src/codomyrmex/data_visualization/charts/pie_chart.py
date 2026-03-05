@@ -34,17 +34,10 @@ def create_pie_chart(
     Generates a pie chart.
     Uses logging_monitoring for logging.
     """
-    logger.debug(f"Generating pie chart titled '{title}'")
     if not labels or not sizes:
-        logger.warning(
-            "Empty data for labels or sizes in pie chart. No plot generated."
-        )
-        return None
+        raise ValueError('Empty data for labels or sizes in pie chart. No plot generated.')
     if len(labels) != len(sizes):
-        logger.warning(
-            f"Length mismatch for pie chart: labels ({len(labels)}) vs sizes ({len(sizes)}). Plot not generated."
-        )
-        return None
+        raise ValueError(f"Length mismatch for pie chart: labels ({len(labels)}) vs sizes ({len(sizes)}). Plot not generated.")
     if explode and len(explode) != len(labels):
         logger.warning(
             f"Length mismatch for pie chart explode: labels ({len(labels)}) vs explode ({len(explode)}). Ignoring explode."

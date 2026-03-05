@@ -23,6 +23,7 @@ codomyrmex dashboard --open
 ## Launch Script: `launch_dashboard.py`
 
 The primary entry point for the Codomyrmex website. It:
+
 1. Generates static HTML pages from Jinja2 templates into `output/website/`
 2. Creates a root redirect at `index.html`
 3. Initializes the `DataProvider` (module discovery, git status, PAI awareness)
@@ -105,7 +106,7 @@ The server exposes 27 REST endpoints at `http://localhost:8787/api/...`:
 |-----------|------|---------------|
 | **This dashboard** (Codomyrmex) | 8787 | `python scripts/website/launch_dashboard.py --open` |
 | **PAI Observability** | 5172 + 4000 | `~/.claude/Observability/scripts/start-agent-observability-dashboard.sh` |
-| **PAI Project Manager** | 8889 | `bun ~/.claude/skills/PAI/Tools/PMServer.ts` |
+| **PAI Project Manager** | 8889 | `bun scripts/pai/pm/server.ts` |
 | **MCP HTTP Server** | 8080 | `python scripts/model_context_protocol/run_mcp_server.py --transport http` |
 
 > **Port note**: PAI VoiceServer uses port 8888. PMServer now defaults to port 8889 to avoid conflict. Both can run simultaneously.

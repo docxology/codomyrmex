@@ -55,7 +55,6 @@ class PRSpec:
         return len(self.changes)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "title": self.title,
             "branch": self.branch,

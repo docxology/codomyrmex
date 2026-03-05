@@ -7,6 +7,9 @@ Generates scatter plots.
 
 import matplotlib.pyplot as plt
 
+from codomyrmex.data_visualization.engines._scatter import (
+    apply_scatter,  # direct submodule import avoids engines/__init__ circular import
+)
 from codomyrmex.data_visualization.utils import (
     DEFAULT_FIGURE_SIZE,
     apply_theme_to_axes,
@@ -35,20 +38,17 @@ def create_scatter_plot(
     Generates a scatter plot.
     Uses logging_monitoring for logging.
     """
-    logger.debug(f"Generating scatter plot titled '{title}'")
     if len(x_data) == 0 or len(y_data) == 0:
-        logger.warning("Empty data provided for scatter plot. No plot generated.")
-        return None
+        raise ValueError("x_data and y_data must be non-empty for scatter plot")
     if len(x_data) != len(y_data):
-        logger.warning(
-            f"Length mismatch for scatter plot: x_data ({len(x_data)}) vs y_data ({len(y_data)}). Plot not generated."
+        raise ValueError(
+            f"Length mismatch for scatter plot: x_data ({len(x_data)}) vs y_data ({len(y_data)})"
         )
-        return None
 
     fig, ax = plt.subplots(figsize=figure_size)
     if theme is not None:
         apply_theme_to_axes(ax, theme)
-    ax.scatter(x_data, y_data, s=dot_size, c=dot_color, alpha=alpha)
+    apply_scatter(ax, x_data, y_data, s=dot_size, c=dot_color, alpha=alpha)
     ax.set_title(title)
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)

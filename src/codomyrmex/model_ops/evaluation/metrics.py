@@ -30,7 +30,6 @@ class EvaluationResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "metrics": self.metrics,
             "task_type": self.task_type.value,
@@ -238,7 +237,6 @@ class ConfusionMatrix:
         return self._matrix.get((true_label, pred_label), 0)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         matrix_rows = []
         for tc in self.classes:
             row = [self.get_cell(tc, pc) for pc in self.classes]

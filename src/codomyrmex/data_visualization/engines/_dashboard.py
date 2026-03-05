@@ -44,8 +44,6 @@ class DashboardMixin:
 
         if not hasattr(axes, "__iter__"):
             axes = [axes]
-        elif axes.ndim == 1:
-            axes = axes.flatten()
         else:
             axes = axes.flatten()
 

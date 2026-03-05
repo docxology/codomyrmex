@@ -39,7 +39,6 @@ class Strategy:
         self.success_rate = self.success_rate * (1 - weight) + (1.0 if success else 0.0) * weight
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "prompt_template": self.prompt_template[:100],
@@ -68,11 +67,11 @@ class StrategyLibrary:
         self._strategies[strategy.name] = strategy
 
     def get(self, name: str) -> Strategy | None:
-        """Return the requested value."""
+        """Return strategy by name, or None if not found."""
         return self._strategies.get(name)
 
     def remove(self, name: str) -> bool:
-        """Remove."""
+        """Remove strategy by name; returns False if name not present."""
         if name in self._strategies:
             del self._strategies[name]
             return True
@@ -93,11 +92,10 @@ class StrategyLibrary:
 
     @property
     def size(self) -> int:
-        """Size."""
+        """Number of strategies in the library."""
         return len(self._strategies)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "strategies": [s.to_dict() for s in self.list_strategies()],
             "total": self.size,

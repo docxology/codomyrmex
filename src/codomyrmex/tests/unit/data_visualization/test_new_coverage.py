@@ -976,11 +976,11 @@ class TestLinePlotEdgeCases:
 class TestPieChartEdgeCases:
     """Edge case tests for create_pie_chart not covered by TestPieChart."""
 
-    def test_mismatched_labels_and_sizes_returns_none(self):
+    def test_mismatched_labels_and_sizes_raises(self):
         from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
 
-        result = create_pie_chart(["A", "B", "C"], [10, 20])
-        assert result is None
+        with pytest.raises(ValueError, match="Length mismatch"):
+            create_pie_chart(["A", "B", "C"], [10, 20])
 
     def test_zero_sum_sizes_raises_runtime_error(self):
         from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart

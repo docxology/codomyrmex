@@ -7,7 +7,7 @@
 
 ## Context
 
-This module provides the detailed reference layer in the PAI-Codomyrmex documentation hierarchy. It sits between the root bridge document (`/PAI.md`) and the implementation docs (`src/codomyrmex/agents/pai/`). The PAI Dashboard (port 8889) is documented with 8 interface screenshots.
+This module provides the detailed reference layer in the PAI-Codomyrmex documentation hierarchy. It sits between the root bridge document (`/PAI.md`) and the implementation docs (`src/codomyrmex/agents/pai/`). The PAI Command Center (port 8888) is a 15-tab modular SPA documented with full interface screenshots.
 
 ## Dashboard Interface
 
@@ -57,10 +57,11 @@ Run `/codomyrmexTrust` before BUILD or EXECUTE phases.
 
 ## AI Strategy
 
-1. **Start with README.md**: Index page with full 8-screenshot gallery
+1. **Start with README.md**: Index page with full 15-tab screenshot gallery
 2. **Architecture first**: Understand the component model with Network graph context
-3. **Reference, not tutorial**: These docs explain what exists, not how to build it
-4. **Visual verification**: Use screenshots to confirm expected Dashboard state
+3. **Dashboard setup**: See [dashboard-setup.md](dashboard-setup.md) for modular server architecture
+4. **Reference, not tutorial**: These docs explain what exists, not how to build it
+5. **Visual verification**: Use screenshots to confirm expected Dashboard state
 
 ## Signposting
 
@@ -72,12 +73,14 @@ Run `/codomyrmexTrust` before BUILD or EXECUTE phases.
 
 ### Related Documentation
 
-- [README.md](README.md) — Documentation index with full screenshot gallery
+- [README.md](README.md) — Documentation index with full 15-tab screenshot gallery
 - [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification with tab→screenshot mapping
+- [SPEC.md](SPEC.md) — Functional specification with 15-tab→screenshot mapping
+- [dashboard-setup.md](dashboard-setup.md) — Both dashboards, modular server architecture
 - [docs/modules/PAI.md](../modules/PAI.md) — Module-level AI agent context
-- [architecture.md](architecture.md) — Architecture deep-dive (Analytics, Network, Integration screenshots)
-- [tools-reference.md](tools-reference.md) — Tool inventory (Git, Email screenshots)
-- [api-reference.md](api-reference.md) — Python API reference (Analytics screenshot)
-- [workflows.md](workflows.md) — Workflow documentation (Dispatch, Board, Calendar screenshots)
-- [screenshots/](screenshots/) — All 8 PAI Dashboard interface screenshots
+- [architecture.md](architecture.md) — Architecture deep-dive
+- [tools-reference.md](tools-reference.md) — Tool inventory
+- [api-reference.md](api-reference.md) — Python API reference
+- [workflows.md](workflows.md) — Workflow documentation
+- [skills-and-commands.md](skills-and-commands.md) — External Claude Code skills
+- [screenshots/](screenshots/) — All 15 PAI Dashboard interface screenshots

@@ -14,14 +14,10 @@ except ImportError as _e:
     ) from _e
 
 from codomyrmex.data_visualization._compat import monitor_performance
-
-try:
-    from codomyrmex.logging_monitoring import get_logger
-except ImportError:
-    from logging import getLogger as get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 # Import mixins for class composition
-from ._dashboard import DashboardMixin, _plot_dataset, create_advanced_dashboard
+from ._dashboard import DashboardMixin, create_advanced_dashboard
 from ._heatmap import HeatmapMixin, create_advanced_heatmap
 from ._histogram import HistogramMixin, create_advanced_histogram
 from ._line_bar import (
@@ -86,11 +82,6 @@ class AdvancedPlotter(
         self.figures = []
         self.current_figure = None
         self.current_axes = None
-
-    @staticmethod
-    def _plot_dataset(ax, dataset):
-        """Plot a single dataset on given axes (delegates to _dashboard module)."""
-        _plot_dataset(ax, dataset)
 
     def _setup_style(self):
         """Setup matplotlib and seaborn styling."""
@@ -200,14 +191,14 @@ class AdvancedPlotter(
             logger.error("No current figure to save")
             return False
 
-        try:
-            format = format or self.config.save_format
-            dpi = dpi or self.config.save_dpi
-            bbox_inches = bbox_inches or self.config.bbox_inches
-            transparent = (
-                transparent if transparent is not None else self.config.transparent
-            )
+        format = format or self.config.save_format
+        dpi = dpi or self.config.save_dpi
+        bbox_inches = bbox_inches or self.config.bbox_inches
+        transparent = (
+            transparent if transparent is not None else self.config.transparent
+        )
 
+        try:
             self.current_figure.savefig(
                 path,
                 format=format,
@@ -215,13 +206,37 @@ class AdvancedPlotter(
                 bbox_inches=bbox_inches,
                 transparent=transparent,
             )
-
-            logger.info(f"Plot saved to {path}")
-            return True
-
-        except Exception as e:
-            logger.error(f"Error saving plot: {e}")
+        except OSError as e:
+            logger.error(f"Failed to save plot to {path}: {e}")
             return False
+
+        logger.info(f"Plot saved to {path}")
+        return True
+
+    def _plot_dataset(self, ax: plt.Axes, dataset: "Dataset") -> None:
+        """Render a single Dataset onto *ax* based on its plot_type.
+
+        Dispatches to the appropriate matplotlib call for LINE, SCATTER, BAR,
+        and HISTOGRAM plot types.  Adds a legend entry when dataset.label is set.
+        """
+        xs = [p.x for p in dataset.data]
+        ys = [p.y for p in dataset.data]
+        label = dataset.label
+        color = dataset.color
+
+        if dataset.plot_type == PlotType.LINE:
+            ax.plot(xs, ys, label=label, color=color, linewidth=dataset.linewidth)
+        elif dataset.plot_type == PlotType.SCATTER:
+            sizes = [p.size if p.size is not None else dataset.markersize for p in dataset.data]
+            colors = [p.color if p.color is not None else (color or "blue") for p in dataset.data]
+            ax.scatter(xs, ys, s=sizes, c=colors, label=label, alpha=dataset.alpha)
+        elif dataset.plot_type == PlotType.BAR:
+            ax.bar(xs, ys, label=label, color=color)
+        elif dataset.plot_type == PlotType.HISTOGRAM:
+            ax.hist(ys, label=label)
+
+        if label:
+            ax.legend()
 
     def clear_figures(self):
         """Clear all figures from memory."""

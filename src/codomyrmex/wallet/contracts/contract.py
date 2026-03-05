@@ -52,7 +52,6 @@ class Contract:
         return issues
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "address": self.address,
             "name": self.name,

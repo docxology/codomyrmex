@@ -7,13 +7,14 @@ from __future__ import annotations
 
 import time
 import uuid
-from collections import defaultdict, deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
+from codomyrmex.exceptions.orchestration import WorkflowError
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.utils.graph import kahn_topological_sort
 
 logger = get_logger(__name__)
 
@@ -52,7 +53,6 @@ class WorkflowStep:
     duration_ms: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "name": self.name,
             "status": self.status.value,
@@ -91,7 +91,6 @@ class WorkflowResult:
         return sum(1 for s in self.steps if s.status == StepStatus.FAILED)
 
     def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of this object's fields."""
         return {
             "workflow_id": self.workflow_id,
             "success": self.success,
@@ -161,40 +160,27 @@ class WorkflowRunner:
             step.duration_ms = (time.time() - step_start) * 1000
 
         result.total_duration_ms = (time.time() - start) * 1000
-        result.success = all(
-            s.status in (StepStatus.COMPLETED, StepStatus.SKIPPED)
-            for s in self._steps.values()
-        ) and result.failed_count == 0
+        result.success = (
+            result.completed_count > 0
+            and result.failed_count == 0
+            and all(
+                s.status in (StepStatus.COMPLETED, StepStatus.SKIPPED)
+                for s in self._steps.values()
+            )
+        )
 
         logger.info("Workflow complete", extra=result.to_dict())
         return result
 
     def _topological_sort(self) -> list[str]:
-        """Kahn's algorithm for topological ordering."""
-        in_degree: dict[str, int] = defaultdict(int)
-        graph: dict[str, list[str]] = defaultdict(list)
-
-        for name, step in self._steps.items():
-            in_degree.setdefault(name, 0)
-            for dep in step.depends_on:
-                graph[dep].append(name)
-                in_degree[name] += 1
-
-        queue = deque(n for n, d in in_degree.items() if d == 0)
-        order: list[str] = []
-
-        while queue:
-            node = queue.popleft()
-            order.append(node)
-            for neighbor in graph[node]:
-                in_degree[neighbor] -= 1
-                if in_degree[neighbor] == 0:
-                    queue.append(neighbor)
-
-        if len(order) != len(self._steps):
-            raise ValueError("Cycle detected in workflow DAG")
-
-        return order
+        """Return step names in dependency-first topological order."""
+        try:
+            return kahn_topological_sort(
+                self._steps,
+                lambda name: self._steps[name].depends_on,
+            )
+        except ValueError as exc:
+            raise WorkflowError(str(exc)) from exc
 
     @property
     def step_count(self) -> int:
