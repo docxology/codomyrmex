@@ -64,7 +64,7 @@ except ImportError:
 class StaticAnalyzer:
     """Main static analyzer class."""
 
-    def __init__(self, project_root: str = None):
+    def __init__(self, project_root: str | None = None):
         """
         Initialize the static analyzer.
 
@@ -123,7 +123,7 @@ class StaticAnalyzer:
     @mcp_tool()
     @monitor_performance("analyze_file")
     def analyze_file(
-        self, file_path: str, analysis_types: list[AnalysisType] = None
+        self, file_path: str, analysis_types: list[AnalysisType] | None = None
     ) -> list[AnalysisResult]:
         """
         Analyze a single file for various issues.
@@ -252,9 +252,9 @@ class StaticAnalyzer:
     @monitor_performance("analyze_project")
     def analyze_project(
         self,
-        target_paths: list[str] = None,
-        analysis_types: list[AnalysisType] = None,
-        exclude_patterns: list[str] = None,
+        target_paths: list[str] | None = None,
+        analysis_types: list[AnalysisType] | None = None,
+        exclude_patterns: list[str] | None = None,
     ) -> AnalysisSummary:
         """
         Analyze an entire project.
@@ -526,7 +526,7 @@ class StaticAnalyzer:
 # Convenience functions
 @mcp_tool()
 def analyze_file(
-    file_path: str, analysis_types: list[AnalysisType] = None
+    file_path: str, analysis_types: list[AnalysisType] | None = None
 ) -> list[AnalysisResult]:
     """Analyze a single file."""
     analyzer = StaticAnalyzer()
@@ -536,8 +536,8 @@ def analyze_file(
 @mcp_tool()
 def analyze_project(
     project_root: str,
-    target_paths: list[str] = None,
-    analysis_types: list[AnalysisType] = None,
+    target_paths: list[str] | None = None,
+    analysis_types: list[AnalysisType] | None = None,
 ) -> AnalysisSummary:
     """Analyze an entire project."""
     analyzer = StaticAnalyzer(project_root)

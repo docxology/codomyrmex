@@ -26,8 +26,7 @@ import logging
 import threading
 import time
 import warnings
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -42,6 +41,9 @@ from codomyrmex.ide.antigravity.agent_relay import (
     AgentRelay,
     RelayMessage,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # =====================================================================
 # Antigravity Side

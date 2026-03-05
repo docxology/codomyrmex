@@ -109,7 +109,7 @@ def check_imports(code: str) -> list[str]:
 def validate_code_example(example: CodeExample) -> CodeExample:
     """Validate a code example."""
     if example.language == "python":
-        syntax_valid, syntax_errors = validate_python_syntax(example.code)
+        syntax_valid, _syntax_errors = validate_python_syntax(example.code)
         example.syntax_valid = syntax_valid
         example.import_errors = check_imports(example.code)
 

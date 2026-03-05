@@ -112,7 +112,7 @@ class Ant:
         for idx, pos in enumerate(reversed(self.pheromone_trail)):
             decay = strength * (1.0 - idx / max(trail_len, 1))
             if decay > 0:
-                grid_pos = (int(round(pos[0])), int(round(pos[1])))
+                grid_pos = (round(pos[0]), round(pos[1]))
                 deposits.append((grid_pos, decay))
 
         return deposits

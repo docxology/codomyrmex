@@ -12,6 +12,7 @@ Verifies:
 from __future__ import annotations
 
 import asyncio
+import contextlib
 
 import pytest
 
@@ -146,10 +147,8 @@ class TestErrorHandling:
         job_id = scheduler.schedule(_fail_job, name="bad_job")
 
         # run_all uses TaskGroup — a failing task raises ExceptionGroup
-        try:
+        with contextlib.suppress(BaseException):
             await scheduler.run_all()
-        except BaseException:
-            pass
 
         job = scheduler.get_job(job_id)
         assert job is not None
@@ -189,10 +188,8 @@ class TestMetrics:
         scheduler = AsyncScheduler()
         scheduler.schedule(_fail_job, name="bad")
 
-        try:
+        with contextlib.suppress(BaseException):
             await scheduler.run_all()
-        except BaseException:
-            pass
 
         assert scheduler.metrics.jobs_failed == 1
 
@@ -293,10 +290,8 @@ class TestEventBusIntegration:
         scheduler = AsyncScheduler(event_bus=FakeEventBus())
         scheduler.schedule(_fail_job, name="bad_job")
 
-        try:
+        with contextlib.suppress(BaseException):
             await scheduler.run_all()
-        except BaseException:
-            pass
 
         event_types = [e["type"] for e in events]
         assert "job.failed" in event_types

@@ -22,7 +22,7 @@ class TemplateGenerator:
         self.templates = templates
         self.variables = variables
 
-    def generate(self, n: int = 10, seed: int = None) -> list[str]:
+    def generate(self, n: int = 10, seed: int | None = None) -> list[str]:
         """Generate n samples by filling templates with random variables."""
         if seed is not None:
             random.seed(seed)
@@ -52,7 +52,9 @@ class SyntheticDataGenerator:
     NOUNS = ["cat", "dog", "car", "house", "tree", "book", "phone", "computer"]
     VERBS = ["runs", "jumps", "sleeps", "reads", "writes", "plays", "builds", "finds"]
 
-    def generate_structured(self, schema: DataSchema, seed: int = None) -> list[dict]:
+    def generate_structured(
+        self, schema: DataSchema, seed: int | None = None
+    ) -> list[dict]:
         """Generate n_samples structured records matching the schema."""
         if seed is not None:
             random.seed(seed)
@@ -108,7 +110,7 @@ class SyntheticDataGenerator:
         n_classes: int = 2,
         n_features: int = 10,
         class_balance: str = "balanced",
-        seed: int = None,
+        seed: int | None = None,
     ) -> tuple[list[list[float]], list[int]]:
         """
         Generate a synthetic classification dataset.
@@ -153,8 +155,8 @@ class SyntheticDataGenerator:
     def generate_preference_pairs(
         self,
         n_pairs: int = 100,
-        templates: list[str] = None,
-        seed: int = None,
+        templates: list[str] | None = None,
+        seed: int | None = None,
     ) -> list[dict]:
         """Generate preference pairs for RLHF/DPO training."""
         if seed is not None:

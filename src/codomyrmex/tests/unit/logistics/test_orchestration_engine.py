@@ -400,7 +400,7 @@ class TestOrchestrationEngineStatus:
 
     def test_health_check_components_have_status(self, engine):
         result = engine.health_check()
-        for _comp_name, comp_data in result["components"].items():
+        for comp_data in result["components"].values():
             assert "status" in comp_data
 
     def test_get_metrics_fails_on_missing_methods(self, engine):

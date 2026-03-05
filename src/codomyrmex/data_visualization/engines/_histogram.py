@@ -28,7 +28,7 @@ class HistogramMixin:
         data: list[float | int],
         bins: int | list[float] = 30,
         label: str = "",
-        color: str = None,
+        color: str | None = None,
         alpha: float = 0.7,
         density: bool = False,
         cumulative: bool = False,
@@ -76,8 +76,8 @@ class HistogramMixin:
     def plot_box(
         self,
         data: list[float | int] | dict[str, list[float | int]],
-        labels: list[str] = None,
-        color: str | list[str] = None,
+        labels: list[str] | None = None,
+        color: str | list[str] | None = None,
         notch: bool = False,
         patch_artist: bool = True,
         **kwargs,
@@ -128,8 +128,8 @@ class HistogramMixin:
     def plot_violin(
         self,
         data: list[float | int] | dict[str, list[float | int]],
-        labels: list[str] = None,
-        color: str | list[str] = None,
+        labels: list[str] | None = None,
+        color: str | list[str] | None = None,
         alpha: float = 0.7,
         **kwargs,
     ) -> list[plt.Polygon]:

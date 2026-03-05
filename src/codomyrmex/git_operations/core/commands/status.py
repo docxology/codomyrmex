@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 
 
 @mcp_tool(name="git_add")
-def add_files(file_paths: list[str], repository_path: str = None) -> bool:
+def add_files(file_paths: list[str], repository_path: str | None = None) -> bool:
     """Add files to the Git staging area."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -23,7 +23,7 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     try:
         logger.info(f"Adding files to staging area: {file_paths}")
 
-        cmd = ["git", "add"] + file_paths
+        cmd = ["git", "add", *file_paths]
         subprocess.run(
             cmd,
             cwd=repository_path,
@@ -47,7 +47,7 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
 
 
 @mcp_tool(name="git_repo_status")
-def get_status(repository_path: str = None) -> dict[str, Any]:
+def get_status(repository_path: str | None = None) -> dict[str, Any]:
     """Get the current Git repository status."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -125,7 +125,7 @@ def get_status(repository_path: str = None) -> dict[str, Any]:
 
 @mcp_tool(name="git_clean")
 def clean_repository(
-    force: bool = False, directories: bool = False, repository_path: str = None
+    force: bool = False, directories: bool = False, repository_path: str | None = None
 ) -> bool:
     """Clean untracked files from the repository."""
     if repository_path is None:
@@ -162,7 +162,7 @@ def clean_repository(
 
 @mcp_tool(name="git_diff")
 def get_diff(
-    target: str = "HEAD", repository_path: str = None, cached: bool = False
+    target: str = "HEAD", repository_path: str | None = None, cached: bool = False
 ) -> str:
     """Get the diff of current changes against a target."""
     if repository_path is None:
@@ -196,7 +196,9 @@ def get_diff(
 
 @mcp_tool(name="git_diff_files")
 def get_diff_files(
-    file_path: str = None, staged: bool = False, repository_path: str = None
+    file_path: str | None = None,
+    staged: bool = False,
+    repository_path: str | None = None,
 ) -> str:
     """Get diff of changes for a specific file or all files."""
     if repository_path is None:
@@ -233,7 +235,7 @@ def get_diff_files(
 
 @mcp_tool(name="git_reset")
 def reset_changes(
-    mode: str = "mixed", target: str = "HEAD", repository_path: str = None
+    mode: str = "mixed", target: str = "HEAD", repository_path: str | None = None
 ) -> bool:
     """Reset repository to a specific state."""
     if repository_path is None:

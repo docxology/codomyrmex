@@ -66,7 +66,7 @@ def create_svg_bar_chart(
         f'<line x1="50" y1="{height - 50}" x2="{width - 30}" y2="{height - 50}" class="axis"/>',
     ]
 
-    for i, (x, y) in enumerate(zip(x_values, y_values)):
+    for i, (x, y) in enumerate(zip(x_values, y_values, strict=False)):
         bar_height = (y / max_y) * (height - 120) if max_y > 0 else 0
         x_pos = 60 + i * (bar_width + 5)
         y_pos = height - 50 - bar_height
@@ -143,10 +143,9 @@ def main():
         / "data_visualization"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/data_visualization/config.yaml")
 
     parser = argparse.ArgumentParser(description="Export data visualizations")

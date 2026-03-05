@@ -28,9 +28,7 @@ class ValidationResult:
 
 def _get_signing_params(private_key: Any) -> dict:
     """Determine the signing algorithm based on key type."""
-    if isinstance(private_key, rsa.RSAPrivateKey) or isinstance(
-        private_key, ec.EllipticCurvePrivateKey
-    ):
+    if isinstance(private_key, (rsa.RSAPrivateKey, ec.EllipticCurvePrivateKey)):
         return {"algorithm": hashes.SHA256()}
     if isinstance(private_key, ed25519.Ed25519PrivateKey):
         return {"algorithm": None}

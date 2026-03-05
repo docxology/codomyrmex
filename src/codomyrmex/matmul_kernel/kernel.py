@@ -35,7 +35,7 @@ def tiled_matmul(
     assert A.shape[1] == B.shape[0], f"Shape mismatch: {A.shape} @ {B.shape}"
 
     M, K = A.shape
-    K2, N = B.shape
+    _K2, N = B.shape
 
     if out is None:
         C = np.zeros((M, N), dtype=np.float64 if A.dtype == np.float64 else np.float32)
@@ -70,7 +70,8 @@ def batched_matmul(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     Returns:
         C: (batch, M, N)
     """
-    assert A.ndim == 3 and B.ndim == 3
+    assert A.ndim == 3
+    assert B.ndim == 3
     assert A.shape[0] == B.shape[0], "Batch sizes must match"
     batch, M, K = A.shape
     _, K2, N = B.shape
@@ -87,7 +88,7 @@ def matmul_flops(M: int, K: int, N: int) -> int:
     return 2 * M * K * N  # multiply + accumulate per element
 
 
-def benchmark_matmul(sizes: list[int] = None) -> dict:
+def benchmark_matmul(sizes: list[int] | None = None) -> dict:
     """
     Benchmark tiled matmul vs numpy.dot for various sizes.
 

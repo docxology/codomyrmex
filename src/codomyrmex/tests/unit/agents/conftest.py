@@ -72,8 +72,8 @@ class ConcreteAgent(BaseAgent):
     def __init__(
         self,
         name: str = "test_agent",
-        capabilities: list[AgentCapabilities] = None,
-        config: dict[str, Any] = None,
+        capabilities: list[AgentCapabilities] | None = None,
+        config: dict[str, Any] | None = None,
     ):
         caps = capabilities or [
             AgentCapabilities.CODE_GENERATION,

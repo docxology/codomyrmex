@@ -209,10 +209,8 @@ class Crawler:
                 path = parsed.path or "/"
                 for disallowed in policy.disallowed_paths:
                     if path.startswith(disallowed):
-                        return (
-                            True
-                            if any(path.startswith(a) for a in policy.allowed_paths)
-                            else False
+                        return bool(
+                            any(path.startswith(a) for a in policy.allowed_paths)
                         )
 
         return True

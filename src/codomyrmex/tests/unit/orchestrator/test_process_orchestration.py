@@ -287,9 +287,9 @@ class TestWorkflow:
         wf = Workflow("result-test")
         wf.add_task("x", action=lambda: 99)
         asyncio.new_event_loop().run_until_complete(wf.run())
-        r = wf.get_task_result("x")
+        wf.get_task_result("x")
         # May return a TaskResult or None depending on implementation
-        assert r is not None or True  # Just exercise the method
+        assert True  # Just exercise the method
 
     def test_conditional_skip(self):
         from codomyrmex.orchestrator.workflows.workflow import Workflow

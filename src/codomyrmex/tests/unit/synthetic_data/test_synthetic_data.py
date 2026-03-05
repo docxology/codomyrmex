@@ -202,7 +202,7 @@ class TestSyntheticDataGeneratorClassification:
     def test_imbalanced_classification(self):
         """Imbalanced classification produces different class sizes."""
         gen = SyntheticDataGenerator()
-        features, labels = gen.generate_classification(
+        _features, labels = gen.generate_classification(
             n_samples=100,
             n_classes=3,
             class_balance="imbalanced",
@@ -218,7 +218,7 @@ class TestSyntheticDataGeneratorClassification:
     def test_feature_dimensionality(self):
         """Each feature vector has n_features dimensions."""
         gen = SyntheticDataGenerator()
-        features, labels = gen.generate_classification(
+        features, _labels = gen.generate_classification(
             n_samples=50,
             n_features=7,
             seed=42,
@@ -237,7 +237,7 @@ class TestSyntheticDataGeneratorClassification:
     def test_binary_classification(self):
         """Default 2-class produces labels in {0, 1}."""
         gen = SyntheticDataGenerator()
-        features, labels = gen.generate_classification(n_samples=50, seed=42)
+        _features, labels = gen.generate_classification(n_samples=50, seed=42)
         assert set(labels).issubset({0, 1})
 
 

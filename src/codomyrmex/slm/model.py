@@ -97,7 +97,7 @@ class SLM:
         Returns:
             logits: (batch, seq, vocab_size)
         """
-        batch, seq = token_ids.shape
+        _batch, seq = token_ids.shape
         if seq > self.config.max_seq_len:
             raise ValueError(
                 f"Sequence length {seq} exceeds max_seq_len {self.config.max_seq_len}"

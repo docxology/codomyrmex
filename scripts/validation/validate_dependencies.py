@@ -36,7 +36,7 @@ def parse_pyproject(path: Path) -> dict[str, Any]:
 
     # Optional dependencies
     optional_deps = project.get("optional-dependencies", {})
-    for group, group_deps in optional_deps.items():
+    for group_deps in optional_deps.values():
         for dep in group_deps:
             name = dep.split("[")[0].split(">=")[0].split("==")[0].split("<")[0].strip()
             deps[name.lower()] = dep
@@ -130,10 +130,9 @@ def main():
         / "validation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/validation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Validate dependency consistency")

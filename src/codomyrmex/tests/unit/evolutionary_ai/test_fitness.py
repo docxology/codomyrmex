@@ -42,13 +42,13 @@ class TestFitnessResult:
 @pytest.mark.unit
 class TestScalarFitness:
     def test_maximize_returns_raw_value(self):
-        ff = ScalarFitness(fn=lambda g: sum(g), maximize=True)
+        ff = ScalarFitness(fn=sum, maximize=True)
         ind = Individual(genes=[1.0, 2.0, 3.0])
         result = ff.evaluate(ind)
         assert result.value == pytest.approx(6.0)
 
     def test_minimize_negates_value(self):
-        ff = ScalarFitness(fn=lambda g: sum(g), maximize=False)
+        ff = ScalarFitness(fn=sum, maximize=False)
         ind = Individual(genes=[1.0, 2.0, 3.0])
         result = ff.evaluate(ind)
         assert result.value == pytest.approx(-6.0)

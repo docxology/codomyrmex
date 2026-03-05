@@ -460,15 +460,15 @@ class FallbackChain(Generic[T]):
 
 
 __all__ = [
-    # Enums
-    "LoadBalanceStrategy",
-    "AgentStatus",
     # Data classes
     "AgentHealth",
-    "PooledAgent",
-    "PoolConfig",
+    "AgentPool",
+    "AgentStatus",
     # Classes
     "CircuitBreaker",
-    "AgentPool",
     "FallbackChain",
+    # Enums
+    "LoadBalanceStrategy",
+    "PoolConfig",
+    "PooledAgent",
 ]

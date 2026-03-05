@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from codomyrmex.meme.neurolinguistic.models import CognitiveFrame
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from codomyrmex.meme.neurolinguistic.models import CognitiveFrame
 
 
 def analyze_frames(

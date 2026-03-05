@@ -110,7 +110,8 @@ class TestTaskExecutionError:
 
     def test_message_contains_task_and_reason(self):
         exc = TaskExecutionError("task-1", "disk full")
-        assert "task-1" in str(exc) and "disk full" in str(exc)
+        assert "task-1" in str(exc)
+        assert "disk full" in str(exc)
 
     def test_raises_cleanly(self):
         with pytest.raises(TaskExecutionError):
@@ -185,7 +186,8 @@ class TestChannelError:
 
     def test_message_contains_channel_and_reason(self):
         exc = ChannelError("ch-1", "connection refused")
-        assert "ch-1" in str(exc) and "connection refused" in str(exc)
+        assert "ch-1" in str(exc)
+        assert "connection refused" in str(exc)
 
     def test_raises_cleanly(self):
         with pytest.raises(ChannelError):
@@ -208,7 +210,9 @@ class TestMessageDeliveryError:
     def test_message_string_contains_all_ids(self):
         exc = MessageDeliveryError("msg-1", "sender-A", "receiver-B", "dropped")
         s = str(exc)
-        assert "msg-1" in s and "sender-A" in s and "receiver-B" in s
+        assert "msg-1" in s
+        assert "sender-A" in s
+        assert "receiver-B" in s
 
     def test_raises_cleanly(self):
         with pytest.raises(MessageDeliveryError):
@@ -230,7 +234,8 @@ class TestCoordinationError:
     def test_message_contains_both_fields(self):
         exc = CoordinationError("leader-election", "no candidates")
         s = str(exc)
-        assert "leader-election" in s and "no candidates" in s
+        assert "leader-election" in s
+        assert "no candidates" in s
 
     def test_raises_cleanly(self):
         with pytest.raises(CoordinationError):

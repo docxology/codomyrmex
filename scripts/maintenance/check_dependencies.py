@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 
-def run_command(cmd: list[str], cwd: Path = None) -> tuple[int, str, str]:
+def run_command(cmd: list[str], cwd: Path | None = None) -> tuple[int, str, str]:
     """Run a command and return exit code, stdout, stderr."""
     try:
         result = subprocess.run(
@@ -49,7 +49,7 @@ def check_dependencies(repo_root: Path) -> int:
 
     # Try to validate sync
     print("\n📦 Checking dependency sync...")
-    code, stdout, stderr = run_command(["uv", "sync", "--dry-run"], cwd=repo_root)
+    code, stdout, _stderr = run_command(["uv", "sync", "--dry-run"], cwd=repo_root)
     if code == 0:
         print("✅ Dependencies are in sync")
     else:

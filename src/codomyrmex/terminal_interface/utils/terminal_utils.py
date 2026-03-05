@@ -56,7 +56,7 @@ class TerminalFormatter:
         "STRIKETHROUGH": "\033[9m",
     }
 
-    def __init__(self, use_colors: bool = None):
+    def __init__(self, use_colors: bool | None = None):
         """Initialize formatter with color support detection."""
         if use_colors is None:
             # Auto-detect color support
@@ -76,10 +76,7 @@ class TerminalFormatter:
             return True
 
         # Check for Windows Terminal or other modern terminals
-        if os.environ.get("WT_SESSION") or os.environ.get("COLORTERM"):
-            return True
-
-        return False
+        return bool(os.environ.get("WT_SESSION") or os.environ.get("COLORTERM"))
 
     def color(self, text: str, color: str, style: str | None = None) -> str:
         """Apply color and style to text."""
@@ -137,10 +134,7 @@ class TerminalFormatter:
         suffix: str = "",
     ) -> str:
         """Create a progress bar."""
-        if total == 0:
-            percent = 100
-        else:
-            percent = min(100, (current / total) * 100)
+        percent = 100 if total == 0 else min(100, current / total * 100)
 
         filled = int(width * current // total) if total > 0 else width
         bar = "█" * filled + "░" * (width - filled)
@@ -359,7 +353,7 @@ class CommandRunner:
     def run_python_module(
         self,
         module: str,
-        args: list[str] = None,
+        args: list[str] | None = None,
         cwd: Path | None = None,
         show_output: bool = True,
     ) -> dict[str, Any]:

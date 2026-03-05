@@ -33,7 +33,7 @@ def check_links(root_dir):
             text, link = match.groups()
 
             # Skip external links
-            if link.startswith("http") or link.startswith("mailto:"):
+            if link.startswith(("http", "mailto:")):
                 continue
 
             # Skip anchor links within same file (simplified)

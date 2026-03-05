@@ -108,7 +108,7 @@ def run_image_generation(
                 number_of_images=number_of_images,
                 aspect_ratio=aspect_ratio,
             )
-            for i, img in enumerate(results):
+            for _i, img in enumerate(results):
                 image_bytes = img.get("image_bytes") or img.get("image_data")
                 if image_bytes:
                     total_idx = saved + 1

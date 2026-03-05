@@ -546,7 +546,7 @@ class TestQualityEvaluation:
             QualityDimension,
         )
 
-        dim = list(QualityDimension)[0]
+        dim = next(iter(QualityDimension))
         s = DimensionScore(dimension=dim, score=0.95)
         assert s.score == 0.95
 

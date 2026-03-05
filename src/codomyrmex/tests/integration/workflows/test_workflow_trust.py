@@ -7,6 +7,8 @@ Tests that require ``trusted_call_tool`` wrap exceptions from internal
 ``TrustRegistry`` issues so they skip rather than fail.
 """
 
+import contextlib
+
 import pytest
 
 
@@ -89,10 +91,8 @@ class TestWorkflowTrust:
         trust_gateway.trust_all()
 
         # Try a tool call — may fail on TrustRegistry but should still audit
-        try:
+        with contextlib.suppress(AttributeError):
             trust_gateway.trusted_call_tool("codomyrmex.list_modules")
-        except AttributeError:
-            pass
 
         entries = trust_gateway.get_audit_log()
         # Audit should have at least the trust_all or list_modules attempt
@@ -103,10 +103,8 @@ class TestWorkflowTrust:
         from codomyrmex.agents.pai import trust_gateway
 
         trust_gateway.trust_all()
-        try:
+        with contextlib.suppress(AttributeError):
             trust_gateway.trusted_call_tool("codomyrmex.list_modules")
-        except AttributeError:
-            pass
 
         entries = trust_gateway.get_audit_log()
         if entries:

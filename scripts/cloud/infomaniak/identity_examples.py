@@ -107,7 +107,7 @@ def list_app_credentials(client):
 
 
 def create_app_credential(
-    client, name: str, description: str = None, expires: str = None
+    client, name: str, description: str | None = None, expires: str | None = None
 ):
     """Create an application credential."""
     print(f"\n🔑 Creating application credential: {name}")
@@ -209,10 +209,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Identity Examples")

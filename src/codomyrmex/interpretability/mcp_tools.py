@@ -13,11 +13,11 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 )
 def sae_train(
     d_input: int,
-    d_features: int = None,
+    d_features: int | None = None,
     n_samples: int = 200,
     n_steps: int = 50,
     lambda_l1: float = 1e-3,
-    seed: int = None,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     """Train an SAE on randomly generated activations (for testing/demo).
 
@@ -69,7 +69,7 @@ def sae_train(
 )
 def sae_analyze(
     d_input: int,
-    d_features: int = None,
+    d_features: int | None = None,
     n_samples: int = 200,
     seed: int = 42,
 ) -> dict[str, Any]:

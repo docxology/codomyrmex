@@ -39,7 +39,7 @@ def create_gauge(name: str, documentation: str, labelnames: tuple = ()) -> Gauge
 
 
 def create_histogram(
-    name: str, documentation: str, labelnames: tuple = (), buckets: tuple = None
+    name: str, documentation: str, labelnames: tuple = (), buckets: tuple | None = None
 ) -> Histogram:
     """Create a Prometheus histogram."""
     if buckets:

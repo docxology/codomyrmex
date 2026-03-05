@@ -53,7 +53,7 @@ class TestSQLValidator:
 
     @pytest.mark.unit
     def test_valid_count(self):
-        valid, error = SQLValidator.validate("SELECT COUNT(*) FROM orders;")
+        valid, _error = SQLValidator.validate("SELECT COUNT(*) FROM orders;")
         assert valid is True
 
     @pytest.mark.unit
@@ -114,7 +114,7 @@ class TestSQLValidator:
     def test_dangerous_keywords_blocked(self):
         """All dangerous keywords should be blocked."""
         for kw in SQLValidator.DANGEROUS_KEYWORDS:
-            valid, error = SQLValidator.validate(f"{kw} something FROM table;")
+            valid, _error = SQLValidator.validate(f"{kw} something FROM table;")
             assert valid is False, f"Expected {kw} to be blocked"
 
 

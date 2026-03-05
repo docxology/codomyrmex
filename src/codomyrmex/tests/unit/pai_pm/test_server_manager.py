@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import stat
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
 from codomyrmex.pai_pm import HAS_BUN, PaiPmServerManager
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @pytest.mark.unit

@@ -621,7 +621,7 @@ class TestGlobalDocAuditorAuditDirectory:
     def test_empty_dir_returns_zero_issues(self, tmp_path: Path):
         from codomyrmex.documentation.scripts.global_doc_auditor import audit_directory
 
-        total, compliant, issues = audit_directory(tmp_path)
+        _total, _compliant, issues = audit_directory(tmp_path)
         assert isinstance(issues, list)
 
     def test_compliant_dir_counted(self, tmp_path: Path):
@@ -634,7 +634,7 @@ class TestGlobalDocAuditorAuditDirectory:
             (d / f).write_text(f"# {f}\n")
         (d / "module.py").write_text("pass\n")
 
-        total, compliant, issues = audit_directory(tmp_path)
+        _total, compliant, _issues = audit_directory(tmp_path)
         assert compliant >= 1
 
     def test_missing_required_files_creates_issue(self, tmp_path: Path):

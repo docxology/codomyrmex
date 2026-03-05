@@ -1,5 +1,6 @@
 """Unit tests for ai_code_editing module."""
 
+import contextlib
 import os
 import signal
 import sys
@@ -21,10 +22,8 @@ try:
     signal.signal(signal.SIGALRM, _old_handler)
 except Exception:
     signal.alarm(0)
-    try:
+    with contextlib.suppress(Exception):
         signal.signal(signal.SIGALRM, _old_handler)
-    except Exception:
-        pass
 
 pytestmark = pytest.mark.skipif(
     not _AI_CODE_HELPERS_AVAILABLE,

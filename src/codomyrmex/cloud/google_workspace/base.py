@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -69,7 +69,7 @@ class GoogleWorkspaceBase:
             logger.error("Failed to %s %s: %s", verb, resource, exc)
             return default
 
-    def __enter__(self) -> GoogleWorkspaceBase:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *args) -> bool:

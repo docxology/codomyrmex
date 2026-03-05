@@ -44,10 +44,9 @@ def main():
         / "ci_cd_automation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/ci_cd_automation/config.yaml")
 
     setup_logging()
@@ -90,7 +89,7 @@ def main():
 
     print_info("Testing monitor_pipeline_health...")
     try:
-        health = monitor_pipeline_health(pipeline_name="test_pipeline")
+        monitor_pipeline_health(pipeline_name="test_pipeline")
         print_success("  monitor_pipeline_health called successfully.")
     except Exception as e:
         print_info(f"  monitor_pipeline_health demo: {e}")

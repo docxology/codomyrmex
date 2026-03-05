@@ -53,16 +53,16 @@ def cli_commands():
 
 
 __all__ = [
+    "Entity",
     # Models
     "EntityType",
-    "RelationType",
-    "Entity",
-    "Relationship",
     "GraphContext",
-    # Graph
-    "KnowledgeGraph",
     # Pipeline
     "GraphRAGPipeline",
+    # Graph
+    "KnowledgeGraph",
+    "RelationType",
+    "Relationship",
     # CLI
     "cli_commands",
 ]

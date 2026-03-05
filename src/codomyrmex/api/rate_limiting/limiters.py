@@ -293,7 +293,7 @@ class CompositeRateLimiter(RateLimiter):
         Returns the most restrictive result (lowest remaining).
         """
         most_restrictive = None
-        for _name, limiter in self.limiters.items():
+        for limiter in self.limiters.values():
             result = limiter.check(key, cost)
             if (
                 most_restrictive is None
@@ -311,7 +311,7 @@ class CompositeRateLimiter(RateLimiter):
         RateLimitExceeded, the exception propagates.
         """
         results = []
-        for _name, limiter in self.limiters.items():
+        for limiter in self.limiters.values():
             results.append(limiter.acquire(key, cost))
         # Return the most restrictive result
         if not results:

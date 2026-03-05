@@ -81,30 +81,30 @@ def cli_commands():
 
 
 __all__ = [
-    "service_mesh",
+    "ConnectionError",
+    "DNSResolutionError",
     # Core classes
     "HTTPClient",
-    "WebSocketClient",
+    "HTTPError",
+    # Exceptions
+    "NetworkError",
+    "NetworkTimeoutError",
+    "PortScanner",
+    "ProxyError",
+    "RateLimitError",
+    "Response",
     "SSHClient",
+    "SSHError",
+    "SSLError",
     "TCPClient",
     "TCPServer",
     "UDPClient",
-    "PortScanner",
-    "Response",
+    "WebSocketClient",
+    "WebSocketError",
+    "cli_commands",
     # Functions
     "get_http_client",
-    # Exceptions
-    "NetworkError",
-    "ConnectionError",
-    "NetworkTimeoutError",
-    "SSLError",
-    "HTTPError",
-    "DNSResolutionError",
-    "WebSocketError",
-    "ProxyError",
-    "RateLimitError",
-    "SSHError",
-    "cli_commands",
+    "service_mesh",
 ]
 
 __version__ = "0.1.0"

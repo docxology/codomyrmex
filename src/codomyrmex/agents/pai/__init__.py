@@ -76,42 +76,42 @@ from .trust_gateway import (
 )
 
 __all__ = [
+    # Constants
+    "ALGORITHM_PHASES",
+    "DESTRUCTIVE_TOOLS",
+    "DESTRUCTIVE_TOOL_COUNT",
+    "PAI_PRINCIPLES",
+    "PAI_UPSTREAM_URL",
+    "PROMPT_COUNT",
+    "RESOURCE_COUNT",
+    "RESPONSE_DEPTH_LEVELS",
+    "SAFE_TOOLS",
+    "SAFE_TOOL_COUNT",
+    "TOOL_COUNT",
+    "PAIAgentInfo",
     # Core
     "PAIBridge",
     "PAIConfig",
+    "PAIHookInfo",
+    "PAIMemoryStore",
     # Data classes
     "PAISkillInfo",
     "PAIToolInfo",
-    "PAIHookInfo",
-    "PAIAgentInfo",
-    "PAIMemoryStore",
-    # Constants
-    "ALGORITHM_PHASES",
-    "RESPONSE_DEPTH_LEVELS",
-    "PAI_PRINCIPLES",
-    "PAI_UPSTREAM_URL",
-    # MCP Bridge
-    "create_codomyrmex_mcp_server",
-    "get_tool_registry",
-    "get_skill_manifest",
-    "call_tool",
-    "TOOL_COUNT",
-    "RESOURCE_COUNT",
-    "PROMPT_COUNT",
     # Trust Gateway
     "TrustLevel",
     "TrustRegistry",
-    "verify_capabilities",
-    "trust_tool",
-    "trust_all",
-    "trusted_call_tool",
+    "call_tool",
+    # MCP Bridge
+    "create_codomyrmex_mcp_server",
+    "get_skill_manifest",
+    "get_tool_registry",
     "get_trust_report",
     "is_trusted",
     "reset_trust",
-    "SAFE_TOOLS",
-    "DESTRUCTIVE_TOOLS",
-    "SAFE_TOOL_COUNT",
-    "DESTRUCTIVE_TOOL_COUNT",
+    "trust_all",
+    "trust_tool",
+    "trusted_call_tool",
+    "verify_capabilities",
 ]
 
 __version__ = "0.4.0"

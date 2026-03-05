@@ -28,9 +28,8 @@ def extract_imports(file_path: Path) -> set[str]:
         if isinstance(node, ast.Import):
             for alias in node.names:
                 imports.add(alias.name.split(".")[0])
-        elif isinstance(node, ast.ImportFrom):
-            if node.module:
-                imports.add(node.module.split(".")[0])
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imports.add(node.module.split(".")[0])
 
     return imports
 
@@ -68,7 +67,7 @@ def find_cycles(
     if start in visited:
         if start in path:
             cycle_start = path.index(start)
-            cycles.append(path[cycle_start:] + [start])
+            cycles.append([*path[cycle_start:], start])
         return cycles
 
     visited.add(start)
@@ -145,10 +144,9 @@ def main():
         / "validation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/validation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Analyze module dependency hierarchy")

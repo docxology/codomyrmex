@@ -220,7 +220,7 @@ class AssertionHelpers:
     """
 
     @staticmethod
-    def assert_model_execution_success(result: Any, model_name: str = ""):
+    def assert_model_execution_success(result: Any, model_name: str = "") -> None:
         """
         Assert that model execution was successful.
 
@@ -240,7 +240,7 @@ class AssertionHelpers:
         assert result.execution_time > 0, f"Execution time is invalid for {model_name}"
 
     @staticmethod
-    def assert_model_available(manager: OllamaManager, model_name: str):
+    def assert_model_available(manager: OllamaManager, model_name: str) -> None:
         """
         Assert that a model is available.
 
@@ -256,7 +256,7 @@ class AssertionHelpers:
         )
 
     @staticmethod
-    def assert_valid_execution_options(options: ExecutionOptions):
+    def assert_valid_execution_options(options: ExecutionOptions) -> None:
         """
         Assert that execution options are valid.
 
@@ -277,7 +277,7 @@ class AssertionHelpers:
         assert options.max_tokens > 0, f"Max tokens must be > 0: {options.max_tokens}"
 
     @staticmethod
-    def assert_output_saved(output_manager: OutputManager, model_name: str):
+    def assert_output_saved(output_manager: OutputManager, model_name: str) -> None:
         """
         Assert that output was saved correctly.
 
@@ -321,7 +321,7 @@ class ModelAvailabilityChecker:
             self._available_models_cache = [m.name for m in models]
         return self._available_models_cache
 
-    def find_suitable_model(self, requirements: list[str] = None) -> str | None:
+    def find_suitable_model(self, requirements: list[str] | None = None) -> str | None:
         """
         Find a model suitable for testing.
 

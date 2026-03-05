@@ -9,7 +9,7 @@ logger = get_logger(__name__)
 
 @mcp_tool()
 def get_config(
-    key: str, repository_path: str = None, global_config: bool = False
+    key: str, repository_path: str | None = None, global_config: bool = False
 ) -> str | None:
     """Get a Git configuration value."""
     if repository_path is None:
@@ -46,7 +46,10 @@ def get_config(
 
 @mcp_tool()
 def set_config(
-    key: str, value: str, repository_path: str = None, global_config: bool = False
+    key: str,
+    value: str,
+    repository_path: str | None = None,
+    global_config: bool = False,
 ) -> bool:
     """Set a Git configuration value."""
     if repository_path is None:

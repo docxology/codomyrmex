@@ -246,9 +246,9 @@ class ResourceManager:
                 logger.error(f"Cannot allocate: Resource {resource_id} not found")
                 return None
 
-            if (
-                resource.status != ResourceStatus.AVAILABLE
-                and resource.status != ResourceStatus.ALLOCATED
+            if resource.status not in (
+                ResourceStatus.AVAILABLE,
+                ResourceStatus.ALLOCATED,
             ):
                 logger.warning(f"Resource {resource.name} is {resource.status.value}")
                 return None

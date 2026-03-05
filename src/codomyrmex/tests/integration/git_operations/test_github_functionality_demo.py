@@ -171,7 +171,7 @@ def demonstrate_github_functionality():
         f"\n   🔑 Current token status: {'✅ Set' if github_token != 'not_set' else '❌ Not set'}"
     )
 
-    if github_token != "not_set" and github_token != "placeholder_for_testing":
+    if github_token not in {"not_set", "placeholder_for_testing"}:
         print("   📝 Token appears to be set - attempting test...")
         try:
             # Try to create a test repository

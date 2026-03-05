@@ -79,7 +79,7 @@ class OpenClawClient(CLIAgentBase):
                 request,
                 additional_metadata={
                     "openclaw_success": result.get("success", False),
-                    "command_full": " ".join([self.command] + openclaw_args),
+                    "command_full": " ".join([self.command, *openclaw_args]),
                 },
             )
         except AgentTimeoutError as e:

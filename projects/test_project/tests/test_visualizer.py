@@ -39,7 +39,7 @@ class TestDataVisualizer:
     def test_initialization_creates_directory(self, tmp_path: Path):
         """Test that initialization creates output directory."""
         output_dir = tmp_path / "new" / "nested" / "dir"
-        visualizer = DataVisualizer(output_dir=output_dir)
+        DataVisualizer(output_dir=output_dir)
 
         assert output_dir.exists()
 

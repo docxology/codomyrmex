@@ -7,10 +7,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.edge_computing.core.cluster import EdgeCluster
 from codomyrmex.edge_computing.core.models import EdgeFunction, EdgeNodeStatus
+
+if TYPE_CHECKING:
+    from codomyrmex.edge_computing.core.cluster import EdgeCluster
 
 
 class DeploymentStrategy(Enum):

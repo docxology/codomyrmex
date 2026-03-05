@@ -37,17 +37,16 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
             DocumentFormat.JSON,
             DocumentFormat.YAML,
             DocumentFormat.CSV,
-        ]:
-            if target_format in [DocumentFormat.JSON, DocumentFormat.YAML]:
-                if isinstance(document.content, (dict, list)):
-                    converted_content = py_copy.deepcopy(document.content)
-                    return Document(
-                        content=converted_content,
-                        format=target_format,
-                        file_path=document.file_path,
-                        encoding=document.encoding,
-                        metadata=document.metadata.copy(),
-                    )
+        ] and target_format in [DocumentFormat.JSON, DocumentFormat.YAML]:
+            if isinstance(document.content, (dict, list)):
+                converted_content = py_copy.deepcopy(document.content)
+                return Document(
+                    content=converted_content,
+                    format=target_format,
+                    file_path=document.file_path,
+                    encoding=document.encoding,
+                    metadata=document.metadata.copy(),
+                )
 
         # Get content as string for basic conversion
         content_str = document.get_content_as_string()

@@ -78,7 +78,7 @@ async def check_module_files(module_path: Path) -> dict[str, Any]:
 
 
 async def check_module_health(
-    module_path: Path, _task_results: dict = None
+    module_path: Path, _task_results: dict | None = None
 ) -> dict[str, Any]:
     """Full health check for a module."""
     module_name = module_path.name

@@ -7,12 +7,14 @@ and configurable routing (log, webhook, event bus).
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.telemetry.metric_aggregator import MetricAggregator
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from codomyrmex.telemetry.metric_aggregator import MetricAggregator
 
 
 class AlertSeverity(Enum):

@@ -116,12 +116,12 @@ class AdvancedPlotter(
     @monitor_performance("finalize_plot")
     def finalize_plot(
         self,
-        title: str = None,
-        xlabel: str = None,
-        ylabel: str = None,
-        legend: bool = None,
-        grid: bool = None,
-        save_path: str = None,
+        title: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
+        legend: bool | None = None,
+        grid: bool | None = None,
+        save_path: str | None = None,
     ) -> plt.Figure:
         """Finalize the current plot with labels, legend, and styling."""
         if self.current_figure is None:
@@ -153,24 +153,26 @@ class AdvancedPlotter(
         else:
             yield axes
 
-    def _set_plot_title(self, title: str = None) -> None:
+    def _set_plot_title(self, title: str | None = None) -> None:
         if title or self.config.title:
             self.current_figure.suptitle(title or self.config.title)
 
-    def _set_plot_labels(self, xlabel: str = None, ylabel: str = None) -> None:
+    def _set_plot_labels(
+        self, xlabel: str | None = None, ylabel: str | None = None
+    ) -> None:
         for ax in self._iter_axes():
             if hasattr(ax, "set_xlabel"):
                 ax.set_xlabel(xlabel or self.config.xlabel)
                 ax.set_ylabel(ylabel or self.config.ylabel)
 
-    def _set_plot_legend(self, legend: bool = None) -> None:
+    def _set_plot_legend(self, legend: bool | None = None) -> None:
         if not (legend if legend is not None else self.config.legend):
             return
         for ax in self._iter_axes():
             if hasattr(ax, "legend"):
                 ax.legend()
 
-    def _set_plot_grid(self, grid: bool = None) -> None:
+    def _set_plot_grid(self, grid: bool | None = None) -> None:
         if not (grid if grid is not None else self.config.grid):
             return
         for ax in self._iter_axes():
@@ -181,10 +183,10 @@ class AdvancedPlotter(
     def save_plot(
         self,
         path: str,
-        format: str = None,
-        dpi: int = None,
-        bbox_inches: str = None,
-        transparent: bool = None,
+        format: str | None = None,
+        dpi: int | None = None,
+        bbox_inches: str | None = None,
+        transparent: bool | None = None,
     ) -> bool:
         """Save the current plot to a file."""
         if self.current_figure is None:

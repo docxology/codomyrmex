@@ -8,10 +8,12 @@ and content length.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agentic_memory.models import Memory, MemoryImportance
-from codomyrmex.agentic_memory.rules.engine import RuleEngine
+
+if TYPE_CHECKING:
+    from codomyrmex.agentic_memory.rules.engine import RuleEngine
 
 
 @dataclass

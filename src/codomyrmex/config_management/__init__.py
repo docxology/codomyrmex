@@ -162,25 +162,25 @@ def validate_config(namespace: str = "default") -> dict[str, Any]:
 
 # Build __all__ dynamically based on available components
 __all__ = [
-    # Configuration management
-    "get_config",
-    "set_config",
-    "validate_config",
-    "ConfigurationManager",
-    "load_configuration",
-    "validate_configuration",
-    "Configuration",
+    "ConfigAudit",
+    "ConfigDeployment",
     "ConfigSchema",
+    "ConfigWatcher",
+    "Configuration",
     # Configuration deployment
     "ConfigurationDeployer",
-    "deploy_configuration",
-    "ConfigDeployment",
+    "ConfigurationManager",
     # Configuration monitoring
     "ConfigurationMonitor",
-    "monitor_config_changes",
-    "ConfigAudit",
-    "ConfigWatcher",
     "cli_commands",
+    "deploy_configuration",
+    # Configuration management
+    "get_config",
+    "load_configuration",
+    "monitor_config_changes",
+    "set_config",
+    "validate_config",
+    "validate_configuration",
 ]
 
 # Add secret management if available

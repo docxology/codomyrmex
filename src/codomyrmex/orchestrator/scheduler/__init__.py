@@ -63,24 +63,24 @@ def cli_commands():
 
 
 __all__ = [
+    "CronTrigger",
+    # Advanced
+    "DependencyScheduler",
+    "IntervalTrigger",
+    "Job",
+    "JobPipeline",
+    "JobStatus",
+    "OnceTrigger",
+    "PersistentScheduler",
+    "ScheduledRecurrence",
     # Core classes
     "Scheduler",
-    "Job",
-    "JobStatus",
     # Triggers
     "Trigger",
     "TriggerType",
-    "OnceTrigger",
-    "IntervalTrigger",
-    "CronTrigger",
+    "at",
+    "cli_commands",
+    "cron",
     # Convenience functions
     "every",
-    "at",
-    "cron",
-    # Advanced
-    "DependencyScheduler",
-    "PersistentScheduler",
-    "JobPipeline",
-    "ScheduledRecurrence",
-    "cli_commands",
 ]

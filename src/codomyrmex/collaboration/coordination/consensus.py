@@ -216,10 +216,7 @@ class VotingMechanism:
         quorum_met = participation >= self._quorum
 
         decisive_votes = votes_for + votes_against
-        if decisive_votes > 0:
-            approval_rate = votes_for / decisive_votes
-        else:
-            approval_rate = 0
+        approval_rate = votes_for / decisive_votes if decisive_votes > 0 else 0
 
         passed = quorum_met and approval_rate >= self._threshold
 

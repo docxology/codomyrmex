@@ -76,7 +76,7 @@ class WASMRuntimeClient(ABC):
         self,
         instance_id: str,
         function_name: str,
-        args: list[Any] = None,
+        args: list[Any] | None = None,
     ) -> WASMExecution:
         """Execute a function in a WASM instance."""
 
@@ -114,7 +114,7 @@ class WasmtimeClient(WASMRuntimeClient):
         self,
         instance_id: str,
         function_name: str,
-        args: list[Any] = None,
+        args: list[Any] | None = None,
     ) -> WASMExecution:
         """Execute function (mock - would call actual runtime)."""
         instance = self._instances.get(instance_id)
@@ -183,7 +183,7 @@ class WASMOrchestrator:
         self,
         instance_id: str,
         function_name: str,
-        args: list[Any] = None,
+        args: list[Any] | None = None,
     ) -> WASMExecution | None:
         """Execute a function on any runtime."""
         for client in self._runtimes.values():

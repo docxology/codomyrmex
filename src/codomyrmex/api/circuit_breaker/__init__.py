@@ -15,7 +15,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional, TypeVar
+from typing import Any, Optional, Self, TypeVar
 
 from codomyrmex.exceptions import BulkheadFullError, CircuitOpenError
 
@@ -242,7 +242,7 @@ class CircuitBreaker:
             self._half_open_calls = 0
             self._half_open_successes = 0
 
-    def __enter__(self) -> "CircuitBreaker":
+    def __enter__(self) -> Self:
         """Context manager entry."""
         if not self.allow_request():
             raise CircuitOpenError(f"Circuit '{self.name}' is open")
@@ -378,7 +378,7 @@ class Bulkhead:
             self._active = max(0, self._active - 1)
         self._semaphore.release()
 
-    def __enter__(self) -> "Bulkhead":
+    def __enter__(self) -> Self:
         """Context manager entry."""
         if not self.acquire():
             raise BulkheadFullError(f"Bulkhead '{self.name}' is full")
@@ -470,18 +470,18 @@ def retry(
 
 
 __all__ = [
+    "Bulkhead",
+    "BulkheadFullError",
+    # Classes
+    "CircuitBreaker",
+    "CircuitBreakerConfig",
+    # Exceptions
+    "CircuitOpenError",
     # Enums
     "CircuitState",
     # Data classes
     "CircuitStats",
-    "CircuitBreakerConfig",
-    # Classes
-    "CircuitBreaker",
     "RetryPolicy",
-    "Bulkhead",
-    # Exceptions
-    "CircuitOpenError",
-    "BulkheadFullError",
     # Decorators
     "circuit_breaker",
     "retry",

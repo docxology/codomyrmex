@@ -6,11 +6,14 @@ including parsing, validation, and migration between formats.
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
 
 logger = get_logger(__name__)
 

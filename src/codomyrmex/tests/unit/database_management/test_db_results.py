@@ -131,7 +131,7 @@ class TestBatchOperations:
         INSERT INTO items VALUES (2, 'b');
         INSERT INTO items VALUES (3, 'c');
         """
-        total_rows, statements = db_connector.execute_script(script)
+        _total_rows, statements = db_connector.execute_script(script)
         db_connector.commit()
 
         assert statements == 3

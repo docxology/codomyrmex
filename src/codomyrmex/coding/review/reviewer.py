@@ -53,7 +53,7 @@ class CodeReviewer(
     - ReportingMixin: HTML/JSON/Markdown report generation
     """
 
-    def __init__(self, project_root: str = None, config_path: str = None):
+    def __init__(self, project_root: str | None = None, config_path: str | None = None):
         """
         Initialize the code reviewer.
 
@@ -194,7 +194,7 @@ class CodeReviewer(
         return Path(file_path).suffix.lower() in supported_extensions
 
     def analyze_file(
-        self, file_path: str, analysis_types: list[str] = None
+        self, file_path: str, analysis_types: list[str] | None = None
     ) -> list[AnalysisResult]:
         """
         Analyze a single file for various issues.
@@ -222,8 +222,8 @@ class CodeReviewer(
 
     def analyze_project(
         self,
-        target_paths: list[str] = None,
-        analysis_types: list[str] = None,
+        target_paths: list[str] | None = None,
+        analysis_types: list[str] | None = None,
     ) -> AnalysisSummary:
         """
         Analyze an entire project.
@@ -309,7 +309,7 @@ class CodeReviewer(
         return summary
 
     def check_quality_gates(
-        self, thresholds: dict[str, int] = None
+        self, thresholds: dict[str, int] | None = None
     ) -> QualityGateResult:
         """Check if code meets quality standards."""
         if thresholds is None:

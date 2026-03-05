@@ -40,7 +40,8 @@ class TestOrchestratorLogging:
         start_record = start_logs[0]
         assert "test_script.py" in start_record.message
         # Extra fields are stored as direct attributes on the record
-        assert hasattr(start_record, "event") and start_record.event == "SCRIPT_START"
+        assert hasattr(start_record, "event")
+        assert start_record.event == "SCRIPT_START"
 
         # Verify SCRIPT_END event
         end_logs = [
@@ -48,9 +49,12 @@ class TestOrchestratorLogging:
         ]
         assert len(end_logs) >= 1, "Should log SCRIPT_END event"
         end_record = end_logs[0]
-        assert hasattr(end_record, "event") and end_record.event == "SCRIPT_END"
-        assert hasattr(end_record, "status") and end_record.status == "passed"
-        assert hasattr(end_record, "exit_code") and end_record.exit_code == 0
+        assert hasattr(end_record, "event")
+        assert end_record.event == "SCRIPT_END"
+        assert hasattr(end_record, "status")
+        assert end_record.status == "passed"
+        assert hasattr(end_record, "exit_code")
+        assert end_record.exit_code == 0
         assert hasattr(end_record, "execution_time")
 
     def test_run_script_logs_failure(self, tmp_path, caplog):
@@ -70,8 +74,10 @@ class TestOrchestratorLogging:
         ]
         assert len(end_logs) >= 1
         end_record = end_logs[0]
-        assert hasattr(end_record, "status") and end_record.status == "failed"
-        assert hasattr(end_record, "exit_code") and end_record.exit_code == 1
+        assert hasattr(end_record, "status")
+        assert end_record.status == "failed"
+        assert hasattr(end_record, "exit_code")
+        assert end_record.exit_code == 1
 
     def test_generate_report_logs_summary(self, tmp_path, caplog):
         """Test that generate_report logs RUN_SUMMARY event."""
@@ -109,19 +115,16 @@ class TestOrchestratorLogging:
         ]
         assert len(summary_logs) >= 1, "Should log RUN_SUMMARY event"
         summary_record = summary_logs[0]
-        assert (
-            hasattr(summary_record, "event") and summary_record.event == "RUN_SUMMARY"
-        )
-        assert (
-            hasattr(summary_record, "run_id")
-            and summary_record.run_id == "test_run_123"
-        )
-        assert (
-            hasattr(summary_record, "total_scripts")
-            and summary_record.total_scripts == 2
-        )
-        assert hasattr(summary_record, "passed") and summary_record.passed == 1
-        assert hasattr(summary_record, "failed") and summary_record.failed == 1
+        assert hasattr(summary_record, "event")
+        assert summary_record.event == "RUN_SUMMARY"
+        assert hasattr(summary_record, "run_id")
+        assert summary_record.run_id == "test_run_123"
+        assert hasattr(summary_record, "total_scripts")
+        assert summary_record.total_scripts == 2
+        assert hasattr(summary_record, "passed")
+        assert summary_record.passed == 1
+        assert hasattr(summary_record, "failed")
+        assert summary_record.failed == 1
 
     def test_log_context_correlation_id(self):
         """Test that LogContext properly sets correlation ID."""

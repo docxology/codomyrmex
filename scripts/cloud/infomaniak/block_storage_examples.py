@@ -109,7 +109,11 @@ def list_backups(client):
 
 
 def create_volume(
-    client, name: str, size: int, volume_type: str = None, zone: str = None
+    client,
+    name: str,
+    size: int,
+    volume_type: str | None = None,
+    zone: str | None = None,
 ):
     """Create a new volume."""
     print(f"\n💾 Creating volume: {name}")
@@ -137,7 +141,7 @@ def get_volume(client, volume_id: str):
         print("   Volume not found")
 
 
-def create_snapshot(client, volume_id: str, name: str, description: str = None):
+def create_snapshot(client, volume_id: str, name: str, description: str | None = None):
     """Create a volume snapshot."""
     print(f"\n📸 Creating snapshot: {name}")
     print(f"   Volume: {volume_id}")
@@ -156,7 +160,7 @@ def create_backup(
     client,
     volume_id: str,
     name: str,
-    description: str = None,
+    description: str | None = None,
     incremental: bool = False,
 ):
     """Create a volume backup."""
@@ -206,10 +210,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Block Storage Examples")

@@ -38,14 +38,14 @@ def run_demo():
 
     # 2. Setup Budgets
     print("\nSetting up budgets...")
-    llm_budget = budgets.create(
+    budgets.create(
         name="Daily LLM",
         amount=1.00,  # $1.00 budget
         period=BudgetPeriod.DAILY,
         category=CostCategory.LLM_INFERENCE,
     )
 
-    compute_budget = budgets.create(
+    budgets.create(
         name="Weekly Compute",
         amount=10.00,
         period=BudgetPeriod.WEEKLY,

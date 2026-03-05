@@ -57,23 +57,23 @@ def cli_commands():
 
 
 __all__ = [
-    # API endpoints
-    "EmailProvider",
-    "EmailMessage",
-    "EmailDraft",
-    "EmailAddress",
-    "GmailProvider",
-    "AgentMailProvider",
+    "AGENTMAIL_AVAILABLE",
     # Status flags
     "EMAIL_AVAILABLE",
     "GMAIL_AVAILABLE",
-    "AGENTMAIL_AVAILABLE",
+    "AgentMailProvider",
+    "EmailAPIError",
+    "EmailAddress",
+    "EmailAuthError",
+    "EmailDraft",
     # Exceptions
     "EmailError",
-    "EmailAuthError",
-    "EmailAPIError",
-    "MessageNotFoundError",
+    "EmailMessage",
+    # API endpoints
+    "EmailProvider",
+    "GmailProvider",
     "InvalidMessageError",
+    "MessageNotFoundError",
     # Utilities
     "cli_commands",
 ]

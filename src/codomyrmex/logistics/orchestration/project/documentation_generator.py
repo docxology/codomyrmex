@@ -203,10 +203,7 @@ class DocumentationGenerator:
         parent_link = ""
         if parent_path:
             depth_diff = len(dir_path.parts) - len(parent_path.parts)
-            if depth_diff > 0:
-                rel_path = "../" * depth_diff
-            else:
-                rel_path = "../"
+            rel_path = "../" * depth_diff if depth_diff > 0 else "../"
             parent_link = (
                 f"\n- **Parent Directory**: [{parent_path.name}]({rel_path}README.md)"
             )
@@ -259,10 +256,7 @@ class DocumentationGenerator:
         parent_link = ""
         if parent_path:
             depth_diff = len(dir_path.parts) - len(parent_path.parts)
-            if depth_diff > 0:
-                rel_path = "../" * depth_diff
-            else:
-                rel_path = "../"
+            rel_path = "../" * depth_diff if depth_diff > 0 else "../"
             parent_link = f"\n- **Parent Agents**: [{parent_path.name} AGENTS.md]({rel_path}AGENTS.md)"
 
         variables = {

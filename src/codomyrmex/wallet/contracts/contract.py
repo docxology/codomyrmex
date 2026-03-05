@@ -9,7 +9,7 @@ class Contract:
     """A smart contract."""
 
     def __init__(
-        self, address: Address, abi: list[dict[str, Any]] = None, name: str = ""
+        self, address: Address, abi: list[dict[str, Any]] | None = None, name: str = ""
     ):
         self.address = address
         self.abi = abi or []

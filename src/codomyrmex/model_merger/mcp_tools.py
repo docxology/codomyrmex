@@ -56,7 +56,7 @@ def merge_models(
 )
 def create_model_soup(
     param_dicts: list[dict[str, list]],
-    weights: list[float] = None,
+    weights: list[float] | None = None,
 ) -> dict[str, Any]:
     """Average multiple models into a model soup.
 

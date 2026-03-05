@@ -27,7 +27,9 @@ class EdgeMetrics:
         """Add an invocation record."""
         self._records.append(record)
 
-    def total_invocations(self, function_id: str = None, node_id: str = None) -> int:
+    def total_invocations(
+        self, function_id: str | None = None, node_id: str | None = None
+    ) -> int:
         """Count invocations, optionally filtered."""
         records = self._records
         if function_id is not None:
@@ -36,7 +38,7 @@ class EdgeMetrics:
             records = [r for r in records if r.node_id == node_id]
         return len(records)
 
-    def success_rate(self, function_id: str = None) -> float:
+    def success_rate(self, function_id: str | None = None) -> float:
         """Success rate as percentage (0-100). Returns 100.0 if no records."""
         records = self._records
         if function_id is not None:
@@ -46,7 +48,7 @@ class EdgeMetrics:
         successes = sum(1 for r in records if r.success)
         return (successes / len(records)) * 100.0
 
-    def avg_latency_ms(self, function_id: str = None) -> float:
+    def avg_latency_ms(self, function_id: str | None = None) -> float:
         """Average latency in ms. Returns 0.0 if no records."""
         records = self._records
         if function_id is not None:
@@ -55,7 +57,7 @@ class EdgeMetrics:
             return 0.0
         return sum(r.duration_ms for r in records) / len(records)
 
-    def error_count(self, node_id: str = None) -> int:
+    def error_count(self, node_id: str | None = None) -> int:
         """Count of failed invocations."""
         records = self._records
         if node_id is not None:

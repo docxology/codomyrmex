@@ -49,10 +49,9 @@ def main():
         / "cerebrum"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cerebrum/config.yaml")
 
     setup_logging()
@@ -62,7 +61,7 @@ def main():
     print_info("Initializing CerebrumEngine...")
     try:
         config = CerebrumConfig()
-        engine = CerebrumEngine(config=config)
+        CerebrumEngine(config=config)
         print_success("  CerebrumEngine initialized successfully.")
     except Exception as e:
         print_error(f"  CerebrumEngine failed: {e}")
@@ -86,7 +85,7 @@ def main():
     print_info("Testing Bayesian components...")
     try:
         network = BayesianNetwork(name="example_net")
-        inference = InferenceEngine(network=network)
+        InferenceEngine(network=network)
         print_success(
             f"  BayesianNetwork '{network.name}' and InferenceEngine initialized."
         )
@@ -96,7 +95,7 @@ def main():
     # 4. Active Inference
     print_info("Testing Active Inference agent...")
     try:
-        agent = ActiveInferenceAgent()
+        ActiveInferenceAgent()
         print_success("  ActiveInferenceAgent initialized successfully.")
     except Exception as e:
         print_error(f"  ActiveInferenceAgent failed: {e}")

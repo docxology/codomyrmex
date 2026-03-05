@@ -435,7 +435,7 @@ class TestConfigurationManagerEnhanced:
         # Should have created a backup configuration
         backup_names = [
             name
-            for name in manager.configurations.keys()
+            for name in manager.configurations
             if name.startswith("test_config_backup")
         ]
         assert len(backup_names) == 1

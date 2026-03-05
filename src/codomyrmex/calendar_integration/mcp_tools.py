@@ -177,8 +177,8 @@ def calendar_create_event(
         evt = CalendarEvent(
             summary=summary,
             description=description,
-            start_time=datetime.fromisoformat(start_time.replace("Z", "+00:00")),
-            end_time=datetime.fromisoformat(end_time.replace("Z", "+00:00")),
+            start_time=datetime.fromisoformat(start_time),
+            end_time=datetime.fromisoformat(end_time),
             location=location,
             attendees=_with_default_attendee(attendees),
         )
@@ -292,8 +292,8 @@ def calendar_update_event(
         evt = CalendarEvent(
             summary=summary,
             description=description,
-            start_time=datetime.fromisoformat(start_time.replace("Z", "+00:00")),
-            end_time=datetime.fromisoformat(end_time.replace("Z", "+00:00")),
+            start_time=datetime.fromisoformat(start_time),
+            end_time=datetime.fromisoformat(end_time),
             location=location,
             attendees=_with_default_attendee(attendees),
         )

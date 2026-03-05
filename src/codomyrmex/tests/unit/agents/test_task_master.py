@@ -301,7 +301,7 @@ class TestCalculateCost:
         assert cost == 18.0
 
     @pytest.mark.parametrize(
-        "model,expected_input_rate,expected_output_rate",
+        ("model", "expected_input_rate", "expected_output_rate"),
         [
             ("claude-sonnet-4-20250514", 3.00, 15.00),
             ("claude-3-5-haiku-20241022", 1.00, 5.00),

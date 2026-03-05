@@ -69,8 +69,8 @@ TOKENS_PER_WORD = 1.3
 # Templates for different document types
 TEMPLATES = {
     "essay": {
-        "system": """You are an expert academic writer. Write comprehensive, 
-well-structured essays with clear thesis statements, supporting arguments, 
+        "system": """You are an expert academic writer. Write comprehensive,
+well-structured essays with clear thesis statements, supporting arguments,
 and proper citations. Use formal academic language.""",
         "structure": """Write a comprehensive essay on the topic: {topic}
 
@@ -93,9 +93,9 @@ Target length: approximately {target_words} words for this section.
         ],
     },
     "dissertation": {
-        "system": """You are an expert PhD dissertation writer. Write comprehensive, 
-rigorous academic content suitable for a doctoral thesis. Include proper academic 
-structure, literature references (use placeholder citations like [Author, Year]), 
+        "system": """You are an expert PhD dissertation writer. Write comprehensive,
+rigorous academic content suitable for a doctoral thesis. Include proper academic
+structure, literature references (use placeholder citations like [Author, Year]),
 methodology discussions, and critical analysis.""",
         "structure": """Write a section for a PhD dissertation on: {topic}
 
@@ -122,8 +122,8 @@ Guidelines:
         ],
     },
     "story": {
-        "system": """You are a creative fiction writer. Write engaging, 
-immersive stories with vivid descriptions, compelling characters, 
+        "system": """You are a creative fiction writer. Write engaging,
+immersive stories with vivid descriptions, compelling characters,
 and engaging plot development.""",
         "structure": """Continue writing the story about: {topic}
 
@@ -141,7 +141,7 @@ Target length: approximately {target_words} words.
         ],
     },
     "documentation": {
-        "system": """You are a technical documentation expert. Write clear, 
+        "system": """You are a technical documentation expert. Write clear,
 comprehensive documentation with examples, code snippets, and proper structure.""",
         "structure": """Write documentation for: {topic}
 
@@ -453,10 +453,9 @@ def main():
     config_path = (
         Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(
@@ -473,13 +472,13 @@ Templates:
 Examples:
   # 5-page essay
   python openrouter_long_output.py --topic "AI Ethics" --pages 5
-  
+
   # PhD dissertation (~100 pages)
   python openrouter_long_output.py --template dissertation --topic "ML Safety" --pages 100
-  
+
   # 10,000 word story
   python openrouter_long_output.py --template story --topic "Space Exploration" --words 10000
-  
+
   # Custom sections
   python openrouter_long_output.py --topic "Python Guide" --sections "Basics" "Advanced" "Examples"
         """,

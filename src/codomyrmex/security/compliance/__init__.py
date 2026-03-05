@@ -250,7 +250,7 @@ class ComplianceChecker:
             framework=self.framework,
         )
 
-        for _control_id, checker in self._checkers.items():
+        for checker in self._checkers.values():
             result = checker.check(context)
             report.results.append(result)
 
@@ -292,18 +292,18 @@ SOC2_CONTROLS = [
 ]
 
 __all__ = [
-    # Enums
-    "ComplianceFramework",
-    "ControlStatus",
-    # Data classes
-    "Control",
-    "ControlResult",
-    "ComplianceReport",
-    # Checkers
-    "ControlChecker",
-    "PolicyChecker",
-    # Core
-    "ComplianceChecker",
     # Pre-built
     "SOC2_CONTROLS",
+    # Core
+    "ComplianceChecker",
+    # Enums
+    "ComplianceFramework",
+    "ComplianceReport",
+    # Data classes
+    "Control",
+    # Checkers
+    "ControlChecker",
+    "ControlResult",
+    "ControlStatus",
+    "PolicyChecker",
 ]

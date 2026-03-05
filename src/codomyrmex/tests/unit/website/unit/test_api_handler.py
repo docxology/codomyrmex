@@ -9,6 +9,7 @@ handle_docs_get, handle_execute, handle_tests_run,
 handle_pai_action, handle_agent_dispatch, handle_agent_dispatch_status.
 """
 
+import contextlib
 import io
 import json
 
@@ -280,10 +281,8 @@ class TestHandleTestsRun:
 
         APIHandler._test_running = False
         APIHandler._test_lock = threading.Lock()
-        try:
+        with contextlib.suppress(Exception):
             h.handle_tests_run()
-        except Exception:
-            pass
         if h.errors:
             assert h.errors[0][0] == 500
 
@@ -391,30 +390,24 @@ class TestHandleAgentDispatch:
 
     def test_no_content_returns_400(self):
         h = FakeAPIHandler(content_length=0)
-        try:
+        with contextlib.suppress(Exception):
             h.handle_agent_dispatch()
-        except Exception:
-            pass
         if h.responses:
             assert h.responses[0]["status"] == 400
 
     def test_invalid_json_returns_400(self):
         body = b"not json"
         h = FakeAPIHandler(content_length=len(body), body=body)
-        try:
+        with contextlib.suppress(Exception):
             h.handle_agent_dispatch()
-        except Exception:
-            pass
         if h.responses:
             assert h.responses[0]["status"] == 400
 
     def test_empty_payload_returns_400(self):
         body = b"   "  # whitespace-only payload
         h = FakeAPIHandler(content_length=len(body), body=body)
-        try:
+        with contextlib.suppress(Exception):
             h.handle_agent_dispatch()
-        except Exception:
-            pass
         if h.responses:
             assert h.responses[0]["status"] == 400
 
@@ -428,10 +421,8 @@ class TestHandleAgentDispatchStatus:
 
     def test_no_orch_returns_inactive(self):
         h = FakeAPIHandler()
-        try:
+        with contextlib.suppress(Exception):
             h.handle_agent_dispatch_status()
-        except Exception:
-            pass
         if h.responses:
             data = h.responses[0]["data"]
             assert data.get("active") is False or "error" in data

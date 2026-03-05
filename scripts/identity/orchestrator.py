@@ -28,7 +28,7 @@ def run_orchestrator():
     # 2. Create Personas for different tiers
     print("\n[Step 2] Creating personas...")
     p_anon = manager.create_persona("anon-001", "Shadow", VerificationLevel.ANON)
-    p_verified = manager.create_persona(
+    manager.create_persona(
         "verified-001", "Researcher", VerificationLevel.VERIFIED_ANON
     )
     p_kyc = manager.create_persona("kyc-001", "Alice Smith", VerificationLevel.KYC)
@@ -118,10 +118,9 @@ def run_orchestrator():
         / "identity"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/identity/config.yaml")
 
 

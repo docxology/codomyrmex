@@ -75,10 +75,9 @@ def main():
     config_path = (
         Path(__file__).resolve().parent.parent.parent / "config" / "fpf" / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/fpf/config.yaml")
 
     parser = argparse.ArgumentParser(description="FPF utilities")

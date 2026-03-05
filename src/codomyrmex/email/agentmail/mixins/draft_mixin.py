@@ -6,7 +6,7 @@ update, send, and delete drafts.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.email.agentmail.models import (
     AgentMailDraft,
@@ -14,7 +14,9 @@ from codomyrmex.email.agentmail.models import (
     _sdk_message_to_email_message,
 )
 from codomyrmex.email.exceptions import EmailAPIError
-from codomyrmex.email.generics import EmailDraft, EmailMessage
+
+if TYPE_CHECKING:
+    from codomyrmex.email.generics import EmailDraft, EmailMessage
 
 try:
     from agentmail.core import ApiError

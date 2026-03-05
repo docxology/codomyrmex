@@ -84,7 +84,7 @@ def create_text_plot(
         max_label_len = min(15, max(len(str(x)) for x in x_values))
         bar_width = width - max_label_len - 10
 
-        for x, y in zip(x_values, y_values):
+        for x, y in zip(x_values, y_values, strict=False):
             bar_len = int((y - min_y) / y_range * bar_width) if y_range > 0 else 0
             bar = "█" * bar_len
             label = str(x)[:max_label_len].ljust(max_label_len)
@@ -118,7 +118,7 @@ def create_text_plot(
             x_min, x_max = min(x_nums), max(x_nums)
             x_range = x_max - x_min if x_max != x_min else 1
 
-            for x, y in zip(x_nums, y_values):
+            for x, y in zip(x_nums, y_values, strict=False):
                 col = (
                     int((x - x_min) / x_range * (width - 1))
                     if x_range > 0
@@ -156,10 +156,9 @@ def main():
         / "data_visualization"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/data_visualization/config.yaml")
 
     parser = argparse.ArgumentParser(description="Create quick plots from data files")

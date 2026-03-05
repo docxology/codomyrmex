@@ -194,7 +194,6 @@ class APIAgentBase(BaseAgent):
 
         self.logger.error(
             f"{self.name} API error",
-            exc_info=True,
             extra={
                 "agent": self.name,
                 "model": getattr(self, "model", None),

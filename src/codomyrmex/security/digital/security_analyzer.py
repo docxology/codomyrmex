@@ -169,20 +169,19 @@ class ASTSecurityAnalyzer(ast.NodeVisitor):
 
     def visit_Call(self, node: ast.Call) -> None:
         """Check for dangerous calls."""
-        if isinstance(node.func, ast.Name):
-            if node.func.id in ("eval", "exec"):
-                self.findings.append(
-                    SecurityFinding(
-                        issue_type=SecurityIssue.COMMAND_INJECTION,
-                        severity="CRITICAL",
-                        confidence=0.9,
-                        file_path=self.filepath,
-                        line_number=node.lineno,
-                        code_snippet=f"Use of {node.func.id}()",
-                        description=f"Dangerous use of {node.func.id}",
-                        recommendation="Avoid eval/exec",
-                    )
+        if isinstance(node.func, ast.Name) and node.func.id in ("eval", "exec"):
+            self.findings.append(
+                SecurityFinding(
+                    issue_type=SecurityIssue.COMMAND_INJECTION,
+                    severity="CRITICAL",
+                    confidence=0.9,
+                    file_path=self.filepath,
+                    line_number=node.lineno,
+                    code_snippet=f"Use of {node.func.id}()",
+                    description=f"Dangerous use of {node.func.id}",
+                    recommendation="Avoid eval/exec",
                 )
+            )
         self.generic_visit(node)
 
 

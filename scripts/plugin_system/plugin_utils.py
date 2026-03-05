@@ -18,7 +18,7 @@ except ImportError:
 import argparse
 
 
-def find_plugins(search_paths: list = None) -> list:
+def find_plugins(search_paths: list | None = None) -> list:
     """Find plugin files."""
     paths = search_paths or ["plugins", "src/plugins", ".codomyrmex/plugins"]
     found = []
@@ -124,10 +124,9 @@ def main():
         / "plugin_system"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/plugin_system/config.yaml")
 
     parser = argparse.ArgumentParser(description="Plugin utilities")

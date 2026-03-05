@@ -279,14 +279,14 @@ class FixtureBuilder:
 
 
 __all__ = [
-    # Enums
-    "FixtureScope",
+    "DataFixture",
+    "FixtureBuilder",
     # Data classes
     "FixtureDefinition",
     "FixtureInstance",
     # Core
     "FixtureManager",
-    "DataFixture",
+    # Enums
+    "FixtureScope",
     "JSONFixtureLoader",
-    "FixtureBuilder",
 ]

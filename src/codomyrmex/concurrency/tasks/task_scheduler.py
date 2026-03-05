@@ -8,8 +8,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import TYPE_CHECKING
 
-from .task_queue import Task
+if TYPE_CHECKING:
+    from .task_queue import Task
 
 
 class SchedulingStrategy(Enum):

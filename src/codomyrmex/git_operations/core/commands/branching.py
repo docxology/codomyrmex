@@ -8,7 +8,7 @@ _GIT_TIMEOUT = 60  # seconds
 logger = get_logger(__name__)
 
 
-def create_branch(branch_name: str, repository_path: str = None) -> bool:
+def create_branch(branch_name: str, repository_path: str | None = None) -> bool:
     """Create and switch to a new Git branch.
 
     Raises:
@@ -29,7 +29,7 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
     return True
 
 
-def switch_branch(branch_name: str, repository_path: str = None) -> bool:
+def switch_branch(branch_name: str, repository_path: str | None = None) -> bool:
     """Switch to an existing Git branch.
 
     Raises:
@@ -51,7 +51,7 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
 
 
 def delete_branch(
-    branch_name: str, repository_path: str = None, force: bool = False
+    branch_name: str, repository_path: str | None = None, force: bool = False
 ) -> bool:
     """Delete a local git branch.
 
@@ -79,7 +79,7 @@ def delete_branch(
     return True
 
 
-def get_current_branch(repository_path: str = None) -> str:
+def get_current_branch(repository_path: str | None = None) -> str:
     """Get the name of the current Git branch.
 
     Raises:
@@ -101,7 +101,7 @@ def get_current_branch(repository_path: str = None) -> str:
     return branch_name
 
 
-def list_branches(repository_path: str = None) -> list[str]:
+def list_branches(repository_path: str | None = None) -> list[str]:
     """List all local branches in the repository.
 
     Args:

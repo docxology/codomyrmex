@@ -436,21 +436,21 @@ class AdaptiveKeyProvider(KeyProvider[K]):
 
 
 __all__ = [
-    # Enums
-    "WarmingStrategy",
-    # Data classes
-    "WarmingConfig",
-    "WarmingStats",
-    # Key providers
-    "KeyProvider",
-    "StaticKeyProvider",
-    "CallableKeyProvider",
+    "AccessTracker",
     "AdaptiveKeyProvider",
-    # Value loaders
-    "ValueLoader",
-    "CallableValueLoader",
     "BatchValueLoader",
     # Main classes
     "CacheWarmer",
-    "AccessTracker",
+    "CallableKeyProvider",
+    "CallableValueLoader",
+    # Key providers
+    "KeyProvider",
+    "StaticKeyProvider",
+    # Value loaders
+    "ValueLoader",
+    # Data classes
+    "WarmingConfig",
+    "WarmingStats",
+    # Enums
+    "WarmingStrategy",
 ]

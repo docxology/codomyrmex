@@ -42,22 +42,22 @@ from .workflows.workflow import (
 logger = get_logger(__name__)
 
 __all__ = [
+    "Steps",
+    "batch",
+    "chain_scripts",
+    "condition",
+    "pipe",
+    "python_func",
+    "retry",
     # Quick execution
     "run",
     "run_async",
-    "pipe",
-    "batch",
-    "chain_scripts",
-    # Workflow builders
-    "workflow",
-    "step",
-    "Steps",
     # Utilities
     "shell",
-    "python_func",
-    "retry",
+    "step",
     "timeout",
-    "condition",
+    # Workflow builders
+    "workflow",
 ]
 
 
@@ -74,9 +74,9 @@ class StepResult:
 def run(
     target: str | Path,
     timeout: int = 60,
-    args: list[str] = None,
-    env: dict[str, str] = None,
-    cwd: Path = None,
+    args: list[str] | None = None,
+    env: dict[str, str] | None = None,
+    cwd: Path | None = None,
 ) -> dict[str, Any]:
     """Run a single script or command.
 
@@ -99,7 +99,7 @@ def run(
 
 
 async def run_async(
-    target: str | Path, timeout: int = 60, args: list[str] = None
+    target: str | Path, timeout: int = 60, args: list[str] | None = None
 ) -> dict[str, Any]:
     """Async version of run."""
     loop = asyncio.get_event_loop()
@@ -111,8 +111,8 @@ async def run_async(
 def shell(
     command: str,
     timeout: int = 60,
-    env: dict[str, str] = None,
-    cwd: Path = None,
+    env: dict[str, str] | None = None,
+    cwd: Path | None = None,
     check: bool = False,
 ) -> dict[str, Any]:
     """Execute a shell command.
@@ -222,7 +222,7 @@ def pipe(
 
 
 def batch(
-    targets: list[str | Path], workers: int = None, timeout: int = 60
+    targets: list[str | Path], workers: int | None = None, timeout: int = 60
 ) -> ExecutionResult:
     """Run multiple targets in parallel.
 
@@ -318,8 +318,8 @@ class Steps:
         self,
         name: str,
         action: Callable,
-        depends_on: list[str] = None,
-        timeout: float = None,
+        depends_on: list[str] | None = None,
+        timeout: float | None = None,
         retry: int = 1,
     ) -> "Steps":
         """Add a step to the workflow.
@@ -349,7 +349,9 @@ class Steps:
         self._steps.append(name)
         return self
 
-    def add_parallel(self, steps: list[tuple], depends_on: list[str] = None) -> "Steps":
+    def add_parallel(
+        self, steps: list[tuple], depends_on: list[str] | None = None
+    ) -> "Steps":
         """Add parallel steps.
 
         Args:
@@ -390,7 +392,12 @@ class Steps:
         return self._workflow
 
 
-def step(name: str, action: Callable = None, timeout: float = None, retry: int = 1):
+def step(
+    name: str,
+    action: Callable | None = None,
+    timeout: float | None = None,
+    retry: int = 1,
+):
     """Decorator to create a workflow step.
 
     Args:
@@ -426,7 +433,7 @@ def workflow(name: str = "workflow") -> Steps:
 
 
 def python_func(
-    func: Callable, args: tuple = (), kwargs: dict = None, timeout: int = 60
+    func: Callable, args: tuple = (), kwargs: dict | None = None, timeout: int = 60
 ) -> dict[str, Any]:
     """Run a Python function with monitoring.
 

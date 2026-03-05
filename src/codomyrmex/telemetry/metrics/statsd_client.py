@@ -12,7 +12,12 @@ logger = get_logger(__name__)
 class StatsDClient:
     """Wrapper for statsd client to send metrics to a StatsD collector."""
 
-    def __init__(self, host: str = None, port: int = None, prefix: str = "codomyrmex"):
+    def __init__(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+        prefix: str = "codomyrmex",
+    ):
         """Initialize the StatsD client.
 
         Args:

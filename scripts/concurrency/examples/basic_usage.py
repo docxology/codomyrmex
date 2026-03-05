@@ -372,7 +372,7 @@ class ConcurrencyScript(ScriptBase):
 
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures = [executor.submit(stress_worker, i) for i in range(workers)]
-            results = [f.result() for f in as_completed(futures)]
+            [f.result() for f in as_completed(futures)]
 
         duration = (time.perf_counter() - start_time) * 1000
 

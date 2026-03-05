@@ -107,34 +107,34 @@ except ImportError:
 
 
 __all__ = [
+    "InfomaniakAuthError",
     # Exceptions
     "InfomaniakCloudError",
-    "InfomaniakAuthError",
-    "InfomaniakNotFoundError",
-    "InfomaniakConflictError",
-    "InfomaniakQuotaExceededError",
-    "InfomaniakConnectionError",
-    "InfomaniakTimeoutError",
-    "classify_openstack_error",
-    "classify_http_error",
-    # Base classes
-    "InfomaniakOpenStackBase",
-    "InfomaniakS3Base",
-    "InfomaniakRESTBase",
-    # Authentication
-    "InfomaniakCredentials",
-    "InfomaniakS3Credentials",
-    "create_openstack_connection",
-    "create_s3_client",
     # Clients
     "InfomaniakComputeClient",
-    "InfomaniakVolumeClient",
-    "InfomaniakNetworkClient",
-    "InfomaniakObjectStorageClient",
-    "InfomaniakS3Client",
-    "InfomaniakIdentityClient",
+    "InfomaniakConflictError",
+    "InfomaniakConnectionError",
+    # Authentication
+    "InfomaniakCredentials",
     "InfomaniakDNSClient",
     "InfomaniakHeatClient",
+    "InfomaniakIdentityClient",
     "InfomaniakMeteringClient",
+    "InfomaniakNetworkClient",
     "InfomaniakNewsletterClient",
+    "InfomaniakNotFoundError",
+    "InfomaniakObjectStorageClient",
+    # Base classes
+    "InfomaniakOpenStackBase",
+    "InfomaniakQuotaExceededError",
+    "InfomaniakRESTBase",
+    "InfomaniakS3Base",
+    "InfomaniakS3Client",
+    "InfomaniakS3Credentials",
+    "InfomaniakTimeoutError",
+    "InfomaniakVolumeClient",
+    "classify_http_error",
+    "classify_openstack_error",
+    "create_openstack_connection",
+    "create_s3_client",
 ]

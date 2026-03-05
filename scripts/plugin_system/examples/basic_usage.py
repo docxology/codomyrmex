@@ -44,10 +44,9 @@ def main():
         / "plugin_system"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/plugin_system/config.yaml")
 
     setup_logging()
@@ -56,7 +55,7 @@ def main():
     # 1. Plugin Manager
     print_info("Testing PluginManager and Registry...")
     try:
-        manager = PluginManager()
+        PluginManager()
         registry = PluginRegistry()
         print_success(
             f"  PluginManager initialized. Registry has {len(registry.plugins)} plugins."

@@ -47,17 +47,17 @@ def cli_commands():
 
 
 __all__ = [
-    "WorkflowStepType",
-    "StepStatus",
-    "WorkflowStep",
-    "StepResult",
-    "WorkflowResult",
-    "Workflow",
-    "StepExecutor",
     "AssertionExecutor",
-    "WaitExecutor",
     "ScriptExecutor",
+    "StepExecutor",
+    "StepResult",
+    "StepStatus",
+    "WaitExecutor",
+    "Workflow",
+    "WorkflowResult",
     "WorkflowRunner",
+    "WorkflowStep",
+    "WorkflowStepType",
     # CLI
     "cli_commands",
 ]

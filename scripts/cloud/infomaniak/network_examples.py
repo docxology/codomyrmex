@@ -135,7 +135,7 @@ def list_loadbalancers(client):
         print()
 
 
-def create_network(client, name: str, cidr: str = None, dns: list = None):
+def create_network(client, name: str, cidr: str | None = None, dns: list | None = None):
     """Create a network with subnet."""
     print(f"\n🌐 Creating network: {name}")
 
@@ -160,7 +160,7 @@ def create_network(client, name: str, cidr: str = None, dns: list = None):
             print("   ❌ Failed to create subnet")
 
 
-def create_router(client, name: str, external_network: str = None):
+def create_router(client, name: str, external_network: str | None = None):
     """Create a router."""
     print(f"\n🔀 Creating router: {name}")
 
@@ -171,7 +171,7 @@ def create_router(client, name: str, external_network: str = None):
         print("   ❌ Failed to create router")
 
 
-def create_security_group(client, name: str, description: str = None):
+def create_security_group(client, name: str, description: str | None = None):
     """Create a security group."""
     print(f"\n🛡️  Creating security group: {name}")
 
@@ -187,8 +187,8 @@ def add_security_rule(
     sg_id: str,
     direction: str,
     protocol: str,
-    port_min: int = None,
-    port_max: int = None,
+    port_min: int | None = None,
+    port_max: int | None = None,
     cidr: str = "0.0.0.0/0",
 ):
     """Add a security group rule."""
@@ -234,10 +234,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Network Examples")

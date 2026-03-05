@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
-from codomyrmex.meme.memetics.models import Meme, Memeplex
+if TYPE_CHECKING:
+    from codomyrmex.meme.memetics.models import Meme, Memeplex
 
 
 def virality_score(meme: Meme, network_size: int = 1000) -> float:

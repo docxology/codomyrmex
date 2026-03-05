@@ -10,8 +10,7 @@ from __future__ import annotations
 
 import subprocess
 import time
-from collections.abc import Callable, Generator, Mapping, Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -22,6 +21,9 @@ from .subprocess import (
     _validate_working_directory,
     run_command,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Generator, Mapping, Sequence
 
 logger = get_logger(__name__)
 

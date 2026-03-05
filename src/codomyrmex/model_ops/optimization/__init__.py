@@ -50,19 +50,19 @@ def cli_commands():
 
 
 __all__ = [
-    # CLI integration
-    "cli_commands",
-    # Enums
-    "QuantizationType",
     "BatchingStrategy",
-    # Data classes
-    "OptimizationConfig",
-    "InferenceStats",
-    "InferenceRequest",
-    "InferenceResult",
     # Components
     "InferenceCache",
-    "RequestBatcher",
     # Core
     "InferenceOptimizer",
+    "InferenceRequest",
+    "InferenceResult",
+    "InferenceStats",
+    # Data classes
+    "OptimizationConfig",
+    # Enums
+    "QuantizationType",
+    "RequestBatcher",
+    # CLI integration
+    "cli_commands",
 ]

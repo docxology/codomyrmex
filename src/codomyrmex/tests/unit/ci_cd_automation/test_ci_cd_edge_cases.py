@@ -176,7 +176,8 @@ class TestErrorHandlingAndRetries:
         job.status = JobStatus.FAILURE
 
         # Stage should still be able to continue
-        assert job.allow_failure and job.status == JobStatus.FAILURE
+        assert job.allow_failure
+        assert job.status == JobStatus.FAILURE
 
     def test_stage_allow_failure_flag(self):
         """Test stage with allow_failure flag."""

@@ -575,7 +575,9 @@ class TestPhysicalObject:
         obj = _make_obj()
         for tag in ["a", "b", "c"]:
             obj.add_tag(tag)
-        assert obj.has_tag("a") and obj.has_tag("b") and obj.has_tag("c")
+        assert obj.has_tag("a")
+        assert obj.has_tag("b")
+        assert obj.has_tag("c")
         assert len(obj.tags) == 3
 
     def test_connections_add_and_check(self):
@@ -802,7 +804,7 @@ class TestObjectRegistry:
     def test_register_emits_created_event(self):
         reg = self._fresh_registry()
         events = []
-        reg.add_event_handler(EventType.CREATED, lambda e: events.append(e))
+        reg.add_event_handler(EventType.CREATED, events.append)
         reg.register_object(_make_obj())
         assert len(events) == 1
         assert events[0].event_type == EventType.CREATED
@@ -810,7 +812,7 @@ class TestObjectRegistry:
     def test_register_event_contains_object_info(self):
         reg = self._fresh_registry()
         events = []
-        reg.add_event_handler(EventType.CREATED, lambda e: events.append(e))
+        reg.add_event_handler(EventType.CREATED, events.append)
         reg.register_object(_make_obj(obj_id="sensor-1", obj_type=ObjectType.SENSOR))
         assert events[0].data["object_type"] == "sensor"
         assert events[0].object_id == "sensor-1"
@@ -1020,7 +1022,7 @@ class TestObjectRegistry:
     def test_event_handler(self):
         reg = self._fresh_registry()
         captured = []
-        reg.add_event_handler(EventType.CREATED, lambda e: captured.append(e))
+        reg.add_event_handler(EventType.CREATED, captured.append)
         reg.register_object(_make_obj())
         assert len(captured) == 1
         assert captured[0].event_type == EventType.CREATED
@@ -1029,8 +1031,8 @@ class TestObjectRegistry:
         reg = self._fresh_registry()
         results_a = []
         results_b = []
-        reg.add_event_handler(EventType.CREATED, lambda e: results_a.append(e))
-        reg.add_event_handler(EventType.CREATED, lambda e: results_b.append(e))
+        reg.add_event_handler(EventType.CREATED, results_a.append)
+        reg.add_event_handler(EventType.CREATED, results_b.append)
         reg.register_object(_make_obj())
         assert len(results_a) == 1
         assert len(results_b) == 1
@@ -1620,7 +1622,7 @@ class TestPhysicalObjectManager:
         mgr = self._fresh_manager()
         mgr.create_object("a", "A", ObjectType.SENSOR, 0, 0, 0)
         mgr.create_object("b", "B", ObjectType.SENSOR, 10, 0, 0)
-        cx, cy, cz = mgr.calculate_center_of_mass()
+        cx, cy, _cz = mgr.calculate_center_of_mass()
         assert cx == pytest.approx(5.0)
         assert cy == pytest.approx(0.0)
 

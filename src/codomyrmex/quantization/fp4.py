@@ -94,10 +94,7 @@ def quantize_fp4(x: np.ndarray) -> FP4Tensor:
 
     # Compute global scale
     abs_max = float(np.max(np.abs(x_flat)))
-    if abs_max < 1e-10:
-        scale = 1.0
-    else:
-        scale = abs_max / 2.0
+    scale = 1.0 if abs_max < 1e-10 else abs_max / 2.0
 
     # Scale to [-2, 2] range
     x_scaled = x_flat / scale

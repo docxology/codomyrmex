@@ -104,7 +104,7 @@ class TelemetryScript(ScriptBase):
                 service_name=args.service_name,
                 attributes={"environment": "demo", "version": "1.0.0"},
             )
-            tracer = TraceContext.get_tracer(args.service_name)
+            TraceContext.get_tracer(args.service_name)
 
             results["trace_context"] = {
                 "service_name": args.service_name,

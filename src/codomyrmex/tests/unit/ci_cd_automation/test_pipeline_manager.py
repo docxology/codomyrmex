@@ -330,13 +330,13 @@ class TestValidatePipelineConfig:
             "stages": [],
             "triggers": ["push", "pull_request", "manual", "schedule"],
         }
-        is_valid, errors = mgr.validate_pipeline_config(config)
+        is_valid, _errors = mgr.validate_pipeline_config(config)
         assert is_valid is True
 
     def test_triggers_not_list(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         config = {"name": "p1", "stages": [], "triggers": "push"}
-        is_valid, errors = mgr.validate_pipeline_config(config)
+        is_valid, _errors = mgr.validate_pipeline_config(config)
         assert is_valid is False
 
     def test_invalid_timeout(self, tmp_path):
@@ -349,13 +349,13 @@ class TestValidatePipelineConfig:
     def test_zero_timeout(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         config = {"name": "p1", "stages": [], "timeout": 0}
-        is_valid, errors = mgr.validate_pipeline_config(config)
+        is_valid, _errors = mgr.validate_pipeline_config(config)
         assert is_valid is False
 
     def test_string_timeout(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         config = {"name": "p1", "stages": [], "timeout": "fast"}
-        is_valid, errors = mgr.validate_pipeline_config(config)
+        is_valid, _errors = mgr.validate_pipeline_config(config)
         assert is_valid is False
 
 
@@ -753,7 +753,7 @@ class TestValidateStageDependencies:
     def test_no_deps_valid(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         stages = [{"name": "a"}, {"name": "b"}]
-        is_valid, errors = mgr.validate_stage_dependencies(stages)
+        is_valid, _errors = mgr.validate_stage_dependencies(stages)
         assert is_valid is True
 
 

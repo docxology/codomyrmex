@@ -603,7 +603,7 @@ class TestInfomaniakIdentityClientExpanded:
         assert result["id"] == "ac1"
 
     def test_delete_application_credential(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.delete_application_credential("ac1") is True
 
     def test_list_roles(self):

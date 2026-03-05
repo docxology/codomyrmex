@@ -66,32 +66,32 @@ def cli_commands():
 
 
 __all__ = [
+    "Concept",
+    "ConceptType",
+    "ContextBuilder",
+    "FPFAnalyzer",
+    "FPFExporter",
+    "FPFExtractor",
+    "FPFFetcher",
+    "FPFIndex",
+    "FPFIndexer",
     # Main classes
     "FPFParser",
-    "FPFExtractor",
-    "FPFIndexer",
-    "FPFFetcher",
-    "FPFExporter",
-    "FPFVisualizer",
-    "FPFVisualizerPNG",
-    "ContextBuilder",
-    "TermAnalyzer",
-    "GraphGenerator",
-    "SectionManager",
-    "SectionExporter",
-    "SectionImporter",
-    "FPFAnalyzer",
-    "ReportGenerator",
     # Models
     "FPFSpec",
+    "FPFVisualizer",
+    "FPFVisualizerPNG",
+    "GraphGenerator",
     "Pattern",
-    "Concept",
-    "Relationship",
-    "FPFIndex",
     # Enums
     "PatternStatus",
-    "ConceptType",
+    "Relationship",
     "RelationshipType",
+    "ReportGenerator",
+    "SectionExporter",
+    "SectionImporter",
+    "SectionManager",
+    "TermAnalyzer",
     # CLI integration
     "cli_commands",
 ]
@@ -103,7 +103,7 @@ class FPFClient:
     This class provides a convenient interface for common FPF operations.
     """
 
-    def __init__(self, spec_path: str = None):
+    def __init__(self, spec_path: str | None = None):
         """Initialize the FPF client.
 
         Args:
@@ -161,7 +161,7 @@ class FPFClient:
 
         return self.spec
 
-    def search(self, query: str, filters: dict = None) -> list[Pattern]:
+    def search(self, query: str, filters: dict | None = None) -> list[Pattern]:
         """Search for patterns.
 
         Args:
@@ -211,7 +211,9 @@ class FPFClient:
 
         self.exporter.export_json(self.spec, Path(output_path))
 
-    def build_context(self, pattern_id: str = None, filters: dict = None) -> str:
+    def build_context(
+        self, pattern_id: str | None = None, filters: dict | None = None
+    ) -> str:
         """Build context string for prompt engineering.
 
         Args:

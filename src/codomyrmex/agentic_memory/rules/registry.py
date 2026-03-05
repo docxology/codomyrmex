@@ -8,9 +8,12 @@ the filesystem on every call.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .loader import RuleLoader
-from .models import Rule
+
+if TYPE_CHECKING:
+    from .models import Rule
 
 # Maps file extension → rule name in file-specific/
 _EXT_TO_RULE: dict[str, str] = {

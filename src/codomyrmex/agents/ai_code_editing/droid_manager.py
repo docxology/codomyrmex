@@ -9,9 +9,14 @@ from __future__ import annotations
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from codomyrmex.agents.droid.controller import (
+        DroidController,
+    )
 
 logger = get_logger(__name__)
 
@@ -19,16 +24,10 @@ logger = get_logger(__name__)
 # Import core droid components
 try:
     # Try relative imports first (when used as module)
-    from codomyrmex.agents.droid.controller import (
-        DroidController,
-    )
     from codomyrmex.agents.droid.todo import TodoManager
 except ImportError:
     try:
         # Try absolute imports (when run directly)
-        from codomyrmex.agents.droid.controller import (
-            DroidController,
-        )
         from codomyrmex.agents.droid.todo import TodoManager
     except ImportError as e:
         print(f"❌ Failed to import droid components: {e}")

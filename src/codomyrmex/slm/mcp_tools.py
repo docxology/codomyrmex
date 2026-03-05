@@ -7,7 +7,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(category="slm")
 def slm_generate(
-    prompt_tokens: list[int] = None,
+    prompt_tokens: list[int] | None = None,
     max_new_tokens: int = 10,
     vocab_size: int = 100,
     d_model: int = 32,

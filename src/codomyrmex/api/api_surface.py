@@ -7,8 +7,10 @@ coverage, and generates summary reports.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
-from codomyrmex.api.api_contract import APIContract, APIEndpoint
+if TYPE_CHECKING:
+    from codomyrmex.api.api_contract import APIContract, APIEndpoint
 
 
 @dataclass

@@ -93,13 +93,13 @@ Example:
 
     if args.dry_run:
         # Check if workflow supports dry-run
-        if args.workflow in ["deploy_preview"]:
+        if args.workflow == "deploy_preview":
             cmd.append("--dry-run")
 
     # Add remaining arguments
     cmd.extend(remaining)
 
-    if args.dry_run and args.workflow not in ["deploy_preview"]:
+    if args.dry_run and args.workflow != "deploy_preview":
         print(f"Would run: {' '.join(cmd)}")
         return 0
 

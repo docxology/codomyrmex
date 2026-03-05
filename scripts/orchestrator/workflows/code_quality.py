@@ -22,11 +22,15 @@ from typing import Any
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
+import contextlib
+
 from codomyrmex.orchestrator import Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> dict[str, Any]:
+def run_ruff_lint(
+    _task_results: dict | None = None, fix: bool = False
+) -> dict[str, Any]:
     """Run ruff linting."""
     cmd = ["uv", "run", "ruff", "check", "src/"]
     if fix:
@@ -43,10 +47,8 @@ def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> dict[str, An
         # Extract fixed count
         for line in result.stdout.split("\n"):
             if "Fixed" in line:
-                try:
+                with contextlib.suppress(IndexError, ValueError):
                     fixed = int(line.split()[1])
-                except (IndexError, ValueError):
-                    pass
 
     return {
         "success": result.returncode == 0,
@@ -57,7 +59,9 @@ def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> dict[str, An
     }
 
 
-def run_mypy_check(_task_results: dict = None, strict: bool = False) -> dict[str, Any]:
+def run_mypy_check(
+    _task_results: dict | None = None, strict: bool = False
+) -> dict[str, Any]:
     """Run mypy type checking."""
     cmd = ["uv", "run", "mypy", "src/codomyrmex", "--ignore-missing-imports"]
     if strict:
@@ -80,7 +84,7 @@ def run_mypy_check(_task_results: dict = None, strict: bool = False) -> dict[str
     }
 
 
-def check_code_complexity(_task_results: dict = None) -> dict[str, Any]:
+def check_code_complexity(_task_results: dict | None = None) -> dict[str, Any]:
     """Check code complexity using radon."""
     # Try radon for complexity analysis
     result = subprocess.run(
@@ -109,10 +113,8 @@ def check_code_complexity(_task_results: dict = None) -> dict[str, Any]:
     avg_complexity = None
     for line in (result.stdout or "").split("\n"):
         if "Average complexity:" in line:
-            try:
+            with contextlib.suppress(ValueError, IndexError):
                 avg_complexity = float(line.split(":")[-1].strip().split()[0])
-            except (ValueError, IndexError):
-                pass
 
     return {
         "success": True,
@@ -126,7 +128,7 @@ def check_code_complexity(_task_results: dict = None) -> dict[str, Any]:
     }
 
 
-def run_security_scan(_task_results: dict = None) -> dict[str, Any]:
+def run_security_scan(_task_results: dict | None = None) -> dict[str, Any]:
     """Run security analysis using bandit."""
     result = subprocess.run(
         ["uv", "run", "bandit", "-r", "src/codomyrmex", "-f", "json", "-q"],
@@ -170,7 +172,7 @@ def run_security_scan(_task_results: dict = None) -> dict[str, Any]:
     }
 
 
-def run_docstring_coverage(_task_results: dict = None) -> dict[str, Any]:
+def run_docstring_coverage(_task_results: dict | None = None) -> dict[str, Any]:
     """Check docstring coverage using interrogate."""
     result = subprocess.run(
         ["uv", "run", "interrogate", "src/codomyrmex", "-v", "--fail-under=0"],
@@ -202,7 +204,7 @@ def run_docstring_coverage(_task_results: dict = None) -> dict[str, Any]:
     }
 
 
-def generate_quality_report(_task_results: dict = None) -> dict[str, Any]:
+def generate_quality_report(_task_results: dict | None = None) -> dict[str, Any]:
     """Generate comprehensive quality report."""
     import datetime
 

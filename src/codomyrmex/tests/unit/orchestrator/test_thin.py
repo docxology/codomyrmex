@@ -232,7 +232,7 @@ class TestBatch:
             except PermissionError:
                 pytest.skip("ProcessPoolExecutor not available in sandbox")
             # ExecutionResult has success_count, failed_count, etc.
-            assert isinstance(result, ExecutionResult) or isinstance(result, dict)
+            assert isinstance(result, (ExecutionResult, dict))
 
     def test_batch_empty_list(self):
         """Test batch with empty list."""

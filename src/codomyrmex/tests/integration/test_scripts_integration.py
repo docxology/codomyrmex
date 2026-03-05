@@ -67,7 +67,7 @@ _HELP_SCRIPTS = {
 
 
 @pytest.mark.parametrize(
-    "script_path, expected_text",
+    ("script_path", "expected_text"),
     [pytest.param(v[0], v[1], id=k) for k, v in _HELP_SCRIPTS.items()],
 )
 def test_script_help(script_path: str, expected_text: str) -> None:

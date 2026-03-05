@@ -51,7 +51,7 @@ class CrumbCleaner:
         return os.urandom(size_bytes)
 
     def configure_blacklist(
-        self, add: list[str] = None, remove: list[str] = None
+        self, add: list[str] | None = None, remove: list[str] | None = None
     ) -> None:
         """Dynamically configure the metadata blacklist."""
         if add:

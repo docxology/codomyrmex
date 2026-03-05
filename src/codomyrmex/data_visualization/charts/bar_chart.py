@@ -23,7 +23,7 @@ def create_bar_chart(
     title: str = "Bar Chart",
     x_label: str = "Categories",
     y_label: str = "Values",
-    output_path: str = None,
+    output_path: str | None = None,
     show_plot: bool = False,
     horizontal: bool = False,
     bar_color: str = "skyblue",
@@ -81,8 +81,8 @@ class BarChart:
 
     def __init__(
         self,
-        categories: list = None,
-        values: list = None,
+        categories: list | None = None,
+        values: list | None = None,
         title: str = "Bar Chart",
         x_label: str = "Categories",
         y_label: str = "Values",
@@ -114,7 +114,7 @@ class BarChart:
         """Data."""
         return {"x": self.categories, "y": self.values}
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """
         Render the bar chart.
 

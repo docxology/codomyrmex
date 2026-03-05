@@ -228,7 +228,7 @@ class ReActChain(Chain):
 
         tool_descriptions = "\n".join(
             f"- {name}: Use this tool by writing 'Action: {name}[input]'"
-            for name in self.tools.keys()
+            for name in self.tools
         )
 
         base_prompt = f"""Answer the following question using the available tools.

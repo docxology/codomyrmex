@@ -467,7 +467,7 @@ class TestValidateDocVersions:
         # We need to temporarily override DOCUSAURUS_ROOT_DIR
         # Instead, we test with the real dirs -- the function uses DOCUSAURUS_ROOT_DIR
         # We just ensure it returns valid structure
-        is_valid, errors, warnings = mod.validate_doc_versions()
+        is_valid, _errors, _warnings = mod.validate_doc_versions()
         # In the real repo the aggregated docs might not exist, so warnings expected
         assert isinstance(is_valid, bool)
 

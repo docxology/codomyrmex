@@ -89,7 +89,7 @@ def list_records(client, zone_id: str):
 
 
 def create_zone(
-    client, name: str, email: str, ttl: int = 3600, description: str = None
+    client, name: str, email: str, ttl: int = 3600, description: str | None = None
 ):
     """Create a DNS zone."""
     print(f"\n🌐 Creating zone: {name}")
@@ -122,7 +122,7 @@ def create_record(
     record_type: str,
     values: list,
     ttl: int = 3600,
-    description: str = None,
+    description: str | None = None,
 ):
     """Create a DNS record."""
     print(f"\n📝 Creating record: {name} ({record_type})")
@@ -145,7 +145,11 @@ def create_record(
 
 
 def update_record(
-    client, zone_id: str, record_id: str, values: list = None, ttl: int = None
+    client,
+    zone_id: str,
+    record_id: str,
+    values: list | None = None,
+    ttl: int | None = None,
 ):
     """Update a DNS record."""
     print(f"\n✏️  Updating record: {record_id}")
@@ -207,10 +211,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak DNS Examples")

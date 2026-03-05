@@ -151,7 +151,7 @@ class TestConfigSchemaValidation:
         assert schema.description == ""
 
     @pytest.mark.parametrize(
-        "data,expected_valid",
+        ("data", "expected_valid"),
         [
             ({"name": "ok"}, True),
             ({}, False),

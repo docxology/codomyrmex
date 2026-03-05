@@ -158,7 +158,7 @@ class SearchIndex:
                 scores[doc_id] += 1.0
 
         # Title bonus
-        for doc_id, _score in scores.items():
+        for doc_id in scores:
             entry = self._docs[doc_id]
             title_tokens = set(self._tokenize(entry.title))
             overlap = len(title_tokens & set(query_tokens))
@@ -202,9 +202,8 @@ class SearchIndex:
         # Find the first occurrence of any query token
         for token in query_tokens:
             pos = lower.find(token)
-            if pos >= 0:
-                if best_pos == -1 or pos < best_pos:
-                    best_pos = pos
+            if pos >= 0 and (best_pos == -1 or pos < best_pos):
+                best_pos = pos
 
         if best_pos == -1:
             snippet = content[:max_len]

@@ -22,11 +22,13 @@ from typing import Any
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
+import contextlib
+
 from codomyrmex.orchestrator import Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-async def list_outdated_packages(_task_results: dict = None) -> dict[str, Any]:
+async def list_outdated_packages(_task_results: dict | None = None) -> dict[str, Any]:
     """List outdated packages using pip."""
     result = subprocess.run(
         ["uv", "pip", "list", "--outdated", "--format=json"],
@@ -38,10 +40,8 @@ async def list_outdated_packages(_task_results: dict = None) -> dict[str, Any]:
 
     outdated = []
     if result.returncode == 0 and result.stdout.strip():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             outdated = json.loads(result.stdout)
-        except json.JSONDecodeError:
-            pass
 
     return {
         "success": result.returncode == 0,
@@ -50,7 +50,9 @@ async def list_outdated_packages(_task_results: dict = None) -> dict[str, Any]:
     }
 
 
-async def check_security_vulnerabilities(_task_results: dict = None) -> dict[str, Any]:
+async def check_security_vulnerabilities(
+    _task_results: dict | None = None,
+) -> dict[str, Any]:
     """Check for known security vulnerabilities."""
     # Try pip-audit or safety
     result = subprocess.run(
@@ -80,7 +82,7 @@ async def check_security_vulnerabilities(_task_results: dict = None) -> dict[str
     }
 
 
-async def check_dependency_tree(_task_results: dict = None) -> dict[str, Any]:
+async def check_dependency_tree(_task_results: dict | None = None) -> dict[str, Any]:
     """Analyze dependency tree for issues."""
     result = subprocess.run(
         ["uv", "pip", "check"],
@@ -102,7 +104,9 @@ async def check_dependency_tree(_task_results: dict = None) -> dict[str, Any]:
     }
 
 
-async def verify_requirements_files(_task_results: dict = None) -> dict[str, Any]:
+async def verify_requirements_files(
+    _task_results: dict | None = None,
+) -> dict[str, Any]:
     """Verify requirements files exist and are valid."""
     req_files = list(project_root.glob("requirements*.txt"))
     pyproject = project_root / "pyproject.toml"
@@ -152,7 +156,7 @@ def _extract_result(obj) -> dict:
 
 
 async def generate_dependency_report(
-    task_results: dict = None, _task_results: dict = None
+    task_results: dict | None = None, _task_results: dict | None = None
 ) -> dict[str, Any]:
     """Generate comprehensive dependency report."""
     # Handle both parameter naming conventions

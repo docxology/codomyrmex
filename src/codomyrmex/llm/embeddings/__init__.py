@@ -537,22 +537,22 @@ def chunk_text(
 
 
 __all__ = [
-    # Enums
-    "EmbeddingModel",
     # Data classes
     "Embedding",
-    "SimilarityResult",
-    # Providers
-    "EmbeddingProvider",
-    "TestEmbeddingProvider",
     # Core classes
     "EmbeddingCache",
     "EmbeddingIndex",
+    # Enums
+    "EmbeddingModel",
+    # Providers
+    "EmbeddingProvider",
     "EmbeddingService",
-    # Similarity functions
-    "cosine_similarity",
-    "euclidean_distance",
-    "dot_product",
+    "SimilarityResult",
+    "TestEmbeddingProvider",
     # Utilities
     "chunk_text",
+    # Similarity functions
+    "cosine_similarity",
+    "dot_product",
+    "euclidean_distance",
 ]

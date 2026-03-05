@@ -38,7 +38,7 @@ def get_shell_info() -> dict:
     }
 
 
-def list_processes(filter_text: str = None) -> list:
+def list_processes(filter_text: str | None = None) -> list:
     """List running processes."""
     try:
         result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
@@ -85,10 +85,9 @@ def main():
         / "terminal_interface"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/terminal_interface/config.yaml")
 
     parser = argparse.ArgumentParser(description="Terminal utilities")

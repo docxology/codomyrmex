@@ -90,7 +90,7 @@ def update_init_file(module_name: str, info: dict) -> bool:
         insert_idx = len(lines)
 
         for i, line in enumerate(lines):
-            if line.startswith("__all__") or line.startswith("__version__"):
+            if line.startswith(("__all__", "__version__")):
                 insert_idx = i
                 break
 
@@ -132,10 +132,9 @@ def main():
         / "utils"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/utils/config.yaml")
 
     """Main execution."""

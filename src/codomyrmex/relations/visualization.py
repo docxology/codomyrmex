@@ -10,9 +10,10 @@ Provides:
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .crm.crm import ContactManager
+if TYPE_CHECKING:
+    from .crm.crm import ContactManager
 
 
 def render_social_graph(cm: ContactManager) -> dict[str, Any]:

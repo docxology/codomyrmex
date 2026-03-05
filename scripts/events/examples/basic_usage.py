@@ -47,10 +47,9 @@ def main():
         / "events"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/events/config.yaml")
 
     setup_logging()
@@ -58,7 +57,7 @@ def main():
 
     # 1. Event Bus
     print_info("Testing Event Bus...")
-    bus = get_event_bus()
+    get_event_bus()
 
     received = []
 
@@ -81,7 +80,7 @@ def main():
 
     # 2. Event Logger
     print_info("Testing Event Logger...")
-    logger = get_event_logger()
+    get_event_logger()
     stats = get_event_stats()
     if isinstance(stats, dict):
         print_success("  Event Logger and Stats functional.")

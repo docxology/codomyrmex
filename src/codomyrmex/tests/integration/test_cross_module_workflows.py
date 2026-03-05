@@ -6,6 +6,7 @@ This integration test validates end-to-end workflows that span multiple modules,
 ensuring that different components work together seamlessly in complex scenarios.
 """
 
+import contextlib
 import os
 import re
 import tempfile
@@ -93,10 +94,8 @@ except ImportError:
 
 # Set up logging for tests
 if LOGGING_AVAILABLE and callable(setup_logging):
-    try:
+    with contextlib.suppress(Exception):
         setup_logging()
-    except Exception:
-        pass
 
 logger = get_logger(__name__) if LOGGING_AVAILABLE else None
 

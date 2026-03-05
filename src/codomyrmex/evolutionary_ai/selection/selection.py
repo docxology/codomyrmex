@@ -10,9 +10,10 @@ from __future__ import annotations
 
 import random
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar
 
-from codomyrmex.evolutionary_ai.genome.genome import Individual
+if TYPE_CHECKING:
+    from codomyrmex.evolutionary_ai.genome.genome import Individual
 
 T = TypeVar("T")
 

@@ -7,9 +7,10 @@ Uses a directed graph (dict-of-sets) so we have zero dependency on
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.agentic_memory.obsidian.models import Note, Wikilink
+if TYPE_CHECKING:
+    from codomyrmex.agentic_memory.obsidian.models import Note, Wikilink
 
 # ── lightweight directed graph ───────────────────────────────────────
 
@@ -70,7 +71,7 @@ class _DiGraph:
 def build_link_graph(vault: Any) -> _DiGraph:
     """Build a directed link graph from vault notes."""
     g = _DiGraph()
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         title = note.title
         g.add_node(title)
         for link in note.links:
@@ -81,7 +82,7 @@ def build_link_graph(vault: Any) -> _DiGraph:
 def get_backlinks(vault: Any, title: str) -> list[Note]:
     """Return notes that link *to* the given title."""
     results: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         if note.title == title:
             continue
         for link in note.links:
@@ -108,7 +109,7 @@ def find_orphans(vault: Any) -> list[Note]:
     """Return notes with no inbound or outbound links."""
     g = build_link_graph(vault)
     orphans: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         title = note.title
         has_outgoing = len(g.successors(title)) > 0
         has_incoming = len(g.predecessors(title)) > 0
@@ -121,7 +122,7 @@ def find_dead_ends(vault: Any) -> list[Note]:
     """Return notes with no outgoing links (dead ends / leaf notes)."""
     g = build_link_graph(vault)
     dead_ends: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         if len(g.successors(note.title)) == 0 and len(g.predecessors(note.title)) > 0:
             dead_ends.append(note)
     return dead_ends
@@ -134,7 +135,7 @@ def find_hubs(vault: Any, *, min_links: int = 5) -> list[tuple[Note, int]]:
     """
     g = build_link_graph(vault)
     hubs: list[tuple[Note, int]] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         degree = g.degree(note.title)
         if degree >= min_links:
             hubs.append((note, degree))
@@ -147,7 +148,7 @@ def find_broken_links(vault: Any) -> list[tuple[Note, Wikilink]]:
     does not exist in the vault."""
     results: list[tuple[Note, Wikilink]] = []
     existing_titles = {n.title for n in vault.notes.values()}
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         for link in note.links:
             if link.target not in existing_titles:
                 results.append((note, link))
@@ -235,8 +236,8 @@ def get_shortest_path(
         neighbors = set(g.successors(current)) | set(g.predecessors(current))
         for neighbor in neighbors:
             if neighbor == target:
-                return path + [neighbor]
+                return [*path, neighbor]
             if neighbor not in visited:
                 visited.add(neighbor)
-                queue.append(path + [neighbor])
+                queue.append([*path, neighbor])
     return None

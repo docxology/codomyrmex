@@ -31,25 +31,25 @@ from codomyrmex.crypto.protocols.zero_knowledge import (
 )
 
 __all__ = [
+    # Secret sharing
+    "PRIME",
     # Key exchange
     "DHKeyPair",
     "ECDHKeyPair",
+    # Zero knowledge
+    "SchnorrProof",
+    "Share",
     "dh_compute_shared_secret",
     "dh_generate_keypair",
     "dh_generate_parameters",
     "ecdh_compute_shared_secret",
     "ecdh_generate_keypair",
-    # Secret sharing
-    "PRIME",
-    "Share",
     "generate_share_commitment",
-    "reconstruct_secret",
-    "split_secret",
-    "verify_share",
-    # Zero knowledge
-    "SchnorrProof",
     "pedersen_commit",
     "pedersen_verify",
+    "reconstruct_secret",
     "schnorr_prove",
     "schnorr_verify",
+    "split_secret",
+    "verify_share",
 ]

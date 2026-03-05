@@ -9,6 +9,7 @@ Provider API calls (network) are skipped via module-level env-var guards.
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -32,6 +33,9 @@ from codomyrmex.llm.providers.models import (
     ProviderConfig,
     ProviderType,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 # Skip guard for live API tests
 _has_openrouter_key = bool(os.getenv("OPENROUTER_API_KEY"))
@@ -251,7 +255,6 @@ class TestLLMProviderBase:
 
     def _make_provider(self, default_model: str = "model-x"):
         """Create a minimal concrete provider for testing base class methods."""
-        from collections.abc import Iterator
 
         from codomyrmex.llm.providers.base import LLMProvider
 
@@ -311,7 +314,6 @@ class TestLLMProviderBase:
     def test_get_model_returns_config_default(self):
         """get_model(None) returns config.default_model when set."""
         cfg = ProviderConfig(default_model="claude-3")
-        from collections.abc import Iterator
 
         from codomyrmex.llm.providers.base import LLMProvider
 

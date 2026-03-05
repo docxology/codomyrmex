@@ -233,10 +233,7 @@ class RepositoryManager:
             logger.error(f"Repository '{full_name}' not found in library")
             return False
 
-        if custom_path:
-            local_path = Path(custom_path)
-        else:
-            local_path = self.get_local_path(repo)
+        local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         local_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -316,10 +313,7 @@ class RepositoryManager:
             logger.error(f"Repository '{full_name}' not found in library")
             return False
 
-        if custom_path:
-            local_path = Path(custom_path)
-        else:
-            local_path = self.get_local_path(repo)
+        local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         if not is_git_repository(str(local_path)):
             logger.error(f"Repository not found locally: {local_path}")
@@ -359,10 +353,7 @@ class RepositoryManager:
             logger.error(f"Repository '{full_name}' not found in library")
             return None
 
-        if custom_path:
-            local_path = Path(custom_path)
-        else:
-            local_path = self.get_local_path(repo)
+        local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         if not is_git_repository(str(local_path)):
             return {"error": "Repository not found locally", "path": str(local_path)}
@@ -505,10 +496,7 @@ class RepositoryManager:
             return False
 
         repo = self.get_repository(full_name)
-        if custom_path:
-            local_path = Path(custom_path)
-        else:
-            local_path = self.get_local_path(repo)
+        local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         # Then push
         logger.info(f"Syncing (pushing) {repo.full_name}...")
@@ -529,10 +517,7 @@ class RepositoryManager:
         if not repo:
             return False
 
-        if custom_path:
-            local_path = Path(custom_path)
-        else:
-            local_path = self.get_local_path(repo)
+        local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         if not is_git_repository(str(local_path)):
             return False

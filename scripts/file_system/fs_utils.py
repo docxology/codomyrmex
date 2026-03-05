@@ -39,10 +39,9 @@ def main():
         / "file_system"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/file_system/config.yaml")
 
     parser = argparse.ArgumentParser(description="Codomyrmex File System Utilities")

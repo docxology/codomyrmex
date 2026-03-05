@@ -569,7 +569,7 @@ class TestInfomaniakSwiftClientExpanded:
         mc.object_store.set_container_metadata.assert_called_once()
 
     def test_set_container_write_acl(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.set_container_write_acl("mybucket", "user:admin") is True
 
     def test_list_containers_error(self):

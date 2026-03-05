@@ -21,11 +21,11 @@ def create_pie_chart(
     labels: list,
     sizes: list,
     title: str = "Pie Chart",
-    output_path: str = None,
+    output_path: str | None = None,
     show_plot: bool = False,
     autopct: str = "%1.1f%%",
     startangle: int = 90,
-    explode: list = None,  # e.g., [0, 0.1, 0, 0] to explode the 2nd slice
+    explode: list | None = None,  # e.g., [0, 0.1, 0, 0] to explode the 2nd slice
     theme=None,
     figure_size: tuple = DEFAULT_FIGURE_SIZE,
 ):
@@ -92,12 +92,12 @@ class PieChart:
 
     def __init__(
         self,
-        labels: list = None,
-        sizes: list = None,
+        labels: list | None = None,
+        sizes: list | None = None,
         title: str = "Pie Chart",
         autopct: str = "%1.1f%%",
         startangle: int = 90,
-        explode: list = None,
+        explode: list | None = None,
     ):
         """
         Initialize a pie chart.
@@ -117,7 +117,7 @@ class PieChart:
         self.startangle = startangle
         self.explode = explode
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """
         Render the pie chart.
 

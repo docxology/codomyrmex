@@ -22,7 +22,7 @@ class TestIntegrationBus:
     def test_emit_and_subscribe(self) -> None:
         bus = IntegrationBus()
         received: list[IntegrationEvent] = []
-        bus.subscribe("build.done", lambda e: received.append(e))
+        bus.subscribe("build.done", received.append)
         bus.emit("build.done", source="ci")
         assert len(received) == 1
         assert received[0].source == "ci"
@@ -68,14 +68,14 @@ class TestModuleConnector:
 
     def test_singleton(self) -> None:
         mc = ModuleConnector()
-        mc.register("svc", lambda: object())
+        mc.register("svc", object)
         a = mc.resolve("svc")
         b = mc.resolve("svc")
         assert a is b
 
     def test_non_singleton(self) -> None:
         mc = ModuleConnector()
-        mc.register("svc", lambda: object(), singleton=False)
+        mc.register("svc", object, singleton=False)
         a = mc.resolve("svc")
         b = mc.resolve("svc")
         assert a is not b

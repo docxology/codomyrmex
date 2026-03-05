@@ -37,7 +37,7 @@ def estimate_time(tasks: list) -> dict:
     }
 
 
-def create_schedule(tasks: list, start_date: datetime = None) -> list:
+def create_schedule(tasks: list, start_date: datetime | None = None) -> list:
     """Create a schedule from tasks."""
     start = start_date or datetime.now()
     schedule = []
@@ -71,10 +71,9 @@ def main():
         / "logistics"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/logistics/config.yaml")
 
     parser = argparse.ArgumentParser(description="Logistics utilities")
@@ -123,10 +122,7 @@ def main():
         print(f"\n   Total: {result['total_hours']}h ({result['total_days']} days)")
 
     elif args.command == "schedule":
-        if args.file:
-            tasks = json.loads(Path(args.file).read_text())
-        else:
-            tasks = sample_tasks
+        tasks = json.loads(Path(args.file).read_text()) if args.file else sample_tasks
 
         schedule = create_schedule(tasks)
         print("📅 Schedule:\n")

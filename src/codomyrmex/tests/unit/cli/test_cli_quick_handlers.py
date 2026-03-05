@@ -70,13 +70,13 @@ class TestHandleQuickRun:
             print("hello")
         """,
         )
-        result, output = _capture_stdout(handle_quick_run, str(script))
+        result, _output = _capture_stdout(handle_quick_run, str(script))
         assert result is True
 
     def test_run_missing_file(self, tmp_path):
         """Pass a nonexistent .py path -- should return False gracefully."""
         missing = tmp_path / "does_not_exist.py"
-        result, output = _capture_stdout(handle_quick_run, str(missing))
+        result, _output = _capture_stdout(handle_quick_run, str(missing))
         assert result is False
 
     def test_run_with_args(self, tmp_path):
@@ -99,13 +99,13 @@ class TestHandleQuickRun:
         inner.mkdir()
         _write_script(inner / "a.py", 'print("a")\n')
         _write_script(inner / "b.py", 'print("b")\n')
-        result, output = _capture_stdout(handle_quick_run, str(subdir))
+        result, _output = _capture_stdout(handle_quick_run, str(subdir))
         assert isinstance(result, bool)
 
     def test_run_with_verbose(self, tmp_path):
         """verbose=True should still succeed."""
         script = _write_script(tmp_path / "verb.py", 'print("verbose")\n')
-        result, output = _capture_stdout(handle_quick_run, str(script), verbose=True)
+        result, _output = _capture_stdout(handle_quick_run, str(script), verbose=True)
         assert result is True
 
     def test_run_script_with_exit_code_1(self, tmp_path):
@@ -117,7 +117,7 @@ class TestHandleQuickRun:
             sys.exit(1)
         """,
         )
-        result, output = _capture_stdout(handle_quick_run, str(script))
+        result, _output = _capture_stdout(handle_quick_run, str(script))
         assert result is False
 
     def test_run_timeout_exceeded(self, tmp_path):
@@ -129,7 +129,7 @@ class TestHandleQuickRun:
             time.sleep(30)
         """,
         )
-        result, output = _capture_stdout(handle_quick_run, str(script), timeout=1)
+        result, _output = _capture_stdout(handle_quick_run, str(script), timeout=1)
         assert result is False
 
     def test_run_unknown_target(self, tmp_path):
@@ -140,13 +140,13 @@ class TestHandleQuickRun:
 
     def test_run_module_name_target(self):
         """A bare name without dots or slashes tries module demo path."""
-        result, output = _capture_stdout(handle_quick_run, "nonexistent_module_zzz")
+        result, _output = _capture_stdout(handle_quick_run, "nonexistent_module_zzz")
         assert isinstance(result, bool)
 
     def test_run_glob_pattern_no_match(self, tmp_path):
         """Glob pattern matching zero scripts returns False."""
         pattern = str(tmp_path / "*.py")
-        result, output = _capture_stdout(handle_quick_run, pattern)
+        result, _output = _capture_stdout(handle_quick_run, pattern)
         assert result is False
 
 
@@ -170,7 +170,7 @@ class TestHandleQuickPipe:
 
     def test_pipe_single_command(self):
         """A single command in the pipe works."""
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_pipe,
             ["echo single"],
         )
@@ -178,7 +178,7 @@ class TestHandleQuickPipe:
 
     def test_pipe_stop_on_error_true(self):
         """First command fails and stop_on_error=True stops the pipe."""
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_pipe,
             ["false", "echo should_not_run"],
             stop_on_error=True,
@@ -187,7 +187,7 @@ class TestHandleQuickPipe:
 
     def test_pipe_stop_on_error_false(self):
         """First command fails, stop_on_error=False lets second run."""
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_pipe,
             ["false", "echo continued"],
             stop_on_error=False,
@@ -197,7 +197,7 @@ class TestHandleQuickPipe:
     def test_pipe_empty_commands(self):
         """Empty list should handle gracefully (no crash)."""
         try:
-            result, output = _capture_stdout(handle_quick_pipe, [])
+            result, _output = _capture_stdout(handle_quick_pipe, [])
             assert isinstance(result, bool)
         except Exception:
             # Workflow with 0 tasks may raise; that is acceptable
@@ -205,7 +205,7 @@ class TestHandleQuickPipe:
 
     def test_pipe_success_output_contains_steps(self):
         """Output should reference step counts."""
-        result, output = _capture_stdout(
+        _result, output = _capture_stdout(
             handle_quick_pipe,
             ["echo a", "echo b", "echo c"],
         )
@@ -231,7 +231,7 @@ class TestHandleQuickBatch:
         for i in range(3):
             s = _write_script(tmp_path / f"s{i}.py", f'print("script {i}")\n')
             scripts.append(str(s))
-        result, output = _capture_stdout(handle_quick_batch, scripts, workers=2)
+        result, _output = _capture_stdout(handle_quick_batch, scripts, workers=2)
         assert isinstance(result, bool)
 
     def test_batch_workers_1(self, tmp_path):
@@ -243,7 +243,7 @@ class TestHandleQuickBatch:
     def test_batch_verbose(self, tmp_path):
         """verbose=True should produce per-target output lines."""
         s = _write_script(tmp_path / "verb.py", 'print("v")\n')
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_batch,
             [str(s)],
             verbose=True,
@@ -265,7 +265,7 @@ class TestHandleQuickBatch:
             time.sleep(30)
         """,
         )
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_batch,
             [str(s)],
             timeout=1,
@@ -284,7 +284,7 @@ class TestHandleQuickBatch:
 
     def test_batch_nonexistent_target(self, tmp_path):
         """Batch ignores targets that are not files or directories."""
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_batch,
             [str(tmp_path / "ghost.py")],
         )
@@ -311,7 +311,7 @@ class TestHandleQuickChain:
         """Two passing scripts chain successfully."""
         a = _write_script(tmp_path / "a.py", 'print("a")\n')
         b = _write_script(tmp_path / "b.py", 'print("b")\n')
-        result, output = _capture_stdout(handle_quick_chain, [str(a), str(b)])
+        result, _output = _capture_stdout(handle_quick_chain, [str(a), str(b)])
         assert result is True
 
     def test_chain_continue_on_error_false(self, tmp_path):
@@ -324,7 +324,7 @@ class TestHandleQuickChain:
         """,
         )
         ok = _write_script(tmp_path / "ok.py", 'print("ok")\n')
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_chain,
             [str(fail), str(ok)],
             continue_on_error=False,
@@ -353,7 +353,7 @@ class TestHandleQuickChain:
 
     def test_chain_missing_script_stops(self, tmp_path):
         """Non-existent script in chain triggers stop when continue=False."""
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_chain,
             [str(tmp_path / "nope.py")],
             continue_on_error=False,
@@ -363,7 +363,7 @@ class TestHandleQuickChain:
     def test_chain_missing_script_continues(self, tmp_path):
         """Non-existent script in chain continues when continue=True."""
         ok = _write_script(tmp_path / "ok.py", 'print("ok")\n')
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_chain,
             [str(tmp_path / "nope.py"), str(ok)],
             continue_on_error=True,
@@ -372,7 +372,7 @@ class TestHandleQuickChain:
 
     def test_chain_empty(self):
         """Empty chain list should not crash."""
-        result, output = _capture_stdout(handle_quick_chain, [])
+        result, _output = _capture_stdout(handle_quick_chain, [])
         assert isinstance(result, bool)
 
     def test_chain_passes_result_via_env(self, tmp_path):
@@ -389,7 +389,7 @@ class TestHandleQuickChain:
             print("second ok")
         """,
         )
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_chain,
             [str(first), str(second)],
         )
@@ -459,7 +459,7 @@ class TestHandleQuickWorkflow:
         )
         # The orchestration engine import will likely fail or the engine
         # will reject the definition.  Either way, we get False.
-        result, output = _capture_stdout(handle_quick_workflow, str(defn))
+        result, _output = _capture_stdout(handle_quick_workflow, str(defn))
         assert result is False
 
     @pytest.mark.skipif(
@@ -469,7 +469,7 @@ class TestHandleQuickWorkflow:
         """Malformed YAML file should return False."""
         bad = tmp_path / "bad.yaml"
         bad.write_text(":\n  - :\n    bad: [")
-        result, output = _capture_stdout(handle_quick_workflow, str(bad))
+        result, _output = _capture_stdout(handle_quick_workflow, str(bad))
         assert result is False
 
     @pytest.mark.skipif(True, reason="requires orchestration engine infrastructure")
@@ -484,7 +484,7 @@ class TestHandleQuickWorkflow:
                 }
             )
         )
-        result, output = _capture_stdout(handle_quick_workflow, str(defn))
+        result, _output = _capture_stdout(handle_quick_workflow, str(defn))
         assert isinstance(result, bool)
 
     @pytest.mark.skipif(True, reason="requires orchestration engine infrastructure")
@@ -492,7 +492,7 @@ class TestHandleQuickWorkflow:
         """Params dict passed to workflow engine."""
         defn = tmp_path / "paramwf.json"
         defn.write_text(json.dumps({"name": "paramwf", "steps": []}))
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_workflow,
             str(defn),
             params='{"key":"val"}',
@@ -768,7 +768,7 @@ class TestEdgeCases:
         inner.mkdir()
         _write_script(inner / "x.py", 'print("x")\n')
         _write_script(inner / "y.py", 'print("y")\n')
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_run,
             str(subdir),
             parallel=True,
@@ -784,7 +784,7 @@ class TestEdgeCases:
             time.sleep(30)
         """,
         )
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_chain,
             [str(slow)],
             timeout=1,
@@ -800,7 +800,7 @@ class TestEdgeCases:
 
     def test_chain_all_missing_continue(self, tmp_path):
         """All scripts missing with continue_on_error=True."""
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_chain,
             [str(tmp_path / "a.py"), str(tmp_path / "b.py")],
             continue_on_error=True,
@@ -809,7 +809,7 @@ class TestEdgeCases:
 
     def test_pipe_with_env_command(self):
         """Pipe a command that reads environment (env is a real command)."""
-        result, output = _capture_stdout(
+        result, _output = _capture_stdout(
             handle_quick_pipe,
             ["echo TESTVAL"],
         )

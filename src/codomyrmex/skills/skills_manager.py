@@ -155,13 +155,13 @@ class SkillsManager:
                     "name": name,
                     "metadata": self.registry.get_skill_metadata(category, name),
                 }
-                for name in skills.keys()
+                for name in skills
             ]
 
         # Return all skills
         results = []
         for cat, skills in index.items():
-            for name in skills.keys():
+            for name in skills:
                 results.append(
                     {
                         "category": cat,

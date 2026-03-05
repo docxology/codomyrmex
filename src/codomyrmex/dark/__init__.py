@@ -70,9 +70,9 @@ def cli_commands():
 
 
 __all__ = [
-    "__version__",
-    "pdf",
     "PDF_AVAILABLE",
+    "__version__",
     # CLI integration
     "cli_commands",
+    "pdf",
 ]

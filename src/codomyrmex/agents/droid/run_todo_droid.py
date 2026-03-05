@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import sys
 import time
-from collections.abc import Callable, Iterable
+from typing import TYPE_CHECKING
 
 from codomyrmex.agents.droid.controller import (
     DroidController,
@@ -12,6 +12,9 @@ from codomyrmex.agents.droid.controller import (
 )
 from codomyrmex.agents.droid.todo import TodoItem, TodoManager
 from codomyrmex.logging_monitoring import get_logger, setup_logging
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
 
 setup_logging()
 logger = get_logger(__name__)

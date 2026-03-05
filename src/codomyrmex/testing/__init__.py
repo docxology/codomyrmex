@@ -66,28 +66,28 @@ def cli_commands():
 
 
 __all__ = [
-    "chaos",
-    "workflow",
-    # CLI integration
-    "cli_commands",
-    # Generators
-    "GeneratorStrategy",
-    "IntGenerator",
-    "FloatGenerator",
-    "StringGenerator",
-    "ListGenerator",
     "DictGenerator",
-    "OneOfGenerator",
-    # Property testing
-    "PropertyTestResult",
-    "property_test",
-    # Fuzzing
-    "FuzzingStrategy",
-    "FuzzResult",
-    "Fuzzer",
     # Fixtures
     "Fixture",
     "FixtureManager",
-    "fixture",
+    "FloatGenerator",
+    "FuzzResult",
+    "Fuzzer",
+    # Fuzzing
+    "FuzzingStrategy",
+    # Generators
+    "GeneratorStrategy",
+    "IntGenerator",
+    "ListGenerator",
+    "OneOfGenerator",
+    # Property testing
+    "PropertyTestResult",
+    "StringGenerator",
     "TestDataFactory",
+    "chaos",
+    # CLI integration
+    "cli_commands",
+    "fixture",
+    "property_test",
+    "workflow",
 ]

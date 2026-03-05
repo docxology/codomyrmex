@@ -7,11 +7,13 @@ verifying that handler outputs are deterministic.
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.events.event_store import EventStore, StreamEvent
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from codomyrmex.events.event_store import EventStore, StreamEvent
 
 
 @dataclass

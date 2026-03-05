@@ -109,7 +109,7 @@ class EvalHarness:
     Runs a model function against multiple tasks and reports metrics.
     """
 
-    def __init__(self, model_fn: Callable[[str], str] = None):
+    def __init__(self, model_fn: Callable[[str], str] | None = None):
         """Initialize the harness.
 
         Args:

@@ -116,7 +116,7 @@ def resolve_path(
 ) -> tuple[bool, Path | None]:
     """Resolve a relative path and check if it exists."""
     try:
-        if relative_path.startswith("http://") or relative_path.startswith("https://"):
+        if relative_path.startswith(("http://", "https://")):
             return (True, None)  # External links
 
         # Handle relative paths
@@ -124,7 +124,7 @@ def resolve_path(
             levels_up = relative_path.count("../")
             current_dir = base_path.parent
             for _ in range(levels_up):
-                if current_dir == repo_root or current_dir == current_dir.parent:
+                if current_dir in (repo_root, current_dir.parent):
                     break
                 current_dir = current_dir.parent
             while relative_path.startswith("../"):

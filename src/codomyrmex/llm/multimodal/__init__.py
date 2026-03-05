@@ -54,20 +54,20 @@ def cli_commands():
 
 
 __all__ = [
-    # CLI integration
-    "cli_commands",
+    "AudioContent",
+    "AudioFormat",
+    "AudioProcessor",
+    "ImageContent",
+    "ImageFormat",
+    "ImageProcessor",
+    "MediaContent",
     # Models
     "MediaType",
-    "ImageFormat",
-    "AudioFormat",
-    "MediaContent",
-    "ImageContent",
-    "AudioContent",
     "MultimodalMessage",
-    # Processors
-    "MultimodalProcessor",
-    "ImageProcessor",
-    "AudioProcessor",
     # Builder
     "MultimodalMessageBuilder",
+    # Processors
+    "MultimodalProcessor",
+    # CLI integration
+    "cli_commands",
 ]

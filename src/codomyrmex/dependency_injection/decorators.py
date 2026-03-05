@@ -22,8 +22,10 @@ from __future__ import annotations
 
 import functools
 import inspect
-from collections.abc import Callable
-from typing import Any, TypeVar, get_type_hints
+from typing import TYPE_CHECKING, Any, TypeVar, get_type_hints
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 T = TypeVar("T")
 
@@ -166,7 +168,7 @@ def inject(fn: Callable[..., Any]) -> Callable[..., Any]:
     sig = inspect.signature(fn)
     injectable_params: dict[str, type] = {}
 
-    for name, _param in sig.parameters.items():
+    for name in sig.parameters:
         if name == "self":
             continue
         if name == "return":

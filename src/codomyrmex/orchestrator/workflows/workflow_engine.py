@@ -7,14 +7,16 @@ from __future__ import annotations
 
 import time
 import uuid
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.exceptions.orchestration import WorkflowError
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.utils.graph import kahn_topological_sort
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

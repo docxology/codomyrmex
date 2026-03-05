@@ -39,10 +39,9 @@ def main():
     config_path = (
         Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/llm/config.yaml")
 
     setup_logging()
@@ -57,9 +56,9 @@ def main():
     # 2. Ollama Components
     print_info("Testing Ollama components...")
     try:
-        ollama = OllamaManager(auto_start_server=False)
-        runner = ModelRunner(config=config)
-        output = OutputManager()
+        OllamaManager(auto_start_server=False)
+        ModelRunner(config=config)
+        OutputManager()
         print_success("  Ollama components (Manager, Runner, Output) initialized.")
     except Exception as e:
         print_info(f"  Ollama check note: {e}")
@@ -67,8 +66,8 @@ def main():
     # 3. Fabric Components
     print_info("Testing Fabric components...")
     try:
-        fabric = FabricManager()
-        orch = FabricOrchestrator()
+        FabricManager()
+        FabricOrchestrator()
         print_success("  Fabric components (Manager, Orchestrator) initialized.")
     except Exception as e:
         print_info(f"  Fabric check note: {e}")

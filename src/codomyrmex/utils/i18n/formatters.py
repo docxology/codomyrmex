@@ -57,7 +57,7 @@ class NumberFormatter:
         fmt = cls.FORMATS.get(locale.language, cls.FORMATS["en"])
 
         if decimals == 0:
-            int_part = str(int(round(number)))
+            int_part = str(round(number))
             dec_part = ""
         else:
             parts = f"{number:.{decimals}f}".split(".")

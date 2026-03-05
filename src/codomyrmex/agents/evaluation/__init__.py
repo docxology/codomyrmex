@@ -516,20 +516,20 @@ def create_basic_test_suite() -> list[TestCase]:
 
 
 __all__ = [
-    # Enums
-    "MetricType",
-    # Data classes
-    "EvalResult",
-    "TestCase",
-    "BenchmarkResult",
-    # Scorers
-    "Scorer",
-    "ExactMatchScorer",
-    "ContainsScorer",
-    "LengthScorer",
-    "CompositeScorer",
     # Main class
     "AgentBenchmark",
+    "BenchmarkResult",
+    "CompositeScorer",
+    "ContainsScorer",
+    # Data classes
+    "EvalResult",
+    "ExactMatchScorer",
+    "LengthScorer",
+    # Enums
+    "MetricType",
+    # Scorers
+    "Scorer",
+    "TestCase",
     # Utilities
     "create_basic_test_suite",
 ]

@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "codomyrmex"
-version = "1.1.1"
+version = "1.1.2"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -489,12 +489,22 @@ ignore = [
     # Argument/method unused (common in ABC/interface patterns)
     "ARG001",   # unused function argument
     "ARG002",   # unused method argument
+    "ARG005",   # unused lambda argument (389 — lambda convention)
 
     # Miscellaneous noise
     "FBT",      # boolean trap (FBT001/002/003 — too opinionated for this codebase)
     "ERA001",   # commented-out code (will clean up later in targeted pass)
     "INP001",   # implicit namespace package (scripts dir has no __init__.py by design)
     "RUF009",   # dataclass default mutable (false positives with Field())
+
+    # v1.1.2: Phase 2 triage additions
+    "NPY002",   # numpy legacy random (348 — false positives on non-numpy code)
+    "N806",     # non-lowercase variable (283 — scientific/mathematical naming)
+    "DTZ005",   # tz-naive datetime.now() (470 — migrate to tz-aware later)
+    "PERF401",  # manual list comprehension (302 — many are clearer as loops)
+    "RET504",   # unnecessary assignment before return (128 — readability choice)
+    "S607",     # partial executable path (315 — scripts call local tooling)
+    "T201",     # print statement in library code (2,464 — keep in scripts/)
 ]
 
 [tool.ruff.lint.per-file-ignores]

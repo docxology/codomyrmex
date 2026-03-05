@@ -266,6 +266,7 @@ class CompositionVisualizer:
         else:
             plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
             return fig
+        return None
 
     def create_pattern_landscape_map(
         self,
@@ -367,6 +368,7 @@ class CompositionVisualizer:
         else:
             plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
             return fig
+        return None
 
     def create_cross_analysis_summary(
         self,
@@ -452,3 +454,4 @@ class CompositionVisualizer:
         else:
             plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
             return fig
+        return None

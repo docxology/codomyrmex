@@ -21,13 +21,17 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
+import contextlib
+
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.orchestrator import RetryPolicy, TaskResult, Workflow
 
 logger = get_logger(__name__)
 
 
-async def run_static_analysis(path: Path = None, _task_results: dict = None) -> dict:
+async def run_static_analysis(
+    path: Path | None = None, _task_results: dict | None = None
+) -> dict:
     """Run static analysis on the codebase."""
     from codomyrmex.static_analysis import analyze_code_quality
 
@@ -48,7 +52,7 @@ async def run_static_analysis(path: Path = None, _task_results: dict = None) -> 
         return {"success": False, "error": str(e)}
 
 
-async def analyze_dependencies(_task_results: dict = None) -> dict:
+async def analyze_dependencies(_task_results: dict | None = None) -> dict:
     """Analyze project dependencies."""
     from codomyrmex.tools.dependency_analyzer import DependencyAnalyzer
 
@@ -68,7 +72,7 @@ async def analyze_dependencies(_task_results: dict = None) -> dict:
         return {"success": False, "error": str(e)}
 
 
-async def run_tests(_task_results: dict = None) -> dict:
+async def run_tests(_task_results: dict | None = None) -> dict:
     """Run tests with coverage."""
     import subprocess
 
@@ -98,10 +102,8 @@ async def run_tests(_task_results: dict = None) -> dict:
                 parts = line.split()
                 for part in parts:
                     if part.endswith("%"):
-                        try:
+                        with contextlib.suppress(ValueError):
                             coverage = float(part.rstrip("%"))
-                        except ValueError:
-                            pass
 
         return {
             "success": result.returncode == 0,
@@ -116,7 +118,9 @@ async def run_tests(_task_results: dict = None) -> dict:
         return {"success": False, "error": str(e)}
 
 
-async def generate_report(output_path: Path = None, _task_results: dict = None) -> dict:
+async def generate_report(
+    output_path: Path | None = None, _task_results: dict | None = None
+) -> dict:
     """Generate comprehensive HTML report from analysis results."""
     output = output_path or project_root / "output" / "analysis_report.html"
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -270,7 +274,7 @@ async def main() -> int:
     print()
 
     try:
-        results = await workflow.run()
+        await workflow.run()
         summary = workflow.get_summary()
 
         print()

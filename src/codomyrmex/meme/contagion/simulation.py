@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from codomyrmex.meme.contagion.epidemic import SIRModel
-from codomyrmex.meme.contagion.models import ContagionModel, PropagationTrace
+
+if TYPE_CHECKING:
+    from codomyrmex.meme.contagion.models import ContagionModel, PropagationTrace
 
 
 def run_simulation(

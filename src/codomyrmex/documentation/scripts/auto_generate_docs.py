@@ -222,7 +222,9 @@ For complete documentation, see:
 
 
 @mcp_tool()
-def generate_documentation(repo_root: str = None, module_name: str = None) -> int:
+def generate_documentation(
+    repo_root: str | None = None, module_name: str | None = None
+) -> int:
     """Generate documentation for modules.
 
     Args:

@@ -339,17 +339,17 @@ class AuditLogger:
 
 
 __all__ = [
-    # Enums
-    "AuditEventType",
-    "AuditSeverity",
     # Data classes
     "AuditEvent",
-    # Stores
-    "AuditStore",
-    "InMemoryAuditStore",
-    "FileAuditStore",
+    # Enums
+    "AuditEventType",
     # Core
     "AuditLogger",
+    "AuditSeverity",
+    # Stores
+    "AuditStore",
+    "FileAuditStore",
+    "InMemoryAuditStore",
 ]
 
 from .audit_trail import *

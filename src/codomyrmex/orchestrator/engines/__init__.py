@@ -89,7 +89,7 @@ class WorkflowDefinition:
     def get_task(self, task_id: str) -> TaskDefinition | None:
         """Get a task by ID."""
         for task in self.tasks:
-            if task.id == task_id or task.name == task_id:
+            if task_id in (task.id, task.name):
                 return task
         return None
 
@@ -248,10 +248,7 @@ class SequentialEngine(ExecutionEngine):
             start_time = datetime.now()
 
             try:
-                if task.action:
-                    output = task.action(context)
-                else:
-                    output = None
+                output = task.action(context) if task.action else None
 
                 return TaskResult(
                     task_id=task.id,

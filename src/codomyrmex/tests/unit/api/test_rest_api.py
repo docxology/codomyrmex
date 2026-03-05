@@ -386,7 +386,7 @@ class TestAPIRouter:
 
         result = router.match_endpoint(HTTPMethod.GET, "/users/42")
         assert result is not None
-        endpoint, params = result
+        _endpoint, params = result
         assert params["user_id"] == "42"
 
     def test_match_multiple_params(self):

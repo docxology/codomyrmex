@@ -8,8 +8,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import TYPE_CHECKING
 
-from codomyrmex.release.package_builder import BuildReport
+if TYPE_CHECKING:
+    from codomyrmex.release.package_builder import BuildReport
 
 
 class DistributionTarget(Enum):

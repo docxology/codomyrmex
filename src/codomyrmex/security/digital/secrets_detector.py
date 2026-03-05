@@ -184,7 +184,7 @@ class SecretsDetector:
         for x in range(256):
             p_x = float(data.count(chr(x))) / len(data)
             if p_x > 0:
-                entropy += -p_x * math.log(p_x, 2)
+                entropy += -p_x * math.log2(p_x)
         return entropy
 
     def _should_skip(self, file_path: str) -> bool:
@@ -193,9 +193,7 @@ class SecretsDetector:
         if filename in self.EXCLUDE_FILES or filename.startswith("."):
             return True
         ext = os.path.splitext(filename)[1]
-        if ext in self.EXCLUDE_FILES:
-            return True
-        return False
+        return ext in self.EXCLUDE_FILES
 
 
 # Convenience functions

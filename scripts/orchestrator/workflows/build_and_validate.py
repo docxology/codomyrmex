@@ -22,11 +22,13 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
+import contextlib
+
 from codomyrmex.orchestrator import RetryPolicy, Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-async def clean_build(_task_results: dict = None) -> dict:
+async def clean_build(_task_results: dict | None = None) -> dict:
     """Clean previous build artifacts."""
     dirs_to_clean = [
         project_root / "dist",
@@ -49,7 +51,7 @@ async def clean_build(_task_results: dict = None) -> dict:
     return {"success": True, "directories_cleaned": cleaned}
 
 
-async def run_linting(_task_results: dict = None) -> dict:
+async def run_linting(_task_results: dict | None = None) -> dict:
     """Run ruff linting."""
     result = subprocess.run(
         ["uv", "run", "ruff", "check", "src/", "--output-format=concise"],
@@ -67,7 +69,7 @@ async def run_linting(_task_results: dict = None) -> dict:
     }
 
 
-async def run_type_checking(_task_results: dict = None) -> dict:
+async def run_type_checking(_task_results: dict | None = None) -> dict:
     """Run mypy type checking."""
     result = subprocess.run(
         [
@@ -93,7 +95,7 @@ async def run_type_checking(_task_results: dict = None) -> dict:
     }
 
 
-async def run_tests(_task_results: dict = None) -> dict:
+async def run_tests(_task_results: dict | None = None) -> dict:
     """Run test suite."""
     result = subprocess.run(
         ["uv", "run", "pytest", "src/codomyrmex/tests/unit", "-q", "--tb=no", "-x"],
@@ -110,15 +112,11 @@ async def run_tests(_task_results: dict = None) -> dict:
             parts = line.split()
             for i, p in enumerate(parts):
                 if p == "passed" and i > 0:
-                    try:
+                    with contextlib.suppress(ValueError):
                         passed = int(parts[i - 1])
-                    except ValueError:
-                        pass
                 if p == "failed" and i > 0:
-                    try:
+                    with contextlib.suppress(ValueError):
                         failed = int(parts[i - 1])
-                    except ValueError:
-                        pass
 
     return {
         "success": result.returncode == 0,
@@ -128,7 +126,7 @@ async def run_tests(_task_results: dict = None) -> dict:
     }
 
 
-async def build_package(_task_results: dict = None) -> dict:
+async def build_package(_task_results: dict | None = None) -> dict:
     """Build the package."""
     result = subprocess.run(
         ["uv", "build"], capture_output=True, text=True, cwd=project_root
@@ -145,7 +143,7 @@ async def build_package(_task_results: dict = None) -> dict:
     }
 
 
-async def validate_build(_task_results: dict = None) -> dict:
+async def validate_build(_task_results: dict | None = None) -> dict:
     """Validate the built package."""
 
     dist_dir = project_root / "dist"

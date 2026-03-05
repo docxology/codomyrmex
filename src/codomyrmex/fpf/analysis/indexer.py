@@ -57,7 +57,7 @@ class FPFIndexer:
 
             # Build relationship graph
             relationship_graph[pattern.id] = []
-            for _dep_type, deps in pattern.dependencies.items():
+            for deps in pattern.dependencies.values():
                 for dep in deps:
                     if dep not in relationship_graph[pattern.id]:
                         relationship_graph[pattern.id].append(dep)

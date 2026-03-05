@@ -61,50 +61,50 @@ from .models import (
 )
 
 __all__ = [
-    # Client
-    "CodaClient",
-    # Core resources
-    "Doc",
-    "DocList",
-    "Page",
-    "PageList",
-    "PageReference",
-    "PageContentItem",
-    "Table",
-    "TableList",
-    "TableReference",
-    "Column",
-    "ColumnList",
-    "Row",
-    "RowList",
-    "RowEdit",
-    "CellEdit",
-    "Formula",
-    "FormulaList",
-    "Control",
-    "ControlList",
-    # Permissions
-    "Permission",
-    "PermissionList",
-    "SharingMetadata",
     "ACLSettings",
-    "Principal",
-    # References
-    "WorkspaceReference",
-    "FolderReference",
-    "Icon",
-    "DocSize",
-    # User
-    "User",
-    # Mutations
-    "MutationStatus",
-    "InsertRowsResult",
+    "CellEdit",
     # Exceptions
     "CodaAPIError",
     "CodaAuthenticationError",
+    # Client
+    "CodaClient",
     "CodaForbiddenError",
+    "CodaGoneError",
     "CodaNotFoundError",
     "CodaRateLimitError",
     "CodaValidationError",
-    "CodaGoneError",
+    "Column",
+    "ColumnList",
+    "Control",
+    "ControlList",
+    # Core resources
+    "Doc",
+    "DocList",
+    "DocSize",
+    "FolderReference",
+    "Formula",
+    "FormulaList",
+    "Icon",
+    "InsertRowsResult",
+    # Mutations
+    "MutationStatus",
+    "Page",
+    "PageContentItem",
+    "PageList",
+    "PageReference",
+    # Permissions
+    "Permission",
+    "PermissionList",
+    "Principal",
+    "Row",
+    "RowEdit",
+    "RowList",
+    "SharingMetadata",
+    "Table",
+    "TableList",
+    "TableReference",
+    # User
+    "User",
+    # References
+    "WorkspaceReference",
 ]

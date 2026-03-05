@@ -153,7 +153,7 @@ class MemeticEngine:
             while len(offspring) < len(current_pop) - len(parents):
                 if len(parents) < 2:
                     break
-                p1, p2 = random.sample(parents, 2)
+                p1, _p2 = random.sample(parents, 2)
                 # Simple cloning — upgrade to crossover recombination when memeplex algebra is implemented
                 child = p1
                 offspring.append(child)

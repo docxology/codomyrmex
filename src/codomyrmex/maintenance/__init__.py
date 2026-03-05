@@ -46,23 +46,23 @@ from .deps.dependency_consolidator import main as dependency_consolidator_main
 from .deps.validate_dependencies import main as validate_dependencies_main
 
 __all__ = [
-    # Submodules
-    "deps",
-    "health",
-    # Main analysis functions
-    "analyze_project_structure",
-    "analyze_project_dependencies",
-    "analyze_code_quality",
-    "check_dependencies",
-    "consolidate_dependencies",
-    "add_deprecation_notice",
     # Main classes
     "DependencyAnalyzer",
+    "add_deprecation_notice",
+    "add_deprecation_notices_main",
+    "analyze_code_quality",
+    "analyze_project_dependencies",
     # CLI entry points
     "analyze_project_main",
+    # Main analysis functions
+    "analyze_project_structure",
+    "check_dependencies",
+    "consolidate_dependencies",
     "dependency_analyzer_main",
     "dependency_checker_main",
     "dependency_consolidator_main",
+    # Submodules
+    "deps",
+    "health",
     "validate_dependencies_main",
-    "add_deprecation_notices_main",
 ]

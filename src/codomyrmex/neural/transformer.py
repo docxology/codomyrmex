@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-import numpy as np
+from typing import TYPE_CHECKING
 
 from .attention import MultiHeadAttention
 from .layers import Embedding, FeedForward, LayerNorm, PositionalEncoding
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
 class TransformerBlock:

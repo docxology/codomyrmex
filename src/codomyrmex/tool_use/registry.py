@@ -9,13 +9,15 @@ from __future__ import annotations
 
 import functools
 import time
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.validation.schemas import Result, ResultStatus, ToolDefinition
 
 from .validation import validate_input, validate_output
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @dataclass

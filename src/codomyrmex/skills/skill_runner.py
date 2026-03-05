@@ -7,7 +7,7 @@ a single entry point for skill lookup, validation, and execution.
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -17,7 +17,9 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-from .discovery import Skill, SkillRegistry
+
+if TYPE_CHECKING:
+    from .discovery import Skill, SkillRegistry
 
 
 def run_skill(

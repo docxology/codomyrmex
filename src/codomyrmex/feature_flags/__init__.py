@@ -57,12 +57,12 @@ def cli_commands():
 
 
 __all__ = [
-    "strategies",
-    "storage",
-    "evaluation",
-    "rollout",
     # CLI integration
     "cli_commands",
+    "evaluation",
+    "rollout",
+    "storage",
+    "strategies",
 ]
 
 if HAS_FEATURE_MANAGER:

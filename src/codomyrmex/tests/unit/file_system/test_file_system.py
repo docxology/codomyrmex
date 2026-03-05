@@ -477,7 +477,7 @@ class TestFindDuplicates:
         fs.create_file(td / "unique.txt", "different")
         dupes = fs.find_duplicates(td)
         assert len(dupes) == 1
-        paths = list(dupes.values())[0]
+        paths = next(iter(dupes.values()))
         assert len(paths) == 2
         names = {p.name for p in paths}
         assert "orig.txt" in names
@@ -516,7 +516,7 @@ class TestFindDuplicates:
             fs.create_file(td / name, "triple")
         dupes = fs.find_duplicates(td)
         assert len(dupes) == 1
-        paths = list(dupes.values())[0]
+        paths = next(iter(dupes.values()))
         assert len(paths) == 3
 
 

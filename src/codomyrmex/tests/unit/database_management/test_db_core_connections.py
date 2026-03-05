@@ -63,7 +63,7 @@ class TestDatabaseConnector:
         db_path = str(tmp_path / "test.db")
         connector = DatabaseConnector(f"sqlite:///{db_path}")
         connector.connect()
-        rows, cursor = connector.execute("SELECT 1 AS val")
+        _rows, cursor = connector.execute("SELECT 1 AS val")
         assert cursor.fetchone()[0] == 1
         connector.disconnect()
 
@@ -78,7 +78,7 @@ class TestDatabaseConnector:
             "INSERT INTO t VALUES (1);\n"
             "INSERT INTO t VALUES (2);\n"
         )
-        total_rows, stmts = connector.execute_script(script)
+        _total_rows, stmts = connector.execute_script(script)
         connector.commit()
         assert stmts == 3
 

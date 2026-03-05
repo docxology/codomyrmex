@@ -51,6 +51,7 @@ class RefinedUtilities:
                             f"Retry {i + 1}/{retries} after {delay:.2f}s due to: {e}"
                         )
                         time.sleep(delay)
+                return None
 
             return wrapper
 

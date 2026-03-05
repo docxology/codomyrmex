@@ -65,38 +65,38 @@ from codomyrmex.crypto.currency.wallet import (
 )
 
 __all__ = [
-    # Wallet
-    "generate_mnemonic",
-    "mnemonic_to_seed",
-    "HDWallet",
-    "create_hd_wallet",
     # Blockchain
     "Block",
-    "MerkleTree",
-    "MerkleProof",
-    "create_block",
-    "calculate_block_hash",
-    "build_merkle_tree",
-    "get_merkle_proof",
-    "verify_merkle_proof",
-    # Transactions
-    "Transaction",
-    "SignedTransaction",
-    "create_transaction",
-    "sign_transaction",
-    "verify_transaction",
-    "serialize_transaction",
-    "deserialize_transaction",
-    # Addresses
-    "generate_bitcoin_address",
-    "validate_bitcoin_address",
-    "generate_ethereum_address",
-    "validate_ethereum_address",
-    "checksum_ethereum_address",
     # Tokens
     "ERC20Token",
+    "HDWallet",
+    "MerkleProof",
+    "MerkleTree",
+    "SignedTransaction",
+    # Transactions
+    "Transaction",
     "TransferEvent",
+    "build_merkle_tree",
+    "calculate_block_hash",
+    "checksum_ethereum_address",
+    "create_block",
     "create_erc20_interface",
-    "encode_transfer",
+    "create_hd_wallet",
+    "create_transaction",
     "decode_transfer_event",
+    "deserialize_transaction",
+    "encode_transfer",
+    # Addresses
+    "generate_bitcoin_address",
+    "generate_ethereum_address",
+    # Wallet
+    "generate_mnemonic",
+    "get_merkle_proof",
+    "mnemonic_to_seed",
+    "serialize_transaction",
+    "sign_transaction",
+    "validate_bitcoin_address",
+    "validate_ethereum_address",
+    "verify_merkle_proof",
+    "verify_transaction",
 ]

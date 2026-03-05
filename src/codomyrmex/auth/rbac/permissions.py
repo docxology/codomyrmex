@@ -96,11 +96,10 @@ class PermissionRegistry:
 
     def revoke_role(self, user_id: str, role: str) -> bool:
         """Revoke a role from a user."""
-        if user_id in self._user_roles:
-            if role in self._user_roles[user_id]:
-                self._user_roles[user_id].discard(role)
-                logger.info("Revoked role '%s' from user '%s'", role, user_id)
-                return True
+        if user_id in self._user_roles and role in self._user_roles[user_id]:
+            self._user_roles[user_id].discard(role)
+            logger.info("Revoked role '%s' from user '%s'", role, user_id)
+            return True
         return False
 
     def get_user_roles(self, user_id: str) -> set[str]:
@@ -135,7 +134,7 @@ class PermissionRegistry:
 
         Supports wildcards: "files.*" matches "files.read".
         """
-        if permission == "*" or permission == requested:
+        if permission in ("*", requested):
             return True
         if permission.endswith(".*"):
             prefix = permission[:-1]  # "files."
@@ -148,10 +147,7 @@ class PermissionRegistry:
         permissions = self.get_permissions(role)
         if "*" in permissions or "admin" in permissions:
             return True
-        for p in permissions:
-            if self._matches(p, permission):
-                return True
-        return False
+        return any(self._matches(p, permission) for p in permissions)
 
     # ── User-level check with audit ─────────────────────────────────
 

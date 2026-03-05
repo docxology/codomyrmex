@@ -43,11 +43,11 @@ except ImportError:
     AVRO_AVAILABLE = False
 
 try:
-    import pandas as _pd
-    import pyarrow  # noqa: F401
+    import pandas as pd
+    import pyarrow as pa  # noqa: F401
 
     # Verify pandas can actually use pyarrow for parquet (version compat check)
-    _pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
+    pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
     PARQUET_AVAILABLE = True
 except (ImportError, Exception):
     PARQUET_AVAILABLE = False
@@ -901,9 +901,7 @@ class TestStreamBuffer:
         from codomyrmex.serialization.streaming import StreamBuffer
 
         flushed_items = []
-        buf = StreamBuffer(
-            max_size=3, flush_callback=lambda items: flushed_items.extend(items)
-        )
+        buf = StreamBuffer(max_size=3, flush_callback=flushed_items.extend)
         buf.add(1)
         buf.add(2)
         buf.add(3)  # Should trigger auto-flush

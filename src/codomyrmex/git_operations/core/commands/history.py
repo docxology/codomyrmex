@@ -9,7 +9,7 @@ logger = get_logger(__name__)
 
 @mcp_tool(name="git_log")
 def get_commit_history(
-    limit: int = 10, repository_path: str = None
+    limit: int = 10, repository_path: str | None = None
 ) -> list[dict[str, str]]:
     """Get recent commit history."""
     if repository_path is None:
@@ -61,7 +61,7 @@ def get_commit_history(
 
 
 @mcp_tool(name="git_blame")
-def get_blame(file_path: str, repository_path: str = None) -> str:
+def get_blame(file_path: str, repository_path: str | None = None) -> str:
     """Get the blame for a file."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -87,7 +87,7 @@ def get_blame(file_path: str, repository_path: str = None) -> str:
 
 
 @mcp_tool(name="git_commit_details")
-def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
+def get_commit_details(commit_sha: str, repository_path: str | None = None) -> dict:
     """Get detailed information about a specific commit."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -129,12 +129,12 @@ def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
 @mcp_tool(name="git_log_filtered")
 def get_commit_history_filtered(
     limit: int = 10,
-    repository_path: str = None,
-    since: str = None,
-    until: str = None,
-    author: str = None,
-    branch: str = None,
-    file_path: str = None,
+    repository_path: str | None = None,
+    since: str | None = None,
+    until: str | None = None,
+    author: str | None = None,
+    branch: str | None = None,
+    file_path: str | None = None,
 ) -> list[dict[str, str]]:
     """
     Get commit history with filters.

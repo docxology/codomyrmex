@@ -34,7 +34,7 @@ def find_spec_files(base_path: Path) -> list:
     return list(base_path.rglob("MCP_TOOL_SPECIFICATION.md"))
 
 
-def discover_all_tools(base_path: Path, module: str = None) -> ToolCatalog:
+def discover_all_tools(base_path: Path, module: str | None = None) -> ToolCatalog:
     """Discover all tools from specs and modules."""
     catalog = ToolCatalog()
 

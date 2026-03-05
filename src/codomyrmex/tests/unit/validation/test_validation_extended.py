@@ -581,8 +581,8 @@ class TestExamplesValidator:
 
         issue = ValidationIssue(
             module="test",
-            validation_type=list(ValidationType)[0],
-            severity=list(ValidationSeverity)[0],
+            validation_type=next(iter(ValidationType)),
+            severity=next(iter(ValidationSeverity)),
             message="test issue",
             file_path="test.py",
         )
@@ -620,8 +620,8 @@ class TestValidationDataclasses:
 
         issue = ValidationIssue(
             module="test",
-            validation_type=list(ValidationType)[0],
-            severity=list(ValidationSeverity)[0],
+            validation_type=next(iter(ValidationType)),
+            severity=next(iter(ValidationSeverity)),
             message="Test issue",
             file_path="test.py",
             line_number=42,
@@ -646,8 +646,8 @@ class TestValidationDataclasses:
 
         issue = ValidationIssue(
             module="utils",
-            validation_type=list(ValidationType)[0],
-            severity=list(ValidationSeverity)[0],
+            validation_type=next(iter(ValidationType)),
+            severity=next(iter(ValidationSeverity)),
             message="warning",
         )
         result = ModuleValidationResult(module="utils", success=False, issues=[issue])

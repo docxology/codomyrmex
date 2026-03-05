@@ -550,24 +550,24 @@ def get_metrics(backend="in_memory") -> Metrics:
 
 
 __all__ = [
-    # Enums
-    "MetricType",
-    # Data classes
-    "MetricSample",
-    "MetricDescriptor",
-    # Metrics
-    "Metric",
     "Counter",
     "Gauge",
     "Histogram",
-    "Summary",
-    "Timer",
-    # Core
-    "MetricsRegistry",
+    # Metrics
+    "Metric",
+    "MetricAggregator",
+    "MetricDescriptor",
+    # Data classes
+    "MetricSample",
+    # Enums
+    "MetricType",
     "Metrics",
     "MetricsError",
-    "get_metrics",
-    "MetricAggregator",
+    # Core
+    "MetricsRegistry",
     "PrometheusExporter",
     "StatsDClient",
+    "Summary",
+    "Timer",
+    "get_metrics",
 ]

@@ -107,16 +107,10 @@ class PlanEvaluator:
         # Retry ratio: how many iterations used out of max
         # Lower is better → 1.0 if first iteration
         max_iter = cfg.max_iterations
-        if max_iter > 0:
-            retry_ratio = 1.0 - ((iteration - 1) / max_iter)
-        else:
-            retry_ratio = 1.0
+        retry_ratio = 1.0 - (iteration - 1) / max_iter if max_iter > 0 else 1.0
 
         # Memory hits: fraction of queries that returned data
-        if memory_queries > 0:
-            memory_hit_rate = memory_hits / memory_queries
-        else:
-            memory_hit_rate = 0.0
+        memory_hit_rate = memory_hits / memory_queries if memory_queries > 0 else 0.0
 
         # Weighted composite
         overall = (

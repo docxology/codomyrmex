@@ -157,7 +157,7 @@ def remove_canvas_node(canvas: Canvas, node_id: str) -> CanvasNode | None:
     if removed:
         # Also remove connected edges
         canvas.edges = [
-            e for e in canvas.edges if e.fromNode != node_id and e.toNode != node_id
+            e for e in canvas.edges if node_id not in (e.fromNode, e.toNode)
         ]
     return removed
 

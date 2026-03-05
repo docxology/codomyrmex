@@ -33,7 +33,7 @@ class Template:
 
     def render(self, context: dict) -> str:
         """Render template with context."""
-        if self.engine == "jinja2" or self.engine == "mako":
+        if self.engine in {"jinja2", "mako"}:
             return self.template_obj.render(**context)
         raise TemplatingError(f"Unknown engine: {self.engine}")
 

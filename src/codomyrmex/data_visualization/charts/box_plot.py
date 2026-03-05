@@ -19,11 +19,11 @@ logger = get_logger(__name__)
 
 def create_box_plot(
     data,
-    labels: list = None,
+    labels: list | None = None,
     title: str = "Box Plot",
-    x_label: str = None,
+    x_label: str | None = None,
     y_label: str = "Values",
-    output_path: str = None,
+    output_path: str | None = None,
     show_plot: bool = False,
     notch: bool = False,
     patch_artist: bool = True,
@@ -102,14 +102,14 @@ class BoxPlot:
     def __init__(
         self,
         data=None,
-        labels: list = None,
+        labels: list | None = None,
         title: str = "Box Plot",
-        x_label: str = None,
+        x_label: str | None = None,
         y_label: str = "Values",
         notch: bool = False,
         patch_artist: bool = True,
         box_color: str = "lightblue",
-        figure_size: tuple = None,
+        figure_size: tuple | None = None,
         theme=None,
     ):
         self.data = data or []
@@ -123,7 +123,7 @@ class BoxPlot:
         self.figure_size = figure_size or DEFAULT_FIGURE_SIZE
         self.theme = theme
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """Render the box plot."""
         return create_box_plot(
             data=self.data,

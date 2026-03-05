@@ -13,7 +13,7 @@ from .search import NASSearcher, NASSearchSpace, size_heuristic_eval
 
 
 @mcp_tool(category="nas")
-def nas_sample_architecture(seed: int = None) -> dict:
+def nas_sample_architecture(seed: int | None = None) -> dict:
     """Sample a random architecture from the default search space.
 
     Args:

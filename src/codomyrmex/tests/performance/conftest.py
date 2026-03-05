@@ -1,3 +1,4 @@
+import contextlib
 import shutil
 import tempfile
 from collections.abc import Generator
@@ -23,10 +24,8 @@ except ImportError:
 def setup_performance_logging():
     """Set up logging for performance tests."""
     if LOGGING_AVAILABLE and callable(setup_logging):
-        try:
+        with contextlib.suppress(Exception):
             setup_logging()
-        except Exception:
-            pass
 
 
 @pytest.fixture

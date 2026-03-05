@@ -10,6 +10,7 @@ operation = client.models.generate_videos(
     config={"person_generation": "ALLOW_ADULT"},
 )
 print("Polling operation...")
+import contextlib
 import time
 
 while not operation.done:
@@ -30,7 +31,5 @@ else:
         print(f"Dump: {result.model_dump()}")
     except Exception as e:
         print(f"Dump error: {e}")
-        try:
+        with contextlib.suppress(AttributeError):
             print(f"Dict: {result.__dict__}")
-        except AttributeError:
-            pass

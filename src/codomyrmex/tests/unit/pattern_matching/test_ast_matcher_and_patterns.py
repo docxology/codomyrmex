@@ -221,7 +221,7 @@ class TestASTMatcher:
         matcher = ASTMatcher()
         results = matcher.find_antipatterns(code)
         assert any(r.pattern_name == "star_import" for r in results)
-        star_result = [r for r in results if r.pattern_name == "star_import"][0]
+        star_result = next(r for r in results if r.pattern_name == "star_import")
         assert "from os import *" in star_result.details
 
     def test_antipattern_deep_nesting(self):
@@ -339,7 +339,7 @@ class TestASTMatcher:
     # ----- Parametrized pattern detection -----
 
     @pytest.mark.parametrize(
-        "pattern_name,code,expected_count",
+        ("pattern_name", "code", "expected_count"),
         [
             ("singleton", "class S:\n    def __new__(cls): pass\n", 1),
             ("singleton", "class R:\n    def method(self): pass\n", 0),
@@ -754,7 +754,7 @@ class TestCodeSimilarity:
         assert dr.similarity == 0.95
 
     @pytest.mark.parametrize(
-        "code_a,code_b,min_score,max_score",
+        ("code_a", "code_b", "min_score", "max_score"),
         [
             # Identical
             ("x = 1", "x = 1", 0.9, 1.0),

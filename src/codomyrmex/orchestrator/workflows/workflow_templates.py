@@ -5,15 +5,17 @@ Common workflows: CI/CD, code review, data pipeline.
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.orchestrator.workflows.workflow_engine import (
     WorkflowRunner,
     WorkflowStep,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

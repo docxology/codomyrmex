@@ -25,9 +25,9 @@ pytestmark = [
 
 # Force non-interactive backend before any matplotlib import
 if _has_matplotlib:
-    import matplotlib
+    import matplotlib as mpl
 
-    matplotlib.use("Agg")
+    mpl.use("Agg")
 
 
 import matplotlib.pyplot as plt  # noqa: E402
@@ -184,7 +184,7 @@ class TestSetupStyle:
         """Cover lines 164-177: every branch in _setup_style."""
         cfg = PlotConfig(style=style, show_plot=False)
         p = AdvancedPlotter(cfg)
-        fig, ax = p.create_figure()
+        fig, _ax = p.create_figure()
         assert fig is not None
 
 
@@ -230,7 +230,7 @@ class TestCreateFigure:
         assert fig in plotter.figures
 
     def test_multiple_subplots(self, plotter):
-        fig, axes = plotter.create_figure(subplots=(2, 2))
+        _fig, axes = plotter.create_figure(subplots=(2, 2))
         assert axes.shape == (2, 2)
 
     def test_custom_figsize(self, plotter):
@@ -340,14 +340,14 @@ class TestPlotBar:
 class TestPlotHistogram:
     def test_basic_histogram(self, plotter):
         plotter.create_figure()
-        counts, edges, patches = plotter.plot_histogram([1, 2, 2, 3, 3, 3, 4], bins=4)
+        _counts, edges, _patches = plotter.plot_histogram([1, 2, 2, 3, 3, 3, 4], bins=4)
         assert len(edges) == 5  # bins + 1
 
     def test_histogram_auto_creates_figure(self):
         """Cover line 430: auto-create figure."""
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
-        counts, edges, patches = p.plot_histogram([1, 2, 3])
+        _counts, _edges, _patches = p.plot_histogram([1, 2, 3])
         assert p.current_figure is not None
 
     def test_histogram_density_cumulative(self, plotter):
@@ -573,14 +573,14 @@ class TestCreateDashboard:
 class TestPlotDataset:
     def test_plot_dataset_line(self, plotter):
         """Cover lines 727-736."""
-        fig, ax = plotter.create_figure()
+        _fig, ax = plotter.create_figure()
         points = [DataPoint(x=i, y=i * 2) for i in range(5)]
         ds = Dataset(name="line", data=points, plot_type=PlotType.LINE, label="L")
         plotter._plot_dataset(ax, ds)
 
     def test_plot_dataset_scatter(self, plotter):
         """Cover lines 737-747."""
-        fig, ax = plotter.create_figure()
+        _fig, ax = plotter.create_figure()
         points = [DataPoint(x=i, y=i * 2, size=10.0, color="red") for i in range(5)]
         ds = Dataset(
             name="sc", data=points, plot_type=PlotType.SCATTER, label="S", color="blue"
@@ -589,7 +589,7 @@ class TestPlotDataset:
 
     def test_plot_dataset_bar(self, plotter):
         """Cover lines 748-755."""
-        fig, ax = plotter.create_figure()
+        _fig, ax = plotter.create_figure()
         points = [DataPoint(x=i, y=i * 3) for i in range(5)]
         ds = Dataset(
             name="bar", data=points, plot_type=PlotType.BAR, label="B", color="green"
@@ -598,14 +598,14 @@ class TestPlotDataset:
 
     def test_plot_dataset_histogram(self, plotter):
         """Cover lines 756-759."""
-        fig, ax = plotter.create_figure()
+        _fig, ax = plotter.create_figure()
         points = [DataPoint(x=i, y=float(i)) for i in range(20)]
         ds = Dataset(name="hist", data=points, plot_type=PlotType.HISTOGRAM, label="H")
         plotter._plot_dataset(ax, ds)
 
     def test_plot_dataset_no_label(self, plotter):
         """Cover line 761: label is falsy so legend not called."""
-        fig, ax = plotter.create_figure()
+        _fig, ax = plotter.create_figure()
         points = [DataPoint(x=i, y=i) for i in range(5)]
         ds = Dataset(name="nolabel", data=points, plot_type=PlotType.LINE, label=None)
         plotter._plot_dataset(ax, ds)
@@ -872,7 +872,7 @@ class TestImportFallbacks:
         # Just verify the plotter works (decorator applied to all methods)
         cfg = PlotConfig(show_plot=False)
         p = AdvancedPlotter(cfg)
-        fig, ax = p.create_figure()
+        fig, _ax = p.create_figure()
         assert fig is not None
 
 
@@ -1092,7 +1092,7 @@ class TestPlotDatasetScatterDefaults:
     def test_plot_dataset_scatter_none_size_color(self, plotter):
         """When DataPoint.size is None and DataPoint.color is None, defaults
         should be pulled from Dataset.markersize and Dataset.color."""
-        fig, ax = plotter.create_figure()
+        _fig, ax = plotter.create_figure()
         points = [DataPoint(x=1, y=2), DataPoint(x=3, y=4)]
         ds = Dataset(
             name="sc_defaults",
@@ -1198,7 +1198,7 @@ class TestHistogramEdgeCases:
     def test_histogram_with_bin_edges(self, plotter):
         """Provide explicit bin edges instead of count."""
         plotter.create_figure()
-        counts, edges, _ = plotter.plot_histogram(
+        _counts, edges, _ = plotter.plot_histogram(
             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             bins=[0, 3, 6, 10],
         )
@@ -1207,7 +1207,7 @@ class TestHistogramEdgeCases:
     def test_histogram_single_value(self, plotter):
         """Histogram with a single repeated value."""
         plotter.create_figure()
-        counts, edges, patches = plotter.plot_histogram([5, 5, 5, 5], bins=1)
+        counts, _edges, _patches = plotter.plot_histogram([5, 5, 5, 5], bins=1)
         assert counts is not None
 
 
@@ -1335,5 +1335,5 @@ class TestCreateFigureCustomDpi:
 
     def test_extra_kwargs_passed_through(self, plotter):
         """Passing squeeze=False should not raise."""
-        fig, axes = plotter.create_figure(subplots=(1, 1), squeeze=False)
+        fig, _axes = plotter.create_figure(subplots=(1, 1), squeeze=False)
         assert fig is not None

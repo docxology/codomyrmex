@@ -68,7 +68,7 @@ class PipelineManager:
         """
         try:
             with open(config_path) as f:
-                if config_path.endswith(".yaml") or config_path.endswith(".yml"):
+                if config_path.endswith((".yaml", ".yml")):
                     config = yaml.safe_load(f)
                 else:
                     config = json.load(f)
@@ -440,12 +440,10 @@ class PipelineManager:
                         )
 
         # Validate timeout if present
-        if "timeout" in config:
-            if (
-                not isinstance(config["timeout"], (int, float))
-                or config["timeout"] <= 0
-            ):
-                errors.append("Timeout must be a positive number")
+        if "timeout" in config and (
+            not isinstance(config["timeout"], (int, float)) or config["timeout"] <= 0
+        ):
+            errors.append("Timeout must be a positive number")
 
         return len(errors) == 0, errors
 
@@ -882,10 +880,9 @@ class PipelineManager:
             return False
 
         for stage_name in stage_names:
-            if stage_name not in visited:
-                if has_cycle(stage_name):
-                    errors.append(f"Cycle detected involving stage '{stage_name}'")
-                    break  # Only report first cycle
+            if stage_name not in visited and has_cycle(stage_name):
+                errors.append(f"Cycle detected involving stage '{stage_name}'")
+                break  # Only report first cycle
 
         return len(errors) == 0, errors
 
@@ -927,7 +924,7 @@ class PipelineManager:
 
         # Save to file
         with open(output_path, "w") as f:
-            if output_path.endswith(".yaml") or output_path.endswith(".yml"):
+            if output_path.endswith((".yaml", ".yml")):
                 yaml.dump(config, f, default_flow_style=False)
             else:
                 json.dump(config, f, indent=2)

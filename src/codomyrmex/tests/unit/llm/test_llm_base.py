@@ -429,7 +429,7 @@ class TestSizeParsing:
 
     @_skip_no_ollama
     @pytest.mark.parametrize(
-        "input_str,expected",
+        ("input_str", "expected"),
         [
             ("1GB", 1 * 1024 * 1024 * 1024),
             ("2.5GB", int(2.5 * 1024 * 1024 * 1024)),
@@ -688,7 +688,7 @@ class TestTokenEstimation:
         return max(1, len(text) // 4)
 
     @pytest.mark.parametrize(
-        "text,min_tokens,max_tokens",
+        ("text", "min_tokens", "max_tokens"),
         [
             ("Hello", 1, 3),
             ("The quick brown fox jumps over the lazy dog", 8, 15),

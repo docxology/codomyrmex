@@ -50,7 +50,7 @@ def run_command(cmd: list[str]) -> tuple[bool, str, str]:
 
 def check_python_version() -> dict[str, Any]:
     """Check Python version requirements."""
-    success, stdout, stderr = run_command([sys.executable, "--version"])
+    success, stdout, _stderr = run_command([sys.executable, "--version"])
 
     result = {
         "current_version": "unknown",
@@ -116,7 +116,7 @@ def check_security() -> dict[str, Any]:
 
     # Run security checks if tools are available
     if security["pip_audit_available"]:
-        success, stdout, stderr = run_command(
+        success, stdout, _stderr = run_command(
             [sys.executable, "-m", "pip-audit", "--format=json"]
         )
         if success:
@@ -260,7 +260,7 @@ def fix_dependencies(deps: dict[str, dict]) -> None:
     """Attempt to install missing dependencies."""
     missing_packages = []
 
-    for _category, packages in deps.items():
+    for packages in deps.values():
         for package, info in packages.items():
             if not info["installed"]:
                 missing_packages.append(package)
@@ -271,11 +271,11 @@ def fix_dependencies(deps: dict[str, dict]) -> None:
         # Try to install with uv if available
         success, _, _ = run_command(["uv", "--version"])
         if success:
-            success, stdout, stderr = run_command(["uv", "add"] + missing_packages)
+            success, stdout, stderr = run_command(["uv", "add", *missing_packages])
         else:
             # Fall back to pip
-            success, stdout, stderr = run_command(
-                [sys.executable, "-m", "pip", "install"] + missing_packages
+            success, _stdout, stderr = run_command(
+                [sys.executable, "-m", "pip", "install", *missing_packages]
             )
 
         if success:

@@ -71,30 +71,30 @@ def cli_commands():
 
 
 __all__ = [
-    "EdgeNode",
-    "EdgeNodeStatus",
-    "EdgeFunction",
-    "EdgeRuntime",
-    "EdgeCluster",
-    "EdgeSynchronizer",
-    "SyncState",
-    "EdgeExecutionError",
-    "EdgeMetrics",
-    "InvocationRecord",
+    "CacheEntry",
     # Deployment strategies
     "DeploymentManager",
     "DeploymentPlan",
     "DeploymentState",
     "DeploymentStrategy",
-    # Scheduler
-    "EdgeScheduler",
-    "ScheduledJob",
-    "ScheduleType",
     # Cache
     "EdgeCache",
-    "CacheEntry",
+    "EdgeCluster",
+    "EdgeExecutionError",
+    "EdgeFunction",
+    "EdgeMetrics",
+    "EdgeNode",
+    "EdgeNodeStatus",
+    "EdgeRuntime",
+    # Scheduler
+    "EdgeScheduler",
+    "EdgeSynchronizer",
+    "HealthCheck",
     # Health monitoring
     "HealthMonitor",
-    "HealthCheck",
+    "InvocationRecord",
+    "ScheduleType",
+    "ScheduledJob",
+    "SyncState",
     "cli_commands",
 ]

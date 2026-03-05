@@ -27,8 +27,8 @@ class HeatmapMixin:
     def plot_heatmap(
         self,
         data: list[list[float]] | np.ndarray | pd.DataFrame,
-        x_labels: list[str] = None,
-        y_labels: list[str] = None,
+        x_labels: list[str] | None = None,
+        y_labels: list[str] | None = None,
         cmap: str = "viridis",
         annot: bool = False,
         fmt: str = ".2f",

@@ -65,7 +65,7 @@ class Meme:
 
     def descend(self, new_content: str, **overrides: Any) -> Meme:
         """Create a mutated descendant, preserving lineage."""
-        child_lineage = self.lineage + [self.id]
+        child_lineage = [*self.lineage, self.id]
         return Meme(
             content=new_content,
             meme_type=overrides.get("meme_type", self.meme_type),

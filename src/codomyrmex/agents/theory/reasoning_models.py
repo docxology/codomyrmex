@@ -211,7 +211,7 @@ class NeuralReasoningModel(ReasoningModel):
         """Check if pattern matches premises."""
         # Simple implementation: check if pattern keys are in premises
         if isinstance(pattern, dict):
-            return all(key in premises for key in pattern.keys())
+            return all(key in premises for key in pattern)
         return False
 
     def explain(self, result: dict[str, Any]) -> str:

@@ -62,7 +62,7 @@ def demo_rabbit_hole():
     print_info(f"Rabbit Hole Response: {welcome}")
 
     # Simulate interaction loop
-    for i in range(3):
+    for _i in range(3):
         fake_response = hole.generate_response(attacker_ip, "ls -la")
         print_info(f"Attacker cmd 'ls -la' -> Response: '{fake_response}'")
 
@@ -81,10 +81,9 @@ def main():
         / "demos"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()

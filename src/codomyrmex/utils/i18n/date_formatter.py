@@ -36,7 +36,7 @@ class DateFormatter:
         return dt.strftime(fmt["datetime"])
 
     @classmethod
-    def relative_time(cls, dt: datetime, now: datetime = None) -> str:
+    def relative_time(cls, dt: datetime, now: datetime | None = None) -> str:
         """Human-readable relative time: 'just now', '5 minutes ago', '2 hours ago', 'yesterday', '3 days ago'."""
         if now is None:
             now = datetime.now()

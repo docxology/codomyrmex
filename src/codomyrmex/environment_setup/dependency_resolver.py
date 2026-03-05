@@ -11,10 +11,12 @@ import os
 import shutil
 import subprocess  # nosec B404
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = get_logger(__name__)
 

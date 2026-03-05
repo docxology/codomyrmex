@@ -11,9 +11,10 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .models import Address
+if TYPE_CHECKING:
+    from .models import Address
 
 
 @dataclass
@@ -83,10 +84,7 @@ class EventFilter:
             return False
         if self._contract_address and event.contract_address != self._contract_address:
             return False
-        for key, val in self._arg_filters.items():
-            if event.args.get(key) != val:
-                return False
-        return True
+        return all(event.args.get(key) == val for key, val in self._arg_filters.items())
 
 
 class EventLog:

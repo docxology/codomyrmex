@@ -61,22 +61,22 @@ def cli_commands():
 
 
 __all__ = [
-    "PluginManager",
-    "PluginValidator",
-    "PluginLoader",
-    "PluginRegistry",
-    "PluginInfo",
-    "Plugin",
-    "PluginType",
-    "PluginState",
-    # Exceptions
-    "PluginError",
-    "LoadError",
     "DependencyError",
     "HookError",
-    "PluginValidationError",
-    "PluginStateError",
+    "LoadError",
+    "Plugin",
     "PluginConflictError",
+    # Exceptions
+    "PluginError",
+    "PluginInfo",
+    "PluginLoader",
+    "PluginManager",
+    "PluginRegistry",
+    "PluginState",
+    "PluginStateError",
+    "PluginType",
+    "PluginValidationError",
+    "PluginValidator",
     # CLI
     "cli_commands",
 ]

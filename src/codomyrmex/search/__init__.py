@@ -45,16 +45,16 @@ def cli_commands():
 
 
 __all__ = [
-    # CLI integration
-    "cli_commands",
     "Document",
-    "SearchResult",
-    "Tokenizer",
-    "SimpleTokenizer",
     "FuzzyMatcher",
+    "InMemoryIndex",
     "QueryParser",
     "SearchIndex",
-    "InMemoryIndex",
+    "SearchResult",
+    "SimpleTokenizer",
+    "Tokenizer",
+    # CLI integration
+    "cli_commands",
     "create_index",
     "quick_search",
 ]

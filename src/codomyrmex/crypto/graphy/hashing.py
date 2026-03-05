@@ -4,12 +4,17 @@ from __future__ import annotations
 
 import enum
 import warnings
+from typing import TYPE_CHECKING
 
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.hashes import HashAlgorithm as _CryptoHashAlgorithm
 
 from codomyrmex.crypto.exceptions import HashError
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from cryptography.hazmat.primitives.hashes import (
+        HashAlgorithm as _CryptoHashAlgorithm,
+    )
 
 logger = get_logger(__name__)
 

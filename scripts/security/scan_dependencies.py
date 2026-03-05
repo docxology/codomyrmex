@@ -24,12 +24,6 @@ import subprocess
 
 def find_requirements_files(path: str = ".") -> list:
     """Find requirements files in the project."""
-    patterns = [
-        "requirements.txt",
-        "requirements*.txt",
-        "pyproject.toml",
-        "setup.py",
-    ]
     found = []
     root = Path(path)
 

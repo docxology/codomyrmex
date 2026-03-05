@@ -25,19 +25,19 @@ def get_terminal_size() -> tuple:
     return size.columns, size.lines
 
 
-def print_table(headers: list, rows: list, widths: list = None):
+def print_table(headers: list, rows: list, widths: list | None = None):
     """Print formatted table."""
     if not widths:
         widths = [
-            max(len(str(r[i])) for r in [headers] + rows) + 2
+            max(len(str(r[i])) for r in [headers, *rows]) + 2
             for i in range(len(headers))
         ]
 
-    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths))
+    header_row = "".join(h.ljust(w) for h, w in zip(headers, widths, strict=False))
     print(header_row)
     print("-" * sum(widths))
     for row in rows:
-        print("".join(str(c).ljust(w) for c, w in zip(row, widths)))
+        print("".join(str(c).ljust(w) for c, w in zip(row, widths, strict=False)))
 
 
 def print_progress(current: int, total: int, width: int = 40):
@@ -71,10 +71,9 @@ def main():
     config_path = (
         Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cli/config.yaml")
 
     parser = argparse.ArgumentParser(description="CLI utilities")

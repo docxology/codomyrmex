@@ -141,7 +141,7 @@ def test_health_check(db_manager):
     """Test health check functionality."""
     health = db_manager.health_check_all()
     assert len(health) == 1
-    conn_name = list(health.keys())[0]
+    conn_name = next(iter(health.keys()))
     assert health[conn_name]["status"] == "healthy"
 
 

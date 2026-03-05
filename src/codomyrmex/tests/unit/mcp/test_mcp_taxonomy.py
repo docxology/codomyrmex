@@ -25,7 +25,7 @@ class TestToolCategory:
         assert {c.value for c in ToolCategory} == expected
 
     @pytest.mark.parametrize(
-        "tool,expected",
+        ("tool", "expected"),
         [
             ("codomyrmex.analyze_file", ToolCategory.ANALYSIS),
             ("codomyrmex.analyze_project", ToolCategory.ANALYSIS),
@@ -38,7 +38,7 @@ class TestToolCategory:
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize(
-        "tool,expected",
+        ("tool", "expected"),
         [
             ("codomyrmex.create_bar_chart", ToolCategory.GENERATION),
             ("codomyrmex.create_line_plot", ToolCategory.GENERATION),
@@ -51,7 +51,7 @@ class TestToolCategory:
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize(
-        "tool,expected",
+        ("tool", "expected"),
         [
             ("codomyrmex.execute_code", ToolCategory.EXECUTION),
             ("codomyrmex.code_execute", ToolCategory.EXECUTION),
@@ -64,7 +64,7 @@ class TestToolCategory:
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize(
-        "tool,expected",
+        ("tool", "expected"),
         [
             ("codomyrmex.list_modules", ToolCategory.QUERY),
             ("codomyrmex.get_status", ToolCategory.QUERY),
@@ -79,7 +79,7 @@ class TestToolCategory:
         assert categorize_tool(tool) == expected
 
     @pytest.mark.parametrize(
-        "tool,expected",
+        ("tool", "expected"),
         [
             ("codomyrmex.git_commit", ToolCategory.MUTATION),
             ("codomyrmex.git_push", ToolCategory.MUTATION),

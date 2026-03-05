@@ -480,7 +480,8 @@ class TestSimulatorHadamard:
         circuit = QuantumCircuit(1).h(0).measure_all()
         sim = QuantumSimulator()
         counts = sim.run(circuit, shots=1000)
-        assert "0" in counts and "1" in counts
+        assert "0" in counts
+        assert "1" in counts
 
     def test_hadamard_roughly_balanced(self):
         circuit = QuantumCircuit(1).h(0).measure_all()

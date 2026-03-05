@@ -1,8 +1,7 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-import matplotlib
-import matplotlib.colors
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -398,7 +397,7 @@ class BaseChartVisualizer(BaseVisualizer):
             # Fallback to viridis
             cmap = plt.cm.get_cmap("viridis")
         rgba = cmap(normalized)
-        return matplotlib.colors.rgb2hex(rgba)
+        return mpl.colors.rgb2hex(rgba)
 
     def add_value_labels(
         self,

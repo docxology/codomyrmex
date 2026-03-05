@@ -2,12 +2,12 @@
 
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pytest
 
 # Use non-interactive backend for testing
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 
 # ============================================================================
@@ -138,7 +138,7 @@ class TestAdvancedPlotter:
         plotter = AdvancedPlotter()
         plotter.create_figure()
         bars = plotter.plot_bar(["A", "B"], [10, 20])
-        assert isinstance(bars, matplotlib.container.BarContainer)
+        assert isinstance(bars, mpl.container.BarContainer)
         plotter.clear_figures()
 
     def test_plot_histogram(self):
@@ -589,13 +589,13 @@ class TestAdvancedPlotterCoverage:
         assert isinstance(cfg, PlotConfig)
 
     def test_create_bar_chart(self, tmp_path):
-        import matplotlib
+        import matplotlib as mpl
 
         from codomyrmex.data_visualization.engines.advanced_plotter import (
             create_advanced_bar_chart,
         )
 
-        matplotlib.use("Agg")
+        mpl.use("Agg")
         fig = create_advanced_bar_chart(["A", "B", "C"], [10, 20, 30], title="Test")
         assert isinstance(fig, plt.Figure)
 
@@ -609,7 +609,7 @@ class TestAdvancedPlotterCoverage:
         dp1 = DataPoint(x=1.0, y=2.0)
         dp2 = DataPoint(x=2.0, y=3.0)
         ds = Dataset(
-            name="test", data=[dp1, dp2], plot_type=list(PlotType)[0], label="test"
+            name="test", data=[dp1, dp2], plot_type=next(iter(PlotType)), label="test"
         )
         assert ds.label == "test"
 

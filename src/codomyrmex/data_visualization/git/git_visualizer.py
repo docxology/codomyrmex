@@ -67,11 +67,11 @@ class GitVisualizer:
 
     def visualize_git_tree_png(
         self,
-        repository_path: str = None,
-        branches: list[dict[str, Any]] = None,
-        commits: list[dict[str, Any]] = None,
+        repository_path: str | None = None,
+        branches: list[dict[str, Any]] | None = None,
+        commits: list[dict[str, Any]] | None = None,
         title: str = "Git Tree Visualization",
-        output_path: str = None,
+        output_path: str | None = None,
         show_plot: bool = False,
         figure_size: tuple[int, int] = (12, 8),
         max_commits: int = 20,
@@ -230,11 +230,11 @@ class GitVisualizer:
 
     def visualize_git_tree_mermaid(
         self,
-        repository_path: str = None,
-        branches: list[dict[str, Any]] = None,
-        commits: list[dict[str, Any]] = None,
+        repository_path: str | None = None,
+        branches: list[dict[str, Any]] | None = None,
+        commits: list[dict[str, Any]] | None = None,
         title: str = "Git Tree Diagram",
-        output_path: str = None,
+        output_path: str | None = None,
     ) -> str:
         """
         Create a Mermaid Git tree/branch diagram.
@@ -288,10 +288,10 @@ class GitVisualizer:
 
     def visualize_commit_activity_png(
         self,
-        repository_path: str = None,
-        commits: list[dict[str, Any]] = None,
+        repository_path: str | None = None,
+        commits: list[dict[str, Any]] | None = None,
         title: str = "Commit Activity",
-        output_path: str = None,
+        output_path: str | None = None,
         show_plot: bool = False,
         figure_size: tuple[int, int] = (12, 6),
         days_back: int = 30,
@@ -331,7 +331,7 @@ class GitVisualizer:
                     date_str = commit.get("date", "")
                     # Parse different date formats
                     if "T" in date_str:
-                        date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+                        date = datetime.fromisoformat(date_str)
                     else:
                         date = datetime.strptime(date_str[:19], "%Y-%m-%d %H:%M:%S")
                     commit_dates.append(date.date())
@@ -452,7 +452,7 @@ class GitVisualizer:
         for commit in commits[:20]:
             try:
                 date_str = commit.get("date", "")
-                date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+                date = datetime.fromisoformat(date_str)
                 dates.append(date)
             except (ValueError, KeyError, AttributeError):
                 continue
@@ -520,7 +520,7 @@ class GitVisualizer:
         for commit in commits:
             try:
                 date_str = commit.get("date", "")
-                date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+                date = datetime.fromisoformat(date_str)
                 commit_dates.append(date)
             except (ValueError, KeyError, AttributeError):
                 continue
@@ -558,10 +558,10 @@ class GitVisualizer:
 
     def visualize_repository_summary_png(
         self,
-        repository_path: str = None,
-        repo_data: dict[str, Any] = None,
+        repository_path: str | None = None,
+        repo_data: dict[str, Any] | None = None,
         title: str = "Repository Summary",
-        output_path: str = None,
+        output_path: str | None = None,
         show_plot: bool = False,
         figure_size: tuple[int, int] = (14, 10),
     ) -> bool:
@@ -868,9 +868,9 @@ def visualize_git_repository(
 
 
 def create_git_tree_png(
-    repository_path: str = None,
-    branches: list[dict[str, Any]] = None,
-    commits: list[dict[str, Any]] = None,
+    repository_path: str | None = None,
+    branches: list[dict[str, Any]] | None = None,
+    commits: list[dict[str, Any]] | None = None,
     output_path: str = "git_tree.png",
     title: str = "Git Tree Visualization",
 ) -> bool:
@@ -886,9 +886,9 @@ def create_git_tree_png(
 
 
 def create_git_tree_mermaid(
-    repository_path: str = None,
-    branches: list[dict[str, Any]] = None,
-    commits: list[dict[str, Any]] = None,
+    repository_path: str | None = None,
+    branches: list[dict[str, Any]] | None = None,
+    commits: list[dict[str, Any]] | None = None,
     output_path: str = "git_tree.mmd",
     title: str = "Git Tree Diagram",
 ) -> str:
@@ -915,10 +915,7 @@ if __name__ == "__main__":
     visualizer = GitVisualizer()
 
     # Test with sample data if no git repo provided
-    if len(sys.argv) > 1:
-        repo_path = sys.argv[1]
-    else:
-        repo_path = None
+    repo_path = sys.argv[1] if len(sys.argv) > 1 else None
 
     if repo_path and os.path.exists(repo_path):
         logger.info(f"Creating comprehensive Git report for: {repo_path}")

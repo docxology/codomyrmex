@@ -71,31 +71,31 @@ def cli_commands():
 
 
 __all__ = [
+    "AESGCMEncryptor",
+    "EncryptionError",
     # Classes
     "Encryptor",
     "KeyManager",
-    "AESGCMEncryptor",
     "SecureDataContainer",
-    "EncryptionError",
     "Signer",
-    # Convenience functions
-    "encrypt",
-    "decrypt",
-    "generate_key",
-    "get_encryptor",
-    "encrypt_data",
-    "decrypt_data",
-    "generate_aes_key",
-    "encrypt_file",
-    "decrypt_file",
-    "hash_data",
-    # HMAC
-    "compute_hmac",
-    "verify_hmac",
-    # KDF
-    "derive_key_hkdf",
     # CLI
     "cli_commands",
+    # HMAC
+    "compute_hmac",
+    "decrypt",
+    "decrypt_data",
+    "decrypt_file",
+    # KDF
+    "derive_key_hkdf",
+    # Convenience functions
+    "encrypt",
+    "encrypt_data",
+    "encrypt_file",
+    "generate_aes_key",
+    "generate_key",
+    "get_encryptor",
+    "hash_data",
+    "verify_hmac",
 ]
 
 

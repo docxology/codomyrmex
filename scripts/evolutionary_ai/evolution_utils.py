@@ -34,7 +34,7 @@ def select_parents(population: list, fitnesses: list, count: int = 2) -> list:
     parents = []
     for _ in range(count):
         candidates = random.sample(
-            list(zip(population, fitnesses)), min(3, len(population))
+            list(zip(population, fitnesses, strict=False)), min(3, len(population))
         )
         winner = max(candidates, key=lambda x: x[1])
         parents.append(winner[0])
@@ -92,10 +92,9 @@ def main():
         / "evolutionary_ai"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/evolutionary_ai/config.yaml")
 
     parser = argparse.ArgumentParser(description="Evolutionary AI utilities")

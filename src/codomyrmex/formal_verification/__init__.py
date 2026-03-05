@@ -38,24 +38,24 @@ from .solver import ConstraintSolver
 from .verify_isc import ISCVerificationResult, verify_criteria_consistency
 
 __all__ = [
-    "__version__",
+    "BackendNotAvailableError",
     # Core API
     "ConstraintSolver",
-    "verify_criteria_consistency",
     "ISCVerificationResult",
+    "InvalidConstraintError",
+    "ModelBuildError",
     # Backend abstractions
     "SolverBackend",
-    "SolverResult",
-    "SolverStatus",
-    "push",
-    "pop",
     # Exceptions
     "SolverError",
+    "SolverResult",
+    "SolverStatus",
     "SolverTimeoutError",
-    "ModelBuildError",
     "UnsatisfiableError",
-    "BackendNotAvailableError",
-    "InvalidConstraintError",
+    "__version__",
+    "pop",
+    "push",
+    "verify_criteria_consistency",
 ]
 
 

@@ -147,7 +147,7 @@ Get your free API key at: https://openrouter.ai/keys
 
 Quick setup:
   export OPENROUTER_API_KEY='your-key-here'
-  
+
 Or save to config file:
   mkdir -p ~/.config/openrouter
   echo 'your-key-here' > ~/.config/openrouter/api_key
@@ -256,10 +256,9 @@ def main():
     config_path = (
         Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(

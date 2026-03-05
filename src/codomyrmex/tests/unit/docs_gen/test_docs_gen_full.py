@@ -1025,7 +1025,7 @@ class TestSiteGeneratorConfig:
         config = gen.generate_config()
         api_section = next(item for item in config.nav if "API Reference" in item)
         api_nav = api_section["API Reference"]
-        names = [list(d.keys())[0] for d in api_nav]
+        names = [next(iter(d.keys())) for d in api_nav]
         assert names == ["a_mod", "m_mod", "z_mod"]
 
     def test_more_nav_for_custom_pages(self):
@@ -1058,7 +1058,7 @@ class TestSiteGeneratorConfig:
             None,
         )
         if more_section:
-            more_paths = [list(d.values())[0] for d in more_section["More"]]
+            more_paths = [next(iter(d.values())) for d in more_section["More"]]
             assert "api/mymod.md" not in more_paths
 
 

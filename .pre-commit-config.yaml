@@ -13,15 +13,27 @@ repos:
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
 
-
-
-  # Security scanning
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.9.4
+  # Type checking with ty
+  - repo: local
     hooks:
-      - id: bandit
-        args: [--recursive, --configfile=pyproject.toml]
-        exclude: ^src/codomyrmex/tests/.*$
+      - id: ty-check
+        name: ty type check
+        entry: uv run ty check src/
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: false
+        stages: [pre-push]
+
+  # uv lock file integrity
+  - repo: local
+    hooks:
+      - id: uv-lock-check
+        name: uv lock check
+        entry: uv lock --check
+        language: system
+        files: ^pyproject\.toml$
+        pass_filenames: false
 
   # Secret detection
   - repo: https://github.com/Yelp/detect-secrets

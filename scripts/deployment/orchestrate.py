@@ -108,10 +108,7 @@ def run_orchestration():
         )
 
     # 6. Rollback if needed
-    if (
-        report.decision == CanaryDecision.ROLLBACK
-        or report.decision == CanaryDecision.CONTINUE
-    ):
+    if report.decision in (CanaryDecision.ROLLBACK, CanaryDecision.CONTINUE):
         print(
             f"\n🔙 Step 4: Decision is {report.decision.value}, rolling back to v1.2.0"
         )
@@ -149,10 +146,9 @@ def run_orchestration():
         / "deployment"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/deployment/config.yaml")
 
 

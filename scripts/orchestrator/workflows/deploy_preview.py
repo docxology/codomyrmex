@@ -27,7 +27,7 @@ from codomyrmex.orchestrator import RetryPolicy, Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-async def build_application(_task_results: dict = None) -> dict[str, Any]:
+async def build_application(_task_results: dict | None = None) -> dict[str, Any]:
     """Build the application for deployment."""
     result = subprocess.run(
         ["uv", "build"], capture_output=True, text=True, cwd=project_root, timeout=300
@@ -44,7 +44,9 @@ async def build_application(_task_results: dict = None) -> dict[str, Any]:
     }
 
 
-async def run_pre_deployment_checks(_task_results: dict = None) -> dict[str, Any]:
+async def run_pre_deployment_checks(
+    _task_results: dict | None = None,
+) -> dict[str, Any]:
     """Run pre-deployment validation checks."""
     checks = {"lint": False, "types": False, "security": False}
 
@@ -94,8 +96,8 @@ async def run_pre_deployment_checks(_task_results: dict = None) -> dict[str, Any
 
 
 async def deploy_to_preview(
-    task_results: dict = None,
-    _task_results: dict = None,
+    task_results: dict | None = None,
+    _task_results: dict | None = None,
     env: str = "preview",
     dry_run: bool = False,
 ) -> dict[str, Any]:
@@ -132,7 +134,7 @@ async def deploy_to_preview(
     # Example: deploy using pip install to a virtual environment
     deploy_cmd = ["echo", f"Deploying {artifacts[0]} to {env}"]
 
-    result = subprocess.run(
+    subprocess.run(
         deploy_cmd, capture_output=True, text=True, cwd=project_root, timeout=300
     )
 
@@ -146,7 +148,9 @@ async def deploy_to_preview(
 
 
 async def run_smoke_tests(
-    task_results: dict = None, _task_results: dict = None, skip: bool = False
+    task_results: dict | None = None,
+    _task_results: dict | None = None,
+    skip: bool = False,
 ) -> dict[str, Any]:
     """Run smoke tests against deployed preview."""
     if skip:
@@ -205,7 +209,7 @@ def _extract_result(obj) -> dict:
 
 
 async def generate_deployment_report(
-    task_results: dict = None, _task_results: dict = None
+    task_results: dict | None = None, _task_results: dict | None = None
 ) -> dict[str, Any]:
     """Generate deployment report."""
     # Handle both naming conventions
@@ -294,7 +298,7 @@ async def main() -> int:
     )
 
     # Deploy
-    async def deploy_action(_task_results: dict = None) -> dict[str, Any]:
+    async def deploy_action(_task_results: dict | None = None) -> dict[str, Any]:
         return await deploy_to_preview(
             _task_results, env=args.env, dry_run=args.dry_run
         )
@@ -304,7 +308,7 @@ async def main() -> int:
     )
 
     # Smoke tests
-    async def smoke_test_action(_task_results: dict = None) -> dict[str, Any]:
+    async def smoke_test_action(_task_results: dict | None = None) -> dict[str, Any]:
         return await run_smoke_tests(_task_results, skip=args.skip_tests)
 
     workflow.add_task(

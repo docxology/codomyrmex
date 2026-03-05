@@ -120,63 +120,63 @@ def cli_commands():
 
 
 __all__ = [
-    # CLI integration
-    "cli_commands",
-    # Core engine
-    "CerebrumEngine",
-    "ModelManager",
-    "ReasoningEngine",
-    "WorkingMemory",
-    "ReasoningChain",
-    "ChainExecutionResult",
-    "DecisionModule",
-    "Decision",
+    # Active inference
+    "ActiveInferenceAgent",
+    "ActiveInferenceError",
+    "AdaptationTransformer",
+    "BayesianInferenceError",
+    # Bayesian inference
+    "BayesianNetwork",
+    "BeliefState",
     # Case management
     "Case",
     "CaseBase",
+    "CaseError",
+    "CaseNotFoundError",
     "CaseRetriever",
-    # Bayesian inference
-    "BayesianNetwork",
-    "InferenceEngine",
+    "CaseVisualizer",
+    # Configuration
+    "CerebrumConfig",
+    # Core engine
+    "CerebrumEngine",
+    # Exceptions
+    "CerebrumError",
+    "ChainExecutionResult",
+    "Decision",
+    "DecisionModule",
     "Distribution",
-    "PriorBuilder",
-    # Active inference
-    "ActiveInferenceAgent",
-    "BeliefState",
-    "VariationalFreeEnergy",
-    "PolicySelector",
+    "InferenceEngine",
+    "InferenceError",
+    "InferenceVisualizer",
+    "InvalidCaseError",
+    "LearningTransformer",
     # Models
     "Model",
     "ModelBase",
-    "ReasoningResult",
+    "ModelError",
+    "ModelManager",
     # Transformations
     "ModelTransformer",
-    "AdaptationTransformer",
-    "LearningTransformer",
-    "TransformationManager",
     # Visualization
     "ModelVisualizer",
-    "CaseVisualizer",
-    "InferenceVisualizer",
-    # Configuration
-    "CerebrumConfig",
-    # Exceptions
-    "CerebrumError",
-    "CaseError",
-    "CaseNotFoundError",
-    "InvalidCaseError",
-    "BayesianInferenceError",
-    "InferenceError",
     "NetworkStructureError",
-    "ActiveInferenceError",
-    "ModelError",
+    "PolicySelector",
+    "PriorBuilder",
+    "ReasoningChain",
+    "ReasoningEngine",
+    "ReasoningResult",
     "TransformationError",
+    "TransformationManager",
+    "VariationalFreeEnergy",
     "VisualizationError",
+    "WorkingMemory",
+    # CLI integration
+    "cli_commands",
+    "compute_cosine_similarity",
+    "compute_euclidean_distance",
     # Utilities
     "compute_hash",
     "normalize_features",
-    "compute_euclidean_distance",
-    "compute_cosine_similarity",
     "softmax",
 ]
 

@@ -77,19 +77,19 @@ __all__ = [
     "ArchitectureViolation",
     "CodeMetrics",
     "CodeReviewError",
+    # Reviewer
+    "CodeReviewer",
     "ComplexityReductionSuggestion",
     "ConfigurationError",
     "DeadCodeFinding",
     "Language",
+    # Analyzer
+    "PyscnAnalyzer",
     "PyscnError",
     "QualityDashboard",
     "QualityGateResult",
     "SeverityLevel",
     "ToolNotFoundError",
-    # Analyzer
-    "PyscnAnalyzer",
-    # Reviewer
-    "CodeReviewer",
     "analyze_file",
     "analyze_project",
     "check_quality_gates",

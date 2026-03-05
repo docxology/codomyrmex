@@ -95,10 +95,9 @@ def main():
         / "environment_setup"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/environment_setup/config.yaml")
 
     parser = argparse.ArgumentParser(description="Environment setup")
@@ -112,7 +111,7 @@ def main():
     subparsers.add_parser("env", help="Check .env file")
 
     # Create command
-    create = subparsers.add_parser("create", help="Create .env from template")
+    subparsers.add_parser("create", help="Create .env from template")
 
     args = parser.parse_args()
 

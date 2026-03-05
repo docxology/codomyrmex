@@ -9,12 +9,12 @@ import sys
 import tempfile
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import pytest
 
 pytestmark = pytest.mark.integration
 
-matplotlib.use("Agg")  # Non-interactive backend for testing
+mpl.use("Agg")  # Non-interactive backend for testing
 
 
 @pytest.mark.unit

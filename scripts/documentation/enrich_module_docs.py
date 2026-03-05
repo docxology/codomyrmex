@@ -223,7 +223,7 @@ def get_module_description(info: dict) -> str:
                 # Skip title-like lines
                 if stripped.lower().replace("_", " ") == info["name"].replace("_", " "):
                     continue
-                if stripped.endswith("Module") or stripped.endswith("module"):
+                if stripped.endswith(("Module", "module")):
                     continue
                 return stripped
     return f"Provides {info['display_name'].lower()} functionality for the Codomyrmex ecosystem."
@@ -521,10 +521,7 @@ def should_enrich(module_name: str, doc_file: Path, info: dict) -> bool:
     # Enrich if very thin (under 50 lines for README, 25 for AGENTS/SPEC)
     if doc_file.name == "README.md" and lines_count < 50:
         return True
-    if doc_file.name in ("AGENTS.md", "SPEC.md") and lines_count < 25:
-        return True
-
-    return False
+    return bool(doc_file.name in ("AGENTS.md", "SPEC.md") and lines_count < 25)
 
 
 def main():
@@ -539,10 +536,9 @@ def main():
         / "documentation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/documentation/config.yaml")
 
     enriched_count = 0

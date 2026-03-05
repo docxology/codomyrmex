@@ -119,7 +119,7 @@ class IA3Adapter(PEFTAdapter):
     Very parameter-efficient: only 3 vectors per layer.
     """
 
-    def __init__(self, d_model: int, d_ff: int = None):
+    def __init__(self, d_model: int, d_ff: int | None = None):
         """Initialize IA3 adapter."""
         self.d_model = d_model
         self.d_ff = d_ff or 4 * d_model

@@ -118,10 +118,7 @@ class ToolTester:
                     continue
 
                 handler = tool.get("handler")
-                if handler:
-                    result = handler(**arguments)
-                else:
-                    result = None
+                result = handler(**arguments) if handler else None
 
                 duration = (time.perf_counter() - start) * 1000
 

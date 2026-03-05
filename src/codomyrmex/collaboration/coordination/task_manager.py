@@ -172,9 +172,8 @@ class DependencyGraph:
             return False
 
         for task_id in self._dependencies:
-            if task_id not in visited:
-                if dfs(task_id):
-                    return True
+            if task_id not in visited and dfs(task_id):
+                return True
         return False
 
 

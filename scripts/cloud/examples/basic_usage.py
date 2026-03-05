@@ -39,10 +39,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     setup_logging()
@@ -52,7 +51,7 @@ def main():
     print_info("Testing CodaClient initialization...")
     coda_token = os.getenv("CODA_API_TOKEN", "")
     try:
-        client = CodaClient(api_token=coda_token)
+        CodaClient(api_token=coda_token)
         print_success("  CodaClient initialized successfully (interface check).")
     except Exception as e:
         print_error(f"  CodaClient failed: {e}")

@@ -44,10 +44,9 @@ def main():
         / "data_visualization"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/data_visualization/config.yaml")
 
     setup_logging()
@@ -78,7 +77,7 @@ def main():
     # 3. Advanced Plotter
     print_info("Testing AdvancedPlotter initialization...")
     try:
-        plotter = AdvancedPlotter()
+        AdvancedPlotter()
         print_success("  AdvancedPlotter initialized successfully.")
     except Exception as e:
         # matplotlib might not be available

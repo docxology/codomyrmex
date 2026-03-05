@@ -30,10 +30,9 @@ def main():
         / "coding"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/coding/config.yaml")
 
     setup_logging()
@@ -72,7 +71,7 @@ def main():
     try:
         from codomyrmex.coding import ExecutionMonitor, check_docker_available
 
-        monitor = ExecutionMonitor()
+        ExecutionMonitor()
         docker = check_docker_available()
         print_success(f"  ExecutionMonitor initialized. Docker available: {docker}")
     except Exception as e:

@@ -141,7 +141,7 @@ def run_script(
 
     # get args from config
     script_args = script_config.get("args", [])
-    cmd = [sys.executable, str(script_path)] + script_args
+    cmd = [sys.executable, str(script_path), *script_args]
     # Debug logging removed - use --verbose flag for detailed output
 
     try:
@@ -219,7 +219,7 @@ def _target_wrapper(q, f, a, k, memory_limit_mb):
 def run_function(
     func: callable,
     args: tuple = (),
-    kwargs: dict = None,
+    kwargs: dict | None = None,
     timeout: int = 60,
     memory_limit_mb: int | None = None,
 ) -> dict[str, Any]:

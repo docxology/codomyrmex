@@ -40,10 +40,9 @@ def main():
         / "tools"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/tools/config.yaml")
 
     setup_logging()
@@ -66,7 +65,7 @@ def main():
     # 2. Dependency Analyzer
     print_info("Testing DependencyAnalyzer...")
     try:
-        analyzer = DependencyAnalyzer()
+        DependencyAnalyzer()
         # Analyze a small part of the repo
         # Use a real path if possible, or just initialize
         print_success("  DependencyAnalyzer initialized.")

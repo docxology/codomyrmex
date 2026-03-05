@@ -111,7 +111,7 @@ def pattern_trusted() -> dict:
 
     # Try a safe tool (should succeed at VERIFIED)
     try:
-        result = trusted_call_tool("codomyrmex.list_modules")
+        trusted_call_tool("codomyrmex.list_modules")
         print_success(
             "  ✅ trusted_call_tool('list_modules') — PASSED (VERIFIED is sufficient)"
         )

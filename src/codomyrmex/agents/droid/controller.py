@@ -9,15 +9,17 @@ from __future__ import annotations
 import json
 import os
 import time
-from collections.abc import Callable, Iterable
 from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from pathlib import Path
 from threading import RLock
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.performance import monitor_performance, performance_context
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
 
 """Droid controller and configuration utilities."""
 

@@ -46,7 +46,7 @@ class SSHClient:
 
     def execute_command(self, command: str) -> tuple[int, str, str]:
         """Execute a command on the remote host."""
-        stdin, stdout, stderr = self.client.exec_command(command)
+        _stdin, stdout, stderr = self.client.exec_command(command)
         exit_status = stdout.channel.recv_exit_status()
         return exit_status, stdout.read().decode(), stderr.read().decode()
 

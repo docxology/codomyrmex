@@ -44,10 +44,9 @@ def main():
         / "database_management"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/database_management/config.yaml")
 
     setup_logging()
@@ -79,7 +78,7 @@ def main():
     try:
         # Create output dir if needed
         os.makedirs("output/schema", exist_ok=True)
-        schema = generate_schema(models=[], output_dir="output/schema")
+        generate_schema(models=[], output_dir="output/schema")
         print_success("  generate_schema called successfully.")
     except Exception as e:
         print_info(f"  generate_schema demo: {e}")

@@ -15,9 +15,12 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from codomyrmex.coding.debugging.patch_generator import Patch
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from codomyrmex.coding.debugging.patch_generator import Patch
 
 # In a real scenario, this would import the Execution module
 # from codomyrmex.coding.execution import execute_code

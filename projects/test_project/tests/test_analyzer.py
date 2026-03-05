@@ -110,7 +110,7 @@ class TestProjectAnalyzer:
         # Since the fixture might not have actual comment TODO markers,
         # we just verify the issue detection runs without error
         # Long line issues are also detected
-        long_line_issues = [i for i in issues if i["type"] == "long_line"]
+        [i for i in issues if i["type"] == "long_line"]
         # The sample file has issues detected (structure test)
         assert isinstance(issues, list)
 

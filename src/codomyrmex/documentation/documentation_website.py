@@ -375,7 +375,7 @@ def print_assessment_checklist():
     print("--- End of Checklist ---")
 
 
-def aggregate_docs(source_root: str = None, dest_root: str = None):
+def aggregate_docs(source_root: str | None = None, dest_root: str | None = None):
     """Aggregate module documentation into the Docusaurus docs/modules folder.
 
     This copies canonical documentation files from each src/codomyrmex/<module>/ directory into
@@ -626,7 +626,7 @@ def main():
     elif action_to_perform == "aggregate_docs":
         aggregate_docs()
     elif action_to_perform == "validate_docs":
-        is_valid, errors, warnings = validate_doc_versions()
+        is_valid, _errors, _warnings = validate_doc_versions()
         if not is_valid:
             logger.error("Documentation validation failed!")
             sys.exit(1)

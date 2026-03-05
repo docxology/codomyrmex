@@ -23,12 +23,14 @@ from typing import Any
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
+import contextlib
+
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
 
-def discover_test_files(test_dir: Path, markers: str = None) -> list[Path]:
+def discover_test_files(test_dir: Path, markers: str | None = None) -> list[Path]:
     """Discover all test files.
 
     Args:
@@ -66,7 +68,10 @@ def split_into_groups(files: list[Path], num_groups: int) -> list[list[Path]]:
 
 
 async def run_test_group(
-    group_id: int, test_files: list[Path], coverage: bool = False, markers: str = None
+    group_id: int,
+    test_files: list[Path],
+    coverage: bool = False,
+    markers: str | None = None,
 ) -> dict[str, Any]:
     """Run a group of tests.
 
@@ -110,20 +115,14 @@ async def run_test_group(
             parts = line.split()
             for i, p in enumerate(parts):
                 if p == "passed" and i > 0:
-                    try:
+                    with contextlib.suppress(ValueError):
                         passed = int(parts[i - 1])
-                    except ValueError:
-                        pass
                 if p == "failed" and i > 0:
-                    try:
+                    with contextlib.suppress(ValueError):
                         failed = int(parts[i - 1])
-                    except ValueError:
-                        pass
                 if p == "skipped" and i > 0:
-                    try:
+                    with contextlib.suppress(ValueError):
                         skipped = int(parts[i - 1])
-                    except ValueError:
-                        pass
 
     return {
         "success": result.returncode == 0,
@@ -186,16 +185,14 @@ async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
 
     # Cleanup temp files
     for cov_file in coverage_files:
-        try:
+        with contextlib.suppress(Exception):
             cov_file.unlink()
-        except Exception:
-            pass
 
     return {"success": True, "coverage": total_coverage}
 
 
 async def generate_test_report(
-    group_results: list[dict[str, Any]], coverage_data: dict[str, Any] = None
+    group_results: list[dict[str, Any]], coverage_data: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     """Generate comprehensive test report.
 

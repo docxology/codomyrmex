@@ -391,13 +391,12 @@ class OllamaManager:
                                             "verifying",
                                             "writing",
                                         ]
+                                    ) and (
+                                        "manifest" in status.lower()
+                                        or "digest" in status.lower()
+                                        or "layer" in status.lower()
                                     ):
-                                        if (
-                                            "manifest" in status.lower()
-                                            or "digest" in status.lower()
-                                            or "layer" in status.lower()
-                                        ):
-                                            self.logger.info(f"Pull status: {status}")
+                                        self.logger.info(f"Pull status: {status}")
                                     last_status = status
 
                                 # Check for completion

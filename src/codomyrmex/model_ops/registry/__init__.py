@@ -51,18 +51,18 @@ def cli_commands():
 
 
 __all__ = [
-    # CLI integration
-    "cli_commands",
-    # Models
-    "ModelStage",
-    "ModelFramework",
-    "ModelMetrics",
-    "ModelVersion",
-    "RegisteredModel",
-    # Stores
-    "ModelStore",
     "FileModelStore",
     "InMemoryModelStore",
+    "ModelFramework",
+    "ModelMetrics",
     # Registry
     "ModelRegistry",
+    # Models
+    "ModelStage",
+    # Stores
+    "ModelStore",
+    "ModelVersion",
+    "RegisteredModel",
+    # CLI integration
+    "cli_commands",
 ]

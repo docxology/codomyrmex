@@ -34,7 +34,7 @@ class TestColumnTypeMappingSQLite:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "data_type, expected_sql_type",
+        ("data_type", "expected_sql_type"),
         [
             ("string", "TEXT"),
             ("text", "TEXT"),
@@ -57,7 +57,7 @@ class TestColumnTypeMappingSQLite:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "data_type, expected_sql_type",
+        ("data_type", "expected_sql_type"),
         [
             ("string", "VARCHAR"),
             ("text", "TEXT"),
@@ -80,7 +80,7 @@ class TestColumnTypeMappingSQLite:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "data_type, expected_sql_type",
+        ("data_type", "expected_sql_type"),
         [
             ("string", "VARCHAR"),
             ("text", "TEXT"),

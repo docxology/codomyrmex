@@ -64,23 +64,23 @@ def cli_commands():
 
 
 __all__ = [
-    # Classes
-    "Compressor",
     "ArchiveManager",
     "CompressionError",
-    "ZstdCompressor",
+    # Classes
+    "Compressor",
     "ParallelCompressor",
-    # Functions
-    "compress",
-    "decompress",
-    "get_compressor",
-    "compress_data",
-    "decompress_data",
+    "ZstdCompressor",
     "auto_decompress",
-    "compress_file",
-    "decompress_file",
     # CLI
     "cli_commands",
+    # Functions
+    "compress",
+    "compress_data",
+    "compress_file",
+    "decompress",
+    "decompress_data",
+    "decompress_file",
+    "get_compressor",
 ]
 
 

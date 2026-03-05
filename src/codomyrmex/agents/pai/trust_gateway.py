@@ -27,10 +27,9 @@ import json
 import logging
 import threading
 import time
-from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools
 from codomyrmex.agents.pai.mcp_bridge import (
@@ -39,6 +38,9 @@ from codomyrmex.agents.pai.mcp_bridge import (
 )
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.quality.validation import validate_tool_arguments
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

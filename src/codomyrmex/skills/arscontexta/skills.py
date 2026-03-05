@@ -1,7 +1,6 @@
 import hashlib
 import json
 import logging
-from collections.abc import Callable
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -22,7 +21,12 @@ try:
 except ImportError:
     _HAS_DISCOVERY = False
 
+from typing import TYPE_CHECKING
+
 from .core import ArsContextaManager
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # ============================================================================
 # Skill registration (into discovery.DEFAULT_REGISTRY)

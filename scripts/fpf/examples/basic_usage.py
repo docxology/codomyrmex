@@ -36,10 +36,9 @@ def main():
     config_path = (
         Path(__file__).resolve().parent.parent.parent / "config" / "fpf" / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/fpf/config.yaml")
 
     setup_logging()
@@ -48,7 +47,7 @@ def main():
     # 1. FPFClient
     print_info("Testing FPFClient initialization...")
     try:
-        client = FPFClient()
+        FPFClient()
         print_success("  FPFClient initialized successfully.")
     except Exception as e:
         print_error(f"  FPFClient failed: {e}")
@@ -65,7 +64,7 @@ def main():
         pattern = Pattern(id="pattern1", name="Test Pattern")
         print_success(f"  Pattern model instance created: {pattern.name}")
 
-        rel = Relationship(id="rel1", source_id="concept1", target_id="pattern1")
+        Relationship(id="rel1", source_id="concept1", target_id="pattern1")
         print_success("  Relationship model instance created.")
     except Exception as e:
         print_error(f"  Models check failed: {e}")

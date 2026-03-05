@@ -141,10 +141,7 @@ def runs_test(data: bytes) -> NistTestResult:
     numerator = abs(v_obs - 2.0 * n * pi * (1.0 - pi))
     denominator = 2.0 * math.sqrt(2.0 * n) * pi * (1.0 - pi)
 
-    if denominator == 0:
-        p_value = 0.0
-    else:
-        p_value = _erfc(numerator / denominator)
+    p_value = 0.0 if denominator == 0 else _erfc(numerator / denominator)
 
     passed = p_value >= _SIGNIFICANCE_LEVEL
     logger.debug(

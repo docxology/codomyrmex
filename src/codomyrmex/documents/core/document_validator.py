@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
-from codomyrmex.documents.models.document import Document
+from typing import TYPE_CHECKING
+
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from codomyrmex.documents.models.document import Document
 
 logger = get_logger(__name__)
 
@@ -12,7 +16,10 @@ class ValidationResult:
     """Result of document validation."""
 
     def __init__(
-        self, is_valid: bool, errors: list[str] = None, warnings: list[str] = None
+        self,
+        is_valid: bool,
+        errors: list[str] | None = None,
+        warnings: list[str] | None = None,
     ):
 
         self.is_valid = is_valid

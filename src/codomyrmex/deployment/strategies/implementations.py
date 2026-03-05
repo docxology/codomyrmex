@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .base import DeploymentStrategy
 from .types import DeploymentResult, DeploymentState, DeploymentTarget
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 
@@ -129,15 +132,14 @@ class BlueGreenDeployment(DeploymentStrategy):
                 failed += 1
                 errors.append(f"Error: {target.id} - {e}")
 
-        if failed == 0 and updated > 0:
-            if self.switch_fn:
-                try:
-                    if not self.switch_fn(version):
-                        errors.append("Traffic switch failed")
-                        failed += 1
-                except Exception as e:
-                    errors.append(f"Switch error: {e}")
+        if failed == 0 and updated > 0 and self.switch_fn:
+            try:
+                if not self.switch_fn(version):
+                    errors.append("Traffic switch failed")
                     failed += 1
+            except Exception as e:
+                errors.append(f"Switch error: {e}")
+                failed += 1
 
         return DeploymentResult(
             success=failed == 0,

@@ -20,14 +20,11 @@ import ast
 import re
 
 
-def search_regex(pattern: str, path: Path, file_extensions: list = None) -> list:
+def search_regex(pattern: str, path: Path, file_extensions: list | None = None) -> list:
     """Search for regex pattern in files."""
     matches = []
 
-    if path.is_file():
-        files = [path]
-    else:
-        files = list(path.rglob("*"))
+    files = [path] if path.is_file() else list(path.rglob("*"))
 
     compiled = re.compile(pattern, re.IGNORECASE)
 

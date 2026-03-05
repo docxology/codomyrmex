@@ -492,7 +492,7 @@ class TestKeyRotation:
         rotation = KeyRotation()
         rotation.register_wallet("u1", "0xold")
         hook_calls = []
-        rotation.add_post_rotate_hook(lambda record: hook_calls.append(record))
+        rotation.add_post_rotate_hook(hook_calls.append)
         rotation.record_rotation("u1", "0xold", "0xnew")
         assert len(hook_calls) == 1
         assert hook_calls[0].new_wallet_id == "0xnew"

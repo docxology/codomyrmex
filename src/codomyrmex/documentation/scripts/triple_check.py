@@ -185,7 +185,7 @@ def analyze_file(file_path: Path, base_path: Path) -> dict:
                     if code_blocks % 2 == 1:  # Inside code block
                         continue
 
-            is_valid, error, resolved = verify_relative_path(
+            is_valid, error, _resolved = verify_relative_path(
                 link_url, file_path, base_path
             )
             if not is_valid:

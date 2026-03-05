@@ -421,5 +421,5 @@ class TestErrorBudgetPolicy:
         tracker = SLOTracker()
         policy = ErrorBudgetPolicy(tracker)
         called = []
-        policy.add_policy("alert", lambda consumed: called.append(consumed))
+        policy.add_policy("alert", called.append)
         assert "alert" in policy._policies

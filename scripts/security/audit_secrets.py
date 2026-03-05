@@ -112,7 +112,7 @@ def scan_file(file_path: Path) -> list:
         for i, line in enumerate(lines, 1):
             # Skip comments in code
             stripped = line.strip()
-            if stripped.startswith("#") or stripped.startswith("//"):
+            if stripped.startswith(("#", "//")):
                 # But still check for actual secrets even in comments
                 pass
 

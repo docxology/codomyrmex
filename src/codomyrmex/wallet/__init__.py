@@ -51,27 +51,27 @@ def cli_commands():
 
 
 __all__ = [
-    "contracts",
-    "security",
-    # Classes
-    "WalletManager",
-    "NaturalRitualRecovery",
     "BackupManager",
     "KeyRotation",
+    "NaturalRitualRecovery",
+    "RitualError",
     "RitualStep",
-    "RotationRecord",
     "RotationPolicy",
+    "RotationRecord",
     # Exceptions
     "WalletError",
-    "WalletNotFoundError",
     "WalletKeyError",
-    "RitualError",
-    # Functions
-    "hash_response",
-    "create_wallet",
-    "get_wallet_manager",
+    # Classes
+    "WalletManager",
+    "WalletNotFoundError",
     # CLI integration
     "cli_commands",
+    "contracts",
+    "create_wallet",
+    "get_wallet_manager",
+    # Functions
+    "hash_response",
+    "security",
 ]
 
 __version__ = "0.1.0"

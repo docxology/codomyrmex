@@ -101,10 +101,7 @@ def discover_and_register_tools(server: MCPServer) -> int:
 
         # Prefix with module source to avoid collisions
         source_module = _extract_module_name(tool.source_path, str(modules_dir))
-        if source_module:
-            prefixed_name = f"{source_module}__{safe_name}"
-        else:
-            prefixed_name = safe_name
+        prefixed_name = f"{source_module}__{safe_name}" if source_module else safe_name
 
         # Check for duplicate tool names
         existing = server._tool_registry.list_tools()
@@ -489,10 +486,9 @@ def main():
         / "model_context_protocol"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/model_context_protocol/config.yaml")
 
     parser = argparse.ArgumentParser(

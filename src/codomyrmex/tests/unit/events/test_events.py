@@ -171,7 +171,7 @@ class TestInMemoryStream:
 
         stream = InMemoryStream()
         received = []
-        asyncio.run(stream.subscribe(handler=lambda e: received.append(e)))
+        asyncio.run(stream.subscribe(handler=received.append))
         asyncio.run(stream.publish(Event(data="hello")))
         assert len(received) == 1
 
@@ -183,7 +183,7 @@ class TestInMemoryStream:
         received = []
 
         async def run():
-            sub = await stream.subscribe(handler=lambda e: received.append(e))
+            sub = await stream.subscribe(handler=received.append)
             await stream.publish(Event(data="before"))
             await stream.unsubscribe(sub.id)
             await stream.publish(Event(data="after"))
@@ -255,7 +255,7 @@ class TestTopicStream:
         received = []
 
         async def run():
-            await ts.subscribe("metrics", handler=lambda e: received.append(e))
+            await ts.subscribe("metrics", handler=received.append)
             await ts.publish("metrics", Event(data="cpu=50"))
             await ts.publish("alerts", Event(data="fire!"))
 
@@ -312,7 +312,7 @@ class TestEventBus:
         received = []
         bus.subscribe(
             event_patterns=[EventType.SYSTEM_STARTUP.value],
-            handler=lambda e: received.append(e),
+            handler=received.append,
             subscriber_id="test-sub",
         )
         event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
@@ -327,7 +327,7 @@ class TestEventBus:
         received = []
         bus.subscribe(
             event_patterns=[EventType.SYSTEM_STARTUP.value],
-            handler=lambda e: received.append(e),
+            handler=received.append,
             subscriber_id="sub-to-remove",
         )
         bus.unsubscribe("sub-to-remove")
@@ -342,7 +342,7 @@ class TestEventBus:
         received = []
         bus.subscribe(
             event_patterns=[EventType.MODULE_LOAD.value],
-            handler=lambda e: received.append(e),
+            handler=received.append,
         )
         event = Event(event_type=EventType.MODULE_LOAD, source="test")
         bus.emit_typed(event)
@@ -356,7 +356,7 @@ class TestEventBus:
         received = []
         bus.subscribe_typed(
             event_type=EventType.ANALYSIS_START,
-            handler=lambda e: received.append(e),
+            handler=received.append,
         )
         bus.publish(Event(event_type=EventType.ANALYSIS_START, source="test"))
         assert len(received) >= 1
@@ -390,8 +390,8 @@ class TestEventBus:
         bus = EventBus()
         received_a = []
         received_b = []
-        bus.subscribe(event_patterns=["*"], handler=lambda e: received_a.append(e))
-        bus.subscribe(event_patterns=["*"], handler=lambda e: received_b.append(e))
+        bus.subscribe(event_patterns=["*"], handler=received_a.append)
+        bus.subscribe(event_patterns=["*"], handler=received_b.append)
         bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
         assert len(received_a) >= 1
         assert len(received_b) >= 1

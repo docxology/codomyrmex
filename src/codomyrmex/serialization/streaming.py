@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import csv
 import json
-from collections.abc import Generator, Iterator
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Iterator
+    from pathlib import Path
 
 
 def stream_jsonl_write(

@@ -8,10 +8,12 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
-from codomyrmex.orchestrator.workflows.workflow_journal import (
-    WorkflowJournal,
-)
+if TYPE_CHECKING:
+    from codomyrmex.orchestrator.workflows.workflow_journal import (
+        WorkflowJournal,
+    )
 
 
 @dataclass

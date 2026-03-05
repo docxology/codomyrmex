@@ -85,12 +85,14 @@ def run_code_in_docker(
     docker_timeout = timeout * language_config.get("timeout_factor", 1.2)
 
     # Construct the full Docker command
-    docker_cmd = (
-        ["docker", "run", "--rm"]
-        + docker_args
-        + [language_config["image"]]
-        + container_cmd
-    )
+    docker_cmd = [
+        "docker",
+        "run",
+        "--rm",
+        *docker_args,
+        language_config["image"],
+        *container_cmd,
+    ]
 
     logger.info(f"Executing code in Docker: {' '.join(docker_cmd)}")
 

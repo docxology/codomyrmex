@@ -129,7 +129,7 @@ def write_pdf(
                 c.setSubject(metadata["subject"])
 
             # Write content
-            width, height = letter
+            _width, height = letter
             y = height - 50
             lines = content.split("\n")
 

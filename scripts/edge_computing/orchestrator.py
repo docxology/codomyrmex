@@ -36,10 +36,9 @@ def main():
         / "edge_computing"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/edge_computing/config.yaml")
 
     print("--- Edge Computing Orchestrator Starting ---")
@@ -47,7 +46,7 @@ def main():
     # 1. Initialize Cluster and Infrastructure
     cluster = EdgeCluster()
     metrics = EdgeMetrics()
-    scheduler = EdgeScheduler()
+    EdgeScheduler()
     deploy_manager = DeploymentManager(cluster)
 
     # 2. Register Edge Nodes

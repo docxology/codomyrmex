@@ -39,9 +39,7 @@ def analyze_python_file(file_path: Path) -> dict:
         tree = ast.parse(source)
 
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) or isinstance(
-                node, ast.AsyncFunctionDef
-            ):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 stats["functions"] += 1
                 if ast.get_docstring(node):
                     stats["docstrings"] += 1
@@ -98,10 +96,9 @@ def main():
         / "static_analysis"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/static_analysis/config.yaml")
 
     parser = argparse.ArgumentParser(description="Static code analysis")

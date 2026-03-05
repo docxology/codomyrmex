@@ -8,7 +8,9 @@ logger = get_logger(__name__)
 
 
 @mcp_tool(name="git_create_tag")
-def create_tag(tag_name: str, message: str = None, repository_path: str = None) -> bool:
+def create_tag(
+    tag_name: str, message: str | None = None, repository_path: str | None = None
+) -> bool:
     """Create a Git tag."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -40,7 +42,7 @@ def create_tag(tag_name: str, message: str = None, repository_path: str = None) 
 
 
 @mcp_tool(name="git_list_tags")
-def list_tags(repository_path: str = None) -> list[str]:
+def list_tags(repository_path: str | None = None) -> list[str]:
     """List all Git tags."""
     if repository_path is None:
         repository_path = os.getcwd()

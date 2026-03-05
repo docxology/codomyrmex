@@ -98,26 +98,34 @@ def generate_report(
 
 
 __all__ = [
-    "exceptions",
-    "export",
-    # Core
-    "Theme",
-    "DEFAULT_THEME",
     "DARK_THEME",
-    "Grid",
-    "Section",
-    "render_html",
+    "DEFAULT_THEME",
+    # Chart Classes
+    "AreaChart",
+    "BarChart",
+    "BarPlot",
+    "BoxPlot",
+    "Card",
     # UI
     "Dashboard",
-    "Card",
-    "Table",
+    "FinanceReport",
+    "GeneralSystemReport",
+    "Grid",
+    "Heatmap",
+    "Histogram",
+    "LinePlot",
+    "LogisticsReport",
+    "MarketingReport",
+    # Mermaid
+    "MermaidDiagram",
+    "PieChart",
     # Reports
     "Report",
-    "GeneralSystemReport",
-    "FinanceReport",
-    "MarketingReport",
-    "LogisticsReport",
-    "generate_report",
+    "ScatterPlot",
+    "Section",
+    "Table",
+    # Core
+    "Theme",
     # Chart Creation Functions
     "create_area_chart",
     "create_bar_chart",
@@ -128,16 +136,8 @@ __all__ = [
     "create_line_plot",
     "create_pie_chart",
     "create_scatter_plot",
-    # Chart Classes
-    "AreaChart",
-    "BarChart",
-    "BarPlot",
-    "BoxPlot",
-    "Heatmap",
-    "Histogram",
-    "LinePlot",
-    "PieChart",
-    "ScatterPlot",
-    # Mermaid
-    "MermaidDiagram",
+    "exceptions",
+    "export",
+    "generate_report",
+    "render_html",
 ]

@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from codomyrmex.meme.cultural_dynamics.models import CulturalState
+import itertools
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from codomyrmex.meme.cultural_dynamics.models import CulturalState
 
 
 def detect_oscillation(states: list[CulturalState], dimension: str) -> bool:
@@ -12,7 +16,7 @@ def detect_oscillation(states: list[CulturalState], dimension: str) -> bool:
         return False
 
     # Check for sign changes in derivative
-    diffs = [y - x for x, y in zip(values[:-1], values[1:], strict=False)]
+    diffs = [y - x for x, y in itertools.pairwise(values)]
     sign_changes = sum(1 for i in range(len(diffs) - 1) if diffs[i] * diffs[i + 1] < 0)
 
     return sign_changes > 0

@@ -92,27 +92,27 @@ def cli_commands() -> dict[str, object]:
 
 
 __all__ = [
-    "cli_commands",
-    "setup_logging",
-    "get_logger",
     # log format constants
     "DEFAULT_LOG_FORMAT",
     "DETAILED_LOG_FORMAT",
-    # v0.2.0 correlation
-    "new_correlation_id",
-    "get_correlation_id",
-    "set_correlation_id",
-    "clear_correlation_id",
-    "with_correlation",
     "CorrelationFilter",
-    "enrich_event_data",
-    "create_mcp_correlation_header",
-    "create_correlation_id",
-    # context management
-    "LogContext",
-    "log_with_context",
     # structured JSON logging
     "JSONFormatter",
-    "enable_structured_json",
+    # context management
+    "LogContext",
+    "clear_correlation_id",
+    "cli_commands",
     "configure_all_structured",
+    "create_correlation_id",
+    "create_mcp_correlation_header",
+    "enable_structured_json",
+    "enrich_event_data",
+    "get_correlation_id",
+    "get_logger",
+    "log_with_context",
+    # v0.2.0 correlation
+    "new_correlation_id",
+    "set_correlation_id",
+    "setup_logging",
+    "with_correlation",
 ]

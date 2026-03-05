@@ -51,18 +51,18 @@ def cli_commands():
 
 
 __all__ = [
-    "CircuitState",
+    "CircuitBreaker",
     "CircuitBreakerConfig",
     "CircuitOpenError",
-    "NoHealthyInstanceError",
-    "LoadBalancerStrategy",
-    "ServiceInstance",
-    "CircuitBreaker",
+    "CircuitState",
     "LoadBalancer",
+    "LoadBalancerStrategy",
+    "NoHealthyInstanceError",
     "RetryPolicy",
+    "ServiceInstance",
     "ServiceProxy",
-    "with_circuit_breaker",
-    "with_retry",
     # CLI
     "cli_commands",
+    "with_circuit_breaker",
+    "with_retry",
 ]

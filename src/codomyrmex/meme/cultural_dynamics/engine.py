@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from codomyrmex.meme.cultural_dynamics.models import (
     CulturalState,
     FrequencyMap,
@@ -9,7 +11,9 @@ from codomyrmex.meme.cultural_dynamics.models import (
     Signal,
     Trajectory,
 )
-from codomyrmex.meme.memetics.models import Meme
+
+if TYPE_CHECKING:
+    from codomyrmex.meme.memetics.models import Meme
 
 
 class CulturalDynamicsEngine:

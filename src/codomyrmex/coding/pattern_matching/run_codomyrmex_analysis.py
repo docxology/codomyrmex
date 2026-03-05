@@ -218,9 +218,7 @@ def _perform_symbol_extraction(path: str) -> list[str]:
 
     symbols = []
     for node in ast.iter_child_nodes(tree):
-        if isinstance(node, ast.ClassDef) or isinstance(
-            node, (ast.FunctionDef, ast.AsyncFunctionDef)
-        ):
+        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
             symbols.append(node.name)
     return symbols
 

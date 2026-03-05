@@ -49,18 +49,18 @@ def cli_commands():
 
 
 __all__ = [
-    # API endpoints
-    "CalendarProvider",
-    "CalendarEvent",
-    "GoogleCalendar",
     # Status flags
     "CALENDAR_AVAILABLE",
     "GCAL_AVAILABLE",
+    "CalendarAPIError",
+    "CalendarAuthError",
     # Exceptions
     "CalendarError",
-    "CalendarAuthError",
-    "CalendarAPIError",
+    "CalendarEvent",
+    # API endpoints
+    "CalendarProvider",
     "EventNotFoundError",
+    "GoogleCalendar",
     "InvalidEventError",
     # Utilities
     "cli_commands",

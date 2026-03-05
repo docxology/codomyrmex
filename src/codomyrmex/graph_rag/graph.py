@@ -118,11 +118,11 @@ class KnowledgeGraph:
             current = path[-1]
             for neighbor_id in self._adjacency.get(current, []):
                 if neighbor_id == end_id:
-                    return path + [neighbor_id]
+                    return [*path, neighbor_id]
 
                 if neighbor_id not in visited:
                     visited.add(neighbor_id)
-                    queue.append(path + [neighbor_id])
+                    queue.append([*path, neighbor_id])
 
         return None
 

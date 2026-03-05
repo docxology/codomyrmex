@@ -22,10 +22,10 @@ __all__ = ["ExampleClient", "process_data"]
 
 class ExampleClient:
     """A client for demonstrating class documentation.
-    
+
     Inherits from nothing in particular.
     """
-    
+
     def __init__(self, endpoint: str, timeout: float = 30.0) -> None:
         """Initialize the client."""
         self.endpoint = endpoint
@@ -58,10 +58,9 @@ def main():
         / "docs_gen"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     print("--- Starting Docs Generation Orchestrator ---")
@@ -76,7 +75,7 @@ def main():
     # 3. Add a custom page
     print("Adding custom introduction page...")
     intro_content = """# Introduction
-    
+
 Welcome to the improved documentation system.
 This site was generated using the `docs_gen` orchestrator.
 """

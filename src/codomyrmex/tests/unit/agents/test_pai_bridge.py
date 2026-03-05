@@ -9,7 +9,7 @@ Upstream reference: https://github.com/danielmiessler/Personal_AI_Infrastructure
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -26,6 +26,9 @@ from codomyrmex.agents.pai import (
     PAISkillInfo,
     PAIToolInfo,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # =====================================================================
 # Fixtures
@@ -117,7 +120,7 @@ class TestDiscovery:
         assert expected_keys.issubset(set(components.keys()))
 
         # Each component has exists/count/path
-        for _key, info in components.items():
+        for info in components.values():
             assert "exists" in info
             assert "count" in info
             assert "path" in info

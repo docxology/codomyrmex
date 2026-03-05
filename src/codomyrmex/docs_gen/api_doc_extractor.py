@@ -107,15 +107,18 @@ class APIDocExtractor:
 
         # Extract __all__
         for node in ast.walk(tree):
-            if isinstance(node, ast.Assign) and any(
-                isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets
+            if (
+                isinstance(node, ast.Assign)
+                and any(
+                    isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets
+                )
+                and isinstance(node.value, ast.List)
             ):
-                if isinstance(node.value, ast.List):
-                    module_doc.exports = [
-                        elt.value
-                        for elt in node.value.elts
-                        if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
-                    ]
+                module_doc.exports = [
+                    elt.value
+                    for elt in node.value.elts
+                    if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
+                ]
 
         for node in tree.body:
             if isinstance(node, ast.ClassDef):

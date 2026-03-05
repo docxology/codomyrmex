@@ -13,11 +13,13 @@ from __future__ import annotations
 
 import asyncio
 import time
-from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
 
 logger = get_logger(__name__)
 
@@ -66,7 +68,7 @@ class AsyncWorkerPool:
         self._tasks: list[asyncio.Task[Any]] = []
         self._closed = False
 
-    async def __aenter__(self) -> AsyncWorkerPool:
+    async def __aenter__(self) -> Self:
         """Enter async context."""
         return self
 

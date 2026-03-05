@@ -10,10 +10,7 @@ def check_secrets(content: Any, file_path: str | None) -> list[AuditIssue]:
     import re
 
     issues = []
-    if not isinstance(content, str):
-        content_str = str(content)
-    else:
-        content_str = content
+    content_str = str(content) if not isinstance(content, str) else content
 
     sensitive_patterns = [
         (

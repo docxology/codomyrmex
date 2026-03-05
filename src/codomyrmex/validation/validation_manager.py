@@ -7,15 +7,17 @@ validation profiles, and aggregate reporting.
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .contextual import ContextualValidator, ValidationIssue
 from .summary import ValidationSummary
 from .validator import ValidationResult, Validator
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

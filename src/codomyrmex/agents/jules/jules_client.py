@@ -8,9 +8,8 @@ from __future__ import annotations
 
 import re
 import time
-from collections.abc import Iterator
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
@@ -19,6 +18,9 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError, JulesError
 from codomyrmex.agents.generic import CLIAgentBase
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 # Auth-related strings Jules CLI may emit on failure
 _AUTH_MARKERS = (
@@ -114,7 +116,7 @@ class JulesClient(CLIAgentBase):
                     request,
                     additional_metadata={
                         "jules_success": result.get("success", False),
-                        "command_full": " ".join([self.command] + jules_args),
+                        "command_full": " ".join([self.command, *jules_args]),
                         "attempt": attempt + 1,
                     },
                 )
@@ -135,6 +137,7 @@ class JulesClient(CLIAgentBase):
                 raise JulesError(
                     f"Jules command failed: {e}", command=self.command
                 ) from e
+        return None
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream Jules command output."""

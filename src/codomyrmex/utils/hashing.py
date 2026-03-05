@@ -9,8 +9,10 @@ from __future__ import annotations
 import hashlib
 import json
 from bisect import bisect_right
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def content_hash(data: str | bytes, algorithm: str = "sha256") -> str:

@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from codomyrmex.meme.neurolinguistic.framing import analyze_frames
-from codomyrmex.meme.neurolinguistic.models import CognitiveFrame
 from codomyrmex.meme.neurolinguistic.patterns import detect_patterns
+
+if TYPE_CHECKING:
+    from codomyrmex.meme.neurolinguistic.models import CognitiveFrame
 
 
 class NeurolinguisticEngine:

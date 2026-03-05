@@ -46,7 +46,7 @@ def decode_jwt_payload(token: str) -> dict:
         return {"error": str(e)}
 
 
-def hash_password(password: str, salt: bytes = None) -> tuple:
+def hash_password(password: str, salt: bytes | None = None) -> tuple:
     """Hash a password with salt."""
     if salt is None:
         salt = secrets.token_bytes(16)
@@ -75,10 +75,9 @@ def main():
         / "auth"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/auth/config.yaml")
 
     parser = argparse.ArgumentParser(description="Authentication utilities")

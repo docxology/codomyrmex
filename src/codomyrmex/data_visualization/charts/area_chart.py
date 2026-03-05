@@ -25,9 +25,9 @@ def create_area_chart(
     title: str = "Area Chart",
     x_label: str = "X-axis",
     y_label: str = "Y-axis",
-    output_path: str = None,
+    output_path: str | None = None,
     show_plot: bool = False,
-    labels: list = None,
+    labels: list | None = None,
     alpha: float = 0.5,
     stacked: bool = False,
     figure_size: tuple = DEFAULT_FIGURE_SIZE,
@@ -108,15 +108,15 @@ class AreaChart:
 
     def __init__(
         self,
-        x_data: list = None,
-        y_data: list = None,
+        x_data: list | None = None,
+        y_data: list | None = None,
         title: str = "Area Chart",
         x_label: str = "X-axis",
         y_label: str = "Y-axis",
-        labels: list = None,
+        labels: list | None = None,
         alpha: float = 0.5,
         stacked: bool = False,
-        figure_size: tuple = None,
+        figure_size: tuple | None = None,
         theme=None,
     ):
         self.x_data = x_data or []
@@ -130,7 +130,7 @@ class AreaChart:
         self.figure_size = figure_size or DEFAULT_FIGURE_SIZE
         self.theme = theme
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """Render the area chart."""
         return create_area_chart(
             x_data=self.x_data,

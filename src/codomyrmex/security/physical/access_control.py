@@ -111,13 +111,12 @@ class AccessControlSystem:
 
         now = datetime.now()
         for permission in self.permissions[user_id]:
-            if permission.resource == resource:
-                if (
-                    permission.permission_type == permission_type
-                    or permission.permission_type == "admin"
-                ):
-                    if permission.expires_at is None or permission.expires_at > now:
-                        return True
+            if (
+                permission.resource == resource
+                and (permission.permission_type in (permission_type, "admin"))
+                and (permission.expires_at is None or permission.expires_at > now)
+            ):
+                return True
         return False
 
 

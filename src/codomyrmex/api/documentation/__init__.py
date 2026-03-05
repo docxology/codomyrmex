@@ -50,17 +50,17 @@ from .doc_generator import (
 # Currently, the core documentation generation and OpenAPI spec generation are available
 
 __all__ = [
+    "APIDocumentation",
     # Documentation generation
     "APIDocumentationGenerator",
-    "generate_api_docs",
-    "extract_api_specs",
-    "APIDocumentation",
     "APIEndpoint",
+    "APISchema",
     # OpenAPI/Swagger (from parent module)
     "OpenAPIGenerator",
+    "extract_api_specs",
+    "generate_api_docs",
     "generate_openapi_spec",
     "validate_openapi_spec",
-    "APISchema",
     # Future: Add when implemented
     # 'DocumentationPublisher',
     # 'publish_documentation',

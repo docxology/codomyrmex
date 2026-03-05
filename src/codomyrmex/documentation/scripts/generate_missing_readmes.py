@@ -127,7 +127,7 @@ def generate_readme_content(module_info, dir_path, repo_root):
     # Add navigation
     if nav_links:
         readme_content += "\n## Navigation\n"
-        for link_type, _link_path in nav_links.items():
+        for link_type in nav_links:
             if link_type == "parent":
                 readme_content += (
                     f"- **Parent Directory**: [{dir_path.parent.name}](../README.md)\n"

@@ -92,9 +92,8 @@ def get_submodules(src_dir: Path) -> list[str]:
             item.is_dir()
             and item.name not in IGNORE_DIRS
             and not item.name.startswith(".")
-        ):
-            if (item / "__init__.py").exists():
-                modules.append(item.name)
+        ) and (item / "__init__.py").exists():
+            modules.append(item.name)
     return sorted(modules)
 
 

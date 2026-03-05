@@ -7,9 +7,12 @@ their directory location in the rules hierarchy.
 from __future__ import annotations
 
 import re
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .models import Rule, RulePriority, RuleSection
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # Matches section headings like "## 0. Preamble" or "## 3. Coding Standards & Practices for X"
 _SECTION_RE = re.compile(r"^#{1,3}\s+(\d+)\.\s+(.+)$", re.MULTILINE)

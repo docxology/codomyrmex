@@ -24,7 +24,7 @@ DEFAULT_LABEL_FONTSIZE = 12
 
 
 def apply_common_aesthetics(
-    ax, title: str = None, x_label: str = None, y_label: str = None
+    ax, title: str | None = None, x_label: str | None = None, y_label: str | None = None
 ):
     """
     Apply common aesthetics to a matplotlib axes.
@@ -159,7 +159,7 @@ def apply_theme_to_axes(ax, theme_name):
     return ax
 
 
-def apply_style(ax, style_name: str = None):
+def apply_style(ax, style_name: str | None = None):
     """
     Map a style name to a ThemeName and apply it.
 

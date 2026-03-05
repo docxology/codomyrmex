@@ -7,10 +7,12 @@ such as dependency audits, stale file cleanup, and health checks.
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 __all__ = [
     "MaintenanceScheduler",

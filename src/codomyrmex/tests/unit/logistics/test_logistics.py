@@ -15,7 +15,7 @@ class TestResourceManager:
             ResourceType,
         )
 
-        r = Resource(id="r1", name="cpu", type=list(ResourceType)[0], capacity=100)
+        r = Resource(id="r1", name="cpu", type=next(iter(ResourceType)), capacity=100)
         assert r.name == "cpu"
 
     def test_resource_limits(self):
@@ -53,7 +53,7 @@ class TestTaskOrchestrator:
             name="build",
             module="core",
             action="compile",
-            priority=list(TaskPriority)[0],
+            priority=next(iter(TaskPriority)),
         )
         assert t.name == "build"
 

@@ -108,9 +108,8 @@ class CronTrigger(Trigger):
             elif "/" in part:
                 base, step = part.split("/")
                 step = int(step)
-                if base == "*":
-                    if value % step == 0:
-                        return True
+                if base == "*" and value % step == 0:
+                    return True
             elif int(part) == value:
                 return True
 

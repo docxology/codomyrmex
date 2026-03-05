@@ -46,7 +46,7 @@ class NASSearchSpace:
     dropout: list[float] = field(default_factory=lambda: [0.0, 0.1, 0.3])
     activation: list[str] = field(default_factory=lambda: ["relu", "gelu", "swish"])
 
-    def sample(self, seed: int = None) -> ArchConfig:
+    def sample(self, seed: int | None = None) -> ArchConfig:
         """Sample a random architecture from the search space."""
         if seed is not None:
             random.seed(seed)
@@ -98,7 +98,7 @@ class NASSearcher:
         self.eval_fn = eval_fn  # Returns score (higher = better)
         self.history: list[tuple[ArchConfig, float]] = []
 
-    def random_search(self, n_trials: int = 20, seed: int = None) -> ArchConfig:
+    def random_search(self, n_trials: int = 20, seed: int | None = None) -> ArchConfig:
         """Random architecture search."""
         if seed is not None:
             random.seed(seed)
@@ -123,7 +123,7 @@ class NASSearcher:
         n_generations: int = 5,
         population_size: int = 10,
         n_mutations: int = 3,
-        seed: int = None,
+        seed: int | None = None,
     ) -> ArchConfig:
         """Evolutionary architecture search with mutation."""
         if seed is not None:

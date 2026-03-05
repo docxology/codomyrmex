@@ -149,7 +149,7 @@ class OTLPExporter(SpanExporter):
                 trace_spans[span.trace_id] = []
             trace_spans[span.trace_id].append(span)
 
-        for _trace_id, trace_span_list in trace_spans.items():
+        for trace_span_list in trace_spans.values():
             scope_spans = []
             for span in trace_span_list:
                 scope_spans.append(

@@ -233,10 +233,7 @@ class SecretScanner:
 
     def _should_ignore(self, path: str) -> bool:
         """Check if a path should be ignored."""
-        for pattern in self._ignore_compiled:
-            if pattern.search(path):
-                return True
-        return False
+        return any(pattern.search(path) for pattern in self._ignore_compiled)
 
     def scan_text(
         self,
@@ -338,9 +335,8 @@ class SecretScanner:
                 if self._should_ignore(str(path)):
                     continue
 
-                if extensions:
-                    if path.suffix.lower() not in extensions:
-                        continue
+                if extensions and path.suffix.lower() not in extensions:
+                    continue
 
                 result = self.scan_file(str(path))
                 all_secrets.extend(result.secrets_found)
@@ -485,20 +481,20 @@ def generate_secret(length: int = 32, include_special: bool = True) -> str:
 
 
 __all__ = [
-    # Enums
-    "SecretType",
-    "SecretSeverity",
     # Data classes
     "DetectedSecret",
     "ScanResult",
     # Classes
     "SecretPatterns",
     "SecretScanner",
+    "SecretSeverity",
+    # Enums
+    "SecretType",
     "SecretVault",
+    "generate_secret",
     # Functions
     "get_secret_from_env",
     "mask_secret",
-    "generate_secret",
 ]
 
 # Note: secret_scanner.py contains a minimal SecretScanner variant.

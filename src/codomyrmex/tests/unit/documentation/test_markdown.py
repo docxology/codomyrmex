@@ -246,7 +246,7 @@ class TestCheckLinks:
 
         issues = check_links(docs)
         assert len(issues) >= 1
-        file_issues = list(issues.values())[0]
+        file_issues = next(iter(issues.values()))
         assert any(i["issue"] == "broken_link" for i in file_issues)
 
     def test_external_links_not_flagged(self, tmp_path: Path):
@@ -337,7 +337,7 @@ class TestAuditStructure:
         # AGENTS.md without Parent/Self links
         (mod / "AGENTS.md").write_text("# Agents\n\nNo links here.\n")
 
-        modules, errors = check_structure(tmp_path)
+        _modules, errors = check_structure(tmp_path)
         signpost_errors = [e for e in errors if "BAD SIGNPOSTING" in e]
         assert len(signpost_errors) >= 1
 
@@ -348,7 +348,7 @@ class TestAuditStructure:
         cache.mkdir()
         (cache / "__init__.py").write_text("")
 
-        modules, errors = check_structure(tmp_path)
+        modules, _errors = check_structure(tmp_path)
         cache_modules = [m for m in modules if "__pycache__" in str(m)]
         assert len(cache_modules) == 0
 
@@ -359,7 +359,7 @@ class TestAuditStructure:
         hidden.mkdir()
         (hidden / "__init__.py").write_text("")
 
-        modules, errors = check_structure(tmp_path)
+        modules, _errors = check_structure(tmp_path)
         hidden_modules = [m for m in modules if ".hidden" in str(m)]
         assert len(hidden_modules) == 0
 

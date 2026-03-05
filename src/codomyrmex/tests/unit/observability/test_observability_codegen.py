@@ -89,7 +89,7 @@ class TestAlertEngine:
         eng = AlertEngine()
         eng.add_rule(AlertRule("r", "m", "gt", 0))
         received: list[Alert] = []
-        eng.on_alert(lambda a: received.append(a))
+        eng.on_alert(received.append)
         eng.evaluate({"m": 1.0})
         assert len(received) == 1
 

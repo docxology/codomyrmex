@@ -5,10 +5,12 @@ Errors related to file and directory operations.
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from .base import CodomyrmexError
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class FileOperationError(CodomyrmexError):

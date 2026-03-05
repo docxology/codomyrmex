@@ -25,9 +25,9 @@ def create_line_plot(
     title: str = "Line Plot",
     x_label: str = "X-axis",
     y_label: str = "Y-axis",
-    output_path: str = None,
+    output_path: str | None = None,
     show_plot: bool = False,
-    line_labels: list = None,  # For multiple lines
+    line_labels: list | None = None,  # For multiple lines
     markers: bool = False,
     figure_size: tuple = DEFAULT_FIGURE_SIZE,
     theme=None,
@@ -94,14 +94,14 @@ class LinePlot:
 
     def __init__(
         self,
-        x_data: list = None,
-        y_data: list = None,
+        x_data: list | None = None,
+        y_data: list | None = None,
         title: str = "Line Plot",
         x_label: str = "X-axis",
         y_label: str = "Y-axis",
-        line_labels: list = None,
+        line_labels: list | None = None,
         markers: bool = False,
-        figure_size: tuple = None,
+        figure_size: tuple | None = None,
     ):
         """
         Initialize a line plot.
@@ -125,7 +125,7 @@ class LinePlot:
         self.markers = markers
         self.figure_size = figure_size or DEFAULT_FIGURE_SIZE
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """
         Render the line plot.
 

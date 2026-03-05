@@ -61,7 +61,7 @@ async def main() -> int:
         # Actually, the provided Workflow doesn't seem to pass results down.
         # Let's check _execute_task again.
 
-        results = await workflow.run()
+        await workflow.run()
         print_success(f"Workflow '{workflow.name}' completed.")
         for name, task in workflow.tasks.items():
             print_info(f"  Task '{name}': {task.status.value}")

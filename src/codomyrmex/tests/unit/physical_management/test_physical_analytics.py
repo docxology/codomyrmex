@@ -154,7 +154,7 @@ class TestAnalyticsWindowMetrics:
         assert abs(m[AnalyticsMetric.STD_DEV] - expected_std) < 1e-9
 
     @pytest.mark.parametrize(
-        "values, expected_mean, expected_min, expected_max",
+        ("values", "expected_mean", "expected_min", "expected_max"),
         [
             ([1.0, 2.0, 3.0, 4.0, 5.0], 3.0, 1.0, 5.0),
             ([100.0, 100.0, 100.0], 100.0, 100.0, 100.0),

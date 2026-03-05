@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
@@ -96,7 +97,7 @@ if __name__ == "__main__":
         print(f"\nFOUND {len(errors)} STRUCTURAL ISSUES:")
         for e in errors:
             print(f"[FAIL] {e}")
-        exit(1)
+        sys.exit(1)
     else:
         print("\n[SUCCESS] All modules contain specific documentation and signposting!")
-        exit(0)
+        sys.exit(0)

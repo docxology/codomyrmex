@@ -51,7 +51,7 @@ class TestComputeGAE:
         T = 5
         rewards = np.ones(T)  # All positive
         values = np.zeros(T)
-        advantages, returns = compute_gae(
+        _advantages, returns = compute_gae(
             rewards, values, last_value=0.0, gamma=0.99, gae_lambda=0.95
         )
         # Returns should be at least as large as immediate rewards due to discounting
@@ -74,7 +74,7 @@ class TestComputeGAE:
         values = np.array([0.5])
         last_value = 0.3
         gamma = 0.99
-        advantages, returns = compute_gae(
+        advantages, _returns = compute_gae(
             rewards, values, last_value, gamma=gamma, gae_lambda=0.95
         )
         expected_delta = 1.0 + gamma * 0.3 - 0.5

@@ -7,6 +7,7 @@ using various STT providers.
 import asyncio
 from collections.abc import AsyncIterator
 from pathlib import Path
+from typing import Self
 
 from .models import (
     TranscriptionConfig,
@@ -260,7 +261,7 @@ class Transcriber:
         """Unload the model to free memory."""
         self._provider.unload()
 
-    def __enter__(self) -> "Transcriber":
+    def __enter__(self) -> Self:
         """Context manager entry."""
         return self
 

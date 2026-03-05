@@ -254,7 +254,7 @@ class APIHandler:
 
         try:
             # Run the script using the current python executable
-            cmd = [sys.executable, str(script_path)] + sanitized_args
+            cmd = [sys.executable, str(script_path), *sanitized_args]
             env = os.environ.copy()
             env["PYTHONUNBUFFERED"] = "1"
 

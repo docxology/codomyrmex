@@ -16,10 +16,11 @@ import hashlib
 import json
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
-from .engine import TriadicCoordinate
+if TYPE_CHECKING:
+    from .engine import TriadicCoordinate
 
 
 def _content_hash(data: dict[str, Any]) -> str:
@@ -204,7 +205,7 @@ class UORRelationship:
 
     def involves(self, entity_id: str) -> bool:
         """Check if an entity is involved in this relationship."""
-        return self.source_id == entity_id or self.target_id == entity_id
+        return entity_id in (self.source_id, self.target_id)
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize the relationship to a plain dictionary."""

@@ -5,9 +5,9 @@ Sprint 7 coverage push — batch 3: completing the remaining 4 modules.
 
 import os
 
-import matplotlib
+import matplotlib as mpl
 
-matplotlib.use("Agg")  # Non-interactive backend for CI
+mpl.use("Agg")  # Non-interactive backend for CI
 
 import pytest
 

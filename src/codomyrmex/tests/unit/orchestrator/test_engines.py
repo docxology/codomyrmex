@@ -37,7 +37,7 @@ class TestSequentialEngine:
         result = engine.execute(wf)
         assert result.success is True
         assert len(result.task_results) == 1
-        task_result = list(result.task_results.values())[0]
+        task_result = next(iter(result.task_results.values()))
         assert task_result.state == TaskState.COMPLETED
         assert task_result.output == "hello"
 
@@ -75,7 +75,7 @@ class TestSequentialEngine:
         )
         result = engine.execute(wf)
         assert result.success is True
-        task_result = list(result.task_results.values())[0]
+        task_result = next(iter(result.task_results.values()))
         assert task_result.state == TaskState.SKIPPED
 
     def test_retry_on_failure(self):

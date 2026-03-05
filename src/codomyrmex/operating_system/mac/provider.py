@@ -98,7 +98,7 @@ class MacOSProvider(OSProviderBase):
                 continue
 
             status = ProcessStatus.RUNNING
-            if stat.startswith("S") or stat.startswith("I"):
+            if stat.startswith(("S", "I")):
                 status = ProcessStatus.SLEEPING
             elif stat.startswith("T"):
                 status = ProcessStatus.STOPPED

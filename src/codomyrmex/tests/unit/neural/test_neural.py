@@ -77,7 +77,7 @@ class TestMultiHeadAttention:
     def test_output_shape(self):
         mha = MultiHeadAttention(d_model=64, n_heads=4)
         x = np.random.randn(2, 10, 64)
-        out, weights = mha(x, x, x)
+        out, _weights = mha(x, x, x)
         assert out.shape == (2, 10, 64)
 
     @pytest.mark.unit

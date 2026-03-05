@@ -89,7 +89,7 @@ class SemanticRouter:
         best_route = None
         best_score = -1.0
 
-        for _name, route in self.routes.items():
+        for route in self.routes.values():
             if route.embeddings is None:
                 continue
             # Cosine similarity to each example, take max

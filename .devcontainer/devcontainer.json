@@ -1,0 +1,63 @@
+{
+    "name": "Codomyrmex",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "features": {
+        "ghcr.io/devcontainers-extra/features/just:1": {},
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        }
+    },
+    "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh && source $HOME/.local/bin/env && uv sync --all-groups",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "charliermarsh.ruff",
+                "astral-sh.ty",
+                "ms-python.python",
+                "tamasfe.even-better-toml",
+                "bierner.markdown-mermaid",
+                "yzhang.markdown-all-in-one",
+                "skellock.just"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": ".venv/bin/python",
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll.ruff": "explicit",
+                        "source.organizeImports.ruff": "explicit"
+                    }
+                },
+                "ruff.path": [
+                    ".venv/bin/ruff"
+                ],
+                "files.exclude": {
+                    "**/__pycache__": true,
+                    "**/.ruff_cache": true,
+                    "**/.ty": true
+                }
+            }
+        }
+    },
+    "forwardPorts": [
+        8000,
+        8787,
+        8888
+    ],
+    "portsAttributes": {
+        "8000": {
+            "label": "Docs Server",
+            "onAutoForward": "notify"
+        },
+        "8787": {
+            "label": "Admin Dashboard",
+            "onAutoForward": "notify"
+        },
+        "8888": {
+            "label": "PAI Dashboard",
+            "onAutoForward": "notify"
+        }
+    },
+    "remoteUser": "vscode"
+}

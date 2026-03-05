@@ -171,7 +171,7 @@ class FPFCombinatoricsAnalyzer:
 
             # Get dependencies
             dependencies = []
-            for _dep_type, deps in pattern.dependencies.items():
+            for deps in pattern.dependencies.values():
                 dependencies.extend(deps)
 
             if dependencies:
@@ -462,10 +462,10 @@ class FPFCombinatoricsAnalyzer:
             with open(matrix_path, "w", encoding="utf-8", newline="") as f:
                 writer = csv.writer(f)
                 # Header row
-                writer.writerow([""] + pattern_ids)
+                writer.writerow(["", *pattern_ids])
                 # Data rows
                 for i, pattern_id in enumerate(pattern_ids):
-                    row = [pattern_id] + similarity_matrix[i].tolist()
+                    row = [pattern_id, *similarity_matrix[i].tolist()]
                     writer.writerow(row)
             self.logger.info(f"Exported similarity matrix to {matrix_path}")
         except ImportError:

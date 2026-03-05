@@ -95,7 +95,7 @@ def analyze_file(file_path: Path, repo_root: Path) -> QualityScore:
 
 def analyze_content_quality(
     repo_root: Path,
-    output_dir: Path = None,
+    output_dir: Path | None = None,
     output_format: str = "both",
     min_score: int = 60,
 ) -> int:
@@ -170,10 +170,9 @@ def main():
         / "documentation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/documentation/config.yaml")
 
     parser = argparse.ArgumentParser(

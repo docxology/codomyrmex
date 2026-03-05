@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import os
 import shutil
@@ -175,10 +176,8 @@ class PaiPmServerManager:
         except ProcessLookupError:
             pass  # already dead
 
-        try:
+        with contextlib.suppress(OSError):
             _PID_FILE.unlink(missing_ok=True)
-        except OSError:
-            pass
 
         logger.info("PAI PM server stopped (pid=%d)", pid)
         return {"status": "stopped", "pid": pid}

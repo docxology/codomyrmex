@@ -9,9 +9,10 @@ Provides:
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .contextual import ValidationIssue
+if TYPE_CHECKING:
+    from .contextual import ValidationIssue
 
 
 class ValidationSummary:

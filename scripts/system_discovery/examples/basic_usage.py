@@ -44,10 +44,9 @@ def main():
         / "system_discovery"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/system_discovery/config.yaml")
 
     setup_logging()
@@ -72,7 +71,7 @@ def main():
     # 2. Capability Scanner
     print_info("Initializing CapabilityScanner...")
     try:
-        scanner = CapabilityScanner()
+        CapabilityScanner()
         print_success("  CapabilityScanner initialized successfully.")
     except Exception as e:
         print_error(f"  CapabilityScanner failed: {e}")
@@ -80,7 +79,7 @@ def main():
     # 3. Status Reporter
     print_info("Initializing StatusReporter...")
     try:
-        reporter = StatusReporter()
+        StatusReporter()
         print_success("  StatusReporter initialized successfully.")
     except Exception as e:
         print_error(f"  StatusReporter failed: {e}")

@@ -723,7 +723,7 @@ class TestPluginManagerCore:
             hook = mgr.register_hook("test_hook", description="Test")
             assert isinstance(hook, Hook)
             results_box = []
-            hook.register(lambda v: results_box.append(v))
+            hook.register(results_box.append)
             mgr.emit_hook("test_hook", 42)
             assert results_box == [42]
 
@@ -986,7 +986,7 @@ class TestParametrizedPluginSpecs:
     """Parametrized tests for valid and invalid plugin info combinations."""
 
     @pytest.mark.parametrize(
-        "name,version,entry_point,expected_valid",
+        ("name", "version", "entry_point", "expected_valid"),
         [
             ("valid_plugin", "1.0.0", "valid.py", True),
             ("another", "0.0.1", "another.py", True),

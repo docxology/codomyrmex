@@ -1,3 +1,4 @@
+import contextlib
 import time
 
 import docker
@@ -39,10 +40,8 @@ def running_container(docker_client, existing_image):
             existing_image, command="sleep 100", detach=True, remove=True
         )
         yield container
-        try:
+        with contextlib.suppress(Exception):
             container.stop(timeout=1)
-        except Exception:
-            pass
     except Exception as e:
         pytest.skip(f"Could not run container for test: {e}")
 

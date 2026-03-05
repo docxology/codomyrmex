@@ -132,7 +132,9 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
     print(f"Piping {len(commands)} commands")
 
     # Build workflow from commands
-    async def run_command(cmd: str, _task_results: dict = None) -> dict[str, Any]:
+    async def run_command(
+        cmd: str, _task_results: dict | None = None
+    ) -> dict[str, Any]:
         """Run a single command."""
         import subprocess
 
@@ -357,7 +359,7 @@ def handle_quick_workflow(
         if result["success"]:
             print("Workflow completed successfully")
             if verbose and "results" in result:
-                for step, _step_result in result["results"].items():
+                for step in result["results"]:
                     print(f"  ✓ {step}")
             return True
         print(f"Workflow failed: {result.get('error', 'Unknown error')}")

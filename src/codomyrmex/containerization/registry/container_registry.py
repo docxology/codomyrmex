@@ -313,7 +313,7 @@ class ContainerRegistry:
 
         try:
             # Build image
-            image, build_logs = self._docker_client.images.build(
+            image, _build_logs = self._docker_client.images.build(
                 path=context_path,
                 dockerfile=dockerfile,
                 tag=full_name,

@@ -13,7 +13,9 @@ logger = get_logger(__name__)
 
 @mcp_tool(name="git_push")
 def push_changes(
-    remote: str = "origin", branch: str = None, repository_path: str = None
+    remote: str = "origin",
+    branch: str | None = None,
+    repository_path: str | None = None,
 ) -> bool:
     """Push committed changes to a remote repository."""
     if repository_path is None:
@@ -52,7 +54,9 @@ def push_changes(
 
 @mcp_tool(name="git_pull")
 def pull_changes(
-    remote: str = "origin", branch: str = None, repository_path: str = None
+    remote: str = "origin",
+    branch: str | None = None,
+    repository_path: str | None = None,
 ) -> bool:
     """Pull changes from a remote repository."""
     if repository_path is None:
@@ -92,8 +96,8 @@ def pull_changes(
 @mcp_tool(name="git_fetch_changes")
 def fetch_changes(
     remote: str = "origin",
-    branch: str = None,
-    repository_path: str = None,
+    branch: str | None = None,
+    repository_path: str | None = None,
     prune: bool = False,
 ) -> bool:
     """Fetch changes from a remote repository without merging."""

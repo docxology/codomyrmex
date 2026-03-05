@@ -65,25 +65,25 @@ def cli_commands():
 
 
 __all__ = [
-    "permissions",
-    "versioning",
-    "marketplace",
-    "SkillsManager",
     "SkillLoader",
-    "SkillSync",
     "SkillRegistry",
+    "SkillSync",
+    "SkillsManager",
     # Submodules
     "arscontexta",
+    "cli_commands",
+    "composition",
     "discovery",
     "execution",
-    "composition",
-    "testing",
+    "list_runnable_skills",
+    "marketplace",
     "mcp_tools",
+    "permissions",
     # Runner
     "run_skill",
     "run_skill_by_name",
-    "list_runnable_skills",
-    "cli_commands",
+    "testing",
+    "versioning",
 ]
 
 # Default configuration

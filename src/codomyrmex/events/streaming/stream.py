@@ -109,9 +109,8 @@ class SSEStream(Stream):
         if len(self._event_buffer) > self._buffer_size:
             self._event_buffer.pop(0)
         for sub_id, sub in self._subscriptions.items():
-            if sub.should_receive(event):
-                if sub_id in self._event_queues:
-                    await self._event_queues[sub_id].put(event)
+            if sub.should_receive(event) and sub_id in self._event_queues:
+                await self._event_queues[sub_id].put(event)
 
     async def subscribe(
         self,

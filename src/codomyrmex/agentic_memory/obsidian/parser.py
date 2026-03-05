@@ -7,8 +7,7 @@ All extraction is regex/YAML-based with no external Obsidian dependencies.
 from __future__ import annotations
 
 import re
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     import yaml
@@ -26,6 +25,9 @@ from codomyrmex.agentic_memory.obsidian.models import (
     Wikilink,
 )
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = get_logger(__name__)
 
@@ -61,10 +63,7 @@ def parse_frontmatter(raw: str) -> tuple[dict[str, Any], str]:
     body = raw[match.end() :]
     if not fm_text:
         return {}, body
-    if yaml is not None:
-        fm = yaml.safe_load(fm_text) or {}
-    else:
-        fm = {}
+    fm = yaml.safe_load(fm_text) or {} if yaml is not None else {}
     return fm, body
 
 

@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import traceback
 from datetime import datetime
@@ -1012,10 +1013,10 @@ def main():
 
     if success:
         print("\n🚀 ALL GIT METHODS VERIFIED SUCCESSFULLY!")
-        exit(0)
+        sys.exit(0)
     else:
         print("\n⚠️ Some methods had issues - check the detailed report")
-        exit(1)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -37,34 +37,34 @@ from .selection.selection import (
 )
 
 __all__ = [
-    # Core types
-    "Individual",
-    "Genome",
-    "GenomeStats",
-    "Population",
-    "GenerationStats",
-    # Operators
-    "MutationOperator",
     "BitFlipMutation",
-    "SwapMutation",
-    "GaussianMutation",
-    "ScrambleMutation",
-    "CrossoverOperator",
-    "SinglePointCrossover",
-    "TwoPointCrossover",
-    "UniformCrossover",
     "BlendCrossover",
-    # Selection
-    "SelectionOperator",
-    "TournamentSelection",
-    "RouletteWheelSelection",
-    "RankSelection",
+    "ConstrainedFitness",
+    "CrossoverOperator",
     # Fitness
     "FitnessFunction",
     "FitnessResult",
-    "ScalarFitness",
+    "GaussianMutation",
+    "GenerationStats",
+    "Genome",
+    "GenomeStats",
+    # Core types
+    "Individual",
     "MultiObjectiveFitness",
-    "ConstrainedFitness",
+    # Operators
+    "MutationOperator",
+    "Population",
+    "RankSelection",
+    "RouletteWheelSelection",
+    "ScalarFitness",
+    "ScrambleMutation",
+    # Selection
+    "SelectionOperator",
+    "SinglePointCrossover",
+    "SwapMutation",
+    "TournamentSelection",
+    "TwoPointCrossover",
+    "UniformCrossover",
 ]
 
 __version__ = "1.1.0"

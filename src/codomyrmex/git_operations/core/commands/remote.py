@@ -10,7 +10,7 @@ logger = get_logger(__name__)
 
 
 @mcp_tool(name="git_fetch")
-def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
+def fetch_remote(remote: str = "origin", repository_path: str | None = None) -> bool:
     """Fetch changes from a remote."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -37,7 +37,7 @@ def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
 
 
 @mcp_tool(name="git_prune_remote")
-def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
+def prune_remote(remote: str = "origin", repository_path: str | None = None) -> bool:
     """Prune remote tracking branches."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -64,7 +64,7 @@ def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
 
 
 @mcp_tool(name="git_add_remote")
-def add_remote(remote_name: str, url: str, repository_path: str = None) -> bool:
+def add_remote(remote_name: str, url: str, repository_path: str | None = None) -> bool:
     """Add a remote repository."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -95,7 +95,7 @@ def add_remote(remote_name: str, url: str, repository_path: str = None) -> bool:
 
 
 @mcp_tool(name="git_remove_remote")
-def remove_remote(remote_name: str, repository_path: str = None) -> bool:
+def remove_remote(remote_name: str, repository_path: str | None = None) -> bool:
     """Remove a remote repository."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -126,7 +126,7 @@ def remove_remote(remote_name: str, repository_path: str = None) -> bool:
 
 
 @mcp_tool(name="git_list_remotes")
-def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
+def list_remotes(repository_path: str | None = None) -> list[dict[str, str]]:
     """List all remote repositories."""
     if repository_path is None:
         repository_path = os.getcwd()

@@ -12,9 +12,10 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .contract import Contract
+if TYPE_CHECKING:
+    from .contract import Contract
 
 
 class ContractStatus(Enum):
@@ -97,7 +98,7 @@ class ContractRegistry:
     def deploy(self, name: str) -> bool:
         """Mark a contract as deployed."""
         entry = self._contracts.get(name)
-        if entry and entry.status in (ContractStatus.DRAFT,):
+        if entry and entry.status == ContractStatus.DRAFT:
             entry.status = ContractStatus.DEPLOYED
             entry.deployed_at = time.time()
             return True

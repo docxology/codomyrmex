@@ -66,32 +66,32 @@ def cli_commands():
 
 
 __all__ = [
-    # CLI integration
-    "cli_commands",
-    "replication",
-    "async_ops",
-    "warmers",
     # Core classes
     "Cache",
-    "CacheManager",
-    "CacheStats",
-    "NamespacedCache",
-    "TTLManager",
-    # Functions
-    "get_cache",
+    "CacheConnectionError",
     # Exceptions
     "CacheError",
     "CacheExpiredError",
     "CacheFullError",
-    "CacheConnectionError",
-    "CacheKeyError",
-    "CacheSerializationError",
     "CacheInvalidationError",
+    "CacheKeyError",
+    "CacheManager",
+    "CacheSerializationError",
+    "CacheStats",
+    "NamespacedCache",
+    "TTLManager",
+    "async_ops",
+    # CLI integration
+    "cli_commands",
+    "distributed",
+    # Functions
+    "get_cache",
+    "invalidation",
     # Submodules
     "policies",
-    "invalidation",
-    "distributed",
+    "replication",
     "serializers",
+    "warmers",
 ]
 
 __version__ = "0.1.0"

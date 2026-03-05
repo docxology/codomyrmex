@@ -184,6 +184,4 @@ class Authenticator:
     def _validate_password(self, username: str, password: str) -> bool:
         """Validate username and password."""
         user = self._users.get(username)
-        if user and user.get("password") == password:
-            return True
-        return False
+        return bool(user and user.get("password") == password)

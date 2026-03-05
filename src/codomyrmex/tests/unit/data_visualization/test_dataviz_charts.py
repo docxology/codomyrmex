@@ -2,12 +2,12 @@
 
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pytest
 
 # Use non-interactive backend for testing
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 
 # ============================================================================

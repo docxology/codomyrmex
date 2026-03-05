@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import TYPE_CHECKING
 
 from codomyrmex.data_visualization._compat import monitor_performance
 
 if TYPE_CHECKING:
+    from datetime import datetime
+
     import matplotlib.pyplot as plt
 
     from ._types import PlotConfig
@@ -26,10 +27,10 @@ class LineBarMixin:
         x_data: list[float | int | str | datetime],
         y_data: list[float | int | str | datetime],
         label: str = "",
-        color: str = None,
+        color: str | None = None,
         linewidth: float = 2.0,
         linestyle: str = "-",
-        marker: str = None,
+        marker: str | None = None,
         markersize: float = 6.0,
         alpha: float = 1.0,
         **kwargs,
@@ -82,7 +83,7 @@ class LineBarMixin:
         x_data: list[str | int | float],
         y_data: list[float | int],
         label: str = "",
-        color: str | list[str] = None,
+        color: str | list[str] | None = None,
         alpha: float = 0.8,
         width: float = 0.8,
         orientation: str = "vertical",
@@ -144,7 +145,7 @@ def create_advanced_line_plot(
     xlabel: str = "",
     ylabel: str = "",
     config: PlotConfig = None,
-    save_path: str = None,
+    save_path: str | None = None,
     **kwargs,
 ):
     """Create an advanced line plot."""
@@ -162,7 +163,7 @@ def create_advanced_bar_chart(
     xlabel: str = "",
     ylabel: str = "",
     config: PlotConfig = None,
-    save_path: str = None,
+    save_path: str | None = None,
     **kwargs,
 ):
     """Create an advanced bar chart."""

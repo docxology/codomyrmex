@@ -41,7 +41,7 @@ class TestParseRequirementsFile:
     """Tests for requirement string parsing from files."""
 
     @pytest.mark.parametrize(
-        "line,expected_name,expected_version",
+        ("line", "expected_name", "expected_version"),
         [
             ("requests==2.28.0", "requests", "==2.28.0"),
             ("flask>=2.0", "flask", ">=2.0"),
@@ -553,7 +553,7 @@ class TestDependencyConsolidation:
         }
         pyproject_content = '"requests>=2.28"\n'
 
-        section, mapping = generate_pyproject_additions(deps, pyproject_content)
+        _section, mapping = generate_pyproject_additions(deps, pyproject_content)
 
         # requests is already in pyproject, so it should not appear in mapping
         all_pkgs = []
@@ -574,7 +574,7 @@ class TestDependencyConsolidation:
         }
         pyproject_content = '"requests>=2.28"\n'
 
-        section, mapping = generate_pyproject_additions(deps, pyproject_content)
+        _section, mapping = generate_pyproject_additions(deps, pyproject_content)
 
         assert "api" in mapping
         assert any("httpx" in pkg for pkg in mapping["api"])

@@ -67,7 +67,7 @@ def swift_list_containers(client):
         print(f"   📁 {name}")
 
 
-def swift_list_objects(client, container: str, prefix: str = None):
+def swift_list_objects(client, container: str, prefix: str | None = None):
     """List objects in a Swift container."""
     print(f"\n📄 Objects in '{container}'\n" + "=" * 50)
     objects = client.list_objects(container, prefix=prefix)
@@ -128,7 +128,7 @@ def s3_list_buckets(client):
         print(f"   🪣 {name}")
 
 
-def s3_list_objects(client, bucket: str, prefix: str = None):
+def s3_list_objects(client, bucket: str, prefix: str | None = None):
     """List objects in an S3 bucket."""
     print(f"\n📄 Objects in '{bucket}'\n" + "=" * 50)
     objects = client.list_objects(bucket, prefix=prefix)
@@ -151,7 +151,9 @@ def s3_upload(client, bucket: str, key: str, file_path: str):
         print("   ❌ Upload failed")
 
 
-def s3_upload_data(client, bucket: str, key: str, data: str, content_type: str = None):
+def s3_upload_data(
+    client, bucket: str, key: str, data: str, content_type: str | None = None
+):
     """Upload data directly to S3."""
     print(f"\n⬆️  Uploading data to s3://{bucket}/{key}")
 
@@ -227,10 +229,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Object Storage Examples")

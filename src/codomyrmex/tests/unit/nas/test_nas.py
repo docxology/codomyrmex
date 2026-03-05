@@ -209,7 +209,7 @@ class TestNASSearcher:
         # Get first generation scores and last generation best
         first_gen_scores = [s for _, s in searcher.history[:10]]
         first_gen_best = max(first_gen_scores)
-        overall_best_config, overall_best_score = searcher.best()
+        _overall_best_config, overall_best_score = searcher.best()
 
         assert overall_best_score >= first_gen_best
 
@@ -234,7 +234,7 @@ class TestNASSearcher:
         space = NASSearchSpace()
         searcher = NASSearcher(space, simple_eval_fn)
         searcher.random_search(n_trials=20, seed=42)
-        best_config, best_score = searcher.best()
+        _best_config, best_score = searcher.best()
         all_scores = [s for _, s in searcher.history]
         assert best_score == max(all_scores)
 

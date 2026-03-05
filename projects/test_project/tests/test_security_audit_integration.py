@@ -209,11 +209,12 @@ class TestSecurityAuditModule:
         assert isinstance(result["modules_found"], int)
 
     def test_audit_path_returns_dict(self):
-        """audit_path() returns dict with expected keys."""
+        """audit_path() returns dict with expected keys (scans a single small file)."""
         from src.security_audit import SecurityAudit
 
+        # Use this test file itself — a single small file avoids long scan times
         auditor = SecurityAudit()
-        result = auditor.audit_path(TEST_PROJECT_ROOT)
+        result = auditor.audit_path(__file__)
         assert isinstance(result, dict)
         assert "path" in result
         assert "security_available" in result

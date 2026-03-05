@@ -101,7 +101,9 @@ class ParallelRunner:
         self._cancelled = False
         self._executor: concurrent.futures.ProcessPoolExecutor | None = None
 
-    def _emit_progress(self, script: str, status: str, details: dict[str, Any] = None):
+    def _emit_progress(
+        self, script: str, status: str, details: dict[str, Any] | None = None
+    ):
         """Emit progress update."""
         if self.progress_callback:
             try:

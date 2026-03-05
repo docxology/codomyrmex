@@ -27,32 +27,32 @@ from .strategies import (
 )
 
 __all__ = [
-    # Submodules
-    "health_checks",
-    "strategies",
-    "rollback",
-    # Strategy classes
-    "DeploymentState",
-    "DeploymentTarget",
-    "DeploymentResult",
-    "DeploymentStrategy",
-    "RollingDeployment",
     "BlueGreenDeployment",
-    "CanaryDeployment",
-    "create_strategy",
-    "StrategyProgress",
-    # Aliases for convenience
-    "CanaryStrategy",
     "BlueGreenStrategy",
-    "RollingStrategy",
-    # Manager classes
-    "DeploymentManager",
-    "GitOpsSynchronizer",
     # Canary analysis
     "CanaryAnalyzer",
     "CanaryDecision",
+    "CanaryDeployment",
     "CanaryReport",
+    # Aliases for convenience
+    "CanaryStrategy",
+    # Manager classes
+    "DeploymentManager",
+    "DeploymentResult",
+    # Strategy classes
+    "DeploymentState",
+    "DeploymentStrategy",
+    "DeploymentTarget",
+    "GitOpsSynchronizer",
     "MetricComparison",
+    "RollingDeployment",
+    "RollingStrategy",
+    "StrategyProgress",
+    "create_strategy",
+    # Submodules
+    "health_checks",
+    "rollback",
+    "strategies",
 ]
 
 __version__ = "0.2.0"

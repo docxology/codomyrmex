@@ -56,10 +56,7 @@ def audit_directory(root_path: Path) -> tuple[int, int, list[str]]:
 
         if missing:
             # Check if this directory is empty or trivial
-            if not any(
-                f.endswith(".py") or f.endswith(".sh") or f.endswith(".md")
-                for f in files
-            ):
+            if not any(f.endswith((".py", ".sh", ".md")) for f in files):
                 continue  # Skip mostly empty directories
 
             issues.append(f"{current_path}: Missing {', '.join(missing)}")

@@ -60,21 +60,21 @@ def cli_commands():
 
 
 __all__ = [
-    # Models
-    "FeatureType",
-    "ValueType",
-    "FeatureDefinition",
-    "FeatureValue",
-    "FeatureVector",
-    "FeatureGroup",
-    "USER_ID_FEATURE",
     "TIMESTAMP_FEATURE",
+    "USER_ID_FEATURE",
+    "FeatureDefinition",
+    "FeatureGroup",
+    "FeatureService",
     # Store
     "FeatureStore",
-    "InMemoryFeatureStore",
     # Service
     "FeatureTransform",
-    "FeatureService",
+    # Models
+    "FeatureType",
+    "FeatureValue",
+    "FeatureVector",
+    "InMemoryFeatureStore",
+    "ValueType",
     # CLI
     "cli_commands",
 ]

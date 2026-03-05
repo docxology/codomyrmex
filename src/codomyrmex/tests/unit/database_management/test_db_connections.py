@@ -302,7 +302,7 @@ class TestDatabaseConnector:
         connector = DatabaseConnector(f"sqlite:///{db_path}")
 
         connector.connect()
-        rows, cursor = connector.execute("CREATE TABLE test (id INTEGER)")
+        _rows, _cursor = connector.execute("CREATE TABLE test (id INTEGER)")
         connector.commit()
 
         assert connector._connection is not None
@@ -322,7 +322,7 @@ class TestDatabaseConnector:
         INSERT INTO users VALUES (1);
         """
 
-        total_rows, statements = connector.execute_script(script)
+        _total_rows, statements = connector.execute_script(script)
 
         assert statements == 3
         connector.disconnect()

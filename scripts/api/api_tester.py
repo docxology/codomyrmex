@@ -23,7 +23,7 @@ import urllib.request
 
 
 def make_request(
-    url: str, method: str = "GET", data: dict = None, headers: dict = None
+    url: str, method: str = "GET", data: dict | None = None, headers: dict | None = None
 ) -> dict:
     """Make HTTP request."""
     headers = headers or {}
@@ -74,10 +74,9 @@ def main():
     config_path = (
         Path(__file__).resolve().parent.parent.parent / "config" / "api" / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/api/config.yaml")
 
     parser = argparse.ArgumentParser(description="API testing utility")

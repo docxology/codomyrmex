@@ -767,7 +767,7 @@ class TestAntigravityEventHandlers:
         """Registered event handler receives emitted event data."""
         received = []
         client = AntigravityClient(artifact_dir=str(tmp_path))
-        client.register_event_handler("connected", lambda data: received.append(data))
+        client.register_event_handler("connected", received.append)
         conv = tmp_path / "evt_conv"
         conv.mkdir()
         client.connect()
@@ -780,9 +780,7 @@ class TestAntigravityEventHandlers:
         conv = tmp_path / "dc_conv"
         conv.mkdir()
         client = AntigravityClient(artifact_dir=str(tmp_path))
-        client.register_event_handler(
-            "disconnected", lambda data: received.append(data)
-        )
+        client.register_event_handler("disconnected", received.append)
         client.connect()
         client.disconnect()
         assert len(received) == 1
@@ -793,9 +791,7 @@ class TestAntigravityEventHandlers:
         conv = tmp_path / "ac_conv"
         conv.mkdir()
         client = AntigravityClient(artifact_dir=str(tmp_path))
-        client.register_event_handler(
-            "artifact_created", lambda data: received.append(data)
-        )
+        client.register_event_handler("artifact_created", received.append)
         client.connect()
         client.create_artifact("evt_doc", "Content", artifact_type="other")
         assert len(received) == 1

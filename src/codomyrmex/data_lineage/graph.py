@@ -109,13 +109,13 @@ class LineageGraph:
         def dfs(current: str, path: list[str]) -> list[str] | None:
             """Dfs."""
             if current == target_id:
-                return path + [current]
+                return [*path, current]
             if current in visited:
                 return None
             visited.add(current)
             for edge in self._edges:
                 if edge.source_id == current:
-                    result = dfs(edge.target_id, path + [current])
+                    result = dfs(edge.target_id, [*path, current])
                     if result:
                         return result
             return None
@@ -144,9 +144,8 @@ class LineageGraph:
             return False
 
         for node_id in self._nodes:
-            if node_id not in visited:
-                if has_cycle(node_id):
-                    cycles.append(node_id)
+            if node_id not in visited and has_cycle(node_id):
+                cycles.append(node_id)
 
         return cycles
 

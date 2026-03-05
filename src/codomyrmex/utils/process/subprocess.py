@@ -30,14 +30,17 @@ import os
 import shlex
 import subprocess
 import time
-from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import (
+    TYPE_CHECKING,
     Any,
 )
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
 
 logger = get_logger(__name__)
 
@@ -730,16 +733,16 @@ def split_command(command: str) -> list[str]:
 
 
 __all__ = [
-    # Main execution functions
-    "run_command",
-    "run_command_async",
-    # Result and error types
-    "SubprocessResult",
     "CommandError",
     "CommandErrorType",
+    # Result and error types
+    "SubprocessResult",
     # Utility functions
     "check_command_available",
     "get_command_version",
     "quote_command",
+    # Main execution functions
+    "run_command",
+    "run_command_async",
     "split_command",
 ]

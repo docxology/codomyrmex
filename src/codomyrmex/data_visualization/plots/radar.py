@@ -29,7 +29,7 @@ class RadarChart(BasePlot):
 
         if n > 0:
             angles = np.linspace(0, 2 * np.pi, n, endpoint=False).tolist()
-            vals = list(self.values) + [self.values[0]]
+            vals = [*list(self.values), self.values[0]]
             angles += angles[:1]
             ax.plot(angles, vals)
             ax.fill(angles, vals, alpha=0.25)

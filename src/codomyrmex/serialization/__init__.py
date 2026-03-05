@@ -70,26 +70,26 @@ def cli_commands() -> dict[str, dict[str, Any]]:
 
 
 __all__ = [
-    # Core classes
-    "Serializer",
-    "SerializationManager",
-    "SerializationFormat",
-    "MsgpackSerializer",
     "AvroSerializer",
-    "ParquetSerializer",
-    # Functions
-    "serialize",
-    "deserialize",
-    # Exceptions
-    "SerializationError",
+    "BinaryFormatError",
+    "CircularReferenceError",
     "DeserializationError",
-    "SchemaValidationError",
     "EncodingError",
     "FormatNotSupportedError",
-    "CircularReferenceError",
+    "MsgpackSerializer",
+    "ParquetSerializer",
+    "SchemaValidationError",
+    # Exceptions
+    "SerializationError",
+    "SerializationFormat",
+    "SerializationManager",
+    # Core classes
+    "Serializer",
     "TypeConversionError",
-    "BinaryFormatError",
     "cli_commands",
+    "deserialize",
+    # Functions
+    "serialize",
 ]
 
 __version__ = "0.1.0"

@@ -152,81 +152,81 @@ def cli_commands():
 
 
 __all__ = [
-    "cli_commands",
-    # Core operations
-    "check_git_availability",
-    "is_git_repository",
-    "initialize_git_repository",
-    "clone_repository",
-    # Branch operations
-    "create_branch",
-    "delete_branch",
-    "switch_branch",
-    "get_current_branch",
-    "list_branches",
-    "merge_branch",
-    "rebase_branch",
+    "CloneStatus",
+    "GitHubAPIError",
+    "Repository",
+    # Repository Management
+    "RepositoryManager",
+    "RepositoryMetadata",
+    # Metadata Management
+    "RepositoryMetadataManager",
+    "RepositoryType",
     # File operations
     "add_files",
-    "commit_changes",
-    "amend_commit",
-    "get_status",
-    "get_diff",
-    "reset_changes",
-    # Remote operations
-    "push_changes",
-    "pull_changes",
-    "fetch_changes",
     "add_remote",
-    "remove_remote",
-    "list_remotes",
+    "amend_commit",
+    "apply_stash",
+    # Core operations
+    "check_git_availability",
+    # Advanced operations
+    "cherry_pick",
+    "clean_repository",
+    "cli_commands",
+    "clone_repository",
+    "commit_changes",
+    # Branch operations
+    "create_branch",
+    # GitHub API operations
+    "create_github_repository",
+    "create_pull_request",
+    # Tag operations
+    "create_tag",
+    "delete_branch",
+    "delete_github_repository",
+    "fetch_changes",
+    "get_blame",
+    "get_commit_details",
     # History & information
     "get_commit_history",
     "get_commit_history_filtered",
     # Config operations
     "get_config",
-    "set_config",
-    # Advanced operations
-    "cherry_pick",
-    "revert_commit",
-    "clean_repository",
-    "get_blame",
-    "get_commit_details",
-    # Tag operations
-    "create_tag",
+    "get_current_branch",
+    "get_diff",
+    "get_pull_request",
+    "get_pull_requests",
+    "get_repository_info",
+    "get_status",
+    "initialize_git_repository",
+    "is_git_repository",
+    "list_branches",
+    "list_remotes",
+    "list_stashes",
     "list_tags",
+    "merge_branch",
+    "pull_changes",
+    # Remote operations
+    "push_changes",
+    "rebase_branch",
+    "remove_remote",
+    "reset_changes",
+    "revert_commit",
+    "set_config",
     # Stash operations
     "stash_changes",
-    "apply_stash",
-    "list_stashes",
-    # Repository Management
-    "RepositoryManager",
-    "RepositoryType",
-    "Repository",
-    # Metadata Management
-    "RepositoryMetadataManager",
-    "RepositoryMetadata",
-    "CloneStatus",
-    # GitHub API operations
-    "create_github_repository",
-    "delete_github_repository",
-    "create_pull_request",
-    "get_pull_requests",
-    "get_pull_request",
-    "get_repository_info",
-    "GitHubAPIError",
+    "switch_branch",
 ]
 
 # Add visualization functions if available
 if VISUALIZATION_INTEGRATION_AVAILABLE:
     __all__.extend(
         [
+            "analyze_repository_structure",
             # Visualization integration
             "create_git_analysis_report",
-            "visualize_git_branches",
-            "visualize_commit_activity",
             "create_git_workflow_diagram",
-            "analyze_repository_structure",
             "get_repository_metadata",
+            "visualize_commit_activity",
+            "visualize_git_branches",
         ]
     )

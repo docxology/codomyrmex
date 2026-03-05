@@ -118,10 +118,9 @@ def main():
         / "docs"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/docs/config.yaml")
 
     parser = argparse.ArgumentParser(description="Remediate documentation gaps.")
@@ -141,7 +140,7 @@ def main():
         return
 
     count = 0
-    for root, dirs, files in os.walk(src_dir):
+    for root, _dirs, _files in os.walk(src_dir):
         root_path = Path(root)
 
         # Skip hidden directories

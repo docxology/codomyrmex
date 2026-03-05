@@ -168,7 +168,7 @@ class GeminiCLIWrapper(BaseAgent):
         if not self.cli_path:
             raise GeminiError("gemini CLI executable not found")
 
-        cmd = [self.cli_path, "mcp"] + mcp_args
+        cmd = [self.cli_path, "mcp", *mcp_args]
         try:
             result = subprocess.run(
                 cmd, capture_output=True, text=True, check=True, timeout=60
@@ -182,7 +182,7 @@ class GeminiCLIWrapper(BaseAgent):
         if not self.cli_path:
             raise GeminiError("gemini CLI executable not found")
 
-        cmd = [self.cli_path, "extensions"] + ext_args
+        cmd = [self.cli_path, "extensions", *ext_args]
         try:
             result = subprocess.run(
                 cmd, capture_output=True, text=True, check=True, timeout=60

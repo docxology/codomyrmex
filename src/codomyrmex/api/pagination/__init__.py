@@ -547,19 +547,19 @@ def create_paginator(
 # ---------------------------------------------------------------------------
 
 __all__ = [
-    # Enums
-    "PaginationStrategy",
-    "SortDirection",
+    "CursorPaginator",
+    "KeysetPaginator",
+    # Concrete paginators
+    "OffsetPaginator",
     # Dataclasses
     "PageInfo",
     "PaginatedResponse",
     "PaginationRequest",
+    # Enums
+    "PaginationStrategy",
     # Abstract base
     "Paginator",
-    # Concrete paginators
-    "OffsetPaginator",
-    "CursorPaginator",
-    "KeysetPaginator",
+    "SortDirection",
     # Factory
     "create_paginator",
 ]

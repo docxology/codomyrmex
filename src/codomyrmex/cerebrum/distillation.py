@@ -10,13 +10,15 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.cerebrum.core.cases import Case
-from codomyrmex.llm.models.reasoning import (
-    ReasoningTrace,
-)
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from codomyrmex.llm.models.reasoning import (
+        ReasoningTrace,
+    )
 
 logger = get_logger(__name__)
 

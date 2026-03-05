@@ -301,7 +301,7 @@ class TestImageProcessor:
             format="png",
         )
 
-        valid, message = processor.validate(content)
+        valid, _message = processor.validate(content)
         assert valid is True
 
     def test_processor_validate_wrong_type(self):
@@ -377,7 +377,7 @@ class TestAudioProcessor:
             duration_seconds=30.0,
         )
 
-        valid, message = processor.validate(content)
+        valid, _message = processor.validate(content)
         assert valid is True
 
     def test_processor_validate_too_long(self):

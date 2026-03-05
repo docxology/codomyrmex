@@ -225,7 +225,7 @@ def deploy_infrastructure(
                 # Get instance port
                 inst = clients["compute"].get_instance(resources["instance"])
                 if inst and inst.get("addresses"):
-                    for net_name, addrs in inst["addresses"].items():
+                    for addrs in inst["addresses"].values():
                         for addr in addrs:
                             port_id = addr.get("port_id")
                             if port_id:
@@ -396,10 +396,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Infomaniak Full Workflow")

@@ -46,10 +46,9 @@ def main():
         / "agents"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/agents/config.yaml")
 
     setup_logging()
@@ -140,14 +139,14 @@ def calculate_discount(price, discount_percent):
     improved_code = '''
 def calculate_discount(price: float, discount_percent: float) -> float:
     """Calculate discounted price.
-    
+
     Args:
         price: Original price
         discount_percent: Discount percentage (0-100)
-    
+
     Returns:
         Discounted price, or original if invalid percentage
-    
+
     Raises:
         ValueError: If price is negative
     """

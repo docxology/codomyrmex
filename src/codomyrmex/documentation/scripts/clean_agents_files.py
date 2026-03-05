@@ -74,7 +74,7 @@ class AgentsCleaner:
         conceptual_items = []
         for line in active_section:
             line = line.strip()
-            if line.startswith("- ") or line.startswith("* "):
+            if line.startswith(("- ", "* ")):
                 # Extract item name
                 item_text = line[2:].strip()
                 if "**" in item_text:

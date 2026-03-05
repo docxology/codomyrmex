@@ -19,8 +19,7 @@ from __future__ import annotations
 import logging
 import threading
 import time
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -36,6 +35,9 @@ from codomyrmex.ide.antigravity.agent_relay import (
     AgentRelay,
     RelayMessage,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # Optional scheduler support -- not yet available in all installations.
 try:

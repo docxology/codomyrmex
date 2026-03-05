@@ -328,7 +328,7 @@ class TestEdgeCases:
         assert config.data["a"] == {"b": "nested"}
 
     @pytest.mark.parametrize(
-        "format_name,extension,loader",
+        ("format_name", "extension", "loader"),
         [
             ("yaml", ".yaml", yaml.safe_load),
             ("json", ".json", json.loads),

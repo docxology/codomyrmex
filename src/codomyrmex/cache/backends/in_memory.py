@@ -38,11 +38,10 @@ class InMemoryCache(Cache):
         value, timestamp, ttl = self._cache[key]
 
         # Check expiration
-        if ttl is not None:
-            if time.time() - timestamp > ttl:
-                del self._cache[key]
-                self._stats.misses += 1
-                return None
+        if ttl is not None and time.time() - timestamp > ttl:
+            del self._cache[key]
+            self._stats.misses += 1
+            return None
 
         self._stats.hits += 1
         return value
@@ -82,10 +81,9 @@ class InMemoryCache(Cache):
 
         # Check expiration
         _, timestamp, ttl = self._cache[key]
-        if ttl is not None:
-            if time.time() - timestamp > ttl:
-                del self._cache[key]
-                return False
+        if ttl is not None and time.time() - timestamp > ttl:
+            del self._cache[key]
+            return False
 
         return True
 
@@ -99,7 +97,7 @@ class InMemoryCache(Cache):
         """Delete all keys matching a pattern."""
         import fnmatch
 
-        keys_to_delete = [k for k in self._cache.keys() if fnmatch.fnmatch(k, pattern)]
+        keys_to_delete = [k for k in self._cache if fnmatch.fnmatch(k, pattern)]
         for key in keys_to_delete:
             self.delete(key)
         return len(keys_to_delete)

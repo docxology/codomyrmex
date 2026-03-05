@@ -71,27 +71,27 @@ except ImportError:
     LLMInference = None  # type: ignore[assignment,misc]
 
 __all__ = [
+    # New modules (Sprint: module expansion)
+    "AgentBrain",
+    # Pipeline
+    "AnalysisPipeline",
+    "AnalysisResult",
+    "ChartConfig",
+    # Visualizer
+    "DataVisualizer",
+    "GitWorkflow",
+    "KnowledgeSearch",
+    "LLMInference",
+    "MCPExplorer",
+    "PipelineResult",
+    "PipelineStatus",
+    # Analyzer
+    "ProjectAnalyzer",
+    "ReportConfig",
+    # Reporter
+    "ReportGenerator",
+    "SecurityAudit",
     # Entry points
     "run_analysis",
     "run_pipeline",
-    # Analyzer
-    "ProjectAnalyzer",
-    "AnalysisResult",
-    # Visualizer
-    "DataVisualizer",
-    "ChartConfig",
-    # Reporter
-    "ReportGenerator",
-    "ReportConfig",
-    # Pipeline
-    "AnalysisPipeline",
-    "PipelineResult",
-    "PipelineStatus",
-    # New modules (Sprint: module expansion)
-    "AgentBrain",
-    "GitWorkflow",
-    "KnowledgeSearch",
-    "SecurityAudit",
-    "MCPExplorer",
-    "LLMInference",
 ]

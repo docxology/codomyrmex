@@ -154,40 +154,40 @@ def cli_commands():
 
 # Build __all__ dynamically
 __all__ = [
-    # CLI integration
-    "cli_commands",
-    # Version
-    "__version__",
-    # Exceptions
-    "VideoError",
-    "VideoReadError",
-    "VideoWriteError",
-    "VideoProcessingError",
-    "FrameExtractionError",
-    "AudioExtractionError",
-    "UnsupportedFormatError",
-    "VideoAnalysisError",
-    # Configuration
-    "VideoConfig",
-    "get_config",
-    "set_config",
-    "reset_config",
-    "configure",
-    # Models
-    "FilterType",
-    "VideoCodec",
-    "AudioCodec",
-    "VideoInfo",
-    "ProcessingResult",
-    "ExtractionResult",
-    "VideoComparison",
-    # Availability flags
-    "PIL_AVAILABLE",
+    "ANALYSIS_AVAILABLE",
+    "EXTRACTION_AVAILABLE",
     "MOVIEPY_AVAILABLE",
     "OPENCV_AVAILABLE",
+    # Availability flags
+    "PIL_AVAILABLE",
     "PROCESSING_AVAILABLE",
-    "EXTRACTION_AVAILABLE",
-    "ANALYSIS_AVAILABLE",
+    "AudioCodec",
+    "AudioExtractionError",
+    "ExtractionResult",
+    # Models
+    "FilterType",
+    "FrameExtractionError",
+    "ProcessingResult",
+    "UnsupportedFormatError",
+    "VideoAnalysisError",
+    "VideoCodec",
+    "VideoComparison",
+    # Configuration
+    "VideoConfig",
+    # Exceptions
+    "VideoError",
+    "VideoInfo",
+    "VideoProcessingError",
+    "VideoReadError",
+    "VideoWriteError",
+    # Version
+    "__version__",
+    # CLI integration
+    "cli_commands",
+    "configure",
+    "get_config",
+    "reset_config",
+    "set_config",
 ]
 
 if PROCESSING_AVAILABLE:

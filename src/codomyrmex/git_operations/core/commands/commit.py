@@ -14,11 +14,11 @@ logger = get_logger(__name__)
 @mcp_tool(name="git_commit")
 def commit_changes(
     message: str,
-    repository_path: str = None,
-    author_name: str = None,
-    author_email: str = None,
+    repository_path: str | None = None,
+    author_name: str | None = None,
+    author_email: str | None = None,
     stage_all: bool = True,
-    file_paths: list[str] = None,
+    file_paths: list[str] | None = None,
 ) -> str | None:
     """
     Commit staged changes with the given message.
@@ -132,7 +132,7 @@ def commit_changes(
 
 
 @mcp_tool(name="git_revert")
-def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
+def revert_commit(commit_sha: str, repository_path: str | None = None) -> bool:
     """Revert a specific commit by creating a new inverse commit."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -162,7 +162,7 @@ def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
 
 @mcp_tool(name="git_cherry_pick")
 def cherry_pick(
-    commit_sha: str, repository_path: str = None, no_commit: bool = False
+    commit_sha: str, repository_path: str | None = None, no_commit: bool = False
 ) -> bool:
     """Cherry-pick a commit from another branch."""
     if repository_path is None:
@@ -200,10 +200,10 @@ def cherry_pick(
 
 @mcp_tool(name="git_amend")
 def amend_commit(
-    message: str = None,
-    repository_path: str = None,
-    author_name: str = None,
-    author_email: str = None,
+    message: str | None = None,
+    repository_path: str | None = None,
+    author_name: str | None = None,
+    author_email: str | None = None,
     no_edit: bool = False,
 ) -> str | None:
     """Amend the last commit."""

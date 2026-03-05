@@ -14,9 +14,12 @@ from __future__ import annotations
 
 import re
 from abc import ABC, abstractmethod
-from collections.abc import Callable
+from typing import TYPE_CHECKING
 
-from .models import PromptTestCase
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from .models import PromptTestCase
 
 
 class Evaluator(ABC):

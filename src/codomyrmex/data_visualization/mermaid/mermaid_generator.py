@@ -45,7 +45,7 @@ class MermaidDiagramGenerator:
         branches: list[dict[str, Any]],
         commits: list[dict[str, Any]],
         title: str = "Git Branch Diagram",
-        output_path: str = None,
+        output_path: str | None = None,
     ) -> str:
         """
         Create a Git branch diagram using Mermaid gitgraph syntax.
@@ -96,7 +96,7 @@ class MermaidDiagramGenerator:
         self,
         workflow_steps: list[dict[str, Any]] | None = None,
         title: str = "Git Workflow",
-        output_path: str = None,
+        output_path: str | None = None,
     ) -> str:
         """
         Create a Git workflow diagram using Mermaid flowchart syntax.
@@ -139,7 +139,7 @@ class MermaidDiagramGenerator:
         self,
         repo_structure: dict[str, Any],
         title: str = "Repository Structure",
-        output_path: str = None,
+        output_path: str | None = None,
     ) -> str:
         """
         Create a repository structure diagram using Mermaid graph syntax.
@@ -180,7 +180,7 @@ class MermaidDiagramGenerator:
         self,
         commits: list[dict[str, Any]],
         title: str = "Commit Timeline",
-        output_path: str = None,
+        output_path: str | None = None,
     ) -> str:
         """
         Create a commit timeline diagram using Mermaid timeline syntax.
@@ -230,7 +230,7 @@ class MermaidDiagramGenerator:
 
         for branch in branches_sorted:
             branch_name = branch.get("name", "unknown")
-            if branch_name != "main" and branch_name != "master":
+            if branch_name not in {"main", "master"}:
                 lines.append(f"    branch {branch_name}")
                 lines.append(f"    checkout {branch_name}")
 
@@ -402,10 +402,10 @@ class MermaidDiagramGenerator:
 # Convenience functions for easy import
 @mcp_tool()
 def create_git_branch_diagram(
-    branches: list[dict[str, Any]] = None,
-    commits: list[dict[str, Any]] = None,
+    branches: list[dict[str, Any]] | None = None,
+    commits: list[dict[str, Any]] | None = None,
     title: str = "Git Branch Diagram",
-    output_path: str = None,
+    output_path: str | None = None,
 ) -> str:
     """Create a Git branch diagram using Mermaid syntax."""
     generator = MermaidDiagramGenerator()
@@ -414,9 +414,9 @@ def create_git_branch_diagram(
 
 @mcp_tool()
 def create_git_workflow_diagram(
-    workflow_steps: list[dict[str, Any]] = None,
+    workflow_steps: list[dict[str, Any]] | None = None,
     title: str = "Git Workflow",
-    output_path: str = None,
+    output_path: str | None = None,
 ) -> str:
     """Create a Git workflow diagram using Mermaid syntax."""
     generator = MermaidDiagramGenerator()
@@ -425,9 +425,9 @@ def create_git_workflow_diagram(
 
 @mcp_tool()
 def create_repository_structure_diagram(
-    repo_structure: dict[str, Any] = None,
+    repo_structure: dict[str, Any] | None = None,
     title: str = "Repository Structure",
-    output_path: str = None,
+    output_path: str | None = None,
 ) -> str:
     """Create a repository structure diagram using Mermaid syntax."""
     generator = MermaidDiagramGenerator()
@@ -438,9 +438,9 @@ def create_repository_structure_diagram(
 
 @mcp_tool()
 def create_commit_timeline_diagram(
-    commits: list[dict[str, Any]] = None,
+    commits: list[dict[str, Any]] | None = None,
     title: str = "Commit Timeline",
-    output_path: str = None,
+    output_path: str | None = None,
 ) -> str:
     """Create a commit timeline diagram using Mermaid syntax."""
     generator = MermaidDiagramGenerator()

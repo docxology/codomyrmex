@@ -9,9 +9,11 @@ from __future__ import annotations
 
 import re
 import statistics
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus

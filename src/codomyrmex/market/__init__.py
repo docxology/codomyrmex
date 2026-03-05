@@ -36,10 +36,10 @@ def cli_commands():
 
 
 __all__ = [
-    "ReverseAuction",
-    "Bid",
     "AuctionRequest",
+    "Bid",
     "DemandAggregator",
+    "ReverseAuction",
     # CLI integration
     "cli_commands",
 ]

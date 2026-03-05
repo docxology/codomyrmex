@@ -106,13 +106,17 @@ def calculate_cyclomatic_complexity(code: str) -> int:
 
     complexity = 1
     for node in ast.walk(tree):
-        if (
-            isinstance(node, (ast.If, ast.IfExp))
-            or isinstance(node, ast.For)
-            or isinstance(node, ast.While)
-            or isinstance(node, ast.ExceptHandler)
-            or isinstance(node, ast.Assert)
-            or isinstance(node, ast.With)
+        if isinstance(
+            node,
+            (
+                ast.If,
+                ast.IfExp,
+                ast.For,
+                ast.While,
+                ast.ExceptHandler,
+                ast.Assert,
+                ast.With,
+            ),
         ):
             complexity += 1
         elif isinstance(node, ast.BoolOp):

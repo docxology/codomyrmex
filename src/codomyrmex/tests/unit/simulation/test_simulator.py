@@ -315,7 +315,7 @@ class TestQLearningAgent:
         assert agent._last_state is None
         agent.act({"x": 1})
         assert agent._last_state is not None
-        assert agent._last_action_type in ["a"]
+        assert agent._last_action_type == "a"
 
     def test_learn_updates_q_value(self):
         """learn() changes Q-value for the last state-action pair."""

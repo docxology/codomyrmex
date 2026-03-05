@@ -16,15 +16,15 @@ from codomyrmex.crypto.steganography.text import (
 )
 
 __all__ = [
-    # image
-    "calculate_capacity",
-    "embed_in_image",
-    "extract_from_image",
-    # text
-    "embed_in_text",
-    "extract_from_text",
     # detection
     "DetectionResult",
     "analyze_statistical_anomalies",
+    # image
+    "calculate_capacity",
     "detect_lsb_steganography",
+    "embed_in_image",
+    # text
+    "embed_in_text",
+    "extract_from_image",
+    "extract_from_text",
 ]

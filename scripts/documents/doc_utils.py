@@ -42,7 +42,7 @@ def analyze_document(path: Path) -> dict:
     return info
 
 
-def find_documents(path: str, extensions: list = None) -> list:
+def find_documents(path: str, extensions: list | None = None) -> list:
     """Find documents in path."""
     exts = extensions or [".md", ".txt", ".rst", ".adoc"]
     p = Path(path)
@@ -87,10 +87,9 @@ def main():
         / "documents"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/documents/config.yaml")
 
     parser = argparse.ArgumentParser(description="Document utilities")

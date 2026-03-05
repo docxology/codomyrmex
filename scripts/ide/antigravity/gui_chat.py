@@ -22,9 +22,9 @@ def send_gui_message(message: str, app_name: str = "Antigravity"):
     tell application "{app_name}"
         activate
     end tell
-    
+
     delay 0.5
-    
+
     tell application "System Events"
         tell process "{app_name}"
             -- Type the message

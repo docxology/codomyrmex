@@ -108,7 +108,7 @@ def main() -> int:
     print_info("Initializing Data Provider...")
     try:
         data_provider = DataProvider(root_dir=project_root)
-        summary = data_provider.get_system_summary()
+        data_provider.get_system_summary()
         print_success(f"System loaded — {len(data_provider.get_modules())} modules")
 
         # Quick PAI status

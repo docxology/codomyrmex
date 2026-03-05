@@ -140,7 +140,7 @@ class DockerClient:
         self, args: list[str], timeout: float | None = None, capture_output: bool = True
     ) -> subprocess.CompletedProcess:
         """Run a docker command."""
-        cmd = [self.docker_path] + args
+        cmd = [self.docker_path, *args]
         return subprocess.run(
             cmd, capture_output=capture_output, text=True, timeout=timeout
         )
@@ -237,7 +237,7 @@ class DockerClient:
 
         if follow:
             process = subprocess.Popen(
-                [self.docker_path] + args,
+                [self.docker_path, *args],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
@@ -382,7 +382,7 @@ class DockerComposeClient:
         timeout: float | None = None,
     ) -> subprocess.CompletedProcess:
         """Run a docker-compose command."""
-        cmd = ["docker", "compose", "-f", self.compose_file] + args
+        cmd = ["docker", "compose", "-f", self.compose_file, *args]
         return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
 
     def up(

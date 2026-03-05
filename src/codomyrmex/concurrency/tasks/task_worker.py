@@ -8,11 +8,13 @@ from __future__ import annotations
 
 import time
 import uuid
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .task_queue import Task
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from .task_queue import Task
 
 
 @dataclass

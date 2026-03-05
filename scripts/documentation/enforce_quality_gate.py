@@ -16,7 +16,7 @@ from pathlib import Path
 
 def enforce_quality_gate(
     repo_root: Path,
-    output_dir: Path = None,
+    output_dir: Path | None = None,
     min_quality_score: int = 70,
     max_broken_links: int = 10,
     max_placeholders: int = 100,
@@ -129,10 +129,9 @@ def main():
         / "documentation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/documentation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Enforce documentation quality gates")

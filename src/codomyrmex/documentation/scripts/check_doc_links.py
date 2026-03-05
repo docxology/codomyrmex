@@ -57,11 +57,7 @@ def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> tuple[bool,
     Returns: (exists, resolved_path)
     """
     # Skip external links
-    if (
-        link_url.startswith("http://")
-        or link_url.startswith("https://")
-        or link_url.startswith("mailto:")
-    ):
+    if link_url.startswith(("http://", "https://", "mailto:")):
         return (True, "external")  # Assume external links are valid
 
     # Skip anchor-only links

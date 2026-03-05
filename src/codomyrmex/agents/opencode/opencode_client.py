@@ -71,7 +71,7 @@ class OpenCodeClient(CLIAgentBase):
                 request,
                 additional_metadata={
                     "opencode_success": result.get("success", False),
-                    "command_full": " ".join([self.command] + opencode_args),
+                    "command_full": " ".join([self.command, *opencode_args]),
                 },
             )
         except AgentTimeoutError as e:

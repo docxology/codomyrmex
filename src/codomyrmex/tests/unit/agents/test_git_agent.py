@@ -168,7 +168,7 @@ class TestGitAgentExecution:
 
     def test_create_issue_json(self):
         """create_issue via JSON dispatches correctly (may error without GITHUB_TOKEN)."""
-        agent, stub = self._make_agent()
+        agent, _stub = self._make_agent()
         request = AgentRequest(
             prompt='{"action": "create_issue", "owner": "o", "repo_name": "r", "title": "t"}'
         )

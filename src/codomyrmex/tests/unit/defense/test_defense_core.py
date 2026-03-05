@@ -423,7 +423,7 @@ class TestDefense:
             )
         )
         # First request: allowed (CRITICAL auto-blocks for *future* but LOG doesn't deny this one)
-        allowed, threats = self.defense.process_request("attacker", {})
+        allowed, _threats = self.defense.process_request("attacker", {})
         assert allowed is True
         assert self.defense.blocked_count == 1
         # Second request: blocked via blocklist

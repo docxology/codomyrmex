@@ -99,7 +99,7 @@ class TestSimpleVersion:
         assert SimpleVersion("1.0.0") == SimpleVersion("1.0.0")
 
     def test_inequality(self):
-        assert not (SimpleVersion("1.0.0") == SimpleVersion("2.0.0"))
+        assert SimpleVersion("1.0.0") != SimpleVersion("2.0.0")
 
     def test_compatible_same_major(self):
         assert SimpleVersion("1.0.0").is_compatible(SimpleVersion("1.9.9"))

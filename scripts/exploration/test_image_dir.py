@@ -7,7 +7,7 @@ try:
     result = client.models.generate_images(
         model="imagen-4.0-generate-001",
         prompt="A tiny cute ant",
-        config=dict(number_of_images=1),
+        config={"number_of_images": 1},
     )
     for img in result.images:
         print("IMG:", dir(img))

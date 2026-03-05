@@ -23,10 +23,10 @@ from dataclasses import dataclass
 @dataclass
 class SampleClass:
     """A sample dataclass."""
-    
+
     name: str
     value: int = 0
-    
+
     def process(self) -> str:
         """Process and return formatted value."""
         return f"{self.name}: {self.value}"

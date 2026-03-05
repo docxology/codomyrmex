@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
+def generate_dashboard(repo_root: Path, output_dir: Path | None = None) -> int:
     """Generate HTML dashboard from validation results."""
     print("📊 Generating validation dashboard...\n")
 
@@ -74,7 +74,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
     <title>Documentation Quality Dashboard</title>
     <style>
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                background: #f5f5f5; padding: 20px; color: #333; }}
         .container {{ max-width: 1200px; margin: 0 auto; }}
         h1 {{ color: #2c3e50; margin-bottom: 20px; }}
@@ -93,7 +93,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
 <body>
     <div class="container">
         <h1>📊 Documentation Quality Dashboard</h1>
-        
+
         <div class="grid">
             <div class="card">
                 <h2>🔗 Link Validation</h2>
@@ -114,7 +114,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                     <span class="metric-value">{data["links"].get("external", "N/A")}</span>
                 </div>
             </div>
-            
+
             <div class="card">
                 <h2>📝 Content Quality</h2>
                 <div class="metric">
@@ -130,7 +130,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                     <span class="metric-value">{data["quality"].get("min_score", "N/A")}</span>
                 </div>
             </div>
-            
+
             <div class="card">
                 <h2>🤖 AGENTS.md Validation</h2>
                 <div class="metric">
@@ -147,7 +147,7 @@ def generate_dashboard(repo_root: Path, output_dir: Path = None) -> int:
                 </div>
             </div>
         </div>
-        
+
         <p class="timestamp">Generated: {data["generated"]}</p>
     </div>
 </body>
@@ -181,10 +181,9 @@ def main():
         / "documentation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/documentation/config.yaml")
 
     parser = argparse.ArgumentParser(description="Generate validation dashboard")

@@ -5,6 +5,8 @@ serialization, TemplateRegistry CRUD, search, import/export, and
 the module-level default registry.
 """
 
+import contextlib
+
 import pytest
 
 try:
@@ -361,10 +363,8 @@ class TestDefaultRegistry:
             assert reg.get(test_name) is t
         finally:
             # Clean up so other tests aren't affected
-            try:
+            with contextlib.suppress(KeyError):
                 reg.remove(test_name)
-            except KeyError:
-                pass
 
     def test_default_registry_size_is_int(self):
         """Default registry size should be an integer."""

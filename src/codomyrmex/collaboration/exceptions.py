@@ -8,7 +8,7 @@ in multi-agent collaboration workflows.
 class CollaborationError(Exception):
     """Base exception for all collaboration module errors."""
 
-    def __init__(self, message: str, details: dict = None):
+    def __init__(self, message: str, details: dict | None = None):
         super().__init__(message)
         self.message = message
         self.details = details or {}
@@ -17,7 +17,7 @@ class CollaborationError(Exception):
 class AgentNotFoundError(CollaborationError):
     """Raised when an agent cannot be found in the registry."""
 
-    def __init__(self, agent_id: str, message: str = None):
+    def __init__(self, agent_id: str, message: str | None = None):
         message = message or f"Agent not found: {agent_id}"
         super().__init__(message, {"agent_id": agent_id})
         self.agent_id = agent_id
@@ -26,7 +26,7 @@ class AgentNotFoundError(CollaborationError):
 class AgentBusyError(CollaborationError):
     """Raised when an agent is busy and cannot accept new tasks."""
 
-    def __init__(self, agent_id: str, current_task_id: str = None):
+    def __init__(self, agent_id: str, current_task_id: str | None = None):
         message = f"Agent {agent_id} is busy"
         if current_task_id:
             message += f" with task {current_task_id}"
@@ -40,7 +40,7 @@ class AgentBusyError(CollaborationError):
 class TaskExecutionError(CollaborationError):
     """Raised when a task fails to execute."""
 
-    def __init__(self, task_id: str, reason: str, agent_id: str = None):
+    def __init__(self, task_id: str, reason: str, agent_id: str | None = None):
         message = f"Task {task_id} execution failed: {reason}"
         super().__init__(
             message, {"task_id": task_id, "reason": reason, "agent_id": agent_id}
@@ -74,7 +74,7 @@ class TaskDependencyError(CollaborationError):
 class ConsensusError(CollaborationError):
     """Raised when consensus cannot be reached among agents."""
 
-    def __init__(self, message: str, details: dict = None):
+    def __init__(self, message: str, details: dict | None = None):
         super().__init__(message, details or {})
 
 
@@ -123,7 +123,7 @@ class CoordinationError(CollaborationError):
 class LeaderElectionError(CollaborationError):
     """Raised when leader election fails."""
 
-    def __init__(self, reason: str, candidates: list = None):
+    def __init__(self, reason: str, candidates: list | None = None):
         """Initialize error with reason."""
         message = f"Leader election failed: {reason}"
         super().__init__(message, {"reason": reason, "candidates": candidates or []})
@@ -135,7 +135,7 @@ class CapabilityMismatchError(CollaborationError):
     """Raised when no agent has the required capabilities."""
 
     def __init__(
-        self, required_capabilities: list, available_capabilities: list = None
+        self, required_capabilities: list, available_capabilities: list | None = None
     ):
         """Initialize error with required capabilities."""
         message = f"No agent has required capabilities: {required_capabilities}"

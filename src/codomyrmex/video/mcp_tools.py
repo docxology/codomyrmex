@@ -36,7 +36,7 @@ def video_get_config() -> dict[str, Any]:
         dict with keys: status, config, issues
     """
     try:
-        VideoConfig, get_config = _get_config()
+        _VideoConfig, get_config = _get_config()
         config = get_config()
         issues = config.validate()
         return {

@@ -393,21 +393,21 @@ class SecurityScanner:
 
 
 __all__ = [
-    # Enums
-    "Severity",
+    "CommandInjectionRule",
     "FindingType",
-    # Data classes
-    "SecurityFinding",
-    "ScanResult",
-    # Rules
-    "SecurityRule",
+    "HardcodedSecretRule",
+    "InsecureRandomRule",
     "PatternRule",
     "SQLInjectionRule",
-    "HardcodedSecretRule",
-    "CommandInjectionRule",
-    "InsecureRandomRule",
+    "ScanResult",
+    # Data classes
+    "SecurityFinding",
+    # Rules
+    "SecurityRule",
     # Core
     "SecurityScanner",
+    # Enums
+    "Severity",
 ]
 
 from .vulnerability_scanner import *

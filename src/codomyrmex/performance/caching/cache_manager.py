@@ -231,8 +231,8 @@ def cached_function(
             return result
 
         # Add cache management methods to the wrapper
-        wrapper.cache_clear = lambda: _cache_manager.clear()
-        wrapper.cache_stats = lambda: _cache_manager.get_stats()
+        wrapper.cache_clear = _cache_manager.clear
+        wrapper.cache_stats = _cache_manager.get_stats
 
         return wrapper
 

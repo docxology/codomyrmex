@@ -232,7 +232,7 @@ class TestGETEndpoints:
 
     def test_config_get_traversal_blocked(self, live_server):
         """Test /api/config/../../etc/passwd returns 403."""
-        status, data = live_server.get("/api/config/../../etc/passwd")
+        status, _data = live_server.get("/api/config/../../etc/passwd")
         assert status in (403, 404)
 
     def test_docs_list(self, live_server):
@@ -250,7 +250,7 @@ class TestGETEndpoints:
 
     def test_docs_get_404(self, live_server):
         """Test /api/docs/{path} returns 404 for missing file."""
-        status, data = live_server.get("/api/docs/NONEXISTENT_FILE_XYZ.md")
+        status, _data = live_server.get("/api/docs/NONEXISTENT_FILE_XYZ.md")
         assert status == 404
 
     def test_pipelines_list(self, live_server):
@@ -324,19 +324,19 @@ class TestPOSTEndpoints:
 
     def test_execute_requires_script_name(self, live_server):
         """Test /api/execute returns 400 when script name is missing."""
-        status, data = live_server.post("/api/execute", {})
+        status, _data = live_server.post("/api/execute", {})
         assert status == 400
 
     def test_execute_rejects_path_traversal(self, live_server):
         """Test /api/execute returns 403 for path traversal."""
-        status, data = live_server.post(
+        status, _data = live_server.post(
             "/api/execute", {"script": "../../../etc/passwd"}
         )
         assert status == 403
 
     def test_execute_rejects_missing_script(self, live_server):
         """Test /api/execute returns 403 for non-existent script."""
-        status, data = live_server.post(
+        status, _data = live_server.post(
             "/api/execute", {"script": "nonexistent_script.py"}
         )
         assert status == 403
@@ -368,14 +368,14 @@ class TestOriginValidation:
 
     def test_valid_localhost_origin(self, live_server):
         """Test that localhost:8787 origin is accepted."""
-        status, data = live_server.post(
+        status, _data = live_server.post(
             "/api/refresh", {}, origin="http://localhost:8787"
         )
         assert status == 200
 
     def test_valid_127_origin(self, live_server):
         """Test that 127.0.0.1:8787 origin is accepted."""
-        status, data = live_server.post(
+        status, _data = live_server.post(
             "/api/refresh", {}, origin="http://127.0.0.1:8787"
         )
         assert status == 200
@@ -388,7 +388,7 @@ class TestOriginValidation:
 
     def test_no_origin_accepted(self, live_server):
         """Test that requests without Origin header are accepted (curl/same-origin)."""
-        status, data = live_server.post("/api/refresh", {}, origin=None)
+        status, _data = live_server.post("/api/refresh", {}, origin=None)
         assert status == 200
 
 
@@ -457,12 +457,12 @@ class TestConfigSave:
 
     def test_missing_filename_returns_400(self, live_server):
         """Test that missing filename returns 400."""
-        status, data = live_server.post("/api/config", {})
+        status, _data = live_server.post("/api/config", {})
         assert status == 400
 
     def test_traversal_returns_403(self, live_server):
         """Test that path traversal in filename returns 403."""
-        status, data = live_server.post(
+        status, _data = live_server.post(
             "/api/config",
             {"filename": "../../etc/passwd", "content": "evil"},
         )
@@ -584,7 +584,7 @@ class TestRouting:
 
     def test_post_tests_routes_correctly(self, live_server):
         """Test that POST /api/tests resolves (202 Accepted for async test runs)."""
-        status, data = live_server.post("/api/tests", {})
+        status, _data = live_server.post("/api/tests", {})
         assert status in (200, 202)  # 202 Accepted is correct for async test start
 
     def test_unknown_api_returns_404(self, live_server):
@@ -749,7 +749,7 @@ class TestTrustStatusEndpoint:
 
     def test_returns_200(self, live_server):
         """GET /api/trust/status returns HTTP 200."""
-        status, data = live_server.get("/api/trust/status")
+        status, _data = live_server.get("/api/trust/status")
         assert status == 200
 
     def test_response_has_counts_dict_with_required_keys(self, live_server):
@@ -927,7 +927,7 @@ class TestAgentDispatchStatusEndpoint:
     def test_returns_200(self, live_server):
         """GET /api/agent/dispatch/status returns HTTP 200."""
         WebsiteServer._dispatch_orch = None
-        status, data = live_server.get("/api/agent/dispatch/status")
+        status, _data = live_server.get("/api/agent/dispatch/status")
         assert status == 200
 
     def test_active_is_false_when_no_orch(self, live_server):
@@ -996,7 +996,7 @@ class TestAgentDispatchEndpoint:
         t.start()
         try:
             WebsiteServer._dispatch_thread = t
-            status, data = live_server.post("/api/agent/dispatch", {"prompt": "hello"})
+            status, _data = live_server.post("/api/agent/dispatch", {"prompt": "hello"})
             assert status == 429
         finally:
             stop_event.set()
@@ -1047,7 +1047,7 @@ class TestTelemetryEndpoint:
 
     def test_returns_200(self, live_server):
         """GET /api/telemetry returns HTTP 200."""
-        status, data = live_server.get("/api/telemetry")
+        status, _data = live_server.get("/api/telemetry")
         assert status == 200
 
     def test_response_has_status_field(self, live_server):
@@ -1089,7 +1089,7 @@ class TestSecurityPostureEndpoint:
 
     def test_returns_200(self, live_server):
         """GET /api/security/posture returns HTTP 200."""
-        status, data = live_server.get("/api/security/posture")
+        status, _data = live_server.get("/api/security/posture")
         assert status == 200
 
     def test_response_has_status_field(self, live_server):

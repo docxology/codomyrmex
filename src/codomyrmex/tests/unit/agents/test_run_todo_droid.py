@@ -18,8 +18,8 @@ from __future__ import annotations
 import json
 import sys
 import textwrap
-from pathlib import Path
 from types import SimpleNamespace
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -42,6 +42,9 @@ from codomyrmex.agents.droid.run_todo_droid import (
     run_todos,
 )
 from codomyrmex.agents.droid.todo import TodoItem, TodoManager
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Helpers (real objects, no mocks)
@@ -687,7 +690,7 @@ class TestEdgeCases:
         """)
         f = _make_todo_file(tmp_path, content)
         manager = TodoManager(str(f))
-        items, completed = manager.load()
+        items, _completed = manager.load()
         assert len(items) == 1
         assert items[0].task_name == "t1"
 

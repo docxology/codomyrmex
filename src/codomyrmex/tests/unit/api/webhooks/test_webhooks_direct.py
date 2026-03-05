@@ -428,7 +428,7 @@ class TestHTTPWebhookTransport:
 
     def test_handler_can_return_error_code(self):
         transport = _make_transport(status_code=404, body="Not Found")
-        code, body = transport.send("url", "payload", {}, 5.0)
+        code, _body = transport.send("url", "payload", {}, 5.0)
         assert code == 404
 
 
@@ -592,7 +592,7 @@ class TestFactoryFunctions:
     def test_create_webhook_dispatcher_noop_transport_returns_200(self):
         d = create_webhook_dispatcher()
         # Default transport always returns (200, "OK")
-        code, body = d.transport.send("url", "payload", {}, 5.0)
+        code, _body = d.transport.send("url", "payload", {}, 5.0)
         assert code == 200
 
     def test_create_webhook_dispatcher_custom_registry(self):

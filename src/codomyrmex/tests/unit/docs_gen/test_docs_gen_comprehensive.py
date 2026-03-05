@@ -213,7 +213,7 @@ class TestSiteGeneratorComprehensive:
         api_nav = next(
             item["API Reference"] for item in config.nav if "API Reference" in item
         )
-        names = [list(d.keys())[0] for d in api_nav]
+        names = [next(iter(d.keys())) for d in api_nav]
         assert names == ["a_mod", "z_mod"]
 
     def test_extra_css_js(self):

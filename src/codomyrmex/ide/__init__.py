@@ -320,19 +320,19 @@ def cli_commands():
 
 
 __all__ = [
-    "IDEClient",
-    "IDEStatus",
-    "IDECommand",
-    "IDECommandResult",
-    "FileInfo",
-    "IDEError",
-    "ConnectionError",
-    "CommandExecutionError",
-    "SessionError",
+    "AntigravityClient",
     "ArtifactError",
+    "CommandExecutionError",
+    "ConnectionError",
     # Submodule clients
     "CursorClient",
+    "FileInfo",
+    "IDEClient",
+    "IDECommand",
+    "IDECommandResult",
+    "IDEError",
+    "IDEStatus",
+    "SessionError",
     "VSCodeClient",
-    "AntigravityClient",
     "cli_commands",
 ]

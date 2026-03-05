@@ -228,10 +228,7 @@ class Tracer:
         """Start a new span."""
         parent = get_current_span()
 
-        if parent:
-            context = parent.context.child()
-        else:
-            context = SpanContext.new_root()
+        context = parent.context.child() if parent else SpanContext.new_root()
 
         span = Span(name=name, context=context, kind=kind)
 

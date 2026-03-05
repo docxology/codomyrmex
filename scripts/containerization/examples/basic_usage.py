@@ -44,10 +44,9 @@ def main():
         / "containerization"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/containerization/config.yaml")
 
     setup_logging()
@@ -56,7 +55,7 @@ def main():
     # 1. Docker Manager
     print_info("Testing DockerManager initialization...")
     try:
-        mgr = DockerManager()
+        DockerManager()
         print_success("  DockerManager available.")
     except Exception as e:
         print_info(f"  DockerManager note: {e}")
@@ -64,7 +63,7 @@ def main():
     # 2. Kubernetes Orchestrator
     print_info("Testing KubernetesOrchestrator initialization...")
     try:
-        orchestrator = KubernetesOrchestrator()
+        KubernetesOrchestrator()
         print_success("  KubernetesOrchestrator available.")
     except Exception as e:
         print_info(f"  KubernetesOrchestrator note: {e}")
@@ -72,7 +71,7 @@ def main():
     # 3. Security Scanner
     print_info("Verifying ContainerSecurityScanner...")
     try:
-        scanner = ContainerSecurityScanner()
+        ContainerSecurityScanner()
         print_success("  ContainerSecurityScanner available.")
     except Exception as e:
         print_error(f"  Security scanner failed: {e}")
@@ -80,7 +79,7 @@ def main():
     # 4. Optimizer
     print_info("Verifying ContainerOptimizer...")
     try:
-        optimizer = ContainerOptimizer()
+        ContainerOptimizer()
         print_success("  ContainerOptimizer available.")
     except Exception as e:
         print_error(f"  Optimizer failed: {e}")

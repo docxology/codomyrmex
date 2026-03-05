@@ -41,7 +41,7 @@ class TestEventBusZeroMock:
     def test_wildcard_subscription(self, clean_bus):
         """Test wildcard pattern matching."""
         received = []
-        clean_bus.subscribe(["system.*"], lambda e: received.append(e))
+        clean_bus.subscribe(["system.*"], received.append)
 
         clean_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
         clean_bus.publish(Event(event_type=EventType.SYSTEM_ERROR, source="test"))
@@ -68,7 +68,7 @@ class TestEventBusZeroMock:
         def my_filter(event):
             return event.data.get("relevant") is True
 
-        clean_bus.subscribe(["*"], lambda e: received.append(e), filter_func=my_filter)
+        clean_bus.subscribe(["*"], received.append, filter_func=my_filter)
 
         clean_bus.publish(
             Event(
@@ -91,7 +91,7 @@ class TestEventBusZeroMock:
     def test_unsubscribe(self, clean_bus):
         """Test unsubscription."""
         received = []
-        sub_id = clean_bus.subscribe(["*"], lambda e: received.append(e))
+        sub_id = clean_bus.subscribe(["*"], received.append)
 
         clean_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
         assert len(received) == 1
@@ -108,7 +108,7 @@ class TestEventBusZeroMock:
             raise RuntimeError("Boom")
 
         clean_bus.subscribe(["*"], faulty_handler)
-        clean_bus.subscribe(["*"], lambda e: received.append(e))
+        clean_bus.subscribe(["*"], received.append)
 
         # Should not raise exception
         clean_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
@@ -123,7 +123,7 @@ class TestEventEmitterZeroMock:
 
     def test_emitter_basics(self, clean_bus):
         received = []
-        clean_bus.subscribe(["*"], lambda e: received.append(e))
+        clean_bus.subscribe(["*"], received.append)
 
         emitter = EventEmitter(source="my_component", event_bus=clean_bus)
         emitter.emit(EventType.TASK_STARTED, data={"id": 1})
@@ -134,7 +134,7 @@ class TestEventEmitterZeroMock:
 
     def test_emitter_context_manager(self, clean_bus):
         received = []
-        clean_bus.subscribe(["*"], lambda e: received.append(e))
+        clean_bus.subscribe(["*"], received.append)
 
         from codomyrmex.events.emitters.event_emitter import EventOperationContext
 

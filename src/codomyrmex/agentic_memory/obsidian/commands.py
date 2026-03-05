@@ -355,7 +355,7 @@ def get_outline(
             hashes = stripped.split(" ", 1)[0]
             level = len(hashes)
             text = stripped[level:].strip()
-        elif stripped.startswith("\t") or stripped.startswith("  "):
+        elif stripped.startswith(("\t", "  ")):
             level = len(stripped) - len(stripped.lstrip())
             text = stripped.strip()
         items.append(OutlineItem(level=level, text=text, raw=line))

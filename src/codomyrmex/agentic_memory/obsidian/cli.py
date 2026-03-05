@@ -12,12 +12,14 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
-from collections.abc import Sequence
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+    from pathlib import Path
 
 logger = get_logger(__name__)
 

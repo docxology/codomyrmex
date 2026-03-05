@@ -90,7 +90,7 @@ class Dataset:
     and I/O capabilities.
     """
 
-    def __init__(self, data: list[dict[str, Any]] = None):
+    def __init__(self, data: list[dict[str, Any]] | None = None):
         """
         Initialize a dataset.
 
@@ -252,7 +252,7 @@ class Evaluator:
     Model output evaluator with customizable metrics.
     """
 
-    def __init__(self, metrics: dict[str, Callable] = None):
+    def __init__(self, metrics: dict[str, Callable] | None = None):
         """
         Initialize evaluator.
 
@@ -342,55 +342,55 @@ def cli_commands():
 
 
 __all__ = [
-    "optimization",
-    "registry",
-    # CLI integration
-    "cli_commands",
-    # Submodules
-    "evaluation",
-    "training",
-    # Core classes
-    "Dataset",
-    "DatasetSanitizer",
-    "FineTuningJob",
-    "Evaluator",
-    # Evaluation components (scorer/benchmark/quality)
-    "Scorer",
-    "ExactMatchScorer",
-    "ContainsScorer",
-    "LengthScorer",
-    "RegexScorer",
-    "CompositeScorer",
-    "WeightedScorer",
-    "create_default_scorer",
+    "AUCROCMetric",
+    "AccuracyMetric",
     "BenchmarkCase",
     "BenchmarkResult",
     "BenchmarkSuite",
-    "SuiteResult",
-    "QualityDimension",
+    "CompositeScorer",
+    "ConfusionMatrix",
+    "ContainsScorer",
+    # Core classes
+    "Dataset",
+    "DatasetSanitizer",
     "DimensionScore",
-    "QualityReport",
+    "EvaluationResult",
+    "Evaluator",
+    "ExactMatchScorer",
+    "F1Metric",
+    "FineTuningJob",
+    "LengthScorer",
+    "MAEMetric",
+    "MSEMetric",
+    "Metric",
+    "ModelEvaluator",
+    "PrecisionMetric",
     "QualityAnalyzer",
+    "QualityDimension",
+    "QualityReport",
+    "R2Metric",
+    "RMSEMetric",
+    "RecallMetric",
+    "RegexScorer",
+    # Evaluation components (scorer/benchmark/quality)
+    "Scorer",
+    "SuiteResult",
+    # Metric classes
+    "TaskType",
+    "WeightedScorer",
     "analyze_quality",
+    # CLI integration
+    "cli_commands",
+    "create_default_scorer",
+    "create_evaluator",
+    # Submodules
+    "evaluation",
     # Metric functions
     "exact_match_metric",
     "length_ratio_metric",
-    # Metric classes
-    "TaskType",
-    "EvaluationResult",
-    "Metric",
-    "AccuracyMetric",
-    "PrecisionMetric",
-    "RecallMetric",
-    "F1Metric",
-    "ConfusionMatrix",
-    "MSEMetric",
-    "MAEMetric",
-    "RMSEMetric",
-    "R2Metric",
-    "AUCROCMetric",
-    "ModelEvaluator",
-    "create_evaluator",
+    "optimization",
+    "registry",
+    "training",
 ]
 
 __version__ = "0.1.0"

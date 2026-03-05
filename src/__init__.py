@@ -156,20 +156,20 @@ def get_template_info() -> dict:
 
 
 __all__ = [
+    "CodeExecutionError",
+    "CodeGenerationError",
+    # Common exceptions
+    "CodomyrmexError",
+    "ConfigurationError",
+    "EnvironmentError",
+    "StaticAnalysisError",
     # Main components
     "codomyrmex",
     # Re-exported functions
     "get_codomyrmex_version",
-    "list_modules",
+    "get_main_package_info",
     "get_module_path",
     "get_source_version",
-    "get_main_package_info",
     "get_template_info",
-    # Common exceptions
-    "CodomyrmexError",
-    "CodeExecutionError",
-    "CodeGenerationError",
-    "ConfigurationError",
-    "EnvironmentError",
-    "StaticAnalysisError",
+    "list_modules",
 ]

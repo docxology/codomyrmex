@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from collections import deque
-from collections.abc import Callable, Iterable
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
 
 
 def kahn_topological_sort(

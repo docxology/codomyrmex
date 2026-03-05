@@ -26,7 +26,7 @@ def create_scatter_plot(
     title: str = "Scatter Plot",
     x_label: str = "X-axis",
     y_label: str = "Y-axis",
-    output_path: str = None,
+    output_path: str | None = None,
     show_plot: bool = False,
     dot_size: int = 20,
     dot_color: str = "blue",
@@ -74,8 +74,8 @@ class ScatterPlot:
 
     def __init__(
         self,
-        x_data: list = None,
-        y_data: list = None,
+        x_data: list | None = None,
+        y_data: list | None = None,
         title: str = "Scatter Plot",
         x_label: str = "X-axis",
         y_label: str = "Y-axis",
@@ -110,7 +110,7 @@ class ScatterPlot:
         """Data."""
         return {"x": self.x_data, "y": self.y_data}
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """
         Render the scatter plot.
 

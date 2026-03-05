@@ -45,10 +45,9 @@ def main():
         / "physical_management"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/physical_management/config.yaml")
 
     setup_logging()
@@ -67,7 +66,7 @@ def main():
     # 2. Physics Simulator
     print_info("Testing PhysicsSimulator...")
     try:
-        sim = PhysicsSimulator()
+        PhysicsSimulator()
         print_success("  PhysicsSimulator initialized.")
     except Exception as e:
         print_error(f"  Physics simulator failed: {e}")
@@ -75,7 +74,7 @@ def main():
     # 3. Sensor Manager
     print_info("Testing SensorManager...")
     try:
-        sensor_mgr = SensorManager()
+        SensorManager()
         print_success("  SensorManager initialized.")
     except Exception as e:
         print_error(f"  Sensor manager failed: {e}")

@@ -145,24 +145,24 @@ def cli_commands():
 
 # Build __all__ dynamically
 __all__ = [
-    # CLI integration
-    "cli_commands",
-    # Version
-    "__version__",
-    # Exceptions (always available)
-    "AudioError",
-    "TranscriptionError",
-    "SynthesisError",
-    "AudioFormatError",
-    "ModelNotLoadedError",
-    "ProviderNotAvailableError",
-    "VoiceNotFoundError",
+    "EDGE_TTS_AVAILABLE",
+    "PYTTSX3_AVAILABLE",
     # Availability flags
     "STT_AVAILABLE",
     "TTS_AVAILABLE",
     "WHISPER_AVAILABLE",
-    "PYTTSX3_AVAILABLE",
-    "EDGE_TTS_AVAILABLE",
+    # Exceptions (always available)
+    "AudioError",
+    "AudioFormatError",
+    "ModelNotLoadedError",
+    "ProviderNotAvailableError",
+    "SynthesisError",
+    "TranscriptionError",
+    "VoiceNotFoundError",
+    # Version
+    "__version__",
+    # CLI integration
+    "cli_commands",
 ]
 
 if STT_AVAILABLE:

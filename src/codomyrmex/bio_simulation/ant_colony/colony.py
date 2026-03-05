@@ -135,9 +135,8 @@ class Colony:
                 ant.energy = min(ant.energy + recovery, 1.0)
                 if ant.energy >= 0.9:
                     ant.state = AntState.FORAGING
-            elif ant.state == AntState.IDLE:
-                if random.random() < 0.1:
-                    ant.state = AntState.FORAGING
+            elif ant.state == AntState.IDLE and random.random() < 0.1:
+                ant.state = AntState.FORAGING
 
             # Check for death after action
             if not ant.is_alive():
@@ -153,7 +152,7 @@ class Colony:
 
     def _forage(self, ant: Ant) -> None:
         """Move a foraging ant toward food, guided by pheromones."""
-        pos = (int(round(ant.position[0])), int(round(ant.position[1])))
+        pos = (round(ant.position[0]), round(ant.position[1]))
 
         # Check for nearby food
         perception_radius = 1.5

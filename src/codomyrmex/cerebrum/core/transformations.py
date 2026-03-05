@@ -226,11 +226,12 @@ class LearningTransformer(ModelTransformer):
 
         # Apply gradient updates
         for param_key, grad_value in gradient.items():
-            if param_key in updated.parameters:
-                if isinstance(
-                    updated.parameters[param_key], (int, float)
-                ) and isinstance(grad_value, (int, float)):
-                    updated.parameters[param_key] -= self.learning_rate * grad_value
+            if (
+                param_key in updated.parameters
+                and isinstance(updated.parameters[param_key], (int, float))
+                and isinstance(grad_value, (int, float))
+            ):
+                updated.parameters[param_key] -= self.learning_rate * grad_value
 
         self.logger.debug(f"Applied gradient update to model {model.name}")
         return updated

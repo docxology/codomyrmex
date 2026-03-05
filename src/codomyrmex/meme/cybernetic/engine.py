@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import time
+from typing import TYPE_CHECKING
 
 from codomyrmex.meme.cybernetic.control import PIDController
-from codomyrmex.meme.cybernetic.models import (
-    ControlSystem,
-    SystemState,
-)
+
+if TYPE_CHECKING:
+    from codomyrmex.meme.cybernetic.models import (
+        ControlSystem,
+        SystemState,
+    )
 
 
 class CyberneticEngine:

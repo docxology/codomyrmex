@@ -53,21 +53,21 @@ except ImportError:
 
 
 __all__ = [
-    # Main interface
-    "Synthesizer",
-    # Models
-    "AudioFormat",
-    "SynthesisResult",
-    "TTSConfig",
-    "VoiceGender",
-    "VoiceInfo",
-    "SSMLOptions",
-    # Providers
-    "TTSProvider",
-    "Pyttsx3Provider",
-    "EdgeTTSProvider",
-    "PYTTSX3_AVAILABLE",
     "EDGE_TTS_AVAILABLE",
     "POPULAR_VOICES",
+    "PYTTSX3_AVAILABLE",
+    # Models
+    "AudioFormat",
+    "EdgeTTSProvider",
+    "Pyttsx3Provider",
+    "SSMLOptions",
+    "SynthesisResult",
+    # Main interface
+    "Synthesizer",
+    "TTSConfig",
+    # Providers
+    "TTSProvider",
+    "VoiceGender",
+    "VoiceInfo",
     "get_provider",
 ]

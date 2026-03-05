@@ -8,9 +8,8 @@ stores outcomes, and re-plans if needed.
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.memory.store import MemoryStore
 from codomyrmex.agents.planner.feedback_config import FeedbackConfig
@@ -22,6 +21,9 @@ from codomyrmex.orchestrator.workflows.workflow_engine import (
     WorkflowRunner,
     WorkflowStep,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

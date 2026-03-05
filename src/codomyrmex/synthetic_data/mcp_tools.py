@@ -14,7 +14,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def synth_generate_structured(
     fields: dict[str, dict[str, Any]],
     n_samples: int = 100,
-    seed: int = None,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     """Generate structured data records matching a schema.
 
@@ -53,7 +53,7 @@ def synth_generate_classification(
     n_classes: int = 2,
     n_features: int = 10,
     class_balance: str = "balanced",
-    seed: int = None,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     """Generate a classification dataset with features and labels.
 
@@ -102,7 +102,7 @@ def synth_generate_classification(
 )
 def synth_generate_preference_pairs(
     n_pairs: int = 100,
-    seed: int = None,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     """Generate preference pair data for RLHF/DPO.
 

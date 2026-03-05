@@ -329,8 +329,8 @@ class TestGetDocTree:
         result = provider.get_doc_tree()
 
         # Should have Modules section with the README
-        has_modules = any(c.get("name") == "Modules" for c in result["children"])
-        assert has_modules or True  # May be empty if structure differs
+        any(c.get("name") == "Modules" for c in result["children"])
+        assert True  # May be empty if structure differs
 
 
 @pytest.mark.unit
@@ -903,7 +903,7 @@ class TestGetScriptMetadata:
         script.write_text('"""Run the full test suite.\nMore details here."""\npass')
 
         provider = DataProvider(tmp_path)
-        title, description = provider._get_script_metadata(script)
+        title, _description = provider._get_script_metadata(script)
         assert title == "Run the full test suite."
 
     def test_returns_filename_when_no_docstring(self, tmp_path):

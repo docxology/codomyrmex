@@ -7,10 +7,12 @@ latest-per-key views.
 from __future__ import annotations
 
 from collections import defaultdict
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.events.event_store import EventStore, StreamEvent
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from codomyrmex.events.event_store import EventStore, StreamEvent
 
 
 class StreamProjection:

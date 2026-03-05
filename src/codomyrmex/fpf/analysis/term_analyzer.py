@@ -181,7 +181,7 @@ class TermAnalyzer:
         return importance_scores[:top_n]
 
     def analyze_section_terms(
-        self, spec: FPFSpec, part: str = None
+        self, spec: FPFSpec, part: str | None = None
     ) -> dict[str, list[str]]:
         """Analyze terms by section/part.
 

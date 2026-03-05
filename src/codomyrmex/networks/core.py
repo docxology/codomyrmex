@@ -77,13 +77,11 @@ class Network:
             raise ValueError(f"Node {node_id} does not exist")
         del self.nodes[node_id]
         # Remove edges involving this node
-        self.edges = [
-            e for e in self.edges if e.source != node_id and e.target != node_id
-        ]
+        self.edges = [e for e in self.edges if node_id not in (e.source, e.target)]
         del self._adj[node_id]
         for nid in self._adj:
             self._adj[nid] = [
-                e for e in self._adj[nid] if e.target != node_id and e.source != node_id
+                e for e in self._adj[nid] if node_id not in (e.target, e.source)
             ]
 
     def has_node(self, node_id: str) -> bool:

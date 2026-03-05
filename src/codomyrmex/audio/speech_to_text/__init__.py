@@ -46,17 +46,17 @@ except ImportError:
 
 
 __all__ = [
-    # Main interface
-    "Transcriber",
-    # Models
-    "TranscriptionResult",
-    "TranscriptionConfig",
-    "Segment",
-    "Word",
-    "WhisperModelSize",
+    "WHISPER_AVAILABLE",
     # Providers
     "STTProvider",
+    "Segment",
+    # Main interface
+    "Transcriber",
+    "TranscriptionConfig",
+    # Models
+    "TranscriptionResult",
+    "WhisperModelSize",
     "WhisperProvider",
-    "WHISPER_AVAILABLE",
+    "Word",
     "get_provider",
 ]

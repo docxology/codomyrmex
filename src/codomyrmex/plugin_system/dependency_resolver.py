@@ -199,7 +199,7 @@ class DependencyResolver:
             for dep in node_data.dependencies:
                 if dep in in_stack:
                     idx = path.index(dep)
-                    cycles.append(path[idx:] + [dep])
+                    cycles.append([*path[idx:], dep])
                 elif dep not in visited and dep in self._nodes:
                     self._dfs_cycle(dep, path, visited, in_stack, cycles)
 

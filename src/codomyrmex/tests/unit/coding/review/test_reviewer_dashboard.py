@@ -9,8 +9,7 @@ implementations.  No unittest.mock, MagicMock, monkeypatch, or patch is used.
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
@@ -21,6 +20,9 @@ from codomyrmex.coding.review.models import (
     QualityDashboard,
 )
 from codomyrmex.coding.review.reviewer_impl.dashboard import DashboardMixin
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Real stub helpers — not mocks. Each method has a genuine implementation.

@@ -15,15 +15,15 @@ from .policy import PolicyEngine, PolicyError, PolicyRule
 __all__ = [
     # Contracts
     "Contract",
-    "ContractTerm",
-    "ContractStatus",
     "ContractError",
-    # Policy
-    "PolicyRule",
-    "PolicyEngine",
-    "PolicyError",
+    "ContractStatus",
+    "ContractTerm",
+    "DisputeError",
     # Dispute Resolution
     "DisputeResolver",
     "DisputeStatus",
-    "DisputeError",
+    "PolicyEngine",
+    "PolicyError",
+    # Policy
+    "PolicyRule",
 ]

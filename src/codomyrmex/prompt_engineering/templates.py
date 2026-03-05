@@ -7,10 +7,12 @@ storing, and rendering prompt templates with variable substitution.
 
 from __future__ import annotations
 
-import builtins
 import re
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    import builtins
 
 try:
     from codomyrmex.validation.schemas import Config, Result, ResultStatus

@@ -602,7 +602,7 @@ class TestConfigurationManagerGapFillers:
                 os.environ["TESTPRESENT_VAR"] = saved
 
     @pytest.mark.parametrize(
-        "source,key,value",
+        ("source", "key", "value"),
         [
             ("a.yaml", "content", "yaml"),
             ("b.yml", "content", "yml"),

@@ -120,7 +120,7 @@ def analyze_dependencies(root: Path) -> dict[str, dict]:
             dependencies[package_name]["sources"].append((str(req_file), version_spec))
 
     # Identify conflicts (multiple version specs for same package)
-    for _package_name, info in dependencies.items():
+    for info in dependencies.values():
         if len(info["versions"]) > 1:
             info["conflicts"] = list(info["versions"])
 
@@ -155,7 +155,7 @@ def generate_pyproject_additions(
         # Get the most specific version (prefer == over >=)
         versions = list(info["versions"])
         if any("==" in v for v in versions):
-            version_spec = [v for v in versions if "==" in v][0]
+            version_spec = next(v for v in versions if "==" in v)
         elif versions:
             version_spec = versions[0]
         else:

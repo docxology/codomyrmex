@@ -140,7 +140,7 @@ def list_events(client, stack_id: str):
         print(f"   ... and {len(events) - 10} more events")
 
 
-def create_stack(client, name: str, template_path: str, parameters: dict = None):
+def create_stack(client, name: str, template_path: str, parameters: dict | None = None):
     """Create a Heat stack from template file."""
     print(f"\n🚀 Creating stack: {name}")
     print(f"   Template: {template_path}")

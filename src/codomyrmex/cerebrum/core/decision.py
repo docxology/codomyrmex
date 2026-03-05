@@ -83,10 +83,7 @@ class DecisionModule:
 
                 total_score += score * weight
 
-            if total_weight > 0:
-                final_score = total_score / total_weight
-            else:
-                final_score = 0.5
+            final_score = total_score / total_weight if total_weight > 0 else 0.5
 
             scores.append(final_score)
 

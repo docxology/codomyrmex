@@ -111,7 +111,7 @@ class TestDeploymentStatusEnum:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "member,expected_value",
+        ("member", "expected_value"),
         [
             ("PENDING", "pending"),
             ("RUNNING", "running"),
@@ -136,7 +136,7 @@ class TestEnvironmentTypeEnum:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "member,expected_value",
+        ("member", "expected_value"),
         [
             ("DEVELOPMENT", "development"),
             ("STAGING", "staging"),
@@ -284,7 +284,7 @@ class TestRollbackStrategyEnum:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "member,expected_value",
+        ("member", "expected_value"),
         [
             ("IMMEDIATE", "immediate"),
             ("ROLLING", "rolling"),

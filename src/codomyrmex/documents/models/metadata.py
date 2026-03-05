@@ -79,10 +79,7 @@ class DocumentMetadata:
 
     def update(self, other: Any) -> None:
         """Update metadata from another metadata object or dictionary."""
-        if isinstance(other, DocumentMetadata):
-            other_dict = other.to_dict()
-        else:
-            other_dict = other
+        other_dict = other.to_dict() if isinstance(other, DocumentMetadata) else other
 
         for key, value in other_dict.items():
             if value is None:

@@ -5,11 +5,14 @@ from __future__ import annotations
 import json
 import os
 import shutil
+from typing import TYPE_CHECKING
 
-from codomyrmex.coding.review.models import (
-    QualityDashboard,
-)
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from codomyrmex.coding.review.models import (
+        QualityDashboard,
+    )
 
 logger = get_logger(__name__)
 

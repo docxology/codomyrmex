@@ -54,7 +54,7 @@ class TestCrossoverOperators:
         cross = SinglePointCrossover(crossover_rate=1.0)
         p1 = Individual(genes=[0, 0, 0, 0])
         p2 = Individual(genes=[1, 1, 1, 1])
-        c1, c2 = cross.crossover(p1, p2)
+        c1, _c2 = cross.crossover(p1, p2)
 
         # Verify crossover happened at some point
         found_point = False
@@ -78,7 +78,7 @@ class TestCrossoverOperators:
         cross = UniformCrossover(crossover_rate=1.0, mixing_ratio=0.5)
         p1 = Individual(genes=[0] * 100)
         p2 = Individual(genes=[1] * 100)
-        c1, c2 = cross.crossover(p1, p2)
+        c1, _c2 = cross.crossover(p1, p2)
         # Statistics: approximately 50/50
         zeros = sum(1 for g in c1.genes if g == 0)
         ones = sum(1 for g in c1.genes if g == 1)

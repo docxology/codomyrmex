@@ -90,7 +90,7 @@ def main():
         "--list-workflows", "-l", action="store_true", help="List workflows"
     )
     parser.add_argument("--context", "-c", action="store_true", help="Show CI context")
-    args = parser.parse_args()
+    parser.parse_args()
 
     print("🔄 CI/CD Status\n")
 

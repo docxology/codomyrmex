@@ -50,9 +50,7 @@ class Experiment:
             return False
         if self.start_date and now < self.start_date:
             return False
-        if self.end_date and now > self.end_date:
-            return False
-        return True
+        return not (self.end_date and now > self.end_date)
 
 
 @dataclass

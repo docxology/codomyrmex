@@ -44,10 +44,9 @@ def main():
         / "security"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/security/config.yaml")
 
     setup_logging()
@@ -56,7 +55,7 @@ def main():
     # 1. Digital Security
     print_info("Testing VulnerabilityScanner initialization...")
     try:
-        scanner = VulnerabilityScanner()
+        VulnerabilityScanner()
         print_success("  VulnerabilityScanner available.")
     except Exception as e:
         print_info(f"  VulnerabilityScanner note: {e}")
@@ -64,7 +63,7 @@ def main():
     # 2. Physical Security
     print_info("Testing AccessControlSystem...")
     try:
-        acs = AccessControlSystem()
+        AccessControlSystem()
         print_success("  AccessControlSystem available.")
     except Exception as e:
         print_info(f"  AccessControlSystem note: {e}")

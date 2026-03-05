@@ -110,7 +110,7 @@ class BPETokenizer:
         words = text.split()
         for word in words:
             # Each word becomes characters + end-of-word marker
-            chars = list(word) + ["</w>"]
+            chars = [*list(word), "</w>"]
             word_pieces = self._apply_merges(chars)
             for piece in word_pieces:
                 token_id = self.vocab.get(piece, self.vocab.get("<UNK>", 1))

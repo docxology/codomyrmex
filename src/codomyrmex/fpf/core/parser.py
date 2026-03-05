@@ -89,7 +89,7 @@ class FPFParser:
                 continue
 
             # Detect end of TOC (start of actual content)
-            if line.startswith("# **Preface**") or line.startswith("## FPF is"):
+            if line.startswith(("# **Preface**", "## FPF is")):
                 break
 
             # Detect parts

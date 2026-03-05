@@ -168,9 +168,7 @@ class DependencyAnalyzer:
         ) -> bool:
             """Check if there's a cycle from start to current."""
             if current in visited:
-                if current == start:
-                    return True
-                return False
+                return current == start
 
             visited.add(current)
             path.append(current)

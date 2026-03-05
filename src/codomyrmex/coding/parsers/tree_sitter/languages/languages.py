@@ -39,7 +39,7 @@ class LanguageManager:
         return cls._languages.get(lang_name)
 
     @classmethod
-    def discover_languages(cls, search_path: str):
+    def discover_languages(cls, search_path: str) -> None:
         """Discovers and loads all .so files in a directory as languages."""
         if not os.path.exists(search_path):
             return

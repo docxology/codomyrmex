@@ -7,9 +7,9 @@ logger = get_logger(__name__)
 def demo_data_visualization() -> bool:
     """Demo data visualization capabilities."""
     try:
-        import matplotlib
+        import matplotlib as mpl
 
-        matplotlib.use("Agg")
+        mpl.use("Agg")
         import os
 
         from codomyrmex.data_visualization import create_bar_chart, create_line_plot

@@ -23,7 +23,7 @@ class SelectiveSSM:
         A[n,n] = -(n+1) for n=0..N-1 (diagonal)
     """
 
-    def __init__(self, d_model: int, d_state: int = 16, dt_rank: int = None):
+    def __init__(self, d_model: int, d_state: int = 16, dt_rank: int | None = None):
         """Initialize selective SSM parameters.
 
         Args:
@@ -122,7 +122,7 @@ class MambaBlock:
     def __init__(
         self,
         d_model: int,
-        d_inner: int = None,
+        d_inner: int | None = None,
         d_state: int = 16,
         d_conv: int = 4,
     ):
@@ -156,7 +156,7 @@ class MambaBlock:
 
     def _causal_conv1d(self, x: np.ndarray) -> np.ndarray:
         """Causal depthwise conv1d: (batch, seq, d) -> (batch, seq, d)."""
-        batch, seq, d = x.shape
+        _batch, seq, d = x.shape
         k = self.d_conv
         # Pad left with k-1 zeros for causality
         padded = np.pad(x, ((0, 0), (k - 1, 0), (0, 0)))  # (batch, seq+k-1, d)
@@ -207,7 +207,7 @@ class MambaBlock:
 def mamba_forward(
     x: np.ndarray,
     n_layers: int = 2,
-    d_model: int = None,
+    d_model: int | None = None,
     d_state: int = 16,
 ) -> np.ndarray:
     """Stack multiple Mamba blocks with residual connections.

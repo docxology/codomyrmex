@@ -16,6 +16,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import contextlib
 import json
 import os
 from datetime import datetime
@@ -59,10 +60,8 @@ def parse_metrics_file(path: Path) -> list:
             content = f.read()
             for line in content.strip().split("\n"):
                 if line.strip():
-                    try:
+                    with contextlib.suppress(BaseException):
                         metrics.append(json.loads(line))
-                    except:
-                        pass
     except:
         pass
     return metrics
@@ -80,10 +79,9 @@ def main():
         / "telemetry"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/telemetry/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display telemetry status")

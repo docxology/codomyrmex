@@ -218,7 +218,7 @@ class TestAnalyzeWithCaseBasedReasoning:
         assert cbr_result["case_base_size"] > 0
 
     def test_similarity_entry_structure(self, cbr_result):
-        for _pattern_id, data in cbr_result["similarity_analysis"].items():
+        for data in cbr_result["similarity_analysis"].values():
             assert "prediction" in data
             assert "confidence" in data
             assert "retrieved_count" in data
@@ -254,7 +254,7 @@ class TestAnalyzeWithBayesianInference:
         assert "network_edges" in bayesian_result
 
     def test_inference_results_structure(self, bayesian_result):
-        for _pattern_id, data in bayesian_result["inference_results"].items():
+        for data in bayesian_result["inference_results"].values():
             if "error" not in data:
                 assert "importance_distribution" in data
                 assert "most_likely" in data
@@ -268,7 +268,7 @@ class TestAnalyzeWithBayesianInference:
         assert len(bayesian_result["inference_results"]) <= 20
 
     def test_importance_probabilities_sum_near_one(self, bayesian_result):
-        for _pattern_id, data in bayesian_result["inference_results"].items():
+        for data in bayesian_result["inference_results"].values():
             if "importance_distribution" in data:
                 dist = data["importance_distribution"]
                 total = dist["high"] + dist["medium"] + dist["low"]

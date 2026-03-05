@@ -207,7 +207,7 @@ class ContextBuilder:
         related_patterns = []
 
         # Collect related pattern IDs
-        for _dep_type, deps in pattern.dependencies.items():
+        for deps in pattern.dependencies.values():
             related_ids.update(deps)
 
         # Get related patterns

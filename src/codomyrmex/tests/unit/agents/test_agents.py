@@ -136,7 +136,7 @@ class TestAgentSpec:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "provider,expected_model",
+        ("provider", "expected_model"),
         [
             ("claude", "claude-3-haiku-20240307"),
             ("claude_code", "claude-3-haiku-20240307"),
@@ -239,7 +239,7 @@ class TestExtractTodoItems:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "line,expected_count",
+        ("line", "expected_count"),
         [
             ("- [ ] task", 1),
             ("  - [ ] indented task", 1),

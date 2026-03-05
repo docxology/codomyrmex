@@ -14,11 +14,12 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .auction import ReverseAuction
+if TYPE_CHECKING:
+    from .auction import ReverseAuction
 
 logger = get_logger(__name__)
 

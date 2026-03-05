@@ -519,7 +519,7 @@ class TestFromTodo:
         """)
         )
 
-        orch, tasks = EditingOrchestrator.from_todo(str(todo_file))
+        _orch, tasks = EditingOrchestrator.from_todo(str(todo_file))
         assert tasks == []
 
     def test_from_todo_with_custom_config(self, tmp_path):
@@ -528,7 +528,7 @@ class TestFromTodo:
         todo_file.write_text("- [ ] Task one\n")
 
         cfg = EditingConfig(max_iterations=2)
-        orch, tasks = EditingOrchestrator.from_todo(str(todo_file), config=cfg)
+        orch, _tasks = EditingOrchestrator.from_todo(str(todo_file), config=cfg)
         assert orch.config.max_iterations == 2
 
 

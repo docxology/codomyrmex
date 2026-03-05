@@ -231,7 +231,8 @@ def run_tests(source_file: Path, mutated_source: str, test_files: list[str]) -> 
             "-q",
             "--tb=no",
             "--override-ini=addopts=",
-        ] + test_files
+            *test_files,
+        ]
         result = subprocess.run(
             cmd,
             capture_output=True,
@@ -313,8 +314,8 @@ def main() -> int:
                 "-q",
                 "--override-ini=addopts=",
                 "--tb=short",
-            ]
-            + all_test_files,
+                *all_test_files,
+            ],
             capture_output=True,
             text=True,
             cwd=str(ROOT),

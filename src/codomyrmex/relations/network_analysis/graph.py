@@ -153,10 +153,10 @@ class SocialGraph:
 
             for neighbor in self._edges.get(current, {}):
                 if neighbor == target:
-                    return path + [neighbor]
+                    return [*path, neighbor]
                 if neighbor not in visited:
                     visited.add(neighbor)
-                    queue.append(path + [neighbor])
+                    queue.append([*path, neighbor])
 
         return []  # No path found
 

@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import logging
 import time
-from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -26,6 +25,9 @@ from .models import (
     VaultHealthReport,
     VaultSpace,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # Default Kernel Primitives (15 total)
 # ============================================================================

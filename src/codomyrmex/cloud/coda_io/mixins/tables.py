@@ -280,10 +280,7 @@ class TablesMixin:
         Returns:
             Update result with request_id
         """
-        if isinstance(row, RowEdit):
-            row_dict = row.to_dict()
-        else:
-            row_dict = row
+        row_dict = row.to_dict() if isinstance(row, RowEdit) else row
 
         params = {}
         if disable_parsing:

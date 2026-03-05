@@ -88,9 +88,7 @@ class Subscription:
             return False
         if self.topic != "*" and self.topic != event.metadata.get("topic", "*"):
             return False
-        if self.filter_fn and not self.filter_fn(event):
-            return False
-        return True
+        return not (self.filter_fn and not self.filter_fn(event))
 
 
 def create_event(

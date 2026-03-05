@@ -11,13 +11,13 @@ from .worker import SpecializedWorker, WorkerAgent
 __all__ = [
     # Base classes
     "AbstractAgent",
+    # Registry
+    "AgentRegistry",
     "CollaborativeAgent",
-    # Worker agents
-    "WorkerAgent",
     "SpecializedWorker",
     # Supervisor
     "SupervisorAgent",
-    # Registry
-    "AgentRegistry",
+    # Worker agents
+    "WorkerAgent",
     "get_registry",
 ]

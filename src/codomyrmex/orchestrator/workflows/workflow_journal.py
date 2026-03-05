@@ -9,14 +9,15 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.agents.memory.store import MemoryStore
-from codomyrmex.orchestrator.workflows.workflow_engine import (
-    WorkflowResult,
-    WorkflowRunner,
-    WorkflowStep,
-)
+if TYPE_CHECKING:
+    from codomyrmex.agents.memory.store import MemoryStore
+    from codomyrmex.orchestrator.workflows.workflow_engine import (
+        WorkflowResult,
+        WorkflowRunner,
+        WorkflowStep,
+    )
 
 
 @dataclass

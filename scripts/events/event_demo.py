@@ -159,10 +159,9 @@ def main():
         / "events"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 
     parser = argparse.ArgumentParser(description="Event system demo")

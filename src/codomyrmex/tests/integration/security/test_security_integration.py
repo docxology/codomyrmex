@@ -74,9 +74,9 @@ class TestSecurityIntegrationWithOtherModules:
 
         try:
             # Scan for vulnerabilities
-            result = scan_vulnerabilities(str(tmp_path))
+            scan_vulnerabilities(str(tmp_path))
             # Should not crash even if static_analysis not fully integrated
-            assert result is not None or True  # May return None if not implemented
+            assert True  # May return None if not implemented
         except Exception:
             # If integration not fully implemented, that's okay
             pass

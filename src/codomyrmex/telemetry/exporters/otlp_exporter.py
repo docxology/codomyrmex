@@ -15,7 +15,7 @@ _DEFAULT_OTLP_HTTP_TRACES = (
 class OTLPExporter(OTLPSpanExporter):
     """Exporter that sends spans to an OTLP collector via HTTP."""
 
-    def __init__(self, endpoint: str = None, **kwargs):
+    def __init__(self, endpoint: str | None = None, **kwargs):
         """Initialize the exporter.
 
         Args:

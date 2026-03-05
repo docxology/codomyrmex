@@ -7,13 +7,15 @@ errors and adjusting parameters between attempts.
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .failure_taxonomy import classify_error
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

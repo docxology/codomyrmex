@@ -158,7 +158,7 @@ class SpatialIndex:
     def get_nearby_cells(self, x: float, y: float, z: float, radius: float) -> set[str]:
         """Get object IDs within the specified radius, using spatial indexing for efficiency."""
         nearby_objects = set()
-        grid_radius = int(math.ceil(radius / self.grid_size))
+        grid_radius = math.ceil(radius / self.grid_size)
         center_x, center_y, center_z = (
             int(x // self.grid_size),
             int(y // self.grid_size),
@@ -601,10 +601,10 @@ class ObjectRegistry:
 
             for connected_id in current_obj.connections:
                 if connected_id == end_id:
-                    return path + [connected_id]
+                    return [*path, connected_id]
 
                 if connected_id not in visited and connected_id in self.objects:
-                    queue.append((connected_id, path + [connected_id]))
+                    queue.append((connected_id, [*path, connected_id]))
 
         return None
 

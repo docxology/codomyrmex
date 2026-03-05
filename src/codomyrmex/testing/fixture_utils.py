@@ -52,10 +52,7 @@ class FixtureManager:
 
     def teardown(self, name: str | None = None) -> None:
         """Teardown fixture(s)."""
-        if name:
-            fixtures_to_teardown = [name]
-        else:
-            fixtures_to_teardown = list(self._active.keys())
+        fixtures_to_teardown = [name] if name else list(self._active.keys())
 
         for fixture_name in fixtures_to_teardown:
             if fixture_name in self._active:
@@ -101,8 +98,8 @@ class TestDataFactory:
 
     @staticmethod
     def date(
-        start: datetime = None,
-        end: datetime = None,
+        start: datetime | None = None,
+        end: datetime | None = None,
     ) -> datetime:
         """Date."""
         start = start or datetime(2000, 1, 1)

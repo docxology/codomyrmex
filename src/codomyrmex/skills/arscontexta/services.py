@@ -6,9 +6,7 @@ import hashlib
 import json
 import logging
 import time
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -46,6 +44,10 @@ from .types import (
     PipelineStage,
     StageResult,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from pathlib import Path
 
 
 def _build_default_primitives() -> list[KernelPrimitive]:

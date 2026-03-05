@@ -54,7 +54,7 @@ class MetricsCollector:
             stats["total_execution_time"] += metric.get("execution_time", 0)
 
         # Calculate averages
-        for _language, stats in language_stats.items():
+        for stats in language_stats.values():
             if stats["count"] > 0:
                 stats["average_execution_time"] = (
                     stats["total_execution_time"] / stats["count"]

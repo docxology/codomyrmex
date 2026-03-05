@@ -52,7 +52,7 @@ def test_ssh_client_logic():
 
     client = SSHClient("localhost", username, key_filename=key_path)
     client.connect()
-    status, out, err = client.execute_command("echo hello world")
+    status, out, _err = client.execute_command("echo hello world")
     client.close()
 
     assert status == 0
@@ -72,7 +72,7 @@ def test_tcp_client_real():
     server_sock.listen(1)
 
     def handle_client():
-        conn, addr = server_sock.accept()
+        conn, _addr = server_sock.accept()
         data = conn.recv(1024)
         conn.sendall(data)  # Echo back
         conn.close()
@@ -113,7 +113,7 @@ def test_udp_client_real():
 
     client = UDPClient("127.0.0.1", port)
     client.send(b"pulse")
-    data, addr = client.receive(1024)
+    data, _addr = client.receive(1024)
     client.close()
 
     assert data == b"pulse"

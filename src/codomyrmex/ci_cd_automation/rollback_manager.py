@@ -113,10 +113,7 @@ class RollbackManager:
             Created rollback plan
         """
         # Create steps based on strategy
-        if custom_steps:
-            steps = custom_steps
-        else:
-            steps = self._create_default_steps(strategy)
+        steps = custom_steps or self._create_default_steps(strategy)
 
         plan = RollbackPlan(
             deployment_id=deployment_id,

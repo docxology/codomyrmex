@@ -48,16 +48,16 @@ def cli_commands():
 
 
 __all__ = [
-    "EventType",
     "Event",
-    "Subscription",
-    "create_event",
-    "Stream",
+    "EventType",
     "InMemoryStream",
     "SSEStream",
+    "Stream",
+    "StreamProcessor",
+    "Subscription",
     "TopicStream",
     "broadcast",
-    "StreamProcessor",
     # CLI integration
     "cli_commands",
+    "create_event",
 ]

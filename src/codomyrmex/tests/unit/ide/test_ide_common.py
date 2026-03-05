@@ -274,7 +274,7 @@ class TestIDEClientEventSystem:
         """Registered handler should be called on emit."""
         client = AntigravityClient()
         received = []
-        client.register_event_handler("test_event", lambda data: received.append(data))
+        client.register_event_handler("test_event", received.append)
         client.emit_event("test_event", {"key": "value"})
         assert len(received) == 1
         assert received[0] == {"key": "value"}
@@ -297,7 +297,7 @@ class TestIDEClientEventSystem:
         """Handler should receive None when emitted with no data."""
         client = AntigravityClient()
         received = []
-        client.register_event_handler("evt", lambda d: received.append(d))
+        client.register_event_handler("evt", received.append)
         client.emit_event("evt")
         assert received == [None]
 

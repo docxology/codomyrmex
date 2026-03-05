@@ -142,7 +142,7 @@ class GraphGenerator:
         return pos
 
     def apply_force_directed_layout(
-        self, G: nx.Graph, k: float = None, iterations: int = 50
+        self, G: nx.Graph, k: float | None = None, iterations: int = 50
     ) -> dict[str, tuple[float, float]]:
         """Apply force-directed layout to a graph.
 
@@ -195,7 +195,7 @@ class GraphGenerator:
         return pos
 
     def get_node_colors_by_attribute(
-        self, G: nx.Graph, attribute: str, color_map: dict[str, str] = None
+        self, G: nx.Graph, attribute: str, color_map: dict[str, str] | None = None
     ) -> list[str]:
         """Get node colors based on a node attribute.
 

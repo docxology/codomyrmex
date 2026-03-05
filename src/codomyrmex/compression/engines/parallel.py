@@ -10,11 +10,14 @@ Provides:
 from __future__ import annotations
 
 import time
-from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from codomyrmex.compression.core.compressor import Compressor
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @dataclass

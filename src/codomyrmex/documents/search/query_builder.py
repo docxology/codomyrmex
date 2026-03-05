@@ -42,7 +42,9 @@ class QueryBuilder:
         }
 
 
-def build_query(terms: list[str], filters: dict = None, sort_by: str = None) -> str:
+def build_query(
+    terms: list[str], filters: dict | None = None, sort_by: str | None = None
+) -> str:
     """
     Build a search query.
 

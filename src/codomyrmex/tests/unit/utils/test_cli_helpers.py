@@ -274,7 +274,7 @@ class TestDetermineLanguageFromFile:
     """Comprehensive tests for determine_language_from_file."""
 
     @pytest.mark.parametrize(
-        "filename,expected",
+        ("filename", "expected"),
         [
             ("main.py", "python"),
             ("app.js", "javascript"),
@@ -872,7 +872,7 @@ class TestFormatResult:
         assert msg is None
 
     def test_dict_success_false(self):
-        success, msg = format_result({"success": False})
+        success, _msg = format_result({"success": False})
         assert success is False
 
     def test_dict_with_output_key(self):
@@ -884,11 +884,11 @@ class TestFormatResult:
         assert msg == "data here"
 
     def test_dict_custom_success_key(self):
-        success, msg = format_result({"ok": True}, success_key="ok")
+        success, _msg = format_result({"ok": True}, success_key="ok")
         assert success is True
 
     def test_dict_missing_success_key_defaults_false(self):
-        success, msg = format_result({"data": "x"})
+        success, _msg = format_result({"data": "x"})
         assert success is False
 
     def test_bool_true(self):

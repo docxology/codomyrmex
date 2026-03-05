@@ -10,10 +10,12 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.documents.models.metadata import DocumentMetadata
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class DocumentType(Enum):

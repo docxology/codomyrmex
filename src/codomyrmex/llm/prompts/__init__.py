@@ -415,17 +415,17 @@ def get_common_template(name: str) -> PromptTemplate | None:
 
 
 __all__ = [
-    # Enums
-    "PromptRole",
-    # Data classes
-    "Message",
-    "PromptVersion",
-    # Classes
-    "PromptTemplate",
-    "PromptBuilder",
-    "PromptRegistry",
     # Constants
     "COMMON_TEMPLATES",
+    # Data classes
+    "Message",
+    "PromptBuilder",
+    "PromptRegistry",
+    # Enums
+    "PromptRole",
+    # Classes
+    "PromptTemplate",
+    "PromptVersion",
     # Functions
     "get_common_template",
 ]

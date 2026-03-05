@@ -76,7 +76,7 @@ def collect_code_metrics(path: str) -> dict:
                         stripped = line.strip()
                         if not stripped:
                             metrics["blank_lines"] += 1
-                        elif stripped.startswith("#") or stripped.startswith("//"):
+                        elif stripped.startswith(("#", "//")):
                             metrics["comment_lines"] += 1
             except:
                 pass
@@ -102,10 +102,9 @@ def main():
         / "metrics"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/metrics/config.yaml")
 
     parser = argparse.ArgumentParser(description="Metrics viewer")

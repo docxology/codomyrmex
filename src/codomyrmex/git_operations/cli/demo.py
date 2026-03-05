@@ -30,7 +30,7 @@ logger = get_logger(__name__)
 class GitVisualizationDemo:
     """Class to run git visualization demonstrations."""
 
-    def __init__(self, output_dir: str = None):
+    def __init__(self, output_dir: str | None = None):
         """Initialize the demo runner."""
         if output_dir:
             self.output_dir = Path(output_dir)
@@ -43,7 +43,7 @@ class GitVisualizationDemo:
 
     def run_all_demos(
         self,
-        repository_path: str = None,
+        repository_path: str | None = None,
         skip_sample: bool = False,
         skip_workflows: bool = False,
     ) -> bool:

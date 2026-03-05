@@ -1,7 +1,7 @@
 """TCP and UDP socket implementation."""
 
 import socket
-from typing import Any
+from typing import Any, Self
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -16,7 +16,7 @@ class TCPClient:
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def __enter__(self) -> "TCPClient":
+    def __enter__(self) -> Self:
         """Support use as a context manager."""
         return self
 

@@ -416,7 +416,7 @@ class TestSSHClient:
 
         client = SSHClient("localhost", username, key_filename=key_path)
         client.connect()
-        status, out, err = client.execute_command("echo hello")
+        status, out, _err = client.execute_command("echo hello")
         client.close()
         assert status == 0
         assert "hello" in out
@@ -517,7 +517,7 @@ class TestUDPClient:
 
         client = UDPClient("127.0.0.1", port)
         client.send(b"udp data")
-        data, addr = client.receive(1024)
+        data, _addr = client.receive(1024)
         client.close()
 
         assert data == b"udp data"

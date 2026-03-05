@@ -327,24 +327,24 @@ class HealthChecker:
 
 
 __all__ = [
-    # Logging
-    "setup_module_logging",
-    "log_performance",
-    # Async
-    "run_async",
-    "gather_with_concurrency",
-    "make_async",
-    # Retry
-    "RetryConfig",
-    "with_retry",
-    "async_retry",
-    # Resources
-    "timed_operation",
-    "async_timed_operation",
-    # Registry
-    "ModuleRegistry",
-    "registry",
     # Health
     "HealthChecker",
     "HealthStatus",
+    # Registry
+    "ModuleRegistry",
+    # Retry
+    "RetryConfig",
+    "async_retry",
+    "async_timed_operation",
+    "gather_with_concurrency",
+    "log_performance",
+    "make_async",
+    "registry",
+    # Async
+    "run_async",
+    # Logging
+    "setup_module_logging",
+    # Resources
+    "timed_operation",
+    "with_retry",
 ]

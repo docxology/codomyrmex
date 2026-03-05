@@ -480,9 +480,7 @@ class RepositoryMetadataManager:
         for metadata in self.metadata.values():
             if metadata.last_sync_date:
                 try:
-                    last_sync = datetime.fromisoformat(
-                        metadata.last_sync_date.replace("Z", "+00:00")
-                    )
+                    last_sync = datetime.fromisoformat(metadata.last_sync_date)
                     if last_sync < cutoff_date:
                         outdated.append(metadata)
                 except ValueError:

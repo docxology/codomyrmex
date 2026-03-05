@@ -19,8 +19,8 @@ def create_issue(
     repo_name: str,
     title: str,
     body: str = "",
-    labels: list[str] = None,
-    assignees: list[str] = None,
+    labels: list[str] | None = None,
+    assignees: list[str] | None = None,
     github_token: str | None = None,
 ) -> dict:
     """Create a new issue."""
@@ -60,7 +60,7 @@ def list_issues(
     owner: str,
     repo_name: str,
     state: str = "open",
-    labels: list[str] = None,
+    labels: list[str] | None = None,
     github_token: str | None = None,
 ) -> list[dict]:
     """List issues in a repository."""

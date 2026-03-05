@@ -280,7 +280,7 @@ class TestKeyRotation:
 
     def test_post_rotate_hook(self):
         hook_calls = []
-        self.kr.add_post_rotate_hook(lambda rec: hook_calls.append(rec))
+        self.kr.add_post_rotate_hook(hook_calls.append)
         self.kr.register_wallet("u1", "0xold")
         self.kr.record_rotation("u1", "0xold", "0xnew")
         assert len(hook_calls) == 1

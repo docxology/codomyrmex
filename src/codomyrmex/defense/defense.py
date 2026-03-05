@@ -11,15 +11,17 @@ from __future__ import annotations
 
 import time
 from collections import defaultdict, deque
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .active import ActiveDefense, ThreatLevel
 from .rabbithole import RabbitHole
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

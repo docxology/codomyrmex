@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import matplotlib.pyplot as plt
-
 from codomyrmex.data_visualization._compat import monitor_performance
 
 from ._types import Dataset, PlotType
 
 if TYPE_CHECKING:
+    import matplotlib.pyplot as plt
+
     from ._types import PlotConfig
 
 
@@ -42,10 +42,7 @@ class DashboardMixin:
         """
         fig, axes = self.create_figure(subplots=layout, **kwargs)
 
-        if not hasattr(axes, "__iter__"):
-            axes = [axes]
-        else:
-            axes = axes.flatten()
+        axes = [axes] if not hasattr(axes, "__iter__") else axes.flatten()
 
         for i, dataset in enumerate(datasets):
             if i >= len(axes):

@@ -254,7 +254,7 @@ class TestDataCurator:
             "quantum physics describes subatomic particle behavior",
             "classical music originated in the western tradition",
         ]
-        unique_texts, stats = curator.deduplicate(texts)
+        _unique_texts, stats = curator.deduplicate(texts)
         assert stats["unique_documents"] == 3
         assert stats["duplicates_removed"] == 0
 

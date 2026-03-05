@@ -109,7 +109,7 @@ def run_video_generation(
             print_info("    Calling Google AI Veo 2.0 (may take 30-60s)...")
             results = generator.generate(prompt=act_prompt, model=model)
 
-            for i, vid in enumerate(results):
+            for _i, vid in enumerate(results):
                 video_bytes = vid.get("video_bytes") or vid.get("video_data")
                 if video_bytes:
                     total_idx = saved + 1

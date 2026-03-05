@@ -29,24 +29,24 @@ from .task_manager import (
 )
 
 __all__ = [
-    # Task management
-    "SchedulingStrategy",
-    "TaskQueue",
-    "DependencyGraph",
-    "TaskManager",
-    # Consensus
-    "VoteType",
-    "Vote",
-    "Proposal",
-    "VotingResult",
-    "VotingMechanism",
+    "BullyElection",
     "ConsensusBuilder",
+    "DependencyGraph",
+    "ElectionResult",
     # Leader election
     "ElectionState",
-    "ElectionResult",
     "LeaderElection",
-    "BullyElection",
-    "RingElection",
+    "Proposal",
     "RandomElection",
+    "RingElection",
     "RotatingLeadership",
+    # Task management
+    "SchedulingStrategy",
+    "TaskManager",
+    "TaskQueue",
+    "Vote",
+    # Consensus
+    "VoteType",
+    "VotingMechanism",
+    "VotingResult",
 ]

@@ -73,25 +73,25 @@ def cli_commands():
 
 
 __all__ = [
+    # Templates
+    "ALERT_TEMPLATE",
+    "ERROR_TEMPLATE",
+    "INFO_TEMPLATE",
+    "ConsoleProvider",
+    "FileProvider",
+    # Data classes
+    "Notification",
     # Enums
     "NotificationChannel",
     "NotificationPriority",
-    "NotificationStatus",
-    # Data classes
-    "Notification",
-    "NotificationResult",
     # Providers
     "NotificationProvider",
-    "ConsoleProvider",
-    "FileProvider",
-    "WebhookProvider",
-    # Core
-    "NotificationTemplate",
+    "NotificationResult",
     "NotificationRouter",
     "NotificationService",
-    # Templates
-    "ALERT_TEMPLATE",
-    "INFO_TEMPLATE",
-    "ERROR_TEMPLATE",
+    "NotificationStatus",
+    # Core
+    "NotificationTemplate",
+    "WebhookProvider",
     "cli_commands",
 ]

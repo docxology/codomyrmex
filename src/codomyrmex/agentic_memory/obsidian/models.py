@@ -7,8 +7,10 @@ CLI-mode models re-exported from their domain modules for convenience.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ── parser / filesystem models ───────────────────────────────────────
 

@@ -39,10 +39,9 @@ def main():
         / "validation"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/validation/config.yaml")
 
     setup_logging()
@@ -66,7 +65,7 @@ def main():
     # 2. Validator Instance
     print_info("Testing Validator instance...")
     try:
-        validator = Validator(validator_type="json_schema")
+        Validator(validator_type="json_schema")
         print_success("  Validator instance initialized.")
     except Exception as e:
         print_error(f"  Validator failed: {e}")

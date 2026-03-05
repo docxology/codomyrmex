@@ -7,6 +7,7 @@ monitoring, ensuring that visualization components work correctly with performan
 tracking and monitoring systems.
 """
 
+import contextlib
 import statistics
 import tempfile
 import time
@@ -57,10 +58,8 @@ except ImportError:
 
 # Set up logging for tests
 if LOGGING_AVAILABLE and callable(setup_logging):
-    try:
+    with contextlib.suppress(Exception):
         setup_logging()
-    except Exception:
-        pass
 
 logger = get_logger(__name__) if LOGGING_AVAILABLE else None
 
@@ -101,7 +100,7 @@ class TestVisualizationPerformanceWorkflow:
     )
     def test_basic_visualization_creation(self):
         """Test that basic visualizations can be created."""
-        import matplotlib
+        import matplotlib as mpl
 
         from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
@@ -110,13 +109,13 @@ class TestVisualizationPerformanceWorkflow:
         bar_result = create_bar_chart(bar_data, "Test Bar Chart")
 
         assert bar_result is not None
-        assert isinstance(bar_result, matplotlib.figure.Figure)
+        assert isinstance(bar_result, mpl.figure.Figure)
 
         # Test line plot creation (x_data, y_data are positional lists)
         line_result = create_line_plot([1, 2, 3, 4], [10, 15, 12, 18], "Test Line Plot")
 
         assert line_result is not None
-        assert isinstance(line_result, matplotlib.figure.Figure)
+        assert isinstance(line_result, mpl.figure.Figure)
 
     @pytest.mark.skipif(
         not PERFORMANCE_AVAILABLE, reason="Performance module not available"

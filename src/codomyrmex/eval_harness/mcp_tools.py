@@ -5,7 +5,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(category="eval_harness")
 def eval_harness_run(
-    tasks: list[dict] = None,
+    tasks: list[dict] | None = None,
     metric: str = "exact_match",
 ) -> dict:
     """Run evaluation tasks against an identity model and return metrics.
@@ -56,8 +56,8 @@ def eval_harness_run(
 
 @mcp_tool(category="eval_harness")
 def eval_harness_score(
-    predictions: list[str] = None,
-    targets: list[str] = None,
+    predictions: list[str] | None = None,
+    targets: list[str] | None = None,
     metric: str = "exact_match",
 ) -> dict:
     """Score predictions against targets using the specified metric.

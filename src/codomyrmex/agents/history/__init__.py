@@ -545,15 +545,15 @@ class ConversationManager:
 
 
 __all__ = [
-    # Enums
-    "MessageRole",
-    # Data classes
-    "HistoryMessage",
     "Conversation",
-    # Stores
-    "InMemoryHistoryStore",
-    "FileHistoryStore",
-    "SQLiteHistoryStore",
     # Manager
     "ConversationManager",
+    "FileHistoryStore",
+    # Data classes
+    "HistoryMessage",
+    # Stores
+    "InMemoryHistoryStore",
+    # Enums
+    "MessageRole",
+    "SQLiteHistoryStore",
 ]

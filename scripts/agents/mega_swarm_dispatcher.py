@@ -52,7 +52,7 @@ def get_valid_modules() -> list[str]:
             if item.is_dir() and item.name not in EXCLUDES:
                 modules.add(item.name)
 
-    return sorted(list(modules))
+    return sorted(modules)
 
 
 def dispatch_jules(module_name: str) -> None:
@@ -76,7 +76,7 @@ def dispatch_jules(module_name: str) -> None:
         raise RuntimeError("'jules' CLI not found. Is it installed?") from None
 
 
-def run_swarm(max_agents: int = None) -> None:
+def run_swarm(max_agents: int | None = None) -> None:
     """Run the mega swarm in batches."""
     modules = get_valid_modules()
     if not modules:

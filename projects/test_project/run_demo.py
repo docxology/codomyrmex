@@ -292,10 +292,7 @@ def main() -> int:
     print_header("Test Project - Codomyrmex Reference Implementation")
 
     # Determine target path
-    if len(sys.argv) > 1:
-        target = Path(sys.argv[1])
-    else:
-        target = Path(__file__).parent / "src"
+    target = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).parent / "src"
 
     print(f"\nTarget: {target.absolute()}")
 
@@ -337,7 +334,7 @@ def main() -> int:
         print(f"    • {dashboard_path.relative_to(Path(__file__).parent)}")
         print()
         print("  Reports:")
-        for _fmt, path in report_paths.items():
+        for path in report_paths.values():
             print(f"    • {path.relative_to(Path(__file__).parent)}")
         print()
         print("  Open the HTML files in your browser to view!")

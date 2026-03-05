@@ -10,12 +10,12 @@ All tests call real code with real inputs — no mocks, no stubs.
 import json
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pytest
 
 # Must be set before any pyplot usage.
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 
 # =============================================================================

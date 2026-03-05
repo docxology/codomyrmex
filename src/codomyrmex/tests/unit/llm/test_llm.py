@@ -656,7 +656,7 @@ class TestConfigManager:
         assert "long_form" in presets
 
         # Verify presets are ExecutionOptions instances
-        for _name, preset in presets.items():
+        for preset in presets.values():
             assert isinstance(preset, ExecutionOptions)
 
     def test_validate_config(self):

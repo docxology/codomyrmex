@@ -99,7 +99,7 @@ class TestCalculateOverallScore:
         self.dash = _ConcreteDashboard()
 
     @pytest.mark.parametrize(
-        "score,expected",
+        ("score", "expected"),
         [(100.0, 100.0), (0.0, 0.0), (200.0, 100.0), (-50.0, 0.0)],
     )
     def test_uniform_score_round_trips(self, score: float, expected: float) -> None:
@@ -364,7 +364,8 @@ class TestDetectCodeSmells:
 
     def test_returns_empty_list_when_no_findings(self) -> None:
         smells = _ConcreteDashboard().detect_code_smells()
-        assert isinstance(smells, list) and smells == []
+        assert isinstance(smells, list)
+        assert smells == []
 
     def test_detect_long_methods_empty(self) -> None:
         assert _ConcreteDashboard()._detect_long_methods() == []
@@ -436,4 +437,5 @@ class TestGenerateQualityDashboard:
 
     def test_timestamp_is_nonempty_string(self, tmp_path: Path) -> None:
         result = _ConcreteDashboard(tmp_path).generate_quality_dashboard()
-        assert isinstance(result.analysis_timestamp, str) and result.analysis_timestamp
+        assert isinstance(result.analysis_timestamp, str)
+        assert result.analysis_timestamp

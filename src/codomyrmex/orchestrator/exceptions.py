@@ -169,14 +169,14 @@ class ConcurrencyError(OrchestrationError):
 
 
 __all__ = [
-    # Re-exported from workflow.py
-    "WorkflowError",
+    "ConcurrencyError",
     "CycleError",
-    "TaskFailedError",
-    # Defined in this module
-    "StepError",
+    "DependencyResolutionError",
     "OrchestratorTimeoutError",
     "StateError",
-    "DependencyResolutionError",
-    "ConcurrencyError",
+    # Defined in this module
+    "StepError",
+    "TaskFailedError",
+    # Re-exported from workflow.py
+    "WorkflowError",
 ]

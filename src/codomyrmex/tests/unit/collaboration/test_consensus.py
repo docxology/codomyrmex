@@ -49,7 +49,10 @@ class TestVote:
     def test_to_dict_contains_expected_keys(self):
         v = Vote(voter_id="a1", vote=VoteType.YES, reason="ok")
         d = v.to_dict()
-        assert "voter_id" in d and "vote" in d and "timestamp" in d and "reason" in d
+        assert "voter_id" in d
+        assert "vote" in d
+        assert "timestamp" in d
+        assert "reason" in d
 
     def test_to_dict_vote_is_string_value(self):
         v = Vote(voter_id="a1", vote=VoteType.YES)

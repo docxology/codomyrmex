@@ -33,10 +33,7 @@ def resolve_link(base_path: Path, link: str) -> Path:
         return REPO_ROOT / link.lstrip("/")
 
     # Relative links
-    if base_path.is_file():
-        base_dir = base_path.parent
-    else:
-        base_dir = base_path
+    base_dir = base_path.parent if base_path.is_file() else base_path
 
     # Handle parent directory references
     resolved = (base_dir / link).resolve()
@@ -61,11 +58,7 @@ def validate_file(filepath: Path) -> list[tuple[str, str]]:
     broken = []
     for text, link in links:
         # Skip external links
-        if (
-            link.startswith("http://")
-            or link.startswith("https://")
-            or link.startswith("mailto:")
-        ):
+        if link.startswith(("http://", "https://", "mailto:")):
             continue
 
         resolved = resolve_link(filepath, link)

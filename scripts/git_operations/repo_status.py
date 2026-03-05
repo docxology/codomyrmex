@@ -25,7 +25,7 @@ def run_git(args: list, cwd: str = ".") -> tuple:
     """Run a git command and return (success, output)."""
     try:
         result = subprocess.run(
-            ["git"] + args, cwd=cwd, capture_output=True, text=True, timeout=30
+            ["git", *args], cwd=cwd, capture_output=True, text=True, timeout=30
         )
         return result.returncode == 0, result.stdout.strip()
     except Exception as e:
@@ -119,10 +119,9 @@ def main():
         / "git_operations"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/git_operations/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display Git repository status")

@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import TYPE_CHECKING
 
 from codomyrmex.data_visualization._compat import monitor_performance
 
 if TYPE_CHECKING:
+    from datetime import datetime
+
     import matplotlib.pyplot as plt
 
     from ._types import PlotConfig
@@ -26,7 +27,7 @@ class ScatterMixin:
         x_data: list[float | int | str | datetime],
         y_data: list[float | int | str | datetime],
         label: str = "",
-        color: str = None,
+        color: str | None = None,
         size: float | list[float] = 50,
         alpha: float = 0.7,
         marker: str = "o",

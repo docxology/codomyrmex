@@ -473,20 +473,20 @@ def get_current_span() -> Span | None:
 
 
 __all__ = [
+    "ConsoleExporter",
+    "InMemoryExporter",
+    "Span",
+    # Data classes
+    "SpanContext",
+    # Exporters
+    "SpanExporter",
     # Enums
     "SpanKind",
     "SpanStatus",
-    # Data classes
-    "SpanContext",
-    "Span",
-    # Exporters
-    "SpanExporter",
-    "ConsoleExporter",
-    "InMemoryExporter",
     # Tracer
     "Tracer",
+    "get_current_span",
     # Functions
     "get_tracer",
     "trace",
-    "get_current_span",
 ]

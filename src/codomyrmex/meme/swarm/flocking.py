@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 
-from codomyrmex.meme.swarm.models import FlockingParams, SwarmAgent
+if TYPE_CHECKING:
+    from codomyrmex.meme.swarm.models import FlockingParams, SwarmAgent
 
 
 def update_flock(agents: list[SwarmAgent], params: FlockingParams) -> None:

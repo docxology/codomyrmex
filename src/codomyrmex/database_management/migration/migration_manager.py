@@ -101,7 +101,7 @@ class DatabaseConnector:
         """Parse database type from URL."""
         if url.startswith("sqlite"):
             return "sqlite"
-        if url.startswith("postgresql") or url.startswith("postgres"):
+        if url.startswith(("postgresql", "postgres")):
             return "postgresql"
         if url.startswith("mysql"):
             return "mysql"

@@ -110,7 +110,7 @@ class TestExampleExecution:
             print(f"\nTesting {module_name} example...")
 
             # Run the example
-            exit_code, stdout, stderr = self.run_example_script(example_file)
+            exit_code, _stdout, stderr = self.run_example_script(example_file)
 
             if exit_code == 0:
                 successful += 1
@@ -153,7 +153,7 @@ class TestExampleExecution:
             print(f"\nTesting {workflow_name}...")
 
             # Run the workflow
-            exit_code, stdout, stderr = self.run_example_script(
+            exit_code, _stdout, stderr = self.run_example_script(
                 workflow_file, timeout=120
             )  # Longer timeout for workflows
 

@@ -49,7 +49,7 @@ def compute_scale_zero_point(
         return 1.0, 0
 
     scale = float((x_max - x_min) / n_levels)
-    zero_point = int(round(qmin - x_min / scale))
+    zero_point = round(qmin - x_min / scale)
     zero_point = max(qmin, min(qmax, zero_point))
 
     return scale, zero_point

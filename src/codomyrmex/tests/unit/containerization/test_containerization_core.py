@@ -364,7 +364,7 @@ class TestDockerSdkContainerConfig:
         assert len(cfg.networks) == 2
 
     @pytest.mark.parametrize(
-        "image,tag,expected",
+        ("image", "tag", "expected"),
         [
             ("nginx", "1.25", "nginx:1.25"),
             ("registry.io/myapp", "sha-abc", "registry.io/myapp:sha-abc"),
@@ -694,45 +694,45 @@ class TestBuildGeneratorDockerfileValidation:
 
     def test_latest_tag_warning(self):
         content = "FROM ubuntu:latest\nUSER appuser\n"
-        is_valid, issues = self.generator.validate_dockerfile(content)
+        _is_valid, issues = self.generator.validate_dockerfile(content)
         assert any("latest" in i.lower() for i in issues)
 
     def test_no_tag_treated_as_latest(self):
         content = "FROM ubuntu\nUSER appuser\n"
-        is_valid, issues = self.generator.validate_dockerfile(content)
+        _is_valid, issues = self.generator.validate_dockerfile(content)
         assert any("latest" in i.lower() for i in issues)
 
     def test_chmod_777_flagged(self):
         content = "FROM python:3.12\nRUN chmod 777 /app\nUSER user\n"
-        is_valid, issues = self.generator.validate_dockerfile(content)
+        _is_valid, issues = self.generator.validate_dockerfile(content)
         assert any("permissive" in i.lower() for i in issues)
 
     def test_password_in_env_flagged(self):
         content = "FROM python:3.12\nENV PASSWORD=secret\nUSER user\n"
-        is_valid, issues = self.generator.validate_dockerfile(content)
+        _is_valid, issues = self.generator.validate_dockerfile(content)
         assert any("password" in i.lower() for i in issues)
 
     def test_no_user_instruction_suggestion(self):
         content = "FROM python:3.12-slim\nCOPY . .\n"
-        is_valid, issues = self.generator.validate_dockerfile(content)
+        _is_valid, issues = self.generator.validate_dockerfile(content)
         assert any("USER" in i for i in issues)
 
     def test_comments_and_blank_lines_ignored(self):
         content = (
             "# This is a comment\n\nFROM python:3.12\n# Another comment\nUSER appuser\n"
         )
-        is_valid, issues = self.generator.validate_dockerfile(content)
+        is_valid, _issues = self.generator.validate_dockerfile(content)
         assert is_valid is True
 
     @pytest.mark.parametrize(
-        "dockerfile,expected_issue_substring",
+        ("dockerfile", "expected_issue_substring"),
         [
             ("FROM ubuntu:latest\nUSER root\n", "root"),
             ("FROM ubuntu:20.04\nRUN chmod +x /entrypoint.sh\n", "permissive"),
         ],
     )
     def test_security_issues_parametrized(self, dockerfile, expected_issue_substring):
-        is_valid, issues = self.generator.validate_dockerfile(dockerfile)
+        _is_valid, issues = self.generator.validate_dockerfile(dockerfile)
         assert any(expected_issue_substring in i.lower() for i in issues)
 
 
@@ -891,7 +891,7 @@ class TestBuildGeneratorTemplates:
         assert "security_hardened" in self.generator.templates
 
     @pytest.mark.parametrize(
-        "build_type,expected_base_substring",
+        ("build_type", "expected_base_substring"),
         [
             ("python", "python"),
             ("node", "node"),

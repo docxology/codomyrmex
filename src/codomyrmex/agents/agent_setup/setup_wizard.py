@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import getpass
 import os
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from codomyrmex.agents.agent_setup.config_file import (
     DEFAULT_CONFIG_PATH,
@@ -23,6 +23,9 @@ from codomyrmex.agents.agent_setup.config_file import (
     save_config,
 )
 from codomyrmex.agents.agent_setup.registry import AgentRegistry, ProbeResult
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ── ANSI helpers ──────────────────────────────────────────────────────────
 

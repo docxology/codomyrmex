@@ -23,7 +23,7 @@ def create_histogram(
     title: str = "Histogram",
     x_label: str = "Value",
     y_label: str = "Frequency",
-    output_path: str = None,
+    output_path: str | None = None,
     show_plot: bool = False,
     hist_color: str = "cornflowerblue",
     edge_color: str = "black",
@@ -68,7 +68,7 @@ class Histogram:
 
     def __init__(
         self,
-        data: list = None,
+        data: list | None = None,
         bins: int = 10,
         title: str = "Histogram",
         x_label: str = "Value",
@@ -96,7 +96,7 @@ class Histogram:
         self.hist_color = hist_color
         self.edge_color = edge_color
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """
         Render the histogram.
 

@@ -357,7 +357,7 @@ class DeploymentOrchestrator:
         # Use Docker for development deployments
         if self.docker_client and deployment.artifacts:
             for artifact in deployment.artifacts:
-                if artifact.endswith(".tar.gz") or artifact.endswith(".zip"):
+                if artifact.endswith((".tar.gz", ".zip")):
                     # Build and run Docker image
                     image_tag = f"{deployment.name}:{deployment.version}"
                     self._build_docker_image(artifact, image_tag)
@@ -385,7 +385,7 @@ class DeploymentOrchestrator:
         # Use Kubernetes for production deployments
         if self.k8s_client and deployment.artifacts:
             for artifact in deployment.artifacts:
-                if artifact.endswith(".yaml") or artifact.endswith(".yml"):
+                if artifact.endswith((".yaml", ".yml")):
                     self._deploy_to_kubernetes(
                         artifact, deployment.environment.variables
                     )
@@ -409,7 +409,7 @@ class DeploymentOrchestrator:
             raise RuntimeError("Docker client not initialized")
         try:
             # Extract artifact if it's an archive
-            if artifact_path.endswith(".tar.gz") or artifact_path.endswith(".zip"):
+            if artifact_path.endswith((".tar.gz", ".zip")):
                 extract_dir = f"/tmp/{os.path.basename(artifact_path).replace('.tar.gz', '').replace('.zip', '')}"
                 if os.path.exists(extract_dir):
                     shutil.rmtree(extract_dir)

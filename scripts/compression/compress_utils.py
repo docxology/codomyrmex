@@ -29,7 +29,7 @@ def format_size(size: int) -> str:
     return f"{size:.1f} TB"
 
 
-def compress_gzip(input_path: Path, output_path: Path = None) -> dict:
+def compress_gzip(input_path: Path, output_path: Path | None = None) -> dict:
     """Compress file with gzip."""
     output = output_path or input_path.with_suffix(input_path.suffix + ".gz")
 
@@ -47,7 +47,7 @@ def compress_gzip(input_path: Path, output_path: Path = None) -> dict:
     }
 
 
-def decompress_gzip(input_path: Path, output_path: Path = None) -> dict:
+def decompress_gzip(input_path: Path, output_path: Path | None = None) -> dict:
     """Decompress gzip file."""
     output = output_path or input_path.with_suffix("").with_suffix(
         input_path.stem.split(".")[-1] if "." in input_path.stem else ""
@@ -98,10 +98,9 @@ def main():
         / "compression"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/compression/config.yaml")
 
     parser = argparse.ArgumentParser(description="Compression utilities")

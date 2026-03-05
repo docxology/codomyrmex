@@ -52,7 +52,7 @@ class TestAPIRouter:
 
         match = router.match_endpoint(HTTPMethod.GET, "/users")
         assert match is not None
-        endpoint, params = match
+        endpoint, _params = match
         assert endpoint.path == "/users"
 
     def test_match_endpoint_with_params(self):
@@ -72,7 +72,7 @@ class TestAPIRouter:
 
         match = router.match_endpoint(HTTPMethod.GET, "/users/123")
         assert match is not None
-        endpoint, params = match
+        _endpoint, params = match
         assert params["id"] == "123"
 
 

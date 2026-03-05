@@ -50,22 +50,22 @@ def cli_commands() -> dict[str, Any]:
 
 
 __all__ = [
+    "ABTest",
+    "ContainsEvaluator",
+    "CustomEvaluator",
     # Enums
     "EvaluationType",
-    "TestStatus",
-    # Data classes
-    "PromptTestCase",
-    "TestResult",
-    "TestSuiteResult",
     # Evaluators
     "Evaluator",
     "ExactMatchEvaluator",
-    "ContainsEvaluator",
-    "CustomEvaluator",
+    # Data classes
+    "PromptTestCase",
     # Core
     "PromptTestSuite",
     "PromptTester",
-    "ABTest",
+    "TestResult",
+    "TestStatus",
+    "TestSuiteResult",
     # CLI
     "cli_commands",
 ]

@@ -57,7 +57,9 @@ class OpenCodeIntegrationAdapter(AgentIntegrationAdapter):
 
         return response.content
 
-    def adapt_for_llm(self, messages: list[dict], model: str = None, **kwargs) -> dict:
+    def adapt_for_llm(
+        self, messages: list[dict], model: str | None = None, **kwargs
+    ) -> dict:
         """
         Adapt OpenCode for LLM module.
 

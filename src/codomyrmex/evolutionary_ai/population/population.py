@@ -9,9 +9,8 @@ from __future__ import annotations
 
 import random
 import statistics
-from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from codomyrmex.evolutionary_ai.genome.genome import Genome, Individual
 from codomyrmex.evolutionary_ai.operators.operators import (
@@ -25,6 +24,9 @@ from codomyrmex.evolutionary_ai.selection.selection import (
     TournamentSelection,
 )
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

@@ -42,10 +42,9 @@ def main():
         / "collaboration"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/collaboration/config.yaml")
 
     """Demonstrate advanced swarm coordination workflow."""
@@ -64,11 +63,11 @@ def main():
 
         # Create swarm manager
         print_info(f"\n1. Initializing swarm with {args.agents} agents...")
-        swarm = SwarmManager()
+        SwarmManager()
 
         # Create task decomposer
         print_info("\n2. Setting up task decomposer...")
-        decomposer = TaskDecomposer()
+        TaskDecomposer()
 
         # Define a complex task
         complex_task = {

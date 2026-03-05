@@ -59,10 +59,7 @@ def compute_delta(
     absolute = after - before
     relative = (absolute / before * 100) if before != 0 else 0.0
 
-    if higher_is_better:
-        improved = after > before
-    else:
-        improved = after < before
+    improved = after > before if higher_is_better else after < before
 
     return BenchmarkDelta(
         name=name,

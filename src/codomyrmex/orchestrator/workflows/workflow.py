@@ -257,7 +257,7 @@ class Workflow:
         self.logger.info(f"Workflow '{self.name}' cancellation requested")
 
     def _emit_progress(
-        self, task_name: str, status: str, details: dict[str, Any] = None
+        self, task_name: str, status: str, details: dict[str, Any] | None = None
     ):
         """Emit progress update if callback is registered."""
         if self.progress_callback:

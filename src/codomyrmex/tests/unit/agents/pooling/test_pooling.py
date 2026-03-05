@@ -2,6 +2,7 @@
 Tests for Agent Pooling Module
 """
 
+import contextlib
 import time
 
 import pytest
@@ -176,10 +177,8 @@ class TestAgentPool:
 
         # Execute multiple times - should track failures
         for _ in range(5):
-            try:
+            with contextlib.suppress(Exception):
                 pool.execute(lambda agent: agent.execute("test"))
-            except Exception:
-                pass
 
         # Verify failures are tracked
         stats = pool.get_stats()

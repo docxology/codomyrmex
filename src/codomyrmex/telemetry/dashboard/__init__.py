@@ -6,12 +6,14 @@ telemetry observability.
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 from uuid import uuid4
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 # ------------------------------------------------------------------
 # Enums

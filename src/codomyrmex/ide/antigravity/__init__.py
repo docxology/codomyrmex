@@ -92,25 +92,25 @@ except ImportError:
     DispatcherConfig = None
 
 __all__ = [
-    # Core
-    "AntigravityClient",
-    "Artifact",
-    "ConversationContext",
-    # Bridges
-    "AntigravityToolProvider",
-    "AntigravityAgent",
-    "AntigravityToolSkill",
-    "AntigravitySkillFactory",
-    "ArtifactHistoryBridge",
     # Relay
     "AgentRelay",
-    "RelayMessage",
-    "LiveAgentBridge",
+    "AntigravityAgent",
+    # Core
+    "AntigravityClient",
+    "AntigravityDispatcher",
+    "AntigravitySkillFactory",
+    # Bridges
+    "AntigravityToolProvider",
+    "AntigravityToolSkill",
+    "Artifact",
+    "ArtifactHistoryBridge",
     "ClaudeCodeEndpoint",
+    "ConversationContext",
+    "DispatcherConfig",
+    "LiveAgentBridge",
     # Scheduler & Endpoint
     "MessageScheduler",
-    "SchedulerConfig",
     "RelayEndpoint",
-    "AntigravityDispatcher",
-    "DispatcherConfig",
+    "RelayMessage",
+    "SchedulerConfig",
 ]

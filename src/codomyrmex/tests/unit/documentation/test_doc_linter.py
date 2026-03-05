@@ -377,7 +377,7 @@ class TestDocumentationQualityAnalyzer:
         )
 
         analyzer = DocumentationQualityAnalyzer()
-        for _metric, value in analyzer.quality_metrics.items():
+        for value in analyzer.quality_metrics.values():
             assert value == 0
 
 

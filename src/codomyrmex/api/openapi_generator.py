@@ -28,12 +28,14 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 if TYPE_CHECKING:
+    from codomyrmex.api.standardization.graphql_api import GraphQLAPI
+    from codomyrmex.api.standardization.rest_api import RESTAPI
+
     from .standardization.graphql_api import GraphQLAPI
     from .standardization.rest_api import RESTAPI
 else:
     try:
-        from codomyrmex.api.standardization.graphql_api import GraphQLAPI
-        from codomyrmex.api.standardization.rest_api import RESTAPI
+        pass
     except (ImportError, AttributeError) as exc:
         raise ImportError(
             "api.standardization module not available; run: uv sync --extra api"

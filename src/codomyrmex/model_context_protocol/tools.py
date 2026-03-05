@@ -492,10 +492,7 @@ def json_query(path: str, query: str | None = None) -> dict[str, Any]:
             parts = query.replace("[", ".").replace("]", "").split(".")
             result = data
             for part in parts:
-                if part.isdigit():
-                    result = result[int(part)]
-                else:
-                    result = result[part]
+                result = result[int(part)] if part.isdigit() else result[part]
             return {"success": True, "result": result, "query": query}
 
         return {"success": True, "data": data}

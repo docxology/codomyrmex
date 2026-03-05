@@ -76,17 +76,16 @@ def main():
         / "coding"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/coding/config.yaml")
 
     parser = argparse.ArgumentParser(description="Code quality checks")
     parser.add_argument("path", nargs="?", default=".", help="File or directory")
     parser.add_argument("--fix", "-f", action="store_true", help="Auto-fix issues")
     parser.add_argument(
-        "--type", "-t", choices=list(TOOLS.keys()) + ["all"], default="all"
+        "--type", "-t", choices=[*list(TOOLS.keys()), "all"], default="all"
     )
     args = parser.parse_args()
 

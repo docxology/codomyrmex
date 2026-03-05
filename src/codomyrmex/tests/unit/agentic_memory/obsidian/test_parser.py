@@ -36,7 +36,7 @@ class TestParseFrontmatter:
 
     def test_complex_frontmatter(self):
         raw = "---\ntitle: Complex\ndate: 2024-01-15\nnested:\n  key: value\n---\nContent."
-        fm, body = parse_frontmatter(raw)
+        fm, _body = parse_frontmatter(raw)
         assert fm["title"] == "Complex"
         assert fm["nested"]["key"] == "value"
 

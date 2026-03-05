@@ -263,7 +263,7 @@ class TestAlertEngine:
     def test_on_alert_handler_called(self):
         received = []
         engine = AlertEngine()
-        engine.on_alert(lambda a: received.append(a))
+        engine.on_alert(received.append)
         engine.add_rule(AlertRule("r", "metric", condition="gt", threshold=0.0))
         engine.evaluate({"metric": 1.0})
         assert len(received) == 1
@@ -283,8 +283,8 @@ class TestAlertEngine:
         received_a = []
         received_b = []
         engine = AlertEngine()
-        engine.on_alert(lambda a: received_a.append(a))
-        engine.on_alert(lambda a: received_b.append(a))
+        engine.on_alert(received_a.append)
+        engine.on_alert(received_b.append)
         engine.add_rule(AlertRule("r", "m", condition="gt", threshold=0.0))
         engine.evaluate({"m": 1.0})
         assert len(received_a) == 1

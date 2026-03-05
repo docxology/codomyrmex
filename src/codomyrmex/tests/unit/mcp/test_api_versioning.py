@@ -24,7 +24,9 @@ class TestAPIVersion:
 
     def test_parse(self):
         v = APIVersion.parse("v1.2.3")
-        assert v.major == 1 and v.minor == 2 and v.patch == 3
+        assert v.major == 1
+        assert v.minor == 2
+        assert v.patch == 3
 
     def test_ordering(self):
         assert APIVersion(1, 0, 0) < APIVersion(2, 0, 0)

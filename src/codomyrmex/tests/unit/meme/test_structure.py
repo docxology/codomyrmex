@@ -252,7 +252,8 @@ def test_memeplex_recombine():
     a = Memeplex(name="A", memes=[Meme(content="a1"), Meme(content="a2")])
     b = Memeplex(name="B", memes=[Meme(content="b1"), Meme(content="b2")])
     child = a.recombine(b)
-    assert "A" in child.name and "B" in child.name
+    assert "A" in child.name
+    assert "B" in child.name
 
 
 # ---------------------------------------------------------------------------

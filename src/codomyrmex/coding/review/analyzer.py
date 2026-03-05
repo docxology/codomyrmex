@@ -45,7 +45,7 @@ class PyscnAnalyzer:
         >>> clones = analyzer.find_clones(["file1.py", "file2.py"])
     """
 
-    def __init__(self, config: dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """Initialize pyscn analyzer with configuration.
 
         Args:

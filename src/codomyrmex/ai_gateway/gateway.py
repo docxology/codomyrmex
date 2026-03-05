@@ -72,7 +72,7 @@ class CircuitBreaker:
     @property
     def is_available(self) -> bool:
         """Check if the circuit breaker allows requests."""
-        if self.state == CircuitState.CLOSED or self.state == CircuitState.HALF_OPEN:
+        if self.state in (CircuitState.CLOSED, CircuitState.HALF_OPEN):
             return True
         elapsed = time.time() - (self.last_failure_time or 0)
         return elapsed > self.recovery_timeout_s

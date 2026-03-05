@@ -28,12 +28,12 @@ __all__ = [
     # event_listener
     "AutoEventListener",
     "EventListener",
-    "create_auto_listener",
-    "create_listener",
-    "event_handler",
     # event_logger
     "EventLogEntry",
     "EventLogger",
+    "create_auto_listener",
+    "create_listener",
+    "event_handler",
     "export_event_logs",
     "generate_performance_report",
     "get_event_logger",

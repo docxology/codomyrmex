@@ -219,8 +219,8 @@ class GoogleCalendar(CalendarProvider):
             start_str = item["start"].get("dateTime", item["start"].get("date"))
             end_str = item["end"].get("dateTime", item["end"].get("date"))
 
-            start_time = datetime.fromisoformat(start_str.replace("Z", "+00:00"))
-            end_time = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+            start_time = datetime.fromisoformat(start_str)
+            end_time = datetime.fromisoformat(end_str)
 
             attendees = [
                 attendee.get("email")

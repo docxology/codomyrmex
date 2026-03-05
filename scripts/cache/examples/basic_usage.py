@@ -39,10 +39,9 @@ def main():
         / "cache"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cache/config.yaml")
 
     setup_logging()

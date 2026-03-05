@@ -69,40 +69,40 @@ from .workflow_manager import (
 __version__ = "0.1.0"
 
 __all__ = [
-    # Core classes
-    "WorkflowManager",
-    "TaskOrchestrator",
-    "ProjectManager",
-    "ResourceManager",
-    "OrchestrationEngine",
     "DocumentationGenerator",
-    # Data classes
-    "WorkflowStep",
-    "WorkflowStatus",
-    "WorkflowExecution",
-    # Task & scheduling
-    "Task",
-    "TaskStatus",
-    "TaskPriority",
-    "TaskResult",
-    "TaskResource",
-    "Task",
-    "TaskStatus",
-    "TaskResult",
-    "Project",
-    "ProjectTemplate",
-    "Resource",
-    "ResourceType",
-    "ResourceStatus",
-    "ResourceAllocation",
-    "ResourceUsage",
+    "OrchestrationEngine",
     # Sessions & engine
     "OrchestrationSession",
+    "Project",
+    "ProjectManager",
+    "ProjectTemplate",
+    "Resource",
+    "ResourceAllocation",
+    "ResourceManager",
+    "ResourceStatus",
+    "ResourceType",
+    "ResourceUsage",
     "SessionStatus",
+    # Task & scheduling
+    "Task",
+    "Task",
+    "TaskOrchestrator",
+    "TaskPriority",
+    "TaskResource",
+    "TaskResult",
+    "TaskResult",
+    "TaskStatus",
+    "TaskStatus",
+    "WorkflowExecution",
+    # Core classes
+    "WorkflowManager",
+    "WorkflowStatus",
+    # Data classes
+    "WorkflowStep",
+    "execute_mcp_tool",
+    "get_mcp_tool_definitions",
     # MCP tools
     "get_mcp_tools",
-    "get_mcp_tool_definitions",
-    "execute_mcp_tool",
 ]
 
 
@@ -118,7 +118,9 @@ def create_task(name: str, module: str, action: str, **kwargs) -> Task:
     return Task(name=name, module=module, action=action, parameters=kwargs)
 
 
-def create_project(name: str, description: str = "", template: str = None) -> Project:
+def create_project(
+    name: str, description: str = "", template: str | None = None
+) -> Project:
     """Create a new project instance."""
     return Project(name=name, description=description, template=template)
 

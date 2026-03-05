@@ -165,7 +165,7 @@ class FPFVisualizerPNG:
             raise ValueError("No patterns found for visualization")
 
         # Create figure
-        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        _fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
 
         # Apply layout
         if layout == "hierarchical":
@@ -236,7 +236,7 @@ class FPFVisualizerPNG:
             raise ValueError("No concepts found for visualization")
 
         # Create figure
-        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        _fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
 
         # Apply layout
         if layout == "circular":
@@ -315,7 +315,7 @@ class FPFVisualizerPNG:
             raise ValueError("No parts found for visualization")
 
         # Create figure
-        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        _fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
 
         # Apply tree layout
         pos = self.graph_generator.apply_tree_layout(G)

@@ -11,13 +11,12 @@ with support for:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
 )
 from codomyrmex.agents.core.exceptions import ClaudeError
-from codomyrmex.agents.core.session import SessionManager
 from codomyrmex.agents.generic.api_agent_base import APIAgentBase
 from codomyrmex.logging_monitoring import get_logger
 
@@ -27,6 +26,9 @@ from .mixins.file_ops import FileOpsMixin
 from .mixins.session import SessionMixin
 from .mixins.system_ops import SystemOpsMixin
 from .mixins.tools import ToolsMixin
+
+if TYPE_CHECKING:
+    from codomyrmex.agents.core.session import SessionManager
 
 try:
     import anthropic

@@ -8,7 +8,7 @@ logger = get_logger(__name__)
 
 
 @mcp_tool()
-def init_submodules(repository_path: str = None) -> bool:
+def init_submodules(repository_path: str | None = None) -> bool:
     """Initialize and update submodules."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -34,7 +34,7 @@ def init_submodules(repository_path: str = None) -> bool:
 
 
 @mcp_tool()
-def update_submodules(repository_path: str = None) -> bool:
+def update_submodules(repository_path: str | None = None) -> bool:
     """Update submodules to latest commit."""
     if repository_path is None:
         repository_path = os.getcwd()

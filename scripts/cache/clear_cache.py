@@ -32,8 +32,8 @@ def get_cache_dirs() -> list:
 
 def clear_cache(
     cache_path: Path,
-    older_than_days: int = None,
-    file_types: list = None,
+    older_than_days: int | None = None,
+    file_types: list | None = None,
     dry_run: bool = True,
 ) -> dict:
     """Clear cache entries based on criteria."""
@@ -51,9 +51,8 @@ def clear_cache(
                 if mtime > cutoff:
                     should_delete = False
 
-            if file_types:
-                if f.suffix.lstrip(".") not in file_types:
-                    should_delete = False
+            if file_types and f.suffix.lstrip(".") not in file_types:
+                should_delete = False
 
             if should_delete:
                 size = f.stat().st_size
@@ -87,10 +86,9 @@ def main():
         / "cache"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cache/config.yaml")
 
     parser = argparse.ArgumentParser(description="Clear cache entries")
@@ -126,10 +124,7 @@ def main():
         print("\n   Add --dry-run to preview without deleting")
         return 0
 
-    if args.path:
-        cache_dirs = [Path(args.path)]
-    else:
-        cache_dirs = get_cache_dirs()
+    cache_dirs = [Path(args.path)] if args.path else get_cache_dirs()
 
     if not cache_dirs:
         print("📦 No cache directories found")

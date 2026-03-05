@@ -14,10 +14,10 @@ except ImportError:
     SERIALIZATION_AVAILABLE = False
 
 try:
-    import pandas as _pd
-    import pyarrow  # noqa: F401
+    import pandas as pd
+    import pyarrow as pa  # noqa: F401
 
-    _pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
+    pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
     PARQUET_AVAILABLE = True
 except (ImportError, Exception):
     PARQUET_AVAILABLE = False

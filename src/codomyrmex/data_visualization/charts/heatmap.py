@@ -20,14 +20,14 @@ logger = get_logger(__name__)
 
 def create_heatmap(
     data: list,
-    x_labels: list = None,
-    y_labels: list = None,
+    x_labels: list | None = None,
+    y_labels: list | None = None,
     title: str = "Heatmap",
-    x_label: str = None,
-    y_label: str = None,
+    x_label: str | None = None,
+    y_label: str | None = None,
     cmap: str = "viridis",
-    colorbar_label: str = None,
-    output_path: str = None,
+    colorbar_label: str | None = None,
+    output_path: str | None = None,
     show_plot: bool = False,
     annot: bool = False,
     fmt: str = ".2f",
@@ -114,17 +114,17 @@ class Heatmap:
 
     def __init__(
         self,
-        data: list = None,
-        x_labels: list = None,
-        y_labels: list = None,
+        data: list | None = None,
+        x_labels: list | None = None,
+        y_labels: list | None = None,
         title: str = "Heatmap",
-        x_label: str = None,
-        y_label: str = None,
+        x_label: str | None = None,
+        y_label: str | None = None,
         cmap: str = "viridis",
-        colorbar_label: str = None,
+        colorbar_label: str | None = None,
         annot: bool = False,
         fmt: str = ".2f",
-        figure_size: tuple = None,
+        figure_size: tuple | None = None,
         theme=None,
     ):
         self.data = data or []
@@ -140,7 +140,7 @@ class Heatmap:
         self.figure_size = figure_size or DEFAULT_FIGURE_SIZE
         self.theme = theme
 
-    def render(self, output_path: str = None, show_plot: bool = False):
+    def render(self, output_path: str | None = None, show_plot: bool = False):
         """Render the heatmap."""
         return create_heatmap(
             data=self.data,

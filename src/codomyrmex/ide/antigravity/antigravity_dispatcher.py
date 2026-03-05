@@ -24,7 +24,7 @@ import threading
 import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -34,10 +34,12 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-from codomyrmex.ide.antigravity.agent_relay import (
-    AgentRelay,
-    RelayMessage,
-)
+
+if TYPE_CHECKING:
+    from codomyrmex.ide.antigravity.agent_relay import (
+        AgentRelay,
+        RelayMessage,
+    )
 
 # =====================================================================
 # Configuration

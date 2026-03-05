@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 from codomyrmex.cerebrum import (
@@ -34,7 +34,7 @@ and reason about the First Principles Framework specification.
 """
 
 try:
-    matplotlib.use("Agg")  # Use non-interactive backend
+    mpl.use("Agg")  # Use non-interactive backend
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
@@ -474,7 +474,7 @@ class FPFOrchestrator:
         # Visualize Bayesian network
         if self.cerebrum.bayesian_network:
             try:
-                matplotlib.use("Agg")  # Use non-interactive backend
+                mpl.use("Agg")  # Use non-interactive backend
                 visualizer = ModelVisualizer(figure_size=(14, 10), dpi=300)
                 fig = visualizer.visualize_network(
                     self.cerebrum.bayesian_network,
@@ -654,7 +654,7 @@ class FPFOrchestrator:
             viz_dir: Visualization directory
         """
         try:
-            matplotlib.use("Agg")
+            mpl.use("Agg")
 
             concordance_viz = ConcordanceVisualizer(figure_size=(14, 10), dpi=300)
 
@@ -719,7 +719,7 @@ class FPFOrchestrator:
             viz_dir: Visualization directory
         """
         try:
-            matplotlib.use("Agg")
+            mpl.use("Agg")
 
             composition_viz = CompositionVisualizer(figure_size=(20, 14), dpi=300)
 

@@ -314,7 +314,7 @@ class Matrix4x4:
             + self.data[3][3]
         )
 
-        if w != 0 and w != 1:
+        if w not in {0, 1}:
             return Point3D(x / w, y / w, z / w)
         return Point3D(x, y, z)
 

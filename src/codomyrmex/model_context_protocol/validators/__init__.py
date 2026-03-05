@@ -62,9 +62,8 @@ class SchemaValidator:
         elif schema_type == "number":
             if not isinstance(data, (int, float)) or isinstance(data, bool):
                 errors.append(f"Expected number, got {type(data).__name__}")
-        elif schema_type == "boolean":
-            if not isinstance(data, bool):
-                errors.append(f"Expected boolean, got {type(data).__name__}")
+        elif schema_type == "boolean" and not isinstance(data, bool):
+            errors.append(f"Expected boolean, got {type(data).__name__}")
 
         return ValidationResult(
             valid=len(errors) == 0, errors=errors, warnings=warnings

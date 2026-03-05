@@ -13,7 +13,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 )
 def gateway_complete(
     prompt: str,
-    providers: list[dict[str, Any]] = None,
+    providers: list[dict[str, Any]] | None = None,
     strategy: str = "round_robin",
 ) -> dict[str, Any]:
     """Send a completion request through the AI Gateway.
@@ -59,7 +59,7 @@ def gateway_complete(
     description="Check the health status of all configured AI Gateway providers.",
 )
 def gateway_health(
-    providers: list[dict[str, Any]] = None,
+    providers: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Return health status for all providers.
 

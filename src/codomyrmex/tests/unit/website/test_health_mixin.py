@@ -168,7 +168,7 @@ class TestComputeOverallStatus:
     def test_healthy_modules(self, provider: DataProvider) -> None:
         modules = [{"name": "test", "status": "Active"}]
         git_info = {"branch": "main"}
-        status_text, status_class = provider._compute_overall_status(modules, git_info)
+        _status_text, status_class = provider._compute_overall_status(modules, git_info)
         assert status_class in ("ok", "warn", "err")
 
 

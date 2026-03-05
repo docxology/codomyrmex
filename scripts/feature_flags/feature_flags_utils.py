@@ -27,7 +27,7 @@ DEFAULT_FLAGS = {
 }
 
 
-def load_flags(path: Path = None) -> dict:
+def load_flags(path: Path | None = None) -> dict:
     """Load feature flags from file or defaults."""
     if path and path.exists():
         return json.loads(path.read_text())
@@ -35,7 +35,7 @@ def load_flags(path: Path = None) -> dict:
     # Check environment
     env_flags = {}
     for key, val in os.environ.items():
-        if key.startswith("FF_") or key.startswith("FEATURE_"):
+        if key.startswith(("FF_", "FEATURE_")):
             flag_name = key.replace("FF_", "").replace("FEATURE_", "").lower()
             env_flags[flag_name] = {"enabled": val.lower() in ["true", "1", "yes"]}
 
@@ -68,10 +68,9 @@ def main():
         / "feature_flags"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/feature_flags/config.yaml")
 
     parser = argparse.ArgumentParser(description="Feature flags utilities")

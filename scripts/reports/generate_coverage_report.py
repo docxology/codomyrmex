@@ -70,7 +70,7 @@ def generate_markdown_report(coverage_data: dict, output_dir: Path) -> None:
     print(f"✅ Generated: {report_path}")
 
 
-def generate_report(repo_root: Path, output_dir: Path = None) -> int:
+def generate_report(repo_root: Path, output_dir: Path | None = None) -> int:
     """Generate coverage reports."""
     print("📊 Generating coverage report...\n")
 
@@ -120,10 +120,9 @@ def main():
         / "reports"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/reports/config.yaml")
 
     parser = argparse.ArgumentParser(description="Generate coverage reports")

@@ -85,10 +85,9 @@ def main():
         / "cache"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cache/config.yaml")
 
     parser = argparse.ArgumentParser(description="Display cache statistics")
@@ -99,10 +98,7 @@ def main():
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
     args = parser.parse_args()
 
-    if args.path:
-        cache_dirs = [Path(args.path)]
-    else:
-        cache_dirs = get_cache_dirs()
+    cache_dirs = [Path(args.path)] if args.path else get_cache_dirs()
 
     if not cache_dirs:
         print("📦 No cache directories found")

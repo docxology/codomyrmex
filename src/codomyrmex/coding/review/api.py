@@ -5,13 +5,17 @@ These wrap the CodeReviewer class for simple one-call usage.
 
 from __future__ import annotations
 
-from .models import AnalysisResult, AnalysisSummary, QualityGateResult
+from typing import TYPE_CHECKING
+
 from .reviewer import CodeReviewer
+
+if TYPE_CHECKING:
+    from .models import AnalysisResult, AnalysisSummary, QualityGateResult
 
 
 # Convenience functions
 def analyze_file(
-    file_path: str, analysis_types: list[str] = None
+    file_path: str, analysis_types: list[str] | None = None
 ) -> list[AnalysisResult]:
     """Analyze a single file."""
     reviewer = CodeReviewer()
@@ -20,8 +24,8 @@ def analyze_file(
 
 def analyze_project(
     project_root: str,
-    target_paths: list[str] = None,
-    analysis_types: list[str] = None,
+    target_paths: list[str] | None = None,
+    analysis_types: list[str] | None = None,
 ) -> AnalysisSummary:
     """Analyze an entire project."""
     reviewer = CodeReviewer(project_root)
@@ -29,7 +33,7 @@ def analyze_project(
 
 
 def check_quality_gates(
-    project_root: str, thresholds: dict[str, int] = None
+    project_root: str, thresholds: dict[str, int] | None = None
 ) -> QualityGateResult:
     """Check if project meets quality standards."""
     reviewer = CodeReviewer(project_root)
@@ -41,7 +45,7 @@ def generate_report(
     project_root: str,
     output_path: str,
     format: str = "html",
-    analysis_types: list[str] = None,
+    analysis_types: list[str] | None = None,
 ) -> bool:
     """Generate analysis report."""
     reviewer = CodeReviewer(project_root)

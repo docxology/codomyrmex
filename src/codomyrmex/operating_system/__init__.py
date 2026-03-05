@@ -82,31 +82,31 @@ def cli_commands():
 
 
 __all__ = [
+    "CommandResult",
+    "DiskInfo",
+    "NetworkInfo",
     # Enums
     "OSPlatform",
-    "ServiceStatus",
-    "ProcessStatus",
-    # Data models
-    "SystemInfo",
-    "ProcessInfo",
-    "DiskInfo",
-    "ServiceInfo",
-    "NetworkInfo",
-    "CommandResult",
     # Base
     "OSProviderBase",
-    # Generic API
-    "detect_platform",
-    "get_provider",
-    "get_system_info",
-    "list_processes",
-    "get_disk_usage",
-    "get_services",
-    "get_network_interfaces",
-    "execute_command",
-    "get_environment_variables",
+    "ProcessInfo",
+    "ProcessStatus",
+    "ServiceInfo",
+    "ServiceStatus",
+    # Data models
+    "SystemInfo",
     # CLI
     "cli_commands",
+    # Generic API
+    "detect_platform",
+    "execute_command",
+    "get_disk_usage",
+    "get_environment_variables",
+    "get_network_interfaces",
+    "get_provider",
+    "get_services",
+    "get_system_info",
+    "list_processes",
 ]
 
 __version__ = "0.1.0"

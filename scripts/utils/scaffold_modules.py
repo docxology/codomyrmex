@@ -149,7 +149,7 @@ NEW_MODULES = [
 ]
 
 
-def generate_readme(name: str, description: str, parent: str = None) -> str:
+def generate_readme(name: str, description: str, parent: str | None = None) -> str:
     """Generate README.md content."""
     full_name = f"{parent}/{name}" if parent else name
     return f"""# {name.replace("_", " ").title()}
@@ -194,13 +194,13 @@ See [API_SPECIFICATION.md](./API_SPECIFICATION.md) for detailed API documentatio
 """
 
 
-def generate_agents(name: str, description: str, parent: str = None) -> str:
+def generate_agents(name: str, description: str, parent: str | None = None) -> str:
     """Generate AGENTS.md content."""
     full_name = f"{parent}/{name}" if parent else name
     return f"""# AI Agent Guidelines - {name.replace("_", " ").title()}
 
-**Module**: `codomyrmex.{full_name.replace("/", ".")}`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.{full_name.replace("/", ".")}`
+**Version**: v0.1.0
 **Status**: Active
 
 ## Purpose
@@ -248,13 +248,13 @@ Common issues and solutions:
 """
 
 
-def generate_spec(name: str, description: str, parent: str = None) -> str:
+def generate_spec(name: str, description: str, parent: str | None = None) -> str:
     """Generate SPEC.md content."""
     full_name = f"{parent}/{name}" if parent else name
     return f"""# Technical Specification - {name.replace("_", " ").title()}
 
-**Module**: `codomyrmex.{full_name.replace("/", ".")}`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.{full_name.replace("/", ".")}`
+**Version**: v0.1.0
 **Last Updated**: {datetime.now().strftime("%Y-%m-%d")}
 
 ## 1. Purpose
@@ -319,13 +319,13 @@ pytest tests/{full_name.replace("/", "_")}/
 """
 
 
-def generate_pai(name: str, description: str, parent: str = None) -> str:
+def generate_pai(name: str, description: str, parent: str | None = None) -> str:
     """Generate PAI.md content."""
     full_name = f"{parent}/{name}" if parent else name
     return f"""# Personal AI Infrastructure - {name.replace("_", " ").title()}
 
-**Module**: `codomyrmex.{full_name.replace("/", ".")}`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.{full_name.replace("/", ".")}`
+**Version**: v0.1.0
 **Status**: Active
 
 ## Context
@@ -369,9 +369,8 @@ except Exception as e:
 """
 
 
-def generate_init(name: str, description: str, parent: str = None) -> str:
+def generate_init(name: str, description: str, parent: str | None = None) -> str:
     """Generate __init__.py content."""
-    full_name = f"{parent}.{name}" if parent else name
     return f'''"""
 {name.replace("_", " ").title()} {"Submodule" if parent else "Module"}
 
@@ -390,7 +389,7 @@ def create_module_structure(
     base_path: Path,
     name: str,
     description: str,
-    parent: str = None,
+    parent: str | None = None,
     dry_run: bool = False,
 ) -> list:
     """Create the full module/submodule structure."""
@@ -424,16 +423,13 @@ def create_script_structure(
     scripts_base: Path,
     name: str,
     description: str,
-    parent: str = None,
+    parent: str | None = None,
     dry_run: bool = False,
 ) -> list:
     """Create corresponding script directory."""
     created_files = []
 
-    if parent:
-        script_path = scripts_base / parent / name
-    else:
-        script_path = scripts_base / name
+    script_path = scripts_base / parent / name if parent else scripts_base / name
 
     if not dry_run:
         script_path.mkdir(parents=True, exist_ok=True)

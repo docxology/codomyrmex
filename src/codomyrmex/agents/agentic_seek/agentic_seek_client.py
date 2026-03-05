@@ -14,9 +14,8 @@ import os
 import shutil
 import subprocess
 import time
-from collections.abc import Iterator
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.agentic_seek.agent_router import AgenticSeekRouter
 from codomyrmex.agents.agentic_seek.agent_types import (
@@ -35,6 +34,9 @@ from codomyrmex.config_management.defaults import (
     DEFAULT_OLLAMA_URL,
 )
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 logger = get_logger(__name__)
 
@@ -238,7 +240,7 @@ class AgenticSeekClient(CLIAgentBase):
             raise ValueError("config.ini missing [MAIN] section")
 
         main = parser["MAIN"]
-        browser = parser["BROWSER"] if "BROWSER" in parser else {}
+        browser = parser.get("BROWSER", {})
 
         def _bool(val: str) -> bool:
             return val.strip().lower() in ("true", "1", "yes")

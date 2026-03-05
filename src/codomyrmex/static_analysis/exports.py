@@ -10,10 +10,12 @@ Provides:
 from __future__ import annotations
 
 import ast
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = get_logger(__name__)
 
@@ -88,7 +90,7 @@ def audit_exports(src_dir: Path) -> list[dict[str, str]]:
     for mod_path in modules:
         init = mod_path / "__init__.py"
         mod_name = mod_path.name
-        has_all, names = check_all_defined(init)
+        has_all, _names = check_all_defined(init)
 
         if not has_all:
             findings.append(

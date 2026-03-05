@@ -26,6 +26,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.2] - 2026-03-05 — "Developer Experience"
+
+Ruff Phase 2 triage, DX tooling, and pre-commit modernization.
+
+### Added
+
+- **`justfile`** — Modern task runner with 20+ targets mirroring Makefile (includes `just lint-fix`, `just lint-fix-unsafe`, `just quick`, `just info`)
+- **`.devcontainer/devcontainer.json`** — GitHub Codespaces support with Python 3.11, uv, ruff, ty extensions, port forwarding (8000/8787/8888)
+- **Pre-commit: `ty` hook** — Type checking on pre-push
+- **Pre-commit: `uv lock --check` hook** — Lock file integrity verification on pyproject.toml changes
+
+### Changed
+
+- **Ruff triage Phase 2**: added 8 new rule ignores (`ARG005`, `NPY002`, `N806`, `DTZ005`, `PERF401`, `RET504`, `S607`, `T201`); applied 2,280 unsafe-fixes — violations from **9,706 → 3,188** (−67%)
+- **Pre-commit modernized**: removed `bandit` (superseded by ruff `S` rules); added `ty-check` and `uv-lock-check` hooks
+- **65 files reformatted** after unsafe-fix pass
+- **Version**: `1.1.1` → `1.1.2` (synced across all root docs + `__init__.py`)
+
+### Metrics
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Ruff violations | 9,706 | **3,188** (−67%) |
+| Rules ignored | 40 | **48** (+8 documented) |
+| Unsafe fixes applied | 0 | **2,280** |
+| Tests | 749 | **749 pass** |
+| Build | v1.1.1 | `codomyrmex-1.1.2.tar.gz` + `.whl` ✅ |
+
+---
+
 ## [1.1.1] - 2026-03-05 — "Polish & Hardening"
 
 Comprehensive quality release focused on toolchain modernization, lint triage, and codebase hygiene.

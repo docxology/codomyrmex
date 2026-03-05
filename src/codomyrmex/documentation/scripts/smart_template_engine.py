@@ -203,9 +203,8 @@ class SmartTemplateEngine:
             if isinstance(node, ast.Import):
                 for alias in node.names:
                     imports.append(alias.name)
-            elif isinstance(node, ast.ImportFrom):
-                if node.module:
-                    imports.append(node.module)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                imports.append(node.module)
 
         return imports
 
@@ -227,7 +226,7 @@ class SmartTemplateEngine:
                 continue
 
             if in_args:
-                if stripped.startswith("Returns:") or stripped.startswith("Raises:"):
+                if stripped.startswith(("Returns:", "Raises:")):
                     break
 
                 # Parse parameter line: "param_name (type): description"

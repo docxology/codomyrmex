@@ -247,7 +247,7 @@ class TestBatchingStream:
         async def _test():
             batches_received = []
             stream = BatchingStream(batch_size=2)
-            stream.on_batch(lambda batch: batches_received.append(batch))
+            stream.on_batch(batches_received.append)
 
             await stream.add(Event(type=EventType.MESSAGE, data="one"))
             await stream.add(Event(type=EventType.MESSAGE, data="two"))
@@ -288,7 +288,7 @@ class TestBatchingStream:
         async def _test():
             flushed = []
             stream = BatchingStream(batch_size=100, flush_interval=10.0)
-            stream.on_batch(lambda batch: flushed.append(batch))
+            stream.on_batch(flushed.append)
             await stream.add(Event(type=EventType.MESSAGE, data="remaining"))
             await stream.stop()
             assert len(flushed) == 1

@@ -82,8 +82,8 @@ async def test_message_bus_routing():
     bus = MessageBus()
     received = []
 
-    bus.subscribe("sub1", "tasks.role.*", lambda m: received.append(m))
-    bus.subscribe("sub2", "broadcast.#", lambda m: received.append(m))
+    bus.subscribe("sub1", "tasks.role.*", received.append)
+    bus.subscribe("sub2", "broadcast.#", received.append)
 
     msg1 = SwarmMessage(SwarmMessageType.TASK_ASSIGNMENT, "sender", payload={"id": 1})
     await bus.publish("tasks.role.coder", msg1)

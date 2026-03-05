@@ -64,7 +64,7 @@ from .models import (
 def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
     """Convert AgentMail SDK errors to codomyrmex email exceptions."""
     status_code = getattr(exc, "status_code", None)
-    if status_code == 401 or status_code == 403:
+    if status_code in {401, 403}:
         raise EmailAuthError(
             f"AgentMail authentication failed during {context}: {exc}"
         ) from exc

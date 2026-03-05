@@ -6,7 +6,7 @@ list_template_files, and error paths.
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -17,6 +17,9 @@ from codomyrmex.module_template.scaffold import (
     list_template_files,
     scaffold_new_module,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # TEMPLATE_FILES constant

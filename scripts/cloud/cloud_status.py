@@ -112,10 +112,9 @@ def main():
         / "cloud"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/cloud/config.yaml")
 
     parser = argparse.ArgumentParser(description="Cloud service status")
@@ -141,7 +140,7 @@ def main():
         else {args.provider: providers[args.provider]}
     )
 
-    for key, (name, check_fn) in to_check.items():
+    for name, check_fn in to_check.values():
         status = check_fn()
         icon = "✅" if status.get("installed") else "⚪"
         print(f"{icon} {name}:")

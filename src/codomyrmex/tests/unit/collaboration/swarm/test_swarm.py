@@ -325,7 +325,7 @@ class TestMessageBus:
         """publishing to a subscribed topic delivers the message to all matching subscribers."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
-        bus.subscribe("alice", "task.assigned", lambda m: received.append(m))
+        bus.subscribe("alice", "task.assigned", received.append)
         msg = SwarmMessage(SwarmMessageType.TASK_ASSIGNMENT, sender="system")
         await bus.publish("task.assigned", msg)
         assert len(received) == 1
@@ -335,7 +335,7 @@ class TestMessageBus:
         """wildcard subscriptions (e.g. "task.*") match any sub-topic under the prefix."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
-        bus.subscribe("alice", "task.*", lambda m: received.append(m))
+        bus.subscribe("alice", "task.*", received.append)
         msg = SwarmMessage(SwarmMessageType.RESULT, sender="bob")
         await bus.publish("task.completed", msg)
         assert len(received) == 1
@@ -345,7 +345,7 @@ class TestMessageBus:
         """publishing to a different topic does not trigger unrelated subscriptions."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
-        bus.subscribe("alice", "task.assigned", lambda m: received.append(m))
+        bus.subscribe("alice", "task.assigned", received.append)
         await bus.publish(
             "review.requested",
             SwarmMessage(SwarmMessageType.REVIEW_REQUEST, "bob"),
@@ -384,7 +384,7 @@ class TestMessageBus:
         """Verify multi segment wildcard behavior."""
         bus = MessageBus()
         received: list[SwarmMessage] = []
-        bus.subscribe("alice", "task.#", lambda m: received.append(m))
+        bus.subscribe("alice", "task.#", received.append)
         await bus.publish("task.sub.deep", SwarmMessage(SwarmMessageType.RESULT, "x"))
         assert len(received) == 1
 
@@ -394,7 +394,7 @@ class TestMessageBus:
         bus = MessageBus()
         good: list[SwarmMessage] = []
         bus.subscribe("bad", "topic", lambda m: 1 / 0)  # Will raise
-        bus.subscribe("good", "topic", lambda m: good.append(m))
+        bus.subscribe("good", "topic", good.append)
         count = await bus.publish(
             "topic", SwarmMessage(SwarmMessageType.STATUS_UPDATE, "x")
         )

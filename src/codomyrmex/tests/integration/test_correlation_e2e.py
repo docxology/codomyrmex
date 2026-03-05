@@ -32,7 +32,7 @@ def clean_event_bus():
     bus.reset_stats()
 
     events_caught: list[Event] = []
-    bus.subscribe(["*"], lambda e: events_caught.append(e), subscriber_id="test_sub")
+    bus.subscribe(["*"], events_caught.append, subscriber_id="test_sub")
 
     yield bus, events_caught
 

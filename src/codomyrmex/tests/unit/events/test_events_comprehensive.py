@@ -768,7 +768,7 @@ class TestIntegrationBusBasics:
             raise RuntimeError("intentional failure")
 
         bus.subscribe("task.run", bad_handler)
-        bus.subscribe("task.run", lambda e: received.append(e))
+        bus.subscribe("task.run", received.append)
 
         bus.emit("task.run", payload={})
 

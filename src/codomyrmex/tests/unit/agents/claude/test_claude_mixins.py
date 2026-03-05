@@ -305,7 +305,7 @@ class TestExecutionMixin:
             prompt="Test",
             context={"system_prompt": "Be concise."},
         )
-        messages, system_msg = mixin._build_messages_with_system(request)
+        _messages, system_msg = mixin._build_messages_with_system(request)
         assert system_msg == "Be concise."
 
     def test_build_messages_with_context_items_as_system(self):
@@ -318,7 +318,7 @@ class TestExecutionMixin:
             prompt="Test",
             context={"role_description": "Expert Python developer"},
         )
-        messages, system_msg = mixin._build_messages_with_system(request)
+        _messages, system_msg = mixin._build_messages_with_system(request)
         assert system_msg is not None
         assert "Expert Python developer" in system_msg
 
@@ -336,7 +336,7 @@ class TestExecutionMixin:
                 ],
             },
         )
-        messages, system_msg = mixin._build_messages_with_system(request)
+        messages, _system_msg = mixin._build_messages_with_system(request)
         # History messages + the current prompt
         assert len(messages) == 3
         assert messages[0]["role"] == "user"
@@ -623,7 +623,7 @@ class TestFileOpsMixin:
             ".rb": "ruby",
         }
         # This is hardcoded in the method; we're verifying our understanding
-        for _ext, expected_lang in ext_map.items():
+        for expected_lang in ext_map.values():
             assert expected_lang is not None  # sanity
 
 

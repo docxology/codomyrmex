@@ -183,7 +183,7 @@ class TestSimulateFSDPStep:
         mean_grad = (grad1 + grad2) / 2
         expected_params = params - lr * mean_grad
 
-        new_params, shards = simulate_fsdp_step(
+        new_params, _shards = simulate_fsdp_step(
             params, [grad1, grad2], world_size=world_size, learning_rate=lr
         )
         np.testing.assert_allclose(new_params, expected_params, atol=1e-12)

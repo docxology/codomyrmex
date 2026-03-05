@@ -115,11 +115,11 @@ class SparseAutoencoder:
 
 def train_sae(
     activations: np.ndarray,
-    d_features: int = None,
+    d_features: int | None = None,
     n_steps: int = 100,
     lr: float = 1e-3,
     lambda_l1: float = 1e-3,
-    seed: int = None,
+    seed: int | None = None,
 ) -> SparseAutoencoder:
     """Train a sparse autoencoder on neural network activations."""
     if seed is not None:

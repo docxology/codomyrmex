@@ -9,9 +9,8 @@ from __future__ import annotations
 
 import time
 import uuid
-from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -20,6 +19,9 @@ except ImportError:
     ResultStatus = None
 
 from .scorers import ExactMatchScorer, Scorer
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @dataclass

@@ -851,7 +851,7 @@ class TestMessageBus:
         """publish() invokes handler for subscribers with matching topic."""
         bus = MessageBus()
         received = []
-        bus.subscribe("alice", "tasks.assigned", lambda m: received.append(m))
+        bus.subscribe("alice", "tasks.assigned", received.append)
         msg = self._make_message()
         await bus.publish("tasks.assigned", msg)
         assert len(received) == 1
@@ -862,7 +862,7 @@ class TestMessageBus:
         """publish() does not invoke handler for non-matching topic."""
         bus = MessageBus()
         received = []
-        bus.subscribe("alice", "tasks.completed", lambda m: received.append(m))
+        bus.subscribe("alice", "tasks.completed", received.append)
         msg = self._make_message()
         await bus.publish("tasks.assigned", msg)
         assert len(received) == 0
@@ -872,7 +872,7 @@ class TestMessageBus:
         """publish() matches wildcard subscription patterns."""
         bus = MessageBus()
         received = []
-        bus.subscribe("mgr", "tasks.#", lambda m: received.append(m))
+        bus.subscribe("mgr", "tasks.#", received.append)
         msg = self._make_message()
         await bus.publish("tasks.assigned.urgent", msg)
         assert len(received) == 1

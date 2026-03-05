@@ -24,19 +24,19 @@ from .direct import (
 )
 
 __all__ = [
+    "Broadcaster",
+    "Channel",
+    "ChannelInfo",
+    "ChannelManager",
     # Channels
     "ChannelState",
-    "ChannelInfo",
-    "Channel",
+    "ConversationTracker",
+    "DirectMessenger",
     "MessageQueue",
+    # Direct messaging
+    "PendingRequest",
     "QueueChannel",
-    "ChannelManager",
     # Broadcaster
     "Subscription",
     "TopicInfo",
-    "Broadcaster",
-    # Direct messaging
-    "PendingRequest",
-    "DirectMessenger",
-    "ConversationTracker",
 ]

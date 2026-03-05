@@ -257,7 +257,7 @@ class TestSecurityMonitor:
 
         evt = SecurityEvent(
             event_id="e1",
-            event_type=list(SecurityEventType)[0],
+            event_type=next(iter(SecurityEventType)),
             timestamp=datetime.now(),
             resource="test",
         )
@@ -280,8 +280,8 @@ class TestSecurityMonitor:
             rule_id="r1",
             name="test",
             description="test rule",
-            event_type=list(SecurityEventType)[0],
+            event_type=next(iter(SecurityEventType)),
             conditions={"count": 10},
-            alert_level=list(AlertLevel)[0],
+            alert_level=next(iter(AlertLevel)),
         )
         assert rule.name == "test"

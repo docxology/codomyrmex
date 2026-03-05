@@ -42,11 +42,10 @@ import json
 import os
 import time
 import uuid
-from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.llm_client import AgentRequest, OllamaClient
 from codomyrmex.ide.antigravity.agent_relay import AgentRelay
@@ -54,6 +53,9 @@ from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.core.correlation import (
     with_correlation,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = get_logger(__name__)
 

@@ -19,7 +19,7 @@ import argparse
 import re
 
 
-def find_skills(search_paths: list = None) -> list:
+def find_skills(search_paths: list | None = None) -> list:
     """Find skill definitions."""
     paths = search_paths or [".agent/skills", "skills", ".codomyrmex/skills"]
     found = []

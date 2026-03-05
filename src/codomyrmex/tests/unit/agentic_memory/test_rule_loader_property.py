@@ -119,7 +119,8 @@ class TestParseSectionsQuality:
     def test_titles_are_nonempty_strings(self, raw: str) -> None:
         sections = RuleLoader._parse_sections(raw)
         for s in sections:
-            assert isinstance(s.title, str) and s.title
+            assert isinstance(s.title, str)
+            assert s.title
 
     @given(
         st.text(
@@ -151,7 +152,9 @@ class TestParseSectionsRegressions:
     def test_two_headings_split_at_boundary(self) -> None:
         raw = "## 1. Imports\nUse explicit.\n\n## 2. Style\nUse black."
         s = RuleLoader._parse_sections(raw)
-        assert len(s) == 2 and s[0].number == 1 and s[1].number == 2
+        assert len(s) == 2
+        assert s[0].number == 1
+        assert s[1].number == 2
 
     def test_level_3_heading_is_recognised(self) -> None:
         s = RuleLoader._parse_sections("### 5. Deep Section\nContent.")

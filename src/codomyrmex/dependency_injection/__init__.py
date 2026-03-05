@@ -53,19 +53,19 @@ from .decorators import (
 from .scopes import Scope
 
 __all__ = [
+    "CircularDependencyError",
     # Container
     "Container",
-    "ServiceDescriptor",
     "ResolutionError",
-    "CircularDependencyError",
-    # Decorators
-    "injectable",
-    "inject",
-    "is_injectable",
-    "get_injectable_metadata",
-    "get_inject_metadata",
-    "get_injectable_params",
     # Scopes
     "Scope",
     "ScopeContext",
+    "ServiceDescriptor",
+    "get_inject_metadata",
+    "get_injectable_metadata",
+    "get_injectable_params",
+    "inject",
+    # Decorators
+    "injectable",
+    "is_injectable",
 ]

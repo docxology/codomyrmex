@@ -142,7 +142,7 @@ def test_find_duplicates(fs_manager, tmp_path):
     duplicates = fs_manager.find_duplicates(tmp_path)
     assert len(duplicates) == 1
 
-    paths = list(duplicates.values())[0]
+    paths = next(iter(duplicates.values()))
     assert len(paths) == 2
     assert any(p.name == "original.txt" for p in paths)
     assert any(p.name == "copy.txt" for p in paths)

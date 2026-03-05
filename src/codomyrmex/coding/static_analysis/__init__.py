@@ -57,7 +57,7 @@ from .static_analyzer import (
 from .tool_runners import ToolRunner
 
 
-def analyze_code_quality(path: str = None, **kwargs) -> dict:
+def analyze_code_quality(path: str | None = None, **kwargs) -> dict:
     """
     Analyze code quality for workflow integration.
 

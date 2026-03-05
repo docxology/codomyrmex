@@ -41,7 +41,7 @@ logger = get_logger(__name__)
 def create_git_analysis_report(
     repository_path: str,
     output_dir: str = "./git_analysis",
-    report_name: str = None,
+    report_name: str | None = None,
     include_png: bool = True,
     include_mermaid: bool = True,
 ) -> dict[str, Any]:
@@ -107,9 +107,9 @@ def create_git_analysis_report(
 
 def visualize_git_branches(
     repository_path: str,
-    output_path: str = None,
+    output_path: str | None = None,
     format_type: str = "png",
-    title: str = None,
+    title: str | None = None,
     max_commits: int = 20,
 ) -> dict[str, Any]:
     """
@@ -180,9 +180,9 @@ def visualize_git_branches(
 
 def visualize_commit_activity(
     repository_path: str,
-    output_path: str = None,
+    output_path: str | None = None,
     days_back: int = 30,
-    title: str = None,
+    title: str | None = None,
 ) -> dict[str, Any]:
     """
     Create a commit activity visualization.
@@ -341,7 +341,10 @@ def create_git_workflow_diagram(
 
 
 def analyze_repository_structure(
-    repository_path: str, output_path: str = None, title: str = None, max_depth: int = 3
+    repository_path: str,
+    output_path: str | None = None,
+    title: str | None = None,
+    max_depth: int = 3,
 ) -> dict[str, Any]:
     """
     Analyze and visualize repository structure.

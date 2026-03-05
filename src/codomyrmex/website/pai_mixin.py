@@ -167,7 +167,7 @@ class PAIProviderMixin:
 
         for line in content.splitlines():
             stripped = line.strip()
-            if stripped.startswith("- [x]") or stripped.startswith("- [X]"):
+            if stripped.startswith(("- [x]", "- [X]")):
                 completed.append(stripped[5:].strip())
             elif stripped.startswith("- [ ]"):
                 remaining.append(stripped[5:].strip())

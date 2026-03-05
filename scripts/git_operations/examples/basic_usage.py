@@ -46,10 +46,9 @@ def main():
         / "git_operations"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/git_operations/config.yaml")
 
     setup_logging()
@@ -79,7 +78,7 @@ def main():
     # 2. Repository Manager
     print_info("Testing RepositoryManager...")
     try:
-        mgr = RepositoryManager()
+        RepositoryManager()
         # Initialize (loads metadata etc)
         print_success("  RepositoryManager initialized.")
     except Exception as e:

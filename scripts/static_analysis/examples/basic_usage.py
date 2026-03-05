@@ -39,10 +39,9 @@ def main():
         / "static_analysis"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/static_analysis/config.yaml")
 
     setup_logging()
@@ -62,7 +61,7 @@ def main():
     # 2. StaticAnalyzer Initialization
     print_info("Initializing StaticAnalyzer...")
     try:
-        analyzer = StaticAnalyzer()
+        StaticAnalyzer()
         print_success("  StaticAnalyzer initialized.")
     except Exception as e:
         print_error(f"  Initialization failed: {e}")

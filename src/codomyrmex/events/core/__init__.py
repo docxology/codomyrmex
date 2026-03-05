@@ -39,19 +39,24 @@ from .exceptions import (
 from .mixins import EventMixin
 
 __all__ = [
-    # event_bus
-    "EventBus",
-    "Subscription",
-    "get_event_bus",
-    "publish_event",
-    "publish_event_async",
-    "subscribe_to_events",
-    "unsubscribe_from_events",
     # event_schema
     "Event",
+    # event_bus
+    "EventBus",
+    # exceptions
+    "EventDeliveryError",
+    "EventHandlerError",
+    # mixins
+    "EventMixin",
     "EventPriority",
+    "EventPublishError",
+    "EventQueueError",
     "EventSchema",
+    "EventSubscriptionError",
+    "EventTimeoutError",
     "EventType",
+    "EventValidationError",
+    "Subscription",
     "create_alert_event",
     "create_analysis_complete_event",
     "create_analysis_start_event",
@@ -59,14 +64,9 @@ __all__ = [
     "create_metric_event",
     "create_module_load_event",
     "create_system_startup_event",
-    # exceptions
-    "EventDeliveryError",
-    "EventHandlerError",
-    "EventPublishError",
-    "EventQueueError",
-    "EventSubscriptionError",
-    "EventTimeoutError",
-    "EventValidationError",
-    # mixins
-    "EventMixin",
+    "get_event_bus",
+    "publish_event",
+    "publish_event_async",
+    "subscribe_to_events",
+    "unsubscribe_from_events",
 ]

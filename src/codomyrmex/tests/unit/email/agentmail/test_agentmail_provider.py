@@ -485,7 +485,7 @@ class TestAgentMailProviderMetrics:
 
         assert isinstance(metrics, dict)
         # The API should return at least some metrics; we verify the type only
-        for key, _value in metrics.items():
+        for key in metrics:
             assert isinstance(key, str)
 
     def test_metrics_with_time_window(self) -> None:

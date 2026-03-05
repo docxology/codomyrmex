@@ -115,7 +115,7 @@ class Environment:
 
     def set_pheromone(self, position: tuple[int, int], amount: float) -> None:
         """Set pheromone intensity at a specific cell."""
-        ix, iy = int(round(position[0])), int(round(position[1]))
+        ix, iy = round(position[0]), round(position[1])
         if 0 <= ix < self.width and 0 <= iy < self.height:
             self._pheromones[(ix, iy)] = self._pheromones.get((ix, iy), 0.0) + amount
 

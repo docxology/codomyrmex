@@ -540,24 +540,24 @@ def create_rag_prompt(context: GenerationContext) -> str:
 
 
 __all__ = [
-    # Enums
-    "DocumentType",
-    # Data classes
-    "Document",
-    "Chunk",
-    "RetrievalResult",
-    "GenerationContext",
-    # Splitters
-    "TextSplitter",
-    "RecursiveTextSplitter",
-    "SentenceSplitter",
-    # Vector stores
-    "VectorStore",
-    "InMemoryVectorStore",
-    # Core
-    "ContextFormatter",
-    "RAGPipeline",
     # Templates
     "RAG_PROMPT_TEMPLATE",
+    "Chunk",
+    # Core
+    "ContextFormatter",
+    # Data classes
+    "Document",
+    # Enums
+    "DocumentType",
+    "GenerationContext",
+    "InMemoryVectorStore",
+    "RAGPipeline",
+    "RecursiveTextSplitter",
+    "RetrievalResult",
+    "SentenceSplitter",
+    # Splitters
+    "TextSplitter",
+    # Vector stores
+    "VectorStore",
     "create_rag_prompt",
 ]

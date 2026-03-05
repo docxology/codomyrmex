@@ -68,7 +68,7 @@ class UORGraph:
         to_remove = [
             rid
             for rid, rel in self._relationships.items()
-            if rel.source_id == entity_id or rel.target_id == entity_id
+            if entity_id in (rel.source_id, rel.target_id)
         ]
         for rid in to_remove:
             del self._relationships[rid]
@@ -135,7 +135,7 @@ class UORGraph:
         """
         results: list[UORRelationship] = []
         for rel in self._relationships.values():
-            if rel.source_id != entity_id and rel.target_id != entity_id:
+            if entity_id not in (rel.source_id, rel.target_id):
                 continue
             if relationship_type and rel.relationship_type != relationship_type:
                 continue
@@ -216,10 +216,10 @@ class UORGraph:
 
             for neighbor in adjacency.get(current, set()):
                 if neighbor == target_id:
-                    return path + [neighbor]
+                    return [*path, neighbor]
                 if neighbor not in visited:
                     visited.add(neighbor)
-                    queue.append(path + [neighbor])
+                    queue.append([*path, neighbor])
 
         return []
 

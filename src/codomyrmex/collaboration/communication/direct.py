@@ -252,11 +252,7 @@ class DirectMessenger:
         messages = self._message_log
 
         if agent_id:
-            messages = [
-                m
-                for m in messages
-                if m.sender_id == agent_id or m.receiver_id == agent_id
-            ]
+            messages = [m for m in messages if agent_id in (m.sender_id, m.receiver_id)]
 
         return list(reversed(messages[-limit:]))
 

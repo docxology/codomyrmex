@@ -27,7 +27,7 @@ def compute_log_probs(
     Returns:
         log_probs: (batch, seq) log probabilities, 0 for ignored tokens
     """
-    batch, seq, vocab = logits.shape
+    batch, seq, _vocab = logits.shape
 
     # Numerically stable log-softmax
     logits_max = np.max(logits, axis=-1, keepdims=True)

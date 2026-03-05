@@ -25,7 +25,7 @@ import threading
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 from codomyrmex.logging_monitoring.audit.audit_logger import (
     AuditLogger as _StandaloneAuditLogger,  # noqa: F401
@@ -318,7 +318,7 @@ class LogContext:
         self.additional_context = additional_context or {}
         self.previous_context = getattr(_correlation_context, "correlation_id", None)
 
-    def __enter__(self) -> "LogContext":
+    def __enter__(self) -> Self:
         """Enter the context, setting the correlation ID for subsequent logs.
 
         Returns:

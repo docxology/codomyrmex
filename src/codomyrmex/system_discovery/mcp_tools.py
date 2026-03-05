@@ -17,10 +17,7 @@ def health_check(module: str | None = None) -> dict:
 
     try:
         checker = HealthChecker()
-        if module:
-            result = checker.check_module(module)
-        else:
-            result = checker.check_all()
+        result = checker.check_module(module) if module else checker.check_all()
         return {
             "status": "success",
             "healthy": result.healthy if hasattr(result, "healthy") else True,

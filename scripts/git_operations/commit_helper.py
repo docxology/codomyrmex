@@ -39,7 +39,7 @@ def run_git(args: list) -> tuple:
     """Run a git command and return (success, output)."""
     try:
         result = subprocess.run(
-            ["git"] + args, capture_output=True, text=True, timeout=30
+            ["git", *args], capture_output=True, text=True, timeout=30
         )
         return result.returncode == 0, result.stdout.strip()
     except Exception as e:
@@ -96,7 +96,8 @@ def infer_type(files: list) -> str:
     if any("test" in p for p in paths):
         return "test"
     if any(
-        "readme" in p or "docs/" in p or ".md" in e for p, e in zip(paths, extensions)
+        "readme" in p or "docs/" in p or ".md" in e
+        for p, e in zip(paths, extensions, strict=False)
     ):
         return "docs"
     if any("ci" in p or ".github" in p or "workflow" in p for p in paths):
@@ -134,10 +135,9 @@ def main():
         / "git_operations"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/git_operations/config.yaml")
 
     parser = argparse.ArgumentParser(description="Build conventional commit messages")

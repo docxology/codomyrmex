@@ -9,6 +9,7 @@ This module provides extensive async tests for:
 """
 
 import asyncio
+import contextlib
 import time
 
 import pytest
@@ -556,10 +557,8 @@ class TestAsyncSemaphoreErrorHandling:
         # Cancel the waiting task
         task.cancel()
 
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
 
         # Semaphore should still work
         sem.release()

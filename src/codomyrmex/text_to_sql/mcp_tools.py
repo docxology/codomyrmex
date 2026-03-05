@@ -14,7 +14,7 @@ from .engine import SQLSchema, TextToSQLEngine
 
 @mcp_tool(category="text_to_sql")
 def text_to_sql_generate(
-    question: str, tables: dict, primary_keys: dict = None
+    question: str, tables: dict, primary_keys: dict | None = None
 ) -> dict:
     """Generate a SQL query from a natural language question.
 

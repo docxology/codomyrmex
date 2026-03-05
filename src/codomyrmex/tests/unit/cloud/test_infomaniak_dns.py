@@ -500,7 +500,7 @@ class TestInfomaniakDNSClientExpanded:
         assert result["type"] == "A"
 
     def test_update_record(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.update_record("z1", "r1", records=["5.6.7.8"]) is True
 
     def test_list_ptr_records(self):

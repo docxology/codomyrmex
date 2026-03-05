@@ -9,9 +9,10 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
-from codomyrmex.evolutionary_ai.genome.genome import Individual
+if TYPE_CHECKING:
+    from codomyrmex.evolutionary_ai.genome.genome import Individual
 
 T = TypeVar("T")
 

@@ -18,6 +18,7 @@ Usage:
 
 from __future__ import annotations
 
+import contextlib
 import inspect
 import threading
 import typing
@@ -89,7 +90,7 @@ class ScopeContext:
         """Whether this scope context is currently active."""
         return self._active
 
-    def __enter__(self) -> ScopeContext:
+    def __enter__(self) -> typing.Self:
         """Enter the context manager."""
         self._active = True
         self._container._push_scope(self)
@@ -567,12 +568,10 @@ class Container:
             # Use pre-computed params from @inject decorator
             kwargs = {}
             for name, hint in inject_params.items():
-                try:
+                with contextlib.suppress(KeyError):
                     kwargs[name] = self._resolve_internal(
                         hint, name=None, scope_context=scope_context
                     )
-                except KeyError:
-                    pass
             return impl(**kwargs)
 
         # Fallback: inspect __init__ type hints directly

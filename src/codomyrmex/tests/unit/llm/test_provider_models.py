@@ -67,7 +67,7 @@ class TestProviderTypeEnum:
         assert isinstance(ProviderType.OPENAI, Enum)
 
     @pytest.mark.parametrize(
-        "member,expected",
+        ("member", "expected"),
         [
             (ProviderType.OPENAI, "openai"),
             (ProviderType.ANTHROPIC, "anthropic"),

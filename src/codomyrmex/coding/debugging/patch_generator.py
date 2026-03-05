@@ -15,11 +15,13 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agents.llm_client import AgentRequest
-from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
 
 logger = get_logger(__name__)
 

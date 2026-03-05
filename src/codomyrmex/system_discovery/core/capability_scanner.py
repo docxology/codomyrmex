@@ -388,10 +388,7 @@ class CapabilityScanner:
 
     def _is_generator(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
         """Check if function is a generator."""
-        return any(
-            isinstance(n, ast.Yield) or isinstance(n, ast.YieldFrom)
-            for n in ast.walk(node)
-        )
+        return any(isinstance(n, (ast.Yield, ast.YieldFrom)) for n in ast.walk(node))
 
     def _analyze_function(
         self,
@@ -514,12 +511,19 @@ class CapabilityScanner:
         complexity = 1  # Base complexity
 
         for child in ast.walk(node):
-            if (
-                isinstance(child, (ast.If, ast.For, ast.While, ast.With))
-                or isinstance(child, ast.ExceptHandler)
-                or isinstance(
-                    child, (ast.ListComp, ast.DictComp, ast.SetComp, ast.GeneratorExp)
-                )
+            if isinstance(
+                child,
+                (
+                    ast.If,
+                    ast.For,
+                    ast.While,
+                    ast.With,
+                    ast.ExceptHandler,
+                    ast.ListComp,
+                    ast.DictComp,
+                    ast.SetComp,
+                    ast.GeneratorExp,
+                ),
             ):
                 complexity += 1
 

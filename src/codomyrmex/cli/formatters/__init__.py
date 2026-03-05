@@ -76,13 +76,13 @@ class PlainFormatter(OutputFormatter):
 
         if columns is None:
             # Auto-detect columns from first row
-            columns = [Column(name=k, key=k) for k in data[0].keys()]
+            columns = [Column(name=k, key=k) for k in data[0]]
 
         # Calculate column widths
         for col in columns:
             if col.width is None:
                 col.width = max(
-                    len(col.name), max(len(str(row.get(col.key, ""))) for row in data)
+                    len(col.name), *(len(str(row.get(col.key, ""))) for row in data)
                 )
 
         # Build table
@@ -220,13 +220,13 @@ class TableFormatter(OutputFormatter):
             return "No data"
 
         if columns is None:
-            columns = [Column(name=k, key=k) for k in data[0].keys()]
+            columns = [Column(name=k, key=k) for k in data[0]]
 
         # Calculate widths
         for col in columns:
             if col.width is None:
                 col.width = max(
-                    len(col.name), max(len(str(row.get(col.key, ""))) for row in data)
+                    len(col.name), *(len(str(row.get(col.key, ""))) for row in data)
                 )
 
         b = self._borders

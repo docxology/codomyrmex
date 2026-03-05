@@ -7,6 +7,7 @@ through security auditing to CI/CD pipeline automation, ensuring that code
 quality checks, security scans, and deployment automation work together seamlessly.
 """
 
+import contextlib
 import os
 import tempfile
 
@@ -56,10 +57,8 @@ except ImportError:
 
 # Set up logging for tests
 if LOGGING_AVAILABLE and callable(setup_logging):
-    try:
+    with contextlib.suppress(Exception):
         setup_logging()
-    except Exception:
-        pass
 
 logger = get_logger(__name__) if LOGGING_AVAILABLE else None
 

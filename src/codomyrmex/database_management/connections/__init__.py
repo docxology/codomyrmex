@@ -440,19 +440,19 @@ class HealthChecker:
 
 
 __all__ = [
+    # Base classes
+    "Connection",
+    "ConnectionFactory",
+    # Pool
+    "ConnectionPool",
     # Enums
     "ConnectionState",
     # Data classes
     "ConnectionStats",
-    "PoolConfig",
-    # Base classes
-    "Connection",
-    "ConnectionFactory",
+    # Health
+    "HealthChecker",
     # In-memory implementations
     "InMemoryConnection",
     "InMemoryConnectionFactory",
-    # Pool
-    "ConnectionPool",
-    # Health
-    "HealthChecker",
+    "PoolConfig",
 ]

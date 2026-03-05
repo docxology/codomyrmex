@@ -23,9 +23,9 @@ pytestmark = [
 ]
 
 # Force non-interactive backend before any matplotlib import
-import matplotlib  # noqa: E402
+import matplotlib as mpl  # noqa: E402
 
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 from codomyrmex.data_visualization.git.git_visualizer import (  # noqa: E402
     GitVisualizer,

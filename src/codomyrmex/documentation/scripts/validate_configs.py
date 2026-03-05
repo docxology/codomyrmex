@@ -287,7 +287,7 @@ class ConfigValidator:
         print(f"   Success Rate: {results['success_rate']:.1f}%")
         print("\n" + "=" * 80)
 
-    def save_report(self, results: dict[str, Any], output_file: str = None):
+    def save_report(self, results: dict[str, Any], output_file: str | None = None):
         """Save validation results to file."""
         if output_file is None:
             output_file = (

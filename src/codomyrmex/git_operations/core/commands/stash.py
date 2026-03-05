@@ -8,7 +8,9 @@ logger = get_logger(__name__)
 
 
 @mcp_tool(name="git_stash")
-def stash_changes(message: str = None, repository_path: str = None) -> bool:
+def stash_changes(
+    message: str | None = None, repository_path: str | None = None
+) -> bool:
     """Stash current changes."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -38,7 +40,9 @@ def stash_changes(message: str = None, repository_path: str = None) -> bool:
 
 
 @mcp_tool(name="git_stash_apply")
-def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
+def apply_stash(
+    stash_ref: str | None = None, repository_path: str | None = None
+) -> bool:
     """Apply stashed changes."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -68,7 +72,7 @@ def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
 
 
 @mcp_tool(name="git_stash_list")
-def list_stashes(repository_path: str = None) -> list[dict[str, str]]:
+def list_stashes(repository_path: str | None = None) -> list[dict[str, str]]:
     """List all stashes."""
     if repository_path is None:
         repository_path = os.getcwd()

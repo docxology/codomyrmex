@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from codomyrmex.meme.swarm.models import SwarmAgent
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from codomyrmex.meme.swarm.models import SwarmAgent
 
 
 def reach_consensus(

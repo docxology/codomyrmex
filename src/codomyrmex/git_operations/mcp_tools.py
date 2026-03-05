@@ -241,7 +241,7 @@ def git_delete_branch(
     description="Merge a source branch into a target branch.",
 )
 def git_merge(
-    path: str, source_branch: str, target_branch: str = None
+    path: str, source_branch: str, target_branch: str | None = None
 ) -> dict[str, Any]:
     """Merge source_branch into target_branch (or current branch)."""
     try:
@@ -314,7 +314,7 @@ def git_reset(path: str, mode: str = "mixed", target: str = "HEAD") -> dict[str,
     category="git_operations",
     description="Amend the most recent commit message or content.",
 )
-def git_amend(path: str, message: str = None) -> dict[str, Any]:
+def git_amend(path: str, message: str | None = None) -> dict[str, Any]:
     """Amend the last commit."""
     try:
         result = _git().amend_commit(message=message, repository_path=path)
@@ -327,7 +327,7 @@ def git_amend(path: str, message: str = None) -> dict[str, Any]:
     category="git_operations",
     description="Stash uncommitted changes with an optional description message.",
 )
-def git_stash(path: str = ".", message: str = None) -> dict[str, Any]:
+def git_stash(path: str = ".", message: str | None = None) -> dict[str, Any]:
     """Stash uncommitted changes."""
     try:
         result = _git().stash_changes(message=message, repository_path=path)
@@ -340,7 +340,7 @@ def git_stash(path: str = ".", message: str = None) -> dict[str, Any]:
     category="git_operations",
     description="Apply a stash entry to the working directory.",
 )
-def git_stash_apply(path: str = ".", stash_ref: str = None) -> dict[str, Any]:
+def git_stash_apply(path: str = ".", stash_ref: str | None = None) -> dict[str, Any]:
     """Apply a stash."""
     try:
         result = _git().apply_stash(stash_ref=stash_ref, repository_path=path)
@@ -366,7 +366,9 @@ def git_stash_list(path: str = ".") -> dict[str, Any]:
     category="git_operations",
     description="Create a lightweight or annotated tag at the current commit.",
 )
-def git_create_tag(path: str, tag_name: str, message: str = None) -> dict[str, Any]:
+def git_create_tag(
+    path: str, tag_name: str, message: str | None = None
+) -> dict[str, Any]:
     """Create a git tag."""
     try:
         result = _git().create_tag(tag_name, message=message, repository_path=path)

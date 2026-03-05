@@ -38,7 +38,7 @@ class StubAgent(BaseAgent):
         capabilities: list[AgentCapabilities],
         should_succeed: bool = True,
         delay: float = 0.0,
-        fail_after: int = None,
+        fail_after: int | None = None,
     ):
         super().__init__(name=name, capabilities=capabilities, config={})
         self.should_succeed = should_succeed

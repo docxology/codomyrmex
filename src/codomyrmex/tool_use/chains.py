@@ -10,12 +10,14 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.validation.schemas import Result
-
-from .registry import ToolRegistry
 from .validation import ValidationResult
+
+if TYPE_CHECKING:
+    from codomyrmex.validation.schemas import Result
+
+    from .registry import ToolRegistry
 
 
 @dataclass

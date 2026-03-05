@@ -626,7 +626,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "sg1"
 
     def test_delete_security_group(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.delete_security_group("sg1") is True
 
     def test_allocate_floating_ip(self):
@@ -651,7 +651,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "lb1"
 
     def test_delete_loadbalancer(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.delete_loadbalancer("lb1") is True
 
     def test_list_subnets(self):
@@ -685,7 +685,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "sn1"
 
     def test_delete_subnet(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.delete_subnet("sn1") is True
 
     def test_release_floating_ip(self):
@@ -713,7 +713,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "li1"
 
     def test_delete_listener(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.delete_listener("li1") is True
 
     def test_list_pools(self):
@@ -731,7 +731,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["id"] == "p1"
 
     def test_delete_pool(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.delete_pool("p1") is True
 
     def test_list_pool_members(self):
@@ -774,7 +774,7 @@ class TestInfomaniakNetworkClientExpanded:
         assert result["type"] == "HTTP"
 
     def test_delete_health_monitor(self):
-        client, mc = self._make_client()
+        client, _mc = self._make_client()
         assert client.delete_health_monitor("hm1") is True
 
     def test_remove_router_interface(self):

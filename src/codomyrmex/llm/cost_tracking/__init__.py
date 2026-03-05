@@ -469,12 +469,10 @@ class BudgetGuard:
             if self._daily_spend[self._today_key()] + estimated_cost > self.daily_limit:
                 return False
 
-        if self.monthly_limit is not None:
-            if (
-                self._monthly_spend[self._month_key()] + estimated_cost
-                > self.monthly_limit
-            ):
-                return False
+        if self.monthly_limit is not None and (
+            self._monthly_spend[self._month_key()] + estimated_cost > self.monthly_limit
+        ):
+            return False
 
         if self.total_limit is not None:
             if self._total_spend + estimated_cost > self.total_limit:
@@ -524,20 +522,20 @@ def get_model_pricing(model_id: str) -> ModelPricing | None:
 
 
 __all__ = [
-    # Enums
-    "ModelProvider",
-    # Data classes
-    "ModelPricing",
-    "UsageRecord",
-    "UsageSummary",
-    # Classes
-    "TokenCounter",
-    "CostTracker",
-    "BudgetGuard",
     # Constants
     "MODEL_PRICING",
+    "BudgetGuard",
+    "CostTracker",
+    # Data classes
+    "ModelPricing",
+    # Enums
+    "ModelProvider",
+    # Classes
+    "TokenCounter",
+    "UsageRecord",
+    "UsageSummary",
+    "count_tokens",
     # Functions
     "estimate_cost",
-    "count_tokens",
     "get_model_pricing",
 ]

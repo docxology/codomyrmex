@@ -78,7 +78,8 @@ class TestOllamaProviderIntegration:
         """Test initializing Ollama client."""
         client, model = get_llm_client("ollama")
         assert client is not None, "Ollama client should be initialized"
-        assert isinstance(model, str) and len(model) > 0
+        assert isinstance(model, str)
+        assert len(model) > 0
 
     def test_get_llm_client_ollama_custom_model(self):
         """Test initializing Ollama client with custom model."""

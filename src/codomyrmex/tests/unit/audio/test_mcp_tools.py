@@ -1,6 +1,6 @@
 import wave
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 import pytest
 
@@ -63,7 +63,7 @@ def test_audio_transcribe_invalid_file(monkeypatch: pytest.MonkeyPatch) -> None:
         def __init__(self, *args: Any, **kwargs: Any) -> None:
             pass
 
-        def __enter__(self) -> "MockTranscriber":
+        def __enter__(self) -> Self:
             return self
 
         def __exit__(self, *args: object) -> None:
@@ -88,7 +88,7 @@ def test_audio_detect_language_invalid_file(monkeypatch: pytest.MonkeyPatch) -> 
         def __init__(self, *args: Any, **kwargs: Any) -> None:
             pass
 
-        def __enter__(self) -> "MockTranscriber":
+        def __enter__(self) -> Self:
             return self
 
         def __exit__(self, *args: object) -> None:
@@ -124,7 +124,7 @@ def test_audio_batch_transcribe_invalid_files(
         def __init__(self, *args: Any, **kwargs: Any) -> None:
             pass
 
-        def __enter__(self) -> "MockTranscriber":
+        def __enter__(self) -> Self:
             return self
 
         def __exit__(self, *args: object) -> None:

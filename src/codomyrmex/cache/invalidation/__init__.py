@@ -270,16 +270,16 @@ class InvalidationManager:
 
 
 __all__ = [
-    # Enums
-    "InvalidationStrategy",
     # Data classes
     "CacheEntry",
-    # Policies
-    "InvalidationPolicy",
-    "TTLPolicy",
-    "LRUPolicy",
-    "LFUPolicy",
     "FIFOPolicy",
     # Core
     "InvalidationManager",
+    # Policies
+    "InvalidationPolicy",
+    # Enums
+    "InvalidationStrategy",
+    "LFUPolicy",
+    "LRUPolicy",
+    "TTLPolicy",
 ]

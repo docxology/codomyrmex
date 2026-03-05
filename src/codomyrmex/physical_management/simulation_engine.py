@@ -124,7 +124,7 @@ class PhysicsSimulator:
         for obj_data in self.objects.values():
             obj_data["force"] = Vector3D(0, 0, 0)
 
-        for _obj_id, obj_data in self.objects.items():
+        for obj_data in self.objects.values():
             total_force = Vector3D(0, 0, 0)
 
             # Add gravity
@@ -242,20 +242,18 @@ class PhysicsSimulator:
 
     def calculate_total_kinetic_energy(self) -> float:
         """Calculate total kinetic energy of all objects."""
-        return sum(
-            self.calculate_kinetic_energy(obj_id) for obj_id in self.objects.keys()
-        )
+        return sum(self.calculate_kinetic_energy(obj_id) for obj_id in self.objects)
 
     def calculate_total_potential_energy(self) -> float:
         """Calculate total potential energy of all objects."""
         total_pe = 0.0
 
         # Gravitational potential energy
-        for obj_id in self.objects.keys():
+        for obj_id in self.objects:
             total_pe += self.calculate_potential_energy(obj_id)
 
         # Force field potential energy
-        for _obj_id, obj_data in self.objects.items():
+        for obj_data in self.objects.values():
             for force_field in self.force_fields:
                 distance = (obj_data["position"] - force_field.position).magnitude()
                 if distance > 0:
@@ -312,44 +310,43 @@ class PhysicsSimulator:
     def _apply_spring_constraints(self) -> None:
         """Apply spring constraints (called from _apply_constraints)."""
         for constraint in self.constraints:
-            if constraint.constraint_type == "spring":
-                if (
-                    constraint.object1_id in self.objects
-                    and constraint.object2_id in self.objects
-                ):
-                    obj1 = self.objects[constraint.object1_id]
-                    obj2 = self.objects[constraint.object2_id]
+            if constraint.constraint_type == "spring" and (
+                constraint.object1_id in self.objects
+                and constraint.object2_id in self.objects
+            ):
+                obj1 = self.objects[constraint.object1_id]
+                obj2 = self.objects[constraint.object2_id]
 
-                    # Spring parameters
-                    rest_length = constraint.parameters.get("rest_length", 1.0)
-                    k = constraint.parameters.get("spring_constant", 1.0)
-                    damping = constraint.parameters.get("damping", 0.1)
+                # Spring parameters
+                rest_length = constraint.parameters.get("rest_length", 1.0)
+                k = constraint.parameters.get("spring_constant", 1.0)
+                damping = constraint.parameters.get("damping", 0.1)
 
-                    # Calculate spring force
-                    direction = obj2["position"] - obj1["position"]
-                    current_length = direction.magnitude()
+                # Calculate spring force
+                direction = obj2["position"] - obj1["position"]
+                current_length = direction.magnitude()
 
-                    if current_length > 0:
-                        spring_force_magnitude = k * (current_length - rest_length)
-                        spring_direction = direction.normalize()
-                        spring_force = spring_direction * spring_force_magnitude
+                if current_length > 0:
+                    spring_force_magnitude = k * (current_length - rest_length)
+                    spring_direction = direction.normalize()
+                    spring_force = spring_direction * spring_force_magnitude
 
-                        # Add damping force
-                        relative_velocity = obj2["velocity"] - obj1["velocity"]
-                        damping_force = spring_direction * (
-                            damping
-                            * (
-                                relative_velocity.x * spring_direction.x
-                                + relative_velocity.y * spring_direction.y
-                                + relative_velocity.z * spring_direction.z
-                            )
+                    # Add damping force
+                    relative_velocity = obj2["velocity"] - obj1["velocity"]
+                    damping_force = spring_direction * (
+                        damping
+                        * (
+                            relative_velocity.x * spring_direction.x
+                            + relative_velocity.y * spring_direction.y
+                            + relative_velocity.z * spring_direction.z
                         )
+                    )
 
-                        total_force = spring_force + damping_force
+                    total_force = spring_force + damping_force
 
-                        # Apply forces (Newton's 3rd law)
-                        obj1["force"] += total_force
-                        obj2["force"] -= total_force
+                    # Apply forces (Newton's 3rd law)
+                    obj1["force"] += total_force
+                    obj2["force"] -= total_force
 
     def detect_collisions(self, collision_radius: float = 0.5) -> list[tuple[str, str]]:
         """Detect collisions between objects."""

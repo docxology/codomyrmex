@@ -71,40 +71,40 @@ def cli_commands():
 
 
 __all__ = [
-    "lineage",
-    "migration",
-    "backup",
-    "connections",
-    "audit",
-    "sharding",
-    "replication",
-    "performance_monitor",
-    "schema_generator",
-    # CLI integration
-    "cli_commands",
-    # Database management
-    "DatabaseManager",
-    "manage_databases",
-    "DatabaseConnection",
-    "DatabaseType",
-    "QueryResult",
-    "connect_database",
-    "execute_query",
-    # Migration management
-    "MigrationManager",
-    "run_migrations",
-    "Migration",
+    "Backup",
     # Backup management
     "BackupManager",
-    "backup_database",
-    "Backup",
+    "DatabaseConnection",
+    # Database management
+    "DatabaseManager",
+    "DatabaseMetrics",
     # Performance monitoring
     "DatabasePerformanceMonitor",
-    "monitor_database",
-    "optimize_database",
-    "DatabaseMetrics",
+    "DatabaseType",
+    "Migration",
+    # Migration management
+    "MigrationManager",
+    "QueryResult",
+    "SchemaDefinition",
     # Schema generation
     "SchemaGenerator",
+    "audit",
+    "backup",
+    "backup_database",
+    # CLI integration
+    "cli_commands",
+    "connect_database",
+    "connections",
+    "execute_query",
     "generate_schema",
-    "SchemaDefinition",
+    "lineage",
+    "manage_databases",
+    "migration",
+    "monitor_database",
+    "optimize_database",
+    "performance_monitor",
+    "replication",
+    "run_migrations",
+    "schema_generator",
+    "sharding",
 ]

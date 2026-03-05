@@ -397,20 +397,20 @@ def chunk_stream(text: str, chunk_size: int = 10) -> Generator[str, None, None]:
 
 
 __all__ = [
-    # Enums
-    "StreamEventType",
-    # Data classes
-    "StreamEvent",
-    "StreamStats",
-    # Components
-    "StreamBuffer",
-    "StreamProcessor",
-    "PassthroughProcessor",
     "ContentFilterProcessor",
     "JSONStreamParser",
+    "PassthroughProcessor",
+    # Components
+    "StreamBuffer",
+    # Data classes
+    "StreamEvent",
+    # Enums
+    "StreamEventType",
     # Core
     "StreamHandler",
+    "StreamProcessor",
+    "StreamStats",
+    "chunk_stream",
     # Utilities
     "stream_to_string",
-    "chunk_stream",
 ]

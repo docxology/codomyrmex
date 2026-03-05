@@ -33,31 +33,31 @@ from codomyrmex.crypto.analysis.strength import (
 )
 
 __all__ = [
-    # entropy
-    "ChiSquaredResult",
-    "byte_entropy",
-    "chi_squared_test",
-    "serial_correlation",
-    "shannon_entropy",
-    # frequency
-    "bigram_frequency",
-    "character_frequency",
-    "expected_english_frequency",
-    "index_of_coincidence",
-    # strength
-    "StrengthResult",
-    "assess_key_strength",
-    "assess_password_strength",
-    "check_common_passwords",
-    "estimate_crack_time",
     # classical
     "CaesarResult",
+    # entropy
+    "ChiSquaredResult",
+    # strength
+    "StrengthResult",
     "VigenereResult",
+    "assess_key_strength",
+    "assess_password_strength",
+    # frequency
+    "bigram_frequency",
     "break_caesar",
     "break_vigenere",
+    "byte_entropy",
     "caesar_decrypt",
     "caesar_encrypt",
+    "character_frequency",
+    "check_common_passwords",
+    "chi_squared_test",
     "detect_cipher_type",
+    "estimate_crack_time",
+    "expected_english_frequency",
+    "index_of_coincidence",
+    "serial_correlation",
+    "shannon_entropy",
     "vigenere_decrypt",
     "vigenere_encrypt",
 ]

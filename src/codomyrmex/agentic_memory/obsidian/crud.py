@@ -6,14 +6,17 @@ Path traversal is blocked.
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from codomyrmex.agentic_memory.obsidian.models import Note
 from codomyrmex.agentic_memory.obsidian.parser import (
     parse_note,
     serialize_note,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from codomyrmex.agentic_memory.obsidian.models import Note
 
 try:
     import yaml

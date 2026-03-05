@@ -168,7 +168,7 @@ class CLIAgentBase(BaseAgent):
 
         try:
             result = subprocess.run(
-                [cmd] + check_args,
+                [cmd, *check_args],
                 capture_output=True,
                 text=True,
                 timeout=5,

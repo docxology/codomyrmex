@@ -69,7 +69,7 @@ def recombine(meme_a: Meme, meme_b: Meme, crossover_point: float | None = None) 
         fidelity=(meme_a.fidelity + meme_b.fidelity) / 2,
         fecundity=(meme_a.fecundity + meme_b.fecundity) / 2,
         longevity=(meme_a.longevity + meme_b.longevity) / 2,
-        lineage=list(set(meme_a.lineage + [meme_a.id] + meme_b.lineage + [meme_b.id])),
+        lineage=list({*meme_a.lineage, meme_a.id, *meme_b.lineage, meme_b.id}),
     )
 
 
@@ -92,9 +92,11 @@ def splice(host: Meme, insert: Meme, position: float | None = None) -> Meme:
 
     host_words = host.content.split()
     insert_pos = int(len(host_words) * position)
-    spliced = (
-        host_words[:insert_pos] + [f"[{insert.content}]"] + host_words[insert_pos:]
-    )
+    spliced = [
+        *host_words[:insert_pos],
+        f"[{insert.content}]",
+        *host_words[insert_pos:],
+    ]
 
     return host.descend(
         new_content=" ".join(spliced),

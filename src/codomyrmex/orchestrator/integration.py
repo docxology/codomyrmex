@@ -227,7 +227,7 @@ class CICDBridge:
             Async action function
         """
 
-        async def stage_action(_task_results: dict = None) -> dict[str, Any]:
+        async def stage_action(_task_results: dict | None = None) -> dict[str, Any]:
             results = []
             overall_success = True
 
@@ -356,7 +356,7 @@ class AgentOrchestrator:
             timeout = task_def.get("timeout", 300)
 
             async def agent_action(
-                _task_results: dict = None,
+                _task_results: dict | None = None,
                 _agent=agent_name,
                 _task=task_content,
                 _kwargs=task_def.get("kwargs", {}),

@@ -398,7 +398,7 @@ class TestConcurrentSubscribers:
         await asyncio.sleep(0.1)
 
         # All subscribers should have received the event
-        for _sub_id, results in subscriber_results.items():
+        for results in subscriber_results.values():
             assert results == ["test_value"]
 
         bus.shutdown()

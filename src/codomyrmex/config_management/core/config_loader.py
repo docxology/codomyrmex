@@ -302,7 +302,7 @@ class ConfigurationManager:
             file_path = source[7:]  # Remove "file://" prefix
             return self._load_file(file_path)
 
-        if source.startswith("http://") or source.startswith("https://"):
+        if source.startswith(("http://", "https://")):
             # HTTP/HTTPS URL
             return self._load_from_url(source)
 
@@ -317,7 +317,7 @@ class ConfigurationManager:
 
         try:
             with open(file_path) as f:
-                if file_path.endswith(".yaml") or file_path.endswith(".yml"):
+                if file_path.endswith((".yaml", ".yml")):
                     return yaml.safe_load(f)
                 return json.load(f)
 
@@ -356,7 +356,7 @@ class ConfigurationManager:
         """Load JSON schema for configuration validation."""
         try:
             with open(schema_path) as f:
-                if schema_path.endswith(".yaml") or schema_path.endswith(".yml"):
+                if schema_path.endswith((".yaml", ".yml")):
                     schema_data = yaml.safe_load(f)
                 else:
                     schema_data = json.load(f)
@@ -479,7 +479,7 @@ class ConfigurationManager:
             template = self._generate_template_from_schema(schema.schema)
 
             with open(output_path, "w") as f:
-                if output_path.endswith(".yaml") or output_path.endswith(".yml"):
+                if output_path.endswith((".yaml", ".yml")):
                     yaml.dump(template, f, default_flow_style=False)
                 else:
                     json.dump(template, f, indent=2)
@@ -511,7 +511,7 @@ class ConfigurationManager:
 
         if prop_type == "string":
             return "example_value"
-        if prop_type == "number" or prop_type == "integer":
+        if prop_type in {"number", "integer"}:
             return 0
         if prop_type == "boolean":
             return False

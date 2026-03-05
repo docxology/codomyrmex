@@ -28,7 +28,7 @@ def load_pipeline(path: Path) -> dict:
     return {"error": f"Unsupported format: {path.suffix}"}
 
 
-def execute_step(step: dict, context: dict = None) -> dict:
+def execute_step(step: dict, context: dict | None = None) -> dict:
     """Execute a pipeline step."""
     result = {"name": step.get("name", "unnamed"), "status": "pending"}
 

@@ -17,8 +17,7 @@ Example::
 from __future__ import annotations
 
 import os
-from collections.abc import Iterator
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.llm.providers import (
     CompletionResponse,
@@ -27,6 +26,9 @@ from codomyrmex.llm.providers import (
     ProviderConfig,
     ProviderType,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 # Gemini models available via the google-genai SDK (Mar 2026)
 GEMINI_MODELS = [

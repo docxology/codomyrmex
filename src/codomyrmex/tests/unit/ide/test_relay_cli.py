@@ -665,7 +665,7 @@ class TestCmdSend:
         """When sender is None, cmd_send should default to 'cli'."""
         relay = AgentRelay("ch", relay_dir=relay_dir)
         # Simulate what cmd_send does: sender = args.sender or "cli"
-        sender = None or "cli"
+        sender = "cli"
         msg = relay.post_message(sender, "test")
         assert msg.sender == "cli"
 

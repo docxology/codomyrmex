@@ -39,10 +39,9 @@ def main():
         / "templating"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/templating/config.yaml")
 
     setup_logging()
@@ -62,7 +61,7 @@ def main():
     # 2. Template Manager
     print_info("Testing TemplateManager...")
     try:
-        manager = TemplateManager()
+        TemplateManager()
         print_success("  TemplateManager initialized.")
     except Exception as e:
         print_error(f"  TemplateManager failed: {e}")

@@ -103,7 +103,7 @@ class TestReportGenerator:
         assert "json" in paths
         assert "markdown" in paths
 
-        for fmt, path in paths.items():
+        for path in paths.values():
             assert path.exists()
 
     def test_report_includes_summary(

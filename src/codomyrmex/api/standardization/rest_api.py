@@ -89,7 +89,7 @@ class APIResponse:
     def __post_init__(self):
         """Set default headers based on content type."""
         if self.content_type and "content-type" not in [
-            h.lower() for h in self.headers.keys()
+            h.lower() for h in self.headers
         ]:
             self.headers["Content-Type"] = self.content_type
 

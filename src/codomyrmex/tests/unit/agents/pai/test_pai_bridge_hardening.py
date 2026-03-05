@@ -6,7 +6,7 @@ project's zero-mock policy.
 """
 
 import sys
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -34,6 +34,9 @@ from codomyrmex.model_context_protocol.discovery import (
     MCPDiscovery,
     mcp_tool,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 # ── Fixtures ──────────────────────────────────────────────────────────
 
@@ -375,7 +378,7 @@ def test_trust_registry_lifecycle(fresh_trust_registry):
         assert reg.level(promoted[0]) == TrustLevel.VERIFIED
 
     # Trust a specific tool
-    some_tool = list(reg._levels.keys())[0]
+    some_tool = next(iter(reg._levels.keys()))
     reg.trust_tool(some_tool)
     assert reg.level(some_tool) == TrustLevel.TRUSTED
 

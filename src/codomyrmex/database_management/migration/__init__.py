@@ -48,17 +48,17 @@ def cli_commands():
 
 
 __all__ = [
-    "MigrationStatus",
-    "MigrationDirection",
-    "MigrationStep",
-    "MigrationResult",
-    "Migration",
+    "CompositeTransformer",
+    "DataMigrator",
     "DataTransformer",
     "FieldRenameTransformer",
     "FieldTypeTransformer",
-    "CompositeTransformer",
+    "Migration",
+    "MigrationDirection",
+    "MigrationResult",
     "MigrationRunner",
-    "DataMigrator",
+    "MigrationStatus",
+    "MigrationStep",
     # CLI
     "cli_commands",
 ]

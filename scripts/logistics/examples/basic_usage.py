@@ -39,10 +39,9 @@ def main():
         / "logistics"
         / "config.yaml"
     )
-    config_data = {}
     if config_path.exists():
         with open(config_path) as f:
-            config_data = yaml.safe_load(f) or {}
+            yaml.safe_load(f) or {}
             print("Loaded config from config/logistics/config.yaml")
 
     setup_logging()
@@ -51,7 +50,7 @@ def main():
     # 1. Workflow Manager
     print_info("Testing WorkflowManager...")
     try:
-        wm = WorkflowManager()
+        WorkflowManager()
         print_success("  WorkflowManager initialized successfully.")
     except Exception as e:
         print_error(f"  WorkflowManager failed: {e}")
@@ -71,7 +70,7 @@ def main():
     # 3. Scheduling
     print_info("Testing ScheduleManager...")
     try:
-        sm = ScheduleManager()
+        ScheduleManager()
         print_success("  ScheduleManager initialized successfully.")
     except Exception as e:
         print_error(f"  ScheduleManager failed: {e}")

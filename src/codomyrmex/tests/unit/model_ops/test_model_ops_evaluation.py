@@ -797,7 +797,7 @@ class TestMetricsParametrized:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "y_true,y_pred,expected_accuracy",
+        ("y_true", "y_pred", "expected_accuracy"),
         [
             ([1, 1, 1, 1], [1, 1, 1, 1], 1.0),
             ([1, 0, 1, 0], [0, 1, 0, 1], 0.0),
@@ -811,7 +811,7 @@ class TestMetricsParametrized:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "y_true,y_pred,expected_precision",
+        ("y_true", "y_pred", "expected_precision"),
         [
             ([1, 1, 0, 0], [1, 1, 1, 0], 2.0 / 3.0),  # TP=2, FP=1
             ([1, 1, 0, 0], [0, 0, 0, 0], 0.0),  # No positive predictions
@@ -825,7 +825,7 @@ class TestMetricsParametrized:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "y_true,y_pred,expected_recall",
+        ("y_true", "y_pred", "expected_recall"),
         [
             ([1, 1, 0, 0], [1, 0, 0, 0], 0.5),  # TP=1, FN=1
             ([1, 1, 1, 0], [1, 1, 1, 0], 1.0),  # Perfect recall
@@ -839,7 +839,7 @@ class TestMetricsParametrized:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "y_true,y_pred,expected_f1",
+        ("y_true", "y_pred", "expected_f1"),
         [
             ([1, 1, 0, 0], [1, 1, 0, 0], 1.0),  # Perfect
             ([1, 1, 0, 0], [0, 0, 1, 1], 0.0),  # All wrong
@@ -857,7 +857,7 @@ class TestMetricsParametrized:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "y_true,y_pred,expected_mse",
+        ("y_true", "y_pred", "expected_mse"),
         [
             ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 0.0),
             ([0.0, 0.0], [1.0, 1.0], 1.0),
@@ -871,7 +871,7 @@ class TestMetricsParametrized:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "y_true,y_pred,expected_mae",
+        ("y_true", "y_pred", "expected_mae"),
         [
             ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 0.0),
             ([0.0, 0.0], [1.0, -1.0], 1.0),
@@ -885,7 +885,7 @@ class TestMetricsParametrized:
 
     @pytest.mark.unit
     @pytest.mark.parametrize(
-        "y_true,y_pred,expected_r2",
+        ("y_true", "y_pred", "expected_r2"),
         [
             ([1.0, 2.0, 3.0], [1.0, 2.0, 3.0], 1.0),
             ([1.0, 2.0, 3.0], [2.0, 2.0, 2.0], 0.0),

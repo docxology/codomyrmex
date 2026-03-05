@@ -7,8 +7,10 @@ an AggregateResult with statistics.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
-from .tasks.task_worker import TaskResult
+if TYPE_CHECKING:
+    from .tasks.task_worker import TaskResult
 
 
 @dataclass

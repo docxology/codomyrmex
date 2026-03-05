@@ -127,7 +127,7 @@ def cli_commands() -> dict[str, Any]:
         },
         "evaluate": {
             "help": "Evaluate a prompt-response pair (JSON input via stdin)",
-            "handler": lambda args: _cli_evaluate(args),
+            "handler": _cli_evaluate,
             "arguments": [
                 {"name": "--prompt", "help": "The prompt text", "required": False},
                 {"name": "--response", "help": "The response text", "required": False},
@@ -160,32 +160,32 @@ def _cli_evaluate(args: Any) -> None:
 
 
 __all__ = [
-    "testing",
-    # Templates
-    "PromptTemplate",
-    "TemplateRegistry",
-    "get_default_registry",
-    # Versioning
-    "PromptVersion",
-    "VersionManager",
-    # Optimization
-    "OptimizationStrategy",
-    "OptimizationResult",
-    "PromptOptimizer",
     # Evaluation
     "EvaluationCriteria",
     "EvaluationResult",
+    "OptimizationResult",
+    # Optimization
+    "OptimizationStrategy",
+    # Error
+    "PromptEngineeringError",
     "PromptEvaluator",
+    "PromptOptimizer",
+    # Templates
+    "PromptTemplate",
+    # Versioning
+    "PromptVersion",
+    "TemplateRegistry",
+    "VersionManager",
+    "cli_commands",
     "get_default_criteria",
+    "get_default_registry",
+    "list_strategies",
+    # Convenience functions
+    "list_templates",
+    "quick_evaluate",
+    "score_completeness",
     "score_relevance",
     "score_response_length",
     "score_structure",
-    "score_completeness",
-    # Convenience functions
-    "list_templates",
-    "list_strategies",
-    "quick_evaluate",
-    "cli_commands",
-    # Error
-    "PromptEngineeringError",
+    "testing",
 ]

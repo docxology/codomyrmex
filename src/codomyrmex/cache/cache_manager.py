@@ -11,13 +11,15 @@ Provides:
 from __future__ import annotations
 
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .backends.file_based import FileBasedCache
 from .backends.in_memory import InMemoryCache
-from .cache import Cache
+
+if TYPE_CHECKING:
+    from .cache import Cache
 
 logger = get_logger(__name__)
 

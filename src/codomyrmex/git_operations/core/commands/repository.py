@@ -27,7 +27,7 @@ def check_git_availability() -> bool:
 
 
 @mcp_tool(name="git_is_repo")
-def is_git_repository(repository_path: str = None) -> bool:
+def is_git_repository(repository_path: str | None = None) -> bool:
     """Check if the given path is a Git repository."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -135,7 +135,7 @@ def initialize_git_repository(
 
 
 @mcp_tool(name="git_clone")
-def clone_repository(url: str, destination: str, branch: str = None) -> bool:
+def clone_repository(url: str, destination: str, branch: str | None = None) -> bool:
     """Clone a Git repository to the specified destination."""
     try:
         logger.info(f"Cloning repository from {url} to {destination}")

@@ -32,7 +32,7 @@ class TestAgenticSeekAgentType:
         assert len(AgenticSeekAgentType) == 5
 
     @pytest.mark.parametrize(
-        "member,value",
+        ("member", "value"),
         [
             (AgenticSeekAgentType.CODER, "coder"),
             (AgenticSeekAgentType.BROWSER, "browser"),
@@ -160,7 +160,7 @@ class TestAgenticSeekTaskStatus:
         assert len(AgenticSeekTaskStatus) == 4
 
     @pytest.mark.parametrize(
-        "member,value",
+        ("member", "value"),
         [
             (AgenticSeekTaskStatus.PENDING, "pending"),
             (AgenticSeekTaskStatus.RUNNING, "running"),

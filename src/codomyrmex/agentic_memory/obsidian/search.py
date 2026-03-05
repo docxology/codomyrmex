@@ -73,11 +73,11 @@ def search_vault(
             tag_name = tag.name if case_sensitive else tag.name.lower()
             if q in tag_name:
                 score += 0.5
-                if match_type not in ("title",):
+                if match_type != "title":
                     match_type = "tag"
 
         # Frontmatter value match
-        for _key, val in note.frontmatter.items():
+        for val in note.frontmatter.values():
             val_str = str(val) if case_sensitive else str(val).lower()
             if q in val_str:
                 score += 0.3
@@ -121,7 +121,7 @@ def search_regex(
     compiled = re.compile(pattern, flags)
     results: list[SearchResult] = []
 
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         match = compiled.search(note.content)
         if match:
             idx = match.start()
@@ -154,7 +154,7 @@ def filter_by_tag(
     """
     tag = tag.lstrip("#")
     results: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         for t in note.tags:
             if include_nested:
                 if t.name == tag or t.name.startswith(tag + "/"):
@@ -185,7 +185,7 @@ def filter_by_tags(
     cleaned_tags = [t.lstrip("#") for t in tags]
     results: list[Note] = []
 
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         note_tag_names = {t.name for t in note.tags}
         if match_all:
             if all(t in note_tag_names for t in cleaned_tags):
@@ -205,7 +205,7 @@ def filter_by_frontmatter(
 ) -> list[Note]:
     """Return notes whose frontmatter contains *key* (optionally with a matching *value*)."""
     results: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         if key in note.frontmatter:
             if value is None or note.frontmatter[key] == value:
                 results.append(note)
@@ -218,7 +218,7 @@ def filter_by_frontmatter_exists(
 ) -> list[Note]:
     """Return notes that have ALL specified frontmatter keys."""
     results: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         if all(k in note.frontmatter for k in keys):
             results.append(note)
     return results
@@ -240,7 +240,7 @@ def filter_by_date(
     before_dt = datetime.fromisoformat(before).date() if before else None
 
     results: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         raw = note.frontmatter.get(date_field)
         if raw is None:
             continue
@@ -271,7 +271,7 @@ def filter_by_date(
 def find_notes_linking_to(vault: Any, target: str) -> list[Note]:
     """Return notes that contain a wikilink to *target*."""
     results: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         for link in note.links:
             if link.target == target:
                 results.append(note)
@@ -285,7 +285,7 @@ def find_notes_with_embeds(vault: Any, target: str | None = None) -> list[Note]:
     If *target* is given, only return notes embedding that specific file.
     """
     results: list[Note] = []
-    for _rel, note in vault.notes.items():
+    for note in vault.notes.values():
         if target:
             if any(e.target == target for e in note.embeds):
                 results.append(note)

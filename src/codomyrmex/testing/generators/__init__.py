@@ -285,23 +285,23 @@ class DatasetGenerator:
 
 
 __all__ = [
+    "BooleanGenerator",
+    "ChoiceGenerator",
     # Enums
     "DataType",
-    # Data classes
-    "FieldSpec",
-    # Base
-    "Generator",
-    # Generators
-    "StringGenerator",
-    "IntegerGenerator",
-    "FloatGenerator",
-    "BooleanGenerator",
+    "DatasetGenerator",
     "DateGenerator",
     "EmailGenerator",
-    "UUIDGenerator",
+    # Data classes
+    "FieldSpec",
+    "FloatGenerator",
+    # Base
+    "Generator",
+    "IntegerGenerator",
     "NameGenerator",
-    "ChoiceGenerator",
     # Composite
     "RecordGenerator",
-    "DatasetGenerator",
+    # Generators
+    "StringGenerator",
+    "UUIDGenerator",
 ]

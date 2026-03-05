@@ -12,9 +12,9 @@ logger = get_logger(__name__)
 @mcp_tool(name="git_merge")
 def merge_branch(
     source_branch: str,
-    target_branch: str = None,
-    repository_path: str = None,
-    strategy: str = None,
+    target_branch: str | None = None,
+    repository_path: str | None = None,
+    strategy: str | None = None,
 ) -> bool:
     """Merge a source branch into the target branch."""
     if repository_path is None:
@@ -59,7 +59,7 @@ def merge_branch(
 
 @mcp_tool(name="git_rebase")
 def rebase_branch(
-    target_branch: str, repository_path: str = None, interactive: bool = False
+    target_branch: str, repository_path: str | None = None, interactive: bool = False
 ) -> bool:
     """Rebase current branch onto target branch."""
     if repository_path is None:

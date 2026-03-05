@@ -542,7 +542,7 @@ class TestStreamCommand:
 
     def test_command_not_found(self):
         gen = stream_command(["nonexistent_binary_xyz_abc_123"])
-        lines, result = self._exhaust_generator(gen)
+        _lines, result = self._exhaust_generator(gen)
         assert not result.success
         assert result.error_message is not None
 
@@ -552,7 +552,7 @@ class TestStreamCommand:
                 [sys.executable, "-c", "import os; print(os.getcwd())"],
                 cwd=tmpdir,
             )
-            lines, result = self._exhaust_generator(gen)
+            _lines, result = self._exhaust_generator(gen)
             assert result.success
 
     def test_timeout(self):
@@ -560,7 +560,7 @@ class TestStreamCommand:
             [sys.executable, "-c", "import time; time.sleep(30)"],
             timeout=0.5,
         )
-        lines, result = self._exhaust_generator(gen)
+        _lines, result = self._exhaust_generator(gen)
         assert result.timed_out
         assert not result.success
 

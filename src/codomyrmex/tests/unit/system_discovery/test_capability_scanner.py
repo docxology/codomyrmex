@@ -314,8 +314,8 @@ class TestExtractParameters:
 
     def test_varargs_and_kwargs_with_annotations(self):
         params = self._params_of("def f(*args: int, **kwargs: str): pass")
-        vararg = [p for p in params if p["name"] == "*args"][0]
-        kwarg = [p for p in params if p["name"] == "**kwargs"][0]
+        vararg = next(p for p in params if p["name"] == "*args")
+        kwarg = next(p for p in params if p["name"] == "**kwargs")
         assert vararg["annotation"] == "int"
         assert kwarg["annotation"] == "str"
 
@@ -640,7 +640,7 @@ class TestAnalyzeAst:
         return scanner._analyze_ast(tree, Path("/test.py"))
 
     def test_captures_functions(self):
-        funcs, classes, consts, imports = self._run('''
+        funcs, _classes, _consts, _imports = self._run('''
 def public_func():
     """Public."""
     pass
@@ -1245,11 +1245,11 @@ class TestScanModuleEndToEnd:
         assert "generate_items" in func_names
 
         # Check async
-        fetch = [f for f in result.functions if f.name == "fetch_data"][0]
+        fetch = next(f for f in result.functions if f.name == "fetch_data")
         assert fetch.is_async is True
 
         # Check generator
-        gen = [f for f in result.functions if f.name == "generate_items"][0]
+        gen = next(f for f in result.functions if f.name == "generate_items")
         assert gen.is_generator is True
 
         # Classes
@@ -1258,7 +1258,7 @@ class TestScanModuleEndToEnd:
         assert "AdvancedProcessor" in class_names
 
         # BaseProcessor details
-        bp = [c for c in result.classes if c.name == "BaseProcessor"][0]
+        bp = next(c for c in result.classes if c.name == "BaseProcessor")
         assert "name" in bp.properties
         assert "DEFAULT" in bp.class_variables
         method_names = [m.name for m in bp.methods]
@@ -1267,7 +1267,7 @@ class TestScanModuleEndToEnd:
         assert "_internal" in method_names
 
         # AdvancedProcessor inheritance
-        ap = [c for c in result.classes if c.name == "AdvancedProcessor"][0]
+        ap = next(c for c in result.classes if c.name == "AdvancedProcessor")
         assert "BaseProcessor" in ap.inheritance
 
         # Constants

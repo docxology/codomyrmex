@@ -6,7 +6,7 @@ analysis parsing — all without requiring API keys or network access.
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -17,6 +17,9 @@ from codomyrmex.agents.core import (
     AgentResponse,
     BaseAgent,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 # =====================================================================
 # Stub agent (no API key required)

@@ -57,7 +57,7 @@ def get_default_engine(engine_type: str = "jinja2"):
     return _default_engine
 
 
-def render(template: str, context: dict = None, engine: str = "jinja2") -> str:
+def render(template: str, context: dict | None = None, engine: str = "jinja2") -> str:
     """
     Render a template string with context data.
 
@@ -82,7 +82,7 @@ def render(template: str, context: dict = None, engine: str = "jinja2") -> str:
     return eng.render(template, context)
 
 
-def render_file(path: str, context: dict = None, engine: str = "jinja2") -> str:
+def render_file(path: str, context: dict | None = None, engine: str = "jinja2") -> str:
     """
     Load and render a template file.
 

@@ -8,8 +8,8 @@ context generation for LLM consumption.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from codomyrmex.graph_rag.graph import KnowledgeGraph
 from codomyrmex.graph_rag.models import (
     Entity,
     EntityType,
@@ -17,6 +17,9 @@ from codomyrmex.graph_rag.models import (
     Relationship,
 )
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from codomyrmex.graph_rag.graph import KnowledgeGraph
 
 logger = get_logger(__name__)
 
