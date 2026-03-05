@@ -251,3 +251,5 @@ src/codomyrmex/codomyrmex/codomyrmex.llm/
 /static_analysis_codeql_1/codeql.db
 3-4-2026.md
 /.desloppify
+cov_config.json
+codomyrmex_inventory.json
