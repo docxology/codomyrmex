@@ -9,6 +9,8 @@ and integration with other Codomyrmex modules.
 import pytest
 
 from codomyrmex.security import (
+
+pytestmark = pytest.mark.integration
     # Cognitive security
     analyze_email,
     assess_risk,
@@ -21,7 +23,6 @@ from codomyrmex.security import (
     scan_vulnerabilities,
 )
 
-pytestmark = pytest.mark.integration
 
 class TestCrossSubmoduleWorkflows:
     """Test workflows across security submodules."""
