@@ -174,13 +174,13 @@ graph TD
   - [Security](SECURITY.md) - Security policies
 - **Children**:
   - [Source Code](src/README.md) - All modules and implementations
-  - [Documentation](docs/README.md) - User and developer guides
+  - [Documentation](../README.md) - User and developer guides
   - [Scripts](scripts/README.md) - Automation and orchestration utilities
   - [Configuration](config/README.md) - Configuration templates
 
 ## Documentation
 
-Comprehensive documentation for users, developers, and contributors. All documentation is organized in the [docs/](docs/README.md) directory.
+Comprehensive documentation for users, developers, and contributors. All documentation is organized in the [docs/](../README.md) directory.
 
 ### Getting Started
 
@@ -238,7 +238,7 @@ Comprehensive documentation for users, developers, and contributors. All documen
 - **[Integration Examples](docs/examples/integration-examples.md)** - Integration patterns
 - **[Orchestration Examples](docs/examples/orchestration-examples.md)** - Workflow examples
 
-**See [Documentation Hub](docs/README.md) for complete documentation index.**
+**See [Documentation Hub](../README.md) for complete documentation index.**
 
 ## Development
 
@@ -320,7 +320,7 @@ Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 
 ## Navigation Links
 
-- **Documentation**: [Reference Guides](docs/README.md)
+- **Documentation**: [Reference Guides](../README.md)
 - **All Agents**: [AGENTS.md](AGENTS.md)
 - **Functional Spec**: [SPEC.md](SPEC.md)
 - **Source Index**: [src/README.md](src/README.md)
