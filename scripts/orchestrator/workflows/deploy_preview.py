@@ -18,16 +18,16 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator import RetryPolicy, Workflow
-from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
+from codomyrmex.orchestrator import Workflow, RetryPolicy
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
 
 
-async def build_application(_task_results: dict = None) -> dict[str, Any]:
+async def build_application(_task_results: dict = None) -> Dict[str, Any]:
     """Build the application for deployment."""
     result = subprocess.run(
         ["uv", "build"],
@@ -48,7 +48,7 @@ async def build_application(_task_results: dict = None) -> dict[str, Any]:
     }
 
 
-async def run_pre_deployment_checks(_task_results: dict = None) -> dict[str, Any]:
+async def run_pre_deployment_checks(_task_results: dict = None) -> Dict[str, Any]:
     """Run pre-deployment validation checks."""
     checks = {
         "lint": False,
@@ -92,7 +92,7 @@ async def run_pre_deployment_checks(_task_results: dict = None) -> dict[str, Any
     }
 
 
-async def deploy_to_preview(task_results: dict = None, _task_results: dict = None, env: str = "preview", dry_run: bool = False) -> dict[str, Any]:
+async def deploy_to_preview(task_results: dict = None, _task_results: dict = None, env: str = "preview", dry_run: bool = False) -> Dict[str, Any]:
     """Deploy to preview environment."""
     # Handle both naming conventions and TaskResult objects
     results = task_results or _task_results or {}
@@ -144,7 +144,7 @@ async def deploy_to_preview(task_results: dict = None, _task_results: dict = Non
     }
 
 
-async def run_smoke_tests(task_results: dict = None, _task_results: dict = None, skip: bool = False) -> dict[str, Any]:
+async def run_smoke_tests(task_results: dict = None, _task_results: dict = None, skip: bool = False) -> Dict[str, Any]:
     """Run smoke tests against deployed preview."""
     if skip:
         return {
@@ -195,7 +195,7 @@ def _extract_result(obj) -> dict:
     return value if isinstance(value, dict) else {}
 
 
-async def generate_deployment_report(task_results: dict = None, _task_results: dict = None) -> dict[str, Any]:
+async def generate_deployment_report(task_results: dict = None, _task_results: dict = None) -> Dict[str, Any]:
     """Generate deployment report."""
     # Handle both naming conventions
     results = task_results or _task_results or {}
@@ -238,7 +238,7 @@ async def generate_deployment_report(task_results: dict = None, _task_results: d
     }
 
 
-def _summarize_result(result: dict[str, Any]) -> str:
+def _summarize_result(result: Dict[str, Any]) -> str:
     """Create summary string from result."""
     if result.get("dry_run"):
         return "Dry run completed"
@@ -289,7 +289,7 @@ async def main() -> int:
     )
 
     # Deploy
-    async def deploy_action(_task_results: dict = None) -> dict[str, Any]:
+    async def deploy_action(_task_results: dict = None) -> Dict[str, Any]:
         return await deploy_to_preview(_task_results, env=args.env, dry_run=args.dry_run)
 
     workflow.add_task(
@@ -300,7 +300,7 @@ async def main() -> int:
     )
 
     # Smoke tests
-    async def smoke_test_action(_task_results: dict = None) -> dict[str, Any]:
+    async def smoke_test_action(_task_results: dict = None) -> Dict[str, Any]:
         return await run_smoke_tests(_task_results, skip=args.skip_tests)
 
     workflow.add_task(

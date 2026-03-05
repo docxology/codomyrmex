@@ -1,3 +1,5 @@
+import pytest
+
 from codomyrmex.graph_rag.mcp_tools import (
     graph_rag_build_graph,
     graph_rag_list_types,
@@ -45,17 +47,11 @@ class TestGraphRagMCPTools:
         """Test searching with entity type filter."""
         entities = [
             {"id": "e1", "name": "Python Language", "entity_type": "concept"},
-            {
-                "id": "e2",
-                "name": "Python Software Foundation",
-                "entity_type": "organization",
-            },
+            {"id": "e2", "name": "Python Software Foundation", "entity_type": "organization"},
         ]
 
         # Matches the organization only
-        result = graph_rag_search_entities(
-            entities=entities, query="python", entity_type="organization"
-        )
+        result = graph_rag_search_entities(entities=entities, query="python", entity_type="organization")
         assert result["status"] == "success"
         assert result["match_count"] == 1
         assert result["matches"][0]["id"] == "e2"
@@ -63,19 +59,10 @@ class TestGraphRagMCPTools:
     def test_tool_metadata(self):
         """Test that MCP tools have correct metadata."""
         assert hasattr(graph_rag_list_types, "_mcp_tool_meta")
-        assert (
-            graph_rag_list_types._mcp_tool_meta["name"]
-            == "codomyrmex.graph_rag_list_types"
-        )
+        assert graph_rag_list_types._mcp_tool_meta["name"] == "codomyrmex.graph_rag_list_types"
 
         assert hasattr(graph_rag_build_graph, "_mcp_tool_meta")
-        assert (
-            graph_rag_build_graph._mcp_tool_meta["name"]
-            == "codomyrmex.graph_rag_build_graph"
-        )
+        assert graph_rag_build_graph._mcp_tool_meta["name"] == "codomyrmex.graph_rag_build_graph"
 
         assert hasattr(graph_rag_search_entities, "_mcp_tool_meta")
-        assert (
-            graph_rag_search_entities._mcp_tool_meta["name"]
-            == "codomyrmex.graph_rag_search_entities"
-        )
+        assert graph_rag_search_entities._mcp_tool_meta["name"] == "codomyrmex.graph_rag_search_entities"

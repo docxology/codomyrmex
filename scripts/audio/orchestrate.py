@@ -75,11 +75,8 @@ def run_audio_synthesis(
     """
     # Late import — audio is an optional extra
     try:
-        from codomyrmex.audio import TTS_AVAILABLE, Synthesizer
-        from codomyrmex.audio.exceptions import (
-            ProviderNotAvailableError,
-            SynthesisError,
-        )
+        from codomyrmex.audio import Synthesizer, TTS_AVAILABLE
+        from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
     except ImportError:
         print_error("Audio module not available.")
         print_info("  Install audio extras: uv sync --extra audio")

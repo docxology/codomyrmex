@@ -32,6 +32,7 @@ from codomyrmex.utils.cli_helpers import (
 )
 
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Audio Basic Usage Example")
     parser.add_argument("--text", default="Hello! This is Codomyrmex.", help="Input for generation")
@@ -48,16 +49,8 @@ def main() -> int:
 
     # ── 0. Import guard ────────────────────────────────────────────────
     try:
-        from codomyrmex.audio import (
-            EDGE_TTS_AVAILABLE,
-            PYTTSX3_AVAILABLE,
-            TTS_AVAILABLE,
-            Synthesizer,
-        )
-        from codomyrmex.audio.exceptions import (
-            ProviderNotAvailableError,
-            SynthesisError,
-        )
+        from codomyrmex.audio import Synthesizer, TTS_AVAILABLE, EDGE_TTS_AVAILABLE, PYTTSX3_AVAILABLE
+        from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
     except ImportError:
         print_error("Audio module not importable.")
         print_info("  Install: uv sync --extra audio")
@@ -92,7 +85,7 @@ def main() -> int:
         print_info("1. edge-tts — Neural TTS (Microsoft Edge voices)...")
         try:
             synth = Synthesizer(provider="edge-tts")
-            print_success("   Synthesizer ready with edge-tts.")
+            print_success(f"   Synthesizer ready with edge-tts.")
 
             # Synthesize to file
             out = output_dir / "basic_usage_edge_tts.mp3"

@@ -25,18 +25,16 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    DESTRUCTIVE_TOOL_COUNT,
-    DESTRUCTIVE_TOOLS,
-    SAFE_TOOL_COUNT,
-    SAFE_TOOLS,
     PAIBridge,
     TrustLevel,
+    SAFE_TOOLS,
+    DESTRUCTIVE_TOOLS,
+    SAFE_TOOL_COUNT,
+    DESTRUCTIVE_TOOL_COUNT,
     get_trust_report,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_warning,
 )
 
 SECTIONS = ["security", "telos", "classification", "env", "trust"]
@@ -127,7 +125,7 @@ def section_env(bridge: PAIBridge) -> dict:
         security_keys = [k for k in settings if any(s in k.lower() for s in ["key", "token", "secret", "auth"])]
         if security_keys:
             print(f"  ⚠️  Security-sensitive keys detected: {security_keys}")
-            print("     (values hidden for security)")
+            print(f"     (values hidden for security)")
     else:
         print_info("  settings.json: not found")
 

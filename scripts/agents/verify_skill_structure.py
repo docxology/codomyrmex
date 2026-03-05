@@ -1,8 +1,7 @@
 
 import re
-import sys
 from pathlib import Path
-
+import sys
 
 def verify_skill_md():
     skill_path = Path("~/.claude/skills/Codomyrmex/SKILL.md").expanduser().resolve()

@@ -1,5 +1,4 @@
 import os
-
 for path in [
     "src/codomyrmex/documentation/docs/modules/llm/mcp_tool_specification.md",
     "src/codomyrmex/documentation/docs/modules/data_visualization/usage_examples.md",
@@ -9,7 +8,7 @@ for path in [
     "src/codomyrmex/data_visualization/USAGE_EXAMPLES.md"
 ]:
     if os.path.exists(path):
-        with open(path) as f:
+        with open(path, "r") as f:
             content = f.read()
 
         # for plot_outputs/ -> plot_output/

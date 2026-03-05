@@ -17,8 +17,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import csv
 import json
+import csv
 
 
 def load_data(file_path: str) -> tuple:
@@ -27,13 +27,13 @@ def load_data(file_path: str) -> tuple:
     suffix = path.suffix.lower()
 
     if suffix == ".csv":
-        with open(path) as f:
+        with open(path, "r") as f:
             reader = csv.DictReader(f)
             rows = list(reader)
             headers = list(rows[0].keys()) if rows else []
             return headers, rows
     elif suffix == ".json":
-        with open(path) as f:
+        with open(path, "r") as f:
             data = json.load(f)
             if isinstance(data, list) and data:
                 return list(data[0].keys()), data
@@ -123,15 +123,14 @@ def create_html_chart(data: list, x_col: str, y_col: str, chart_type: str = "bar
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "data_visualization" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/data_visualization/config.yaml")
+            print(f"Loaded config from config/data_visualization/config.yaml")
 
     parser = argparse.ArgumentParser(description="Export data visualizations")
     parser.add_argument("data_file", help="CSV or JSON data file")

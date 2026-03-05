@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from src.analyzer import AnalysisResult, ProjectAnalyzer
+from src.analyzer import ProjectAnalyzer, AnalysisResult
 
 
 class TestAnalysisResult:
@@ -25,7 +25,8 @@ class TestAnalysisResult:
     def test_has_issues_with_issues(self):
         """Test has_issues returns True when issues exist."""
         result = AnalysisResult(
-            file_path=Path("test.py"), issues=[{"type": "warning", "message": "test"}]
+            file_path=Path("test.py"),
+            issues=[{"type": "warning", "message": "test"}]
         )
         assert result.has_issues is True
 
@@ -34,7 +35,7 @@ class TestAnalysisResult:
         result = AnalysisResult(
             file_path=Path("test.py"),
             metrics={"lines_of_code": 100},
-            patterns=["type_hints"],
+            patterns=["type_hints"]
         )
 
         d = result.to_dict()

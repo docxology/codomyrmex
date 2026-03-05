@@ -1,7 +1,5 @@
 import os
-
 from google import genai
-
 try:
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     models = list(client.models.list())

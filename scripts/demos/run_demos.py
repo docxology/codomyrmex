@@ -5,33 +5,31 @@ scripts/demos/run_demos.py
 Orchestrator script to run system demonstrations using the 'demos' module.
 """
 
-import argparse
 import sys
 from pathlib import Path
+import argparse
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent.parent / "src"))
 
 from codomyrmex.demos.registry import get_registry
 from codomyrmex.utils.cli_helpers import (
-    format_table,
-    print_error,
-    print_info,
-    print_section,
-    print_success,
     setup_logging,
+    print_info,
+    print_success,
+    print_error,
+    print_section,
+    format_table
 )
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 

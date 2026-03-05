@@ -4,10 +4,10 @@ Workflow Manager for Antigravity
 Demonstrates creating and managing task artifacts programmatically.
 """
 
-import logging
 import sys
 import time
 from pathlib import Path
+import logging
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent

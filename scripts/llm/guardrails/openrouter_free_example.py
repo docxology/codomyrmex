@@ -13,16 +13,16 @@ Usage:
     python openrouter_free_example.py
 """
 
+import sys
 import os
 import re
-import sys
 from pathlib import Path
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
+from codomyrmex.llm.providers import get_provider, ProviderType, ProviderConfig, Message
 
 # Config file locations
 CONFIG_PATHS = [
@@ -88,15 +88,14 @@ def safe_completion(provider, user_input: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+            print(f"Loaded config from config/llm/config.yaml")
 
     """Demonstrate guardrails with OpenRouter free models."""
     print("=" * 60)

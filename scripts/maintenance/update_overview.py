@@ -1,5 +1,5 @@
-import os
 import re
+import os
 
 DOCS_DIR = "docs/modules"
 
@@ -29,7 +29,7 @@ def add_to_agents_table(content, header, new_row):
             content = content[:match.start(1)] + new_table_content + content[match.end(1):]
     return content
 
-with open(f"{DOCS_DIR}/overview.md") as f:
+with open(f"{DOCS_DIR}/overview.md", "r") as f:
     overview = f.read()
 
 # Remove tree_sitter
@@ -46,12 +46,11 @@ with open(f"{DOCS_DIR}/overview.md", "w") as f:
     f.write(overview)
 
 
-with open(f"{DOCS_DIR}/AGENTS.md") as f:
+with open(f"{DOCS_DIR}/AGENTS.md", "r") as f:
     agents = f.read()
 
 # Update the Children list
 import glob
-
 src_modules = sorted([os.path.basename(p) for p in glob.glob("src/codomyrmex/*") if os.path.isdir(p) and not os.path.basename(p).startswith("_") and "documentation" != os.path.basename(p)])
 src_modules.append("documentation") # keep the same set
 src_modules = sorted([m for m in src_modules if os.path.isfile(f"src/codomyrmex/{m}/__init__.py")])

@@ -7,10 +7,9 @@ including persona management and bio-cognitive verification.
 """
 
 import sys
-
 from codomyrmex.identity import (
-    BioCognitiveVerifier,
     IdentityManager,
+    BioCognitiveVerifier,
     VerificationLevel,
 )
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -80,15 +79,14 @@ def run_orchestrator():
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "identity" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/identity/config.yaml")
+            print(f"Loaded config from config/identity/config.yaml")
 
 if __name__ == "__main__":
     try:

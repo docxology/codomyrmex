@@ -17,9 +17,9 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import subprocess
 import json
 import re
-import subprocess
 
 
 def find_requirements_files(path: str = ".") -> list:
@@ -48,7 +48,7 @@ def parse_requirements(file_path: Path) -> list:
     packages = []
 
     if file_path.suffix == ".txt":
-        with open(file_path) as f:
+        with open(file_path, "r") as f:
             for line in f:
                 line = line.strip()
                 if line and not line.startswith("#") and not line.startswith("-"):
@@ -62,7 +62,7 @@ def parse_requirements(file_path: Path) -> list:
                         })
 
     elif file_path.name == "pyproject.toml":
-        with open(file_path) as f:
+        with open(file_path, "r") as f:
             content = f.read()
             # Simple extraction of dependencies
             dep_match = re.search(r'dependencies\s*=\s*\[(.*?)\]', content, re.DOTALL)

@@ -1,6 +1,5 @@
-from codomyrmex.multimodal.image_generation import ImageGenerator
 from codomyrmex.video.generation.video_generator import VideoGenerator
-
+from codomyrmex.multimodal.image_generation import ImageGenerator
 print("Generating Image...")
 ig = ImageGenerator()
 res = ig.generate(prompt="A test image", model="imagen-3.0-generate-001", number_of_images=1)

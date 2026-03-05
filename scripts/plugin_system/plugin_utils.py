@@ -112,15 +112,14 @@ def on_shutdown():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "plugin_system" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/plugin_system/config.yaml")
+            print(f"Loaded config from config/plugin_system/config.yaml")
 
     parser = argparse.ArgumentParser(description="Plugin utilities")
     subparsers = parser.add_subparsers(dest="command")

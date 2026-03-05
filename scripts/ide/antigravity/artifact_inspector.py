@@ -4,10 +4,10 @@ Artifact Inspector for Antigravity
 Lists and inspects all artifacts in the current conversation.
 """
 
-import logging
 import sys
-from datetime import datetime
 from pathlib import Path
+import logging
+from datetime import datetime
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent

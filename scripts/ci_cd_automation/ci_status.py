@@ -87,7 +87,7 @@ def main():
     # Git context
     git_info = get_git_info()
     if git_info:
-        print("📌 Current context:")
+        print(f"📌 Current context:")
         print(f"   Branch: {git_info.get('branch', 'unknown')}")
         print(f"   Commit: {git_info.get('commit', 'unknown')}")
         print(f"   Message: {git_info.get('message', '')}")

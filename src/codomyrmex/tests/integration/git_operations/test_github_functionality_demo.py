@@ -1,7 +1,5 @@
 import pytest
 
-pytestmark = pytest.mark.integration
-
 #!/usr/bin/env python3
 """
 GitHub Operations Functionality Demo
@@ -22,9 +20,11 @@ import tempfile
 from datetime import datetime
 
 # Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from codomyrmex.git_operations import (
+
+pytestmark = pytest.mark.integration
     GitHubAPIError,
     add_files,
     # Local Git operations
@@ -94,7 +94,7 @@ def test_all_git_operations():
         # Test file operations
         print("\n4. Testing file operations...")
         test_file = os.path.join(temp_dir, "test_file.py")
-        with open(test_file, "w") as f:
+        with open(test_file, 'w') as f:
             f.write(f'''#!/usr/bin/env python3
 """
 Test file for Git operations validation.
@@ -158,20 +158,14 @@ def demonstrate_github_functionality():
     # Test 1: Repository creation (would work with real token)
     print("1. Repository Creation Functions:")
     print("   📋 Function: create_github_repository()")
-    print(
-        "   🔒 Private repo: create_github_repository(name='private_test', private=True)"
-    )
-    print(
-        "   🌐 Public repo:  create_github_repository(name='public_test', private=False)"
-    )
+    print("   🔒 Private repo: create_github_repository(name='private_test', private=True)")
+    print("   🌐 Public repo:  create_github_repository(name='public_test', private=False)")
 
     # Test current token status
-    github_token = os.environ.get("GITHUB_TOKEN", "not_set")
-    print(
-        f"\n   🔑 Current token status: {'✅ Set' if github_token != 'not_set' else '❌ Not set'}"
-    )
+    github_token = os.environ.get('GITHUB_TOKEN', 'not_set')
+    print(f"\n   🔑 Current token status: {'✅ Set' if github_token != 'not_set' else '❌ Not set'}")
 
-    if github_token != "not_set" and github_token != "placeholder_for_testing":
+    if github_token != 'not_set' and github_token != 'placeholder_for_testing':
         print("   📝 Token appears to be set - attempting test...")
         try:
             # Try to create a test repository
@@ -179,7 +173,7 @@ def demonstrate_github_functionality():
                 name=f"test_validation_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
                 private=True,
                 description="Test repository for validation - will be deleted immediately",
-                github_token=github_token,
+                github_token=github_token
             )
 
             if result.get("success"):
@@ -190,7 +184,7 @@ def demonstrate_github_functionality():
                 print(f"   🌐 URL: {repo_info['html_url']}")
 
                 # Clean up immediately
-                owner = repo_info["full_name"].split("/")[0]
+                owner = repo_info["full_name"].split('/')[0]
                 try:
                     delete_github_repository(owner, repo_info["name"], github_token)
                     print("   🧹 Test repository cleaned up")
@@ -216,7 +210,7 @@ def demonstrate_github_functionality():
         "get_repository_info(repo_owner, repo_name, github_token)",
         "create_pull_request(repo_owner, repo_name, head_branch, base_branch, title, body)",
         "get_pull_requests(repo_owner, repo_name, state='open', github_token)",
-        "get_pull_request(repo_owner, repo_name, pr_number, github_token)",
+        "get_pull_request(repo_owner, repo_name, pr_number, github_token)"
     ]
 
     for i, func in enumerate(functions, 1):
@@ -262,9 +256,7 @@ def show_complete_workflow():
     print("   • Feature branch available on GitHub")
 
     print("\n6. 🔄 CREATE PULL REQUEST")
-    print(
-        "   • create_pull_request(owner, repo, 'feature/new-feature', 'main', title, body)"
-    )
+    print("   • create_pull_request(owner, repo, 'feature/new-feature', 'main', title, body)")
     print("   • PR created with comprehensive description and metadata")
 
     print("\n7. 📖 READ PULL REQUEST")
@@ -275,9 +267,7 @@ def show_complete_workflow():
     print("   • get_pull_requests(owner, repo, state='open')")
     print("   • List all PRs with filtering by state")
 
-    print(
-        "\n✅ RESULT: Complete development workflow from repo creation to PR management!"
-    )
+    print("\n✅ RESULT: Complete development workflow from repo creation to PR management!")
 
 
 def main():
@@ -299,15 +289,9 @@ def main():
         # Summary
         print("\n📊 DEMONSTRATION SUMMARY")
         print("=" * 60)
-        print(
-            f"✅ Local Git Operations (22 functions): {'WORKING' if local_git_works else 'FAILED'}"
-        )
-        print(
-            f"🐙 GitHub API Operations (6 functions): {'WORKING' if github_works else 'READY (needs token)'}"
-        )
-        print(
-            f"🔄 Complete Workflow Integration: {'VERIFIED' if local_git_works else 'PENDING'}"
-        )
+        print(f"✅ Local Git Operations (22 functions): {'WORKING' if local_git_works else 'FAILED'}")
+        print(f"🐙 GitHub API Operations (6 functions): {'WORKING' if github_works else 'READY (needs token)'}")
+        print(f"🔄 Complete Workflow Integration: {'VERIFIED' if local_git_works else 'PENDING'}")
 
         if local_git_works and not github_works:
             print("\n💡 TO ENABLE FULL GITHUB TESTING:")
@@ -325,7 +309,6 @@ def main():
     except Exception as e:
         print(f"\n❌ Error during demonstration: {e}")
         import traceback
-
         traceback.print_exc()
 
 

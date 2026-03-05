@@ -12,12 +12,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 def main() -> int:

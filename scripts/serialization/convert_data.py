@@ -16,8 +16,8 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import csv
 import json
+import csv
 
 
 def load_json(path: Path) -> any:

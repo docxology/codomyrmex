@@ -61,15 +61,14 @@ def colorize(text: str, color: str) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "cli" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/cli/config.yaml")
+            print(f"Loaded config from config/cli/config.yaml")
 
     parser = argparse.ArgumentParser(description="CLI utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -99,7 +98,7 @@ def main():
 
     if args.command == "info":
         cols, rows = get_terminal_size()
-        print("🖥️  Terminal Info:\n")
+        print(f"🖥️  Terminal Info:\n")
         print(f"   Size: {cols}x{rows}")
         print(f"   Python: {sys.version.split()[0]}")
         print(f"   Platform: {sys.platform}")

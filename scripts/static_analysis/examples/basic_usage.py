@@ -18,26 +18,23 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.static_analysis import StaticAnalyzer, analyze_file, get_available_tools
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.static_analysis import (
+    StaticAnalyzer,
+    get_available_tools,
+    analyze_file
 )
-
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "static_analysis" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/static_analysis/config.yaml")
+            print(f"Loaded config from config/static_analysis/config.yaml")
 
     setup_logging()
     print_info("Running Static Analysis Examples...")

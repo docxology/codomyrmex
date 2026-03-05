@@ -3,9 +3,9 @@
 Basic Setup & Connection Verification for Antigravity
 """
 
-import logging
 import sys
 from pathlib import Path
+import logging
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent

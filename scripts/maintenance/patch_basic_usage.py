@@ -9,7 +9,7 @@ for folder, prompt_arg, default_prompt in [
     path = f"scripts/{folder}/examples/basic_usage.py"
     if not os.path.exists(path): continue
 
-    with open(path) as f:
+    with open(path, "r") as f:
         content = f.read()
 
     # Fix outputs

@@ -13,8 +13,8 @@ from pathlib import Path
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
-from codomyrmex.market import DemandAggregator, ReverseAuction
-from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+from codomyrmex.market import ReverseAuction, DemandAggregator
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 
 
 def demo_reverse_auction():
@@ -79,13 +79,12 @@ def demo_aggregation():
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "demos" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
             print(f"Loaded config from {config_path.name}")
 

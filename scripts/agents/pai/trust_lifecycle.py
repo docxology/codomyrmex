@@ -25,24 +25,20 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    DESTRUCTIVE_TOOL_COUNT,
+    TrustLevel,
     DESTRUCTIVE_TOOLS,
     SAFE_TOOL_COUNT,
-    TrustLevel,
+    DESTRUCTIVE_TOOL_COUNT,
+    verify_capabilities,
+    trust_tool,
+    trust_all,
+    trusted_call_tool,
     get_trust_report,
     is_trusted,
     reset_trust,
-    trust_all,
-    trust_tool,
-    trusted_call_tool,
-    verify_capabilities,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_success, print_warning, print_error,
 )
 
 PHASES = ["reset", "verify", "trust-one", "trust-all", "execute"]
@@ -189,7 +185,7 @@ def main() -> int:
     args = parse_args()
     setup_logging()
 
-    print("🔐 PAI Trust Lifecycle Demo")
+    print(f"🔐 PAI Trust Lifecycle Demo")
     print(f"   Trust model: {' → '.join(t.value for t in TrustLevel)}")
 
     results: dict = {}

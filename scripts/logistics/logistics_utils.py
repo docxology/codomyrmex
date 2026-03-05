@@ -59,15 +59,14 @@ def create_schedule(tasks: list, start_date: datetime = None) -> list:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "logistics" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/logistics/config.yaml")
+            print(f"Loaded config from config/logistics/config.yaml")
 
     parser = argparse.ArgumentParser(description="Logistics utilities")
     subparsers = parser.add_subparsers(dest="command")
@@ -109,7 +108,7 @@ def main():
             print("📊 Using sample tasks (provide JSON file for custom)\n")
 
         result = estimate_time(tasks)
-        print("⏱️  Time Estimate:\n")
+        print(f"⏱️  Time Estimate:\n")
         for item in result["breakdown"]:
             print(f"   {item['name']}: {item['hours']}h")
         print(f"\n   Total: {result['total_hours']}h ({result['total_days']} days)")

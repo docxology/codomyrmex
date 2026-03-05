@@ -19,6 +19,7 @@ import argparse
 import json
 import os
 
+
 DEFAULT_FLAGS = {
     "new_dashboard": {"enabled": False, "description": "New dashboard UI"},
     "dark_mode": {"enabled": True, "description": "Dark mode support"},
@@ -58,15 +59,14 @@ def is_enabled(flags: dict, name: str) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "feature_flags" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/feature_flags/config.yaml")
+            print(f"Loaded config from config/feature_flags/config.yaml")
 
     parser = argparse.ArgumentParser(description="Feature flags utilities")
     subparsers = parser.add_subparsers(dest="command")

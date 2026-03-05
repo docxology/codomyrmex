@@ -4,10 +4,10 @@ GUI Chat Automation for Antigravity using AppleScript.
 Sends keystrokes directly to the active window/pane.
 """
 
+import sys
+import subprocess
 import argparse
 import logging
-import subprocess
-import sys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')

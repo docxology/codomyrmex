@@ -43,12 +43,7 @@ _PAI_PM_PORT   = 8888
 _CODO_PORT     = 8787
 
 try:
-    from codomyrmex.utils.cli_helpers import (
-        print_error,
-        print_info,
-        print_success,
-        setup_logging,
-    )
+    from codomyrmex.utils.cli_helpers import print_error, print_info, print_success, setup_logging
     from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
 except ImportError as exc:
     print(f"[ERROR] Cannot import codomyrmex: {exc}", file=sys.stderr)

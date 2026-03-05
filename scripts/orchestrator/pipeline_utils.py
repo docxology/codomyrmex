@@ -114,7 +114,7 @@ def main() -> int:
         errors = validate_pipeline(pipeline)
 
         if errors:
-            print("❌ Validation failed:\n")
+            print(f"❌ Validation failed:\n")
             for e in errors:
                 print(f"   - {e}")
             return 1

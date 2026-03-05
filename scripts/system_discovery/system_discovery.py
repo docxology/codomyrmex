@@ -17,8 +17,8 @@ except ImportError:
 
 import argparse
 import os
-import platform
 import subprocess
+import platform
 
 
 def get_system_info() -> dict:
@@ -101,15 +101,14 @@ def discover_environment() -> dict:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "system_discovery" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/system_discovery/config.yaml")
+            print(f"Loaded config from config/system_discovery/config.yaml")
 
     parser = argparse.ArgumentParser(description="System discovery")
     subparsers = parser.add_subparsers(dest="command")

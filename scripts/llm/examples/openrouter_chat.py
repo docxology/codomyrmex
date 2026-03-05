@@ -27,12 +27,12 @@ Usage:
     python openrouter_chat.py --batch "Hello" "How are you?" "Tell me a joke"
 """
 
+import sys
+import os
 import argparse
 import json
-import os
-import sys
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 
 # Ensure codomyrmex is in path
 try:
@@ -42,11 +42,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.llm.providers import (
+    get_provider,
+    ProviderType,
+    ProviderConfig,
     Message,
     OpenRouterProvider,
-    ProviderConfig,
-    ProviderType,
-    get_provider,
 )
 
 # Default config file locations
@@ -311,15 +311,14 @@ def run_batch_chat(
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "llm" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/llm/config.yaml")
+            print(f"Loaded config from config/llm/config.yaml")
 
     parser = argparse.ArgumentParser(
         description="OpenRouter Interactive Chat - Multi-turn Conversations",

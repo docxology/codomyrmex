@@ -28,9 +28,7 @@ except ImportError:
 
 from codomyrmex.agents.pai import PAIBridge
 from codomyrmex.utils.cli_helpers import (
-    print_info,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_warning,
 )
 
 
@@ -140,7 +138,7 @@ def lifecycle_analysis(bridge: PAIBridge) -> dict:
             for h in hooks:
                 print(f"    • {h}")
         else:
-            print("    (none)")
+            print(f"    (none)")
 
     # Map to Algorithm phases
     phase_mapping = {
@@ -150,7 +148,7 @@ def lifecycle_analysis(bridge: PAIBridge) -> dict:
         "prompt": "OBSERVE (1/7) — user prompt processing",
     }
 
-    print("\n  Hook → Algorithm Phase Mapping:")
+    print(f"\n  Hook → Algorithm Phase Mapping:")
     for cat, phase in phase_mapping.items():
         has = "✅" if categories[cat] else "❌"
         print(f"    {has} {cat:10s} → {phase}")

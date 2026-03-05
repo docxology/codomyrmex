@@ -17,10 +17,10 @@ Usage::
     --list-categories     Show all discovered categories and exit
 """
 
-import argparse
 import re
-import subprocess
 import sys
+import argparse
+import subprocess
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -526,10 +526,10 @@ def render_skill_md(
     summary = f"{skill_name} operations using Codomyrmex modules: {module_str}."
 
     parts = [
-        "---",
+        f"---",
         f"name: {skill_name}",
         f"description: {description}",
-        "---",
+        f"---",
         f"# {skill_name}",
         "",
         summary,

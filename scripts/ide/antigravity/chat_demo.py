@@ -4,9 +4,9 @@ Chat Messaging Demo for Antigravity
 Demonstrates sending messages to the Antigravity chat interface.
 """
 
-import logging
 import sys
 from pathlib import Path
+import logging
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent

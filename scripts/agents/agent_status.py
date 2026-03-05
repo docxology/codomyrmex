@@ -81,7 +81,7 @@ def main():
 
     # Health check
     health = check_agent_health()
-    print("🔧 System:")
+    print(f"🔧 System:")
     print(f"   Python: {health['python_version']}")
     print(f"   Codomyrmex: {'✅ Available' if health['codomyrmex_available'] else '❌ Not installed'}")
     if health["env_vars"]:

@@ -10,7 +10,7 @@ Verifies Privacy module functionality:
 import sys
 
 from codomyrmex.privacy import CrumbCleaner, MixnetProxy
-from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 
 
 def verify_privacy():
@@ -23,7 +23,10 @@ def verify_privacy():
         "timestamp": "2023-01-01",
         "location": {"lat": 10, "lon": 20},
         "payload": "secret message",
-        "meta": {"device_id": "iphone", "valid": True},
+        "meta": {
+             "device_id": "iphone",
+             "valid": True
+        }
     }
 
     clean = cleaner.scrub(data)
@@ -50,7 +53,6 @@ def main() -> int:
     verify_privacy()
     print_success("Phase 3 Verification Complete")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())

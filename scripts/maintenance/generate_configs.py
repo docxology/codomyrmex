@@ -7,9 +7,8 @@ corresponding dedicated configuration directory in the `/config/` root,
 complete with a comprehensive default `config.yaml`.
 """
 
-from pathlib import Path
-
 import yaml
+from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 SRC_DIR = REPO_ROOT / "src" / "codomyrmex"
@@ -76,7 +75,7 @@ def sync_configs():
         else:
             updated_count += 1
 
-    print("\n✅ Synchronization complete.")
+    print(f"\n✅ Synchronization complete.")
     print(f"Created {created_count} new config files. Skipped {updated_count} existing.")
 
 if __name__ == "__main__":

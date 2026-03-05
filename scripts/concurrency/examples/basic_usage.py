@@ -18,11 +18,11 @@ Environment Variables:
 """
 
 import sys
-import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.parent
@@ -30,7 +30,6 @@ sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -73,7 +72,7 @@ class ConcurrencyScript(ScriptBase):
             help="Skip Redis lock tests (if Redis unavailable)"
         )
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute concurrency demonstrations and tests."""
         results = {
             "tests_run": 0,
@@ -174,7 +173,7 @@ class ConcurrencyScript(ScriptBase):
 
         return results
 
-    def _test_local_lock(self, iterations: int, timeout: float) -> dict[str, Any]:
+    def _test_local_lock(self, iterations: int, timeout: float) -> Dict[str, Any]:
         """Test LocalLock acquire/release cycles."""
         from codomyrmex.concurrency import LocalLock
 
@@ -198,7 +197,7 @@ class ConcurrencyScript(ScriptBase):
             "min_time_ms": min(times),
         }
 
-    def _test_semaphore(self, limit: int, workers: int, iterations: int) -> dict[str, Any]:
+    def _test_semaphore(self, limit: int, workers: int, iterations: int) -> Dict[str, Any]:
         """Test semaphore with concurrent access."""
         from codomyrmex.concurrency import LocalSemaphore
 
@@ -238,9 +237,9 @@ class ConcurrencyScript(ScriptBase):
             "within_limit": max_concurrent[0] <= limit,
         }
 
-    def _test_lock_manager(self, iterations: int, timeout: float) -> dict[str, Any]:
+    def _test_lock_manager(self, iterations: int, timeout: float) -> Dict[str, Any]:
         """Test LockManager multi-resource acquisition."""
-        from codomyrmex.concurrency import LocalLock, LockManager
+        from codomyrmex.concurrency import LockManager, LocalLock
 
         manager = LockManager()
         resources = ["resource_a", "resource_b", "resource_c"]
@@ -264,7 +263,7 @@ class ConcurrencyScript(ScriptBase):
             "total_releases": stats.total_releases,
         }
 
-    def _test_read_write_lock(self, workers: int, iterations: int) -> dict[str, Any]:
+    def _test_read_write_lock(self, workers: int, iterations: int) -> Dict[str, Any]:
         """Test ReadWriteLock with concurrent readers and writers."""
         from codomyrmex.concurrency import ReadWriteLock
 
@@ -311,7 +310,7 @@ class ConcurrencyScript(ScriptBase):
             "final_value": shared_data["value"],
         }
 
-    def _stress_test(self, workers: int, iterations: int) -> dict[str, Any]:
+    def _stress_test(self, workers: int, iterations: int) -> Dict[str, Any]:
         """Stress test with mixed concurrent operations."""
         from codomyrmex.concurrency import LocalLock, LocalSemaphore
 

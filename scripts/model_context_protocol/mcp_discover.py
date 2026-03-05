@@ -26,7 +26,7 @@ from codomyrmex.model_context_protocol.discovery import (
     SpecificationScanner,
     ToolCatalog,
 )
-from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 
 
 def find_spec_files(base_path: Path) -> list:

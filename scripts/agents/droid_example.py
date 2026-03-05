@@ -15,12 +15,7 @@ except ImportError:
 
 from codomyrmex.agents import DroidController
 from codomyrmex.agents.droid import DroidConfig, DroidMode
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_error, print_info
 
 
 def sample_task(data: dict) -> str:
@@ -30,15 +25,14 @@ def sample_task(data: dict) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/agents/config.yaml")
+            print(f"Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_info("Initializing Droid Controller...")

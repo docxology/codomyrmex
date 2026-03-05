@@ -21,8 +21,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.orchestrator import Workflow, RetryPolicy, TaskResult
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.orchestrator import RetryPolicy, TaskResult, Workflow
 
 logger = get_logger(__name__)
 

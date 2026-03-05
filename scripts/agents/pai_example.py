@@ -26,11 +26,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
+    PAIBridge,
     ALGORITHM_PHASES,
     PAI_PRINCIPLES,
-    PAI_UPSTREAM_URL,
     RESPONSE_DEPTH_LEVELS,
-    PAIBridge,
+    PAI_UPSTREAM_URL,
 )
 
 SUBSYSTEMS = [

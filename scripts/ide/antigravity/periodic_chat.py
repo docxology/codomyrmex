@@ -4,13 +4,13 @@ Periodic Chat Messaging for Antigravity.
 Simulates a "Real IDE UX" by sending status updates or messages on a timer.
 """
 
+import sys
+import os
+import time
 import argparse
 import logging
-import os
-import sys
-import time
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent

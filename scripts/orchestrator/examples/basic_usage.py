@@ -15,20 +15,13 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 import asyncio
-
 from codomyrmex.orchestrator import Workflow
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
-
 
 async def main() -> int:
     setup_logging()
-    print_info("Running Basic orchestrator Usage...")
+    print_info(f"Running Basic orchestrator Usage...")
 
     # 1. Workflow Creation
     print_info("Creating a real orchestration workflow...")
@@ -68,7 +61,7 @@ async def main() -> int:
     except Exception as e:
         print_error(f"Workflow execution failed: {e}")
 
-    print_success("Basic orchestrator Usage completed successfully")
+    print_success(f"Basic orchestrator Usage completed successfully")
     return 0
 
 if __name__ == "__main__":

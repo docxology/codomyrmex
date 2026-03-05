@@ -1,6 +1,5 @@
 import imageio
 import numpy as np
-
 try:
     writer = imageio.get_writer('output/test_encoding.mp4', fps=20)
     for i in range(20):

@@ -28,17 +28,13 @@ except ImportError:
 
 from codomyrmex.agents.pai import (
     call_tool,
-    reset_trust,
-    trust_all,
     trusted_call_tool,
     verify_capabilities,
+    trust_all,
+    reset_trust,
 )
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    print_warning,
-    setup_logging,
+    setup_logging, print_info, print_success, print_warning, print_error,
 )
 
 PATTERNS = ["direct", "trusted", "dynamic", "errors"]

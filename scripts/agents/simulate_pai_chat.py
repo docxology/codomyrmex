@@ -13,13 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from codomyrmex.tests.simulation.pai_simulator import PAISimulator
-
-from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_success,
-    setup_logging,
-)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 def main() -> int:

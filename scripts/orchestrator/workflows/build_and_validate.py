@@ -22,8 +22,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator import RetryPolicy, Workflow
-from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
+from codomyrmex.orchestrator import Workflow, RetryPolicy
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
 
 
 async def clean_build(_task_results: dict = None) -> dict:

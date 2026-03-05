@@ -1,8 +1,7 @@
 import os
-import sys
 import urllib.request
-
 from google import genai
+import sys
 
 api_key = os.environ.get("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)

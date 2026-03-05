@@ -22,13 +22,8 @@ except ImportError:
 
 from codomyrmex.auth import Authenticator
 from codomyrmex.utils.cli_helpers import (
-    print_error,
-    print_info,
-    print_section,
-    print_success,
-    setup_logging,
+    setup_logging, print_success, print_info, print_error, print_section
 )
-
 
 def run_auth_lifecycle():
     setup_logging()

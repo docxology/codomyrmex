@@ -13,8 +13,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from codomyrmex.data_lineage import EdgeType, ImpactAnalyzer, LineageTracker, NodeType
-
+from codomyrmex.data_lineage import LineageTracker, ImpactAnalyzer, NodeType, EdgeType
 
 def main() -> int:
     print("--- Starting Data Lineage Demo ---")
@@ -55,7 +54,7 @@ def main() -> int:
     # 4. Register Downstream Consumers (Models/Dashboards)
     print("Registering downstream consumers...")
     # Manual node creation for specific types
-    from codomyrmex.data_lineage import LineageEdge, LineageNode
+    from codomyrmex.data_lineage import LineageNode, LineageEdge
 
     # Model
     model_node = LineageNode(id="revenue_forecast", name="Revenue Forecast Model", node_type=NodeType.MODEL)

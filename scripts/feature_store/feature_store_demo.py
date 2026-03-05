@@ -5,8 +5,8 @@ Feature Store Demo Script
 Demonstrates functionality of the feature_store module.
 """
 
-import math
 import sys
+import math
 from pathlib import Path
 
 # Add project root to path
@@ -16,14 +16,13 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from codomyrmex.feature_store import (
     FeatureDefinition,
     FeatureGroup,
-    FeatureService,
-    FeatureStoreError,
-    FeatureTransform,
     FeatureType,
-    InMemoryFeatureStore,
     ValueType,
+    FeatureService,
+    FeatureTransform,
+    InMemoryFeatureStore,
+    FeatureStoreError,
 )
-
 
 def main() -> int:
     print("--- Codomyrmex Feature Store Orchestrator ---")

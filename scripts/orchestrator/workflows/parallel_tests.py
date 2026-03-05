@@ -18,7 +18,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
@@ -28,7 +28,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-def discover_test_files(test_dir: Path, markers: str = None) -> list[Path]:
+def discover_test_files(test_dir: Path, markers: str = None) -> List[Path]:
     """Discover all test files.
 
     Args:
@@ -44,7 +44,7 @@ def discover_test_files(test_dir: Path, markers: str = None) -> list[Path]:
     return sorted(test_files)
 
 
-def split_into_groups(files: list[Path], num_groups: int) -> list[list[Path]]:
+def split_into_groups(files: List[Path], num_groups: int) -> List[List[Path]]:
     """Split files into roughly equal groups.
 
     Args:
@@ -67,10 +67,10 @@ def split_into_groups(files: list[Path], num_groups: int) -> list[list[Path]]:
 
 async def run_test_group(
     group_id: int,
-    test_files: list[Path],
+    test_files: List[Path],
     coverage: bool = False,
     markers: str = None
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """Run a group of tests.
 
     Args:
@@ -143,7 +143,7 @@ async def run_test_group(
     }
 
 
-async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
+async def merge_coverage_reports(num_groups: int) -> Dict[str, Any]:
     """Merge coverage reports from parallel runs.
 
     Args:
@@ -203,9 +203,9 @@ async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
 
 
 async def generate_test_report(
-    group_results: list[dict[str, Any]],
-    coverage_data: dict[str, Any] = None
-) -> dict[str, Any]:
+    group_results: List[Dict[str, Any]],
+    coverage_data: Dict[str, Any] = None
+) -> Dict[str, Any]:
     """Generate comprehensive test report.
 
     Args:

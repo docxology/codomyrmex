@@ -258,14 +258,14 @@ def generate_readme(info: dict) -> str:
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
         lines.append("")
         first_cls = info["classes"][0]["name"]
-        lines.append("# Initialize")
+        lines.append(f"# Initialize")
         lines.append(f"instance = {first_cls}()")
     elif info["functions"]:
         imports = ", ".join(f["name"] for f in info["functions"][:3])
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
         lines.append("")
         first_fn = info["functions"][0]["name"]
-        lines.append("# Use the module")
+        lines.append(f"# Use the module")
         lines.append(f"result = {first_fn}()")
     else:
         lines.append(f"from codomyrmex.{info['name']} import *  # See source for specific imports")
@@ -443,16 +443,16 @@ def generate_spec(info: dict) -> str:
     lines.append("")
     if info["classes"]:
         imports = ", ".join(c["name"] for c in info["classes"][:5])
-        lines.append("```python")
+        lines.append(f"```python")
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
-        lines.append("```")
+        lines.append(f"```")
     elif info["functions"]:
         imports = ", ".join(f["name"] for f in info["functions"][:5])
-        lines.append("```python")
+        lines.append(f"```python")
         lines.append(f"from codomyrmex.{info['name']} import {imports}")
-        lines.append("```")
+        lines.append(f"```")
     else:
-        lines.append("See source module for available exports.")
+        lines.append(f"See source module for available exports.")
     lines.append("")
 
     # Testing
@@ -490,15 +490,14 @@ def should_enrich(module_name: str, doc_file: Path, info: dict) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/documentation/config.yaml")
+            print(f"Loaded config from config/documentation/config.yaml")
 
     enriched_count = 0
     skipped_count = 0

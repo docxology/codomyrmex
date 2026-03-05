@@ -47,7 +47,7 @@ class TestSerializationIntegration:
 
     def test_import_serialize_deserialize(self):
         """Verify serialize/deserialize functions."""
-        from codomyrmex.serialization import deserialize, serialize
+        from codomyrmex.serialization import serialize, deserialize
 
         data = {"key": "value", "number": 42}
         serialized = serialize(data, format="json")
@@ -68,7 +68,7 @@ class TestValidationIntegration:
 
     def test_import_validator(self):
         """Verify Validator class."""
-        from codomyrmex.validation.validator import ValidationResult, Validator
+        from codomyrmex.validation.validator import Validator, ValidationResult
 
         assert Validator is not None
         assert ValidationResult is not None
@@ -124,7 +124,7 @@ class TestOrchestratorIntegration:
 
     def test_import_workflow(self):
         """Verify Workflow and Task imports."""
-        from codomyrmex.orchestrator import Task, TaskStatus, Workflow
+        from codomyrmex.orchestrator import Workflow, Task, TaskStatus
 
         assert Workflow is not None
         assert Task is not None
@@ -132,7 +132,7 @@ class TestOrchestratorIntegration:
 
     def test_import_runners(self):
         """Verify runner functions."""
-        from codomyrmex.orchestrator import run_function, run_script
+        from codomyrmex.orchestrator import run_script, run_function
 
         assert callable(run_script)
         assert callable(run_function)
@@ -192,8 +192,8 @@ class TestVisualizationIntegration:
 
     def test_import_report_classes(self):
         """Verify report classes import."""
-        from codomyrmex.data_visualization import generate_report
         from codomyrmex.data_visualization.reports.general import GeneralSystemReport
+        from codomyrmex.data_visualization import generate_report
 
         assert GeneralSystemReport is not None
         assert callable(generate_report)

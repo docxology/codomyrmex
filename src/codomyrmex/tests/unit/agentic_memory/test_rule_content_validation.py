@@ -1,6 +1,5 @@
-from pathlib import Path
-
 import pytest
+from pathlib import Path
 
 from codomyrmex.agentic_memory.rules.registry import RuleRegistry
 
@@ -23,12 +22,7 @@ def test_all_cursorrules_have_sections_0_to_7() -> None:
 
         missing = expected_sections - actual_sections
         if missing:
-            violations.append(
-                f"{rule.file_path.name} is missing sections: {sorted(list(missing))}"
-            )
+            violations.append(f"{rule.file_path.name} is missing sections: {sorted(list(missing))}")
 
     if violations:
-        pytest.fail(
-            "The following .cursorrules files are missing required sections:\n"
-            + "\n".join(violations)
-        )
+        pytest.fail("The following .cursorrules files are missing required sections:\n" + "\n".join(violations))

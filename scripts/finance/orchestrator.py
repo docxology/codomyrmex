@@ -5,26 +5,20 @@ Demonstrates Ledger, Taxes, Payroll, and Forecasting.
 """
 
 from codomyrmex.finance import (
-    AccountType,
-    Forecaster,
-    Ledger,
-    PayrollProcessor,
-    TaxCalculator,
+    Ledger, AccountType, TaxCalculator, PayrollProcessor, Forecaster
 )
 from codomyrmex.finance.visualization import balance_sheet_text, income_statement_text
 
-
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "finance" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/finance/config.yaml")
+            print(f"Loaded config from config/finance/config.yaml")
 
     print("--- Codomyrmex Finance Orchestrator ---")
 

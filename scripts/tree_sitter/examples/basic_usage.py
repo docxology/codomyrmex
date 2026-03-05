@@ -13,14 +13,13 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Optional
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
-
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -64,7 +63,7 @@ class TreeSitterScript(ScriptBase):
             help="Display full AST structure"
         )
 
-    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
         """Execute tree-sitter demonstrations."""
         results = {
             "tests_run": 0,
@@ -81,7 +80,7 @@ class TreeSitterScript(ScriptBase):
             return results
 
         # Import tree_sitter module (after dry_run check)
-        from codomyrmex.tree_sitter import LanguageManager, TreeSitterParser
+        from codomyrmex.tree_sitter import TreeSitterParser, LanguageManager
 
         # Sample code for different languages
         sample_code = self._get_sample_code(args.language)
@@ -475,7 +474,7 @@ int main() {
         }
         return samples.get(language, samples["python"])
 
-    def _get_default_queries(self, language: str, custom_query: str | None = None) -> dict[str, str]:
+    def _get_default_queries(self, language: str, custom_query: Optional[str] = None) -> Dict[str, str]:
         """Get default queries for the language."""
         queries = {}
 
@@ -525,7 +524,7 @@ int main() {
             count += self._count_nodes(child)
         return count
 
-    def _collect_node_types(self, node, types: dict[str, int]):
+    def _collect_node_types(self, node, types: Dict[str, int]):
         """Collect node type counts."""
         types[node.type] = types.get(node.type, 0) + 1
         for child in node.children:
@@ -545,15 +544,14 @@ int main() {
 
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
+    from pathlib import Path
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "tree_sitter" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/tree_sitter/config.yaml")
+            print(f"Loaded config from config/tree_sitter/config.yaml")
 
 if __name__ == "__main__":
     script = TreeSitterScript()
