@@ -312,6 +312,13 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: projects/test_project/src/agent_brain.py (edit), projects/test_project/tests/test_agent_brain_integration.py (edit), projects/test_project/src/knowledge_search.py (edit), projects/test_project/src/mcp_explorer.py (edit), projects/test_project/src/llm_inference.py (edit), projects/test_project/tests/test_mcp_explorer_integration.py (edit), projects/test_project/tests/test_llm_inference_integration.py (edit), projects/test_project/src/security_audit.py (edit), projects/test_project/tests/test_security_audit_integration.py (edit)
+Files: MEMORY/WORK/20260305-103000_desloppify-deep-fix/PRD.md (create), src/codomyrmex/data_visualization/plots/scatter.py (edit), src/codomyrmex/data_visualization/plots/__init__.py (edit), src/codomyrmex/tests/unit/data_visualization/test_plots.py (edit), .desloppify/external_review_sessions/ext_20260305_200903_b1a348b9/review_result.json (create), .desloppify/external_review_sessions/ext_20260305_200903_b1a348b9/review_result.json (edit), src/codomyrmex/orchestrator/thin.py (edit), src/codomyrmex/agents/droid/generators/documentation.py (edit)
+
+## Crash Recovery
+Last session (2026-03-05T11:47:43.325657) was not properly closed (crash/kill).
+Recorded 13 file changes before crash.
+Last changed files: src/codomyrmex/agents/droid/generators/documentation.py, src/codomyrmex/orchestrator/thin.py, .desloppify/external_review_sessions/ext_20260305_200903_b1a348b9/review_result.json, src/codomyrmex/tests/unit/data_visualization/test_plots.py, src/codomyrmex/data_visualization/plots/__init__.py
+Bridge from previous session is valid (above).
+For details use: memory_search("changes last session")
 
 # === END COGNILAYER ===

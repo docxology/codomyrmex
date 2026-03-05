@@ -117,15 +117,29 @@ def shell(
 ) -> dict[str, Any]:
     """Execute a shell command.
 
+    This function always returns a dict — it never raises on process failure
+    or timeout (unless ``check=True``). Callers must inspect ``result["success"]``
+    to detect errors.  This is an intentional "command result object" contract
+    so orchestration pipelines can aggregate outcomes without try/except at every
+    call site.
+
     Args:
         command: Shell command to execute
         timeout: Execution timeout
         env: Additional environment variables
         cwd: Working directory
-        check: Raise exception on non-zero exit
+        check: If True, raise :class:`subprocess.CalledProcessError` on non-zero exit.
+            All other errors (timeout, OS error) still return a dict.
 
     Returns:
-        Result dictionary with stdout, stderr, returncode
+        dict with keys:
+            - ``success`` (bool): True if returncode == 0
+            - ``command`` (str): The original command string
+            - ``returncode`` (int | None): Exit code, or None on timeout
+            - ``stdout`` (str): Captured stdout (empty string on error)
+            - ``stderr`` (str): Captured stderr (empty string on error)
+            - ``execution_time`` (float): Elapsed seconds
+            - ``error`` (str): Human-readable error description (timeout/OS errors only)
     """
     run_env = os.environ.copy()
     if env:

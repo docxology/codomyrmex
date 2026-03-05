@@ -387,7 +387,6 @@ This module provides tools for assessing documentation quality,
 consistency, and technical accuracy across the Codomyrmex platform.
 """
 
-from typing import Dict, List, Optional, Tuple
 from pathlib import Path
 import re
 
@@ -404,7 +403,7 @@ class DocumentationQualityAnalyzer:
             "structure": 0
         }
 
-    def analyze_file(self, file_path: Path) -> Dict[str, float]:
+    def analyze_file(self, file_path: Path) -> dict[str, float]:
         """Analyze a single documentation file."""
         if not file_path.exists():
             return {"error": "File not found"}
@@ -640,7 +639,7 @@ class DocumentationConsistencyChecker:
             "Installation", "Usage", "API Reference", "Examples"
         ]
 
-    def check_project_consistency(self, project_path: Path) -> Dict[str, List[str]]:
+    def check_project_consistency(self, project_path: Path) -> dict[str, list[str]]:
         """Check consistency across the entire project."""
         issues = {
             "naming": [],
@@ -666,7 +665,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_naming_conventions(self, md_files: List[Path]) -> List[str]:
+    def _check_naming_conventions(self, md_files: list[Path]) -> list[str]:
         """Check file and header naming conventions."""
         issues = []
 
@@ -691,7 +690,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_formatting_consistency(self, md_files: List[Path]) -> List[str]:
+    def _check_formatting_consistency(self, md_files: list[Path]) -> list[str]:
         """Check formatting consistency."""
         issues = []
 
@@ -721,7 +720,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_content_consistency(self, md_files: List[Path]) -> List[str]:
+    def _check_content_consistency(self, md_files: list[Path]) -> list[str]:
         """Check content consistency."""
         issues = []
 
@@ -752,7 +751,7 @@ class DocumentationConsistencyChecker:
 
         return issues
 
-    def _check_structural_consistency(self, md_files: List[Path]) -> List[str]:
+    def _check_structural_consistency(self, md_files: list[Path]) -> list[str]:
         """Check structural consistency."""
         issues = []
 
