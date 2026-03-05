@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.3"><img src="https://img.shields.io/badge/release-v1.1.3-blueviolet?style=flat-square" alt="Release"></a>
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.4"><img src="https://img.shields.io/badge/release-v1.1.4-blueviolet?style=flat-square" alt="Release"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License: MIT"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-≥3.10-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
@@ -20,7 +20,7 @@
   <a href="docs/getting-started/GETTING_STARTED_WITH_AGENTS.md">Agent Guide</a> •
   <a href="docs/">Documentation</a> •
   <a href="CONTRIBUTING.md">Contributing</a> •
-  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.3">v1.1.3 Release</a>
+  <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.4">v1.1.4 Release</a>
 </p>
 
 ---

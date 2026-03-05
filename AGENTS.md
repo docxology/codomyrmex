@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.1.3 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -432,7 +432,7 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.1.3** (March 2026) - Release: 127 modules, 545 `@mcp_tool` decorators, repo-wide version sync to v1.1.3, RASP doc compliance 127/127
+- **v1.1.4** (March 2026) - Release: 127 modules, 545 `@mcp_tool` decorators, repo-wide version sync to v1.1.4, RASP doc compliance 127/127
 - **v1.0.8** (March 2026) - Repo-wide doc audit: module count updated to 126; MCP auto-discovered updated to 121 (Sprint 22); ~407 dynamic tools; all metric references reconciled
 - **v1.0.7** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
 - **v1.0.5** (March 2026) - Sprint 16 MCP coverage, ruff violations zeroed, circular imports resolved
