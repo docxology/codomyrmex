@@ -19,7 +19,7 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
         pass
-#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
+    #         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     # Define paths to check
     project_root = Path(__file__).parent.parent.parent.parent.parent
@@ -31,16 +31,15 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
 
     # Check README files
     readme_checks = []
-    readme_locations = [
-        project_root / "README.md",
-        docs_path / "README.md"
-    ]
+    readme_locations = [project_root / "README.md", docs_path / "README.md"]
 
     for readme_path in readme_locations:
         if readme_path.exists():
             content = readme_path.read_text()
             score = assess_readme_quality(content, readme_path)
-            readme_checks.append(f"✅ {readme_path.relative_to(project_root)}: Score {score}/100")
+            readme_checks.append(
+                f"✅ {readme_path.relative_to(project_root)}: Score {score}/100"
+            )
         else:
             readme_checks.append(f"❌ {readme_path.relative_to(project_root)}: Missing")
 
@@ -52,14 +51,16 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     agents_locations = [
         project_root / "AGENTS.md",
         project_root / "src" / "AGENTS.md",
-        project_root / "docs" / "AGENTS.md"
+        project_root / "docs" / "AGENTS.md",
     ]
 
     for agents_path in agents_locations:
         if agents_path.exists():
             content = agents_path.read_text()
             score = assess_agents_quality(content, agents_path)
-            agents_checks.append(f"✅ {agents_path.relative_to(project_root)}: Score {score}/100")
+            agents_checks.append(
+                f"✅ {agents_path.relative_to(project_root)}: Score {score}/100"
+            )
         else:
             agents_checks.append(f"❌ {agents_path.relative_to(project_root)}: Missing")
 
@@ -74,7 +75,9 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
         for doc_path in md_files[:5]:  # Check first 5 files
             content = doc_path.read_text()
             score = assess_technical_accuracy(content, doc_path)
-            tech_docs_checks.append(f"✅ {doc_path.relative_to(project_root)}: Score {score}/100")
+            tech_docs_checks.append(
+                f"✅ {doc_path.relative_to(project_root)}: Score {score}/100"
+            )
 
         if len(md_files) > 5:
             tech_docs_checks.append(f"📁 ... and {len(md_files) - 5} more files")
@@ -85,7 +88,11 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     coverage_report.extend(tech_docs_checks)
 
     # Overall assessment
-    total_score = sum(int(check.split("Score ")[1].split("/")[0]) for check in coverage_report if "Score" in check)
+    total_score = sum(
+        int(check.split("Score ")[1].split("/")[0])
+        for check in coverage_report
+        if "Score" in check
+    )
     max_possible = len([check for check in coverage_report if "Score" in check]) * 100
     overall_score = (total_score / max_possible * 100) if max_possible > 0 else 0
 
@@ -95,7 +102,10 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     report_path = docs_path / "coverage_assessment.md"
     report_path.write_text("\n".join(coverage_report))
 
-    logger.info(f"Documentation coverage assessed: {overall_score:.1f}/100", extra={"description": description})
+    logger.info(
+        f"Documentation coverage assessed: {overall_score:.1f}/100",
+        extra={"description": description},
+    )
     return f"Documentation coverage assessed: {overall_score:.1f}/100"
 
 
@@ -183,7 +193,7 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
         pass
-#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
+    #         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     # Define the documentation module path
     project_root = Path(__file__).parent.parent.parent.parent.parent
@@ -219,16 +229,17 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
                 if "__all__" in updated_content:
                     all_index = updated_content.find("__all__")
                     updated_content = (
-                        updated_content[:all_index] +
-                        import_line + "\n" +
-                        updated_content[all_index:]
+                        updated_content[:all_index]
+                        + import_line
+                        + "\n"
+                        + updated_content[all_index:]
                     )
                 else:
                     updated_content += "\n" + import_line
 
         # Update __all__ to include new modules
         if "__all__" in updated_content:
-            all_section = updated_content[updated_content.find("__all__"):]
+            all_section = updated_content[updated_content.find("__all__") :]
             if "DocumentationQualityAnalyzer" not in all_section:
                 # Insert new items before the closing bracket
                 bracket_pos = all_section.rfind("]")
@@ -236,12 +247,13 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
                     new_items = [
                         '    "DocumentationQualityAnalyzer",',
                         '    "generate_quality_report",',
-                        '    "DocumentationConsistencyChecker",'
+                        '    "DocumentationConsistencyChecker",',
                     ]
                     updated_all = (
-                        all_section[:bracket_pos] +
-                        "\n" + "\n".join(new_items) +
-                        all_section[bracket_pos:]
+                        all_section[:bracket_pos]
+                        + "\n"
+                        + "\n".join(new_items)
+                        + all_section[bracket_pos:]
                     )
                     updated_content = updated_content.replace(all_section, updated_all)
 
@@ -255,13 +267,16 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
     files_created = [
         "quality_assessment.py",
         "consistency_checker.py",
-        "tests/test_quality_assessment.py"
+        "tests/test_quality_assessment.py",
     ]
 
     if init_path.exists():
         files_created.append("__init__.py (updated)")
 
-    logger.info(f"Documentation quality methods added: {len(files_created)} files", extra={"description": description})
+    logger.info(
+        f"Documentation quality methods added: {len(files_created)} files",
+        extra={"description": description},
+    )
     return f"Documentation quality methods added: {len(files_created)} files"
 
 
@@ -301,26 +316,35 @@ def assess_readme_quality(content: str, file_path: Path) -> int:
 def assess_agents_quality(content: str, file_path: Path) -> int:
     """Assess AGENTS.md quality based on content analysis."""
     score = 0
+    content_lower = content.lower()
 
     # Check for agent descriptions
-    if "agent" in content.lower() and "module" in content.lower():
+    if "agent" in content_lower and "module" in content_lower:
         score += 25
 
     # Check for core agent types
-    agent_types = ["code editing", "documentation", "project orchestration", "data visualization"]
-    found_types = sum(1 for agent_type in agent_types if agent_type.lower() in content.lower())
+    agent_types = [
+        "code editing",
+        "documentation",
+        "project orchestration",
+        "data visualization",
+    ]
+    agent_types_lower = [t.lower() for t in agent_types]
+    found_types = sum(
+        1 for agent_type in agent_types_lower if agent_type in content_lower
+    )
     score += found_types * 15
 
     # Check for technical content
-    if "api" in content.lower() or "configuration" in content.lower():
+    if "api" in content_lower or "configuration" in content_lower:
         score += 20
 
     # Check for examples
-    if "```" in content or "example" in content.lower():
+    if "```" in content or "example" in content_lower:
         score += 20
 
     # Check for troubleshooting
-    if "troubleshooting" in content.lower():
+    if "troubleshooting" in content_lower:
         score += 20
 
     return min(score, 100)
@@ -329,10 +353,12 @@ def assess_agents_quality(content: str, file_path: Path) -> int:
 def assess_technical_accuracy(content: str, file_path: Path) -> int:
     """Assess technical accuracy of documentation."""
     score = 0
+    content_lower = content.lower()
 
     # Check for technical terms and concepts
     technical_terms = ["api", "method", "function", "class", "module", "parameter"]
-    found_terms = sum(1 for term in technical_terms if term.lower() in content.lower())
+    technical_terms_lower = [t.lower() for t in technical_terms]
+    found_terms = sum(1 for term in technical_terms_lower if term in content_lower)
     score += found_terms * 10
 
     # Check for code references
@@ -344,11 +370,11 @@ def assess_technical_accuracy(content: str, file_path: Path) -> int:
         score += 20
 
     # Check for links to source code
-    if "github.com" in content.lower() or "source" in content.lower():
+    if "github.com" in content_lower or "source" in content_lower:
         score += 20
 
     # Check for version information
-    if any(keyword in content.lower() for keyword in ["version", "v1.", "v2."]):
+    if any(keyword in content_lower for keyword in ["version", "v1.", "v2."]):
         score += 15
 
     return min(score, 100)
@@ -398,18 +424,20 @@ class DocumentationQualityAnalyzer:
     def _assess_completeness(self, content: str) -> float:
         """Assess documentation completeness."""
         score = 0.0
+        content_lower = content.lower()
 
         # Check for essential sections
         essential_sections = [
             "overview", "installation", "usage", "api", "examples"
         ]
+        essential_sections_lower = [s.lower() for s in essential_sections]
 
-        for section in essential_sections:
-            if section.lower() in content.lower():
+        for section in essential_sections_lower:
+            if section in content_lower:
                 score += 20.0
 
         # Check for code examples
-        if "```" in content or "example" in content.lower():
+        if "```" in content or "example" in content_lower:
             score += 20.0
 
         # Check for links and references
@@ -445,14 +473,16 @@ class DocumentationQualityAnalyzer:
     def _assess_technical_accuracy(self, content: str) -> float:
         """Assess technical accuracy."""
         score = 0.0
+        content_lower = content.lower()
 
         # Check for technical terms
         technical_terms = [
             "api", "method", "function", "class", "module", "parameter",
             "return", "exception", "error", "configuration"
         ]
+        technical_terms_lower = [t.lower() for t in technical_terms]
 
-        found_terms = sum(1 for term in technical_terms if term.lower() in content.lower())
+        found_terms = sum(1 for term in technical_terms_lower if term in content_lower)
         score += min(found_terms * 5.0, 30.0)
 
         # Check for code references
@@ -460,11 +490,11 @@ class DocumentationQualityAnalyzer:
             score += 30.0
 
         # Check for proper error handling documentation
-        if "error" in content.lower() or "exception" in content.lower():
+        if "error" in content_lower or "exception" in content_lower:
             score += 20.0
 
         # Check for version information
-        if any(keyword in content.lower() for keyword in ["version", "v1.", "v2."]):
+        if any(keyword in content_lower for keyword in ["version", "v1.", "v2."]):
             score += 20.0
 
         return min(score, 100.0)
@@ -472,6 +502,7 @@ class DocumentationQualityAnalyzer:
     def _assess_readability(self, content: str) -> float:
         """Assess documentation readability."""
         score = 100.0
+        content_lower = content.lower()
 
         # Check for overly long paragraphs
         paragraphs = [p.strip() for p in content.split("\\n\\n") if p.strip()]
@@ -489,7 +520,8 @@ class DocumentationQualityAnalyzer:
 
         # Check for excessive jargon
         jargon_words = ["utilize", "facilitate", "paradigm", "methodology"]
-        jargon_count = sum(1 for word in jargon_words if word.lower() in content.lower())
+        jargon_words_lower = [j.lower() for j in jargon_words]
+        jargon_count = sum(1 for word in jargon_words_lower if word in content_lower)
 
         if jargon_count > 3:
             score -= 10.0
