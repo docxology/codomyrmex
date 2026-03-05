@@ -7,12 +7,20 @@ Extracted from data_provider.py for modularity. This mixin provides:
 - get_pai_telos(): Read TELOS life profile files
 - get_pai_memory_overview(): Stat memory subdirectories
 - get_pai_awareness_data(): Aggregate all PAI ecosystem data
+
+When the PAI PM Server (scripts/pai/pm/server.ts) is running,
+get_pai_awareness_data() delegates to its /api/awareness endpoint
+to avoid duplicating the read logic. Falls back to direct YAML reads
+when the server is not available.
 """
 
 from __future__ import annotations
 
 import json as _json
+import os
 import re
+import urllib.error
+import urllib.request
 from typing import Any
 
 import yaml
@@ -20,6 +28,11 @@ import yaml
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+# PM Server base URL — configurable via PAI_PM_PORT env var
+_PM_SERVER_PORT = os.environ.get("PAI_PM_PORT", "8889")
+_PM_SERVER_BASE = f"http://localhost:{_PM_SERVER_PORT}"
+
 
 
 class PAIProviderMixin:
@@ -281,7 +294,35 @@ class PAIProviderMixin:
         return "\n".join(lines)
 
     def get_pai_awareness_data(self) -> dict[str, Any]:
-        """Aggregate all PAI ecosystem data for the awareness dashboard."""
+        """Aggregate all PAI ecosystem data for the awareness dashboard.
+
+        When the PAI PM Server is running (default port 8889), delegates to its
+        /api/awareness endpoint for a single source of truth. Falls back to
+        direct YAML reads when the server is not available.
+        """
+        # ── HTTP-first: try PMServer /api/awareness ──
+        try:
+            req = urllib.request.Request(
+                f"{_PM_SERVER_BASE}/api/awareness",
+                headers={"Accept": "application/json"},
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                if resp.status == 200:
+                    server_data = _json.loads(resp.read().decode("utf-8"))
+                    # Augment with skills/hooks that only Python-side can discover
+                    if "skills" not in server_data:
+                        server_data["skills"] = self._discover_skills()
+                    if "hooks" not in server_data:
+                        server_data["hooks"] = self._discover_hooks()
+                    if "metrics" in server_data:
+                        server_data["metrics"]["skill_count"] = len(server_data.get("skills", []))
+                        server_data["metrics"]["hook_count"] = len(server_data.get("hooks", []))
+                    logger.debug("PAI awareness data fetched from PMServer at %s", _PM_SERVER_BASE)
+                    return server_data
+        except (urllib.error.URLError, OSError, _json.JSONDecodeError, TimeoutError) as e:
+            logger.debug("PMServer not available, falling back to YAML: %s", e)
+
+        # ── Fallback: direct YAML reads (offline mode) ──
         try:
             missions = self.get_pai_missions()
         except Exception:
@@ -303,8 +344,6 @@ class PAIProviderMixin:
         completed_tasks = 0
         for project in projects:
             tc = project.get("task_counts", {})
-            # task_counts has: completed, in_progress, remaining, blocked, optional
-            # Sum all to get total (there is no 'total' key in progress.json)
             total_tasks += sum(
                 tc.get(k, 0)
                 for k in ("completed", "in_progress", "remaining", "blocked", "optional")
@@ -315,27 +354,8 @@ class PAIProviderMixin:
             round(completed_tasks / total_tasks * 100, 1) if total_tasks > 0 else 0
         )
 
-        # Discover PAI skills and hooks
-        skills: list[str] = []
-        hooks: list[str] = []
-        try:
-            skills_dir = self._PAI_ROOT / "skills"
-            if skills_dir.exists():
-                skills = sorted(
-                    d.name for d in skills_dir.iterdir()
-                    if d.is_dir() and not d.name.startswith(".")
-                )
-        except Exception as e:
-            logger.debug("Failed to discover PAI skills: %s", e)
-        try:
-            hooks_dir = self._PAI_ROOT / "hooks"
-            if hooks_dir.exists():
-                hooks = sorted(
-                    f.stem for f in hooks_dir.iterdir()
-                    if f.is_file() and not f.name.startswith(".")
-                )
-        except Exception as e:
-            logger.debug("Failed to discover PAI hooks: %s", e)
+        skills = self._discover_skills()
+        hooks = self._discover_hooks()
 
         return {
             "missions": missions,
@@ -356,6 +376,32 @@ class PAIProviderMixin:
             },
             "mermaid_graph": self._safe_mermaid_graph(missions, projects),
         }
+
+    def _discover_skills(self) -> list[str]:
+        """Discover PAI skill directories."""
+        try:
+            skills_dir = self._PAI_ROOT / "skills"
+            if skills_dir.exists():
+                return sorted(
+                    d.name for d in skills_dir.iterdir()
+                    if d.is_dir() and not d.name.startswith(".")
+                )
+        except Exception as e:
+            logger.debug("Failed to discover PAI skills: %s", e)
+        return []
+
+    def _discover_hooks(self) -> list[str]:
+        """Discover PAI hook files."""
+        try:
+            hooks_dir = self._PAI_ROOT / "hooks"
+            if hooks_dir.exists():
+                return sorted(
+                    f.stem for f in hooks_dir.iterdir()
+                    if f.is_file() and not f.name.startswith(".")
+                )
+        except Exception as e:
+            logger.debug("Failed to discover PAI hooks: %s", e)
+        return []
 
     def _safe_mermaid_graph(
         self,
