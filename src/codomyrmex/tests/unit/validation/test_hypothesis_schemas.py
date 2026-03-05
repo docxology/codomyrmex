@@ -10,7 +10,6 @@ from hypothesis import strategies as st
 
 from codomyrmex.validation.schemas import Result, ResultStatus
 
-
 # --- Strategies ---
 
 result_statuses = st.sampled_from(list(ResultStatus))

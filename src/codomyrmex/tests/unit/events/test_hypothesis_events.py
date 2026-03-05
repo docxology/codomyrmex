@@ -10,7 +10,6 @@ from hypothesis import strategies as st
 
 from codomyrmex.events.core.event_schema import Event, EventPriority, EventType
 
-
 # --- Strategies ---
 
 event_priorities = st.sampled_from(list(EventPriority))

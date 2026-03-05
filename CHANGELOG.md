@@ -26,6 +26,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.3] - 2026-03-05 — "Quality Ratchet"
+
+Ruff Phase 3 triage pushing violations below 800, ty at 1,442.
+
+### Changed
+
+- **Ruff Phase 3**: 35 new rule ignores + expanded per-file ignores → **3,552 → 794** (−78%)
+- **Cumulative**: 119,498 → **794** (−**99.3%** since v1.1.0)
+- **Per-file ignores**: tests get `PT011/S106/S108/S310`; scripts get `EXE001/E402/PLW1510`
+- **Version**: `1.1.2` → `1.1.3` (synced across all root docs)
+
+### Metrics
+
+| Metric | v1.1.2 | v1.1.3 |
+|--------|--------|--------|
+| **Ruff** | 3,552 | **794** (−78%) |
+| **ty** | — | **1,442** diagnostics |
+| **Tests** | 766 | **779 pass** |
+| **Rules ignored** | 48 | **83** (all documented) |
+
+---
+
 ## [1.1.2] - 2026-03-05 — "Developer Experience"
 
 Ruff Phase 2 triage, DX tooling, and pre-commit modernization.

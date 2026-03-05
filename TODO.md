@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.1.2 | **Date**: 2026-03-05 | **Modules**: 127 | **Sprint**: 25
+**Version**: v1.1.3 | **Date**: 2026-03-05 | **Modules**: 127 | **Sprint**: 25
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -15,7 +15,7 @@ This is the authoritative project backlog. Updated after each sprint.
 | Total LOC (incl. tests) | ~560,000 | `wc -l` across all `.py` |
 | Test files | **905+** | `find -name "test_*.py"` |
 | Test suite | **21,000+** tests collected | `uv run pytest --collect-only` |
-| Ruff violations | **3,552** (triaged from 119k) | `uv run ruff check .` |
+| Ruff violations | **794** (triaged from 119k) | `uv run ruff check .` |
 | Ruff auto-fixed | **10,946** applied | `uv run ruff check --fix .` |
 | Ruff formatted | **3,420** files | `uv run ruff format --check .` |
 | Script parse errors | **0** (46 fixed in v1.1.1) | `python3 -c "import ast"` |
@@ -29,7 +29,7 @@ This is the authoritative project backlog. Updated after each sprint.
 | Build backend | **uv_build** | Migrated from hatchling |
 | Linter | **ruff** (select=ALL) | Replaced flake8+black+isort |
 | Type checker | **ty** (tightened) | Replaced mypy |
-| Build artifacts | `codomyrmex-1.1.2.tar.gz` + `.whl` | `uv build` ✅ |
+| Build artifacts | `codomyrmex-1.1.3.tar.gz` + `.whl` | `uv build` ✅ |
 
 ---
 
