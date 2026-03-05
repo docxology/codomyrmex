@@ -254,7 +254,6 @@ jobs:
           echo "✅ SEMGREP_APP_TOKEN found, proceeding with scan"
 
       - name: Run Semgrep
-        if: ${{ secrets.SEMGREP_APP_TOKEN != '' }}
         uses: semgrep/semgrep-action@v1
         with:
           config: >-

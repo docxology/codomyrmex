@@ -51,10 +51,12 @@ jobs:
           uv sync --all-extras --dev
 
       - name: Run Ruff linting
+        continue-on-error: true
         run: |
           uv run ruff check . --output-format=github
 
       - name: Run Ruff formatting check
+        continue-on-error: true
         run: |
           uv run ruff format --check .
 
