@@ -34,14 +34,14 @@ Incremental release focused on quality ramp, documentation polish, and developer
 | Item | Scope | Detail |
 | :--- | :--- | :--- |
 | **Desloppify score 63→70+** | Repo-wide | Reduce code smells, facade issues; target top categories |
-| **noqa reduction 55K→50K** | Repo-wide | Remove stale suppressions, fix underlying issues |
-| **Property-based tests** | `agentic_memory/rules/` | Hypothesis-based tests for `RuleLoader._parse_sections` |
+| **noqa/suppression audit** | Repo-wide | 233 noqa + 178 `type: ignore` lines — reduce stale suppressions, fix underlying issues (F401:159, E402:54, F403:50 are top noqa codes) |
+| ~~**Property-based tests**~~ ✅ | `agentic_memory/rules/` | Done: `test_rule_loader_property.py` (161 lines, 6 property classes) |
 | **Dashboard WebSocket** | `website/` | Replace 15s polling with real-time push |
 | **Coverage ramp 31→35%** | `pyproject.toml` | Ratchet `fail_under`, add tests for uncovered modules |
 | **Lighthouse CI** | `.github/workflows/` | Performance budget enforcement for documentation site |
 | ~~**Rules CLI**~~ ✅ | `cli/` | Already implemented: `codomyrmex rules list` and `codomyrmex rules check <file>` |
-| **Rule-AGENTS cross-ref** | `agentic_memory/rules/` | Cross-reference rules to corresponding `AGENTS.md` files |
-| **Gemini workflow health** | `.github/workflows/` | Verify 5 Gemini workflows + API key integration check |
+| ~~**Rule-AGENTS cross-ref**~~ ✅ | `agentic_memory/rules/` | Done: all 46 modules with cursorrules have `## Rule Reference` in AGENTS.md |
+| ~~**Gemini workflow health**~~ ✅ | `.github/workflows/` | Done: 5 workflows verified; prompt files in `.gemini/` match; dual auth (API key + WIF) consistent |
 
 ### Optional-Dep Implementation (when deps installed)
 
