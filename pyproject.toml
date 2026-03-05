@@ -322,6 +322,7 @@ source-exclude = [
 dev = [
     {include-group = "lint"},
     {include-group = "test"},
+    "hypothesis>=6.151.9",
 ]
 docs = [
     "mkdocs>=1.6.1",
