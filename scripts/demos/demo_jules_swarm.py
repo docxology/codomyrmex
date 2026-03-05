@@ -102,7 +102,7 @@ def main() -> int:
     task_count = len(dispatcher.tasks)
     batch_count = (task_count + args.batch_size - 1) // args.batch_size if task_count else 0
 
-    print(f"Jules Swarm Dispatcher")
+    print("Jules Swarm Dispatcher")
     print(f"  TODO file  : {args.todo}")
     print(f"  Repo       : {args.repo or '(not set — dry run)'}")
     print(f"  Priority   : {args.priority or 'ALL'}")

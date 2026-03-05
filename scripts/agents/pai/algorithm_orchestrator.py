@@ -28,21 +28,24 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    PAIBridge,
     ALGORITHM_PHASES,
-    RESPONSE_DEPTH_LEVELS,
     PAI_PRINCIPLES,
     PAI_UPSTREAM_URL,
+    RESPONSE_DEPTH_LEVELS,
+    PAIBridge,
     call_tool,
-    verify_capabilities,
-    trust_all,
-    trusted_call_tool,
     get_skill_manifest,
     get_trust_report,
     reset_trust,
+    trust_all,
+    trusted_call_tool,
+    verify_capabilities,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 
@@ -151,7 +154,7 @@ def phase_3_plan(bridge: PAIBridge, depth: str) -> dict:
 
     # Show depth levels
     print(f"  Selected depth: {depth}")
-    print(f"  Available depths:")
+    print("  Available depths:")
     for lvl in RESPONSE_DEPTH_LEVELS:
         marker = "→" if lvl["depth"] == depth else " "
         print(f"    {marker} {lvl['depth']:12s}  {lvl['when']}")
@@ -268,7 +271,7 @@ def phase_7_learn(bridge: PAIBridge, all_results: dict) -> dict:
 
     # Summary
     phases_run = len(all_results)
-    print(f"\n  Summary:")
+    print("\n  Summary:")
     print(f"    Phases completed  : {phases_run}/7")
     print(f"    PAI upstream      : {PAI_UPSTREAM_URL}")
     print(f"    Algorithm phases  : {len(ALGORITHM_PHASES)}")
@@ -285,7 +288,7 @@ def main() -> int:
     args = parse_args()
     setup_logging()
 
-    print(f"🧬 PAI Algorithm Orchestrator — 7-Phase Walkthrough")
+    print("🧬 PAI Algorithm Orchestrator — 7-Phase Walkthrough")
     print(f"   Depth: {args.depth} | Upstream: {PAI_UPSTREAM_URL}")
 
     bridge = PAIBridge()

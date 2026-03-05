@@ -5,11 +5,17 @@ Regenerates the tool table in ~/.claude/skills/Codomyrmex/SKILL.md
 to reflect all currently available static and dynamic MCP tools.
 """
 
-import sys
 import re
+import sys
 from pathlib import Path
+
 from codomyrmex.agents.pai.mcp_bridge import get_tool_registry
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 SKILL_PATH = Path("~/.claude/skills/Codomyrmex/SKILL.md").expanduser().resolve()
 

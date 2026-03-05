@@ -17,8 +17,8 @@ except ImportError:
 
 import argparse
 import os
-import subprocess
 import shutil
+import subprocess
 
 
 def get_terminal_size() -> tuple:
@@ -43,14 +43,14 @@ def list_processes(filter_text: str = None) -> list:
     try:
         result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
         lines = result.stdout.split("\n")[1:]  # Skip header
-        
+
         processes = []
         for line in lines:
             if not line.strip():
                 continue
             if filter_text and filter_text.lower() not in line.lower():
                 continue
-            
+
             parts = line.split(None, 10)
             if len(parts) >= 11:
                 processes.append({
@@ -60,7 +60,7 @@ def list_processes(filter_text: str = None) -> list:
                     "mem": parts[3],
                     "command": parts[10][:60],
                 })
-        
+
         return processes
     except:
         return []
@@ -73,31 +73,32 @@ def check_command(command: str) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "terminal_interface" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/terminal_interface/config.yaml")
+            print("Loaded config from config/terminal_interface/config.yaml")
 
     parser = argparse.ArgumentParser(description="Terminal utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Info command
     subparsers.add_parser("info", help="Show terminal info")
-    
+
     # Check command
     check = subparsers.add_parser("check", help="Check if commands are available")
     check.add_argument("commands", nargs="+", help="Commands to check")
-    
+
     # Processes command
     ps = subparsers.add_parser("ps", help="List processes")
     ps.add_argument("--filter", "-f", default=None, help="Filter processes")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🖥️  Terminal Utilities\n")
         print("Commands:")
@@ -109,18 +110,18 @@ def main():
         print("  python terminal_utils.py check python node docker")
         print("  python terminal_utils.py ps --filter python")
         return 0
-    
+
     if args.command == "info":
         cols, rows = get_terminal_size()
         info = get_shell_info()
-        
+
         print("🖥️  Terminal Info\n")
         print(f"   Shell: {info['shell']}")
         print(f"   Term: {info['term']}")
         print(f"   User: {info['user']}")
         print(f"   Size: {cols}x{rows}")
         print(f"   PATH entries: {info['path_entries']}")
-    
+
     elif args.command == "check":
         print("🔍 Command Check\n")
         for cmd in args.commands:
@@ -128,24 +129,24 @@ def main():
             icon = "✅" if available else "❌"
             location = shutil.which(cmd) if available else "not found"
             print(f"   {icon} {cmd}: {location}")
-    
+
     elif args.command == "ps":
         processes = list_processes(args.filter)
-        
+
         if args.filter:
             print(f"🔍 Processes matching '{args.filter}':\n")
         else:
             print("📋 Running processes:\n")
-        
+
         print(f"   {'PID':<8} {'CPU%':<6} {'MEM%':<6} {'COMMAND'}")
         print("   " + "-" * 60)
-        
+
         for p in processes[:20]:
             print(f"   {p['pid']:<8} {p['cpu']:<6} {p['mem']:<6} {p['command']}")
-        
+
         if len(processes) > 20:
             print(f"\n   ... and {len(processes) - 20} more")
-    
+
     return 0
 
 

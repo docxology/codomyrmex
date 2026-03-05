@@ -664,7 +664,7 @@ def generate_readme(module: str, meta: dict) -> str:
     lines = [
         f"# {title} Configuration",
         "",
-        f"**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
+        "**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
         "",
         "## Overview",
         "",
@@ -748,7 +748,7 @@ def generate_agents(module: str, meta: dict) -> str:
     lines = [
         f"# {title} -- Configuration Agent Coordination",
         "",
-        f"**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
+        "**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
         "",
         "## Overview",
         "",
@@ -768,7 +768,7 @@ def generate_agents(module: str, meta: dict) -> str:
                 lines.append(f"{i}. `{name}` is set -- {description}")
     else:
         lines.append(f"1. The module is importable via `from codomyrmex.{module} import *`")
-        lines.append(f"2. Any optional dependencies are installed (check with `codomyrmex check`)")
+        lines.append("2. Any optional dependencies are installed (check with `codomyrmex check`)")
 
     lines.append("")
     lines.append("## Agent Instructions")
@@ -779,21 +779,21 @@ def generate_agents(module: str, meta: dict) -> str:
         lines.append(f"2. Use `get_config(\"{module}.<key>\")` from config_management to read module settings")
     else:
         lines.append(f"1. Import the module directly: `from codomyrmex.{module} import ...`")
-        lines.append(f"2. Check module availability with `list_modules()` from system_discovery")
+        lines.append("2. Check module availability with `list_modules()` from system_discovery")
 
     if mcp_tools:
         lines.append(f"3. Available MCP tools: {', '.join(f'`{t}`' for t in mcp_tools)}")
     else:
-        lines.append(f"3. This module has no auto-discovered MCP tools; use direct Python imports")
+        lines.append("3. This module has no auto-discovered MCP tools; use direct Python imports")
 
     lines.append(f"4. {config_notes}")
     lines.append("")
 
     lines.append("## Operating Contracts")
     lines.append("")
-    lines.append(f"- **Import Safety**: Module import does not trigger side effects or network calls")
-    lines.append(f"- **Error Handling**: All errors raise specific exceptions (never returns None silently)")
-    lines.append(f"- **Thread Safety**: Configuration reads are thread-safe after initialization")
+    lines.append("- **Import Safety**: Module import does not trigger side effects or network calls")
+    lines.append("- **Error Handling**: All errors raise specific exceptions (never returns None silently)")
+    lines.append("- **Thread Safety**: Configuration reads are thread-safe after initialization")
     lines.append("")
 
     lines.append("## Configuration Patterns")
@@ -836,7 +836,7 @@ def generate_spec(module: str, meta: dict) -> str:
     lines = [
         f"# {title} Configuration Specification",
         "",
-        f"**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
+        "**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
         "",
         "## Overview",
         "",

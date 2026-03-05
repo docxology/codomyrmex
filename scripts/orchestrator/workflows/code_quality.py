@@ -17,16 +17,16 @@ import asyncio
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> Dict[str, Any]:
+def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> dict[str, Any]:
     """Run ruff linting."""
     cmd = ["uv", "run", "ruff", "check", "src/"]
     if fix:
@@ -61,7 +61,7 @@ def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> Dict[str, An
     }
 
 
-def run_mypy_check(_task_results: dict = None, strict: bool = False) -> Dict[str, Any]:
+def run_mypy_check(_task_results: dict = None, strict: bool = False) -> dict[str, Any]:
     """Run mypy type checking."""
     cmd = ["uv", "run", "mypy", "src/codomyrmex", "--ignore-missing-imports"]
     if strict:
@@ -88,7 +88,7 @@ def run_mypy_check(_task_results: dict = None, strict: bool = False) -> Dict[str
     }
 
 
-def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
+def check_code_complexity(_task_results: dict = None) -> dict[str, Any]:
     """Check code complexity using radon."""
     # Try radon for complexity analysis
     result = subprocess.run(
@@ -132,7 +132,7 @@ def check_code_complexity(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
+def run_security_scan(_task_results: dict = None) -> dict[str, Any]:
     """Run security analysis using bandit."""
     result = subprocess.run(
         ["uv", "run", "bandit", "-r", "src/codomyrmex", "-f", "json", "-q"],
@@ -173,7 +173,7 @@ def run_security_scan(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
+def run_docstring_coverage(_task_results: dict = None) -> dict[str, Any]:
     """Check docstring coverage using interrogate."""
     result = subprocess.run(
         ["uv", "run", "interrogate", "src/codomyrmex", "-v", "--fail-under=0"],
@@ -205,10 +205,10 @@ def run_docstring_coverage(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
+def generate_quality_report(_task_results: dict = None) -> dict[str, Any]:
     """Generate comprehensive quality report."""
     import datetime
-    
+
     _task_results = _task_results or {}
 
     report = {

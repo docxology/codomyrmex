@@ -4,10 +4,10 @@ Artifact Inspector for Antigravity
 Lists and inspects all artifacts in the current conversation.
 """
 
-import sys
-from pathlib import Path
 import logging
+import sys
 from datetime import datetime
+from pathlib import Path
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -21,16 +21,16 @@ logger = logging.getLogger("antigravity.inspector")
 
 def inspect_artifacts():
     client = AntigravityClient()
-    
+
     if not client.connect():
         logger.error("❌ Not connected to Antigravity.")
         return False
-        
+
     logger.info(f"🔍 Inspecting Conversation: {client.get_conversation_id()}")
-    
+
     artifacts = client.list_artifacts()
     logger.info(f"Found {len(artifacts)} artifacts.\n")
-    
+
     for i, art in enumerate(artifacts, 1):
         modified_time = datetime.fromtimestamp(art['modified']).strftime('%Y-%m-%d %H:%M:%S')
         logger.info(f"[{i}] {art['name']} ({art['type']})")
@@ -38,7 +38,7 @@ def inspect_artifacts():
         logger.info(f"    Size: {art['size']} bytes")
         logger.info(f"    Modified: {modified_time}")
         logger.info("-" * 40)
-        
+
     return True
 
 if __name__ == "__main__":

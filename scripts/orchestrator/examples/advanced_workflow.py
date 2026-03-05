@@ -15,11 +15,12 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
+from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+
 
 def main() -> int:
     setup_logging()
-    print_info(f"Running Advanced orchestrator Workflow...")
+    print_info("Running Advanced orchestrator Workflow...")
 
     # Import validation
     try:
@@ -30,7 +31,7 @@ def main() -> int:
         # We don't exit here because we want the script to be 'resilient' for testing purposes
 
     # Advanced logic here
-    print_success(f"Advanced orchestrator Workflow completed successfully")
+    print_success("Advanced orchestrator Workflow completed successfully")
     return 0
 
 if __name__ == "__main__":

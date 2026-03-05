@@ -33,12 +33,12 @@ def find_build_files() -> list:
         "pom.xml",
         "CMakeLists.txt",
     ]
-    
+
     found = []
     for p in patterns:
         if Path(p).exists():
             found.append(p)
-    
+
     return found
 
 
@@ -49,11 +49,11 @@ def get_build_info() -> dict:
         "platform": sys.platform,
         "timestamp": datetime.now().isoformat(),
     }
-    
+
     # Check for common build tools
     tools = ["make", "pip", "npm", "cargo", "go", "gradle", "maven"]
     info["tools"] = {}
-    
+
     for tool in tools:
         try:
             result = subprocess.run([tool, "--version"], capture_output=True, text=True, timeout=5)
@@ -61,59 +61,60 @@ def get_build_info() -> dict:
                 info["tools"][tool] = result.stdout.split("\n")[0][:40]
         except:
             pass
-    
+
     return info
 
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "build_synthesis" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/build_synthesis/config.yaml")
+            print("Loaded config from config/build_synthesis/config.yaml")
 
     parser = argparse.ArgumentParser(description="Build utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Info command
     subparsers.add_parser("info", help="Show build info")
-    
+
     # Find command
     subparsers.add_parser("find", help="Find build files")
-    
+
     args = parser.parse_args()
-    
+
     if not args.command:
         print("🔨 Build Utilities\n")
         print("Commands:")
         print("  info - Show build environment info")
         print("  find - Find build configuration files")
         return 0
-    
+
     if args.command == "info":
         info = get_build_info()
         print("🔨 Build Environment:\n")
         print(f"   Python: {info['python']}")
         print(f"   Platform: {info['platform']}")
-        
+
         if info["tools"]:
             print("\n   Available tools:")
             for tool, version in info["tools"].items():
                 print(f"      ✅ {tool}: {version}")
-    
+
     elif args.command == "find":
         files = find_build_files()
         print(f"📋 Build Files ({len(files)}):\n")
         for f in files:
             print(f"   📄 {f}")
-        
+
         if not files:
             print("   No build files found")
-    
+
     return 0
 
 

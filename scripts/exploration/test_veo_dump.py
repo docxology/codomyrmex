@@ -1,4 +1,5 @@
 import os
+
 from google import genai
 
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
@@ -10,6 +11,7 @@ operation = client.models.generate_videos(
 )
 print("Polling operation...")
 import time
+
 while not operation.done:
     time.sleep(5)
     operation = client.operations.get(operation=operation)
@@ -24,7 +26,6 @@ else:
         print(f"Has generated_videos: {len(result.generated_videos)}")
     if hasattr(result, "videos"):
         print(f"Has videos: {len(result.videos)}")
-    import json
     try:
         print(f"Dump: {result.model_dump()}")
     except Exception as e:

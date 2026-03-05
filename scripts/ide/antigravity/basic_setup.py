@@ -3,9 +3,9 @@
 Basic Setup & Connection Verification for Antigravity
 """
 
+import logging
 import sys
 from pathlib import Path
-import logging
 
 # Ensure project root is in path
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -24,17 +24,17 @@ def verify_connection():
     """Verify connection to Antigravity session."""
     logger.info("Initializing Antigravity Client...")
     client = AntigravityClient()
-    
+
     logger.info(f"Artifact Directory: {client.artifact_dir}")
-    
+
     if client.connect():
         logger.info("✅ Successfully connected to Antigravity session!")
         logger.info(f"   Conversation ID: {client.get_conversation_id()}")
-        
+
         caps = client.get_capabilities()
         logger.info(f"   Provider: {caps.get('provider')}")
         logger.info(f"   Status: {caps.get('status')}")
-        
+
         return True
     else:
         logger.error("❌ Failed to connect to Antigravity session.")

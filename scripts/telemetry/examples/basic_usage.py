@@ -13,13 +13,14 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -58,7 +59,7 @@ class TelemetryScript(ScriptBase):
             help="Simulate errors in some spans"
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute telemetry demonstrations."""
         results = {
             "tests_run": 0,
@@ -76,8 +77,13 @@ class TelemetryScript(ScriptBase):
         # Import telemetry module (requires opentelemetry)
         try:
             from codomyrmex.telemetry import (
-                TraceContext, start_span, get_current_span, traced,
-                SimpleSpanProcessor, BatchSpanProcessor, OTLPExporter
+                BatchSpanProcessor,
+                OTLPExporter,
+                SimpleSpanProcessor,
+                TraceContext,
+                get_current_span,
+                start_span,
+                traced,
             )
         except ImportError as e:
             self.log_info(f"Telemetry dependencies not available: {e}")

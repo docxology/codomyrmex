@@ -13,13 +13,14 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 # Direct import to avoid triggering full codomyrmex package init
 import importlib.util
+
 script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
 spec = importlib.util.spec_from_file_location("script_base", script_base_path)
 script_base = importlib.util.module_from_spec(spec)
@@ -54,7 +55,7 @@ class CollaborationScript(ScriptBase):
             help="Agent roles (default: researcher coder reviewer)"
         )
 
-    def run(self, args, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute collaboration demonstrations."""
         results = {
             "tests_run": 0,
@@ -70,7 +71,7 @@ class CollaborationScript(ScriptBase):
             return results
 
         # Import collaboration module (after dry_run check)
-        from codomyrmex.collaboration import SwarmManager, AgentProxy, TaskDecomposer
+        from codomyrmex.collaboration import AgentProxy, SwarmManager, TaskDecomposer
 
         # Test 1: SwarmManager creation
         self.log_info(f"\n1. Creating SwarmManager with {args.agents} agents")

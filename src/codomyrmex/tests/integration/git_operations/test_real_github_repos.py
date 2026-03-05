@@ -24,7 +24,7 @@ import tempfile
 from datetime import datetime
 
 # Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 from codomyrmex.git_operations import (
     add_files,
@@ -42,55 +42,57 @@ from codomyrmex.git_operations import (
 
 def _run_repo_test(repo_info, base_dir):
     """Test all operations on a single repository."""
-    print(f'\n🔄 TESTING {repo_info["name"].upper()} ({repo_info["type"]})')
-    print('=' * 50)
+    print(f"\n🔄 TESTING {repo_info['name'].upper()} ({repo_info['type']})")
+    print("=" * 50)
 
-    local_path = os.path.join(base_dir, repo_info['name'])
+    local_path = os.path.join(base_dir, repo_info["name"])
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     try:
         # Step 1: Clone repository
-        print(f'1. Cloning {repo_info["name"]}...')
-        if clone_repository(repo_info['url'], local_path):
-            print(f'   ✅ Successfully cloned {repo_info["name"]}')
+        print(f"1. Cloning {repo_info['name']}...")
+        if clone_repository(repo_info["url"], local_path):
+            print(f"   ✅ Successfully cloned {repo_info['name']}")
         else:
-            print(f'   ❌ Failed to clone {repo_info["name"]}')
+            print(f"   ❌ Failed to clone {repo_info['name']}")
             return False
 
         # Step 2: Verify repository
         if is_git_repository(local_path):
-            print('   ✅ Repository structure verified')
+            print("   ✅ Repository structure verified")
         else:
-            print('   ❌ Invalid repository structure')
+            print("   ❌ Invalid repository structure")
             return False
 
         # Step 3: Get current branch and status
         current_branch = get_current_branch(local_path)
-        print(f'   ✅ Current branch: {current_branch}')
+        print(f"   ✅ Current branch: {current_branch}")
 
         status = get_status(local_path)
-        print(f'   ✅ Repository status: {"clean" if status.get("clean") else "has changes"}')
+        print(
+            f"   ✅ Repository status: {'clean' if status.get('clean') else 'has changes'}"
+        )
 
         # Step 4: Get commit history
         history = get_commit_history(limit=3, repository_path=local_path)
-        print(f'   ✅ Retrieved {len(history)} commits')
+        print(f"   ✅ Retrieved {len(history)} commits")
         if history:
-            print(f'   📋 Latest commit: {history[0]["message"]}')
+            print(f"   📋 Latest commit: {history[0]['message']}")
 
         # Step 5: Create feature branch
-        feature_branch = f'feature/test-operations-{timestamp}'
-        print(f'\n2. Creating feature branch: {feature_branch}')
+        feature_branch = f"feature/test-operations-{timestamp}"
+        print(f"\n2. Creating feature branch: {feature_branch}")
 
         if create_branch(feature_branch, local_path):
-            print(f'   ✅ Created and switched to {feature_branch}')
+            print(f"   ✅ Created and switched to {feature_branch}")
             new_branch = get_current_branch(local_path)
-            print(f'   ✅ Confirmed on branch: {new_branch}')
+            print(f"   ✅ Confirmed on branch: {new_branch}")
         else:
-            print('   ❌ Failed to create feature branch')
+            print("   ❌ Failed to create feature branch")
             return False
 
         # Step 6: Create comprehensive test files
-        print('\n3. Creating and committing test files...')
+        print("\n3. Creating and committing test files...")
 
         test_files = create_test_files(repo_info, timestamp, feature_branch)
 
@@ -98,57 +100,61 @@ def _run_repo_test(repo_info, base_dir):
         for file_path, content in test_files.items():
             full_path = os.path.join(local_path, file_path)
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
-            with open(full_path, 'w') as f:
+            with open(full_path, "w") as f:
                 f.write(content)
 
-        print(f'   ✅ Created {len(test_files)} test files')
+        print(f"   ✅ Created {len(test_files)} test files")
 
         # Step 7: Add files to staging
         file_list = list(test_files.keys())
         if add_files(file_list, local_path):
-            print(f'   ✅ Added {len(file_list)} files to staging area')
+            print(f"   ✅ Added {len(file_list)} files to staging area")
         else:
-            print('   ❌ Failed to add files to staging area')
+            print("   ❌ Failed to add files to staging area")
             return False
 
         # Step 8: Commit changes
         commit_message = create_commit_message(repo_info, timestamp, feature_branch)
 
         if commit_changes(commit_message, local_path):
-            print('   ✅ Committed changes with comprehensive message')
+            print("   ✅ Committed changes with comprehensive message")
         else:
-            print('   ❌ Failed to commit changes')
+            print("   ❌ Failed to commit changes")
             return False
 
         # Step 9: Verify commit
         status = get_status(local_path)
-        if status.get('clean'):
-            print('   ✅ Repository is clean after commit')
+        if status.get("clean"):
+            print("   ✅ Repository is clean after commit")
 
         updated_history = get_commit_history(limit=2, repository_path=local_path)
-        print(f'   ✅ Updated history: {len(updated_history)} commits')
+        print(f"   ✅ Updated history: {len(updated_history)} commits")
         if updated_history:
-            print(f'   📋 New commit: {updated_history[0]["message"].split(chr(10))[0]}')
+            print(
+                f"   📋 New commit: {updated_history[0]['message'].split(chr(10))[0]}"
+            )
 
         # Step 10: Push changes to remote
-        print('\n4. Pushing feature branch to remote...')
-        if push_changes('origin', feature_branch, local_path):
-            print(f'   ✅ Successfully pushed {feature_branch} to {repo_info["name"]}')
-            print(f'   🌐 Branch available at: https://github.com/docxology/{repo_info["name"]}/tree/{feature_branch}')
+        print("\n4. Pushing feature branch to remote...")
+        if push_changes("origin", feature_branch, local_path):
+            print(f"   ✅ Successfully pushed {feature_branch} to {repo_info['name']}")
+            print(
+                f"   🌐 Branch available at: https://github.com/docxology/{repo_info['name']}/tree/{feature_branch}"
+            )
             return True
         else:
-            print('   ❌ Failed to push feature branch')
+            print("   ❌ Failed to push feature branch")
             return False
 
     except Exception as e:
-        print(f'   ❌ Error testing {repo_info["name"]}: {e}')
+        print(f"   ❌ Error testing {repo_info['name']}: {e}")
         return False
 
 
 def create_test_files(repo_info, timestamp, feature_branch):
     """Create comprehensive test files for the repository."""
     return {
-        f'test_feature_{timestamp}.py': f'''#!/usr/bin/env python3
+        f"test_feature_{timestamp}.py": f'''#!/usr/bin/env python3
 """
 Test feature for {repo_info["name"]} repository.
 Created: {datetime.now().isoformat()}
@@ -157,13 +163,13 @@ Repository Type: {repo_info["type"]}
 
 def test_git_operations():
     """Test function to validate Git operations workflow."""
-    return f"Git operations test successful for {repo_info['name']}!"
+    return f"Git operations test successful for {repo_info["name"]}!"
 
 def get_repository_info():
     """Get information about this test repository."""
     return {{
-        "name": "{repo_info['name']}",
-        "type": "{repo_info['type']}",
+        "name": "{repo_info["name"]}",
+        "type": "{repo_info["type"]}",
         "created": "{datetime.now().isoformat()}",
         "branch": "{feature_branch}"
     }}
@@ -191,8 +197,7 @@ if __name__ == "__main__":
         print(f"{{key}}: {{value}}")
     validate_repository_operations()
 ''',
-
-        f'README_{repo_info["type"].upper()}.md': f'''# {repo_info["name"].title()} Repository Test
+        f"README_{repo_info['type'].upper()}.md": f"""# {repo_info["name"].title()} Repository Test
 
 This file was created to test the complete Git operations workflow.
 
@@ -233,9 +238,8 @@ This test validates that all Git operations work correctly with real GitHub repo
 - ✅ **Status Tracking**: All operations properly logged and verified
 
 **Test completed successfully!** All 22 local Git operations + GitHub integration working perfectly.
-''',
-
-        f'tests/test_{repo_info["name"]}.py': f'''#!/usr/bin/env python3
+""",
+        f"tests/test_{repo_info['name']}.py": f'''#!/usr/bin/env python3
 """Tests for {repo_info["name"]} repository operations."""
 
 import unittest
@@ -250,12 +254,12 @@ class Test{repo_info["name"].title().replace("_", "")}(unittest.TestCase):
 
     def test_repository_type(self):
         """Test repository type is correct."""
-        expected_type = "{repo_info['type']}"
+        expected_type = "{repo_info["type"]}"
         self.assertIn(expected_type, ["private", "public"])
 
     def test_repository_name(self):
         """Test repository name is correct."""
-        expected_name = "{repo_info['name']}"
+        expected_name = "{repo_info["name"]}"
         self.assertIn(expected_name, ["test_private", "test_public"])
 
     def test_git_operations_available(self):
@@ -268,8 +272,8 @@ class Test{repo_info["name"].title().replace("_", "")}(unittest.TestCase):
         """Test that test files were created successfully."""
         test_files = [
             "test_feature_{timestamp}.py",
-            "README_{repo_info['type'].upper()}.md",
-            "tests/test_{repo_info['name']}.py"
+            "README_{repo_info["type"].upper()}.md",
+            "tests/test_{repo_info["name"]}.py"
         ]
 
         # In a real scenario, we would check if files exist
@@ -289,11 +293,10 @@ class Test{repo_info["name"].title().replace("_", "")}(unittest.TestCase):
         self.assertEqual(len(workflow_steps), 5, "All workflow steps should complete")
 
 if __name__ == '__main__':
-    print(f"Running tests for {repo_info['name']} repository...")
+    print(f"Running tests for {repo_info["name"]} repository...")
     unittest.main(verbosity=2)
 ''',
-
-        f'docs/TESTING_{repo_info["type"].upper()}.md': f'''# Testing Documentation - {repo_info["name"].title()}
+        f"docs/TESTING_{repo_info['type'].upper()}.md": f"""# Testing Documentation - {repo_info["name"].title()}
 
 ## Overview
 This document details the testing performed on the `{repo_info["name"]}` repository to validate all Git operations.
@@ -347,13 +350,13 @@ The {repo_info["type"]} repository `{repo_info["name"]}` has been successfully t
 - All Git operations working correctly
 
 **Test Status: ✅ ALL OPERATIONS SUCCESSFUL**
-'''
+""",
     }
 
 
 def create_commit_message(repo_info, timestamp, feature_branch):
     """Create a comprehensive commit message."""
-    return f'''Add comprehensive test files for {repo_info["name"]}
+    return f"""Add comprehensive test files for {repo_info["name"]}
 
 This commit adds a complete test suite to validate Git operations
 on the {repo_info["type"]} repository {repo_info["name"]}.
@@ -380,44 +383,45 @@ Repository Details:
 
 This commit demonstrates that all Git operations work correctly
 with real GitHub repositories, validating the complete workflow
-from local development to remote synchronization.'''
+from local development to remote synchronization."""
+
 
 pytestmark = pytest.mark.integration
 
 
 def main():
     """Main testing function."""
-    print('🎯 COMPREHENSIVE TESTING ON REAL GITHUB REPOSITORIES')
-    print('=' * 60)
+    print("🎯 COMPREHENSIVE TESTING ON REAL GITHUB REPOSITORIES")
+    print("=" * 60)
 
     # Check Git availability first
     if not check_git_availability():
-        print('❌ Git is not available on this system')
+        print("❌ Git is not available on this system")
         return False
 
-    print('✅ Git is available and ready')
+    print("✅ Git is available and ready")
 
     # Define test repositories
     test_repos = [
         {
-            'name': 'test_private',
-            'url': 'https://github.com/docxology/test_private.git',
-            'type': 'private'
+            "name": "test_private",
+            "url": "https://github.com/docxology/test_private.git",
+            "type": "private",
         },
         {
-            'name': 'test_public',
-            'url': 'https://github.com/docxology/test_public.git',
-            'type': 'public'
-        }
+            "name": "test_public",
+            "url": "https://github.com/docxology/test_public.git",
+            "type": "public",
+        },
     ]
 
-    print('Target Repositories:')
+    print("Target Repositories:")
     for repo in test_repos:
-        print(f'• https://github.com/docxology/{repo["name"]} ({repo["type"]})')
+        print(f"• https://github.com/docxology/{repo['name']} ({repo['type']})")
 
     # Create temporary working directory
-    base_dir = tempfile.mkdtemp(prefix='github_real_test_')
-    print(f'\nWorking directory: {base_dir}')
+    base_dir = tempfile.mkdtemp(prefix="github_real_test_")
+    print(f"\nWorking directory: {base_dir}")
 
     results = []
 
@@ -425,43 +429,44 @@ def main():
         # Test each repository
         for repo in test_repos:
             success = _run_repo_test(repo, base_dir)
-            results.append({'repo': repo['name'], 'success': success})
+            results.append({"repo": repo["name"], "success": success})
 
             if success:
-                print(f'\n✅ COMPLETED ALL OPERATIONS FOR {repo["name"].upper()}!')
+                print(f"\n✅ COMPLETED ALL OPERATIONS FOR {repo['name'].upper()}!")
             else:
-                print(f'\n❌ SOME OPERATIONS FAILED FOR {repo["name"].upper()}!')
+                print(f"\n❌ SOME OPERATIONS FAILED FOR {repo['name'].upper()}!")
 
         # Print final summary
-        print('\n🎉 COMPREHENSIVE TESTING COMPLETED!')
-        print('=' * 60)
+        print("\n🎉 COMPREHENSIVE TESTING COMPLETED!")
+        print("=" * 60)
 
-        successful = sum(1 for r in results if r['success'])
+        successful = sum(1 for r in results if r["success"])
         total = len(results)
 
-        print('📊 FINAL RESULTS:')
-        print(f'• Repositories Tested: {total}')
-        print(f'• Successful: {successful}')
-        print(f'• Failed: {total - successful}')
-        print(f'• Success Rate: {(successful/total)*100:.0f}%')
+        print("📊 FINAL RESULTS:")
+        print(f"• Repositories Tested: {total}")
+        print(f"• Successful: {successful}")
+        print(f"• Failed: {total - successful}")
+        print(f"• Success Rate: {(successful / total) * 100:.0f}%")
 
-        print('\n📁 Repository Status:')
+        print("\n📁 Repository Status:")
         for result in results:
-            status = '✅ SUCCESS' if result['success'] else '❌ FAILED'
-            print(f'• {result["repo"]}: {status}')
+            status = "✅ SUCCESS" if result["success"] else "❌ FAILED"
+            print(f"• {result['repo']}: {status}")
 
         if successful == total:
-            print('\n🚀 ALL REPOSITORIES TESTED SUCCESSFULLY!')
-            print('Feature branches created with comprehensive test files.')
-            print('All Git operations validated on real GitHub repositories!')
+            print("\n🚀 ALL REPOSITORIES TESTED SUCCESSFULLY!")
+            print("Feature branches created with comprehensive test files.")
+            print("All Git operations validated on real GitHub repositories!")
         else:
-            print('\n⚠️ Some repositories had issues - check output above.')
+            print("\n⚠️ Some repositories had issues - check output above.")
 
         return successful == total
 
     except Exception as e:
-        print(f'\n❌ Error during testing: {e}')
+        print(f"\n❌ Error during testing: {e}")
         import traceback
+
         traceback.print_exc()
         return False
 
@@ -469,12 +474,11 @@ def main():
         # Clean up local directories
         try:
             shutil.rmtree(base_dir)
-            print(f'\n🧹 Cleaned up local test directory: {base_dir}')
+            print(f"\n🧹 Cleaned up local test directory: {base_dir}")
         except Exception as e:
-            print(f'⚠️ Could not clean up {base_dir}: {e}')
+            print(f"⚠️ Could not clean up {base_dir}: {e}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     success = main()
     exit(0 if success else 1)
-

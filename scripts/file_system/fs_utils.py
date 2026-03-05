@@ -7,8 +7,8 @@ Usage:
     python fs_utils.py <command> [options]
 """
 
-import sys
 import argparse
+import sys
 from pathlib import Path
 
 # Add src to sys.path for local development
@@ -29,39 +29,40 @@ def format_size(bytes: int) -> str:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "file_system" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/file_system/config.yaml")
+            print("Loaded config from config/file_system/config.yaml")
 
     parser = argparse.ArgumentParser(description="Codomyrmex File System Utilities")
     subparsers = parser.add_subparsers(dest="command")
-    
+
     # Analyze command
     analyze = subparsers.add_parser("analyze", help="Analyze directory contents")
     analyze.add_argument("path", default=".", nargs="?")
-    
+
     # Duplicates command
     dups = subparsers.add_parser("duplicates", help="Find duplicate files")
     dups.add_argument("path", default=".", nargs="?")
-    
+
     # Tree command
     tree = subparsers.add_parser("tree", help="Show directory tree")
     tree.add_argument("path", default=".", nargs="?")
     tree.add_argument("--depth", "-d", type=int, default=3)
-    
+
     # Disk command
     disk = subparsers.add_parser("disk", help="Show disk usage")
     disk.add_argument("path", default=".", nargs="?")
-    
+
     args = parser.parse_args()
-    
+
     fs = create_file_system_manager()
-    
+
     if not args.command:
         print("📁 Codomyrmex File System Utilities\n")
         print("Commands:")
@@ -74,24 +75,24 @@ def main():
         print("  python fs_utils.py duplicates .")
         print("  python fs_utils.py tree --depth 2")
         return 0
-    
+
     if args.command == "analyze":
         path = Path(args.path)
         if not path.exists():
             print(f"❌ Path not found: {args.path}")
             return 1
-        
+
         print(f"📊 Analyzing: {path}\n")
         items = fs.list_dir(path, recursive=True)
-        
+
         files = [i for i in items if i.is_file()]
         dirs = [i for i in items if i.is_dir()]
         total_size = sum(f.stat().st_size for f in files)
-        
+
         print(f"   Files: {len(files)}")
         print(f"   Directories: {len(dirs)}")
         print(f"   Total size: {format_size(total_size)}")
-        
+
         # Extension stats
         ext_stats = {}
         for f in files:
@@ -100,16 +101,16 @@ def main():
                 ext_stats[ext] = {"count": 0, "size": 0}
             ext_stats[ext]["count"] += 1
             ext_stats[ext]["size"] += f.stat().st_size
-            
+
         print("\n   By extension:")
         sorted_ext = sorted(ext_stats.items(), key=lambda x: -x[1]['size'])
         for ext, data in sorted_ext[:10]:
             print(f"     {ext}: {data['count']} files, {format_size(data['size'])}")
-    
+
     elif args.command == "duplicates":
         path = Path(args.path)
         print(f"🔍 Finding duplicates in: {path}\n")
-        
+
         duplicates = fs.find_duplicates(path)
         if duplicates:
             print(f"   Found {len(duplicates)} duplicate groups:\n")
@@ -120,11 +121,11 @@ def main():
                     print(f"     - {p.relative_to(path)}")
         else:
             print("   No duplicates found")
-    
+
     elif args.command == "tree":
         path = Path(args.path)
         print(f"📂 {path}\n")
-        
+
         def print_tree(p, prefix="", depth=0, max_depth=3):
             if depth >= max_depth:
                 return
@@ -133,7 +134,7 @@ def main():
             except PermissionError:
                 print(f"{prefix}└── [Permission Denied]")
                 return
-                
+
             for i, item in enumerate(items[:20]):
                 is_last = i == len(items) - 1 or i == 19
                 connector = "└── " if is_last else "├── "
@@ -141,7 +142,7 @@ def main():
                 if item.is_dir():
                     ext = "    " if is_last else "│   "
                     print_tree(item, prefix + ext, depth + 1, max_depth)
-        
+
         print_tree(path, max_depth=args.depth)
 
     elif args.command == "disk":
@@ -151,7 +152,7 @@ def main():
         print(f"   Total: {format_size(usage['total'])}")
         print(f"   Used:  {format_size(usage['used'])} ({usage['percent']:.1f}%)")
         print(f"   Free:  {format_size(usage['free'])}")
-    
+
     return 0
 
 

@@ -8,7 +8,6 @@ are exhausted.
 Zero-Mock compliant — all tests use real functions.
 """
 
-
 import pytest
 
 # ── utils.retry ────────────────────────────────────────────────────────

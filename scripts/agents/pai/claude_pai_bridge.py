@@ -30,11 +30,14 @@ except ImportError:
 from codomyrmex.agents.pai import (
     PAIBridge,
     call_tool,
-    get_tool_registry,
     get_skill_manifest,
+    get_tool_registry,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
 )
 
 DEMOS = ["discover", "register", "manifest", "review"]
@@ -89,7 +92,7 @@ def demo_discover() -> dict:
         print(f"  Agents: {len(agents)} personalities")
 
         # Show how this context informs Claude
-        print(f"\n  Claude integration context:")
+        print("\n  Claude integration context:")
         print(f"    Agent personalities available for delegation: {len(agents)}")
         print(f"    Skill packs for capability assessment: {len(skills)}")
         print(f"    Tools for Algorithm phase execution: {len(tools)}")
@@ -161,16 +164,16 @@ def demo_manifest() -> dict:
     resources = manifest.get("resources", [])
     prompts = manifest.get("prompts", [])
 
-    print(f"\n  System context for Claude:")
+    print("\n  System context for Claude:")
     print(f"    Available tools: {len(tools)}")
     print(f"    Available resources: {len(resources)}")
     print(f"    Available prompts: {len(prompts)}")
 
     # Show a sample system prompt fragment
-    print(f"\n  Sample system prompt fragment:")
+    print("\n  Sample system prompt fragment:")
     print(f"    'You have access to {len(tools)} Codomyrmex tools via MCP.'")
-    print(f"    'Use codomyrmex.list_modules to discover available modules.'")
-    print(f"    'Use codomyrmex.pai_status to check PAI integration status.'")
+    print("    'Use codomyrmex.list_modules to discover available modules.'")
+    print("    'Use codomyrmex.pai_status to check PAI integration status.'")
 
     return {
         "manifest_keys": list(manifest.keys()),
@@ -216,8 +219,8 @@ def demo_review() -> dict:
     else:
         print_info("  (Claude API not available — showing what would be reviewed)")
         print(f"    File: agents/pai/__init__.py ({lines} lines)")
-        print(f"    Analysis: general code quality review")
-        print(f"    Context: PAI bridge public API exports")
+        print("    Analysis: general code quality review")
+        print("    Context: PAI bridge public API exports")
 
     return {"review": "skipped", "lines_available": lines, "api_available": client is not None}
 
@@ -226,7 +229,7 @@ def main() -> int:
     args = parse_args()
     setup_logging()
 
-    print(f"🔗 Claude + PAI Bridge Integration Demo")
+    print("🔗 Claude + PAI Bridge Integration Demo")
 
     results: dict = {}
     fns = {

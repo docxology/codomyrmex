@@ -16,15 +16,15 @@ import asyncio
 import importlib
 import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-def get_all_modules() -> List[Path]:
+def get_all_modules() -> list[Path]:
     """Get all module directories."""
     src_dir = project_root / "src" / "codomyrmex"
     modules = []
@@ -37,7 +37,7 @@ def get_all_modules() -> List[Path]:
     return sorted(modules)
 
 
-async def check_module_imports(module_path: Path) -> Dict[str, Any]:
+async def check_module_imports(module_path: Path) -> dict[str, Any]:
     """Check if module can be imported."""
     module_name = f"codomyrmex.{module_path.name}"
 
@@ -48,7 +48,7 @@ async def check_module_imports(module_path: Path) -> Dict[str, Any]:
         return {"success": False, "module": module_name, "error": str(e)}
 
 
-async def check_module_files(module_path: Path) -> Dict[str, Any]:
+async def check_module_files(module_path: Path) -> dict[str, Any]:
     """Check for required files."""
     required_files = ["__init__.py"]
     recommended_files = ["README.md", "AGENTS.md"]
@@ -73,7 +73,7 @@ async def check_module_files(module_path: Path) -> Dict[str, Any]:
     }
 
 
-async def check_module_health(module_path: Path, _task_results: dict = None) -> Dict[str, Any]:
+async def check_module_health(module_path: Path, _task_results: dict = None) -> dict[str, Any]:
     """Full health check for a module."""
     module_name = module_path.name
 

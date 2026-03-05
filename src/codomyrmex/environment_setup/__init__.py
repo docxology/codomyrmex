@@ -36,7 +36,9 @@ except ImportError:
     ResultStatus = None
 
 
-from typing import Any, Callable, Dict
+from collections.abc import Callable
+from typing import Any, Dict
+
 
 def cli_commands() -> dict[str, dict[str, str | Callable]]:
     """Return CLI commands for the environment_setup module."""

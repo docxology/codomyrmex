@@ -3,9 +3,9 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 
-from codomyrmex.calendar_integration.mcp_tools import (
-
 pytestmark = pytest.mark.integration
+
+from codomyrmex.calendar_integration.mcp_tools import (
     _DEFAULT_ATTENDEE,
     calendar_create_event,
     calendar_delete_event,
@@ -54,7 +54,7 @@ def test_calendar_mcp_flow():
         end_time=(now + timedelta(hours=1)).isoformat(),
         description="Created via MCP tool",
         location="Virtual",
-        attendees=[_DEFAULT_ATTENDEE]
+        attendees=[_DEFAULT_ATTENDEE],
     )
     assert res_create["status"] == "ok"
     event_id = res_create["event_id"]
@@ -72,7 +72,7 @@ def test_calendar_mcp_flow():
         end_time=(now + timedelta(hours=2)).isoformat(),
         description="Updated via MCP tool",
         location="Virtual",
-        attendees=[_DEFAULT_ATTENDEE]
+        attendees=[_DEFAULT_ATTENDEE],
     )
     assert res_update["status"] == "ok"
 
@@ -118,7 +118,9 @@ def test_calendar_error_handling_missing_token():
     """Verify MCP tools return error dicts rather than raising when no token exists."""
     res_list = calendar_list_events()
     assert res_list["status"] == "error", "Expected error status for missing token"
-    assert res_list.get("message") or res_list.get("error"), "Expected non-empty error message"
+    assert res_list.get("message") or res_list.get("error"), (
+        "Expected non-empty error message"
+    )
 
     now = datetime.now(UTC)
     res_create = calendar_create_event(
@@ -127,4 +129,6 @@ def test_calendar_error_handling_missing_token():
         end_time=(now + timedelta(hours=1)).isoformat(),
     )
     assert res_create["status"] == "error", "Expected error status for missing token"
-    assert res_create.get("message") or res_create.get("error"), "Expected non-empty error message"
+    assert res_create.get("message") or res_create.get("error"), (
+        "Expected non-empty error message"
+    )

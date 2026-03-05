@@ -4,10 +4,10 @@ GUI Chat Automation for Antigravity using AppleScript.
 Sends keystrokes directly to the active window/pane.
 """
 
-import sys
-import subprocess
 import argparse
 import logging
+import subprocess
+import sys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -34,7 +34,7 @@ def send_gui_message(message: str, app_name: str = "Antigravity"):
         end tell
     end tell
     '''
-    
+
     try:
         subprocess.run(["osascript", "-e", apple_script], check=True, capture_output=True)
         return True
@@ -51,7 +51,7 @@ def is_app_running(app_name: str) -> bool:
     end tell
     '''
     try:
-        result = subprocess.run(["osascript", "-e", apple_script], 
+        result = subprocess.run(["osascript", "-e", apple_script],
                                 capture_output=True, text=True, timeout=5)
         return result.stdout.strip() == "true"
     except Exception:
@@ -62,14 +62,14 @@ if __name__ == "__main__":
     parser.add_argument("--message", "-m", default="Hello from orchestrator test",
                         help="Message to send (default: test message)")
     parser.add_argument("--app", default="Antigravity", help="Application name (default: Antigravity)")
-    
+
     args = parser.parse_args()
-    
+
     # Check if app is running first
     if not is_app_running(args.app):
         logger.info(f"ℹ️  {args.app} is not running - skipping GUI automation (success).")
         sys.exit(0)
-    
+
     logger.info(f"Sending to {args.app}: '{args.message}'")
     if send_gui_message(args.message, args.app):
         logger.info("✅ Sent successfully via GUI")

@@ -32,8 +32,6 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from pathlib import Path
-
 
 BASE_URL = "http://localhost:8888"
 

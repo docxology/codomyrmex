@@ -331,7 +331,7 @@ def main() -> int:
                 f"({r.kill_ratio * 100:.0f}%)"
             )
             if r.details:
-                print(f"  Survivors:")
+                print("  Survivors:")
                 for d in r.details[:10]:
                     print(f"    {d}")
 

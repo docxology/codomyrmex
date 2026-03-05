@@ -43,7 +43,12 @@ _PAI_PM_PORT   = 8888
 _CODO_PORT     = 8787
 
 try:
-    from codomyrmex.utils.cli_helpers import print_error, print_info, print_success, setup_logging
+    from codomyrmex.utils.cli_helpers import (
+        print_error,
+        print_info,
+        print_success,
+        setup_logging,
+    )
     from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
 except ImportError as exc:
     print(f"[ERROR] Cannot import codomyrmex: {exc}", file=sys.stderr)
@@ -179,7 +184,7 @@ def phase_pai_pm(restart: bool, port: int = _PAI_PM_PORT) -> subprocess.Popen | 
         for line in p.stdout:
             sys.stdout.write(f"\033[90m[PAI PM]\033[0m {line}")
             sys.stdout.flush()
-            
+
     threading.Thread(target=_tail_logs, args=(proc,), daemon=True).start()
 
     if _port_is_live(port, timeout=8.0):

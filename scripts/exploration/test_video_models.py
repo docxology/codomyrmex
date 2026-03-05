@@ -1,6 +1,7 @@
 import os
-from google import genai
 import sys
+
+from google import genai
 
 api_key = os.environ.get("GEMINI_API_KEY")
 if not api_key:
@@ -16,6 +17,6 @@ for m in models:
         video_models.append(m.name)
     if "imagen" in name or "image" in name:
         image_models.append(m.name)
-        
+
 print("VIDEO MODELS:", video_models)
 print("IMAGE MODELS:", image_models)

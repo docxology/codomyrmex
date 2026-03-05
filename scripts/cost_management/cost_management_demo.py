@@ -13,12 +13,13 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from codomyrmex.cost_management import (
-    CostTracker,
     BudgetManager,
-    CostCategory,
     BudgetPeriod,
-    JSONCostStore
+    CostCategory,
+    CostTracker,
+    JSONCostStore,
 )
+
 
 def run_demo():
     print("--- Codomyrmex Cost Management Demo ---")

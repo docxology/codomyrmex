@@ -5,10 +5,10 @@ Scans the repository for required documentation files (README.md, AGENTS.md, SPE
 and reports on coverage and quality (stub detection).
 """
 
-from pathlib import Path
-from typing import Dict, List, Any
 import os
 import sys
+from pathlib import Path
+from typing import Any
 
 # Ensure codomyrmex is in path
 _project_root = Path(__file__).resolve().parents[2]
@@ -16,6 +16,7 @@ if str(_project_root / "src") not in sys.path:
     sys.path.insert(0, str(_project_root / "src"))
 
 from codomyrmex.utils import ScriptBase
+
 
 class DocumentationAudit(ScriptBase):
     def __init__(self):
@@ -37,7 +38,7 @@ class DocumentationAudit(ScriptBase):
             help="Attempt to create missing files (Dry run recommended first)"
         )
 
-    def scan_directory(self, path: Path) -> Dict[str, Any]:
+    def scan_directory(self, path: Path) -> dict[str, Any]:
         """Scan a single directory for documentation status."""
         stats = {
             "path": str(path.relative_to(self.root_dir)),
@@ -45,7 +46,7 @@ class DocumentationAudit(ScriptBase):
             "missing": [],
             "stubs": []
         }
-        
+
         for filename in self.required_files:
             file_path = path / filename
             if file_path.exists():
@@ -55,20 +56,20 @@ class DocumentationAudit(ScriptBase):
                     stats["stubs"].append(filename)
             else:
                 stats["missing"].append(filename)
-                
+
         return stats
 
-    def calculate_score(self, stats: Dict[str, Any]) -> float:
+    def calculate_score(self, stats: dict[str, Any]) -> float:
         """Calculate a compliance score (0-100)."""
         total = len(self.required_files)
         present = total - len(stats["missing"])
         non_stubs = present - len(stats["stubs"])
-        
+
         # 50% for presence, 50% for quality
         score = (present / total) * 50 + (non_stubs / total) * 50
         return score
 
-    def generate_report(self, results: List[Dict[str, Any]]) -> None:
+    def generate_report(self, results: list[dict[str, Any]]) -> None:
         """Generate a markdown report."""
         report_lines = [
             "# Documentation Audit Report",
@@ -80,47 +81,47 @@ class DocumentationAudit(ScriptBase):
             "| Module | Score | Missing | Stubs |",
             "| :--- | :---: | :--- | :--- |"
         ]
-        
+
         total_score = 0
-        
+
         for res in results:
             score = self.calculate_score(res)
             total_score += score
-            
+
             missing_str = ", ".join(res["missing"]) if res["missing"] else "✅"
             stubs_str = ", ".join(res["stubs"]) if res["stubs"] else "✅"
-            
+
             # Highlight poor scores
             icon = "🟢" if score > 80 else "🟡" if score > 50 else "🔴"
-            
+
             report_lines.append(
                 f"| {icon} **{res['path']}** | {score:.0f}% | {missing_str} | {stubs_str} |"
             )
-            
+
         avg_score = total_score / len(results) if results else 0
         report_lines.insert(5, f"**Average Compliance**: {avg_score:.1f}%")
         report_lines.insert(6, "")
-        
+
         report_content = "\n".join(report_lines)
-        
+
         # Save report
         if self.output_path:
             report_file = self.output_path / "audit_report.md"
             with open(report_file, "w") as f:
                 f.write(report_content)
             self.log_success(f"Report saved to {report_file}")
-            
+
             # Also print to console
             print(report_content)
 
     def run(self, args, config):
         self.target_dir = args.target.resolve()
         self.root_dir = Path.cwd()
-        
+
         self.log_info(f"Scanning target: {self.target_dir}")
-        
+
         results = []
-        
+
         # Directories that are not our code — skip entire subtrees
         SKIP_DIRS = {"__pycache__", ".mypy_cache", ".git", "gitnexus", "node_modules"}
 
@@ -150,9 +151,9 @@ class DocumentationAudit(ScriptBase):
             if "__init__.py" in files or any(p.suffix == ".py" for p in path.iterdir()):
                 stats = self.scan_directory(path)
                 results.append(stats)
-                
+
         self.generate_report(results)
-        
+
         return {"scanned": len(results), "average_score": 0} # Simplified return
 
 if __name__ == "__main__":
@@ -160,6 +161,6 @@ if __name__ == "__main__":
     # Ensure src is in path for imports (file-relative for any working directory)
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
-    
+
     audit = DocumentationAudit()
     sys.exit(audit.execute())

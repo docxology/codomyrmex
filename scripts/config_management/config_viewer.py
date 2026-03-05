@@ -39,7 +39,7 @@ def load_toml(path: Path) -> dict:
             import toml as tomllib
         except ImportError:
             return {"error": "tomllib not available"}
-    
+
     with open(path, "rb") as f:
         return tomllib.load(f)
 
@@ -47,7 +47,7 @@ def load_toml(path: Path) -> dict:
 def load_config(path: Path) -> dict:
     """Load config file based on extension."""
     suffix = path.suffix.lower()
-    
+
     if suffix == ".json":
         with open(path) as f:
             return json.load(f)
@@ -76,10 +76,10 @@ def find_config_files(base_path: str = ".") -> list:
     ]
     found = []
     root = Path(base_path)
-    
+
     for pattern in patterns:
         found.extend(root.glob(pattern))
-    
+
     # Filter out package-lock and node_modules
     return [f for f in found if "node_modules" not in str(f) and "package-lock" not in f.name]
 
@@ -104,7 +104,7 @@ def main():
     parser.add_argument("--format", "-f", choices=["json", "yaml", "table"], default="json")
     parser.add_argument("--env", "-e", action="store_true", help="Show environment variables")
     args = parser.parse_args()
-    
+
     if args.env:
         print("🔧 Environment Variables:\n")
         for key in sorted(os.environ.keys()):
@@ -114,14 +114,14 @@ def main():
                     value = value[:4] + "..." if len(value) > 4 else "***"
                 print(f"   {key}={value[:60]}")
         return 0
-    
+
     if args.list:
         files = find_config_files()
         print(f"📋 Config files found ({len(files)}):\n")
         for f in files[:20]:
             print(f"   📄 {f}")
         return 0
-    
+
     if not args.path:
         print("🔧 Configuration Viewer\n")
         print("Usage:")
@@ -130,24 +130,24 @@ def main():
         print("  python config_viewer.py --list")
         print("  python config_viewer.py --env")
         return 0
-    
+
     config_path = Path(args.path)
     if not config_path.exists():
         print(f"❌ File not found: {args.path}")
         return 1
-    
+
     try:
         config = load_config(config_path)
     except Exception as e:
         print(f"❌ Failed to load: {e}")
         return 1
-    
+
     if "error" in config:
         print(f"❌ {config['error']}")
         return 1
-    
+
     print(f"📄 Config: {config_path.name}\n")
-    
+
     if args.key:
         value = get_nested_value(config, args.key)
         if value is not None:
@@ -155,7 +155,7 @@ def main():
         else:
             print(f"   Key not found: {args.key}")
         return 0
-    
+
     if args.format == "table":
         def print_flat(d, prefix=""):
             for k, v in d.items():
@@ -167,7 +167,7 @@ def main():
         print_flat(config)
     else:
         print(json.dumps(config, indent=2))
-    
+
     return 0
 
 

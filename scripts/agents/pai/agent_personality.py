@@ -26,7 +26,9 @@ except ImportError:
 
 from codomyrmex.agents.pai import PAIBridge, PAIConfig
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_warning,
+    print_info,
+    print_warning,
+    setup_logging,
 )
 
 
