@@ -39,7 +39,7 @@ class GoogleCalendar(CalendarProvider):
     """Google Calendar provider implementation."""
 
     def __init__(
-        self, credentials: Credentials | None = None, service: Resource | None = None
+        self, credentials: "Credentials | None" = None, service: "Resource | None" = None
     ):
         """
         Initialize the Google Calendar provider.

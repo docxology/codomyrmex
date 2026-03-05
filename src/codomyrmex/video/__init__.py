@@ -121,9 +121,9 @@ except ImportError:
 try:
     from .generation import VideoGenerator
 
-    GENERATION_AVAILABLE = True
+    VIDEO_GENERATION_AVAILABLE = True
 except ImportError:
-    pass
+    VIDEO_GENERATION_AVAILABLE = False
 
 
 def cli_commands():
@@ -199,5 +199,5 @@ if EXTRACTION_AVAILABLE:
 if ANALYSIS_AVAILABLE:
     __all__.append("VideoAnalyzer")
 
-if GENERATION_AVAILABLE:
+if VIDEO_GENERATION_AVAILABLE:
     __all__.append("VideoGenerator")
