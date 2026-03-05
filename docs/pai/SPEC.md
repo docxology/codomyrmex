@@ -1,6 +1,6 @@
 # docs/pai — Functional Specification
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -68,7 +68,7 @@ Started with: `uv run python scripts/pai/dashboard.py` or `bun run src/codomyrme
 | Timeline | Temporal Gantt-style project visualization | `pai_timeline.png` |
 | 🚴 Bike Ride | LLM email briefing — unanswered threads + A/B/C drafts + TTS | `pai_bikeride.png` |
 
-### MCP Tool Counts (v1.0.8)
+### MCP Tool Counts (v1.1.4)
 
 | Category | Count | Notes |
 |----------|-------|-------|

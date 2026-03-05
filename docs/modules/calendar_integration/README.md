@@ -1,6 +1,6 @@
 # Codomyrmex Calendar Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
 
 The `calendar_integration` module provides a unified, generic interface for integrating with various calendar providers, with an initial focus on Google Calendar (`gcal`). It adheres strictly to the Codomyrmex Zero-Mock policy, ensuring reliable and verifiable interactions with real calendar APIs.
 

@@ -1,11 +1,11 @@
 from codomyrmex.data_visualization.plots.heatmap import Heatmap
 from codomyrmex.data_visualization.plots.mermaid import MermaidDiagram
-from codomyrmex.data_visualization.plots.scatter import ScatterPlot
+from codomyrmex.data_visualization.plots.scatter import _ScatterPlot
 
 
 def test_scatterplot_render():
     """Verify scatterplot render behavior."""
-    plot = ScatterPlot(title="Test Plot", data=[1, 4, 2, 5, 3, 6])
+    plot = _ScatterPlot(title="Test Plot", data=[1, 4, 2, 5, 3, 6])
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test Plot"' in html

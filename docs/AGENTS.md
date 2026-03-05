@@ -1,6 +1,6 @@
 # Codomyrmex Agents — docs
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -14,7 +14,7 @@ Central documentation hub for the Codomyrmex platform. Contains user guides, dev
 | [**development/**](development/) | Dev environment, testing | Medium - dev workflows |
 | [**reference/**](reference/) | API, CLI, troubleshooting | High - technical reference |
 | [**deployment/**](deployment/) | Production deployment | Medium - operations |
-| [**modules/**](modules/) | Per-module docs (124) | High - module details |
+| [**modules/**](modules/) | Per-module docs (127) | High - module details |
 | [**integration/**](integration/) | External integrations | Medium - integrations |
 | [**examples/**](examples/) | Code examples | Medium - learning |
 | [**project/**](project/) | Architecture, contributing | Low - project info |

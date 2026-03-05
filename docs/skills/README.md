@@ -1,26 +1,63 @@
-# Skills Documentation — README
+# Skills Documentation
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Documentation for the Codomyrmex skill system covering the complete skill lifecycle — discovery, execution, composition, testing, marketplace governance, and extensibility.
+The Codomyrmex skill system provides structured instruction sets that extend AI agent capabilities for specialized tasks. Skills are organized as folders containing `SKILL.md` instruction files, optional scripts, examples, and resources.
+
+## Skill Architecture
+
+```mermaid
+graph TD
+    Agent[AI Agent] --> SkillLoader[Skill Loader]
+    SkillLoader --> SKILL[SKILL.md]
+    SkillLoader --> Scripts[scripts/]
+    SkillLoader --> Examples[examples/]
+    SkillLoader --> Resources[resources/]
+    
+    SKILL --> Instructions[Task Instructions]
+    Scripts --> Helpers[Helper Utilities]
+    Examples --> Patterns[Reference Implementations]
+```
+
+## Available Skills
+
+| Skill | Description | Source |
+|-------|-------------|--------|
+| Modern Python | uv, ruff, ty best practices | Trail of Bits |
+| Property Testing | Hypothesis-based property tests | Trail of Bits |
+| Security Audit | Security audit methodology | Trail of Bits |
+| Systematic Debugging | Root cause investigation | Superpowers |
+| TDD | Test-driven development | Superpowers |
+| Coverage Push | Zero-mock coverage improvement | Internal |
+| Desloppify | Code health scanner | Internal |
+| GitNexus | Git repo analysis | Internal |
+
+## Skill File Structure
+
+```
+skills/
+├── skill_name/
+│   ├── SKILL.md          # Main instructions (required)
+│   ├── scripts/          # Helper scripts
+│   ├── examples/         # Reference implementations
+│   └── resources/        # Additional files
+```
 
 ## Contents
 
 | File | Description |
-| :--- | :--- |
-| [index.md](index.md) | Skills documentation index |
-| [skill-lifecycle.md](skill-lifecycle.md) | Skill authoring and versioning lifecycle |
-| [discovery-and-execution.md](discovery-and-execution.md) | Skill discovery and runtime execution |
-| [composition-and-testing.md](composition-and-testing.md) | Composing and testing skill chains |
-| [marketplace-and-governance.md](marketplace-and-governance.md) | Skill marketplace and governance |
+|------|-------------|
+| [AGENTS.md](AGENTS.md) | Agent coordination for skills |
+| [SPEC.md](SPEC.md) | Skills functional specification |
+| [PAI.md](PAI.md) | PAI integration for skills |
 
 ## Related Documentation
 
-- [Skills Module](../modules/skills/) — Skills module implementation
-- [Tool Use Module](../modules/tool_use/) — Tool calling and chains
-- [Plugin System Module](../modules/plugin_system/) — Plugin architecture
+- [Agent Documentation](../agents/) — Agent rules and coordination
+- [PAI Infrastructure](../pai/) — Personal AI bridge
+- [Skills Source](../../skills/) — Skill implementations
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 # Getting Started with Agents
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **126 Python modules**, **~427 MCP tools**, **81 PAI skills**, and **15 Antigravity workflows**.
 
@@ -527,7 +527,7 @@ Skills are also accessible as **Claude Code plugins** via `~/.claude/skills/` an
 | Skill | Source | Version | Slash Commands |
 |-------|--------|---------|---------------|
 | **visual-explainer** | [nicobailon/visual-explainer](https://github.com/nicobailon/visual-explainer) | v0.4.4 | `/generate-web-diagram`, `/generate-visual-plan`, `/generate-slides`, `/diff-review`, `/plan-review`, `/project-recap`, `/fact-check` |
-| **Codomyrmex** | This repo | v1.0.8 | `/codomyrmexVerify`, `/codomyrmexTrust`, `/codomyrmexAnalyze`, `/codomyrmexSearch`, `/codomyrmexDocs`, `/codomyrmexStatus`, `/codomyrmexMemory` |
+| **Codomyrmex** | This repo | v1.1.4 | `/codomyrmexVerify`, `/codomyrmexTrust`, `/codomyrmexAnalyze`, `/codomyrmexSearch`, `/codomyrmexDocs`, `/codomyrmexStatus`, `/codomyrmexMemory` |
 
 ---
 

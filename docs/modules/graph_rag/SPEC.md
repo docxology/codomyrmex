@@ -1,6 +1,6 @@
 # Technical Specification - Graph Rag
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.graph_rag`  
 **Last Updated**: 2026-01-29

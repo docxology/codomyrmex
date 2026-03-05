@@ -1,6 +1,6 @@
 # aider -- Agent Capabilities (Docs Summary)
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 

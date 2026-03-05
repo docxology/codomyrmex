@@ -1,8 +1,8 @@
 # PAI-Codomyrmex Integration
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
-> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 127-module Python toolbox (121 auto-discovered via MCP) it consumes via MCP. The PAI Command Center is a 15-tab SPA served from `src/codomyrmex/agents/pai/pm/`.
+> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 127-module Python toolbox (127 auto-discovered via MCP) it consumes via MCP. The PAI Command Center is a 15-tab SPA served from `src/codomyrmex/agents/pai/pm/`.
 
 ## 🎬 Interface Tour
 
@@ -32,7 +32,7 @@ graph TB
 
     subgraph CDM["🐜 Codomyrmex (this repo)"]
         direction TB
-        MODULES["126 Python Modules (121 auto-discovered)"]
+        MODULES["126 Python Modules (127 auto-discovered)"]
         STATIC["20 Static Tools"]
         DYNAMIC["~407 Dynamic Tools"]
         RESOURCES["2 Resources"]

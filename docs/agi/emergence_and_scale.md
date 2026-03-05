@@ -115,7 +115,7 @@ This fractal self-similarity is not coincidental — it reflects the autopoietic
 
 Anderson's deeper point is that at each level of complexity, **qualitatively new phenomena emerge** that cannot be predicted from the laws governing the level below. The relationship between levels is not ontological reduction but *broken symmetry*.
 
-Applied to codomyrmex's growth from 88 modules (v1.0.0) to 127 modules (v1.1.0):
+Applied to codomyrmex's growth from 88 modules (v1.1.4) to 127 modules (v1.1.4):
 
 | Module Count | Phase | Emergent Capability | Symmetry Broken |
 |:-------------|:------|:-------------------|:---------------|

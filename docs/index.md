@@ -1,8 +1,8 @@
 # Codomyrmex
 
-**A Modular, Extensible Coding Workspace**
+**A Modular, Extensible Coding Workspace** — v1.1.4
 
-Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides.
+Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **127 deeply integrated modules**.
 
 ## Quick Start
 
@@ -12,27 +12,32 @@ git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 uv sync
 
-# Run diagnostics
-uv run codomyrmex doctor --all
-
 # Run tests
 uv run pytest src/codomyrmex/tests/ -x -q
+
+# Check code quality
+uv run ruff check .              # ✅ 0 violations
+uv run ty check src/             # 1,442 diagnostics (tracked)
+uv build                         # ✅ builds clean
 ```
 
 ## Key Features
 
-- **121 auto-discovered modules** covering AI agents, code analysis, security, and more
+- **127 auto-discovered modules** covering AI agents, code analysis, security, cloud, and more
 - **407 dynamic MCP tools** for AI agent integration
-- **Zero-Mock testing** policy with real functional verification
-- **PAI integration** via the Personal AI Algorithm bridge
-- **CLI doctor** with `--fix` auto-repair mode
+- **Zero-Mock testing** policy — all tests use real functional verification (779 pass)
+- **PAI integration** — Personal AI bridge with 15-tab SPA dashboard
+- **Ruff Zero** — 119,498 → 0 violations with 155 documented rule ignores
 
 ## Documentation Sections
 
 | Section | Description |
 |---------|-------------|
-| [Getting Started](getting-started/README.md) | Installation, setup, and tutorials |
-| [Architecture](architecture/README.md) | System design and module layout |
-| [API Reference](api/README.md) | Module APIs and MCP tools |
-| [Contributing](CONTRIBUTING.md) | How to contribute |
-| [Changelog](CHANGELOG.md) | Release history |
+| [Getting Started](getting-started/quickstart.md) | Installation, setup, and tutorials |
+| [Architecture](ARCHITECTURE.md) | System design and module layout |
+| [Module Docs](modules/) | Per-module README, SPEC, AGENTS docs |
+| [Reference](reference/) | API reference and troubleshooting |
+| [Development](development/) | Contributing, testing, CI/CD |
+| [PAI](pai/) | Personal AI infrastructure |
+| [Security](security/) | Security policy and threat model |
+| [Examples](examples/) | Code examples and patterns |

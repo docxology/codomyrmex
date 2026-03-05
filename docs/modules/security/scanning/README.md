@@ -1,6 +1,6 @@
 # Security Scanning Submodule
 
-**Version**: v1.0.0 | **Source**: [`src/codomyrmex/security/scanning/__init__.py`](../../../../src/codomyrmex/security/scanning/__init__.py)
+**Version**: v1.1.4 | **Source**: [`src/codomyrmex/security/scanning/__init__.py`](../../../../src/codomyrmex/security/scanning/__init__.py)
 
 ## Overview
 

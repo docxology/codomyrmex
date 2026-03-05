@@ -20,5 +20,3 @@ class _ScatterPlot(BasePlot):
         ax.set_ylabel("Y")
 
 
-# Public alias for backward compatibility — prefer charts.scatter_plot.ScatterPlot
-ScatterPlot = _ScatterPlot

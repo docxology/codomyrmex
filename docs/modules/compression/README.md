@@ -1,6 +1,6 @@
 # Compression Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
 
 Data compression utilities with gzip, zlib, ZIP, and Zstandard support.
 

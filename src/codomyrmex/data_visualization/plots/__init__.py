@@ -1,9 +1,11 @@
 """Plot components for data visualization.
 
-Provides chart types: ScatterPlot, Heatmap, MermaidDiagram, Histogram,
+Provides chart types: Heatmap, MermaidDiagram, Histogram,
 PieChart, BoxPlot, AreaPlot, ViolinPlot, RadarChart, CandlestickChart,
 GanttChart, FunnelChart, SankeyDiagram, WordCloud, ConfusionMatrix,
 TreeMap, NetworkGraph, BarChart, LinePlot.
+
+For scatter plots use ``codomyrmex.data_visualization.charts.scatter_plot.ScatterPlot``.
 """
 
 from ._base import BasePlot
@@ -22,7 +24,6 @@ from .network import NetworkGraph
 from .pie import PieChart
 from .radar import RadarChart
 from .sankey import SankeyDiagram
-from .scatter import ScatterPlot
 from .treemap import TreeMap
 from .violin import ViolinPlot
 from .wordcloud import WordCloud
@@ -44,7 +45,6 @@ __all__ = [
     "PieChart",
     "RadarChart",
     "SankeyDiagram",
-    "ScatterPlot",
     "TreeMap",
     "ViolinPlot",
     "WordCloud",
