@@ -1,9 +1,26 @@
-# Codomyrmex Root Specification
+# Qwen Scripts — SPEC
+
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+
+**Directory**: `scripts/agents/qwen/`
 
 ## Purpose
-This specification formally defines the expected behavior, interfaces, and architecture for the `Codomyrmex Root` module.
 
-## Architectural Constraints
-- **Modularity**: Components must maintain strict modular boundaries.
-- **Real Execution**: The design guarantees executable paths without reliance on stubbed or mocked data.
-- **Data Integrity**: All input and output signatures must be strictly validated.
+Thin orchestrator scripts for Qwen agent demos. All business logic resides in `src/codomyrmex/agents/qwen/`.
+
+## Scripts
+
+| Script | Exit Codes | Dependencies |
+|--------|-----------|--------------|
+| `qwen_demo.py` | 0=success, 1=error | `openai`, optional `qwen-agent` |
+
+## Configuration
+
+| Env Variable | Required | Description |
+|-------------|----------|-------------|
+| `DASHSCOPE_API_KEY` | For API demos | DashScope API key |
+| `QWEN_API_KEY` | Alternative | Alternative API key |
+
+## Navigation
+
+- [README.md](README.md) · [AGENTS.md](AGENTS.md) · [PAI.md](PAI.md)

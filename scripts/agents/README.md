@@ -1,10 +1,10 @@
 # Agent Scripts
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Agent utility scripts for testing, orchestrating, and demonstrating the Codomyrmex agent ecosystem. All scripts are flat in this directory - no nested subfolders.
+Thin orchestrator scripts for testing, demonstrating, and running the Codomyrmex agent ecosystem. Provider-specific scripts are organized into subfolders; shared utilities remain at root.
 
 ## Quick Start
 
@@ -15,78 +15,60 @@ uv run python scripts/agents/run_all_agents.py
 # Check agent system status
 uv run python scripts/agents/agent_status.py --verbose
 
-# Run Claude Code demo
-uv run python scripts/agents/claude_code_demo.py
+# Run Qwen demo (offline)
+uv run scripts/agents/qwen/qwen_demo.py --offline
 ```
+
+## Directory Structure
+
+| Subfolder | Scripts | Description |
+|-----------|---------|-------------|
+| [claude/](claude/) | 3 | Claude Code demos and workflows |
+| [codex/](codex/) | 1 | OpenAI Codex integration |
+| [code_editing/](code_editing/) | 1 | Code editor/refactoring demos |
+| [deepseek/](deepseek/) | 1 | DeepSeek model demos |
+| [droid/](droid/) | 1 | Droid controller examples |
+| [evaluation/](evaluation/) | 1 | Agent evaluation benchmarks |
+| [gemini/](gemini/) | 2 | Google Gemini demos + dispatch |
+| [history/](history/) | 1 | Agent history exploration |
+| [jules/](jules/) | 4 | Jules, mega-swarm dispatcher/harvester |
+| [o1/](o1/) | 1 | OpenAI o1 reasoning demos |
+| [ollama/](ollama/) | 1 | Ollama orchestration |
+| [opencode/](opencode/) | 1 | Open-source model CLI |
+| [pai/](pai/) | 8+ | PAI bridge, dashboard, personality, security |
+| [pooling/](pooling/) | 1 | Agent pooling demos |
+| [qwen/](qwen/) | 1 | **Qwen demos** (14 models, 5 MCP tools) |
+
+## Shared Root Scripts
+
+| Script | Description |
+|--------|-------------|
+| `agent_status.py` | System status, health checks, API validation |
+| `agent_diagnostics.py` | Capability diagnostics across all agents |
+| `agent_comparison.py` | Side-by-side provider comparison |
+| `agent_utils.py` | Shared utilities (`get_llm_client()`) |
+| `run_all_agents.py` | Execute all examples with pass/fail summary |
+| `orchestrate.py` | Module-scoped script orchestration |
+| `basic_usage.py` | Generic agent initialization |
+| `multi_agent_workflow.py` | Multi-agent orchestrated workflows |
+| `advanced_workflow.py` | Complex multi-step pipelines |
+| `relay_chat_demo.py` | Live bidirectional relay chat |
+| `recursive_task.py` | Recursive delegation/clarification |
+| `discursive_debate.py` | Multi-turn dialectic debate |
+| `theory_example.py` | Code analysis via theory module |
+| `verify_skill_structure.py` | Skill system structure validation |
 
 ## Real Integration
 
 All relay scripts support real LLM backends via `agent_utils.get_llm_client()`:
 
-1. **Claude API**: Set `ANTHROPIC_API_KEY` environment variable.
-2. **Ollama**: Ensure Ollama is running at `http://localhost:11434`.
-3. **Requirement**: One of the above MUST be available. Mocks are disabled.
-
-## Scripts
-
-| Script | Description |
-| ------ | ----------- |
-| `agent_status.py` | System status, health checks, API key validation |
-| `run_all_agents.py` | Execute all example scripts with pass/fail summary |
-| `orchestrate.py` | Module-scoped script orchestration |
-| `test_gemini_dispatch.py` | Gemini client, CodeEditor, and Orchestrator tests |
-| `claude_code_demo.py` | Claude Code methods demonstration |
-| `relay_chat_demo.py` | **Live Relay** Basic bidirectional chat |
-| `recursive_task.py` | **Live Relay** Recursive delegation/clarification |
-| `discursive_debate.py` | **Live Relay** Multi-turn dialectic debate |
-| `orchestrate_with_ollama.py` | **Full Setup** Auto-starts Ollama, pulls model, runs Relay Chat |
-
-## Agent Examples
-
-| Script | Agent | Features |
-| ------ | ----- | -------- |
-| `basic_usage.py` | Generic | Agent initialization, requests |
-| `claude_example.py` | Claude | Basic API usage |
-| `claude_code_workflow.py` | Claude | Full Claude Code workflow |
-| `gemini_example.py` | Gemini | Google AI integration |
-| `codex_example.py` | Codex | OpenAI Codex integration |
-| `droid_example.py` | Droid | Task coordination |
-| `jules_example.py` | Jules | Git operations |
-| `opencode_example.py` | OpenCode | Open-source models |
-| `code_editor_example.py` | CodeEditor | Code generation/refactoring |
-| `multi_agent_workflow.py` | Multiple | Orchestrated workflows |
-| `advanced_workflow.py` | Multiple | Complex pipelines |
-| `agent_diagnostics.py` | All | Capability diagnostics |
-| `agent_comparison.py` | Multiple | Side-by-side comparison |
-| `theory_example.py` | Theory | Code analysis |
-
-## PAI (Personal AI Infrastructure)
-
-| Script | Description |
-| ------ | ----------- |
-| `pai_example.py` | Full PAI bridge demo — all 11 subsystems (Algorithm, Skills, Tools, Hooks, Agents, Memory, Security, TELOS, Settings, MCP) |
-| `pai_dashboard.py` | **Key entry point** — launches dashboard and opens browser to PAI Awareness page |
-
-```bash
-# Full PAI report
-uv run python scripts/agents/pai_example.py
-
-# Single subsystem
-uv run python scripts/agents/pai_example.py --subsystem algorithm
-
-# JSON output
-uv run python scripts/agents/pai_example.py --json
-
-# Launch PAI Control Center in browser
-uv run python scripts/agents/pai_dashboard.py
-
-# Launch on custom port without auto-open
-uv run python scripts/agents/pai_dashboard.py --port 9000 --no-open
-```
+1. **Claude API**: Set `ANTHROPIC_API_KEY`
+2. **Ollama**: Ensure running at `http://localhost:11434`
+3. **Qwen**: Set `DASHSCOPE_API_KEY`
+4. **Zero-Mock**: One backend MUST be available. No mocks.
 
 ## Navigation
 
-- **Parent**: [scripts](../README.md)
-- **Agents Module**: [../../src/codomyrmex/agents/README.md](../../src/codomyrmex/agents/README.md)
-- **PAI Module**: [../../src/codomyrmex/agents/pai/README.md](../../src/codomyrmex/agents/pai/README.md)
-- **Claude Module**: [../../src/codomyrmex/agents/claude/README.md](../../src/codomyrmex/agents/claude/README.md)
+- **Parent**: [scripts/](../README.md)
+- **Source Module**: [../../src/codomyrmex/agents/](../../src/codomyrmex/agents/README.md)
+- **PAI Module**: [../../src/codomyrmex/agents/pai/](../../src/codomyrmex/agents/pai/README.md)
