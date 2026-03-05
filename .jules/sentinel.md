@@ -1,0 +1,4 @@
+## 2025-01-22 - SQL Injection in DatabaseManager PRAGMA Statement
+**Vulnerability:** A SQL injection vulnerability existed in `src/codomyrmex/database_management/db_manager.py` where a user-provided `table_name` was directly interpolated into a `PRAGMA table_info({table_name})` statement.
+**Learning:** `PRAGMA` statements in SQLite cannot use standard parameterized queries (e.g. `?`), meaning they are particularly susceptible to SQL injection if not properly sanitized manually.
+**Prevention:** To safely use identifiers in PRAGMA or other statements where parameterization isn't supported, always escape double quotes in the identifier by replacing them with two double quotes (`""`), and enclose the entire identifier in double quotes. Example: `safe_table_name = table_name.replace('"', '""')` and then use `f'PRAGMA table_info("{safe_table_name}")'`.
