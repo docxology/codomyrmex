@@ -2,8 +2,9 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
-  <img src="https://img.shields.io/badge/Codomyrmex-v1.0.8-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Modules-126-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/Codomyrmex-v1.1.0-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Modules-127-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/Workflows-36-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
 </p>
@@ -12,7 +13,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of 126 deeply integrated modules spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional.
+Codomyrmex is a production-grade library of **127 deeply integrated modules** spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem includes **3,000+ Python files**, **905+ test files**, **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
 
 ---
 
@@ -32,20 +33,21 @@ Codomyrmex is a production-grade library of 126 deeply integrated modules spanni
 
 | Directory | Files | Description |
 |:---|:---:|:---|
-| [**docs/getting-started/**](docs/getting-started/) | 18 | Quick start, installation, setup, tutorials |
-| [**docs/development/**](docs/development/) | 9 | Dev environment, testing strategy, contribution guides |
-| [**docs/reference/**](docs/reference/) | 15 | API reference, CLI reference, troubleshooting |
-| [**docs/modules/**](docs/modules/) | 740 | Per-module documentation for all 127 modules |
-| [**docs/agents/**](docs/agents/) | 9 | Agent rules, coordination, autonomous operation |
+| [**docs/getting-started/**](docs/getting-started/) | 9 | Quick start, installation, setup, tutorials |
+| [**docs/development/**](docs/development/) | 10 | Dev environment, testing strategy, contribution guides |
+| [**docs/reference/**](docs/reference/) | 16 | API reference, CLI reference, troubleshooting |
+| [**docs/modules/**](docs/modules/) | 126 dirs | Per-module documentation (README, SPEC, AGENTS, PAI per module) |
+| [**docs/agents/**](docs/agents/) | 4 | Agent rules, coordination, autonomous operation |
 | [**docs/integration/**](docs/integration/) | 11 | External service integration (Google, GitHub, etc.) |
 | [**docs/deployment/**](docs/deployment/) | 5 | Production deployment guides and checklists |
 | [**docs/security/**](docs/security/) | 11 | Security theory, threat models, audit procedures |
-| [**docs/pai/**](docs/pai/) | 8 | PAI dashboard, email, calendar, skill management |
+| [**docs/pai/**](docs/pai/) | 10 | PAI dashboard, email, calendar, skill management |
 | [**docs/bio/**](docs/bio/) | 15 | Biological & myrmecological perspectives |
 | [**docs/cognitive/**](docs/cognitive/) | 11 | Cognitive science & engineering perspectives |
+| [**docs/agi/**](docs/agi/) | 14 | AGI theory, emergence, recursive self-improvement |
 | [**docs/compliance/**](docs/compliance/) | 5 | Audit reports, policy compliance, SOC2 |
 | [**docs/examples/**](docs/examples/) | 8 | Code examples, integration demos, walkthroughs |
-| [**docs/project/**](docs/project/) | 7 | Architecture, roadmap, contributing, governance |
+| [**docs/project/**](docs/project/) | 9 | Architecture, roadmap, contributing, governance |
 | [**docs/project_orchestration/**](docs/project_orchestration/) | 11 | Multi-project workflow guides and pipelines |
 | [**docs/skills/**](docs/skills/) | 9 | Skill system lifecycle, governance, authoring |
 
@@ -290,6 +292,53 @@ graph TB
 | [`formal_verification`](src/codomyrmex/formal_verification/) | 8 | 2 | [📖](docs/modules/formal_verification/) | [⚙️](config/formal_verification/config.yaml) | [📜](scripts/formal_verification/) | Z3 backend, SMT solver, invariant checking |
 | [`system_discovery`](src/codomyrmex/system_discovery/) | 14 | 4 | [📖](docs/modules/system_discovery/) | [⚙️](config/system_discovery/config.yaml) | [📜](scripts/system_discovery/) | System introspection, capability detection |
 
+### 🧬 ML Training & Optimization Modules
+
+| Module | Py | Docs | Description |
+|:---|:---:|:---:|:---|
+| [`lora`](src/codomyrmex/lora/) | 3 | [📖](docs/modules/lora/) | LoRA fine-tuning adapters |
+| [`peft`](src/codomyrmex/peft/) | 3 | [📖](docs/modules/peft/) | Parameter-efficient fine-tuning |
+| [`rlhf`](src/codomyrmex/rlhf/) | 3 | [📖](docs/modules/rlhf/) | Reinforcement learning from human feedback |
+| [`dpo`](src/codomyrmex/dpo/) | 3 | [📖](docs/modules/dpo/) | Direct preference optimization |
+| [`distillation`](src/codomyrmex/distillation/) | 3 | [📖](docs/modules/distillation/) | Model distillation and compression |
+| [`quantization`](src/codomyrmex/quantization/) | 5 | [📖](docs/modules/quantization/) | Model quantization (INT8, FP16) |
+| [`distributed_training`](src/codomyrmex/distributed_training/) | 3 | [📖](docs/modules/distributed_training/) | Multi-GPU and distributed training |
+| [`autograd`](src/codomyrmex/autograd/) | 4 | [📖](docs/modules/autograd/) | Automatic differentiation engine |
+| [`matmul_kernel`](src/codomyrmex/matmul_kernel/) | 3 | [📖](docs/modules/matmul_kernel/) | Custom matrix multiplication kernels |
+| [`softmax_opt`](src/codomyrmex/softmax_opt/) | 3 | [📖](docs/modules/softmax_opt/) | Softmax optimization (FlashAttention-style) |
+| [`nas`](src/codomyrmex/nas/) | 3 | [📖](docs/modules/nas/) | Neural architecture search |
+| [`model_merger`](src/codomyrmex/model_merger/) | 3 | [📖](docs/modules/model_merger/) | Model merging (TIES, SLERP, DARE) |
+| [`slm`](src/codomyrmex/slm/) | 3 | [📖](docs/modules/slm/) | Small language model optimization |
+| [`ssm`](src/codomyrmex/ssm/) | 3 | [📖](docs/modules/ssm/) | State space models (Mamba) |
+| [`eval_harness`](src/codomyrmex/eval_harness/) | 3 | [📖](docs/modules/eval_harness/) | LLM evaluation harness |
+| [`logit_processor`](src/codomyrmex/logit_processor/) | 3 | [📖](docs/modules/logit_processor/) | Logit manipulation and processing |
+| [`tokenizer`](src/codomyrmex/tokenizer/) | 4 | [📖](docs/modules/tokenizer/) | Custom tokenizer training and management |
+
+### 🔗 Data Pipeline & Infrastructure Modules
+
+| Module | Py | Docs | Description |
+|:---|:---:|:---:|:---|
+| [`api`](src/codomyrmex/api/) | 31 | [📖](docs/modules/api/) | REST/GraphQL API framework |
+| [`collaboration`](src/codomyrmex/collaboration/) | 30 | [📖](docs/modules/collaboration/) | Multi-agent collaboration protocols |
+| [`ml_pipeline`](src/codomyrmex/ml_pipeline/) | 2 | [📖](docs/modules/ml_pipeline/) | ML pipeline orchestration |
+| [`data_curation`](src/codomyrmex/data_curation/) | 3 | [📖](docs/modules/data_curation/) | Dataset curation and cleaning |
+| [`synthetic_data`](src/codomyrmex/synthetic_data/) | 3 | [📖](docs/modules/synthetic_data/) | Synthetic data generation |
+| [`text_to_sql`](src/codomyrmex/text_to_sql/) | 3 | [📖](docs/modules/text_to_sql/) | Natural language to SQL translation |
+| [`semantic_router`](src/codomyrmex/semantic_router/) | 3 | [📖](docs/modules/semantic_router/) | Semantic intent routing |
+
+### 🧩 Specialized Modules
+
+| Module | Py | Docs | Description |
+|:---|:---:|:---:|:---|
+| [`ai_gateway`](src/codomyrmex/ai_gateway/) | 3 | [📖](docs/modules/ai_gateway/) | AI gateway and API proxy |
+| [`aider`](src/codomyrmex/aider/) | 5 | [📖](docs/modules/aider/) | Aider AI coding assistant integration |
+| [`neural`](src/codomyrmex/neural/) | 7 | [📖](docs/modules/neural/) | Neural network primitives |
+| [`interpretability`](src/codomyrmex/interpretability/) | 3 | [📖](docs/modules/interpretability/) | Model interpretability and explainability |
+| [`image`](src/codomyrmex/image/) | 2 | [📖](docs/modules/image/) | Image processing utilities |
+| [`examples`](src/codomyrmex/examples/) | 9 | [📖](docs/modules/examples/) | Reference implementation examples |
+| [`pai_pm`](src/codomyrmex/pai_pm/) | 6 | [📖](docs/modules/pai_pm/) | PAI Project Manager server (Bun/TypeScript) |
+| [`soul`](src/codomyrmex/soul/) | 4 | [📖](docs/modules/soul/) | Biocognitive identity and persona engine |
+
 ---
 
 ## 🔬 Module Dependency Architecture
@@ -371,7 +420,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover ~303 tools (118 auto-discovered modules)
+    MCP->>Tools: Discover ~424 tools across 127 modules
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -388,20 +437,21 @@ sequenceDiagram
 
 ## 🏗️ Project Structure
 
-```
+```text
 codomyrmex/
-├── .github/                  # GitHub workflows, templates, README
-├── config/                   # 126 module-specific config.yaml files
-├── docs/                     # 900+ documentation files
+├── .github/                  # 36 GitHub Actions workflows, templates, docs
+├── config/                   # 127 module-specific config.yaml files
+├── docs/                     # 1,029+ documentation files across 17 directories
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
 │   ├── PAI.md                # Personal AI reference
-│   ├── getting-started/      # 18 quick-start docs
-│   ├── development/          # 9 dev guides
-│   ├── modules/              # 740 per-module docs
+│   ├── getting-started/      # 9 quick-start docs
+│   ├── development/          # 10 dev guides
+│   ├── modules/              # 126 per-module doc directories
 │   ├── security/             # 11 security guides
-│   └── ... (16 directories)
+│   ├── agi/                  # 14 AGI theory docs
+│   └── ... (17 directories)
 ├── scripts/                  # 445+ orchestrator scripts
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
@@ -410,8 +460,10 @@ codomyrmex/
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
 │   ├── security/             # 47 files
-│   ├── tests/                # 800+ test files (zero-mock)
-│   └── ... (91 more modules)
+│   ├── tests/                # 905+ test files (zero-mock)
+│   └── ... (122 more modules)
+├── CHANGELOG.md              # Release history
+├── CITATION.cff              # Citation metadata
 └── pyproject.toml            # uv-managed project configuration
 ```
 
@@ -421,14 +473,16 @@ codomyrmex/
 
 | Metric | Value |
 |:---|:---:|
-| **Total Modules** | 126 |
-| **Total Python Files** | 1,800+ |
-| **Total Test Files** | 800+ |
-| **Documentation Files** | 900+ |
+| **Total Modules** | 127 |
+| **Total Python Files** | 3,000+ |
+| **Total Test Files** | 905+ |
+| **Documentation Files** | 1,029+ |
+| **GitHub Workflows** | 36 |
+| **MCP Tools** | 424 |
 | **Testing Policy** | Zero-Mock (100% real methods) |
 | **Default LLM** | Gemini 2.5 Pro |
 | **Package Manager** | uv |
-| **Python Version** | 3.11+ |
+| **Python Version** | ≥3.10 |
 
 ---
 
@@ -518,7 +572,7 @@ uv run python -m pytest src/codomyrmex/tests/unit/llm/ -v
 
 ## 🗺️ Configuration Architecture
 
-> See [config/](config/) for all 126 module configurations.
+> See [config/](config/) for all 127 module configurations.
 
 ```mermaid
 graph TB
@@ -526,7 +580,7 @@ graph TB
         C1["agents/config.yaml"]
         C2["llm/config.yaml"]
         C3["security/config.yaml"]
-        Cdots["... 126 total"]
+        Cdots["... 127 total"]
     end
 
     subgraph Scripts["scripts/"]
@@ -625,6 +679,38 @@ Every module follows the **RASP** documentation pattern:
 
 ---
 
+## 🏗️ `.github/` Directory Overview
+
+> This directory powers the GitHub-hosted infrastructure for Codomyrmex.
+
+### Workflows (36 total)
+
+| Category | Workflows | Description |
+|:---|:---|:---|
+| **Core CI/CD** | [ci.yml](workflows/ci.yml), [security.yml](workflows/security.yml), [release.yml](workflows/release.yml), [pre-commit.yml](workflows/pre-commit.yml) | Lint, test, security scan, release |
+| **Code Quality** | [code-health.yml](workflows/code-health.yml), [benchmarks.yml](workflows/benchmarks.yml), [documentation.yml](workflows/documentation.yml), [documentation-validation.yml](workflows/documentation-validation.yml) | Quality gates, benchmarks, docs |
+| **PR Automation** | [auto-merge.yml](workflows/auto-merge.yml), [pr-labeler.yml](workflows/pr-labeler.yml), [pr-title-check.yml](workflows/pr-title-check.yml), [pr-conflict-check.yml](workflows/pr-conflict-check.yml), [pr-coverage-comment.yml](workflows/pr-coverage-comment.yml), [pr-linter-comments.yml](workflows/pr-linter-comments.yml) | Auto-merge, labeling, coverage |
+| **AI Dispatch** | [gemini-dispatch.yml](workflows/gemini-dispatch.yml), [gemini-invoke.yml](workflows/gemini-invoke.yml), [gemini-review.yml](workflows/gemini-review.yml), [gemini-triage.yml](workflows/gemini-triage.yml), [gemini-scheduled-triage.yml](workflows/gemini-scheduled-triage.yml), [jules-dispatch.yml](workflows/jules-dispatch.yml) | Gemini and Jules agent orchestration |
+| **Maintenance** | [maintenance.yml](workflows/maintenance.yml), [cleanup-branches.yml](workflows/cleanup-branches.yml), [lock-threads.yml](workflows/lock-threads.yml), [workflow-coordinator.yml](workflows/workflow-coordinator.yml), [workflow-status.yml](workflows/workflow-status.yml) | Repo health, branch cleanup, status |
+| **Community** | [first-interaction.yml](workflows/first-interaction.yml), [first-pr-merged.yml](workflows/first-pr-merged.yml), [agent-welcome.yml](workflows/agent-welcome.yml), [agent-metrics.yml](workflows/agent-metrics.yml) | Onboarding, agent welcome |
+| **Dependencies** | [dependency-review.yml](workflows/dependency-review.yml), [dependabot-auto-approve.yml](workflows/dependabot-auto-approve.yml), [sbom.yml](workflows/sbom.yml) | Dep review, SBOM generation |
+
+### Community & Configuration Files
+
+| File | Purpose |
+|:---|:---|
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contributor guide with PR process and code standards |
+| [CODEOWNERS](CODEOWNERS) | Auto-assignment of reviewers by file path |
+| [PULL_REQUEST_TEMPLATE.md](PULL_REQUEST_TEMPLATE.md) | Standard PR checklist |
+| [ISSUE_TEMPLATE/](ISSUE_TEMPLATE/) | Bug reports, feature requests, Jules tasks, docs issues |
+| [dependabot.yml](dependabot.yml) | Automated dependency update configuration |
+| [release-drafter.yml](release-drafter.yml) | Auto-generated release notes |
+| [FUNDING.yml](FUNDING.yml) | GitHub Sponsors configuration |
+| [WORKFLOW_IMPROVEMENTS.md](WORKFLOW_IMPROVEMENTS.md) | Planned workflow enhancements |
+| [WORKFLOW_TESTING_GUIDE.md](WORKFLOW_TESTING_GUIDE.md) | Guide for testing GitHub Actions locally |
+
+---
+
 ## 📜 License
 
 MIT License — see [LICENSE](LICENSE) for details.
@@ -633,5 +719,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>127 modules · 1,800+ Python files · 800+ tests · 900+ docs · Zero-Mock · Production-Grade</sub>
+  <sub>127 modules · 3,000+ Python files · 905+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>
