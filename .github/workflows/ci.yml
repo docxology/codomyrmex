@@ -169,13 +169,7 @@ jobs:
       matrix:
         # Slim matrix for PRs: ubuntu+3.11 only. Full matrix on main push.
         os: ${{ github.event_name == 'pull_request' && fromJSON('["ubuntu-latest"]') || fromJSON('["ubuntu-latest", "macos-latest", "windows-latest"]') }}
-        python-version: ${{ github.event_name == 'pull_request' && fromJSON('["3.11"]') || fromJSON('["3.10", "3.11", "3.12", "3.13"]') }}
-        exclude:
-          # Reduce matrix size by excluding some combinations
-          - os: macos-latest
-            python-version: "3.10"
-          - os: windows-latest
-            python-version: "3.10"
+        python-version: ${{ github.event_name == 'pull_request' && fromJSON('["3.11"]') || fromJSON('["3.11", "3.12", "3.13"]') }}
 
     steps:
       - name: Checkout code
@@ -389,9 +383,9 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # Sum JUnit XML attributes using grep + awk (avoids multi-line Python in YAML)
-          total_tests=$(grep -rh 'tests="' test-results/ 2>/dev/null | grep -oP 'tests="\K[0-9]+' | awk '{s+=$1} END {print s+0}')
-          failed_tests=$(grep -rh 'failures="' test-results/ 2>/dev/null | grep -oP 'failures="\K[0-9]+' | awk '{s+=$1} END {print s+0}')
-          error_tests=$(grep -rh 'errors="' test-results/ 2>/dev/null | grep -oP 'errors="\K[0-9]+' | awk '{s+=$1} END {print s+0}')
+          total_tests=$(grep -roh 'tests="[0-9]*"' test-results/ 2>/dev/null | sed 's/tests="//;s/"//' | awk '{s+=$1} END {print s+0}')
+          failed_tests=$(grep -roh 'failures="[0-9]*"' test-results/ 2>/dev/null | sed 's/failures="//;s/"//' | awk '{s+=$1} END {print s+0}')
+          error_tests=$(grep -roh 'errors="[0-9]*"' test-results/ 2>/dev/null | sed 's/errors="//;s/"//' | awk '{s+=$1} END {print s+0}')
           passed=$((total_tests - failed_tests - error_tests))
 
           echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY

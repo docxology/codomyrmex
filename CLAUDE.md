@@ -312,14 +312,6 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: MEMORY/WORK/20260305-093700_test-project-module-expansion/PRD.md (create), projects/test_project/src/agent_brain.py (create), projects/test_project/src/git_workflow.py (create), projects/test_project/src/knowledge_search.py (create), projects/test_project/src/security_audit.py (create), projects/test_project/src/mcp_explorer.py (create), projects/test_project/src/llm_inference.py (create), projects/test_project/tests/test_agent_brain_integration.py (create), projects/test_project/tests/test_git_workflow_integration.py (create), projects/test_project/tests/test_knowledge_search_integration.py (create)
-  ... and 10 more
-
-## Crash Recovery
-Last session (2026-03-05T09:50:25.282227) was not properly closed (crash/kill).
-Recorded 30 file changes before crash.
-Last changed files: projects/test_project/SPEC.md, projects/test_project/AGENTS.md, projects/test_project/README.md, projects/test_project/run_demo.py, projects/test_project/src/__init__.py
-Bridge from previous session is valid (above).
-For details use: memory_search("changes last session")
+Files: projects/test_project/src/agent_brain.py (edit), projects/test_project/tests/test_agent_brain_integration.py (edit), projects/test_project/src/knowledge_search.py (edit), projects/test_project/src/mcp_explorer.py (edit), projects/test_project/src/llm_inference.py (edit), projects/test_project/tests/test_mcp_explorer_integration.py (edit), projects/test_project/tests/test_llm_inference_integration.py (edit), projects/test_project/src/security_audit.py (edit), projects/test_project/tests/test_security_audit_integration.py (edit)
 
 # === END COGNILAYER ===

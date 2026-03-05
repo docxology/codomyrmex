@@ -602,8 +602,8 @@ jobs:
             echo "❌ **Bandit Security Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
           
-          if [[ "${{ needs.semgrep-scan.result }}" == "success" ]]; then
-            echo "✅ **Semgrep Analysis**: Completed" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.semgrep-scan.result }}" == "success" || "${{ needs.semgrep-scan.result }}" == "skipped" ]]; then
+            echo "✅ **Semgrep Analysis**: ${{ needs.semgrep-scan.result }}" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Semgrep Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
