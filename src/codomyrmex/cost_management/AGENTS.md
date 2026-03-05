@@ -40,3 +40,12 @@ Provides comprehensive spend tracking, budgeting, and alerting. `CostTracker` re
 ## Navigation
 
 - **Root**: [Root](../../../README.md)
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — track spend, create budgets, set alerts, gate expenditure | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and configurations | None | OBSERVED |

@@ -244,33 +244,27 @@ class TaskManager:
 
         Considers agent capabilities, current load, and dependencies.
         """
-        # Check agent load
         agent_task_count = len(self._agent_tasks.get(agent.agent_id, set()))
         if agent_task_count >= self._max_concurrent:
             return None
 
-        # Get completed task IDs for dependency checking
         completed_ids = set(self._completed.keys())
 
-        # Find ready tasks that match agent capabilities
         for _ in range(len(self._queue)):
             task = self._queue.pop()
             if task is None:
                 break
 
-            # Check dependencies
             if not task.is_ready(list(completed_ids)):
                 self._queue.push(task)  # Re-queue
                 continue
 
-            # Check capabilities
             if task.required_capabilities:
                 agent_caps = set(agent.get_capabilities())
                 if not set(task.required_capabilities).issubset(agent_caps):
                     self._queue.push(task)
                     continue
 
-            # Assign task
             task.status = TaskStatus.RUNNING
             task.assigned_agent_id = agent.agent_id
             self._running[task.id] = task
@@ -293,7 +287,6 @@ class TaskManager:
 
         task = self._running.pop(task_id)
 
-        # Update agent task tracking
         if task.assigned_agent_id and task.assigned_agent_id in self._agent_tasks:
             self._agent_tasks[task.assigned_agent_id].discard(task_id)
 
@@ -308,7 +301,6 @@ class TaskManager:
 
         self._graph.remove_task(task_id)
 
-        # Notify callbacks
         for callback in self._callbacks:
             try:
                 callback(task, result)
@@ -378,7 +370,6 @@ class TaskManager:
 
         try:
             while self._queue or self._running:
-                # Assign tasks to idle agents
                 for agent in agents:
                     if agent.state == AgentState.IDLE:
                         task = self.get_next_task(agent)
@@ -388,7 +379,6 @@ class TaskManager:
 
                 await asyncio.sleep(0.1)  # Small delay to prevent busy-waiting
 
-            # Return all results
             results = {}
             results.update(self._completed)
             results.update(self._failed)

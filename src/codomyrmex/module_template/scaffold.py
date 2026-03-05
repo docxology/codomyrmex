@@ -122,9 +122,9 @@ def _copy_and_customize(
                         break
                 content = '\n'.join(lines)
 
-        import tempfile
         import os
-        
+        import tempfile
+
         fd, temp_path = tempfile.mkstemp(dir=dst.parent)
         try:
             with open(fd, 'w', encoding='utf-8') as f:
@@ -196,9 +196,9 @@ def create_{module_name}(config: Optional[Dict[str, Any]] = None) -> {class_name
     """
     return {class_name}(config)
 '''
-    import tempfile
     import os
-    
+    import tempfile
+
     fd, temp_path = tempfile.mkstemp(dir=path.parent)
     try:
         with open(fd, 'w', encoding='utf-8') as f:

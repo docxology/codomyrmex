@@ -192,7 +192,6 @@ class MessageQueue:
             else:
                 message = await self._queue.get()
 
-            # Check message expiration
             if self._message_ttl > 0:
                 age = (datetime.now() - message.timestamp).total_seconds()
                 if age > self._message_ttl:

@@ -30,3 +30,12 @@ Agents can assess corpus quality by checking deduplication ratios across documen
 3. Response: {"unique_texts": [...], "stats": {"duplicates_removed": 47, ...}}
 4. Agent reports: "Removed 47 near-duplicates, 953 unique documents remain"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — deduplicate, similarity-check, curate, configure thresholds | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and configurations | None | OBSERVED |

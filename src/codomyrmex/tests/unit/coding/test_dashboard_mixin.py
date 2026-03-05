@@ -167,7 +167,8 @@ class TestIdentifyQuickWins:
 
     def test_warning_not_a_quick_win(self) -> None:
         issue = {"severity": "warning", "file_path": "a.py", "line_number": 5}
-        assert self.dash._identify_quick_wins([issue]) == []
+        result = self.dash._identify_quick_wins([issue])
+        assert result == []
 
 
 class TestIdentifyLongTermImprovements:

@@ -80,7 +80,6 @@ def encode_base58(data: bytes) -> str:
             else:
                 break
 
-        # Convert bytes to integer
         num = int.from_bytes(data, "big")
 
         # Divide repeatedly by 58
@@ -118,7 +117,6 @@ def decode_base58(encoded: str) -> bytes:
             else:
                 break
 
-        # Convert Base58 string to integer
         num = 0
         for ch in encoded:
             if ch not in _BASE58_MAP:
@@ -127,7 +125,6 @@ def decode_base58(encoded: str) -> bytes:
                 )
             num = num * 58 + _BASE58_MAP[ch]
 
-        # Convert integer to bytes
         if num == 0:
             result_bytes = b""
         else:

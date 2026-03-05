@@ -312,12 +312,13 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/tests/unit/coding/test_dashboard_mixin.py (edit)
+Files: ~/.claude/Plans/binary-knitting-leaf.md (create), src/codomyrmex/tests/unit/agentic_memory/test_rules_hypothesis.py (create), src/codomyrmex/tests/unit/agentic_memory/test_rules_hypothesis.py (edit), TODO.md (edit), src/codomyrmex/collaboration/coordination/consensus.py (edit), src/codomyrmex/crypto/steganography/image.py (edit), ~/.claude/Plans/snuggly-dazzling-floyd.md (create), src/codomyrmex/ml_pipeline/AGENTS.md (create), src/codomyrmex/bio_simulation/AGENTS.md (edit), src/codomyrmex/crypto/steganography/text.py (edit)
+  ... and 30 more
 
 ## Crash Recovery
-Last session (2026-03-04T14:09:55.034072) was not properly closed (crash/kill).
-Recorded 4 file changes before crash.
-Last changed files: src/codomyrmex/tests/unit/coding/test_dashboard_mixin.py
+Last session (2026-03-04T18:21:50.127571) was not properly closed (crash/kill).
+Recorded 90 file changes before crash.
+Last changed files: src/codomyrmex/logistics/orchestration/project/mcp_tools.py, src/codomyrmex/environment_setup/__init__.py, src/codomyrmex/documentation/pai.py, src/codomyrmex/config_monitoring/config_monitor.py, src/codomyrmex/feature_flags/core/manager.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

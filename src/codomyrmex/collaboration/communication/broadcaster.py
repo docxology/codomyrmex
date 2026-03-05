@@ -81,7 +81,6 @@ class Broadcaster:
         if topic not in self._topics:
             return False
 
-        # Remove all subscriptions
         for sub_id in list(self._topics[topic]):
             self._unsubscribe(sub_id)
 
@@ -113,7 +112,6 @@ class Broadcaster:
             Subscription ID.
 
         """
-        # Create topic if it doesn't exist
         if topic not in self._topics:
             self.create_topic(topic)
 
@@ -188,7 +186,6 @@ class Broadcaster:
         message.message_type = MessageType.BROADCAST
         self._message_counts[topic] += 1
 
-        # Retain message
         self._retained_messages[topic].append(message)
         if len(self._retained_messages[topic]) > self._retention_count:
             self._retained_messages[topic].pop(0)
@@ -197,7 +194,6 @@ class Broadcaster:
         for sub_id in self._topics[topic]:
             subscription = self._subscriptions.get(sub_id)
             if subscription:
-                # Apply filter
                 if subscription.filter_fn and not subscription.filter_fn(message):
                     continue
 

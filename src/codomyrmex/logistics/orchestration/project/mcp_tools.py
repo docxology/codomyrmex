@@ -11,7 +11,7 @@ than using the modern `@mcp_tool` auto-discovery decorators found elsewhere
 in Codomyrmex. This manual approach is preserved here because it allows
 dynamic initialization of the orchestration engine and fine-grained, centralized
 control over tool schemas for highly complex orchestration workflows.
-Auto-discovery tools like PAI Bridge may need special handling or an 
+Auto-discovery tools like PAI Bridge may need special handling or an
 explicit adapter to register these tools if they rely solely on `@mcp_tool`.
 """
 
@@ -56,9 +56,9 @@ from .workflow_manager import WorkflowStep, get_workflow_manager
 
 class OrchestrationMCPTools:
     """MCP tools for orchestration operations.
-    
-    Note: This class uses manual method routing (via `execute_tool`) and 
-    schema definition (via `get_tool_definitions`) rather than relying on 
+
+    Note: This class uses manual method routing (via `execute_tool`) and
+    schema definition (via `get_tool_definitions`) rather than relying on
     the project's standard `@mcp_tool` decorator for auto-discovery.
     """
 

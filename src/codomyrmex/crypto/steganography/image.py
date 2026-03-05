@@ -107,7 +107,6 @@ def embed_in_image(image_path: str, message: str, output_path: str) -> bool:
     payload = length_header + message_bytes
     payload_bits = _message_to_bits(payload)
 
-    # Check capacity
     max_bits = width * height * 3
     if len(payload_bits) > max_bits:
         raise SteganographyError(
@@ -194,14 +193,12 @@ def extract_from_image(image_path: str) -> str:
     length_bytes = _bits_to_bytes(bits[:32])
     message_length = struct.unpack(">I", length_bytes)[0]
 
-    # Validate length
     total_available = (len(bits) - 32) // 8
     if message_length > total_available:
         raise SteganographyError(
             f"Invalid message length {message_length} (only {total_available} bytes available)"
         )
 
-    # Read message bytes
     message_bits = bits[32 : 32 + message_length * 8]
     message_bytes = _bits_to_bytes(message_bits)
 

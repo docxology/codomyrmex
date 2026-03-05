@@ -53,13 +53,11 @@ class VSCodeClient(IDEClient):
             bool: True if connection successful.
         """
         self._status = IDEStatus.CONNECTING
-        # Check for VS Code workspace indicators
         if self._vscode_dir.exists():
             self._connected = True
             self._status = IDEStatus.CONNECTED
             return True
 
-        # Check for workspace file
         workspace_files = list(self.workspace_path.glob("*.code-workspace"))
         if workspace_files:
             self._connected = True

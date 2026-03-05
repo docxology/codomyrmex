@@ -30,3 +30,12 @@ Track `clip_fraction` and `entropy` across steps to diagnose training stability.
 3. Response: {"clip_fraction": 0.12, "entropy": 1.38, ...}
 4. Agent interprets: clip_fraction < 0.3 indicates stable training
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — run PPO training steps, score rewards, tune policies | None | TRUSTED |
+| **Architect** | Read + Architecture review | None | SAFE |
+| **QATester** | Validation + output verification | None | SAFE |
+| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |

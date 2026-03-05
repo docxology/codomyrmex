@@ -30,3 +30,12 @@ Agents can repeatedly sample to build statistical profiles of the architecture s
 3. Response: {"best_config": {"n_layers": 4, "d_model": 256, ...}, "best_score": -0.12}
 4. Agent presents: "Recommended: 4-layer, 256-dim transformer (~10.5M params)"
 ```
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |

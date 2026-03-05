@@ -344,8 +344,6 @@ def detect_cipher_type(ciphertext: str) -> str:
         # Try all 26 Caesar shifts and check if shift=0 (identity) is best
         results = break_caesar(ciphertext)
         best_shift = results[0].shift
-        # Check if the best decryption has a good score (close to English)
-        # and that it is notably better than the second-best
         if best_shift == 0:
             return "plaintext"
         elif results[0].score < 200:

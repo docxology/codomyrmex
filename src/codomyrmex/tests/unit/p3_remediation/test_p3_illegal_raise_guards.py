@@ -164,8 +164,8 @@ class TestUtilsInitRetryIllegalRaiseGuard:
 
 # ── networking.service_mesh.resilience.RetryPolicy ─────────────────────
 
-from codomyrmex.networking.service_mesh.resilience import (
-    RetryPolicy as MeshRetryPolicy,  # noqa: E402
+from codomyrmex.networking.service_mesh.resilience import (  # noqa: E402
+    RetryPolicy as MeshRetryPolicy,
 )
 
 

@@ -212,11 +212,9 @@ class VotingMechanism:
         votes_against = sum(1 for v in votes if v.vote == VoteType.NO)
         abstentions = sum(1 for v in votes if v.vote == VoteType.ABSTAIN)
 
-        # Check quorum
         participation = len(votes) / total_voters if total_voters > 0 else 0
         quorum_met = participation >= self._quorum
 
-        # Check if passed
         decisive_votes = votes_for + votes_against
         if decisive_votes > 0:
             approval_rate = votes_for / decisive_votes
@@ -287,14 +285,12 @@ class ConsensusBuilder:
         if not proposals:
             return None
 
-        # Count occurrences of each value
         value_counts: dict[str, int] = {}
         for value in proposals.values():
             # Use string representation for hashing
             key_str = str(value)
             value_counts[key_str] = value_counts.get(key_str, 0) + 1
 
-        # Find most common value
         if not value_counts:
             return None
 
@@ -347,7 +343,6 @@ class ConsensusBuilder:
 
         """
         for round_num in range(max_rounds):
-            # Collect proposals
             for agent in agents:
                 try:
                     value = value_fn(agent)
@@ -355,7 +350,6 @@ class ConsensusBuilder:
                 except Exception as e:
                     logger.warning(f"Agent {agent.agent_id} failed to propose: {e}")
 
-            # Check consensus
             consensus = self.check_consensus(key, len(agents))
             if consensus is not None:
                 logger.info(f"Consensus reached for {key} in round {round_num + 1}")

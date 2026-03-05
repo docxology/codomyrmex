@@ -92,7 +92,6 @@ class AntigravityClient(IDEClient):
         self._status = IDEStatus.CONNECTING
 
         if self.artifact_dir.exists():
-            # Find most recent conversation
             conversations = [
                 d for d in self.artifact_dir.iterdir()
                 if d.is_dir() and not d.name.startswith(".")
@@ -176,7 +175,6 @@ class AntigravityClient(IDEClient):
         if command not in self.TOOLS:
             raise CommandExecutionError(f"Unknown command: {command}")
 
-        # Return simulated success response
         return {
             "status": "success",
             "command": command,
@@ -193,7 +191,6 @@ class AntigravityClient(IDEClient):
         Returns:
             File path or None if no file is active.
         """
-        # Check conversation artifacts first
         if self._context and self._context.artifacts:
             most_recent = max(self._context.artifacts, key=lambda a: a.modified)
             if most_recent.path and Path(most_recent.path).exists():
@@ -706,17 +703,14 @@ class AntigravityClient(IDEClient):
 
         if cli:
             try:
-                # Build command args
                 cmd = [cli, "chat", "--reuse-window"]
 
-                # Add mode if specified
                 mode = kwargs.get("mode")
                 if mode:
                     cmd.extend(["--mode", mode])
 
                 cmd.append(message)
 
-                # Run the CLI command
                 subprocess.run(cmd, check=True, capture_output=True, timeout=30)
 
                 return IDECommandResult(

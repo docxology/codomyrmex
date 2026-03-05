@@ -4,8 +4,6 @@ from datetime import UTC, datetime, timedelta
 import pytest
 
 from codomyrmex.calendar_integration.mcp_tools import (
-
-pytestmark = pytest.mark.integration
     _DEFAULT_ATTENDEE,
     calendar_create_event,
     calendar_delete_event,
@@ -13,6 +11,8 @@ pytestmark = pytest.mark.integration
     calendar_list_events,
     calendar_update_event,
 )
+
+pytestmark = pytest.mark.integration
 
 # ---------------------------------------------------------------------------
 # Connectivity probe — verify the OAuth credentials actually work, not just

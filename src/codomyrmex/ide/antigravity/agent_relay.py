@@ -162,7 +162,6 @@ class AgentRelay:
         # Ensure channel directory exists
         self.channel_dir.mkdir(parents=True, exist_ok=True)
 
-        # Create messages file if it doesn't exist
         if not self.messages_path.exists():
             self.messages_path.touch()
             logger.info(f"Created relay channel: {self.channel_id}")

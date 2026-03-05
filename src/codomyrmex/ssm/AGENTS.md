@@ -41,3 +41,12 @@ Provides state space model primitives (Mamba/S6) for AI agents that need sequenc
 - Pure NumPy implementation: suitable for prototyping and testing, not production inference
 - Random weight initialization: outputs are not meaningful without training
 - Sequential scan: no parallel scan optimization (would need GPU kernels)
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |

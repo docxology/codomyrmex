@@ -1,5 +1,3 @@
-import pytest
-
 #!/usr/bin/env python3
 """
 Comprehensive Testing on Real GitHub Repositories
@@ -22,6 +20,8 @@ import shutil
 import sys
 import tempfile
 from datetime import datetime
+
+import pytest
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))

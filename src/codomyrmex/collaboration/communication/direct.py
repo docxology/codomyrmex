@@ -171,7 +171,6 @@ class DirectMessenger:
             metadata=metadata or {},
         )
 
-        # Create pending request
         future: asyncio.Future = asyncio.Future()
         pending = PendingRequest(
             request_id=message.id,
@@ -210,8 +209,7 @@ class DirectMessenger:
                 str(e)
             ) from e
         finally:
-            # Cleanup pending request
-            self._pending_requests.pop(message.id, None)
+                self._pending_requests.pop(message.id, None)
 
     async def respond(
         self,
@@ -327,7 +325,6 @@ class ConversationTracker:
     def end_conversation(self, conversation_id: str) -> bool:
         """End a conversation."""
         if conversation_id in self._conversations:
-            # Remove from agent mappings
             for agent_convos in self._agent_conversations.values():
                 agent_convos.discard(conversation_id)
             del self._conversations[conversation_id]

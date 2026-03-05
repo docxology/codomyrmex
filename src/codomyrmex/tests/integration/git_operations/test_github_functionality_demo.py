@@ -1,5 +1,3 @@
-import pytest
-
 #!/usr/bin/env python3
 """
 GitHub Operations Functionality Demo
@@ -19,12 +17,12 @@ import sys
 import tempfile
 from datetime import datetime
 
+import pytest
+
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from codomyrmex.git_operations import (
-
-pytestmark = pytest.mark.integration
     GitHubAPIError,
     add_files,
     # Local Git operations
@@ -40,6 +38,8 @@ pytestmark = pytest.mark.integration
     initialize_git_repository,
     is_git_repository,
 )
+
+pytestmark = pytest.mark.integration
 
 
 def test_all_git_operations():

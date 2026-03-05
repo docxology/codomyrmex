@@ -235,7 +235,6 @@ class RingElection(LeaderElection):
             round_count += 1
             priority = self._priority_fn(agent)
 
-            # Add to candidates, filtering lower priority
             candidates.append((priority, agent))
 
         # Sort and select highest priority

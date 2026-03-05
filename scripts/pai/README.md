@@ -30,6 +30,7 @@ uv run python scripts/pai/dashboard.py --no-setup --restart
 | File | Description |
 |------|-------------|
 | `dashboard.py` | PAI dashboard orchestrator — launches both servers (:8888 + :8787) |
+| `pm/` | **PAI Project Manager tools** — 19 TypeScript CLI tools for Mission/Project/Task CRUD + GitHub sync ([README](pm/README.md)) |
 | `test_email_compose.py` | LLM email compose functional tests — validates all templates with real project/calendar data |
 | `generate_skills.py` | Auto-generate SKILL.md files from MCP tool manifest |
 | `update_pai_docs.py` | Batch update stub PAI.md files across all modules |

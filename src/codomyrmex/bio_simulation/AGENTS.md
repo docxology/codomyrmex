@@ -26,4 +26,13 @@ The Bio-Simulation module provides high-fidelity ant colony simulation. It is us
 
 ## Navigation
 
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md)
+- [README.md](README.md) | [SPEC.md](SPEC.md)
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |

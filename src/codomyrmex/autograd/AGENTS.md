@@ -38,3 +38,12 @@ Agents can demonstrate how backpropagation works by building Value computation g
 - `sigmoid` -- logistic function
 - `square` -- x^2
 - `sum` -- identity (for scalar inputs)
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |

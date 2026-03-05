@@ -120,7 +120,6 @@ def detect_lsb_steganography(image_path: str) -> DetectionResult:
         header_value = 0
         for bit in header_bits:
             header_value = (header_value << 1) | bit
-        # Check if header_value is a plausible message length
         max_capacity = (total_lsbs // 8) - 4
         if 0 < header_value <= max_capacity:
             has_length_header = True
@@ -213,7 +212,6 @@ def analyze_statistical_anomalies(data: bytes) -> DetectionResult:
 
     total_bytes = len(data)
     bit_ratios = [count / total_bytes for count in bit_counts]
-    # Check if LSBs are unusually uniform compared to higher bits
     lsb_ratio = bit_ratios[0]
     bit_ratios[7]
     lsb_uniformity = 1.0 - 2.0 * abs(lsb_ratio - 0.5)
@@ -235,7 +233,6 @@ def analyze_statistical_anomalies(data: bytes) -> DetectionResult:
     except ValueError:
         is_uniform = False
 
-    # Build confidence
     confidence = 0.0
 
     if entropy > 7.9:

@@ -168,7 +168,6 @@ class SupervisorAgent(CollaborativeAgent):
                 *[self.delegate(task) for task in tasks],
                 return_exceptions=True
             )
-            # Convert exceptions to TaskResults
             final_results = []
             for i, result in enumerate(results):
                 if isinstance(result, Exception):
@@ -207,17 +206,14 @@ class SupervisorAgent(CollaborativeAgent):
         pending = list(tasks)
 
         while pending:
-            # Find tasks ready to execute
             ready = [t for t in pending if t.is_ready(completed_ids)]
 
             if not ready:
-                # Check for circular dependencies
                 raise TaskDependencyError(
                     pending[0].id,
                     [d for d in pending[0].dependencies if d not in completed_ids]
                 )
 
-            # Execute ready tasks in parallel
             batch_results = await self.delegate_batch(ready)
 
             for task, result in zip(ready, batch_results, strict=False):

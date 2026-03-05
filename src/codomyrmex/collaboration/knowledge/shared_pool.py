@@ -102,7 +102,6 @@ class SharedMemoryPool:
             True if written, False if ACL denied.
 
         """
-        # Find which namespace to write to
         target_ns = agent_id
         if target_ns not in self._namespaces:
             return False
@@ -192,7 +191,6 @@ class SharedMemoryPool:
         terms_lower = [t.lower() for t in query_terms]
 
         for ns_id, entries in self._namespaces.items():
-            # Check read access
             if requesting_agent:
                 acl = self._acls.get(ns_id)
                 if acl and not acl.can_read(requesting_agent):

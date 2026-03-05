@@ -236,7 +236,6 @@ class ToolChain:
             else:
                 step_input = dict(context)
 
-            # Invoke the tool
             result = self._registry.invoke(step.tool_name, step_input)
             step_results.append(result)
 
@@ -250,7 +249,6 @@ class ToolChain:
                     break
                 continue
 
-            # Store output in context
             output = result.data
             if step.output_key:
                 context[step.output_key] = output

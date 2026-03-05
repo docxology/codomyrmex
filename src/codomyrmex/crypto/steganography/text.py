@@ -43,7 +43,6 @@ def _zw_to_bytes(zw_string: str) -> bytes:
             bits.append(1)
         # Skip any other characters (delimiters, etc.)
 
-    # Convert bits to bytes
     result = bytearray()
     for i in range(0, len(bits) - 7, 8):
         byte = 0
@@ -130,7 +129,6 @@ def extract_from_text(stego_text: str) -> str:
         SteganographyError: If no hidden message is found or the
             extracted data is invalid.
     """
-    # Find delimiters
     start_idx = stego_text.find(_START_DELIMITER)
     end_idx = stego_text.find(_END_DELIMITER)
 

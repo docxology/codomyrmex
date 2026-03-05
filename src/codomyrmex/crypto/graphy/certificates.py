@@ -169,13 +169,11 @@ def validate_certificate_chain(cert_chain: list) -> ValidationResult:
 
     try:
         for i, cert in enumerate(cert_chain):
-            # Check date validity
             if now < cert.not_valid_before_utc:
                 errors.append(f"Certificate {i}: not yet valid (not_valid_before={cert.not_valid_before_utc})")
             if now > cert.not_valid_after_utc:
                 errors.append(f"Certificate {i}: expired (not_valid_after={cert.not_valid_after_utc})")
 
-        # Check issuer/subject chain linkage
         for i in range(len(cert_chain) - 1):
             current = cert_chain[i]
             issuer_cert = cert_chain[i + 1]

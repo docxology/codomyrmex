@@ -248,3 +248,4 @@ fix_*.py
 src/codomyrmex/dark/pdf/vendor/dark-pdf
 src/codomyrmex/codomyrmex/codomyrmex.llm/
 /static_analysis_codeql_1/codeql.db
+3-4-2026.md

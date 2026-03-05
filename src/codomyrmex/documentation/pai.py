@@ -148,12 +148,10 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
     layer = get_layer(module_name)
     phases = infer_pai_phase(module_name, exports["functions"], exports["classes"])
 
-    # Build overview
     overview = exports["docstring"].split("\n")[0] if exports["docstring"] else ""
     if not overview:
         overview = readme_desc or f"The {human_name} module provides capabilities for the codomyrmex ecosystem."
 
-    # Build the document
     sections = []
 
     # Header

@@ -298,7 +298,6 @@ class ConsensusProtocol(AgentProtocol):
         if not agents:
             raise ValueError("No agents available for consensus")
 
-        # Get results from all agents
         tasks = [agent.process_task(task) for agent in agents]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -314,7 +313,6 @@ class ConsensusProtocol(AgentProtocol):
             key = json.dumps(result, sort_keys=True, default=str)
             result_counts[key] = result_counts.get(key, 0) + 1
 
-        # Check if quorum is met
         max_count = max(result_counts.values())
         if max_count / len(agents) >= self.quorum:
             max_key = max(result_counts.keys(), key=lambda k: result_counts[k])

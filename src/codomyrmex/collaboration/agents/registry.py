@@ -88,7 +88,6 @@ class AgentRegistry:
         """
         self._agents[agent.agent_id] = agent
 
-        # Update capability index
         for capability in agent.get_capabilities():
             if capability not in self._capability_index:
                 self._capability_index[capability] = set()
@@ -114,7 +113,6 @@ class AgentRegistry:
 
         agent = self._agents[agent_id]
 
-        # Remove from capability index
         for capability in agent.get_capabilities():
             if capability in self._capability_index:
                 self._capability_index[capability].discard(agent_id)
@@ -152,10 +150,8 @@ class AgentRegistry:
         if not capabilities:
             return self.get_all()
 
-        # Start with agents having the first capability
         matching_ids = self._capability_index.get(capabilities[0], set()).copy()
 
-        # Intersect with other capabilities
         for capability in capabilities[1:]:
             matching_ids &= self._capability_index.get(capability, set())
 

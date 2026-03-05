@@ -183,7 +183,6 @@ def assess_password_strength(password: str) -> StrengthResult:
         feedback.append("Avoid repeated characters (e.g., aaa, 111)")
         score = max(0, score - repeat_count * 5)
 
-    # Check common passwords
     if check_common_passwords(password):
         feedback.append("This is a commonly used password")
         score = min(score, 5)

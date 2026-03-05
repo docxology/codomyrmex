@@ -1,4 +1,3 @@
-import pytest
 
 from codomyrmex.graph_rag.mcp_tools import (
     graph_rag_build_graph,
@@ -24,7 +23,7 @@ class TestGraphRagMCPTools:
         relationships = [
             {"source_id": "e2", "target_id": "e1", "relation_type": "authored_by"}
         ]
-        
+
         result = graph_rag_build_graph(entities=entities, relationships=relationships)
         assert result["status"] == "success"
         assert result["entity_count"] == 2
@@ -37,7 +36,7 @@ class TestGraphRagMCPTools:
             {"id": "e1", "name": "Python Language", "entity_type": "concept"},
             {"id": "e2", "name": "Java Language", "entity_type": "concept"},
         ]
-        
+
         result = graph_rag_search_entities(entities=entities, query="python")
         assert result["status"] == "success"
         assert result["match_count"] == 1
@@ -49,7 +48,7 @@ class TestGraphRagMCPTools:
             {"id": "e1", "name": "Python Language", "entity_type": "concept"},
             {"id": "e2", "name": "Python Software Foundation", "entity_type": "organization"},
         ]
-        
+
         # Matches the organization only
         result = graph_rag_search_entities(entities=entities, query="python", entity_type="organization")
         assert result["status"] == "success"

@@ -58,7 +58,6 @@ class WorkerAgent(CollaborativeAgent):
         """
         self._task_handlers[capability_name] = handler
 
-        # Add capability if not already present
         if not self.has_capability(capability_name):
             self.add_capability(AgentCapability(
                 name=capability_name,
@@ -79,7 +78,6 @@ class WorkerAgent(CollaborativeAgent):
         Finds the appropriate handler based on task capabilities
         and executes it.
         """
-        # Find a matching handler
         handler = None
         for cap in task.required_capabilities:
             if cap in self._task_handlers:
@@ -96,7 +94,6 @@ class WorkerAgent(CollaborativeAgent):
                 self.get_capabilities()
             )
 
-        # Execute the handler
         logger.info(f"Worker {self.name} executing task: {task.name}")
 
         if asyncio.iscoroutinefunction(handler):
@@ -128,7 +125,6 @@ class WorkerAgent(CollaborativeAgent):
             return_exceptions=True
         )
 
-        # Convert exceptions to TaskResults
         final_results = []
         for i, result in enumerate(results):
             if isinstance(result, Exception):

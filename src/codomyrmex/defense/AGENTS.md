@@ -86,3 +86,12 @@ if result["detected"]:
 This module is governed by the following rule file:
 
 - [`src/codomyrmex/agentic_memory/rules/modules/defense.cursorrules`](src/codomyrmex/agentic_memory/rules/modules/defense.cursorrules)
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — design, implement, and run defensive scenarios | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study domain capabilities | None | OBSERVED |

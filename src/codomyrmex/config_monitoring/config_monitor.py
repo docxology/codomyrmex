@@ -416,7 +416,6 @@ class ConfigurationMonitor:
             except (OSError, AttributeError):
                 pass
 
-            # Check content
             try:
                 content = f.read_text(errors='ignore')
                 for pattern, msg in sensitive_patterns:

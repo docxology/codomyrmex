@@ -77,7 +77,6 @@ def decode_pem(pem_string: str) -> bytes:
         end = footer_match.start()
         b64_content = pem_string[start:end].strip()
 
-        # Remove all whitespace from the Base64 content
         b64_clean = "".join(b64_content.split())
 
         return base64.b64decode(b64_clean)

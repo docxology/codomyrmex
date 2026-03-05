@@ -5,6 +5,9 @@ This module provides tools for validating the environment, checking dependencies
 managing environment variables, and integrating with the uv package manager.
 """
 
+from collections.abc import Callable
+from typing import Any
+
 from .dependency_resolver import (
     Conflict,
     DependencyInfo,
@@ -35,8 +38,6 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-
-from typing import Any, Callable, Dict
 
 def cli_commands() -> dict[str, dict[str, str | Callable]]:
     """Return CLI commands for the environment_setup module."""

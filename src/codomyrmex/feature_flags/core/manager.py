@@ -131,7 +131,6 @@ class FeatureManager:
         if flag is None:
             return default
 
-        # Create EvaluationContext
         user_id = context_attrs.pop("user_id", None)
         session_id = context_attrs.pop("session_id", None)
         environment = context_attrs.pop("environment", "production")

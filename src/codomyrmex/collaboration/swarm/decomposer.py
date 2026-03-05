@@ -114,7 +114,6 @@ class TaskDecomposer:
                 (set(), AgentRole.REVIEWER, "Review: {task}", 5),
             ]
 
-        # Build sub-tasks with sequential dependencies
         for _, role, template, priority in matched_phases:
             st = SubTask(
                 description=template.format(task=task),

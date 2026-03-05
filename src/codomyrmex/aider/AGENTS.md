@@ -160,3 +160,12 @@ All MCP tools catch exceptions and return `{"status": "error", "message": "..."}
 2. `--no-auto-commits` is always applied -- Claude Code controls when commits happen.
 3. `--yes` prevents interactive prompts that would hang the subprocess.
 4. File paths are passed as positional arguments, not interpolated into shell strings.
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — edit code, architect changes, configure | aider_edit, aider_architect, aider_config, aider_ask, aider_check | TRUSTED |
+| **Architect** | Design review + query only | aider_ask, aider_check | SAFE |
+| **QATester** | Validation — check and query | aider_check, aider_ask | SAFE |
+| **Researcher** | Read-only — inspect configuration | aider_check | OBSERVED |

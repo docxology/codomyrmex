@@ -33,3 +33,12 @@ Configuration change detection, drift analysis, compliance auditing, and file-sy
 - **Parent**: [config_management/](../config_management/AGENTS.md)
 - **Specification**: [SPEC.md](SPEC.md)
 - **README**: [README.md](README.md)
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — configure, monitor, snapshot, audit, hot-reload | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and configurations | None | OBSERVED |

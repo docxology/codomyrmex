@@ -46,3 +46,12 @@ This document defines which PAI agent types can access softmax_opt tools and at 
 | TRUSTED | Full read/write access to all module capabilities |
 | OBSERVED | Read-only access, results logged for audit |
 | UNTRUSTED | No access |
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full — design, implement, train, benchmark | All available | TRUSTED |
+| **Architect** | Read + Architecture review | Read-only | SAFE |
+| **QATester** | Validation + output verification | Read + Inspect | SAFE |
+| **Researcher** | Read-only — study algorithms and outputs | None | OBSERVED |

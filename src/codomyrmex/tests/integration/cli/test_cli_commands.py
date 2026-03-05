@@ -1,7 +1,7 @@
-import pytest
-
 import subprocess
 import sys
+
+import pytest
 
 pytestmark = pytest.mark.integration
 
