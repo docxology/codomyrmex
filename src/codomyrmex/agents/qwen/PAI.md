@@ -1,45 +1,42 @@
-# Personal AI Infrastructure - Qwen
+# Qwen Agent — PAI Integration
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: `codomyrmex.agents.qwen`  
-**Status**: Active
+## Purpose
 
-## Context
+PAI (Personal AI Infrastructure) integration for the Qwen agent module.
 
-Qwen-Coder integration for multilingual code assistance
+## PAI Bridge Points
 
-## AI Strategy
+| PAI Component | Qwen Integration |
+|---------------|-----------------|
+| Trust Gateway | API key validation via DashScope |
+| MCP Bridge | 5 tools: chat, tool-calling, models, agents, code review |
+| Agent Tiers | Tier 1 (editor) via QwenClient |
+| Awareness | Model registry for capability matching |
 
-As an AI agent working with this submodule:
+## MCP Tool Mapping
 
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
-
-```python
-from codomyrmex.agents.qwen import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+```mermaid
+graph LR
+    PAI[PAI Bridge] --> MCP[MCP Tools]
+    MCP --> QC[qwen_chat]
+    MCP --> QCT[qwen_chat_with_tools]
+    MCP --> QLM[qwen_list_models]
+    MCP --> QCA[qwen_create_agent]
+    MCP --> QCR[qwen_code_review]
 ```
 
-## Key Files
+## Configuration
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+PAI manages Qwen credentials via the trust gateway:
 
-## Future Considerations
+- `DASHSCOPE_API_KEY` → API authentication
+- Model selection via awareness for task-appropriate matching
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+## Navigation
+
+- **README**: [README.md](README.md)
+- **SPEC**: [SPEC.md](SPEC.md)
+- **AGENTS**: [AGENTS.md](AGENTS.md)
+- **Parent**: [agents/](../README.md)
