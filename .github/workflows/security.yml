@@ -463,6 +463,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.check_updates.outputs.updates_available == 'true'
+        continue-on-error: true
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
