@@ -27,10 +27,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Self
 
-from codomyrmex.logging_monitoring.audit.audit_logger import (
-    AuditLogger as _StandaloneAuditLogger,  # noqa: F401
-)
-
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 # More detailed log format for debug purposes, can be set via env variable

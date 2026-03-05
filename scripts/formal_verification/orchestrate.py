@@ -15,7 +15,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex  # noqa: F401
+    import codomyrmex
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -139,7 +139,7 @@ def main():
     print_section("Codomyrmex Formal Verification Orchestrator", separator="=")
 
     try:
-        import z3  # noqa: F401
+        import z3
     except ImportError:
         print_error("z3-solver not installed. Cannot run demos.")
         return 1

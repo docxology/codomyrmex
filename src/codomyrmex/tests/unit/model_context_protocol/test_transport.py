@@ -14,7 +14,7 @@ import pytest
 
 pydantic = pytest.importorskip("pydantic")
 
-from codomyrmex.model_context_protocol.errors import (  # noqa: E402
+from codomyrmex.model_context_protocol.errors import (
     FieldError,
     MCPErrorCode,
     MCPToolError,
@@ -23,11 +23,11 @@ from codomyrmex.model_context_protocol.errors import (  # noqa: E402
     timeout_error,
     validation_error,
 )
-from codomyrmex.model_context_protocol.transport.client import (  # noqa: E402
+from codomyrmex.model_context_protocol.transport.client import (
     MCPClientConfig,
     MCPClientError,
 )
-from codomyrmex.model_context_protocol.transport.server import (  # noqa: E402
+from codomyrmex.model_context_protocol.transport.server import (
     MCPServer,
     MCPServerConfig,
 )

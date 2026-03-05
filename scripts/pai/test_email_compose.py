@@ -22,7 +22,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
 # Delegate to the relocated module
-from codomyrmex.tests.integration.pai.test_email_compose import main  # noqa: E402
+from codomyrmex.tests.integration.pai.test_email_compose import main
 
 if __name__ == "__main__":
     sys.exit(main())

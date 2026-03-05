@@ -269,7 +269,7 @@ class TestHealthChecker:
         try:
             from codomyrmex.system_discovery.health.health_checker import (
                 check_module_availability,
-                perform_health_check,  # noqa: F401
+                perform_health_check,
             )
         except ImportError:
             pytest.skip("Health checker convenience functions not available")

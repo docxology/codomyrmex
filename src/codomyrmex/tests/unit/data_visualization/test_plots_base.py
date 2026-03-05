@@ -17,7 +17,7 @@ import base64
 import pytest
 
 try:
-    import matplotlib as mpl  # noqa: F401
+    import matplotlib as mpl
 
     MATPLOTLIB_AVAILABLE = True
 except ImportError:

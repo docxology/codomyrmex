@@ -17,7 +17,7 @@ pytestmark = [
 ]
 
 # Import the module — always available (it handles missing deps internally)
-from codomyrmex.git_operations.api import visualization as viz_mod  # noqa: E402
+from codomyrmex.git_operations.api import visualization as viz_mod
 
 # ---------------------------------------------------------------------------
 # Helpers

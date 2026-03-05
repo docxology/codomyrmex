@@ -24,7 +24,6 @@ def _load_rest_api():
     name = "codomyrmex.api.standardization.rest_api"
     if name in sys.modules:
         return sys.modules[name]
-    import codomyrmex.logging_monitoring  # noqa: F401 — loads cleanly, no cycles
 
     spec = importlib.util.spec_from_file_location(
         name,

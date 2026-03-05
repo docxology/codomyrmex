@@ -15,7 +15,7 @@ except ImportError:
 
 try:
     import pandas as pd
-    import pyarrow as pa  # noqa: F401
+    import pyarrow as pa
 
     pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
     PARQUET_AVAILABLE = True

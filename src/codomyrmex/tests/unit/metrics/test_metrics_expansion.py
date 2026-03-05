@@ -16,7 +16,7 @@ except ImportError:
     HAS_PROMETHEUS = False
 
 try:
-    import statsd  # noqa: F401
+    import statsd
 
     from codomyrmex.telemetry.metrics import StatsDClient
 

@@ -619,7 +619,7 @@ class TestOutputFilePath:
 # Zero-mock policy: these are concrete implementations, not Mock() objects.
 # ---------------------------------------------------------------------------
 
-from codomyrmex.agents.core.base import AgentResponse  # noqa: E402
+from codomyrmex.agents.core.base import AgentResponse
 
 
 class _SuccessClient:

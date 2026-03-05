@@ -13,7 +13,7 @@ _tokenizer: BPETokenizer | None = None
 
 def _get_or_create_tokenizer() -> BPETokenizer:
     """Return the module-level tokenizer instance, creating one if needed."""
-    global _tokenizer  # noqa: PLW0603
+    global _tokenizer
     if _tokenizer is None:
         _tokenizer = BPETokenizer(vocab_size=500)
     return _tokenizer
@@ -31,7 +31,7 @@ def tokenizer_train(texts: list[str], vocab_size: int = 500) -> dict:
         dict with: status, vocab_size (int), num_merges (int),
         sample_vocab (list of first 20 tokens).
     """
-    global _tokenizer  # noqa: PLW0603
+    global _tokenizer
     _tokenizer = BPETokenizer(vocab_size=vocab_size)
     _tokenizer.train(texts, vocab_size=vocab_size)
     return {

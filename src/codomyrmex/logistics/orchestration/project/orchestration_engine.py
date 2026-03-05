@@ -41,7 +41,7 @@ except ImportError:
 
 
 try:
-    import codomyrmex.model_context_protocol  # noqa: F401
+    import codomyrmex.model_context_protocol
 
     MCP_AVAILABLE = True
 except ImportError:

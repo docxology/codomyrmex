@@ -23,7 +23,7 @@ import pytest
 
 pydantic = pytest.importorskip("pydantic")
 
-from codomyrmex.model_context_protocol.transport.server import (  # noqa: E402
+from codomyrmex.model_context_protocol.transport.server import (
     MCPServer,
     MCPServerConfig,
 )

@@ -23,21 +23,21 @@ def audio_get_capabilities() -> dict[str, Any]:
         }
 
         try:
-            import whisper  # noqa: F401
+            import whisper
 
             capabilities["stt_providers"].append("whisper")
         except ImportError:
             pass
 
         try:
-            import pyttsx3  # noqa: F401
+            import pyttsx3
 
             capabilities["tts_providers"].append("pyttsx3")
         except ImportError:
             pass
 
         try:
-            import edge_tts  # noqa: F401
+            import edge_tts
 
             capabilities["tts_providers"].append("edge-tts")
         except ImportError:

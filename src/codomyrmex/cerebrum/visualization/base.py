@@ -46,7 +46,7 @@ elif nx is None:
 logger = get_logger(__name__)
 
 
-class BaseVisualizer(ABC):  # noqa: B024
+class BaseVisualizer(ABC):
     """Base class for all visualizers."""
 
     def __init__(

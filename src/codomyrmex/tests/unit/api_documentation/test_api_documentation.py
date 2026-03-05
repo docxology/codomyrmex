@@ -13,7 +13,7 @@ import pytest
 
 try:
     from codomyrmex.api.openapi_generator import (
-        generate_openapi_spec as _probe,  # noqa: F401
+        generate_openapi_spec as _probe,
     )
 
     _API_AVAILABLE = True

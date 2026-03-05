@@ -53,7 +53,7 @@ def _safe_eval_expression(expression: str, variables: dict[str, float]) -> Value
 
     # Verify code only uses allowed operations
     # (compile already restricts to expressions, and namespace has no builtins)
-    result = eval(code, namespace)  # noqa: S307
+    result = eval(code, namespace)
 
     if not isinstance(result, Value):
         # Expression evaluated to a raw number (no variables used)
@@ -95,7 +95,7 @@ def autograd_compute(expression: str, variables: dict) -> dict:
     except SyntaxError as exc:
         raise ValueError(f"Invalid expression syntax: {exc}") from exc
 
-    result = eval(code, namespace)  # noqa: S307
+    result = eval(code, namespace)
 
     if not isinstance(result, Value):
         result = Value(float(result))

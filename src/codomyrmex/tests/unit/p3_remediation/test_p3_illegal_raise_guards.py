@@ -120,7 +120,7 @@ class TestCircuitBreakerRetryIllegalRaiseGuard:
 # The function `retry` in utils/__init__.py is shadowed by the submodule
 # utils/retry.py once it's been imported (line 17 above). We retrieve the
 # function directly from the module's __dict__ to avoid the collision.
-import importlib  # noqa: E402
+import importlib
 
 _utils_init = importlib.import_module("codomyrmex.utils")
 _utils_retry_func = _utils_init.__dict__.get("retry")
@@ -163,7 +163,7 @@ class TestUtilsInitRetryIllegalRaiseGuard:
 
 # ── networking.service_mesh.resilience.RetryPolicy ─────────────────────
 
-from codomyrmex.networking.service_mesh.resilience import (  # noqa: E402
+from codomyrmex.networking.service_mesh.resilience import (
     RetryPolicy as MeshRetryPolicy,
 )
 
@@ -188,7 +188,7 @@ class TestMeshRetryPolicyIllegalRaiseGuard:
 
 # ── orchestrator.resilience.retry_policy.with_retry ────────────────────
 
-from codomyrmex.orchestrator.resilience.retry_policy import (  # noqa: E402
+from codomyrmex.orchestrator.resilience.retry_policy import (
     with_retry as orch_with_retry,
 )
 
@@ -227,8 +227,8 @@ class TestOrchestratorWithRetryIllegalRaiseGuard:
 
 # ── utils.integration.with_retry ───────────────────────────────────────
 
-from codomyrmex.utils.integration import RetryConfig as IntRetryConfig  # noqa: E402
-from codomyrmex.utils.integration import with_retry as int_with_retry  # noqa: E402
+from codomyrmex.utils.integration import RetryConfig as IntRetryConfig
+from codomyrmex.utils.integration import with_retry as int_with_retry
 
 
 @pytest.mark.unit
@@ -252,7 +252,7 @@ class TestIntegrationWithRetryIllegalRaiseGuard:
 
 # ── cli_agent_base.retry_on_failure ────────────────────────────────────
 
-from codomyrmex.agents.generic.cli_agent_base import retry_on_failure  # noqa: E402
+from codomyrmex.agents.generic.cli_agent_base import retry_on_failure
 
 
 @pytest.mark.unit

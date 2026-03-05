@@ -65,7 +65,7 @@ class TestPhysicalManagement:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.physical_management import (  # noqa: F401
+            from codomyrmex.physical_management import (
                 PhysicalObjectManager,
                 Vector3D,
             )

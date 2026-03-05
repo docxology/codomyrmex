@@ -34,14 +34,14 @@ except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
 try:
-    from codomyrmex.coding.static_analysis import analyze_file  # noqa: F401
+    from codomyrmex.coding.static_analysis import analyze_file
 
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
 
 try:
-    from codomyrmex.security.digital import analyze_file_security  # noqa: F401
+    from codomyrmex.security.digital import analyze_file_security
 
     MODULE_AVAILABILITY["security"] = True
 except ImportError:
@@ -53,7 +53,7 @@ except ImportError:
     MODULE_AVAILABILITY["ai_code_editing"] = False
 
 try:
-    from codomyrmex.data_visualization import create_bar_chart  # noqa: F401
+    from codomyrmex.data_visualization import create_bar_chart
 
     MODULE_AVAILABILITY["data_visualization"] = True
 except ImportError:
@@ -61,8 +61,8 @@ except ImportError:
 
 try:
     from codomyrmex.performance import (
-        profile_function,  # noqa: F401
-        run_benchmark,  # noqa: F401
+        profile_function,
+        run_benchmark,
     )
 
     MODULE_AVAILABILITY["performance"] = True
@@ -71,7 +71,7 @@ except ImportError:
 
 try:
     from codomyrmex.logging_monitoring import (
-        PerformanceLogger,  # noqa: F401
+        PerformanceLogger,
     )
 
     MODULE_AVAILABILITY["performance_logging"] = True
@@ -80,7 +80,7 @@ except ImportError:
 
 try:
     from codomyrmex.logging_monitoring import (
-        get_logger,  # noqa: F401
+        get_logger,
     )
 
     LOGGING_AVAILABLE = True

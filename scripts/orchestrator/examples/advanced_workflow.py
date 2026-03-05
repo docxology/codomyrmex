@@ -10,7 +10,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex  # noqa: F401
+    import codomyrmex
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -24,7 +24,7 @@ def main() -> int:
 
     # Import validation
     try:
-        import codomyrmex.orchestrator  # noqa: F401
+        import codomyrmex.orchestrator
 
         print_info("Successfully imported codomyrmex.orchestrator")
     except ImportError as e:

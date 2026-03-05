@@ -19,7 +19,6 @@ def _load_graphql_api():
     name = "codomyrmex.api.standardization.graphql_api"
     if name in sys.modules:
         return sys.modules[name]
-    import codomyrmex.logging_monitoring  # noqa: F401
 
     spec = importlib.util.spec_from_file_location(
         name,

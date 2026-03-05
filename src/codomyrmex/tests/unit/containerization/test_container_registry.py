@@ -36,13 +36,13 @@ except Exception:
 
 # --- Imports ----------------------------------------------------------------
 
-from codomyrmex.containerization.registry.container_registry import (  # noqa: E402
+from codomyrmex.containerization.registry.container_registry import (
     ContainerImage,
     ContainerRegistry,
     RegistryCredentials,
     manage_container_registry,
 )
-from codomyrmex.exceptions import CodomyrmexError  # noqa: E402
+from codomyrmex.exceptions import CodomyrmexError
 
 # ---------------------------------------------------------------------------
 # ContainerImage dataclass

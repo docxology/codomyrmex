@@ -15,7 +15,7 @@ import pytest
 
 # Import modules for integration testing
 try:
-    from codomyrmex.coding.static_analysis import (  # noqa: F401
+    from codomyrmex.coding.static_analysis import (
         analyze_file,
         analyze_project,
     )
@@ -26,9 +26,9 @@ except ImportError:
 
 try:
     from codomyrmex.security.digital import (
-        analyze_file_security,  # noqa: F401
-        check_compliance,  # noqa: F401
-        scan_vulnerabilities,  # noqa: F401
+        analyze_file_security,
+        check_compliance,
+        scan_vulnerabilities,
     )
 
     SECURITY_AVAILABLE = True
@@ -36,7 +36,7 @@ except ImportError:
     SECURITY_AVAILABLE = False
 
 try:
-    from codomyrmex.ci_cd_automation import (  # noqa: F401
+    from codomyrmex.ci_cd_automation import (
         create_pipeline,
         validate_pipeline_config,
     )

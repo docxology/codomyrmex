@@ -11,7 +11,7 @@ import pytest
 
 try:
     from codomyrmex.api.openapi_generator import (
-        OpenAPISpecification as _probe,  # noqa: F401
+        OpenAPISpecification as _probe,
     )
 
     _API_AVAILABLE = True

@@ -8,14 +8,14 @@ import pytest
 import yaml
 
 try:
-    import docker  # noqa: F401
+    import docker
 
     DOCKER_AVAILABLE = True
 except ImportError:
     DOCKER_AVAILABLE = False
 
 try:
-    import aiohttp  # noqa: F401
+    import aiohttp
 
     AIOHTTP_AVAILABLE = True
 except ImportError:

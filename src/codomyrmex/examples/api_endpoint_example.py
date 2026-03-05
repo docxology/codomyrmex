@@ -10,14 +10,14 @@ project_root = Path(__file__).resolve().parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from codomyrmex.api import (  # noqa: E402
+from codomyrmex.api import (
     APIRequest,
     APIResponse,
     APIRouter,
     HTTPStatus,
     create_api,
 )
-from codomyrmex.logging_monitoring import get_logger  # noqa: E402
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

@@ -9,7 +9,7 @@ except ImportError:
     TerminalFormatter = None  # type: ignore[assignment,misc]
 
 try:
-    from codomyrmex.performance.monitoring.performance_monitor import (  # noqa: F401
+    from codomyrmex.performance.monitoring.performance_monitor import (
         PerformanceMonitor,
         monitor_performance,
     )

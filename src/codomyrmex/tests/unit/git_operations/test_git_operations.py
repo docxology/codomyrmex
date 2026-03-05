@@ -580,7 +580,7 @@ class TestGitOperations:
         assert result is True
 
 
-import subprocess  # noqa: E402
+import subprocess
 
 
 class TestGitCoreDeep:

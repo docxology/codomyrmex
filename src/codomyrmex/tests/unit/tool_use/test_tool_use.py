@@ -4,7 +4,7 @@ import pytest
 
 try:
     from codomyrmex.tool_use import (
-        ChainResult,  # noqa: F401
+        ChainResult,
         ChainStep,
         ToolChain,
         ToolEntry,

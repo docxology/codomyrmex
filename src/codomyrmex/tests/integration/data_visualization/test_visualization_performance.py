@@ -20,8 +20,8 @@ pytestmark = pytest.mark.integration
 # Import modules for integration testing
 try:
     from codomyrmex.data_visualization import (
-        create_bar_chart,  # noqa: F401
-        create_line_plot,  # noqa: F401
+        create_bar_chart,
+        create_line_plot,
     )
 
     DATA_VISUALIZATION_AVAILABLE = True
@@ -30,9 +30,9 @@ except ImportError:
 
 try:
     from codomyrmex.performance import (
-        PerformanceProfiler,  # noqa: F401
-        profile_function,  # noqa: F401
-        run_benchmark,  # noqa: F401
+        PerformanceProfiler,
+        profile_function,
+        run_benchmark,
     )
 
     PERFORMANCE_AVAILABLE = True

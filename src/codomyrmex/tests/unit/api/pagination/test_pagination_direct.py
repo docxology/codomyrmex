@@ -23,7 +23,6 @@ def _load_pagination():
     name = "codomyrmex.api.pagination"
     if name in sys.modules:
         return sys.modules[name]
-    import codomyrmex.logging_monitoring  # noqa: F401
 
     spec = importlib.util.spec_from_file_location(
         name,

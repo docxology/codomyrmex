@@ -80,7 +80,7 @@ class TestScrapeIntegration:
 
 # Check if firecrawl-py is available
 try:
-    from firecrawl import Firecrawl  # noqa: F401
+    from firecrawl import Firecrawl
 
     FIRECRAWL_AVAILABLE = True
 except ImportError:

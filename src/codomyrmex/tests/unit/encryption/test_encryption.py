@@ -24,7 +24,7 @@ cryptography = pytest.importorskip(
     "cryptography", reason="cryptography library required"
 )
 
-from codomyrmex.encryption import (  # noqa: E402
+from codomyrmex.encryption import (
     AESGCMEncryptor,
     EncryptionError,
     Encryptor,
@@ -45,7 +45,7 @@ from codomyrmex.encryption import (  # noqa: E402
     hash_data,
     verify_hmac,
 )
-from codomyrmex.encryption.signing import (  # noqa: E402
+from codomyrmex.encryption.signing import (
     SignatureAlgorithm,
     SignatureResult,
     sign_file,

@@ -23,7 +23,7 @@ except ImportError:
     MODULE_AVAILABILITY["ai_code_editing"] = False
 
 try:
-    from codomyrmex.coding import (  # noqa: F401
+    from codomyrmex.coding import (
         ExecutionLimits,
         execute_code,
         execute_with_limits,
@@ -38,14 +38,14 @@ except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
 try:
-    from codomyrmex.coding.static_analysis import analyze_file  # noqa: F401
+    from codomyrmex.coding.static_analysis import analyze_file
 
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
 
 try:
-    from codomyrmex.security.digital import (  # noqa: F401
+    from codomyrmex.security.digital import (
         analyze_file_security,
         check_compliance,
     )
@@ -55,21 +55,21 @@ except ImportError:
     MODULE_AVAILABILITY["security"] = False
 
 try:
-    from codomyrmex.data_visualization import create_bar_chart  # noqa: F401
+    from codomyrmex.data_visualization import create_bar_chart
 
     MODULE_AVAILABILITY["data_visualization"] = True
 except ImportError:
     MODULE_AVAILABILITY["data_visualization"] = False
 
 try:
-    from codomyrmex.performance import profile_function, run_benchmark  # noqa: F401
+    from codomyrmex.performance import profile_function, run_benchmark
 
     MODULE_AVAILABILITY["performance"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance"] = False
 
 try:
-    from codomyrmex.ci_cd_automation import create_pipeline  # noqa: F401
+    from codomyrmex.ci_cd_automation import create_pipeline
 
     MODULE_AVAILABILITY["ci_cd"] = True
 except ImportError:

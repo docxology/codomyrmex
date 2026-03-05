@@ -22,21 +22,21 @@ import pytest
 
 # Check optional dependencies
 try:
-    import yaml  # noqa: F401
+    import yaml
 
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
 
 try:
-    import msgpack  # noqa: F401
+    import msgpack
 
     MSGPACK_AVAILABLE = True
 except ImportError:
     MSGPACK_AVAILABLE = False
 
 try:
-    import fastavro  # noqa: F401
+    import fastavro
 
     AVRO_AVAILABLE = True
 except ImportError:
@@ -44,7 +44,7 @@ except ImportError:
 
 try:
     import pandas as pd
-    import pyarrow as pa  # noqa: F401
+    import pyarrow as pa
 
     # Verify pandas can actually use pyarrow for parquet (version compat check)
     pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")

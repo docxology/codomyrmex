@@ -20,7 +20,6 @@ def _load_api_versioning():
     name = "codomyrmex.api.standardization.api_versioning"
     if name in sys.modules:
         return sys.modules[name]
-    import codomyrmex.logging_monitoring  # noqa: F401
 
     spec = importlib.util.spec_from_file_location(
         name,

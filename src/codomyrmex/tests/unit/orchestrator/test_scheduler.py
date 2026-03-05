@@ -224,7 +224,7 @@ class TestJobStatus:
 class TestJob:
     def _make_job(self, func=None, trigger=None, **kwargs):
         if func is None:
-            func = lambda: 42  # noqa: E731
+            func = lambda: 42
         if trigger is None:
             trigger = OnceTrigger(run_at=datetime.now() + timedelta(hours=1))
         return Job(id="j1", name="test", func=func, trigger=trigger, **kwargs)

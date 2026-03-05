@@ -10,7 +10,7 @@ try:
     from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
     from codomyrmex.agents.git_agent import GitAgent
     from codomyrmex.git_operations.core.repository import (
-        RepositoryManager,  # noqa: F401
+        RepositoryManager,
     )
 
     _HAS_AGENTS = True

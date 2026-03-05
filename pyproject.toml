@@ -323,6 +323,12 @@ dev = [
     {include-group = "lint"},
     {include-group = "test"},
 ]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.3",
+    "mkdocstrings>=1.0.3",
+    "mkdocstrings-python>=2.0.3",
+]
 lint = ["ruff>=0.11.0", "ty"]
 test = [
     "pytest>=8.0.0",
@@ -505,6 +511,7 @@ ignore = [
     "RET504",   # unnecessary assignment before return (128 — readability choice)
     "S607",     # partial executable path (315 — scripts call local tooling)
     "T201",     # print statement in library code (2,464 — keep in scripts/)
+    "PGH003",   # bare type: ignore without code (100 — mypy→ty migration)
 ]
 
 [tool.ruff.lint.per-file-ignores]

@@ -15,16 +15,8 @@ import pytest
 # Ensure _stubs.py is importable from test modules
 sys.path.insert(0, str(Path(__file__).parent))
 
-from _stubs import (  # noqa: F401  – re-exported for fixture use
+from _stubs import (
     Stub,
-    make_stub_container,
-    make_stub_floating_ip,
-    make_stub_image,
-    make_stub_network,
-    make_stub_server,
-    make_stub_stack,
-    make_stub_volume,
-    make_stub_zone,
 )
 
 # =========================================================================

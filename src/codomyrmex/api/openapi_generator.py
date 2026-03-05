@@ -108,7 +108,7 @@ class OpenAPISpecification:
 
 
 # Re-export generator classes from their dedicated modules for backward compatibility
-from .openapi_documentation_generator import DocumentationOpenAPIGenerator  # noqa: E402, I001
+from .openapi_documentation_generator import DocumentationOpenAPIGenerator
 
 
 def __getattr__(name: str):

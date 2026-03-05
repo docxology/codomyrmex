@@ -11,7 +11,7 @@ import tempfile
 import pytest
 
 try:
-    from codomyrmex.api.health import HealthStatus as _probe  # noqa: F401
+    from codomyrmex.api.health import HealthStatus as _probe
 
     _API_AVAILABLE = True
 except ImportError:

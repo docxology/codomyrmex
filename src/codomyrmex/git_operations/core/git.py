@@ -8,10 +8,7 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 from codomyrmex.performance import PERFORMANCE_MONITOR_AVAILABLE
 
 if PERFORMANCE_MONITOR_AVAILABLE:
-    from codomyrmex.performance import (  # noqa: F401
-        monitor_performance,
-        performance_context,
-    )
+    pass
 
 from .commands.branching import (
     create_branch,

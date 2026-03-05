@@ -286,7 +286,7 @@ class TestWebSocketClient:
     @pytest.mark.asyncio
     async def test_websocket_on_handler_registration(self):
         client = WebSocketClient("ws://localhost:8080")
-        handler = lambda data: None  # noqa: E731
+        handler = lambda data: None
         client.on(handler)
         assert handler in client._handlers
 

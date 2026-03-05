@@ -11,8 +11,8 @@ pytestmark = pytest.mark.skipif(
     reason="Gemini CLI requires AI API access; set GEMINI_TEST_ENABLED=1 to run",
 )
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse  # noqa: E402
-from codomyrmex.agents.gemini.gemini_cli import GeminiCLIWrapper  # noqa: E402
+from codomyrmex.agents.core import AgentRequest, AgentResponse
+from codomyrmex.agents.gemini.gemini_cli import GeminiCLIWrapper
 
 
 def test_gemini_cli_version():

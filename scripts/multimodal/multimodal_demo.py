@@ -26,7 +26,7 @@ except ImportError:
 
 # Ensure codomyrmex is importable from the repo root
 try:
-    import codomyrmex  # noqa: F401
+    import codomyrmex
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))

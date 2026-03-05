@@ -10,7 +10,7 @@ import pytest
 
 _GIT_AVAILABLE = shutil.which("git") is not None
 
-from codomyrmex.git_operations.core.commands.submodules import (  # noqa: E402
+from codomyrmex.git_operations.core.commands.submodules import (
     init_submodules,
     update_submodules,
 )

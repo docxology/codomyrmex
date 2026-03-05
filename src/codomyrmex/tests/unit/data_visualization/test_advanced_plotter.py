@@ -30,11 +30,11 @@ if _has_matplotlib:
     mpl.use("Agg")
 
 
-import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-from codomyrmex.data_visualization.engines.advanced_plotter import (  # noqa: E402
+from codomyrmex.data_visualization.engines.advanced_plotter import (
     AdvancedPlotter,
     ChartStyle,
     ColorPalette,

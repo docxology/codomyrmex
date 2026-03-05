@@ -684,12 +684,12 @@ class TestContainerAdvancedFeatures:
 
     def test_resolve_optional(self, container: Container):
         # Not registered
-        val = container.resolve(Optional[IService])  # noqa: UP045
+        val = container.resolve(Optional[IService])
         assert val is None
 
         # Registered
         container.register(IService, ConcreteService)
-        val = container.resolve(Optional[IService])  # noqa: UP045
+        val = container.resolve(Optional[IService])
         assert isinstance(val, ConcreteService)
 
     def test_scan_auto_registration(self, container: Container):

@@ -10,7 +10,7 @@ from pathlib import Path
 
 # Ensure codomyrmex is in path
 try:
-    import codomyrmex  # noqa: F401
+    import codomyrmex
 except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
@@ -40,7 +40,7 @@ def main():
 
     # Import validation
     try:
-        import codomyrmex.module_template  # noqa: F401
+        import codomyrmex.module_template
 
         print_info("Successfully imported codomyrmex.module_template")
     except ImportError as e:
