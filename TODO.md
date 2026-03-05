@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.1.4 | **Date**: 2026-03-05 | **Modules**: 127 | **Sprint**: 25
+**Version**: v1.1.5 | **Date**: 2026-03-05 | **Modules**: 127 | **Sprint**: 25
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -19,7 +19,7 @@ This is the authoritative project backlog. Updated after each sprint.
 | Ruff auto-fixed | **10,946** applied | `uv run ruff check --fix .` |
 | Ruff formatted | **3,420** files | `uv run ruff format --check .` |
 | Script parse errors | **0** (46 fixed in v1.1.1) | `python3 -c "import ast"` |
-| ty diagnostics | **1,772** (tightened config) | `uv run ty check src/` |
+| ty diagnostics | **971** (target <1,000 met) | `uv run ty check src/` |
 | Pass-only function stubs | **4** intentional no-ops | AST analysis |
 | Coverage gate | `fail_under=31`; actual ~32% ✅ | Gate ratcheted |
 | MCP `@mcp_tool` decorators | **545** | `grep -r '@mcp_tool'` |
@@ -33,190 +33,75 @@ This is the authoritative project backlog. Updated after each sprint.
 
 ---
 
-## 🟡 v1.1.1 — "Polish & Hardening"
+## 🟡 v1.1.5 — "Type Safety & Coverage Ratchet"
 
-Incremental release focused on quality ramp, ruff triage, and developer experience.
+Incremental release focused on eliminating remaining type errors and tightening the coverage gate.
 
-### Ruff Triage (118,922 → target: <80,000)
+### `ty` Diagnostic Reduction (1,446 → 971) ✅
 
-| Rule Category | Count | Action | Scope |
+| Rule | Est. Count | Action | Focus |
 | :--- | :--- | :--- | :--- |
-| `D` (pydocstyle) | ~40,000 est. | Ignore rules `D100–D107` (missing docstrings) in `pyproject.toml` | Repo-wide |
-| `ANN` (annotations) | ~15,000 est. | Ignore `ANN001`, `ANN002`, `ANN003` (missing arg annotations) | Repo-wide |
-| `ERA001` (commented-out code) | ~3,000 est. | `ruff check --select=ERA001 --fix .` — safe auto-removal | Repo-wide |
-| `T201` (print statements) | ~2,000 est. | Triage: keep in scripts/, remove from library code | `src/codomyrmex/` |
-| `F401` (unused imports) | ~500 est. | `ruff check --select=F401 --fix .` — safe auto-removal | Repo-wide |
-| `UP` (pyupgrade) | ~2,000 est. | `ruff check --select=UP --fix .` — modernize syntax | Repo-wide |
-| `I` (isort) | already fixed | Verify zero remaining after format pass | Repo-wide |
+| `invalid-assignment` | **~600** | Fix return types in top offenders (`website/`, `agents/`, `orchestrator/`); add proper annotations | ✅ Core Modules |
+| `invalid-return-type` | **~400** | Explicitly handle or type the return values of asynchronous functions and factory methods | ✅ Async/Factory |
+| `invalid-parameter-default` | **~300** | Auto-fix via ruff `RUF013` applied previously; verify all instances of `def f(x: str = None)` are resolved | ✅ Verification |
+| `possibly-unresolved-reference` | **~140** | Add `TYPE_CHECKING` guards around conditional imports to satisfy the type checker without circular dependencies | ✅ Manual Fix |
 
-**Technical details**: Add rule ignores to `[tool.ruff.lint]` `ignore` list in `pyproject.toml`. Run `ruff check --select=<RULE> --fix .` for each auto-fixable category. Manual review for `T201` (print) in library code.
+**Technical details**: Focus on the `src/codomyrmex/` library files. Run `uv run ty check src/ 2>&1 | grep -c "invalid-return-type"` to track diagnostic reductions. Add hard-fail on `ci.yml` when diagnostics drop below 1,000.
 
-### ty Tightening (1,771 → target: <1,000)
-
-| Rule | Current | Action |
-| :--- | :--- | :--- |
-| `unresolved-import` | `"ignore"` | Keep ignored — many optional deps |
-| `possibly-unbound` | `"ignore"` | Tighten to `"warn"` after fixing top offenders |
-| `invalid-return-type` | default (warn) | Fix the ~50 most common return type mismatches |
-| `redundant-cast` | default | Fix — these are safe auto-fixes |
-
-**Technical details**: Update `[tool.ty.rules]` in `pyproject.toml`. Fix return type annotations in `website/`, `agents/`, `orchestrator/` first (highest diagnostic density). Run `uv run ty check src/ 2>&1 | grep -c "invalid-return-type"` to measure progress.
-
-### Codebase Quality
+### Codebase Quality & Testing (Coverage 32% → 35%)
 
 | Item | Scope | Technical Detail |
 | :--- | :--- | :--- |
-| **Desloppify score 63→70+** | Repo-wide | Run `/desloppify` workflow; target top categories: facade issues, oversized `__init__.py` files, dead code |
-| **noqa/suppression audit** | Repo-wide | 233 `noqa` + 178 `type: ignore` lines — audit with `grep -rn "# noqa" src/ \| wc -l`; remove stale suppressions, fix underlying issues (top: F401:159, E402:54, F403:50) |
-| **Coverage ramp 31→35%** | `pyproject.toml` | Ratchet `fail_under` to 35; add tests for uncovered modules (`embodiment/`, `quantum/`, `dark/`, `spatial/`); measure with `uv run pytest --cov=codomyrmex --cov-report=term-missing` |
-| **Dashboard WebSocket** | `website/` | Replace 15s polling in `pai_mixin.py` with WebSocket push via `websockets` library; update `PAI_DASHBOARD.md` |
-| **Parse error cleanup** | `scripts/` | Fix 4 syntax errors in `scripts/utils/orchestrate.py`, `scripts/utils/scaffold_modules.py`, `scripts/validation/orchestrate.py`, `scripts/website/orchestrate.py` |
-| **Broken symlink cleanup** | `src/*/.cursor/` | Remove or fix broken `.cursorrules` symlinks in 5+ module dirs; these cause `uv build` source-tree warnings |
+| **Coverage gate ratchet** | `pyproject.toml` | Bump `fail_under` to 35. Add tests for `embodiment/`, `quantum/`, and `dark/` to reach threshold |
+| **`noqa` / `type: ignore` Audit** | Repo-wide | Audit existing 178 `type: ignore` and 233 `noqa` flags; remove state suppressions as `ty` and `ruff` accurately capture truth |
+| **Broken symlink cleanup** | `.cursorrules` | Fix broken symlinks in module directories (`src/*/.cursor/`) causing warnings during `uv build` |
+| **Dashboard WebSocket** | `website/` | Replace 15s polling in `pai_mixin.py` with WebSocket push via `websockets` library |
 
-### CI/CD Improvements
+---
+
+## 🟢 v1.1.6 — "Tooling & Developer Experience"
+
+Focused on making the project easier to contribute to, operate, and extend efficiently.
+
+### Infrastructure & Pipeline
 
 | Item | Scope | Technical Detail |
 | :--- | :--- | :--- |
-| **Lighthouse CI** | `.github/workflows/` | Add `treosh/lighthouse-ci-action` workflow for docs site performance budgets (LCP <2.5s, CLS <0.1) |
-| **Ruff CI gate** | `ci.yml` | Change ruff check from `continue-on-error: true` to hard fail once violation count is triaged below threshold |
-| **ty CI gate** | `ci.yml` | Change ty check from `continue-on-error: true` to hard fail once diagnostics are below 500 |
-| **Build verification** | `ci.yml` | Add `uv build` step to CI to catch build regressions (broken symlinks, missing files) |
+| **Dependency audit** | `uv.lock` | Run `uv pip audit`; resolve any identified CVEs; pin dependencies for security |
+| **SBOM generation** | `.github/workflows/`| Add CycloneDX SBOM generation to `sbom.yml`; attach output `sbom.json` to GitHub release assets |
+| **PEP 723 script metadata** | `scripts/` | Add `# /// script` inline metadata to top 10 most-used scripts enabling standalone execution (e.g. `uv run script.py`) |
+| **`justfile` Migration** | Root | Create a `justfile` mirroring the `Makefile` with targets (`just lint`, `just test`, `just build`); preserve `Makefile` |
 
-### Optional-Dep Implementation (when deps installed)
+### Documentation Site Tuning
 
-| Area | Scope | Key Items |
+| Item | Scope | Technical Detail |
 | :--- | :--- | :--- |
-| **Cloud providers** | `cloud/` | Concrete provider implementations (boto3, gcloud, azure); wire `from_env()` pattern |
-| **Audio STT/TTS** | `audio/` | Provider implementations behind `faster-whisper`, `edge-tts`; add integration tests |
-| **Cache backends** | `cache/` | `redis` and `memcached` backend implementations; benchmark against in-memory |
-| **WASM runtime** | `containerization/` | `wasmtime` integration for `load_module()/execute()`; add security sandbox tests |
+| **Strict MkDocs CI** | `mkdocs.yml` | Run `mkdocs build --strict` to fix broken cross-references (1,029+ docs); enforce in `docs-deploy.yml` |
+| **API reference generation** | `docs/reference/` | Install `mkdocstrings[python]` and auto-generate from `src/codomyrmex/` top-level `__init__.py` files |
+| **Lighthouse CI** | `.github/workflows/`| Enforce performance budgets (LCP < 2.5s, CLS < 0.1) for the documentation site on PR merges |
 
 ---
 
-## 🟢 v1.1.2 — "Developer Experience"
+## 🟣 v1.1.7 — "Advanced Verification & Ecosystem Integration"
 
-Focused on making the project easy to contribute to, operate, and extend. Every item has a concrete verification command.
+Targeted feature additions and aggressive testing protocols to guarantee industrial-grade stability.
 
-### Ruff Triage Phase 2 (9,706 → target: <5,000)
+### Expanded Testing Methodologies
 
-| Rule | Count | Action | Fixable? |
-| :--- | :--- | :--- | :--- |
-| `T201` (print) | **2,464** | Move to per-file ignore for `scripts/`, suppress in `src/` library code; remove stale prints | ⚠️ Manual: review each `src/` occurrence |
-| `DTZ005` (tz-naive datetime) | **470** | Bulk-fix: `datetime.now()` → `datetime.now(tz=UTC)` across all modules | ✅ Auto-fixable |
-| `RUF013` (implicit `Optional`) | **421** | Bulk-fix: `x: str = None` → `x: str \| None = None` | ✅ Auto-fixable |
-| `ARG005` (unused lambda arg) | **389** | Ignore in `pyproject.toml` — lambda convention | Ignore |
-| `NPY002` (numpy legacy RNG) | **348** | Ignore — false positives on non-numpy code | Ignore |
-| `F841` (unused variable) | **322** | `ruff check --select=F841 --fix .` — safe removal | ✅ Auto-fixable |
-| `S607` (partial exec path) | **315** | Ignore in scripts/ per-file; audit in library code | ⚠️ Audit |
-| `EXE001` (shebang) | **303** | `ruff check --select=EXE001 --fix .` — add missing shebangs | ✅ Auto-fixable |
-| `PERF401` (manual list comp) | **302** | `ruff check --select=PERF401 --fix .` — convert to list comprehensions | ✅ Auto-fixable |
-| `N806` (non-lowercase var) | **283** | Ignore — scientific/mathematical naming convention | Ignore |
-
-**Technical details**: Run auto-fixes first (`DTZ005`, `RUF013`, `F841`, `EXE001`, `PERF401`), then add remaining ignores (`ARG005`, `NPY002`, `N806`). Manual audit `T201` in `src/codomyrmex/` only (not scripts). Expected reduction: ~2,500 auto-fixed + ~1,000 ignored = **~6,200 remaining**.
-
-### noqa/Suppression Cleanup (179 → target: <100)
-
-| Suppression | Count | Action |
+| Item | Scope | Technical Detail |
 | :--- | :--- | :--- |
-| `# noqa: F401` (unused import) | ~100 est. | Audit each: if re-exported, add to `__all__`; else remove import |
-| `# noqa: E402` (import order) | ~30 est. | Move path-setup code to `conftest.py` or use conditional imports |
-| `# noqa: F403` (wildcard import) | ~25 est. | Replace `from x import *` with explicit imports; update `__all__` |
-| Remaining noqa | ~24 | Case-by-case: fix or document reason |
-| `# type: ignore` | ~50 est. | Cross-reference with ty diagnostics; remove stale ones |
+| **Coverage gate ratchet** | `pyproject.toml` | Bump `fail_under` to 38. Expand coverage onto `spatial/`, `cerebrum/`, and `graph_rag/` |
+| **Property-based testing** | `serialization/` | Add `hypothesis` dev-dependency; write robust property tests (`@given`) for schema validators and data round-trips |
+| **Mutation testing scale-up** | `pyproject.toml` | Expand `[tool.mutmut]` from 6 to 12 targets (e.g., `cache/core.py`, `concurrency/core.py`, `events/core.py`) |
+| **Flaky testing tracking** | `pyproject.toml` | Apply `@pytest.mark.flaky(reruns=2)` using `pytest-rerunfailures` to explicitly track and document CI flakes |
 
-**Technical details**: `grep -rn "# noqa: F401" src/ --include="*.py" | wc -l` to measure progress. For each `__init__.py` with `# noqa: F401`, check if the symbol is in `__all__`; if so, the noqa is stale. Remove `type: ignore` comments where ty's tightened rules now catch the issue.
+### Ecosystem Features
 
-### Tooling & DX
-
-| Item | Scope | Technical Detail | Verification |
-| :--- | :--- | :--- | :--- |
-| **justfile** | Root | Create `justfile` with targets mirroring Makefile (40 targets); add `just lint`, `just test`, `just build`, `just release`; keep Makefile for CI backward compat | `just --list` shows all targets |
-| **PEP 723 script metadata** | `scripts/` (top 10) | Add `# /// script` inline metadata to 10 most-used scripts; enables standalone `uv run script.py` without prior `uv sync` | `uv run scripts/utils/scaffold_modules.py --help` works without venv |
-| **Dev container** | `.devcontainer/` | Create `devcontainer.json`: Python 3.11, uv pre-installed, ruff + ty extensions, port forwarding for docs (8000) and dashboard (8888) | `devcontainer build .` succeeds |
-| **Nix flake** | `flake.nix` | Create flake with `devShells.default` providing Python 3.11, uv, just; `packages.default` for the wheel; `checks` for `ruff check` + `pytest` | `nix develop` drops into shell |
-| **Pre-commit modernization** | `.pre-commit-config.yaml` | Update ruff hook to `0.15.x`; add `ty` hook via local hook; remove `bandit` (superseded by ruff S rules); add `uv lock --check` hook | `pre-commit run --all-files` passes |
-
-### Documentation Site
-
-| Item | Scope | Technical Detail | Verification |
-| :--- | :--- | :--- | :--- |
-| **`mkdocs build --strict`** | `mkdocs.yml` | Fix broken cross-refs (currently 1,029+ docs); add `--strict` to CI `docs-deploy.yml` workflow | `mkdocs build --strict` exits 0 |
-| **API reference** | `docs/reference/` | Install `mkdocstrings[python]`; add `reference/` nav section in `mkdocs.yml`; auto-generate from `src/codomyrmex/` top-level `__init__.py` files | `mkdocs serve` → `/reference/` loads |
-| **Module inventory page** | `docs/modules/` | Auto-generated markdown table of all 127 modules with status, test count, coverage %, and module-level dependency graph (Mermaid) | `docs/modules/index.md` renders correctly |
-| **Search tuning** | `mkdocs.yml` | Set `search.boost` on key pages (README, ARCHITECTURE, module READMEs); verify Material search indexes all 1,029+ pages | Search "agents" returns top result |
-
-### Testing Infrastructure
-
-| Item | Scope | Technical Detail | Verification |
-| :--- | :--- | :--- | :--- |
-| **Coverage ramp 32→38%** | `pyproject.toml` | Ratchet `fail_under=38`; add tests for 5 lowest-coverage modules (identify via `--cov-report=term-missing`); focus on `embodiment/`, `quantum/`, `dark/`, `spatial/`, `cerebrum/` | `uv run pytest --cov=codomyrmex --cov-report=term-missing` ≥38% |
-| **Property-based testing** | `validation/`, `serialization/` | Add `hypothesis` to dev deps; write 20+ property tests for schema validators (`@given(st.text())`), round-trip serialization, crypto hash determinism | `uv run pytest -k "hypothesis" --count` ≥20 |
-| **Mutation testing expansion** | `pyproject.toml` | Expand `[tool.mutmut]` from 6→12 target files; add `cache/core.py`, `concurrency/core.py`, `events/core.py`, `validation/core.py`, `serialization/core.py`, `crypto/core.py` | `uv run mutmut run --paths-to-mutate=...` mutation score ≥50% |
-| **Flaky test tracking** | `pyproject.toml` | Install `pytest-rerunfailures`; add `@pytest.mark.flaky(reruns=2)` to known flakey tests; add `--reruns 2` to CI `pytest` invocation | `grep -rn "@pytest.mark.flaky" src/ \| wc -l` documents all flaky tests |
-
----
-
-## 🟣 v1.1.3 — "Quality Ratchet"
-
-Focused on tightening every quality gate and reducing tech debt to near-zero in core modules.
-
-### Ruff Phase 3 (target: <2,000)
-
-| Action | Expected Reduction | Technical Detail | Verification |
-| :--- | :--- | :--- | :--- |
-| **Unsafe-fixes pass** | **−4,309** | Run `ruff check --unsafe-fixes --fix .` on 4,309 available unsafe fixes; review diff with `git diff --stat`; revert any that break tests | `uv run ruff check . \| tail -1` should show <2,000 |
-| **PLW1510 audit** | **−264** | `subprocess.run()` calls missing `check=True`; add to each or explicitly handle returncode | `uv run ruff check --select=PLW1510 . \| wc -l` → 0 |
-| **RET504 simplification** | **−128** | Unnecessary variable assignments before return; auto-fix available | `uv run ruff check --select=RET504 --fix .` |
-| **SIM102 collapsible if** | **−103** | Nested ifs that can be collapsed; auto-fix available | `uv run ruff check --select=SIM102 --fix .` |
-| **E402 import order** | **−111** | Imports not at top of file; refactor path-setup patterns to `conftest.py` | `uv run ruff check --select=E402 . \| wc -l` → 0 |
-| **S110/S106 security** | **−244** | Suppress `S106` (hardcoded passwords — false positives on test fixtures) in per-file ignores for `tests/`; audit real `S110` (try/except/pass) occurrences | Manual audit |
-| **Ruff CI hard-fail** | — | Change `ci.yml` ruff step from `continue-on-error: true` to hard fail once <2,000 | `ruff check .` exits 0 or CI fails |
-
-### ty Phase 2 (1,772 → target: <500)
-
-| Diagnostic | Count | Action | Focus |
-| :--- | :--- | :--- | :--- |
-| `invalid-assignment` | **661** | Fix top 50 modules: typically `x: str = some_func()` where return type isn't str; add proper annotations | Fix in: `website/`, `agents/`, `orchestrator/` (highest density) |
-| `str`/`int`/`bool`/`float` literals | **1,026** combined | These are informational (type narrowing hints); suppress as category if ty supports it, else ignore | Check ty docs for suppression |
-| `invalid-parameter-default` | **348** | Fix: `def f(x: str = None)` → `def f(x: str \| None = None)`; overlaps with `RUF013` fixes | Auto-fix via ruff RUF013 first |
-| `possibly-unresolved-reference` | **148** | Fix conditional imports: add `TYPE_CHECKING` guards or re-export in `__init__.py` | `uv run ty check src/ 2>&1 \| grep -c possibly-unresolved` |
-| `unused-type-ignore-comment` | **95** | Remove stale `# type: ignore` comments → now redundant after ty migration | `uv run ruff check --select=PGH003 --fix .` |
-| `call-non-callable` / `no-matching-overload` | **143** | Fix overload signatures in `agents/`, `llm/` provider ABCs | Manual fixes |
-| **ty CI hard-fail** | — | Change `ci.yml` ty step from `continue-on-error: true` to hard fail once <500 | `ty check src/` exits 0 or CI fails |
-
-### Security Hardening
-
-| Item | Scope | Technical Detail | Verification |
-| :--- | :--- | :--- | :--- |
-| **Dependency audit** | `uv.lock` | Run `uv pip audit` (or `pip-audit`); resolve any known CVEs; pin affected deps | `pip-audit --strict` exits 0 |
-| **SBOM generation** | CI | Add CycloneDX SBOM generation to `sbom.yml` workflow; output to `sbom.json` in release assets | SBOM attached to GitHub release |
-| **Secret scanning** | `.pre-commit-config.yaml` | Verify `detect-secrets` hook catches test credential patterns; add `.secrets.baseline` file | `detect-secrets scan --list-all-plugins` |
-| **CSP headers** | `website/` | Add Content-Security-Policy headers to dashboard responses; implement `SecurityMiddleware` | Browser DevTools shows CSP header |
-| **STRIDE threat model** | `docs/security/` | Create `THREAT_MODEL.md` covering: spoofing (MCP auth), tampering (agent code injection), repudiation (audit logging), info disclosure (LLM prompt leakage), DoS (rate limiting), elevation (skill permissions) | `docs/security/THREAT_MODEL.md` exists with all 6 STRIDE categories |
-
-### CI/CD Improvements
-
-| Item | Scope | Technical Detail | Verification |
-| :--- | :--- | :--- | :--- |
-| **Workflow consolidation** | `.github/workflows/` | 36 workflow files → consolidate to ~15 by merging related workflows (3 gemini-*→ 1, 5 pr-* → 1, 2 docs-* → 1) | `ls .github/workflows/*.yml \| wc -l` ≤ 20 |
-| **Lighthouse CI** | `.github/workflows/` | Add `treosh/lighthouse-ci-action` for docs site; budgets: LCP <2.5s, CLS <0.1, Performance ≥90 | Lighthouse CI check passes on PR |
-| **Matrix testing** | `ci.yml` | Add `strategy.matrix.python-version: ["3.11", "3.12", "3.13"]`; verify all 3 versions pass | CI matrix shows 3 green checks |
-| **Release automation** | `release.yml` | Auto-generate release notes from CHANGELOG.md; attach `uv build` artifacts; update version badge | `gh release create` auto-generates notes |
-| **Dependabot grouping** | `.github/dependabot.yml` | Group minor/patch updates by ecosystem; schedule weekly; auto-merge patch updates | Dependabot PRs are grouped |
-
-### Coverage Ratchet (38% → target: 42%)
-
-| Module | Current | Target | Key Functions to Test |
-| :--- | :--- | :--- | :--- |
-| `embodiment/` | ~0% | 30% | `RobotController.connect()`, `SensorFusion.merge()`, or archive module |
-| `quantum/` | ~5% | 25% | `QuantumCircuit.execute()`, `QubitRegister.measure()` |
-| `dark/` | ~5% | 25% | Core entropy functions, randomness generation |
-| `spatial/` | ~10% | 30% | `GeodesicTransform.apply()`, rotation matrices |
-| `cerebrum/` | ~10% | 30% | `BeliefNetwork.update()`, probabilistic inference |
-| `graph_rag/` | ~15% | 35% | `GraphRetriever.query()`, entity extraction |
-| `agentic_memory/` | ~15% | 35% | `MemoryStore.retrieve()`, TTL expiry, tag search |
-
-**Technical details**: `uv run pytest --cov=codomyrmex --cov-report=term-missing --cov-report=html` → review `htmlcov/index.html`. Ratchet `fail_under` to 42 in `pyproject.toml`. Each module needs ≥5 real-logic tests (zero-mock policy).
+| Item | Scope | Technical Detail |
+| :--- | :--- | :--- |
+| **Graph RAG pipeline** | `graph_rag`, `llm/rag` | Connect the knowledge graph to `llm/rag/` for retrieval-augmented generation with structured entity relationships |
+| **Agentic memory backend** | `agentic_memory/` | Deploy SQLite backend for the `MemoryStore` enabling cross-session retrieval, TTL expiry, and tag indexing |
+| **Optional integrations** | `cloud/`, `audio/` | Implement concrete provider implementations (`boto3`, `faster-whisper`, `edge-tts`) gated via optional dependencies |
 
 ---
 

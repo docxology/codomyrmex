@@ -359,7 +359,7 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 31
+fail_under = 35
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -650,7 +650,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403", "E402"]
 "tests/**/*" = ["S101", "PLR2004", "ANN", "B011", "SLF001", "ARG", "PT011", "S106", "S108", "S310"]
-"scripts/**/*.py" = ["T20", "INP001", "ANN", "S101", "BLE001", "EXE001", "E402", "PLW1510"]
+"scripts/**/*.py" = ["T20", "INP001", "ANN", "S101", "BLE001", "EXE001", "E402", "PLW1510", "F401"]
 "**/mcp_tools.py" = ["ANN", "ARG001"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]

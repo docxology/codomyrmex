@@ -17,14 +17,19 @@ try:
 except ImportError:
     FITZ_AVAILABLE = False
 
+from typing import TYPE_CHECKING
+
 # Only import the dark PDF modules if fitz is available
-if FITZ_AVAILABLE:
+if TYPE_CHECKING or FITZ_AVAILABLE:
     from codomyrmex.dark.pdf.dark_pdf_wrapper import _PRESETS, DarkPDF
     from codomyrmex.dark.pdf.filters import DarkPDFFilter, apply_dark_mode
 else:
     DarkPDFFilter = None
+
     apply_dark_mode = None
+
     DarkPDF = None
+
     _PRESETS = None
 
 # Skip entire module if fitz is not available

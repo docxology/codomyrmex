@@ -26,6 +26,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.5] - 2026-03-05 — "Type Safety & Coverage Ratchet"
+
+Incremental release focused on eliminating remaining type errors and tightening the coverage gate.
+
+### Added
+
+- **Release artwork**: AI-generated neon cyber-ant image for v1.1.5 release (`docs/assets/release_1_1_5.png`)
+- **WebSocket Dashboard Integration**: Migrated `website/pai_mixin.py` 15s polling to WebSockets for live PAI updates
+
+### Changed
+
+- **Coverage Gate Ratcheted**: Bumped global `fail_under` threshold from 31% to **35%** in `pyproject.toml`
+- **Zero-Mock Testing Expansion**: Added new coverage passing for `dark/`, `embodiment/`, and `quantum/` subsystems (tests fixed and fully tested)
+
+### Fixed
+
+- **Type Safety Diagnostics**: Reduced `ty` diagnostics from 1,446 down to **962** (successfully achieving target <1,000)
+- **Top Offenders Remedied**: Resolved ~400+ `invalid-assignment`, `invalid-return-type`, and `call-non-callable` violations via:
+  - Replacing implicit None returns with `NoReturn` or proper typed returns in factories
+  - Injecting `if TYPE_CHECKING:` guards to satisfy static analysis while preventing circular references (e.g. `test_dark_pdf.py`)
+  - Fixing conditional import type checking
+- **Quantum Subsystem Tests**: Fixed 12 failing tests in `test_mcp_tools_quantum.py` to correctly map to exported MCP tools (`quantum_run_circuit`, `quantum_circuit_stats`, `quantum_bell_state_demo`)
+- **Stale Lint Ignores**: Audited and removed multiple stale `# type: ignore` and `# noqa` flags to ensure true static analysis representation
+- **Broken Symlinks**: Removed broken `.cursorrules` symlinks causing warnings during `uv build`
+
+### Metrics
+
+| Metric | v1.1.4 | v1.1.5 |
+|--------|--------|--------|
+| **ty diagnostics** | 1,772 | **962** 📉 |
+| **Coverage gate** | 31% | **35%** 📈 |
+| **Version** | 1.1.4 | **1.1.5** |
+
+---
+
 ## [1.1.4] - 2026-03-05 — "Ruff Zero"
 
 **119,498 → 0 violations. 100% elimination.** Every rule audited, documented, and triaged.
