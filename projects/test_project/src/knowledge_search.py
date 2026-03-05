@@ -16,9 +16,9 @@ Example:
 
 from typing import Any
 
-from codomyrmex.formal_verification import ConstraintSolver, SolverStatus
+from codomyrmex.formal_verification import ConstraintSolver
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.scrape import Scraper, ScrapeFormat, ScrapeOptions
+from codomyrmex.scrape import ScrapeFormat, ScrapeOptions, Scraper
 from codomyrmex.search import (
     Document,
     FuzzyMatcher,
@@ -63,27 +63,25 @@ class KnowledgeSearch:
     def build_index(self, documents: list[dict[str, Any]]) -> SearchIndex:
         """Build a full-text search index from documents.
 
-        Converts raw dicts to Document objects and indexes them
-        using codomyrmex.search.create_index (TF-IDF backend).
+        Converts raw dicts to Document objects and indexes them using
+        InMemoryIndex (create_index creates the backend, .index() adds docs).
 
         Args:
             documents: List of dicts with 'id' and 'content' keys.
-                       Optional 'title' and 'metadata' keys supported.
+                       Optional 'metadata' key supported.
 
         Returns:
             InMemoryIndex populated with the documents.
         """
-        docs = [
-            Document(
+        self.index = create_index("memory")
+        for i, d in enumerate(documents):
+            doc = Document(
                 id=str(d.get("id", i)),
                 content=str(d.get("content", "")),
-                title=str(d.get("title", "")),
                 metadata=d.get("metadata", {}),
             )
-            for i, d in enumerate(documents)
-        ]
-        self.index = create_index(docs)
-        logger.info(f"Built index with {len(docs)} documents")
+            self.index.index(doc)
+        logger.info(f"Built index with {len(documents)} documents")
         return self.index
 
     def full_text_search(
@@ -94,8 +92,8 @@ class KnowledgeSearch:
     ) -> list[SearchResult]:
         """Perform full-text search using codomyrmex.search.
 
-        If documents are provided, builds a fresh index first.
-        Uses quick_search for one-shot convenience.
+        If documents are provided, builds a fresh index first then searches.
+        Uses quick_search for one-shot convenience on content strings.
 
         Args:
             query: Search query string.
@@ -107,30 +105,22 @@ class KnowledgeSearch:
         """
         if documents:
             self.build_index(documents)
-
-        if documents:
-            # One-shot convenience via quick_search
-            docs = [
-                Document(
-                    id=str(d.get("id", i)),
-                    content=str(d.get("content", "")),
-                    title=str(d.get("title", "")),
-                    metadata=d.get("metadata", {}),
-                )
-                for i, d in enumerate(documents)
-            ]
-            results = quick_search(query=query, documents=docs, top_k=top_k)
+            # quick_search takes plain content strings for one-shot searches
+            content_strings = [str(d.get("content", "")) for d in documents]
+            results = quick_search(content_strings, query, k=top_k)
         else:
             results = self.index.search(query=query, top_k=top_k)
 
         logger.debug(f"Full-text search '{query}' returned {len(results)} results")
         return results
 
-    def fuzzy_match(self, query: str, candidates: list[str], threshold: float = 0.6) -> list[str]:
+    def fuzzy_match(
+        self, query: str, candidates: list[str], threshold: float = 0.6
+    ) -> list[str]:
         """Find fuzzy matches for query within candidates.
 
-        Uses codomyrmex.search.FuzzyMatcher for approximate string
-        matching based on edit distance.
+        Uses FuzzyMatcher.similarity_ratio to filter candidates above
+        the similarity threshold, then find_best_match as fallback.
 
         Args:
             query: Query string to match.
@@ -140,7 +130,12 @@ class KnowledgeSearch:
         Returns:
             List of matching candidate strings above threshold.
         """
-        matches = self.fuzzy.match(query=query, candidates=candidates, threshold=threshold)
+        matches = [
+            c for c in candidates if self.fuzzy.similarity_ratio(query, c) >= threshold
+        ]
+        if not matches:
+            best = self.fuzzy.find_best_match(query, candidates, threshold)
+            matches = [best] if best is not None else []
         logger.debug(f"Fuzzy match '{query}' found {len(matches)} matches")
         return matches
 

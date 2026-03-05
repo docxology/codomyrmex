@@ -26,6 +26,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.1] - 2026-03-05 — "Polish & Hardening"
+
+Comprehensive quality release focused on toolchain modernization, lint triage, and codebase hygiene.
+
+### Added
+
+- **ty type checker badge** in `.github/README.md` alongside existing ruff badge
+- **`uv build` CI step** in `ci.yml` — catches build regressions (broken symlinks, missing files)
+- **`docs/plans/`** directory and **`docs/PAI_DASHBOARD.md`**, **`docs/index.md`** links added to README documentation tables
+- **Release artwork**: 2 AI-generated images for v1.1.1 release (`docs/assets/release-v1.1.1-hero.png`, `release-v1.1.1-before-after.png`)
+
+### Changed
+
+- **Modern Python migration**: Replaced `hatchling` → `uv_build`, `flake8+black+isort` → `ruff`, `mypy` → `ty`
+- **Ruff triage**: `select = ["ALL"]` with **40+ documented rule ignores** — violations from **119,498 → 9,706** (−92%)
+- **ty rules tightened**: `possibly-unbound` escalated from default → `"warn"`
+- **Version**: `1.1.0` → `1.1.1` (synced across `pyproject.toml`, `__init__.py`, README, AGENTS, SPEC, PAI, CLAUDE, `.github/README.md`)
+- **Python badge**: `≥3.10` → `≥3.11` (matches `requires-python`)
+- **Test commands modernized**: `uv run python -m pytest` → `uv run pytest`; `uv sync` → `uv sync --all-groups`
+- **Quick Start** updated with lint/format/type-check commands
+- **README** project structure: 17 → 18 documentation directories
+- **`.pre-commit-config.yaml`**: Removed `black` and `mypy` hooks (replaced by ruff)
+- **`.github/workflows/ci.yml`**: Replaced Black check with ruff format, MyPy with ty
+- **`Makefile`**: Updated `lint`, `format`, `type-check` targets to use ruff/ty
+
+### Fixed
+
+- **51 script parse errors** — removed broken auto-injected config-loading blocks from all `scripts/*/orchestrate.py` files and 8 additional scripts
+- **4 broken `.cursor/.cursorrules` symlinks** removed from `documentation/`, `environment_setup/`, `logging_monitoring/`, `model_context_protocol/`
+- **`__init__.py __version__`**: stale `"1.0.8"` → `"1.1.1"`
+- **`.gitignore`**: Added `.ty/` cache directory
+- **`pytest.ini`**: Consolidated into `pyproject.toml` (file deleted)
+- **`logging_monitoring/__init__.py`**: Added missing re-exports for `DEFAULT_LOG_FORMAT`, `DETAILED_LOG_FORMAT`, `create_correlation_id`
+
+### Metrics
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Ruff violations | 119,498 | **9,706** (−92%) |
+| Script parse errors | 51 | **0** |
+| Broken symlinks | 4 | **0** |
+| ty diagnostics | 1,771 | **1,772** (tightened) |
+| Build backend | hatchling | **uv_build** |
+| Type checker | mypy | **ty** |
+| Linter | flake8+black+isort | **ruff** (select=ALL) |
+| Tests | 749 | **749 pass** |
+| Build | — | `codomyrmex-1.1.1.tar.gz` + `.whl` ✅ |
+
+---
+
 ## [1.1.0] - 2026-03-04 — "Production Readiness"
 
 First feature release targeting external consumption. All 9 planned items implemented and triple-checked.

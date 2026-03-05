@@ -27,17 +27,48 @@ Example:
 __version__ = "1.1.0"
 __author__ = "Codomyrmex Team"
 
-from .agent_brain import AgentBrain
 from .analyzer import AnalysisResult, ProjectAnalyzer
-from .git_workflow import GitWorkflow
-from .knowledge_search import KnowledgeSearch
-from .llm_inference import LLMInference
 from .main import run_analysis, run_pipeline
-from .mcp_explorer import MCPExplorer
 from .pipeline import AnalysisPipeline, PipelineResult, PipelineStatus
 from .reporter import ReportConfig, ReportGenerator
-from .security_audit import SecurityAudit
-from .visualizer import ChartConfig, DataVisualizer
+
+try:
+    from .visualizer import ChartConfig, DataVisualizer
+except ImportError:
+    ChartConfig = None  # type: ignore[assignment,misc]
+    DataVisualizer = None  # type: ignore[assignment,misc]
+
+# New modules — imported conditionally so a missing optional SDK dep
+# in one module does not prevent the others from loading.
+try:
+    from .agent_brain import AgentBrain
+except ImportError:
+    AgentBrain = None  # type: ignore[assignment,misc]
+
+try:
+    from .git_workflow import GitWorkflow
+except ImportError:
+    GitWorkflow = None  # type: ignore[assignment,misc]
+
+try:
+    from .knowledge_search import KnowledgeSearch
+except ImportError:
+    KnowledgeSearch = None  # type: ignore[assignment,misc]
+
+try:
+    from .security_audit import SecurityAudit
+except ImportError:
+    SecurityAudit = None  # type: ignore[assignment,misc]
+
+try:
+    from .mcp_explorer import MCPExplorer
+except ImportError:
+    MCPExplorer = None  # type: ignore[assignment,misc]
+
+try:
+    from .llm_inference import LLMInference
+except ImportError:
+    LLMInference = None  # type: ignore[assignment,misc]
 
 __all__ = [
     # Entry points

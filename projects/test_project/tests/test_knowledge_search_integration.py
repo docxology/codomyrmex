@@ -3,8 +3,6 @@
 import sys
 from pathlib import Path
 
-import pytest
-
 # Ensure src is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -136,7 +134,6 @@ class TestKnowledgeSearchModule:
 
     def test_build_index_returns_index(self):
         """build_index() with documents returns a SearchIndex."""
-        from codomyrmex.search import SearchIndex
         from src.knowledge_search import KnowledgeSearch
 
         ks = KnowledgeSearch()

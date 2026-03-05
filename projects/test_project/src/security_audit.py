@@ -18,12 +18,36 @@ Example:
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.crypto.graphy.hashing import hash_data, verify_hash
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.maintenance import analyze_project_structure, check_dependencies
-from codomyrmex.system_discovery import CapabilityScanner, HealthChecker, SystemDiscovery
 
 HAS_SECURITY_MODULES = True  # Exported for integration tests
+
+# system_discovery → data_visualization → matplotlib (optional dep)
+try:
+    from codomyrmex.system_discovery import (
+        CapabilityScanner,
+        HealthChecker,
+        SystemDiscovery,
+    )
+
+    HAS_SYSTEM_DISCOVERY = True
+except ImportError:
+    HAS_SYSTEM_DISCOVERY = False
+    SystemDiscovery = None  # type: ignore[assignment,misc]
+    CapabilityScanner = None  # type: ignore[assignment,misc]
+    HealthChecker = None  # type: ignore[assignment,misc]
+
+# crypto import is conditional: codomyrmex.crypto.__init__ imports currency
+# which requires the optional 'mnemonic' package. Fail explicitly when absent.
+try:
+    from codomyrmex.crypto.graphy.hashing import hash_data, verify_hash
+
+    HAS_CRYPTO_MODULE = True
+except ImportError:
+    HAS_CRYPTO_MODULE = False
+    hash_data = None  # type: ignore[assignment]
+    verify_hash = None  # type: ignore[assignment]
 
 logger = get_logger(__name__)
 
@@ -34,6 +58,7 @@ try:
         scan_directory_for_secrets,
         scan_vulnerabilities,
     )
+
     HAS_DIGITAL_SECURITY = True
 except ImportError:
     HAS_DIGITAL_SECURITY = False
@@ -58,10 +83,12 @@ class SecurityAudit:
     """
 
     def __init__(self) -> None:
-        """Initialize SecurityAudit with system discovery."""
-        self.discovery = SystemDiscovery()
-        self.scanner = CapabilityScanner()
-        logger.info("SecurityAudit initialized")
+        """Initialize SecurityAudit with system discovery (when available)."""
+        self.discovery = SystemDiscovery() if HAS_SYSTEM_DISCOVERY else None
+        self.scanner = CapabilityScanner() if HAS_SYSTEM_DISCOVERY else None
+        logger.info(
+            "SecurityAudit initialized (system_discovery=%s)", HAS_SYSTEM_DISCOVERY
+        )
 
     def hash_and_verify(
         self,
@@ -83,7 +110,16 @@ class SecurityAudit:
             - algorithm: str
             - hex_digest: str
             - verified: bool (re-verified against same data)
+
+        Raises:
+            ImportError: If codomyrmex.crypto is not available (mnemonic dep missing).
         """
+        if not HAS_CRYPTO_MODULE:
+            raise ImportError(
+                "codomyrmex.crypto requires the 'mnemonic' package. "
+                "Install with: uv sync --extra crypto"
+            )
+
         if isinstance(data, str):
             data = data.encode("utf-8")
 
@@ -146,7 +182,9 @@ class SecurityAudit:
 
         try:
             audit = audit_code_security(path_str)
-            result["code_audit"] = audit if isinstance(audit, dict) else {"result": str(audit)}
+            result["code_audit"] = (
+                audit if isinstance(audit, dict) else {"result": str(audit)}
+            )
         except Exception as e:
             logger.warning(f"audit_code_security failed: {e}")
             result["code_audit"] = {"error": str(e)}
@@ -171,14 +209,24 @@ class SecurityAudit:
         result: dict[str, Any] = {
             "discovery_type": type(self.discovery).__name__,
             "scanner_type": type(self.scanner).__name__,
-            "health_checker": HealthChecker.__name__,
+            "health_checker": HealthChecker.__name__
+            if HAS_SYSTEM_DISCOVERY
+            else "unavailable",
             "modules_found": 0,
         }
+
+        if not HAS_SYSTEM_DISCOVERY or self.discovery is None:
+            result["note"] = (
+                "system_discovery requires matplotlib (uv sync --extra data_visualization)"
+            )
+            return result
 
         try:
             modules = self.discovery.discover_modules()
             result["modules_found"] = len(modules) if modules else 0
-            result["module_names"] = list(modules.keys())[:10] if isinstance(modules, dict) else []
+            result["module_names"] = (
+                list(modules.keys())[:10] if isinstance(modules, dict) else []
+            )
         except Exception as e:
             logger.warning(f"discover_modules failed: {e}")
             result["error"] = str(e)
@@ -208,14 +256,18 @@ class SecurityAudit:
 
         try:
             structure = analyze_project_structure(path_str)
-            result["structure"] = structure if isinstance(structure, dict) else {"raw": str(structure)}
+            result["structure"] = (
+                structure if isinstance(structure, dict) else {"raw": str(structure)}
+            )
         except Exception as e:
             logger.warning(f"analyze_project_structure failed: {e}")
             result["structure"] = {"error": str(e)}
 
         try:
             deps = check_dependencies(path_str)
-            result["dependencies"] = deps if isinstance(deps, dict) else {"raw": str(deps)}
+            result["dependencies"] = (
+                deps if isinstance(deps, dict) else {"raw": str(deps)}
+            )
         except Exception as e:
             logger.warning(f"check_dependencies failed: {e}")
             result["dependencies"] = {"error": str(e)}

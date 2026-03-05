@@ -36,7 +36,6 @@ from codomyrmex.skills import (
     SkillLoader,
     SkillRegistry,
     SkillsManager,
-    get_skills_manager,
     list_runnable_skills,
 )
 
@@ -64,8 +63,14 @@ class MCPExplorer:
 
     def __init__(self) -> None:
         """Initialize MCPExplorer."""
+        from pathlib import Path
+
         self.discovery = MCPDiscovery()
-        self.skill_registry = SkillRegistry()
+        # SkillRegistry requires a SkillLoader — point at ~/.claude/skills
+        _skills_dir = Path.home() / ".claude" / "skills"
+        _skills_dir.mkdir(parents=True, exist_ok=True)
+        skill_loader = SkillLoader(upstream_dir=_skills_dir, custom_dir=_skills_dir)
+        self.skill_registry = SkillRegistry(skill_loader=skill_loader)
         self.plugin_registry = PluginRegistry()
         self.plugin_manager = PluginManager()
         logger.info("MCPExplorer initialized")
@@ -95,8 +100,12 @@ class MCPExplorer:
 
         try:
             report = self.discovery.discover()
-            result["tool_count"] = report.total_tools if hasattr(report, "total_tools") else 0
-            result["failed_modules"] = report.failed_count if hasattr(report, "failed_count") else 0
+            result["tool_count"] = (
+                report.total_tools if hasattr(report, "total_tools") else 0
+            )
+            result["failed_modules"] = (
+                report.failed_count if hasattr(report, "failed_count") else 0
+            )
         except Exception as e:
             logger.warning(f"MCPDiscovery.discover() failed: {e}")
             result["discovery_error"] = str(e)
@@ -189,7 +198,9 @@ class MCPExplorer:
                 {
                     "name": p.name,
                     "version": getattr(p, "version", "unknown"),
-                    "state": p.state.value if hasattr(p.state, "value") else str(p.state),
+                    "state": p.state.value
+                    if hasattr(p.state, "value")
+                    else str(p.state),
                 }
                 for p in (plugins or [])
             ]
@@ -209,13 +220,22 @@ class MCPExplorer:
         return {
             "model_context_protocol": {
                 "module": "codomyrmex.model_context_protocol",
-                "key_classes": ["MCPDiscovery", "MCPToolRegistry", "MCPServer", "MCPClient"],
+                "key_classes": [
+                    "MCPDiscovery",
+                    "MCPToolRegistry",
+                    "MCPServer",
+                    "MCPClient",
+                ],
                 "key_functions": ["categorize_all_tools", "generate_taxonomy_report"],
             },
             "skills": {
                 "module": "codomyrmex.skills",
                 "key_classes": ["SkillRegistry", "SkillLoader", "SkillsManager"],
-                "key_functions": ["list_runnable_skills", "run_skill", "get_skills_manager"],
+                "key_functions": [
+                    "list_runnable_skills",
+                    "run_skill",
+                    "get_skills_manager",
+                ],
             },
             "plugin_system": {
                 "module": "codomyrmex.plugin_system",

@@ -140,7 +140,7 @@ class GmailProvider(EmailProvider):
 
         # Option 2: Application Default Credentials
         try:
-            import google.auth  # noqa: PLC0415 — conditional import
+            import google.auth
 
             creds, _ = google.auth.default(scopes=_GMAIL_SCOPES)
             return cls(credentials=creds)

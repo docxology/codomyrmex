@@ -102,7 +102,7 @@ def cli_commands():
     }
 
 
-from typing import Any  # noqa: E402
+from typing import Any
 
 
 def get_config(key: str, default: Any = None, namespace: str = "default") -> Any:

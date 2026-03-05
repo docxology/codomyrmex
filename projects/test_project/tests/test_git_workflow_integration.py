@@ -107,8 +107,9 @@ class TestGitWorkflowModule:
 
     def test_inspect_repo_on_valid_git_repo(self):
         """inspect_repo() detects the codomyrmex repo correctly."""
-        from codomyrmex.git_operations import check_git_availability
         from src.git_workflow import GitWorkflow
+
+        from codomyrmex.git_operations import check_git_availability
 
         if not check_git_availability():
             pytest.skip("Git not installed on this system")

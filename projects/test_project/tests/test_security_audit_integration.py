@@ -12,12 +12,23 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 TEST_PROJECT_ROOT = str(Path(__file__).parent.parent)
 
 
+def _matplotlib_available() -> bool:
+    """Check if matplotlib is installed (needed by system_discovery → data_visualization)."""
+    try:
+        import importlib
+
+        importlib.import_module("matplotlib")
+        return True
+    except ImportError:
+        return False
+
+
 class TestSecurityImports:
     """Verify codomyrmex.security imports used in security_audit."""
 
     def test_import_security_module(self):
         """codomyrmex.security module is importable."""
-        import codomyrmex.security as security
+        from codomyrmex import security
 
         assert security is not None
 
@@ -36,12 +47,27 @@ class TestSecurityImports:
         assert isinstance(HAS_DIGITAL_SECURITY, bool)
 
 
+def _mnemonic_available() -> bool:
+    """Check if the mnemonic package is installed (needed by crypto.currency)."""
+    try:
+        import importlib
+
+        importlib.import_module("mnemonic")
+        return True
+    except ImportError:
+        return False
+
+
+@pytest.mark.skipif(
+    not _mnemonic_available(),
+    reason="codomyrmex.crypto requires 'mnemonic' package (uv sync --extra crypto)",
+)
 class TestCryptoImports:
     """Verify codomyrmex.crypto imports used in security_audit."""
 
     def test_import_crypto_module(self):
         """codomyrmex.crypto top-level is importable."""
-        import codomyrmex.crypto as crypto
+        from codomyrmex import crypto
 
         assert crypto is not None
 
@@ -96,6 +122,10 @@ class TestMaintenanceImports:
         assert callable(check_dependencies)
 
 
+@pytest.mark.skipif(
+    not _matplotlib_available(),
+    reason="system_discovery requires matplotlib via data_visualization (uv sync --extra data_visualization)",
+)
 class TestSystemDiscoveryImports:
     """Verify codomyrmex.system_discovery imports used in security_audit."""
 
@@ -131,16 +161,20 @@ class TestSecurityAuditModule:
 
     def test_security_audit_instantiation(self):
         """SecurityAudit can be instantiated without errors."""
-        from src.security_audit import SecurityAudit
+        from src.security_audit import HAS_SYSTEM_DISCOVERY, SecurityAudit
 
         auditor = SecurityAudit()
         assert auditor is not None
-        assert auditor.discovery is not None
-        assert auditor.scanner is not None
+        if HAS_SYSTEM_DISCOVERY:
+            assert auditor.discovery is not None
+            assert auditor.scanner is not None
 
     def test_hash_and_verify_bytes(self):
         """hash_and_verify() with bytes returns correct structure."""
-        from src.security_audit import SecurityAudit
+        from src.security_audit import HAS_CRYPTO_MODULE, SecurityAudit
+
+        if not HAS_CRYPTO_MODULE:
+            pytest.skip("crypto module requires 'mnemonic' package")
 
         auditor = SecurityAudit()
         result = auditor.hash_and_verify(b"test data", "sha256")
@@ -152,7 +186,10 @@ class TestSecurityAuditModule:
 
     def test_hash_and_verify_string(self):
         """hash_and_verify() with string auto-encodes to bytes."""
-        from src.security_audit import SecurityAudit
+        from src.security_audit import HAS_CRYPTO_MODULE, SecurityAudit
+
+        if not HAS_CRYPTO_MODULE:
+            pytest.skip("crypto module requires 'mnemonic' package")
 
         auditor = SecurityAudit()
         result = auditor.hash_and_verify("hello world", "sha256")

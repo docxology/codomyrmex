@@ -3,8 +3,6 @@
 import sys
 from pathlib import Path
 
-import pytest
-
 # Ensure src is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -57,10 +55,15 @@ class TestSkillsImports:
     """Verify codomyrmex.skills imports used in mcp_explorer."""
 
     def test_import_skill_registry(self):
-        """SkillRegistry is importable and constructable."""
-        from codomyrmex.skills import SkillRegistry
+        """SkillRegistry is importable and constructable with a SkillLoader."""
+        from pathlib import Path
 
-        registry = SkillRegistry()
+        from codomyrmex.skills import SkillLoader, SkillRegistry
+
+        skills_dir = Path.home() / ".claude" / "skills"
+        skills_dir.mkdir(parents=True, exist_ok=True)
+        loader = SkillLoader(upstream_dir=skills_dir, custom_dir=skills_dir)
+        registry = SkillRegistry(skill_loader=loader)
         assert registry is not None
 
     def test_import_skill_loader(self):

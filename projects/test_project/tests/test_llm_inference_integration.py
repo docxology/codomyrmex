@@ -3,8 +3,6 @@
 import sys
 from pathlib import Path
 
-import pytest
-
 # Ensure src is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -87,7 +85,7 @@ class TestCollaborationImports:
 
         values = [p.value for p in TaskPriority]
         assert len(values) > 0
-        assert "normal" in values or "NORMAL" in values or any(v for v in values)
+        assert TaskPriority.NORMAL.value in values
 
     def test_import_task_status(self):
         """TaskStatus enum is importable with expected values."""
@@ -97,16 +95,16 @@ class TestCollaborationImports:
         assert len(values) > 0
 
     def test_import_task_model(self):
-        """Task model is importable."""
+        """Task model is importable and constructable with required name field."""
         from codomyrmex.collaboration import Task, TaskPriority
 
         task = Task(
-            id="test-task-001",
-            description="Test task",
-            priority=TaskPriority.NORMAL,
+            name="Test task",
+            description="Test task description",
+            priority=TaskPriority.NORMAL.value,
         )
         assert task is not None
-        assert task.id == "test-task-001"
+        assert task.name == "Test task"
 
 
 class TestLLMInferenceModule:

@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "codomyrmex"
-version = "1.1.0"
+version = "1.1.1"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -428,22 +428,80 @@ src = ["src"]
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    "D",        # pydocstyle (enable selectively later)
-    "COM812",   # trailing comma (formatter conflict)
-    "ISC001",   # string concat (formatter conflict)
-    "ANN401",   # Dynamically typed Any
-    "TD002",    # Missing TODO author
-    "TD003",    # Missing TODO link
-    "FIX002",   # Line contains TODO
+    # Formatter conflicts
+    "COM812",   # trailing comma (conflicts with ruff format)
+    "ISC001",   # string concat (conflicts with ruff format)
     "E501",     # line too long (handled by formatter)
-    "B008",     # do not perform function calls in argument defaults
+
+    # Docstring rules (enable selectively later when docstring push begins)
+    "D",        # all pydocstyle rules
+
+    # Type annotation noise (legacy codebase has ~33k missing annotations)
+    "ANN001",   # missing type for function argument
+    "ANN002",   # missing type for *args
+    "ANN003",   # missing type for **kwargs
+    "ANN201",   # missing return type for public function
+    "ANN202",   # missing return type for private function
+    "ANN204",   # missing return type for special method
+    "ANN401",   # Dynamically typed Any
+
+    # Assert usage (44k violations — assert is intentional in this codebase)
+    "S101",     # use of assert (tests already ignored via per-file)
+
+    # Import style (legacy pattern — import-inside-function is intentional for optional deps)
+    "PLC0415",  # import outside top-level (6.7k — many lazy/optional imports)
+
+    # Magic values (too noisy for a config-heavy codebase)
+    "PLR2004",  # magic value comparison
+
+    # TODO/FIXME management
+    "TD002",    # missing TODO author
+    "TD003",    # missing TODO link
+    "FIX002",   # line contains TODO
+
+    # Complexity/style (keep code readable without enforcement)
     "C901",     # too complex
+    "B008",     # function calls in argument defaults (FastAPI Depends pattern)
+    "PLR0913",  # too many arguments (complex module configs)
+    "PLR0911",  # too many return statements
+    "PLR0912",  # too many branches
+    "PLR0915",  # too many statements
+
+    # Exception handling style (enforce gradually)
+    "TRY003",   # raise vanilla args (1.6k — would require exception refactor)
+    "EM101",    # raw string in exception (refactor to variables — later)
+    "EM102",    # f-string in exception (refactor to variables — later)
+    "BLE001",   # blind except (1.9k — needs case-by-case audit)
+
+    # Logging style (legacy codebase uses f-strings in logging)
+    "G004",     # logging f-string (2.2k — migrate to % format later)
+
+    # Private member access (common in test code and internal wiring)
+    "SLF001",   # private member access (2.6k — internal module cross-refs)
+
+    # Try/except style
+    "TRY300",   # try-consider-else
+    "TRY400",   # error-instead-of-exception
+
+    # Pathlib enforcement (migrate gradually from os.path)
+    "PTH",      # all pathlib rules (PTH100-PTH211, ~1.5k — migrate later)
+
+    # Argument/method unused (common in ABC/interface patterns)
+    "ARG001",   # unused function argument
+    "ARG002",   # unused method argument
+
+    # Miscellaneous noise
+    "FBT",      # boolean trap (FBT001/002/003 — too opinionated for this codebase)
+    "ERA001",   # commented-out code (will clean up later in targeted pass)
+    "INP001",   # implicit namespace package (scripts dir has no __init__.py by design)
+    "RUF009",   # dataclass default mutable (false positives with Field())
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401", "F403"]
-"tests/**/*" = ["S101", "PLR2004", "ANN", "B011"]
-"scripts/**/*.py" = ["T20", "INP001"]
+"__init__.py" = ["F401", "F403", "E402"]
+"tests/**/*" = ["S101", "PLR2004", "ANN", "B011", "SLF001", "ARG"]
+"scripts/**/*.py" = ["T20", "INP001", "ANN", "S101", "BLE001"]
+"**/mcp_tools.py" = ["ANN", "ARG001"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "unittest.mock" = { msg = "Zero-Mock Policy: Use real functional implementations and authentic fixtures instead of mocks." }
@@ -461,8 +519,9 @@ docstring-code-format = true
 python-version = "3.11"
 
 [tool.ty.rules]
-# Lenient for legacy codebase — tighten over time
+# v1.1.1: Tightened from initial lenient config
 possibly-unresolved-reference = "warn"
+possibly-unbound = "warn"
 unresolved-import = "ignore"
 possibly-missing-attribute = "ignore"
 invalid-argument-type = "ignore"

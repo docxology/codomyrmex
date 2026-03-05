@@ -152,7 +152,9 @@ def demo_agent_brain() -> None:
         print(f"  Available agent providers: {providers}")
 
         brain.remember("Python uses GIL for thread safety", "knowledge", "high")
-        brain.remember("codomyrmex has 121 auto-discovered modules", "knowledge", "normal")
+        brain.remember(
+            "codomyrmex has 121 auto-discovered modules", "knowledge", "normal"
+        )
         results = brain.recall("Python", k=3)
         print(f"  Memory store: {len(results)} recall result(s) for 'Python'")
 
@@ -174,7 +176,7 @@ def demo_git_workflow() -> None:
         info = wf.inspect_repo(repo_root)
         print(f"  Is git repo: {info['is_git_repo']}")
         print(f"  Current branch: {info.get('current_branch', 'n/a')}")
-        branch_count = len(info.get('branches', []))
+        branch_count = len(info.get("branches", []))
         print(f"  Branches found: {branch_count}")
 
         history = wf.analyze_history(repo_root, max_commits=10)
@@ -194,7 +196,10 @@ def demo_knowledge_search() -> None:
         docs = [
             {"id": "1", "content": "Python is great for data science and ML"},
             {"id": "2", "content": "JavaScript and TypeScript run in the browser"},
-            {"id": "3", "content": "Rust provides memory safety without garbage collection"},
+            {
+                "id": "3",
+                "content": "Rust provides memory safety without garbage collection",
+            },
             {"id": "4", "content": "codomyrmex integrates 121 modules via MCP tools"},
         ]
         results = ks.full_text_search("Python data", docs)
@@ -207,7 +212,9 @@ def demo_knowledge_search() -> None:
         print(f"  Scrape formats: {info['available_formats']}")
 
         constraints = ks.verify_constraints([], timeout_ms=500)
-        print(f"  Constraint solver: {constraints['status']} (z3 available: {constraints['solver_available']})")
+        print(
+            f"  Constraint solver: {constraints['status']} (z3 available: {constraints['solver_available']})"
+        )
     except Exception as e:
         print(f"  [warning] Knowledge Search demo failed: {e}")
 

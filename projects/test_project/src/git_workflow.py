@@ -19,13 +19,11 @@ from typing import Any
 from codomyrmex.git_analysis import GitHistoryAnalyzer
 from codomyrmex.git_operations import (
     check_git_availability,
-    create_branch,
     get_current_branch,
     get_diff,
     get_status,
     is_git_repository,
     list_branches,
-    switch_branch,
 )
 from codomyrmex.logging_monitoring import get_logger
 
@@ -102,7 +100,9 @@ class GitWorkflow:
 
         try:
             status = get_status(path_str)
-            result["status"] = status if isinstance(status, dict) else {"raw": str(status)}
+            result["status"] = (
+                status if isinstance(status, dict) else {"raw": str(status)}
+            )
         except Exception as e:
             logger.warning(f"get_status failed: {e}")
 
@@ -120,7 +120,9 @@ class GitWorkflow:
 
         return result
 
-    def analyze_history(self, path: str | Path, max_commits: int = 20) -> dict[str, Any]:
+    def analyze_history(
+        self, path: str | Path, max_commits: int = 20
+    ) -> dict[str, Any]:
         """Analyze commit history using git_analysis.
 
         Uses GitHistoryAnalyzer to extract commit frequency, contributor
@@ -160,7 +162,9 @@ class GitWorkflow:
 
             try:
                 contributors = analyzer.get_contributor_stats()
-                result["contributors"] = contributors if isinstance(contributors, list) else []
+                result["contributors"] = (
+                    contributors if isinstance(contributors, list) else []
+                )
             except Exception as e:
                 logger.warning(f"get_contributor_stats failed: {e}")
 
@@ -199,6 +203,10 @@ class GitWorkflow:
             "git_analysis": {
                 "module": "codomyrmex.git_analysis",
                 "key_classes": ["GitHistoryAnalyzer"],
-                "capabilities": ["commit_history", "contributor_stats", "churn_detection"],
+                "capabilities": [
+                    "commit_history",
+                    "contributor_stats",
+                    "churn_detection",
+                ],
             },
         }

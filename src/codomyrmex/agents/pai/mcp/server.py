@@ -119,7 +119,7 @@ def create_codomyrmex_mcp_server(
     Returns:
         An MCPServer ready to ``run()``.
     """
-    from codomyrmex.model_context_protocol.transport.server import (  # noqa: PLC0415 — lazy import
+    from codomyrmex.model_context_protocol.transport.server import (
         MCPServer,
         MCPServerConfig,
     )

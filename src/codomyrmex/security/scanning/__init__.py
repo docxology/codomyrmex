@@ -410,4 +410,4 @@ __all__ = [
     "SecurityScanner",
 ]
 
-from .vulnerability_scanner import *  # noqa: E402
+from .vulnerability_scanner import *

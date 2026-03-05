@@ -168,15 +168,17 @@ class LLMInference:
         try:
             decomposer = TaskDecomposer()
             task = Task(
-                id=f"task_{id(description)}",
+                name=description[:50],
                 description=description,
-                priority=task_priority,
+                priority=task_priority.value,
             )
             subtasks = decomposer.decompose(task)
             result["task_submitted"] = True
             result["subtask_count"] = len(subtasks) if subtasks else 0
             result["task_id"] = task.id
-            result["task_status"] = task.status.value if hasattr(task.status, "value") else str(task.status)
+            result["task_status"] = (
+                task.status.value if hasattr(task.status, "value") else str(task.status)
+            )
         except Exception as e:
             logger.warning(f"SwarmManager task submission failed: {e}")
             result["error"] = str(e)

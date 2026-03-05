@@ -67,6 +67,10 @@ jobs:
         run: |
           uv run ty check src/
 
+      - name: Verify package build
+        run: |
+          uv build
+
       - name: Validate dependencies
         run: |
           echo "🔍 Validating dependency management..."

@@ -155,4 +155,4 @@ __all__ = [
     "run_server",
 ]
 
-from . import versioning as versioning_module  # noqa: E402
+from . import versioning as versioning_module

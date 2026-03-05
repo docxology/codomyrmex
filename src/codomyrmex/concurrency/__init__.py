@@ -84,4 +84,4 @@ __all__ = [
     "cli_commands",
 ]
 
-from . import tasks, workers  # noqa: E402
+from . import tasks, workers

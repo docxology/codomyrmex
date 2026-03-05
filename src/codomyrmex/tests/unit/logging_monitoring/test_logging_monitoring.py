@@ -204,11 +204,13 @@ class TestLoggingMonitoring:
 
         correlation_id = "test-correlation-123"
 
-        with caplog.at_level(logging.INFO):
-            with LogContext(
+        with (
+            caplog.at_level(logging.INFO),
+            LogContext(
                 correlation_id=correlation_id, additional_context={"env": "test"}
-            ):
-                log_with_context("INFO", "Message inside context", {"key": "value"})
+            ),
+        ):
+            log_with_context("INFO", "Message inside context", {"key": "value"})
 
         # Verify log contains correlation ID
         assert len(caplog.records) == 1
@@ -239,13 +241,13 @@ class TestLoggingMonitoring:
 
         perf_logger = PerformanceLogger("test.performance")
 
-        with caplog.at_level(logging.INFO):
-            with perf_logger.time_operation(
-                "context_test", {"type": "context_manager"}
-            ):
-                import time
+        with (
+            caplog.at_level(logging.INFO),
+            perf_logger.time_operation("context_test", {"type": "context_manager"}),
+        ):
+            import time
 
-                time.sleep(0.01)  # Small delay to ensure measurable duration
+            time.sleep(0.01)  # Small delay to ensure measurable duration
 
         # Verify completion was logged
         records = [

@@ -72,9 +72,7 @@ def measure_import_time(module_name: str) -> dict[str, Any]:
     # Remove from cache if already loaded to measure cold import
     cached_module = sys.modules.pop(module_name, None)
     # Also remove child modules
-    children_to_remove = [
-        k for k in sys.modules if k.startswith(f"{module_name}.")
-    ]
+    children_to_remove = [k for k in sys.modules if k.startswith(f"{module_name}.")]
     cached_children = {k: sys.modules.pop(k) for k in children_to_remove}
 
     try:
@@ -113,10 +111,7 @@ def analyse_import_weights(
     list of dicts sorted by ``import_time_seconds`` descending.
     """
     # Discover all sub-modules currently loaded
-    sub_modules = sorted(
-        k for k in sys.modules
-        if k.startswith(f"{root_module}.")
-    )
+    sub_modules = sorted(k for k in sys.modules if k.startswith(f"{root_module}."))
 
     results: list[dict[str, Any]] = []
     for mod_name in sub_modules:
@@ -129,19 +124,7 @@ def analyse_import_weights(
 
 
 __all__ = [
+    "analyse_import_weights",
     "benchmark_cli_startup",
     "measure_import_time",
-    "analyse_import_weights",
 ]
-
-
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "performance" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/performance/config.yaml")
-

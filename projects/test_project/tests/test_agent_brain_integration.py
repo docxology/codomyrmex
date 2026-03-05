@@ -3,8 +3,6 @@
 import sys
 from pathlib import Path
 
-import pytest
-
 # Ensure src is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -62,15 +60,15 @@ class TestAgenticMemoryImports:
 
         assert MemoryType is not None
         values = [t.value for t in MemoryType]
-        assert "knowledge" in values
+        assert "episodic" in values
 
     def test_import_memory_importance(self):
-        """MemoryImportance enum is importable."""
+        """MemoryImportance enum is importable with integer importance levels."""
         from codomyrmex.agentic_memory import MemoryImportance
 
         assert MemoryImportance is not None
-        values = [i.value for i in MemoryImportance]
-        assert "normal" in values
+        assert MemoryImportance.MEDIUM is not None
+        assert len(list(MemoryImportance)) > 0
 
     def test_import_in_memory_store(self):
         """InMemoryStore is importable and constructable."""
@@ -113,8 +111,9 @@ class TestAgentBrainModule:
 
     def test_remember_returns_memory(self):
         """remember() stores content and returns a Memory object."""
-        from codomyrmex.agentic_memory import Memory
         from src.agent_brain import AgentBrain
+
+        from codomyrmex.agentic_memory import Memory
 
         brain = AgentBrain()
         mem = brain.remember("Test knowledge content", "knowledge", "normal")

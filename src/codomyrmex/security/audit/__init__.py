@@ -352,4 +352,4 @@ __all__ = [
     "AuditLogger",
 ]
 
-from .audit_trail import *  # noqa: E402
+from .audit_trail import *

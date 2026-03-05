@@ -14,6 +14,14 @@ Example:
 
 from typing import Any
 
+from codomyrmex.agentic_memory import (
+    AgentMemory,
+    InMemoryStore,
+    Memory,
+    MemoryImportance,
+    MemoryType,
+    RetrievalResult,
+)
 from codomyrmex.agents import (
     AgentCapabilities,
     AgentConfig,
@@ -24,14 +32,6 @@ from codomyrmex.agents import (
     CodexClient,
     GeminiClient,
     get_config,
-)
-from codomyrmex.agentic_memory import (
-    AgentMemory,
-    InMemoryStore,
-    Memory,
-    MemoryImportance,
-    MemoryType,
-    RetrievalResult,
 )
 from codomyrmex.logging_monitoring import get_logger
 
@@ -87,25 +87,36 @@ class AgentBrain:
     def remember(
         self,
         content: str,
-        memory_type: str = "knowledge",
-        importance: str = "normal",
+        memory_type: str = "semantic",
+        importance: str = "medium",
     ) -> Memory:
         """Store content in agent memory.
 
         Args:
             content: Text content to remember.
-            memory_type: One of 'knowledge', 'episodic', 'semantic'.
-            importance: One of 'low', 'normal', 'high', 'critical'.
+            memory_type: One of 'episodic', 'semantic', 'procedural'.
+                         Accepts 'knowledge' as alias for 'semantic'.
+            importance: One of 'low', 'medium', 'high', 'critical'.
+                        Accepts 'normal' as alias for 'medium'.
 
         Returns:
             The stored Memory object.
         """
-        mem_type = MemoryType(memory_type) if memory_type in [t.value for t in MemoryType] else MemoryType.KNOWLEDGE
-        mem_importance = (
-            MemoryImportance(importance)
-            if importance in [i.value for i in MemoryImportance]
-            else MemoryImportance.NORMAL
-        )
+        _type_map = {
+            "episodic": MemoryType.EPISODIC,
+            "semantic": MemoryType.SEMANTIC,
+            "procedural": MemoryType.PROCEDURAL,
+            "knowledge": MemoryType.SEMANTIC,
+        }
+        _imp_map = {
+            "low": MemoryImportance.LOW,
+            "medium": MemoryImportance.MEDIUM,
+            "normal": MemoryImportance.MEDIUM,
+            "high": MemoryImportance.HIGH,
+            "critical": MemoryImportance.CRITICAL,
+        }
+        mem_type = _type_map.get(memory_type, MemoryType.SEMANTIC)
+        mem_importance = _imp_map.get(importance, MemoryImportance.MEDIUM)
         memory = self.memory.remember(
             content=content,
             memory_type=mem_type,

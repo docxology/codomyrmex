@@ -17,59 +17,55 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 try:
-    from codomyrmex.agents import AgentOrchestrator, AgentRequest, AgentResponse, BaseAgent, AgentCapabilities
-except ImportError as e:
+    from codomyrmex.agents import (
+        AgentCapabilities,
+        AgentOrchestrator,
+        AgentRequest,
+        AgentResponse,
+        BaseAgent,
+    )
+except ImportError:
     # Handle missing optional dependencies (e.g., aiohttp)
     def main():
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
-
         setup_logging()
         print_info(f"Agents module dependencies not available: {e}")
         print_info("Install with: pip install aiohttp")
         print_info("Skipping agents examples - success.")
         return 0
-    
+
     if __name__ == "__main__":
         import sys
+
         sys.exit(main())
     else:
         # Let the import error propagate if not running as main
         raise
 
+
 # 1. Define a Mock Agent for demonstration (to avoid requiring real API keys in example)
 class DemoAgent(BaseAgent):
     def __init__(self, name="demo_agent"):
         super().__init__(name=name, capabilities=[AgentCapabilities.TEXT_COMPLETION])
-    
+
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
-        self.logger.info(f"Agent {self.name} processing prompt: {request.prompt[:20]}...")
+        self.logger.info(
+            f"Agent {self.name} processing prompt: {request.prompt[:20]}..."
+        )
         return AgentResponse(
             content=f"Response from {self.name} for: {request.prompt}",
-            metadata={"agent": self.name}
+            metadata={"agent": self.name},
         )
 
-def main():
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
 
+def main():
     setup_logging()
     print_info("Running Agents Examples...")
 
@@ -77,18 +73,20 @@ def main():
     print_info("Initializing real AgentOrchestrator with demo agents...")
     agent_a = DemoAgent(name="Agent_A")
     agent_b = DemoAgent(name="Agent_B")
-    
+
     orchestrator = AgentOrchestrator(agents=[agent_a, agent_b])
-    
+
     request = AgentRequest(prompt="What is the capital of France?")
-    
+
     # 2. Parallel Execution
     print_info("Executing request in parallel across orchestrated agents...")
     responses = orchestrator.execute_parallel(request)
-    
+
     for resp in responses:
         if resp.is_success():
-            print_success(f"  {resp.metadata.get('agent', 'Unknown agent')}: {resp.content}")
+            print_success(
+                f"  {resp.metadata.get('agent', 'Unknown agent')}: {resp.content}"
+            )
         else:
             print_error(f"  Agent failed: {resp.error}")
 
@@ -99,6 +97,7 @@ def main():
 
     print_success("Agents examples completed successfully")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -58,7 +58,7 @@ class GeminiProvider(LLMProvider):
     def _init_client(self) -> None:
         """Initialize the google-genai client."""
         try:
-            from google import genai  # noqa: PLC0415
+            from google import genai
 
             self._client = genai.Client(api_key=self.config.api_key)
             self._genai_types = __import__("google.genai.types", fromlist=["types"])
