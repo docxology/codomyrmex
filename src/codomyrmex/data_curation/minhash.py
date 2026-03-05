@@ -25,6 +25,12 @@ class MinHash:
     """
 
     def __init__(self, n_hashes: int = 128, shingle_size: int = 3):
+        """Initialize a MinHash object.
+
+        Args:
+            n_hashes: Number of random hash functions to use.
+            shingle_size: Number of characters per shingle (n-gram).
+        """
         self.n_hashes = n_hashes
         self.shingle_size = shingle_size
 
@@ -66,11 +72,28 @@ class MinHash:
         return hash_values.min(axis=1).astype(np.int64)
 
     def jaccard_estimate(self, sig_a: np.ndarray, sig_b: np.ndarray) -> float:
-        """Estimate Jaccard similarity from two MinHash signatures."""
+        """Estimate Jaccard similarity from two MinHash signatures.
+
+        Args:
+            sig_a: The MinHash signature for the first document.
+            sig_b: The MinHash signature for the second document.
+
+        Returns:
+            The estimated Jaccard similarity (between 0.0 and 1.0).
+        """
         return float(np.mean(sig_a == sig_b))
 
     def are_similar(self, text_a: str, text_b: str, threshold: float = 0.8) -> bool:
-        """Check if two texts are near-duplicates."""
+        """Check if two texts are near-duplicates.
+
+        Args:
+            text_a: The first text to compare.
+            text_b: The second text to compare.
+            threshold: Minimum Jaccard similarity required to be considered near-duplicates.
+
+        Returns:
+            True if estimated similarity is >= threshold, False otherwise.
+        """
         sig_a = self.signature(text_a)
         sig_b = self.signature(text_b)
         return self.jaccard_estimate(sig_a, sig_b) >= threshold
@@ -87,6 +110,12 @@ class LSHIndex:
     """
 
     def __init__(self, n_hashes: int = 128, n_bands: int = 16):
+        """Initialize an LSHIndex.
+
+        Args:
+            n_hashes: Number of hash functions in the MinHash signatures.
+            n_bands: Number of bands to split the signature into.
+        """
         self.n_hashes = n_hashes
         self.n_bands = n_bands
         self.rows_per_band = n_hashes // n_bands
@@ -94,7 +123,12 @@ class LSHIndex:
         self.signatures: dict[str, np.ndarray] = {}
 
     def add(self, doc_id: str, signature: np.ndarray) -> None:
-        """Add document to LSH index."""
+        """Add document to LSH index.
+
+        Args:
+            doc_id: Unique identifier for the document.
+            signature: MinHash signature array for the document.
+        """
         self.signatures[doc_id] = signature
 
         for band_idx in range(self.n_bands):
@@ -108,7 +142,14 @@ class LSHIndex:
             self.buckets[bucket_key].append(doc_id)
 
     def query(self, signature: np.ndarray) -> set[str]:
-        """Find all candidate near-duplicates for a query signature."""
+        """Find all candidate near-duplicates for a query signature.
+
+        Args:
+            signature: MinHash signature to query against the index.
+
+        Returns:
+            A set of document IDs that are candidate near-duplicates.
+        """
         candidates = set()
         for band_idx in range(self.n_bands):
             start = band_idx * self.rows_per_band
@@ -132,6 +173,14 @@ class DataCurator:
         n_bands: int = 16,
         shingle_size: int = 3,
     ):
+        """Initialize a DataCurator pipeline.
+
+        Args:
+            similarity_threshold: Jaccard similarity cutoff for deduplication.
+            n_hashes: Number of hash functions to use in MinHash signatures.
+            n_bands: Number of bands to use in the LSH index.
+            shingle_size: Number of characters per shingle (n-gram).
+        """
         self.threshold = similarity_threshold
         self.minhash = MinHash(n_hashes=n_hashes, shingle_size=shingle_size)
         self.lsh = LSHIndex(n_hashes=n_hashes, n_bands=n_bands)
@@ -139,6 +188,9 @@ class DataCurator:
     def deduplicate(self, texts: list[str]) -> tuple[list[str], dict]:
         """
         Remove near-duplicate texts from corpus.
+
+        Args:
+            texts: List of text strings to deduplicate.
 
         Returns:
             unique_texts: Deduplicated texts

@@ -120,6 +120,21 @@ class TestMinHashSimilarity:
         )
 
     @pytest.mark.unit
+    def test_are_similar_custom_threshold(self):
+        """are_similar respects a custom threshold parameter."""
+        mh = MinHash(n_hashes=128)
+        text_a = "the quick brown fox jumps over the lazy dog"
+        text_b = "the quick brown fox jumps over the sleeping dog"
+        # Determine actual similarity
+        sim = mh.jaccard_estimate(mh.signature(text_a), mh.signature(text_b))
+
+        # We test with a threshold lower than similarity (should be True)
+        assert mh.are_similar(text_a, text_b, threshold=sim - 0.1)
+
+        # We test with a threshold higher than similarity (should be False)
+        assert not mh.are_similar(text_a, text_b, threshold=sim + 0.1)
+
+    @pytest.mark.unit
     def test_similarity_symmetric(self):
         """Jaccard estimate should be symmetric: J(A,B) == J(B,A)."""
         mh = MinHash()
@@ -185,6 +200,22 @@ class TestLSHIndex:
         assert candidates == set()
 
     @pytest.mark.unit
+    def test_lsh_index_empty_bands(self):
+        """Querying with a signature that matches no bands returns empty set."""
+        mh = MinHash(n_hashes=128)
+        lsh = LSHIndex(n_hashes=128, n_bands=16)
+        sig1 = mh.signature("completely random unrelated text one")
+        sig2 = mh.signature("another entirely different phrase two")
+        lsh.add("doc1", sig1)
+
+        # Manually alter the index to simulate no matching buckets
+        # by clearing the buckets but leaving signatures
+        lsh.buckets.clear()
+
+        candidates = lsh.query(sig2)
+        assert candidates == set()
+
+    @pytest.mark.unit
     def test_similar_docs_are_candidates(self):
         """Similar documents should appear as candidates."""
         mh = MinHash()
@@ -227,6 +258,18 @@ class TestLSHIndex:
 
 class TestDataCurator:
     """End-to-end deduplication pipeline."""
+
+    @pytest.mark.unit
+    def test_deduplication_all_identical(self):
+        """An array of identical strings should be reduced to just one."""
+        curator = DataCurator()
+        texts = ["identical text"] * 5
+        unique_texts, stats = curator.deduplicate(texts)
+        assert len(unique_texts) == 1
+        assert stats["total_documents"] == 5
+        assert stats["unique_documents"] == 1
+        assert stats["duplicates_removed"] == 4
+        assert stats["deduplication_ratio"] == 0.2
 
     @pytest.mark.unit
     def test_deduplication_removes_duplicates(self):
@@ -345,3 +388,23 @@ class TestMCPTools:
         assert "are_similar" in result
         assert result["similarity"] == 1.0
         assert result["are_similar"] is True
+
+    @pytest.mark.unit
+    def test_mcp_tool_metadata(self):
+        """Ensure MCP tools have correct metadata registered."""
+        from codomyrmex.data_curation.mcp_tools import (
+            data_curation_deduplicate,
+            data_curation_similarity,
+        )
+
+        assert hasattr(data_curation_deduplicate, "_mcp_tool_meta")
+        meta1 = data_curation_deduplicate._mcp_tool_meta
+        assert meta1["name"] == "codomyrmex.data_curation_deduplicate"
+        assert meta1["category"] == "data_curation"
+        assert "Deduplicate a list of texts" in meta1["description"]
+
+        assert hasattr(data_curation_similarity, "_mcp_tool_meta")
+        meta2 = data_curation_similarity._mcp_tool_meta
+        assert meta2["name"] == "codomyrmex.data_curation_similarity"
+        assert meta2["category"] == "data_curation"
+        assert "Estimate Jaccard similarity" in meta2["description"]

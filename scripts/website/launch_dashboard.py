@@ -45,7 +45,7 @@ def main():
 
     args = parse_args()
     setup_logging(level="INFO")
-    
+
     # Determine project root
     project_root = Path(__file__).resolve().parent.parent.parent
     print_info(f"Project Root: {project_root}")
@@ -100,7 +100,7 @@ def main():
 
     # Start Server
     print_info(f"Starting server at http://localhost:{args.port}...")
-    
+
     try:
         max_retries = 10
         for attempt in range(max_retries):
@@ -110,7 +110,7 @@ def main():
                 with socketserver.TCPServer((args.host, args.port), WebsiteServer) as httpd:
                     if args.open:
                         threading.Thread(target=lambda p=args.port: (time.sleep(1), webbrowser.open(f"http://localhost:{p}"))).start()
-                    
+
                     print_success(f"Dashboard active at http://localhost:{args.port}")
                     print_info("Press Ctrl+C to stop.")
                     httpd.serve_forever()
