@@ -1,7 +1,6 @@
-from typing import List, Optional
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import uvicorn
 
 # Initialize FastAPI app
 app = FastAPI(title="Example API", description="A simple item management API")
@@ -10,13 +9,13 @@ app = FastAPI(title="Example API", description="A simple item management API")
 # Pydantic model for data validation
 class Item(BaseModel):
     name: str
-    description: Optional[str] = None
+    description: str | None = None
     price: float
-    tax: Optional[float] = None
+    tax: float | None = None
 
 
 # In-memory database
-fake_items_db: List[Item] = []
+fake_items_db: list[Item] = []
 
 
 @app.post("/items/", response_model=Item, status_code=201)
@@ -28,7 +27,7 @@ async def create_item(item: Item):
     return item
 
 
-@app.get("/items/", response_model=List[Item])
+@app.get("/items/", response_model=list[Item])
 async def read_items(skip: int = 0, limit: int = 10):
     """
     Read items with pagination.

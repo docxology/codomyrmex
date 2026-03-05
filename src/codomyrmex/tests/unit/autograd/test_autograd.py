@@ -42,7 +42,7 @@ class TestValueForward:
     @pytest.mark.unit
     def test_pow_forward(self):
         a = Value(3.0)
-        c = a ** 2
+        c = a**2
         assert c.data == 9.0
 
     @pytest.mark.unit
@@ -127,7 +127,7 @@ class TestValueBackward:
     @pytest.mark.unit
     def test_pow_backward(self):
         a = Value(3.0)
-        c = a ** 3
+        c = a**3
         c.backward()
         # d(x^3)/dx = 3x^2 = 27
         assert abs(a.grad - 27.0) < 1e-9
@@ -145,7 +145,7 @@ class TestValueBackward:
         # f(a,b) = a*b + a^2, df/da = b + 2a, df/db = a
         a = Value(2.0)
         b = Value(3.0)
-        f = a * b + a ** 2
+        f = a * b + a**2
         f.backward()
         assert abs(a.grad - 7.0) < 1e-9  # 3 + 2*2 = 7
         assert abs(b.grad - 2.0) < 1e-9  # 2

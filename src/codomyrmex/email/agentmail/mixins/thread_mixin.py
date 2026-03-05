@@ -22,6 +22,7 @@ except ImportError:
 def _raise_for_api_error(exc: Exception, context: str):
     """Import and delegate to the module-level error raiser."""
     from codomyrmex.email.agentmail.provider import _raise_for_api_error as _raise
+
     _raise(exc, context)
 
 
@@ -89,7 +90,9 @@ class ThreadMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"get_thread({thread_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching thread {thread_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error fetching thread {thread_id}: {exc}"
+            ) from exc
 
     def delete_thread(
         self,
@@ -111,4 +114,6 @@ class ThreadMixin:
         except ApiError as exc:
             _raise_for_api_error(exc, f"delete_thread({thread_id})")
         except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting thread {thread_id}: {exc}") from exc
+            raise EmailAPIError(
+                f"Unexpected error deleting thread {thread_id}: {exc}"
+            ) from exc

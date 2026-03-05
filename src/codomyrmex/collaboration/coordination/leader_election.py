@@ -81,9 +81,13 @@ class LeaderElection(ABC):
 
         This is the base implementation - subclasses should override.
         """
-        raise NotImplementedError("Subclasses must implement elect()")  # ABC: intentional
+        raise NotImplementedError(
+            "Subclasses must implement elect()"
+        )  # ABC: intentional
 
-    def _filter_healthy(self, agents: list[CollaborativeAgent]) -> list[CollaborativeAgent]:
+    def _filter_healthy(
+        self, agents: list[CollaborativeAgent]
+    ) -> list[CollaborativeAgent]:
         """Return only agents not in ERROR state."""
         return [a for a in agents if a.state != AgentState.ERROR]
 
@@ -92,7 +96,9 @@ class LeaderElection(ABC):
         self._election_history.append(result)
         if result.success:
             self._current_leader = result.leader_id
-        self._state = ElectionState.COMPLETED if result.success else ElectionState.FAILED
+        self._state = (
+            ElectionState.COMPLETED if result.success else ElectionState.FAILED
+        )
 
 
 class BullyElection(LeaderElection):
@@ -178,7 +184,9 @@ class BullyElection(LeaderElection):
         )
 
         self._record_result(result)
-        logger.info(f"Bully election complete: Leader is {leader.name} ({leader.agent_id})")
+        logger.info(
+            f"Bully election complete: Leader is {leader.name} ({leader.agent_id})"
+        )
         return result
 
 
@@ -252,7 +260,9 @@ class RingElection(LeaderElection):
         )
 
         self._record_result(result)
-        logger.info(f"Ring election complete: Leader is {leader.name} ({leader.agent_id})")
+        logger.info(
+            f"Ring election complete: Leader is {leader.name} ({leader.agent_id})"
+        )
         return result
 
 
@@ -304,7 +314,9 @@ class RandomElection(LeaderElection):
         )
 
         self._record_result(result)
-        logger.info(f"Random election complete: Leader is {leader.name} ({leader.agent_id})")
+        logger.info(
+            f"Random election complete: Leader is {leader.name} ({leader.agent_id})"
+        )
         return result
 
 
@@ -360,11 +372,11 @@ class RotatingLeadership:
 
 
 __all__ = [
-    "ElectionState",
-    "ElectionResult",
-    "LeaderElection",
     "BullyElection",
-    "RingElection",
+    "ElectionResult",
+    "ElectionState",
+    "LeaderElection",
     "RandomElection",
+    "RingElection",
     "RotatingLeadership",
 ]

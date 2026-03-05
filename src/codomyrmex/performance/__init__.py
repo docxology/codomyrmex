@@ -13,7 +13,7 @@ Subpackages:
 
 from codomyrmex.exceptions import CodomyrmexError
 
-from . import analysis, benchmarking  # noqa: F401
+from . import analysis, benchmarking
 from .caching.cache_manager import CacheManager, cached_function
 from .optimization.lazy_loader import LazyLoader, lazy_import
 
@@ -37,6 +37,7 @@ try:
     PERFORMANCE_MONITOR_AVAILABLE = True
 except ImportError:
     import logging as _logging
+
     _logging.getLogger("codomyrmex.performance").warning(
         "psutil is not installed; performance monitoring is disabled. "
         "Enable it with: uv sync --extra performance"
@@ -80,14 +81,14 @@ def cli_commands():
 
 
 __all__ = [
-    "LazyLoader",
-    "lazy_import",
     "CacheManager",
-    "cached_function",
+    "LazyLoader",
     "PerformanceProfiler",
+    "cached_function",
+    "cli_commands",
+    "lazy_import",
     "profile_function",
     "run_benchmark",
-    "cli_commands",
 ]
 
 if PERFORMANCE_MONITOR_AVAILABLE:
@@ -95,4 +96,3 @@ if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("monitor_performance")
     __all__.append("performance_context")
     __all__.append("get_system_metrics")
-

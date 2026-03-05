@@ -30,7 +30,7 @@ else:
 # Skip entire module if fitz is not available
 pytestmark = pytest.mark.skipif(
     not FITZ_AVAILABLE,
-    reason="PyMuPDF (fitz) not available - install with: uv sync --extra dark"
+    reason="PyMuPDF (fitz) not available - install with: uv sync --extra dark",
 )
 
 
@@ -374,9 +374,7 @@ class TestDarkPDFPresets:
             _make_test_pdf(input1)
             _make_test_pdf(input2)
 
-            results = DarkPDF.batch(
-                [input1, input2], output_dir=output_dir, dpi=72
-            )
+            results = DarkPDF.batch([input1, input2], output_dir=output_dir, dpi=72)
             assert len(results) == 2
             assert all(p.exists() for p in results)
             assert results[0].name == "a_dark.pdf"

@@ -13,31 +13,38 @@ from typing import Any, Optional, Union
 
 class MessageRole(Enum):
     """Roles for messages."""
+
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
     TOOL = "tool"
 
+
 class ContentType(Enum):
     """Types of content in messages."""
+
     TEXT = "text"
     IMAGE = "image"
     FILE = "file"
     TOOL_CALL = "tool_call"
     TOOL_RESULT = "tool_result"
 
+
 @dataclass
 class TextContent:
     """Text content in a message."""
+
     type: str = "text"
     text: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return {"type": self.type, "text": self.text}
 
+
 @dataclass
 class ImageContent:
     """Image content in a message."""
+
     type: str = "image"
     source: str = ""  # URL or base64
     media_type: str = "image/png"
@@ -53,9 +60,11 @@ class ImageContent:
             result["alt_text"] = self.alt_text
         return result
 
+
 @dataclass
 class FileContent:
     """File content in a message."""
+
     type: str = "file"
     name: str = ""
     path: str = ""
@@ -73,9 +82,11 @@ class FileContent:
             result["size"] = self.size  # type: ignore[assignment]
         return result
 
+
 @dataclass
 class ToolParameter:
     """A parameter for a tool."""
+
     name: str
     param_type: str  # string, number, boolean, array, object
     description: str
@@ -106,9 +117,11 @@ class ToolParameter:
             schema["enum"] = self.enum  # type: ignore[assignment]
         return schema
 
+
 @dataclass
 class Tool:
     """Definition of a tool that can be called."""
+
     name: str
     description: str
     parameters: list[ToolParameter] = field(default_factory=list)
@@ -147,9 +160,11 @@ class Tool:
             },
         }
 
+
 @dataclass
 class ToolCall:
     """A call to a tool."""
+
     id: str
     name: str
     arguments: dict[str, Any] = field(default_factory=dict)
@@ -162,9 +177,11 @@ class ToolCall:
             "arguments": self.arguments,
         }
 
+
 @dataclass
 class ToolResult:
     """Result of a tool call."""
+
     tool_call_id: str
     content: Any
     is_error: bool = False
@@ -177,9 +194,11 @@ class ToolResult:
             "is_error": self.is_error,
         }
 
+
 @dataclass
 class Message:
     """A message in the conversation."""
+
     role: MessageRole
     content: list[TextContent | ImageContent | FileContent | ToolCall | ToolResult]
     name: str | None = None
@@ -197,7 +216,7 @@ class Message:
         return result
 
     @classmethod
-    def from_text(cls, role: MessageRole, text: str) -> 'Message':
+    def from_text(cls, role: MessageRole, text: str) -> "Message":
         """Create a simple text message."""
         return cls(
             role=role,
@@ -212,9 +231,11 @@ class Message:
                 texts.append(c.text)
         return "\n".join(texts)
 
+
 @dataclass
 class Conversation:
     """A conversation context."""
+
     id: str
     messages: list[Message] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -244,9 +265,11 @@ class Conversation:
         """Serialize to JSON."""
         return json.dumps(self.to_dict(), indent=2)
 
+
 @dataclass
 class Request:
     """A request to the model."""
+
     conversation: Conversation
     tools: list[Tool] = field(default_factory=list)
     model: str = ""
@@ -264,9 +287,11 @@ class Request:
             "stop_sequences": self.stop_sequences,
         }
 
+
 @dataclass
 class Response:
     """A response from the model."""
+
     message: Message
     finish_reason: str = "stop"  # stop, tool_call, length, error
     usage: dict[str, int] = field(default_factory=dict)
@@ -280,6 +305,7 @@ class Response:
             "model": self.model,
         }
 
+
 def create_tool(
     name: str,
     description: str,
@@ -290,30 +316,33 @@ def create_tool(
 
     if parameters:
         for param_name, param_config in parameters.items():
-            params.append(ToolParameter(
-                name=param_name,
-                param_type=param_config.get("type", "string"),
-                description=param_config.get("description", ""),
-                required=param_config.get("required", True),
-                default=param_config.get("default"),
-                enum=param_config.get("enum"),
-            ))
+            params.append(
+                ToolParameter(
+                    name=param_name,
+                    param_type=param_config.get("type", "string"),
+                    description=param_config.get("description", ""),
+                    required=param_config.get("required", True),
+                    default=param_config.get("default"),
+                    enum=param_config.get("enum"),
+                )
+            )
 
     return Tool(name=name, description=description, parameters=params)
 
+
 __all__ = [
-    "MessageRole",
     "ContentType",
-    "TextContent",
-    "ImageContent",
-    "FileContent",
-    "ToolParameter",
-    "Tool",
-    "ToolCall",
-    "ToolResult",
-    "Message",
     "Conversation",
+    "FileContent",
+    "ImageContent",
+    "Message",
+    "MessageRole",
     "Request",
     "Response",
+    "TextContent",
+    "Tool",
+    "ToolCall",
+    "ToolParameter",
+    "ToolResult",
     "create_tool",
 ]

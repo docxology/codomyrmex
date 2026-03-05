@@ -22,6 +22,7 @@ try:
         get_supported_providers,
         refactor_code_snippet,
     )
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -35,7 +36,9 @@ def _get_installed_ollama_models() -> list[str]:
     try:
         result = subprocess.run(
             ["ollama", "list"],
-            capture_output=True, text=True, timeout=10,
+            capture_output=True,
+            text=True,
+            timeout=10,
         )
         if result.returncode != 0:
             return []
@@ -50,6 +53,10 @@ _INSTALLED_MODELS = _get_installed_ollama_models()
 _TEST_MODEL = sorted(_INSTALLED_MODELS)[0] if _INSTALLED_MODELS else None
 
 
+@pytest.mark.skipif(
+    not OLLAMA_AVAILABLE,
+    reason="OllamaManager not installed (requires codomyrmex[ollama])",
+)
 class TestOllamaProviderIntegration:
     """Test Ollama as an LLM provider in ai_code_helpers."""
 
@@ -88,8 +95,11 @@ def _ollama_model_responsive() -> bool:
         return False
     try:
         result = generate_code_snippet(
-            prompt="Return 1", language="python", provider="ollama",
-            model_name=_TEST_MODEL, max_length=32,
+            prompt="Return 1",
+            language="python",
+            provider="ollama",
+            model_name=_TEST_MODEL,
+            max_length=32,
         )
         return len(result.get("generated_code", "")) > 0
     except Exception:
@@ -99,7 +109,9 @@ def _ollama_model_responsive() -> bool:
 _OLLAMA_RESPONSIVE = OLLAMA_AVAILABLE and _ollama_model_responsive()
 
 
-@pytest.mark.skipif(not _OLLAMA_RESPONSIVE, reason="Ollama not available or model not responding")
+@pytest.mark.skipif(
+    not _OLLAMA_RESPONSIVE, reason="Ollama not available or model not responding"
+)
 class TestOllamaCodeGeneration:
     """Test code generation with Ollama (requires Ollama server running)."""
 

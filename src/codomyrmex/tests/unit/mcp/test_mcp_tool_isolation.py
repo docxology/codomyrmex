@@ -98,6 +98,7 @@ class TestExceptionIsolation:
 
     def test_multiple_exception_types(self) -> None:
         """Different exception types are all properly isolated."""
+
         def _value_error(**kwargs):
             raise ValueError("bad value")
 
@@ -146,7 +147,9 @@ class TestGlobalStateIsolation:
         reg.register("mutator", schema={}, handler=_mutates_global)
 
         for _i in range(5):
-            r = reg.execute(MCPToolCall(tool_name="mutator", arguments={"key": "shared"}))
+            r = reg.execute(
+                MCPToolCall(tool_name="mutator", arguments={"key": "shared"})
+            )
 
         assert r.data["result"]["count"] == 5
 

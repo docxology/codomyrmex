@@ -72,13 +72,16 @@ class SocialEngineeringDetector:
 
         return analysis
 
-    def _calculate_risk_score(self, indicators: list[SocialEngineeringIndicator]) -> float:
+    def _calculate_risk_score(
+        self, indicators: list[SocialEngineeringIndicator]
+    ) -> float:
         """Calculate risk score from indicators."""
         if not indicators:
             return 0.0
 
         total_score = sum(
-            i.confidence * (1.0 if i.severity == "high" else 0.5 if i.severity == "medium" else 0.25)
+            i.confidence
+            * (1.0 if i.severity == "high" else 0.5 if i.severity == "medium" else 0.25)
             for i in indicators
         )
         return min(total_score / len(indicators), 1.0)
@@ -102,4 +105,3 @@ def analyze_communication(
     if detector is None:
         detector = SocialEngineeringDetector()
     return detector.analyze_communication(communication)
-

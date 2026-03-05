@@ -18,27 +18,33 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
+
 class GraphQLType(Enum):
     """GraphQL type definitions."""
+
     STRING = "String"
     INT = "Int"
     FLOAT = "Float"
     BOOLEAN = "Boolean"
     ID = "ID"
 
+
 @dataclass
 class GraphQLField:
     """Represents a GraphQL field definition."""
+
     name: str
-    type: Union[str, 'GraphQLObjectType']
+    type: Union[str, "GraphQLObjectType"]
     description: str | None = None
-    args: dict[str, Union[str, 'GraphQLObjectType']] = field(default_factory=dict)
+    args: dict[str, Union[str, "GraphQLObjectType"]] = field(default_factory=dict)
     resolver: Callable | None = None
     required: bool = False
+
 
 @dataclass
 class GraphQLObjectType:
     """Represents a GraphQL object type."""
+
     name: str
     fields: dict[str, GraphQLField] = field(default_factory=dict)
     description: str | None = None
@@ -52,9 +58,11 @@ class GraphQLObjectType:
         """Get a field by name."""
         return self.fields.get(name)
 
+
 @dataclass
 class GraphQLSchema:
     """GraphQL schema definition."""
+
     query_type: GraphQLObjectType | None = None
     mutation_type: GraphQLObjectType | None = None
     subscription_type: GraphQLObjectType | None = None
@@ -86,13 +94,19 @@ class GraphQLSchema:
                 if field.args:
                     args_list = []
                     for arg_name, arg_type in field.args.items():
-                        arg_type_str = arg_type if isinstance(arg_type, str) else arg_type.name
+                        arg_type_str = (
+                            arg_type if isinstance(arg_type, str) else arg_type.name
+                        )
                         args_list.append(f"{arg_name}: {arg_type_str}")
                     args_str = f"({', '.join(args_list)})"
 
-                field_type_str = field.type if isinstance(field.type, str) else field.type.name
+                field_type_str = (
+                    field.type if isinstance(field.type, str) else field.type.name
+                )
                 required_marker = "!" if field.required else ""
-                lines.append(f"  {field_name}{args_str}: {field_type_str}{required_marker}")
+                lines.append(
+                    f"  {field_name}{args_str}: {field_type_str}{required_marker}"
+                )
             lines.append("}")
 
         # Add Query type
@@ -103,13 +117,19 @@ class GraphQLSchema:
                 if field.args:
                     args_list = []
                     for arg_name, arg_type in field.args.items():
-                        arg_type_str = arg_type if isinstance(arg_type, str) else arg_type.name
+                        arg_type_str = (
+                            arg_type if isinstance(arg_type, str) else arg_type.name
+                        )
                         args_list.append(f"{arg_name}: {arg_type_str}")
                     args_str = f"({', '.join(args_list)})"
 
-                field_type_str = field.type if isinstance(field.type, str) else field.type.name
+                field_type_str = (
+                    field.type if isinstance(field.type, str) else field.type.name
+                )
                 required_marker = "!" if field.required else ""
-                lines.append(f"  {field_name}{args_str}: {field_type_str}{required_marker}")
+                lines.append(
+                    f"  {field_name}{args_str}: {field_type_str}{required_marker}"
+                )
             lines.append("}")
 
         # Add Mutation type
@@ -120,25 +140,35 @@ class GraphQLSchema:
                 if field.args:
                     args_list = []
                     for arg_name, arg_type in field.args.items():
-                        arg_type_str = arg_type if isinstance(arg_type, str) else arg_type.name
+                        arg_type_str = (
+                            arg_type if isinstance(arg_type, str) else arg_type.name
+                        )
                         args_list.append(f"{arg_name}: {arg_type_str}")
                     args_str = f"({', '.join(args_list)})"
 
-                field_type_str = field.type if isinstance(field.type, str) else field.type.name
+                field_type_str = (
+                    field.type if isinstance(field.type, str) else field.type.name
+                )
                 required_marker = "!" if field.required else ""
-                lines.append(f"  {field_name}{args_str}: {field_type_str}{required_marker}")
+                lines.append(
+                    f"  {field_name}{args_str}: {field_type_str}{required_marker}"
+                )
             lines.append("}")
 
         return "\n".join(lines)
 
+
 @dataclass
 class GraphQLResolver:
     """GraphQL resolver for handling field resolution."""
+
     field_name: str
     resolver_func: Callable
     complexity: int = 1
 
-    def resolve(self, parent: Any, args: dict[str, Any], context: dict[str, Any]) -> Any:
+    def resolve(
+        self, parent: Any, args: dict[str, Any], context: dict[str, Any]
+    ) -> Any:
         """
         Resolve the field value.
 
@@ -156,9 +186,11 @@ class GraphQLResolver:
             logger.error(f"Resolver error for field {self.field_name}: {e}")
             raise
 
+
 @dataclass
 class GraphQLMutation:
     """GraphQL mutation definition."""
+
     name: str
     input_type: GraphQLObjectType
     output_type: str | GraphQLObjectType
@@ -182,13 +214,16 @@ class GraphQLMutation:
             logger.error(f"Mutation error for {self.name}: {e}")
             raise
 
+
 @dataclass
 class GraphQLQuery:
     """GraphQL query representation."""
+
     operation: str  # 'query', 'mutation', or 'subscription'
     selection_set: dict[str, Any]
     variables: dict[str, Any] = field(default_factory=dict)
     operation_name: str | None = None
+
 
 class GraphQLAPI:
     """
@@ -214,8 +249,9 @@ class GraphQLAPI:
 
         logger.info("GraphQL API initialized")
 
-    def register_resolver(self, type_name: str, field_name: str,
-                         resolver: GraphQLResolver) -> None:
+    def register_resolver(
+        self, type_name: str, field_name: str, resolver: GraphQLResolver
+    ) -> None:
         """
         Register a field resolver.
 
@@ -240,8 +276,12 @@ class GraphQLAPI:
         self.mutations[mutation.name] = mutation
         logger.debug(f"Registered mutation: {mutation.name}")
 
-    def execute_query(self, query: str, variables: dict[str, Any] | None = None,
-                     context: dict[str, Any] | None = None) -> dict[str, Any]:
+    def execute_query(
+        self,
+        query: str,
+        variables: dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         Execute a GraphQL query.
 
@@ -262,10 +302,14 @@ class GraphQLAPI:
             # Validate query complexity
             complexity = self._calculate_complexity(parsed_query)
             if complexity > self.query_complexity_limit:
-                raise ValueError(f"Query complexity {complexity} exceeds limit {self.query_complexity_limit}")
+                raise ValueError(
+                    f"Query complexity {complexity} exceeds limit {self.query_complexity_limit}"
+                )
 
             # Execute query
-            result = self._execute_operation(parsed_query, variables or {}, context or {})
+            result = self._execute_operation(
+                parsed_query, variables or {}, context or {}
+            )
 
             return {"data": result}
 
@@ -293,7 +337,7 @@ class GraphQLAPI:
         # Extract operation name if present
         operation_name = None
         if "{" in query:
-            before_brace = query.split("{")[0].strip()
+            before_brace = query.split("{", maxsplit=1)[0].strip()
             if before_brace.startswith(("query", "mutation")):
                 parts = before_brace.split()
                 if len(parts) > 1:
@@ -302,7 +346,7 @@ class GraphQLAPI:
         return GraphQLQuery(
             operation=operation,
             selection_set={},  # Would parse actual selection set
-            operation_name=operation_name
+            operation_name=operation_name,
         )
 
     def _calculate_complexity(self, query: GraphQLQuery) -> int:
@@ -318,8 +362,9 @@ class GraphQLAPI:
         # Simplified complexity calculation
         return 1
 
-    def _execute_operation(self, query: GraphQLQuery, variables: dict[str, Any],
-                          context: dict[str, Any]) -> Any:
+    def _execute_operation(
+        self, query: GraphQLQuery, variables: dict[str, Any], context: dict[str, Any]
+    ) -> Any:
         """
         Execute a GraphQL operation.
 
@@ -333,14 +378,15 @@ class GraphQLAPI:
         """
         if query.operation == "query" and self.schema.query_type:
             return self._execute_selection_set(self.schema.query_type, {}, context)
-        elif query.operation == "mutation":
+        if query.operation == "mutation":
             # Handle mutations
             return {}
 
         return {}
 
-    def _execute_selection_set(self, object_type: GraphQLObjectType, parent: Any,
-                              context: dict[str, Any]) -> dict[str, Any]:
+    def _execute_selection_set(
+        self, object_type: GraphQLObjectType, parent: Any, context: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Execute a selection set against an object type.
 
@@ -374,8 +420,11 @@ class GraphQLAPI:
     def _register_builtin_resolvers(self) -> None:
         """Register built-in resolvers for common types."""
         # Functional base implementation registering universal __typename
-        self.register_resolver("__Any", "__typename",
-                               GraphQLResolver("__typename", lambda p, a, c: type(p).__name__))
+        self.register_resolver(
+            "__Any",
+            "__typename",
+            GraphQLResolver("__typename", lambda p, a, c: type(p).__name__),
+        )
 
     def get_schema_sdl(self) -> str:
         """
@@ -397,8 +446,10 @@ class GraphQLAPI:
             "total_requests": self.request_count,
             "total_errors": self.error_count,
             "error_rate": self.error_count / max(self.request_count, 1),
-            "registered_resolvers": sum(len(resolvers) for resolvers in self.resolvers.values()),
-            "registered_mutations": len(self.mutations)
+            "registered_resolvers": sum(
+                len(resolvers) for resolvers in self.resolvers.values()
+            ),
+            "registered_mutations": len(self.mutations),
         }
 
     def validate_query(self, query: str) -> list[str]:
@@ -421,6 +472,7 @@ class GraphQLAPI:
 
         return errors
 
+
 # Decorator for GraphQL resolvers
 def resolver(field_name: str, complexity: int = 1):
     """
@@ -433,19 +485,24 @@ def resolver(field_name: str, complexity: int = 1):
     Returns:
         Decorated function
     """
+
     def decorator(func: Callable) -> GraphQLResolver:
         """Decorator."""
 
         return GraphQLResolver(
-            field_name=field_name,
-            resolver_func=func,
-            complexity=complexity
+            field_name=field_name, resolver_func=func, complexity=complexity
         )
+
     return decorator
 
+
 # Decorator for GraphQL mutations
-def mutation(name: str, input_type: GraphQLObjectType,
-             output_type: str | GraphQLObjectType, description: str | None = None):
+def mutation(
+    name: str,
+    input_type: GraphQLObjectType,
+    output_type: str | GraphQLObjectType,
+    description: str | None = None,
+):
     """
     Decorator to mark functions as GraphQL mutations.
 
@@ -458,6 +515,7 @@ def mutation(name: str, input_type: GraphQLObjectType,
     Returns:
         Decorated function
     """
+
     def decorator(func: Callable) -> GraphQLMutation:
         """Decorator."""
 
@@ -466,9 +524,11 @@ def mutation(name: str, input_type: GraphQLObjectType,
             input_type=input_type,
             output_type=output_type,
             resolver=func,
-            description=description
+            description=description,
         )
+
     return decorator
+
 
 # Convenience functions
 def create_schema() -> GraphQLSchema:
@@ -479,6 +539,7 @@ def create_schema() -> GraphQLSchema:
         GraphQLSchema instance
     """
     return GraphQLSchema()
+
 
 def create_object_type(name: str, description: str | None = None) -> GraphQLObjectType:
     """
@@ -493,8 +554,13 @@ def create_object_type(name: str, description: str | None = None) -> GraphQLObje
     """
     return GraphQLObjectType(name=name, description=description)
 
-def create_field(name: str, type: str | GraphQLObjectType,
-                description: str | None = None, required: bool = False) -> GraphQLField:
+
+def create_field(
+    name: str,
+    type: str | GraphQLObjectType,
+    description: str | None = None,
+    required: bool = False,
+) -> GraphQLField:
     """
     Create a new GraphQL field.
 
@@ -508,8 +574,5 @@ def create_field(name: str, type: str | GraphQLObjectType,
         GraphQLField instance
     """
     return GraphQLField(
-        name=name,
-        type=type,
-        description=description,
-        required=required
+        name=name, type=type, description=description, required=required
     )

@@ -228,9 +228,7 @@ class TestPPOStep:
         states = np.random.randn(batch, d_state)
         actions = np.random.randint(0, d_action, batch)
         log_probs_all = actor(states)
-        old_log_probs = np.array(
-            [log_probs_all[i, actions[i]] for i in range(batch)]
-        )
+        old_log_probs = np.array([log_probs_all[i, actions[i]] for i in range(batch)])
         values = critic(states)
         rewards = np.random.randn(batch) * 0.1
         advantages, returns = compute_gae(rewards, values, last_value=0.0)

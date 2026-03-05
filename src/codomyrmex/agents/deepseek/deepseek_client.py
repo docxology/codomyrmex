@@ -120,5 +120,4 @@ class DeepSeekClient(APIAgentBase):
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"DeepSeek streaming error: {e}", exc_info=True)
-            yield f"Error: {str(e)}"
-
+            yield f"Error: {e!s}"

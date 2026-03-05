@@ -98,11 +98,13 @@ class RelationStrengthScorer:
 
     Example::
 
-        scorer = RelationStrengthScorer(config=StrengthConfig(
-            decay_function=DecayFunction.EXPONENTIAL,
-            half_life=86400 * 7,
-            type_weights={"meeting": 3.0, "email": 1.0},
-        ))
+        scorer = RelationStrengthScorer(
+            config=StrengthConfig(
+                decay_function=DecayFunction.EXPONENTIAL,
+                half_life=86400 * 7,
+                type_weights={"meeting": 3.0, "email": 1.0},
+            )
+        )
         scorer.add_interaction(Interaction("a", "b", "meeting", time.time()))
         score = scorer.score("a", "b", now=time.time())
     """

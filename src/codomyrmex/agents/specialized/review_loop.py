@@ -117,7 +117,9 @@ class ReviewLoop:
         result.final_tests = self._test_generator.from_source(code.source)
         return result
 
-    def _review(self, code: CodeBundle, tests: TestSuite, iteration: int) -> ReviewResult:
+    def _review(
+        self, code: CodeBundle, tests: TestSuite, iteration: int
+    ) -> ReviewResult:
         """Simulate code review with quality scoring."""
         issues: list[str] = []
         score = 0.0

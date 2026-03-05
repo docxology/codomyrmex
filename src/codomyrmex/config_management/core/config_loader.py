@@ -22,6 +22,7 @@ try:
 except ImportError:
     # Fallback - should use get_logger from logging_monitoring
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 
 # Import exceptions
@@ -45,27 +46,24 @@ except ImportError:
         class ConfigurationError(Exception):
             """Configurationerror.
 
-                A class for handling configurationerror operations.
-                """
-            pass
+            A class for handling configurationerror operations.
+            """
 
         class FileOperationError(Exception):
             """Fileoperationerror.
 
-                A class for handling fileoperationerror operations.
-                """
-            pass
+            A class for handling fileoperationerror operations.
+            """
 
         class ValidationError(Exception):
             """Validationerror.
 
-                A class for handling validationerror operations.
-                """
-            pass
+            A class for handling validationerror operations.
+            """
 
         def create_error_context(**kwargs):
             return dict(kwargs)
-    pass
+
 
 @dataclass
 class ConfigSchema:
@@ -93,6 +91,7 @@ class ConfigSchema:
             if self.version.startswith("draft"):
                 # Use the newer format checker API
                 from jsonschema import FormatChecker
+
                 format_checker = FormatChecker()
             else:
                 format_checker = None
@@ -123,7 +122,7 @@ class Configuration:
 
     def __post_init__(self):
 
-        if not hasattr(self, 'loaded_at') or self.loaded_at is None:
+        if not hasattr(self, "loaded_at") or self.loaded_at is None:
             self.loaded_at = datetime.now(UTC)
 
     def validate(self) -> list[str]:
@@ -202,8 +201,11 @@ class ConfigurationManager:
         except (OSError, PermissionError):
             # If we can't create the directory, use a temporary location
             import tempfile
+
             self.config_dir = tempfile.mkdtemp(prefix="codomyrmex_config_")
-            logger.warning(f"Could not create config directory {config_dir}, using temporary location: {self.config_dir}")
+            logger.warning(
+                f"Could not create config directory {config_dir}, using temporary location: {self.config_dir}"
+            )
 
     def load_configuration(
         self,
@@ -259,7 +261,11 @@ class ConfigurationManager:
         # Check if any configuration was found
         if not merged_config and not env_config:
             # No configuration found - raise error if specific sources were requested
-            if sources and len(sources) == 1 and sources[0] not in [f"{name}.yaml", f"{name}.yml", f"{name}.json"]:
+            if (
+                sources
+                and len(sources) == 1
+                and sources[0] not in [f"{name}.yaml", f"{name}.yml", f"{name}.json"]
+            ):
                 raise FileNotFoundError(f"Configuration source not found: {sources[0]}")
 
         # Create configuration object
@@ -291,19 +297,18 @@ class ConfigurationManager:
             value = os.getenv(env_var)
             return {env_var: value} if value else None
 
-        elif source.startswith("file://"):
+        if source.startswith("file://"):
             # File path
             file_path = source[7:]  # Remove "file://" prefix
             return self._load_file(file_path)
 
-        elif source.startswith("http://") or source.startswith("https://"):
+        if source.startswith("http://") or source.startswith("https://"):
             # HTTP/HTTPS URL
             return self._load_from_url(source)
 
-        else:
-            # Local file
-            file_path = os.path.join(self.config_dir, source)
-            return self._load_file(file_path)
+        # Local file
+        file_path = os.path.join(self.config_dir, source)
+        return self._load_file(file_path)
 
     def _load_file(self, file_path: str) -> dict[str, Any] | None:
         """Load configuration from file."""
@@ -314,8 +319,7 @@ class ConfigurationManager:
             with open(file_path) as f:
                 if file_path.endswith(".yaml") or file_path.endswith(".yml"):
                     return yaml.safe_load(f)
-                else:
-                    return json.load(f)
+                return json.load(f)
 
         except Exception as e:
             logger.error(f"Failed to load config file {file_path}: {e}")
@@ -330,8 +334,7 @@ class ConfigurationManager:
             content_type = response.headers.get("content-type", "")
             if "yaml" in content_type:
                 return yaml.safe_load(response.text)
-            else:
-                return response.json()
+            return response.json()
 
         except Exception as e:
             logger.error(f"Failed to load config from URL {url}: {e}")
@@ -508,16 +511,15 @@ class ConfigurationManager:
 
         if prop_type == "string":
             return "example_value"
-        elif prop_type == "number" or prop_type == "integer":
+        if prop_type == "number" or prop_type == "integer":
             return 0
-        elif prop_type == "boolean":
+        if prop_type == "boolean":
             return False
-        elif prop_type == "array":
+        if prop_type == "array":
             return []
-        elif prop_type == "object":
+        if prop_type == "object":
             return self._generate_template_from_schema(prop_schema)
-        else:
-            return None
+        return None
 
     def load_configuration_from_file(self, path: str) -> Configuration | None:
         """
@@ -540,7 +542,9 @@ class ConfigurationManager:
         )
         return config
 
-    def load_config_with_validation(self, path: str, schema: dict[str, Any] | None = None) -> Configuration | None:
+    def load_config_with_validation(
+        self, path: str, schema: dict[str, Any] | None = None
+    ) -> Configuration | None:
         """
         Load configuration with automatic validation.
 
@@ -561,6 +565,7 @@ class ConfigurationManager:
                 from codomyrmex.config_management.validation.config_validator import (
                     ConfigValidator,
                 )
+
                 validator = ConfigValidator(schema)
                 result = validator.validate(config.data)
 
@@ -606,7 +611,9 @@ class ConfigurationManager:
             # Assume current version is stored in config
             current_version = config.data.get("version", "1.0.0")
 
-            migration_result = migrate_config(config.data, current_version, target_version)
+            migration_result = migrate_config(
+                config.data, current_version, target_version
+            )
 
             if migration_result.success:
                 # Update configuration with migrated data
@@ -622,17 +629,20 @@ class ConfigurationManager:
                     )
                     self.configurations[backup_name] = backup_config
 
-                logger.info(f"Successfully migrated {name} from {current_version} to {target_version}")
+                logger.info(
+                    f"Successfully migrated {name} from {current_version} to {target_version}"
+                )
                 return True
-            else:
-                logger.error(f"Migration failed for {name}: {migration_result.errors}")
-                return False
+            logger.error(f"Migration failed for {name}: {migration_result.errors}")
+            return False
 
         except Exception as e:
             logger.error(f"Migration error for {name}: {e}")
             return False
 
-    def validate_config_schema(self, config_data: dict[str, Any], schema: dict[str, Any]) -> tuple[bool, list[str]]:
+    def validate_config_schema(
+        self, config_data: dict[str, Any], schema: dict[str, Any]
+    ) -> tuple[bool, list[str]]:
         """
         Validate configuration data against a schema.
 
@@ -647,6 +657,7 @@ class ConfigurationManager:
             from codomyrmex.config_management.validation.config_validator import (
                 validate_config_schema,
             )
+
             return validate_config_schema(config_data, schema)
         except ImportError:
             logger.warning("ConfigValidator not available, skipping schema validation")
@@ -685,23 +696,19 @@ class ConfigurationManager:
                 validator = ConfigValidator(schema)
                 result = validator.validate(config.data)
                 return result.to_dict()
-            else:
-                # Basic validation without schema
-                return {
-                    "is_valid": True,
-                    "total_issues": 0,
-                    "errors": 0,
-                    "warnings": 0,
-                    "issues": [],
-                    "note": "No schema available for detailed validation"
-                }
+            # Basic validation without schema
+            return {
+                "is_valid": True,
+                "total_issues": 0,
+                "errors": 0,
+                "warnings": 0,
+                "issues": [],
+                "note": "No schema available for detailed validation",
+            }
 
         except Exception as e:
             logger.error(f"Error generating validation report for {name}: {e}")
-            return {
-                "is_valid": False,
-                "error": str(e)
-            }
+            return {"is_valid": False, "error": str(e)}
 
     def create_migration_backup(self, name: str) -> bool:
         """

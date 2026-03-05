@@ -12,6 +12,7 @@ try:
         WASMRuntime,
         WasmtimeClient,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -23,6 +24,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestWASMRuntime:
     """Test suite for WASMRuntime."""
+
     def test_wasmtime(self):
         assert WASMRuntime.WASMTIME is not None
 
@@ -39,6 +41,7 @@ class TestWASMRuntime:
 @pytest.mark.unit
 class TestWASMModule:
     """Test suite for WASMModule."""
+
     def test_create_module(self):
         module = WASMModule(name="test-mod", path="/tmp/test.wasm")
         assert module.name == "test-mod"
@@ -55,6 +58,7 @@ class TestWASMModule:
 @pytest.mark.unit
 class TestWASMInstance:
     """Test suite for WASMInstance."""
+
     def test_create_instance(self):
         module = WASMModule(name="m", path="/m.wasm")
         instance = WASMInstance(id="inst-1", module=module)
@@ -67,6 +71,7 @@ class TestWASMInstance:
 @pytest.mark.unit
 class TestWASMExecution:
     """Test suite for WASMExecution."""
+
     def test_successful_execution(self):
         execution = WASMExecution(success=True, result=42)
         assert execution.success is True
@@ -82,6 +87,7 @@ class TestWASMExecution:
 @pytest.mark.unit
 class TestWasmtimeClient:
     """Test suite for WasmtimeClient."""
+
     def test_create_client(self):
         client = WasmtimeClient()
         assert client is not None
@@ -91,6 +97,7 @@ class TestWasmtimeClient:
 @pytest.mark.unit
 class TestWASMOrchestrator:
     """Test suite for WASMOrchestrator."""
+
     def test_create_orchestrator(self):
         orch = WASMOrchestrator()
         assert orch is not None
@@ -99,12 +106,15 @@ class TestWASMOrchestrator:
 @pytest.mark.unit
 class TestWASMComponentModel:
     """Test suite for WASMComponentModel."""
+
     def test_create_model(self):
         model = WASMComponentModel()
         assert model is not None
 
     def test_define_interface(self):
         model = WASMComponentModel()
-        model.define_interface("math", {"add": {"params": ["i32", "i32"], "result": "i32"}})
+        model.define_interface(
+            "math", {"add": {"params": ["i32", "i32"], "result": "i32"}}
+        )
         iface = model.get_interface("math")
         assert iface is not None

@@ -61,4 +61,3 @@ def validate_session_id(session_id: str | None) -> str | None:
             return None
 
     return session_id
-

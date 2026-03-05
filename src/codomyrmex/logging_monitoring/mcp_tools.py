@@ -39,6 +39,7 @@ def logging_format_structured(
             StructuredFormatter,
             StructuredLogEntry,
         )
+
         entry = StructuredLogEntry(
             level=LogLevel(level.lower()),
             message=message,

@@ -16,15 +16,15 @@ import asyncio
 import importlib
 import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
+from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
 
 
-def get_all_modules() -> List[Path]:
+def get_all_modules() -> list[Path]:
     """Get all module directories."""
     src_dir = project_root / "src" / "codomyrmex"
     modules = []
@@ -37,7 +37,7 @@ def get_all_modules() -> List[Path]:
     return sorted(modules)
 
 
-async def check_module_imports(module_path: Path) -> Dict[str, Any]:
+async def check_module_imports(module_path: Path) -> dict[str, Any]:
     """Check if module can be imported."""
     module_name = f"codomyrmex.{module_path.name}"
 
@@ -48,7 +48,7 @@ async def check_module_imports(module_path: Path) -> Dict[str, Any]:
         return {"success": False, "module": module_name, "error": str(e)}
 
 
-async def check_module_files(module_path: Path) -> Dict[str, Any]:
+async def check_module_files(module_path: Path) -> dict[str, Any]:
     """Check for required files."""
     required_files = ["__init__.py"]
     recommended_files = ["README.md", "AGENTS.md"]
@@ -68,12 +68,18 @@ async def check_module_files(module_path: Path) -> Dict[str, Any]:
         "success": len(missing_required) == 0,
         "missing_required": missing_required,
         "missing_recommended": missing_recommended,
-        "has_tests": (module_path / "tests").exists() or
-                    any((project_root / "src" / "codomyrmex" / "tests" / "unit").glob(f"*{module_path.name}*"))
+        "has_tests": (module_path / "tests").exists()
+        or any(
+            (project_root / "src" / "codomyrmex" / "tests" / "unit").glob(
+                f"*{module_path.name}*"
+            )
+        ),
     }
 
 
-async def check_module_health(module_path: Path, _task_results: dict = None) -> Dict[str, Any]:
+async def check_module_health(
+    module_path: Path, _task_results: dict = None
+) -> dict[str, Any]:
     """Full health check for a module."""
     module_name = module_path.name
 
@@ -91,11 +97,15 @@ async def check_module_health(module_path: Path, _task_results: dict = None) -> 
 
     if files_result["missing_required"]:
         score -= 30
-        issues.append(f"Missing required: {', '.join(files_result['missing_required'])}")
+        issues.append(
+            f"Missing required: {', '.join(files_result['missing_required'])}"
+        )
 
     if files_result["missing_recommended"]:
         score -= 10
-        issues.append(f"Missing recommended: {', '.join(files_result['missing_recommended'])}")
+        issues.append(
+            f"Missing recommended: {', '.join(files_result['missing_recommended'])}"
+        )
 
     if not files_result["has_tests"]:
         score -= 20
@@ -109,10 +119,7 @@ async def check_module_health(module_path: Path, _task_results: dict = None) -> 
         "score": score,
         "import_ok": import_result["success"],
         "issues": issues,
-        "details": {
-            "import": import_result,
-            "files": files_result
-        }
+        "details": {"import": import_result, "files": files_result},
     }
 
 
@@ -142,8 +149,12 @@ async def main() -> int:
         results.append(result)
 
         # Print status
-        icon = {"healthy": "✅", "degraded": "⚠️", "unhealthy": "❌"}.get(result["status"], "❓")
-        print(f"  {icon} {result['module']:30} [{result['score']:3}%] {result['status']}")
+        icon = {"healthy": "✅", "degraded": "⚠️", "unhealthy": "❌"}.get(
+            result["status"], "❓"
+        )
+        print(
+            f"  {icon} {result['module']:30} [{result['score']:3}%] {result['status']}"
+        )
 
         if args.verbose and result["issues"]:
             for issue in result["issues"]:
@@ -171,13 +182,18 @@ async def main() -> int:
                 for missing in result["details"]["files"]["missing_recommended"]:
                     file_path = module_path / missing
                     if missing == "README.md":
-                        file_path.write_text(f"# {result['module'].replace('_', ' ').title()}\n\nModule documentation.\n")
+                        file_path.write_text(
+                            f"# {result['module'].replace('_', ' ').title()}\n\nModule documentation.\n"
+                        )
                         print(f"  Created: {file_path}")
                     elif missing == "AGENTS.md":
-                        file_path.write_text(f"# Agents for {result['module']}\n\nAgent instructions.\n")
+                        file_path.write_text(
+                            f"# Agents for {result['module']}\n\nAgent instructions.\n"
+                        )
                         print(f"  Created: {file_path}")
 
     return 0 if unhealthy == 0 else 1
+
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

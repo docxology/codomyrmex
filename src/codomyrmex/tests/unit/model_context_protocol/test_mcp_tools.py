@@ -37,7 +37,9 @@ class TestMCPReadFile:
         f.write_bytes(b"x" * 2000)
         result = read_file(str(f), max_size=1000)
         assert result["success"] is False
-        assert "too large" in result["error"].lower() or "large" in result["error"].lower()
+        assert (
+            "too large" in result["error"].lower() or "large" in result["error"].lower()
+        )
 
     def test_read_multiline_file_counts_lines(self, tmp_path):
         f = tmp_path / "multiline.py"
@@ -73,6 +75,7 @@ class TestMCPWriteFile:
         result = write_file(path, "written content")
         assert result["success"] is True
         from pathlib import Path
+
         assert Path(path).read_text() == "written content"
 
     def test_write_overwrites_existing_file(self, tmp_path):
@@ -191,7 +194,6 @@ class TestMCPToolDecorator:
         @mcp_tool()
         def my_tool_func():
             """Does something."""
-            pass
 
         assert "my_tool_func" in my_tool_func._mcp_tool["name"]
 
@@ -199,7 +201,6 @@ class TestMCPToolDecorator:
         @mcp_tool()
         def documented():
             """This is the description."""
-            pass
 
         assert documented._mcp_tool["description"] == "This is the description."
 
@@ -207,6 +208,5 @@ class TestMCPToolDecorator:
         @mcp_tool()
         def modular():
             """Test."""
-            pass
 
         assert "module" in modular._mcp_tool

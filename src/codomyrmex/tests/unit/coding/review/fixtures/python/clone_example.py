@@ -2,10 +2,11 @@
 Example file with code clones for testing duplicate detection.
 """
 
+
 def calculate_statistics_v1(data):
     """Calculate basic statistics for a list of numbers."""
     if not data:
-        return {'count': 0, 'sum': 0, 'mean': 0, 'min': None, 'max': None}
+        return {"count": 0, "sum": 0, "mean": 0, "min": None, "max": None}
 
     total = 0
     minimum = data[0]
@@ -13,27 +14,19 @@ def calculate_statistics_v1(data):
 
     for value in data:
         total += value
-        if value < minimum:
-            minimum = value
-        if value > maximum:
-            maximum = value
+        minimum = min(minimum, value)
+        maximum = max(maximum, value)
 
     count = len(data)
     mean = total / count
 
-    return {
-        'count': count,
-        'sum': total,
-        'mean': mean,
-        'min': minimum,
-        'max': maximum
-    }
+    return {"count": count, "sum": total, "mean": mean, "min": minimum, "max": maximum}
 
 
 def calculate_statistics_v2(numbers):
     """Calculate basic statistics for a list of numbers - similar to v1."""
     if not numbers:
-        return {'count': 0, 'sum': 0, 'mean': 0, 'min': None, 'max': None}
+        return {"count": 0, "sum": 0, "mean": 0, "min": None, "max": None}
 
     total = 0
     minimum = numbers[0]
@@ -41,21 +34,13 @@ def calculate_statistics_v2(numbers):
 
     for value in numbers:
         total += value
-        if value < minimum:
-            minimum = value
-        if value > maximum:
-            maximum = value
+        minimum = min(minimum, value)
+        maximum = max(maximum, value)
 
     count = len(numbers)
     mean = total / count
 
-    return {
-        'count': count,
-        'sum': total,
-        'mean': mean,
-        'min': minimum,
-        'max': maximum
-    }
+    return {"count": count, "sum": total, "mean": mean, "min": minimum, "max": maximum}
 
 
 class DataProcessor:
@@ -94,4 +79,3 @@ class DataProcessor:
                     result.append(str(item))
 
         return result
-

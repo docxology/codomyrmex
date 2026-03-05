@@ -46,13 +46,13 @@ def sample_code_files(temp_performance_dir: Path) -> dict[str, Path]:
 
     # Small Python file
     small_file = temp_performance_dir / "small.py"
-    small_file.write_text('''
+    small_file.write_text("""
 def add_numbers(a, b):
     return a + b
 
 result = add_numbers(5, 3)
 print(result)
-''')
+""")
 
     # Medium Python file with more complexity
     medium_file = temp_performance_dir / "medium.py"
@@ -178,32 +178,29 @@ def performance_baseline_data() -> dict[str, Any]:
             "code.execute_code": {
                 "small_script": 0.5,  # seconds
                 "medium_script": 1.0,
-                "large_script": 2.0
+                "large_script": 2.0,
             },
             "static_analysis.analyze_file": {
                 "small_file": 0.1,
                 "medium_file": 0.5,
-                "large_file": 2.0
+                "large_file": 2.0,
             },
             "security_audit.analyze_file_security": {
                 "small_file": 0.2,
                 "medium_file": 1.0,
-                "large_file": 3.0
-            }
+                "large_file": 3.0,
+            },
         },
         "system_requirements": {
             "min_execution_time": 0.001,  # seconds
             "max_memory_usage": 500,  # MB
-            "max_cpu_usage": 80.0  # percent
+            "max_cpu_usage": 80.0,  # percent
         },
         "regression_thresholds": {
             "performance_degradation": 1.5,  # Max 50% slowdown
             "memory_increase": 1.2,  # Max 20% memory increase
-        }
+        },
     }
-
-
-
 
 
 @pytest.fixture

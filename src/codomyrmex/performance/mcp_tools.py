@@ -40,12 +40,20 @@ def performance_check_regression(
             BenchmarkResult,
             RegressionDetector,
         )
+
         detector = RegressionDetector()
-        detector.set_baseline(Baseline(
-            benchmark_name, mean=baseline_mean, stddev=baseline_stddev,
-            warning_threshold=warning_threshold, critical_threshold=critical_threshold,
-        ))
-        result = BenchmarkResult(benchmark_name, value=measured_value, higher_is_better=higher_is_better)
+        detector.set_baseline(
+            Baseline(
+                benchmark_name,
+                mean=baseline_mean,
+                stddev=baseline_stddev,
+                warning_threshold=warning_threshold,
+                critical_threshold=critical_threshold,
+            )
+        )
+        result = BenchmarkResult(
+            benchmark_name, value=measured_value, higher_is_better=higher_is_better
+        )
         report = detector.check(result)
         return {
             "status": "success",
@@ -81,6 +89,7 @@ def performance_compare_benchmarks(
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             compute_delta,
         )
+
         delta = compute_delta(name, before, after, higher_is_better)
         return {
             "status": "success",

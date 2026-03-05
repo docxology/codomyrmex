@@ -36,8 +36,11 @@ async def test_swarm_manager_mission_execution():
                 SwarmMessage(
                     SwarmMessageType.RESULT,
                     message.recipient,
-                    payload={"task_id": message.payload["task_id"], "result": {"status": "success"}}
-                )
+                    payload={
+                        "task_id": message.payload["task_id"],
+                        "result": {"status": "success"},
+                    },
+                ),
             )
 
     manager.bus.subscribe("sim", "tasks.role.#", simulate_agent)
@@ -48,6 +51,7 @@ async def test_swarm_manager_mission_execution():
     assert len(results) >= 2
     for r in results:
         assert r["result"]["status"] == "success"
+
 
 @pytest.mark.asyncio
 async def test_agent_pool_assignment():
@@ -71,6 +75,7 @@ async def test_agent_pool_assignment():
     assert agent2.agent_id != agent.agent_id
     assert agent2.active_tasks == 1
 
+
 @pytest.mark.asyncio
 async def test_message_bus_routing():
     """Test message bus pub/sub with wildcards."""
@@ -83,7 +88,9 @@ async def test_message_bus_routing():
     msg1 = SwarmMessage(SwarmMessageType.TASK_ASSIGNMENT, "sender", payload={"id": 1})
     await bus.publish("tasks.role.coder", msg1)
 
-    msg2 = SwarmMessage(SwarmMessageType.STATUS_UPDATE, "sender", payload={"status": "ok"})
+    msg2 = SwarmMessage(
+        SwarmMessageType.STATUS_UPDATE, "sender", payload={"status": "ok"}
+    )
     await bus.publish("broadcast.system.status", msg2)
 
     # Wait for tasks if any
@@ -93,16 +100,13 @@ async def test_message_bus_routing():
     assert received[0].payload["id"] == 1
     assert received[1].payload["status"] == "ok"
 
+
 @pytest.mark.asyncio
 async def test_consensus_engine_strategies():
     """Test different consensus resolution strategies."""
     manager = SwarmManager()
 
-    votes = [
-        Vote("a1", True),
-        Vote("a2", True),
-        Vote("a3", False)
-    ]
+    votes = [Vote("a1", True), Vote("a2", True), Vote("a3", False)]
 
     # Majority
     res_maj = await manager.request_consensus("test", votes, strategy="majority")
@@ -113,12 +117,12 @@ async def test_consensus_engine_strategies():
     assert res_veto.decision == Decision.VETOED
 
     # Weighted
-    votes_weighted = [
-        Vote("a1", False, weight=2.0),
-        Vote("a2", True, weight=1.0)
-    ]
-    res_weight = await manager.request_consensus("test", votes_weighted, strategy="weighted")
+    votes_weighted = [Vote("a1", False, weight=2.0), Vote("a2", True, weight=1.0)]
+    res_weight = await manager.request_consensus(
+        "test", votes_weighted, strategy="weighted"
+    )
     assert res_weight.decision == Decision.REJECTED
+
 
 def test_task_decomposer_logic():
     """Test DAG-based task decomposition."""
@@ -132,8 +136,9 @@ def test_task_decomposer_logic():
     assert len(order) == len(subtasks)
 
     # Check dependency: tests should depend on implementation if both present
-    auth_task = next(t for t in subtasks if AgentRole.CODER == t.role)
-    test_task = next(t for t in subtasks if AgentRole.TESTER == t.role)
+    auth_task = next(t for t in subtasks if t.role == AgentRole.CODER)
+    test_task = next(t for t in subtasks if t.role == AgentRole.TESTER)
 
-    assert auth_task.task_id in test_task.depends_on or \
-           any(dep == auth_task.task_id for dep in test_task.depends_on)
+    assert auth_task.task_id in test_task.depends_on or any(
+        dep == auth_task.task_id for dep in test_task.depends_on
+    )

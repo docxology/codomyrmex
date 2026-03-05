@@ -14,7 +14,7 @@ def _tokenize(text: str) -> list[str]:
     """Tokenize text into lowercase words."""
     if not isinstance(text, str):
         text = str(text)
-    return re.findall(r'\w+', text.lower())
+    return re.findall(r"\w+", text.lower())
 
 
 class InMemoryIndex:
@@ -95,12 +95,10 @@ class InMemoryIndex:
         serializable_index = {
             term: list(doc_ids) for term, doc_ids in self._index.items()
         }
-        documents = {
-            doc_id: doc.to_dict() for doc_id, doc in self._documents.items()
-        }
+        documents = {doc_id: doc.to_dict() for doc_id, doc in self._documents.items()}
 
         data = {"index": serializable_index, "documents": documents}
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f)
 
         logger.debug(f"Saved index to {path}")
@@ -109,7 +107,7 @@ class InMemoryIndex:
     def load(cls, path: Path) -> "InMemoryIndex":
         """Load index from a JSON file (index only, documents are metadata)."""
         path = Path(path)
-        with open(path, encoding='utf-8') as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
 
         instance = cls()
@@ -120,7 +118,9 @@ class InMemoryIndex:
         return instance
 
 
-def index_document(document: Document, index: InMemoryIndex | None = None) -> InMemoryIndex:
+def index_document(
+    document: Document, index: InMemoryIndex | None = None
+) -> InMemoryIndex:
     """
     Index a document for search.
 

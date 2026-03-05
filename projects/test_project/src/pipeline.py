@@ -333,7 +333,7 @@ class AnalysisPipeline:
 
         # Initialize context
         self.context = {
-            "target_path": target_path or Path("."),
+            "target_path": target_path or Path(),
             "results": {},
             "config": {},
         }

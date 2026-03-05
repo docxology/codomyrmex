@@ -112,17 +112,13 @@ class TestKubernetesDeploymentDataclass:
             "limits": {"cpu": "500m", "memory": "512Mi"},
             "requests": {"cpu": "250m", "memory": "256Mi"},
         }
-        dep = KubernetesDeployment(
-            name="app", image="img:v1", resources=resources
-        )
+        dep = KubernetesDeployment(name="app", image="img:v1", resources=resources)
         assert dep.resources["limits"]["cpu"] == "500m"
         assert dep.resources["requests"]["memory"] == "256Mi"
 
     def test_deployment_custom_namespace(self):
         """Custom namespace is stored correctly."""
-        dep = KubernetesDeployment(
-            name="app", image="img:v1", namespace="production"
-        )
+        dep = KubernetesDeployment(name="app", image="img:v1", namespace="production")
         assert dep.namespace == "production"
 
     def test_deployment_with_secrets_and_config_maps(self):
@@ -180,9 +176,7 @@ class TestKubernetesServiceDataclass:
 
     def test_service_with_selector(self):
         """Selector dict is stored."""
-        svc = KubernetesService(
-            name="svc", selector={"app": "web", "tier": "frontend"}
-        )
+        svc = KubernetesService(name="svc", selector={"app": "web", "tier": "frontend"})
         assert svc.selector["app"] == "web"
         assert svc.selector["tier"] == "frontend"
 
@@ -305,9 +299,7 @@ class TestKubernetesOrchestratorDeployments:
 
     def test_get_deployment_status_has_namespace(self):
         """Returned dict contains the queried namespace."""
-        result = self.orch.get_deployment_status(
-            "test", namespace="staging"
-        )
+        result = self.orch.get_deployment_status("test", namespace="staging")
         assert result["namespace"] == "staging"
 
     def test_get_deployment_status_simulated_values(self):
@@ -325,9 +317,7 @@ class TestKubernetesOrchestratorDeployments:
 
     def test_scale_deployment_with_namespace(self):
         """scale_deployment with explicit namespace returns True."""
-        result = self.orch.scale_deployment(
-            "test", replicas=5, namespace="production"
-        )
+        result = self.orch.scale_deployment("test", replicas=5, namespace="production")
         assert result is True
 
 
@@ -507,9 +497,7 @@ class TestKubernetesOrchestratorManifests:
             "spec": {},
         }
         yaml_file = tmp_path / "multi.yaml"
-        yaml_file.write_text(
-            yaml.dump(doc1) + "---\n" + yaml.dump(doc2)
-        )
+        yaml_file.write_text(yaml.dump(doc1) + "---\n" + yaml.dump(doc2))
 
         results = self.orch.apply_yaml_file(str(yaml_file))
         assert isinstance(results, list)

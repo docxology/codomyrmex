@@ -36,7 +36,9 @@ class Strategy:
         self.usage_count += 1
         # Running average
         weight = 1.0 / self.usage_count
-        self.success_rate = self.success_rate * (1 - weight) + (1.0 if success else 0.0) * weight
+        self.success_rate = (
+            self.success_rate * (1 - weight) + (1.0 if success else 0.0) * weight
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {

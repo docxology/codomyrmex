@@ -180,7 +180,9 @@ class TestFrequencyMap:
 
     def test_zero_frequency(self) -> None:
         """Zero dominant_frequency is valid (flat signal)."""
-        fm = FrequencyMap(dimension="d", dominant_frequency=0.0, period=0.0, amplitude=0.0)
+        fm = FrequencyMap(
+            dimension="d", dominant_frequency=0.0, period=0.0, amplitude=0.0
+        )
         assert fm.dominant_frequency == 0.0
         assert fm.amplitude == 0.0
 
@@ -320,7 +322,9 @@ class TestCulturalDynamicsEngineZeitgeist:
     def test_negative_valence_shifts_dimension_negative(self) -> None:
         """Strongly negative signals shift dimension value negative."""
         engine = CulturalDynamicsEngine()
-        sigs = [self._make_signal("d", -1.0, 1.0, timestamp=float(i)) for i in range(10)]
+        sigs = [
+            self._make_signal("d", -1.0, 1.0, timestamp=float(i)) for i in range(10)
+        ]
         traj = engine.zeitgeist_trajectory(sigs)
         final_val = traj.states[-1].dimensions.get("d", 0.0)
         assert final_val < 0.0
@@ -366,9 +370,9 @@ class TestCulturalDynamicsEngineMutation:
         low_state = CulturalState(energy=0.2)
         high_state = CulturalState(energy=0.8)
         meme = Meme(content="x")
-        assert engine.mutation_probability(high_state, meme) > engine.mutation_probability(
-            low_state, meme
-        )
+        assert engine.mutation_probability(
+            high_state, meme
+        ) > engine.mutation_probability(low_state, meme)
 
 
 @pytest.mark.unit

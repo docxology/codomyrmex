@@ -7,6 +7,8 @@ from codomyrmex.logging_monitoring import get_logger
 """Physical simulation engine for object interactions."""
 
 logger = get_logger(__name__)
+
+
 @dataclass
 class Vector3D:
     """3D vector for physics calculations."""
@@ -76,8 +78,7 @@ class PhysicsSimulator:
     """Physics simulation engine."""
 
     def __init__(self):
-        """  Init  .
-            """
+        """Init  ."""
         self.gravity = Vector3D(0, -9.81, 0)
         self.force_fields: list[ForceField] = []
         self.constraints: list[Constraint] = []
@@ -389,4 +390,4 @@ class PhysicsSimulator:
         return True
 
 
-__all__ = ["Vector3D", "ForceField", "Constraint", "PhysicsSimulator"]
+__all__ = ["Constraint", "ForceField", "PhysicsSimulator", "Vector3D"]

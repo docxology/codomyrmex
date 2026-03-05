@@ -19,7 +19,12 @@ Installation:
 
 Quick Start:
     ```python
-    from codomyrmex.video import VideoProcessor, FrameExtractor, VideoAnalyzer, VideoGenerator
+    from codomyrmex.video import (
+        VideoProcessor,
+        FrameExtractor,
+        VideoAnalyzer,
+        VideoGenerator,
+    )
 
     # Process video
     processor = VideoProcessor()
@@ -86,6 +91,7 @@ from .models import (
 try:
     from .processing import VideoProcessor
     from .processing.video_processor import MOVIEPY_AVAILABLE, OPENCV_AVAILABLE
+
     PROCESSING_AVAILABLE = MOVIEPY_AVAILABLE or OPENCV_AVAILABLE
 except ImportError:
     VideoProcessor = None  # type: ignore
@@ -96,6 +102,7 @@ except ImportError:
 # Import extraction
 try:
     from .extraction import FrameExtractor
+
     EXTRACTION_AVAILABLE = True
 except ImportError:
     FrameExtractor = None  # type: ignore
@@ -104,6 +111,7 @@ except ImportError:
 # Import analysis
 try:
     from .analysis import VideoAnalyzer
+
     ANALYSIS_AVAILABLE = True
 except ImportError:
     VideoAnalyzer = None  # type: ignore
@@ -112,6 +120,7 @@ except ImportError:
 # Import generation
 try:
     from .generation import VideoGenerator
+
     GENERATION_AVAILABLE = True
 except ImportError:
     pass

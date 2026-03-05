@@ -60,9 +60,7 @@ except ImportError as _exc:
     _import_error = str(_exc)
 
     def _not_available(*args, **kwargs):
-        raise ImportError(
-            f"model_evaluation module is not available: {_import_error}"
-        )
+        raise ImportError(f"model_evaluation module is not available: {_import_error}")
 
     Scorer = None
     ExactMatchScorer = None
@@ -143,4 +141,3 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
-

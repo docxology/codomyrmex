@@ -180,9 +180,9 @@ class SSMLOptions:
 
 __all__ = [
     "AudioFormat",
-    "VoiceGender",
-    "VoiceInfo",
+    "SSMLOptions",
     "SynthesisResult",
     "TTSConfig",
-    "SSMLOptions",
+    "VoiceGender",
+    "VoiceInfo",
 ]

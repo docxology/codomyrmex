@@ -65,15 +65,18 @@ class TestRecentsUnavailable:
 class TestWorkspaceSignatures:
     def test_save_workspace_requires_name(self):
         import inspect
+
         params = list(inspect.signature(save_workspace).parameters.keys())
         assert "name" in params
 
     def test_load_workspace_requires_name(self):
         import inspect
+
         params = list(inspect.signature(load_workspace).parameters.keys())
         assert "name" in params
 
     def test_delete_workspace_requires_name(self):
         import inspect
+
         params = list(inspect.signature(delete_workspace).parameters.keys())
         assert "name" in params

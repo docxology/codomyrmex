@@ -23,17 +23,21 @@ from codomyrmex.orchestrator.workflows.workflow_journal import (
 )
 
 
-def _make_result(success: bool = True, step_count: int = 2, wf_id: str = "wf-1") -> WorkflowResult:
+def _make_result(
+    success: bool = True, step_count: int = 2, wf_id: str = "wf-1"
+) -> WorkflowResult:
     """Helper to create a WorkflowResult for testing."""
     steps = []
     for i in range(step_count):
         status = StepStatus.COMPLETED if success or i == 0 else StepStatus.FAILED
-        steps.append(WorkflowStep(
-            name=f"step_{i}",
-            status=status,
-            duration_ms=50.0 + i * 10,
-            error="" if status == StepStatus.COMPLETED else "simulated",
-        ))
+        steps.append(
+            WorkflowStep(
+                name=f"step_{i}",
+                status=status,
+                duration_ms=50.0 + i * 10,
+                error="" if status == StepStatus.COMPLETED else "simulated",
+            )
+        )
     return WorkflowResult(
         workflow_id=wf_id,
         success=success,
@@ -43,6 +47,7 @@ def _make_result(success: bool = True, step_count: int = 2, wf_id: str = "wf-1")
 
 
 # ─── WorkflowJournal ────────────────────────────────────────────────
+
 
 class TestWorkflowJournal:
     """Test suite for WorkflowJournal."""
@@ -58,7 +63,9 @@ class TestWorkflowJournal:
 
     def test_record_step(self):
         journal = WorkflowJournal()
-        step = WorkflowStep(name="build", status=StepStatus.COMPLETED, duration_ms=100.0)
+        step = WorkflowStep(
+            name="build", status=StepStatus.COMPLETED, duration_ms=100.0
+        )
         journal.on_step_complete("wf-1", step)
         entries = journal.by_event_type("step")
         assert len(entries) == 1
@@ -102,6 +109,7 @@ class TestWorkflowJournal:
 
 # ─── WorkflowAnalytics ───────────────────────────────────────────────
 
+
 class TestWorkflowAnalytics:
     """Test suite for WorkflowAnalytics."""
 
@@ -113,7 +121,9 @@ class TestWorkflowAnalytics:
 
         # Two successful workflows
         for wf_id in ("wf-1", "wf-2"):
-            journal.record_full_workflow(runner, _make_result(success=True, wf_id=wf_id))
+            journal.record_full_workflow(
+                runner, _make_result(success=True, wf_id=wf_id)
+            )
 
         # One failed workflow
         journal.record_full_workflow(runner, _make_result(success=False, wf_id="wf-3"))

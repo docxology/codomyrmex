@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 
 class ResolutionStrategy(Enum):
     """Strategy for resolving merge conflicts."""
+
     OURS = "ours"
     THEIRS = "theirs"
     UNION = "union"
@@ -28,6 +29,7 @@ class ResolutionStrategy(Enum):
 @dataclass
 class ConflictBlock:
     """A single conflict block within a file."""
+
     file_path: str
     start_line: int
     ours_content: str
@@ -45,6 +47,7 @@ class ConflictBlock:
 @dataclass
 class MergeConflictReport:
     """Report of all conflicts in a repository."""
+
     conflicts: list[ConflictBlock] = field(default_factory=list)
     files_affected: int = 0
     auto_resolved: int = 0
@@ -72,7 +75,9 @@ class MergeResolver:
 
         result = subprocess.run(
             ["git", "diff", "--name-only", "--diff-filter=U"],
-            capture_output=True, text=True, cwd=self._repo,
+            capture_output=True,
+            text=True,
+            cwd=self._repo,
         )
         conflict_files = [f.strip() for f in result.stdout.splitlines() if f.strip()]
 
@@ -106,17 +111,20 @@ class MergeResolver:
                 while i < len(lines) and not self.CONFLICT_END.match(lines[i]):
                     theirs_lines.append(lines[i])
                     i += 1
-                blocks.append(ConflictBlock(
-                    file_path=rel_name,
-                    start_line=start + 1,
-                    ours_content="\n".join(ours_lines),
-                    theirs_content="\n".join(theirs_lines),
-                ))
+                blocks.append(
+                    ConflictBlock(
+                        file_path=rel_name,
+                        start_line=start + 1,
+                        ours_content="\n".join(ours_lines),
+                        theirs_content="\n".join(theirs_lines),
+                    )
+                )
             i += 1
         return blocks
 
-    def resolve_file(self, file_path: str,
-                     strategy: ResolutionStrategy = ResolutionStrategy.OURS) -> bool:
+    def resolve_file(
+        self, file_path: str, strategy: ResolutionStrategy = ResolutionStrategy.OURS
+    ) -> bool:
         """Resolve all conflicts in a file using a strategy."""
         full_path = self._repo / file_path
         if not full_path.exists():

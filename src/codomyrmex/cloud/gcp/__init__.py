@@ -9,10 +9,13 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class GCSClient(StorageClient):
     """Wrapper for Google Cloud Storage operations."""
 
-    def __init__(self, project: str | None = None, client: storage.Client | None = None):
+    def __init__(
+        self, project: str | None = None, client: storage.Client | None = None
+    ):
         self.client = client or storage.Client(project=project)
 
     def list_buckets(self) -> list[str]:
@@ -51,7 +54,9 @@ class GCSClient(StorageClient):
         except Exception:
             return False
 
-    def upload_file(self, bucket: str, key: str, file_path: str, content_type: str | None = None) -> bool:
+    def upload_file(
+        self, bucket: str, key: str, file_path: str, content_type: str | None = None
+    ) -> bool:
         """Upload a file from local disk."""
         try:
             bucket_obj = self.client.bucket(bucket)
@@ -112,6 +117,7 @@ class GCSClient(StorageClient):
     ) -> str:
         """Generate a presigned URL."""
         import datetime
+
         try:
             bucket_obj = self.client.bucket(bucket)
             blob = bucket_obj.blob(key)
@@ -127,13 +133,17 @@ class GCSClient(StorageClient):
             return ""
 
     # Legacy methods for backward compatibility
-    def upload_blob(self, bucket_name: str, source_file_name: str, destination_blob_name: str) -> bool:
+    def upload_blob(
+        self, bucket_name: str, source_file_name: str, destination_blob_name: str
+    ) -> bool:
         return self.upload_file(bucket_name, destination_blob_name, source_file_name)
 
     def list_blobs(self, bucket_name: str) -> list[str]:
         return self.list_objects(bucket_name)
 
-    def download_blob(self, bucket_name: str, source_blob_name: str, destination_file_name: str) -> bool:
+    def download_blob(
+        self, bucket_name: str, source_blob_name: str, destination_file_name: str
+    ) -> bool:
         return self.download_file(bucket_name, source_blob_name, destination_file_name)
 
     def get_metadata(self, bucket_name: str, blob_name: str) -> dict:

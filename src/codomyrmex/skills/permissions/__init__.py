@@ -9,6 +9,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -22,7 +23,9 @@ class SkillPermissionManager:
 
     def __init__(self):
         """Initialize SkillPermissionManager."""
-        self._permissions: dict[str, set[str]] = {}  # skill_id -> set of granted actions
+        self._permissions: dict[
+            str, set[str]
+        ] = {}  # skill_id -> set of granted actions
 
     def check_permission(self, skill_id: str, action: str) -> bool:
         """

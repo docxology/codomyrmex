@@ -39,10 +39,10 @@ from .generator import WebsiteGenerator
 from .server import WebsiteServer
 
 __all__ = [
-    "accessibility",
-    "WebsiteGenerator",
     "DataProvider",
+    "WebsiteGenerator",
     "WebsiteServer",
+    "accessibility",
 ]
 
 __version__ = "0.1.0"

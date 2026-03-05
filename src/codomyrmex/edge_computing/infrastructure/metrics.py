@@ -27,9 +27,7 @@ class EdgeMetrics:
         """Add an invocation record."""
         self._records.append(record)
 
-    def total_invocations(
-        self, function_id: str = None, node_id: str = None
-    ) -> int:
+    def total_invocations(self, function_id: str = None, node_id: str = None) -> int:
         """Count invocations, optionally filtered."""
         records = self._records
         if function_id is not None:

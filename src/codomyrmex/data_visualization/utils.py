@@ -23,7 +23,9 @@ DEFAULT_TITLE_FONTSIZE = 16
 DEFAULT_LABEL_FONTSIZE = 12
 
 
-def apply_common_aesthetics(ax, title: str = None, x_label: str = None, y_label: str = None):
+def apply_common_aesthetics(
+    ax, title: str = None, x_label: str = None, y_label: str = None
+):
     """
     Apply common aesthetics to a matplotlib axes.
 
@@ -36,12 +38,12 @@ def apply_common_aesthetics(ax, title: str = None, x_label: str = None, y_label:
     Returns:
         The styled axes object.
     """
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
     ax.grid(True, alpha=0.3)
 
     if title:
-        ax.set_title(title, fontsize=12, fontweight='bold')
+        ax.set_title(title, fontsize=12, fontweight="bold")
     if x_label:
         ax.set_xlabel(x_label)
     if y_label:
@@ -55,7 +57,7 @@ def save_plot(
     output_path: str,
     dpi: int = 150,
     transparent: bool = False,
-    bbox_inches: str = 'tight'
+    bbox_inches: str = "tight",
 ) -> bool:
     """
     Save a matplotlib figure to a file.
@@ -77,7 +79,7 @@ def save_plot(
 
         # Detect format from extension
         suffix = output_path.suffix.lower()
-        fmt = suffix[1:] if suffix else 'png'
+        fmt = suffix[1:] if suffix else "png"
 
         # Save the figure
         fig.savefig(
@@ -85,7 +87,7 @@ def save_plot(
             format=fmt,
             dpi=dpi,
             transparent=transparent,
-            bbox_inches=bbox_inches
+            bbox_inches=bbox_inches,
         )
 
         logger.info(f"Plot saved successfully to {output_path}")
@@ -107,24 +109,23 @@ def get_color_palette(n_colors: int = 10) -> list:
         List of color hex codes.
     """
     base_palette = [
-        '#1f77b4',  # Blue
-        '#ff7f0e',  # Orange
-        '#2ca02c',  # Green
-        '#d62728',  # Red
-        '#9467bd',  # Purple
-        '#8c564b',  # Brown
-        '#e377c2',  # Pink
-        '#7f7f7f',  # Gray
-        '#bcbd22',  # Olive
-        '#17becf',  # Cyan
+        "#1f77b4",  # Blue
+        "#ff7f0e",  # Orange
+        "#2ca02c",  # Green
+        "#d62728",  # Red
+        "#9467bd",  # Purple
+        "#8c564b",  # Brown
+        "#e377c2",  # Pink
+        "#7f7f7f",  # Gray
+        "#bcbd22",  # Olive
+        "#17becf",  # Cyan
     ]
 
     # Repeat palette if more colors needed
     if n_colors <= len(base_palette):
         return base_palette[:n_colors]
-    else:
-        repeats = (n_colors // len(base_palette)) + 1
-        return (base_palette * repeats)[:n_colors]
+    repeats = (n_colors // len(base_palette)) + 1
+    return (base_palette * repeats)[:n_colors]
 
 
 def apply_theme_to_axes(ax, theme_name):
@@ -144,6 +145,7 @@ def apply_theme_to_axes(ax, theme_name):
             apply_theme,
             get_theme,
         )
+
         if isinstance(theme_name, str):
             theme_name = ThemeName(theme_name)
         theme = get_theme(theme_name)
@@ -155,7 +157,6 @@ def apply_theme_to_axes(ax, theme_name):
     except (ImportError, ValueError) as e:
         logger.debug(f"Could not apply theme: {e}")
     return ax
-
 
 
 def apply_style(ax, style_name: str = None):
@@ -174,16 +175,14 @@ def apply_style(ax, style_name: str = None):
     return ax
 
 
-
-
 __all__ = [
-    "save_plot",
-    "apply_common_aesthetics",
-    "get_color_palette",
-    "apply_theme_to_axes",
-    "apply_style",
     "DEFAULT_FIGURE_SIZE",
     "DEFAULT_GRID_STYLE",
-    "DEFAULT_TITLE_FONTSIZE",
     "DEFAULT_LABEL_FONTSIZE",
+    "DEFAULT_TITLE_FONTSIZE",
+    "apply_common_aesthetics",
+    "apply_style",
+    "apply_theme_to_axes",
+    "get_color_palette",
+    "save_plot",
 ]

@@ -300,9 +300,9 @@ class TranscriptionConfig:
 
 
 __all__ = [
+    "Segment",
+    "TranscriptionConfig",
+    "TranscriptionResult",
     "WhisperModelSize",
     "Word",
-    "Segment",
-    "TranscriptionResult",
-    "TranscriptionConfig",
 ]

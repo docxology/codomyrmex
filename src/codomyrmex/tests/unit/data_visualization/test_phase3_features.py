@@ -13,6 +13,7 @@ def test_funnel_chart_render():
     assert "data:image/png;base64" in html
     assert 'alt="Test Funnel"' in html
 
+
 def test_sankey_diagram_render():
     """Verify sankey diagram render behavior."""
     links = [("A", "B", 10), ("B", "C", 5)]
@@ -21,6 +22,7 @@ def test_sankey_diagram_render():
     assert "mermaid" in html
     assert "sankey-beta" in html
     assert "A, B, 10" in html
+
 
 def test_timeline_component():
     """Verify timeline component behavior."""
@@ -32,6 +34,7 @@ def test_timeline_component():
     assert "Start" in html
     assert "2023-01-01" in html
     assert "Description" in html
+
 
 def test_statbox_component():
     """Verify statbox component behavior."""

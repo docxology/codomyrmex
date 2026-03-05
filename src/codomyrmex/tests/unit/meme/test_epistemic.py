@@ -74,7 +74,9 @@ class TestEvidence:
 
     def test_fabricated_type(self) -> None:
         """FABRICATED type is stored correctly."""
-        ev = Evidence(content="fake", source="troll", evidence_type=EvidenceType.FABRICATED)
+        ev = Evidence(
+            content="fake", source="troll", evidence_type=EvidenceType.FABRICATED
+        )
         assert ev.evidence_type == EvidenceType.FABRICATED
 
 
@@ -298,7 +300,9 @@ class TestCalculateCertainty:
 
     def test_uniform_certainty(self) -> None:
         """Uniform certainty yields that same value."""
-        beliefs = [Belief(statement=f"b{i}", adherent="x", certainty=0.6) for i in range(5)]
+        beliefs = [
+            Belief(statement=f"b{i}", adherent="x", certainty=0.6) for i in range(5)
+        ]
         assert calculate_certainty(beliefs) == pytest.approx(0.6, abs=1e-9)
 
 
@@ -408,8 +412,12 @@ class TestEpistemicEngineDetectContradictions:
     def test_multiple_contradictions_reported(self) -> None:
         """Multiple contradicting beliefs all appear in conflicts."""
         engine = EpistemicEngine()
-        engine.state.facts.append(Fact(statement="fact_one", verification_method="test"))
-        engine.state.facts.append(Fact(statement="fact_two", verification_method="test"))
+        engine.state.facts.append(
+            Fact(statement="fact_one", verification_method="test")
+        )
+        engine.state.facts.append(
+            Fact(statement="fact_two", verification_method="test")
+        )
         engine.state.beliefs.append(
             Belief(statement="not fact_one and not fact_two", adherent="x")
         )

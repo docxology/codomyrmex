@@ -217,9 +217,7 @@ class RepositoryManager:
         """
         return self.base_path / repo.local_path_suggestion
 
-    def clone_repository(
-        self, full_name: str, custom_path: str | None = None
-    ) -> bool:
+    def clone_repository(self, full_name: str, custom_path: str | None = None) -> bool:
         """
         Clone a repository from the library with metadata tracking.
 
@@ -302,9 +300,7 @@ class RepositoryManager:
                 f"Could not set up development branches for {repo.full_name}: {e}"
             )
 
-    def update_repository(
-        self, full_name: str, custom_path: str | None = None
-    ) -> bool:
+    def update_repository(self, full_name: str, custom_path: str | None = None) -> bool:
         """
         Update a repository (pull latest changes).
 
@@ -408,7 +404,9 @@ class RepositoryManager:
         results = {}
         futures = {}
 
-        logger.info(f"Bulk cloning {len(repos)} repositories with {max_workers} workers...")
+        logger.info(
+            f"Bulk cloning {len(repos)} repositories with {max_workers} workers..."
+        )
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             for repo in repos:
@@ -466,7 +464,9 @@ class RepositoryManager:
 
         futures = {}
 
-        logger.info(f"Bulk updating {len(repos_to_update)} repositories with {max_workers} workers...")
+        logger.info(
+            f"Bulk updating {len(repos_to_update)} repositories with {max_workers} workers..."
+        )
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             for repo in repos_to_update:
@@ -489,9 +489,7 @@ class RepositoryManager:
 
         return results
 
-    def sync_repository(
-        self, full_name: str, custom_path: str | None = None
-    ) -> bool:
+    def sync_repository(self, full_name: str, custom_path: str | None = None) -> bool:
         """
         Sync a repository (pull and push).
 
@@ -516,9 +514,7 @@ class RepositoryManager:
         logger.info(f"Syncing (pushing) {repo.full_name}...")
         return push_changes(repository_path=str(local_path))
 
-    def prune_repository(
-        self, full_name: str, custom_path: str | None = None
-    ) -> bool:
+    def prune_repository(self, full_name: str, custom_path: str | None = None) -> bool:
         """
         Prune remote tracking branches for a repository.
 

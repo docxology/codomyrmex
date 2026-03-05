@@ -101,8 +101,12 @@ def gws_run(
     try:
         runner = _get_runner(account=account, timeout=timeout)
         result = runner.run(
-            service, resource, method,
-            params=params, body=body, page_all=page_all,
+            service,
+            resource,
+            method,
+            params=params,
+            body=body,
+            page_all=page_all,
         )
         parsed = runner._parse_output(result["stdout"])
         return {

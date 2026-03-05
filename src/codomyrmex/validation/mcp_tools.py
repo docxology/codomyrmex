@@ -15,6 +15,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def _get_validation_manager():
     """Lazy import ValidationManager to avoid circular imports."""
     from codomyrmex.validation.validation_manager import ValidationManager
+
     return ValidationManager()
 
 
@@ -92,12 +93,16 @@ def validate_config(
     if strict and required_keys:
         extra = [k for k in config if k not in required_keys]
         for key in extra:
-            warnings.append({"field": key, "message": f"Unknown key '{key}' in strict mode"})
+            warnings.append(
+                {"field": key, "message": f"Unknown key '{key}' in strict mode"}
+            )
 
     # Check for None values in required keys
     for key in required_keys:
         if key in config and config[key] is None:
-            warnings.append({"field": key, "message": f"Key '{key}' is present but None"})
+            warnings.append(
+                {"field": key, "message": f"Key '{key}' is present but None"}
+            )
 
     return {
         "is_valid": len(errors) == 0,

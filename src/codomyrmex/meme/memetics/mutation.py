@@ -92,7 +92,9 @@ def splice(host: Meme, insert: Meme, position: float | None = None) -> Meme:
 
     host_words = host.content.split()
     insert_pos = int(len(host_words) * position)
-    spliced = host_words[:insert_pos] + [f"[{insert.content}]"] + host_words[insert_pos:]
+    spliced = (
+        host_words[:insert_pos] + [f"[{insert.content}]"] + host_words[insert_pos:]
+    )
 
     return host.descend(
         new_content=" ".join(spliced),

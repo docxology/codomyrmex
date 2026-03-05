@@ -38,6 +38,7 @@ try:
         validate_document,
     )
     from .core.document_writer import DocumentWriter, write_document
+
     CORE_AVAILABLE = True
 except ImportError:
     DocumentReader = None
@@ -57,6 +58,7 @@ try:
     from .formats.markdown_handler import read_markdown, write_markdown
     from .formats.text_handler import read_text, write_text
     from .formats.yaml_handler import read_yaml, write_yaml
+
     FORMATS_AVAILABLE = True
 except ImportError:
     read_markdown = None
@@ -72,6 +74,7 @@ except ImportError:
 # Import PDF handler (optional)
 try:
     from .formats.pdf_handler import PDFDocument, read_pdf, write_pdf
+
     PDF_AVAILABLE = True
 except ImportError:
     read_pdf = None
@@ -82,6 +85,7 @@ except ImportError:
 # Import new format handlers
 try:
     from .formats.html_handler import read_html, write_html
+
     HTML_AVAILABLE = True
 except ImportError:
     read_html = None
@@ -90,6 +94,7 @@ except ImportError:
 
 try:
     from .formats.xml_handler import read_xml, write_xml
+
     XML_AVAILABLE = True
 except ImportError:
     read_xml = None
@@ -98,6 +103,7 @@ except ImportError:
 
 try:
     from .formats.csv_handler import read_csv, write_csv
+
     CSV_AVAILABLE = True
 except ImportError:
     read_csv = None
@@ -110,6 +116,7 @@ try:
     from .transformation.formatter import format_document
     from .transformation.merger import merge_documents
     from .transformation.splitter import split_document
+
     TRANSFORMATION_AVAILABLE = True
 except ImportError:
     convert_document = None
@@ -123,6 +130,7 @@ try:
     from .metadata.extractor import extract_metadata
     from .metadata.manager import update_metadata
     from .metadata.versioning import get_document_version
+
     METADATA_AVAILABLE = True
 except ImportError:
     extract_metadata = None
@@ -135,6 +143,7 @@ try:
     from .search.indexer import InMemoryIndex, create_index, index_document
     from .search.query_builder import QueryBuilder, build_query
     from .search.searcher import search_documents, search_index
+
     SEARCH_AVAILABLE = True
 except ImportError:
     InMemoryIndex = None
@@ -150,6 +159,7 @@ except ImportError:
 try:
     from .models.document import Document, DocumentFormat, DocumentType
     from .models.metadata import DocumentMetadata, MetadataField
+
     MODELS_AVAILABLE = True
 except ImportError:
     Document = None
@@ -162,6 +172,7 @@ except ImportError:
 # Import config
 try:
     from .config import DocumentsConfig, get_config, set_config
+
     CONFIG_AVAILABLE = True
 except ImportError:
     DocumentsConfig = None
@@ -169,8 +180,10 @@ except ImportError:
     set_config = None
     CONFIG_AVAILABLE = False
 
+
 def cli_commands():
     """Return CLI commands for the documents module."""
+
     def _list_formats():
         """List document formats."""
         print("Documents Module - Supported Formats:")
@@ -210,93 +223,115 @@ def cli_commands():
 __all__ = ["cli_commands"]
 
 if CORE_AVAILABLE:
-    __all__.extend([
-        "DocumentReader",
-        "DocumentWriter",
-        "DocumentParser",
-        "DocumentValidator",
-        "ValidationResult",
-        "read_document",
-        "write_document",
-        "parse_document",
-        "validate_document",
-    ])
+    __all__.extend(
+        [
+            "DocumentParser",
+            "DocumentReader",
+            "DocumentValidator",
+            "DocumentWriter",
+            "ValidationResult",
+            "parse_document",
+            "read_document",
+            "validate_document",
+            "write_document",
+        ]
+    )
 
 if FORMATS_AVAILABLE:
-    __all__.extend([
-        "read_markdown",
-        "write_markdown",
-        "read_json",
-        "write_json",
-        "read_yaml",
-        "write_yaml",
-        "read_text",
-        "write_text",
-    ])
+    __all__.extend(
+        [
+            "read_json",
+            "read_markdown",
+            "read_text",
+            "read_yaml",
+            "write_json",
+            "write_markdown",
+            "write_text",
+            "write_yaml",
+        ]
+    )
 
 if PDF_AVAILABLE:
-    __all__.extend([
-        "read_pdf",
-        "write_pdf",
-        "PDFDocument",
-    ])
+    __all__.extend(
+        [
+            "PDFDocument",
+            "read_pdf",
+            "write_pdf",
+        ]
+    )
 
 if HTML_AVAILABLE:
-    __all__.extend([
-        "read_html",
-        "write_html",
-    ])
+    __all__.extend(
+        [
+            "read_html",
+            "write_html",
+        ]
+    )
 
 if XML_AVAILABLE:
-    __all__.extend([
-        "read_xml",
-        "write_xml",
-    ])
+    __all__.extend(
+        [
+            "read_xml",
+            "write_xml",
+        ]
+    )
 
 if CSV_AVAILABLE:
-    __all__.extend([
-        "read_csv",
-        "write_csv",
-    ])
+    __all__.extend(
+        [
+            "read_csv",
+            "write_csv",
+        ]
+    )
 
 if TRANSFORMATION_AVAILABLE:
-    __all__.extend([
-        "convert_document",
-        "merge_documents",
-        "split_document",
-        "format_document",
-    ])
+    __all__.extend(
+        [
+            "convert_document",
+            "format_document",
+            "merge_documents",
+            "split_document",
+        ]
+    )
 
 if METADATA_AVAILABLE:
-    __all__.extend([
-        "extract_metadata",
-        "update_metadata",
-        "get_document_version",
-    ])
+    __all__.extend(
+        [
+            "extract_metadata",
+            "get_document_version",
+            "update_metadata",
+        ]
+    )
 
 if SEARCH_AVAILABLE:
-    __all__.extend([
-        "InMemoryIndex",
-        "index_document",
-        "create_index",
-        "search_documents",
-        "search_index",
-        "QueryBuilder",
-        "build_query",
-    ])
+    __all__.extend(
+        [
+            "InMemoryIndex",
+            "QueryBuilder",
+            "build_query",
+            "create_index",
+            "index_document",
+            "search_documents",
+            "search_index",
+        ]
+    )
 
 if MODELS_AVAILABLE:
-    __all__.extend([
-        "Document",
-        "DocumentFormat",
-        "DocumentType",
-        "DocumentMetadata",
-        "MetadataField",
-    ])
+    __all__.extend(
+        [
+            "Document",
+            "DocumentFormat",
+            "DocumentMetadata",
+            "DocumentType",
+            "MetadataField",
+        ]
+    )
 
 if CONFIG_AVAILABLE:
-    __all__.extend([
-        "DocumentsConfig",
-        "get_config",
-        "set_config",
-    ])
+    __all__.extend(
+        [
+            "DocumentsConfig",
+            "get_config",
+            "set_config",
+        ]
+    )

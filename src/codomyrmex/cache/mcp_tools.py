@@ -18,6 +18,7 @@ def _get_manager():
     global _manager
     if _manager is None:
         from codomyrmex.cache import CacheManager
+
         _manager = CacheManager()
     return _manager
 

@@ -13,8 +13,8 @@ Usage:
     uv run python scripts/multimodal/examples/basic_usage.py
 """
 
-import os
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -24,6 +24,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.multimodal.image_generation import ImageGenerator
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -31,18 +32,34 @@ from codomyrmex.utils.cli_helpers import (
     print_success,
     setup_logging,
 )
-from codomyrmex.multimodal.image_generation import ImageGenerator
-
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Multimodal Basic Usage Example")
-    parser.add_argument("--prompt", default="A photorealistic blue butterfly resting on a dandelion, morning light", help="Input for generation")
-    parser.add_argument("--model", default="imagen-4.0-generate-001", help="Image generation model")
-    parser.add_argument("--aspect-ratio", default="1:1", choices=["1:1", "16:9", "9:16", "4:3", "3:4"], help="Aspect ratio for the image")
-    parser.add_argument("--images", type=int, default=1, help="Number of images to generate")
-    parser.add_argument("--output-dir", default="output/images", help="Output directory relative to repo root")
+    parser.add_argument(
+        "--prompt",
+        default="A photorealistic blue butterfly resting on a dandelion, morning light",
+        help="Input for generation",
+    )
+    parser.add_argument(
+        "--model", default="imagen-4.0-generate-001", help="Image generation model"
+    )
+    parser.add_argument(
+        "--aspect-ratio",
+        default="1:1",
+        choices=["1:1", "16:9", "9:16", "4:3", "3:4"],
+        help="Aspect ratio for the image",
+    )
+    parser.add_argument(
+        "--images", type=int, default=1, help="Number of images to generate"
+    )
+    parser.add_argument(
+        "--output-dir",
+        default="output/images",
+        help="Output directory relative to repo root",
+    )
     return parser.parse_args()
+
 
 def main() -> int:
     setup_logging()
@@ -64,7 +81,9 @@ def main() -> int:
         return 1
 
     # ── 3. Generate a single image ─────────────────────────────────────
-    print_info(f"2. Generating {args.images} image(s) ({args.model}, {args.aspect_ratio})...")
+    print_info(
+        f"2. Generating {args.images} image(s) ({args.model}, {args.aspect_ratio})..."
+    )
     try:
         results = generator.generate(
             prompt=args.prompt,
@@ -72,7 +91,9 @@ def main() -> int:
             number_of_images=args.images,
             aspect_ratio=args.aspect_ratio,
         )
-        print_success(f"   Got {len(results)} result(s). Keys: {list(results[0].keys())}")
+        print_success(
+            f"   Got {len(results)} result(s). Keys: {list(results[0].keys())}"
+        )
     except Exception as e:
         print_error(f"   Image generation failed: {e}")
         return 1
@@ -86,7 +107,9 @@ def main() -> int:
     if image_bytes:
         out = output_dir / "basic_usage_image.png"
         out.write_bytes(image_bytes)
-        print_success(f"   Saved: {args.output_dir}/basic_usage_image.png ({len(image_bytes):,} bytes)")
+        print_success(
+            f"   Saved: {args.output_dir}/basic_usage_image.png ({len(image_bytes):,} bytes)"
+        )
     else:
         print_info(f"   No image_bytes in result — available keys: {list(img.keys())}")
 
@@ -100,7 +123,9 @@ def main() -> int:
             number_of_images=1,
             aspect_ratio=alt_ratio,
         )
-        print_success(f"   {alt_ratio} image generated. Keys: {list(wide_results[0].keys())}")
+        print_success(
+            f"   {alt_ratio} image generated. Keys: {list(wide_results[0].keys())}"
+        )
     except Exception as e:
         print_error(f"   {alt_ratio} generation failed: {e}")
         return 1

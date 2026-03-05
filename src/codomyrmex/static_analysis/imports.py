@@ -113,11 +113,11 @@ def get_layer(module: str) -> str:
     """
     if module in FOUNDATION:
         return "foundation"
-    elif module in CORE:
+    if module in CORE:
         return "core"
-    elif module in SERVICE:
+    if module in SERVICE:
         return "service"
-    elif module in SPECIALIZED:
+    if module in SPECIALIZED:
         return "specialized"
     return "other"
 

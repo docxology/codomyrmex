@@ -170,6 +170,7 @@ class TestSpan:
 
     def test_duration_ms_positive_after_start_end(self):
         import time
+
         s = Span("op").start()
         time.sleep(0.001)
         s.end()
@@ -322,9 +323,8 @@ class TestTracer:
 
     def test_span_context_manager_records_exception(self):
         t = Tracer("test")
-        with pytest.raises(RuntimeError):
-            with t.span("failing_op") as s:
-                raise RuntimeError("test error")
+        with pytest.raises(RuntimeError), t.span("failing_op") as s:
+            raise RuntimeError("test error")
         assert s.status == SpanStatus.ERROR
 
     def test_span_context_manager_calls_on_span_end(self):

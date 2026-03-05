@@ -14,7 +14,7 @@ from enum import Enum
 from typing import Any
 from urllib.parse import urljoin, urlparse
 
-__all__ = ["CrawlStatus", "CrawlConfig", "CrawlResult", "RobotsPolicy", "Crawler"]
+__all__ = ["CrawlConfig", "CrawlResult", "CrawlStatus", "Crawler", "RobotsPolicy"]
 
 
 class CrawlStatus(Enum):
@@ -169,10 +169,7 @@ class Crawler:
 
     def has_next(self) -> bool:
         """Check if there are more URLs to crawl."""
-        return (
-            len(self._frontier) > 0
-            and self.pages_crawled < self._config.max_pages
-        )
+        return len(self._frontier) > 0 and self.pages_crawled < self._config.max_pages
 
     def next_url(self) -> tuple[str, int] | None:
         """Get the next URL to crawl from the frontier.
@@ -212,9 +209,11 @@ class Crawler:
                 path = parsed.path or "/"
                 for disallowed in policy.disallowed_paths:
                     if path.startswith(disallowed):
-                        return True if any(
-                            path.startswith(a) for a in policy.allowed_paths
-                        ) else False
+                        return (
+                            True
+                            if any(path.startswith(a) for a in policy.allowed_paths)
+                            else False
+                        )
 
         return True
 
@@ -256,7 +255,10 @@ class Crawler:
             self._content_hashes.add(result.content_hash)
 
         # Enqueue discovered links
-        if result.status == CrawlStatus.SUCCESS and result.depth < self._config.max_depth:
+        if (
+            result.status == CrawlStatus.SUCCESS
+            and result.depth < self._config.max_depth
+        ):
             for link in result.links:
                 normalized = self._normalize_url(urljoin(result.url, link))
                 if normalized not in self._visited and self.is_allowed(normalized):

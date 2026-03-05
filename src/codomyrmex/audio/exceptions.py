@@ -247,10 +247,10 @@ class VoiceNotFoundError(AudioError):
 
 __all__ = [
     "AudioError",
-    "TranscriptionError",
-    "SynthesisError",
     "AudioFormatError",
     "ModelNotLoadedError",
     "ProviderNotAvailableError",
+    "SynthesisError",
+    "TranscriptionError",
     "VoiceNotFoundError",
 ]

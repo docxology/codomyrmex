@@ -20,12 +20,14 @@ class Plotter:
     def bar_chart(self, categories, values, **kwargs):
         """Create a bar chart."""
         from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
+
         kwargs.setdefault("figure_size", self.figure_size)
         return create_bar_chart(categories, values, **kwargs)
 
     def line_plot(self, x_data, y_data, **kwargs):
         """Create a line plot."""
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
+
         kwargs.setdefault("figure_size", self.figure_size)
         return create_line_plot(x_data, y_data, **kwargs)
 
@@ -34,27 +36,30 @@ class Plotter:
         from codomyrmex.data_visualization.charts.scatter_plot import (
             create_scatter_plot,
         )
+
         kwargs.setdefault("figure_size", self.figure_size)
         return create_scatter_plot(x_data, y_data, **kwargs)
 
     def histogram(self, data, **kwargs):
         """Create a histogram."""
         from codomyrmex.data_visualization.charts.histogram import create_histogram
+
         kwargs.setdefault("figure_size", self.figure_size)
         return create_histogram(data, **kwargs)
 
     def pie_chart(self, labels, sizes, **kwargs):
         """Create a pie chart."""
         from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
+
         kwargs.setdefault("figure_size", self.figure_size)
         return create_pie_chart(labels, sizes, **kwargs)
 
     def heatmap(self, data, **kwargs):
         """Create a heatmap."""
         from codomyrmex.data_visualization.charts.heatmap import create_heatmap
+
         kwargs.setdefault("figure_size", self.figure_size)
         return create_heatmap(data, **kwargs)
-
 
 
 __all__ = [

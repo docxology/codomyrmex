@@ -12,6 +12,7 @@ import requests as requests_lib
 
 try:
     from codomyrmex import networking
+
     # Try importing EphemeralServer, might fail if path issues, handled in tests
     try:
         from codomyrmex.tests.utils.ephemeral_server import EphemeralServer
@@ -30,6 +31,7 @@ try:
         get_http_client,
     )
     from codomyrmex.networking.http_client import NetworkingError
+
     NETWORKING_AVAILABLE = True
 except ImportError:
     NETWORKING_AVAILABLE = False
@@ -55,6 +57,7 @@ requires_network = pytest.mark.skipif(
 # ==============================================================================
 # Module Import Tests
 # ==============================================================================
+
 
 class TestNetworkingModuleImport:
     """Test networking module import and structure."""
@@ -83,6 +86,7 @@ class TestNetworkingModuleImport:
 # Response Object Tests
 # ==============================================================================
 
+
 class TestResponse:
     """Tests for Response dataclass."""
 
@@ -91,16 +95,17 @@ class TestResponse:
             status_code=200,
             headers={"Content-Type": "application/json"},
             content=b'{"key": "value"}',
-            text='{"key": "value"}'
+            text='{"key": "value"}',
         )
         assert response.status_code == 200
         assert response.headers["Content-Type"] == "application/json"
 
     def test_response_json_parsing(self):
         response = Response(
-            status_code=200, headers={},
+            status_code=200,
+            headers={},
             content=b'{"name": "test", "value": 123}',
-            text='{"name": "test", "value": 123}'
+            text='{"name": "test", "value": 123}',
         )
         data = response.json()
         assert data["name"] == "test"
@@ -108,8 +113,10 @@ class TestResponse:
 
     def test_response_json_caching(self):
         response = Response(
-            status_code=200, headers={},
-            content=b'{"cached": true}', text='{"cached": true}'
+            status_code=200,
+            headers={},
+            content=b'{"cached": true}',
+            text='{"cached": true}',
         )
         data1 = response.json()
         data2 = response.json()
@@ -118,10 +125,11 @@ class TestResponse:
     def test_response_with_predefined_json(self):
         json_data = {"preloaded": "data"}
         response = Response(
-            status_code=200, headers={},
+            status_code=200,
+            headers={},
             content=b'{"preloaded": "data"}',
             text='{"preloaded": "data"}',
-            json_data=json_data
+            json_data=json_data,
         )
         assert response.json() is json_data
 
@@ -129,6 +137,7 @@ class TestResponse:
 # ==============================================================================
 # HTTPClient Tests — Real HTTP
 # ==============================================================================
+
 
 class TestHTTPClient:
     """Tests for HTTPClient using real HTTP requests."""
@@ -142,8 +151,10 @@ class TestHTTPClient:
 
     def test_client_initialization_custom(self):
         client = HTTPClient(
-            timeout=60, max_retries=5, retry_backoff=2.0,
-            headers={"Authorization": "Bearer token"}
+            timeout=60,
+            max_retries=5,
+            retry_backoff=2.0,
+            headers={"Authorization": "Bearer token"},
         )
         assert client.timeout == 60
         assert client.max_retries == 5
@@ -163,33 +174,27 @@ class TestHTTPClient:
 
     def test_post_request(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient()
-            response = client.post(
-                f"{server.url}/post",
-                json={"name": "test"}
-            )
+            response = client.post(f"{server.url}/post", json={"name": "test"})
             assert response.status_code == 200
             data = response.json()
             assert data["json"]["name"] == "test"
 
     def test_put_request(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient()
-            response = client.put(
-                f"{server.url}/put",
-                json={"name": "updated"}
-            )
+            response = client.put(f"{server.url}/put", json={"name": "updated"})
             assert response.status_code == 200
 
     def test_delete_request(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient()
@@ -198,13 +203,12 @@ class TestHTTPClient:
 
     def test_request_with_custom_headers(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient()
             response = client.get(
-                f"{server.url}/headers",
-                headers={"X-Custom-Header": "custom-value"}
+                f"{server.url}/headers", headers={"X-Custom-Header": "custom-value"}
             )
             data = response.json()
             # headers keys are often lowercased or titlecased depending on server
@@ -215,7 +219,7 @@ class TestHTTPClient:
 
     def test_request_with_custom_timeout(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient()
@@ -236,7 +240,7 @@ class TestHTTPClient:
 
     def test_response_4xx_error(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient()
@@ -246,7 +250,7 @@ class TestHTTPClient:
     @requires_network
     def test_response_5xx_error(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient(max_retries=0)
@@ -257,6 +261,7 @@ class TestHTTPClient:
 # ==============================================================================
 # WebSocketClient Tests
 # ==============================================================================
+
 
 class TestWebSocketClient:
     """Tests for WebSocketClient."""
@@ -273,7 +278,7 @@ class TestWebSocketClient:
             "wss://example.com/ws",
             headers={"Authorization": "Bearer token"},
             reconnect_interval=2.0,
-            max_reconnect_delay=60.0
+            max_reconnect_delay=60.0,
         )
         assert client.url == "wss://example.com/ws"
         assert client.headers["Authorization"] == "Bearer token"
@@ -289,8 +294,10 @@ class TestWebSocketClient:
     async def test_websocket_message_handling_json(self):
         client = WebSocketClient("ws://localhost:8080")
         received = []
+
         async def handler(data):
             received.append(data)
+
         client.on(handler)
         await client._handle_message('{"type": "test", "value": 42}')
         assert received == [{"type": "test", "value": 42}]
@@ -299,8 +306,10 @@ class TestWebSocketClient:
     async def test_websocket_message_handling_string(self):
         client = WebSocketClient("ws://localhost:8080")
         received = []
+
         async def handler(data):
             received.append(data)
+
         client.on(handler)
         await client._handle_message("plain text message")
         assert received == ["plain text message"]
@@ -309,8 +318,10 @@ class TestWebSocketClient:
     async def test_websocket_message_handling_bytes(self):
         client = WebSocketClient("ws://localhost:8080")
         received = []
+
         async def handler(data):
             received.append(data)
+
         client.on(handler)
         await client._handle_message(b"binary data")
         assert received == [b"binary data"]
@@ -319,8 +330,10 @@ class TestWebSocketClient:
     async def test_websocket_sync_handler(self):
         client = WebSocketClient("ws://localhost:8080")
         received = []
+
         def handler(data):
             received.append(data)
+
         client.on(handler)
         await client._handle_message('{"test": true}')
         assert received == [{"test": True}]
@@ -329,10 +342,13 @@ class TestWebSocketClient:
     async def test_websocket_handler_exception_isolation(self):
         client = WebSocketClient("ws://localhost:8080")
         called = []
+
         async def failing_handler(data):
             raise ValueError("Handler error")
+
         async def working_handler(data):
             called.append(data)
+
         client.on(failing_handler)
         client.on(working_handler)
         await client._handle_message('{"test": 1}')
@@ -342,6 +358,7 @@ class TestWebSocketClient:
     async def test_websocket_send_not_connected(self):
         client = WebSocketClient("ws://localhost:8080")
         from codomyrmex.networking.websocket_client import WebSocketError
+
         with pytest.raises(WebSocketError):
             await client.send({"message": "test"})
 
@@ -377,7 +394,9 @@ class TestSSHClient:
         assert client.port == 22
 
     def test_ssh_client_key_based_auth(self):
-        client = SSHClient(hostname="example.com", username="user", key_filename="/path/to/key")
+        client = SSHClient(
+            hostname="example.com", username="user", key_filename="/path/to/key"
+        )
         assert client.key_filename == "/path/to/key"
 
     def test_ssh_client_custom_port(self):
@@ -387,6 +406,7 @@ class TestSSHClient:
     @requires_ssh
     def test_ssh_client_connect_and_execute(self):
         import os
+
         key_path = os.path.expanduser("~/.ssh/id_rsa")
         if not os.path.exists(key_path):
             pytest.skip("No SSH key at ~/.ssh/id_rsa")
@@ -405,6 +425,7 @@ class TestSSHClient:
 # ==============================================================================
 # TCPClient/Server Tests — Real Loopback
 # ==============================================================================
+
 
 class TestTCPClient:
     """Tests for TCPClient using real loopback sockets."""
@@ -472,6 +493,7 @@ class TestTCPServer:
 # UDPClient Tests — Real Loopback
 # ==============================================================================
 
+
 class TestUDPClient:
     """Tests for UDPClient using real loopback sockets."""
 
@@ -505,6 +527,7 @@ class TestUDPClient:
 # ==============================================================================
 # PortScanner Tests — Real Ports
 # ==============================================================================
+
 
 class TestPortScanner:
     """Tests for PortScanner using real ports."""
@@ -541,12 +564,13 @@ class TestPortScanner:
 # Integration-style Tests — Real HTTP
 # ==============================================================================
 
+
 class TestNetworkingIntegration:
     """Integration tests using real services."""
 
     def test_http_client_json_workflow(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient(headers={"Accept": "application/json"})
@@ -557,13 +581,12 @@ class TestNetworkingIntegration:
 
     def test_http_client_post_json_workflow(self):
         if not EphemeralServer:
-             pytest.skip("EphemeralServer not available")
+            pytest.skip("EphemeralServer not available")
 
         with EphemeralServer() as server:
             client = HTTPClient()
             response = client.post(
-                f"{server.url}/post",
-                json={"name": "Bob", "email": "bob@example.com"}
+                f"{server.url}/post", json={"name": "Bob", "email": "bob@example.com"}
             )
             assert response.status_code == 200
             assert response.json()["json"]["name"] == "Bob"
@@ -572,8 +595,10 @@ class TestNetworkingIntegration:
     async def test_websocket_message_flow(self):
         client = WebSocketClient("ws://localhost:8080")
         messages = []
+
         async def collector(data):
             messages.append(data)
+
         client.on(collector)
         await client._handle_message('{"event": "connect", "status": "ok"}')
         await client._handle_message('{"event": "data", "payload": {"value": 42}}')
@@ -585,6 +610,7 @@ class TestNetworkingIntegration:
 # Error Handling Tests
 # ==============================================================================
 
+
 class TestNetworkingErrorHandling:
     """Tests for error handling in networking module."""
 
@@ -594,6 +620,7 @@ class TestNetworkingErrorHandling:
 
     def test_networking_error_inheritance(self):
         from codomyrmex.exceptions import CodomyrmexError
+
         assert isinstance(NetworkingError("Test"), CodomyrmexError)
 
     def test_http_client_wraps_request_exceptions(self):

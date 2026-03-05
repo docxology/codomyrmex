@@ -34,8 +34,6 @@ from codomyrmex.dependency_injection import (
 class IService:
     """Abstract interface for testing."""
 
-    pass
-
 
 class ConcreteService(IService):
     """Concrete implementation for testing."""
@@ -46,8 +44,6 @@ class ConcreteService(IService):
 
 class AnotherService:
     """Another concrete service for testing."""
-
-    pass
 
 
 @pytest.fixture
@@ -139,7 +135,9 @@ class TestContainerRegisterInstance:
         resolved = container.resolve(IService)
         assert resolved is obj
 
-    def test_register_instance_returns_container_for_chaining(self, container: Container):
+    def test_register_instance_returns_container_for_chaining(
+        self, container: Container
+    ):
         result = container.register_instance(IService, ConcreteService())
         assert result is container
 
@@ -147,7 +145,9 @@ class TestContainerRegisterInstance:
         with pytest.raises(TypeError, match="Cannot register None"):
             container.register_instance(IService, None)  # type: ignore[arg-type]
 
-    def test_register_instance_descriptor_is_instance_registration(self, container: Container):
+    def test_register_instance_descriptor_is_instance_registration(
+        self, container: Container
+    ):
         obj = ConcreteService()
         container.register_instance(IService, obj)
         descriptor = container.get_descriptor(IService)
@@ -188,7 +188,9 @@ class TestContainerRegisterFactory:
         assert instance_a is not instance_b
         assert call_count == 2
 
-    def test_register_factory_returns_container_for_chaining(self, container: Container):
+    def test_register_factory_returns_container_for_chaining(
+        self, container: Container
+    ):
         result = container.register_factory(IService, ConcreteService)
         assert result is container
 
@@ -323,7 +325,9 @@ class TestScopeContext:
             b = scope.resolve(IService)
             assert a is b
 
-    def test_scoped_returns_different_instance_across_contexts(self, container: Container):
+    def test_scoped_returns_different_instance_across_contexts(
+        self, container: Container
+    ):
         container.register(IService, ConcreteService, scope="scoped")
         with ScopeContext(container) as scope1:
             a = scope1.resolve(IService)
@@ -625,7 +629,9 @@ class TestAutoResolutionViaHints:
         assert isinstance(worker.logger, Logger)
         assert worker.logger.name == "logger"
 
-    def test_constructor_with_no_hints_creates_plain_instance(self, container: Container):
+    def test_constructor_with_no_hints_creates_plain_instance(
+        self, container: Container
+    ):
         class Simple:
             def __init__(self):
                 self.ready = True
@@ -638,6 +644,7 @@ class TestAutoResolutionViaHints:
 # ---------------------------------------------------------------------------
 # Advanced resolution features tests
 # ---------------------------------------------------------------------------
+
 
 @injectable(scope="singleton")
 class GlobalAutoRegistered:
@@ -701,8 +708,8 @@ class TestContainerAdvancedFeatures:
             def __init__(self, a: A):
                 self.a = a
 
-        A.__init__.__annotations__['b'] = B
-        B.__init__.__annotations__['a'] = A
+        A.__init__.__annotations__["b"] = B
+        B.__init__.__annotations__["a"] = A
 
         container.register(A, A, name="a_named")
         container.register(B, B, name="b_named")

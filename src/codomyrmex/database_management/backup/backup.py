@@ -79,7 +79,9 @@ class DatabaseBackup:
     def _save_manifest(self) -> None:
         self._manifest_path.write_text(json.dumps(self._manifest, indent=2))
 
-    def backup_sqlite(self, db_path: Path, backup_name: str | None = None) -> BackupMetadata:
+    def backup_sqlite(
+        self, db_path: Path, backup_name: str | None = None
+    ) -> BackupMetadata:
         """Create a backup of a SQLite database."""
         name = backup_name or f"sqlite_{int(time.time())}"
         dest = self._backup_dir / f"{name}.db"
@@ -107,8 +109,9 @@ class DatabaseBackup:
         self._save_manifest()
         return metadata
 
-    def backup_postgres(self, connection_string: str,
-                        backup_name: str | None = None) -> BackupMetadata:
+    def backup_postgres(
+        self, connection_string: str, backup_name: str | None = None
+    ) -> BackupMetadata:
         """Create a pg_dump backup of a PostgreSQL database."""
         name = backup_name or f"pg_{int(time.time())}"
         dest = self._backup_dir / f"{name}.sql"
@@ -116,7 +119,9 @@ class DatabaseBackup:
         try:
             result = subprocess.run(
                 ["pg_dump", connection_string, "-f", str(dest)],
-                capture_output=True, text=True, timeout=300,
+                capture_output=True,
+                text=True,
+                timeout=300,
             )
             success = result.returncode == 0
             metadata = BackupMetadata(

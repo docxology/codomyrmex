@@ -12,7 +12,14 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-__all__ = ["TaskPriority", "TaskStatus", "ScheduleConfig", "TaskResult", "MaintenanceTask", "MaintenanceScheduler"]
+__all__ = [
+    "MaintenanceScheduler",
+    "MaintenanceTask",
+    "ScheduleConfig",
+    "TaskPriority",
+    "TaskResult",
+    "TaskStatus",
+]
 
 
 class TaskPriority(Enum):
@@ -114,12 +121,14 @@ class MaintenanceScheduler:
     Example::
 
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="dep_audit",
-            description="Check dependencies for CVEs",
-            action=lambda: run_dep_audit(),
-            schedule=ScheduleConfig(interval_seconds=3600),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="dep_audit",
+                description="Check dependencies for CVEs",
+                action=lambda: run_dep_audit(),
+                schedule=ScheduleConfig(interval_seconds=3600),
+            )
+        )
         due = scheduler.get_due_tasks(now=time.time())
         for task in due:
             result = scheduler.execute(task.name)
@@ -176,9 +185,9 @@ class MaintenanceScheduler:
         for task in self._tasks.values():
             if not task.enabled:
                 continue
-            if task.last_run == 0.0 and task.schedule.run_on_startup:
-                due.append(task)
-            elif now - task.last_run >= task.schedule.interval_seconds:
+            if (
+                task.last_run == 0.0 and task.schedule.run_on_startup
+            ) or now - task.last_run >= task.schedule.interval_seconds:
                 due.append(task)
 
         priority_order = {

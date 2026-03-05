@@ -20,7 +20,16 @@ Usage:
 """
 logger = get_logger(__name__)
 
-__all__ = ["run_command", "check_python_version", "check_dependencies", "check_security", "check_environment", "generate_report", "fix_dependencies", "main"]
+__all__ = [
+    "check_dependencies",
+    "check_environment",
+    "check_python_version",
+    "check_security",
+    "fix_dependencies",
+    "generate_report",
+    "main",
+    "run_command",
+]
 
 
 def run_command(cmd: list[str]) -> tuple[bool, str, str]:
@@ -30,7 +39,7 @@ def run_command(cmd: list[str]) -> tuple[bool, str, str]:
             cmd,
             capture_output=True,
             text=True,
-            timeout=300  # 5 minute timeout
+            timeout=300,  # 5 minute timeout
         )
         return result.returncode == 0, result.stdout, result.stderr
     except subprocess.TimeoutExpired:
@@ -46,7 +55,7 @@ def check_python_version() -> dict[str, Any]:
     result = {
         "current_version": "unknown",
         "meets_requirement": False,
-        "status": "error"
+        "status": "error",
     }
 
     if success:
@@ -54,7 +63,7 @@ def check_python_version() -> dict[str, Any]:
         result["current_version"] = version_str
 
         # Check if version meets minimum requirement (3.10)
-        version_parts = version_str.split('.')
+        version_parts = version_str.split(".")
         major, minor = int(version_parts[0]), int(version_parts[1])
 
         if major > 3 or (major == 3 and minor >= 10):
@@ -73,7 +82,7 @@ def check_dependencies() -> dict[str, Any]:
         "llm": ["openai", "anthropic", "google.generativeai"],
         "analysis": ["pylint", "flake8", "bandit"],
         "data": ["matplotlib", "seaborn", "numpy"],
-        "dev": ["pytest", "black", "mypy"]
+        "dev": ["pytest", "black", "mypy"],
     }
 
     results = {}
@@ -95,7 +104,7 @@ def check_security() -> dict[str, Any]:
     security = {
         "pip_audit_available": False,
         "safety_available": False,
-        "vulnerabilities": []
+        "vulnerabilities": [],
     }
 
     # Check if security tools are available
@@ -107,9 +116,9 @@ def check_security() -> dict[str, Any]:
 
     # Run security checks if tools are available
     if security["pip_audit_available"]:
-        success, stdout, stderr = run_command([
-            sys.executable, "-m", "pip-audit", "--format=json"
-        ])
+        success, stdout, stderr = run_command(
+            [sys.executable, "-m", "pip-audit", "--format=json"]
+        )
         if success:
             try:
                 vulnerabilities = json.loads(stdout)
@@ -126,12 +135,12 @@ def check_environment() -> dict[str, Any]:
         "virtual_env": False,
         "uv_available": False,
         "git_available": False,
-        "docker_available": False
+        "docker_available": False,
     }
 
     # Check for virtual environment
-    env["virtual_env"] = hasattr(sys, 'real_prefix') or (
-        hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix
+    env["virtual_env"] = hasattr(sys, "real_prefix") or (
+        hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
     )
 
     # Check for development tools
@@ -156,10 +165,18 @@ def generate_report(py_version: dict, deps: dict, security: dict, env: dict) -> 
 
     # Python Version
     report.append("## Python Version")
-    status_icon = "✅" if py_version["status"] == "ok" else "⚠️" if py_version["status"] == "warning" else "❌"
+    status_icon = (
+        "✅"
+        if py_version["status"] == "ok"
+        else "⚠️"
+        if py_version["status"] == "warning"
+        else "❌"
+    )
     report.append(f"- **Current**: {py_version['current_version']}")
     report.append("- **Required**: >= 3.10")
-    report.append(f"- **Status**: {status_icon} {'OK' if py_version['meets_requirement'] else 'Needs update'}")
+    report.append(
+        f"- **Status**: {status_icon} {'OK' if py_version['meets_requirement'] else 'Needs update'}"
+    )
     report.append("")
 
     # Dependencies
@@ -183,14 +200,20 @@ def generate_report(py_version: dict, deps: dict, security: dict, env: dict) -> 
     report.append(f"- **Virtual Environment**: {'✅' if env['virtual_env'] else '❌'}")
     report.append(f"- **UV Available**: {'✅' if env['uv_available'] else '❌'}")
     report.append(f"- **Git Available**: {'✅' if env['git_available'] else '❌'}")
-    report.append(f"- **Docker Available**: {'✅' if env['docker_available'] else '❌'}")
+    report.append(
+        f"- **Docker Available**: {'✅' if env['docker_available'] else '❌'}"
+    )
     report.append("")
 
     # Security
     report.append("## Security")
-    report.append(f"- **Security Tools**: {len([s for s in [security['pip_audit_available'], security['safety_available']] if s])}/2 available")
+    report.append(
+        f"- **Security Tools**: {len([s for s in [security['pip_audit_available'], security['safety_available']] if s])}/2 available"
+    )
     if security["vulnerabilities"]:
-        report.append(f"- **Vulnerabilities Found**: {len(security['vulnerabilities'])}")
+        report.append(
+            f"- **Vulnerabilities Found**: {len(security['vulnerabilities'])}"
+        )
     else:
         report.append("- **Vulnerabilities**: ✅ None found")
     report.append("")
@@ -202,7 +225,9 @@ def main():
     """Main function to run dependency checks."""
     parser = argparse.ArgumentParser(description="Check Codomyrmex dependencies")
     parser.add_argument("--output", "-o", help="Output file for the report")
-    parser.add_argument("--fix", action="store_true", help="Attempt to fix missing dependencies")
+    parser.add_argument(
+        "--fix", action="store_true", help="Attempt to fix missing dependencies"
+    )
 
     args = parser.parse_args()
 
@@ -218,7 +243,7 @@ def main():
     report = generate_report(py_version, deps, security, env)
 
     if args.output:
-        with open(args.output, 'w') as f:
+        with open(args.output, "w") as f:
             f.write(report)
     else:
         print(report)
@@ -246,14 +271,12 @@ def fix_dependencies(deps: dict[str, dict]) -> None:
         # Try to install with uv if available
         success, _, _ = run_command(["uv", "--version"])
         if success:
-            success, stdout, stderr = run_command([
-                "uv", "add"] + missing_packages
-            )
+            success, stdout, stderr = run_command(["uv", "add"] + missing_packages)
         else:
             # Fall back to pip
-            success, stdout, stderr = run_command([
-                sys.executable, "-m", "pip", "install"
-            ] + missing_packages)
+            success, stdout, stderr = run_command(
+                [sys.executable, "-m", "pip", "install"] + missing_packages
+            )
 
         if success:
             print("✅ Successfully installed missing dependencies")

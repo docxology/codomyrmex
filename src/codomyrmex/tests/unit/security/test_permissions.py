@@ -1,6 +1,5 @@
 """Tests for security/permissions.py — Permission, Role, Grant, PermissionModel."""
 
-
 from codomyrmex.security.permissions import (
     Grant,
     Permission,
@@ -288,7 +287,13 @@ class TestPermissionModelMatrix:
         matrix = model.permission_matrix()
         assert "alice" in matrix
         assert isinstance(matrix["alice"], dict)
-        assert set(matrix["alice"].keys()) == {"read", "write", "execute", "delete", "admin"}
+        assert set(matrix["alice"].keys()) == {
+            "read",
+            "write",
+            "execute",
+            "delete",
+            "admin",
+        }
 
     def test_matrix_viewer_row(self):
         """VIEWER row has only read=True."""

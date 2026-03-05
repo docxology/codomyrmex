@@ -16,7 +16,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import run_parallel
-from codomyrmex.utils.cli_helpers import setup_logging, print_info
+from codomyrmex.utils.cli_helpers import print_info, setup_logging
 
 
 def main() -> int:
@@ -25,7 +25,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Quick parallel test runner")
     parser.add_argument("--modules", "-m", nargs="+", help="Specific modules to test")
     parser.add_argument("--workers", "-w", type=int, default=4, help="Parallel workers")
-    parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per test")
+    parser.add_argument(
+        "--timeout", "-t", type=int, default=60, help="Timeout per test"
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
@@ -64,7 +66,7 @@ def main() -> int:
         scripts=test_files,
         max_workers=args.workers,
         timeout=args.timeout,
-        progress_callback=on_progress if args.verbose else None
+        progress_callback=on_progress if args.verbose else None,
     )
 
     print()
@@ -84,6 +86,7 @@ def main() -> int:
     # Script executed successfully - test results are informational
     # Return 0 to indicate script success, not test success
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

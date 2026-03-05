@@ -13,6 +13,7 @@ from typing import Any
 
 class EdgeProvider(Enum):
     """Supported edge providers."""
+
     CLOUDFLARE_WORKERS = "cloudflare_workers"
     FASTLY_COMPUTE = "fastly_compute"
     AWS_LAMBDA_EDGE = "aws_lambda_edge"
@@ -22,6 +23,7 @@ class EdgeProvider(Enum):
 
 class EdgeRegion(Enum):
     """Common edge regions."""
+
     GLOBAL = "global"
     US_EAST = "us-east"
     US_WEST = "us-west"
@@ -32,6 +34,7 @@ class EdgeRegion(Enum):
 @dataclass
 class EdgeFunctionConfig:
     """Configuration for an edge function."""
+
     name: str
     provider: EdgeProvider
     entry_point: str = "handler"
@@ -47,6 +50,7 @@ class EdgeFunctionConfig:
 @dataclass
 class EdgeDeployment:
     """An edge function deployment."""
+
     id: str
     function_name: str
     provider: EdgeProvider
@@ -64,27 +68,22 @@ class EdgeClient(ABC):
     @abstractmethod
     def provider(self) -> EdgeProvider:
         """Provider."""
-        pass
 
     @abstractmethod
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:
         """Deploy edge function."""
-        pass
 
     @abstractmethod
     def list_deployments(self) -> list[EdgeDeployment]:
         """List all deployments."""
-        pass
 
     @abstractmethod
     def delete(self, deployment_id: str) -> bool:
         """Delete a deployment."""
-        pass
 
     @abstractmethod
     def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
         """Get deployment logs."""
-        pass
 
 
 class CloudflareWorkersClient(EdgeClient):
@@ -205,12 +204,12 @@ class EdgeManager:
 
 
 __all__ = [
+    "CloudflareWorkersClient",
+    "EdgeClient",
+    "EdgeDeployment",
+    "EdgeFunctionConfig",
+    "EdgeManager",
     "EdgeProvider",
     "EdgeRegion",
-    "EdgeFunctionConfig",
-    "EdgeDeployment",
-    "EdgeClient",
-    "CloudflareWorkersClient",
     "FastlyComputeClient",
-    "EdgeManager",
 ]

@@ -45,7 +45,9 @@ class TestAPIKey:
 
     def test_apikey_is_expired_false_when_future(self):
         """A key with a future expires_at is not expired."""
-        key = APIKey(key="k", user_id="u", permissions=[], expires_at=time.time() + 3600)
+        key = APIKey(
+            key="k", user_id="u", permissions=[], expires_at=time.time() + 3600
+        )
         assert key.is_expired is False
 
     def test_apikey_is_expired_true_when_past(self):
@@ -71,8 +73,11 @@ class TestAPIKey:
     def test_apikey_is_valid_false_when_revoked_and_expired(self):
         """is_valid is False when both revoked and expired."""
         key = APIKey(
-            key="k", user_id="u", permissions=[],
-            expires_at=time.time() - 1, revoked=True,
+            key="k",
+            user_id="u",
+            permissions=[],
+            expires_at=time.time() - 1,
+            revoked=True,
         )
         assert key.is_valid is False
 

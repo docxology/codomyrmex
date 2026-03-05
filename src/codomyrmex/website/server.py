@@ -31,11 +31,14 @@ logger = get_logger(__name__)
 # Configuration from environment variables
 _CORS_ORIGINS = os.getenv(
     "CODOMYRMEX_CORS_ORIGINS",
-    DEFAULT_CORS_ORIGINS + ",http://127.0.0.1:8787,http://localhost:8888,http://127.0.0.1:8888,http://localhost:8889,http://127.0.0.1:8889",
+    DEFAULT_CORS_ORIGINS
+    + ",http://127.0.0.1:8787,http://localhost:8888,http://127.0.0.1:8888,http://localhost:8889,http://127.0.0.1:8889",
 )
 
 # Allowed origins for CORS/CSRF validation
-_ALLOWED_ORIGINS = frozenset(origin.strip() for origin in _CORS_ORIGINS.split(",") if origin.strip())
+_ALLOWED_ORIGINS = frozenset(
+    origin.strip() for origin in _CORS_ORIGINS.split(",") if origin.strip()
+)
 
 
 class WebsiteServer(
@@ -54,7 +57,7 @@ class WebsiteServer(
     """
 
     # Class-level configuration to be set before starting the server
-    root_dir: Path = Path(".")
+    root_dir: Path = Path()
     data_provider: DataProvider | None = None
     _test_lock = threading.Lock()
     _test_running = False
@@ -80,11 +83,11 @@ class WebsiteServer(
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""
         self.send_response(204)
-        self.send_header('Access-Control-Allow-Origin', self._cors_origin())
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
-        self.send_header('Access-Control-Max-Age', '86400')
-        self.send_header('Vary', 'Origin')
+        self.send_header("Access-Control-Allow-Origin", self._cors_origin())
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Origin")
+        self.send_header("Access-Control-Max-Age", "86400")
+        self.send_header("Vary", "Origin")
         self.end_headers()
 
     def _validate_origin(self) -> bool:
@@ -179,13 +182,13 @@ class WebsiteServer(
     def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""
         self.send_response(status)
-        self.send_header('Content-type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', self._cors_origin())
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
-        self.send_header('Vary', 'Origin')
+        self.send_header("Content-type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", self._cors_origin())
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Origin")
+        self.send_header("Vary", "Origin")
         self.end_headers()
-        self.wfile.write(json.dumps(data).encode('utf-8'))
+        self.wfile.write(json.dumps(data).encode("utf-8"))
 
     def log_message(self, format: str, *args) -> None:
         """Override to suppress high-frequency access logs like /api/health."""

@@ -13,6 +13,7 @@ from codomyrmex.config_management.core.config_loader import (
 # Configuration dataclass tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfiguration:
     """Tests for the Configuration dataclass."""
@@ -128,6 +129,7 @@ class TestConfiguration:
 # ---------------------------------------------------------------------------
 # Configuration -- additional edge cases
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationAdditionalEdgeCases:

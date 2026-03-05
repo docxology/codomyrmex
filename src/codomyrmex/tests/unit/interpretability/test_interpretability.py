@@ -4,6 +4,7 @@ import pytest
 
 try:
     import numpy as np
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
@@ -17,6 +18,7 @@ try:
         analyze_features,
         train_sae,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -278,6 +280,7 @@ class TestInterpretabilityMCPTools:
     def test_sae_train_tool(self):
         """MCP sae_train returns success with loss metrics."""
         from codomyrmex.interpretability.mcp_tools import sae_train
+
         result = sae_train(d_input=8, d_features=16, n_samples=50, n_steps=5, seed=42)
         assert result["status"] == "success"
         assert result["d_input"] == 8
@@ -287,6 +290,7 @@ class TestInterpretabilityMCPTools:
     def test_sae_analyze_tool(self):
         """MCP sae_analyze returns feature analysis."""
         from codomyrmex.interpretability.mcp_tools import sae_analyze
+
         result = sae_analyze(d_input=8, d_features=16, n_samples=50, seed=42)
         assert result["status"] == "success"
         assert "top_features" in result

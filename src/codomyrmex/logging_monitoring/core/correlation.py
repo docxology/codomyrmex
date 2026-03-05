@@ -90,6 +90,7 @@ def with_correlation(cid: str | None = None) -> Generator[str, None, None]:
 
 # ── Logging Integration ──────────────────────────────────────────────
 
+
 class CorrelationFilter(logging.Filter):
     """Logging filter that injects ``correlation_id`` into log records.
 
@@ -104,11 +105,12 @@ class CorrelationFilter(logging.Filter):
 
     def filter(self, record: logging.LogRecord) -> bool:
         """Filter."""
-        record.correlation_id = get_correlation_id()  # noqa: E501
+        record.correlation_id = get_correlation_id()
         return True
 
 
 # ── Event Integration ────────────────────────────────────────────────
+
 
 def enrich_event_data(data: dict[str, Any]) -> dict[str, Any]:
     """Add the current correlation ID to an event data dict.
@@ -126,6 +128,7 @@ def enrich_event_data(data: dict[str, Any]) -> dict[str, Any]:
 
 
 # ── MCP Integration ──────────────────────────────────────────────────
+
 
 def create_mcp_correlation_header() -> dict[str, str]:
     """Generate MCP metadata headers with the current correlation ID.

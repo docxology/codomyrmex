@@ -232,9 +232,18 @@ class TestCacheStatsOutput:
     def test_to_dict_has_required_keys(self):
         s = CacheStats()
         d = s.to_dict()
-        for key in ("hits", "misses", "total_requests", "hit_rate",
-                    "size", "max_size", "usage_percent", "evictions",
-                    "writes", "deletes"):
+        for key in (
+            "hits",
+            "misses",
+            "total_requests",
+            "hit_rate",
+            "size",
+            "max_size",
+            "usage_percent",
+            "evictions",
+            "writes",
+            "deletes",
+        ):
             assert key in d
 
     def test_to_dict_values(self):

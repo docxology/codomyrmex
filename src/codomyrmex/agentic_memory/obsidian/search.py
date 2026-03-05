@@ -84,12 +84,14 @@ def search_vault(
                 break
 
         if score > 0:
-            results.append(SearchResult(
-                note=note,
-                score=score,
-                match_type=match_type,
-                context=context,
-            ))
+            results.append(
+                SearchResult(
+                    note=note,
+                    score=score,
+                    match_type=match_type,
+                    context=context,
+                )
+            )
 
     results.sort(key=lambda r: r.score, reverse=True)
     return results[:limit]
@@ -125,12 +127,14 @@ def search_regex(
             idx = match.start()
             start = max(0, idx - 40)
             end = min(len(note.content), match.end() + 40)
-            results.append(SearchResult(
-                note=note,
-                score=1.0,
-                match_type="content",
-                context=note.content[start:end].strip(),
-            ))
+            results.append(
+                SearchResult(
+                    note=note,
+                    score=1.0,
+                    match_type="content",
+                    context=note.content[start:end].strip(),
+                )
+            )
     return results[:limit]
 
 
@@ -156,10 +160,9 @@ def filter_by_tag(
                 if t.name == tag or t.name.startswith(tag + "/"):
                     results.append(note)
                     break
-            else:
-                if t.name == tag:
-                    results.append(note)
-                    break
+            elif t.name == tag:
+                results.append(note)
+                break
     return results
 
 
@@ -187,9 +190,8 @@ def filter_by_tags(
         if match_all:
             if all(t in note_tag_names for t in cleaned_tags):
                 results.append(note)
-        else:
-            if any(t in note_tag_names for t in cleaned_tags):
-                results.append(note)
+        elif any(t in note_tag_names for t in cleaned_tags):
+            results.append(note)
     return results
 
 
@@ -287,7 +289,6 @@ def find_notes_with_embeds(vault: Any, target: str | None = None) -> list[Note]:
         if target:
             if any(e.target == target for e in note.embeds):
                 results.append(note)
-        else:
-            if note.embeds:
-                results.append(note)
+        elif note.embeds:
+            results.append(note)
     return results

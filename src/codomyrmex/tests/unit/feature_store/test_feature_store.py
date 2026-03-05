@@ -24,7 +24,7 @@ class TestFeatureStoreImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        import codomyrmex.feature_store as feature_store
+        from codomyrmex import feature_store
 
         assert feature_store is not None
 

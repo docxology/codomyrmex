@@ -54,7 +54,9 @@ class PermissionRegistry:
             self._roles[role] = set()
         if permissions:
             self._roles[role].update(permissions)
-        logger.info("Registered role '%s' with %d permissions", role, len(self._roles[role]))
+        logger.info(
+            "Registered role '%s' with %d permissions", role, len(self._roles[role])
+        )
 
     def add_inheritance(self, child: str, parent: str) -> None:
         """Make child role inherit all permissions from parent role."""
@@ -169,17 +171,27 @@ class PermissionRegistry:
         # Check all assigned roles
         for role in roles:
             if self.has_permission(role, permission):
-                self._audit_log.append(PermissionCheck(
-                    user_id=user_id, role=role, permission=permission,
-                    granted=True, resource=resource,
-                ))
+                self._audit_log.append(
+                    PermissionCheck(
+                        user_id=user_id,
+                        role=role,
+                        permission=permission,
+                        granted=True,
+                        resource=resource,
+                    )
+                )
                 return True
 
         # Failed check
-        self._audit_log.append(PermissionCheck(
-            user_id=user_id, role=",".join(roles) if roles else "none",
-            permission=permission, granted=False, resource=resource,
-        ))
+        self._audit_log.append(
+            PermissionCheck(
+                user_id=user_id,
+                role=",".join(roles) if roles else "none",
+                permission=permission,
+                granted=False,
+                resource=resource,
+            )
+        )
         return False
 
     @property

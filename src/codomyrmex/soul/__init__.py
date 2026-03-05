@@ -29,11 +29,11 @@ from .agent import HAS_SOUL, SoulAgent
 from .exceptions import SoulError, SoulImportError, SoulMemoryError, SoulProviderError
 
 __all__ = [
-    "__version__",
     "HAS_SOUL",
     "SoulAgent",
     "SoulError",
     "SoulImportError",
     "SoulMemoryError",
     "SoulProviderError",
+    "__version__",
 ]

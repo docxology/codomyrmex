@@ -7,6 +7,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class Dataset:
     """Represents a collection of training/eval data."""
 
@@ -24,18 +25,20 @@ class Dataset:
 
     def to_jsonl(self, file_path: str):
         """Save dataset to a JSONL file."""
-        with open(file_path, 'w') as f:
-            for item in self.data:
-                f.write(json.dumps(item) + '\n')
+        with open(file_path, "w") as f:
+            f.writelines(json.dumps(item) + "\n" for item in self.data)
         logger.info(f"Dataset saved to {file_path}")
 
     def validate(self) -> bool:
         """Basic validation for LLM datasets."""
         for i, item in enumerate(self.data):
             if "messages" not in item and "prompt" not in item:
-                logger.error(f"Invalid format at index {i}: missing 'messages' or 'prompt'")
+                logger.error(
+                    f"Invalid format at index {i}: missing 'messages' or 'prompt'"
+                )
                 return False
         return True
+
 
 class DatasetSanitizer:
     """Utilities for sanitizing datasets (removing PII, etc.)."""
@@ -50,7 +53,9 @@ class DatasetSanitizer:
         return Dataset(new_data)
 
     @staticmethod
-    def filter_by_length(dataset: Dataset, min_len: int = 0, max_len: int = 100000) -> Dataset:
+    def filter_by_length(
+        dataset: Dataset, min_len: int = 0, max_len: int = 100000
+    ) -> Dataset:
         """Filter items by content length."""
         new_data = []
         for item in dataset.data:

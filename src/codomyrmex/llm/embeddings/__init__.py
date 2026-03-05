@@ -20,6 +20,7 @@ from typing import Any, Optional, Union
 
 class EmbeddingModel(Enum):
     """Available embedding models."""
+
     OPENAI_ADA_002 = "text-embedding-ada-002"
     OPENAI_3_SMALL = "text-embedding-3-small"
     OPENAI_3_LARGE = "text-embedding-3-large"
@@ -40,9 +41,11 @@ class EmbeddingModel(Enum):
         }
         return dims.get(self.value, 1536)
 
+
 @dataclass
 class Embedding:
     """A text embedding with metadata."""
+
     vector: list[float]
     text: str
     model: str
@@ -90,13 +93,17 @@ class Embedding:
             vector=data["vector"],
             text=data["text"],
             model=data["model"],
-            created_at=datetime.fromisoformat(data.get("created_at", datetime.now().isoformat())),
+            created_at=datetime.fromisoformat(
+                data.get("created_at", datetime.now().isoformat())
+            ),
             metadata=data.get("metadata", {}),
         )
+
 
 @dataclass
 class SimilarityResult:
     """Result of a similarity search."""
+
     embedding: Embedding
     score: float
     rank: int = 0
@@ -106,24 +113,23 @@ class SimilarityResult:
         """Text."""
         return self.embedding.text
 
+
 class EmbeddingProvider(ABC):
     """Base class for embedding providers."""
 
     @abstractmethod
     def embed(self, text: str) -> Embedding:
         """Generate embedding for single text."""
-        pass
 
     @abstractmethod
     def embed_batch(self, texts: list[str]) -> list[Embedding]:
         """Generate embeddings for multiple texts."""
-        pass
 
     @property
     @abstractmethod
     def model_name(self) -> str:
         """Get model name."""
-        pass
+
 
 class TestEmbeddingProvider(EmbeddingProvider):
     """
@@ -170,6 +176,7 @@ class TestEmbeddingProvider(EmbeddingProvider):
     def embed_batch(self, texts: list[str]) -> list[Embedding]:
         """Generate mock embeddings for batch."""
         return [self.embed(text) for text in texts]
+
 
 class EmbeddingCache:
     """
@@ -232,6 +239,7 @@ class EmbeddingCache:
         """Get number of cached embeddings."""
         return len(self._cache)
 
+
 def cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
     """
     Compute cosine similarity between two vectors.
@@ -250,6 +258,7 @@ def cosine_similarity(vec1: list[float], vec2: list[float]) -> float:
 
     return dot_product / (magnitude1 * magnitude2)
 
+
 def euclidean_distance(vec1: list[float], vec2: list[float]) -> float:
     """
     Compute Euclidean distance between two vectors.
@@ -261,12 +270,14 @@ def euclidean_distance(vec1: list[float], vec2: list[float]) -> float:
 
     return math.sqrt(sum((a - b) ** 2 for a, b in zip(vec1, vec2, strict=False)))
 
+
 def dot_product(vec1: list[float], vec2: list[float]) -> float:
     """Compute dot product of two vectors."""
     if len(vec1) != len(vec2):
         raise ValueError(f"Dimension mismatch: {len(vec1)} vs {len(vec2)}")
 
     return sum(a * b for a, b in zip(vec1, vec2, strict=False))
+
 
 class EmbeddingIndex:
     """
@@ -355,6 +366,7 @@ class EmbeddingIndex:
     def count(self) -> int:
         """Get number of indexed embeddings."""
         return len(self._embeddings)
+
 
 class EmbeddingService:
     """
@@ -455,7 +467,7 @@ class EmbeddingService:
 
         # Batch process uncached
         for batch_start in range(0, len(uncached), self.batch_size):
-            batch = uncached[batch_start:batch_start + self.batch_size]
+            batch = uncached[batch_start : batch_start + self.batch_size]
             batch_texts = [text for _, text in batch]
 
             self._stats["api_calls"] += 1
@@ -480,6 +492,7 @@ class EmbeddingService:
         if self._stats["total_requests"] == 0:
             return 0.0
         return self._stats["cache_hits"] / self._stats["total_requests"]
+
 
 def chunk_text(
     text: str,
@@ -521,6 +534,7 @@ def chunk_text(
         start = end - overlap
 
     return chunks
+
 
 __all__ = [
     # Enums

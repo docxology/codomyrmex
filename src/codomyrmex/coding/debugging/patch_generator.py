@@ -43,9 +43,10 @@ class Patch:
         ...     file_path="script.py",
         ...     diff="--- a/script.py\\n+++ b/script.py\\n@@ -1 +1 @@\\n-x = undefined\\n+x = 0",
         ...     description="Initialize variable x with default value",
-        ...     confidence=0.85
+        ...     confidence=0.85,
         ... )
     """
+
     file_path: str
     diff: str  # Unified diff format
     description: str
@@ -98,18 +99,20 @@ class PatchGenerator:
             ...     error_type="NameError",
             ...     message="name 'foo' is not defined",
             ...     line_number=10,
-            ...     file_path="script.py"
+            ...     file_path="script.py",
             ... )
             >>> patches = generator.generate(source_code, diagnosis)
         """
         if not diagnosis.file_path:
-             logger.warning("No file path in diagnosis, cannot generate specific patch.")
-             return []
+            logger.warning("No file path in diagnosis, cannot generate specific patch.")
+            return []
 
         prompt = self._construct_prompt(source_code, diagnosis)
 
         if not self.llm_client:
-            logger.warning("No LLM client configured for PatchGenerator — returning empty patch list.")
+            logger.warning(
+                "No LLM client configured for PatchGenerator — returning empty patch list."
+            )
             return []
 
         try:
@@ -120,13 +123,19 @@ class PatchGenerator:
 
             # Extract unified diff from the response
             patches = self._parse_patches(raw_text, diagnosis)
-            logger.info("Generated %d candidate patch(es) for %s", len(patches), diagnosis.file_path)
+            logger.info(
+                "Generated %d candidate patch(es) for %s",
+                len(patches),
+                diagnosis.file_path,
+            )
             return patches
         except Exception as e:
             logger.error(f"Failed to generate patch: {e}")
             return []
 
-    def _parse_patches(self, llm_response: str, diagnosis: ErrorDiagnosis) -> list[Patch]:
+    def _parse_patches(
+        self, llm_response: str, diagnosis: ErrorDiagnosis
+    ) -> list[Patch]:
         """Parse LLM response text into structured Patch objects."""
         import re
 
@@ -134,32 +143,41 @@ class PatchGenerator:
 
         # Look for unified diff blocks (```diff ... ``` or raw --- / +++ lines)
         diff_pattern = re.compile(
-            r'```(?:diff)?\s*\n(---.*?)\n```',
+            r"```(?:diff)?\s*\n(---.*?)\n```",
             re.DOTALL,
         )
         matches = diff_pattern.findall(llm_response)
 
         if not matches:
             # Try bare diff (lines starting with --- followed by +++)
-            bare_diff = re.compile(r'(---\s+\S+.*?\n\+\+\+\s+\S+.*?\n(?:@@.*?\n(?:[+ \-].*?\n)*))', re.DOTALL)
+            bare_diff = re.compile(
+                r"(---\s+\S+.*?\n\+\+\+\s+\S+.*?\n(?:@@.*?\n(?:[+ \-].*?\n)*))",
+                re.DOTALL,
+            )
             matches = bare_diff.findall(llm_response)
 
         for i, diff_text in enumerate(matches):
-            patches.append(Patch(
-                file_path=diagnosis.file_path or "",
-                diff=diff_text.strip(),
-                description=f"LLM-generated fix for {diagnosis.error_type}: {diagnosis.message}",
-                confidence=max(0.5, 0.9 - i * 0.1),  # First patch highest confidence
-            ))
+            patches.append(
+                Patch(
+                    file_path=diagnosis.file_path or "",
+                    diff=diff_text.strip(),
+                    description=f"LLM-generated fix for {diagnosis.error_type}: {diagnosis.message}",
+                    confidence=max(
+                        0.5, 0.9 - i * 0.1
+                    ),  # First patch highest confidence
+                )
+            )
 
         # If no diff was found but we got a text response, create a descriptive patch
         if not patches and llm_response.strip():
-            patches.append(Patch(
-                file_path=diagnosis.file_path or "",
-                diff=f"# LLM suggestion (manual application required):\n# {llm_response[:500]}",
-                description=f"Suggestion for {diagnosis.error_type}",
-                confidence=0.3,
-            ))
+            patches.append(
+                Patch(
+                    file_path=diagnosis.file_path or "",
+                    diff=f"# LLM suggestion (manual application required):\n# {llm_response[:500]}",
+                    description=f"Suggestion for {diagnosis.error_type}",
+                    confidence=0.3,
+                )
+            )
 
         return patches
 

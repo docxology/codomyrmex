@@ -119,8 +119,8 @@ class TestPedersenCommitment:
     # For Pedersen we need two generators g, h where log_g(h) is unknown.
     # For testing, any two distinct generators work since we are verifying
     # the math, not the security assumption.
-    P_G = SMALL_GEN   # g = 5
-    P_H = 4           # h = 4 (another element in Z*_23)
+    P_G = SMALL_GEN  # g = 5
+    P_H = 4  # h = 4 (another element in Z*_23)
     P_P = SMALL_PRIME  # p = 23
 
     def test_commit_verify_roundtrip(self) -> None:
@@ -149,14 +149,18 @@ class TestPedersenCommitment:
         value = 10
         randomness = 13
         c = pedersen_commit(value, randomness, self.P_G, self.P_H, self.P_P)
-        assert not pedersen_verify(c, value + 1, randomness, self.P_G, self.P_H, self.P_P)
+        assert not pedersen_verify(
+            c, value + 1, randomness, self.P_G, self.P_H, self.P_P
+        )
 
     def test_wrong_randomness_fails(self) -> None:
         """Verification with the wrong randomness must fail."""
         value = 10
         randomness = 13
         c = pedersen_commit(value, randomness, self.P_G, self.P_H, self.P_P)
-        assert not pedersen_verify(c, value, randomness + 1, self.P_G, self.P_H, self.P_P)
+        assert not pedersen_verify(
+            c, value, randomness + 1, self.P_G, self.P_H, self.P_P
+        )
 
     def test_medium_prime(self) -> None:
         """Pedersen commitment with a larger prime."""

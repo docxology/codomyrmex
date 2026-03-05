@@ -27,25 +27,31 @@ class TestOrchestratorLogging:
         test_script.write_text("print('Hello, World!')")
 
         # Capture logs
-        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.execution.runner"):
+        with caplog.at_level(
+            logging.INFO, logger="codomyrmex.orchestrator.execution.runner"
+        ):
             run_script(test_script, timeout=10)
 
         # Verify SCRIPT_START event by checking log messages
-        start_logs = [r for r in caplog.records if "Script execution started" in r.message]
+        start_logs = [
+            r for r in caplog.records if "Script execution started" in r.message
+        ]
         assert len(start_logs) >= 1, "Should log SCRIPT_START event"
         start_record = start_logs[0]
         assert "test_script.py" in start_record.message
         # Extra fields are stored as direct attributes on the record
-        assert hasattr(start_record, 'event') and start_record.event == "SCRIPT_START"
+        assert hasattr(start_record, "event") and start_record.event == "SCRIPT_START"
 
         # Verify SCRIPT_END event
-        end_logs = [r for r in caplog.records if "Script execution completed" in r.message]
+        end_logs = [
+            r for r in caplog.records if "Script execution completed" in r.message
+        ]
         assert len(end_logs) >= 1, "Should log SCRIPT_END event"
         end_record = end_logs[0]
-        assert hasattr(end_record, 'event') and end_record.event == "SCRIPT_END"
-        assert hasattr(end_record, 'status') and end_record.status == "passed"
-        assert hasattr(end_record, 'exit_code') and end_record.exit_code == 0
-        assert hasattr(end_record, 'execution_time')
+        assert hasattr(end_record, "event") and end_record.event == "SCRIPT_END"
+        assert hasattr(end_record, "status") and end_record.status == "passed"
+        assert hasattr(end_record, "exit_code") and end_record.exit_code == 0
+        assert hasattr(end_record, "execution_time")
 
     def test_run_script_logs_failure(self, tmp_path, caplog):
         """Test that run_script logs failure status correctly."""
@@ -53,15 +59,19 @@ class TestOrchestratorLogging:
         test_script = tmp_path / "failing_script.py"
         test_script.write_text("import sys; sys.exit(1)")
 
-        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.execution.runner"):
+        with caplog.at_level(
+            logging.INFO, logger="codomyrmex.orchestrator.execution.runner"
+        ):
             run_script(test_script, timeout=10)
 
         # Verify SCRIPT_END event shows failure
-        end_logs = [r for r in caplog.records if "Script execution completed" in r.message]
+        end_logs = [
+            r for r in caplog.records if "Script execution completed" in r.message
+        ]
         assert len(end_logs) >= 1
         end_record = end_logs[0]
-        assert hasattr(end_record, 'status') and end_record.status == "failed"
-        assert hasattr(end_record, 'exit_code') and end_record.exit_code == 1
+        assert hasattr(end_record, "status") and end_record.status == "failed"
+        assert hasattr(end_record, "exit_code") and end_record.exit_code == 1
 
     def test_generate_report_logs_summary(self, tmp_path, caplog):
         """Test that generate_report logs RUN_SUMMARY event."""
@@ -88,18 +98,30 @@ class TestOrchestratorLogging:
             },
         ]
 
-        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.observability.reporting"):
+        with caplog.at_level(
+            logging.INFO, logger="codomyrmex.orchestrator.observability.reporting"
+        ):
             generate_report(results, tmp_path, "test_run_123")
 
         # Verify RUN_SUMMARY event
-        summary_logs = [r for r in caplog.records if "Run summary generated" in r.message]
+        summary_logs = [
+            r for r in caplog.records if "Run summary generated" in r.message
+        ]
         assert len(summary_logs) >= 1, "Should log RUN_SUMMARY event"
         summary_record = summary_logs[0]
-        assert hasattr(summary_record, 'event') and summary_record.event == "RUN_SUMMARY"
-        assert hasattr(summary_record, 'run_id') and summary_record.run_id == "test_run_123"
-        assert hasattr(summary_record, 'total_scripts') and summary_record.total_scripts == 2
-        assert hasattr(summary_record, 'passed') and summary_record.passed == 1
-        assert hasattr(summary_record, 'failed') and summary_record.failed == 1
+        assert (
+            hasattr(summary_record, "event") and summary_record.event == "RUN_SUMMARY"
+        )
+        assert (
+            hasattr(summary_record, "run_id")
+            and summary_record.run_id == "test_run_123"
+        )
+        assert (
+            hasattr(summary_record, "total_scripts")
+            and summary_record.total_scripts == 2
+        )
+        assert hasattr(summary_record, "passed") and summary_record.passed == 1
+        assert hasattr(summary_record, "failed") and summary_record.failed == 1
 
     def test_log_context_correlation_id(self):
         """Test that LogContext properly sets correlation ID."""
@@ -135,4 +157,3 @@ class TestQuietReconfigMode:
                 os.environ.pop("CODOMYRMEX_LOG_QUIET_RECONFIG", None)
             else:
                 os.environ["CODOMYRMEX_LOG_QUIET_RECONFIG"] = original_env
-

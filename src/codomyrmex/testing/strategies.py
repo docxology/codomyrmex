@@ -16,7 +16,6 @@ class GeneratorStrategy(ABC):
     @abstractmethod
     def generate(self) -> Any:
         """Generate."""
-        pass
 
 
 class IntGenerator(GeneratorStrategy):
@@ -59,7 +58,7 @@ class StringGenerator(GeneratorStrategy):
     def generate(self) -> str:
         """Generate."""
         length = random.randint(self.min_length, self.max_length)
-        return ''.join(random.choice(self.charset) for _ in range(length))
+        return "".join(random.choice(self.charset) for _ in range(length))
 
 
 class ListGenerator(GeneratorStrategy):

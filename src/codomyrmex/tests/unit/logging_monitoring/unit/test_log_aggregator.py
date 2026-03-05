@@ -19,7 +19,9 @@ from codomyrmex.logging_monitoring.core.log_aggregator import (
 
 
 def _rec(level="info", message="msg", module="app", cid="", **fields):
-    return LogRecord(level=level, message=message, module=module, correlation_id=cid, fields=fields)
+    return LogRecord(
+        level=level, message=message, module=module, correlation_id=cid, fields=fields
+    )
 
 
 # ── LogRecord ──────────────────────────────────────────────────────────────
@@ -35,7 +37,9 @@ class TestLogRecord:
         assert r.timestamp > 0
 
     def test_explicit_fields(self):
-        r = LogRecord(level="error", message="boom", module="db", correlation_id="cid-1")
+        r = LogRecord(
+            level="error", message="boom", module="db", correlation_id="cid-1"
+        )
         assert r.level == "error"
         assert r.module == "db"
         assert r.correlation_id == "cid-1"
@@ -245,7 +249,9 @@ class TestLogAggregatorStats:
 
     def test_stats_top_modules_sorted(self):
         agg = LogAggregator()
-        agg.add_many([_rec(module="a")] * 3 + [_rec(module="b")] * 5 + [_rec(module="c")] * 1)
+        agg.add_many(
+            [_rec(module="a")] * 3 + [_rec(module="b")] * 5 + [_rec(module="c")] * 1
+        )
         stats = agg.stats()
         # Top module should be "b" with count 5
         assert stats.top_modules[0] == ("b", 5)

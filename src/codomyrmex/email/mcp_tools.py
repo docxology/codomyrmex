@@ -19,10 +19,9 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def _get_provider(inbox_id: str | None = None):
     """Instantiate AgentMailProvider using environment credentials."""
     from .agentmail import AGENTMAIL_AVAILABLE, AgentMailProvider
+
     if not AGENTMAIL_AVAILABLE:
-        raise ImportError(
-            "agentmail SDK is not installed. Run: uv sync --extra email"
-        )
+        raise ImportError("agentmail SDK is not installed. Run: uv sync --extra email")
     return AgentMailProvider(default_inbox_id=inbox_id)
 
 
@@ -33,6 +32,7 @@ def _get_gmail_provider():
     from the environment (or falls back to Application Default Credentials).
     """
     from .gmail.provider import GMAIL_AVAILABLE, GmailProvider
+
     if not GMAIL_AVAILABLE:
         raise ImportError(
             "Gmail dependencies are not installed. Run: uv sync --extra email"
@@ -70,6 +70,7 @@ def agentmail_send_message(
     """
     try:
         from .generics import EmailDraft
+
         provider = _get_provider(inbox_id)
         draft = EmailDraft(
             subject=subject,
@@ -355,6 +356,7 @@ def gmail_send_message(
     """
     try:
         from .generics import EmailDraft
+
         provider = _get_gmail_provider()
         draft = EmailDraft(
             subject=subject,
@@ -495,6 +497,7 @@ def gmail_create_draft(
     """
     try:
         from .generics import EmailDraft
+
         provider = _get_gmail_provider()
         draft = EmailDraft(
             subject=subject,
@@ -535,7 +538,9 @@ def agentmail_create_webhook(
     """
     try:
         provider = _get_provider()
-        webhook = provider.create_webhook(url=url, event_types=event_types, inbox_ids=inbox_ids)
+        webhook = provider.create_webhook(
+            url=url, event_types=event_types, inbox_ids=inbox_ids
+        )
         return {
             "status": "success",
             "webhook_id": webhook.webhook_id,

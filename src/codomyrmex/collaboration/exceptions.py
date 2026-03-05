@@ -30,7 +30,9 @@ class AgentBusyError(CollaborationError):
         message = f"Agent {agent_id} is busy"
         if current_task_id:
             message += f" with task {current_task_id}"
-        super().__init__(message, {"agent_id": agent_id, "current_task_id": current_task_id})
+        super().__init__(
+            message, {"agent_id": agent_id, "current_task_id": current_task_id}
+        )
         self.agent_id = agent_id
         self.current_task_id = current_task_id
 
@@ -40,7 +42,9 @@ class TaskExecutionError(CollaborationError):
 
     def __init__(self, task_id: str, reason: str, agent_id: str = None):
         message = f"Task {task_id} execution failed: {reason}"
-        super().__init__(message, {"task_id": task_id, "reason": reason, "agent_id": agent_id})
+        super().__init__(
+            message, {"task_id": task_id, "reason": reason, "agent_id": agent_id}
+        )
         self.task_id = task_id
         self.reason = reason
         self.agent_id = agent_id
@@ -60,7 +64,9 @@ class TaskDependencyError(CollaborationError):
 
     def __init__(self, task_id: str, missing_dependencies: list):
         message = f"Task {task_id} has unmet dependencies: {missing_dependencies}"
-        super().__init__(message, {"task_id": task_id, "missing_dependencies": missing_dependencies})
+        super().__init__(
+            message, {"task_id": task_id, "missing_dependencies": missing_dependencies}
+        )
         self.task_id = task_id
         self.missing_dependencies = missing_dependencies
 
@@ -88,12 +94,15 @@ class MessageDeliveryError(CollaborationError):
     def __init__(self, message_id: str, sender_id: str, receiver_id: str, reason: str):
         """Initialize error with message routing details."""
         message = f"Failed to deliver message {message_id} from {sender_id} to {receiver_id}: {reason}"
-        super().__init__(message, {
-            "message_id": message_id,
-            "sender_id": sender_id,
-            "receiver_id": receiver_id,
-            "reason": reason,
-        })
+        super().__init__(
+            message,
+            {
+                "message_id": message_id,
+                "sender_id": sender_id,
+                "receiver_id": receiver_id,
+                "reason": reason,
+            },
+        )
         self.message_id = message_id
         self.sender_id = sender_id
         self.receiver_id = receiver_id
@@ -125,28 +134,33 @@ class LeaderElectionError(CollaborationError):
 class CapabilityMismatchError(CollaborationError):
     """Raised when no agent has the required capabilities."""
 
-    def __init__(self, required_capabilities: list, available_capabilities: list = None):
+    def __init__(
+        self, required_capabilities: list, available_capabilities: list = None
+    ):
         """Initialize error with required capabilities."""
         message = f"No agent has required capabilities: {required_capabilities}"
-        super().__init__(message, {
-            "required_capabilities": required_capabilities,
-            "available_capabilities": available_capabilities or [],
-        })
+        super().__init__(
+            message,
+            {
+                "required_capabilities": required_capabilities,
+                "available_capabilities": available_capabilities or [],
+            },
+        )
         self.required_capabilities = required_capabilities
         self.available_capabilities = available_capabilities or []
 
 
 __all__ = [
-    "CollaborationError",
-    "AgentNotFoundError",
     "AgentBusyError",
-    "TaskExecutionError",
-    "TaskNotFoundError",
-    "TaskDependencyError",
-    "ConsensusError",
+    "AgentNotFoundError",
+    "CapabilityMismatchError",
     "ChannelError",
-    "MessageDeliveryError",
+    "CollaborationError",
+    "ConsensusError",
     "CoordinationError",
     "LeaderElectionError",
-    "CapabilityMismatchError",
+    "MessageDeliveryError",
+    "TaskDependencyError",
+    "TaskExecutionError",
+    "TaskNotFoundError",
 ]

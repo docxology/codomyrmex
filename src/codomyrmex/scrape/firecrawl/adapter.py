@@ -79,13 +79,15 @@ class FirecrawlAdapter(BaseScraper):
             ```
         """
         options = options or ScrapeOptions()
-        formats = [f.value if isinstance(f, ScrapeFormat) else f for f in options.formats]
+        formats = [
+            f.value if isinstance(f, ScrapeFormat) else f for f in options.formats
+        ]
 
         try:
             firecrawl_result = self.client.scrape_url(
                 url,
                 formats=formats,
-                actions=options.actions if options.actions else None,
+                actions=options.actions or None,
                 wait_for=options.wait_for,
             )
 
@@ -130,7 +132,7 @@ class FirecrawlAdapter(BaseScraper):
             firecrawl_result = self.client.crawl_url(
                 url,
                 limit=options.limit,
-                scrape_options=scrape_options if scrape_options else None,
+                scrape_options=scrape_options or None,
             )
 
             # Convert Firecrawl result to CrawlResult
@@ -173,9 +175,7 @@ class FirecrawlAdapter(BaseScraper):
             logger.error(f"Error in FirecrawlAdapter.map: {e}")
             raise ScrapeError(f"Failed to map {url}: {e}") from e
 
-    def search(
-        self, query: str, options: ScrapeOptions | None = None
-    ) -> SearchResult:
+    def search(self, query: str, options: ScrapeOptions | None = None) -> SearchResult:
         """Search the web and optionally scrape results using Firecrawl.
 
         Args:
@@ -207,7 +207,7 @@ class FirecrawlAdapter(BaseScraper):
             firecrawl_result = self.client.search_web(
                 query,
                 limit=options.limit,
-                scrape_options=scrape_options if scrape_options else None,
+                scrape_options=scrape_options or None,
             )
 
             # Convert Firecrawl result to SearchResult
@@ -238,20 +238,17 @@ class FirecrawlAdapter(BaseScraper):
         Example:
             ```python
             adapter = FirecrawlAdapter(config)
-            schema = {
-                "type": "object",
-                "properties": {"title": {"type": "string"}}
-            }
+            schema = {"type": "object", "properties": {"title": {"type": "string"}}}
             result = adapter.extract(
-                ["https://example.com"],
-                schema=schema,
-                prompt="Extract the page title"
+                ["https://example.com"], schema=schema, prompt="Extract the page title"
             )
             print(result.data)
             ```
         """
         try:
-            firecrawl_result = self.client.extract_data(urls, schema=schema, prompt=prompt)
+            firecrawl_result = self.client.extract_data(
+                urls, schema=schema, prompt=prompt
+            )
 
             # Convert Firecrawl result to ExtractResult
             result = self._convert_extract_result(firecrawl_result, urls)
@@ -262,7 +259,9 @@ class FirecrawlAdapter(BaseScraper):
             logger.error(f"Error in FirecrawlAdapter.extract: {e}")
             raise ScrapeError(f"Failed to extract data: {e}") from e
 
-    def _convert_scrape_result(self, firecrawl_data: dict[str, Any], url: str) -> ScrapeResult:
+    def _convert_scrape_result(
+        self, firecrawl_data: dict[str, Any], url: str
+    ) -> ScrapeResult:
         """Convert Firecrawl scrape result to ScrapeResult.
 
         Args:
@@ -287,7 +286,11 @@ class FirecrawlAdapter(BaseScraper):
 
             metadata = {}
             if hasattr(firecrawl_data, "metadata"):
-                metadata = firecrawl_data.metadata if isinstance(firecrawl_data.metadata, dict) else {}
+                metadata = (
+                    firecrawl_data.metadata
+                    if isinstance(firecrawl_data.metadata, dict)
+                    else {}
+                )
         elif isinstance(firecrawl_data, dict):
             # Dict response - handle both nested (data.markdown) and flat (markdown) structures
             data = firecrawl_data.get("data", firecrawl_data)
@@ -320,7 +323,9 @@ class FirecrawlAdapter(BaseScraper):
             success=True,
         )
 
-    def _convert_crawl_result(self, firecrawl_data: dict[str, Any], url: str) -> CrawlResult:
+    def _convert_crawl_result(
+        self, firecrawl_data: dict[str, Any], url: str
+    ) -> CrawlResult:
         """Convert Firecrawl crawl result to CrawlResult.
 
         Args:
@@ -357,15 +362,14 @@ class FirecrawlAdapter(BaseScraper):
                 credits_used=credits_used,
                 expires_at=expires_at,
             )
-        else:
-            # Fallback for unexpected format
-            return CrawlResult(
-                job_id="unknown",
-                status="unknown",
-                total=0,
-                completed=0,
-                results=[],
-            )
+        # Fallback for unexpected format
+        return CrawlResult(
+            job_id="unknown",
+            status="unknown",
+            total=0,
+            completed=0,
+            results=[],
+        )
 
     def _convert_map_result(self, firecrawl_data: dict[str, Any]) -> MapResult:
         """Convert Firecrawl map result to MapResult.
@@ -379,10 +383,11 @@ class FirecrawlAdapter(BaseScraper):
         if isinstance(firecrawl_data, dict):
             links = firecrawl_data.get("links", [])
             return MapResult(links=links, total=len(links))
-        else:
-            return MapResult(links=[], total=0)
+        return MapResult(links=[], total=0)
 
-    def _convert_search_result(self, firecrawl_data: dict[str, Any], query: str) -> SearchResult:
+    def _convert_search_result(
+        self, firecrawl_data: dict[str, Any], query: str
+    ) -> SearchResult:
         """Convert Firecrawl search result to SearchResult.
 
         Args:
@@ -402,8 +407,7 @@ class FirecrawlAdapter(BaseScraper):
                     results.append(scrape_result)
 
             return SearchResult(query=query, results=results, total=len(results))
-        else:
-            return SearchResult(query=query, results=[], total=0)
+        return SearchResult(query=query, results=[], total=0)
 
     def _convert_extract_result(
         self, firecrawl_data: dict[str, Any], urls: list[str]
@@ -428,11 +432,9 @@ class FirecrawlAdapter(BaseScraper):
                 data=data if isinstance(data, dict) else {},
                 urls=urls,
             )
-        else:
-            return ExtractResult(
-                job_id=None,
-                status="completed",
-                data={},
-                urls=urls,
-            )
-
+        return ExtractResult(
+            job_id=None,
+            status="completed",
+            data={},
+            urls=urls,
+        )

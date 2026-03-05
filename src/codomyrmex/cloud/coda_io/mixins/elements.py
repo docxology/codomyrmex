@@ -12,6 +12,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class ElementsMixin:
     """ElementsMixin class."""
 
@@ -141,4 +142,3 @@ class ElementsMixin:
         """
         path = f"/docs/{self._encode_id(doc_id)}/hooks/automation/{self._encode_id(rule_id)}"
         return self._post(path, json_data=payload or {})
-

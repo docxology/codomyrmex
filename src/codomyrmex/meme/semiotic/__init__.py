@@ -11,11 +11,11 @@ from codomyrmex.meme.semiotic.models import (
 )
 
 __all__ = [
-    "Sign",
-    "SignType",
     "DriftReport",
+    "MnemonicDevice",
     "SemanticTerritory",
     "SemioticAnalyzer",
     "SemioticEncoder",
-    "MnemonicDevice",
+    "Sign",
+    "SignType",
 ]

@@ -53,12 +53,14 @@ def deserialize_data(data: str, format: str = "json") -> dict[str, Any] | list[A
         raw: bytes = data.encode("utf-8")
         if fmt == SerializationFormat.PICKLE:
             import base64
+
             raw = base64.b64decode(raw)
         return cast("dict[str, Any] | list[Any]", deserialize(raw, fmt))
     except Exception as e:
         # Fallback to pure bytes if decoding fails but we have other binary formats
         try:
             import base64
+
             raw = base64.b64decode(data.encode("utf-8"))
             return cast("dict[str, Any] | list[Any]", deserialize(raw, fmt))
         except Exception:

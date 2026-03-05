@@ -3,9 +3,11 @@
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
+
     def monitor_performance(name):
         def decorator(func):
             return func
+
         return decorator
 
 
@@ -17,6 +19,7 @@ from codomyrmex.logging_monitoring import get_logger
 from .config import DEFAULT_LLM_PROVIDER, get_llm_client
 
 logger = get_logger(__name__)
+
 
 @monitor_performance("ai_code_analysis")
 def analyze_code_quality(
@@ -101,9 +104,7 @@ def analyze_code_quality(
         elif provider == "ollama":
             # Use Ollama integration
             result = client.run_model(
-                model_name=model,
-                prompt=prompt,
-                save_output=False
+                model_name=model, prompt=prompt, save_output=False
             )
             analysis = result.response
             tokens_used = result.tokens_used
@@ -140,6 +141,7 @@ def analyze_code_quality(
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error analyzing code: {e}", exc_info=True)
         raise RuntimeError(f"Code analysis failed: {e}") from None
+
 
 @monitor_performance("ai_code_comparison")
 def compare_code_versions(
@@ -200,7 +202,7 @@ Please analyze:
 5. Best practices adherence
 6. Overall recommendation
 
-{context if context else ""}"""
+{context or ""}"""
 
         # Generate comparison based on provider
         if provider == "openai":
@@ -230,9 +232,7 @@ Please analyze:
         elif provider == "ollama":
             # Use Ollama integration
             result = client.run_model(
-                model_name=model,
-                prompt=prompt,
-                save_output=False
+                model_name=model, prompt=prompt, save_output=False
             )
             comparison = result.response
             tokens_used = result.tokens_used
@@ -269,4 +269,3 @@ Please analyze:
         # Final fallback for unexpected API errors or network issues
         logger.error(f"Unexpected error comparing code versions: {e}", exc_info=True)
         raise RuntimeError(f"Code comparison failed: {e}") from None
-

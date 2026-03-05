@@ -11,9 +11,9 @@ __all__ = [
     "ROS2Bridge",
     "Transform3D",
     "Vec3",
+    "actuators",
     "ros",
     "sensors",
-    "actuators",
     "transformation",
 ]
 

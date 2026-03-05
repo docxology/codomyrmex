@@ -207,13 +207,13 @@ class RegexScorer(Scorer):
 
         if self._full_match:
             return 1.0 if pattern.fullmatch(output) else 0.0
-        else:
-            return 1.0 if pattern.search(output) else 0.0
+        return 1.0 if pattern.search(output) else 0.0
 
 
 @dataclass
 class WeightedScorer:
     """A scorer paired with a weight for use in CompositeScorer."""
+
     scorer: Scorer
     weight: float = 1.0
 
@@ -264,14 +264,11 @@ class CompositeScorer(Scorer):
             return 0.0
 
         weighted_sum = sum(
-            ws.scorer.score(output, reference) * ws.weight
-            for ws in self._scorers
+            ws.scorer.score(output, reference) * ws.weight for ws in self._scorers
         )
         return round(weighted_sum / total_weight, 6)
 
-    def score_detailed(
-        self, output: str, reference: str
-    ) -> dict[str, Any]:
+    def score_detailed(self, output: str, reference: str) -> dict[str, Any]:
         """Score with detailed per-scorer breakdown.
 
         Args:
@@ -291,16 +288,18 @@ class CompositeScorer(Scorer):
         for ws in self._scorers:
             individual_score = ws.scorer.score(output, reference)
             weighted_sum += individual_score * ws.weight
-            details.append({
-                "name": ws.scorer.name,
-                "score": individual_score,
-                "weight": ws.weight,
-                "weighted_score": round(
-                    individual_score * ws.weight / total_weight, 6
-                )
-                if total_weight > 0
-                else 0.0,
-            })
+            details.append(
+                {
+                    "name": ws.scorer.name,
+                    "score": individual_score,
+                    "weight": ws.weight,
+                    "weighted_score": round(
+                        individual_score * ws.weight / total_weight, 6
+                    )
+                    if total_weight > 0
+                    else 0.0,
+                }
+            )
 
         overall = round(weighted_sum / total_weight, 6) if total_weight > 0 else 0.0
 
@@ -320,20 +319,22 @@ def create_default_scorer() -> CompositeScorer:
         - ContainsScorer (weight 1.0)
         - LengthScorer (weight 0.5)
     """
-    return CompositeScorer([
-        WeightedScorer(ExactMatchScorer(case_sensitive=False), weight=2.0),
-        WeightedScorer(ContainsScorer(), weight=1.0),
-        WeightedScorer(LengthScorer(min_length=1, max_length=1000), weight=0.5),
-    ])
+    return CompositeScorer(
+        [
+            WeightedScorer(ExactMatchScorer(case_sensitive=False), weight=2.0),
+            WeightedScorer(ContainsScorer(), weight=1.0),
+            WeightedScorer(LengthScorer(min_length=1, max_length=1000), weight=0.5),
+        ]
+    )
 
 
 __all__ = [
-    "Scorer",
-    "ExactMatchScorer",
+    "CompositeScorer",
     "ContainsScorer",
+    "ExactMatchScorer",
     "LengthScorer",
     "RegexScorer",
-    "CompositeScorer",
+    "Scorer",
     "WeightedScorer",
     "create_default_scorer",
 ]

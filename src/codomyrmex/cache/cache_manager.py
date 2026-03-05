@@ -34,7 +34,9 @@ class CacheManager:
 
     SUPPORTED_BACKENDS = ("in_memory", "file_based", "redis")
 
-    def __init__(self, default_backend: str = "in_memory", default_ttl: float = 0) -> None:
+    def __init__(
+        self, default_backend: str = "in_memory", default_ttl: float = 0
+    ) -> None:
         self._caches: dict[str, Cache] = {}
         self._backends: dict[str, str] = {}  # cache_key -> backend name
         self._default_backend = default_backend
@@ -66,11 +68,12 @@ class CacheManager:
         """Create a cache backend instance."""
         if backend == "in_memory":
             return InMemoryCache()
-        elif backend == "file_based":
+        if backend == "file_based":
             return FileBasedCache()
-        elif backend == "redis":
+        if backend == "redis":
             try:
                 from .backends.redis_backend import RedisCache
+
                 return RedisCache()
             except (ImportError, TypeError, OSError):
                 logger.warning("Redis not available, falling back to in-memory cache")

@@ -94,7 +94,9 @@ class PromptTester:
             EvaluationType.CONTAINS: ContainsEvaluator(),
         }
 
-    def register_evaluator(self, eval_type: EvaluationType, evaluator: Evaluator) -> None:
+    def register_evaluator(
+        self, eval_type: EvaluationType, evaluator: Evaluator
+    ) -> None:
         """Register custom evaluator."""
         self._evaluators[eval_type] = evaluator
 
@@ -148,7 +150,9 @@ class PromptTester:
             score = evaluator.evaluate(test_case, actual_output)
 
             # Determine pass/fail
-            status = TestStatus.PASSED if score >= self.pass_threshold else TestStatus.FAILED
+            status = (
+                TestStatus.PASSED if score >= self.pass_threshold else TestStatus.FAILED
+            )
 
             return TestResult(
                 test_case_id=test_case.id,
@@ -229,7 +233,7 @@ class ABTest:
             return None
 
         best_name = None
-        best_value = float('-inf') if metric != "average_latency_ms" else float('inf')
+        best_value = float("-inf") if metric != "average_latency_ms" else float("inf")
 
         for name, result in self.results.items():
             value = getattr(result, metric, 0)
@@ -238,10 +242,9 @@ class ABTest:
                 if value < best_value:
                     best_value = value
                     best_name = name
-            else:
-                if value > best_value:
-                    best_value = value
-                    best_name = name
+            elif value > best_value:
+                best_value = value
+                best_name = name
 
         return best_name
 

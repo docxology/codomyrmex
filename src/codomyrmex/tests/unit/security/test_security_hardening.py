@@ -30,10 +30,15 @@ from codomyrmex.wallet.security.encrypted_storage import (
 
 class TestEncryptedEntry:
     """Test suite for EncryptedEntry."""
+
     def test_round_trip_dict(self) -> None:
         entry = EncryptedEntry(
-            key="test", ciphertext="abc", nonce="def", tag="ghi",
-            created_at=1.0, rotated_at=2.0,
+            key="test",
+            ciphertext="abc",
+            nonce="def",
+            tag="ghi",
+            created_at=1.0,
+            rotated_at=2.0,
         )
         d = entry.to_dict()
         restored = EncryptedEntry.from_dict(d)
@@ -43,6 +48,7 @@ class TestEncryptedEntry:
 
 class TestEncryptedStore:
     """Test suite for EncryptedStore."""
+
     def test_put_and_get(self) -> None:
         store = EncryptedStore()
         store.put("api_key", "sk-secret-12345")
@@ -105,6 +111,7 @@ class TestEncryptedStore:
 
 class TestVulnerability:
     """Test suite for Vulnerability."""
+
     def test_to_dict(self) -> None:
         v = Vulnerability(package="requests", severity="high", cve_id="CVE-123")
         d = v.to_dict()
@@ -114,6 +121,7 @@ class TestVulnerability:
 
 class TestDependencyScanner:
     """Test suite for DependencyScanner."""
+
     def test_scan_direct(self) -> None:
         scanner = DependencyScanner()
         report = scanner.scan_dependencies({"requests": ">=2.28.0"})
@@ -127,7 +135,7 @@ class TestDependencyScanner:
         assert report.is_clean
 
     def test_scan_pyproject_file(self) -> None:
-        content = '''
+        content = """
 [project]
 name = "test-project"
 version = "0.1.0"
@@ -135,7 +143,7 @@ dependencies = [
     "requests>=2.28.0",
     "numpy>=1.24.0",
 ]
-'''
+"""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
@@ -153,17 +161,21 @@ dependencies = [
         assert report.scan_source == "file_not_found"
 
     def test_report_has_critical(self) -> None:
-        report = ScanReport(vulnerabilities=[
-            Vulnerability(package="x", severity="critical"),
-        ])
+        report = ScanReport(
+            vulnerabilities=[
+                Vulnerability(package="x", severity="critical"),
+            ]
+        )
         assert report.has_critical
 
     def test_report_count_by_severity(self) -> None:
-        report = ScanReport(vulnerabilities=[
-            Vulnerability(package="a", severity="high"),
-            Vulnerability(package="b", severity="medium"),
-            Vulnerability(package="c", severity="high"),
-        ])
+        report = ScanReport(
+            vulnerabilities=[
+                Vulnerability(package="a", severity="high"),
+                Vulnerability(package="b", severity="medium"),
+                Vulnerability(package="c", severity="high"),
+            ]
+        )
         assert report.count_by_severity == {"high": 2, "medium": 1}
 
 
@@ -172,6 +184,7 @@ dependencies = [
 
 class TestSBOMComponent:
     """Test suite for SBOMComponent."""
+
     def test_auto_purl(self) -> None:
         c = SBOMComponent(name="requests", version="2.31.0")
         assert c.purl == "pkg:pypi/requests@2.31.0"
@@ -189,9 +202,11 @@ class TestSBOMComponent:
 
 class TestSBOMDocument:
     """Test suite for SBOMDocument."""
+
     def test_cyclonedx_format(self) -> None:
         doc = SBOMDocument(
-            project_name="test", project_version="1.0.0",
+            project_name="test",
+            project_version="1.0.0",
             components=[SBOMComponent(name="a", version="1.0")],
         )
         cdx = doc.to_cyclonedx()
@@ -206,22 +221,28 @@ class TestSBOMDocument:
         assert parsed["bomFormat"] == "CycloneDX"
 
     def test_component_count(self) -> None:
-        doc = SBOMDocument(components=[
-            SBOMComponent(name="a"), SBOMComponent(name="b"),
-        ])
+        doc = SBOMDocument(
+            components=[
+                SBOMComponent(name="a"),
+                SBOMComponent(name="b"),
+            ]
+        )
         assert doc.component_count == 2
 
 
 class TestSBOMGenerator:
     """Test suite for SBOMGenerator."""
+
     def test_from_dependencies(self) -> None:
         gen = SBOMGenerator()
-        sbom = gen.from_dependencies("proj", "1.0", {"requests": "2.31.0", "numpy": "1.24"})
+        sbom = gen.from_dependencies(
+            "proj", "1.0", {"requests": "2.31.0", "numpy": "1.24"}
+        )
         assert sbom.project_name == "proj"
         assert sbom.component_count == 2
 
     def test_from_pyproject(self) -> None:
-        content = '''
+        content = """
 [project]
 name = "my-project"
 version = "0.5.0"
@@ -229,7 +250,7 @@ dependencies = [
     "requests>=2.31.0",
     "pydantic>=2.0",
 ]
-'''
+"""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()

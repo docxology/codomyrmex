@@ -9,6 +9,7 @@ from codomyrmex.logging_monitoring import get_logger
 @dataclass
 class Dataset:
     """Represents a fine-tuning dataset."""
+
     name: str
     path: str
     format: str = "jsonl"
@@ -23,7 +24,9 @@ class Dataset:
             "metadata": self.metadata,
         }
 
+
 logger = get_logger(__name__)
+
 
 class FineTuningJob:
     """Represents a fine-tuning job on a remote provider."""

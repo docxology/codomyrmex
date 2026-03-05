@@ -95,9 +95,7 @@ class TestComputeDPOLoss:
 
         # Weak preference for winner
         policy_w_weak = np.ones(batch) * 0.5
-        result_weak = compute_dpo_loss(
-            policy_w_weak, policy_l, ref_w, ref_l, beta=0.1
-        )
+        result_weak = compute_dpo_loss(policy_w_weak, policy_l, ref_w, ref_l, beta=0.1)
 
         # Strong preference for winner
         policy_w_strong = np.ones(batch) * 5.0
@@ -135,8 +133,10 @@ class TestComputeDPOLoss:
     @pytest.mark.unit
     def test_result_contains_expected_keys(self):
         result = compute_dpo_loss(
-            np.array([1.0]), np.array([0.0]),
-            np.array([0.5]), np.array([0.5]),
+            np.array([1.0]),
+            np.array([0.0]),
+            np.array([0.5]),
+            np.array([0.5]),
             beta=0.1,
         )
         assert "loss" in result
@@ -148,8 +148,10 @@ class TestComputeDPOLoss:
     @pytest.mark.unit
     def test_beta_stored_in_result(self):
         result = compute_dpo_loss(
-            np.array([1.0]), np.array([0.0]),
-            np.array([0.5]), np.array([0.5]),
+            np.array([1.0]),
+            np.array([0.0]),
+            np.array([0.5]),
+            np.array([0.5]),
             beta=0.25,
         )
         assert result["beta"] == 0.25
@@ -192,8 +194,10 @@ class TestDPOLoss:
     def test_callable_returns_dict(self):
         loss_fn = DPOLoss(beta=0.1)
         result = loss_fn(
-            np.array([1.0]), np.array([0.0]),
-            np.array([0.5]), np.array([0.5]),
+            np.array([1.0]),
+            np.array([0.0]),
+            np.array([0.5]),
+            np.array([0.5]),
         )
         assert isinstance(result, dict)
         assert "loss" in result

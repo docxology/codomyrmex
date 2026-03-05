@@ -29,6 +29,7 @@ MAX_TOKENS = 4096
 @dataclass
 class CodexRequest:
     """Request structure for Codex code generation."""
+
     prompt: str
     language: str
     max_tokens: int = MAX_TOKENS
@@ -40,6 +41,7 @@ class CodexRequest:
 @dataclass
 class CodexResponse:
     """Response structure from Codex."""
+
     generated_code: str
     model: str
     tokens_used: int
@@ -88,7 +90,7 @@ class OpenAICodex:
         context: str | None = None,
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Generate code using OpenAI models.
 
@@ -121,11 +123,11 @@ class OpenAICodex:
                 model=self.model,
                 messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
+                    {"role": "user", "content": user_prompt},
                 ],
                 max_tokens=max_tokens,
                 temperature=temperature,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -149,7 +151,7 @@ class OpenAICodex:
                 "execution_time": execution_time,
                 "finish_reason": finish_reason,
                 "prompt": prompt,
-                "status": "success"
+                "status": "success",
             }
 
         except ImportError as e:
@@ -168,7 +170,7 @@ class OpenAICodex:
         language: str = "python",
         max_tokens: int = 1024,
         temperature: float = DEFAULT_TEMPERATURE,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Complete partial code.
 
@@ -188,7 +190,7 @@ class OpenAICodex:
             language=language,
             max_tokens=max_tokens,
             temperature=temperature,
-            **kwargs
+            **kwargs,
         )
 
     def edit_code(
@@ -198,7 +200,7 @@ class OpenAICodex:
         language: str = "python",
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Edit existing code based on instructions.
 
@@ -230,11 +232,11 @@ class OpenAICodex:
                 model=self.model,
                 messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
+                    {"role": "user", "content": user_prompt},
                 ],
                 max_tokens=max_tokens,
                 temperature=temperature,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -257,7 +259,7 @@ class OpenAICodex:
                 "model": self.model,
                 "tokens_used": tokens_used,
                 "execution_time": execution_time,
-                "status": "success"
+                "status": "success",
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -269,7 +271,7 @@ class OpenAICodex:
         code: str,
         language: str = "python",
         detail_level: str = "medium",
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Generate explanation for code.
 
@@ -290,7 +292,7 @@ class OpenAICodex:
             detail_instructions = {
                 "brief": "Provide a brief one-paragraph summary.",
                 "medium": "Provide a clear explanation with key points.",
-                "detailed": "Provide a detailed explanation covering all aspects."
+                "detailed": "Provide a detailed explanation covering all aspects.",
             }
 
             system_prompt = (
@@ -302,11 +304,11 @@ class OpenAICodex:
                 model=self.model,
                 messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"```{language}\n{code}\n```"}
+                    {"role": "user", "content": f"```{language}\n{code}\n```"},
                 ],
                 max_tokens=2048,
                 temperature=0.3,
-                **kwargs
+                **kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -326,7 +328,7 @@ class OpenAICodex:
                 "model": self.model,
                 "tokens_used": tokens_used,
                 "execution_time": execution_time,
-                "status": "success"
+                "status": "success",
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -347,7 +349,7 @@ class OpenAICodex:
 
         guidelines = language_guidelines.get(
             language.lower(),
-            "Follow language best practices and include documentation."
+            "Follow language best practices and include documentation.",
         )
 
         return (
@@ -390,9 +392,7 @@ class OpenAICodex:
 
 # Module-level convenience functions
 def generate_code(
-    prompt: str,
-    language: str = "python",
-    **kwargs: Any
+    prompt: str, language: str = "python", **kwargs: Any
 ) -> dict[str, Any]:
     """Generate code using OpenAI (module-level convenience function).
 
@@ -408,13 +408,17 @@ def generate_code(
     return codex.generate_code(prompt, language, **kwargs)
 
 
-def complete_code(code_prefix: str, language: str = "python", **kwargs: Any) -> dict[str, Any]:
+def complete_code(
+    code_prefix: str, language: str = "python", **kwargs: Any
+) -> dict[str, Any]:
     """Complete code (module-level convenience function)."""
     codex = OpenAICodex()
     return codex.complete_code(code_prefix, language, **kwargs)
 
 
-def edit_code(code: str, instruction: str, language: str = "python", **kwargs: Any) -> dict[str, Any]:
+def edit_code(
+    code: str, instruction: str, language: str = "python", **kwargs: Any
+) -> dict[str, Any]:
     """Edit code (module-level convenience function)."""
     codex = OpenAICodex()
     return codex.edit_code(code, instruction, language, **kwargs)

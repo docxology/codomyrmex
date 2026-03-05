@@ -30,26 +30,45 @@ class TestArchConfig:
     @pytest.mark.unit
     def test_total_params_estimate_positive(self):
         config = ArchConfig(
-            n_layers=4, d_model=256, n_heads=8,
-            d_ff=1024, dropout=0.1, activation="relu",
+            n_layers=4,
+            d_model=256,
+            n_heads=8,
+            d_ff=1024,
+            dropout=0.1,
+            activation="relu",
         )
         assert config.total_params_estimate > 0
 
     @pytest.mark.unit
     def test_total_params_scales_with_layers(self):
-        base = ArchConfig(n_layers=2, d_model=128, n_heads=4, d_ff=512, dropout=0.0, activation="relu")
-        deep = ArchConfig(n_layers=8, d_model=128, n_heads=4, d_ff=512, dropout=0.0, activation="relu")
+        base = ArchConfig(
+            n_layers=2, d_model=128, n_heads=4, d_ff=512, dropout=0.0, activation="relu"
+        )
+        deep = ArchConfig(
+            n_layers=8, d_model=128, n_heads=4, d_ff=512, dropout=0.0, activation="relu"
+        )
         assert deep.total_params_estimate > base.total_params_estimate
 
     @pytest.mark.unit
     def test_total_params_scales_with_width(self):
-        narrow = ArchConfig(n_layers=4, d_model=64, n_heads=2, d_ff=256, dropout=0.0, activation="relu")
-        wide = ArchConfig(n_layers=4, d_model=512, n_heads=8, d_ff=2048, dropout=0.0, activation="relu")
+        narrow = ArchConfig(
+            n_layers=4, d_model=64, n_heads=2, d_ff=256, dropout=0.0, activation="relu"
+        )
+        wide = ArchConfig(
+            n_layers=4,
+            d_model=512,
+            n_heads=8,
+            d_ff=2048,
+            dropout=0.0,
+            activation="relu",
+        )
         assert wide.total_params_estimate > narrow.total_params_estimate
 
     @pytest.mark.unit
     def test_default_params_dict(self):
-        config = ArchConfig(n_layers=1, d_model=64, n_heads=2, d_ff=128, dropout=0.0, activation="relu")
+        config = ArchConfig(
+            n_layers=1, d_model=64, n_heads=2, d_ff=128, dropout=0.0, activation="relu"
+        )
         assert config.params == {}
 
 
@@ -104,13 +123,22 @@ class TestNASSearchSpace:
     @pytest.mark.unit
     def test_validate_invalid_n_layers(self):
         space = NASSearchSpace()
-        config = ArchConfig(n_layers=99, d_model=128, n_heads=4, d_ff=512, dropout=0.1, activation="relu")
+        config = ArchConfig(
+            n_layers=99,
+            d_model=128,
+            n_heads=4,
+            d_ff=512,
+            dropout=0.1,
+            activation="relu",
+        )
         assert space.validate(config) is False
 
     @pytest.mark.unit
     def test_validate_invalid_dropout(self):
         space = NASSearchSpace()
-        config = ArchConfig(n_layers=4, d_model=128, n_heads=4, d_ff=512, dropout=1.5, activation="relu")
+        config = ArchConfig(
+            n_layers=4, d_model=128, n_heads=4, d_ff=512, dropout=1.5, activation="relu"
+        )
         assert space.validate(config) is False
 
     @pytest.mark.unit
@@ -140,8 +168,10 @@ class TestNASSearcher:
     @pytest.fixture
     def simple_eval_fn(self):
         """Evaluation function that prefers more layers."""
+
         def eval_fn(config: ArchConfig) -> float:
             return float(config.n_layers)
+
         return eval_fn
 
     @pytest.mark.unit
@@ -244,8 +274,10 @@ class TestMutation:
     def test_mutate_produces_valid_config(self):
         """Mutated configs should still have valid head/model divisibility."""
         space = NASSearchSpace()
+
         def eval_fn(c):
             return 1.0
+
         searcher = NASSearcher(space, eval_fn)
         parent = space.sample(seed=42)
         for _ in range(50):
@@ -256,18 +288,22 @@ class TestMutation:
     def test_mutate_changes_something(self):
         """At least one dimension should differ after mutation (usually)."""
         space = NASSearchSpace()
+
         def eval_fn(c):
             return 1.0
+
         searcher = NASSearcher(space, eval_fn)
         parent = space.sample(seed=42)
         # Run many mutations; at least some should differ
         changed = False
         for _ in range(20):
             child = searcher._mutate(parent)
-            if (child.n_layers != parent.n_layers or
-                child.d_model != parent.d_model or
-                child.dropout != parent.dropout or
-                child.activation != parent.activation):
+            if (
+                child.n_layers != parent.n_layers
+                or child.d_model != parent.d_model
+                or child.dropout != parent.dropout
+                or child.activation != parent.activation
+            ):
                 changed = True
                 break
         assert changed

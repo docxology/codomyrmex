@@ -81,18 +81,30 @@ class HealthHandler:
                 description="Baseline system metrics",
                 tags=["system", "auto"],
             )
-            dash.add_panel(Panel(
-                id="modules", title="Module Count",
-                panel_type=PanelType.STAT, metrics=["module_count"],
-            ))
-            dash.add_panel(Panel(
-                id="tools", title="MCP Tool Count",
-                panel_type=PanelType.STAT, metrics=["tool_count"],
-            ))
-            dash.add_panel(Panel(
-                id="agents", title="Agent Count",
-                panel_type=PanelType.STAT, metrics=["agent_count"],
-            ))
+            dash.add_panel(
+                Panel(
+                    id="modules",
+                    title="Module Count",
+                    panel_type=PanelType.STAT,
+                    metrics=["module_count"],
+                )
+            )
+            dash.add_panel(
+                Panel(
+                    id="tools",
+                    title="MCP Tool Count",
+                    panel_type=PanelType.STAT,
+                    metrics=["tool_count"],
+                )
+            )
+            dash.add_panel(
+                Panel(
+                    id="agents",
+                    title="Agent Count",
+                    panel_type=PanelType.STAT,
+                    metrics=["agent_count"],
+                )
+            )
 
         return cls._telemetry_collector, cls._telemetry_dm, MetricType
 
@@ -108,16 +120,20 @@ class HealthHandler:
             # Seed / refresh baseline metrics from DataProvider
             if self.data_provider:
                 modules = self.data_provider.get_modules()
-                collector.record("module_count", float(len(modules)),
-                                metric_type=MetricType.GAUGE)
+                collector.record(
+                    "module_count", float(len(modules)), metric_type=MetricType.GAUGE
+                )
                 agents = self.data_provider.get_actual_agents()
-                collector.record("agent_count", float(len(agents)),
-                                metric_type=MetricType.GAUGE)
+                collector.record(
+                    "agent_count", float(len(agents)), metric_type=MetricType.GAUGE
+                )
                 try:
                     tools_data = self.data_provider.get_mcp_tools()
-                    collector.record("tool_count",
-                                    float(len(tools_data.get("tools", []))),
-                                    metric_type=MetricType.GAUGE)
+                    collector.record(
+                        "tool_count",
+                        float(len(tools_data.get("tools", []))),
+                        metric_type=MetricType.GAUGE,
+                    )
                 except Exception as e:
                     logger.debug("Failed to record tool_count metric: %s", e)
 
@@ -132,9 +148,7 @@ class HealthHandler:
                 "status": "ok",
                 "dashboards": [d.to_dict() for d in dm.list()],
                 "metric_names": list(collector._metrics.keys()),
-                "total_metrics": sum(
-                    len(v) for v in collector._metrics.values()
-                ),
+                "total_metrics": sum(len(v) for v in collector._metrics.values()),
                 "latest_values": latest_values,
             }
         except Exception as exc:
@@ -153,50 +167,57 @@ class HealthHandler:
 
             if self.data_provider:
                 modules = self.data_provider.get_modules()
-                collector.record("module_count", float(len(modules)),
-                                metric_type=MetricType.GAUGE)
+                collector.record(
+                    "module_count", float(len(modules)), metric_type=MetricType.GAUGE
+                )
                 seeded.append("module_count")
 
                 agents = self.data_provider.get_actual_agents()
-                collector.record("agent_count", float(len(agents)),
-                                metric_type=MetricType.GAUGE)
+                collector.record(
+                    "agent_count", float(len(agents)), metric_type=MetricType.GAUGE
+                )
                 seeded.append("agent_count")
 
                 try:
                     tools_data = self.data_provider.get_mcp_tools()
-                    collector.record("tool_count",
-                                    float(len(tools_data.get("tools", []))),
-                                    metric_type=MetricType.GAUGE)
+                    collector.record(
+                        "tool_count",
+                        float(len(tools_data.get("tools", []))),
+                        metric_type=MetricType.GAUGE,
+                    )
                     seeded.append("tool_count")
                 except Exception as e:
                     logger.debug("Failed to seed tool_count metric: %s", e)
 
                 # Additional useful metrics
-                collector.record("python_version_minor",
-                                float(sys.version_info.minor),
-                                metric_type=MetricType.GAUGE)
+                collector.record(
+                    "python_version_minor",
+                    float(sys.version_info.minor),
+                    metric_type=MetricType.GAUGE,
+                )
                 seeded.append("python_version_minor")
 
                 scripts = self.data_provider.get_available_scripts()
-                collector.record("script_count",
-                                float(len(scripts)),
-                                metric_type=MetricType.GAUGE)
+                collector.record(
+                    "script_count", float(len(scripts)), metric_type=MetricType.GAUGE
+                )
                 seeded.append("script_count")
 
-            self.send_json_response({
-                "status": "ok",
-                "seeded_metrics": seeded,
-                "count": len(seeded),
-            })
-        except Exception as exc:
             self.send_json_response(
-                {"status": "error", "error": str(exc)}, status=500
+                {
+                    "status": "ok",
+                    "seeded_metrics": seeded,
+                    "count": len(seeded),
+                }
             )
+        except Exception as exc:
+            self.send_json_response({"status": "error", "error": str(exc)}, status=500)
 
     def handle_security_posture(self) -> None:
         """Handle GET /api/security/posture -- aggregate security posture."""
         try:
             from codomyrmex.security.dashboard import SecurityDashboard
+
             sd = SecurityDashboard()
             posture = sd.posture()
             data = {

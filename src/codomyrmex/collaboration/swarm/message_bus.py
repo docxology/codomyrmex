@@ -71,11 +71,13 @@ class MessageBus:
             handler: Callback invoked with matching messages.
 
         """
-        self._subscriptions.append(Subscription(
-            subscriber_id=subscriber_id,
-            topic=topic,
-            handler=handler,
-        ))
+        self._subscriptions.append(
+            Subscription(
+                subscriber_id=subscriber_id,
+                topic=topic,
+                handler=handler,
+            )
+        )
         logger.info(
             "Subscription added",
             extra={"subscriber": subscriber_id, "topic": topic},
@@ -94,10 +96,10 @@ class MessageBus:
         """
         before = len(self._subscriptions)
         self._subscriptions = [
-            s for s in self._subscriptions
+            s
+            for s in self._subscriptions
             if not (
-                s.subscriber_id == subscriber_id
-                and (topic is None or s.topic == topic)
+                s.subscriber_id == subscriber_id and (topic is None or s.topic == topic)
             )
         ]
         removed = before - len(self._subscriptions)
@@ -118,7 +120,7 @@ class MessageBus:
         """
         # Record in history
         if len(self._history) >= self._history_limit:
-            self._history = self._history[-self._history_limit // 2:]
+            self._history = self._history[-self._history_limit // 2 :]
         self._history.append(message)
 
         # Deliver to matching subscribers

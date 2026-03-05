@@ -87,12 +87,14 @@ def config_audits_audit_directory(
         for result in results:
             issue_count = len(result.issues)
             total_issues += issue_count
-            file_results.append({
-                "audit_id": result.audit_id,
-                "summary": result.summary,
-                "is_compliant": result.is_compliant,
-                "issue_count": issue_count,
-            })
+            file_results.append(
+                {
+                    "audit_id": result.audit_id,
+                    "summary": result.summary,
+                    "is_compliant": result.is_compliant,
+                    "issue_count": issue_count,
+                }
+            )
 
         return {
             "status": "success",

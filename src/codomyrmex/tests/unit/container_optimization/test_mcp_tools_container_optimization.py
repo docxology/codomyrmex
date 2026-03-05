@@ -26,7 +26,9 @@ class TestContainerOptimizationAnalyze:
             container_optimization_analyze,
         )
 
-        result = container_optimization_analyze(image_name="nonexistent_image_xyz_12345")
+        result = container_optimization_analyze(
+            image_name="nonexistent_image_xyz_12345"
+        )
         assert result["status"] == "error"
         assert "message" in result
 
@@ -68,7 +70,9 @@ class TestContainerOptimizationTuneResources:
             container_optimization_tune_resources,
         )
 
-        result = container_optimization_tune_resources(container_id="nonexistent_container_xyz")
+        result = container_optimization_tune_resources(
+            container_id="nonexistent_container_xyz"
+        )
         assert result["status"] == "error"
 
     def test_tune_callable(self):

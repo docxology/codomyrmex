@@ -10,6 +10,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class FileOpsMixin:
     """FileOpsMixin class."""
 
@@ -41,8 +42,7 @@ class FileOpsMixin:
 
         Example:
             >>> result = client.edit_file(
-            ...     "/path/to/file.py",
-            ...     "Add type hints to all function parameters"
+            ...     "/path/to/file.py", "Add type hints to all function parameters"
             ... )
             >>> print(result["diff"])
         """
@@ -71,10 +71,20 @@ class FileOpsMixin:
         if language is None:
             ext = os.path.splitext(file_path)[1].lower()
             lang_map = {
-                ".py": "python", ".js": "javascript", ".ts": "typescript",
-                ".java": "java", ".cpp": "cpp", ".c": "c", ".go": "go",
-                ".rs": "rust", ".rb": "ruby", ".php": "php", ".swift": "swift",
-                ".kt": "kotlin", ".scala": "scala", ".cs": "csharp",
+                ".py": "python",
+                ".js": "javascript",
+                ".ts": "typescript",
+                ".java": "java",
+                ".cpp": "cpp",
+                ".c": "c",
+                ".go": "go",
+                ".rs": "rust",
+                ".rb": "ruby",
+                ".php": "php",
+                ".swift": "swift",
+                ".kt": "kotlin",
+                ".scala": "scala",
+                ".cs": "csharp",
             }
             language = lang_map.get(ext, "text")
 
@@ -114,7 +124,9 @@ Return the complete modified file content:"""
         modified_content = self._extract_code_block(response.content, language)
 
         # Generate diff
-        diff = self._generate_unified_diff(original_content, modified_content, file_path)
+        diff = self._generate_unified_diff(
+            original_content, modified_content, file_path
+        )
 
         return {
             "success": True,
@@ -153,8 +165,7 @@ Return the complete modified file content:"""
 
         Example:
             >>> result = client.create_file(
-            ...     "/path/to/utils.py",
-            ...     "Utility functions for string manipulation"
+            ...     "/path/to/utils.py", "Utility functions for string manipulation"
             ... )
         """
 
@@ -213,4 +224,3 @@ Generate the complete file content:"""
             return match.group(1).strip()
 
         return response.strip()
-

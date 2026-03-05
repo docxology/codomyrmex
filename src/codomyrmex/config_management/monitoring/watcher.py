@@ -8,6 +8,7 @@ from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
+
 class ConfigWatcher:
     """Watches a configuration file for changes and triggers a callback."""
 
@@ -15,7 +16,9 @@ class ConfigWatcher:
         self.file_path = file_path
         self.callback = callback
         self.interval = interval
-        self._last_mtime = os.path.getmtime(file_path) if os.path.exists(file_path) else 0
+        self._last_mtime = (
+            os.path.getmtime(file_path) if os.path.exists(file_path) else 0
+        )
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
 

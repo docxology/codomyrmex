@@ -31,6 +31,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestValidationResult:
     """Test suite for ValidationResult."""
+
     def test_default_valid(self):
         vr = ValidationResult()
         assert vr.valid is True
@@ -70,6 +71,7 @@ class TestValidationResult:
 @pytest.mark.unit
 class TestValidation:
     """Test suite for Validation."""
+
     def test_empty_schema_is_valid(self):
         result = validate_input({"anything": True}, {})
         assert result.valid
@@ -177,6 +179,7 @@ class TestValidation:
 @pytest.mark.unit
 class TestToolEntry:
     """Test suite for ToolEntry."""
+
     def test_create_entry(self):
         entry = ToolEntry(
             name="test",
@@ -210,6 +213,7 @@ class TestToolEntry:
 @pytest.mark.unit
 class TestToolRegistry:
     """Test suite for ToolRegistry."""
+
     def _make_entry(self, name="tool1", tags=None):
         return ToolEntry(
             name=name,
@@ -308,9 +312,7 @@ class TestToolRegistry:
             raise RuntimeError("boom")
 
         reg = ToolRegistry()
-        reg.register(
-            ToolEntry(name="bad", description="Breaks", handler=bad_handler)
-        )
+        reg.register(ToolEntry(name="bad", description="Breaks", handler=bad_handler))
         result = reg.invoke("bad", {})
         assert not result.ok
         assert "boom" in result.message
@@ -324,6 +326,7 @@ class TestToolRegistry:
 @pytest.mark.unit
 class TestToolDecorator:
     """Test suite for ToolDecorator."""
+
     def test_decorator_creates_tool_entry(self):
         @tool(name="add", description="Add numbers")
         def add(data):
@@ -360,6 +363,7 @@ class TestToolDecorator:
 @pytest.mark.unit
 class TestToolChain:
     """Test suite for ToolChain."""
+
     def _setup_registry(self):
         reg = ToolRegistry()
         reg.register(

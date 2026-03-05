@@ -7,7 +7,9 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-def merge_documents(documents: list[Document], target_format: DocumentFormat = None) -> Document:
+def merge_documents(
+    documents: list[Document], target_format: DocumentFormat = None
+) -> Document:
     """
     Merge multiple documents into a single document.
 
@@ -35,6 +37,7 @@ def merge_documents(documents: list[Document], target_format: DocumentFormat = N
         for doc in documents:
             if doc.format != target_format:
                 from .converter import convert_document
+
                 doc = convert_document(doc, target_format)
             converted_docs.append(doc)
 
@@ -69,7 +72,7 @@ def merge_documents(documents: list[Document], target_format: DocumentFormat = N
         logger.error(f"Error merging documents: {e}")
         if isinstance(e, DocumentConversionError):
             raise
-        raise DocumentConversionError(f"Failed to merge documents: {str(e)}") from e
+        raise DocumentConversionError(f"Failed to merge documents: {e!s}") from e
 
 
 def _merge_markdown(documents: list[Document]) -> str:
@@ -113,6 +116,7 @@ def _merge_text(documents: list[Document]) -> str:
     for doc in documents:
         parts.append(doc.get_content_as_string())
     return "\n\n".join(parts)
+
 
 def _merge_csv(documents: list[Document]) -> list[dict]:
     """Merge CSV documents (list of dicts)."""

@@ -2,4 +2,4 @@
 
 from .kernel import log_softmax, online_softmax, safe_softmax, softmax
 
-__all__ = ["softmax", "log_softmax", "online_softmax", "safe_softmax"]
+__all__ = ["log_softmax", "online_softmax", "safe_softmax", "softmax"]

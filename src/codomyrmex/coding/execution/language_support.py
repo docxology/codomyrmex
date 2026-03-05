@@ -9,7 +9,10 @@ Attributes:
         execution configurations.
 
 Example:
-    >>> from codomyrmex.coding.execution.language_support import SUPPORTED_LANGUAGES, validate_language
+    >>> from codomyrmex.coding.execution.language_support import (
+    ...     SUPPORTED_LANGUAGES,
+    ...     validate_language,
+    ... )
     >>> if validate_language("python"):
     ...     config = SUPPORTED_LANGUAGES["python"]
     ...     print(f"Using Docker image: {config['image']}")
@@ -98,4 +101,3 @@ def validate_language(language: str) -> bool:
         False
     """
     return language in SUPPORTED_LANGUAGES
-

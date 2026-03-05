@@ -59,7 +59,7 @@ class TestOrchestrationIntegration:
                 name="test_step",
                 module="environment_setup",
                 action="check_environment",
-                parameters={}
+                parameters={},
             )
         ]
 
@@ -81,7 +81,7 @@ class TestOrchestrationIntegration:
         project = self.project_manager.create_project(
             name="test_project",
             template_name="ai_analysis",
-            description="Test project for integration testing"
+            description="Test project for integration testing",
         )
 
         assert project is not None
@@ -95,7 +95,7 @@ class TestOrchestrationIntegration:
         # Test project status
         status = self.project_manager.get_project_status("test_project")
         assert status is not None
-        assert status['name'] == "test_project"
+        assert status["name"] == "test_project"
 
     def test_task_orchestration_with_dependencies(self):
         """Test task orchestration with dependencies."""
@@ -104,7 +104,7 @@ class TestOrchestrationIntegration:
             name="task1",
             module="environment_setup",
             action="check_environment",
-            parameters={}
+            parameters={},
         )
 
         task2 = Task(
@@ -112,7 +112,7 @@ class TestOrchestrationIntegration:
             module="static_analysis",
             action="analyze_code_quality",
             parameters={"path": "."},
-            dependencies=[task1.id]
+            dependencies=[task1.id],
         )
 
         # Add tasks to orchestrator
@@ -143,10 +143,7 @@ class TestOrchestrationIntegration:
     def test_resource_allocation_and_deallocation(self):
         """Test resource allocation and deallocation."""
         user_id = "test_user"
-        requirements = {
-            "cpu": {"cores": 1},
-            "memory": {"gb": 1}
-        }
+        requirements = {"cpu": {"cores": 1}, "memory": {"gb": 1}}
 
         # Allocate resources
         allocated = self.resource_manager.allocate_resources(user_id, requirements)
@@ -168,8 +165,7 @@ class TestOrchestrationIntegration:
         """Test orchestration engine session management."""
         # Create session
         session_id = self.engine.create_session(
-            user_id="test_user",
-            mode="resource_aware"
+            user_id="test_user", mode="resource_aware"
         )
 
         assert session_id is not None
@@ -196,51 +192,48 @@ class TestOrchestrationIntegration:
                     "name": "step1",
                     "module": "environment_setup",
                     "action": "check_environment",
-                    "parameters": {}
+                    "parameters": {},
                 },
                 {
                     "name": "step2",
                     "module": "static_analysis",
                     "action": "analyze_code_quality",
-                    "parameters": {"path": "."}
-                }
+                    "parameters": {"path": "."},
+                },
             ],
-            "dependencies": {
-                "step2": ["step1"]
-            }
+            "dependencies": {"step2": ["step1"]},
         }
 
         # Execute workflow
         result = self.engine.execute_complex_workflow(workflow_definition)
 
         assert result is not None
-        assert 'success' in result
-        assert 'results' in result
+        assert "success" in result
+        assert "results" in result
 
     def test_system_health_check(self):
         """Test system health check."""
         health = self.engine.health_check()
 
         assert health is not None
-        assert 'overall_status' in health
-        assert 'components' in health
-        assert 'timestamp' in health
+        assert "overall_status" in health
+        assert "components" in health
+        assert "timestamp" in health
 
         # Verify expected components are checked
         expected_components = [
-            'workflow_manager',
-            'task_orchestrator',
-            'project_manager',
-            'resource_manager'
+            "workflow_manager",
+            "task_orchestrator",
+            "project_manager",
+            "resource_manager",
         ]
 
         for component in expected_components:
-            assert component in health['components']
+            assert component in health["components"]
 
     def test_performance_monitoring_integration(self):
         """Test performance monitoring integration."""
         try:
-
             # Create performance monitor
             monitor = PerformanceMonitor()
             assert monitor is not None
@@ -251,7 +244,7 @@ class TestOrchestrationIntegration:
                     name="perf_test_step",
                     module="environment_setup",
                     action="check_environment",
-                    parameters={}
+                    parameters={},
                 )
             ]
 
@@ -275,7 +268,7 @@ class TestOrchestrationIntegration:
                 name="invalid_step",
                 module="nonexistent_module",
                 action="nonexistent_action",
-                parameters={}
+                parameters={},
             )
         ]
 
@@ -284,7 +277,7 @@ class TestOrchestrationIntegration:
 
         # Should handle error gracefully
         assert result is not None
-        assert 'errors' in result.__dict__
+        assert "errors" in result.__dict__
 
     def test_concurrent_execution(self):
         """Test concurrent execution of multiple workflows."""
@@ -296,7 +289,7 @@ class TestOrchestrationIntegration:
                     name=f"concurrent_step_{i}",
                     module="environment_setup",
                     action="check_environment",
-                    parameters={}
+                    parameters={},
                 )
             ]
             wf_name = f"concurrent_workflow_{i}"
@@ -355,7 +348,6 @@ class TestOrchestrationEdgeCases:
         self.task_orchestrator = get_task_orchestrator()
         self.project_manager = get_project_manager()
         self.resource_manager = get_resource_manager()
-        yield
 
     def test_nonexistent_workflow_execution(self):
         """Test execution of nonexistent workflow."""
@@ -379,7 +371,7 @@ class TestOrchestrationEdgeCases:
             name="invalid_task",
             module="nonexistent_module",
             action="nonexistent_action",
-            parameters={}
+            parameters={},
         )
 
         # Should not raise exception during creation
@@ -394,11 +386,11 @@ class TestOrchestrationEdgeCases:
         user_id = "test_user"
 
         # Test with invalid resource type
-        invalid_requirements = {
-            "invalid_resource": {"amount": 1}
-        }
+        invalid_requirements = {"invalid_resource": {"amount": 1}}
 
-        allocated = self.resource_manager.allocate_resources(user_id, invalid_requirements)
+        allocated = self.resource_manager.allocate_resources(
+            user_id, invalid_requirements
+        )
         assert allocated is None
 
     def test_circular_dependencies(self):
@@ -409,7 +401,7 @@ class TestOrchestrationEdgeCases:
             module="environment_setup",
             action="check_environment",
             parameters={},
-            dependencies=["task2"]  # Depends on task2
+            dependencies=["task2"],  # Depends on task2
         )
 
         task2 = Task(
@@ -417,7 +409,7 @@ class TestOrchestrationEdgeCases:
             module="static_analysis",
             action="analyze_code_quality",
             parameters={"path": "."},
-            dependencies=["task1"]  # Depends on task1
+            dependencies=["task1"],  # Depends on task1
         )
 
         # Add tasks to orchestrator

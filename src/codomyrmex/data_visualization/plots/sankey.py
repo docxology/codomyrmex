@@ -1,4 +1,5 @@
 """Sankey diagram (Mermaid-based)."""
+
 from dataclasses import dataclass, field
 
 from ._base import BasePlot
@@ -7,6 +8,7 @@ from ._base import BasePlot
 @dataclass
 class SankeyDiagram(BasePlot):
     """Sankey diagram rendered via Mermaid ``sankey-beta`` syntax."""
+
     links: list = field(default_factory=list)
 
     def to_html(self) -> str:

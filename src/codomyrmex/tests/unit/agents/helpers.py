@@ -71,13 +71,16 @@ def check_tool_available(command: str, help_flag: str = "--help") -> bool:
 
 # Check availability of CLI tools and SDKs at module level
 try:
-    import google.genai as genai  # noqa: F401
+    from google import genai  # noqa: F401
+
     SDK_AVAILABLE = True
 except ImportError:
     SDK_AVAILABLE = False
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_AVAILABLE = (SDK_AVAILABLE and GEMINI_API_KEY is not None) or check_tool_available("gemini")
+GEMINI_AVAILABLE = (
+    SDK_AVAILABLE and GEMINI_API_KEY is not None
+) or check_tool_available("gemini")
 JULES_AVAILABLE = check_tool_available("jules")
 OPENCLAW_AVAILABLE = check_tool_available("openclaw")
 OPENCODE_AVAILABLE = check_tool_available("opencode")
@@ -113,4 +116,3 @@ def get_tool_version(command: str) -> str | None:
         pass
 
     return None
-

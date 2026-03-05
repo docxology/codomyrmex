@@ -15,8 +15,11 @@ def test_check_command():
         timeout=60,
     )
     assert result.returncode == 0
-    assert ("Codomyrmex Environment Check" in result.stdout or
-            "Checking Codomyrmex environment..." in result.stdout)
+    assert (
+        "Codomyrmex Environment Check" in result.stdout
+        or "Checking Codomyrmex environment..." in result.stdout
+    )
+
 
 def test_info_command():
     """Tests that the info command runs successfully."""
@@ -28,6 +31,7 @@ def test_info_command():
     )
     assert result.returncode == 0
     assert "Codomyrmex - A Modular, Extensible Coding Workspace" in result.stdout
+
 
 def test_doctor_command():
     """Tests that the doctor command runs successfully."""

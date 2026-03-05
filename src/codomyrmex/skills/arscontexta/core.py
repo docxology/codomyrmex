@@ -8,6 +8,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except Exception:
     logger = logging.getLogger(__name__)
@@ -31,23 +32,98 @@ from .models import (
 
 _DEFAULT_PRIMITIVES: list[dict[str, Any]] = [
     # Foundation layer (5)
-    {"name": "atomic-note", "layer": "foundation", "description": "Single-concept note", "dependencies": []},
-    {"name": "unique-id", "layer": "foundation", "description": "Stable unique identifier per note", "dependencies": []},
-    {"name": "timestamping", "layer": "foundation", "description": "Creation and modification timestamps", "dependencies": ["unique-id"]},
-    {"name": "plain-text", "layer": "foundation", "description": "Plain text as canonical storage format", "dependencies": []},
-    {"name": "link-syntax", "layer": "foundation", "description": "Bidirectional wikilink syntax", "dependencies": ["unique-id"]},
+    {
+        "name": "atomic-note",
+        "layer": "foundation",
+        "description": "Single-concept note",
+        "dependencies": [],
+    },
+    {
+        "name": "unique-id",
+        "layer": "foundation",
+        "description": "Stable unique identifier per note",
+        "dependencies": [],
+    },
+    {
+        "name": "timestamping",
+        "layer": "foundation",
+        "description": "Creation and modification timestamps",
+        "dependencies": ["unique-id"],
+    },
+    {
+        "name": "plain-text",
+        "layer": "foundation",
+        "description": "Plain text as canonical storage format",
+        "dependencies": [],
+    },
+    {
+        "name": "link-syntax",
+        "layer": "foundation",
+        "description": "Bidirectional wikilink syntax",
+        "dependencies": ["unique-id"],
+    },
     # Convention layer (5)
-    {"name": "naming-convention", "layer": "convention", "description": "Consistent file naming scheme", "dependencies": ["unique-id"]},
-    {"name": "front-matter", "layer": "convention", "description": "YAML front-matter metadata block", "dependencies": ["plain-text"]},
-    {"name": "folder-structure", "layer": "convention", "description": "Three-space directory layout", "dependencies": []},
-    {"name": "tag-taxonomy", "layer": "convention", "description": "Hierarchical tagging taxonomy", "dependencies": ["front-matter"]},
-    {"name": "template-set", "layer": "convention", "description": "Reusable note templates", "dependencies": ["front-matter", "naming-convention"]},
+    {
+        "name": "naming-convention",
+        "layer": "convention",
+        "description": "Consistent file naming scheme",
+        "dependencies": ["unique-id"],
+    },
+    {
+        "name": "front-matter",
+        "layer": "convention",
+        "description": "YAML front-matter metadata block",
+        "dependencies": ["plain-text"],
+    },
+    {
+        "name": "folder-structure",
+        "layer": "convention",
+        "description": "Three-space directory layout",
+        "dependencies": [],
+    },
+    {
+        "name": "tag-taxonomy",
+        "layer": "convention",
+        "description": "Hierarchical tagging taxonomy",
+        "dependencies": ["front-matter"],
+    },
+    {
+        "name": "template-set",
+        "layer": "convention",
+        "description": "Reusable note templates",
+        "dependencies": ["front-matter", "naming-convention"],
+    },
     # Automation layer (5)
-    {"name": "auto-backlink", "layer": "automation", "description": "Automatic backlink generation", "dependencies": ["link-syntax"]},
-    {"name": "auto-tag", "layer": "automation", "description": "Automatic tag suggestion", "dependencies": ["tag-taxonomy"]},
-    {"name": "orphan-detection", "layer": "automation", "description": "Detect unlinked orphan notes", "dependencies": ["link-syntax", "auto-backlink"]},
-    {"name": "pipeline-hook", "layer": "automation", "description": "6R pipeline stage hooks", "dependencies": ["template-set"]},
-    {"name": "health-check", "layer": "automation", "description": "Vault health diagnostics", "dependencies": ["orphan-detection", "folder-structure"]},
+    {
+        "name": "auto-backlink",
+        "layer": "automation",
+        "description": "Automatic backlink generation",
+        "dependencies": ["link-syntax"],
+    },
+    {
+        "name": "auto-tag",
+        "layer": "automation",
+        "description": "Automatic tag suggestion",
+        "dependencies": ["tag-taxonomy"],
+    },
+    {
+        "name": "orphan-detection",
+        "layer": "automation",
+        "description": "Detect unlinked orphan notes",
+        "dependencies": ["link-syntax", "auto-backlink"],
+    },
+    {
+        "name": "pipeline-hook",
+        "layer": "automation",
+        "description": "6R pipeline stage hooks",
+        "dependencies": ["template-set"],
+    },
+    {
+        "name": "health-check",
+        "layer": "automation",
+        "description": "Vault health diagnostics",
+        "dependencies": ["orphan-detection", "folder-structure"],
+    },
 ]
 
 
@@ -99,9 +175,7 @@ class KernelPrimitiveRegistry:
             return False
         # Structural check: for folder-structure, verify spaces exist
         if name == "folder-structure":
-            return all(
-                (vault_path / s.value).is_dir() for s in VaultSpace
-            )
+            return all((vault_path / s.value).is_dir() for s in VaultSpace)
         # Default: primitive is registered and enabled
         return prim.enabled
 
@@ -129,7 +203,9 @@ class ProcessingPipeline:
         """Register a handler for a pipeline stage."""
         self._handlers[stage].append(handler)
 
-    def process(self, content: str, context: dict[str, Any] | None = None) -> list[StageResult]:
+    def process(
+        self, content: str, context: dict[str, Any] | None = None
+    ) -> list[StageResult]:
         """Run content through all 6 pipeline stages in order."""
         ctx = context or {}
         self._results = []
@@ -246,7 +322,9 @@ class DerivationEngine:
     def ingest_signal(self, signal: DimensionSignal) -> None:
         self._signals.append(signal)
 
-    def ingest_from_text(self, text: str, source: str = "user") -> list[DimensionSignal]:
+    def ingest_from_text(
+        self, text: str, source: str = "user"
+    ) -> list[DimensionSignal]:
         """Extract dimension signals from free-form text via keyword heuristics."""
         new_signals: list[DimensionSignal] = []
         lower = text.lower()
@@ -433,7 +511,11 @@ class ArsContextaManager:
 
     def health(self, vault_path: str | Path | None = None) -> VaultHealthReport:
         """Run health diagnostics."""
-        vp = Path(vault_path) if vault_path else (self._config.vault_path if self._config else None)
+        vp = (
+            Path(vault_path)
+            if vault_path
+            else (self._config.vault_path if self._config else None)
+        )
         if vp is None:
             return VaultHealthReport(
                 status=HealthStatus.ERROR,
@@ -474,5 +556,3 @@ class ArsContextaManager:
 
     def get_config(self) -> VaultConfig | None:
         return self._config
-
-

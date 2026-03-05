@@ -95,7 +95,9 @@ class EveryCodeClient(CLIAgentBase):
                 text=True,
                 timeout=5,
             )
-            if result.returncode == 0 or "--version" in (result.stdout or result.stderr):
+            if result.returncode == 0 or "--version" in (
+                result.stdout or result.stderr
+            ):
                 return code_command
         except (subprocess.TimeoutExpired, FileNotFoundError) as e:
             logger.debug("Primary command %r not available: %s", code_command, e)
@@ -108,7 +110,9 @@ class EveryCodeClient(CLIAgentBase):
                 text=True,
                 timeout=5,
             )
-            if result.returncode == 0 or "--version" in (result.stdout or result.stderr):
+            if result.returncode == 0 or "--version" in (
+                result.stdout or result.stderr
+            ):
                 return alt_command
         except (subprocess.TimeoutExpired, FileNotFoundError) as e:
             logger.debug("Alternative command %r not available: %s", alt_command, e)
@@ -142,20 +146,22 @@ class EveryCodeClient(CLIAgentBase):
                 request,
                 additional_metadata={
                     "code_success": result.get("success", False),
-                    "input_preview": code_input[:200] if len(code_input) > 200 else code_input,
+                    "input_preview": code_input[:200]
+                    if len(code_input) > 200
+                    else code_input,
                 },
             )
 
         except AgentTimeoutError as e:
             # Convert timeout to EveryCodeError
             raise EveryCodeError(
-                f"Every Code command timed out: {str(e)}",
+                f"Every Code command timed out: {e!s}",
                 command=self.command,
             ) from e
         except AgentError as e:
             # Convert base agent error to EveryCodeError
             raise EveryCodeError(
-                f"Every Code command failed: {str(e)}",
+                f"Every Code command failed: {e!s}",
                 command=self.command,
             ) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -165,7 +171,9 @@ class EveryCodeClient(CLIAgentBase):
                 exc_info=True,
                 extra={"command": self.command, "error": str(e)},
             )
-            raise EveryCodeError(f"Every Code command failed: {str(e)}", command=self.command) from e
+            raise EveryCodeError(
+                f"Every Code command failed: {e!s}", command=self.command
+            ) from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """
@@ -240,7 +248,6 @@ class EveryCodeClient(CLIAgentBase):
         # Join all parts
         return "\n".join(input_parts)
 
-
     def execute_code_command(
         self, command: str, args: list[str] | None = None, input_text: str | None = None
     ) -> dict[str, Any]:
@@ -278,7 +285,14 @@ class EveryCodeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except (AgentError, ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except (
+            AgentError,
+            ValueError,
+            RuntimeError,
+            AttributeError,
+            OSError,
+            TypeError,
+        ) as e:
             self.logger.warning(
                 f"Failed to get Every Code help: {e}",
                 extra={"command": self.command, "error": str(e)},
@@ -300,11 +314,20 @@ class EveryCodeClient(CLIAgentBase):
         try:
             result = self._execute_command(args=["--version"], timeout=5)
             return {
-                "version": result.get("stdout", "").strip() if result.get("success") else None,
+                "version": result.get("stdout", "").strip()
+                if result.get("success")
+                else None,
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except (AgentError, ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except (
+            AgentError,
+            ValueError,
+            RuntimeError,
+            AttributeError,
+            OSError,
+            TypeError,
+        ) as e:
             self.logger.warning(
                 f"Failed to get Every Code version: {e}",
                 extra={"command": self.command, "error": str(e)},

@@ -28,7 +28,7 @@ Example:
         name="get_weather",
         description="Get weather for a location",
         input_schema={"type": "object", "properties": {"location": {"type": "string"}}},
-        handler=get_weather_fn
+        handler=get_weather_fn,
     )
     response = client.execute_with_tools(request)
 
@@ -45,9 +45,9 @@ from .claude_client import CLAUDE_PRICING, ClaudeClient
 from .claude_integration import ClaudeIntegrationAdapter
 
 __all__ = [
+    "CLAUDE_PRICING",
     "ClaudeClient",
     "ClaudeIntegrationAdapter",
-    "CLAUDE_PRICING",
 ]
 
 __version__ = "0.2.0"

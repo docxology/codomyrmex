@@ -83,7 +83,13 @@ class TestGWSExceptions:
             GWSTimeoutError,
         )
 
-        types = [GWSError, GWSNotInstalledError, GWSTimeoutError, GWSAuthError, GWSCommandError]
+        types = [
+            GWSError,
+            GWSNotInstalledError,
+            GWSTimeoutError,
+            GWSAuthError,
+            GWSCommandError,
+        ]
         assert len(set(types)) == len(types)
 
 
@@ -319,7 +325,9 @@ class TestGWSRunnerBuildCmd:
         from codomyrmex.agents.google_workspace.core import GoogleWorkspaceRunner
 
         runner = GoogleWorkspaceRunner()
-        cmd = runner._build_cmd("calendar", "events", "insert", body={"summary": "Meeting"})
+        cmd = runner._build_cmd(
+            "calendar", "events", "insert", body={"summary": "Meeting"}
+        )
         assert "--json" in cmd
         json_idx = cmd.index("--json")
         assert json.loads(cmd[json_idx + 1]) == {"summary": "Meeting"}
@@ -328,7 +336,9 @@ class TestGWSRunnerBuildCmd:
 class TestGWSRunnerNotInstalled:
     """Test that GWSNotInstalledError is raised when gws binary missing."""
 
-    @pytest.mark.skipif(_GWS_INSTALLED, reason="gws is installed — skip not-installed test")
+    @pytest.mark.skipif(
+        _GWS_INSTALLED, reason="gws is installed — skip not-installed test"
+    )
     def test_find_gws_raises_when_not_installed(self):
         from codomyrmex.agents.google_workspace.core import GoogleWorkspaceRunner
         from codomyrmex.agents.google_workspace.exceptions import GWSNotInstalledError

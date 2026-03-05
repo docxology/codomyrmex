@@ -11,7 +11,6 @@ logger = get_logger(__name__)
 
 class DocumentsError(CodomyrmexError):
     """Base exception class for all Documents module errors."""
-    pass
 
 
 class DocumentReadError(DocumentsError):
@@ -34,7 +33,6 @@ class DocumentWriteError(DocumentsError):
 
 class DocumentParseError(DocumentsError):
     """Raised when document parsing fails."""
-    pass
 
 
 class DocumentValidationError(DocumentsError):
@@ -48,7 +46,6 @@ class DocumentValidationError(DocumentsError):
 
 class DocumentConversionError(DocumentsError):
     """Raised when document format conversion fails."""
-    pass
 
 
 class UnsupportedFormatError(DocumentsError):
@@ -62,10 +59,7 @@ class UnsupportedFormatError(DocumentsError):
 
 class EncodingError(DocumentsError):
     """Raised when encoding detection or conversion fails."""
-    pass
 
 
 class MetadataError(DocumentsError):
     """Raised when metadata operations fail."""
-    pass
-

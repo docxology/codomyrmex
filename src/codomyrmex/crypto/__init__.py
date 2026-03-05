@@ -38,27 +38,27 @@ from .exceptions import (
 )
 
 __all__ = [
-    "__version__",
-    "graphy",
-    "currency",
-    "analysis",
-    "steganography",
-    "encoding",
-    "random",
-    "protocols",
-    "CryptoError",
-    "SymmetricCipherError",
     "AsymmetricCipherError",
-    "HashError",
-    "SignatureError",
-    "KDFError",
-    "CertificateError",
-    "WalletError",
     "BlockchainError",
-    "SteganographyError",
+    "CertificateError",
+    "CryptoError",
     "EncodingError",
+    "HashError",
+    "KDFError",
     "ProtocolError",
     "RandomError",
+    "SignatureError",
+    "SteganographyError",
+    "SymmetricCipherError",
+    "WalletError",
+    "__version__",
+    "analysis",
+    "currency",
+    "encoding",
+    "graphy",
+    "protocols",
+    "random",
+    "steganography",
 ]
 
 
@@ -74,7 +74,15 @@ def cli_commands():
 def _cmd_status(**kwargs):
     """Show availability of each crypto submodule."""
     results = {}
-    for name in ["graphy", "currency", "analysis", "steganography", "encoding", "random", "protocols"]:
+    for name in [
+        "graphy",
+        "currency",
+        "analysis",
+        "steganography",
+        "encoding",
+        "random",
+        "protocols",
+    ]:
         try:
             __import__(f"codomyrmex.crypto.{name}")
             results[name] = "available"
@@ -93,11 +101,18 @@ def _cmd_algorithms(**kwargs):
         "kdf": ["PBKDF2", "scrypt", "Argon2id", "HKDF"],
         "mac": ["HMAC-SHA256", "Poly1305", "CMAC"],
         "encoding": ["Base64", "Base58", "Base32", "Hex", "PEM"],
-        "protocols": ["DH", "ECDH (X25519)", "Shamir Secret Sharing", "Schnorr ZKP", "Pedersen Commitment"],
+        "protocols": [
+            "DH",
+            "ECDH (X25519)",
+            "Shamir Secret Sharing",
+            "Schnorr ZKP",
+            "Pedersen Commitment",
+        ],
     }
 
 
 def _cmd_hash(data: str = "", algorithm: str = "sha256", **kwargs):
     """Quick hash computation."""
     from .graphy.hashing import hash_data
+
     return hash_data(data.encode() if isinstance(data, str) else data, algorithm)

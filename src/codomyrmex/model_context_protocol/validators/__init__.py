@@ -14,9 +14,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class ValidationResult:
     """Result of a validation check."""
+
     valid: bool
     errors: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
@@ -24,6 +26,7 @@ class ValidationResult:
     def __bool__(self) -> bool:
         """Return True if this instance is truthy."""
         return self.valid
+
 
 class SchemaValidator:
     """
@@ -63,7 +66,9 @@ class SchemaValidator:
             if not isinstance(data, bool):
                 errors.append(f"Expected boolean, got {type(data).__name__}")
 
-        return ValidationResult(valid=len(errors) == 0, errors=errors, warnings=warnings)
+        return ValidationResult(
+            valid=len(errors) == 0, errors=errors, warnings=warnings
+        )
 
     def _validate_object(self, data: dict[str, Any]) -> list[str]:
         """Validate object properties."""
@@ -101,6 +106,7 @@ class SchemaValidator:
                     errors.append(f"[{i}]: {err}")
 
         return errors
+
 
 class ToolCallValidator:
     """
@@ -158,7 +164,10 @@ class ToolCallValidator:
                 if "data" in result and result["data"] is not None:
                     warnings.append("Data should be null on failure")
 
-        return ValidationResult(valid=len(errors) == 0, errors=errors, warnings=warnings)
+        return ValidationResult(
+            valid=len(errors) == 0, errors=errors, warnings=warnings
+        )
+
 
 class MessageValidator:
     """
@@ -193,7 +202,9 @@ class MessageValidator:
             if not isinstance(params, (dict, list)):
                 errors.append("params must be object or array")
 
-        return ValidationResult(valid=len(errors) == 0, errors=errors, warnings=warnings)
+        return ValidationResult(
+            valid=len(errors) == 0, errors=errors, warnings=warnings
+        )
 
     def validate_response(self, message: dict[str, Any]) -> ValidationResult:
         """Validate a JSON-RPC response."""
@@ -233,7 +244,10 @@ class MessageValidator:
                 elif not isinstance(error["message"], str):
                     errors.append("error.message must be a string")
 
-        return ValidationResult(valid=len(errors) == 0, errors=errors, warnings=warnings)
+        return ValidationResult(
+            valid=len(errors) == 0, errors=errors, warnings=warnings
+        )
+
 
 class SpecificationValidator:
     """
@@ -273,6 +287,7 @@ class SpecificationValidator:
 
         return ValidationResult(valid=True, errors=errors, warnings=warnings)
 
+
 def validate_tool_call(
     tool_name: str,
     arguments: dict[str, Any],
@@ -282,6 +297,7 @@ def validate_tool_call(
     validator = ToolCallValidator(schemas)
     return validator.validate_call(tool_name, arguments)
 
+
 def validate_message(
     message: dict[str, Any],
     message_type: str = "request",
@@ -290,15 +306,15 @@ def validate_message(
     validator = MessageValidator()
     if message_type == "request":
         return validator.validate_request(message)
-    else:
-        return validator.validate_response(message)
+    return validator.validate_response(message)
+
 
 __all__ = [
-    "ValidationResult",
-    "SchemaValidator",
-    "ToolCallValidator",
     "MessageValidator",
+    "SchemaValidator",
     "SpecificationValidator",
-    "validate_tool_call",
+    "ToolCallValidator",
+    "ValidationResult",
     "validate_message",
+    "validate_tool_call",
 ]

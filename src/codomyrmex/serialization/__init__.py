@@ -32,6 +32,7 @@ from .serializer import SerializationFormat, Serializer
 
 def cli_commands() -> dict[str, dict[str, Any]]:
     """Return CLI commands for the serialization module."""
+
     def _formats(**kwargs: Any) -> None:
         """List supported serialization formats."""
         print("=== Serialization Formats ===")
@@ -61,7 +62,10 @@ def cli_commands() -> dict[str, dict[str, Any]]:
 
     return {
         "formats": {"handler": _formats, "help": "List serialization formats"},
-        "convert": {"handler": _convert, "help": "Convert between serialization formats"},
+        "convert": {
+            "handler": _convert,
+            "help": "Convert between serialization formats",
+        },
     }
 
 
@@ -103,5 +107,3 @@ def deserialize(data: bytes, format: str | SerializationFormat = "json") -> Any:
     fmt = SerializationFormat(format) if isinstance(format, str) else format
     serializer = Serializer(default_format=fmt)
     return serializer.deserialize(data)
-
-

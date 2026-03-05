@@ -22,7 +22,7 @@ from codomyrmex.cache.stats import CacheStats
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture()
+@pytest.fixture
 def cache(tmp_path):
     """Return a FileBasedCache backed by an isolated temp directory."""
     return FileBasedCache(cache_dir=tmp_path / "cache")
@@ -46,6 +46,7 @@ class TestFileBasedCacheInit:
     def test_default_cache_dir_is_in_tmp(self):
         cache = FileBasedCache()
         import tempfile
+
         assert str(tempfile.gettempdir()) in str(cache.cache_dir)
 
     def test_custom_cache_dir_stored(self, tmp_path):
@@ -320,7 +321,7 @@ class TestFileBasedCacheStats:
 
     def test_total_requests_tracked(self, cache):
         cache.set("k", "v")
-        cache.get("k")     # hit
+        cache.get("k")  # hit
         cache.get("none")  # miss
         assert cache.stats.total_requests == 2
 

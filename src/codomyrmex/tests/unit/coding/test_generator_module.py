@@ -4,6 +4,7 @@ Covers: CodeBundle dataclass, CodeGenerator.generate with various specs.
 
 No mocks. No MagicMock. No monkeypatch.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -250,7 +251,9 @@ class TestCodeGeneratorHelpers:
 
     def test_extract_operations_finds_items_after_with(self):
         """Operations after 'with' keyword are extracted."""
-        ops = CodeGenerator._extract_operations("Create a utility with add and multiply")
+        ops = CodeGenerator._extract_operations(
+            "Create a utility with add and multiply"
+        )
         assert len(ops) >= 1
 
     def test_extract_class_name_returns_string(self):

@@ -1,6 +1,5 @@
 """Tests for model_evaluation module."""
 
-
 import pytest
 
 try:
@@ -38,6 +37,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestExactMatchScorer:
     """Test suite for ExactMatchScorer."""
+
     def test_exact_match(self):
         scorer = ExactMatchScorer()
         assert scorer.score("hello", "hello") == 1.0
@@ -72,6 +72,7 @@ class TestExactMatchScorer:
 @pytest.mark.unit
 class TestContainsScorer:
     """Test suite for ContainsScorer."""
+
     def test_contains_match(self):
         scorer = ContainsScorer()
         assert scorer.score("The answer is 42", "42") == 1.0
@@ -97,6 +98,7 @@ class TestContainsScorer:
 @pytest.mark.unit
 class TestLengthScorer:
     """Test suite for LengthScorer."""
+
     def test_within_range(self):
         scorer = LengthScorer(min_length=5, max_length=50)
         assert scorer.score("Hello World", "") == 1.0
@@ -128,6 +130,7 @@ class TestLengthScorer:
 @pytest.mark.unit
 class TestRegexScorer:
     """Test suite for RegexScorer."""
+
     def test_regex_search(self):
         scorer = RegexScorer()
         assert scorer.score("The value is 42.", r"\d+") == 1.0
@@ -154,6 +157,7 @@ class TestRegexScorer:
 @pytest.mark.unit
 class TestCompositeScorer:
     """Test suite for CompositeScorer."""
+
     def test_empty_returns_zero(self):
         scorer = CompositeScorer()
         assert scorer.score("a", "b") == 0.0
@@ -164,10 +168,12 @@ class TestCompositeScorer:
         assert scorer.score("hello", "HELLO") == 1.0
 
     def test_weighted_average(self):
-        scorer = CompositeScorer([
-            WeightedScorer(ExactMatchScorer(), weight=1.0),
-            WeightedScorer(ContainsScorer(), weight=1.0),
-        ])
+        scorer = CompositeScorer(
+            [
+                WeightedScorer(ExactMatchScorer(), weight=1.0),
+                WeightedScorer(ContainsScorer(), weight=1.0),
+            ]
+        )
         # Exact match fails (case sensitive), contains succeeds
         score = scorer.score("Hello", "hello")
         assert score == 0.5
@@ -201,6 +207,7 @@ class TestCompositeScorer:
 @pytest.mark.unit
 class TestCreateDefaultScorer:
     """Test suite for CreateDefaultScorer."""
+
     def test_returns_composite(self):
         scorer = create_default_scorer()
         assert isinstance(scorer, CompositeScorer)
@@ -220,6 +227,7 @@ class TestCreateDefaultScorer:
 @pytest.mark.unit
 class TestBenchmarkDataclasses:
     """Test suite for BenchmarkDataclasses."""
+
     def test_case_auto_id(self):
         case = BenchmarkCase(input_text="hi", expected_output="hello")
         assert len(case.id) > 0
@@ -229,13 +237,19 @@ class TestBenchmarkDataclasses:
         assert case.id == "c1"
 
     def test_result_passed_property(self):
-        r_pass = BenchmarkResult(case_id="1", score=0.8, duration_ms=1.0, scorer_name="exact")
-        r_fail = BenchmarkResult(case_id="2", score=0.3, duration_ms=1.0, scorer_name="exact")
+        r_pass = BenchmarkResult(
+            case_id="1", score=0.8, duration_ms=1.0, scorer_name="exact"
+        )
+        r_fail = BenchmarkResult(
+            case_id="2", score=0.3, duration_ms=1.0, scorer_name="exact"
+        )
         assert r_pass.passed is True
         assert r_fail.passed is False
 
     def test_result_to_dict(self):
-        r = BenchmarkResult(case_id="1", score=0.9, duration_ms=5.0, scorer_name="exact")
+        r = BenchmarkResult(
+            case_id="1", score=0.9, duration_ms=5.0, scorer_name="exact"
+        )
         d = r.to_dict()
         assert d["case_id"] == "1"
         assert d["passed"] is True
@@ -249,23 +263,30 @@ class TestBenchmarkDataclasses:
 @pytest.mark.unit
 class TestBenchmarkSuite:
     """Test suite for BenchmarkSuite."""
+
     def test_add_case_and_count(self):
         suite = BenchmarkSuite(name="test")
         suite.add_case(input_text="a", expected_output="b")
         assert suite.case_count == 1
 
     def test_run_with_identity_model(self):
-        suite = BenchmarkSuite(name="identity", scorer=ExactMatchScorer(case_sensitive=True))
+        suite = BenchmarkSuite(
+            name="identity", scorer=ExactMatchScorer(case_sensitive=True)
+        )
         suite.add_case(input_text="hello", expected_output="hello")
         suite.add_case(input_text="world", expected_output="WORLD")
 
         result = suite.run(model_fn=lambda x: x)
         assert isinstance(result, SuiteResult)
         assert result.total_cases == 2
-        assert result.passed_cases == 1  # "hello" matches exactly, "world" != "WORLD" (case sensitive)
+        assert (
+            result.passed_cases == 1
+        )  # "hello" matches exactly, "world" != "WORLD" (case sensitive)
 
     def test_suite_result_stats(self):
-        suite = BenchmarkSuite(name="stats", scorer=ExactMatchScorer(case_sensitive=False))
+        suite = BenchmarkSuite(
+            name="stats", scorer=ExactMatchScorer(case_sensitive=False)
+        )
         suite.add_case(input_text="a", expected_output="a")
         suite.add_case(input_text="b", expected_output="b")
         result = suite.run(model_fn=lambda x: x)
@@ -313,6 +334,7 @@ class TestBenchmarkSuite:
 @pytest.mark.unit
 class TestQualityAnalyzer:
     """Test suite for QualityAnalyzer."""
+
     def test_analyze_nonempty_output(self):
         analyzer = QualityAnalyzer()
         report = analyzer.analyze(
@@ -338,7 +360,7 @@ class TestQualityAnalyzer:
         analyzer = QualityAnalyzer()
         report = analyzer.analyze(
             "Python is great for machine learning tasks.",
-            context="Tell me about Python and machine learning"
+            context="Tell me about Python and machine learning",
         )
         relevance_score = report.get_score(QualityDimension.RELEVANCE)
         assert relevance_score > 0.0

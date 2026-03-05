@@ -8,7 +8,7 @@ import asyncio
 import time
 from dataclasses import dataclass
 
-__all__ = ["RateLimitConfig", "AsyncTokenBucket", "AsyncSlidingWindow"]
+__all__ = ["AsyncSlidingWindow", "AsyncTokenBucket", "RateLimitConfig"]
 
 
 @dataclass
@@ -73,7 +73,9 @@ class AsyncSlidingWindow:
         while True:
             async with self._lock:
                 now = time.monotonic()
-                self._timestamps = [t for t in self._timestamps if now - t < self._window]
+                self._timestamps = [
+                    t for t in self._timestamps if now - t < self._window
+                ]
                 if len(self._timestamps) < self._max_requests:
                     self._timestamps.append(now)
                     return True

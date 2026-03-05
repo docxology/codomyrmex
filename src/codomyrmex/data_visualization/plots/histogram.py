@@ -1,4 +1,5 @@
 """Histogram visualization."""
+
 from ._base import BasePlot
 
 

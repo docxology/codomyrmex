@@ -269,12 +269,16 @@ class TestArgParserFlags:
         assert args.todo_file == "todo_list.txt"
 
     def test_all_flags_combined(self):
-        args = self._parse([
-            "--count", "3",
-            "--config", "/tmp/cfg.json",
-            "--dry-run",
-            "--non-interactive",
-        ])
+        args = self._parse(
+            [
+                "--count",
+                "3",
+                "--config",
+                "/tmp/cfg.json",
+                "--dry-run",
+                "--non-interactive",
+            ]
+        )
         assert args.count == 3
         assert args.config == "/tmp/cfg.json"
         assert args.dry_run is True

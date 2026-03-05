@@ -128,7 +128,9 @@ class EdgeScheduler:
             # Simplistic execution: run on any node that has the function
             for node in cluster.list_nodes():
                 runtime = cluster.get_runtime(node.id)
-                if runtime and any(f.id == job.function_id for f in runtime.list_functions()):
+                if runtime and any(
+                    f.id == job.function_id for f in runtime.list_functions()
+                ):
                     try:
                         runtime.invoke(job.function_id, *job.args, **job.kwargs)
                         self.mark_executed(job.id)

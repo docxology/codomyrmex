@@ -30,6 +30,7 @@ from codomyrmex.performance.monitoring.performance_monitor import (
 # Dataclass tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPerformanceMetrics:
     """Tests for the PerformanceMetrics dataclass."""
@@ -105,6 +106,7 @@ class TestSystemMetrics:
 # SystemMonitor tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSystemMonitor:
     """Tests for the SystemMonitor class."""
@@ -166,6 +168,7 @@ class TestSystemMonitor:
 # ---------------------------------------------------------------------------
 # PerformanceMonitor tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestPerformanceMonitor:
@@ -324,6 +327,7 @@ class TestPerformanceMonitor:
 # Decorator tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMonitorPerformanceDecorator:
     """Tests for the monitor_performance decorator."""
@@ -358,7 +362,6 @@ class TestMonitorPerformanceDecorator:
         @monitor_performance(monitor=pm)
         def documented_func():
             """My docstring."""
-            pass
 
         assert documented_func.__name__ == "documented_func"
         assert documented_func.__doc__ == "My docstring."
@@ -406,6 +409,7 @@ class TestProfileMemoryUsage:
 # Context manager tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPerformanceContext:
     """Tests for the performance_context context manager."""
@@ -423,9 +427,8 @@ class TestPerformanceContext:
 
     def test_records_even_on_exception(self):
         clear_performance_metrics()
-        with pytest.raises(RuntimeError):
-            with performance_context("err_op"):
-                raise RuntimeError("fail")
+        with pytest.raises(RuntimeError), performance_context("err_op"):
+            raise RuntimeError("fail")
 
         stats = get_performance_stats("err_op")
         assert stats["total_calls"] == 1
@@ -451,6 +454,7 @@ class TestTrackResourceUsage:
 # ---------------------------------------------------------------------------
 # Module-level helper tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestModuleLevelHelpers:

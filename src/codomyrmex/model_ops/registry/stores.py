@@ -19,17 +19,14 @@ class ModelStore(ABC):
     @abstractmethod
     def save_artifact(self, model_name: str, version: str, artifact: bytes) -> str:
         """Save model artifact and return path."""
-        pass
 
     @abstractmethod
     def load_artifact(self, path: str) -> bytes:
         """Load model artifact from path."""
-        pass
 
     @abstractmethod
     def delete_artifact(self, path: str) -> bool:
         """Delete model artifact."""
-        pass
 
 
 class FileModelStore(ModelStore):

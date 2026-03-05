@@ -74,7 +74,9 @@ def rsa_encrypt(plaintext: bytes, public_key: Any) -> bytes:
                 label=None,
             ),
         )
-        logger.debug("RSA-OAEP encryption complete, ciphertext length=%d", len(ciphertext))
+        logger.debug(
+            "RSA-OAEP encryption complete, ciphertext length=%d", len(ciphertext)
+        )
         return ciphertext
     except Exception as exc:
         raise AsymmetricCipherError(f"RSA encryption failed: {exc}") from exc
@@ -102,7 +104,9 @@ def rsa_decrypt(ciphertext: bytes, private_key: Any) -> bytes:
                 label=None,
             ),
         )
-        logger.debug("RSA-OAEP decryption complete, plaintext length=%d", len(plaintext))
+        logger.debug(
+            "RSA-OAEP decryption complete, plaintext length=%d", len(plaintext)
+        )
         return plaintext
     except Exception as exc:
         raise AsymmetricCipherError(f"RSA decryption failed: {exc}") from exc
@@ -181,12 +185,18 @@ def serialize_public_key(key: Any, encoding: str = "pem") -> bytes:
         AsymmetricCipherError: On serialization failure.
     """
     try:
-        enc = serialization.Encoding.PEM if encoding == "pem" else serialization.Encoding.DER
+        enc = (
+            serialization.Encoding.PEM
+            if encoding == "pem"
+            else serialization.Encoding.DER
+        )
         data = key.public_bytes(
             encoding=enc,
             format=serialization.PublicFormat.SubjectPublicKeyInfo,
         )
-        logger.debug("Public key serialized to %s, length=%d", encoding.upper(), len(data))
+        logger.debug(
+            "Public key serialized to %s, length=%d", encoding.upper(), len(data)
+        )
         return data
     except Exception as exc:
         raise AsymmetricCipherError(f"Public key serialization failed: {exc}") from exc
@@ -211,7 +221,11 @@ def serialize_private_key(
         AsymmetricCipherError: On serialization failure.
     """
     try:
-        enc = serialization.Encoding.PEM if encoding == "pem" else serialization.Encoding.DER
+        enc = (
+            serialization.Encoding.PEM
+            if encoding == "pem"
+            else serialization.Encoding.DER
+        )
         encryption: serialization.KeySerializationEncryption
         if password is not None:
             encryption = serialization.BestAvailableEncryption(password)
@@ -222,7 +236,9 @@ def serialize_private_key(
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=encryption,
         )
-        logger.debug("Private key serialized to %s, length=%d", encoding.upper(), len(data))
+        logger.debug(
+            "Private key serialized to %s, length=%d", encoding.upper(), len(data)
+        )
         return data
     except Exception as exc:
         raise AsymmetricCipherError(f"Private key serialization failed: {exc}") from exc

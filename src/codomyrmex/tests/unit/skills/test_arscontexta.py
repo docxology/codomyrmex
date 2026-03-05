@@ -269,7 +269,9 @@ class TestDerivationEngine:
 
     def test_text_keyword_extraction(self):
         engine = DerivationEngine()
-        signals = engine.ingest_from_text("I use obsidian for zettelkasten research notes")
+        signals = engine.ingest_from_text(
+            "I use obsidian for zettelkasten research notes"
+        )
         # Should match: obsidian (toolchain), zettelkasten (methodology), research (domain)
         dimensions_found = {s.dimension for s in signals}
         assert ConfigDimension.TOOLCHAIN in dimensions_found

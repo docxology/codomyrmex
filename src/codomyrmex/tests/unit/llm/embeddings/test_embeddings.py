@@ -49,11 +49,13 @@ class TestEmbedding:
 
     def test_from_dict(self):
         """Should create from dict."""
-        emb = Embedding.from_dict({
-            "vector": [0.1, 0.2],
-            "text": "hello",
-            "model": "test",
-        })
+        emb = Embedding.from_dict(
+            {
+                "vector": [0.1, 0.2],
+                "text": "hello",
+                "model": "test",
+            }
+        )
         assert emb.text == "hello"
         assert emb.vector == [0.1, 0.2]
 

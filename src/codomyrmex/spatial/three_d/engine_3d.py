@@ -7,6 +7,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class Vector3D:
     """3D vector representation."""
@@ -31,6 +32,7 @@ class Vector3D:
 @dataclass
 class Quaternion:
     """Quaternion for rotation."""
+
     x: float = 0.0
     y: float = 0.0
     z: float = 0.0
@@ -40,6 +42,7 @@ class Quaternion:
 @dataclass
 class Object3D:
     """3D Object representation."""
+
     name: str = "Object"
     position: Vector3D = field(default_factory=Vector3D)
     rotation: Quaternion = field(default_factory=Quaternion)
@@ -73,6 +76,7 @@ class PhysicsEngine:
 @dataclass
 class Light3D:
     """3D Light representation."""
+
     position: Vector3D = field(default_factory=Vector3D)
     color: tuple[float, float, float] = (1.0, 1.0, 1.0)
     intensity: float = 1.0
@@ -81,6 +85,7 @@ class Light3D:
 @dataclass
 class Camera3D:
     """3D Camera representation."""
+
     position: Vector3D = field(default_factory=Vector3D)
     rotation: Quaternion = field(default_factory=Quaternion)
     field_of_view: float = 60.0
@@ -90,13 +95,14 @@ class Camera3D:
     def look_at(self, target: Vector3D) -> None:
         """Point camera at target."""
         import math
+
         dx = target.x - self.position.x
         dy = target.y - self.position.y
         dz = target.z - self.position.z
 
         # Pitch and yaw calculation as functional fallback
         yaw = math.atan2(dx, dz)
-        pitch = math.atan2(-dy, math.sqrt(dx*dx + dz*dz))
+        pitch = math.atan2(-dy, math.sqrt(dx * dx + dz * dz))
 
         # Approximate quaternion rotation from euler (yaw, pitch, roll=0)
         cy = math.cos(yaw * 0.5)
@@ -113,6 +119,7 @@ class Camera3D:
 @dataclass
 class Scene3D:
     """3D Scene representation."""
+
     objects: list[Object3D] = field(default_factory=list)
     lights: list[Light3D] = field(default_factory=list)
     camera: Camera3D = field(default_factory=Camera3D)

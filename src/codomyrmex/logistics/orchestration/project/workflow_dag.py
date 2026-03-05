@@ -19,25 +19,29 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
+
 class DAGValidationError(Exception):
     """Exception raised when DAG validation fails."""
-    pass
+
 
 class CycleDetectedError(DAGValidationError):
     """Exception raised when a cycle is detected in the DAG."""
-    pass
+
 
 class TaskStatus(Enum):
     """Status of a task in the workflow."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
     SKIPPED = "skipped"
 
+
 @dataclass
 class DAGTask:
     """Represents a task in the DAG."""
+
     name: str
     module: str
     action: str
@@ -59,8 +63,9 @@ class DAGTask:
             "status": self.status.value,
             "execution_order": self.execution_order,
             "result": self.result,
-            "error": self.error
+            "error": self.error,
         }
+
 
 class WorkflowDAG:
     """
@@ -101,7 +106,7 @@ class WorkflowDAG:
             module=task_dict.get("module", ""),
             action=task_dict.get("action", ""),
             dependencies=task_dict.get("dependencies", []),
-            parameters=task_dict.get("parameters", {})
+            parameters=task_dict.get("parameters", {}),
         )
 
         self.tasks[task.name] = task
@@ -182,7 +187,9 @@ class WorkflowDAG:
                 elif neighbor in rec_stack:
                     # Cycle detected
                     cycle = self._find_cycle(node, neighbor)
-                    raise CycleDetectedError(f"Cycle detected in DAG: {' -> '.join(cycle)}")
+                    raise CycleDetectedError(
+                        f"Cycle detected in DAG: {' -> '.join(cycle)}"
+                    )
 
             rec_stack.remove(node)
 
@@ -317,7 +324,7 @@ class WorkflowDAG:
         # Add nodes
         for task_name, task in self.tasks.items():
             label = f"{task_name}\\n{task.module}:{task.action}"
-            lines.append(f"    {task_name}[\"{label}\"]")
+            lines.append(f'    {task_name}["{label}"]')
 
         # Add edges
         added_edges = set()
@@ -350,5 +357,7 @@ class WorkflowDAG:
         return {
             "tasks": {name: task.to_dict() for name, task in self.tasks.items()},
             "graph": {task: list(deps) for task, deps in self.graph.items()},
-            "reverse_graph": {task: list(deps) for task, deps in self.reverse_graph.items()}
+            "reverse_graph": {
+                task: list(deps) for task, deps in self.reverse_graph.items()
+            },
         }

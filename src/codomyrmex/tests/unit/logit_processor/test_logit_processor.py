@@ -183,10 +183,12 @@ class TestLogitProcessorList:
 
     @pytest.mark.unit
     def test_chained_processors(self):
-        chain = LogitProcessorList([
-            TemperatureProcessor(temperature=2.0),
-            TopKProcessor(top_k=2),
-        ])
+        chain = LogitProcessorList(
+            [
+                TemperatureProcessor(temperature=2.0),
+                TopKProcessor(top_k=2),
+            ]
+        )
         logits = np.array([1.0, 3.0, 2.0])
         result = chain(logits)
         # After temp: [0.5, 1.5, 1.0]; after top-k=2: keep indices 1,2

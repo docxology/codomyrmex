@@ -213,9 +213,7 @@ class TestInfomaniakModuleExports:
         assert hasattr(InfomaniakOpenStackBase, "from_env")
         assert hasattr(InfomaniakOpenStackBase, "from_credentials")
 
-        assert isinstance(
-            InfomaniakOpenStackBase.__dict__["from_env"], classmethod
-        )
+        assert isinstance(InfomaniakOpenStackBase.__dict__["from_env"], classmethod)
         assert isinstance(
             InfomaniakOpenStackBase.__dict__["from_credentials"], classmethod
         )
@@ -231,12 +229,8 @@ class TestInfomaniakModuleExports:
         assert hasattr(InfomaniakS3Base, "from_env")
         assert hasattr(InfomaniakS3Base, "from_credentials")
 
-        assert isinstance(
-            InfomaniakS3Base.__dict__["from_env"], classmethod
-        )
-        assert isinstance(
-            InfomaniakS3Base.__dict__["from_credentials"], classmethod
-        )
+        assert isinstance(InfomaniakS3Base.__dict__["from_env"], classmethod)
+        assert isinstance(InfomaniakS3Base.__dict__["from_credentials"], classmethod)
 
     # -----------------------------------------------------------------
     # 10. Exception instances carry service/operation/resource_id
@@ -272,7 +266,9 @@ class TestInfomaniakModuleExports:
                 resource_id="srv-123",
             )
             assert exc.service == "compute", f"{cls.__name__}.service mismatch"
-            assert exc.operation == "create_instance", f"{cls.__name__}.operation mismatch"
+            assert exc.operation == "create_instance", (
+                f"{cls.__name__}.operation mismatch"
+            )
             assert exc.resource_id == "srv-123", f"{cls.__name__}.resource_id mismatch"
             assert "test error" in str(exc)
 
@@ -303,17 +299,20 @@ class TestInfomaniakModuleExports:
 
 # =========================================================================
 
+
 class TestExpandedModuleExports:
     """Comprehensive tests for __all__ exports and import paths."""
 
     def test_classify_http_error_exported(self):
         """classify_http_error is in __all__ and importable."""
         from codomyrmex.cloud.infomaniak import classify_http_error
+
         assert callable(classify_http_error)
 
     def test_rest_base_exported(self):
         """InfomaniakRESTBase is in __all__ and importable."""
         from codomyrmex.cloud.infomaniak import InfomaniakRESTBase
+
         assert InfomaniakRESTBase is not None
 
     def test_all_exports_importable(self):
@@ -332,21 +331,25 @@ class TestExpandedModuleExports:
     def test_all_contains_classify_http_error(self):
         """Verify __all__ includes classify_http_error."""
         import codomyrmex.cloud.infomaniak as pkg
+
         assert "classify_http_error" in pkg.__all__
 
     def test_all_contains_rest_base(self):
         """Verify __all__ includes InfomaniakRESTBase."""
         import codomyrmex.cloud.infomaniak as pkg
+
         assert "InfomaniakRESTBase" in pkg.__all__
 
     def test_newsletter_importable_from_package(self):
         """InfomaniakNewsletterClient importable from package root."""
         from codomyrmex.cloud.infomaniak import InfomaniakNewsletterClient
+
         assert InfomaniakNewsletterClient is not None
 
     def test_newsletter_importable_from_submodule(self):
         """InfomaniakNewsletterClient importable from newsletter submodule."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+
         assert InfomaniakNewsletterClient is not None
 
 

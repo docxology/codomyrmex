@@ -26,6 +26,7 @@ def _make_endpoint(
     """
     try:
         from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint
+
         return RelayEndpoint(
             channel,
             llm_client=client,
@@ -36,6 +37,7 @@ def _make_endpoint(
         )
     except ImportError:
         from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
+
         return ClaudeCodeEndpoint(
             channel,
             claude_client=client,
@@ -80,7 +82,11 @@ class AutonomousAgent:
         self.client = get_llm_client(identity)
 
         self.endpoint = _make_endpoint(
-            channel, identity, poll_interval, self.client, scheduler_config,
+            channel,
+            identity,
+            poll_interval,
+            self.client,
+            scheduler_config,
         )
 
         self.endpoint.on_message(self._handle_message)
@@ -133,7 +139,9 @@ class AutonomousAgent:
         if not msg.is_chat:
             return
 
-        logger.info(f"[{self.identity}] Received from {msg.sender}: {msg.content[:50]}...")
+        logger.info(
+            f"[{self.identity}] Received from {msg.sender}: {msg.content[:50]}..."
+        )
 
         if not self.running:
             return

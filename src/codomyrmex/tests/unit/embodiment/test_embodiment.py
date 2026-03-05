@@ -19,6 +19,7 @@ async def test_ros_bridge_pub_sub():
 
     # Track messages received
     received = []
+
     def callback(msg):
         received.append(msg)
 
@@ -34,6 +35,7 @@ async def test_ros_bridge_pub_sub():
     assert len(received) == 1
     assert received[0].payload == test_msg
 
+
 @pytest.mark.asyncio
 @pytest.mark.unit
 async def test_bridge_publishing():
@@ -44,6 +46,7 @@ async def test_bridge_publishing():
     assert msg is not None
     assert msg.topic == "/cmd_vel"
     assert msg.payload == {"speed": 1.0}
+
 
 @pytest.mark.unit
 def test_transform_3d():
@@ -66,6 +69,7 @@ def test_transform_3d():
 
     assert Transform3D.deg_to_rad(180) == math.pi
 
+
 @pytest.mark.unit
 def test_sensors():
     """Test sensor interface and mock sensor."""
@@ -84,6 +88,7 @@ def test_sensors():
 
     sensor.disconnect()
     assert not sensor.is_connected
+
 
 @pytest.mark.unit
 def test_actuators():

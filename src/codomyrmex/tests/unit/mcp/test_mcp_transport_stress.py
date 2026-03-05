@@ -136,12 +136,14 @@ class TestMalformedJSONRPC:
         """Server._handle_request with invalid JSON → error response."""
         server = _make_server()
         # _handle_request expects a parsed dict, simulate malformed request
-        result = await server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/call",
-            "params": {"name": "", "arguments": {}},
-        })
+        result = await server.handle_request(
+            {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "tools/call",
+                "params": {"name": "", "arguments": {}},
+            }
+        )
         # Should return a response dict (possibly error), not crash
         assert isinstance(result, dict)
 
@@ -149,12 +151,14 @@ class TestMalformedJSONRPC:
     async def test_handle_unknown_method(self) -> None:
         """Unknown JSON-RPC method → error response."""
         server = _make_server()
-        result = await server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "unknown/method",
-            "params": {},
-        })
+        result = await server.handle_request(
+            {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "unknown/method",
+                "params": {},
+            }
+        )
         assert isinstance(result, dict)
 
 
@@ -167,6 +171,7 @@ class TestServerStability:
     @pytest.mark.asyncio
     async def test_server_survives_handler_exception(self) -> None:
         """A tool handler that raises should not crash the server."""
+
         def _bad_handler(**kwargs):
             raise RuntimeError("boom")
 

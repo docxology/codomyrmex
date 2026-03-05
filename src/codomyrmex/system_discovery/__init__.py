@@ -46,12 +46,12 @@ def cli_commands():
 
 
 __all__ = [
-    "SystemDiscovery",
-    "StatusReporter",
     "CapabilityScanner",
     "HealthChecker",
-    "get_system_context",
+    "StatusReporter",
+    "SystemDiscovery",
     "cli_commands",
+    "get_system_context",
 ]
 
 __version__ = "0.1.0"

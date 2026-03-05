@@ -48,11 +48,13 @@ class TransactionBuilder:
 
     Example::
 
-        tx = (TransactionBuilder("0xSender")
-              .to("0xReceiver")
-              .value(1000)
-              .gas_limit(21000)
-              .build())
+        tx = (
+            TransactionBuilder("0xSender")
+            .to("0xReceiver")
+            .value(1000)
+            .gas_limit(21000)
+            .build()
+        )
     """
 
     def __init__(self, from_address: Address) -> None:
@@ -105,7 +107,9 @@ class TransactionBuilder:
 
     def auto_gas(self) -> TransactionBuilder:
         """Auto-estimate gas from calldata."""
-        self._gas_limit = estimate_gas(self._data, is_contract_creation=(self._to is None))
+        self._gas_limit = estimate_gas(
+            self._data, is_contract_creation=(self._to is None)
+        )
         return self
 
     def validate(self) -> list[str]:
@@ -145,6 +149,7 @@ class TransactionBuilder:
 
 
 # ── Batch builder ───────────────────────────────────────────────────
+
 
 def build_batch(
     from_address: Address,

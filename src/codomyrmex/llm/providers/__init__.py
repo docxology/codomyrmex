@@ -27,6 +27,7 @@ class ProviderType(Enum):
         COHERE - Cohere API
         MISTRAL - Mistral AI API
     """
+
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     OPENROUTER = "openrouter"
@@ -36,9 +37,11 @@ class ProviderType(Enum):
     COHERE = "cohere"
     MISTRAL = "mistral"
 
+
 @dataclass
 class Message:
     """A chat message."""
+
     role: str  # "system", "user", "assistant", "tool"
     content: str
     name: str | None = None
@@ -56,9 +59,11 @@ class Message:
             result["tool_call_id"] = self.tool_call_id
         return result
 
+
 @dataclass
 class CompletionResponse:
     """Response from a completion request."""
+
     content: str
     model: str
     provider: ProviderType
@@ -74,9 +79,11 @@ class CompletionResponse:
             return self.usage.get("total_tokens", 0)
         return 0
 
+
 @dataclass
 class ProviderConfig:
     """Configuration for an LLM provider."""
+
     api_key: str | None = None
     base_url: str | None = None
     organization: str | None = None
@@ -84,6 +91,7 @@ class ProviderConfig:
     max_retries: int = 3
     default_model: str | None = None
     extra_headers: dict[str, str] = field(default_factory=dict)
+
 
 class LLMProvider(ABC):
     """Abstract base class for LLM providers.
@@ -120,10 +128,9 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Generate a completion from messages."""
-        pass
 
     @abstractmethod
     def complete_stream(
@@ -132,10 +139,9 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         """Generate a streaming completion."""
-        pass
 
     @abstractmethod
     async def complete_async(
@@ -144,15 +150,13 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Generate a completion asynchronously."""
-        pass
 
     @abstractmethod
     def list_models(self) -> list[str]:
         """List available models for this provider."""
-        pass
 
     def get_model(self, model: str | None = None) -> str:
         """Get model name, using default if not specified."""
@@ -161,7 +165,7 @@ class LLMProvider(ABC):
     @abstractmethod
     def _default_model(self) -> str:
         """Get the default model for this provider."""
-        pass
+
 
 class OpenAIProvider(LLMProvider):
     """OpenAI API provider."""
@@ -176,6 +180,7 @@ class OpenAIProvider(LLMProvider):
         """Initialize the OpenAI client."""
         try:
             from openai import OpenAI
+
             self._client = OpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
@@ -192,7 +197,7 @@ class OpenAIProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Complete."""
         if not self._client:
@@ -203,7 +208,7 @@ class OpenAIProvider(LLMProvider):
             messages=[m.to_dict() for m in messages],
             temperature=temperature,
             max_tokens=max_tokens,
-            **kwargs
+            **kwargs,
         )
 
         choice = response.choices[0]
@@ -216,8 +221,12 @@ class OpenAIProvider(LLMProvider):
                 "prompt_tokens": response.usage.prompt_tokens,
                 "completion_tokens": response.usage.completion_tokens,
                 "total_tokens": response.usage.total_tokens,
-            } if response.usage else None,
-            tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+            }
+            if response.usage
+            else None,
+            tool_calls=[tc.model_dump() for tc in choice.message.tool_calls]
+            if choice.message.tool_calls
+            else None,
             raw_response=response,
         )
 
@@ -227,7 +236,7 @@ class OpenAIProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("OpenAI client not initialized.")
@@ -238,7 +247,7 @@ class OpenAIProvider(LLMProvider):
             temperature=temperature,
             max_tokens=max_tokens,
             stream=True,
-            **kwargs
+            **kwargs,
         )
 
         for chunk in stream:
@@ -251,10 +260,11 @@ class OpenAIProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         try:
             from openai import AsyncOpenAI
+
             async_client = AsyncOpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
@@ -264,7 +274,7 @@ class OpenAIProvider(LLMProvider):
                 messages=[m.to_dict() for m in messages],
                 temperature=temperature,
                 max_tokens=max_tokens,
-                **kwargs
+                **kwargs,
             )
             choice = response.choices[0]
             return CompletionResponse(
@@ -276,8 +286,12 @@ class OpenAIProvider(LLMProvider):
                     "prompt_tokens": response.usage.prompt_tokens,
                     "completion_tokens": response.usage.completion_tokens,
                     "total_tokens": response.usage.total_tokens,
-                } if response.usage else None,
-                tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+                }
+                if response.usage
+                else None,
+                tool_calls=[tc.model_dump() for tc in choice.message.tool_calls]
+                if choice.message.tool_calls
+                else None,
                 raw_response=response,
             )
         except ImportError:
@@ -292,6 +306,7 @@ class OpenAIProvider(LLMProvider):
     def _default_model(self) -> str:
         return "gpt-4o"
 
+
 class AnthropicProvider(LLMProvider):
     """Anthropic Claude API provider."""
 
@@ -304,6 +319,7 @@ class AnthropicProvider(LLMProvider):
     def _init_client(self):
         try:
             from anthropic import Anthropic
+
             self._client = Anthropic(api_key=self.config.api_key)
         except ImportError:
             self._client = None
@@ -314,7 +330,7 @@ class AnthropicProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Complete."""
         if not self._client:
@@ -335,7 +351,7 @@ class AnthropicProvider(LLMProvider):
             system=system,
             temperature=temperature,
             max_tokens=max_tokens or 4096,
-            **kwargs
+            **kwargs,
         )
 
         return CompletionResponse(
@@ -346,7 +362,8 @@ class AnthropicProvider(LLMProvider):
             usage={
                 "prompt_tokens": response.usage.input_tokens,
                 "completion_tokens": response.usage.output_tokens,
-                "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
+                "total_tokens": response.usage.input_tokens
+                + response.usage.output_tokens,
             },
             raw_response=response,
         )
@@ -357,7 +374,7 @@ class AnthropicProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
@@ -376,7 +393,7 @@ class AnthropicProvider(LLMProvider):
             system=system,
             temperature=temperature,
             max_tokens=max_tokens or 4096,
-            **kwargs
+            **kwargs,
         ) as stream:
             yield from stream.text_stream
 
@@ -386,10 +403,11 @@ class AnthropicProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         try:
             from anthropic import AsyncAnthropic
+
             async_client = AsyncAnthropic(api_key=self.config.api_key)
 
             system = None
@@ -406,7 +424,7 @@ class AnthropicProvider(LLMProvider):
                 system=system,
                 temperature=temperature,
                 max_tokens=max_tokens or 4096,
-                **kwargs
+                **kwargs,
             )
 
             return CompletionResponse(
@@ -417,8 +435,11 @@ class AnthropicProvider(LLMProvider):
                 usage={
                     "prompt_tokens": response.usage.input_tokens,
                     "completion_tokens": response.usage.output_tokens,
-                    "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
-                } if response.usage else None,
+                    "total_tokens": response.usage.input_tokens
+                    + response.usage.output_tokens,
+                }
+                if response.usage
+                else None,
                 raw_response=response,
             )
         except ImportError:
@@ -435,6 +456,7 @@ class AnthropicProvider(LLMProvider):
 
     def _default_model(self) -> str:
         return "claude-3-5-sonnet-20241022"
+
 
 class OpenRouterProvider(LLMProvider):
     """OpenRouter API provider for multi-model access.
@@ -488,16 +510,19 @@ class OpenRouterProvider(LLMProvider):
         if not self.config.base_url:
             self.config.base_url = self.BASE_URL
         # Add required OpenRouter headers
-        self.config.extra_headers.update({
-            "HTTP-Referer": "https://github.com/codomyrmex",
-            "X-Title": "Codomyrmex",
-        })
+        self.config.extra_headers.update(
+            {
+                "HTTP-Referer": "https://github.com/codomyrmex",
+                "X-Title": "Codomyrmex",
+            }
+        )
         self._init_client()
 
     def _init_client(self):
         """Initialize the OpenAI-compatible client for OpenRouter."""
         try:
             from openai import OpenAI
+
             self._client = OpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
@@ -514,18 +539,20 @@ class OpenRouterProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Complete."""
         if not self._client:
-            raise RuntimeError("OpenRouter client not initialized. Install openai package.")
+            raise RuntimeError(
+                "OpenRouter client not initialized. Install openai package."
+            )
 
         response = self._client.chat.completions.create(
             model=self.get_model(model),
             messages=[m.to_dict() for m in messages],
             temperature=temperature,
             max_tokens=max_tokens,
-            **kwargs
+            **kwargs,
         )
 
         choice = response.choices[0]
@@ -538,8 +565,12 @@ class OpenRouterProvider(LLMProvider):
                 "prompt_tokens": response.usage.prompt_tokens,
                 "completion_tokens": response.usage.completion_tokens,
                 "total_tokens": response.usage.total_tokens,
-            } if response.usage else None,
-            tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+            }
+            if response.usage
+            else None,
+            tool_calls=[tc.model_dump() for tc in choice.message.tool_calls]
+            if choice.message.tool_calls
+            else None,
             raw_response=response,
         )
 
@@ -549,7 +580,7 @@ class OpenRouterProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized.")
@@ -560,7 +591,7 @@ class OpenRouterProvider(LLMProvider):
             temperature=temperature,
             max_tokens=max_tokens,
             stream=True,
-            **kwargs
+            **kwargs,
         )
 
         for chunk in stream:
@@ -573,10 +604,11 @@ class OpenRouterProvider(LLMProvider):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         try:
             from openai import AsyncOpenAI
+
             async_client = AsyncOpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
@@ -587,7 +619,7 @@ class OpenRouterProvider(LLMProvider):
                 messages=[m.to_dict() for m in messages],
                 temperature=temperature,
                 max_tokens=max_tokens,
-                **kwargs
+                **kwargs,
             )
             choice = response.choices[0]
             return CompletionResponse(
@@ -599,12 +631,18 @@ class OpenRouterProvider(LLMProvider):
                     "prompt_tokens": response.usage.prompt_tokens,
                     "completion_tokens": response.usage.completion_tokens,
                     "total_tokens": response.usage.total_tokens,
-                } if response.usage else None,
-                tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
+                }
+                if response.usage
+                else None,
+                tool_calls=[tc.model_dump() for tc in choice.message.tool_calls]
+                if choice.message.tool_calls
+                else None,
                 raw_response=response,
             )
         except ImportError:
-            raise RuntimeError("OpenRouter async client not available. Install openai package.") from None
+            raise RuntimeError(
+                "OpenRouter async client not available. Install openai package."
+            ) from None
 
     def list_models(self) -> list[str]:
         """List free models available on OpenRouter.
@@ -616,15 +654,16 @@ class OpenRouterProvider(LLMProvider):
     def _default_model(self) -> str:
         return "openrouter/free"
 
+
 # Lazy import to avoid circular dependency
 def _get_gemini_provider():
     from .gemini import GeminiProvider as _GP
+
     return _GP
 
+
 def get_provider(
-    provider_type: ProviderType,
-    config: ProviderConfig | None = None,
-    **kwargs
+    provider_type: ProviderType, config: ProviderConfig | None = None, **kwargs
 ) -> LLMProvider:
     """Get an LLM provider instance."""
     if config is None:
@@ -643,14 +682,15 @@ def get_provider(
 
     return provider_class(config)
 
+
 __all__ = [
-    "ProviderType",
-    "Message",
-    "CompletionResponse",
-    "ProviderConfig",
-    "LLMProvider",
-    "OpenAIProvider",
     "AnthropicProvider",
+    "CompletionResponse",
+    "LLMProvider",
+    "Message",
+    "OpenAIProvider",
     "OpenRouterProvider",
+    "ProviderConfig",
+    "ProviderType",
     "get_provider",
 ]

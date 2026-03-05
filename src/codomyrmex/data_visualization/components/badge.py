@@ -1,4 +1,5 @@
 """Component module."""
+
 from dataclasses import dataclass
 
 from ._base import BaseComponent
@@ -7,6 +8,7 @@ from ._base import BaseComponent
 @dataclass
 class Badge(BaseComponent):
     """Badge component."""
+
     label: str = ""
     color: str = "#3B82F6"
 
@@ -24,7 +26,7 @@ class Badge(BaseComponent):
         return (
             f'<span class="badge" style="background-color: {bg}; '
             f'color: white; padding: 2px 8px; border-radius: 4px;">'
-            f'{self.label}</span>'
+            f"{self.label}</span>"
         )
 
     def __str__(self) -> str:

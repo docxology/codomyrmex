@@ -23,7 +23,13 @@ class TestEdgeComputingClusterHealth:
 
         result = edge_computing_cluster_health()
         assert result["status"] == "success"
-        for key in ("total_nodes", "online", "draining", "total_functions", "total_invocations"):
+        for key in (
+            "total_nodes",
+            "online",
+            "draining",
+            "total_functions",
+            "total_invocations",
+        ):
             assert key in result
 
 

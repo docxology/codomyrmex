@@ -182,7 +182,10 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
         {
             "type": "object",
             "properties": {
-                "module_name": {"type": "string", "description": "Module name (e.g. 'llm', 'security')"},
+                "module_name": {
+                    "type": "string",
+                    "description": "Module name (e.g. 'llm', 'security')",
+                },
             },
             "required": ["module_name"],
         },
@@ -208,7 +211,10 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
         {
             "type": "object",
             "properties": {
-                "module": {"type": "string", "description": "Module name to test (optional)"},
+                "module": {
+                    "type": "string",
+                    "description": "Module name to test (optional)",
+                },
                 "verbose": {"type": "boolean", "default": False},
             },
         },
@@ -279,7 +285,10 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
         {
             "type": "object",
             "properties": {
-                "module": {"type": "string", "description": "Specific module to rescan (optional)"},
+                "module": {
+                    "type": "string",
+                    "description": "Specific module to rescan (optional)",
+                },
             },
         },
     ),
@@ -330,7 +339,13 @@ PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
     (
         "codomyrmex.create_test",
         "Generate tests for a Codomyrmex module",
-        [{"name": "module_name", "description": "Module to create tests for", "required": True}],
+        [
+            {
+                "name": "module_name",
+                "description": "Module to create tests for",
+                "required": True,
+            }
+        ],
         (
             "Create zero-mock tests for the Codomyrmex module '{module_name}'. "
             "Use codomyrmex.module_info to get exports, then "
@@ -342,7 +357,13 @@ PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
     (
         "codomyrmexAnalyze",
         "Perform deep analysis of a Codomyrmex project or specific file",
-        [{"name": "path", "description": "Path to analyze (default: '.')", "required": False}],
+        [
+            {
+                "name": "path",
+                "description": "Path to analyze (default: '.')",
+                "required": False,
+            }
+        ],
         "Run the /codomyrmexAnalyze workflow for deep structural and quality analysis of '{path}'.",
     ),
     (
@@ -350,7 +371,11 @@ PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
         "Add a new entry to the Codomyrmex agentic long-term memory",
         [
             {"name": "content", "description": "Content to remember", "required": True},
-            {"name": "importance", "description": "Importance score 1-10", "required": False},
+            {
+                "name": "importance",
+                "description": "Importance score 1-10",
+                "required": False,
+            },
         ],
         "Run the /codomyrmexMemory workflow to persist: '{content}' (Importance: {importance}).",
     ),
@@ -358,7 +383,11 @@ PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
         "codomyrmexSearch",
         "Search for patterns in the codebase using regex",
         [
-            {"name": "pattern", "description": "Regex search pattern", "required": True},
+            {
+                "name": "pattern",
+                "description": "Regex search pattern",
+                "required": True,
+            },
             {"name": "path", "description": "Search root path", "required": False},
         ],
         "Run the /codomyrmexSearch workflow for pattern '{pattern}' in '{path}'.",
@@ -388,4 +417,3 @@ PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
         "Run the /codomyrmexTrust workflow to promote destructive tools to TRUSTED status.",
     ),
 ]
-

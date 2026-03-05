@@ -17,6 +17,7 @@ import pytest
 def test_video_module_imports() -> None:
     """Test that video module can be imported."""
     from codomyrmex import video
+
     assert hasattr(video, "__version__")
 
 
@@ -294,6 +295,7 @@ class TestVideoProcessor:
         """Test VideoProcessor can be imported."""
         try:
             from codomyrmex.video.processing.video_processor import VideoProcessor
+
             assert callable(VideoProcessor)
         except ImportError:
             pytest.skip("Video processing dependencies not installed")
@@ -323,6 +325,7 @@ class TestFrameExtractor:
         """Test FrameExtractor can be imported."""
         try:
             from codomyrmex.video.extraction.frame_extractor import FrameExtractor
+
             assert callable(FrameExtractor)
         except ImportError:
             pytest.skip("Frame extraction dependencies not installed")
@@ -344,6 +347,7 @@ class TestVideoAnalyzer:
         """Test VideoAnalyzer can be imported."""
         try:
             from codomyrmex.video.analysis.video_analyzer import VideoAnalyzer
+
             assert callable(VideoAnalyzer)
         except ImportError:
             pytest.skip("Video analysis dependencies not installed")
@@ -406,4 +410,5 @@ class TestVideoAnalyzerCoverage:
 
     def test_import(self):
         from codomyrmex.video.analysis.video_analyzer import VideoAnalyzer
+
         assert callable(VideoAnalyzer)

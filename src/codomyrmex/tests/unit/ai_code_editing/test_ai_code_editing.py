@@ -10,9 +10,12 @@ import pytest
 _AI_CODE_HELPERS_AVAILABLE = False
 try:
     # Set a 5-second alarm to abort if import hangs
-    _old_handler = signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError()))
+    _old_handler = signal.signal(
+        signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError())
+    )
     signal.alarm(5)
-    from codomyrmex.agents.ai_code_editing import ai_code_helpers  # noqa: F401
+    from codomyrmex.agents.ai_code_editing import ai_code_helpers
+
     _AI_CODE_HELPERS_AVAILABLE = True
     signal.alarm(0)
     signal.signal(signal.SIGALRM, _old_handler)
@@ -39,7 +42,13 @@ class TestAICodeEditing:
 
     def test_claude_task_master_placeholder_file(self, code_dir):
         """Test that claude_task_master file exists and is importable."""
-        claude_task_master_path = code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "claude_task_master.py"
+        claude_task_master_path = (
+            code_dir
+            / "codomyrmex"
+            / "agents"
+            / "ai_code_editing"
+            / "claude_task_master.py"
+        )
         assert claude_task_master_path.exists()
 
         # File should be importable (may be implemented or placeholder)
@@ -47,13 +56,16 @@ class TestAICodeEditing:
             sys.path.insert(0, str(code_dir))
         try:
             from codomyrmex.agents.ai_code_editing import claude_task_master
+
             assert claude_task_master is not None
         except ImportError:
             pytest.skip("claude_task_master not importable")
 
     def test_openai_codex_placeholder_file(self, code_dir):
         """Test that openai_codex file exists and is importable."""
-        openai_codex_path = code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "openai_codex.py"
+        openai_codex_path = (
+            code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "openai_codex.py"
+        )
         assert openai_codex_path.exists()
 
         # File should be importable (may be implemented or placeholder)
@@ -61,6 +73,7 @@ class TestAICodeEditing:
             sys.path.insert(0, str(code_dir))
         try:
             from codomyrmex.agents.ai_code_editing import openai_codex
+
             assert openai_codex is not None
         except ImportError:
             pytest.skip("openai_codex not importable")
@@ -71,7 +84,9 @@ class TestAICodeEditing:
             sys.path.insert(0, str(code_dir))
 
         # This module may be a placeholder, so we just test that the file exists
-        openai_codex_path = code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "openai_codex.py"
+        openai_codex_path = (
+            code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "openai_codex.py"
+        )
         assert openai_codex_path.exists()
 
     def test_claude_task_master_initialization(self, code_dir):
@@ -80,16 +95,22 @@ class TestAICodeEditing:
             sys.path.insert(0, str(code_dir))
 
         # This module may be a placeholder, so we just test that the file exists
-        claude_task_master_path = code_dir / "codomyrmex" / "agents" / "ai_code_editing" / "claude_task_master.py"
+        claude_task_master_path = (
+            code_dir
+            / "codomyrmex"
+            / "agents"
+            / "ai_code_editing"
+            / "claude_task_master.py"
+        )
         assert claude_task_master_path.exists()
 
     def test_ai_code_helpers_structure(self, code_dir):
         """Test that ai_code_helpers has expected structure."""
         # Check that the module has expected attributes/functions
-        assert hasattr(ai_code_helpers, '__file__')
-        assert hasattr(ai_code_helpers, 'get_llm_client')
-        assert hasattr(ai_code_helpers, 'generate_code_snippet')
-        assert hasattr(ai_code_helpers, 'refactor_code_snippet')
+        assert hasattr(ai_code_helpers, "__file__")
+        assert hasattr(ai_code_helpers, "get_llm_client")
+        assert hasattr(ai_code_helpers, "generate_code_snippet")
+        assert hasattr(ai_code_helpers, "refactor_code_snippet")
 
         # Test that functions are callable
         assert callable(ai_code_helpers.get_llm_client)
@@ -122,7 +143,9 @@ class TestAICodeEditing:
         # Temporarily remove API key if it exists
         original_key = os.environ.pop("OPENAI_API_KEY", None)
         try:
-            with pytest.raises(ValueError, match="OPENAI_API_KEY environment variable not set"):
+            with pytest.raises(
+                ValueError, match="OPENAI_API_KEY environment variable not set"
+            ):
                 get_llm_client("openai")
         finally:
             # Restore original key if it existed
@@ -161,9 +184,7 @@ class TestAICodeEditing:
 
         try:
             result = generate_code_snippet(
-                "Print hello world",
-                "python",
-                provider="openai"
+                "Print hello world", "python", provider="openai"
             )
 
             # Should return a result dict
@@ -189,7 +210,7 @@ class TestAICodeEditing:
                 "Add two numbers",
                 "python",
                 context="def multiply(x, y):\n    return x * y",
-                provider="openai"
+                provider="openai",
             )
 
             # Should return a result dict
@@ -236,10 +257,7 @@ class TestAICodeEditing:
         try:
             original_code = "def calculate_sum(numbers):\n    return sum(numbers)"
             result = refactor_code_snippet(
-                original_code,
-                "Add type hints",
-                "python",
-                provider="openai"
+                original_code, "Add type hints", "python", provider="openai"
             )
 
             # Should return a result dict
@@ -264,10 +282,7 @@ class TestAICodeEditing:
         try:
             original_code = "def hello():\n    print('Hello')"
             result = refactor_code_snippet(
-                original_code,
-                "Optimize code",
-                "python",
-                provider="openai"
+                original_code, "Optimize code", "python", provider="openai"
             )
 
             # Should return a result dict
@@ -282,9 +297,14 @@ class TestAICodeEditing:
 
     def test_ai_code_helpers_constants(self, code_dir):
         """Test that ai_code_helpers has expected constants."""
-        assert hasattr(ai_code_helpers, 'DEFAULT_LLM_PROVIDER')
-        assert hasattr(ai_code_helpers, 'DEFAULT_LLM_MODEL')
-        assert ai_code_helpers.DEFAULT_LLM_PROVIDER in ("openai", "google", "anthropic", "ollama")
+        assert hasattr(ai_code_helpers, "DEFAULT_LLM_PROVIDER")
+        assert hasattr(ai_code_helpers, "DEFAULT_LLM_MODEL")
+        assert ai_code_helpers.DEFAULT_LLM_PROVIDER in (
+            "openai",
+            "google",
+            "anthropic",
+            "ollama",
+        )
         assert isinstance(ai_code_helpers.DEFAULT_LLM_MODEL, dict)
         assert "openai" in ai_code_helpers.DEFAULT_LLM_MODEL
         assert "anthropic" in ai_code_helpers.DEFAULT_LLM_MODEL

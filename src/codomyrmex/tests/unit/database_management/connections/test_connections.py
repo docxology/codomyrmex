@@ -101,7 +101,9 @@ class TestConnectionPool:
     def test_max_connections_timeout(self):
         """Should timeout when max connections reached."""
         factory = InMemoryConnectionFactory()
-        pool = ConnectionPool(factory, config=PoolConfig(min_connections=1, max_connections=1))
+        pool = ConnectionPool(
+            factory, config=PoolConfig(min_connections=1, max_connections=1)
+        )
 
         # Acquire the only connection
         conn = pool.acquire(timeout=1.0)

@@ -14,6 +14,7 @@ from typing import Any
 
 class WASMRuntime(Enum):
     """Supported WASM runtimes."""
+
     WASMTIME = "wasmtime"
     WASMER = "wasmer"
     WAZERO = "wazero"
@@ -23,6 +24,7 @@ class WASMRuntime(Enum):
 @dataclass
 class WASMModule:
     """A WebAssembly module."""
+
     name: str
     path: str
     runtime: WASMRuntime = WASMRuntime.WASMTIME
@@ -36,6 +38,7 @@ class WASMModule:
 @dataclass
 class WASMInstance:
     """A running WASM instance."""
+
     id: str
     module: WASMModule
     created_at: datetime = field(default_factory=datetime.now)
@@ -47,6 +50,7 @@ class WASMInstance:
 @dataclass
 class WASMExecution:
     """Result of a WASM function execution."""
+
     success: bool
     result: Any = None
     error: str | None = None
@@ -62,12 +66,10 @@ class WASMRuntimeClient(ABC):
     @abstractmethod
     def runtime(self) -> WASMRuntime:
         """Runtime."""
-        pass
 
     @abstractmethod
     def load_module(self, module: WASMModule) -> WASMInstance:
         """Load a WASM module."""
-        pass
 
     @abstractmethod
     def execute(
@@ -77,12 +79,10 @@ class WASMRuntimeClient(ABC):
         args: list[Any] = None,
     ) -> WASMExecution:
         """Execute a function in a WASM instance."""
-        pass
 
     @abstractmethod
     def terminate(self, instance_id: str) -> bool:
         """Terminate a WASM instance."""
-        pass
 
 
 class WasmtimeClient(WASMRuntimeClient):
@@ -189,7 +189,10 @@ class WASMOrchestrator:
         for client in self._runtimes.values():
             try:
                 result = client.execute(instance_id, function_name, args)
-                if result.success or result.error != f"Instance not found: {instance_id}":
+                if (
+                    result.success
+                    or result.error != f"Instance not found: {instance_id}"
+                ):
                     return result
             except Exception:
                 continue
@@ -225,12 +228,12 @@ class WASMComponentModel:
 
 
 __all__ = [
-    "WASMRuntime",
-    "WASMModule",
-    "WASMInstance",
+    "WASMComponentModel",
     "WASMExecution",
+    "WASMInstance",
+    "WASMModule",
+    "WASMOrchestrator",
+    "WASMRuntime",
     "WASMRuntimeClient",
     "WasmtimeClient",
-    "WASMOrchestrator",
-    "WASMComponentModel",
 ]

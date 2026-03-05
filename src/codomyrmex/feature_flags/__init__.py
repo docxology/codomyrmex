@@ -1,6 +1,5 @@
 """Feature Flags module for Codomyrmex."""
 
-
 # Submodule exports - import first
 from codomyrmex.logging_monitoring import get_logger
 
@@ -17,6 +16,7 @@ except ImportError as e:
 # Try to import from existing modules, but don't fail if they don't exist
 try:
     from .core.manager import FeatureManager
+
     HAS_FEATURE_MANAGER = True
 except ImportError:
     HAS_FEATURE_MANAGER = False

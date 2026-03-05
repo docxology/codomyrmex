@@ -34,6 +34,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -50,12 +51,15 @@ MSG_TOOL_RESULT = "tool_result"
 MSG_SYSTEM = "system"
 MSG_HEARTBEAT = "heartbeat"
 
-ALL_MSG_TYPES = frozenset({MSG_CHAT, MSG_TOOL_REQUEST, MSG_TOOL_RESULT, MSG_SYSTEM, MSG_HEARTBEAT})
+ALL_MSG_TYPES = frozenset(
+    {MSG_CHAT, MSG_TOOL_REQUEST, MSG_TOOL_RESULT, MSG_SYSTEM, MSG_HEARTBEAT}
+)
 
 
 # =====================================================================
 # Data Structures
 # =====================================================================
+
 
 @dataclass
 class RelayMessage:
@@ -73,6 +77,7 @@ class RelayMessage:
         metadata: Arbitrary metadata dict.
         cursor: Line number in the JSONL file (set on read).
     """
+
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     sender: str = ""
@@ -269,7 +274,9 @@ class AgentRelay:
         Returns:
             The posted ``RelayMessage``.
         """
-        content = json.dumps(result, default=str) if not isinstance(result, str) else result
+        content = (
+            json.dumps(result, default=str) if not isinstance(result, str) else result
+        )
         meta = metadata or {}
         if error:
             meta["error"] = error
@@ -483,7 +490,8 @@ class AgentRelay:
         if not root.exists():
             return []
         return sorted(
-            d.name for d in root.iterdir()
+            d.name
+            for d in root.iterdir()
             if d.is_dir() and (d / "messages.jsonl").exists()
         )
 
@@ -498,12 +506,12 @@ class AgentRelay:
 
 
 __all__ = [
-    "AgentRelay",
-    "RelayMessage",
+    "DEFAULT_RELAY_DIR",
     "MSG_CHAT",
+    "MSG_HEARTBEAT",
+    "MSG_SYSTEM",
     "MSG_TOOL_REQUEST",
     "MSG_TOOL_RESULT",
-    "MSG_SYSTEM",
-    "MSG_HEARTBEAT",
-    "DEFAULT_RELAY_DIR",
+    "AgentRelay",
+    "RelayMessage",
 ]

@@ -40,11 +40,13 @@ class CompatShimGenerator:
     Example::
 
         shim_gen = CompatShimGenerator()
-        shim_gen.add_mapping(ShimMapping(
-            old_name="search",
-            new_name="search_code",
-            param_renames={"q": "query"},
-        ))
+        shim_gen.add_mapping(
+            ShimMapping(
+                old_name="search",
+                new_name="search_code",
+                param_renames={"q": "query"},
+            )
+        )
         shim = shim_gen.create_shim("search", target_fn=search_code)
     """
 

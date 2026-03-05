@@ -4,15 +4,18 @@ Covers: submodule imports, BasePlot.save, BasePlot.__str__, BarChart, LinePlot,
 BaseComponent.__str__, BaseReport.save, Dashboard.__str__, report .save(),
 to_dict, __repr__.
 """
+
 from pathlib import Path
 
 # ── Submodule import tests ────────────────────────────────────────
+
 
 def test_plots_submodule_exports():
     """Verify plots submodule exports behavior."""
     from codomyrmex.data_visualization.plots import (
         BasePlot,
     )
+
     assert len(BasePlot.__dataclass_fields__) > 0
 
 
@@ -21,6 +24,7 @@ def test_components_submodule_exports():
     from codomyrmex.data_visualization.components import (
         BaseComponent,
     )
+
     assert BaseComponent is not None
 
 
@@ -29,6 +33,7 @@ def test_reports_submodule_exports():
     from codomyrmex.data_visualization.reports import (
         BaseReport,
     )
+
     assert BaseReport is not None
 
 
@@ -38,14 +43,17 @@ def test_main_module_exports():
         BarChart,
         BarPlot,
     )
+
     assert BarPlot is BarChart
 
 
 # ── BasePlot enhanced methods ─────────────────────────────────────
 
+
 def test_base_plot_str():
     """Verify base plot str behavior."""
     from codomyrmex.data_visualization.plots import BasePlot
+
     p = BasePlot(title="Test")
     s = str(p)
     assert "data:image/png;base64" in s
@@ -55,6 +63,7 @@ def test_base_plot_str():
 def test_base_plot_repr():
     """Verify base plot repr behavior."""
     from codomyrmex.data_visualization.plots import BasePlot
+
     p = BasePlot(title="X", data=[1, 2, 3])
     assert repr(p) == "BasePlot(title='X', data_count=3)"
 
@@ -62,6 +71,7 @@ def test_base_plot_repr():
 def test_base_plot_save(tmp_path):
     """Verify base plot save behavior."""
     from codomyrmex.data_visualization.plots import BasePlot
+
     p = BasePlot(title="Save Test")
     out = tmp_path / "plot.html"
     result = p.save(str(out))
@@ -75,6 +85,7 @@ def test_base_plot_save(tmp_path):
 def test_base_plot_to_dict():
     """Verify base plot to dict behavior."""
     from codomyrmex.data_visualization.plots import BasePlot
+
     p = BasePlot(title="D", data=[1, 2])
     d = p.to_dict()
     assert d["type"] == "BasePlot"
@@ -84,9 +95,11 @@ def test_base_plot_to_dict():
 
 # ── BarChart ──────────────────────────────────────────────────────
 
+
 def test_bar_chart_categories():
     """Verify bar chart categories behavior."""
     from codomyrmex.data_visualization.plots import BarChart
+
     p = BarChart(title="Bar", categories=["A", "B"], values=[10, 20])
     html = p.to_html()
     assert "data:image/png;base64" in html
@@ -96,6 +109,7 @@ def test_bar_chart_categories():
 def test_bar_chart_data_tuples():
     """Verify bar chart data tuples behavior."""
     from codomyrmex.data_visualization.plots import BarChart
+
     p = BarChart(title="Bar2", data=[("A", 10), ("B", 20)])
     html = p.to_html()
     assert "data:image/png;base64" in html
@@ -104,6 +118,7 @@ def test_bar_chart_data_tuples():
 def test_bar_chart_empty():
     """Verify bar chart empty behavior."""
     from codomyrmex.data_visualization.plots import BarChart
+
     p = BarChart(title="Empty")
     html = p.to_html()
     assert "data:image/png;base64" in html  # Still renders an empty chart
@@ -111,9 +126,11 @@ def test_bar_chart_empty():
 
 # ── LinePlot ──────────────────────────────────────────────────────
 
+
 def test_line_plot_xy():
     """Verify line plot xy behavior."""
     from codomyrmex.data_visualization.plots import LinePlot
+
     p = LinePlot(title="Line", x=[1, 2, 3], y=[10, 20, 15])
     html = p.to_html()
     assert "data:image/png;base64" in html
@@ -123,6 +140,7 @@ def test_line_plot_xy():
 def test_line_plot_data():
     """Verify line plot data behavior."""
     from codomyrmex.data_visualization.plots import LinePlot
+
     p = LinePlot(title="Line2", data=[5, 10, 15])
     html = p.to_html()
     assert "data:image/png;base64" in html
@@ -130,19 +148,23 @@ def test_line_plot_data():
 
 # ── BaseComponent __str__ ─────────────────────────────────────────
 
+
 def test_base_component_str():
     """Verify base component str behavior."""
     from codomyrmex.data_visualization.components import BaseComponent
+
     c = BaseComponent(css_class="test")
     assert 'class="test"' in str(c)
-    assert "BaseComponent(css_class='test')" == repr(c)
+    assert repr(c) == "BaseComponent(css_class='test')"
 
 
 # ── BaseReport save ──────────────────────────────────────────────
 
+
 def test_base_report_save(tmp_path):
     """Verify base report save behavior."""
     from codomyrmex.data_visualization.reports import BaseReport
+
     r = BaseReport(title="Test Report")
     out = tmp_path / "report.html"
     result = r.save(str(out))
@@ -154,16 +176,19 @@ def test_base_report_save(tmp_path):
 def test_base_report_str_repr():
     """Verify base report str repr behavior."""
     from codomyrmex.data_visualization.reports import BaseReport
+
     r = BaseReport(title="R")
     assert "<article>" in str(r)
-    assert "BaseReport(title='R', sections=0)" == repr(r)
+    assert repr(r) == "BaseReport(title='R', sections=0)"
 
 
 # ── Dashboard __str__ / __repr__ ─────────────────────────────────
 
+
 def test_dashboard_str():
     """Verify dashboard str behavior."""
     from codomyrmex.data_visualization.core.ui import Dashboard
+
     d = Dashboard(title="Test Dash")
     s = str(d)
     assert "Test Dash" in s
@@ -173,15 +198,18 @@ def test_dashboard_str():
 def test_dashboard_repr():
     """Verify dashboard repr behavior."""
     from codomyrmex.data_visualization.core.ui import Dashboard
+
     d = Dashboard(title="Dash")
     assert repr(d) == "Dashboard(title='Dash', sections=0)"
 
 
 # ── Report save methods ──────────────────────────────────────────
 
+
 def test_finance_report_save(tmp_path):
     """Verify finance report save behavior."""
     from codomyrmex.data_visualization.reports import FinanceReport
+
     r = FinanceReport()
     out = tmp_path / "fin.html"
     result = r.save(str(out))
@@ -194,6 +222,7 @@ def test_finance_report_save(tmp_path):
 def test_marketing_report_save(tmp_path):
     """Verify marketing report save behavior."""
     from codomyrmex.data_visualization.reports import MarketingReport
+
     r = MarketingReport()
     out = tmp_path / "mkt.html"
     result = r.save(str(out))
@@ -205,6 +234,7 @@ def test_marketing_report_save(tmp_path):
 def test_logistics_report_save(tmp_path):
     """Verify logistics report save behavior."""
     from codomyrmex.data_visualization.reports import LogisticsReport
+
     r = LogisticsReport()
     out = tmp_path / "log.html"
     result = r.save(str(out))
@@ -217,6 +247,7 @@ def test_logistics_report_save(tmp_path):
 def test_general_report_save(tmp_path):
     """Verify general report save behavior."""
     from codomyrmex.data_visualization.reports import GeneralSystemReport
+
     r = GeneralSystemReport()
     out = tmp_path / "gen.html"
     result = r.save(str(out))

@@ -24,6 +24,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -39,6 +40,7 @@ class SkillMetadata:
         description: Human-readable description.
         category: Skill category.
     """
+
     name: str
     description: str = ""
     category: str = "antigravity"
@@ -77,6 +79,7 @@ class AntigravityToolSkill:
         from codomyrmex.ide.antigravity.tool_provider import (
             AntigravityToolProvider,
         )
+
         schema = AntigravityToolProvider.get_tool_schema(tool_name)
         desc = schema["description"] if schema else f"Antigravity tool: {tool_name}"
 
@@ -94,6 +97,7 @@ class AntigravityToolSkill:
         """
         if self._client is None:
             from codomyrmex.ide.antigravity import AntigravityClient
+
             self._client = AntigravityClient()
         return self._client
 
@@ -107,6 +111,7 @@ class AntigravityToolSkill:
             List of validation error strings (empty if valid).
         """
         from codomyrmex.ide.antigravity.tool_provider import AntigravityToolProvider
+
         schema = AntigravityToolProvider.get_tool_schema(self.tool_name)
         if schema is None:
             return [f"Unknown tool: {self.tool_name}"]
@@ -149,9 +154,7 @@ class AntigravityToolSkill:
         logger.info(f"Executing skill: {self.metadata.name}")
         return self.client.invoke_tool(self.tool_name, merged)
 
-    def _apply_chain_input(
-        self, args: dict[str, Any], chain_input: Any
-    ) -> None:
+    def _apply_chain_input(self, args: dict[str, Any], chain_input: Any) -> None:
         """Map chain input to appropriate tool parameter.
 
         Inspects the tool schema to determine which parameter should
@@ -162,6 +165,7 @@ class AntigravityToolSkill:
             chain_input: Result from the previous skill in the chain.
         """
         from codomyrmex.ide.antigravity.tool_provider import AntigravityToolProvider
+
         schema = AntigravityToolProvider.get_tool_schema(self.tool_name)
         if schema is None:
             return
@@ -172,7 +176,11 @@ class AntigravityToolSkill:
         # Map to first missing required parameter
         for req in required:
             if req not in args:
-                args[req] = str(chain_input) if not isinstance(chain_input, str) else chain_input
+                args[req] = (
+                    str(chain_input)
+                    if not isinstance(chain_input, str)
+                    else chain_input
+                )
                 logger.debug(f"Chain: mapped input to {req}")
                 break
 
@@ -207,6 +215,7 @@ class AntigravitySkillFactory:
         """
         if self._client is None:
             from codomyrmex.ide.antigravity import AntigravityClient
+
             self._client = AntigravityClient()
         return self._client
 
@@ -237,6 +246,7 @@ class AntigravitySkillFactory:
             A ``ComposedSkill`` that greps then views matching files.
         """
         from codomyrmex.skills.composition import SkillComposer
+
         composer = SkillComposer()
         return composer.chain(
             self.create("grep_search", SearchPath=path, Query=query),
@@ -245,7 +255,7 @@ class AntigravitySkillFactory:
 
 
 __all__ = [
-    "AntigravityToolSkill",
     "AntigravitySkillFactory",
+    "AntigravityToolSkill",
     "SkillMetadata",
 ]

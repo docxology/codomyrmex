@@ -88,11 +88,13 @@ from .visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
 # FPF integration (optional)
 try:
     from .fpf import FPFCombinatoricsAnalyzer, FPFOrchestrator
+
     _HAS_FPF = True
 except ImportError:
     _HAS_FPF = False
     FPFOrchestrator = None
     FPFCombinatoricsAnalyzer = None
+
 
 def cli_commands():
     """Return CLI commands for the cerebrum module."""
@@ -180,6 +182,6 @@ __all__ = [
 
 # Add FPF integration if available
 if _HAS_FPF:
-    __all__.extend(["FPFOrchestrator", "FPFCombinatoricsAnalyzer"])
+    __all__.extend(["FPFCombinatoricsAnalyzer", "FPFOrchestrator"])
 
 __version__ = "0.1.0"

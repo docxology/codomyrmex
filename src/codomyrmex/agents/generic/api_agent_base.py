@@ -92,9 +92,7 @@ class APIAgentBase(BaseAgent):
         try:
             self.client = client_init_func(api_key)
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            raise error_class(
-                f"Failed to initialize {name} client: {str(e)}"
-            ) from e
+            raise error_class(f"Failed to initialize {name} client: {e!s}") from e
 
     def _extract_config_value(
         self,
@@ -141,15 +139,18 @@ class APIAgentBase(BaseAgent):
         """
         if not self.config.get(self._api_key_config_key):
             import getpass
+
             self.logger.info("Configuring %s — API key not found in config", self.name)
-            api_key = getpass.getpass(f"Enter {self._api_key_config_key} (or env var name): ")
+            api_key = getpass.getpass(
+                f"Enter {self._api_key_config_key} (or env var name): "
+            )
             if api_key:
                 # In a real app we might save this to a config file
                 # For now we just check if it looks like an ENV var or a key
                 if api_key.isupper() and "_" in api_key:
-                     self.logger.info(f"User provided env var name: {api_key}")
+                    self.logger.info(f"User provided env var name: {api_key}")
                 else:
-                     self.logger.info("User provided raw API key")
+                    self.logger.info("User provided raw API key")
             else:
                 self.logger.warning("No API key provided during setup")
 
@@ -161,7 +162,9 @@ class APIAgentBase(BaseAgent):
         """
         api_key = self.api_key
         if not api_key:
-            self.logger.warning(f"Connection test failed for {self.name}: No API key found")
+            self.logger.warning(
+                f"Connection test failed for {self.name}: No API key found"
+            )
             return False
 
         # We could try a simple generation here if we want to be thorough
@@ -326,4 +329,3 @@ class APIAgentBase(BaseAgent):
         raise NotImplementedError(  # ABC: intentional
             f"{self.__class__.__name__} must implement _stream_impl for streaming support"
         )
-

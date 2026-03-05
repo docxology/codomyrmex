@@ -11,9 +11,11 @@ from typing import Any
 # Import logging
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 # Import plugin system components
@@ -61,22 +63,28 @@ class PluginManager:
         """Validate a plugin for security and compatibility."""
         return self.validator.validate_plugin(plugin_path)
 
-    def load_plugin(self, plugin_name: str, config: dict[str, Any] | None = None) -> LoadResult:
+    def load_plugin(
+        self, plugin_name: str, config: dict[str, Any] | None = None
+    ) -> LoadResult:
         """Load and initialize a plugin."""
         logger.info(f"Loading plugin: {plugin_name}")
 
         plugin_info = self.registry.get_plugin_info(plugin_name)
         if not plugin_info:
-             found_info = None
-             for info in self.loader.discover_plugins():
-                 if info.name == plugin_name:
-                     found_info = info
-                     break
-             if found_info:
-                 plugin_info = found_info
-                 self.registry.register(Plugin(info=found_info))
-             else:
-                return LoadResult(plugin_name=plugin_name, success=False, error_message="Plugin not found")
+            found_info = None
+            for info in self.loader.discover_plugins():
+                if info.name == plugin_name:
+                    found_info = info
+                    break
+            if found_info:
+                plugin_info = found_info
+                self.registry.register(Plugin(info=found_info))
+            else:
+                return LoadResult(
+                    plugin_name=plugin_name,
+                    success=False,
+                    error_message="Plugin not found",
+                )
 
         # Validate if auto-validation is enabled
         if self.auto_validate:
@@ -86,7 +94,11 @@ class PluginManager:
                     plugin_name=plugin_name,
                     success=False,
                     error_message="Plugin validation failed",
-                    warnings=[issue['message'] for issue in validation_result.issues + validation_result.warnings]
+                    warnings=[
+                        issue["message"]
+                        for issue in validation_result.issues
+                        + validation_result.warnings
+                    ],
                 )
 
         # Load the plugin
@@ -105,7 +117,9 @@ class PluginManager:
             self.registry.unregister(plugin_name)
         return success
 
-    def reload_plugin(self, plugin_name: str, config: dict[str, Any] | None = None) -> LoadResult:
+    def reload_plugin(
+        self, plugin_name: str, config: dict[str, Any] | None = None
+    ) -> LoadResult:
         """Reload a plugin."""
         return self.loader.reload_plugin(plugin_name, config)
 
@@ -129,7 +143,9 @@ class PluginManager:
         """Get a loaded plugin instance."""
         return self.registry.get(plugin_name)
 
-    def list_plugins(self, filter_type: PluginType | None = None, include_loaded: bool = True) -> list[PluginInfo]:
+    def list_plugins(
+        self, filter_type: PluginType | None = None, include_loaded: bool = True
+    ) -> list[PluginInfo]:
         """List available plugins."""
         return self.registry.list_plugins(filter_type)
 
@@ -141,7 +157,7 @@ class PluginManager:
             "loaded": False,
             "state": "unknown",
             "validation_score": None,
-            "dependencies_satisfied": None
+            "dependencies_satisfied": None,
         }
 
         plugin_info = self.registry.get_plugin_info(plugin_name)
@@ -172,15 +188,21 @@ class PluginManager:
             "total_registered": len(all_plugins),
             "total_loaded": len(loaded_plugins),
             "by_type": {},
-            "by_state": {}
+            "by_state": {},
         }
         for info in all_plugins:
-            status_counts["by_type"][info.plugin_type.value] = status_counts["by_type"].get(info.plugin_type.value, 0) + 1
+            status_counts["by_type"][info.plugin_type.value] = (
+                status_counts["by_type"].get(info.plugin_type.value, 0) + 1
+            )
         for plugin in loaded_plugins.values():
-            status_counts["by_state"][plugin.get_state().value] = status_counts["by_state"].get(plugin.get_state().value, 0) + 1
+            status_counts["by_state"][plugin.get_state().value] = (
+                status_counts["by_state"].get(plugin.get_state().value, 0) + 1
+            )
         return {"status_counts": status_counts, "system_health": "healthy"}
 
-    def register_hook(self, hook_name: str, signature: Callable | None = None, description: str = "") -> Hook:
+    def register_hook(
+        self, hook_name: str, signature: Callable | None = None, description: str = ""
+    ) -> Hook:
         """Register a global hook."""
         hook = self.registry.register_global_hook(hook_name, signature, description)
         logger.info(f"Registered global hook: {hook_name}")
@@ -198,10 +220,18 @@ class PluginManager:
 
 
 def get_plugin_manager() -> PluginManager:
-    if not hasattr(get_plugin_manager, '_manager'):
+    if not hasattr(get_plugin_manager, "_manager"):
         get_plugin_manager._manager = PluginManager()
     return get_plugin_manager._manager
 
-def discover_plugins() -> list[PluginInfo]: return get_plugin_manager().discover_plugins()
-def load_plugin(name: str, config=None) -> LoadResult: return get_plugin_manager().load_plugin(name, config)
-def unload_plugin(name: str) -> bool: return get_plugin_manager().unload_plugin(name)
+
+def discover_plugins() -> list[PluginInfo]:
+    return get_plugin_manager().discover_plugins()
+
+
+def load_plugin(name: str, config=None) -> LoadResult:
+    return get_plugin_manager().load_plugin(name, config)
+
+
+def unload_plugin(name: str) -> bool:
+    return get_plugin_manager().unload_plugin(name)

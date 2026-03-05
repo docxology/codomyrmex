@@ -10,6 +10,7 @@ _GIT_TIMEOUT = 60  # seconds
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_commit")
 def commit_changes(
     message: str,
@@ -53,7 +54,7 @@ def commit_changes(
                 capture_output=True,
                 text=True,
                 check=True,
-            timeout=_GIT_TIMEOUT,
+                timeout=_GIT_TIMEOUT,
             )
             logger.debug("Staged all tracked, modified files")
 
@@ -71,7 +72,7 @@ def commit_changes(
                 capture_output=True,
                 text=True,
                 check=False,
-            timeout=_GIT_TIMEOUT,
+                timeout=_GIT_TIMEOUT,
             )
             email = email_result.stdout.strip() if email_result.returncode == 0 else ""
             if email:
@@ -86,9 +87,11 @@ def commit_changes(
                 capture_output=True,
                 text=True,
                 check=False,
-            timeout=_GIT_TIMEOUT,
+                timeout=_GIT_TIMEOUT,
             )
-            name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            name = (
+                name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            )
             cmd.extend(["--author", f"{name} <{author_email}>"])
 
         # Add commit message
@@ -101,7 +104,7 @@ def commit_changes(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         # Get commit SHA
@@ -111,7 +114,7 @@ def commit_changes(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         commit_sha = sha_result.stdout.strip()
@@ -126,6 +129,7 @@ def commit_changes(
     except Exception as e:
         logger.error(f"Unexpected error committing changes: {e}")
         return None
+
 
 @mcp_tool(name="git_revert")
 def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
@@ -142,7 +146,7 @@ def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
         logger.info(f"Successfully reverted commit {commit_sha[:8]}")
         return True
@@ -154,6 +158,7 @@ def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error reverting commit: {e}")
         return False
+
 
 @mcp_tool(name="git_cherry_pick")
 def cherry_pick(
@@ -177,7 +182,7 @@ def cherry_pick(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Successfully cherry-picked commit {commit_sha[:8]}")
@@ -191,6 +196,7 @@ def cherry_pick(
     except Exception as e:
         logger.error(f"Unexpected error cherry-picking commit: {e}")
         return False
+
 
 @mcp_tool(name="git_amend")
 def amend_commit(
@@ -229,7 +235,7 @@ def amend_commit(
                 capture_output=True,
                 text=True,
                 check=False,
-            timeout=_GIT_TIMEOUT,
+                timeout=_GIT_TIMEOUT,
             )
             email = email_result.stdout.strip() if email_result.returncode == 0 else ""
             if email:
@@ -243,9 +249,11 @@ def amend_commit(
                 capture_output=True,
                 text=True,
                 check=False,
-            timeout=_GIT_TIMEOUT,
+                timeout=_GIT_TIMEOUT,
             )
-            name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            name = (
+                name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
+            )
             cmd.extend(["--author", f"{name} <{author_email}>"])
 
         subprocess.run(
@@ -254,7 +262,7 @@ def amend_commit(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         # Get amended commit SHA
@@ -264,7 +272,7 @@ def amend_commit(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         commit_sha = sha_result.stdout.strip()
@@ -279,4 +287,3 @@ def amend_commit(
     except Exception as e:
         logger.error(f"Unexpected error amending commit: {e}")
         return None
-

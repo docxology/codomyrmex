@@ -26,7 +26,6 @@ logger = get_logger(__name__)
 
 class NetworkingError(CodomyrmexError):
     """Raised when networking operations fail."""
-    pass
 
 
 @dataclass
@@ -138,7 +137,7 @@ class HTTPClient:
                 url=url,
                 headers=request_headers,
                 timeout=timeout,
-                **kwargs
+                **kwargs,
             )
 
             # Parse JSON if possible
@@ -158,4 +157,4 @@ class HTTPClient:
             )
         except requests.exceptions.RequestException as e:
             logger.error(f"HTTP request failed: {e}")
-            raise NetworkingError(f"HTTP request failed: {str(e)}") from e
+            raise NetworkingError(f"HTTP request failed: {e!s}") from e

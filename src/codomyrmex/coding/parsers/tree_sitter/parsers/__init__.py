@@ -14,6 +14,7 @@ from typing import Any, Optional
 
 class NodeType(Enum):
     """Common AST node types."""
+
     FUNCTION = "function"
     CLASS = "class"
     METHOD = "method"
@@ -30,21 +31,25 @@ class NodeType(Enum):
     WHILE = "while"
     TRY = "try"
 
+
 @dataclass
 class Position:
     """Source code position."""
+
     line: int
     column: int
 
-    def __lt__(self, other: 'Position') -> bool:
+    def __lt__(self, other: "Position") -> bool:
         """Return True if less than other."""
         if self.line != other.line:
             return self.line < other.line
         return self.column < other.column
 
+
 @dataclass
 class Range:
     """Source code range."""
+
     start: Position
     end: Position
 
@@ -56,21 +61,23 @@ class Range:
         """Return True if item is contained."""
         return self.start <= pos <= self.end
 
+
 @dataclass
 class ASTNode:
     """Representation of an AST node."""
+
     type: str
     text: str
     range: Range
-    children: list['ASTNode'] = field(default_factory=list)
-    parent: Optional['ASTNode'] = None
+    children: list["ASTNode"] = field(default_factory=list)
+    parent: Optional["ASTNode"] = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def find_children(self, node_type: str) -> list['ASTNode']:
+    def find_children(self, node_type: str) -> list["ASTNode"]:
         """Find all children of a specific type."""
         return [c for c in self.children if c.type == node_type]
 
-    def find_descendants(self, node_type: str) -> list['ASTNode']:
+    def find_descendants(self, node_type: str) -> list["ASTNode"]:
         """Find all descendants of a specific type."""
         result = []
 
@@ -86,7 +93,7 @@ class ASTNode:
 
         return result
 
-    def walk(self) -> Iterator['ASTNode']:
+    def walk(self) -> Iterator["ASTNode"]:
         """Walk the tree in pre-order."""
         yield self
         for child in self.children:
@@ -97,11 +104,15 @@ class ASTNode:
             "type": self.type,
             "text": self.text[:100] if len(self.text) > 100 else self.text,
             "range": {
-                "start": {"line": self.range.start.line, "column": self.range.start.column},
+                "start": {
+                    "line": self.range.start.line,
+                    "column": self.range.start.column,
+                },
                 "end": {"line": self.range.end.line, "column": self.range.end.column},
             },
             "children": [c.to_dict() for c in self.children],
         }
+
 
 class Parser(ABC):
     """Abstract base class for source code parsers."""
@@ -110,27 +121,23 @@ class Parser(ABC):
     @abstractmethod
     def language(self) -> str:
         """Get the language this parser handles."""
-        pass
 
     @abstractmethod
     def parse(self, source: str) -> ASTNode:
         """Parse source code into an AST."""
-        pass
 
     @abstractmethod
     def get_functions(self, root: ASTNode) -> list[ASTNode]:
         """Extract function definitions."""
-        pass
 
     @abstractmethod
     def get_classes(self, root: ASTNode) -> list[ASTNode]:
         """Extract class definitions."""
-        pass
 
     @abstractmethod
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
         """Extract imports."""
-        pass
+
 
 class PythonParser(Parser):
     """Parser for Python source code."""
@@ -142,13 +149,12 @@ class PythonParser(Parser):
 
     def parse(self, source: str) -> ASTNode:
         """Parse Python source code."""
-        lines = source.split('\n')
+        lines = source.split("\n")
         root = ASTNode(
             type="module",
             text=source,
             range=Range(
-                Position(0, 0),
-                Position(len(lines) - 1, len(lines[-1]) if lines else 0)
+                Position(0, 0), Position(len(lines) - 1, len(lines[-1]) if lines else 0)
             ),
         )
 
@@ -162,7 +168,9 @@ class PythonParser(Parser):
     def _parse_functions(self, source: str, lines: list[str]) -> list[ASTNode]:
         """Parse function definitions."""
         functions = []
-        pattern = re.compile(r'^(\s*)def\s+(\w+)\s*\((.*?)\)\s*(?:->.*?)?:', re.MULTILINE)
+        pattern = re.compile(
+            r"^(\s*)def\s+(\w+)\s*\((.*?)\)\s*(?:->.*?)?:", re.MULTILINE
+        )
 
         for match in pattern.finditer(source):
             indent = len(match.group(1))
@@ -170,55 +178,67 @@ class PythonParser(Parser):
             params = match.group(3)
 
             # Find line number
-            line_num = source[:match.start()].count('\n')
+            line_num = source[: match.start()].count("\n")
 
             # Find function end
             end_line = self._find_block_end(lines, line_num, indent)
 
-            func_text = '\n'.join(lines[line_num:end_line + 1])
+            func_text = "\n".join(lines[line_num : end_line + 1])
 
-            functions.append(ASTNode(
-                type="function_definition",
-                text=func_text,
-                range=Range(
-                    Position(line_num, indent),
-                    Position(end_line, len(lines[end_line]) if end_line < len(lines) else 0)
-                ),
-                metadata={
-                    "name": name,
-                    "parameters": [p.strip() for p in params.split(',') if p.strip()],
-                },
-            ))
+            functions.append(
+                ASTNode(
+                    type="function_definition",
+                    text=func_text,
+                    range=Range(
+                        Position(line_num, indent),
+                        Position(
+                            end_line,
+                            len(lines[end_line]) if end_line < len(lines) else 0,
+                        ),
+                    ),
+                    metadata={
+                        "name": name,
+                        "parameters": [
+                            p.strip() for p in params.split(",") if p.strip()
+                        ],
+                    },
+                )
+            )
 
         return functions
 
     def _parse_classes(self, source: str, lines: list[str]) -> list[ASTNode]:
         """Parse class definitions."""
         classes = []
-        pattern = re.compile(r'^(\s*)class\s+(\w+)\s*(?:\((.*?)\))?\s*:', re.MULTILINE)
+        pattern = re.compile(r"^(\s*)class\s+(\w+)\s*(?:\((.*?)\))?\s*:", re.MULTILINE)
 
         for match in pattern.finditer(source):
             indent = len(match.group(1))
             name = match.group(2)
             bases = match.group(3) or ""
 
-            line_num = source[:match.start()].count('\n')
+            line_num = source[: match.start()].count("\n")
             end_line = self._find_block_end(lines, line_num, indent)
 
-            class_text = '\n'.join(lines[line_num:end_line + 1])
+            class_text = "\n".join(lines[line_num : end_line + 1])
 
-            classes.append(ASTNode(
-                type="class_definition",
-                text=class_text,
-                range=Range(
-                    Position(line_num, indent),
-                    Position(end_line, len(lines[end_line]) if end_line < len(lines) else 0)
-                ),
-                metadata={
-                    "name": name,
-                    "bases": [b.strip() for b in bases.split(',') if b.strip()],
-                },
-            ))
+            classes.append(
+                ASTNode(
+                    type="class_definition",
+                    text=class_text,
+                    range=Range(
+                        Position(line_num, indent),
+                        Position(
+                            end_line,
+                            len(lines[end_line]) if end_line < len(lines) else 0,
+                        ),
+                    ),
+                    metadata={
+                        "name": name,
+                        "bases": [b.strip() for b in bases.split(",") if b.strip()],
+                    },
+                )
+            )
 
         return classes
 
@@ -227,40 +247,46 @@ class PythonParser(Parser):
         imports = []
 
         # import x, y, z
-        pattern1 = re.compile(r'^import\s+(.+)$', re.MULTILINE)
+        pattern1 = re.compile(r"^import\s+(.+)$", re.MULTILINE)
         # from x import y
-        pattern2 = re.compile(r'^from\s+(\S+)\s+import\s+(.+)$', re.MULTILINE)
+        pattern2 = re.compile(r"^from\s+(\S+)\s+import\s+(.+)$", re.MULTILINE)
 
         for match in pattern1.finditer(source):
-            line_num = source[:match.start()].count('\n')
-            imports.append(ASTNode(
-                type="import_statement",
-                text=match.group(0),
-                range=Range(
-                    Position(line_num, 0),
-                    Position(line_num, len(match.group(0)))
-                ),
-                metadata={"modules": [m.strip() for m in match.group(1).split(',')]},
-            ))
+            line_num = source[: match.start()].count("\n")
+            imports.append(
+                ASTNode(
+                    type="import_statement",
+                    text=match.group(0),
+                    range=Range(
+                        Position(line_num, 0), Position(line_num, len(match.group(0)))
+                    ),
+                    metadata={
+                        "modules": [m.strip() for m in match.group(1).split(",")]
+                    },
+                )
+            )
 
         for match in pattern2.finditer(source):
-            line_num = source[:match.start()].count('\n')
-            imports.append(ASTNode(
-                type="import_from_statement",
-                text=match.group(0),
-                range=Range(
-                    Position(line_num, 0),
-                    Position(line_num, len(match.group(0)))
-                ),
-                metadata={
-                    "module": match.group(1),
-                    "names": [n.strip() for n in match.group(2).split(',')],
-                },
-            ))
+            line_num = source[: match.start()].count("\n")
+            imports.append(
+                ASTNode(
+                    type="import_from_statement",
+                    text=match.group(0),
+                    range=Range(
+                        Position(line_num, 0), Position(line_num, len(match.group(0)))
+                    ),
+                    metadata={
+                        "module": match.group(1),
+                        "names": [n.strip() for n in match.group(2).split(",")],
+                    },
+                )
+            )
 
         return imports
 
-    def _find_block_end(self, lines: list[str], start_line: int, base_indent: int) -> int:
+    def _find_block_end(
+        self, lines: list[str], start_line: int, base_indent: int
+    ) -> int:
         """Find the end of an indented block."""
         end_line = start_line
 
@@ -268,7 +294,7 @@ class PythonParser(Parser):
             line = lines[i]
 
             # Skip empty lines and comments
-            if not line.strip() or line.lstrip().startswith('#'):
+            if not line.strip() or line.lstrip().startswith("#"):
                 end_line = i
                 continue
 
@@ -292,6 +318,7 @@ class PythonParser(Parser):
         imports.extend(root.find_children("import_from_statement"))
         return imports
 
+
 class JavaScriptParser(Parser):
     """Parser for JavaScript source code."""
 
@@ -302,13 +329,12 @@ class JavaScriptParser(Parser):
 
     def parse(self, source: str) -> ASTNode:
         """Parse the input and return a structured result."""
-        lines = source.split('\n')
+        lines = source.split("\n")
         root = ASTNode(
             type="program",
             text=source,
             range=Range(
-                Position(0, 0),
-                Position(len(lines) - 1, len(lines[-1]) if lines else 0)
+                Position(0, 0), Position(len(lines) - 1, len(lines[-1]) if lines else 0)
             ),
         )
 
@@ -322,75 +348,80 @@ class JavaScriptParser(Parser):
         functions = []
 
         # function name() {}
-        pattern1 = re.compile(r'function\s+(\w+)\s*\((.*?)\)\s*\{')
+        pattern1 = re.compile(r"function\s+(\w+)\s*\((.*?)\)\s*\{")
         # const name = () => {}
-        pattern2 = re.compile(r'(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?\((.*?)\)\s*=>')
+        pattern2 = re.compile(
+            r"(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?\((.*?)\)\s*=>"
+        )
         # name: function() {}
-        pattern3 = re.compile(r'(\w+)\s*:\s*function\s*\((.*?)\)\s*\{')
+        pattern3 = re.compile(r"(\w+)\s*:\s*function\s*\((.*?)\)\s*\{")
 
         for pattern in [pattern1, pattern2, pattern3]:
             for match in pattern.finditer(source):
                 name = match.group(1)
                 params = match.group(2)
-                line_num = source[:match.start()].count('\n')
+                line_num = source[: match.start()].count("\n")
 
-                functions.append(ASTNode(
-                    type="function_declaration",
-                    text=source[match.start():match.end() + 50],
-                    range=Range(
-                        Position(line_num, 0),
-                        Position(line_num + 5, 0)
-                    ),
-                    metadata={
-                        "name": name,
-                        "parameters": [p.strip() for p in params.split(',') if p.strip()],
-                    },
-                ))
+                functions.append(
+                    ASTNode(
+                        type="function_declaration",
+                        text=source[match.start() : match.end() + 50],
+                        range=Range(Position(line_num, 0), Position(line_num + 5, 0)),
+                        metadata={
+                            "name": name,
+                            "parameters": [
+                                p.strip() for p in params.split(",") if p.strip()
+                            ],
+                        },
+                    )
+                )
 
         return functions
 
     def _parse_classes(self, source: str, lines: list[str]) -> list[ASTNode]:
         classes = []
-        pattern = re.compile(r'class\s+(\w+)(?:\s+extends\s+(\w+))?\s*\{')
+        pattern = re.compile(r"class\s+(\w+)(?:\s+extends\s+(\w+))?\s*\{")
 
         for match in pattern.finditer(source):
             name = match.group(1)
             extends = match.group(2)
-            line_num = source[:match.start()].count('\n')
+            line_num = source[: match.start()].count("\n")
 
-            classes.append(ASTNode(
-                type="class_declaration",
-                text=source[match.start():match.end() + 100],
-                range=Range(
-                    Position(line_num, 0),
-                    Position(line_num + 10, 0)
-                ),
-                metadata={
-                    "name": name,
-                    "extends": extends,
-                },
-            ))
+            classes.append(
+                ASTNode(
+                    type="class_declaration",
+                    text=source[match.start() : match.end() + 100],
+                    range=Range(Position(line_num, 0), Position(line_num + 10, 0)),
+                    metadata={
+                        "name": name,
+                        "extends": extends,
+                    },
+                )
+            )
 
         return classes
 
     def _parse_imports(self, source: str, lines: list[str]) -> list[ASTNode]:
         imports = []
-        pattern = re.compile(r'import\s+(?:\{([^}]+)\}|(\w+))?\s*(?:,\s*(?:\{([^}]+)\}|(\w+)))?\s*from\s+[\'"]([^\'"]+)[\'"]')
+        pattern = re.compile(
+            r'import\s+(?:\{([^}]+)\}|(\w+))?\s*(?:,\s*(?:\{([^}]+)\}|(\w+)))?\s*from\s+[\'"]([^\'"]+)[\'"]'
+        )
 
         for match in pattern.finditer(source):
-            line_num = source[:match.start()].count('\n')
+            line_num = source[: match.start()].count("\n")
 
-            imports.append(ASTNode(
-                type="import_declaration",
-                text=match.group(0),
-                range=Range(
-                    Position(line_num, 0),
-                    Position(line_num, len(match.group(0)))
-                ),
-                metadata={
-                    "source": match.group(5),
-                },
-            ))
+            imports.append(
+                ASTNode(
+                    type="import_declaration",
+                    text=match.group(0),
+                    range=Range(
+                        Position(line_num, 0), Position(line_num, len(match.group(0)))
+                    ),
+                    metadata={
+                        "source": match.group(5),
+                    },
+                )
+            )
 
         return imports
 
@@ -402,6 +433,7 @@ class JavaScriptParser(Parser):
 
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
         return root.find_children("import_declaration")
+
 
 def get_parser(language: str) -> Parser:
     """Get a parser for the specified language."""
@@ -418,29 +450,31 @@ def get_parser(language: str) -> Parser:
 
     return parser_class()
 
+
 def parse_file(filepath: str) -> ASTNode:
     """Parse a file and return its AST."""
     with open(filepath) as f:
         source = f.read()
 
     # Detect language from extension
-    if filepath.endswith('.py'):
+    if filepath.endswith(".py"):
         parser = PythonParser()
-    elif filepath.endswith(('.js', '.jsx', '.ts', '.tsx')):
+    elif filepath.endswith((".js", ".jsx", ".ts", ".tsx")):
         parser = JavaScriptParser()
     else:
         raise ValueError(f"Unknown file type: {filepath}")
 
     return parser.parse(source)
 
+
 __all__ = [
-    "NodeType",
-    "Position",
-    "Range",
     "ASTNode",
-    "Parser",
-    "PythonParser",
     "JavaScriptParser",
+    "NodeType",
+    "Parser",
+    "Position",
+    "PythonParser",
+    "Range",
     "get_parser",
     "parse_file",
 ]

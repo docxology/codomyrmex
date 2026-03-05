@@ -125,7 +125,7 @@ class O1Client(APIAgentBase):
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"O1 streaming error: {e}", exc_info=True)
-            yield f"Error: {str(e)}"
+            yield f"Error: {e!s}"
 
     def _build_messages(self, request: AgentRequest) -> list[dict[str, str]]:
         """Build chat messages from agent request."""

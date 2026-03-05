@@ -283,7 +283,9 @@ class TestPluginRegistryCore:
 
     def test_register_and_get(self):
         reg = PluginRegistry()
-        info = PluginInfo(name="alpha", version="1.0.0", plugin_type=PluginType.ANALYZER)
+        info = PluginInfo(
+            name="alpha", version="1.0.0", plugin_type=PluginType.ANALYZER
+        )
         p = Plugin(info)
         assert reg.register(p) is True
         assert reg.get("alpha") is p
@@ -540,7 +542,9 @@ class TestPluginLoaderCore:
 
     def test_load_missing_module_fails(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            info = PluginInfo(name="ghost", version="1.0.0", entry_point="nonexistent.py")
+            info = PluginInfo(
+                name="ghost", version="1.0.0", entry_point="nonexistent.py"
+            )
             loader = PluginLoader(plugin_directories=[tmpdir])
             result = loader.load_plugin(info)
             assert result.success is False
@@ -558,7 +562,9 @@ class TestPluginLoaderCore:
             with open(os.path.join(tmpdir, "unload_me.py"), "w") as f:
                 f.write(plugin_code)
 
-            info = PluginInfo(name="unload_test", version="1.0.0", entry_point="unload_me.py")
+            info = PluginInfo(
+                name="unload_test", version="1.0.0", entry_point="unload_me.py"
+            )
             loader = PluginLoader(plugin_directories=[tmpdir])
             loader.load_plugin(info)
             assert loader.get_plugin("unload_test") is not None
@@ -670,8 +676,12 @@ class TestPluginManagerCore:
     def test_list_plugins(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = PluginManager(plugin_directories=[tmpdir])
-            mgr.registry.register(Plugin(PluginInfo(name="lp1", plugin_type=PluginType.ANALYZER)))
-            mgr.registry.register(Plugin(PluginInfo(name="lp2", plugin_type=PluginType.FORMATTER)))
+            mgr.registry.register(
+                Plugin(PluginInfo(name="lp1", plugin_type=PluginType.ANALYZER))
+            )
+            mgr.registry.register(
+                Plugin(PluginInfo(name="lp2", plugin_type=PluginType.FORMATTER))
+            )
             all_list = mgr.list_plugins()
             assert len(all_list) == 2
             analyzers = mgr.list_plugins(filter_type=PluginType.ANALYZER)
@@ -680,7 +690,9 @@ class TestPluginManagerCore:
     def test_get_plugin_status_registered_only(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = PluginManager(plugin_directories=[tmpdir])
-            info = PluginInfo(name="stat", version="2.0.0", dependencies=["missing_dep"])
+            info = PluginInfo(
+                name="stat", version="2.0.0", dependencies=["missing_dep"]
+            )
             mgr.registry.register(Plugin(info))
             status = mgr.get_plugin_status("stat")
             assert status["registered"] is True
@@ -698,7 +710,9 @@ class TestPluginManagerCore:
     def test_get_system_status(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = PluginManager(plugin_directories=[tmpdir])
-            mgr.registry.register(Plugin(PluginInfo(name="sys1", plugin_type=PluginType.HOOK)))
+            mgr.registry.register(
+                Plugin(PluginInfo(name="sys1", plugin_type=PluginType.HOOK))
+            )
             status = mgr.get_system_status()
             assert status["status_counts"]["total_registered"] == 1
             assert status["system_health"] == "healthy"
@@ -807,10 +821,12 @@ class TestDependencyResolverCore:
 
     def test_add_many(self):
         resolver = DependencyResolver()
-        resolver.add_many([
-            DependencyNode("x", dependencies=["y"]),
-            DependencyNode("y"),
-        ])
+        resolver.add_many(
+            [
+                DependencyNode("x", dependencies=["y"]),
+                DependencyNode("y"),
+            ]
+        )
         result = resolver.resolve()
         assert result.status == ResolutionStatus.RESOLVED
         assert result.load_order.index("y") < result.load_order.index("x")
@@ -879,13 +895,13 @@ class TestPluginDiscoveryCore:
     def test_scan_directory_with_plugin_info_dict(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             code = (
-                'PLUGIN_INFO = {\n'
+                "PLUGIN_INFO = {\n"
                 '    "name": "dir_scanner",\n'
                 '    "version": "3.0.0",\n'
                 '    "author": "TestBot",\n'
                 '    "description": "Found by directory scan",\n'
                 '    "dependencies": ["dep_x"],\n'
-                '}\n'
+                "}\n"
             )
             with open(os.path.join(tmpdir, "scanner_plugin.py"), "w") as f:
                 f.write(code)
@@ -903,7 +919,7 @@ class TestPluginDiscoveryCore:
     def test_scan_directory_with_plugin_class(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             code = (
-                'class Plugin:\n'
+                "class Plugin:\n"
                 '    name = "class_based"\n'
                 '    version = "0.9.0"\n'
                 '    description = "Class-based discovery"\n'
@@ -974,11 +990,13 @@ class TestParametrizedPluginSpecs:
         [
             ("valid_plugin", "1.0.0", "valid.py", True),
             ("another", "0.0.1", "another.py", True),
-            ("", "1.0.0", "e.py", True),   # empty name is allowed by dataclass
-            ("p", "0.0.0", "", True),       # empty entry_point is allowed
+            ("", "1.0.0", "e.py", True),  # empty name is allowed by dataclass
+            ("p", "0.0.0", "", True),  # empty entry_point is allowed
         ],
     )
-    def test_plugin_info_creation_variants(self, name, version, entry_point, expected_valid):
+    def test_plugin_info_creation_variants(
+        self, name, version, entry_point, expected_valid
+    ):
         info = PluginInfo(name=name, version=version, entry_point=entry_point)
         assert isinstance(info, PluginInfo)
         assert info.name == name
@@ -986,7 +1004,17 @@ class TestParametrizedPluginSpecs:
 
     @pytest.mark.parametrize(
         "ptype_str",
-        ["analyzer", "formatter", "exporter", "importer", "processor", "hook", "utility", "adapter", "agent"],
+        [
+            "analyzer",
+            "formatter",
+            "exporter",
+            "importer",
+            "processor",
+            "hook",
+            "utility",
+            "adapter",
+            "agent",
+        ],
     )
     def test_plugin_type_from_string(self, ptype_str):
         ptype = PluginType(ptype_str)

@@ -10,6 +10,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class BaseLock(ABC):
     """Abstract base class for all lock implementations."""
 
@@ -30,12 +31,10 @@ class BaseLock(ABC):
             True if acquired, False otherwise.
 
         """
-        pass
 
     @abstractmethod
     def release(self) -> None:
         """Release the lock."""
-        pass
 
     def __enter__(self):
         """Enter the context manager."""
@@ -46,6 +45,7 @@ class BaseLock(ABC):
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Exit the context manager and clean up."""
         self.release()
+
 
 class LocalLock(BaseLock):
     """File-based lock for local multi-process synchronization.

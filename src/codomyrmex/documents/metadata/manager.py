@@ -39,7 +39,7 @@ def update_metadata(file_path: str | Path, metadata: dict[str, Any]) -> None:
 
     except Exception as e:
         logger.error(f"Error updating metadata for {file_path}: {e}")
-        raise MetadataError(f"Failed to update metadata: {str(e)}") from e
+        raise MetadataError(f"Failed to update metadata: {e!s}") from e
 
 
 def get_metadata(file_path: str | Path) -> dict[str, Any]:
@@ -53,6 +53,7 @@ def get_metadata(file_path: str | Path) -> dict[str, Any]:
         Metadata dictionary
     """
     from .extractor import extract_metadata
+
     return extract_metadata(file_path)
 
 
@@ -60,6 +61,7 @@ def _update_pdf_metadata(file_path: Path, metadata: dict[str, Any]) -> None:
     """Update PDF metadata."""
     try:
         from pypdf import PdfReader, PdfWriter
+
         reader = PdfReader(file_path)
         writer = PdfWriter()
         writer.append_pages_from_reader(reader)
@@ -67,20 +69,22 @@ def _update_pdf_metadata(file_path: Path, metadata: dict[str, Any]) -> None:
         with open(file_path, "wb") as f:
             writer.write(f)
     except ImportError:
-        logger.warning(f"pypdf not installed. Skipping precise PDF metadata update for {file_path}")
+        logger.warning(
+            f"pypdf not installed. Skipping precise PDF metadata update for {file_path}"
+        )
 
 
 def _update_markdown_metadata(file_path: Path, metadata: dict[str, Any]) -> None:
     """Update markdown frontmatter metadata."""
     try:
-        with open(file_path, encoding='utf-8') as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         import yaml
 
         # Check for existing frontmatter
-        if content.startswith('---'):
-            parts = content.split('---', 2)
+        if content.startswith("---"):
+            parts = content.split("---", 2)
             if len(parts) >= 3:
                 existing_metadata = yaml.safe_load(parts[1]) or {}
                 existing_metadata.update(metadata)
@@ -93,12 +97,9 @@ def _update_markdown_metadata(file_path: Path, metadata: dict[str, Any]) -> None
             frontmatter = yaml.dump(metadata, default_flow_style=False)
             new_content = f"---\n{frontmatter}---\n{content}"
 
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(new_content)
 
     except Exception as e:
         logger.error(f"Error updating markdown metadata: {e}")
         raise
-
-
-

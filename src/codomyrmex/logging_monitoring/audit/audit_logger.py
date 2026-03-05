@@ -55,12 +55,19 @@ class AuditLogger:
 
         audit = AuditLogger()
         audit.log_event("login", "user_123", details={"ip": "192.168.1.1"})
-        audit.log_event("file_access", "user_456", status="denied",
-                        severity="warning", category="access")
+        audit.log_event(
+            "file_access",
+            "user_456",
+            status="denied",
+            severity="warning",
+            category="access",
+        )
         recent = audit.query(user_id="user_123")
     """
 
-    def __init__(self, name: str = "codomyrmex.audit", max_records: int = 10000) -> None:
+    def __init__(
+        self, name: str = "codomyrmex.audit", max_records: int = 10000
+    ) -> None:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
         self._records: list[AuditRecord] = []
@@ -105,7 +112,7 @@ class AuditLogger:
 
         # Trim if over max
         if len(self._records) > self._max_records:
-            self._records = self._records[-self._max_records:]
+            self._records = self._records[-self._max_records :]
 
         extra = record.to_dict()
         self.logger.info("Audit event: %s", event_type, extra={"extra": extra})

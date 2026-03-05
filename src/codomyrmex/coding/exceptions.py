@@ -26,7 +26,7 @@ class ExecutionTimeoutError(CodeExecutionError):
         message: str,
         timeout_seconds: float | None = None,
         process_id: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
@@ -43,7 +43,7 @@ class MemoryLimitError(CodeExecutionError):
         message: str,
         limit_bytes: int | None = None,
         used_bytes: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if limit_bytes is not None:
@@ -60,7 +60,7 @@ class SandboxSecurityError(SandboxError):
         message: str,
         violation_type: str | None = None,
         attempted_action: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if violation_type:
@@ -72,12 +72,7 @@ class SandboxSecurityError(SandboxError):
 class SandboxResourceError(SandboxError):
     """Raised when sandbox resource allocation fails."""
 
-    def __init__(
-        self,
-        message: str,
-        resource_type: str | None = None,
-        **kwargs
-    ):
+    def __init__(self, message: str, resource_type: str | None = None, **kwargs):
         super().__init__(message, **kwargs)
         if resource_type:
             self.context["resource_type"] = resource_type
@@ -91,7 +86,7 @@ class DebuggerError(CodomyrmexError):
         message: str,
         debugger: str | None = None,
         target_process: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if debugger:
@@ -108,7 +103,7 @@ class BreakpointError(DebuggerError):
         message: str,
         file_path: str | None = None,
         line: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if file_path:
@@ -119,12 +114,10 @@ class BreakpointError(DebuggerError):
 
 class CodeReviewError(CodomyrmexError):
     """Raised when code review operations fail."""
-    pass
 
 
 class ReviewCommentError(CodeReviewError):
     """Raised when processing review comments fails."""
-    pass
 
 
 class MonitoringError(CodomyrmexError):
@@ -135,7 +128,7 @@ class MonitoringError(CodomyrmexError):
         message: str,
         metric: str | None = None,
         source: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if metric:
@@ -146,12 +139,10 @@ class MonitoringError(CodomyrmexError):
 
 class ProfilingError(MonitoringError):
     """Raised when code profiling fails."""
-    pass
 
 
 class TracingError(MonitoringError):
     """Raised when code tracing fails."""
-    pass
 
 
 class RuntimeError(CodeExecutionError):
@@ -162,7 +153,7 @@ class RuntimeError(CodeExecutionError):
         message: str,
         error_type: str | None = None,
         traceback: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if error_type:

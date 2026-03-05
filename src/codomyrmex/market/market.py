@@ -33,7 +33,9 @@ class Market:
         self._allocations: list[dict[str, Any]] = []
         logger.info("Market initialized")
 
-    def register_agent(self, agent_id: str, capabilities: list[str], max_concurrent: int = 3) -> None:
+    def register_agent(
+        self, agent_id: str, capabilities: list[str], max_concurrent: int = 3
+    ) -> None:
         """Register an agent with its capabilities."""
         self._agents[agent_id] = {
             "id": agent_id,
@@ -41,10 +43,17 @@ class Market:
             "max_concurrent": max_concurrent,
             "active_tasks": 0,
         }
-        logger.info(f"Agent {agent_id} registered with {len(capabilities)} capabilities")
+        logger.info(
+            f"Agent {agent_id} registered with {len(capabilities)} capabilities"
+        )
 
-    def post_task(self, task_id: str, required_capabilities: list[str],
-                  priority: int = 0, metadata: dict[str, Any] | None = None) -> None:
+    def post_task(
+        self,
+        task_id: str,
+        required_capabilities: list[str],
+        priority: int = 0,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
         """Post a task to the marketplace for agent allocation."""
         self._tasks[task_id] = {
             "id": task_id,
@@ -107,7 +116,9 @@ class Market:
 
         return {
             "allocated": len(new_allocations),
-            "unallocated": len([t for t in self._tasks.values() if t["status"] == "open"]),
+            "unallocated": len(
+                [t for t in self._tasks.values() if t["status"] == "open"]
+            ),
             "allocations": new_allocations,
         }
 
@@ -127,9 +138,15 @@ class Market:
         return {
             "total_agents": len(self._agents),
             "total_tasks": len(self._tasks),
-            "open_tasks": len([t for t in self._tasks.values() if t["status"] == "open"]),
-            "assigned_tasks": len([t for t in self._tasks.values() if t["status"] == "assigned"]),
-            "completed_tasks": len([t for t in self._tasks.values() if t["status"] == "completed"]),
+            "open_tasks": len(
+                [t for t in self._tasks.values() if t["status"] == "open"]
+            ),
+            "assigned_tasks": len(
+                [t for t in self._tasks.values() if t["status"] == "assigned"]
+            ),
+            "completed_tasks": len(
+                [t for t in self._tasks.values() if t["status"] == "completed"]
+            ),
             "total_allocations": len(self._allocations),
         }
 

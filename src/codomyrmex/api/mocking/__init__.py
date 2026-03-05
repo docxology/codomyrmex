@@ -23,12 +23,14 @@ from typing import Any, Optional
 # Enums
 # ---------------------------------------------------------------------------
 
+
 class MatchStrategy(Enum):
     """Strategy used to match an incoming request path against a mock route."""
 
     EXACT = "exact"
     PREFIX = "prefix"
     REGEX = "regex"
+
 
 class MockResponseMode(Enum):
     """Determines how a mock route selects which response to return."""
@@ -37,9 +39,11 @@ class MockResponseMode(Enum):
     SEQUENCE = "sequence"
     RANDOM = "random"
 
+
 # ---------------------------------------------------------------------------
 # Dataclasses
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class MockRequest:
@@ -62,6 +66,7 @@ class MockRequest:
     body_pattern: str | None = None
     match_strategy: MatchStrategy = MatchStrategy.EXACT
 
+
 @dataclass
 class MockResponse:
     """
@@ -80,6 +85,7 @@ class MockResponse:
     body: Any = None
     latency_ms: float = 0.0
     error: str | None = None
+
 
 @dataclass
 class MockRoute:
@@ -123,6 +129,7 @@ class MockRoute:
             "call_count": self.call_count,
         }
 
+
 @dataclass
 class RequestLog:
     """
@@ -146,9 +153,11 @@ class RequestLog:
     matched_route: str | None = None
     response_status: int | None = None
 
+
 # ---------------------------------------------------------------------------
 # RequestMatcher
 # ---------------------------------------------------------------------------
+
 
 class RequestMatcher:
     """
@@ -181,7 +190,9 @@ class RequestMatcher:
 
         # --- Path -------------------------------------------------------------
         incoming_path = str(incoming_request.get("path", ""))
-        if not self._match_path(incoming_path, mock_request.path, mock_request.match_strategy):
+        if not self._match_path(
+            incoming_path, mock_request.path, mock_request.match_strategy
+        ):
             return False
 
         # --- Body pattern -----------------------------------------------------
@@ -213,9 +224,11 @@ class RequestMatcher:
             return re.search(pattern, incoming_path) is not None
         return False
 
+
 # ---------------------------------------------------------------------------
 # MockAPIServer
 # ---------------------------------------------------------------------------
+
 
 class MockAPIServer:
     """
@@ -229,10 +242,13 @@ class MockAPIServer:
 
         server = create_mock_server()
 
-        server.add_route("get_users", MockRoute(
-            request=MockRequest(method="GET", path="/api/users"),
-            responses=[MockResponse(status_code=200, body='{"users": []}')],
-        ))
+        server.add_route(
+            "get_users",
+            MockRoute(
+                request=MockRequest(method="GET", path="/api/users"),
+                responses=[MockResponse(status_code=200, body='{"users": []}')],
+            ),
+        )
 
         resp = server.handle_request("GET", "/api/users")
         assert resp.status_code == 200
@@ -458,9 +474,11 @@ class MockAPIServer:
                 f"but it was called {route.call_count} time(s)"
             )
 
+
 # ---------------------------------------------------------------------------
 # ResponseFixture
 # ---------------------------------------------------------------------------
+
 
 class ResponseFixture:
     """
@@ -533,17 +551,21 @@ class ResponseFixture:
             body=json.dumps(data),
         )
 
+
 # ---------------------------------------------------------------------------
 # Factory functions
 # ---------------------------------------------------------------------------
+
 
 def create_mock_server() -> MockAPIServer:
     """Create and return a new ``MockAPIServer`` instance."""
     return MockAPIServer()
 
+
 def create_fixture() -> ResponseFixture:
     """Create and return a new ``ResponseFixture`` instance."""
     return ResponseFixture()
+
 
 # ---------------------------------------------------------------------------
 # Public API

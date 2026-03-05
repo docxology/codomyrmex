@@ -22,6 +22,7 @@ def get_asset_inventory() -> "AssetInventory":
 
 class AssetType(Enum):
     """Types of physical assets."""
+
     SERVER = "server"
     WORKSTATION = "workstation"
     NETWORK_DEVICE = "network_device"
@@ -103,7 +104,9 @@ class AssetInventory:
         logger.info(f"Updated asset {asset_id} status to '{status}'")
         return True
 
-    def list_assets(self, asset_type: str | None = None, status: str | None = None) -> list[PhysicalAsset]:
+    def list_assets(
+        self, asset_type: str | None = None, status: str | None = None
+    ) -> list[PhysicalAsset]:
         """List assets, optionally filtered by type and/or status."""
         results = list(self.assets.values())
 
@@ -159,4 +162,3 @@ def get_asset_status(
     if inventory is None:
         inventory = get_asset_inventory()
     return inventory.get_asset_status(asset_id)
-

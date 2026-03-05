@@ -10,10 +10,10 @@ from codomyrmex.meme.rhizome.models import (
 from codomyrmex.meme.rhizome.network import build_graph, calculate_centrality
 
 __all__ = [
-    "Node",
     "Edge",
     "Graph",
     "NetworkTopology",
+    "Node",
     "RhizomeEngine",
     "build_graph",
     "calculate_centrality",

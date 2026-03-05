@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class SkillCategory(Enum):
     """Categories of skills."""
+
     CODE = "code"
     DATA = "data"
     WEB = "web"
@@ -34,6 +35,7 @@ class SkillCategory(Enum):
 @dataclass
 class ParameterSchema:
     """Schema for a skill parameter."""
+
     name: str
     param_type: str  # string, int, float, bool, list, dict
     description: str
@@ -58,6 +60,7 @@ class ParameterSchema:
 @dataclass
 class SkillMetadata:
     """Metadata for a skill."""
+
     id: str
     name: str
     description: str
@@ -108,7 +111,7 @@ class SkillMetadata:
                 "type": "object",
                 "properties": properties,
                 "required": required,
-            }
+            },
         }
 
 
@@ -120,7 +123,6 @@ class Skill(ABC):
     @abstractmethod
     def execute(self, **kwargs) -> Any:
         """Execute the skill with given parameters."""
-        pass
 
     def validate_params(self, **kwargs) -> list[str]:
         """Validate parameters against schema."""
@@ -163,7 +165,7 @@ class FunctionSkill(Skill):
             logger.debug("Could not read annotations from %s: %s", func, e)
 
         for name, param in sig.parameters.items():
-            if name in ('self', 'cls'):
+            if name in ("self", "cls"):
                 continue
 
             param_type = "string"
@@ -180,21 +182,27 @@ class FunctionSkill(Skill):
                 elif hint is dict:
                     param_type = "object"
 
-            parameters.append(ParameterSchema(
-                name=name,
-                param_type=param_type,
-                description=f"Parameter: {name}",
-                required=param.default == inspect.Parameter.empty,
-                default=None if param.default == inspect.Parameter.empty else param.default,
-            ))
+            parameters.append(
+                ParameterSchema(
+                    name=name,
+                    param_type=param_type,
+                    description=f"Parameter: {name}",
+                    required=param.default == inspect.Parameter.empty,
+                    default=None
+                    if param.default == inspect.Parameter.empty
+                    else param.default,
+                )
+            )
 
         # Generate ID from function name
-        skill_id = hashlib.md5(f"{func.__module__}.{func.__name__}".encode()).hexdigest()[:12]
+        skill_id = hashlib.md5(
+            f"{func.__module__}.{func.__name__}".encode()
+        ).hexdigest()[:12]
 
         return SkillMetadata(
             id=skill_id,
             name=func.__name__,
-            description=doc.split('\n')[0] if doc else f"Skill: {func.__name__}",
+            description=doc.split("\n")[0] if doc else f"Skill: {func.__name__}",
             parameters=parameters,
         )
 
@@ -282,9 +290,10 @@ class SkillRegistry:
         if query:
             query = query.lower()
             results = [
-                s for s in results
-                if query in s.metadata.name.lower() or
-                   query in s.metadata.description.lower()
+                s
+                for s in results
+                if query in s.metadata.name.lower()
+                or query in s.metadata.description.lower()
             ]
 
         return results
@@ -314,6 +323,7 @@ def skill(
     registry: SkillRegistry | None = None,
 ):
     """Decorator to create a skill from a function."""
+
     def decorator(func: Callable) -> FunctionSkill:
         """Decorator."""
         # Create skill
@@ -392,15 +402,15 @@ def get_skill(skill_id: str) -> Skill | None:
 
 
 __all__ = [
-    "SkillCategory",
-    "ParameterSchema",
-    "SkillMetadata",
-    "Skill",
-    "FunctionSkill",
-    "SkillRegistry",
-    "skill",
-    "SkillDiscoverer",
     "DEFAULT_REGISTRY",
-    "register_skill",
+    "FunctionSkill",
+    "ParameterSchema",
+    "Skill",
+    "SkillCategory",
+    "SkillDiscoverer",
+    "SkillMetadata",
+    "SkillRegistry",
     "get_skill",
+    "register_skill",
+    "skill",
 ]

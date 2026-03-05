@@ -33,14 +33,13 @@ try:
 except Exception:
     pass
 
-_skip_no_ollama = pytest.mark.skipif(
-    not ollama_available, reason="Ollama not running"
-)
+_skip_no_ollama = pytest.mark.skipif(not ollama_available, reason="Ollama not running")
 
 
 # ===========================================================================
 # 1. ExecutionOptions dataclass -- parameter boundary tests
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestExecutionOptionsBoundaries:
@@ -96,7 +95,8 @@ class TestExecutionOptionsBoundaries:
         assert opts.timeout == 1
 
     @pytest.mark.parametrize(
-        "fmt", [None, "json"],
+        "fmt",
+        [None, "json"],
         ids=["no_format", "json_format"],
     )
     def test_format_option(self, fmt):
@@ -135,9 +135,16 @@ class TestExecutionOptionsBoundaries:
         from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
         expected = {
-            "temperature", "top_p", "top_k", "repeat_penalty",
-            "max_tokens", "timeout", "stream", "format",
-            "system_prompt", "context_window",
+            "temperature",
+            "top_p",
+            "top_k",
+            "repeat_penalty",
+            "max_tokens",
+            "timeout",
+            "stream",
+            "format",
+            "system_prompt",
+            "context_window",
         }
         actual = {f.name for f in fields(ExecutionOptions)}
         assert expected == actual
@@ -146,6 +153,7 @@ class TestExecutionOptionsBoundaries:
 # ===========================================================================
 # 2. StreamingChunk dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestStreamingChunk:
@@ -179,6 +187,7 @@ class TestStreamingChunk:
 # ===========================================================================
 # 3. ModelExecutionResult dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestModelExecutionResult:
@@ -220,7 +229,9 @@ class TestModelExecutionResult:
         from codomyrmex.llm.ollama.ollama_manager import ModelExecutionResult
 
         r = ModelExecutionResult(
-            model_name="m", prompt="p", response="r",
+            model_name="m",
+            prompt="p",
+            response="r",
             execution_time=0.0,
         )
         assert r.metadata is None
@@ -230,7 +241,9 @@ class TestModelExecutionResult:
         from codomyrmex.llm.ollama.ollama_manager import ModelExecutionResult
 
         r = ModelExecutionResult(
-            model_name="m", prompt="p", response="r",
+            model_name="m",
+            prompt="p",
+            response="r",
             execution_time=0.0,
             metadata={"api_method": "http", "extra": 42},
         )
@@ -242,8 +255,12 @@ class TestModelExecutionResult:
         from codomyrmex.llm.ollama.ollama_manager import ModelExecutionResult
 
         r = ModelExecutionResult(
-            model_name="m", prompt="p", response="r",
-            execution_time=0.5, tokens_used=7, success=True,
+            model_name="m",
+            prompt="p",
+            response="r",
+            execution_time=0.5,
+            tokens_used=7,
+            success=True,
         )
         d = asdict(r)
         serialised = json.dumps(d)
@@ -253,6 +270,7 @@ class TestModelExecutionResult:
 # ===========================================================================
 # 4. OllamaModel dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestOllamaModelDataclass:
@@ -302,6 +320,7 @@ class TestOllamaModelDataclass:
 # 5. Conversation formatting (pure logic -- no Ollama needed)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestConversationFormatting:
     """Tests for ModelRunner._format_conversation -- pure string logic."""
@@ -318,66 +337,81 @@ class TestConversationFormatting:
     @_skip_no_ollama
     def test_system_role_prefix(self):
         runner = self._get_runner()
-        result = runner._format_conversation([
-            {"role": "system", "content": "Be concise"},
-        ])
+        result = runner._format_conversation(
+            [
+                {"role": "system", "content": "Be concise"},
+            ]
+        )
         assert result == "System: Be concise"
 
     @_skip_no_ollama
     def test_user_role_prefix(self):
         runner = self._get_runner()
-        result = runner._format_conversation([
-            {"role": "user", "content": "Hi"},
-        ])
+        result = runner._format_conversation(
+            [
+                {"role": "user", "content": "Hi"},
+            ]
+        )
         assert result == "User: Hi"
 
     @_skip_no_ollama
     def test_assistant_role_prefix(self):
         runner = self._get_runner()
-        result = runner._format_conversation([
-            {"role": "assistant", "content": "Hello!"},
-        ])
+        result = runner._format_conversation(
+            [
+                {"role": "assistant", "content": "Hello!"},
+            ]
+        )
         assert result == "Assistant: Hello!"
 
     @_skip_no_ollama
     def test_unknown_role_defaults_to_user(self):
         runner = self._get_runner()
-        result = runner._format_conversation([
-            {"role": "tool", "content": "data"},
-        ])
+        result = runner._format_conversation(
+            [
+                {"role": "tool", "content": "data"},
+            ]
+        )
         assert result == "User: data"
 
     @_skip_no_ollama
     def test_multi_turn_separated_by_double_newline(self):
         runner = self._get_runner()
-        result = runner._format_conversation([
-            {"role": "system", "content": "System msg"},
-            {"role": "user", "content": "Q"},
-            {"role": "assistant", "content": "A"},
-        ])
+        result = runner._format_conversation(
+            [
+                {"role": "system", "content": "System msg"},
+                {"role": "user", "content": "Q"},
+                {"role": "assistant", "content": "A"},
+            ]
+        )
         parts = result.split("\n\n")
         assert len(parts) == 3
 
     @_skip_no_ollama
     def test_empty_content_handled(self):
         runner = self._get_runner()
-        result = runner._format_conversation([
-            {"role": "user", "content": ""},
-        ])
+        result = runner._format_conversation(
+            [
+                {"role": "user", "content": ""},
+            ]
+        )
         assert result == "User: "
 
     @_skip_no_ollama
     def test_missing_content_key_handled(self):
         runner = self._get_runner()
-        result = runner._format_conversation([
-            {"role": "user"},
-        ])
+        result = runner._format_conversation(
+            [
+                {"role": "user"},
+            ]
+        )
         assert result == "User: "
 
 
 # ===========================================================================
 # 6. Size parsing (OllamaManager._parse_size -- pure logic)
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSizeParsing:
@@ -390,6 +424,7 @@ class TestSizeParsing:
     @_skip_no_ollama
     def _get_manager(self):
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
+
         return OllamaManager(auto_start_server=False)
 
     @_skip_no_ollama
@@ -415,12 +450,14 @@ class TestSizeParsing:
 # 7. OllamaConfig dataclass (ollama/config_manager.py)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestOllamaConfig:
     """Pure-logic tests for OllamaConfig defaults and post_init."""
 
     def test_default_values(self):
         from codomyrmex.llm.ollama.config_manager import OllamaConfig
+
         cfg = OllamaConfig()
         assert cfg.ollama_binary == "ollama"
         assert cfg.auto_start_server is True
@@ -430,6 +467,7 @@ class TestOllamaConfig:
 
     def test_post_init_populates_preferred_models(self):
         from codomyrmex.llm.ollama.config_manager import OllamaConfig
+
         cfg = OllamaConfig()
         assert isinstance(cfg.preferred_models, list)
         assert len(cfg.preferred_models) >= 1
@@ -438,11 +476,13 @@ class TestOllamaConfig:
     def test_post_init_populates_default_options(self):
         from codomyrmex.llm.ollama.config_manager import OllamaConfig
         from codomyrmex.llm.ollama.model_runner import ExecutionOptions
+
         cfg = OllamaConfig()
         assert isinstance(cfg.default_options, ExecutionOptions)
 
     def test_custom_values_override(self):
         from codomyrmex.llm.ollama.config_manager import OllamaConfig
+
         cfg = OllamaConfig(
             server_port=9999,
             default_model="phi3:latest",
@@ -454,6 +494,7 @@ class TestOllamaConfig:
 
     def test_asdict_serialisation(self):
         from codomyrmex.llm.ollama.config_manager import OllamaConfig
+
         cfg = OllamaConfig()
         d = asdict(cfg)
         assert isinstance(d, dict)
@@ -464,6 +505,7 @@ class TestOllamaConfig:
 # 8. ConfigManager -- validation logic (pure, no Ollama needed)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestConfigManagerValidation:
     """Tests for ConfigManager.validate_config and presets."""
@@ -471,6 +513,7 @@ class TestConfigManagerValidation:
     def test_validate_default_config_valid(self):
         """Default config should have zero errors."""
         from codomyrmex.llm.ollama.config_manager import ConfigManager
+
         mgr = ConfigManager()
         result = mgr.validate_config()
         assert isinstance(result["errors"], list)
@@ -542,7 +585,11 @@ class TestConfigManagerValidation:
         mgr = ConfigManager()
         presets = mgr.get_execution_presets()
         assert set(presets.keys()) == {
-            "fast", "creative", "balanced", "precise", "long_form",
+            "fast",
+            "creative",
+            "balanced",
+            "precise",
+            "long_form",
         }
 
     def test_execution_presets_temperature_ordering(self):
@@ -566,6 +613,7 @@ class TestConfigManagerValidation:
 # ===========================================================================
 # 9. ConfigManager save/load/export/import round-trip
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestConfigManagerPersistence:
@@ -629,6 +677,7 @@ class TestConfigManagerPersistence:
 # 10. Token count estimation (character-based heuristic)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestTokenEstimation:
     """Character-based token estimation heuristic (no service needed)."""
@@ -656,6 +705,7 @@ class TestTokenEstimation:
 # ===========================================================================
 # 11. Request payload construction
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestPayloadConstruction:
@@ -729,8 +779,10 @@ class TestPayloadConstruction:
         from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
         opts = ExecutionOptions(
-            temperature=0.5, max_tokens=512,
-            system_prompt="sys", format="json",
+            temperature=0.5,
+            max_tokens=512,
+            system_prompt="sys",
+            format="json",
             context_window=4096,
         )
         payload = self._build_generate_payload("model", "prompt", opts)
@@ -781,6 +833,7 @@ class TestPayloadConstruction:
 # 12. LLM exception hierarchy
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestLLMExceptionHierarchy:
     """Verify exception class relationships."""
@@ -803,12 +856,18 @@ class TestLLMExceptionHierarchy:
         )
 
         subclasses = [
-            LLMConnectionError, LLMAuthenticationError,
-            LLMRateLimitError, LLMTimeoutError,
-            PromptTooLongError, PromptValidationError,
-            ResponseParsingError, ContentFilterError,
-            ModelNotFoundError, TokenLimitError,
-            StreamingError, ContextWindowError,
+            LLMConnectionError,
+            LLMAuthenticationError,
+            LLMRateLimitError,
+            LLMTimeoutError,
+            PromptTooLongError,
+            PromptValidationError,
+            ResponseParsingError,
+            ContentFilterError,
+            ModelNotFoundError,
+            TokenLimitError,
+            StreamingError,
+            ContextWindowError,
         ]
         for cls in subclasses:
             assert issubclass(cls, LLMError), f"{cls.__name__} must inherit LLMError"
@@ -837,6 +896,7 @@ class TestLLMExceptionHierarchy:
 # ===========================================================================
 # 13. Comparison summary logic (pure dict processing)
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestComparisonSummary:
@@ -885,6 +945,7 @@ class TestComparisonSummary:
 # ===========================================================================
 # 14. OutputManager file naming and structure (pure logic)
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestOutputManagerPureLogic:
@@ -940,6 +1001,7 @@ class TestOutputManagerPureLogic:
 # ===========================================================================
 # 15. Model name format parametrize tests
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestModelNameFormats:

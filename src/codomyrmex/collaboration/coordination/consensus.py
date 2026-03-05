@@ -87,7 +87,9 @@ class VotingResult:
         """Calculate voter participation rate."""
         if self.total_voters == 0:
             return 0.0
-        return (self.votes_for + self.votes_against + self.abstentions) / self.total_voters
+        return (
+            self.votes_for + self.votes_against + self.abstentions
+        ) / self.total_voters
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -236,7 +238,9 @@ class VotingMechanism:
         del self._active_proposals[proposal_id]
         del self._votes[proposal_id]
 
-        logger.info(f"Voting complete: {proposal_id} - {'PASSED' if passed else 'REJECTED'}")
+        logger.info(
+            f"Voting complete: {proposal_id} - {'PASSED' if passed else 'REJECTED'}"
+        )
         return result
 
     def get_result(self, proposal_id: str) -> VotingResult | None:
@@ -298,7 +302,9 @@ class ConsensusBuilder:
         if agreement_rate >= self._convergence_threshold:
             # Find the actual value (not the string key)
             for value in proposals.values():
-                if str(value) == max(value_counts.keys(), key=lambda k: value_counts[k]):
+                if str(value) == max(
+                    value_counts.keys(), key=lambda k: value_counts[k]
+                ):
                     self._consensus_values[key] = value
                     return value
 
@@ -367,10 +373,10 @@ class ConsensusBuilder:
 
 
 __all__ = [
-    "VoteType",
-    "Vote",
-    "Proposal",
-    "VotingResult",
-    "VotingMechanism",
     "ConsensusBuilder",
+    "Proposal",
+    "Vote",
+    "VoteType",
+    "VotingMechanism",
+    "VotingResult",
 ]

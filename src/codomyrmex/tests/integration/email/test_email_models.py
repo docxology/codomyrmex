@@ -20,8 +20,9 @@ pytestmark = pytest.mark.integration
 # Require email module dependencies
 pytestmark = pytest.mark.skipif(
     not EMAIL_AVAILABLE,
-    reason="Email module dependencies not installed. Run `uv sync --extra email`"
+    reason="Email module dependencies not installed. Run `uv sync --extra email`",
 )
+
 
 def test_email_models():
     """Test that the generic Email models instantiate correctly."""
@@ -38,7 +39,7 @@ def test_email_models():
         to=[recipient],
         body_text="Hi Bob,\n\nThis is a test.\n\nBest,\nAlice",
         date=now,
-        labels=["INBOX", "UNREAD"]
+        labels=["INBOX", "UNREAD"],
     )
 
     assert message.id == "msg-123"
@@ -51,22 +52,20 @@ def test_email_models():
     assert "INBOX" in message.labels
 
     draft = EmailDraft(
-        subject="Draft Email",
-        to=["test@example.com"],
-        body_text="Draft content."
+        subject="Draft Email", to=["test@example.com"], body_text="Draft content."
     )
     assert draft.subject == "Draft Email"
     assert len(draft.to) == 1
 
 
 @pytest.mark.skipif(
-    not GMAIL_AVAILABLE,
-    reason="Google Mail dependencies not installed."
+    not GMAIL_AVAILABLE, reason="Google Mail dependencies not installed."
 )
 def test_gmail_auth_error():
     """Test that GmailProvider raises EmailAuthError without credentials."""
     with pytest.raises(EmailAuthError):
         GmailProvider()
+
 
 # To fully test the Google Mail integration in a Zero-Mock environment,
 # we need actual valid credentials. The following test is skipped by
@@ -74,7 +73,7 @@ def test_gmail_auth_error():
 # it's safe to run the integration tests against a real account.
 @pytest.mark.skipif(
     os.environ.get("CODOMYRMEX_RUN_LIVE_EMAIL_TESTS") != "1",
-    reason="Live email tests require CODOMYRMEX_RUN_LIVE_EMAIL_TESTS=1 and credentials."
+    reason="Live email tests require CODOMYRMEX_RUN_LIVE_EMAIL_TESTS=1 and credentials.",
 )
 def test_gmail_live_integration():
     """
@@ -84,6 +83,7 @@ def test_gmail_live_integration():
     """
     try:
         from google.auth import default
+
         creds, _ = default()
     except Exception as e:
         pytest.skip(f"Could not load default Google credentials: {e}")
@@ -97,4 +97,3 @@ def test_gmail_live_integration():
 
     # Further actions (like sending an email to oneself) are possible here
     # but kept intentionally omitted for base safety unless explicitly required.
-    pass

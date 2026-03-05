@@ -24,6 +24,7 @@ from codomyrmex.telemetry.otel import MetricCounter, Span, Tracer
 
 class TestTracer:
     """Test suite for Tracer."""
+
     def test_start_span(self) -> None:
         t = Tracer()
         s = t.start_span("op")
@@ -52,6 +53,7 @@ class TestTracer:
 
 class TestMetricCounter:
     """Test suite for MetricCounter."""
+
     def test_increment(self) -> None:
         m = MetricCounter()
         m.increment("req")
@@ -69,6 +71,7 @@ class TestMetricCounter:
 
 class TestAlertEngine:
     """Test suite for AlertEngine."""
+
     def test_fire_alert(self) -> None:
         eng = AlertEngine()
         eng.add_rule(AlertRule("high_err", "error_rate", "gt", 0.05))
@@ -102,6 +105,7 @@ class TestAlertEngine:
 
 class TestAuditTrail:
     """Test suite for AuditTrail."""
+
     def test_record(self) -> None:
         trail = AuditTrail()
         e = trail.record("deploy", actor="agent-1")
@@ -133,6 +137,7 @@ class TestAuditTrail:
 
 class TestDashboardExporter:
     """Test suite for DashboardExporter."""
+
     def test_add_panel(self) -> None:
         exp = DashboardExporter()
         exp.add_panel(Panel("Rate", "graph", "req_rate"))
@@ -155,6 +160,7 @@ class TestDashboardExporter:
 
 class TestCodeGenerator:
     """Test suite for CodeGenerator."""
+
     def test_generate_functions(self) -> None:
         gen = CodeGenerator()
         bundle = gen.generate("Create a calculator with add and multiply")
@@ -182,6 +188,7 @@ class TestCodeGenerator:
 
 class TestTestGenerator:
     """Test suite for Generator."""
+
     def test_from_source(self) -> None:
         gen = TestGenerator()
         suite = gen.from_source("def greet(name): return f'Hello {name}'")
@@ -205,6 +212,7 @@ class TestTestGenerator:
 
 class TestPRBuilder:
     """Test suite for PRBuilder."""
+
     def test_create(self) -> None:
         builder = PRBuilder()
         pr = builder.create([FileChange("a.py", "code")])
@@ -222,6 +230,7 @@ class TestPRBuilder:
 
 class TestReviewLoop:
     """Test suite for ReviewLoop."""
+
     def test_converges(self) -> None:
         loop = ReviewLoop(max_iterations=5, approval_threshold=0.7)
         result = loop.run("Create a module with add and subtract")

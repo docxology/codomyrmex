@@ -6,6 +6,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
+
 @mcp_tool()
 def init_submodules(repository_path: str = None) -> bool:
     """Initialize and update submodules."""
@@ -30,6 +31,7 @@ def init_submodules(repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error initializing submodules: {e}")
         return False
+
 
 @mcp_tool()
 def update_submodules(repository_path: str = None) -> bool:

@@ -1,4 +1,3 @@
-
 """Section exporter for FPF sections.
 
 
@@ -149,7 +148,9 @@ class SectionExporter:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
 
-    def export_all_parts(self, output_dir: Path, include_metadata: bool = True) -> list[Path]:
+    def export_all_parts(
+        self, output_dir: Path, include_metadata: bool = True
+    ) -> list[Path]:
         """Export all parts to separate JSON files.
 
         Args:
@@ -207,4 +208,3 @@ class SectionExporter:
             "description": relationship.description,
             "metadata": relationship.metadata,
         }
-

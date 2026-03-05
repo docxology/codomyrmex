@@ -1,6 +1,7 @@
 """
 Validation utilities for system integrity and integration.
 """
+
 from .pai import validate_pai_integration
 
 # Shared schemas for cross-module interop — imported by 74+ modules
@@ -11,7 +12,7 @@ except ImportError:
     ResultStatus = None  # type: ignore[assignment,misc]
 
 __all__ = [
-    "validate_pai_integration",
     "Result",
     "ResultStatus",
+    "validate_pai_integration",
 ]

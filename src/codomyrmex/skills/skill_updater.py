@@ -103,7 +103,7 @@ def update_skill_md(skill_path: Path | None = None) -> int:
         table_end_offset += len(line) + 1
 
     pre_table = content[:start_idx]
-    post_table = content[start_idx + table_end_offset:]
+    post_table = content[start_idx + table_end_offset :]
     new_content = pre_table + new_table + "\n" + post_table
 
     path.write_text(new_content, encoding="utf-8")

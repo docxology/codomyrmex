@@ -65,9 +65,11 @@ class TestEventEmitter:
         """emit_batch() does nothing when disabled."""
         emitter, bus = self._make_emitter()
         emitter.enabled = False
-        emitter.emit_batch([
-            {"event_type": EventType.SYSTEM_STARTUP},
-        ])
+        emitter.emit_batch(
+            [
+                {"event_type": EventType.SYSTEM_STARTUP},
+            ]
+        )
         assert len(bus.published) == 0
 
     def test_emit_with_correlation_id(self):

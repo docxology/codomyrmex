@@ -312,6 +312,13 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: ~/.claude/Plans/playful-squishing-minsky.md (create), src/codomyrmex/data_visualization/__init__.py (edit), src/codomyrmex/tests/unit/data_visualization/test_new_coverage.py (edit), src/codomyrmex/tests/unit/data_visualization/test_dataviz_charts.py (edit)
+Files: ~/.claude/Plans/distributed-roaming-parrot.md (create)
+
+## Crash Recovery
+Last session (2026-03-05T09:35:39.776804) was not properly closed (crash/kill).
+Recorded 0 file changes before crash.
+Last changed files: none
+Bridge from previous session is valid (above).
+For details use: memory_search("changes last session")
 
 # === END COGNILAYER ===

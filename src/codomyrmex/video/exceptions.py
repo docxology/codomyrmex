@@ -50,8 +50,6 @@ class VideoReadError(VideoError):
     - Permission denied
     """
 
-    pass
-
 
 class VideoWriteError(VideoError):
     """Raised when writing a video file fails.
@@ -189,12 +187,12 @@ class VideoAnalysisError(VideoError):
 
 
 __all__ = [
-    "VideoError",
-    "VideoReadError",
-    "VideoWriteError",
-    "VideoProcessingError",
-    "FrameExtractionError",
     "AudioExtractionError",
+    "FrameExtractionError",
     "UnsupportedFormatError",
     "VideoAnalysisError",
+    "VideoError",
+    "VideoProcessingError",
+    "VideoReadError",
+    "VideoWriteError",
 ]

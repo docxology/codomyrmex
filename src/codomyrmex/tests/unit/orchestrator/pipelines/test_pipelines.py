@@ -52,11 +52,13 @@ class TestPipeline:
         pipeline = Pipeline("test")
 
         pipeline.add_stage(FunctionStage("first", lambda ctx: "first_result"))
-        pipeline.add_stage(FunctionStage(
-            "second",
-            lambda ctx: ctx.get("stage_first_output", "missing") + "_modified",
-            depends_on=["first"],
-        ))
+        pipeline.add_stage(
+            FunctionStage(
+                "second",
+                lambda ctx: ctx.get("stage_first_output", "missing") + "_modified",
+                depends_on=["first"],
+            )
+        )
 
         result = pipeline.run()
 
@@ -68,7 +70,7 @@ class TestPipeline:
         pipeline = Pipeline("test", fail_fast=True)
 
         pipeline.add_stage(FunctionStage("pass", lambda ctx: "ok"))
-        pipeline.add_stage(FunctionStage("fail", lambda ctx: 1/0))  # Will fail
+        pipeline.add_stage(FunctionStage("fail", lambda ctx: 1 / 0))  # Will fail
         pipeline.add_stage(FunctionStage("never", lambda ctx: "never"))
 
         result = pipeline.run()
@@ -137,11 +139,13 @@ class TestPipelineBuilder:
 
     def test_builder(self):
         """Should build pipeline fluently."""
-        pipeline = (PipelineBuilder("my_pipeline")
+        pipeline = (
+            PipelineBuilder("my_pipeline")
             .stage("step1", lambda ctx: "r1")
             .stage("step2", lambda ctx: "r2", depends_on=["step1"])
             .context("key", "value")
-            .build())
+            .build()
+        )
 
         result = pipeline.run()
 

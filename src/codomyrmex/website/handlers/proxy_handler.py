@@ -50,7 +50,7 @@ class ProxyHandler:
     def handle_chat(self) -> None:
         """Proxy chat requests to Ollama."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -58,7 +58,7 @@ class ProxyHandler:
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
@@ -66,46 +66,49 @@ class ProxyHandler:
         ollama_url = f"{_OLLAMA_URL}/api/chat"
 
         # Get the message from frontend
-        user_message = data.get('message', '')
+        user_message = data.get("message", "")
         model = self._resolve_model(data.get("model"))
 
         # Format for Ollama API
         ollama_payload = {
             "model": model,
-            "messages": [
-                {"role": "user", "content": user_message}
-            ],
-            "stream": False  # Non-streaming for simplicity
+            "messages": [{"role": "user", "content": user_message}],
+            "stream": False,  # Non-streaming for simplicity
         }
 
-            # If the frontend already sends proper format, use it
-        if 'messages' in data:
+        # If the frontend already sends proper format, use it
+        if "messages" in data:
             ollama_payload = {
                 "model": model,
-                "messages": data['messages'],
-                "stream": False
+                "messages": data["messages"],
+                "stream": False,
             }
 
         try:
-            ollama_resp = requests.post(ollama_url, json=ollama_payload, timeout=_OLLAMA_TIMEOUT)
+            ollama_resp = requests.post(
+                ollama_url, json=ollama_payload, timeout=_OLLAMA_TIMEOUT
+            )
 
             if ollama_resp.status_code == 200:
                 result = ollama_resp.json()
                 # Extract the assistant's message
-                response_text = result.get('message', {}).get('content', 'No response')
+                response_text = result.get("message", {}).get("content", "No response")
 
-                self.send_json_response({
-                    "response": response_text,
-                    "model": model,
-                    "success": True
-                })
+                self.send_json_response(
+                    {"response": response_text, "model": model, "success": True}
+                )
             else:
-                self.send_json_response({
-                    "error": f"Ollama error: {ollama_resp.status_code} - {ollama_resp.text[:200]}"
-                }, status=502)
+                self.send_json_response(
+                    {
+                        "error": f"Ollama error: {ollama_resp.status_code} - {ollama_resp.text[:200]}"
+                    },
+                    status=502,
+                )
 
         except requests.exceptions.ConnectionError:
-            self.send_json_response({"error": "Ollama service not reachable. Is it running?"}, status=503)
+            self.send_json_response(
+                {"error": "Ollama service not reachable. Is it running?"}, status=503
+            )
         except requests.exceptions.Timeout:
             self.send_json_response({"error": "Ollama request timed out"}, status=504)
         except Exception as e:
@@ -114,7 +117,7 @@ class ProxyHandler:
     def handle_awareness_summary(self) -> None:
         """Handle POST /api/awareness/summary -- generate Ollama AI summary."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -122,7 +125,7 @@ class ProxyHandler:
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
@@ -169,11 +172,13 @@ class ProxyHandler:
             if ollama_resp.status_code == 200:
                 result = ollama_resp.json()
                 summary_text = result.get("message", {}).get("content", "No response")
-                self.send_json_response({
-                    "summary": summary_text,
-                    "model": model,
-                    "success": True,
-                })
+                self.send_json_response(
+                    {
+                        "summary": summary_text,
+                        "model": model,
+                        "success": True,
+                    }
+                )
             else:
                 self.send_json_response(
                     {"error": f"Ollama error: {ollama_resp.status_code}"},

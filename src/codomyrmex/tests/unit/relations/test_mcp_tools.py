@@ -114,6 +114,7 @@ def test_uor_tools():
     # NOTE: uor_add_relationship tool would connect them, but we haven't implemented it.
     # The requirement is just zero-mock testing what we have.
 
+
 def test_social_media_tools():
     """Test social media mock MCP tool."""
     res_pos = social_media_analyze_sentiment("I love this!")

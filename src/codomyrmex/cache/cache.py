@@ -25,7 +25,6 @@ class Cache(ABC):
         Returns:
             Cached value if found, None otherwise
         """
-        pass
 
     @abstractmethod
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
@@ -39,7 +38,6 @@ class Cache(ABC):
         Returns:
             True if successful
         """
-        pass
 
     @abstractmethod
     def delete(self, key: str) -> bool:
@@ -51,7 +49,6 @@ class Cache(ABC):
         Returns:
             True if deleted, False if key didn't exist
         """
-        pass
 
     @abstractmethod
     def clear(self) -> bool:
@@ -60,7 +57,6 @@ class Cache(ABC):
         Returns:
             True if successful
         """
-        pass
 
     @abstractmethod
     def exists(self, key: str) -> bool:
@@ -72,7 +68,6 @@ class Cache(ABC):
         Returns:
             True if key exists
         """
-        pass
 
     @property
     @abstractmethod
@@ -82,7 +77,6 @@ class Cache(ABC):
         Returns:
             CacheStats object
         """
-        pass
 
     def delete_pattern(self, pattern: str) -> int:
         """Delete all keys matching a pattern.
@@ -96,5 +90,3 @@ class Cache(ABC):
         # Default implementation - override in subclasses for better performance
         # This is a basic implementation - subclasses should override
         return 0
-
-

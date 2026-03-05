@@ -36,7 +36,9 @@ from codomyrmex.git_operations.core.metadata import (
 # ---------------------------------------------------------------------------
 
 
-def _make_manager(tmp_path: Path, repos: dict | None = None) -> RepositoryMetadataManager:
+def _make_manager(
+    tmp_path: Path, repos: dict | None = None
+) -> RepositoryMetadataManager:
     """
     Create a real RepositoryMetadataManager backed by a JSON file in tmp_path.
     Optionally seed it with repository metadata entries.
@@ -249,7 +251,9 @@ class TestCmdShowMetadata:
         repos = {
             "a/one": _make_repo_metadata("a/one", clone_status=CloneStatus.CLONED),
             "a/two": _make_repo_metadata("a/two", clone_status=CloneStatus.CLONED),
-            "b/three": _make_repo_metadata("b/three", clone_status=CloneStatus.NOT_CLONED),
+            "b/three": _make_repo_metadata(
+                "b/three", clone_status=CloneStatus.NOT_CLONED
+            ),
         }
         manager = _make_manager(tmp_path, repos)
         args = _args(verbose=False)
@@ -346,7 +350,12 @@ class TestCmdReport:
         assert "Top Starred Repositories:" in captured.out
         assert "a/star: 500 stars" in captured.out
         # nostar (0 stars) should NOT appear in top starred
-        assert "a/nostar" not in captured.out.split("Top Starred Repositories:")[1].split("Recently Active")[0]
+        assert (
+            "a/nostar"
+            not in captured.out.split("Top Starred Repositories:")[1].split(
+                "Recently Active"
+            )[0]
+        )
 
     def test_report_detailed_shows_active_repos(self, tmp_path, capsys):
         """Detailed report shows recently active repositories."""
@@ -386,8 +395,12 @@ class TestCmdReport:
     def test_report_clone_status_breakdown(self, tmp_path, capsys):
         """Report shows clone status breakdown."""
         repos = {
-            "a/cloned": _make_repo_metadata("a/cloned", clone_status=CloneStatus.CLONED),
-            "a/notcloned": _make_repo_metadata("a/notcloned", clone_status=CloneStatus.NOT_CLONED),
+            "a/cloned": _make_repo_metadata(
+                "a/cloned", clone_status=CloneStatus.CLONED
+            ),
+            "a/notcloned": _make_repo_metadata(
+                "a/notcloned", clone_status=CloneStatus.NOT_CLONED
+            ),
         }
         manager = _make_manager(tmp_path, repos)
         args = _args(detailed=False)
@@ -534,7 +547,9 @@ class TestCmdCleanup:
         existing_dir.mkdir()
         repos = {
             "a/present": _make_repo_metadata("a/present", local_path=str(existing_dir)),
-            "a/absent": _make_repo_metadata("a/absent", local_path=str(tmp_path / "nope")),
+            "a/absent": _make_repo_metadata(
+                "a/absent", local_path=str(tmp_path / "nope")
+            ),
             "a/nopath": _make_repo_metadata("a/nopath", local_path=""),
         }
         manager = _make_manager(tmp_path, repos)
@@ -549,9 +564,7 @@ class TestCmdCleanup:
 
     def test_cleanup_saves_metadata_after_removal(self, tmp_path, capsys):
         """After removing entries, metadata JSON is saved to disk."""
-        repo = _make_repo_metadata(
-            "a/gone", local_path=str(tmp_path / "vanished")
-        )
+        repo = _make_repo_metadata("a/gone", local_path=str(tmp_path / "vanished"))
         manager = _make_manager(tmp_path, {"a/gone": repo})
         args = _args(dry_run=False)
         metadata_cli.cmd_cleanup(manager, args)
@@ -591,7 +604,10 @@ class TestMain:
         (tmp_path / "meta.json").write_text("{}")
         metadata_cli.main(argv=["--metadata-file", str(tmp_path / "meta.json")])
         captured = capsys.readouterr()
-        assert "Repository Metadata Management CLI" in captured.out or "usage:" in captured.out.lower()
+        assert (
+            "Repository Metadata Management CLI" in captured.out
+            or "usage:" in captured.out.lower()
+        )
 
     def test_main_show_command(self, tmp_path, capsys):
         """Main dispatches 'show' command correctly."""
@@ -613,7 +629,9 @@ class TestMain:
         """Main dispatches 'cleanup --dry-run' correctly."""
         meta_file = tmp_path / "meta.json"
         meta_file.write_text("{}")
-        metadata_cli.main(argv=["--metadata-file", str(meta_file), "cleanup", "--dry-run"])
+        metadata_cli.main(
+            argv=["--metadata-file", str(meta_file), "cleanup", "--dry-run"]
+        )
         captured = capsys.readouterr()
         assert "Cleaning up repository metadata" in captured.out
 
@@ -631,7 +649,10 @@ class TestMain:
         bad_file.write_text("NOT VALID JSON {{{")
         metadata_cli.main(argv=["--metadata-file", str(bad_file), "show"])
         captured = capsys.readouterr()
-        assert "No repositories found" in captured.out or "Repository Metadata" in captured.out
+        assert (
+            "No repositories found" in captured.out
+            or "Repository Metadata" in captured.out
+        )
 
 
 # ===========================================================================

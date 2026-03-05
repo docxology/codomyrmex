@@ -119,7 +119,9 @@ def _parse_address_list(raw: Any) -> list[EmailAddress]:
     return [addr] if addr else []
 
 
-def _sdk_message_to_email_message(msg: Any, inbox_id: str | None = None) -> EmailMessage:
+def _sdk_message_to_email_message(
+    msg: Any, inbox_id: str | None = None
+) -> EmailMessage:
     """Convert an AgentMail SDK Message object to a generic EmailMessage.
 
     Args:
@@ -135,7 +137,9 @@ def _sdk_message_to_email_message(msg: Any, inbox_id: str | None = None) -> Emai
 
     # Sender
     from_raw = getattr(msg, "from_", None) or getattr(msg, "from", None)
-    sender = _parse_address_field(from_raw) or EmailAddress(email="unknown@agentmail.to")
+    sender = _parse_address_field(from_raw) or EmailAddress(
+        email="unknown@agentmail.to"
+    )
 
     # Recipients
     to_addrs = _parse_address_list(getattr(msg, "to", None))
@@ -251,7 +255,9 @@ def _sdk_webhook_to_model(webhook: Any) -> AgentMailWebhook:
     inbox_ids_raw = getattr(webhook, "inbox_ids", None)
     pod_ids_raw = getattr(webhook, "pod_ids", None)
     return AgentMailWebhook(
-        webhook_id=str(getattr(webhook, "webhook_id", None) or getattr(webhook, "id", "")),
+        webhook_id=str(
+            getattr(webhook, "webhook_id", None) or getattr(webhook, "id", "")
+        ),
         url=getattr(webhook, "url", ""),
         event_types=list(event_types_raw) if event_types_raw else [],
         inbox_ids=list(inbox_ids_raw) if inbox_ids_raw else [],

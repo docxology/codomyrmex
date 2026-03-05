@@ -8,12 +8,13 @@ from codomyrmex.cli.utils import get_logger, print_error, print_header, print_su
 
 logger = get_logger(__name__)
 
+
 def handle_chat_session(
     todo_path: str | None = None,
     rounds: int = 0,
     context: list[str] | None = None,
     stream: bool = False,
-    resume: str | None = None
+    resume: str | None = None,
 ) -> bool:
     """Handle continuous multi-turn chat sessions."""
     try:
@@ -24,7 +25,7 @@ def handle_chat_session(
             print(f"🎯 Targeting scaffolding: {todo_path}")
 
         orch = ConversationOrchestrator.dev_loop(
-            todo_path=todo_path if todo_path else "TODO.md",
+            todo_path=todo_path or "TODO.md",
             extra_files=context,
         )
 
@@ -41,7 +42,10 @@ def handle_chat_session(
 
         def on_turn_callback(turn: Any) -> None:
             if stream:
-                print(f"\n🤖 [{turn.speaker}] ({turn.elapsed_seconds}s):\n{turn.content}\n" + "-"*40)
+                print(
+                    f"\n🤖 [{turn.speaker}] ({turn.elapsed_seconds}s):\n{turn.content}\n"
+                    + "-" * 40
+                )
 
         orch.run(rounds=rounds, on_turn=on_turn_callback)
 

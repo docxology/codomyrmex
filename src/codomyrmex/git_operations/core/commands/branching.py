@@ -23,10 +23,11 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
         capture_output=True,
         text=True,
         check=True,
-    timeout=_GIT_TIMEOUT,
+        timeout=_GIT_TIMEOUT,
     )
     logger.debug("Branch '%s' created and checked out", branch_name)
     return True
+
 
 def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     """Switch to an existing Git branch.
@@ -43,12 +44,15 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         capture_output=True,
         text=True,
         check=True,
-    timeout=_GIT_TIMEOUT,
+        timeout=_GIT_TIMEOUT,
     )
     logger.debug("Switched to branch '%s'", branch_name)
     return True
 
-def delete_branch(branch_name: str, repository_path: str = None, force: bool = False) -> bool:
+
+def delete_branch(
+    branch_name: str, repository_path: str = None, force: bool = False
+) -> bool:
     """Delete a local git branch.
 
     Args:
@@ -69,10 +73,11 @@ def delete_branch(branch_name: str, repository_path: str = None, force: bool = F
         capture_output=True,
         text=True,
         check=True,
-    timeout=_GIT_TIMEOUT,
+        timeout=_GIT_TIMEOUT,
     )
     logger.info(f"Deleted branch {branch_name} (force={force})")
     return True
+
 
 def get_current_branch(repository_path: str = None) -> str:
     """Get the name of the current Git branch.
@@ -89,7 +94,7 @@ def get_current_branch(repository_path: str = None) -> str:
         capture_output=True,
         text=True,
         check=True,
-    timeout=_GIT_TIMEOUT,
+        timeout=_GIT_TIMEOUT,
     )
     branch_name = result.stdout.strip()
     logger.debug("Current branch: %s", branch_name)
@@ -113,7 +118,7 @@ def list_branches(repository_path: str = None) -> list[str]:
         text=True,
         cwd=cwd,
         check=True,
-    timeout=_GIT_TIMEOUT,
+        timeout=_GIT_TIMEOUT,
     )
     branches = []
     for line in result.stdout.splitlines():

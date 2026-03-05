@@ -4,6 +4,7 @@ Unit tests for website accessibility module — Zero-Mock compliant.
 Covers: A11yChecker, AccessibilityReporter, calculate_contrast_ratio,
 check_heading_hierarchy — previously at 14-33% coverage.
 """
+
 import json
 
 import pytest
@@ -197,7 +198,9 @@ class TestA11yChecker:
         report_a = checker_a.check_elements(elements)
         report_aa = checker_aa.check_elements(elements)
         # AA should catch color-contrast; A should not
-        assert report_aa.errors + report_aa.warnings >= report_a.errors + report_a.warnings
+        assert (
+            report_aa.errors + report_aa.warnings >= report_a.errors + report_a.warnings
+        )
 
     def test_input_without_label_flagged(self):
         """input without label is flagged."""

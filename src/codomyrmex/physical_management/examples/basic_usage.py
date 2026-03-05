@@ -26,9 +26,15 @@ def object_management_example():
 
     # Create different types of objects
     objects = [
-        manager.create_object("sensor_001", "Temperature Sensor", ObjectType.SENSOR, 0, 0, 0),
-        manager.create_object("actuator_001", "LED Light", ObjectType.ACTUATOR, 1, 0, 0),
-        manager.create_object("device_001", "Smart Thermostat", ObjectType.DEVICE, 2, 0, 0),
+        manager.create_object(
+            "sensor_001", "Temperature Sensor", ObjectType.SENSOR, 0, 0, 0
+        ),
+        manager.create_object(
+            "actuator_001", "LED Light", ObjectType.ACTUATOR, 1, 0, 0
+        ),
+        manager.create_object(
+            "device_001", "Smart Thermostat", ObjectType.DEVICE, 2, 0, 0
+        ),
     ]
 
     print(f"Created {len(objects)} objects")
@@ -57,10 +63,7 @@ def physics_simulation_example():
     sim = PhysicsSimulator()
 
     # Add force field
-    force_field = ForceField(
-        position=Vector3D(0, 0, 0),
-        strength=5.0
-    )
+    force_field = ForceField(position=Vector3D(0, 0, 0), strength=5.0)
     sim.add_force_field(force_field)
 
     # Register objects
@@ -69,12 +72,14 @@ def physics_simulation_example():
 
     # Run simulation for 2 seconds
     for i in range(120):  # 60 FPS * 2 seconds
-        sim.update_physics(1/60)
+        sim.update_physics(1 / 60)
 
         if i % 30 == 0:  # Print every 0.5 seconds
             ball1_state = sim.get_object_state("ball1")
             ball2_state = sim.get_object_state("ball2")
-            print(f"t={i/60:.1f}s: Ball1 at {ball1_state['position']}, Ball2 at {ball2_state['position']}")
+            print(
+                f"t={i / 60:.1f}s: Ball1 at {ball1_state['position']}, Ball2 at {ball2_state['position']}"
+            )
 
     return sim
 
@@ -97,7 +102,9 @@ def sensor_integration_example():
 
     for reading in readings:
         sensor_manager.add_reading(reading)
-        print(f"Added reading: {reading.sensor_type.value} = {reading.value} {reading.unit}")
+        print(
+            f"Added reading: {reading.sensor_type.value} = {reading.value} {reading.unit}"
+        )
 
     # Get latest temperature
     latest_temp = sensor_manager.get_latest_reading(SensorType.TEMPERATURE)

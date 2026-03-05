@@ -35,6 +35,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[5]
 # TrustLevel Enum
 # =====================================================================
 
+
 class TestTrustLevel:
     """Test trust level enum values."""
 
@@ -55,6 +56,7 @@ class TestTrustLevel:
 # Tool Classification
 # =====================================================================
 
+
 class TestToolClassification:
     """Test safe vs destructive tool sets."""
 
@@ -67,7 +69,7 @@ class TestToolClassification:
 
     def test_safe_tools_count(self):
         total = get_total_tool_count()
-        assert SAFE_TOOL_COUNT == total - DESTRUCTIVE_TOOL_COUNT
+        assert total - DESTRUCTIVE_TOOL_COUNT == SAFE_TOOL_COUNT
 
     def test_no_overlap(self):
         destructive = _get_destructive_tools()
@@ -105,6 +107,7 @@ class TestToolClassification:
 # =====================================================================
 # TrustRegistry
 # =====================================================================
+
 
 class TestTrustRegistry:
     """Test in-memory trust registry."""
@@ -187,6 +190,7 @@ class TestTrustRegistry:
 # verify_capabilities()
 # =====================================================================
 
+
 class TestVerifyCapabilities:
     """Test full capability audit."""
 
@@ -251,6 +255,7 @@ class TestVerifyCapabilities:
 # trusted_call_tool() enforcement
 # =====================================================================
 
+
 class TestTrustedCallTool:
     """Test trust-gated tool execution."""
 
@@ -301,6 +306,7 @@ class TestTrustedCallTool:
 # Module-level functions
 # =====================================================================
 
+
 class TestModuleLevelFunctions:
     """Test public API convenience functions."""
 
@@ -342,6 +348,7 @@ class TestModuleLevelFunctions:
 # =====================================================================
 # Full Workflow Integration
 # =====================================================================
+
 
 class TestFullWorkflow:
     """Test the complete verify → trust → call flow."""
@@ -388,6 +395,7 @@ class TestFullWorkflow:
 # Module __getattr__ Lazy Cache
 # =====================================================================
 
+
 class TestModuleGetattr:
     """Test the module-level __getattr__ lazy initialization and caching.
 
@@ -399,6 +407,7 @@ class TestModuleGetattr:
     def test_safe_tools_is_frozenset(self):
         """SAFE_TOOLS lazy-computed value is a frozenset of tool names."""
         import codomyrmex.agents.pai.trust_gateway as tg
+
         val = tg.SAFE_TOOLS
         assert isinstance(val, frozenset)
         assert len(val) > 0
@@ -406,6 +415,7 @@ class TestModuleGetattr:
     def test_safe_tool_count_matches_safe_tools(self):
         """SAFE_TOOL_COUNT equals len(SAFE_TOOLS) at every access."""
         import codomyrmex.agents.pai.trust_gateway as tg
+
         count = tg.SAFE_TOOL_COUNT
         tools = tg.SAFE_TOOLS
         assert count == len(tools)
@@ -413,6 +423,7 @@ class TestModuleGetattr:
     def test_destructive_tool_count_positive_int(self):
         """DESTRUCTIVE_TOOL_COUNT is a positive integer (≥4 built-ins)."""
         import codomyrmex.agents.pai.trust_gateway as tg
+
         count = tg.DESTRUCTIVE_TOOL_COUNT
         assert isinstance(count, int)
         assert count >= 4
@@ -420,6 +431,7 @@ class TestModuleGetattr:
     def test_safe_tools_recomputed_after_cache_eviction(self):
         """SAFE_TOOLS and SAFE_TOOL_COUNT recomputed when evicted from module globals."""
         import codomyrmex.agents.pai.trust_gateway as tg
+
         # Save originals
         orig_tools = tg.__dict__.pop("SAFE_TOOLS", None)
         tg.__dict__.pop("SAFE_TOOL_COUNT", None)
@@ -438,6 +450,7 @@ class TestModuleGetattr:
     def test_safe_tool_count_uses_none_check_not_falsy(self):
         """SAFE_TOOL_COUNT uses 'is not None' — an empty frozenset cache is respected."""
         import codomyrmex.agents.pai.trust_gateway as tg
+
         orig_tools = tg.__dict__.pop("SAFE_TOOLS", None)
         tg.__dict__.pop("SAFE_TOOL_COUNT", None)
         # Inject empty frozenset to validate is-not-None check (not falsy check)
@@ -455,5 +468,6 @@ class TestModuleGetattr:
     def test_unknown_attribute_raises_attribute_error(self):
         """Accessing an undefined module attribute raises AttributeError."""
         import codomyrmex.agents.pai.trust_gateway as tg
+
         with pytest.raises(AttributeError, match="has no attribute"):
             _ = tg.NONEXISTENT_ATTRIBUTE_XYZ_TRUST_GATEWAY

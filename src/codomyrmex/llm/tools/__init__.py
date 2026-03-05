@@ -16,6 +16,7 @@ from typing import Any, Optional, get_type_hints
 
 class ParameterType(Enum):
     """JSON Schema parameter types."""
+
     STRING = "string"
     INTEGER = "integer"
     NUMBER = "number"
@@ -23,9 +24,11 @@ class ParameterType(Enum):
     ARRAY = "array"
     OBJECT = "object"
 
+
 @dataclass
 class ToolParameter:
     """Definition of a tool parameter."""
+
     name: str
     param_type: ParameterType
     description: str
@@ -49,9 +52,11 @@ class ToolParameter:
 
         return schema
 
+
 @dataclass
 class ToolResult:
     """Result of tool execution."""
+
     success: bool
     output: Any
     error: str | None = None
@@ -65,9 +70,11 @@ class ToolResult:
             return str(self.output)
         return f"Error: {self.error}"
 
+
 @dataclass
 class Tool:
     """A tool that can be called by an LLM."""
+
     name: str
     description: str
     parameters: list[ToolParameter]
@@ -93,8 +100,8 @@ class Tool:
                     "type": "object",
                     "properties": properties,
                     "required": required,
-                }
-            }
+                },
+            },
         }
 
     def to_anthropic_format(self) -> dict[str, Any]:
@@ -114,7 +121,7 @@ class Tool:
                 "type": "object",
                 "properties": properties,
                 "required": required,
-            }
+            },
         }
 
     def execute(self, **kwargs) -> ToolResult:
@@ -124,6 +131,7 @@ class Tool:
             return ToolResult(success=True, output=result)
         except Exception as e:
             return ToolResult(success=False, output=None, error=str(e))
+
 
 class ToolRegistry:
     """Registry for managing available tools."""
@@ -164,8 +172,11 @@ class ToolRegistry:
         """Execute a tool by name."""
         tool = self.get(tool_name)
         if not tool:
-            return ToolResult(success=False, output=None, error=f"Tool '{tool_name}' not found")
+            return ToolResult(
+                success=False, output=None, error=f"Tool '{tool_name}' not found"
+            )
         return tool.execute(**kwargs)
+
 
 def _python_type_to_param_type(python_type: type) -> ParameterType:
     """Convert Python type to JSON Schema parameter type."""
@@ -179,6 +190,7 @@ def _python_type_to_param_type(python_type: type) -> ParameterType:
     }
     return type_mapping.get(python_type, ParameterType.STRING)
 
+
 def tool(
     name: str | None = None,
     description: str | None = None,
@@ -186,6 +198,7 @@ def tool(
     registry: ToolRegistry | None = None,
 ):
     """Decorator to create a tool from a function."""
+
     def decorator(func: Callable) -> Callable:
         """Decorator."""
         tool_name = name or func.__name__
@@ -193,11 +206,11 @@ def tool(
 
         # Extract parameters from function signature
         sig = inspect.signature(func)
-        type_hints = get_type_hints(func) if hasattr(func, '__annotations__') else {}
+        type_hints = get_type_hints(func) if hasattr(func, "__annotations__") else {}
 
         parameters = []
         for param_name, param in sig.parameters.items():
-            if param_name in ('self', 'cls'):
+            if param_name in ("self", "cls"):
                 continue
 
             param_type = type_hints.get(param_name, str)
@@ -207,18 +220,20 @@ def tool(
             param_desc = f"Parameter: {param_name}"
             if func.__doc__:
                 # Simple docstring parsing
-                for line in func.__doc__.split('\n'):
-                    if param_name in line and ':' in line:
-                        param_desc = line.split(':', 1)[-1].strip()
+                for line in func.__doc__.split("\n"):
+                    if param_name in line and ":" in line:
+                        param_desc = line.split(":", 1)[-1].strip()
                         break
 
-            parameters.append(ToolParameter(
-                name=param_name,
-                param_type=_python_type_to_param_type(param_type),
-                description=param_desc,
-                required=not has_default,
-                default=param.default if has_default else None,
-            ))
+            parameters.append(
+                ToolParameter(
+                    name=param_name,
+                    param_type=_python_type_to_param_type(param_type),
+                    description=param_desc,
+                    required=not has_default,
+                    default=param.default if has_default else None,
+                )
+            )
 
         tool_obj = Tool(
             name=tool_name,
@@ -240,6 +255,7 @@ def tool(
         return wrapper
 
     return decorator
+
 
 # Built-in tools
 def create_calculator_tool() -> Tool:
@@ -263,7 +279,9 @@ def create_calculator_tool() -> Tool:
         if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
             return float(node.value)
         if isinstance(node, ast.BinOp) and type(node.op) in _MATH_OPS:
-            return _MATH_OPS[type(node.op)](_safe_eval(node.left), _safe_eval(node.right))
+            return _MATH_OPS[type(node.op)](
+                _safe_eval(node.left), _safe_eval(node.right)
+            )
         if isinstance(node, ast.UnaryOp) and type(node.op) in _MATH_OPS:
             return _MATH_OPS[type(node.op)](_safe_eval(node.operand))
         raise ValueError(f"Unsupported expression: {ast.dump(node)}")
@@ -287,6 +305,7 @@ def create_calculator_tool() -> Tool:
         function=calculate,
         category="utilities",
     )
+
 
 def create_datetime_tool() -> Tool:
     """Create a datetime tool."""
@@ -312,27 +331,31 @@ def create_datetime_tool() -> Tool:
         category="utilities",
     )
 
+
 # Global registry
 DEFAULT_REGISTRY = ToolRegistry()
+
 
 def register_tool(tool: Tool) -> None:
     """Register a tool in the default registry."""
     DEFAULT_REGISTRY.register(tool)
 
+
 def get_tool(name: str) -> Tool | None:
     """Get a tool from the default registry."""
     return DEFAULT_REGISTRY.get(name)
 
+
 __all__ = [
+    "DEFAULT_REGISTRY",
     "ParameterType",
-    "ToolParameter",
-    "ToolResult",
     "Tool",
+    "ToolParameter",
     "ToolRegistry",
-    "tool",
+    "ToolResult",
     "create_calculator_tool",
     "create_datetime_tool",
-    "DEFAULT_REGISTRY",
-    "register_tool",
     "get_tool",
+    "register_tool",
+    "tool",
 ]

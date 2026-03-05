@@ -73,8 +73,7 @@ def circuit_to_ascii(circuit: QuantumCircuit) -> str:
     for col in columns:
         max_w = 1
         for symbol in col.values():
-            if len(symbol) > max_w:
-                max_w = len(symbol)
+            max_w = max(max_w, len(symbol))
         col_widths.append(max_w)
 
     # Build each qubit wire line

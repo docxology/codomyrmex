@@ -13,8 +13,8 @@ from .benchmark import (
 )
 
 __all__ = [
+    "AsyncProfiler",
     "PerformanceProfiler",
     "profile_function",
     "run_benchmark",
-    "AsyncProfiler",
 ]

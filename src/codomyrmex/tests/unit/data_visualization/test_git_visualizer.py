@@ -119,7 +119,16 @@ class TestGitVisualizerInit:
         assert visualizer.mermaid_generator is not None
 
     def test_init_has_color_palette(self, visualizer):
-        expected_keys = {"main", "develop", "feature", "hotfix", "release", "commit", "merge", "tag"}
+        expected_keys = {
+            "main",
+            "develop",
+            "feature",
+            "hotfix",
+            "release",
+            "commit",
+            "merge",
+            "tag",
+        }
         assert expected_keys == set(visualizer.colors.keys())
 
     def test_colors_are_hex_strings(self, visualizer):
@@ -146,16 +155,26 @@ class TestGetBranchColor:
         assert visualizer._get_branch_color("develop") == visualizer.colors["develop"]
 
     def test_feature_branch(self, visualizer):
-        assert visualizer._get_branch_color("feature/auth") == visualizer.colors["feature"]
+        assert (
+            visualizer._get_branch_color("feature/auth") == visualizer.colors["feature"]
+        )
 
     def test_hotfix_branch(self, visualizer):
-        assert visualizer._get_branch_color("hotfix/critical-fix") == visualizer.colors["hotfix"]
+        assert (
+            visualizer._get_branch_color("hotfix/critical-fix")
+            == visualizer.colors["hotfix"]
+        )
 
     def test_release_branch(self, visualizer):
-        assert visualizer._get_branch_color("release/v2.0") == visualizer.colors["release"]
+        assert (
+            visualizer._get_branch_color("release/v2.0") == visualizer.colors["release"]
+        )
 
     def test_unknown_branch_returns_commit_color(self, visualizer):
-        assert visualizer._get_branch_color("experiment/weird") == visualizer.colors["commit"]
+        assert (
+            visualizer._get_branch_color("experiment/weird")
+            == visualizer.colors["commit"]
+        )
 
     def test_case_insensitive(self, visualizer):
         assert visualizer._get_branch_color("MAIN") == visualizer.colors["main"]
@@ -203,7 +222,9 @@ class TestGenerateSampleCommits:
 class TestVisualizeGitTreePng:
     """Test PNG git tree visualization with provided data."""
 
-    def test_with_provided_branches_and_commits(self, visualizer, sample_branches, sample_commits, tmp_path):
+    def test_with_provided_branches_and_commits(
+        self, visualizer, sample_branches, sample_commits, tmp_path
+    ):
         out = tmp_path / "tree.png"
         result = visualizer.visualize_git_tree_png(
             branches=sample_branches,
@@ -225,7 +246,9 @@ class TestVisualizeGitTreePng:
         assert result is True
         assert out.exists()
 
-    def test_no_output_path_still_succeeds(self, visualizer, sample_branches, sample_commits):
+    def test_no_output_path_still_succeeds(
+        self, visualizer, sample_branches, sample_commits
+    ):
         result = visualizer.visualize_git_tree_png(
             branches=sample_branches,
             commits=sample_commits,
@@ -233,7 +256,9 @@ class TestVisualizeGitTreePng:
         )
         assert result is True
 
-    def test_custom_figure_size(self, visualizer, sample_branches, sample_commits, tmp_path):
+    def test_custom_figure_size(
+        self, visualizer, sample_branches, sample_commits, tmp_path
+    ):
         out = tmp_path / "custom_size.png"
         result = visualizer.visualize_git_tree_png(
             branches=sample_branches,
@@ -243,7 +268,9 @@ class TestVisualizeGitTreePng:
         )
         assert result is True
 
-    def test_max_commits_limits_display(self, visualizer, sample_branches, sample_commits, tmp_path):
+    def test_max_commits_limits_display(
+        self, visualizer, sample_branches, sample_commits, tmp_path
+    ):
         out = tmp_path / "limited.png"
         result = visualizer.visualize_git_tree_png(
             branches=sample_branches,
@@ -270,7 +297,9 @@ class TestVisualizeGitTreePng:
 class TestVisualizeGitTreeMermaid:
     """Test Mermaid git tree diagram generation."""
 
-    def test_with_branches_and_commits(self, visualizer, sample_branches, sample_commits, tmp_path):
+    def test_with_branches_and_commits(
+        self, visualizer, sample_branches, sample_commits, tmp_path
+    ):
         out = tmp_path / "tree.mmd"
         result = visualizer.visualize_git_tree_mermaid(
             branches=sample_branches,
@@ -411,7 +440,11 @@ class TestPlotHelpers:
 
         fig, ax = plt.subplots()
         repo_data = {
-            "status": {"clean": False, "modified": ["a.py", "b.py"], "untracked": ["c.py"]},
+            "status": {
+                "clean": False,
+                "modified": ["a.py", "b.py"],
+                "untracked": ["c.py"],
+            },
         }
         visualizer._plot_repository_status(ax, repo_data)
         assert ax.get_title() == "Repository Status"
@@ -725,7 +758,6 @@ class TestCreateComprehensiveGitReport:
         if not mod.GIT_OPERATIONS_AVAILABLE:
             pytest.skip("git_operations not importable")
 
-
         non_git = tmp_path / "not_a_repo"
         non_git.mkdir()
         result = visualizer.create_comprehensive_git_report(
@@ -743,7 +775,9 @@ class TestCreateComprehensiveGitReport:
 class TestConvenienceFunctions:
     """Test module-level convenience wrapper functions."""
 
-    def test_create_git_tree_png_with_data(self, sample_branches, sample_commits, tmp_path):
+    def test_create_git_tree_png_with_data(
+        self, sample_branches, sample_commits, tmp_path
+    ):
         out = tmp_path / "conv_tree.png"
         result = create_git_tree_png(
             branches=sample_branches,
@@ -759,7 +793,9 @@ class TestConvenienceFunctions:
         result = create_git_tree_png(output_path=str(out))
         assert result is True
 
-    def test_create_git_tree_mermaid_with_data(self, sample_branches, sample_commits, tmp_path):
+    def test_create_git_tree_mermaid_with_data(
+        self, sample_branches, sample_commits, tmp_path
+    ):
         out = tmp_path / "conv_tree.mmd"
         result = create_git_tree_mermaid(
             branches=sample_branches,

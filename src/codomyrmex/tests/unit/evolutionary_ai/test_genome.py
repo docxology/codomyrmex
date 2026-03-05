@@ -40,6 +40,7 @@ class TestIndividual:
         assert ind1 != ind3
         assert ind1 != "not an individual"
 
+
 @pytest.mark.unit
 class TestGenome:
     def test_genome_random(self):
@@ -89,7 +90,7 @@ class TestGenome:
         assert stats.min_val == 1.0
         assert stats.max_val == 3.0
         assert stats.length == 3
-        assert stats.std == pytest.approx(math.sqrt(2/3))
+        assert stats.std == pytest.approx(math.sqrt(2 / 3))
 
     def test_genome_stats_empty(self):
         g = Genome(genes=[])

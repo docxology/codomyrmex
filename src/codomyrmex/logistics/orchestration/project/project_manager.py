@@ -20,6 +20,7 @@ logger = get_logger(__name__)
 
 class ProjectStatus(Enum):
     """Project lifecycle status."""
+
     PLANNING = "planning"
     ACTIVE = "active"
     PAUSED = "paused"
@@ -30,6 +31,7 @@ class ProjectStatus(Enum):
 
 class ProjectType(Enum):
     """Types of projects supported."""
+
     AI_ANALYSIS = "ai_analysis"
     WEB_APPLICATION = "web_application"
     DATA_PIPELINE = "data_pipeline"
@@ -42,6 +44,7 @@ class ProjectType(Enum):
 @dataclass
 class ProjectTemplate:
     """Template for creating new projects."""
+
     name: str
     type: ProjectType
     description: str = ""
@@ -54,6 +57,7 @@ class ProjectTemplate:
 @dataclass
 class Project:
     """Project definition."""
+
     name: str
     path: Path
     type: ProjectType
@@ -76,7 +80,7 @@ class Project:
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
             "owner": self.owner,
-            "version": self.version
+            "version": self.version,
         }
 
 
@@ -89,7 +93,9 @@ class ProjectManager:
         self.doc_generator = DocumentationGenerator()
         self.active_projects: dict[str, Project] = {}
 
-    def create_project(self, name: str, type: ProjectType, description: str = "") -> Project | None:
+    def create_project(
+        self, name: str, type: ProjectType, description: str = ""
+    ) -> Project | None:
         """Create a new project."""
         project_path = self.projects_root / name
 
@@ -110,7 +116,7 @@ class ProjectManager:
                 path=project_path,
                 type=type,
                 description=description,
-                status=ProjectStatus.ACTIVE
+                status=ProjectStatus.ACTIVE,
             )
 
             # Generate documentation
@@ -122,7 +128,7 @@ class ProjectManager:
                 version=project.version,
                 author="",
                 created_at=datetime.now().isoformat(),
-                nested_dirs=["src", "tests", "config", "docs"]
+                nested_dirs=["src", "tests", "config", "docs"],
             )
 
             self.active_projects[name] = project
@@ -164,4 +170,3 @@ def get_project_manager() -> ProjectManager:
     if _project_manager is None:
         _project_manager = ProjectManager()
     return _project_manager
-

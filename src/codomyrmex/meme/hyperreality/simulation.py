@@ -31,16 +31,14 @@ def assess_reality_level(object_data: dict[str, Any]) -> SimulationLevel:
     distortion = float(object_data.get("distortion", 0.0))
     if distortion > 0.8:
         return SimulationLevel.ABSENCE
-    elif distortion > 0.4:
+    if distortion > 0.4:
         return SimulationLevel.MASK
 
     # Default: reflection of a basic reality
     return SimulationLevel.REFLECTION
 
 
-def generate_simulacrum(
-    referent: str, level: SimulationLevel
-) -> Simulacrum:
+def generate_simulacrum(referent: str, level: SimulationLevel) -> Simulacrum:
     """Create a new simulacrum based on a referent."""
     fidelity = 1.0
     autonomy = 0.0
@@ -60,8 +58,5 @@ def generate_simulacrum(
         autonomy = 1.0
 
     return Simulacrum(
-        referent=referent,
-        level=level,
-        fidelity=fidelity,
-        autonomy=autonomy
+        referent=referent, level=level, fidelity=fidelity, autonomy=autonomy
     )

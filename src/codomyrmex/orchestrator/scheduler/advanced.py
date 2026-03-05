@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class DependencyStatus(Enum):
     """Status of job dependencies."""
+
     WAITING = "waiting"
     READY = "ready"
     BLOCKED = "blocked"
@@ -30,6 +31,7 @@ class DependencyStatus(Enum):
 @dataclass
 class JobDependency:
     """Dependency between jobs."""
+
     job_id: str
     depends_on: list[str] = field(default_factory=list)
     require_success: bool = True
@@ -137,7 +139,9 @@ class PersistentScheduler(Scheduler):
                     )
                     self._job_functions[job_id] = func_name
         except (json.JSONDecodeError, KeyError) as e:
-            logger.warning("Failed to load scheduler state from %s: %s", self._state_path, e)
+            logger.warning(
+                "Failed to load scheduler state from %s: %s", self._state_path, e
+            )
 
     def _save_state(self) -> None:
         """Save scheduler state to disk."""
@@ -150,19 +154,21 @@ class PersistentScheduler(Scheduler):
         for job_id, job in self._jobs.items():
             if job.status not in (JobStatus.CANCELLED, JobStatus.COMPLETED):
                 func_name = self._job_functions.get(job_id, "")
-                jobs.append({
-                    "id": job_id,
-                    "name": job.name,
-                    "function": func_name,
-                    "status": job.status.value,
-                })
+                jobs.append(
+                    {
+                        "id": job_id,
+                        "name": job.name,
+                        "function": func_name,
+                        "status": job.status.value,
+                    }
+                )
 
         state = {
             "saved_at": datetime.now().isoformat(),
             "jobs": jobs,
         }
 
-        with open(self._state_path, 'w') as f:
+        with open(self._state_path, "w") as f:
             json.dump(state, f, indent=2)
 
     def schedule(
@@ -219,7 +225,11 @@ class JobPipeline:
                 all_done = True
                 for job_id in tasks:
                     job = self._scheduler.get_job(job_id)
-                    if job and job.status not in (JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED):
+                    if job and job.status not in (
+                        JobStatus.COMPLETED,
+                        JobStatus.FAILED,
+                        JobStatus.CANCELLED,
+                    ):
                         all_done = False
                         break
 
@@ -241,6 +251,7 @@ class JobPipeline:
 @dataclass
 class ScheduledRecurrence:
     """Recurrence specification for scheduled jobs."""
+
     every: int = 1
     unit: str = "days"  # seconds, minutes, hours, days, weeks
     at_time: str | None = None  # HH:MM format
@@ -272,13 +283,13 @@ def describe_cron(expression: str) -> str:
 
     if expression == "* * * * *":
         return "Every minute"
-    elif expression == "0 * * * *":
+    if expression == "0 * * * *":
         return "Every hour"
-    elif expression == "0 0 * * *":
+    if expression == "0 0 * * *":
         return "Every day at midnight"
-    elif expression == "0 0 * * 0":
+    if expression == "0 0 * * 0":
         return "Every Sunday at midnight"
-    elif expression == "0 0 1 * *":
+    if expression == "0 0 1 * *":
         return "First day of every month"
 
     return f"Custom: {expression}"

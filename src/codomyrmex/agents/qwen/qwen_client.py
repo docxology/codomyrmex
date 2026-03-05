@@ -51,7 +51,9 @@ class QwenClient(APIAgentBase):
             client_class=openai,
             client_init_func=lambda api_key: openai.OpenAI(
                 api_key=api_key,
-                base_url=os.getenv("QWEN_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
+                base_url=os.getenv(
+                    "QWEN_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"
+                ),
             ),
             error_class=AgentError,
             config=config,
@@ -121,5 +123,4 @@ class QwenClient(APIAgentBase):
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"Qwen streaming error: {e}", exc_info=True)
-            yield f"Error: {str(e)}"
-
+            yield f"Error: {e!s}"

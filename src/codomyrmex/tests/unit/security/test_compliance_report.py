@@ -81,7 +81,9 @@ class TestComplianceReport:
         """pass_rate is 1.0 when all checks pass."""
         report = ComplianceReport()
         for i in range(4):
-            report.add_check(ComplianceCheck(f"C{i}", "cat", "desc", ComplianceStatus.PASS))
+            report.add_check(
+                ComplianceCheck(f"C{i}", "cat", "desc", ComplianceStatus.PASS)
+            )
         assert report.pass_rate == pytest.approx(1.0)
 
     def test_pass_rate_mixed(self):
@@ -154,7 +156,9 @@ class TestComplianceReport:
     def test_to_markdown_contains_table(self):
         """to_markdown() includes a markdown table with check rows."""
         report = ComplianceReport()
-        report.add_check(ComplianceCheck("A01", "owasp", "Access control", ComplianceStatus.PASS))
+        report.add_check(
+            ComplianceCheck("A01", "owasp", "Access control", ComplianceStatus.PASS)
+        )
         md = report.to_markdown()
         assert "| Check |" in md
         assert "A01" in md

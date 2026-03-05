@@ -35,9 +35,19 @@ class BehaviorAnalyzer:
         self.behavior_history: dict[str, list[dict]] = {}
         logger.info("BehaviorAnalyzer initialized")
 
-    SENSITIVE_RESOURCES = {"admin_panel", "database", "credentials", "financial_records", "user_data", "server_config", "security_settings"}
+    SENSITIVE_RESOURCES = {
+        "admin_panel",
+        "database",
+        "credentials",
+        "financial_records",
+        "user_data",
+        "server_config",
+        "security_settings",
+    }
 
-    def analyze_behavior(self, user_id: str, behavior_data: dict) -> list[BehaviorPattern]:
+    def analyze_behavior(
+        self, user_id: str, behavior_data: dict
+    ) -> list[BehaviorPattern]:
         """Analyze user behavior patterns."""
         if user_id not in self.behavior_history:
             self.behavior_history[user_id] = []
@@ -56,7 +66,11 @@ class BehaviorAnalyzer:
         for action, frequency in action_counts.items():
             # Determine risk level based on whether action involves sensitive resources
             resource = behavior_data.get("resource", "")
-            if resource in self.SENSITIVE_RESOURCES or action in ("delete", "export", "privilege_escalation"):
+            if resource in self.SENSITIVE_RESOURCES or action in (
+                "delete",
+                "export",
+                "privilege_escalation",
+            ):
                 risk_level = "high"
             elif action in ("modify", "download", "access"):
                 risk_level = "medium"
@@ -85,10 +99,16 @@ class BehaviorAnalyzer:
 
         # Build baseline from history
         historical_login_hours = [
-            entry.get("login_hour") for entry in history if entry.get("login_hour") is not None
+            entry.get("login_hour")
+            for entry in history
+            if entry.get("login_hour") is not None
         ]
-        historical_locations = {entry.get("location") for entry in history if entry.get("location")}
-        historical_resources = {entry.get("resource") for entry in history if entry.get("resource")}
+        historical_locations = {
+            entry.get("location") for entry in history if entry.get("location")
+        }
+        historical_resources = {
+            entry.get("resource") for entry in history if entry.get("resource")
+        }
 
         # Check login time anomaly
         current_login_hour = current_behavior.get("login_hour")
@@ -106,7 +126,11 @@ class BehaviorAnalyzer:
 
         # Check location anomaly
         current_location = current_behavior.get("location")
-        if current_location and historical_locations and current_location not in historical_locations:
+        if (
+            current_location
+            and historical_locations
+            and current_location not in historical_locations
+        ):
             anomalies.append(
                 Anomaly(
                     anomaly_type="new_location",
@@ -156,4 +180,3 @@ def detect_anomalous_behavior(
     if analyzer is None:
         analyzer = BehaviorAnalyzer()
     return analyzer.detect_anomalies(user_id, current_behavior)
-

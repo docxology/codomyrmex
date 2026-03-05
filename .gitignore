@@ -48,6 +48,7 @@ dmypy.json
 .pytype/
 cython_debug/
 .ruff_cache/
+.ty/
 .black
 .isort.cfg
 .flake8

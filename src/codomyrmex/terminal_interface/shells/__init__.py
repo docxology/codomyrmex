@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 class ShellType(Enum):
     """Types of shells."""
+
     BASH = "bash"
     ZSH = "zsh"
     SH = "sh"
@@ -30,9 +31,11 @@ class ShellType(Enum):
     POWERSHELL = "powershell"
     CMD = "cmd"
 
+
 @dataclass
 class ShellConfig:
     """Configuration for a shell."""
+
     shell_type: ShellType
     executable: str
     args: list[str] = field(default_factory=list)
@@ -41,16 +44,16 @@ class ShellConfig:
     timeout: float | None = None
 
     @classmethod
-    def detect(cls) -> 'ShellConfig':
+    def detect(cls) -> "ShellConfig":
         """Detect the default shell."""
-        shell_path = os.environ.get('SHELL', '/bin/sh')
+        shell_path = os.environ.get("SHELL", "/bin/sh")
         shell_name = os.path.basename(shell_path)
 
         shell_map = {
-            'bash': ShellType.BASH,
-            'zsh': ShellType.ZSH,
-            'sh': ShellType.SH,
-            'fish': ShellType.FISH,
+            "bash": ShellType.BASH,
+            "zsh": ShellType.ZSH,
+            "sh": ShellType.SH,
+            "fish": ShellType.FISH,
         }
 
         shell_type = shell_map.get(shell_name, ShellType.SH)
@@ -60,9 +63,11 @@ class ShellConfig:
             executable=shell_path,
         )
 
+
 @dataclass
 class CommandResult:
     """Result of a command execution."""
+
     command: str
     exit_code: int
     stdout: str
@@ -83,6 +88,7 @@ class CommandResult:
             "duration_ms": self.duration_ms,
             "success": self.success,
         }
+
 
 class Shell:
     """A shell for executing commands."""
@@ -109,7 +115,7 @@ class Shell:
             full_env.update(env)
 
         # Build command
-        shell_args = [self.config.executable, '-c', command]
+        shell_args = [self.config.executable, "-c", command]
 
         try:
             result = subprocess.run(
@@ -161,7 +167,7 @@ class Shell:
         if env:
             full_env.update(env)
 
-        shell_args = [self.config.executable, '-c', command]
+        shell_args = [self.config.executable, "-c", command]
 
         process = subprocess.Popen(
             shell_args,
@@ -180,6 +186,7 @@ class Shell:
     def clear_history(self) -> None:
         """Clear command history."""
         self._history.clear()
+
 
 class InteractiveShell:
     """An interactive shell session."""
@@ -200,7 +207,7 @@ class InteractiveShell:
         full_env.update(self.config.env)
 
         self._process = subprocess.Popen(
-            [self.config.executable, '-i'],
+            [self.config.executable, "-i"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -282,6 +289,7 @@ class InteractiveShell:
         """Return True if the shell process is active."""
         return self._running and self._process is not None
 
+
 class CommandBuilder:
     """Builder for constructing shell commands."""
 
@@ -292,12 +300,12 @@ class CommandBuilder:
         self._env: dict[str, str] = {}
         self._redirects: list[str] = []
 
-    def add(self, *args: str) -> 'CommandBuilder':
+    def add(self, *args: str) -> "CommandBuilder":
         """Add arguments to the command."""
         self._parts.extend(args)
         return self
 
-    def flag(self, name: str, value: str | None = None) -> 'CommandBuilder':
+    def flag(self, name: str, value: str | None = None) -> "CommandBuilder":
         """Add a flag to the command."""
         if value is not None:
             self._parts.extend([name, value])
@@ -305,30 +313,30 @@ class CommandBuilder:
             self._parts.append(name)
         return self
 
-    def env(self, key: str, value: str) -> 'CommandBuilder':
+    def env(self, key: str, value: str) -> "CommandBuilder":
         """Add an environment variable."""
         self._env[key] = value
         return self
 
-    def pipe(self, command: str) -> 'CommandBuilder':
+    def pipe(self, command: str) -> "CommandBuilder":
         """Pipe output to another command."""
-        self._parts.extend(['|', command])
+        self._parts.extend(["|", command])
         return self
 
-    def redirect_stdout(self, path: str, append: bool = False) -> 'CommandBuilder':
+    def redirect_stdout(self, path: str, append: bool = False) -> "CommandBuilder":
         """Redirect stdout to a file."""
         op = ">>" if append else ">"
         self._redirects.append(f"{op} {shlex.quote(path)}")
         return self
 
-    def redirect_stderr(self, path: str) -> 'CommandBuilder':
+    def redirect_stderr(self, path: str) -> "CommandBuilder":
         """Redirect stderr to a file."""
         self._redirects.append(f"2> {shlex.quote(path)}")
         return self
 
-    def background(self) -> 'CommandBuilder':
+    def background(self) -> "CommandBuilder":
         """Run command in background."""
-        self._parts.append('&')
+        self._parts.append("&")
         return self
 
     def build(self) -> str:
@@ -346,6 +354,7 @@ class CommandBuilder:
         parts.extend(self._redirects)
 
         return " ".join(parts)
+
 
 def create_shell(shell_type: ShellType | None = None) -> Shell:
     """Create a shell instance."""
@@ -365,12 +374,13 @@ def create_shell(shell_type: ShellType | None = None) -> Shell:
 
     return Shell(config)
 
+
 __all__ = [
-    "ShellType",
-    "ShellConfig",
-    "CommandResult",
-    "Shell",
-    "InteractiveShell",
     "CommandBuilder",
+    "CommandResult",
+    "InteractiveShell",
+    "Shell",
+    "ShellConfig",
+    "ShellType",
     "create_shell",
 ]

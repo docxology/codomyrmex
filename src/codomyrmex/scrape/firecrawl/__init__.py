@@ -7,6 +7,4 @@ wrapping it in a typed interface that matches the core scraping abstractions.
 from .adapter import FirecrawlAdapter
 from .client import FirecrawlClient
 
-__all__ = ["FirecrawlClient", "FirecrawlAdapter"]
-
-
+__all__ = ["FirecrawlAdapter", "FirecrawlClient"]

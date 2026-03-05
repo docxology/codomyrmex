@@ -89,15 +89,17 @@ class Budget:
 
         if self.period == BudgetPeriod.HOURLY:
             return ref.replace(minute=0, second=0, microsecond=0)
-        elif self.period == BudgetPeriod.DAILY:
+        if self.period == BudgetPeriod.DAILY:
             return ref.replace(hour=0, minute=0, second=0, microsecond=0)
-        elif self.period == BudgetPeriod.WEEKLY:
+        if self.period == BudgetPeriod.WEEKLY:
             start = ref - timedelta(days=ref.weekday())
             return start.replace(hour=0, minute=0, second=0, microsecond=0)
-        elif self.period == BudgetPeriod.MONTHLY:
+        if self.period == BudgetPeriod.MONTHLY:
             return ref.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        elif self.period == BudgetPeriod.YEARLY:
-            return ref.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+        if self.period == BudgetPeriod.YEARLY:
+            return ref.replace(
+                month=1, day=1, hour=0, minute=0, second=0, microsecond=0
+            )
 
         return ref
 
@@ -133,7 +135,9 @@ class CostSummary:
             "by_resource": self.by_resource,
             "by_tag": self.by_tag,
             "entry_count": self.entry_count,
-            "period_start": self.period_start.isoformat() if self.period_start else None,
+            "period_start": self.period_start.isoformat()
+            if self.period_start
+            else None,
             "period_end": self.period_end.isoformat() if self.period_end else None,
         }
 

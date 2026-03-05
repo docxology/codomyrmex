@@ -24,10 +24,10 @@ logger = get_logger(__name__)
 class SchedulingStrategy(Enum):
     """Task scheduling strategies."""
 
-    FIFO = "fifo"              # First-in, first-out
-    PRIORITY = "priority"       # By task priority
-    SHORTEST_FIRST = "shortest" # Estimate shortest tasks first
-    ROUND_ROBIN = "round_robin" # Distribute evenly
+    FIFO = "fifo"  # First-in, first-out
+    PRIORITY = "priority"  # By task priority
+    SHORTEST_FIRST = "shortest"  # Estimate shortest tasks first
+    ROUND_ROBIN = "round_robin"  # Distribute evenly
 
 
 @dataclass(order=True)
@@ -103,8 +103,12 @@ class DependencyGraph:
     """
 
     def __init__(self):
-        self._dependencies: dict[str, set[str]] = {}  # task_id -> set of dependency task_ids
-        self._dependents: dict[str, set[str]] = {}    # task_id -> set of tasks depending on it
+        self._dependencies: dict[
+            str, set[str]
+        ] = {}  # task_id -> set of dependency task_ids
+        self._dependents: dict[
+            str, set[str]
+        ] = {}  # task_id -> set of tasks depending on it
 
     def add_task(self, task: Task) -> None:
         """Add a task and its dependencies to the graph."""
@@ -408,8 +412,8 @@ class TaskManager:
 
 
 __all__ = [
-    "SchedulingStrategy",
-    "TaskQueue",
     "DependencyGraph",
+    "SchedulingStrategy",
     "TaskManager",
+    "TaskQueue",
 ]

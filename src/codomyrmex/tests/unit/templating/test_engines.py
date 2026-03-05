@@ -25,6 +25,7 @@ from codomyrmex.templating.engines import (
 # TemplateContext
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTemplateContext:
     """Tests for the TemplateContext dataclass."""
@@ -97,6 +98,7 @@ class TestTemplateContext:
 # TemplateEngine ABC
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTemplateEngineABC:
     """Tests confirming TemplateEngine is abstract."""
@@ -125,6 +127,7 @@ class TestTemplateEngineABC:
         class Complete(TemplateEngine):
             def render(self, template, context):
                 return "ok"
+
             def render_file(self, path, context):
                 return "ok"
 
@@ -136,6 +139,7 @@ class TestTemplateEngineABC:
 # ---------------------------------------------------------------------------
 # SimpleTemplateEngine
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestSimpleTemplateEngine:
@@ -231,6 +235,7 @@ class TestSimpleTemplateEngine:
 # ---------------------------------------------------------------------------
 # Jinja2LikeEngine
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestJinja2LikeEngine:
@@ -467,7 +472,7 @@ class TestJinja2LikeEngine:
 
     def test_condition_not_equals(self):
         engine = Jinja2LikeEngine(autoescape=False)
-        tpl = '{% if x != 0 %}nonzero{% endif %}'
+        tpl = "{% if x != 0 %}nonzero{% endif %}"
         assert engine.render(tpl, {"x": 5}) == "nonzero"
 
     def test_condition_greater_than(self):
@@ -541,6 +546,7 @@ class TestJinja2LikeEngine:
 # ---------------------------------------------------------------------------
 # MustacheEngine
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMustacheEngine:
@@ -691,6 +697,7 @@ class TestMustacheEngine:
 # create_engine factory
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCreateEngine:
     """Tests for the create_engine factory function."""
@@ -735,6 +742,7 @@ class TestCreateEngine:
 # Integration-style: cross-engine consistency
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCrossEngineConsistency:
     """Basic consistency checks across engines for simple variable rendering."""
@@ -752,11 +760,13 @@ class TestCrossEngineConsistency:
     def test_all_engines_render_from_file(self, tmp_path):
         ctx = {"name": "File"}
 
-        for i, (engine, tpl_content) in enumerate([
-            (SimpleTemplateEngine(), "Hello {{ name }}"),
-            (Jinja2LikeEngine(autoescape=False), "Hello {{ name }}"),
-            (MustacheEngine(), "Hello {{name}}"),
-        ]):
+        for i, (engine, tpl_content) in enumerate(
+            [
+                (SimpleTemplateEngine(), "Hello {{ name }}"),
+                (Jinja2LikeEngine(autoescape=False), "Hello {{ name }}"),
+                (MustacheEngine(), "Hello {{name}}"),
+            ]
+        ):
             f = tmp_path / f"tpl_{i}.txt"
             f.write_text(tpl_content)
             result = engine.render_file(str(f), ctx)

@@ -8,8 +8,6 @@ Tests cover:
 5. ToolRegistry integration
 """
 
-
-
 import pytest
 
 
@@ -27,19 +25,19 @@ def _get_agent_imports():
         react_module = importlib.import_module("codomyrmex.agents.core.react")
 
         return {
-            'AgentCapabilities': base_module.AgentCapabilities,
-            'AgentRequest': base_module.AgentRequest,
-            'AgentResponse': base_module.AgentResponse,
-            'BaseAgent': base_module.BaseAgent,
-            'AgentInterface': base_module.AgentInterface,
-            'ToolRegistry': registry_module.ToolRegistry,
-            'ReActAgent': react_module.ReActAgent,
-            'available': True,
+            "AgentCapabilities": base_module.AgentCapabilities,
+            "AgentRequest": base_module.AgentRequest,
+            "AgentResponse": base_module.AgentResponse,
+            "BaseAgent": base_module.BaseAgent,
+            "AgentInterface": base_module.AgentInterface,
+            "ToolRegistry": registry_module.ToolRegistry,
+            "ReActAgent": react_module.ReActAgent,
+            "available": True,
         }
     except Exception as e:
         return {
-            'available': False,
-            'error': str(e),
+            "available": False,
+            "error": str(e),
         }
 
 
@@ -47,8 +45,10 @@ def _get_agent_imports():
 def agent_modules():
     """Fixture that provides agent modules if available."""
     modules = _get_agent_imports()
-    if not modules['available']:
-        pytest.skip(f"Agent core modules not available: {modules.get('error', 'Unknown')}")
+    if not modules["available"]:
+        pytest.skip(
+            f"Agent core modules not available: {modules.get('error', 'Unknown')}"
+        )
     return modules
 
 
@@ -58,7 +58,7 @@ class TestAgentCapabilities:
 
     def test_all_capabilities_exist(self, agent_modules):
         """Test that all expected capabilities are defined."""
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        AgentCapabilities = agent_modules["AgentCapabilities"]
         expected = [
             "CODE_GENERATION",
             "CODE_EDITING",
@@ -76,18 +76,20 @@ class TestAgentCapabilities:
         ]
 
         for cap_name in expected:
-            assert hasattr(AgentCapabilities, cap_name), f"Missing capability: {cap_name}"
+            assert hasattr(AgentCapabilities, cap_name), (
+                f"Missing capability: {cap_name}"
+            )
 
     def test_capability_values(self, agent_modules):
         """Test capability enum values are strings."""
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        AgentCapabilities = agent_modules["AgentCapabilities"]
         assert AgentCapabilities.CODE_GENERATION.value == "code_generation"
         assert AgentCapabilities.CODE_EDITING.value == "code_editing"
         assert AgentCapabilities.STREAMING.value == "streaming"
 
     def test_capabilities_iterable(self, agent_modules):
         """Test that capabilities can be iterated."""
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        AgentCapabilities = agent_modules["AgentCapabilities"]
         caps = list(AgentCapabilities)
         assert len(caps) >= 13
 
@@ -98,7 +100,7 @@ class TestAgentRequest:
 
     def test_request_creation_minimal(self, agent_modules):
         """Test creating request with minimal parameters."""
-        AgentRequest = agent_modules['AgentRequest']
+        AgentRequest = agent_modules["AgentRequest"]
         request = AgentRequest(prompt="Test prompt")
 
         assert request.prompt == "Test prompt"
@@ -110,8 +112,8 @@ class TestAgentRequest:
 
     def test_request_creation_full(self, agent_modules):
         """Test creating request with all parameters."""
-        AgentRequest = agent_modules['AgentRequest']
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        AgentRequest = agent_modules["AgentRequest"]
+        AgentCapabilities = agent_modules["AgentCapabilities"]
         request = AgentRequest(
             prompt="Generate code",
             context={"language": "python"},
@@ -130,7 +132,7 @@ class TestAgentRequest:
 
     def test_request_post_init(self, agent_modules):
         """Test that post_init sets default values correctly."""
-        AgentRequest = agent_modules['AgentRequest']
+        AgentRequest = agent_modules["AgentRequest"]
         request = AgentRequest(prompt="Test")
 
         # Verify defaults are mutable objects
@@ -151,7 +153,7 @@ class TestAgentResponse:
 
     def test_response_creation_success(self, agent_modules):
         """Test creating successful response."""
-        AgentResponse = agent_modules['AgentResponse']
+        AgentResponse = agent_modules["AgentResponse"]
         response = AgentResponse(content="Generated code here")
 
         assert response.content == "Generated code here"
@@ -161,7 +163,7 @@ class TestAgentResponse:
 
     def test_response_creation_error(self, agent_modules):
         """Test creating error response."""
-        AgentResponse = agent_modules['AgentResponse']
+        AgentResponse = agent_modules["AgentResponse"]
         response = AgentResponse(content="", error="API rate limit exceeded")
 
         assert response.content == ""
@@ -170,7 +172,7 @@ class TestAgentResponse:
 
     def test_response_with_metrics(self, agent_modules):
         """Test response with execution metrics."""
-        AgentResponse = agent_modules['AgentResponse']
+        AgentResponse = agent_modules["AgentResponse"]
         response = AgentResponse(
             content="Result",
             execution_time=1.5,
@@ -191,11 +193,12 @@ class TestBaseAgent:
 
     def test_base_agent_creation(self, agent_modules):
         """Test creating a base agent."""
-        BaseAgent = agent_modules['BaseAgent']
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        BaseAgent = agent_modules["BaseAgent"]
+        AgentCapabilities = agent_modules["AgentCapabilities"]
 
         class TestAgent(BaseAgent):
             """Test suite for Agent."""
+
             def _execute_impl(self, request):
                 return None
 
@@ -214,11 +217,12 @@ class TestBaseAgent:
 
     def test_get_capabilities(self, agent_modules):
         """Test getting agent capabilities."""
-        BaseAgent = agent_modules['BaseAgent']
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        BaseAgent = agent_modules["BaseAgent"]
+        AgentCapabilities = agent_modules["AgentCapabilities"]
 
         class TestAgent(BaseAgent):
             """Test suite for Agent."""
+
             def _execute_impl(self, request):
                 return None
 
@@ -239,31 +243,31 @@ class TestBaseAgent:
 
     def test_supports_capability(self, agent_modules):
         """Test capability checking."""
-        BaseAgent = agent_modules['BaseAgent']
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        BaseAgent = agent_modules["BaseAgent"]
+        AgentCapabilities = agent_modules["AgentCapabilities"]
 
         class TestAgent(BaseAgent):
             """Test suite for Agent."""
+
             def _execute_impl(self, request):
                 return None
 
             def _stream_impl(self, request):
                 yield ""
 
-        agent = TestAgent(
-            name="test", capabilities=[AgentCapabilities.CODE_GENERATION]
-        )
+        agent = TestAgent(name="test", capabilities=[AgentCapabilities.CODE_GENERATION])
 
         assert agent.supports_capability(AgentCapabilities.CODE_GENERATION) is True
         assert agent.supports_capability(AgentCapabilities.VISION) is False
 
     def test_validate_request_empty_prompt(self, agent_modules):
         """Test request validation rejects empty prompts."""
-        BaseAgent = agent_modules['BaseAgent']
-        AgentRequest = agent_modules['AgentRequest']
+        BaseAgent = agent_modules["BaseAgent"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         class TestAgent(BaseAgent):
             """Test suite for Agent."""
+
             def _execute_impl(self, request):
                 return None
 
@@ -277,8 +281,8 @@ class TestBaseAgent:
 
     def test_execute_with_error_handling(self, agent_modules):
         """Test execute method handles errors gracefully."""
-        BaseAgent = agent_modules['BaseAgent']
-        AgentRequest = agent_modules['AgentRequest']
+        BaseAgent = agent_modules["BaseAgent"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         class ErrorAgent(BaseAgent):
             def _execute_impl(self, request):
@@ -296,10 +300,11 @@ class TestBaseAgent:
 
     def test_default_setup_and_test_connection(self, agent_modules):
         """Test default setup and test_connection implementations."""
-        BaseAgent = agent_modules['BaseAgent']
+        BaseAgent = agent_modules["BaseAgent"]
 
         class TestAgent(BaseAgent):
             """Test suite for Agent."""
+
             def _execute_impl(self, request):
                 return None
 
@@ -321,13 +326,13 @@ class TestToolRegistry:
 
     def test_registry_creation(self, agent_modules):
         """Test creating a tool registry."""
-        ToolRegistry = agent_modules['ToolRegistry']
+        ToolRegistry = agent_modules["ToolRegistry"]
         registry = ToolRegistry()
         assert registry is not None
 
     def test_register_tool(self, agent_modules):
         """Test registering a tool."""
-        ToolRegistry = agent_modules['ToolRegistry']
+        ToolRegistry = agent_modules["ToolRegistry"]
         registry = ToolRegistry()
 
         def my_tool(x: int, y: int) -> int:
@@ -342,7 +347,7 @@ class TestToolRegistry:
 
     def test_execute_tool(self, agent_modules):
         """Test executing a registered tool."""
-        ToolRegistry = agent_modules['ToolRegistry']
+        ToolRegistry = agent_modules["ToolRegistry"]
         registry = ToolRegistry()
 
         def multiply(a: int, b: int) -> int:
@@ -356,7 +361,7 @@ class TestToolRegistry:
 
     def test_get_schemas(self, agent_modules):
         """Test getting tool schemas."""
-        ToolRegistry = agent_modules['ToolRegistry']
+        ToolRegistry = agent_modules["ToolRegistry"]
         registry = ToolRegistry()
 
         def greet(name: str) -> str:
@@ -376,9 +381,9 @@ class TestReActAgent:
 
     def test_react_agent_creation(self, agent_modules):
         """Test creating a ReAct agent."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
-        AgentCapabilities = agent_modules['AgentCapabilities']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
+        AgentCapabilities = agent_modules["AgentCapabilities"]
 
         registry = ToolRegistry()
         agent = ReActAgent(
@@ -395,9 +400,9 @@ class TestReActAgent:
 
     def test_react_agent_direct_tool_call(self, agent_modules):
         """Test ReAct agent direct tool call format."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
-        AgentRequest = agent_modules['AgentRequest']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         registry = ToolRegistry()
 
@@ -414,9 +419,9 @@ class TestReActAgent:
 
     def test_react_agent_no_tool_match(self, agent_modules):
         """Test ReAct agent without matching tool."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
-        AgentRequest = agent_modules['AgentRequest']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         registry = ToolRegistry()
         agent = ReActAgent(name="test", tool_registry=registry)
@@ -428,14 +433,13 @@ class TestReActAgent:
 
     def test_react_agent_get_system_prompt(self, agent_modules):
         """Test ReAct agent system prompt generation."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
 
         registry = ToolRegistry()
 
         def my_tool():
             """A test tool."""
-            pass
 
         registry.register_function(my_tool, name="my_tool")
 
@@ -450,8 +454,8 @@ class TestReActAgent:
 
     def test_react_agent_parse_action_args_json(self, agent_modules):
         """Test parsing JSON action arguments."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
 
         registry = ToolRegistry()
         agent = ReActAgent(name="test", tool_registry=registry)
@@ -463,8 +467,8 @@ class TestReActAgent:
 
     def test_react_agent_parse_action_args_keyvalue(self, agent_modules):
         """Test parsing key=value action arguments."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
 
         registry = ToolRegistry()
         agent = ReActAgent(name="test", tool_registry=registry)
@@ -476,9 +480,9 @@ class TestReActAgent:
 
     def test_react_agent_stream(self, agent_modules):
         """Test ReAct agent streaming."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
-        AgentRequest = agent_modules['AgentRequest']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         registry = ToolRegistry()
         agent = ReActAgent(name="test", tool_registry=registry)
@@ -490,15 +494,16 @@ class TestReActAgent:
 
     def test_react_agent_with_stub_llm_client(self, agent_modules):
         """Test ReAct agent with a stub LLM client."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
-        AgentRequest = agent_modules['AgentRequest']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         registry = ToolRegistry()
 
         # Create a simple stub LLM client (no mocks)
         class StubLLMClient:
             """Stub that returns a deterministic answer."""
+
             def chat(self, history):
                 return "Final Answer: The answer is 42"
 
@@ -520,9 +525,9 @@ class TestAgentIntegration:
 
     def test_full_react_workflow_with_tools(self, agent_modules):
         """Test complete ReAct workflow with multiple tools."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
-        AgentRequest = agent_modules['AgentRequest']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         registry = ToolRegistry()
 
@@ -550,9 +555,9 @@ class TestAgentIntegration:
 
     def test_agent_error_recovery(self, agent_modules):
         """Test agent recovers from tool errors."""
-        ReActAgent = agent_modules['ReActAgent']
-        ToolRegistry = agent_modules['ToolRegistry']
-        AgentRequest = agent_modules['AgentRequest']
+        ReActAgent = agent_modules["ReActAgent"]
+        ToolRegistry = agent_modules["ToolRegistry"]
+        AgentRequest = agent_modules["AgentRequest"]
 
         registry = ToolRegistry()
 

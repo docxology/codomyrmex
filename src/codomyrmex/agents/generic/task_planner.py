@@ -112,7 +112,11 @@ class TaskPlanner:
         return self.tasks.get(task_id)
 
     def update_task_status(
-        self, task_id: str, status: TaskStatus, result: Any = None, error: str | None = None
+        self,
+        task_id: str,
+        status: TaskStatus,
+        result: Any = None,
+        error: str | None = None,
     ) -> None:
         """
         Update task status.
@@ -191,9 +195,7 @@ class TaskPlanner:
             if not progress:
                 # Circular dependency or missing task
                 remaining = [
-                    task.id
-                    for task in self.tasks.values()
-                    if task.id not in executed
+                    task.id for task in self.tasks.values() if task.id not in executed
                 ]
                 self.logger.warning(
                     f"Circular dependency or missing tasks: {remaining}"
@@ -210,5 +212,3 @@ class TaskPlanner:
             List of all tasks
         """
         return list(self.tasks.values())
-
-

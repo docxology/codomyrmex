@@ -20,6 +20,7 @@ from codomyrmex.coding.debugging import (
 @pytest.mark.unit
 class TestErrorAnalyzer:
     """Test suite for ErrorAnalyzer."""
+
     def setup_method(self):
         self.analyzer = ErrorAnalyzer()
 
@@ -49,6 +50,7 @@ class TestErrorAnalyzer:
 @pytest.mark.unit
 class TestPatchGenerator:
     """Test suite for PatchGenerator."""
+
     def setup_method(self):
         self.generator = PatchGenerator(llm_client=None)
 
@@ -69,7 +71,9 @@ class TestPatchGeneratorParsing:
 
     def setup_method(self):
         self.generator = PatchGenerator(llm_client=None)
-        self.diagnosis = ErrorDiagnosis("NameError", "name 'x' is not defined", "script.py", 5, "trace")
+        self.diagnosis = ErrorDiagnosis(
+            "NameError", "name 'x' is not defined", "script.py", 5, "trace"
+        )
 
     def test_fenced_diff_block(self):
         """Parse a fenced ```diff code block."""
@@ -125,13 +129,14 @@ class TestPatchGeneratorParsing:
 @pytest.mark.unit
 class TestDebugger:
     """Test suite for Debugger."""
+
     def setup_method(self):
         self.debugger = Debugger()
 
     def test_debug_flow_with_real_components(self):
         """Test the full debug flow with real analyzer, patcher, verifier."""
         # Use a real Python error that the analyzer can parse
-        source = 'print(1/0)\n'
+        source = "print(1/0)\n"
         stderr = 'Traceback (most recent call last):\n  File "test.py", line 1, in <module>\n    print(1/0)\nZeroDivisionError: division by zero'
 
         result = self.debugger.debug(source, "", stderr, 1)
@@ -236,14 +241,16 @@ class TestStaticAnalyzer:
 
         analyzer = StaticAnalyzer(project_root=str(tmp_path))
         py_file = tmp_path / "sample.py"
-        py_file.write_text(textwrap.dedent("""\
+        py_file.write_text(
+            textwrap.dedent("""\
             def foo(x):
                 y = x + 1
                 return y
 
             def bar():
                 pass
-        """))
+        """)
+        )
         results = analyzer.analyze_file(str(py_file))
         assert isinstance(results, list)
 

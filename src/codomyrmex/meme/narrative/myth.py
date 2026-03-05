@@ -32,8 +32,12 @@ def synthesize_myth(
 
     # Construct skeleton content based on arc stages
     segments = []
-    hero_name = next((k for k, v in archetypes.items() if v == Archetype.HERO), "The Hero")
-    shadow_name = next((k for k, v in archetypes.items() if v == Archetype.SHADOW), "The Shadow")
+    hero_name = next(
+        (k for k, v in archetypes.items() if v == Archetype.HERO), "The Hero"
+    )
+    shadow_name = next(
+        (k for k, v in archetypes.items() if v == Archetype.SHADOW), "The Shadow"
+    )
 
     # Very basic template logic
     segments.append(f"{hero_name} lives in the ordinary world of {domain}.")
@@ -48,5 +52,5 @@ def synthesize_myth(
         characters=archetypes,
         cultural_resonance=0.8,  # Myths have high inherent resonance
         content_segments=segments,
-        metadata={"domain": domain}
+        metadata={"domain": domain},
     )

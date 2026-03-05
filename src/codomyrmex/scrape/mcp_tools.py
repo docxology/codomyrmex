@@ -26,6 +26,7 @@ def scrape_extract_content(
     """
     try:
         from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
+
         extractor = ContentExtractor(base_url=base_url)
         result = extractor.extract(html)
         return {
@@ -59,6 +60,7 @@ def scrape_text_similarity(
     """
     try:
         from codomyrmex.scrape.extractors.content_extractor import text_similarity
+
         score = text_similarity(text_a, text_b)
         return {"status": "success", "similarity": score}
     except Exception as exc:

@@ -6,8 +6,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-
-
 class CodeSmellsMixin:
     """CodeSmellsMixin functionality."""
 
@@ -34,19 +32,23 @@ class CodeSmellsMixin:
         smells = []
 
         try:
-            complexity_results = self.pyscn_analyzer.analyze_complexity(self.project_root)
+            complexity_results = self.pyscn_analyzer.analyze_complexity(
+                self.project_root
+            )
 
             for func in complexity_results:
                 if func.get("complexity", 0) > 20:  # Very high complexity
-                    smells.append({
-                        "type": "long_method",
-                        "file_path": func.get("file_path", ""),
-                        "function_name": func.get("name", ""),
-                        "line_number": func.get("line_number", 0),
-                        "complexity": func.get("complexity", 0),
-                        "description": f"Method '{func.get('name', '')}' is too long and complex",
-                        "suggestion": "Consider breaking this method into smaller, more focused methods"
-                    })
+                    smells.append(
+                        {
+                            "type": "long_method",
+                            "file_path": func.get("file_path", ""),
+                            "function_name": func.get("name", ""),
+                            "line_number": func.get("line_number", 0),
+                            "complexity": func.get("complexity", 0),
+                            "description": f"Method '{func.get('name', '')}' is too long and complex",
+                            "suggestion": "Consider breaking this method into smaller, more focused methods",
+                        }
+                    )
 
         except Exception as e:
             logger.error(f"Error detecting long methods: {e}")
@@ -62,14 +64,16 @@ class CodeSmellsMixin:
 
             for cls in coupling_results:
                 if cls.get("coupling", 0) > 15:  # High coupling
-                    smells.append({
-                        "type": "large_class",
-                        "file_path": cls.get("file_path", ""),
-                        "class_name": cls.get("name", ""),
-                        "coupling": cls.get("coupling", 0),
-                        "description": f"Class '{cls.get('name', '')}' has too many dependencies",
-                        "suggestion": "Consider splitting this class or using dependency injection"
-                    })
+                    smells.append(
+                        {
+                            "type": "large_class",
+                            "file_path": cls.get("file_path", ""),
+                            "class_name": cls.get("name", ""),
+                            "coupling": cls.get("coupling", 0),
+                            "description": f"Class '{cls.get('name', '')}' has too many dependencies",
+                            "suggestion": "Consider splitting this class or using dependency injection",
+                        }
+                    )
 
         except Exception as e:
             logger.error(f"Error detecting large classes: {e}")

@@ -18,7 +18,7 @@ from codomyrmex.crypto.exceptions import WalletError
 pytestmark = [pytest.mark.crypto, pytest.mark.unit]
 
 
-@pytest.fixture()
+@pytest.fixture
 def secp256k1_keys():
     """Generate a secp256k1 key pair and return compressed/uncompressed public keys."""
     private_key = ec.generate_private_key(ec.SECP256K1())
@@ -45,12 +45,16 @@ class TestBitcoinAddress:
     def test_mainnet_address_starts_with_1(self, secp256k1_keys):
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed, network="mainnet")
-        assert addr.startswith("1"), f"Mainnet address should start with '1', got {addr}"
+        assert addr.startswith("1"), (
+            f"Mainnet address should start with '1', got {addr}"
+        )
 
     def test_testnet_address_starts_with_m_or_n(self, secp256k1_keys):
         compressed, _ = secp256k1_keys
         addr = generate_bitcoin_address(compressed, network="testnet")
-        assert addr[0] in ("m", "n"), f"Testnet address should start with 'm' or 'n', got {addr}"
+        assert addr[0] in ("m", "n"), (
+            f"Testnet address should start with 'm' or 'n', got {addr}"
+        )
 
     def test_address_length_reasonable(self, secp256k1_keys):
         compressed, _ = secp256k1_keys

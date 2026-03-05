@@ -26,7 +26,9 @@ class PhishingAnalyzer:
 
         logger.info("PhishingAnalyzer initialized")
 
-    def analyze(self, email_content: str, sender: str | None = None) -> PhishingAnalysis:
+    def analyze(
+        self, email_content: str, sender: str | None = None
+    ) -> PhishingAnalysis:
         """Analyze email for phishing indicators."""
         indicators = []
         content_lower = email_content.lower()
@@ -40,18 +42,30 @@ class PhishingAnalyzer:
             indicators.append("URL shortener detected (may hide malicious destination)")
 
         # Check for non-HTTPS links
-        if re.search(r"http://", email_content) and not re.search(r"https://", email_content):
+        if re.search(r"http://", email_content) and not re.search(
+            r"https://", email_content
+        ):
             indicators.append("Non-HTTPS URL detected (insecure connection)")
 
         # Check for urgency language
-        urgency_matches = re.findall(r"(urgent|immediately|act now|expires|limited time|verify your account)", content_lower)
+        urgency_matches = re.findall(
+            r"(urgent|immediately|act now|expires|limited time|verify your account)",
+            content_lower,
+        )
         if urgency_matches:
-            indicators.append(f"Urgency language detected: {', '.join(set(urgency_matches))}")
+            indicators.append(
+                f"Urgency language detected: {', '.join(set(urgency_matches))}"
+            )
 
         # Check for sensitive info requests
-        sensitive_matches = re.findall(r"(password|credit card|ssn|social security|bank account|pin number)", content_lower)
+        sensitive_matches = re.findall(
+            r"(password|credit card|ssn|social security|bank account|pin number)",
+            content_lower,
+        )
         if sensitive_matches:
-            indicators.append(f"Request for sensitive information: {', '.join(set(sensitive_matches))}")
+            indicators.append(
+                f"Request for sensitive information: {', '.join(set(sensitive_matches))}"
+            )
 
         # Check for excessive punctuation
         if re.search(r"[!]{2,}", email_content):
@@ -66,11 +80,18 @@ class PhishingAnalyzer:
             sender_domain_match = re.search(r"@([\w.-]+)", sender)
             if sender_domain_match:
                 sender_domain = sender_domain_match.group(1).lower()
-                content_domains = re.findall(r"https?://(?:www\.)?([\w.-]+)", email_content)
+                content_domains = re.findall(
+                    r"https?://(?:www\.)?([\w.-]+)", email_content
+                )
                 for domain in content_domains:
                     domain_lower = domain.lower()
-                    if sender_domain not in domain_lower and domain_lower not in sender_domain:
-                        indicators.append(f"Sender domain '{sender_domain}' does not match link domain '{domain_lower}'")
+                    if (
+                        sender_domain not in domain_lower
+                        and domain_lower not in sender_domain
+                    ):
+                        indicators.append(
+                            f"Sender domain '{sender_domain}' does not match link domain '{domain_lower}'"
+                        )
                         break
 
         is_phishing = len(indicators) > 0
@@ -84,7 +105,11 @@ class PhishingAnalyzer:
         elif confidence > 0.3:
             risk_level = "medium"
 
-        recommendation = "No action needed" if not is_phishing else "Do not click links or provide information"
+        recommendation = (
+            "No action needed"
+            if not is_phishing
+            else "Do not click links or provide information"
+        )
 
         return PhishingAnalysis(
             is_phishing=is_phishing,
@@ -116,4 +141,3 @@ def detect_phishing_attempt(
         analyzer = PhishingAnalyzer()
     analysis = analyzer.analyze(email_content, sender)
     return analysis.is_phishing
-

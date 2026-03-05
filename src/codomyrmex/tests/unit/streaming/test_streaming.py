@@ -14,6 +14,7 @@ try:
         broadcast,
         create_event,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -25,6 +26,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestEventType:
     """Test suite for EventType."""
+
     def test_message(self):
         assert EventType.MESSAGE is not None
 
@@ -44,6 +46,7 @@ class TestEventType:
 @pytest.mark.unit
 class TestEvent:
     """Test suite for Event."""
+
     def test_create_event(self):
         event = Event()
         assert event.type == EventType.MESSAGE
@@ -59,6 +62,7 @@ class TestEvent:
 @pytest.mark.unit
 class TestSubscription:
     """Test suite for Subscription."""
+
     def test_create_subscription(self):
         sub = Subscription()
         assert sub.topic == "*"
@@ -73,6 +77,7 @@ class TestSubscription:
 @pytest.mark.unit
 class TestInMemoryStream:
     """Test suite for InMemoryStream."""
+
     def test_create_stream(self):
         stream = InMemoryStream()
         assert stream is not None
@@ -81,6 +86,7 @@ class TestInMemoryStream:
 @pytest.mark.unit
 class TestSSEStream:
     """Test suite for SSEStream."""
+
     def test_create_stream(self):
         stream = SSEStream()
         assert stream is not None
@@ -93,6 +99,7 @@ class TestSSEStream:
 @pytest.mark.unit
 class TestTopicStream:
     """Test suite for TopicStream."""
+
     def test_create_stream(self):
         stream = TopicStream()
         assert stream is not None
@@ -101,6 +108,7 @@ class TestTopicStream:
 @pytest.mark.unit
 class TestStreamProcessor:
     """Test suite for StreamProcessor."""
+
     def test_create_processor(self):
         source = InMemoryStream()
         processor = StreamProcessor(source=source)
@@ -110,6 +118,7 @@ class TestStreamProcessor:
 @pytest.mark.unit
 class TestCreateEvent:
     """Test suite for CreateEvent."""
+
     def test_creates_event(self):
         event = create_event(data="hello")
         assert isinstance(event, Event)
@@ -127,5 +136,6 @@ class TestCreateEvent:
 @pytest.mark.unit
 class TestBroadcast:
     """Test suite for Broadcast."""
+
     def test_broadcast_is_callable(self):
         assert callable(broadcast)

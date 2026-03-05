@@ -301,4 +301,4 @@ class Pyttsx3Provider(TTSProvider):
         return ""
 
 
-__all__ = ["Pyttsx3Provider", "PYTTSX3_AVAILABLE"]
+__all__ = ["PYTTSX3_AVAILABLE", "Pyttsx3Provider"]

@@ -5,7 +5,6 @@ Generates bar charts.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-
 import matplotlib.pyplot as plt
 
 from codomyrmex.data_visualization.utils import (
@@ -88,7 +87,7 @@ class BarChart:
         x_label: str = "Categories",
         y_label: str = "Values",
         horizontal: bool = False,
-        bar_color: str = "skyblue"
+        bar_color: str = "skyblue",
     ):
         """
         Initialize a bar chart.
@@ -132,7 +131,7 @@ class BarChart:
             output_path=output_path,
             show_plot=show_plot,
             horizontal=self.horizontal,
-            bar_color=self.bar_color
+            bar_color=self.bar_color,
         )
 
     def save(self, output_path: str):

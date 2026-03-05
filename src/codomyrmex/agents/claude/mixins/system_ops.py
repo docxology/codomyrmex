@@ -12,6 +12,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class SystemOpsMixin:
     """SystemOpsMixin class."""
 
@@ -58,8 +59,15 @@ class SystemOpsMixin:
 
         # Default exclusions
         default_exclude = [
-            "__pycache__", "node_modules", ".git", ".venv", "venv",
-            "*.pyc", "*.pyo", ".DS_Store", "*.egg-info",
+            "__pycache__",
+            "node_modules",
+            ".git",
+            ".venv",
+            "venv",
+            "*.pyc",
+            "*.pyo",
+            ".DS_Store",
+            "*.egg-info",
         ]
         exclude = (exclude_patterns or []) + default_exclude
 
@@ -226,13 +234,29 @@ class SystemOpsMixin:
 
         # Analyze language breakdown
         lang_map = {
-            ".py": "Python", ".js": "JavaScript", ".ts": "TypeScript",
-            ".java": "Java", ".cpp": "C++", ".c": "C", ".go": "Go",
-            ".rs": "Rust", ".rb": "Ruby", ".php": "PHP", ".swift": "Swift",
-            ".kt": "Kotlin", ".scala": "Scala", ".cs": "C#",
-            ".html": "HTML", ".css": "CSS", ".scss": "SCSS",
-            ".md": "Markdown", ".json": "JSON", ".yaml": "YAML", ".yml": "YAML",
-            ".sh": "Shell", ".bash": "Shell",
+            ".py": "Python",
+            ".js": "JavaScript",
+            ".ts": "TypeScript",
+            ".java": "Java",
+            ".cpp": "C++",
+            ".c": "C",
+            ".go": "Go",
+            ".rs": "Rust",
+            ".rb": "Ruby",
+            ".php": "PHP",
+            ".swift": "Swift",
+            ".kt": "Kotlin",
+            ".scala": "Scala",
+            ".cs": "C#",
+            ".html": "HTML",
+            ".css": "CSS",
+            ".scss": "SCSS",
+            ".md": "Markdown",
+            ".json": "JSON",
+            ".yaml": "YAML",
+            ".yml": "YAML",
+            ".sh": "Shell",
+            ".bash": "Shell",
         }
 
         language_breakdown: dict[str, int] = defaultdict(int)
@@ -260,29 +284,28 @@ Provide a brief analysis including:
 Be concise."""
 
             files_summary = "\n".join(scan_result["files"][:50])
-            langs = ", ".join(f"{k}: {v}" for k, v in sorted(
-                language_breakdown.items(), key=lambda x: -x[1]
-            )[:5])
+            langs = ", ".join(
+                f"{k}: {v}"
+                for k, v in sorted(language_breakdown.items(), key=lambda x: -x[1])[:5]
+            )
 
             prompt = f"""Analyze this project structure:
 Path: {path}
-Files: {scan_result['file_count']}
+Files: {scan_result["file_count"]}
 Languages: {langs}
 
 Sample files:
 {files_summary}"""
 
             try:
-                response = self.execute(AgentRequest(
-                    prompt=prompt,
-                    context={"system": system_prompt}
-                ))
+                response = self.execute(
+                    AgentRequest(prompt=prompt, context={"system": system_prompt})
+                )
                 if response.is_success():
                     result["analysis"] = response.content
                     result["tokens_used"] = response.tokens_used
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.debug("Optional analysis step failed: %s", e)
-                pass  # Analysis is optional
+                # Analysis is optional
 
         return result
-

@@ -47,6 +47,7 @@ The purpose is testing.
 
     return docs_dir
 
+
 class TestConsistencyChecker:
     def test_check_file_valid(self, tmp_docs):
         checker = DocumentationConsistencyChecker()
@@ -71,6 +72,7 @@ class TestConsistencyChecker:
         assert report.files_checked == 4
         assert len(report.issues) > 0
         assert report.passed is False
+
 
 class TestQualityAnalyzer:
     def test_analyze_file_high_quality(self, tmp_docs):

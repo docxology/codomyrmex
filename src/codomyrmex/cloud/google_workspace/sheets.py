@@ -30,6 +30,7 @@ class GoogleSheetsClient(GoogleWorkspaceBase):
         Returns:
             2D list of cell values, or empty list on error.
         """
+
         def _call():
             return (
                 self._get_service()

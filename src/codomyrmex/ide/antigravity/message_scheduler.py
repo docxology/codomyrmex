@@ -32,9 +32,11 @@ from codomyrmex.ide.antigravity.agent_relay import AgentRelay, RelayMessage
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -47,6 +49,7 @@ _HOUR_SECONDS: float = 3600.0
 # =====================================================================
 # Configuration
 # =====================================================================
+
 
 @dataclass
 class SchedulerConfig:
@@ -72,6 +75,7 @@ class SchedulerConfig:
 # =====================================================================
 # Scheduler
 # =====================================================================
+
 
 class MessageScheduler:
     """Rate-limited wrapper around :class:`AgentRelay`.
@@ -138,7 +142,7 @@ class MessageScheduler:
             sender=self._identity,
             msg_type="chat",
             content=content,
-            metadata=metadata if metadata else {},
+            metadata=metadata or {},
         )
         return self._wait_and_send(msg)
 
@@ -179,7 +183,8 @@ class MessageScheduler:
         """Reset the consecutive-error counter (clears backoff)."""
         if self._consecutive_errors > 0:
             logger.info(
-                "Scheduler backoff reset  was=%d", self._consecutive_errors,
+                "Scheduler backoff reset  was=%d",
+                self._consecutive_errors,
             )
         self._consecutive_errors = 0
 
@@ -216,7 +221,7 @@ class MessageScheduler:
         if self._consecutive_errors > 0:
             backoff = min(
                 self._config.backoff_base
-                * self._config.backoff_factor ** self._consecutive_errors,
+                * self._config.backoff_factor**self._consecutive_errors,
                 self._config.backoff_max,
             )
         else:
@@ -245,7 +250,9 @@ class MessageScheduler:
         # 2. Jitter + backoff delay.
         delay = self._compute_delay()
         if delay > 0:
-            logger.debug("Scheduler sleeping %.2fs  (errors=%d)", delay, self._consecutive_errors)
+            logger.debug(
+                "Scheduler sleeping %.2fs  (errors=%d)", delay, self._consecutive_errors
+            )
             time.sleep(delay)
 
         # 3. Sliding-window rate limit.

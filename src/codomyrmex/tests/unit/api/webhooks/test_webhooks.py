@@ -25,7 +25,9 @@ try:
         create_webhook_registry,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ---------------------------------------------------------------------------
 # Enum tests
@@ -187,9 +189,7 @@ class TestWebhookSignature:
     def test_hmac_sha512(self):
         payload = "data"
         secret = "key"
-        sig = WebhookSignature.sign(
-            payload, secret, SignatureAlgorithm.HMAC_SHA512
-        )
+        sig = WebhookSignature.sign(payload, secret, SignatureAlgorithm.HMAC_SHA512)
         assert len(sig) == 128  # SHA-512 hex digest length
         assert WebhookSignature.verify(
             payload, secret, sig, SignatureAlgorithm.HMAC_SHA512
@@ -198,12 +198,8 @@ class TestWebhookSignature:
     def test_different_algorithms_produce_different_signatures(self):
         payload = "same-payload"
         secret = "same-secret"
-        sig256 = WebhookSignature.sign(
-            payload, secret, SignatureAlgorithm.HMAC_SHA256
-        )
-        sig512 = WebhookSignature.sign(
-            payload, secret, SignatureAlgorithm.HMAC_SHA512
-        )
+        sig256 = WebhookSignature.sign(payload, secret, SignatureAlgorithm.HMAC_SHA256)
+        sig512 = WebhookSignature.sign(payload, secret, SignatureAlgorithm.HMAC_SHA512)
         assert sig256 != sig512
 
 
@@ -435,8 +431,6 @@ class TestFactories:
         assert dispatcher.registry.get("wh-1") is not None
 
     def test_create_webhook_dispatcher_with_custom_transport(self):
-        transport = HTTPWebhookTransport(
-            handler=lambda u, p, h, t: (201, "Created")
-        )
+        transport = HTTPWebhookTransport(handler=lambda u, p, h, t: (201, "Created"))
         dispatcher = create_webhook_dispatcher(transport=transport)
         assert dispatcher.transport is transport

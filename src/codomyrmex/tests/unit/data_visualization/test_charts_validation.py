@@ -31,6 +31,7 @@ os.environ.setdefault("MPLBACKEND", "Agg")
 
 if _matplotlib_available:
     import matplotlib
+
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
@@ -50,6 +51,7 @@ if _matplotlib_available:
 # ---------------------------------------------------------------------------
 # bar_chart
 # ---------------------------------------------------------------------------
+
 
 class TestBarChartValidation:
     """ValueError contract for create_bar_chart."""
@@ -86,6 +88,7 @@ class TestBarChartValidation:
 # scatter_plot
 # ---------------------------------------------------------------------------
 
+
 class TestScatterPlotValidation:
     """ValueError contract for create_scatter_plot."""
 
@@ -116,6 +119,7 @@ class TestScatterPlotValidation:
 # area_chart
 # ---------------------------------------------------------------------------
 
+
 class TestAreaChartValidation:
     """ValueError contract for create_area_chart."""
 
@@ -141,6 +145,7 @@ class TestAreaChartValidation:
 # ---------------------------------------------------------------------------
 # box_plot
 # ---------------------------------------------------------------------------
+
 
 class TestBoxPlotValidation:
     """ValueError contract for create_box_plot."""
@@ -173,6 +178,7 @@ class TestBoxPlotValidation:
 # heatmap
 # ---------------------------------------------------------------------------
 
+
 class TestHeatmapValidation:
     """ValueError contract for create_heatmap."""
 
@@ -203,6 +209,7 @@ class TestHeatmapValidation:
 # histogram
 # ---------------------------------------------------------------------------
 
+
 class TestHistogramValidation:
     """ValueError contract for create_histogram."""
 
@@ -229,6 +236,7 @@ class TestHistogramValidation:
 # ---------------------------------------------------------------------------
 # line_plot
 # ---------------------------------------------------------------------------
+
 
 class TestLinePlotValidation:
     """ValueError contract for create_line_plot."""
@@ -259,6 +267,7 @@ class TestLinePlotValidation:
 # ---------------------------------------------------------------------------
 # pie_chart
 # ---------------------------------------------------------------------------
+
 
 class TestPieChartValidation:
     """ValueError contract for create_pie_chart."""

@@ -18,6 +18,7 @@ def test_finance_report_generation(tmp_path):
     assert "Net Profit" in html
     assert "CDMX Stock" in html
 
+
 def test_marketing_report_generation(tmp_path):
     """Verify marketing report generation behavior."""
     report = MarketingReport()
@@ -29,6 +30,7 @@ def test_marketing_report_generation(tmp_path):
     assert "Marketing Analysis" in html
     assert "Brand Awareness" in html
     assert "User Acquisition" in html
+
 
 def test_logistics_report_generation(tmp_path):
     """Verify logistics report generation behavior."""
@@ -42,6 +44,7 @@ def test_logistics_report_generation(tmp_path):
     assert "Shipment #1234" in html
     assert "Goods Flow" in html  # Section title
     assert "sankey-beta" in html  # Diagram content
+
 
 def test_generate_report_wrapper(tmp_path):
     """Verify generate report wrapper behavior."""

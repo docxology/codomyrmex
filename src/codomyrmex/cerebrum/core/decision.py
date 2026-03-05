@@ -7,13 +7,16 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class Decision:
     """Represents a choice made by the DecisionModule."""
+
     choice: Any
     confidence: float
     rationale: str
     metadata: dict[str, Any]
+
 
 class DecisionModule:
     """Handles multi-criteria decision making."""
@@ -23,10 +26,7 @@ class DecisionModule:
         self.logger = get_logger(__name__)
 
     def decide(
-        self,
-        options: list[Any],
-        criteria: dict[str, float],
-        context: dict[str, Any]
+        self, options: list[Any], criteria: dict[str, float], context: dict[str, Any]
     ) -> Decision:
         """Make a decision among options based on criteria and context.
 
@@ -41,17 +41,24 @@ class DecisionModule:
             The selected decision
         """
         if not options:
-            return Decision(choice=None, confidence=0.0, rationale="No options provided", metadata={})
+            return Decision(
+                choice=None,
+                confidence=0.0,
+                rationale="No options provided",
+                metadata={},
+            )
 
         if not criteria:
             return Decision(
                 choice=options[0],
                 confidence=0.5,
                 rationale="No criteria provided, selected first option",
-                metadata={}
+                metadata={},
             )
 
-        self.logger.info(f"Making decision among {len(options)} options with {len(criteria)} criteria")
+        self.logger.info(
+            f"Making decision among {len(options)} options with {len(criteria)} criteria"
+        )
 
         scores = []
         for option in options:
@@ -68,7 +75,11 @@ class DecisionModule:
 
                 if score is None:
                     # Fallback: check if option has the criterion as an attribute
-                    score = getattr(option, criterion.lower(), 0.5) if hasattr(option, criterion.lower()) else 0.5
+                    score = (
+                        getattr(option, criterion.lower(), 0.5)
+                        if hasattr(option, criterion.lower())
+                        else 0.5
+                    )
 
                 total_score += score * weight
 
@@ -88,7 +99,10 @@ class DecisionModule:
             confidence=float(confidence),
             rationale=f"Selected {best_option} with score {confidence:.2f} based on weighted criteria",
             metadata={
-                "all_scores": {str(opt): float(score) for opt, score in zip(options, scores, strict=False)},
-                "criteria_used": list(criteria.keys())
-            }
+                "all_scores": {
+                    str(opt): float(score)
+                    for opt, score in zip(options, scores, strict=False)
+                },
+                "criteria_used": list(criteria.keys()),
+            },
         )

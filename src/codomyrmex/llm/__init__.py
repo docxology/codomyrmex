@@ -66,6 +66,7 @@ from .ollama import ConfigManager, ModelRunner, OllamaManager, OutputManager
 
 def cli_commands():
     """Return CLI commands for the llm module."""
+
     def _show_config():
         config = get_config()
         print("LLM configuration:")
@@ -74,9 +75,16 @@ def cli_commands():
 
     def _list_providers():
         submodules = [
-            "providers", "chains", "memory", "tools",
-            "guardrails", "streaming", "embeddings",
-            "rag", "cost_tracking", "prompts",
+            "providers",
+            "chains",
+            "memory",
+            "tools",
+            "guardrails",
+            "streaming",
+            "embeddings",
+            "rag",
+            "cost_tracking",
+            "prompts",
         ]
         print("LLM provider submodules:")
         for name in submodules:
@@ -87,44 +95,41 @@ def cli_commands():
         "providers": _list_providers,
     }
 
+
 __all__ = [
     "safety",
     "multimodal",
-    'cli_commands',
-    'OllamaManager',
-    'ModelRunner',
-    'OutputManager',
-    'ConfigManager',
-
-    'FabricManager',
-    'FabricOrchestrator',
-    'FabricConfigManager',
-
-    'LLMConfig',
-    'LLMConfigPresets',
-    'get_config',
-    'set_config',
-    'reset_config',
-
+    "cli_commands",
+    "OllamaManager",
+    "ModelRunner",
+    "OutputManager",
+    "ConfigManager",
+    "FabricManager",
+    "FabricOrchestrator",
+    "FabricConfigManager",
+    "LLMConfig",
+    "LLMConfigPresets",
+    "get_config",
+    "set_config",
+    "reset_config",
     # MCP Integration
-    'MCPBridge',
-    'MCPResource',
-    'MCPPrompt',
-    'convert_tool_to_mcp',
-    'create_mcp_bridge_from_registry',
-
+    "MCPBridge",
+    "MCPResource",
+    "MCPPrompt",
+    "convert_tool_to_mcp",
+    "create_mcp_bridge_from_registry",
     # Submodules
-    'providers',
-    'chains',
-    'memory',
-    'tools',
-    'guardrails',
-    'streaming',
-    'embeddings',
-    'rag',
-    'cost_tracking',
-    'prompts',
-    'ask',
+    "providers",
+    "chains",
+    "memory",
+    "tools",
+    "guardrails",
+    "streaming",
+    "embeddings",
+    "rag",
+    "cost_tracking",
+    "prompts",
+    "ask",
 ]
 
 
@@ -153,10 +158,8 @@ def ask(question: str, model: str = "openrouter/free") -> str:
         config = ProviderConfig(api_key=api_key)
         with get_provider(ProviderType.OPENROUTER, config) as provider:
             response = provider.complete(
-                messages=[Message(role="user", content=question)],
-                model=model
+                messages=[Message(role="user", content=question)], model=model
             )
             return response.content
     except Exception as e:
-        return f"Error querying LLM: {str(e)}"
-
+        return f"Error querying LLM: {e!s}"

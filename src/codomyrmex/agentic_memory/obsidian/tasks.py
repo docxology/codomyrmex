@@ -50,22 +50,26 @@ def _parse_tasks(lines: list[str]) -> list[TaskItem]:
     for line in lines:
         m = _TASK_LINE_RE.match(line)
         if m:
-            tasks.append(TaskItem(
-                text=m.group("text").strip(),
-                status=m.group("status"),
-                file=m.group("file") or "",
-                line=int(m.group("line")) if m.group("line") else 0,
-                raw=line,
-            ))
+            tasks.append(
+                TaskItem(
+                    text=m.group("text").strip(),
+                    status=m.group("status"),
+                    file=m.group("file") or "",
+                    line=int(m.group("line")) if m.group("line") else 0,
+                    raw=line,
+                )
+            )
         elif line.strip().startswith("- ["):
             # Simpler fallback format: just the checkbox
             status_match = re.match(r"- \[(.)\]\s+(.*)", line.strip())
             if status_match:
-                tasks.append(TaskItem(
-                    text=status_match.group(2).strip(),
-                    status=status_match.group(1),
-                    raw=line,
-                ))
+                tasks.append(
+                    TaskItem(
+                        text=status_match.group(2).strip(),
+                        status=status_match.group(1),
+                        raw=line,
+                    )
+                )
     return tasks
 
 
@@ -93,6 +97,7 @@ def list_tasks(
     [format=json|tsv|csv] [done] [todo] [daily] [active] [verbose] [total]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     flags: list[str] = []
     if status is not None:
@@ -131,6 +136,7 @@ def get_task(
     Maps to ``obsidian task [ref=<path:line>] [file=|path=] [line=<n>] [daily]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     flags: list[str] = []
     if ref:
@@ -157,6 +163,7 @@ def toggle_task(
     Maps to ``obsidian task [ref=|file=|path=] [line=<n>] toggle [daily]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     flags: list[str] = ["toggle"]
     if ref:
@@ -185,6 +192,7 @@ def set_task_status(
     status="<char>" [daily]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     params["status"] = status
     flags: list[str] = []

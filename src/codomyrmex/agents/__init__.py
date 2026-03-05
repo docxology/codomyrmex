@@ -29,7 +29,6 @@ Available submodules:
 - history: Conversation and context persistence
 """
 
-
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -204,8 +203,10 @@ try:
 except ImportError:
     AgenticSeekClient = None
 
+
 def cli_commands():
     """Return CLI commands for the agents module."""
+
     def _list_agents():
         providers = []
         provider_map = {

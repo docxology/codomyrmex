@@ -51,7 +51,7 @@ class TestConfigValidator:
             required=True,
             default="default_value",
             description="Test field",
-            constraints={"min_length": 3, "max_length": 50}
+            constraints={"min_length": 3, "max_length": 50},
         )
 
         assert schema.type == "str"
@@ -64,7 +64,12 @@ class TestConfigValidator:
         """Test validating a simple configuration."""
         schema = {
             "name": ConfigSchema(type="str", required=True),
-            "port": ConfigSchema(type="int", required=False, default=8080, constraints={"min": 1, "max": 65535})
+            "port": ConfigSchema(
+                type="int",
+                required=False,
+                default=8080,
+                constraints={"min": 1, "max": 65535},
+            ),
         }
 
         validator = ConfigValidator(schema)
@@ -92,12 +97,13 @@ class TestConfigValidator:
         schema = {
             "username": ConfigSchema(
                 type="str",
-                constraints={"min_length": 3, "max_length": 20, "pattern": r"^[a-zA-Z0-9_]+$"}
+                constraints={
+                    "min_length": 3,
+                    "max_length": 20,
+                    "pattern": r"^[a-zA-Z0-9_]+$",
+                },
             ),
-            "timeout": ConfigSchema(
-                type="int",
-                constraints={"min": 1, "max": 300}
-            )
+            "timeout": ConfigSchema(type="int", constraints={"min": 1, "max": 300}),
         }
 
         validator = ConfigValidator(schema)
@@ -124,18 +130,21 @@ class TestConfigValidator:
 
     def test_custom_validator(self):
         """Test custom validator functionality."""
+
         def custom_port_validator(config):
             """Custom validator to check port ranges."""
             issues = []
             if "port" in config:
                 port = config["port"]
                 if port in [22, 80, 443]:  # Common ports that might be restricted
-                    issues.append(ValidationIssue(
-                        field_path="port",
-                        message=f"Port {port} is commonly reserved and may cause conflicts",
-                        severity=ValidationSeverity.WARNING,
-                        suggestion="Consider using a different port"
-                    ))
+                    issues.append(
+                        ValidationIssue(
+                            field_path="port",
+                            message=f"Port {port} is commonly reserved and may cause conflicts",
+                            severity=ValidationSeverity.WARNING,
+                            suggestion="Consider using a different port",
+                        )
+                    )
             return issues
 
         validator = ConfigValidator()
@@ -207,7 +216,7 @@ class TestConfigMigrator:
             from_version="1.0.0",
             to_version="2.0.0",
             old_path="old_name",
-            new_path="new_name"
+            new_path="new_name",
         )
 
         migrator.add_migration_rule(rule)
@@ -226,7 +235,7 @@ class TestConfigMigrator:
             from_version="1.0.0",
             to_version="2.0.0",
             old_path="database_name",
-            new_path="database"
+            new_path="database",
         )
         migrator.add_migration_rule(rule)
 
@@ -253,7 +262,7 @@ class TestConfigMigrator:
             from_version="1.0.0",
             to_version="2.0.0",
             old_path="log_level",
-            transform_func=lambda x: str(x).upper()
+            transform_func=lambda x: str(x).upper(),
         )
         migrator.add_migration_rule(rule)
 
@@ -294,7 +303,7 @@ class TestConfigMigrator:
             from_version="1.0.0",
             to_version="2.0.0",
             old_path="missing_field",
-            transform_func=lambda x: x  # This won't be reached
+            transform_func=lambda x: x,  # This won't be reached
         )
         migrator.add_migration_rule(rule)
 
@@ -325,7 +334,7 @@ class TestConfigMigrator:
         result = migrate_config({"test": "data"}, "1.0.0", "2.0.0")
 
         # Should return a migration result
-        assert hasattr(result, 'success')
+        assert hasattr(result, "success")
         assert isinstance(result.success, bool)
 
 
@@ -341,13 +350,13 @@ class TestConfigurationManagerEnhanced:
         # Create a real config file
         config_file = tmp_path / "config.json"
         config_data = {"name": "test", "port": 8080}
-        with open(config_file, 'w') as f:
+        with open(config_file, "w") as f:
             json.dump(config_data, f)
 
         # Create a real schema
         schema = {
             "name": ConfigSchema(type="str", required=True),
-            "port": ConfigSchema(type="int", required=False, default=8080)
+            "port": ConfigSchema(type="int", required=False, default=8080),
         }
 
         # Load config with validation
@@ -424,7 +433,11 @@ class TestConfigurationManagerEnhanced:
 
         assert success
         # Should have created a backup configuration
-        backup_names = [name for name in manager.configurations.keys() if name.startswith("test_config_backup")]
+        backup_names = [
+            name
+            for name in manager.configurations.keys()
+            if name.startswith("test_config_backup")
+        ]
         assert len(backup_names) == 1
 
     def test_migration_error_handling(self):

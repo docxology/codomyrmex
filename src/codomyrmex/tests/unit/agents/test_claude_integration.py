@@ -26,7 +26,9 @@ from codomyrmex.agents.core import (
 class StubClaudeAgent(BaseAgent):
     """Minimal agent stub that returns canned responses."""
 
-    def __init__(self, response_content: str = "stub response", error: str | None = None):
+    def __init__(
+        self, response_content: str = "stub response", error: str | None = None
+    ):
         super().__init__(
             name="stub-claude",
             capabilities=[
@@ -79,7 +81,9 @@ def adapter(stub_agent: StubClaudeAgent) -> ClaudeIntegrationAdapter:
 class TestAdapterConstruction:
     """Verify adapter initialises correctly."""
 
-    def test_adapter_stores_agent_reference(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_adapter_stores_agent_reference(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         assert adapter.agent is stub_agent
 
     def test_adapter_has_logger(self, adapter: ClaudeIntegrationAdapter):
@@ -104,30 +108,42 @@ class TestAdaptForAiCodeEditing:
         result = adapter.adapt_for_ai_code_editing(prompt="Create a hello function")
         assert isinstance(result, str)
 
-    def test_passes_prompt_to_agent(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
-        adapter.adapt_for_ai_code_editing(prompt="Create a fib function", language="python")
+    def test_passes_prompt_to_agent(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
+        adapter.adapt_for_ai_code_editing(
+            prompt="Create a fib function", language="python"
+        )
         assert stub_agent.last_request is not None
         assert "fib" in stub_agent.last_request.prompt
 
-    def test_context_includes_language(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_context_includes_language(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         adapter.adapt_for_ai_code_editing(prompt="test", language="rust")
         ctx = stub_agent.last_request.context
         assert ctx["language"] == "rust"
 
-    def test_context_includes_system_prompt(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_context_includes_system_prompt(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         adapter.adapt_for_ai_code_editing(prompt="test", language="go")
         ctx = stub_agent.last_request.context
         assert "system" in ctx
         assert "go" in ctx["system"].lower()
 
-    def test_context_code_prepended(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_context_code_prepended(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         adapter.adapt_for_ai_code_editing(
             prompt="Add type hints",
             context_code="def add(a, b): return a + b",
         )
         assert "Existing code context" in stub_agent.last_request.prompt
 
-    def test_style_affects_system_prompt(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_style_affects_system_prompt(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         adapter.adapt_for_ai_code_editing(prompt="test", style="functional")
         assert "functional" in stub_agent.last_request.context["system"].lower()
 
@@ -167,7 +183,9 @@ class TestAdaptForLlm:
         assert "usage" in result
         assert "metadata" in result
 
-    def test_extracts_system_message(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_extracts_system_message(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         messages = [
             {"role": "system", "content": "You are helpful"},
             {"role": "user", "content": "Hi"},
@@ -176,7 +194,9 @@ class TestAdaptForLlm:
         ctx = stub_agent.last_request.context
         assert ctx.get("system") == "You are helpful"
 
-    def test_system_prompt_parameter_takes_precedence(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_system_prompt_parameter_takes_precedence(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         messages = [
             {"role": "system", "content": "from message"},
             {"role": "user", "content": "Hi"},
@@ -206,12 +226,16 @@ class TestAdaptForCodeExecution:
         assert isinstance(result, dict)
         assert result["success"] is True
 
-    def test_analysis_type_in_context(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_analysis_type_in_context(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         adapter.adapt_for_code_execution(code="x = 1", analysis_type="security")
         ctx = stub_agent.last_request.context
         assert ctx["analysis_type"] == "security"
 
-    def test_code_included_in_prompt(self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent):
+    def test_code_included_in_prompt(
+        self, adapter: ClaudeIntegrationAdapter, stub_agent: StubClaudeAgent
+    ):
         adapter.adapt_for_code_execution(code="import os; os.system('rm -rf /')")
         assert "os.system" in stub_agent.last_request.prompt
 
@@ -264,7 +288,9 @@ class TestCodeExtraction:
         result = adapter._extract_code_from_response(response, "python")
         assert result == "print('hi')"
 
-    def test_returns_stripped_original_when_no_block(self, adapter: ClaudeIntegrationAdapter):
+    def test_returns_stripped_original_when_no_block(
+        self, adapter: ClaudeIntegrationAdapter
+    ):
         response = "  just plain text  "
         result = adapter._extract_code_from_response(response, "python")
         assert result == "just plain text"
@@ -302,5 +328,7 @@ class TestSystemPromptBuilding:
 
     def test_unknown_style_ignored(self, adapter: ClaudeIntegrationAdapter):
         prompt_no_style = adapter._build_code_generation_system_prompt("python")
-        prompt_bad_style = adapter._build_code_generation_system_prompt("python", style="nonexistent")
+        prompt_bad_style = adapter._build_code_generation_system_prompt(
+            "python", style="nonexistent"
+        )
         assert prompt_no_style == prompt_bad_style

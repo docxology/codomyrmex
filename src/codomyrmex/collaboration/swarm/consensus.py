@@ -80,7 +80,11 @@ class ConsensusEngine:
     Usage::
 
         engine = ConsensusEngine()
-        votes = [SwarmVote("alice", True), SwarmVote("bob", False), SwarmVote("carol", True)]
+        votes = [
+            SwarmVote("alice", True),
+            SwarmVote("bob", False),
+            SwarmVote("carol", True),
+        ]
         result = engine.resolve(votes, strategy="majority")
         assert result.decision == Decision.APPROVED
     """
@@ -111,10 +115,9 @@ class ConsensusEngine:
 
         if strategy == "weighted":
             return self._weighted(votes, threshold)
-        elif strategy == "veto":
+        if strategy == "veto":
             return self._veto(votes)
-        else:
-            return self._majority(votes, threshold)
+        return self._majority(votes, threshold)
 
     def _majority(self, votes: list[SwarmVote], threshold: float) -> ConsensusResult:
         """Calculate simple majority vote."""

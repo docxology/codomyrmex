@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import platform as _platform
 from functools import lru_cache
-from typing import TYPE_CHECKING
 
 from .base import (
     CommandResult,
@@ -22,11 +21,8 @@ from .base import (
     SystemInfo,
 )
 
-if TYPE_CHECKING:
-    pass
-
-
 # ── Detection ───────────────────────────────────────────────────────
+
 
 def detect_platform() -> OSPlatform:
     """Detect the current operating system platform.
@@ -57,14 +53,17 @@ def get_provider() -> OSProviderBase:
 
     if current == OSPlatform.MACOS:
         from .mac.provider import MacOSProvider
+
         return MacOSProvider()
 
     if current == OSPlatform.LINUX:
         from .linux.provider import LinuxProvider
+
         return LinuxProvider()
 
     if current == OSPlatform.WINDOWS:
         from .windows.provider import WindowsProvider
+
         return WindowsProvider()
 
     raise RuntimeError(
@@ -74,6 +73,7 @@ def get_provider() -> OSProviderBase:
 
 
 # ── Generic Dispatch Functions ──────────────────────────────────────
+
 
 def get_system_info() -> SystemInfo:
     """Return system information for the current platform."""
@@ -118,12 +118,12 @@ def get_environment_variables(prefix: str = "") -> dict[str, str]:
 
 __all__ = [
     "detect_platform",
+    "execute_command",
+    "get_disk_usage",
+    "get_environment_variables",
+    "get_network_interfaces",
     "get_provider",
+    "get_services",
     "get_system_info",
     "list_processes",
-    "get_disk_usage",
-    "get_services",
-    "get_network_interfaces",
-    "execute_command",
-    "get_environment_variables",
 ]

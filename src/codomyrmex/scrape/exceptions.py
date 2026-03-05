@@ -56,10 +56,16 @@ class RequestError(ScrapingError):
     ) -> None:
         self.status_code = status_code
         self.response_body = response_body[:500] if response_body else ""
-        super().__init__(message, url=url, details={
-            "status_code": status_code,
-            "response_preview": self.response_body[:200] if self.response_body else "",
-        })
+        super().__init__(
+            message,
+            url=url,
+            details={
+                "status_code": status_code,
+                "response_preview": self.response_body[:200]
+                if self.response_body
+                else "",
+            },
+        )
 
     @property
     def is_server_error(self) -> bool:
@@ -82,10 +88,14 @@ class ParseError(ScrapingError):
     ) -> None:
         self.selector = selector
         self.content_preview = content_preview[:200] if content_preview else ""
-        super().__init__(message, url=url, details={
-            "selector": selector,
-            "content_preview": self.content_preview,
-        })
+        super().__init__(
+            message,
+            url=url,
+            details={
+                "selector": selector,
+                "content_preview": self.content_preview,
+            },
+        )
 
 
 class RateLimitError(ScrapingError):
@@ -104,7 +114,12 @@ class RateLimitError(ScrapingError):
 class CaptchaError(ScrapingError):
     """CAPTCHA challenge detected."""
 
-    def __init__(self, message: str = "CAPTCHA detected", url: str = "", captcha_type: str = "unknown") -> None:
+    def __init__(
+        self,
+        message: str = "CAPTCHA detected",
+        url: str = "",
+        captcha_type: str = "unknown",
+    ) -> None:
         self.captcha_type = captcha_type
         super().__init__(message, url=url, details={"captcha_type": captcha_type})
 
@@ -119,7 +134,9 @@ class AuthenticationError(ScrapingError):
 class ContentNotFoundError(ScrapingError):
     """Expected content was not found on the page."""
 
-    def __init__(self, message: str = "Content not found", url: str = "", selector: str = "") -> None:
+    def __init__(
+        self, message: str = "Content not found", url: str = "", selector: str = ""
+    ) -> None:
         self.selector = selector
         super().__init__(message, url=url, details={"selector": selector})
 
@@ -127,14 +144,19 @@ class ContentNotFoundError(ScrapingError):
 class BlockedError(ScrapingError):
     """IP or user-agent has been blocked by the target."""
 
-    def __init__(self, message: str = "Blocked", url: str = "", reason: str = "") -> None:
+    def __init__(
+        self, message: str = "Blocked", url: str = "", reason: str = ""
+    ) -> None:
         self.reason = reason
         super().__init__(message, url=url, details={"reason": reason})
 
 
 # ── Utility ─────────────────────────────────────────────────────────
 
-def classify_http_error(status_code: int, url: str = "", body: str = "") -> ScrapingError:
+
+def classify_http_error(
+    status_code: int, url: str = "", body: str = ""
+) -> ScrapingError:
     """Create the appropriate exception for an HTTP status code.
 
     Args:
@@ -191,7 +213,9 @@ class ScrapeConnectionError(RequestError):
 class ScrapeTimeoutError(RequestError):
     """Timeout during a scrape operation."""
 
-    def __init__(self, message: str = "Scrape timed out", url: str = "", timeout: float = 0) -> None:
+    def __init__(
+        self, message: str = "Scrape timed out", url: str = "", timeout: float = 0
+    ) -> None:
         self.timeout = timeout
         super().__init__(message, url=url)
 
@@ -215,4 +239,3 @@ class ScrapeValidationError(ScrapingError):
         if value:
             details["value"] = value
         super().__init__(message, url=url, details=details)
-

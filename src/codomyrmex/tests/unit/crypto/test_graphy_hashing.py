@@ -23,6 +23,7 @@ from codomyrmex.crypto.graphy.hashing import (
 @pytest.mark.unit
 class TestSHA256:
     """Test suite for SHA256."""
+
     def test_known_vector_empty(self) -> None:
         # SHA-256 of empty string
         expected = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -41,6 +42,7 @@ class TestSHA256:
 @pytest.mark.unit
 class TestSHA3_256:
     """Test suite for SHA3_256."""
+
     def test_known_vector_empty(self) -> None:
         # SHA-3-256 of empty string
         expected = "a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a"
@@ -55,6 +57,7 @@ class TestSHA3_256:
 @pytest.mark.unit
 class TestSHA512:
     """Test suite for SHA512."""
+
     def test_known_vector_empty(self) -> None:
         # SHA-512 of empty string
         expected = (
@@ -72,6 +75,7 @@ class TestSHA512:
 @pytest.mark.unit
 class TestBLAKE2b:
     """Test suite for BLAKE2b."""
+
     def test_default_digest_size(self) -> None:
         result = hash_blake2b(b"test")
         assert len(result) == 64  # 32 bytes = 64 hex chars
@@ -92,6 +96,7 @@ class TestBLAKE2b:
 @pytest.mark.unit
 class TestMD5:
     """Test suite for MD5."""
+
     def test_known_vector_empty(self) -> None:
         expected = "d41d8cd98f00b204e9800998ecf8427e"
         with warnings.catch_warnings():
@@ -117,6 +122,7 @@ class TestMD5:
 @pytest.mark.unit
 class TestHashData:
     """Test suite for HashData."""
+
     def test_dispatch_sha256(self) -> None:
         assert hash_data(b"abc", "sha256") == hash_sha256(b"abc")
 
@@ -146,6 +152,7 @@ class TestHashData:
 @pytest.mark.unit
 class TestVerifyHash:
     """Test suite for VerifyHash."""
+
     def test_correct_hash_passes(self) -> None:
         data = b"verify me"
         h = hash_sha256(data)
@@ -170,6 +177,7 @@ class TestVerifyHash:
 @pytest.mark.unit
 class TestHashAlgorithmEnum:
     """Test suite for HashAlgorithmEnum."""
+
     def test_values(self) -> None:
         assert HashAlgorithm.SHA256.value == "sha256"
         assert HashAlgorithm.SHA3_256.value == "sha3_256"

@@ -65,11 +65,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
             raise
 
     def create_zone(
-        self,
-        name: str,
-        email: str,
-        ttl: int = 3600,
-        description: str | None = None
+        self, name: str, email: str, ttl: int = 3600, description: str | None = None
     ) -> dict[str, Any] | None:
         """
         Create a new DNS zone.
@@ -82,14 +78,11 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         """
         try:
             # Ensure zone name ends with dot
-            if not name.endswith('.'):
-                name = name + '.'
+            if not name.endswith("."):
+                name = name + "."
 
             zone = self._conn.dns.create_zone(
-                name=name,
-                email=email,
-                ttl=ttl,
-                description=description
+                name=name, email=email, ttl=ttl, description=description
             )
             logger.info(f"Created zone: {zone.id}")
             return {"id": zone.id, "name": zone.name}
@@ -112,7 +105,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         zone_id: str,
         email: str | None = None,
         ttl: int | None = None,
-        description: str | None = None
+        description: str | None = None,
     ) -> bool:
         """Update a DNS zone."""
         try:
@@ -178,7 +171,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         record_type: str,
         records: list[str],
         ttl: int = 3600,
-        description: str | None = None
+        description: str | None = None,
     ) -> dict[str, Any] | None:
         """
         Create a DNS record set.
@@ -193,8 +186,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         """
         try:
             # Ensure name ends with dot
-            if not name.endswith('.'):
-                name = name + '.'
+            if not name.endswith("."):
+                name = name + "."
 
             record = self._conn.dns.create_recordset(
                 zone=zone_id,
@@ -202,7 +195,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                 type=record_type,
                 records=records,
                 ttl=ttl,
-                description=description
+                description=description,
             )
             logger.info(f"Created record: {record.id}")
             return {"id": record.id, "name": record.name, "type": record_type}
@@ -216,7 +209,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         record_id: str,
         records: list[str] | None = None,
         ttl: int | None = None,
-        description: str | None = None
+        description: str | None = None,
     ) -> bool:
         """Update a DNS record set."""
         try:
@@ -271,7 +264,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         floating_ip: str,
         hostname: str,
         ttl: int = 3600,
-        description: str | None = None
+        description: str | None = None,
     ) -> dict[str, Any] | None:
         """
         Set reverse DNS (PTR record) for a floating IP.
@@ -284,8 +277,8 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
         """
         try:
             # Ensure hostname ends with dot
-            if not hostname.endswith('.'):
-                hostname = hostname + '.'
+            if not hostname.endswith("."):
+                hostname = hostname + "."
 
             # Find the floating IP
             fip = self._conn.network.find_ip(floating_ip)
@@ -297,7 +290,7 @@ class InfomaniakDNSClient(InfomaniakOpenStackBase):
                 floating_ip_id=fip.id,
                 ptrdname=hostname,
                 ttl=ttl,
-                description=description
+                description=description,
             )
             logger.info(f"Set reverse DNS for {floating_ip}: {hostname}")
             return {"id": ptr.id, "address": floating_ip, "ptrdname": hostname}

@@ -83,10 +83,15 @@ class AlertEvaluator:
     Example::
 
         evaluator = AlertEvaluator(metrics=aggregator)
-        evaluator.add_rule(AlertRule(
-            name="high_latency", metric_name="latency_ms",
-            threshold=100, operator="gt", severity=AlertSeverity.CRITICAL,
-        ))
+        evaluator.add_rule(
+            AlertRule(
+                name="high_latency",
+                metric_name="latency_ms",
+                threshold=100,
+                operator="gt",
+                severity=AlertSeverity.CRITICAL,
+            )
+        )
         alerts = evaluator.evaluate()
     """
 
@@ -145,15 +150,15 @@ class AlertEvaluator:
                     current_value=value,
                     threshold=rule.threshold,
                     severity=rule.severity,
-                    message=rule.message or f"{rule.name}: {value} {rule.operator} {rule.threshold}",
+                    message=rule.message
+                    or f"{rule.name}: {value} {rule.operator} {rule.threshold}",
                 )
                 new_alerts.append(alert)
                 self._active[rule.name] = alert
-            else:
-                # Resolve if previously active
-                if rule.name in self._active:
-                    self._active[rule.name].state = AlertState.RESOLVED
-                    del self._active[rule.name]
+            # Resolve if previously active
+            elif rule.name in self._active:
+                self._active[rule.name].state = AlertState.RESOLVED
+                del self._active[rule.name]
 
         self._alerts.extend(new_alerts)
         return new_alerts

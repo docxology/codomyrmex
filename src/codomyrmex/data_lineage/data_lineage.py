@@ -40,10 +40,9 @@ class DataLineage:
         """
         if event_type == "dataset":
             return self.tracker.register_dataset(**kwargs)
-        elif event_type == "transformation":
+        if event_type == "transformation":
             return self.tracker.register_transformation(**kwargs)
-        else:
-            raise ValueError(f"Unknown event type: {event_type}")
+        raise ValueError(f"Unknown event type: {event_type}")
 
     def analyze(self, node_id: str) -> dict[str, Any]:
         """Analyze impact of a node."""

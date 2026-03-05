@@ -9,9 +9,9 @@ from .models import AuditIssue, AuditResult, AuditRule
 from .rules import DEFAULT_RULES
 
 __all__ = [
-    "ConfigAuditor",
+    "DEFAULT_RULES",
     "AuditIssue",
     "AuditResult",
     "AuditRule",
-    "DEFAULT_RULES",
+    "ConfigAuditor",
 ]

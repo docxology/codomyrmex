@@ -22,9 +22,7 @@ PROJECT_ROOT = str(Path(__file__).parents[5])
 @pytest.mark.unit
 def test_commit_history_ok() -> None:
     """git_analysis_commit_history returns status:ok with commits list."""
-    result = mcp_tools.git_analysis_commit_history(
-        repo_path=PROJECT_ROOT, max_count=5
-    )
+    result = mcp_tools.git_analysis_commit_history(repo_path=PROJECT_ROOT, max_count=5)
     assert result["status"] == "ok"
     assert "commits" in result
     assert "count" in result
@@ -35,9 +33,7 @@ def test_commit_history_ok() -> None:
 @pytest.mark.unit
 def test_commit_history_required_keys() -> None:
     """Each commit in history has the expected metadata keys."""
-    result = mcp_tools.git_analysis_commit_history(
-        repo_path=PROJECT_ROOT, max_count=3
-    )
+    result = mcp_tools.git_analysis_commit_history(repo_path=PROJECT_ROOT, max_count=3)
     assert result["status"] == "ok"
     for commit in result["commits"]:
         assert "sha" in commit
@@ -101,9 +97,7 @@ def test_branch_topology_ok() -> None:
 @pytest.mark.unit
 def test_commit_frequency_ok() -> None:
     """git_analysis_commit_frequency returns status:ok with frequency dict."""
-    result = mcp_tools.git_analysis_commit_frequency(
-        repo_path=PROJECT_ROOT, by="month"
-    )
+    result = mcp_tools.git_analysis_commit_frequency(repo_path=PROJECT_ROOT, by="month")
     assert result["status"] == "ok"
     assert "frequency" in result
     assert "bucket" in result
@@ -115,9 +109,8 @@ def test_commit_frequency_ok() -> None:
 def test_commit_frequency_week_bucket() -> None:
     """Week-bucketed frequency returns YYYY-WNN format keys."""
     import re
-    result = mcp_tools.git_analysis_commit_frequency(
-        repo_path=PROJECT_ROOT, by="week"
-    )
+
+    result = mcp_tools.git_analysis_commit_frequency(repo_path=PROJECT_ROOT, by="week")
     assert result["status"] == "ok"
     week_pattern = re.compile(r"^\d{4}-W\d{2}$")
     for key in result["frequency"]:
@@ -209,9 +202,7 @@ def test_commit_history_invalid_path() -> None:
 @pytest.mark.unit
 def test_code_churn_invalid_path() -> None:
     """Code churn returns status:error for invalid repo path."""
-    result = mcp_tools.git_analysis_code_churn(
-        repo_path="/nonexistent/path/to/repo"
-    )
+    result = mcp_tools.git_analysis_code_churn(repo_path="/nonexistent/path/to/repo")
     assert result["status"] == "error"
 
 
@@ -277,7 +268,9 @@ def test_all_tools_have_git_analysis_category() -> None:
 @pytest.mark.unit
 def test_filtered_history_ok() -> None:
     """git_analysis_filtered_history returns status:ok with commits list."""
-    result = mcp_tools.git_analysis_filtered_history(repo_path=PROJECT_ROOT, max_count=5)
+    result = mcp_tools.git_analysis_filtered_history(
+        repo_path=PROJECT_ROOT, max_count=5
+    )
     assert result["status"] == "ok"
     assert "commits" in result
     assert "count" in result
@@ -320,7 +313,9 @@ def test_hotspots_ok() -> None:
 @pytest.mark.unit
 def test_commit_frequency_invalid_by() -> None:
     """git_analysis_commit_frequency returns status:error for invalid 'by' value."""
-    result = mcp_tools.git_analysis_commit_frequency(repo_path=PROJECT_ROOT, by="invalid")
+    result = mcp_tools.git_analysis_commit_frequency(
+        repo_path=PROJECT_ROOT, by="invalid"
+    )
     assert result["status"] == "error"
     assert "error" in result
 

@@ -7,6 +7,6 @@ AuthenticationError exception for the auth module.
 from .authenticator import AuthenticationError, Authenticator
 
 __all__ = [
-    "Authenticator",
     "AuthenticationError",
+    "Authenticator",
 ]

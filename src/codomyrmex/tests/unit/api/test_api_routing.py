@@ -175,7 +175,6 @@ class TestAPIRouterEdgeCases:
 
         def test_middleware(request: APIRequest):
             middleware_called.append(True)
-            return None
 
         router.add_middleware(test_middleware)
 
@@ -320,11 +319,7 @@ class TestConvenienceFunctions:
         """Test generate_openapi_spec convenience function."""
         from codomyrmex.api.openapi_generator import generate_openapi_spec
 
-        spec = generate_openapi_spec(
-            title="Quick API",
-            version="1.0.0",
-            endpoints=[]
-        )
+        spec = generate_openapi_spec(title="Quick API", version="1.0.0", endpoints=[])
 
         assert spec["info"]["title"] == "Quick API"
 
@@ -335,7 +330,7 @@ class TestConvenienceFunctions:
         spec = {
             "openapi": "3.0.3",
             "info": {"title": "Test", "version": "1.0.0"},
-            "paths": {}
+            "paths": {},
         }
 
         errors = validate_openapi_spec(spec)
@@ -389,19 +384,23 @@ class TestAPIIntegration:
         manager = APIVersionManager(default_version="1.0.0")
 
         # Register multiple versions
-        manager.register_version(APIVersion(
-            version="1.1.0",
-            format=VersionFormat.SEMVER,
-            release_date=datetime.now(),
-            features=["New feature A"]
-        ))
+        manager.register_version(
+            APIVersion(
+                version="1.1.0",
+                format=VersionFormat.SEMVER,
+                release_date=datetime.now(),
+                features=["New feature A"],
+            )
+        )
 
-        manager.register_version(APIVersion(
-            version="2.0.0",
-            format=VersionFormat.SEMVER,
-            release_date=datetime.now(),
-            breaking_changes=["Changed endpoint format"]
-        ))
+        manager.register_version(
+            APIVersion(
+                version="2.0.0",
+                format=VersionFormat.SEMVER,
+                release_date=datetime.now(),
+                breaking_changes=["Changed endpoint format"],
+            )
+        )
 
         # Get version info
         info = manager.get_version_info()
@@ -432,21 +431,21 @@ class TestAPIIntegration:
 
         # Generate OpenAPI spec
         generator = StandardizationOpenAPIGenerator(
-            title=api.title,
-            version=api.version,
-            description="Full workflow test API"
+            title=api.title, version=api.version, description="Full workflow test API"
         )
 
         # Add security schemes
-        generator.add_security_schemes({
-            "BearerAuth": {"type": "http", "scheme": "bearer"}
-        })
+        generator.add_security_schemes(
+            {"BearerAuth": {"type": "http", "scheme": "bearer"}}
+        )
 
         # Add tags
-        generator.add_tags([
-            {"name": "health", "description": "Health checks"},
-            {"name": "data", "description": "Data operations"}
-        ])
+        generator.add_tags(
+            [
+                {"name": "health", "description": "Health checks"},
+                {"name": "data", "description": "Data operations"},
+            ]
+        )
 
         # Generate spec
         spec = generator.generate_spec()
@@ -541,7 +540,7 @@ class TestGraphQLAPI:
             input_type=input_type,
             output_type="User",
             resolver=create_user_resolver,
-            description="Create a new user"
+            description="Create a new user",
         )
 
         result = mutation.execute({"name": "Test User"}, {})
@@ -622,6 +621,7 @@ class TestAPIPerformance:
 
         # Add 100 endpoints
         for i in range(100):
+
             @router.get(f"/endpoint_{i}")
             def handler(request: APIRequest, idx=i) -> APIResponse:
                 return APIResponse.success({"endpoint": idx})

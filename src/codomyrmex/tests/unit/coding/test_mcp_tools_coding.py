@@ -8,6 +8,7 @@ and the metadata/language-listing functions which require no Docker.
 
 No mocks. No MagicMock. No monkeypatch.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -184,7 +185,7 @@ class TestCodeDebug:
         result = code_debug(
             code="print(foo)",
             stdout="",
-            stderr='NameError: name \'foo\' is not defined',
+            stderr="NameError: name 'foo' is not defined",
             exit_code=1,
         )
         assert isinstance(result, dict)

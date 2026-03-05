@@ -13,6 +13,7 @@ from enum import Enum
 
 class LintSeverity(Enum):
     """Severity levels for lint issues."""
+
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
@@ -21,6 +22,7 @@ class LintSeverity(Enum):
 @dataclass
 class LintIssue:
     """A single lint issue found in code."""
+
     rule_id: str
     message: str
     severity: LintSeverity
@@ -31,6 +33,7 @@ class LintIssue:
 @dataclass
 class LintResult:
     """Collection of lint issues for a file."""
+
     file_path: str
     issues: list[LintIssue] = field(default_factory=list)
 
@@ -87,13 +90,15 @@ class LineLengthRule(LintRule):
         issues = []
         for i, line in enumerate(code.split("\n"), 1):
             if len(line) > self.max_length:
-                issues.append(LintIssue(
-                    rule_id="E501",
-                    message=f"Line too long ({len(line)} > {self.max_length})",
-                    severity=LintSeverity.WARNING,
-                    line_number=i,
-                    file_path=file_path,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule_id="E501",
+                        message=f"Line too long ({len(line)} > {self.max_length})",
+                        severity=LintSeverity.WARNING,
+                        line_number=i,
+                        file_path=file_path,
+                    )
+                )
         return issues
 
 
@@ -105,13 +110,15 @@ class TrailingWhitespaceRule(LintRule):
         issues = []
         for i, line in enumerate(code.split("\n"), 1):
             if line != line.rstrip():
-                issues.append(LintIssue(
-                    rule_id="W291",
-                    message="Trailing whitespace",
-                    severity=LintSeverity.WARNING,
-                    line_number=i,
-                    file_path=file_path,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule_id="W291",
+                        message="Trailing whitespace",
+                        severity=LintSeverity.WARNING,
+                        line_number=i,
+                        file_path=file_path,
+                    )
+                )
         return issues
 
 
@@ -137,20 +144,23 @@ class UnusedImportRule(LintRule):
 
         # Check if each imported name appears elsewhere in the code
         non_import_code = "\n".join(
-            line for line in lines
+            line
+            for line in lines
             if not line.strip().startswith("import ")
             and not line.strip().startswith("from ")
         )
 
         for name, line_no in import_names:
             if name not in non_import_code:
-                issues.append(LintIssue(
-                    rule_id="F401",
-                    message=f"'{name}' imported but unused",
-                    severity=LintSeverity.WARNING,
-                    line_number=line_no,
-                    file_path=file_path,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule_id="F401",
+                        message=f"'{name}' imported but unused",
+                        severity=LintSeverity.WARNING,
+                        line_number=line_no,
+                        file_path=file_path,
+                    )
+                )
 
         return issues
 
@@ -165,13 +175,15 @@ class TodoCommentRule(LintRule):
         issues = []
         for i, line in enumerate(code.split("\n"), 1):
             for match in self._PATTERN.finditer(line):
-                issues.append(LintIssue(
-                    rule_id="W0511",
-                    message=f"{match.group(1)} comment found",
-                    severity=LintSeverity.INFO,
-                    line_number=i,
-                    file_path=file_path,
-                ))
+                issues.append(
+                    LintIssue(
+                        rule_id="W0511",
+                        message=f"{match.group(1)} comment found",
+                        severity=LintSeverity.INFO,
+                        line_number=i,
+                        file_path=file_path,
+                    )
+                )
         return issues
 
 
@@ -222,13 +234,13 @@ class Linter:
 
 
 __all__ = [
-    "LintSeverity",
+    "LineLengthRule",
     "LintIssue",
     "LintResult",
     "LintRule",
-    "LineLengthRule",
+    "LintSeverity",
+    "Linter",
+    "TodoCommentRule",
     "TrailingWhitespaceRule",
     "UnusedImportRule",
-    "TodoCommentRule",
-    "Linter",
 ]

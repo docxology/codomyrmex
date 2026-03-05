@@ -3,4 +3,4 @@
 from .engine import Tensor, Value
 from .ops import relu, sigmoid, softmax, tanh
 
-__all__ = ["Value", "Tensor", "relu", "tanh", "sigmoid", "softmax"]
+__all__ = ["Tensor", "Value", "relu", "sigmoid", "softmax", "tanh"]

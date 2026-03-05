@@ -12,9 +12,9 @@ from .sync import EdgeSynchronizer
 __all__ = [
     "CacheEntry",
     "EdgeCache",
+    "EdgeMetrics",
     "EdgeSynchronizer",
     "HealthCheck",
     "HealthMonitor",
-    "EdgeMetrics",
     "InvocationRecord",
 ]

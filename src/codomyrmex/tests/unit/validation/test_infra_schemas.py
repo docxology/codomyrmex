@@ -126,8 +126,16 @@ class TestDeployment:
     def test_to_dict_keys(self):
         d = Deployment(id="d", name="n")
         keys = d.to_dict().keys()
-        for k in ("id", "name", "status", "target", "version",
-                   "environment", "artifacts", "metadata"):
+        for k in (
+            "id",
+            "name",
+            "status",
+            "target",
+            "version",
+            "environment",
+            "artifacts",
+            "metadata",
+        ):
             assert k in keys
 
     def test_to_dict_status_is_string(self):
@@ -195,8 +203,15 @@ class TestResource:
 
     def test_to_dict_keys(self):
         r = Resource(id="r1", name="n")
-        for k in ("id", "name", "resource_type", "provider",
-                   "status", "properties", "metadata"):
+        for k in (
+            "id",
+            "name",
+            "resource_type",
+            "provider",
+            "status",
+            "properties",
+            "metadata",
+        ):
             assert k in r.to_dict()
 
     def test_to_dict_status_stored(self):
@@ -228,7 +243,14 @@ class TestBuildArtifact:
 
     def test_to_dict_keys(self):
         a = BuildArtifact(name="x", path="/x")
-        for k in ("name", "path", "artifact_type", "size_bytes", "checksum", "metadata"):
+        for k in (
+            "name",
+            "path",
+            "artifact_type",
+            "size_bytes",
+            "checksum",
+            "metadata",
+        ):
             assert k in a.to_dict()
 
     def test_to_dict_size_bytes(self):
@@ -301,8 +323,16 @@ class TestWorkflowStep:
 
     def test_to_dict_keys(self):
         ws = WorkflowStep(id="s", name="n", action="a")
-        for k in ("id", "name", "action", "status", "input_data",
-                   "output_data", "dependencies", "metadata"):
+        for k in (
+            "id",
+            "name",
+            "action",
+            "status",
+            "input_data",
+            "output_data",
+            "dependencies",
+            "metadata",
+        ):
             assert k in ws.to_dict()
 
     def test_to_dict_dependencies(self):

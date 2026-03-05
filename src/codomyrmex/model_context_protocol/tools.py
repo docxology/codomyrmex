@@ -24,7 +24,10 @@ logger = get_logger(__name__)
 # FILE OPERATIONS
 # ============================================================================
 
-def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> dict[str, Any]:
+
+def read_file(
+    path: str, encoding: str = "utf-8", max_size: int = 1_000_000
+) -> dict[str, Any]:
     """
     Read file contents with metadata.
 
@@ -46,7 +49,7 @@ def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> 
         if stats.st_size > max_size:
             return {
                 "error": f"File too large ({stats.st_size} bytes, max {max_size})",
-                "success": False
+                "success": False,
             }
 
         content = file_path.read_text(encoding=encoding)
@@ -130,13 +133,15 @@ def list_directory(
 
             try:
                 stats = item.stat()
-                items.append({
-                    "name": item.name,
-                    "path": str(item.relative_to(dir_path)),
-                    "type": "directory" if item.is_dir() else "file",
-                    "size": stats.st_size if item.is_file() else None,
-                    "modified": datetime.fromtimestamp(stats.st_mtime).isoformat(),
-                })
+                items.append(
+                    {
+                        "name": item.name,
+                        "path": str(item.relative_to(dir_path)),
+                        "type": "directory" if item.is_dir() else "file",
+                        "size": stats.st_size if item.is_file() else None,
+                        "modified": datetime.fromtimestamp(stats.st_mtime).isoformat(),
+                    }
+                )
             except Exception:
                 continue
 
@@ -154,6 +159,7 @@ def list_directory(
 # ============================================================================
 # CODE ANALYSIS
 # ============================================================================
+
 
 def analyze_python_file(path: str) -> dict[str, Any]:
     """
@@ -176,25 +182,30 @@ def analyze_python_file(path: str) -> dict[str, Any]:
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
                 methods = [
-                    n.name for n in node.body
+                    n.name
+                    for n in node.body
                     if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
                 ]
-                classes.append({
-                    "name": node.name,
-                    "line": node.lineno,
-                    "methods": methods,
-                    "bases": [ast.unparse(b) for b in node.bases],
-                })
+                classes.append(
+                    {
+                        "name": node.name,
+                        "line": node.lineno,
+                        "methods": methods,
+                        "bases": [ast.unparse(b) for b in node.bases],
+                    }
+                )
 
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if node.col_offset == 0:  # Top-level function
                     args = [a.arg for a in node.args.args]
-                    functions.append({
-                        "name": node.name,
-                        "line": node.lineno,
-                        "args": args,
-                        "is_async": isinstance(node, ast.AsyncFunctionDef),
-                    })
+                    functions.append(
+                        {
+                            "name": node.name,
+                            "line": node.lineno,
+                            "args": args,
+                            "is_async": isinstance(node, ast.AsyncFunctionDef),
+                        }
+                    )
 
             elif isinstance(node, ast.Import):
                 for alias in node.names:
@@ -206,7 +217,9 @@ def analyze_python_file(path: str) -> dict[str, Any]:
                     imports.append(f"{module}.{alias.name}")
 
         lines = content.split("\n")
-        code_lines = sum(1 for line in lines if line.strip() and not line.strip().startswith("#"))
+        code_lines = sum(
+            1 for line in lines if line.strip() and not line.strip().startswith("#")
+        )
 
         return {
             "success": True,
@@ -220,7 +233,7 @@ def analyze_python_file(path: str) -> dict[str, Any]:
                 "class_count": len(classes),
                 "function_count": len(functions),
                 "import_count": len(imports),
-            }
+            },
         }
     except Exception as e:
         return {"error": str(e), "success": False}
@@ -264,7 +277,10 @@ def search_codebase(
                 continue
 
             # Skip common non-code directories
-            if any(p in filepath.parts for p in [".git", "node_modules", "__pycache__", ".venv"]):
+            if any(
+                p in filepath.parts
+                for p in [".git", "node_modules", "__pycache__", ".venv"]
+            ):
                 continue
 
             files_searched += 1
@@ -273,11 +289,13 @@ def search_codebase(
                 content = filepath.read_text(errors="ignore")
                 for i, line in enumerate(content.split("\n"), 1):
                     if regex.search(line):
-                        matches.append({
-                            "file": str(filepath.relative_to(base_path)),
-                            "line": i,
-                            "content": line.strip()[:200],
-                        })
+                        matches.append(
+                            {
+                                "file": str(filepath.relative_to(base_path)),
+                                "line": i,
+                                "content": line.strip()[:200],
+                            }
+                        )
 
                         if len(matches) >= max_results:
                             break
@@ -303,6 +321,7 @@ def search_codebase(
 # GIT OPERATIONS
 # ============================================================================
 
+
 def git_status(path: str = ".") -> dict[str, Any]:
     """
     Get git repository status.
@@ -319,13 +338,14 @@ def git_status(path: str = ".") -> dict[str, Any]:
         # Get current branch
         branch = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-            cwd=cwd, capture_output=True, text=True
+            cwd=cwd,
+            capture_output=True,
+            text=True,
         ).stdout.strip()
 
         # Get status
         status = subprocess.run(
-            ["git", "status", "--porcelain"],
-            cwd=cwd, capture_output=True, text=True
+            ["git", "status", "--porcelain"], cwd=cwd, capture_output=True, text=True
         ).stdout.strip()
 
         changes = []
@@ -333,25 +353,28 @@ def git_status(path: str = ".") -> dict[str, Any]:
             if line:
                 status_code = line[:2]
                 file_path = line[3:]
-                changes.append({
-                    "status": status_code.strip(),
-                    "file": file_path,
-                })
+                changes.append(
+                    {
+                        "status": status_code.strip(),
+                        "file": file_path,
+                    }
+                )
 
         # Get recent commits
         log = subprocess.run(
-            ["git", "log", "--oneline", "-5"],
-            cwd=cwd, capture_output=True, text=True
+            ["git", "log", "--oneline", "-5"], cwd=cwd, capture_output=True, text=True
         ).stdout.strip()
 
         commits = []
         for line in log.split("\n"):
             if line:
                 parts = line.split(" ", 1)
-                commits.append({
-                    "hash": parts[0],
-                    "message": parts[1] if len(parts) > 1 else "",
-                })
+                commits.append(
+                    {
+                        "hash": parts[0],
+                        "message": parts[1] if len(parts) > 1 else "",
+                    }
+                )
 
         return {
             "success": True,
@@ -382,9 +405,7 @@ def git_diff(path: str = ".", staged: bool = False) -> dict[str, Any]:
         if staged:
             args.append("--staged")
 
-        result = subprocess.run(
-            args, cwd=cwd, capture_output=True, text=True
-        )
+        result = subprocess.run(args, cwd=cwd, capture_output=True, text=True)
 
         return {
             "success": True,
@@ -398,6 +419,7 @@ def git_diff(path: str = ".", staged: bool = False) -> dict[str, Any]:
 # ============================================================================
 # SHELL COMMANDS
 # ============================================================================
+
 
 def run_shell_command(
     command: str,
@@ -448,6 +470,7 @@ def run_shell_command(
 # ============================================================================
 # DATA UTILITIES
 # ============================================================================
+
 
 def json_query(path: str, query: str | None = None) -> dict[str, Any]:
     """
@@ -518,14 +541,14 @@ def checksum_file(path: str, algorithm: str = "sha256") -> dict[str, Any]:
 # ============================================================================
 
 __all__ = [
-    "read_file",
-    "write_file",
-    "list_directory",
     "analyze_python_file",
-    "search_codebase",
-    "git_status",
-    "git_diff",
-    "run_shell_command",
-    "json_query",
     "checksum_file",
+    "git_diff",
+    "git_status",
+    "json_query",
+    "list_directory",
+    "read_file",
+    "run_shell_command",
+    "search_codebase",
+    "write_file",
 ]

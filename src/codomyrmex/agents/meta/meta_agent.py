@@ -45,8 +45,10 @@ class MetaAgent:
         meta.library.add(Strategy("fast", "Be quick: {task}"))
         meta.library.add(Strategy("careful", "Be thorough: {task}"))
 
+
         def execute_task(strategy_name: str) -> dict:
             return {"tests_passed": 9, "tests_total": 10}
+
 
         meta.run(execute_task, iterations=5)
         print(f"Best: {meta.library.best_strategy().name}")

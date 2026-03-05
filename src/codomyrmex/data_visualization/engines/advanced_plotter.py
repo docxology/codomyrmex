@@ -227,8 +227,14 @@ class AdvancedPlotter(
         if dataset.plot_type == PlotType.LINE:
             ax.plot(xs, ys, label=label, color=color, linewidth=dataset.linewidth)
         elif dataset.plot_type == PlotType.SCATTER:
-            sizes = [p.size if p.size is not None else dataset.markersize for p in dataset.data]
-            colors = [p.color if p.color is not None else (color or "blue") for p in dataset.data]
+            sizes = [
+                p.size if p.size is not None else dataset.markersize
+                for p in dataset.data
+            ]
+            colors = [
+                p.color if p.color is not None else (color or "blue")
+                for p in dataset.data
+            ]
             ax.scatter(xs, ys, s=sizes, c=colors, label=label, alpha=dataset.alpha)
         elif dataset.plot_type == PlotType.BAR:
             ax.bar(xs, ys, label=label, color=color)

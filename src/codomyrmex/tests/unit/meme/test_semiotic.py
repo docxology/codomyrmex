@@ -23,6 +23,7 @@ from codomyrmex.meme.semiotic.models import (
 # SignType enum
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSignType:
     """Tests for the Peircean sign type enum."""
@@ -41,6 +42,7 @@ class TestSignType:
 # ---------------------------------------------------------------------------
 # Sign dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestSign:
@@ -89,6 +91,7 @@ class TestSign:
 # SemanticTerritory dataclass
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSemanticTerritory:
     """Tests for the SemanticTerritory dataclass."""
@@ -102,7 +105,9 @@ class TestSemanticTerritory:
     def test_density_with_boundaries(self) -> None:
         """Density = len(signs) / len(boundaries)."""
         signs = [Sign(signifier=f"s{i}", signified=f"m{i}") for i in range(6)]
-        t = SemanticTerritory(domain="test", signs=signs, boundaries={"a": 1.0, "b": 2.0})
+        t = SemanticTerritory(
+            domain="test", signs=signs, boundaries={"a": 1.0, "b": 2.0}
+        )
         assert t.density == pytest.approx(3.0, abs=1e-9)
 
     def test_contested_default_false(self) -> None:
@@ -119,6 +124,7 @@ class TestSemanticTerritory:
 # ---------------------------------------------------------------------------
 # DriftReport dataclass
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestDriftReport:
@@ -175,6 +181,7 @@ class TestDriftReport:
 # ---------------------------------------------------------------------------
 # SemioticAnalyzer
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestSemioticAnalyzer:
@@ -261,6 +268,7 @@ class TestSemioticAnalyzer:
 # SemioticEncoder
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSemioticEncoder:
     """Tests for the SemioticEncoder linguistic steganography."""
@@ -317,6 +325,7 @@ class TestSemioticEncoder:
 # ---------------------------------------------------------------------------
 # MnemonicDevice and build_memory_palace
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMnemonicDevice:

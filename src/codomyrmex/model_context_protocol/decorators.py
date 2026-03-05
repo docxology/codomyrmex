@@ -42,6 +42,7 @@ def mcp_tool(
             '''Add two numbers.'''
             return a + b
     """
+
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         # Get metadata
         base_name = name or func.__name__
@@ -72,6 +73,7 @@ def mcp_tool(
         def wrapper(*args, **kwargs):
             if deprecated_in:
                 import warnings
+
                 warnings.warn(
                     f"MCP tool {tool_name!r} deprecated since v{deprecated_in}.",
                     DeprecationWarning,
@@ -99,6 +101,7 @@ def _safe_default(value: Any) -> Any:
         return {str(k): _safe_default(v) for k, v in value.items()}
     # Enum members → use their value
     import enum
+
     if isinstance(value, enum.Enum):
         return value.value
     # Skip callables (factory defaults like list, dict)
@@ -150,7 +153,9 @@ def _generate_schema_from_signature(func: Callable[..., Any]) -> dict[str, Any]:
             "required": required,
         }
     except Exception as e:
-        logger.warning(f"Failed to generate schema for {getattr(func, '__name__', '?')}: {e}")
+        logger.warning(
+            f"Failed to generate schema for {getattr(func, '__name__', '?')}: {e}"
+        )
         return {"type": "object", "properties": {}}  # Fallback
 
 
@@ -158,15 +163,14 @@ def _map_python_type_to_json(py_type: type[Any]) -> str:
     """Map Python types to JSON Schema types."""
     if py_type is str:
         return "string"
-    elif py_type is int:
+    if py_type is int:
         return "integer"
-    elif py_type is float:
+    if py_type is float:
         return "number"
-    elif py_type is bool:
+    if py_type is bool:
         return "boolean"
-    elif py_type is list or getattr(py_type, "__origin__", None) is list:
+    if py_type is list or getattr(py_type, "__origin__", None) is list:
         return "array"
-    elif py_type is dict or getattr(py_type, "__origin__", None) is dict:
+    if py_type is dict or getattr(py_type, "__origin__", None) is dict:
         return "object"
-    else:
-        return "string"  # Default fallback
+    return "string"  # Default fallback

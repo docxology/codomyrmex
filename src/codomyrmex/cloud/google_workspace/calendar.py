@@ -91,6 +91,4 @@ class GoogleCalendarClient(GoogleWorkspaceBase):
                 .execute()
             )
 
-        return (
-            self._safe_call(_call, "create", "event", default={}) or {}
-        )
+        return self._safe_call(_call, "create", "event", default={}) or {}

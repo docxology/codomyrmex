@@ -97,8 +97,7 @@ class InferenceOptimizer:
                     latency_ms=latency_ms,
                     from_cache=True,
                 )
-            else:
-                self._stats.cache_misses += 1
+            self._stats.cache_misses += 1
 
         # Process (direct call for simplicity)
         output = self.model_fn([input_data])[0]
@@ -130,12 +129,14 @@ class InferenceOptimizer:
         per_item_latency = total_latency / len(inputs)
 
         for i, output in enumerate(outputs):
-            results.append(InferenceResult(
-                request_id=f"batch_{i}",
-                output=output,
-                latency_ms=per_item_latency,
-                batch_size=len(inputs),
-            ))
+            results.append(
+                InferenceResult(
+                    request_id=f"batch_{i}",
+                    output=output,
+                    latency_ms=per_item_latency,
+                    batch_size=len(inputs),
+                )
+            )
 
         with self._lock:
             self._stats.total_requests += len(inputs)

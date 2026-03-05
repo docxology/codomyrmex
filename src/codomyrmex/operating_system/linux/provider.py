@@ -28,7 +28,11 @@ def _run(cmd: str, timeout: float = 10.0) -> str:
     """Run a shell command and return stripped stdout."""
     try:
         result = subprocess.run(
-            cmd, shell=True, capture_output=True, text=True, timeout=timeout,
+            cmd,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
         )
         return result.stdout.strip()
     except Exception:
@@ -46,7 +50,9 @@ class LinuxProvider(OSProviderBase):
         cpu_count = os.cpu_count() or 1
 
         # Distribution version
-        platform_version = _run("cat /etc/os-release 2>/dev/null | grep ^PRETTY_NAME | cut -d= -f2 | tr -d '\"'")
+        platform_version = _run(
+            "cat /etc/os-release 2>/dev/null | grep ^PRETTY_NAME | cut -d= -f2 | tr -d '\"'"
+        )
         if not platform_version:
             platform_version = _run("uname -r")
 
@@ -100,21 +106,25 @@ class LinuxProvider(OSProviderBase):
             elif stat.startswith("Z"):
                 status = ProcessStatus.ZOMBIE
 
-            processes.append(ProcessInfo(
-                pid=pid,
-                name=os.path.basename(comm),
-                status=status,
-                cpu_percent=float(cpu) if cpu.replace(".", "").isdigit() else 0.0,
-                memory_bytes=int(rss) * 1024 if rss.isdigit() else 0,
-                user=user,
-                command=comm,
-            ))
+            processes.append(
+                ProcessInfo(
+                    pid=pid,
+                    name=os.path.basename(comm),
+                    status=status,
+                    cpu_percent=float(cpu) if cpu.replace(".", "").isdigit() else 0.0,
+                    memory_bytes=int(rss) * 1024 if rss.isdigit() else 0,
+                    user=user,
+                    command=comm,
+                )
+            )
         return processes
 
     # ── Disk Usage ──────────────────────────────────────────────────
 
     def get_disk_usage(self) -> list[DiskInfo]:
-        raw = _run("df -kT --exclude-type=tmpfs --exclude-type=devtmpfs --exclude-type=squashfs 2>/dev/null || df -k")
+        raw = _run(
+            "df -kT --exclude-type=tmpfs --exclude-type=devtmpfs --exclude-type=squashfs 2>/dev/null || df -k"
+        )
         disks: list[DiskInfo] = []
         for line in raw.splitlines()[1:]:
             parts = line.split()
@@ -122,14 +132,25 @@ class LinuxProvider(OSProviderBase):
                 # Fallback for df without -T
                 if len(parts) >= 6:
                     device, total_s, used_s, avail_s, pct_s, mount = (
-                        parts[0], parts[1], parts[2], parts[3], parts[4], parts[5],
+                        parts[0],
+                        parts[1],
+                        parts[2],
+                        parts[3],
+                        parts[4],
+                        parts[5],
                     )
                     fstype = ""
                 else:
                     continue
             else:
                 device, fstype, total_s, used_s, avail_s, pct_s, mount = (
-                    parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6],
+                    parts[0],
+                    parts[1],
+                    parts[2],
+                    parts[3],
+                    parts[4],
+                    parts[5],
+                    parts[6],
                 )
             try:
                 total = int(total_s) * 1024
@@ -141,21 +162,25 @@ class LinuxProvider(OSProviderBase):
                 percent = float(pct_s.rstrip("%"))
             except ValueError:
                 percent = 0.0
-            disks.append(DiskInfo(
-                device=device,
-                mountpoint=mount,
-                fstype=fstype,
-                total_bytes=total,
-                used_bytes=used,
-                free_bytes=free,
-                percent_used=percent,
-            ))
+            disks.append(
+                DiskInfo(
+                    device=device,
+                    mountpoint=mount,
+                    fstype=fstype,
+                    total_bytes=total,
+                    used_bytes=used,
+                    free_bytes=free,
+                    percent_used=percent,
+                )
+            )
         return disks
 
     # ── Services ────────────────────────────────────────────────────
 
     def get_services(self, pattern: str = "") -> list[ServiceInfo]:
-        raw = _run("systemctl list-units --type=service --no-pager --no-legend 2>/dev/null")
+        raw = _run(
+            "systemctl list-units --type=service --no-pager --no-legend 2>/dev/null"
+        )
         services: list[ServiceInfo] = []
         for line in raw.splitlines():
             parts = line.split(None, 4)
@@ -165,13 +190,17 @@ class LinuxProvider(OSProviderBase):
             active = parts[2]  # active/inactive
             if pattern and pattern.lower() not in unit_name.lower():
                 continue
-            status = ServiceStatus.RUNNING if active == "active" else ServiceStatus.STOPPED
-            services.append(ServiceInfo(
-                name=unit_name.removesuffix(".service"),
-                status=status,
-                pid=None,
-                enabled=status == ServiceStatus.RUNNING,
-            ))
+            status = (
+                ServiceStatus.RUNNING if active == "active" else ServiceStatus.STOPPED
+            )
+            services.append(
+                ServiceInfo(
+                    name=unit_name.removesuffix(".service"),
+                    status=status,
+                    pid=None,
+                    enabled=status == ServiceStatus.RUNNING,
+                )
+            )
         return services
 
     # ── Network ─────────────────────────────────────────────────────
@@ -225,12 +254,14 @@ class LinuxProvider(OSProviderBase):
                 m = re.match(r"^(\w[\w\d]*):.*", line)
                 if m:
                     if current_iface:
-                        interfaces.append(NetworkInfo(
-                            interface=current_iface,
-                            ip_address=ip_addr,
-                            mac_address=mac_addr,
-                            is_up=is_up,
-                        ))
+                        interfaces.append(
+                            NetworkInfo(
+                                interface=current_iface,
+                                ip_address=ip_addr,
+                                mac_address=mac_addr,
+                                is_up=is_up,
+                            )
+                        )
                     current_iface = m.group(1)
                     ip_addr = ""
                     mac_addr = ""
@@ -238,15 +269,21 @@ class LinuxProvider(OSProviderBase):
                     continue
                 stripped = line.strip()
                 if stripped.startswith("inet "):
-                    ip_addr = stripped.split()[1].split(":")[1] if ":" in stripped.split()[1] else stripped.split()[1]
+                    ip_addr = (
+                        stripped.split()[1].split(":")[1]
+                        if ":" in stripped.split()[1]
+                        else stripped.split()[1]
+                    )
                 elif "HWaddr" in stripped or "ether" in stripped:
                     parts = stripped.split()
                     mac_addr = parts[-1]
             if current_iface:
-                interfaces.append(NetworkInfo(
-                    interface=current_iface,
-                    ip_address=ip_addr,
-                    mac_address=mac_addr,
-                    is_up=is_up,
-                ))
+                interfaces.append(
+                    NetworkInfo(
+                        interface=current_iface,
+                        ip_address=ip_addr,
+                        mac_address=mac_addr,
+                        is_up=is_up,
+                    )
+                )
         return interfaces

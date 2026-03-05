@@ -21,6 +21,7 @@ from codomyrmex.agentic_memory.obsidian.models import (
 
 class TestParseCanvas:
     """Test suite for ParseCanvas."""
+
     def test_parse_nodes(self, tmp_canvas_file):
         canvas = parse_canvas(tmp_canvas_file)
         assert len(canvas.nodes) == 4
@@ -54,6 +55,7 @@ class TestParseCanvas:
 
 class TestCreateCanvas:
     """Test suite for CreateCanvas."""
+
     def test_create_basic(self, tmp_path):
         path = tmp_path / "new.canvas"
         nodes = [
@@ -91,6 +93,7 @@ class TestCreateCanvas:
 
 class TestCanvasSerialization:
     """Test suite for CanvasSerialization."""
+
     def test_to_dict(self):
         canvas = Canvas(
             nodes=[CanvasNode(id="n1", type="text", text="Hi")],
@@ -104,7 +107,17 @@ class TestCanvasSerialization:
 
     def test_from_dict(self):
         data = {
-            "nodes": [{"id": "n1", "type": "text", "x": 0, "y": 0, "width": 100, "height": 100, "text": "Test"}],
+            "nodes": [
+                {
+                    "id": "n1",
+                    "type": "text",
+                    "x": 0,
+                    "y": 0,
+                    "width": 100,
+                    "height": 100,
+                    "text": "Test",
+                }
+            ],
             "edges": [],
         }
         canvas = canvas_from_dict(data)
@@ -114,11 +127,21 @@ class TestCanvasSerialization:
     def test_roundtrip_dict(self):
         original = Canvas(
             nodes=[
-                CanvasNode(id="n1", type="text", x=10, y=20, width=300, height=200, text="Content"),
+                CanvasNode(
+                    id="n1",
+                    type="text",
+                    x=10,
+                    y=20,
+                    width=300,
+                    height=200,
+                    text="Content",
+                ),
                 CanvasNode(id="n2", type="link", url="https://example.com"),
             ],
             edges=[
-                CanvasEdge(id="e1", fromNode="n1", toNode="n2", fromSide="right", toSide="left"),
+                CanvasEdge(
+                    id="e1", fromNode="n1", toNode="n2", fromSide="right", toSide="left"
+                ),
             ],
         )
         d = canvas_to_dict(original)
@@ -130,6 +153,7 @@ class TestCanvasSerialization:
 
 class TestAddOperations:
     """Test suite for AddOperations."""
+
     def test_add_node(self):
         canvas = Canvas()
         node = CanvasNode(id="new", type="text", text="Added")

@@ -13,6 +13,7 @@ try:
         get_config,
         set_config,
     )
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -138,4 +139,3 @@ class TestBaseAgentConfigExtraction:
         # Should not raise error, should return default
         value = agent.get_config_value("nonexistent_attr", default="default")
         assert value == "default"
-

@@ -3,9 +3,16 @@ from pathlib import Path
 
 REQUIRED_FILES = ["README.md", "AGENTS.md", "SPEC.md"]
 IGNORE_DIRS = [
-    ".git", ".github", ".venv", "__pycache__", ".pytest_cache",
-    ".codomyrmex", "node_modules", ".gemini"
+    ".git",
+    ".github",
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".codomyrmex",
+    "node_modules",
+    ".gemini",
 ]
+
 
 def is_relevant_dir(path: Path) -> bool:
     """
@@ -19,11 +26,12 @@ def is_relevant_dir(path: Path) -> bool:
 
         Returns: Description of return value (type: bool)
     """
-    if any(part in IGNORE_DIRS or part.startswith('.') for part in path.parts):
+    if any(part in IGNORE_DIRS or part.startswith(".") for part in path.parts):
         return False
     # If it's a leaf node containing code or if it previously had docs
     # Or if it is a top level directory
     return True
+
 
 def audit_directory(root_path: Path) -> tuple[int, int, list[str]]:
     total_dirs = 0
@@ -32,7 +40,7 @@ def audit_directory(root_path: Path) -> tuple[int, int, list[str]]:
 
     for root, dirs, files in os.walk(root_path):
         # Modify dirs in-place to skip ignored
-        dirs[:] = [d for d in dirs if d not in IGNORE_DIRS and not d.startswith('.')]
+        dirs[:] = [d for d in dirs if d not in IGNORE_DIRS and not d.startswith(".")]
 
         current_path = Path(root)
 
@@ -48,8 +56,11 @@ def audit_directory(root_path: Path) -> tuple[int, int, list[str]]:
 
         if missing:
             # Check if this directory is empty or trivial
-            if not any(f.endswith('.py') or f.endswith('.sh') or f.endswith('.md') for f in files):
-                continue # Skip mostly empty directories
+            if not any(
+                f.endswith(".py") or f.endswith(".sh") or f.endswith(".md")
+                for f in files
+            ):
+                continue  # Skip mostly empty directories
 
             issues.append(f"{current_path}: Missing {', '.join(missing)}")
         else:
@@ -59,10 +70,20 @@ def audit_directory(root_path: Path) -> tuple[int, int, list[str]]:
 
     return total_dirs, compliant_dirs, issues
 
+
 if __name__ == "__main__":
-    root = Path(".")
+    root = Path()
     # Audit specific top level folders we care about
-    targets = ["src", "scripts", "testing", "docs", "config", "projects", "cursorrules", "examples"]
+    targets = [
+        "src",
+        "scripts",
+        "testing",
+        "docs",
+        "config",
+        "projects",
+        "cursorrules",
+        "examples",
+    ]
 
     all_issues = []
     grand_total = 0
@@ -83,13 +104,13 @@ if __name__ == "__main__":
     print("\nAudit Complete.")
     print(f"Total Directories Checked: {grand_total}")
     print(f"Compliant Directories: {grand_compliant}")
-    print(f"Compliance Rate: {grand_compliant/grand_total*100:.1f}%")
+    print(f"Compliance Rate: {grand_compliant / grand_total * 100:.1f}%")
 
     if all_issues:
         print("\nIssues Found:")
-        for i in sorted(all_issues)[:20]: # Show first 20
+        for i in sorted(all_issues)[:20]:  # Show first 20
             print(f"  - {i}")
         if len(all_issues) > 20:
-            print(f"  ... and {len(all_issues)-20} more.")
+            print(f"  ... and {len(all_issues) - 20} more.")
     else:
         print("\nNo issues found! 100% Compliant.")

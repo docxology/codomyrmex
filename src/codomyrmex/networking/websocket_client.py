@@ -11,6 +11,7 @@ from typing import Any
 
 try:
     import websockets
+
     WEBSOCKETS_AVAILABLE = True
 except ImportError:
     WEBSOCKETS_AVAILABLE = False
@@ -23,7 +24,6 @@ logger = get_logger(__name__)
 
 class WebSocketError(CodomyrmexError):
     """Raised when WebSocket operations fail."""
-    pass
 
 
 class WebSocketClient:
@@ -45,7 +45,9 @@ class WebSocketClient:
             max_reconnect_delay: Maximum reconnection delay
         """
         if not WEBSOCKETS_AVAILABLE:
-            raise ImportError("websockets package not available. Install with: pip install websockets")
+            raise ImportError(
+                "websockets package not available. Install with: pip install websockets"
+            )
 
         self.url = url
         self.headers = headers or {}
@@ -63,7 +65,9 @@ class WebSocketClient:
         while self._running:
             try:
                 logger.info(f"Connecting to {self.url}...")
-                async with websockets.connect(self.url, extra_headers=self.headers) as websocket:
+                async with websockets.connect(
+                    self.url, extra_headers=self.headers
+                ) as websocket:
                     self.connection = websocket
                     logger.info("WebSocket connected")
                     delay = self.reconnect_interval  # Reset delay on success

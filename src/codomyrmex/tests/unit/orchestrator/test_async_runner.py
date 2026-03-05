@@ -109,8 +109,7 @@ class TestSemaphoreBounds:
 
         async def _track(idx: int) -> int:
             active.append(idx)
-            if len(active) > peak[0]:
-                peak[0] = len(active)
+            peak[0] = max(peak[0], len(active))
             await asyncio.sleep(0.05)
             active.remove(idx)
             return idx
@@ -266,10 +265,12 @@ class TestExports:
         from codomyrmex.orchestrator import (
             AsyncTaskResult as _ATR,
         )
+
         assert _APR is not None
         assert _ATR is not None
         assert _AER is not None
 
     def test_with_retry_export(self) -> None:
         from codomyrmex.orchestrator import with_retry as _wr
+
         assert _wr is not None

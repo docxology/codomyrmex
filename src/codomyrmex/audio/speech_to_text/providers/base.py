@@ -46,7 +46,6 @@ class STTProvider(ABC):
             **kwargs: Additional provider-specific arguments
 
         """
-        pass
 
     @abstractmethod
     def transcribe(
@@ -68,7 +67,6 @@ class STTProvider(ABC):
             AudioFormatError: If audio format is not supported
 
         """
-        pass
 
     @abstractmethod
     async def transcribe_async(
@@ -89,7 +87,6 @@ class STTProvider(ABC):
             TranscriptionError: If transcription fails
 
         """
-        pass
 
     @abstractmethod
     async def transcribe_stream(
@@ -110,7 +107,6 @@ class STTProvider(ABC):
             TranscriptionError: If transcription fails
 
         """
-        pass
         yield  # Make this a generator
 
     @abstractmethod
@@ -130,7 +126,6 @@ class STTProvider(ABC):
             TranscriptionError: If detection fails
 
         """
-        pass
 
     @abstractmethod
     def get_supported_languages(self) -> list[str]:
@@ -140,7 +135,6 @@ class STTProvider(ABC):
             List of ISO 639-1 language codes
 
         """
-        pass
 
     @property
     @abstractmethod
@@ -151,12 +145,10 @@ class STTProvider(ABC):
             True if model is loaded
 
         """
-        pass
 
     @abstractmethod
     def unload(self) -> None:
         """Unload the model to free memory."""
-        pass
 
 
 __all__ = ["STTProvider"]

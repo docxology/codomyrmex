@@ -83,7 +83,9 @@ class RollingStrategy(DeploymentStrategy):
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
         """Execute the operation."""
-        state = DeploymentState(service=service_name, version=version, strategy="rolling")
+        state = DeploymentState(
+            service=service_name, version=version, strategy="rolling"
+        )
         state.status = "in_progress"
 
         for i in range(1, self.batch_count + 1):
@@ -91,7 +93,11 @@ class RollingStrategy(DeploymentStrategy):
             state.traffic_percentage = pct
             logger.info(
                 "Rolling deploy %s:%s — batch %d/%d (%.0f%%)",
-                service_name, version, i, self.batch_count, pct,
+                service_name,
+                version,
+                i,
+                self.batch_count,
+                pct,
             )
             if self.pause_seconds > 0:
                 time.sleep(self.pause_seconds)
@@ -129,7 +135,9 @@ class CanaryStrategy(DeploymentStrategy):
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
         """Execute the operation."""
-        state = DeploymentState(service=service_name, version=version, strategy="canary")
+        state = DeploymentState(
+            service=service_name, version=version, strategy="canary"
+        )
         state.status = "in_progress"
         pct = self.initial_percentage
 
@@ -137,7 +145,10 @@ class CanaryStrategy(DeploymentStrategy):
             state.traffic_percentage = min(pct, 100.0)
             logger.info(
                 "Canary %s:%s — step %d, traffic %.0f%%",
-                service_name, version, i + 1, state.traffic_percentage,
+                service_name,
+                version,
+                i + 1,
+                state.traffic_percentage,
             )
             if pct >= 100:
                 break
@@ -164,10 +175,14 @@ class BlueGreenStrategy(DeploymentStrategy):
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
         """Execute the operation."""
-        state = DeploymentState(service=service_name, version=version, strategy="blue_green")
+        state = DeploymentState(
+            service=service_name, version=version, strategy="blue_green"
+        )
         state.status = "in_progress"
 
-        logger.info("Blue-Green: deploying %s:%s to 'green' slot", service_name, version)
+        logger.info(
+            "Blue-Green: deploying %s:%s to 'green' slot", service_name, version
+        )
         state.metadata["active_slot"] = "green"
         state.traffic_percentage = 0.0
 
@@ -184,7 +199,9 @@ class BlueGreenStrategy(DeploymentStrategy):
         state.metadata["active_slot"] = "blue"
         state.traffic_percentage = 100.0  # back on blue
         state.completed_at = time.time()
-        logger.info("Blue-Green rollback for %s — swapped back to 'blue'", state.service)
+        logger.info(
+            "Blue-Green rollback for %s — swapped back to 'blue'", state.service
+        )
         return state
 
 
@@ -202,13 +219,18 @@ class FeatureFlagStrategy(DeploymentStrategy):
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
         """Execute the operation."""
-        state = DeploymentState(service=service_name, version=version, strategy="feature_flag")
+        state = DeploymentState(
+            service=service_name, version=version, strategy="feature_flag"
+        )
         state.metadata["flag_name"] = self.flag_name or f"ff_{service_name}_{version}"
         state.traffic_percentage = self.initial_rollout
         state.complete()
         logger.info(
             "Feature-flag deploy %s:%s — flag '%s' at %.0f%%",
-            service_name, version, state.metadata["flag_name"], self.initial_rollout,
+            service_name,
+            version,
+            state.metadata["flag_name"],
+            self.initial_rollout,
         )
         return state
 
@@ -217,5 +239,7 @@ class FeatureFlagStrategy(DeploymentStrategy):
         state.traffic_percentage = 0.0
         state.status = "rolled_back"
         state.completed_at = time.time()
-        logger.info("Feature-flag rollback: disabled flag '%s'", state.metadata.get("flag_name"))
+        logger.info(
+            "Feature-flag rollback: disabled flag '%s'", state.metadata.get("flag_name")
+        )
         return state

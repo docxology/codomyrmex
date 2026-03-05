@@ -59,7 +59,7 @@ def robustness_score(memeplex: Memeplex) -> float:
     uniformity = 1.0 / (1.0 + cv)
     redundancy = min(1.0, len(memeplex.memes) / 10.0)
 
-    return (uniformity * 0.5 + redundancy * 0.2 + memeplex.synergy * 0.3)
+    return uniformity * 0.5 + redundancy * 0.2 + memeplex.synergy * 0.3
 
 
 def decay_rate(meme: Meme, half_life_days: float = 7.0) -> float:

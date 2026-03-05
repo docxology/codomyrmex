@@ -99,11 +99,11 @@ class Stage(ABC):
 
     def on_success(self, result: StageResult, context: dict[str, Any]) -> None:
         """Called on successful execution."""
-        return None  # Optional hook — subclass may override
+        return  # Optional hook — subclass may override
 
     def on_failure(self, result: StageResult, context: dict[str, Any]) -> None:
         """Called on failed execution."""
-        return None  # Optional hook — subclass may override
+        return  # Optional hook — subclass may override
 
 
 class FunctionStage(Stage):
@@ -161,7 +161,9 @@ class ParallelStage(Stage):
     def execute(self, context: dict[str, Any]) -> dict[str, Any]:
         """Execute all child stages in parallel and return a per-stage result dict."""
         results: dict[str, Any] = {}
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.max_workers
+        ) as executor:
             futures = {
                 executor.submit(stage.execute, context): stage.stage_id
                 for stage in self.stages
@@ -183,7 +185,9 @@ class Pipeline:
 
         pipeline = Pipeline("data_processing")
         pipeline.add_stage(FunctionStage("extract", extract_data))
-        pipeline.add_stage(FunctionStage("transform", transform_data, depends_on=["extract"]))
+        pipeline.add_stage(
+            FunctionStage("transform", transform_data, depends_on=["extract"])
+        )
         pipeline.add_stage(FunctionStage("load", load_data, depends_on=["transform"]))
 
         result = pipeline.run()
@@ -248,7 +252,7 @@ class Pipeline:
                 result.status = StageStatus.FAILED
                 result.end_time = datetime.now()
                 if attempt < stage.retry_count:
-                    time.sleep(0.1 * (2 ** attempt))
+                    time.sleep(0.1 * (2**attempt))
                 else:
                     stage.on_failure(result, context)
         return result
@@ -314,7 +318,11 @@ class PipelineBuilder:
         pipeline = (
             PipelineBuilder("my_pipeline")
             .stage("step1", lambda ctx: "result1")
-            .stage("step2", lambda ctx: ctx["stage_step1_output"] + "_processed", depends_on=["step1"])
+            .stage(
+                "step2",
+                lambda ctx: ctx["stage_step1_output"] + "_processed",
+                depends_on=["step1"],
+            )
             .build()
         )
     """
@@ -330,12 +338,14 @@ class PipelineBuilder:
         retry_count: int = 0,
     ) -> "PipelineBuilder":
         """Add a function stage; returns self for chaining."""
-        self._pipeline.add_stage(FunctionStage(
-            stage_id=stage_id,
-            func=func,
-            depends_on=depends_on,
-            retry_count=retry_count,
-        ))
+        self._pipeline.add_stage(
+            FunctionStage(
+                stage_id=stage_id,
+                func=func,
+                depends_on=depends_on,
+                retry_count=retry_count,
+            )
+        )
         return self
 
     def parallel(
@@ -345,11 +355,13 @@ class PipelineBuilder:
         depends_on: list[str] | None = None,
     ) -> "PipelineBuilder":
         """Add a parallel stage; returns self for chaining."""
-        self._pipeline.add_stage(ParallelStage(
-            stage_id=stage_id,
-            stages=stages,
-            depends_on=depends_on,
-        ))
+        self._pipeline.add_stage(
+            ParallelStage(
+                stage_id=stage_id,
+                stages=stages,
+                depends_on=depends_on,
+            )
+        )
         return self
 
     def context(self, key: str, value: Any) -> "PipelineBuilder":

@@ -15,8 +15,8 @@ Usage::
     --list-categories     Show all discovered categories and exit
 """
 
-import sys
 import argparse
+import sys
 
 from codomyrmex.skills.skill_generator import generate_skill_files
 
@@ -26,12 +26,27 @@ def parse_args() -> argparse.Namespace:
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--category", metavar="SKILL", help="Generate only this skill group")
-    parser.add_argument("--dry-run", action="store_true", help="Print SKILL.md to stdout; no writes")
-    parser.add_argument("--output-dir", metavar="DIR", default="~/.claude/skills", help="Output directory")
-    parser.add_argument("--no-rebuild-index", action="store_true", help="Skip GenerateSkillIndex.ts")
-    parser.add_argument("--force", action="store_true", help="Overwrite existing skills")
-    parser.add_argument("--list-categories", action="store_true", help="Show all discovered categories")
+    parser.add_argument(
+        "--category", metavar="SKILL", help="Generate only this skill group"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Print SKILL.md to stdout; no writes"
+    )
+    parser.add_argument(
+        "--output-dir",
+        metavar="DIR",
+        default="~/.claude/skills",
+        help="Output directory",
+    )
+    parser.add_argument(
+        "--no-rebuild-index", action="store_true", help="Skip GenerateSkillIndex.ts"
+    )
+    parser.add_argument(
+        "--force", action="store_true", help="Overwrite existing skills"
+    )
+    parser.add_argument(
+        "--list-categories", action="store_true", help="Show all discovered categories"
+    )
     return parser.parse_args()
 
 

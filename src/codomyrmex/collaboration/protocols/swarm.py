@@ -30,12 +30,14 @@ class AgentProxy:
             "Use codomyrmex.collaboration.swarm.SwarmManager for real agent delegation."
         )
 
+
 class SwarmManager(NewSwarmManager):
     """Orchestrates multiple agents working together (Legacy Compatibility)."""
 
     def add_agent(self, agent: AgentProxy):
         """Add legacy AgentProxy."""
         from codomyrmex.collaboration.swarm import SwarmAgent
+
         # Try to map legacy role to AgentRole enum
         try:
             role = AgentRole(agent.role.lower())
@@ -63,6 +65,7 @@ class SwarmManager(NewSwarmManager):
         import asyncio
 
         from codomyrmex.collaboration.swarm import Decision, SwarmVote
+
         votes = [SwarmVote(aid, True) for aid in self.pool._agents]
         if not votes:
             return False
@@ -73,6 +76,7 @@ class SwarmManager(NewSwarmManager):
             result = loop.run_until_complete(self.request_consensus(proposal, votes))
             loop.close()
         return result.decision == Decision.APPROVED
+
 
 class TaskDecomposer(NewTaskDecomposer):
     """Utilities for breaking down complex missions (Legacy Compatibility)."""

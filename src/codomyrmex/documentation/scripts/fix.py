@@ -14,9 +14,8 @@ Fixes:
 """
 
 
-
-
 logger = get_logger(__name__)
+
 
 def fix_example_tutorial_references():
     """Fix all references in example_tutorial.md files."""
@@ -24,7 +23,9 @@ def fix_example_tutorial_references():
     repo_root = script_dir.parent.parent
 
     # Find all example_tutorial.md files
-    tutorial_files = list((repo_root / 'src' / 'codomyrmex').rglob('**/example_tutorial.md'))
+    tutorial_files = list(
+        (repo_root / "src" / "codomyrmex").rglob("**/example_tutorial.md")
+    )
 
     print(f"Fixing {len(tutorial_files)} example_tutorial.md files...\n")
 
@@ -32,63 +33,63 @@ def fix_example_tutorial_references():
 
     for tutorial_file in tutorial_files:
         try:
-            content = tutorial_file.read_text(encoding='utf-8')
+            content = tutorial_file.read_text(encoding="utf-8")
             original_content = content
 
             # Determine module root (go up from docs/tutorials/example_tutorial.md)
             module_path = tutorial_file.parent.parent.parent
 
             # Check what exists
-            api_spec = module_path / 'API_SPECIFICATION.md'
-            usage_examples = module_path / 'USAGE_EXAMPLES.md'
-            readme = module_path / 'README.md'
+            api_spec = module_path / "API_SPECIFICATION.md"
+            usage_examples = module_path / "USAGE_EXAMPLES.md"
+            readme = module_path / "README.md"
 
             # Fix API_SPECIFICATION.md references
-            if '../API_SPECIFICATION.md' in content:
+            if "../API_SPECIFICATION.md" in content:
                 if api_spec.exists():
                     # Keep it
                     pass
                 elif readme.exists():
                     # Replace with README
                     content = content.replace(
-                        '../API_SPECIFICATION.md',
-                        '../README.md#api-reference'
+                        "../API_SPECIFICATION.md", "../README.md#api-reference"
                     )
                 else:
                     # Remove reference
                     content = re.sub(
-                        r'- \[.*?API.*?\]\(\.\./API_SPECIFICATION\.md\)[^\n]*\n?',
-                        '',
-                        content
+                        r"- \[.*?API.*?\]\(\.\./API_SPECIFICATION\.md\)[^\n]*\n?",
+                        "",
+                        content,
                     )
 
             # Fix USAGE_EXAMPLES.md references
-            if '../USAGE_EXAMPLES.md' in content:
+            if "../USAGE_EXAMPLES.md" in content:
                 if usage_examples.exists():
                     # Keep it
                     pass
                 elif readme.exists():
                     # Replace with README
                     content = content.replace(
-                        '../USAGE_EXAMPLES.md',
-                        '../README.md#usage-examples'
+                        "../USAGE_EXAMPLES.md", "../README.md#usage-examples"
                     )
                 else:
                     # Remove reference
                     content = re.sub(
-                        r'- \[.*?Usage.*?\]\(\.\./USAGE_EXAMPLES\.md\)[^\n]*\n?',
-                        '',
-                        content
+                        r"- \[.*?Usage.*?\]\(\.\./USAGE_EXAMPLES\.md\)[^\n]*\n?",
+                        "",
+                        content,
                     )
 
             if content != original_content:
-                tutorial_file.write_text(content, encoding='utf-8')
+                tutorial_file.write_text(content, encoding="utf-8")
                 rel_path = tutorial_file.relative_to(repo_root)
                 print(f"✅ Fixed: {rel_path}")
                 fixed_count += 1
 
         except Exception as e:
-            rel_path = tutorial_file.relative_to(repo_root) if tutorial_file else 'unknown'
+            rel_path = (
+                tutorial_file.relative_to(repo_root) if tutorial_file else "unknown"
+            )
             print(f"❌ Error fixing {rel_path}: {e}")
 
     print(f"\n✅ Fixed {fixed_count} tutorial files")
@@ -100,7 +101,7 @@ def fix_docs_index_references():
     script_dir = Path(__file__).parent
     repo_root = script_dir.parent.parent
 
-    index_files = list((repo_root / 'src' / 'codomyrmex').rglob('**/docs/index.md'))
+    index_files = list((repo_root / "src" / "codomyrmex").rglob("**/docs/index.md"))
 
     print(f"\nFixing {len(index_files)} docs/index.md files...\n")
 
@@ -108,49 +109,46 @@ def fix_docs_index_references():
 
     for index_file in index_files:
         try:
-            content = index_file.read_text(encoding='utf-8')
+            content = index_file.read_text(encoding="utf-8")
             original_content = content
 
             module_path = index_file.parent.parent
 
             # Check what exists
-            api_spec = module_path / 'API_SPECIFICATION.md'
-            usage_examples = module_path / 'USAGE_EXAMPLES.md'
-            mcp_spec = module_path / 'MCP_TOOL_SPECIFICATION.md'
-            readme = module_path / 'README.md'
+            api_spec = module_path / "API_SPECIFICATION.md"
+            usage_examples = module_path / "USAGE_EXAMPLES.md"
+            mcp_spec = module_path / "MCP_TOOL_SPECIFICATION.md"
+            readme = module_path / "README.md"
 
             # Fix API_SPECIFICATION.md references
-            if '../API_SPECIFICATION.md' in content:
+            if "../API_SPECIFICATION.md" in content:
                 if not api_spec.exists() and readme.exists():
                     content = content.replace(
-                        '../API_SPECIFICATION.md',
-                        '../README.md#api-reference'
+                        "../API_SPECIFICATION.md", "../README.md#api-reference"
                     )
 
             # Fix USAGE_EXAMPLES.md references
-            if '../USAGE_EXAMPLES.md' in content:
+            if "../USAGE_EXAMPLES.md" in content:
                 if not usage_examples.exists() and readme.exists():
                     content = content.replace(
-                        '../USAGE_EXAMPLES.md',
-                        '../README.md#usage-examples'
+                        "../USAGE_EXAMPLES.md", "../README.md#usage-examples"
                     )
 
             # Fix MCP_TOOL_SPECIFICATION.md references
-            if '../MCP_TOOL_SPECIFICATION.md' in content:
+            if "../MCP_TOOL_SPECIFICATION.md" in content:
                 if not mcp_spec.exists() and readme.exists():
                     content = content.replace(
-                        '../MCP_TOOL_SPECIFICATION.md',
-                        '../README.md#mcp-tools'
+                        "../MCP_TOOL_SPECIFICATION.md", "../README.md#mcp-tools"
                     )
 
             if content != original_content:
-                index_file.write_text(content, encoding='utf-8')
+                index_file.write_text(content, encoding="utf-8")
                 rel_path = index_file.relative_to(repo_root)
                 print(f"✅ Fixed: {rel_path}")
                 fixed_count += 1
 
         except Exception as e:
-            rel_path = index_file.relative_to(repo_root) if index_file else 'unknown'
+            rel_path = index_file.relative_to(repo_root) if index_file else "unknown"
             print(f"❌ Error fixing {rel_path}: {e}")
 
     print(f"\n✅ Fixed {fixed_count} index files")
@@ -175,5 +173,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

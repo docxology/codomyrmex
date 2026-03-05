@@ -66,7 +66,13 @@ class TestModuleExports:
         assert PAIConfig is not None
 
     def test_dataclasses_importable(self) -> None:
-        for cls in (PAISkillInfo, PAIToolInfo, PAIHookInfo, PAIAgentInfo, PAIMemoryStore):
+        for cls in (
+            PAISkillInfo,
+            PAIToolInfo,
+            PAIHookInfo,
+            PAIAgentInfo,
+            PAIMemoryStore,
+        ):
             assert cls is not None
 
     def test_constants_importable(self) -> None:
@@ -98,7 +104,16 @@ class TestDiscovery:
 
     def test_get_components(self, bridge: PAIBridge) -> None:
         components = bridge.get_components()
-        expected_keys = {"algorithm", "skills", "tools", "agents", "memory", "hooks", "security", "components"}
+        expected_keys = {
+            "algorithm",
+            "skills",
+            "tools",
+            "agents",
+            "memory",
+            "hooks",
+            "security",
+            "components",
+        }
         assert expected_keys.issubset(set(components.keys()))
 
         # Each component has exists/count/path
@@ -129,7 +144,15 @@ class TestAlgorithm:
 
     def test_phase_names(self) -> None:
         names = [p["name"] for p in PAIBridge.get_algorithm_phases()]
-        assert names == ["OBSERVE", "THINK", "PLAN", "BUILD", "EXECUTE", "VERIFY", "LEARN"]
+        assert names == [
+            "OBSERVE",
+            "THINK",
+            "PLAN",
+            "BUILD",
+            "EXECUTE",
+            "VERIFY",
+            "LEARN",
+        ]
 
     def test_response_depth_levels(self) -> None:
         levels = PAIBridge.get_response_depth_levels()

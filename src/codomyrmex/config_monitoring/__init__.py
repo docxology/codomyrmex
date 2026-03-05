@@ -17,7 +17,7 @@ __all__ = [
     "ConfigAudit",
     "ConfigChange",
     "ConfigSnapshot",
-    "ConfigurationMonitor",
     "ConfigWatcher",
+    "ConfigurationMonitor",
     "monitor_config_changes",
 ]

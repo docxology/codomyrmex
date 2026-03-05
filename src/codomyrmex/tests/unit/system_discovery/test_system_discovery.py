@@ -9,12 +9,12 @@ Covers:
 - CapabilityScanner
 """
 
-
 import pytest
 
 # ===================================================================
 # HealthStatus & HealthCheckResult
 # ===================================================================
+
 
 @pytest.mark.unit
 class TestHealthCheckResult:
@@ -25,6 +25,7 @@ class TestHealthCheckResult:
             HealthCheckResult,
             HealthStatus,
         )
+
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         assert r.module_name == "test"
         assert r.status == HealthStatus.HEALTHY
@@ -36,6 +37,7 @@ class TestHealthCheckResult:
             HealthCheckResult,
             HealthStatus,
         )
+
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         d = r.to_dict()
         assert d["module_name"] == "test"
@@ -48,6 +50,7 @@ class TestHealthCheckResult:
             HealthCheckResult,
             HealthStatus,
         )
+
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_issue("something broke", recommendation="fix it")
         assert len(r.issues) >= 1
@@ -59,6 +62,7 @@ class TestHealthCheckResult:
             HealthCheckResult,
             HealthStatus,
         )
+
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_issue("minor issue")
         assert len(r.issues) == 1
@@ -68,6 +72,7 @@ class TestHealthCheckResult:
             HealthCheckResult,
             HealthStatus,
         )
+
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_metric("latency_ms", 42)
         assert r.metrics["latency_ms"] == 42
@@ -77,6 +82,7 @@ class TestHealthCheckResult:
             HealthCheckResult,
             HealthStatus,
         )
+
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_metric("cpu", 50)
         r.add_metric("memory", 80)
@@ -89,6 +95,7 @@ class TestHealthStatus:
 
     def test_values(self):
         from codomyrmex.system_discovery.health.health_checker import HealthStatus
+
         assert HealthStatus.HEALTHY.value == "healthy"
         assert HealthStatus.DEGRADED.value == "degraded"
         assert HealthStatus.UNHEALTHY.value == "unhealthy"
@@ -99,12 +106,14 @@ class TestHealthStatus:
 # HealthChecker
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestHealthChecker:
     """Test HealthChecker functionality."""
 
     def test_init(self):
         from codomyrmex.system_discovery.health.health_checker import HealthChecker
+
         checker = HealthChecker()
         assert checker is not None
 
@@ -113,6 +122,7 @@ class TestHealthChecker:
             HealthChecker,
             HealthCheckResult,
         )
+
         checker = HealthChecker()
         result = checker.perform_health_check("logging_monitoring")
         assert isinstance(result, HealthCheckResult)
@@ -123,12 +133,14 @@ class TestHealthChecker:
             HealthChecker,
             HealthCheckResult,
         )
+
         checker = HealthChecker()
         result = checker.perform_health_check("nonexistent_module_xyz")
         assert isinstance(result, HealthCheckResult)
 
     def test_check_multiple_modules(self):
         from codomyrmex.system_discovery.health.health_checker import HealthChecker
+
         checker = HealthChecker()
         modules = ["logging_monitoring", "events", "agents"]
         for mod in modules:
@@ -137,6 +149,7 @@ class TestHealthChecker:
 
     def test_result_has_checks_performed(self):
         from codomyrmex.system_discovery.health.health_checker import HealthChecker
+
         checker = HealthChecker()
         result = checker.perform_health_check("logging_monitoring")
         assert isinstance(result.checks_performed, list)
@@ -146,16 +159,19 @@ class TestHealthChecker:
 # DiscoveryEngine
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestDiscoveryEngine:
     """Test SystemDiscovery."""
 
     def test_import(self):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
+
         assert SystemDiscovery is not None
 
     def test_init(self):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
+
         engine = SystemDiscovery()
         assert engine is not None
 
@@ -163,6 +179,7 @@ class TestDiscoveryEngine:
 # ===================================================================
 # CapabilityScanner
 # ===================================================================
+
 
 @pytest.mark.unit
 class TestCapabilityScanner:
@@ -172,12 +189,14 @@ class TestCapabilityScanner:
         from codomyrmex.system_discovery.core.capability_scanner import (
             CapabilityScanner,
         )
+
         assert CapabilityScanner is not None
 
     def test_init(self):
         from codomyrmex.system_discovery.core.capability_scanner import (
             CapabilityScanner,
         )
+
         scanner = CapabilityScanner()
         assert scanner is not None
 
@@ -186,15 +205,18 @@ class TestCapabilityScanner:
 # Context
 # ===================================================================
 
+
 @pytest.mark.unit
 class TestDiscoveryContext:
     """Test discovery context."""
 
     def test_import(self):
         from codomyrmex.system_discovery.core.context import get_system_context
+
         assert get_system_context is not None
 
     def test_call(self):
         from codomyrmex.system_discovery.core.context import get_system_context
+
         ctx = get_system_context()
         assert ctx is not None

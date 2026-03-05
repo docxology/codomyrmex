@@ -120,6 +120,7 @@ class TestThinkingAgentKnowledgeWiring:
         class FakeRetriever:
             def retrieve(self, query: str):
                 from types import SimpleNamespace
+
                 return SimpleNamespace(
                     entities=[],
                     relationships=[],

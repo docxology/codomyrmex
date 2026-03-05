@@ -78,7 +78,6 @@ class Qubit:
             self.alpha = 1.0 + 0j
             self.beta = 0.0 + 0j
             return 0
-        else:
-            self.alpha = 0.0 + 0j
-            self.beta = 1.0 + 0j
-            return 1
+        self.alpha = 0.0 + 0j
+        self.beta = 1.0 + 0j
+        return 1

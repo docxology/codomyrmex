@@ -18,7 +18,12 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-_OLLAMA_ALLOWED_PREFIXES = ("http://localhost:", "http://127.0.0.1:", "https://localhost:", "https://127.0.0.1:")
+_OLLAMA_ALLOWED_PREFIXES = (
+    "http://localhost:",
+    "http://127.0.0.1:",
+    "https://localhost:",
+    "https://127.0.0.1:",
+)
 
 
 @dataclass
@@ -43,6 +48,7 @@ class OllamaClient:
     Implements a robust interface compatible with ClaudeClient
     for use in ClaudeCodeEndpoint, using real LLM inference.
     """
+
     def __init__(self, model: str = "llama3", base_url: str = DEFAULT_OLLAMA_URL):
         if not any(base_url.startswith(prefix) for prefix in _OLLAMA_ALLOWED_PREFIXES):
             raise ValueError(
@@ -50,12 +56,14 @@ class OllamaClient:
             )
         self.model = model
         self.base_url = base_url
-        self.session_manager = None # dummy for interface compatibility
+        self.session_manager = None  # dummy for interface compatibility
 
     def create_session(self, session_id: str) -> None:
         raise NotImplementedError("LLM session management not implemented")
 
-    def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:
+    def execute_with_session(
+        self, request: AgentRequest, session: Any = None, session_id: Any = None
+    ) -> Any:
         """Execute request using Ollama /api/chat for real conversation."""
         url = f"{self.base_url}/api/chat"
 
@@ -66,11 +74,7 @@ class OllamaClient:
             messages.append({"role": "system", "content": request.metadata["system"]})
         messages.append({"role": "user", "content": request.prompt})
 
-        payload = {
-            "model": self.model,
-            "messages": messages,
-            "stream": False
-        }
+        payload = {"model": self.model, "messages": messages, "stream": False}
 
         start_time = time.monotonic()
         content = ""
@@ -78,7 +82,7 @@ class OllamaClient:
             req = urllib.request.Request(
                 url,
                 data=json.dumps(payload).encode("utf-8"),
-                headers={"Content-Type": "application/json"}
+                headers={"Content-Type": "application/json"},
             )
             with urllib.request.urlopen(req) as response:
                 if response.status == 200:
@@ -91,13 +95,23 @@ class OllamaClient:
             # Propagate error with context
             try:
                 # Try to list models to help debugging
-                with urllib.request.urlopen(f"{self.base_url}/api/tags", timeout=1.0) as resp:
-                     if resp.status == 200:
-                         tags = json.loads(resp.read().decode("utf-8"))
-                         models = [m.get("name") for m in tags.get("models", [])]
-                         logger.debug("Available models for debugging: %s", models)
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as debug_err:
-                logger.debug("Failed to list available Ollama models for debug: %s", debug_err)
+                with urllib.request.urlopen(
+                    f"{self.base_url}/api/tags", timeout=1.0
+                ) as resp:
+                    if resp.status == 200:
+                        tags = json.loads(resp.read().decode("utf-8"))
+                        models = [m.get("name") for m in tags.get("models", [])]
+                        logger.debug("Available models for debugging: %s", models)
+            except (
+                ValueError,
+                RuntimeError,
+                AttributeError,
+                OSError,
+                TypeError,
+            ) as debug_err:
+                logger.debug(
+                    "Failed to list available Ollama models for debug: %s", debug_err
+                )
             raise RuntimeError(f"Real Ollama Connection Failed: {e}") from e
 
         elapsed = time.monotonic() - start_time
@@ -107,6 +121,7 @@ class OllamaClient:
             tokens_used=0,
             execution_time=elapsed,
         )
+
 
 def get_llm_client(identity: str = "agent") -> Any:
     """Factory to get the best available REAL LLM client.
@@ -120,6 +135,7 @@ def get_llm_client(identity: str = "agent") -> Any:
     # 1. Check Claude
     try:
         from codomyrmex.agents.claude.claude_client import ClaudeClient
+
         if os.environ.get("ANTHROPIC_API_KEY"):
             logger.info(f"[{identity}] Using real ClaudeClient (API Key found)")
             return ClaudeClient()
@@ -134,7 +150,9 @@ def get_llm_client(identity: str = "agent") -> Any:
             if resp.status == 200:
                 # Use configured model or default
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
-                logger.info(f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})")
+                logger.info(
+                    f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})"
+                )
                 return OllamaClient(model=model)
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         logger.warning("[%s] Ollama connection check failed: %s", identity, e)
@@ -148,8 +166,8 @@ def get_llm_client(identity: str = "agent") -> Any:
 
 
 __all__ = [
-    "OllamaClient",
-    "get_llm_client",
     "AgentRequest",
+    "OllamaClient",
     "_OllamaResponse",
+    "get_llm_client",
 ]

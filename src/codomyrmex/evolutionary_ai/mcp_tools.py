@@ -39,20 +39,47 @@ def evolutionary_ai_list_operators() -> dict[str, Any]:
         return {
             "status": "success",
             "mutation_operators": [
-                {"name": "BitFlipMutation", "description": "Flip bits in binary genomes"},
+                {
+                    "name": "BitFlipMutation",
+                    "description": "Flip bits in binary genomes",
+                },
                 {"name": "SwapMutation", "description": "Swap two gene positions"},
-                {"name": "GaussianMutation", "description": "Add Gaussian noise to real-valued genes"},
-                {"name": "ScrambleMutation", "description": "Scramble a random segment"},
+                {
+                    "name": "GaussianMutation",
+                    "description": "Add Gaussian noise to real-valued genes",
+                },
+                {
+                    "name": "ScrambleMutation",
+                    "description": "Scramble a random segment",
+                },
             ],
             "crossover_operators": [
-                {"name": "SinglePointCrossover", "description": "Split at one random point"},
-                {"name": "TwoPointCrossover", "description": "Split at two random points"},
-                {"name": "UniformCrossover", "description": "Gene-by-gene random parent selection"},
-                {"name": "BlendCrossover", "description": "BLX-alpha for real-valued genes"},
+                {
+                    "name": "SinglePointCrossover",
+                    "description": "Split at one random point",
+                },
+                {
+                    "name": "TwoPointCrossover",
+                    "description": "Split at two random points",
+                },
+                {
+                    "name": "UniformCrossover",
+                    "description": "Gene-by-gene random parent selection",
+                },
+                {
+                    "name": "BlendCrossover",
+                    "description": "BLX-alpha for real-valued genes",
+                },
             ],
             "selection_operators": [
-                {"name": "TournamentSelection", "description": "Tournament-based selection"},
-                {"name": "RouletteWheelSelection", "description": "Fitness-proportionate selection"},
+                {
+                    "name": "TournamentSelection",
+                    "description": "Tournament-based selection",
+                },
+                {
+                    "name": "RouletteWheelSelection",
+                    "description": "Fitness-proportionate selection",
+                },
                 {"name": "RankSelection", "description": "Rank-based selection"},
             ],
         }

@@ -1,4 +1,5 @@
 """Unit tests for collaboration module."""
+
 import pytest
 
 from codomyrmex.collaboration.protocols.swarm import (
@@ -23,6 +24,7 @@ def test_swarm_execution():
 
     assert isinstance(results, dict)
 
+
 @pytest.mark.unit
 def test_task_decomposition():
     """Test mission splitting."""
@@ -31,6 +33,7 @@ def test_task_decomposition():
     assert len(tasks) == 2
     assert "Design" in tasks[0]
     assert "Build" in tasks[1]
+
 
 @pytest.mark.unit
 def test_consensus():
@@ -51,6 +54,7 @@ class TestDependencyGraph:
     def test_empty_graph_has_no_ready_tasks(self):
         """An empty graph returns no ready tasks."""
         from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
+
         g = DependencyGraph()
         assert g.get_ready_tasks(completed=set()) == []
 
@@ -58,6 +62,7 @@ class TestDependencyGraph:
         """add_task records declared dependencies for later retrieval."""
         from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
         from codomyrmex.collaboration.models import Task
+
         g = DependencyGraph()
         t = Task(name="build", dependencies=["compile"])
         g.add_task(t)
@@ -68,6 +73,7 @@ class TestDependencyGraph:
         """Linear dependency chain a→b is not a cycle."""
         from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
         from codomyrmex.collaboration.models import Task
+
         g = DependencyGraph()
         t1 = Task(name="a")
         t2 = Task(name="b", dependencies=[t1.id])
@@ -78,6 +84,7 @@ class TestDependencyGraph:
     def test_has_cycle_detects_cycle(self):
         """has_cycle() returns True when a → b → a mutual dependency exists."""
         from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
+
         g = DependencyGraph()
         # Directly inject a cycle without the Task constructor (which can't encode
         # a cycle since we'd need both IDs before either Task is created).
@@ -91,6 +98,7 @@ class TestDependencyGraph:
         """Only tasks with all dependencies satisfied appear in ready list."""
         from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
         from codomyrmex.collaboration.models import Task
+
         g = DependencyGraph()
         t1 = Task(name="a")
         t2 = Task(name="b", dependencies=[t1.id])
@@ -112,6 +120,7 @@ class TestTaskManagerDeep:
         """submit() enqueues the task and returns its ID."""
         from codomyrmex.collaboration.coordination.task_manager import TaskManager
         from codomyrmex.collaboration.models import Task
+
         tm = TaskManager()
         task = Task(name="build")
         task_id = tm.submit(task)
@@ -124,6 +133,7 @@ class TestTaskManagerDeep:
             SchedulingStrategy,
             TaskManager,
         )
+
         tm = TaskManager()
         assert tm._strategy == SchedulingStrategy.PRIORITY
 
@@ -132,6 +142,7 @@ class TestTaskManagerDeep:
         from codomyrmex.collaboration.coordination.task_manager import (
             SchedulingStrategy,
         )
+
         names = {s.name for s in SchedulingStrategy}
         assert {"FIFO", "PRIORITY", "SHORTEST_FIRST", "ROUND_ROBIN"}.issubset(names)
 
@@ -142,6 +153,7 @@ class TestTaskQueue:
     def test_empty_queue_length_zero(self):
         """A freshly created TaskQueue has length 0."""
         from codomyrmex.collaboration.coordination.task_manager import TaskQueue
+
         q = TaskQueue()
         assert len(q) == 0
         assert not q  # __bool__ returns False when empty
@@ -150,6 +162,7 @@ class TestTaskQueue:
         """TaskQueue pops the highest-priority task first."""
         from codomyrmex.collaboration.coordination.task_manager import TaskQueue
         from codomyrmex.collaboration.models import Task
+
         q = TaskQueue()
         low = Task(name="low-priority", priority=1)
         high = Task(name="high-priority", priority=10)
@@ -164,6 +177,7 @@ class TestTaskQueue:
         """peek() returns the top item without removing it."""
         from codomyrmex.collaboration.coordination.task_manager import TaskQueue
         from codomyrmex.collaboration.models import Task
+
         q = TaskQueue()
         t = Task(name="work")
         q.push(t)

@@ -5,8 +5,6 @@ Since DIGITAL_AVAILABLE depends on optional deps, we test both
 the success path (using tmp files) and the _mcp_tool_meta attribute.
 """
 
-
-
 from codomyrmex.security.mcp_tools import (
     audit_code_security,
     scan_secrets,
@@ -145,7 +143,9 @@ class TestMcpToolsWithInsecureCode:
     def test_scan_secrets_finds_private_key(self, tmp_path):
         """scan_secrets detects private key header in real file."""
         f = tmp_path / "key.pem"
-        f.write_text("-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n-----END RSA PRIVATE KEY-----\n")
+        f.write_text(
+            "-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n-----END RSA PRIVATE KEY-----\n"
+        )
         result = scan_secrets(file_path=str(f))
         assert isinstance(result, dict)
 
@@ -161,7 +161,7 @@ class TestMcpToolsWithInsecureCode:
         """audit_code_security scans file with SQL injection pattern."""
         f = tmp_path / "query.py"
         f.write_text(
-            'def get_user(uid):\n'
+            "def get_user(uid):\n"
             '    return cursor.execute("SELECT * FROM users WHERE id = %s" % uid)\n'
         )
         result = audit_code_security(path=str(f))

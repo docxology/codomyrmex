@@ -28,6 +28,7 @@ from codomyrmex.database_management.schema_generator import (
 # Migration Support Tests
 # ==============================================================================
 
+
 @pytest.mark.database
 class TestMigrationSupport:
     """Tests for database migration functionality."""
@@ -38,8 +39,7 @@ class TestMigrationSupport:
         workspace = str(tmp_path / "migrations")
         db_path = str(tmp_path / "migration_test.db")
         manager = MigrationManager(
-            workspace_dir=workspace,
-            database_url=f"sqlite:///{db_path}"
+            workspace_dir=workspace, database_url=f"sqlite:///{db_path}"
         )
         yield manager
         manager.close()
@@ -50,7 +50,7 @@ class TestMigrationSupport:
             name="create_users_table",
             description="Create the users table",
             sql="CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);",
-            rollback_sql="DROP TABLE users;"
+            rollback_sql="DROP TABLE users;",
         )
 
         assert migration.name == "create_users_table"
@@ -63,7 +63,7 @@ class TestMigrationSupport:
             name="create_posts_table",
             description="Create posts table",
             sql="CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT);",
-            rollback_sql="DROP TABLE posts;"
+            rollback_sql="DROP TABLE posts;",
         )
 
         result = migration_manager.apply_migration(migration.id)
@@ -77,7 +77,7 @@ class TestMigrationSupport:
             name="create_comments_table",
             description="Create comments table",
             sql="CREATE TABLE comments (id INTEGER PRIMARY KEY);",
-            rollback_sql="DROP TABLE comments;"
+            rollback_sql="DROP TABLE comments;",
         )
 
         migration_manager.apply_migration(migration.id)
@@ -91,7 +91,7 @@ class TestMigrationSupport:
             name="create_likes_table",
             description="Create likes table",
             sql="CREATE TABLE likes (id INTEGER PRIMARY KEY);",
-            rollback_sql="DROP TABLE likes;"
+            rollback_sql="DROP TABLE likes;",
         )
 
         result = migration_manager.apply_migration(migration.id, dry_run=True)
@@ -141,7 +141,7 @@ class TestMigrationSupport:
             name="dependent_table",
             description="Create dependent table",
             sql="CREATE TABLE dependent (id INTEGER, base_id INTEGER);",
-            dependencies=[migration1.id]
+            dependencies=[migration1.id],
         )
 
         # Apply first migration
@@ -157,7 +157,7 @@ class TestMigrationSupport:
             id="test_migration",
             name="test",
             description="Test migration",
-            sql="CREATE TABLE test (id INTEGER);"
+            sql="CREATE TABLE test (id INTEGER);",
         )
 
         assert migration.checksum is not None
@@ -167,6 +167,7 @@ class TestMigrationSupport:
 # ==============================================================================
 # Schema Introspection Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestSchemaIntrospection:
@@ -212,14 +213,16 @@ class TestSchemaIntrospection:
         _, cursor = db_connector.execute("PRAGMA table_info(users)")
         columns = []
         for row in cursor.fetchall():
-            columns.append({
-                "cid": row[0],
-                "name": row[1],
-                "type": row[2],
-                "notnull": bool(row[3]),
-                "default": row[4],
-                "pk": bool(row[5])
-            })
+            columns.append(
+                {
+                    "cid": row[0],
+                    "name": row[1],
+                    "type": row[2],
+                    "notnull": bool(row[3]),
+                    "default": row[4],
+                    "pk": bool(row[5]),
+                }
+            )
 
         assert len(columns) == 3
 
@@ -238,7 +241,7 @@ class TestSchemaIntrospection:
                 Column(name="id", data_type="integer", primary_key=True),
                 Column(name="name", data_type="string", length=255),
                 Column(name="price", data_type="float"),
-            ]
+            ],
         )
 
         table_id = generator.create_table(table)
@@ -256,9 +259,9 @@ class TestSchemaIntrospection:
                     columns=[
                         Column(name="id", data_type="integer", primary_key=True),
                         Column(name="name", data_type="string"),
-                    ]
+                    ],
                 )
-            ]
+            ],
         )
 
         sql = schema.to_sql("sqlite")
@@ -269,11 +272,7 @@ class TestSchemaIntrospection:
     def test_column_to_sql_with_constraints(self):
         """Test column SQL generation with constraints."""
         column = Column(
-            name="email",
-            data_type="string",
-            length=255,
-            nullable=False,
-            unique=True
+            name="email", data_type="string", length=255, nullable=False, unique=True
         )
 
         sql = column.to_sql("sqlite")
@@ -284,11 +283,7 @@ class TestSchemaIntrospection:
 
     def test_index_creation_sql(self):
         """Test index SQL generation."""
-        index = Index(
-            name="idx_users_email",
-            columns=["email"],
-            unique=True
-        )
+        index = Index(name="idx_users_email", columns=["email"], unique=True)
 
         sql = index.to_sql("users", "sqlite")
 
@@ -299,6 +294,7 @@ class TestSchemaIntrospection:
 # ==============================================================================
 # Backup Manager Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestBackupManager:
@@ -325,7 +321,7 @@ class TestBackupManager:
         result = backup_manager.create_backup(
             database_name="test_db",
             database_url=f"sqlite:///{test_db}",
-            compression="none"
+            compression="none",
         )
 
         assert result.success
@@ -337,7 +333,7 @@ class TestBackupManager:
         result = backup_manager.create_backup(
             database_name="test_db",
             database_url=f"sqlite:///{test_db}",
-            compression="gzip"
+            compression="gzip",
         )
 
         assert result.success
@@ -346,8 +342,7 @@ class TestBackupManager:
     def test_list_backups(self, backup_manager, test_db):
         """Test listing backups."""
         backup_manager.create_backup(
-            database_name="test_db",
-            database_url=f"sqlite:///{test_db}"
+            database_name="test_db", database_url=f"sqlite:///{test_db}"
         )
 
         backups = backup_manager.list_backups()
@@ -357,17 +352,19 @@ class TestBackupManager:
     def test_delete_backup(self, backup_manager, test_db):
         """Test deleting a backup."""
         result = backup_manager.create_backup(
-            database_name="test_db",
-            database_url=f"sqlite:///{test_db}"
+            database_name="test_db", database_url=f"sqlite:///{test_db}"
         )
 
         assert backup_manager.delete_backup(result.backup_id)
-        assert result.backup_id not in [b["backup_id"] for b in backup_manager.list_backups()]
+        assert result.backup_id not in [
+            b["backup_id"] for b in backup_manager.list_backups()
+        ]
 
 
 # ==============================================================================
 # Performance Monitor Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestPerformanceMonitor:
@@ -386,8 +383,8 @@ class TestPerformanceMonitor:
                 "query_type": "SELECT",
                 "execution_time_ms": 15.5,
                 "rows_affected": 10,
-                "database_name": "test_db"
-            }
+                "database_name": "test_db",
+            },
         )
 
         analysis = monitor.analyze_query_performance(hours=1)
@@ -403,8 +400,8 @@ class TestPerformanceMonitor:
                 "queries_per_second": 100.0,
                 "average_query_time_ms": 25.0,
                 "cache_hit_ratio": 0.95,
-                "disk_io_mb": 10.5
-            }
+                "disk_io_mb": 10.5,
+            },
         )
 
         analysis = monitor.analyze_database_performance("test_db", hours=1)
@@ -421,8 +418,8 @@ class TestPerformanceMonitor:
                 "average_query_time_ms": 25.0,
                 "cache_hit_ratio": 0.95,
                 "disk_io_mb": 10.5,
-                "connections_idle": 2
-            }
+                "connections_idle": 2,
+            },
         )
 
         report = monitor.get_performance_report("test_db", hours=1)
@@ -441,20 +438,23 @@ class TestPerformanceMonitor:
                 "average_query_time_ms": 600.0,  # High query time
                 "cache_hit_ratio": 0.95,
                 "disk_io_mb": 10.5,
-                "connections_idle": 2
-            }
+                "connections_idle": 2,
+            },
         )
 
         alerts = monitor.check_alerts("test_db")
 
         # Should have alert for high query time
-        high_time_alerts = [a for a in alerts if a.metric_name == "average_query_time_ms"]
+        high_time_alerts = [
+            a for a in alerts if a.metric_name == "average_query_time_ms"
+        ]
         assert len(high_time_alerts) >= 1
 
 
 # ==============================================================================
 # Schema Generator Advanced Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestSchemaGeneratorAdvanced:
@@ -473,8 +473,8 @@ class TestSchemaGeneratorAdvanced:
                     "name": "users",
                     "columns": [
                         {"name": "id", "type": "integer"},
-                        {"name": "name", "type": "string"}
-                    ]
+                        {"name": "name", "type": "string"},
+                    ],
                 }
             ]
         }
@@ -486,15 +486,13 @@ class TestSchemaGeneratorAdvanced:
                     "columns": [
                         {"name": "id", "type": "integer"},
                         {"name": "name", "type": "string"},
-                        {"name": "email", "type": "string"}  # New column
-                    ]
+                        {"name": "email", "type": "string"},  # New column
+                    ],
                 },
                 {
                     "name": "posts",  # New table
-                    "columns": [
-                        {"name": "id", "type": "integer"}
-                    ]
-                }
+                    "columns": [{"name": "id", "type": "integer"}],
+                },
             ]
         }
 
@@ -524,7 +522,7 @@ class TestSchemaGeneratorAdvanced:
             columns=[
                 Column(name="id", data_type="integer", primary_key=True),
                 Column(name="name", data_type="string"),
-            ]
+            ],
         )
         generator.create_table(table)
 
@@ -541,7 +539,7 @@ class TestSchemaGeneratorAdvanced:
             name="test_table",
             columns=[
                 Column(name="id", data_type="integer", primary_key=True),
-            ]
+            ],
         )
         generator.create_table(table)
 
@@ -560,15 +558,13 @@ class TestSchemaGeneratorAdvanced:
                     "table": "users",
                     "columns": [
                         {"name": "email", "data_type": "string", "length": 255}
-                    ]
+                    ],
                 }
-            ]
+            ],
         }
 
         migration = generator.generate_migration(
-            name="add_email",
-            description="Add email column to users",
-            changes=changes
+            name="add_email", description="Add email column to users", changes=changes
         )
 
         assert migration.migration_id is not None
@@ -578,6 +574,7 @@ class TestSchemaGeneratorAdvanced:
 # ==============================================================================
 # Integration Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestIntegration:
@@ -632,8 +629,7 @@ class TestIntegration:
 
         # Create migration manager
         manager = MigrationManager(
-            workspace_dir=workspace,
-            database_url=f"sqlite:///{db_path}"
+            workspace_dir=workspace, database_url=f"sqlite:///{db_path}"
         )
 
         # Create migrations without dependencies for simpler test
@@ -641,14 +637,14 @@ class TestIntegration:
             name="create_users",
             description="Create users table",
             sql="CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);",
-            rollback_sql="DROP TABLE users;"
+            rollback_sql="DROP TABLE users;",
         )
 
         m2 = manager.create_migration(
             name="create_posts",
             description="Create posts table",
             sql="CREATE TABLE posts (id INTEGER PRIMARY KEY, user_id INTEGER);",
-            rollback_sql="DROP TABLE posts;"
+            rollback_sql="DROP TABLE posts;",
             # No dependencies
         )
 
@@ -683,8 +679,7 @@ class TestIntegration:
         # Create backup
         backup_manager = BackupManager(workspace_dir=str(tmp_path))
         backup_result = backup_manager.create_backup(
-            database_name="test_db",
-            database_url=f"sqlite:///{db_path}"
+            database_name="test_db", database_url=f"sqlite:///{db_path}"
         )
 
         assert backup_result.success
@@ -699,8 +694,8 @@ class TestIntegration:
                 "queries_per_second": 10.0,
                 "average_query_time_ms": 5.0,
                 "cache_hit_ratio": 0.9,
-                "disk_io_mb": 0.1
-            }
+                "disk_io_mb": 0.1,
+            },
         )
 
         report = monitor.get_performance_report("test_db")
@@ -710,6 +705,7 @@ class TestIntegration:
 # ==============================================================================
 # DatabaseBackup Tests (from test_coverage_boost_r2.py)
 # ==============================================================================
+
 
 class TestDatabaseBackup:
     """Tests for DatabaseBackup manager."""
@@ -776,8 +772,11 @@ class TestDatabaseBackup:
         )
 
         meta = BackupMetadata(
-            backup_id="b1", source="/db", destination="/backup/b1.db",
-            format=BackupFormat.FILE_COPY, size_bytes=1024,
+            backup_id="b1",
+            source="/db",
+            destination="/backup/b1.db",
+            format=BackupFormat.FILE_COPY,
+            size_bytes=1024,
         )
         d = meta.to_dict()
         assert d["backup_id"] == "b1"
@@ -789,13 +788,16 @@ class TestDatabaseBackup:
 # Column Tests (from test_coverage_boost_r3.py)
 # ==============================================================================
 
+
 class TestColumn:
     """Tests for Column dataclass."""
 
     def test_basic_column_sql(self):
         from codomyrmex.database_management.schema_generator import Column
 
-        col = Column(name="id", data_type="integer", primary_key=True, auto_increment=True)
+        col = Column(
+            name="id", data_type="integer", primary_key=True, auto_increment=True
+        )
         sql = col.to_sql("sqlite")
         assert "id" in sql
         assert "INTEGER" in sql
@@ -827,6 +829,7 @@ class TestColumn:
 # Index Tests (from test_coverage_boost_r3.py)
 # ==============================================================================
 
+
 class TestIndex:
     """Tests for Index dataclass."""
 
@@ -849,6 +852,7 @@ class TestIndex:
 # ==============================================================================
 # SchemaTable Tests (from test_coverage_boost_r3.py)
 # ==============================================================================
+
 
 class TestSchemaTable:
     """Tests for SchemaTable."""
@@ -885,6 +889,7 @@ class TestSchemaTable:
 # SchemaMigration Tests (from test_coverage_boost_r3.py)
 # ==============================================================================
 
+
 class TestSchemaMigration:
     """Tests for SchemaMigration."""
 
@@ -904,6 +909,7 @@ class TestSchemaMigration:
 # ==============================================================================
 # SchemaDefinition Tests (from test_coverage_boost_r3.py)
 # ==============================================================================
+
 
 class TestSchemaDefinition:
     """Tests for SchemaDefinition."""
@@ -943,6 +949,7 @@ class TestSchemaDefinition:
 # MigrationResult Tests (from test_coverage_boost_r4.py)
 # ==============================================================================
 
+
 class TestMigrationResult:
     """Tests for MigrationResult."""
 
@@ -952,8 +959,10 @@ class TestMigrationResult:
         )
 
         r = MigrationResult(
-            migration_id="001", success=True,
-            execution_time=0.5, rows_affected=10,
+            migration_id="001",
+            success=True,
+            execution_time=0.5,
+            rows_affected=10,
         )
         assert r.success
         assert r.rows_affected == 10
@@ -962,6 +971,7 @@ class TestMigrationResult:
 # ==============================================================================
 # MigrationManager Tests (from test_coverage_boost_r4.py)
 # ==============================================================================
+
 
 class TestMigrationManager:
     """Tests for MigrationManager."""
@@ -981,7 +991,8 @@ class TestMigrationManager:
 
         mgr = MigrationManager(workspace_dir=str(tmp_path))
         m = mgr.create_migration(
-            name="init", description="Initial",
+            name="init",
+            description="Initial",
             sql="CREATE TABLE t (id INT);",
         )
         assert m.name == "init"
@@ -999,7 +1010,8 @@ class TestMigrationManager:
             database_url=f"sqlite:///{db}",
         )
         mgr.create_migration(
-            name="init", description="Initial",
+            name="init",
+            description="Initial",
             sql="CREATE TABLE t (id INT);",
         )
         pending = mgr.get_pending_migrations()

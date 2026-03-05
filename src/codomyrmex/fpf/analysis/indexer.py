@@ -1,4 +1,3 @@
-
 """Indexer for FPF specification search and relationship traversal.
 
 
@@ -132,4 +131,3 @@ class FPFIndexer:
             return []
 
         return self.index.get_related_patterns(pattern_id, depth)
-

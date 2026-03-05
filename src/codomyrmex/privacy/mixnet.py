@@ -12,15 +12,19 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class Packet:
     """A routable encrypted data unit in the mixnet, tracking payload, route, and remaining hops."""
+
     payload: bytes
     route_id: str
     hops_remaining: int
 
+
 class MixNode:
     """A single node in the mixnet overlay."""
+
     def __init__(self, node_id: str):
         self.node_id = node_id
 
@@ -35,8 +39,9 @@ class MixNode:
         return Packet(
             payload=packet.payload,
             route_id=packet.route_id,
-            hops_remaining=packet.hops_remaining - 1
+            hops_remaining=packet.hops_remaining - 1,
         )
+
 
 class MixnetProxy:
     """Manages anonymous routing through the mixnet."""

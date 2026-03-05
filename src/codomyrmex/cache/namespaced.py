@@ -41,6 +41,5 @@ class NamespacedCache(Cache):
         """Stats."""
         return self.cache.stats
 
-
     def delete_pattern(self, pattern: str) -> int:
         return self.cache.delete_pattern(f"{self.namespace}:{pattern}")

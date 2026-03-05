@@ -30,6 +30,7 @@ def _make_memory(
 
 class TestConsolidationConfig:
     """Test suite for ConsolidationConfig."""
+
     def test_defaults(self) -> None:
         cfg = ConsolidationConfig()
         assert cfg.min_importance == MemoryImportance.MEDIUM
@@ -39,6 +40,7 @@ class TestConsolidationConfig:
 
 class TestMemoryConsolidator:
     """Test suite for MemoryConsolidator."""
+
     def test_consolidate_basic(self) -> None:
         consolidator = MemoryConsolidator()
         memories = [_make_memory(memory_id="m1")]
@@ -85,9 +87,7 @@ class TestMemoryConsolidator:
         assert len(cases) == 0
 
     def test_batch_size_respected(self) -> None:
-        consolidator = MemoryConsolidator(
-            config=ConsolidationConfig(batch_size=3)
-        )
+        consolidator = MemoryConsolidator(config=ConsolidationConfig(batch_size=3))
         memories = [_make_memory(memory_id=f"m{i}") for i in range(10)]
         cases = consolidator.consolidate(memories)
         assert len(cases) == 3
@@ -120,20 +120,33 @@ class TestMemoryConsolidator:
         class _FakeRuleEngine:
             def get_applicable_rules(self, file_path=None, module_name=None):
                 if file_path == "important.py":
-                    return RuleSet(rules=[Rule(name="test", priority=RulePriority.MODULE, file_path=Path(""), sections=[], raw_content="cwd")])
+                    return RuleSet(
+                        rules=[
+                            Rule(
+                                name="test",
+                                priority=RulePriority.MODULE,
+                                file_path=Path(),
+                                sections=[],
+                                raw_content="cwd",
+                            )
+                        ]
+                    )
                 return RuleSet(rules=[])
 
         consolidator = MemoryConsolidator(
             config=ConsolidationConfig(
-                min_importance=MemoryImportance.MEDIUM,
-                rule_engine=_FakeRuleEngine()
+                min_importance=MemoryImportance.MEDIUM, rule_engine=_FakeRuleEngine()
             )
         )
 
-        low_important_file = _make_memory(importance=MemoryImportance.LOW, memory_id="low1")
+        low_important_file = _make_memory(
+            importance=MemoryImportance.LOW, memory_id="low1"
+        )
         low_important_file.metadata["file_path"] = "important.py"
 
-        low_normal_file = _make_memory(importance=MemoryImportance.LOW, memory_id="low2")
+        low_normal_file = _make_memory(
+            importance=MemoryImportance.LOW, memory_id="low2"
+        )
         low_normal_file.metadata["file_path"] = "normal.py"
 
         cases = consolidator.consolidate([low_important_file, low_normal_file])

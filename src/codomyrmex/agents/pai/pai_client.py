@@ -24,6 +24,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -38,7 +39,9 @@ class PAIClient:
         timeout: Request timeout in seconds.
     """
 
-    def __init__(self, base_url: str = "http://localhost:8080", timeout: int = 30) -> None:
+    def __init__(
+        self, base_url: str = "http://localhost:8080", timeout: int = 30
+    ) -> None:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self._event_log: list[dict[str, Any]] = []
@@ -78,7 +81,9 @@ class PAIClient:
             response.raise_for_status()
             result = response.json()
             self._event_log.append({"sent": event_data, "response": result})
-            logger.info("PAI event sent: %s → %s", event_type, result.get("status", "unknown"))
+            logger.info(
+                "PAI event sent: %s → %s", event_type, result.get("status", "unknown")
+            )
             return result
         except requests.exceptions.ConnectionError:
             logger.warning("PAI system unreachable at %s", url)
@@ -90,7 +95,9 @@ class PAIClient:
             logger.error("PAI event send failed: %s", exc)
             return {"status": "error", "message": str(exc)}
 
-    def send_phase_transition(self, from_phase: str, to_phase: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
+    def send_phase_transition(
+        self, from_phase: str, to_phase: str, context: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """Notify PAI of a phase transition.
 
         Args:
@@ -107,7 +114,9 @@ class PAIClient:
             payload={"from_phase": from_phase, "to_phase": to_phase, **(context or {})},
         )
 
-    def send_tool_result(self, tool_name: str, result: dict[str, Any]) -> dict[str, Any]:
+    def send_tool_result(
+        self, tool_name: str, result: dict[str, Any]
+    ) -> dict[str, Any]:
         """Notify PAI of a tool execution result.
 
         Args:

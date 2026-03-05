@@ -22,8 +22,16 @@ MODULE_META = {
     "agents": {
         "desc": "AI agent framework integrations supporting 13 agentic frameworks including Claude, Codex, Gemini, Jules, and more. Provides API-based and CLI-based agent clients with orchestration.",
         "env_vars": [
-            ("AGENT_DEFAULT_TIMEOUT", "30", "Default timeout in seconds for agent operations"),
-            ("AGENT_ENABLE_LOGGING", "true", "Enable or disable agent execution logging"),
+            (
+                "AGENT_DEFAULT_TIMEOUT",
+                "30",
+                "Default timeout in seconds for agent operations",
+            ),
+            (
+                "AGENT_ENABLE_LOGGING",
+                "true",
+                "Enable or disable agent execution logging",
+            ),
             ("ANTHROPIC_API_KEY", "", "API key for Claude agent integration"),
             ("OPENAI_API_KEY", "", "API key for Codex/O1 agent integration"),
             ("GEMINI_API_KEY", "", "API key for Gemini agent integration"),
@@ -54,9 +62,19 @@ MODULE_META = {
         "env_vars": [
             ("GOOGLE_CLIENT_ID", "", "Google OAuth client ID for Calendar API"),
             ("GOOGLE_CLIENT_SECRET", "", "Google OAuth client secret"),
-            ("GOOGLE_REFRESH_TOKEN", "", "Google OAuth refresh token for persistent access"),
+            (
+                "GOOGLE_REFRESH_TOKEN",
+                "",
+                "Google OAuth refresh token for persistent access",
+            ),
         ],
-        "mcp_tools": ["calendar_list_events", "calendar_create_event", "calendar_get_event", "calendar_delete_event", "calendar_update_event"],
+        "mcp_tools": [
+            "calendar_list_events",
+            "calendar_create_event",
+            "calendar_get_event",
+            "calendar_delete_event",
+            "calendar_update_event",
+        ],
         "config_notes": "Requires Google Cloud project with Calendar API enabled. OAuth credentials must be configured before use. Install with `uv sync --extra calendar`.",
     },
     "cerebrum": {
@@ -77,7 +95,11 @@ MODULE_META = {
     "cli": {
         "desc": "Command-line interface for the Codomyrmex development platform. Entry point for all user interaction including module management, workflows, AI code operations, and system status.",
         "env_vars": [
-            ("VIRTUAL_ENV", "", "Path to active Python virtual environment (auto-detected)"),
+            (
+                "VIRTUAL_ENV",
+                "",
+                "Path to active Python virtual environment (auto-detected)",
+            ),
         ],
         "mcp_tools": ["cli_execute", "cli_list_commands"],
         "config_notes": "The CLI auto-detects the virtual environment and available modules. Shell completion is available via `codomyrmex --install-completion`.",
@@ -87,8 +109,16 @@ MODULE_META = {
         "env_vars": [
             ("AZURE_STORAGE_ACCOUNT_URL", "", "Azure Storage account URL"),
             ("INFOMANIAK_APP_CREDENTIAL_ID", "", "Infomaniak API credential ID"),
-            ("INFOMANIAK_APP_CREDENTIAL_SECRET", "", "Infomaniak API credential secret"),
-            ("INFOMANIAK_AUTH_URL", "https://api.infomaniak.com/1/auth", "Infomaniak authentication endpoint"),
+            (
+                "INFOMANIAK_APP_CREDENTIAL_SECRET",
+                "",
+                "Infomaniak API credential secret",
+            ),
+            (
+                "INFOMANIAK_AUTH_URL",
+                "https://api.infomaniak.com/1/auth",
+                "Infomaniak authentication endpoint",
+            ),
             ("INFOMANIAK_PROJECT_ID", "", "Infomaniak project identifier"),
             ("INFOMANIAK_S3_ACCESS_KEY", "", "Infomaniak S3 access key"),
             ("INFOMANIAK_S3_SECRET_KEY", "", "Infomaniak S3 secret key"),
@@ -101,7 +131,13 @@ MODULE_META = {
     "coding": {
         "desc": "Unified module for code execution, sandboxing, review, monitoring, and debugging. Provides a comprehensive toolkit for running, analyzing, and fixing code programmatically.",
         "env_vars": [],
-        "mcp_tools": ["code_execute", "code_list_languages", "code_review_file", "code_review_project", "code_debug"],
+        "mcp_tools": [
+            "code_execute",
+            "code_list_languages",
+            "code_review_file",
+            "code_review_project",
+            "code_debug",
+        ],
         "config_notes": "Code execution runs in sandboxed environments with configurable resource limits (CPU, memory, timeout). Review uses static analysis rules.",
     },
     "collaboration": {
@@ -131,8 +167,16 @@ MODULE_META = {
     "config_management": {
         "desc": "Central configuration management, validation, and deployment for the Codomyrmex ecosystem. Provides multi-source config loading, schema validation, and environment-aware configuration.",
         "env_vars": [
-            ("ENVIRONMENT", "development", "Active environment name (development, staging, production)"),
-            ("OLLAMA_BASE_URL", "http://localhost:11434", "Base URL for Ollama LLM service"),
+            (
+                "ENVIRONMENT",
+                "development",
+                "Active environment name (development, staging, production)",
+            ),
+            (
+                "OLLAMA_BASE_URL",
+                "http://localhost:11434",
+                "Base URL for Ollama LLM service",
+            ),
         ],
         "mcp_tools": ["get_config", "set_config", "validate_config"],
         "config_notes": "Configuration is loaded from YAML files, environment variables, and programmatic defaults. Environment variables take precedence over file values.",
@@ -152,7 +196,12 @@ MODULE_META = {
     "containerization": {
         "desc": "Container management, orchestration, and deployment. Provides Docker build/scan/runtime, Kubernetes management, container registry, and security scanning.",
         "env_vars": [],
-        "mcp_tools": ["container_runtime_status", "container_build", "container_list", "container_security_scan"],
+        "mcp_tools": [
+            "container_runtime_status",
+            "container_build",
+            "container_list",
+            "container_security_scan",
+        ],
         "config_notes": "Requires Docker CLI and daemon for container operations. Kubernetes operations require kubectl configured with cluster access.",
     },
     "cost_management": {
@@ -249,12 +298,29 @@ MODULE_META = {
         "desc": "Email integration with Gmail and AgentMail providers. Provides generic EmailMessage and EmailProvider abstractions with inbox management, threading, and webhook support.",
         "env_vars": [
             ("AGENTMAIL_API_KEY", "", "API key for AgentMail service"),
-            ("AGENTMAIL_DEFAULT_INBOX", "", "Default inbox ID for AgentMail operations"),
+            (
+                "AGENTMAIL_DEFAULT_INBOX",
+                "",
+                "Default inbox ID for AgentMail operations",
+            ),
             ("GOOGLE_CLIENT_ID", "", "Google OAuth client ID for Gmail API"),
             ("GOOGLE_CLIENT_SECRET", "", "Google OAuth client secret for Gmail"),
             ("GOOGLE_REFRESH_TOKEN", "", "Google OAuth refresh token for Gmail access"),
         ],
-        "mcp_tools": ["agentmail_send_message", "agentmail_list_messages", "agentmail_get_message", "agentmail_reply_to_message", "agentmail_list_inboxes", "agentmail_create_inbox", "agentmail_list_threads", "agentmail_create_webhook", "gmail_send_message", "gmail_list_messages", "gmail_get_message", "gmail_create_draft"],
+        "mcp_tools": [
+            "agentmail_send_message",
+            "agentmail_list_messages",
+            "agentmail_get_message",
+            "agentmail_reply_to_message",
+            "agentmail_list_inboxes",
+            "agentmail_create_inbox",
+            "agentmail_list_threads",
+            "agentmail_create_webhook",
+            "gmail_send_message",
+            "gmail_list_messages",
+            "gmail_get_message",
+            "gmail_create_draft",
+        ],
         "config_notes": "AgentMail requires an API key. Gmail requires Google OAuth credentials. Install with `uv sync --extra email`.",
     },
     "embodiment": {
@@ -324,7 +390,14 @@ MODULE_META = {
     "formal_verification": {
         "desc": "Z3 constraint solving and model checking. Provides a model builder with add/delete/replace/solve operations for formal verification of system properties.",
         "env_vars": [],
-        "mcp_tools": ["clear_model", "add_item", "delete_item", "replace_item", "get_model", "solve_model"],
+        "mcp_tools": [
+            "clear_model",
+            "add_item",
+            "delete_item",
+            "replace_item",
+            "get_model",
+            "solve_model",
+        ],
         "config_notes": "Z3 solver timeout and memory limits can be configured per-solve operation. The model state is maintained in-memory.",
     },
     "fpf": {
@@ -336,7 +409,11 @@ MODULE_META = {
     "git_analysis": {
         "desc": "Git history analysis, contributor statistics, and commit pattern detection. Provides 16 analysis tools for repository insights including hotspot detection and code churn.",
         "env_vars": [],
-        "mcp_tools": ["git_analysis_commit_history", "git_analysis_contributor_stats", "git_analysis_hotspots"],
+        "mcp_tools": [
+            "git_analysis_commit_history",
+            "git_analysis_contributor_stats",
+            "git_analysis_hotspots",
+        ],
         "config_notes": "Analysis operates on the current git repository by default. Date ranges and file filters can be set per-analysis call.",
     },
     "git_operations": {
@@ -344,7 +421,13 @@ MODULE_META = {
         "env_vars": [
             ("GITHUB_TOKEN", "", "GitHub personal access token for API operations"),
         ],
-        "mcp_tools": ["git_commit", "git_push", "git_pull", "git_branch", "git_list_branches"],
+        "mcp_tools": [
+            "git_commit",
+            "git_push",
+            "git_pull",
+            "git_branch",
+            "git_list_branches",
+        ],
         "config_notes": "GitHub API operations require GITHUB_TOKEN. Git operations use the system git binary. GIT_EDITOR and GIT_TERMINAL_PROMPT are managed internally.",
     },
     "graph_rag": {
@@ -368,9 +451,21 @@ MODULE_META = {
     "logging_monitoring": {
         "desc": "Centralized structured logging and monitoring integration. Foundation layer module used by all other modules for consistent log output.",
         "env_vars": [
-            ("CODOMYRMEX_LOG_LEVEL", "INFO", "Global log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)"),
-            ("CODOMYRMEX_LOG_FILE", "", "File path for log output (empty for stdout only)"),
-            ("CODOMYRMEX_LOG_FORMAT", "%(asctime)s - %(name)s - %(levelname)s - %(message)s", "Log message format string"),
+            (
+                "CODOMYRMEX_LOG_LEVEL",
+                "INFO",
+                "Global log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
+            ),
+            (
+                "CODOMYRMEX_LOG_FILE",
+                "",
+                "File path for log output (empty for stdout only)",
+            ),
+            (
+                "CODOMYRMEX_LOG_FORMAT",
+                "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                "Log message format string",
+            ),
             ("CODOMYRMEX_LOG_OUTPUT_TYPE", "TEXT", "Log output type (TEXT or JSON)"),
         ],
         "mcp_tools": ["logging_format_structured"],
@@ -501,9 +596,21 @@ MODULE_META = {
         "env_vars": [
             ("FIRECRAWL_API_KEY", "", "API key for Firecrawl scraping service"),
             ("FC_API_KEY", "", "Alternative API key for Firecrawl (fallback)"),
-            ("SCRAPE_BASE_URL", "https://api.firecrawl.dev", "Base URL for scraping service endpoint"),
-            ("SCRAPE_TIMEOUT", "30.0", "Request timeout in seconds for scraping operations"),
-            ("SCRAPE_MAX_RETRIES", "3", "Maximum retry attempts for failed scrape requests"),
+            (
+                "SCRAPE_BASE_URL",
+                "https://api.firecrawl.dev",
+                "Base URL for scraping service endpoint",
+            ),
+            (
+                "SCRAPE_TIMEOUT",
+                "30.0",
+                "Request timeout in seconds for scraping operations",
+            ),
+            (
+                "SCRAPE_MAX_RETRIES",
+                "3",
+                "Maximum retry attempts for failed scrape requests",
+            ),
             ("SCRAPE_RETRY_DELAY", "1.0", "Delay in seconds between retry attempts"),
         ],
         "mcp_tools": ["scrape_extract_content", "scrape_text_similarity"],
@@ -530,7 +637,15 @@ MODULE_META = {
     "skills": {
         "desc": "Skill discovery, listing, and invocation management. Provides 7 skill management tools for PAI skill ecosystem integration.",
         "env_vars": [],
-        "mcp_tools": ["skills_list", "skills_get", "skills_invoke", "skills_search", "skills_register", "skills_unregister", "skills_validate"],
+        "mcp_tools": [
+            "skills_list",
+            "skills_get",
+            "skills_invoke",
+            "skills_search",
+            "skills_register",
+            "skills_unregister",
+            "skills_validate",
+        ],
         "config_notes": "Skill directories are auto-discovered from ~/.claude/skills/. Skill index is cached and regenerated on demand.",
     },
     "spatial": {
@@ -556,8 +671,16 @@ MODULE_META = {
         "env_vars": [
             ("STATSD_HOST", "localhost", "StatsD server hostname for metrics"),
             ("STATSD_PORT", "8125", "StatsD server port"),
-            ("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317", "OpenTelemetry OTLP exporter endpoint"),
-            ("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", "", "OpenTelemetry OTLP traces-specific endpoint"),
+            (
+                "OTEL_EXPORTER_OTLP_ENDPOINT",
+                "http://localhost:4317",
+                "OpenTelemetry OTLP exporter endpoint",
+            ),
+            (
+                "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
+                "",
+                "OpenTelemetry OTLP traces-specific endpoint",
+            ),
         ],
         "mcp_tools": [],
         "config_notes": "StatsD client connects to the configured host:port on initialization. OpenTelemetry exporter uses OTLP protocol with configurable endpoint.",
@@ -591,7 +714,11 @@ MODULE_META = {
     "tree_sitter": {
         "desc": "Tree-sitter based code parsing and AST analysis. Provides language-agnostic syntax tree construction, node querying, and code structure extraction.",
         "env_vars": [],
-        "mcp_tools": ["tree_sitter_parse", "tree_sitter_query", "tree_sitter_languages"],
+        "mcp_tools": [
+            "tree_sitter_parse",
+            "tree_sitter_query",
+            "tree_sitter_languages",
+        ],
         "config_notes": "Language grammars are loaded on demand. Parser timeout and maximum file size are configurable.",
     },
     "utils": {
@@ -629,8 +756,16 @@ MODULE_META = {
         "env_vars": [
             ("CODOMYRMEX_CORS_ORIGINS", "*", "Allowed CORS origins (comma-separated)"),
             ("CODOMYRMEX_ENV", "Development", "Application environment name"),
-            ("CODOMYRMEX_OLLAMA_URL", "http://localhost:11434", "Ollama service URL for web LLM features"),
-            ("CODOMYRMEX_DEFAULT_MODEL", "llama3.2:1b", "Default Ollama model for web interface"),
+            (
+                "CODOMYRMEX_OLLAMA_URL",
+                "http://localhost:11434",
+                "Ollama service URL for web LLM features",
+            ),
+            (
+                "CODOMYRMEX_DEFAULT_MODEL",
+                "llama3.2:1b",
+                "Default Ollama model for web interface",
+            ),
         ],
         "mcp_tools": [],
         "config_notes": "CORS origins control cross-origin access. Ollama URL must point to a running Ollama instance for LLM features.",
@@ -643,13 +778,37 @@ def title_case(module_name: str) -> str:
     words = module_name.replace("_", " ").split()
     # Special cases
     special = {
-        "ai": "AI", "ci": "CI", "cd": "CD", "cli": "CLI", "api": "API",
-        "ide": "IDE", "io": "IO", "ml": "ML", "llm": "LLM", "mcp": "MCP",
-        "ui": "UI", "iot": "IoT", "pdf": "PDF", "rbac": "RBAC", "rag": "RAG",
-        "fpf": "FPF", "os": "OS", "sql": "SQL", "tts": "TTS", "stt": "STT",
-        "ros2": "ROS2", "oauth": "OAuth", "yaml": "YAML", "json": "JSON",
-        "csv": "CSV", "xml": "XML", "html": "HTML", "http": "HTTP",
-        "s3": "S3", "gcp": "GCP", "aws": "AWS",
+        "ai": "AI",
+        "ci": "CI",
+        "cd": "CD",
+        "cli": "CLI",
+        "api": "API",
+        "ide": "IDE",
+        "io": "IO",
+        "ml": "ML",
+        "llm": "LLM",
+        "mcp": "MCP",
+        "ui": "UI",
+        "iot": "IoT",
+        "pdf": "PDF",
+        "rbac": "RBAC",
+        "rag": "RAG",
+        "fpf": "FPF",
+        "os": "OS",
+        "sql": "SQL",
+        "tts": "TTS",
+        "stt": "STT",
+        "ros2": "ROS2",
+        "oauth": "OAuth",
+        "yaml": "YAML",
+        "json": "JSON",
+        "csv": "CSV",
+        "xml": "XML",
+        "html": "HTML",
+        "http": "HTTP",
+        "s3": "S3",
+        "gcp": "GCP",
+        "aws": "AWS",
     }
     return " ".join(special.get(w.lower(), w.capitalize()) for w in words)
 
@@ -664,7 +823,7 @@ def generate_readme(module: str, meta: dict) -> str:
     lines = [
         f"# {title} Configuration",
         "",
-        f"**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
+        "**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
         "",
         "## Overview",
         "",
@@ -695,7 +854,9 @@ def generate_readme(module: str, meta: dict) -> str:
             default_display = f"`{default}`" if default else "None"
             lines.append(f"| `{name}` | str | {default_display} | {description} |")
     else:
-        lines.append(f"The {module} module operates with sensible defaults and does not require environment variable configuration. {config_notes}")
+        lines.append(
+            f"The {module} module operates with sensible defaults and does not require environment variable configuration. {config_notes}"
+        )
     lines.append("")
 
     # MCP Tools
@@ -712,9 +873,13 @@ def generate_readme(module: str, meta: dict) -> str:
     lines.append("## PAI Integration")
     lines.append("")
     if mcp_tools:
-        lines.append(f"PAI agents invoke {module} tools through the MCP bridge. {config_notes}")
+        lines.append(
+            f"PAI agents invoke {module} tools through the MCP bridge. {config_notes}"
+        )
     else:
-        lines.append(f"PAI agents interact with {module} through direct Python imports. {config_notes}")
+        lines.append(
+            f"PAI agents interact with {module} through direct Python imports. {config_notes}"
+        )
     lines.append("")
 
     # Validation
@@ -732,7 +897,9 @@ def generate_readme(module: str, meta: dict) -> str:
     # Navigation
     lines.append("## Navigation")
     lines.append("")
-    lines.append(f"- [Source Module](../../src/codomyrmex/{module}/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)")
+    lines.append(
+        f"- [Source Module](../../src/codomyrmex/{module}/README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)"
+    )
     lines.append("")
 
     return "\n".join(lines)
@@ -748,7 +915,7 @@ def generate_agents(module: str, meta: dict) -> str:
     lines = [
         f"# {title} -- Configuration Agent Coordination",
         "",
-        f"**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
+        "**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
         "",
         "## Overview",
         "",
@@ -763,43 +930,69 @@ def generate_agents(module: str, meta: dict) -> str:
     if env_vars:
         for i, (name, default, description) in enumerate(env_vars, 1):
             if default:
-                lines.append(f"{i}. `{name}` is set (default: `{default}`) -- {description}")
+                lines.append(
+                    f"{i}. `{name}` is set (default: `{default}`) -- {description}"
+                )
             else:
                 lines.append(f"{i}. `{name}` is set -- {description}")
     else:
-        lines.append(f"1. The module is importable via `from codomyrmex.{module} import *`")
-        lines.append(f"2. Any optional dependencies are installed (check with `codomyrmex check`)")
+        lines.append(
+            f"1. The module is importable via `from codomyrmex.{module} import *`"
+        )
+        lines.append(
+            "2. Any optional dependencies are installed (check with `codomyrmex check`)"
+        )
 
     lines.append("")
     lines.append("## Agent Instructions")
     lines.append("")
 
     if env_vars:
-        lines.append(f"1. Verify required environment variables are set before invoking {module} tools")
-        lines.append(f"2. Use `get_config(\"{module}.<key>\")` from config_management to read module settings")
+        lines.append(
+            f"1. Verify required environment variables are set before invoking {module} tools"
+        )
+        lines.append(
+            f'2. Use `get_config("{module}.<key>")` from config_management to read module settings'
+        )
     else:
-        lines.append(f"1. Import the module directly: `from codomyrmex.{module} import ...`")
-        lines.append(f"2. Check module availability with `list_modules()` from system_discovery")
+        lines.append(
+            f"1. Import the module directly: `from codomyrmex.{module} import ...`"
+        )
+        lines.append(
+            "2. Check module availability with `list_modules()` from system_discovery"
+        )
 
     if mcp_tools:
-        lines.append(f"3. Available MCP tools: {', '.join(f'`{t}`' for t in mcp_tools)}")
+        lines.append(
+            f"3. Available MCP tools: {', '.join(f'`{t}`' for t in mcp_tools)}"
+        )
     else:
-        lines.append(f"3. This module has no auto-discovered MCP tools; use direct Python imports")
+        lines.append(
+            "3. This module has no auto-discovered MCP tools; use direct Python imports"
+        )
 
     lines.append(f"4. {config_notes}")
     lines.append("")
 
     lines.append("## Operating Contracts")
     lines.append("")
-    lines.append(f"- **Import Safety**: Module import does not trigger side effects or network calls")
-    lines.append(f"- **Error Handling**: All errors raise specific exceptions (never returns None silently)")
-    lines.append(f"- **Thread Safety**: Configuration reads are thread-safe after initialization")
+    lines.append(
+        "- **Import Safety**: Module import does not trigger side effects or network calls"
+    )
+    lines.append(
+        "- **Error Handling**: All errors raise specific exceptions (never returns None silently)"
+    )
+    lines.append(
+        "- **Thread Safety**: Configuration reads are thread-safe after initialization"
+    )
     lines.append("")
 
     lines.append("## Configuration Patterns")
     lines.append("")
     lines.append("```python")
-    lines.append("from codomyrmex.config_management.mcp_tools import get_config, set_config")
+    lines.append(
+        "from codomyrmex.config_management.mcp_tools import get_config, set_config"
+    )
     lines.append("")
     lines.append("# Read current configuration")
     lines.append(f'value = get_config("{module}.setting")')
@@ -821,7 +1014,9 @@ def generate_agents(module: str, meta: dict) -> str:
 
     lines.append("## Navigation")
     lines.append("")
-    lines.append(f"- [README.md](README.md) | [SPEC.md](SPEC.md) | [Source Module](../../src/codomyrmex/{module}/AGENTS.md)")
+    lines.append(
+        f"- [README.md](README.md) | [SPEC.md](SPEC.md) | [Source Module](../../src/codomyrmex/{module}/AGENTS.md)"
+    )
     lines.append("")
 
     return "\n".join(lines)
@@ -836,7 +1031,7 @@ def generate_spec(module: str, meta: dict) -> str:
     lines = [
         f"# {title} Configuration Specification",
         "",
-        f"**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
+        "**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026",
         "",
         "## Overview",
         "",
@@ -852,7 +1047,9 @@ def generate_spec(module: str, meta: dict) -> str:
         for name, default, description in env_vars:
             required = "Yes" if not default else "No"
             default_display = f"`{default}`" if default else "None"
-            lines.append(f"| `{name}` | string | {required} | {default_display} | {description} |")
+            lines.append(
+                f"| `{name}` | string | {required} | {default_display} | {description} |"
+            )
         lines.append("")
 
         lines.append("## Environment Variables")
@@ -872,20 +1069,32 @@ def generate_spec(module: str, meta: dict) -> str:
                 lines.append(f'export {name}="{default}"    # {description}')
         lines.append("```")
     else:
-        lines.append(f"The {module} module does not require external configuration via environment variables. All settings are managed programmatically through constructor parameters and method arguments.")
+        lines.append(
+            f"The {module} module does not require external configuration via environment variables. All settings are managed programmatically through constructor parameters and method arguments."
+        )
         lines.append("")
         lines.append("| Key | Type | Required | Default | Description |")
         lines.append("|-----|------|----------|---------|-------------|")
-        lines.append(f"| (programmatic) | varies | No | module defaults | {config_notes} |")
+        lines.append(
+            f"| (programmatic) | varies | No | module defaults | {config_notes} |"
+        )
 
     lines.append("")
 
     lines.append("## Design Principles")
     lines.append("")
-    lines.append("- **Centralized Config**: All settings accessible via config_management module")
-    lines.append("- **Env-First**: Environment variables take precedence over config file values")
-    lines.append("- **Explicit Defaults**: All optional settings have documented defaults")
-    lines.append("- **Zero-Mock**: No placeholder or fake configuration values in production")
+    lines.append(
+        "- **Centralized Config**: All settings accessible via config_management module"
+    )
+    lines.append(
+        "- **Env-First**: Environment variables take precedence over config file values"
+    )
+    lines.append(
+        "- **Explicit Defaults**: All optional settings have documented defaults"
+    )
+    lines.append(
+        "- **Zero-Mock**: No placeholder or fake configuration values in production"
+    )
     lines.append("")
 
     lines.append("## Constraints")
@@ -899,7 +1108,9 @@ def generate_spec(module: str, meta: dict) -> str:
             lines.append("- All configuration options have sensible defaults")
     else:
         lines.append(f"- {config_notes}")
-    lines.append("- Configuration is validated on first use; invalid values raise explicit errors")
+    lines.append(
+        "- Configuration is validated on first use; invalid values raise explicit errors"
+    )
     lines.append("- No silent fallback to placeholder values")
     lines.append("")
 
@@ -910,7 +1121,9 @@ def generate_spec(module: str, meta: dict) -> str:
 
     lines.append("## Navigation")
     lines.append("")
-    lines.append(f"- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source Module](../../src/codomyrmex/{module}/SPEC.md)")
+    lines.append(
+        f"- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [Source Module](../../src/codomyrmex/{module}/SPEC.md)"
+    )
     lines.append("")
 
     return "\n".join(lines)

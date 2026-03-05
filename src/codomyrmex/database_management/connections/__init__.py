@@ -20,7 +20,8 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class ConnectionState(Enum):
     """State of a database connection."""
@@ -29,6 +30,7 @@ class ConnectionState(Enum):
     IN_USE = "in_use"
     CLOSED = "closed"
     ERROR = "error"
+
 
 @dataclass
 class ConnectionStats:
@@ -49,6 +51,7 @@ class ConnectionStats:
             return 0.0
         return self.active_connections / self.total_connections
 
+
 @dataclass
 class PoolConfig:
     """Configuration for connection pool."""
@@ -60,6 +63,7 @@ class PoolConfig:
     max_lifetime_s: float = 3600.0  # 1 hour
     validation_interval_s: float = 60.0
     health_check_query: str = "SELECT 1"
+
 
 class Connection(ABC, Generic[T]):
     """Base class for database connections."""
@@ -99,17 +103,15 @@ class Connection(ABC, Generic[T]):
     @abstractmethod
     def execute(self, query: str, params: tuple | None = None) -> Any:
         """Execute a query."""
-        pass
 
     @abstractmethod
     def is_valid(self) -> bool:
         """Check if connection is still valid."""
-        pass
 
     @abstractmethod
     def close(self) -> None:
         """Close the connection."""
-        pass
+
 
 class InMemoryConnection(Connection[dict]):
     """In-memory connection for lightweight or test usage."""
@@ -137,13 +139,14 @@ class InMemoryConnection(Connection[dict]):
         self._closed = True
         self.state = ConnectionState.CLOSED
 
+
 class ConnectionFactory(ABC, Generic[T]):
     """Factory for creating database connections."""
 
     @abstractmethod
     def create(self) -> Connection[T]:
         """Create a new connection."""
-        pass
+
 
 class InMemoryConnectionFactory(ConnectionFactory[dict]):
     """Factory for in-memory connections."""
@@ -158,6 +161,7 @@ class InMemoryConnectionFactory(ConnectionFactory[dict]):
         with self._lock:
             self._counter += 1
             return InMemoryConnection(self._counter)
+
 
 class ConnectionPool(Generic[T]):
     """Thread-safe database connection pool.
@@ -332,8 +336,12 @@ class ConnectionPool(Generic[T]):
     def stats(self) -> ConnectionStats:
         """Get pool statistics."""
         with self._lock:
-            active = sum(1 for c in self._all_connections if c.state == ConnectionState.IN_USE)
-            idle = sum(1 for c in self._all_connections if c.state == ConnectionState.IDLE)
+            active = sum(
+                1 for c in self._all_connections if c.state == ConnectionState.IN_USE
+            )
+            idle = sum(
+                1 for c in self._all_connections if c.state == ConnectionState.IDLE
+            )
 
             return ConnectionStats(
                 total_connections=len(self._all_connections),
@@ -342,7 +350,8 @@ class ConnectionPool(Generic[T]):
                 waiting_requests=0,  # Approximate
                 total_checkouts=self._total_checkouts,
                 total_timeouts=self._total_timeouts,
-                avg_wait_time_ms=sum(self._wait_times[-100:]) / max(len(self._wait_times[-100:]), 1),
+                avg_wait_time_ms=sum(self._wait_times[-100:])
+                / max(len(self._wait_times[-100:]), 1),
             )
 
     def close(self) -> None:
@@ -363,6 +372,7 @@ class ConnectionPool(Generic[T]):
                 self._pool.get_nowait()
         except queue.Empty as e:
             logger.debug("Connection pool queue drained: %s", e)
+
 
 class HealthChecker:
     """Health checker for database connections.
@@ -427,6 +437,7 @@ class HealthChecker:
     def is_healthy(self) -> bool:
         """Get last health check result."""
         return self._last_result
+
 
 __all__ = [
     # Enums

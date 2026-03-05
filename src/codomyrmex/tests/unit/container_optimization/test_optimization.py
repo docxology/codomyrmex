@@ -15,6 +15,7 @@ def docker_client():
     """Provides a Docker client for tests."""
     return docker.from_env()
 
+
 @pytest.fixture(scope="module")
 def existing_image(docker_client):
     """Uses an existing image to avoid build issues in restricted environments."""
@@ -27,6 +28,7 @@ def existing_image(docker_client):
             return img.tags[0]
     return images[0].id
 
+
 @pytest.fixture(scope="module")
 def running_container(docker_client, existing_image):
     """Runs a container for testing resource tuning."""
@@ -34,10 +36,7 @@ def running_container(docker_client, existing_image):
     # This might fail if the entrypoint is not suitable.
     try:
         container = docker_client.containers.run(
-            existing_image,
-            command="sleep 100",
-            detach=True,
-            remove=True
+            existing_image, command="sleep 100", detach=True, remove=True
         )
         yield container
         try:
@@ -46,6 +45,7 @@ def running_container(docker_client, existing_image):
             pass
     except Exception as e:
         pytest.skip(f"Could not run container for test: {e}")
+
 
 class TestContainerOptimizer:
     """Zero-mock tests for ContainerOptimizer."""
@@ -71,12 +71,13 @@ class TestContainerOptimizer:
         assert "suggestions" in report
         assert "score" in report
 
+
 class TestResourceTuner:
     """Zero-mock tests for ResourceTuner."""
 
     def test_analyze_usage_real(self, running_container):
         tuner = ResourceTuner()
-        time.sleep(1) # Wait for stats to be available
+        time.sleep(1)  # Wait for stats to be available
         usage = tuner.analyze_usage(running_container.id)
         assert isinstance(usage, ResourceUsage)
         assert usage.container_id == running_container.id
@@ -89,7 +90,7 @@ class TestResourceTuner:
             cpu_percent=5.0,
             memory_usage_bytes=100 * 1024 * 1024,
             memory_limit_bytes=512 * 1024 * 1024,
-            memory_percent=20.0
+            memory_percent=20.0,
         )
         suggestions = tuner.suggest_limits(usage)
         assert suggestions["cpu_limit"] == "0.5"

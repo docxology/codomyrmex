@@ -24,9 +24,11 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.pai import PAIBridge, ALGORITHM_PHASES
+from codomyrmex.agents.pai import ALGORITHM_PHASES, PAIBridge
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_warning,
+    print_info,
+    print_warning,
+    setup_logging,
 )
 
 
@@ -35,7 +37,9 @@ def parse_args() -> argparse.Namespace:
         description="PAI Memory System Explorer — enumerate and analyze memory stores",
     )
     parser.add_argument("--store", "-s", help="Inspect a specific memory store by name")
-    parser.add_argument("--json", "-j", action="store_true", dest="json_output", help="JSON output")
+    parser.add_argument(
+        "--json", "-j", action="store_true", dest="json_output", help="JSON output"
+    )
     return parser.parse_args()
 
 
@@ -157,6 +161,7 @@ def main() -> int:
 
     print()
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

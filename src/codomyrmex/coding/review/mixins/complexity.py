@@ -9,8 +9,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-
-
 class ComplexityMixin:
     """ComplexityMixin functionality."""
 
@@ -21,7 +19,9 @@ class ComplexityMixin:
 
         try:
             # Get complexity data from pyscn
-            complexity_results = self.pyscn_analyzer.analyze_complexity(self.project_root)
+            complexity_results = self.pyscn_analyzer.analyze_complexity(
+                self.project_root
+            )
 
             for func in complexity_results:
                 complexity = func.get("complexity", 0)
@@ -35,7 +35,9 @@ class ComplexityMixin:
 
         return suggestions
 
-    def _generate_complexity_suggestion(self, func_data: dict[str, Any]) -> ComplexityReductionSuggestion | None:
+    def _generate_complexity_suggestion(
+        self, func_data: dict[str, Any]
+    ) -> ComplexityReductionSuggestion | None:
         """Generate a specific suggestion for reducing complexity."""
         function_name = func_data.get("name", "unknown")
         complexity = func_data.get("complexity", 0)
@@ -49,7 +51,7 @@ class ComplexityMixin:
                 "Improved readability",
                 "Easier testing",
                 "Better maintainability",
-                "Reduced cognitive load"
+                "Reduced cognitive load",
             ]
             code_example = f"""
 def {function_name}(...):
@@ -63,7 +65,7 @@ def {function_name}(...):
             benefits = [
                 "Early returns reduce nesting",
                 "Improved readability",
-                "Reduced complexity"
+                "Reduced complexity",
             ]
             code_example = """
 def complex_function(data):
@@ -85,18 +87,18 @@ def complex_function(data):
             suggested_refactoring=refactoring,
             estimated_effort=effort,
             benefits=benefits,
-            code_example=code_example
+            code_example=code_example,
         )
 
     def _get_top_complexity_issues(self) -> list[dict[str, Any]]:
         """Get top complexity issues."""
         try:
-            complexity_results = self.pyscn_analyzer.analyze_complexity(self.project_root)
+            complexity_results = self.pyscn_analyzer.analyze_complexity(
+                self.project_root
+            )
             # Sort by complexity (highest first) and return top 5
             sorted_results = sorted(
-                complexity_results,
-                key=lambda x: x.get("complexity", 0),
-                reverse=True
+                complexity_results, key=lambda x: x.get("complexity", 0), reverse=True
             )[:5]
 
             return [
@@ -104,7 +106,7 @@ def complex_function(data):
                     "function_name": func.get("name", ""),
                     "file_path": func.get("file_path", ""),
                     "complexity": func.get("complexity", 0),
-                    "line_number": func.get("line_number", 0)
+                    "line_number": func.get("line_number", 0),
                 }
                 for func in sorted_results
             ]

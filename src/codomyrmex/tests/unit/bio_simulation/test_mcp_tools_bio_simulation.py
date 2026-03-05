@@ -25,7 +25,9 @@ class TestBioSimulationRunColony:
 
     def test_with_food_sources(self):
         food = [{"position": [30, 30], "amount": 200.0}]
-        result = bio_simulation_run_colony(population=5, hours=1, seed=42, food_sources=food)
+        result = bio_simulation_run_colony(
+            population=5, hours=1, seed=42, food_sources=food
+        )
         assert result["status"] == "success"
 
     def test_negative_population_returns_error(self):

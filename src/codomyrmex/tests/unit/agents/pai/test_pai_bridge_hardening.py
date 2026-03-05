@@ -274,7 +274,6 @@ def test_mcp_tool_decorator_metadata():
     @mcp_tool(version="1.2.3", requires=["numpy", "pandas"])
     def my_tool():
         """Docstring."""
-        pass
 
     meta = my_tool._mcp_tool_meta
     assert meta["version"] == "1.2.3"
@@ -303,12 +302,10 @@ def test_discovery_availability_missing_dep():
             @mcp_tool(requires=[sentinel])
             def broken_tool():  # type: ignore[misc]
                 """A tool that requires a missing dep."""
-                pass
 
             @mcp_tool(requires=["os"])
             def working_tool():  # type: ignore[misc]
                 """A tool that requires a stdlib module."""
-                pass
 
         discovery = MCPDiscovery()
         tools = discovery._scan_module(FakeModule)

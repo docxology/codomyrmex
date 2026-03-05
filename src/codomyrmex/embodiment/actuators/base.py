@@ -77,7 +77,9 @@ class MockActuator(ActuatorController):
             return False
         self._last_command = command
         if command.command_type == "move":
-            self.current_state["position"] = command.parameters.get("target", self.current_state["position"])
+            self.current_state["position"] = command.parameters.get(
+                "target", self.current_state["position"]
+            )
         return True
 
     def get_status(self) -> ActuatorStatus:

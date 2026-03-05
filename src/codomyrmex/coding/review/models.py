@@ -13,7 +13,7 @@ Example:
     ...     severity=SeverityLevel.WARNING,
     ...     message="Unused variable 'x'",
     ...     rule_id="W0612",
-    ...     category="quality"
+    ...     category="quality",
     ... )
 """
 
@@ -372,7 +372,6 @@ class CodeReviewError(CodomyrmexError):
 
     Parent class for all code review-related exceptions.
     """
-    pass
 
 
 class PyscnError(CodeReviewError):
@@ -380,7 +379,6 @@ class PyscnError(CodeReviewError):
 
     Raised when pyscn analysis fails or produces invalid results.
     """
-    pass
 
 
 class ToolNotFoundError(CodeReviewError):
@@ -389,7 +387,6 @@ class ToolNotFoundError(CodeReviewError):
     Raised when a required external tool (e.g., pylint, pyscn)
     is not installed or not available in PATH.
     """
-    pass
 
 
 class ConfigurationError(CodeReviewError):
@@ -397,5 +394,3 @@ class ConfigurationError(CodeReviewError):
 
     Raised when analysis configuration is invalid or incomplete.
     """
-    pass
-

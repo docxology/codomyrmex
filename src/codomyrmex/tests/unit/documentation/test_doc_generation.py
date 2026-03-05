@@ -32,8 +32,7 @@ class TestExtractExports:
 
         init = tmp_path / "__init__.py"
         init.write_text(
-            '"""Docstring."""\n'
-            '__all__ = ["MyClass", "AnotherClass", "my_func"]\n'
+            '"""Docstring."""\n__all__ = ["MyClass", "AnotherClass", "my_func"]\n'
         )
         result = extract_exports(init)
         assert "MyClass" in result["classes"]
@@ -98,7 +97,9 @@ class TestExtractReadmeDescription:
         from codomyrmex.documentation.pai import extract_readme_description
 
         readme = tmp_path / "README.md"
-        readme.write_text("# Title\n\nFirst line of paragraph.\nSecond line.\n\n## Next\n")
+        readme.write_text(
+            "# Title\n\nFirst line of paragraph.\nSecond line.\n\n## Next\n"
+        )
         desc = extract_readme_description(readme)
         assert "First line" in desc
         assert "Second line" in desc
@@ -199,9 +200,7 @@ class TestInferPaiPhase:
         from codomyrmex.documentation.pai import infer_pai_phase
 
         phases = infer_pai_phase(
-            "my_mod",
-            ["get_data", "generate_output", "validate_result"],
-            []
+            "my_mod", ["get_data", "generate_output", "validate_result"], []
         )
         assert "OBSERVE" in phases
         assert "BUILD" in phases

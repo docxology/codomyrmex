@@ -62,6 +62,7 @@ from codomyrmex.agents.cli.handlers import (
 # variables (per skip policy: skip tests requiring network/API keys).
 # Each binary must be present AND the env var must be set to "1".
 
+
 def _cli_agent_ready(binary: str, env_var: str) -> bool:
     """Return True only if binary is found AND test opt-in env var is set."""
     if not (shutil.which(binary) and os.environ.get(env_var) == "1"):
@@ -72,9 +73,10 @@ def _cli_agent_ready(binary: str, env_var: str) -> bool:
     except Exception:
         return False
 
+
 _OPENCODE_READY = _cli_agent_ready("opencode", "OPENCODE_TEST_ENABLED")
-_JULES_READY    = _cli_agent_ready("jules",    "JULES_TEST_ENABLED")
-_GEMINI_READY   = _cli_agent_ready("gemini",   "GEMINI_TEST_ENABLED")
+_JULES_READY = _cli_agent_ready("jules", "JULES_TEST_ENABLED")
+_GEMINI_READY = _cli_agent_ready("gemini", "GEMINI_TEST_ENABLED")
 
 
 def _make_args(**kwargs):
@@ -94,6 +96,7 @@ def _make_args(**kwargs):
 # ---------------------------------------------------------------------------
 # _parse_context
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestParseContext:
@@ -115,7 +118,7 @@ class TestParseContext:
 
     def test_json_array_parsed(self):
         # json.loads allows arrays -- handler should pass through
-        result = _parse_context('[1, 2, 3]')
+        result = _parse_context("[1, 2, 3]")
         assert result == [1, 2, 3]
 
     def test_nested_json(self):
@@ -127,6 +130,7 @@ class TestParseContext:
 # ---------------------------------------------------------------------------
 # _create_agent_request
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCreateAgentRequest:
@@ -164,6 +168,7 @@ class TestCreateAgentRequest:
 # handle_info
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHandleInfo:
     """Tests for handle_info."""
@@ -195,6 +200,7 @@ class TestHandleInfo:
 # ---------------------------------------------------------------------------
 # handle_agent_setup / handle_agent_test with None client
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestHandleAgentSetupNoneClient:
@@ -228,6 +234,7 @@ class TestHandleAgentTestNoneClient:
 # via the public wrappers, by testing the None-guard directly.
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAgentExecuteNoneGuard:
     """All execute handlers should gracefully handle unavailable clients."""
@@ -235,6 +242,7 @@ class TestAgentExecuteNoneGuard:
     def test_handle_agent_execute_none_client(self, capsys):
         """Directly test _handle_agent_execute with None."""
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         args = _make_args()
         result = _handle_agent_execute(None, "TestAgent", args)
         assert result is False
@@ -242,6 +250,7 @@ class TestAgentExecuteNoneGuard:
     def test_handle_agent_stream_none_client(self, capsys):
         """Directly test _handle_agent_stream with None."""
         from codomyrmex.agents.cli.handlers import _handle_agent_stream
+
         args = _make_args()
         result = _handle_agent_stream(None, "TestAgent", args)
         assert result is False
@@ -251,8 +260,12 @@ class TestAgentExecuteNoneGuard:
 # Jules handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
-@pytest.mark.skipif(not _JULES_READY, reason="Jules CLI requires AI API access; set JULES_TEST_ENABLED=1 to run")
+@pytest.mark.skipif(
+    not _JULES_READY,
+    reason="Jules CLI requires AI API access; set JULES_TEST_ENABLED=1 to run",
+)
 class TestJulesHandlers:
     """Tests for Jules-specific handlers (check, help, command)."""
 
@@ -297,6 +310,7 @@ class TestJulesHandlers:
 # Claude handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestClaudeHandlers:
     """Tests for Claude-specific handlers.
@@ -333,6 +347,7 @@ class TestClaudeHandlers:
 # Codex handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestCodexHandlers:
     """Tests for Codex-specific handlers."""
@@ -358,8 +373,11 @@ class TestCodexHandlers:
 # OpenCode handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
-@pytest.mark.skipif(not _OPENCODE_READY, reason="opencode CLI not available or not responding within 3s")
+@pytest.mark.skipif(
+    not _OPENCODE_READY, reason="opencode CLI not available or not responding within 3s"
+)
 class TestOpenCodeHandlers:
     """Tests for OpenCode-specific handlers."""
 
@@ -398,8 +416,12 @@ class TestOpenCodeHandlers:
 # Gemini handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
-@pytest.mark.skipif(not _GEMINI_READY, reason="Gemini CLI requires AI API access; set GEMINI_TEST_ENABLED=1 to run")
+@pytest.mark.skipif(
+    not _GEMINI_READY,
+    reason="Gemini CLI requires AI API access; set GEMINI_TEST_ENABLED=1 to run",
+)
 class TestGeminiHandlers:
     """Tests for Gemini-specific handlers."""
 
@@ -447,6 +469,7 @@ class TestGeminiHandlers:
 # Droid handlers
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDroidHandlers:
     """Tests for Droid-specific handlers.
@@ -480,6 +503,7 @@ class TestDroidHandlers:
 # _get_droid_controller
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGetDroidController:
     """Tests for the _get_droid_controller singleton helper."""
@@ -487,6 +511,7 @@ class TestGetDroidController:
     def test_returns_none_when_create_fn_missing(self):
         """When create_default_controller is None, should return None."""
         import codomyrmex.agents.cli.handlers as h
+
         # Reset singleton
         original = h._droid_controller
         h._droid_controller = None
@@ -504,6 +529,7 @@ class TestGetDroidController:
 # Edge cases: _handle_agent_execute and _handle_agent_stream with
 # a class that raises on instantiation (simulates missing config)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestHandlerErrorPaths:
@@ -561,6 +587,7 @@ class TestHandlerErrorPaths:
 # We cannot easily trigger a real successful response without API keys,
 # but we CAN test the _create_agent_request + output path indirectly.
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestOutputFilePath:
@@ -693,18 +720,21 @@ class _CLICheckUnavailableClient:
 # Success-path tests for _handle_agent_execute
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHandleAgentExecuteSuccessPaths:
     """Test the happy path of _handle_agent_execute using real helper classes."""
 
     def test_success_response_returns_true(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         args = _make_args(prompt="hi")
         result = _handle_agent_execute(_SuccessClient, "TestAgent", args)
         assert result is True
 
     def test_success_response_prints_content(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         args = _make_args(prompt="hi")
         _handle_agent_execute(_SuccessClient, "TestAgent", args)
         captured = capsys.readouterr()
@@ -713,6 +743,7 @@ class TestHandleAgentExecuteSuccessPaths:
     def test_success_with_metadata_branch(self, capsys):
         """Non-empty metadata dict hits the metadata printing branch (line 102)."""
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         args = _make_args(prompt="hi", format="text")
         result = _handle_agent_execute(_SuccessClientWithMetadata, "TestAgent", args)
         assert result is True
@@ -722,12 +753,14 @@ class TestHandleAgentExecuteSuccessPaths:
     def test_success_with_metadata_json_format(self, capsys):
         """Metadata branch with json format output."""
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         args = _make_args(prompt="hi", format="json")
         result = _handle_agent_execute(_SuccessClientWithMetadata, "TestAgent", args)
         assert result is True
 
     def test_failure_response_returns_false(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         args = _make_args(prompt="hi")
         result = _handle_agent_execute(_FailureResponseClient, "TestAgent", args)
         assert result is False
@@ -735,6 +768,7 @@ class TestHandleAgentExecuteSuccessPaths:
     def test_success_with_output_file(self, tmp_path, capsys):
         """Success path writes response content to output file (line 108-110)."""
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         outfile = tmp_path / "response.txt"
         args = _make_args(prompt="hi", output=str(outfile))
         result = _handle_agent_execute(_SuccessClient, "TestAgent", args)
@@ -745,6 +779,7 @@ class TestHandleAgentExecuteSuccessPaths:
     def test_success_output_file_content_matches_response(self, tmp_path, capsys):
         """File written by handler contains exactly the response content."""
         from codomyrmex.agents.cli.handlers import _handle_agent_execute
+
         outfile = tmp_path / "out.txt"
         args = _make_args(prompt="write this", output=str(outfile))
         _handle_agent_execute(_SuccessClient, "TestAgent", args)
@@ -755,18 +790,21 @@ class TestHandleAgentExecuteSuccessPaths:
 # Success-path tests for _handle_agent_stream
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHandleAgentStreamSuccessPaths:
     """Test the happy path of _handle_agent_stream using real helper classes."""
 
     def test_success_stream_returns_true(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_agent_stream
+
         args = _make_args(prompt="hi")
         result = _handle_agent_stream(_SuccessClient, "TestAgent", args)
         assert result is True
 
     def test_success_stream_prints_chunks(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_agent_stream
+
         args = _make_args(prompt="hi")
         _handle_agent_stream(_SuccessClient, "TestAgent", args)
         captured = capsys.readouterr()
@@ -776,6 +814,7 @@ class TestHandleAgentStreamSuccessPaths:
     def test_success_stream_with_output_file(self, tmp_path, capsys):
         """Stream success path writes joined chunks to output file (line 146-148)."""
         from codomyrmex.agents.cli.handlers import _handle_agent_stream
+
         outfile = tmp_path / "stream_out.txt"
         args = _make_args(prompt="hi", output=str(outfile))
         result = _handle_agent_stream(_SuccessClient, "TestAgent", args)
@@ -803,6 +842,7 @@ class TestHandleAgentStreamSuccessPaths:
     def test_stream_with_output_file_metadata(self, tmp_path, capsys):
         """Ensure the joined output file only contains stream chunks."""
         from codomyrmex.agents.cli.handlers import _handle_agent_stream
+
         outfile = tmp_path / "stream.txt"
         args = _make_args(prompt="hi", output=str(outfile))
         _handle_agent_stream(_SuccessClientWithMetadata, "TestAgent", args)
@@ -813,6 +853,7 @@ class TestHandleAgentStreamSuccessPaths:
 # ---------------------------------------------------------------------------
 # Success-path tests for handle_agent_setup / handle_agent_test
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestHandleAgentSetupSuccessPaths:
@@ -890,18 +931,21 @@ class TestHandleAgentTestSuccessPaths:
 # Success-path tests for _handle_cli_agent_check
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHandleCliAgentCheck:
     """Test _handle_cli_agent_check directly with real helper clients."""
 
     def test_available_client_returns_true(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_cli_agent_check
+
         args = _make_args()
         result = _handle_cli_agent_check(_CLICheckClient, "FakeCLI", args)
         assert result is True
 
     def test_available_client_prints_command(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_cli_agent_check
+
         args = _make_args()
         _handle_cli_agent_check(_CLICheckClient, "FakeCLI", args)
         captured = capsys.readouterr()
@@ -909,6 +953,7 @@ class TestHandleCliAgentCheck:
 
     def test_available_client_prints_timeout(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_cli_agent_check
+
         args = _make_args()
         _handle_cli_agent_check(_CLICheckClient, "FakeCLI", args)
         captured = capsys.readouterr()
@@ -917,12 +962,14 @@ class TestHandleCliAgentCheck:
     def test_unavailable_client_still_returns_true(self, capsys):
         """Per handler logic: even unavailable result returns True (not an error)."""
         from codomyrmex.agents.cli.handlers import _handle_cli_agent_check
+
         args = _make_args()
         result = _handle_cli_agent_check(_CLICheckUnavailableClient, "MissingCLI", args)
         assert result is True
 
     def test_unavailable_client_prints_warning(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_cli_agent_check
+
         args = _make_args()
         _handle_cli_agent_check(_CLICheckUnavailableClient, "MissingCLI", args)
         captured = capsys.readouterr()
@@ -949,6 +996,7 @@ class TestHandleCliAgentCheck:
 
     def test_none_client_returns_false(self, capsys):
         from codomyrmex.agents.cli.handlers import _handle_cli_agent_check
+
         args = _make_args()
         result = _handle_cli_agent_check(None, "Ghost", args)
         assert result is False
@@ -975,6 +1023,7 @@ class TestHandleCliAgentCheck:
 # _handle_api_key_check paths using real get_config()
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHandleApiKeyCheck:
     """Test _handle_api_key_check using real get_config() and a dummy class."""
@@ -988,7 +1037,9 @@ class TestHandleApiKeyCheck:
 
         # claude_api_key is None by default in AgentConfig
         args = _make_args()
-        result = _handle_api_key_check(FakeAPIClient, "FakeAPI", "claude", "FAKE_API_KEY", args)
+        result = _handle_api_key_check(
+            FakeAPIClient, "FakeAPI", "claude", "FAKE_API_KEY", args
+        )
         assert result is False
 
     def test_no_api_key_prints_warning(self, capsys):
@@ -1006,6 +1057,7 @@ class TestHandleApiKeyCheck:
     def test_none_client_returns_false(self, capsys):
         """None client_class returns False immediately."""
         from codomyrmex.agents.cli.handlers import _handle_api_key_check
+
         args = _make_args()
         result = _handle_api_key_check(None, "Ghost", "ghost", "GHOST_KEY", args)
         assert result is False
@@ -1044,6 +1096,7 @@ class TestHandleApiKeyCheck:
 # OpenCode handlers without live CLI (test None-guard and error paths)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestOpenCodeHandlersNoLiveCLI:
     """Test OpenCode handlers by exercising paths that don't need live CLI."""
@@ -1080,6 +1133,7 @@ class TestOpenCodeHandlersNoLiveCLI:
 # Jules handlers without live CLI
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestJulesHandlersNoLiveCLI:
     """Verify Jules handler entry points return bool without crashing."""
@@ -1113,6 +1167,7 @@ class TestJulesHandlersNoLiveCLI:
 # ---------------------------------------------------------------------------
 # Gemini handlers without live CLI
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestGeminiHandlersNoLiveCLI:
@@ -1153,6 +1208,7 @@ class TestGeminiHandlersNoLiveCLI:
 # Droid handlers — extended tests (no droid module needed)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestDroidHandlersExtended:
     """Extended droid handler tests exercising droid-unavailable paths."""
@@ -1188,6 +1244,7 @@ class TestDroidHandlersExtended:
 # handle_info edge cases
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHandleInfoEdgeCases:
     """Additional edge cases for handle_info."""
@@ -1214,6 +1271,7 @@ class TestHandleInfoEdgeCases:
 # ---------------------------------------------------------------------------
 # _parse_context edge cases (additional)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestParseContextEdgeCases:
@@ -1247,6 +1305,7 @@ class TestParseContextEdgeCases:
 # ---------------------------------------------------------------------------
 # _create_agent_request edge cases
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestCreateAgentRequestEdgeCases:

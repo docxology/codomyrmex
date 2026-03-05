@@ -16,6 +16,7 @@ from typing import Any
 
 class RoutingStrategy(Enum):
     """Model routing strategies."""
+
     PRIORITY = "priority"  # Use first available in order
     ROUND_ROBIN = "round_robin"
     RANDOM = "random"
@@ -27,6 +28,7 @@ class RoutingStrategy(Enum):
 @dataclass
 class ModelConfig:
     """Configuration for a model."""
+
     name: str
     provider: str
     model_id: str
@@ -43,6 +45,7 @@ class ModelConfig:
 @dataclass
 class ModelStats:
     """Runtime statistics for a model."""
+
     success_count: int = 0
     failure_count: int = 0
     total_latency_ms: float = 0.0
@@ -73,12 +76,10 @@ class ModelProvider(ABC):
     @abstractmethod
     def complete(self, prompt: str, **kwargs) -> str:
         """Generate completion."""
-        pass
 
     @abstractmethod
     def is_available(self) -> bool:
         """Check if provider is available."""
-        pass
 
 
 class ModelRouter:
@@ -121,7 +122,8 @@ class ModelRouter:
     ) -> ModelConfig | None:
         """Select best model based on strategy and requirements."""
         candidates = [
-            m for m in self._models.values()
+            m
+            for m in self._models.values()
             if m.enabled and self._meets_requirements(m, required_capabilities)
         ]
 
@@ -138,27 +140,33 @@ class ModelRouter:
             candidates.sort(key=lambda m: m.priority, reverse=True)
             return candidates[0]
 
-        elif strategy == RoutingStrategy.ROUND_ROBIN:
+        if strategy == RoutingStrategy.ROUND_ROBIN:
             self._round_robin_idx = (self._round_robin_idx + 1) % len(candidates)
             return candidates[self._round_robin_idx]
 
-        elif strategy == RoutingStrategy.RANDOM:
+        if strategy == RoutingStrategy.RANDOM:
             return random.choice(candidates)
 
-        elif strategy == RoutingStrategy.COST_OPTIMIZED:
-            return min(candidates, key=lambda m: m.cost_per_1k_input + m.cost_per_1k_output)
+        if strategy == RoutingStrategy.COST_OPTIMIZED:
+            return min(
+                candidates, key=lambda m: m.cost_per_1k_input + m.cost_per_1k_output
+            )
 
-        elif strategy == RoutingStrategy.LATENCY_OPTIMIZED:
+        if strategy == RoutingStrategy.LATENCY_OPTIMIZED:
+
             def latency(m):
                 """Latency."""
                 stats = self._stats.get(m.name)
-                return stats.avg_latency_ms if stats else float('inf')
+                return stats.avg_latency_ms if stats else float("inf")
+
             return min(candidates, key=latency)
 
-        elif strategy == RoutingStrategy.CAPABILITY_MATCH:
+        if strategy == RoutingStrategy.CAPABILITY_MATCH:
             if required_capabilities:
+
                 def capability_score(m):
                     return len(set(required_capabilities) & set(m.capabilities))
+
                 return max(candidates, key=capability_score)
             return candidates[0]
 
@@ -310,11 +318,11 @@ class CostTracker:
 
 
 __all__ = [
-    "ModelRouter",
-    "ModelConfig",
-    "ModelStats",
-    "ModelProvider",
-    "RoutingStrategy",
-    "FallbackChain",
     "CostTracker",
+    "FallbackChain",
+    "ModelConfig",
+    "ModelProvider",
+    "ModelRouter",
+    "ModelStats",
+    "RoutingStrategy",
 ]

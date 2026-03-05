@@ -16,18 +16,18 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class CacheSerializer(ABC):
     """Abstract base class for cache serializers."""
 
     @abstractmethod
     def serialize(self, value: Any) -> bytes:
         """Serialize a value to bytes."""
-        pass
 
     @abstractmethod
     def deserialize(self, data: bytes) -> Any:
         """Deserialize bytes to a value."""
-        pass
+
 
 class JSONSerializer(CacheSerializer):
     """JSON serializer for cache values."""
@@ -37,11 +37,12 @@ class JSONSerializer(CacheSerializer):
 
     def serialize(self, value: Any) -> bytes:
         """Serialize this object to a portable format."""
-        return json.dumps(value, indent=self.indent, default=str).encode('utf-8')
+        return json.dumps(value, indent=self.indent, default=str).encode("utf-8")
 
     def deserialize(self, data: bytes) -> Any:
         """Deserialize from a portable format and return an instance."""
-        return json.loads(data.decode('utf-8'))
+        return json.loads(data.decode("utf-8"))
+
 
 class PickleSerializer(CacheSerializer):
     """Pickle serializer for cache values.
@@ -62,6 +63,7 @@ class PickleSerializer(CacheSerializer):
     def deserialize(self, data: bytes) -> Any:
         """Deserialize from a portable format and return an instance."""
         return pickle.loads(data)
+
 
 class CompressedSerializer(CacheSerializer):
     """Wrapper that adds compression."""
@@ -84,6 +86,7 @@ class CompressedSerializer(CacheSerializer):
         decompressed = zlib.decompress(data)
         return self.base.deserialize(decompressed)
 
+
 class Base64Serializer(CacheSerializer):
     """Wrapper that adds base64 encoding."""
 
@@ -100,10 +103,11 @@ class Base64Serializer(CacheSerializer):
         decoded = base64.b64decode(data)
         return self.base.deserialize(decoded)
 
+
 class StringSerializer(CacheSerializer):
     """Simple string serializer."""
 
-    def __init__(self, encoding: str = 'utf-8'):
+    def __init__(self, encoding: str = "utf-8"):
         self.encoding = encoding
 
     def serialize(self, value: Any) -> bytes:
@@ -113,6 +117,7 @@ class StringSerializer(CacheSerializer):
     def deserialize(self, data: bytes) -> Any:
         """Deserialize from a portable format and return an instance."""
         return data.decode(self.encoding)
+
 
 class TypedSerializer(CacheSerializer):
     """Serializer that preserves type information."""
@@ -157,10 +162,9 @@ class TypedSerializer(CacheSerializer):
             logger.debug("Value is not JSON serializable: %s", e)
             return False
 
+
 def create_serializer(
-    serializer_type: str = "json",
-    compress: bool = False,
-    **kwargs
+    serializer_type: str = "json", compress: bool = False, **kwargs
 ) -> CacheSerializer:
     """Factory function to create serializers."""
     serializers = {
@@ -181,12 +185,13 @@ def create_serializer(
 
     return serializer
 
+
 __all__ = [
+    "Base64Serializer",
     "CacheSerializer",
+    "CompressedSerializer",
     "JSONSerializer",
     "PickleSerializer",
-    "CompressedSerializer",
-    "Base64Serializer",
     "StringSerializer",
     "TypedSerializer",
     "create_serializer",

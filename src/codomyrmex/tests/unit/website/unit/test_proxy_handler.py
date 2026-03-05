@@ -4,6 +4,7 @@ Unit tests for ProxyHandler mixin — Zero-Mock compliant.
 Tests the no-content, invalid-JSON, and missing-data-provider paths
 that don't require a running Ollama instance.
 """
+
 import io
 import json
 

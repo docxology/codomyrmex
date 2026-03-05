@@ -103,10 +103,12 @@ class TestDeploymentManager:
 
         # 1 Success
         mgr.deploy("svc1", "v1", RollingDeployment())
+
         # 1 Fail
         class FailStrat(RollingDeployment):
             def deploy(self, targets, version, deploy_fn):
                 return super().deploy(targets, version, lambda t, v: False)
+
         mgr.deploy("svc2", "v2", FailStrat())
         # 1 Rollback
         mgr.rollback("svc1", "v0", BlueGreenDeployment())

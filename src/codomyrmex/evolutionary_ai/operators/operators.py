@@ -17,6 +17,7 @@ T = TypeVar("T")
 
 # ─── Mutation Operators ─────────────────────────────────────────────────
 
+
 class MutationOperator(ABC, Generic[T]):
     """Abstract base class for mutation operators."""
 
@@ -35,7 +36,6 @@ class MutationOperator(ABC, Generic[T]):
         Returns:
             A new mutated Individual.
         """
-        pass
 
 
 class BitFlipMutation(MutationOperator[list[int]]):
@@ -130,6 +130,7 @@ class ScrambleMutation(MutationOperator[list[Any]]):
 
 # ─── Crossover Operators ────────────────────────────────────────────────
 
+
 class CrossoverOperator(ABC, Generic[T]):
     """Abstract base class for crossover operators."""
 
@@ -153,7 +154,6 @@ class CrossoverOperator(ABC, Generic[T]):
         Returns:
             A tuple of two child Individuals.
         """
-        pass
 
     def _should_crossover(self) -> bool:
         """Decide whether to perform crossover based on rate."""
@@ -162,7 +162,9 @@ class CrossoverOperator(ABC, Generic[T]):
     def _copy_parent(self, parent: Individual[T]) -> Individual[T]:
         """Create a copy of a parent, preserving its class."""
         return parent.__class__(
-            genes=list(parent.genes) if isinstance(parent.genes, list) else parent.genes,
+            genes=list(parent.genes)
+            if isinstance(parent.genes, list)
+            else parent.genes,
             fitness=parent.fitness,
             metadata=dict(parent.metadata),
         )
@@ -221,14 +223,14 @@ class TwoPointCrossover(CrossoverOperator[list[Any]]):
         point1, point2 = sorted(random.sample(range(1, length), 2))
 
         child1_genes = (
-            list(parent1.genes[:point1]) +
-            list(parent2.genes[point1:point2]) +
-            list(parent1.genes[point2:])
+            list(parent1.genes[:point1])
+            + list(parent2.genes[point1:point2])
+            + list(parent1.genes[point2:])
         )
         child2_genes = (
-            list(parent2.genes[:point1]) +
-            list(parent1.genes[point1:point2]) +
-            list(parent2.genes[point2:])
+            list(parent2.genes[:point1])
+            + list(parent1.genes[point1:point2])
+            + list(parent2.genes[point2:])
         )
 
         return (
@@ -324,14 +326,14 @@ class BlendCrossover(CrossoverOperator[list[float]]):
 
 
 __all__ = [
-    "MutationOperator",
     "BitFlipMutation",
-    "SwapMutation",
-    "GaussianMutation",
-    "ScrambleMutation",
+    "BlendCrossover",
     "CrossoverOperator",
+    "GaussianMutation",
+    "MutationOperator",
+    "ScrambleMutation",
     "SinglePointCrossover",
+    "SwapMutation",
     "TwoPointCrossover",
     "UniformCrossover",
-    "BlendCrossover",
 ]

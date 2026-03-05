@@ -64,10 +64,12 @@ def _default_task_executor(task: PlanTask) -> Callable[..., Any]:
     Returns a callable that marks the task as completed and returns
     a dict with the task name and state.
     """
+
     def executor(ctx: dict[str, Any]) -> dict[str, Any]:
         """Executor."""
         task.state = TaskState.COMPLETED
         return {"task": task.name, "state": task.state.value}
+
     return executor
 
 
@@ -140,7 +142,9 @@ class FeedbackLoop:
         for iteration in range(1, cfg.max_iterations + 1):
             logger.info(
                 "Feedback iteration %d/%d for goal: %s",
-                iteration, cfg.max_iterations, goal[:50],
+                iteration,
+                cfg.max_iterations,
+                goal[:50],
             )
 
             # 1. Check memory for prior context
@@ -208,7 +212,8 @@ class FeedbackLoop:
             if score.overall >= cfg.quality_floor:
                 logger.info(
                     "Quality floor reached: %.3f >= %.3f",
-                    score.overall, cfg.quality_floor,
+                    score.overall,
+                    cfg.quality_floor,
                 )
                 return FeedbackResult(
                     goal=goal,

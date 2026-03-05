@@ -10,6 +10,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class MetricsCollector:
     """Collect and aggregate execution metrics."""
 
@@ -55,7 +56,9 @@ class MetricsCollector:
         # Calculate averages
         for _language, stats in language_stats.items():
             if stats["count"] > 0:
-                stats["average_execution_time"] = stats["total_execution_time"] / stats["count"]
+                stats["average_execution_time"] = (
+                    stats["total_execution_time"] / stats["count"]
+                )
 
         return language_stats
 

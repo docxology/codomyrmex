@@ -2,4 +2,4 @@
 
 from .forecast import Forecaster, ForecastError
 
-__all__ = ["Forecaster", "ForecastError"]
+__all__ = ["ForecastError", "Forecaster"]

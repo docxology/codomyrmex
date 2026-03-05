@@ -49,7 +49,9 @@ class DeploymentManager:
             DeploymentResult reflecting the outcome.
         """
         strategy = strategy or self._default_strategy
-        logger.info("Deploying %s:%s using %s", service_name, version, type(strategy).__name__)
+        logger.info(
+            "Deploying %s:%s using %s", service_name, version, type(strategy).__name__
+        )
 
         if targets is None:
             targets = [
@@ -70,7 +72,9 @@ class DeploymentManager:
             self._history.append(result)
             if result.success:
                 self._active[service_name] = version
-            logger.info("Deployment %s:%s → %s", service_name, version, result.state.value)
+            logger.info(
+                "Deployment %s:%s → %s", service_name, version, result.state.value
+            )
             return result
         except Exception as e:
             logger.error("Deployment failed for %s:%s: %s", service_name, version, e)
@@ -130,7 +134,13 @@ class DeploymentManager:
         return {
             "total_deployments": len(self._history),
             "active_services": list(self._active.keys()),
-            "completed": sum(1 for r in self._history if r.state == DeploymentState.COMPLETED),
-            "failed": sum(1 for r in self._history if r.state == DeploymentState.FAILED),
-            "rolled_back": sum(1 for r in self._history if r.state == DeploymentState.ROLLED_BACK),
+            "completed": sum(
+                1 for r in self._history if r.state == DeploymentState.COMPLETED
+            ),
+            "failed": sum(
+                1 for r in self._history if r.state == DeploymentState.FAILED
+            ),
+            "rolled_back": sum(
+                1 for r in self._history if r.state == DeploymentState.ROLLED_BACK
+            ),
         }

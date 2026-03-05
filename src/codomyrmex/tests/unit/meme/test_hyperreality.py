@@ -221,34 +221,42 @@ class TestAssessRealityLevel:
 
     def test_copy_without_original_returns_absence(self) -> None:
         """History with 'copy' but no 'original' returns ABSENCE."""
-        result = assess_reality_level({
-            "history": "copy of a copy",
-            "provenance": ["source_a"],
-        })
+        result = assess_reality_level(
+            {
+                "history": "copy of a copy",
+                "provenance": ["source_a"],
+            }
+        )
         assert result == SimulationLevel.ABSENCE
 
     def test_high_distortion_returns_absence(self) -> None:
         """distortion > 0.8 returns ABSENCE."""
-        result = assess_reality_level({
-            "provenance": ["origin"],
-            "distortion": 0.9,
-        })
+        result = assess_reality_level(
+            {
+                "provenance": ["origin"],
+                "distortion": 0.9,
+            }
+        )
         assert result == SimulationLevel.ABSENCE
 
     def test_medium_distortion_returns_mask(self) -> None:
         """distortion between 0.4 and 0.8 returns MASK."""
-        result = assess_reality_level({
-            "provenance": ["origin"],
-            "distortion": 0.6,
-        })
+        result = assess_reality_level(
+            {
+                "provenance": ["origin"],
+                "distortion": 0.6,
+            }
+        )
         assert result == SimulationLevel.MASK
 
     def test_low_distortion_returns_reflection(self) -> None:
         """Low distortion and provenance returns REFLECTION."""
-        result = assess_reality_level({
-            "provenance": ["primary_source"],
-            "distortion": 0.1,
-        })
+        result = assess_reality_level(
+            {
+                "provenance": ["primary_source"],
+                "distortion": 0.1,
+            }
+        )
         assert result == SimulationLevel.REFLECTION
 
     def test_empty_dict_no_provenance_pure(self) -> None:
@@ -361,5 +369,7 @@ class TestHyperrealityEngineInjectSimulacrum:
         """Returned simulacrum has the correct referent."""
         engine = HyperrealityEngine()
         engine.create_tunnel("TR", [])
-        sim = engine.inject_simulacrum("TR", "specific_referent", SimulationLevel.ABSENCE)
+        sim = engine.inject_simulacrum(
+            "TR", "specific_referent", SimulationLevel.ABSENCE
+        )
         assert sim.referent == "specific_referent"

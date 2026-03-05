@@ -15,7 +15,6 @@ logger = get_logger(__name__)
 
 class PolicyError(Exception):
     """Exception raised when a policy violation or management error occurs."""
-    pass
 
 
 class PolicyRule:
@@ -56,8 +55,6 @@ class PolicyRule:
     def __repr__(self) -> str:
         """Return string representation."""
         return f"PolicyRule(name='{self.name}', priority={self.priority})"
-
-
 
 
 class PolicyEngine:
@@ -136,12 +133,14 @@ class PolicyEngine:
 
         for rule in rules:
             passed = rule.evaluate(context)
-            details.append({
-                "rule": rule.name,
-                "passed": passed,
-                "action": rule.action,
-                "priority": rule.priority,
-            })
+            details.append(
+                {
+                    "rule": rule.name,
+                    "passed": passed,
+                    "action": rule.action,
+                    "priority": rule.priority,
+                }
+            )
             if not passed:
                 violations += 1
 
@@ -171,9 +170,7 @@ class PolicyEngine:
             if not d["passed"]
         ]
 
-    def enforce(
-        self, policy_name: str, context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def enforce(self, policy_name: str, context: dict[str, Any]) -> dict[str, Any]:
         """Enforce a policy and return enforcement actions.
 
         Args:
@@ -198,10 +195,13 @@ class PolicyEngine:
 
     def add_policy(self, policy: PolicyRule) -> None:
         """Add a policy rule directly (wraps in unnamed policy)."""
-        self._policies.setdefault("_default", {
-            "id": "default",
-            "name": "_default",
-            "description": "",
-            "rules": [],
-        })
+        self._policies.setdefault(
+            "_default",
+            {
+                "id": "default",
+                "name": "_default",
+                "description": "",
+                "rules": [],
+            },
+        )
         self._policies["_default"]["rules"].append(policy)

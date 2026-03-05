@@ -5,7 +5,6 @@ Uses real project structures and real Jinja2 templates via the
 default module template directory. No unittest.mock is used.
 """
 
-
 import pytest
 
 from codomyrmex.website.generator import WebsiteGenerator
@@ -43,10 +42,20 @@ def test_all_pages_generated(tmp_path):
     gen.generate()
 
     expected = [
-        "index.html", "health.html", "modules.html", "tools.html",
-        "scripts.html", "chat.html", "agents.html", "config.html",
-        "docs.html", "pipelines.html", "awareness.html",
-        "pai_control.html", "dispatch.html", "telemetry.html",
+        "index.html",
+        "health.html",
+        "modules.html",
+        "tools.html",
+        "scripts.html",
+        "chat.html",
+        "agents.html",
+        "config.html",
+        "docs.html",
+        "pipelines.html",
+        "awareness.html",
+        "pai_control.html",
+        "dispatch.html",
+        "telemetry.html",
     ]
     for page in expected:
         assert (output_dir / page).exists(), f"Missing page: {page}"

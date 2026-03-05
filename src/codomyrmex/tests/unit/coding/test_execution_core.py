@@ -5,6 +5,7 @@ SUPPORTED_LANGUAGES structure, execute_code non-Docker paths.
 
 No mocks. No MagicMock. No monkeypatch.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -166,7 +167,9 @@ class TestSupportedLanguagesStructure:
     def test_each_language_has_timeout_factor(self):
         """Every language config has a positive timeout_factor."""
         for lang, config in SUPPORTED_LANGUAGES.items():
-            assert "timeout_factor" in config, f"Language {lang} missing 'timeout_factor'"
+            assert "timeout_factor" in config, (
+                f"Language {lang} missing 'timeout_factor'"
+            )
             assert config["timeout_factor"] >= 1.0
 
     def test_python_extension_is_py(self):
@@ -194,8 +197,12 @@ class TestSupportedLanguagesStructure:
         """Compiled languages (java, cpp, c, rust) have higher timeout factors."""
         compiled = ["java", "cpp", "c", "rust"]
         interpreted = ["python", "javascript", "bash"]
-        compiled_min = min(SUPPORTED_LANGUAGES[lang]["timeout_factor"] for lang in compiled)
-        interpreted_max = max(SUPPORTED_LANGUAGES[lang]["timeout_factor"] for lang in interpreted)
+        compiled_min = min(
+            SUPPORTED_LANGUAGES[lang]["timeout_factor"] for lang in compiled
+        )
+        interpreted_max = max(
+            SUPPORTED_LANGUAGES[lang]["timeout_factor"] for lang in interpreted
+        )
         assert compiled_min >= interpreted_max
 
 
@@ -286,7 +293,10 @@ class TestExecuteCodeNonDockerPaths:
         result = execute_code("cobol", "DISPLAY 'hello'.")
         assert result["status"] == "setup_error"
         assert result["exit_code"] == -1
-        assert "cobol" in result["error_message"].lower() or "not supported" in result["error_message"].lower()
+        assert (
+            "cobol" in result["error_message"].lower()
+            or "not supported" in result["error_message"].lower()
+        )
 
     def test_unsupported_language_has_empty_stdout(self):
         """Unsupported language produces empty stdout."""
@@ -315,5 +325,12 @@ class TestExecuteCodeNonDockerPaths:
         from codomyrmex.coding.execution.executor import execute_code
 
         result = execute_code("unknownlang", "code")
-        required_keys = {"stdout", "stderr", "exit_code", "execution_time", "status", "error_message"}
+        required_keys = {
+            "stdout",
+            "stderr",
+            "exit_code",
+            "execution_time",
+            "status",
+            "error_message",
+        }
         assert required_keys.issubset(result.keys())

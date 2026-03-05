@@ -58,14 +58,14 @@ class AgentOrchestrator:
         if not agents_to_use:
             raise AgentError("No agents available for orchestration")
 
-        self.logger.info(
-            f"Executing parallel request on {len(agents_to_use)} agents"
-        )
+        self.logger.info(f"Executing parallel request on {len(agents_to_use)} agents")
 
         responses = [None] * len(agents_to_use)
         import concurrent.futures
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=len(agents_to_use)) as executor:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=len(agents_to_use)
+        ) as executor:
             future_to_agent = {
                 executor.submit(agent.execute, request): (i, agent)
                 for i, agent in enumerate(agents_to_use)
@@ -76,7 +76,13 @@ class AgentOrchestrator:
                 try:
                     response = future.result()
                     responses[i] = response
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
                     self.logger.error(f"Agent {agent} failed: {e}")
                     responses[i] = AgentResponse(
                         content="",
@@ -108,9 +114,7 @@ class AgentOrchestrator:
         if not agents_to_use:
             raise AgentError("No agents available for orchestration")
 
-        self.logger.info(
-            f"Executing sequential request on {len(agents_to_use)} agents"
-        )
+        self.logger.info(f"Executing sequential request on {len(agents_to_use)} agents")
 
         responses = []
         for agent in agents_to_use:
@@ -119,9 +123,7 @@ class AgentOrchestrator:
                 responses.append(response)
 
                 if stop_on_success and response.is_success():
-                    self.logger.info(
-                        f"Stopping after successful response from {agent}"
-                    )
+                    self.logger.info(f"Stopping after successful response from {agent}")
                     break
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 self.logger.error(f"Agent {agent} failed: {e}")
@@ -155,9 +157,7 @@ class AgentOrchestrator:
         if not agents_to_use:
             raise AgentError("No agents available for orchestration")
 
-        self.logger.info(
-            f"Executing with fallback on {len(agents_to_use)} agents"
-        )
+        self.logger.info(f"Executing with fallback on {len(agents_to_use)} agents")
 
         last_error_response = None
 
@@ -167,11 +167,8 @@ class AgentOrchestrator:
                 if response.is_success():
                     self.logger.info(f"Success with agent {agent}")
                     return response
-                else:
-                    last_error_response = response
-                    self.logger.warning(
-                        f"Agent {agent} failed: {response.error}"
-                    )
+                last_error_response = response
+                self.logger.warning(f"Agent {agent} failed: {response.error}")
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 self.logger.error(f"Agent {agent} raised exception: {e}")
                 last_error_response = AgentResponse(
@@ -215,5 +212,3 @@ class AgentOrchestrator:
         ]
 
         return supported_agents
-
-

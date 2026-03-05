@@ -17,7 +17,13 @@ Usage:
 """
 logger = get_logger(__name__)
 
-__all__ = ["parse_pyproject_dependencies", "check_version_constraints", "check_duplicates", "check_requirements_txt_deprecated", "main"]
+__all__ = [
+    "check_duplicates",
+    "check_requirements_txt_deprecated",
+    "check_version_constraints",
+    "main",
+    "parse_pyproject_dependencies",
+]
 
 
 def parse_pyproject_dependencies(content: str) -> dict[str, list[tuple[str, str]]]:
@@ -45,7 +51,9 @@ def parse_pyproject_dependencies(content: str) -> dict[str, list[tuple[str, str]
                 current_section = None
         elif line_stripped.startswith("[project.optional-dependencies."):
             # Extract group name
-            match = re.match(r"\[project\.optional-dependencies\.([^\]]+)\]", line_stripped)
+            match = re.match(
+                r"\[project\.optional-dependencies\.([^\]]+)\]", line_stripped
+            )
             if match:
                 current_section = f"optional-{match.group(1)}"
 
@@ -56,18 +64,26 @@ def parse_pyproject_dependencies(content: str) -> dict[str, list[tuple[str, str]
             if match:
                 package_spec = match.group(1)
                 # Extract package name and version
-                pkg_match = re.match(r"^([a-zA-Z0-9_-]+[a-zA-Z0-9._-]*)([<>=!~=]+.*)?$", package_spec)
+                pkg_match = re.match(
+                    r"^([a-zA-Z0-9_-]+[a-zA-Z0-9._-]*)([<>=!~=]+.*)?$", package_spec
+                )
                 if pkg_match:
                     pkg_name = pkg_match.group(1).lower()
                     version = pkg_match.group(2) or ""
 
-                    section_key = current_section if current_section != "optional-dependencies" else "optional-dependencies"
+                    section_key = (
+                        current_section
+                        if current_section != "optional-dependencies"
+                        else "optional-dependencies"
+                    )
                     dependencies[section_key].append((pkg_name, version))
 
     return dict(dependencies)
 
 
-def check_version_constraints(dependencies: dict[str, list[tuple[str, str]]]) -> list[str]:
+def check_version_constraints(
+    dependencies: dict[str, list[tuple[str, str]]],
+) -> list[str]:
     """Check that all dependencies have version constraints."""
     errors = []
 
@@ -91,7 +107,9 @@ def check_duplicates(dependencies: dict[str, list[tuple[str, str]]]) -> list[str
     for pkg_name, occurrences in all_packages.items():
         if len(occurrences) > 1:
             sections = [f"{s} ({v})" for s, v in occurrences]
-            warnings.append(f"⚠️  {pkg_name} appears in multiple sections: {', '.join(sections)}")
+            warnings.append(
+                f"⚠️  {pkg_name} appears in multiple sections: {', '.join(sections)}"
+            )
 
     return warnings
 
@@ -113,7 +131,9 @@ def check_requirements_txt_deprecated(root: Path) -> list[str]:
                 if not content.startswith("# DEPRECATED"):
                     errors.append(f"❌ {req_file} missing deprecation notice")
                 elif "DEPRECATED" not in content:
-                    warnings.append(f"⚠️  {req_file} may have incomplete deprecation notice")
+                    warnings.append(
+                        f"⚠️  {req_file} may have incomplete deprecation notice"
+                    )
 
     return errors + warnings
 
@@ -182,4 +202,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

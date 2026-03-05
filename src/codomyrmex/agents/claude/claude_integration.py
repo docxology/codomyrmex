@@ -31,7 +31,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         code = adapter.adapt_for_ai_code_editing(
             prompt="Create a function that calculates fibonacci",
             language="python",
-            style="functional"
+            style="functional",
         )
         ```
     """
@@ -53,7 +53,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         context_code: str | None = None,
         max_tokens: int | None = None,
         temperature: float | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> str:
         """Adapt Claude for AI code editing module.
 
@@ -87,7 +87,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
             "system": system_prompt,
             "language": language,
             "task": "code_generation",
-            **kwargs
+            **kwargs,
         }
 
         request = AgentRequest(
@@ -99,11 +99,11 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         original_max_tokens = None
         original_temperature = None
 
-        if max_tokens is not None and hasattr(self.agent, 'max_tokens'):
+        if max_tokens is not None and hasattr(self.agent, "max_tokens"):
             original_max_tokens = self.agent.max_tokens
             self.agent.max_tokens = max_tokens
 
-        if temperature is not None and hasattr(self.agent, 'temperature'):
+        if temperature is not None and hasattr(self.agent, "temperature"):
             original_temperature = self.agent.temperature
             self.agent.temperature = temperature
 
@@ -144,10 +144,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         return self._extract_code_from_response(response.content, language)
 
     def adapt_for_ai_code_editing_stream(
-        self,
-        prompt: str,
-        language: str = "python",
-        **kwargs: Any
+        self, prompt: str, language: str = "python", **kwargs: Any
     ) -> Iterator[str]:
         """Stream code generation for AI code editing module.
 
@@ -161,11 +158,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         """
         system_prompt = self._build_code_generation_system_prompt(language)
 
-        context = {
-            "system": system_prompt,
-            "language": language,
-            **kwargs
-        }
+        context = {"system": system_prompt, "language": language, **kwargs}
 
         request = AgentRequest(
             prompt=f"Generate {language} code: {prompt}",
@@ -179,7 +172,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         messages: list[dict],
         model: str | None = None,
         system_prompt: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Adapt Claude for LLM module.
 
@@ -208,10 +201,9 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
                 if not extracted_system:
                     extracted_system = msg.get("content", "")
             else:
-                conversation_messages.append({
-                    "role": msg.get("role", "user"),
-                    "content": msg.get("content", "")
-                })
+                conversation_messages.append(
+                    {"role": msg.get("role", "user"), "content": msg.get("content", "")}
+                )
 
         # Build context with conversation history
         context: dict[str, Any] = {**kwargs}
@@ -220,7 +212,9 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         if len(conversation_messages) > 1:
             context["messages"] = conversation_messages[:-1]
 
-        last_message = conversation_messages[-1] if conversation_messages else {"content": ""}
+        last_message = (
+            conversation_messages[-1] if conversation_messages else {"content": ""}
+        )
         prompt = last_message.get("content", "")
 
         request = AgentRequest(prompt=prompt, context=context)
@@ -228,10 +222,14 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
 
         return {
             "content": response.content,
-            "model": model or getattr(self.agent, 'model', 'claude'),
+            "model": model or getattr(self.agent, "model", "claude"),
             "usage": {
-                "prompt_tokens": response.metadata.get("usage", {}).get("input_tokens", 0),
-                "completion_tokens": response.metadata.get("usage", {}).get("output_tokens", 0),
+                "prompt_tokens": response.metadata.get("usage", {}).get(
+                    "input_tokens", 0
+                ),
+                "completion_tokens": response.metadata.get("usage", {}).get(
+                    "output_tokens", 0
+                ),
                 "total_tokens": response.tokens_used or 0,
             },
             "metadata": {
@@ -247,7 +245,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         code: str,
         language: str = "python",
         analysis_type: str = "general",
-        **kwargs: Any
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """Adapt Claude for code execution sandbox.
 
@@ -276,7 +274,9 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
             "performance": "Analyze this code for performance issues, inefficiencies, and optimization opportunities.",
         }
 
-        analysis_instruction = analysis_prompts.get(analysis_type, analysis_prompts["general"])
+        analysis_instruction = analysis_prompts.get(
+            analysis_type, analysis_prompts["general"]
+        )
 
         prompt = f"""{analysis_instruction}
 
@@ -293,7 +293,7 @@ Provide your analysis in a structured format with:
             "system": f"You are an expert {language} code analyst. Provide thorough, actionable analysis.",
             "language": language,
             "analysis_type": analysis_type,
-            **kwargs
+            **kwargs,
         }
 
         request = AgentRequest(prompt=prompt, context=context)
@@ -318,11 +318,7 @@ Provide your analysis in a structured format with:
         return result
 
     def adapt_for_code_refactoring(
-        self,
-        code: str,
-        instruction: str,
-        language: str = "python",
-        **kwargs: Any
+        self, code: str, instruction: str, language: str = "python", **kwargs: Any
     ) -> dict[str, Any]:
         """Adapt Claude for code refactoring operations.
 
@@ -352,7 +348,7 @@ Provide:
             "system": f"You are an expert {language} developer. Provide clean, well-structured refactored code.",
             "language": language,
             "task": "refactoring",
-            **kwargs
+            **kwargs,
         }
 
         request = AgentRequest(prompt=prompt, context=context)
@@ -360,7 +356,9 @@ Provide:
 
         result = {
             "success": response.is_success(),
-            "refactored_code": self._extract_code_from_response(response.content, language),
+            "refactored_code": self._extract_code_from_response(
+                response.content, language
+            ),
             "explanation": response.content,
             "original_code": code,
             "instruction": instruction,
@@ -373,9 +371,7 @@ Provide:
         return result
 
     def _build_code_generation_system_prompt(
-        self,
-        language: str,
-        style: str | None = None
+        self, language: str, style: str | None = None
     ) -> str:
         """Build optimized system prompt for code generation.
 
@@ -448,7 +444,7 @@ Guidelines:
             "recommendations": [],
         }
 
-        lines = output.split('\n')
+        lines = output.split("\n")
         current_section = None
 
         for line in lines:
@@ -459,8 +455,8 @@ Guidelines:
                 current_section = "issues"
             elif "recommend" in lower_line or "suggestion" in lower_line:
                 current_section = "recommendations"
-            elif line.startswith(('-', '*', '•')) and current_section:
-                item = line.lstrip('-*• ').strip()
+            elif line.startswith(("-", "*", "•")) and current_section:
+                item = line.lstrip("-*• ").strip()
                 if item and current_section in result:
                     result[current_section].append(item)
 

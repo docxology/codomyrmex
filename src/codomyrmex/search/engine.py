@@ -18,22 +18,18 @@ class SearchIndex(ABC):
     @abstractmethod
     def index(self, document: Document) -> None:
         """Index a document."""
-        pass
 
     @abstractmethod
     def search(self, query: str, k: int = 10) -> list[SearchResult]:
         """Search for documents."""
-        pass
 
     @abstractmethod
     def delete(self, doc_id: str) -> bool:
         """Delete a document."""
-        pass
 
     @abstractmethod
     def count(self) -> int:
         """Get document count."""
-        pass
 
 
 class InMemoryIndex(SearchIndex):
@@ -104,9 +100,13 @@ class InMemoryIndex(SearchIndex):
                     highlight = "..." + doc.content[start:end] + "..."
                     highlights.append(highlight)
 
-            results.append(SearchResult(
-                document=doc, score=score, highlights=highlights[:3],
-            ))
+            results.append(
+                SearchResult(
+                    document=doc,
+                    score=score,
+                    highlights=highlights[:3],
+                )
+            )
 
         results.sort(reverse=True)
         return results[:k]

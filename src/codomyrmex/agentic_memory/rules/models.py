@@ -29,7 +29,7 @@ class RuleSection:
     """One numbered section from a .cursorrules file (§0–§7)."""
 
     number: int
-    title: str   # e.g. "Coding Standards & Practices for Python"
+    title: str  # e.g. "Coding Standards & Practices for Python"
     content: str
 
     def to_dict(self) -> dict[str, Any]:
@@ -40,7 +40,7 @@ class RuleSection:
 class Rule:
     """Parsed representation of a single .cursorrules file."""
 
-    name: str               # e.g. "python", "agentic_memory", "general"
+    name: str  # e.g. "python", "agentic_memory", "general"
     priority: RulePriority
     file_path: Path
     sections: list[RuleSection]

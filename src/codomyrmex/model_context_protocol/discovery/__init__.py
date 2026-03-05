@@ -60,7 +60,10 @@ class DiscoveredTool:
             },
         }
         if not self.available:
-            schema["description"] = str(schema["description"]) + f" (UNAVAILABLE: {self.unavailable_reason})"
+            schema["description"] = (
+                str(schema["description"])
+                + f" (UNAVAILABLE: {self.unavailable_reason})"
+            )
         return schema
 
 
@@ -148,9 +151,7 @@ class MCPDiscovery:
         except ImportError as e:
             logger.error(f"Failed to import root package {package_name}: {e}")
             return DiscoveryReport(
-                failed_modules=[
-                    FailedModule(package_name, str(e), type(e).__name__)
-                ]
+                failed_modules=[FailedModule(package_name, str(e), type(e).__name__)]
             )
 
         # Walk through all submodules
@@ -176,9 +177,7 @@ class MCPDiscovery:
             except Exception as e:
                 # Isolate failure
                 logger.debug(f"Failed to scan module {name}: {e}")
-                failed_modules.append(
-                    FailedModule(name, str(e), type(e).__name__)
-                )
+                failed_modules.append(FailedModule(name, str(e), type(e).__name__))
                 self._failed_modules.append(
                     FailedModule(name, str(e), type(e).__name__)
                 )
@@ -284,7 +283,10 @@ class MCPDiscovery:
 
         for name, obj in inspect.getmembers(module):
             _add_if_tool(name, obj)
-            if inspect.isclass(obj) and getattr(obj, "__module__", None) == module.__name__:
+            if (
+                inspect.isclass(obj)
+                and getattr(obj, "__module__", None) == module.__name__
+            ):
                 for method_name, method_obj in inspect.getmembers(obj):
                     _add_if_tool(method_name, method_obj)
 
@@ -350,6 +352,7 @@ def mcp_tool(
         requires: List of importable package names required by this tool.
                   If any are missing, the tool will be registered as unavailable.
     """
+
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Decorator."""
         # Extract parameters using pydantic or typed-dict generation logic if needed
@@ -373,8 +376,14 @@ def mcp_tool(
         except Exception:
             params = {}
 
-        func._mcp_tool_meta = {"name": name, "description": description, "tags": tags or [], "parameters": params, "version": version, "requires": requires or []}
+        func._mcp_tool_meta = {
+            "name": name,
+            "description": description,
+            "tags": tags or [],
+            "parameters": params,
+            "version": version,
+            "requires": requires or [],
+        }
         return func
+
     return decorator
-
-

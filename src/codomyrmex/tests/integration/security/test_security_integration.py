@@ -5,7 +5,6 @@ Tests cross-submodule security workflows, end-to-end security assessment pipelin
 and integration with other Codomyrmex modules.
 """
 
-
 import pytest
 
 from codomyrmex.security import (
@@ -48,10 +47,7 @@ class TestCrossSubmoduleWorkflows:
     def test_security_workflow_with_risk_assessment(self):
         """Test security workflow including risk assessment."""
         # Assess risk (theory)
-        context = {
-            "system": "web_app",
-            "threats": ["data_breach"]
-        }
+        context = {"system": "web_app", "threats": ["data_breach"]}
         risk_assessment = assess_risk(context)
         assert risk_assessment is not None
         assert risk_assessment.overall_risk_level in ["low", "medium", "high"]
@@ -67,7 +63,9 @@ class TestSecurityIntegrationWithOtherModules:
         assert permission is not None
         # If logging is working, no exception should be raised
 
-    @pytest.mark.skipif(scan_vulnerabilities is None, reason="Vulnerability scanning not available")
+    @pytest.mark.skipif(
+        scan_vulnerabilities is None, reason="Vulnerability scanning not available"
+    )
     def test_security_with_static_analysis(self, tmp_path):
         """Test integration with static analysis (if available)."""
         # Create test file
@@ -82,5 +80,3 @@ class TestSecurityIntegrationWithOtherModules:
         except Exception:
             # If integration not fully implemented, that's okay
             pass
-
-

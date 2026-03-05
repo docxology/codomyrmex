@@ -39,7 +39,9 @@ class ModuleAudit:
             else:
                 try:
                     content = doc_path.read_text(encoding="utf-8", errors="replace")
-                    if len(content) < 50 or any(p in content for p in PLACEHOLDER_TEXTS):
+                    if len(content) < 50 or any(
+                        p in content for p in PLACEHOLDER_TEXTS
+                    ):
                         self.placeholder_docs.append(doc)
                 except Exception as e:
                     logger.warning("Documentation audit error for %s: %s", doc, str(e))
@@ -53,11 +55,15 @@ class ModuleAudit:
         init_path = self.path / "__init__.py"
         if init_path.exists():
             try:
-                tree = ast.parse(init_path.read_text(encoding="utf-8", errors="replace"))
+                tree = ast.parse(
+                    init_path.read_text(encoding="utf-8", errors="replace")
+                )
                 if ast.get_docstring(tree):
                     self.init_has_docstring = True
             except Exception as e:
-                logger.warning("Documentation audit check failed for %s: %s", init_path, str(e))
+                logger.warning(
+                    "Documentation audit check failed for %s: %s", init_path, str(e)
+                )
                 raise
 
         # Count python files
@@ -89,10 +95,10 @@ def generate_report(audits: list[ModuleAudit], report_file: Path) -> None:
 
     for audit in audits:
         is_perfect = (
-            not audit.missing_docs and
-            not audit.placeholder_docs and
-            audit.has_py_typed and
-            audit.init_has_docstring
+            not audit.missing_docs
+            and not audit.placeholder_docs
+            and audit.has_py_typed
+            and audit.init_has_docstring
         )
         if is_perfect:
             perfect_modules += 1
@@ -104,7 +110,9 @@ def generate_report(audits: list[ModuleAudit], report_file: Path) -> None:
         if not audit.has_py_typed:
             modules_missing_typed += 1
 
-    report_lines.append(f"- **Perfect Compliance**: {perfect_modules} / {total_modules} ({perfect_modules/total_modules:.1%})")
+    report_lines.append(
+        f"- **Perfect Compliance**: {perfect_modules} / {total_modules} ({perfect_modules / total_modules:.1%})"
+    )
     report_lines.append(f"- **Missing Any RASP**: {modules_missing_rasp}")
     report_lines.append(f"- **Placeholder RASP**: {modules_with_placeholders}")
     report_lines.append(f"- **Missing py.typed**: {modules_missing_typed}")
@@ -115,17 +123,31 @@ def generate_report(audits: list[ModuleAudit], report_file: Path) -> None:
     report_lines.append("| :--- | :--- | :--- | :---: | :---: |")
 
     # Sort by number of issues (most issues first)
-    audits.sort(key=lambda x: len(x.missing_docs) + len(x.placeholder_docs) + (0 if x.has_py_typed else 1), reverse=True)
+    audits.sort(
+        key=lambda x: (
+            len(x.missing_docs) + len(x.placeholder_docs) + (0 if x.has_py_typed else 1)
+        ),
+        reverse=True,
+    )
 
     for audit in audits:
         missing_str = ", ".join(audit.missing_docs) if audit.missing_docs else "✅"
-        placeholder_str = ", ".join(audit.placeholder_docs) if audit.placeholder_docs else "✅"
+        placeholder_str = (
+            ", ".join(audit.placeholder_docs) if audit.placeholder_docs else "✅"
+        )
         typed_str = "✅" if audit.has_py_typed else "❌"
         init_doc_str = "✅" if audit.init_has_docstring else "❌"
 
         # Highlight checking row if it has issues
-        if missing_str != "✅" or placeholder_str != "✅" or typed_str == "❌" or init_doc_str == "❌":
-            report_lines.append(f"| `{audit.relative_path}` | {missing_str} | {placeholder_str} | {typed_str} | {init_doc_str} |")
+        if (
+            missing_str != "✅"
+            or placeholder_str != "✅"
+            or typed_str == "❌"
+            or init_doc_str == "❌"
+        ):
+            report_lines.append(
+                f"| `{audit.relative_path}` | {missing_str} | {placeholder_str} | {typed_str} | {init_doc_str} |"
+            )
 
     try:
         report_file.write_text("\n".join(report_lines), encoding="utf-8")
@@ -147,7 +169,7 @@ def audit_documentation(src_dir: Path, report_file: Path) -> None:
         if is_package(root_path):
             # Skip hidden directories and __pycache__
             rel_parts = root_path.relative_to(src_dir).parts
-            if any(part.startswith('.') or part == "__pycache__" for part in rel_parts):
+            if any(part.startswith(".") or part == "__pycache__" for part in rel_parts):
                 continue
 
             audit = ModuleAudit(root_path, src_dir)
@@ -177,7 +199,10 @@ def audit_rasp(base_dir: Path) -> int:
         if "__init__.py" in files:
             path = Path(root)
             # Skip hidden/cache
-            if any(p.startswith('.') or p == "__pycache__" for p in path.relative_to(base_dir).parts):
+            if any(
+                p.startswith(".") or p == "__pycache__"
+                for p in path.relative_to(base_dir).parts
+            ):
                 continue
             packages.append(path)
 

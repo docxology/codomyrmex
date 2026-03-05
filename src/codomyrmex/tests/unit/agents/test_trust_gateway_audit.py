@@ -91,9 +91,7 @@ class TestAuditLog:
         tool_names = [e["tool_name"] for e in recent]
         assert "since.new" in tool_names
         assert "since.old" not in tool_names
-        assert all(
-            datetime.fromisoformat(e["timestamp"]) >= cutoff for e in recent
-        )
+        assert all(datetime.fromisoformat(e["timestamp"]) >= cutoff for e in recent)
 
     def test_unhashable_args(self):
         """Non-serializable args get 'unhashable' hash."""
@@ -216,6 +214,7 @@ class TestTrustStateMachine:
     def test_verify_all_safe_promotes_safe_tools(self):
         """verify_all_safe() promotes eligible safe tools from UNTRUSTED to VERIFIED."""
         from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
+
         if not SAFE_TOOLS:
             pytest.skip("No safe tools registered in this environment")
         safe_tool = next(iter(SAFE_TOOLS))
@@ -227,6 +226,7 @@ class TestTrustStateMachine:
     def test_verify_does_not_promote_already_trusted(self):
         """verify_all_safe() leaves TRUSTED tools unchanged."""
         from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
+
         if not SAFE_TOOLS:
             pytest.skip("No safe tools registered in this environment")
         tool = next(iter(SAFE_TOOLS))
@@ -238,6 +238,7 @@ class TestTrustStateMachine:
     def test_trust_tool_promotes_to_trusted(self):
         """trust_tool() raises a tool from VERIFIED to TRUSTED."""
         from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
+
         if not SAFE_TOOLS:
             pytest.skip("No safe tools registered in this environment")
         tool = next(iter(SAFE_TOOLS))
@@ -266,10 +267,12 @@ class TestTrustStateMachine:
 
     def test_reset_returns_all_to_untrusted(self):
         """reset() sets every tool back to UNTRUSTED."""
-        reg = _make_isolated_registry({
-            "codomyrmex.list_modules": TrustLevel.TRUSTED,
-            "codomyrmex.write_file": TrustLevel.VERIFIED,
-        })
+        reg = _make_isolated_registry(
+            {
+                "codomyrmex.list_modules": TrustLevel.TRUSTED,
+                "codomyrmex.write_file": TrustLevel.VERIFIED,
+            }
+        )
         reg.reset()
         for level in reg._levels.values():
             assert level == TrustLevel.UNTRUSTED
@@ -299,7 +302,9 @@ class TestConcurrentAuditLog:
             except Exception as exc:
                 errors.append(exc)
 
-        threads = [threading.Thread(target=write_entries, args=(t,)) for t in range(n_threads)]
+        threads = [
+            threading.Thread(target=write_entries, args=(t,)) for t in range(n_threads)
+        ]
         for t in threads:
             t.start()
         for t in threads:

@@ -11,8 +11,6 @@ from codomyrmex.logging_monitoring import get_logger
 """Secret Management Module for Codomyrmex Configuration Management."""
 
 
-
-
 logger = get_logger(__name__)
 
 
@@ -25,23 +23,27 @@ class SecretManager:
         Args:
             key_file: Path to encryption key file
         """
-        self.key_file = Path(key_file) if key_file else Path.home() / ".codomyrmex" / "secrets.key"
+        self.key_file = (
+            Path(key_file) if key_file else Path.home() / ".codomyrmex" / "secrets.key"
+        )
         self.key_file.parent.mkdir(parents=True, exist_ok=True)
 
         # Generate or load encryption key
         if self.key_file.exists():
-            with open(self.key_file, 'rb') as f:
+            with open(self.key_file, "rb") as f:
                 self.key = f.read()
         else:
             self.key = Fernet.generate_key()
-            with open(self.key_file, 'wb') as f:
+            with open(self.key_file, "wb") as f:
                 f.write(self.key)
 
         self.fernet = Fernet(self.key)
         self._secrets: dict[str, dict[str, Any]] = {}
         self._rotation_history: list[dict[str, Any]] = []
 
-    def store_secret(self, name: str, value: str, metadata: dict[str, Any] | None = None) -> str:
+    def store_secret(
+        self, name: str, value: str, metadata: dict[str, Any] | None = None
+    ) -> str:
         """Store a secret securely.
 
         Args:
@@ -59,7 +61,7 @@ class SecretManager:
             "name": name,
             "value": self.fernet.encrypt(value.encode()).decode(),
             "created_at": datetime.now().isoformat(),
-            "metadata": metadata or {}
+            "metadata": metadata or {},
         }
 
         self._secrets[secret_id] = secret_data
@@ -108,7 +110,7 @@ class SecretManager:
                 "id": secret["id"],
                 "name": secret["name"],
                 "created_at": secret["created_at"],
-                "metadata": secret["metadata"]
+                "metadata": secret["metadata"],
             }
             for secret in self._secrets.values()
         ]
@@ -137,7 +139,7 @@ class SecretManager:
         old_key = self.key
         self.key = Fernet.generate_key()
 
-        with open(self.key_file, 'wb') as f:
+        with open(self.key_file, "wb") as f:
             f.write(self.key)
 
         self.fernet = Fernet(self.key)
@@ -180,7 +182,10 @@ class SecretManager:
         new_id = self.store_secret(
             name,
             new_value,
-            metadata={"rotated_from": previous_id, "rotation_time": datetime.now().isoformat()},
+            metadata={
+                "rotated_from": previous_id,
+                "rotation_time": datetime.now().isoformat(),
+            },
         )
 
         event = {
@@ -227,7 +232,13 @@ class SecretManager:
                     "created_at": secret["created_at"],
                     "max_age_days": max_age_days,
                 }
-        return {"name": name, "age_days": -1, "stale": False, "created_at": None, "max_age_days": max_age_days}
+        return {
+            "name": name,
+            "age_days": -1,
+            "stale": False,
+            "created_at": None,
+            "max_age_days": max_age_days,
+        }
 
 
 def manage_secrets(operation: str, **kwargs) -> Any:
@@ -243,22 +254,25 @@ def manage_secrets(operation: str, **kwargs) -> Any:
     manager = SecretManager()
 
     if operation == "store":
-        return manager.store_secret(kwargs.get("name"), kwargs.get("value"), kwargs.get("metadata"))
-    elif operation == "get":
+        return manager.store_secret(
+            kwargs.get("name"), kwargs.get("value"), kwargs.get("metadata")
+        )
+    if operation == "get":
         return manager.get_secret(kwargs.get("secret_id"))
-    elif operation == "get_by_name":
+    if operation == "get_by_name":
         return manager.get_secret_by_name(kwargs.get("name"))
-    elif operation == "list":
+    if operation == "list":
         return manager.list_secrets()
-    elif operation == "delete":
+    if operation == "delete":
         return manager.delete_secret(kwargs.get("secret_id"))
-    elif operation == "rotate":
+    if operation == "rotate":
         return manager.rotate_key()
-    else:
-        raise CodomyrmexError(f"Unknown secret operation: {operation}")
+    raise CodomyrmexError(f"Unknown secret operation: {operation}")
 
 
-def encrypt_configuration(config: dict[str, Any], secret_keys: list[str]) -> dict[str, Any]:
+def encrypt_configuration(
+    config: dict[str, Any], secret_keys: list[str]
+) -> dict[str, Any]:
     """Encrypt sensitive configuration values.
 
     Args:

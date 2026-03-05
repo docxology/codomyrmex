@@ -1,6 +1,5 @@
 """Tests for plugin, theme, and snippet management CLI commands."""
 
-
 import pytest
 
 from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable

@@ -78,6 +78,6 @@ def deployment_get_history() -> list[dict[str, Any]]:
 
 __all__ = [
     "deployment_execute",
-    "deployment_list_strategies",
     "deployment_get_history",
+    "deployment_list_strategies",
 ]

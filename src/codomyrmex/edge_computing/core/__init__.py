@@ -16,11 +16,11 @@ from .models import (
 from .runtime import EdgeRuntime
 
 __all__ = [
+    "EdgeCluster",
     "EdgeExecutionError",
     "EdgeFunction",
     "EdgeNode",
     "EdgeNodeStatus",
-    "SyncState",
     "EdgeRuntime",
-    "EdgeCluster",
+    "SyncState",
 ]

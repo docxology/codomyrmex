@@ -22,6 +22,7 @@ from typing import Any
 
 class EdgeNodeStatus(Enum):
     """Status of an edge node."""
+
     ONLINE = "online"
     OFFLINE = "offline"
     DEGRADED = "degraded"
@@ -32,6 +33,7 @@ class EdgeNodeStatus(Enum):
 @dataclass
 class ResourceUsage:
     """Resource utilization of an edge node."""
+
     cpu_percent: float = 0.0
     memory_mb: float = 0.0
     memory_max_mb: float = 0.0
@@ -59,6 +61,7 @@ class ResourceUsage:
 @dataclass
 class EdgeNode:
     """An edge computing node."""
+
     id: str
     name: str
     location: str = ""
@@ -84,7 +87,9 @@ class EdgeNode:
 
     @property
     def is_healthy(self) -> bool:
-        return self.status == EdgeNodeStatus.ONLINE and self.seconds_since_heartbeat < 60
+        return (
+            self.status == EdgeNodeStatus.ONLINE and self.seconds_since_heartbeat < 60
+        )
 
     def has_capability(self, capability: str) -> bool:
         return capability in self.capabilities
@@ -104,6 +109,7 @@ class EdgeNode:
 @dataclass
 class EdgeFunction:
     """A function deployable to edge."""
+
     id: str
     name: str
     handler: Callable[..., Any]
@@ -120,6 +126,7 @@ class EdgeFunction:
 @dataclass
 class EdgeDeployment:
     """Assignment of a function to a node."""
+
     function_id: str
     node_id: str
     deployed_at: datetime = field(default_factory=lambda: datetime.now(UTC))
@@ -133,6 +140,7 @@ class EdgeDeployment:
 @dataclass
 class SyncState:
     """State synchronization data with checksum integrity."""
+
     version: int
     data: dict[str, Any]
     checksum: str
@@ -145,10 +153,11 @@ class SyncState:
 
     def verify(self) -> bool:
         """Verify data integrity against the stored checksum."""
-        expected = hashlib.md5(json.dumps(self.data, sort_keys=True).encode()).hexdigest()
+        expected = hashlib.md5(
+            json.dumps(self.data, sort_keys=True).encode()
+        ).hexdigest()
         return expected == self.checksum
 
 
 class EdgeExecutionError(Exception):
     """Error during edge function execution."""
-    pass

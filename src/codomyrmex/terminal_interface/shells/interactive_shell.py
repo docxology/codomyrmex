@@ -26,6 +26,7 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
+
 class InteractiveShell(cmd.Cmd):
     """
     Interactive shell for exploring the Codomyrmex ecosystem.
@@ -92,9 +93,9 @@ Type 'explore' to begin your foraging adventure!
                 import pkgutil
 
                 import codomyrmex
+
                 self._module_names = [
-                    name
-                    for _, name, _ in pkgutil.iter_modules(codomyrmex.__path__)
+                    name for _, name, _ in pkgutil.iter_modules(codomyrmex.__path__)
                 ]
             except (ImportError, AttributeError, OSError) as exc:
                 logger.warning("pkgutil module scan failed: %s", exc)
@@ -419,7 +420,6 @@ Type 'explore' to begin your foraging adventure!
     def _demo_logging(self):
         """Demo the logging system."""
         try:
-
             demo_logger = get_logger("interactive_demo")
 
             demo_logger.info("🐜 Starting interactive logging demo...")
@@ -723,13 +723,17 @@ print("Sandbox execution complete! ✅")
         try:
             # Use list form for safer execution; fall back to shell=True
             # only for commands containing shell operators (pipes, redirects)
-            shell_operators = ('|', '>', '<', '&&', '||', ';', '`', '$')
+            shell_operators = ("|", ">", "<", "&&", "||", ";", "`", "$")
             if any(op in arg for op in shell_operators):
                 # SECURITY: shell=True is intentional here — this is an
                 # interactive shell command entered by the local user.
-                result = subprocess.run(arg, shell=True, capture_output=True, text=True, timeout=300)
+                result = subprocess.run(
+                    arg, shell=True, capture_output=True, text=True, timeout=300
+                )
             else:
-                result = subprocess.run(shlex.split(arg), capture_output=True, text=True, timeout=300)
+                result = subprocess.run(
+                    shlex.split(arg), capture_output=True, text=True, timeout=300
+                )
             if result.stdout:
                 print(result.stdout)
             if result.stderr:
@@ -813,8 +817,7 @@ print("Sandbox execution complete! ✅")
             ]
             if text:
                 return [name for name in module_names if name.startswith(text)]
-            else:
-                return module_names
+            return module_names
         except Exception as e:
             logger.error(f"Error in tab completion: {e}")
             return []
@@ -829,6 +832,7 @@ print("Sandbox execution complete! ✅")
             logger.error(f"Error in interactive shell: {e}")
             print(f"\n❌ An error occurred: {e}")
             print("🐜 Thanks for exploring the Codomyrmex nest!")
+
 
 if __name__ == "__main__":
     # Allow running this module directly for testing

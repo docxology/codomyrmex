@@ -357,11 +357,13 @@ class TestRowEditModel:
         """Test RowEdit serialization with multiple cells."""
         from codomyrmex.cloud.coda_io.models import CellEdit, RowEdit
 
-        row = RowEdit(cells=[
-            CellEdit(column="Task", value="New task"),
-            CellEdit(column="Status", value="Todo"),
-            CellEdit(column="Priority", value=1),
-        ])
+        row = RowEdit(
+            cells=[
+                CellEdit(column="Task", value="New task"),
+                CellEdit(column="Status", value="Todo"),
+                CellEdit(column="Priority", value=1),
+            ]
+        )
 
         result = row.to_dict()
 

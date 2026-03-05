@@ -18,6 +18,7 @@ by storing expensive computation results and avoiding redundant work.
 
 logger = get_logger(__name__)
 
+
 class CacheManager:
     """
     A cache manager that provides persistent caching for expensive operations.
@@ -99,10 +100,9 @@ class CacheManager:
                 # Update access time for LRU
                 self._access_times[key] = time.time()
                 return value
-            else:
-                # Remove expired entry
-                self._memory_cache.pop(key, None)
-                self._access_times.pop(key, None)
+            # Remove expired entry
+            self._memory_cache.pop(key, None)
+            self._access_times.pop(key, None)
 
         # Check disk cache
         cache_file = self.cache_dir / f"{key}.pkl"
@@ -123,9 +123,8 @@ class CacheManager:
                     self._memory_cache[key] = (value, timestamp, ttl)
                     self._access_times[key] = time.time()
                     return value
-                else:
-                    # Remove expired file
-                    cache_file.unlink(missing_ok=True)
+                # Remove expired file
+                cache_file.unlink(missing_ok=True)
             except (pickle.PickleError, EOFError, OSError):
                 # Remove corrupted cache file
                 cache_file.unlink(missing_ok=True)
@@ -203,16 +202,17 @@ def cached_function(
     def decorator(func: Callable) -> Callable:
         """Decorator.
 
-            Args:        func: Parameter for the operation.
+        Args:        func: Parameter for the operation.
 
-            Returns:        The result of the operation.
-            """
+        Returns:        The result of the operation.
+        """
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper.
 
-                Returns:        The result of the operation.
-                """
+            Returns:        The result of the operation.
+            """
             # Generate cache key
             prefix = cache_key_prefix or func.__name__
             key = _cache_manager._generate_key(prefix, args, kwargs)

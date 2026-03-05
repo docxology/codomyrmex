@@ -12,6 +12,7 @@ try:
         EdgeRegion,
         FastlyComputeClient,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -23,6 +24,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestEdgeProvider:
     """Test suite for EdgeProvider."""
+
     def test_cloudflare(self):
         assert EdgeProvider.CLOUDFLARE_WORKERS is not None
 
@@ -42,6 +44,7 @@ class TestEdgeProvider:
 @pytest.mark.unit
 class TestEdgeRegion:
     """Test suite for EdgeRegion."""
+
     def test_global(self):
         assert EdgeRegion.GLOBAL is not None
 
@@ -55,6 +58,7 @@ class TestEdgeRegion:
 @pytest.mark.unit
 class TestEdgeFunctionConfig:
     """Test suite for EdgeFunctionConfig."""
+
     def test_create_config(self):
         config = EdgeFunctionConfig(
             name="worker",
@@ -78,6 +82,7 @@ class TestEdgeFunctionConfig:
 @pytest.mark.unit
 class TestEdgeDeployment:
     """Test suite for EdgeDeployment."""
+
     def test_create_deployment(self):
         deployment = EdgeDeployment(
             id="deploy-1",
@@ -93,6 +98,7 @@ class TestEdgeDeployment:
 @pytest.mark.unit
 class TestCloudflareWorkersClient:
     """Test suite for CloudflareWorkersClient."""
+
     def test_create_client(self):
         client = CloudflareWorkersClient(account_id="acc-123", api_token="token-123")
         assert client is not None
@@ -102,6 +108,7 @@ class TestCloudflareWorkersClient:
 @pytest.mark.unit
 class TestFastlyComputeClient:
     """Test suite for FastlyComputeClient."""
+
     def test_create_client(self):
         client = FastlyComputeClient(api_key="key-123")
         assert client is not None
@@ -111,6 +118,7 @@ class TestFastlyComputeClient:
 @pytest.mark.unit
 class TestEdgeManager:
     """Test suite for EdgeManager."""
+
     def test_create_manager(self):
         manager = EdgeManager()
         assert manager is not None

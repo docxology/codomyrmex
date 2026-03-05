@@ -10,7 +10,9 @@ from typing import Any
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
-def _get_simulator(name: str = "default", max_steps: int = 100, seed: int | None = None):
+def _get_simulator(
+    name: str = "default", max_steps: int = 100, seed: int | None = None
+):
     """Lazy import and create a Simulator with config."""
     from codomyrmex.simulation.simulator import SimulationConfig, Simulator
 
@@ -107,7 +109,6 @@ def simulation_list_agents() -> dict[str, Any]:
         dict with keys: status, agent_types
     """
     try:
-
         return {
             "status": "success",
             "agent_types": [

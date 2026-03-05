@@ -17,23 +17,25 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class ContainerConfig:
     """Configuration for a container."""
+
     image: str
     name: str | None = None
     command: list[str] | None = None
     entrypoint: list[str] | None = None
     environment: dict[str, str] = field(default_factory=dict)
     volumes: dict[str, str] = field(default_factory=dict)  # host:container
-    ports: dict[int, int] = field(default_factory=dict)    # container:host
+    ports: dict[int, int] = field(default_factory=dict)  # container:host
     labels: dict[str, str] = field(default_factory=dict)
     network: str | None = None
     working_dir: str | None = None
     user: str | None = None
     memory_limit: str | None = None  # e.g., "512m"
-    cpu_limit: float | None = None   # e.g., 0.5
-    restart_policy: str = "no"          # no, always, unless-stopped, on-failure
+    cpu_limit: float | None = None  # e.g., 0.5
+    restart_policy: str = "no"  # no, always, unless-stopped, on-failure
 
     def to_run_args(self) -> list[str]:
         """Convert config to docker run arguments."""
@@ -81,9 +83,11 @@ class ContainerConfig:
 
         return args
 
+
 @dataclass
 class ImageInfo:
     """Information about a Docker image."""
+
     id: str
     repository: str
     tag: str
@@ -94,9 +98,11 @@ class ImageInfo:
     def full_name(self) -> str:
         return f"{self.repository}:{self.tag}"
 
+
 @dataclass
 class ContainerInfo:
     """Information about a running container."""
+
     id: str
     name: str
     image: str
@@ -107,6 +113,7 @@ class ContainerInfo:
     @property
     def is_running(self) -> bool:
         return "Up" in self.status
+
 
 class DockerClient:
     """Client for interacting with Docker."""
@@ -122,7 +129,7 @@ class DockerClient:
                 [self.docker_path, "version"],
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
             )
             if result.returncode != 0:
                 raise RuntimeError("Docker not available")
@@ -130,18 +137,12 @@ class DockerClient:
             raise RuntimeError(f"Docker not found at: {self.docker_path}") from None
 
     def _run_command(
-        self,
-        args: list[str],
-        timeout: float | None = None,
-        capture_output: bool = True
+        self, args: list[str], timeout: float | None = None, capture_output: bool = True
     ) -> subprocess.CompletedProcess:
         """Run a docker command."""
         cmd = [self.docker_path] + args
         return subprocess.run(
-            cmd,
-            capture_output=capture_output,
-            text=True,
-            timeout=timeout
+            cmd, capture_output=capture_output, text=True, timeout=timeout
         )
 
     def build(
@@ -239,13 +240,13 @@ class DockerClient:
                 [self.docker_path] + args,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
-                text=True
+                text=True,
             )
             for line in process.stdout:
                 yield line.rstrip()
         else:
             result = self._run_command(args)
-            for line in result.stdout.split('\n'):
+            for line in result.stdout.split("\n"):
                 if line:
                     yield line
 
@@ -296,17 +297,19 @@ class DockerClient:
         result = self._run_command(args)
 
         containers = []
-        for line in result.stdout.strip().split('\n'):
+        for line in result.stdout.strip().split("\n"):
             if line:
                 data = json.loads(line)
-                containers.append(ContainerInfo(
-                    id=data.get("ID", ""),
-                    name=data.get("Names", ""),
-                    image=data.get("Image", ""),
-                    status=data.get("Status", ""),
-                    ports=self._parse_ports(data.get("Ports", "")),
-                    created=data.get("CreatedAt", ""),
-                ))
+                containers.append(
+                    ContainerInfo(
+                        id=data.get("ID", ""),
+                        name=data.get("Names", ""),
+                        image=data.get("Image", ""),
+                        status=data.get("Status", ""),
+                        ports=self._parse_ports(data.get("Ports", "")),
+                        created=data.get("CreatedAt", ""),
+                    )
+                )
 
         return containers
 
@@ -333,16 +336,18 @@ class DockerClient:
         result = self._run_command(args)
 
         images = []
-        for line in result.stdout.strip().split('\n'):
+        for line in result.stdout.strip().split("\n"):
             if line:
                 data = json.loads(line)
-                images.append(ImageInfo(
-                    id=data.get("ID", ""),
-                    repository=data.get("Repository", ""),
-                    tag=data.get("Tag", ""),
-                    created=data.get("CreatedAt", ""),
-                    size=data.get("Size", ""),
-                ))
+                images.append(
+                    ImageInfo(
+                        id=data.get("ID", ""),
+                        repository=data.get("Repository", ""),
+                        tag=data.get("Tag", ""),
+                        created=data.get("CreatedAt", ""),
+                        size=data.get("Size", ""),
+                    )
+                )
 
         return images
 
@@ -364,6 +369,7 @@ class DockerClient:
         if result.returncode != 0:
             raise RuntimeError(f"Tag failed: {result.stderr}")
 
+
 class DockerComposeClient:
     """Client for Docker Compose operations."""
 
@@ -377,12 +383,7 @@ class DockerComposeClient:
     ) -> subprocess.CompletedProcess:
         """Run a docker-compose command."""
         cmd = ["docker", "compose", "-f", self.compose_file] + args
-        return subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=timeout
-        )
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
 
     def up(
         self,
@@ -436,10 +437,11 @@ class DockerComposeClient:
             logger.warning("Failed to parse docker-compose ps output: %s", e)
             return []
 
+
 __all__ = [
     "ContainerConfig",
-    "ImageInfo",
     "ContainerInfo",
     "DockerClient",
     "DockerComposeClient",
+    "ImageInfo",
 ]

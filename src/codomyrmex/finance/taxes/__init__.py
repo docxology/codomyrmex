@@ -2,4 +2,4 @@
 
 from .calculator import TaxCalculator, TaxError, TaxResult
 
-__all__ = ["TaxCalculator", "TaxResult", "TaxError"]
+__all__ = ["TaxCalculator", "TaxError", "TaxResult"]

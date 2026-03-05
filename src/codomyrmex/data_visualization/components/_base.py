@@ -1,4 +1,5 @@
 """Base class for all UI components."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -13,6 +14,7 @@ class BaseComponent:
         css_class: Additional CSS class(es) for the outer element.
         style: Inline style dict ``{property: value}``.
     """
+
     css_class: str = ""
     style: dict[str, str] = field(default_factory=dict)
 

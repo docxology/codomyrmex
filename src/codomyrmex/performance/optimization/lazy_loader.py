@@ -15,6 +15,7 @@ by deferring module imports until they are actually needed.
 
 logger = get_logger(__name__)
 
+
 class LazyLoader:
     """
     A lazy loader that defers module imports until they are actually accessed.
@@ -70,7 +71,7 @@ def lazy_import(module_name: str, package: str | None = None) -> LazyLoader:
         A LazyLoader instance for the module
 
     Example:
-        >>> matplotlib = lazy_import('matplotlib.pyplot')
+        >>> matplotlib = lazy_import("matplotlib.pyplot")
         >>> # matplotlib is not imported yet
         >>> plt = matplotlib.pyplot  # Now it's imported
     """
@@ -118,7 +119,7 @@ def lazy_function(
         A callable that will load the function on first call
 
     Example:
-        >>> create_plot = lazy_function('matplotlib.pyplot', 'plot')
+        >>> create_plot = lazy_function("matplotlib.pyplot", "plot")
         >>> # matplotlib.pyplot is not imported yet
         >>> create_plot([1, 2, 3], [1, 4, 9])  # Now it's imported and called
     """
@@ -126,7 +127,6 @@ def lazy_function(
 
     @wraps(lambda: None)  # Wraps sentinel — actual function resolved at call time
     def lazy_wrapper(*args, **kwargs):
-
 
         func = getattr(loader, function_name)
         return func(*args, **kwargs)

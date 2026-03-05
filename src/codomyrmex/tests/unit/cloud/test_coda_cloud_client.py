@@ -21,14 +21,17 @@ class TestCodaCloudClient:
         client = CodaClient(api_token="test-token")
         client.session = Stub()
         # Initialize session headers to avoid dict() conversion error
-        client.session.headers = {"Authorization": "Bearer test-token", "Content-Type": "application/json"}
+        client.session.headers = {
+            "Authorization": "Bearer test-token",
+            "Content-Type": "application/json",
+        }
         return client
 
     def test_coda_list_resources(self, client):
         """Test CodaClient list_resources."""
         mock_response = Stub()
         mock_response.status_code = 200
-        mock_response.content = b'{"items": []}' # Not used but good to have
+        mock_response.content = b'{"items": []}'  # Not used but good to have
         mock_response.json.return_value = {
             "items": [
                 {
@@ -40,7 +43,7 @@ class TestCodaCloudClient:
                     "type": "doc",
                     "href": "href1",
                     "owner": "owner1",
-                    "ownerName": "Owner 1"
+                    "ownerName": "Owner 1",
                 }
             ]
         }
@@ -68,7 +71,7 @@ class TestCodaCloudClient:
             "type": "doc",
             "href": "href1",
             "owner": "owner1",
-            "ownerName": "Owner 1"
+            "ownerName": "Owner 1",
         }
         mock_response.json.return_value = doc_data
         client.session.request.return_value = mock_response
@@ -93,7 +96,7 @@ class TestCodaCloudClient:
             "type": "doc",
             "href": "href-new",
             "owner": "owner1",
-            "ownerName": "Owner 1"
+            "ownerName": "Owner 1",
         }
         mock_response.json.return_value = doc_data
         client.session.request.return_value = mock_response

@@ -18,11 +18,13 @@ import pytest
 # Direct-import helper
 # ---------------------------------------------------------------------------
 
+
 def _load_pagination():
     name = "codomyrmex.api.pagination"
     if name in sys.modules:
         return sys.modules[name]
     import codomyrmex.logging_monitoring  # noqa: F401
+
     spec = importlib.util.spec_from_file_location(
         name,
         "src/codomyrmex/api/pagination/__init__.py",
@@ -60,12 +62,13 @@ pytestmark = pytest.mark.skipif(
 # Fixtures
 # ---------------------------------------------------------------------------
 
-@pytest.fixture()
+
+@pytest.fixture
 def items_25():
     return list(range(1, 26))  # 1..25
 
 
-@pytest.fixture()
+@pytest.fixture
 def dict_items_15():
     return [{"id": i, "name": f"item-{i}"} for i in range(1, 16)]
 
@@ -73,6 +76,7 @@ def dict_items_15():
 # ===========================================================================
 # Enums
 # ===========================================================================
+
 
 class TestPaginationStrategyEnum:
     def test_offset_value(self):
@@ -102,6 +106,7 @@ class TestSortDirectionEnum:
 # ===========================================================================
 # PageInfo
 # ===========================================================================
+
 
 class TestPageInfo:
     def test_defaults(self):
@@ -179,6 +184,7 @@ class TestPageInfo:
 # PaginatedResponse
 # ===========================================================================
 
+
 class TestPaginatedResponse:
     def test_default_empty(self):
         r = PaginatedResponse()
@@ -197,6 +203,7 @@ class TestPaginatedResponse:
 # ===========================================================================
 # PaginationRequest
 # ===========================================================================
+
 
 class TestPaginationRequest:
     def test_defaults(self):
@@ -220,6 +227,7 @@ class TestPaginationRequest:
 # ===========================================================================
 # OffsetPaginator
 # ===========================================================================
+
 
 class TestOffsetPaginator:
     def test_first_page(self, items_25):
@@ -296,6 +304,7 @@ class TestOffsetPaginator:
 # ===========================================================================
 # CursorPaginator
 # ===========================================================================
+
 
 class TestCursorPaginator:
     def test_encode_decode_roundtrip(self):
@@ -382,6 +391,7 @@ class TestCursorPaginator:
 # KeysetPaginator
 # ===========================================================================
 
+
 class TestKeysetPaginator:
     def test_first_page_asc(self, dict_items_15):
         p = KeysetPaginator(sort_field="id")
@@ -408,9 +418,7 @@ class TestKeysetPaginator:
 
     def test_after_key_not_found_starts_from_beginning(self, dict_items_15):
         p = KeysetPaginator(sort_field="id")
-        resp = p.paginate(
-            dict_items_15, PaginationRequest(page_size=5, after_key=9999)
-        )
+        resp = p.paginate(dict_items_15, PaginationRequest(page_size=5, after_key=9999))
         ids = [item["id"] for item in resp.items]
         assert ids == [1, 2, 3, 4, 5]
 
@@ -478,6 +486,7 @@ class TestKeysetPaginator:
 # ===========================================================================
 # create_paginator factory
 # ===========================================================================
+
 
 class TestCreatePaginator:
     def test_offset_strategy(self):

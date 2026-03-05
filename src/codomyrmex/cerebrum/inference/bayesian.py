@@ -59,10 +59,14 @@ class BayesianNetwork:
         self.nodes: dict[str, dict[str, Any]] = {}
         self.edges: dict[str, list[str]] = defaultdict(list)
         self.parents: dict[str, list[str]] = defaultdict(list)
-        self.cpt: dict[str, dict[tuple, Distribution]] = {}  # Conditional probability tables
+        self.cpt: dict[
+            str, dict[tuple, Distribution]
+        ] = {}  # Conditional probability tables
         self.logger = get_logger(__name__)
 
-    def add_node(self, node: str, values: list[Any], prior: list[float] | None = None) -> None:
+    def add_node(
+        self, node: str, values: list[Any], prior: list[float] | None = None
+    ) -> None:
         """Add a node to the network.
 
         Args:
@@ -77,7 +81,9 @@ class BayesianNetwork:
             prior = [1.0 / len(values)] * len(values)
 
         if len(prior) != len(values):
-            raise NetworkStructureError("Prior probabilities must match number of values")
+            raise NetworkStructureError(
+                "Prior probabilities must match number of values"
+            )
 
         self.nodes[node] = {"values": values, "prior": prior}
         self.edges[node] = []
@@ -107,9 +113,7 @@ class BayesianNetwork:
         self.parents[child].append(parent)
         self.logger.debug(f"Added edge {parent} -> {child}")
 
-    def set_cpt(
-        self, node: str, cpt: dict[tuple, dict[Any, float]]
-    ) -> None:
+    def set_cpt(self, node: str, cpt: dict[tuple, dict[Any, float]]) -> None:
         """Set conditional probability table for a node.
 
         Args:
@@ -149,7 +153,9 @@ class BayesianNetwork:
 
         def visit(node: str):
             if node in temp_visited:
-                raise NetworkStructureError(f"Cycle detected in Bayesian network involving node {node}")
+                raise NetworkStructureError(
+                    f"Cycle detected in Bayesian network involving node {node}"
+                )
             if node in visited:
                 return
 
@@ -207,10 +213,9 @@ class InferenceEngine:
 
         if self.method == "variable_elimination":
             return self._variable_elimination(query, evidence)
-        elif self.method == "mcmc":
+        if self.method == "mcmc":
             return self._mcmc_inference(query, evidence)
-        else:
-            raise InferenceError(f"Unknown inference method: {self.method}")
+        raise InferenceError(f"Unknown inference method: {self.method}")
 
     def _variable_elimination(
         self, query: dict[str, Any], evidence: dict[str, Any]
@@ -385,7 +390,9 @@ class InferenceEngine:
         assignment[query_var] = np.random.choice(values, p=probs)
         return assignment
 
-    def compute_marginal(self, variable: str, evidence: dict[str, Any] | None = None) -> Distribution:
+    def compute_marginal(
+        self, variable: str, evidence: dict[str, Any] | None = None
+    ) -> Distribution:
         """Compute marginal distribution of a variable.
 
         Args:
@@ -452,4 +459,3 @@ class PriorBuilder:
         probabilities = [c / total for c in counts]
 
         return Distribution(unique_values, probabilities)
-

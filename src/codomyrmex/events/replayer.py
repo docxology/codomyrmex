@@ -136,7 +136,11 @@ class EventReplayer:
                 else [
                     i
                     for i, (a, b) in enumerate(
-                        zip(result_a.handler_outputs, result_b.handler_outputs, strict=False)
+                        zip(
+                            result_a.handler_outputs,
+                            result_b.handler_outputs,
+                            strict=False,
+                        )
                     )
                     if a != b
                 ]

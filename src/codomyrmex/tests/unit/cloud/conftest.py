@@ -15,7 +15,7 @@ import pytest
 # Ensure _stubs.py is importable from test modules
 sys.path.insert(0, str(Path(__file__).parent))
 
-from _stubs import (  # noqa: F401, E402  – re-exported for fixture use
+from _stubs import (  # noqa: F401  – re-exported for fixture use
     Stub,
     make_stub_container,
     make_stub_floating_ip,
@@ -30,6 +30,7 @@ from _stubs import (  # noqa: F401, E402  – re-exported for fixture use
 # =========================================================================
 # Connection Fixtures
 # =========================================================================
+
 
 @pytest.fixture
 def mock_openstack_connection():
@@ -49,6 +50,7 @@ def mock_s3_client():
 # =========================================================================
 # Environment Variable Fixtures
 # =========================================================================
+
 
 @pytest.fixture
 def infomaniak_openstack_env():

@@ -11,7 +11,13 @@ class PipelineBuilder:
     def __init__(self, name: str):
         self.pipeline = Pipeline(name=name)
 
-    def add_stage(self, name: str, commands: list[str], dependencies: list[str] | None = None, on_branch: str | None = None) -> 'PipelineBuilder':
+    def add_stage(
+        self,
+        name: str,
+        commands: list[str],
+        dependencies: list[str] | None = None,
+        on_branch: str | None = None,
+    ) -> "PipelineBuilder":
         """
         Add a stage to the pipeline.
 
@@ -25,11 +31,7 @@ class PipelineBuilder:
         job = PipelineJob(name=f"{name}_job", commands=commands)
 
         # Create a stage and add the job
-        stage = PipelineStage(
-            name=name,
-            jobs=[job],
-            dependencies=dependencies or []
-        )
+        stage = PipelineStage(name=name, jobs=[job], dependencies=dependencies or [])
 
         # Branch constraint logic could be expanded, for now we add to variables if present
         if on_branch:

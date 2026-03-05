@@ -17,6 +17,7 @@ from codomyrmex.concurrency.tasks.task_worker import TaskResult, TaskWorker
 
 # ─── TaskQueue ────────────────────────────────────────────────────────
 
+
 class TestTaskQueue:
     """Test suite for TaskQueue."""
 
@@ -71,6 +72,7 @@ class TestTaskQueue:
 
 # ─── TaskWorker ───────────────────────────────────────────────────────
 
+
 class TestTaskWorker:
     """Test suite for TaskWorker."""
 
@@ -83,6 +85,7 @@ class TestTaskWorker:
 
     def test_error_isolation(self):
         """Worker survives task failure."""
+
         def failing_handler(task):
             raise RuntimeError("boom")
 
@@ -103,6 +106,7 @@ class TestTaskWorker:
 
 
 # ─── TaskScheduler ───────────────────────────────────────────────────
+
 
 class TestTaskScheduler:
     """Test suite for TaskScheduler."""
@@ -148,13 +152,16 @@ class TestTaskScheduler:
 
 # ─── ResultAggregator ───────────────────────────────────────────────
 
+
 class TestResultAggregator:
     """Test suite for ResultAggregator."""
 
     def test_aggregate_stats(self):
         agg = ResultAggregator()
         agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=100))
-        agg.add(TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=200))
+        agg.add(
+            TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=200)
+        )
         summary = agg.aggregate()
         assert summary.total_tasks == 2
         assert summary.successful == 1

@@ -85,10 +85,12 @@ class DashboardBuilder:
     Example::
 
         builder = DashboardBuilder(title="Agent Metrics")
-        builder.add_panel(Panel(
-            title="Latency",
-            targets=[PanelTarget(metric="latency_ms")],
-        ))
+        builder.add_panel(
+            Panel(
+                title="Latency",
+                targets=[PanelTarget(metric="latency_ms")],
+            )
+        )
         config = builder.build()
     """
 
@@ -153,7 +155,13 @@ class DashboardBuilder:
             }
             if panel.thresholds:
                 panel_dict["thresholds"] = [
-                    {"value": t.value, "colorMode": "custom", "fill": True, "line": True, "op": "gt"}
+                    {
+                        "value": t.value,
+                        "colorMode": "custom",
+                        "fill": True,
+                        "line": True,
+                        "op": "gt",
+                    }
                     for t in panel.thresholds
                 ]
             if panel.unit:

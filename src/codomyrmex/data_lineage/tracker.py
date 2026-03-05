@@ -61,22 +61,26 @@ class LineageTracker:
         self.graph.add_node(transform_node)
 
         for input_id in inputs:
-            self.graph.add_edge(LineageEdge(
-                source_id=input_id,
-                target_id=id,
-                edge_type=EdgeType.INPUT_TO,
-            ))
+            self.graph.add_edge(
+                LineageEdge(
+                    source_id=input_id,
+                    target_id=id,
+                    edge_type=EdgeType.INPUT_TO,
+                )
+            )
 
         for output_id in outputs:
             # Outputs must be registered before adding edges
             if not self.graph.get_node(output_id):
-                 self.register_dataset(output_id, output_id)
+                self.register_dataset(output_id, output_id)
 
-            self.graph.add_edge(LineageEdge(
-                source_id=id,
-                target_id=output_id,
-                edge_type=EdgeType.PRODUCED_BY,
-            ))
+            self.graph.add_edge(
+                LineageEdge(
+                    source_id=id,
+                    target_id=output_id,
+                    edge_type=EdgeType.PRODUCED_BY,
+                )
+            )
 
         return transform_node
 
@@ -110,8 +114,12 @@ class ImpactAnalyzer:
 
         affected_datasets = [n for n in downstream if n.node_type == NodeType.DATASET]
         affected_models = [n for n in downstream if n.node_type == NodeType.MODEL]
-        affected_transforms = [n for n in downstream if n.node_type == NodeType.TRANSFORMATION]
-        affected_dashboards = [n for n in downstream if n.node_type == NodeType.DASHBOARD]
+        affected_transforms = [
+            n for n in downstream if n.node_type == NodeType.TRANSFORMATION
+        ]
+        affected_dashboards = [
+            n for n in downstream if n.node_type == NodeType.DASHBOARD
+        ]
 
         # Calculate impact paths
         impact_paths = {}
@@ -127,5 +135,9 @@ class ImpactAnalyzer:
             "affected_transformations": [n.id for n in affected_transforms],
             "affected_dashboards": [n.id for n in affected_dashboards],
             "impact_paths": impact_paths,
-            "risk_level": "high" if affected_models or affected_dashboards else "medium" if affected_datasets else "low",
+            "risk_level": "high"
+            if affected_models or affected_dashboards
+            else "medium"
+            if affected_datasets
+            else "low",
         }

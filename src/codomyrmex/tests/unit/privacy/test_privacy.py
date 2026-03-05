@@ -396,6 +396,7 @@ class TestDetectPIIExtended:
     def test_detect_multiple_emails(self):
         """Detects multiple email addresses in one string."""
         from codomyrmex.privacy.privacy import detect_pii
+
         text = "Contact alice@example.com or bob@example.com"
         matches = detect_pii(text)
         email_matches = [m for m in matches if m.pii_type == "email"]
@@ -404,5 +405,6 @@ class TestDetectPIIExtended:
     def test_detect_pii_in_empty_string(self):
         """No PII detected in empty string."""
         from codomyrmex.privacy.privacy import detect_pii
+
         matches = detect_pii("")
         assert len(matches) == 0

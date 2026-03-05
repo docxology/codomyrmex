@@ -11,6 +11,8 @@ from codomyrmex.collaboration.swarm.consensus import (
     ConsensusEngine,
     ConsensusResult,
     Decision,
+)
+from codomyrmex.collaboration.swarm.consensus import (
     SwarmVote as Vote,
 )
 from codomyrmex.collaboration.swarm.decomposer import (

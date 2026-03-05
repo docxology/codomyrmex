@@ -69,9 +69,8 @@ class DeadLetterQueue:
             "metadata": metadata or {},
             "replayed": False,
         }
-        with self._lock:
-            with self._path.open("a", encoding="utf-8") as f:
-                f.write(json.dumps(entry) + "\n")
+        with self._lock, self._path.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(entry) + "\n")
         return entry_id
 
     def list_entries(
@@ -194,5 +193,7 @@ class DeadLetterQueue:
                         keep.append(line)
                 except json.JSONDecodeError:
                     keep.append(line)
-            self._path.write_text("\n".join(keep) + "\n" if keep else "", encoding="utf-8")
+            self._path.write_text(
+                "\n".join(keep) + "\n" if keep else "", encoding="utf-8"
+            )
             return removed

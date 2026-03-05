@@ -47,6 +47,8 @@ from codomyrmex.collaboration.protocols import (
 from codomyrmex.collaboration.swarm.consensus import (
     ConsensusEngine,
     Decision,
+)
+from codomyrmex.collaboration.swarm.consensus import (
     SwarmVote as Vote,
 )
 from codomyrmex.collaboration.swarm.decomposer import (
@@ -98,8 +100,18 @@ class TestCollaborationModels:
         """Task.to_dict() returns a dict with all required keys."""
         t = Task(name="build", description="build the thing")
         d = t.to_dict()
-        for key in ("id", "name", "description", "required_capabilities", "priority",
-                    "dependencies", "metadata", "created_at", "status", "assigned_agent_id"):
+        for key in (
+            "id",
+            "name",
+            "description",
+            "required_capabilities",
+            "priority",
+            "dependencies",
+            "metadata",
+            "created_at",
+            "status",
+            "assigned_agent_id",
+        ):
             assert key in d, f"Missing key: {key}"
 
     def test_task_to_dict_status_is_string(self):
@@ -164,12 +176,26 @@ class TestCollaborationModels:
         """TaskResult.to_dict() returns all required keys."""
         r = TaskResult(task_id="t1", success=True, output={"data": 1})
         d = r.to_dict()
-        for key in ("task_id", "success", "output", "error", "duration", "agent_id", "completed_at"):
+        for key in (
+            "task_id",
+            "success",
+            "output",
+            "error",
+            "duration",
+            "agent_id",
+            "completed_at",
+        ):
             assert key in d
 
     def test_task_result_from_dict_round_trip(self):
         """TaskResult.from_dict(result.to_dict()) restores identity."""
-        r = TaskResult(task_id="t-abc", success=False, error="oops", duration=1.5, agent_id="agent-1")
+        r = TaskResult(
+            task_id="t-abc",
+            success=False,
+            error="oops",
+            duration=1.5,
+            agent_id="agent-1",
+        )
         d = r.to_dict()
         r2 = TaskResult.from_dict(d)
         assert r2.task_id == "t-abc"
@@ -188,8 +214,16 @@ class TestCollaborationModels:
         """SwarmStatus.to_dict() returns all 8 keys."""
         s = SwarmStatus(total_agents=5, active_agents=2, idle_agents=3)
         d = s.to_dict()
-        for key in ("total_agents", "active_agents", "idle_agents", "pending_tasks",
-                    "running_tasks", "completed_tasks", "failed_tasks", "uptime_seconds"):
+        for key in (
+            "total_agents",
+            "active_agents",
+            "idle_agents",
+            "pending_tasks",
+            "running_tasks",
+            "completed_tasks",
+            "failed_tasks",
+            "uptime_seconds",
+        ):
             assert key in d
 
     def test_swarm_status_defaults_are_zero(self):
@@ -200,16 +234,31 @@ class TestCollaborationModels:
 
     def test_agent_status_to_dict_keys(self):
         """AgentStatus.to_dict() contains all required keys."""
-        a = AgentStatus(agent_id="a1", name="Worker", status="idle", capabilities=["python"])
+        a = AgentStatus(
+            agent_id="a1", name="Worker", status="idle", capabilities=["python"]
+        )
         d = a.to_dict()
-        for key in ("agent_id", "name", "status", "current_task_id", "capabilities",
-                    "tasks_completed", "tasks_failed", "last_heartbeat"):
+        for key in (
+            "agent_id",
+            "name",
+            "status",
+            "current_task_id",
+            "capabilities",
+            "tasks_completed",
+            "tasks_failed",
+            "last_heartbeat",
+        ):
             assert key in d
 
     def test_agent_status_from_dict_round_trip(self):
         """AgentStatus.from_dict(status.to_dict()) restores identity."""
-        original = AgentStatus(agent_id="a2", name="Coder", status="busy",
-                               capabilities=["go"], tasks_completed=7)
+        original = AgentStatus(
+            agent_id="a2",
+            name="Coder",
+            status="busy",
+            capabilities=["go"],
+            tasks_completed=7,
+        )
         d = original.to_dict()
         restored = AgentStatus.from_dict(d)
         assert restored.agent_id == "a2"
@@ -339,7 +388,9 @@ class TestCollaborationExceptions:
             CapabilityMismatchError([]),
         ]
         for err in errors:
-            assert isinstance(err, CollaborationError), f"{type(err)} not CollaborationError"
+            assert isinstance(err, CollaborationError), (
+                f"{type(err)} not CollaborationError"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -368,7 +419,12 @@ class TestConsensusEngine:
     def test_majority_deadlock_at_exactly_threshold(self):
         """2/4 votes (exactly 0.5) → DEADLOCK with default threshold=0.5."""
         engine = ConsensusEngine()
-        votes = [Vote("a1", True), Vote("a2", True), Vote("a3", False), Vote("a4", False)]
+        votes = [
+            Vote("a1", True),
+            Vote("a2", True),
+            Vote("a3", False),
+            Vote("a4", False),
+        ]
         result = engine.resolve(votes, strategy="majority")
         assert result.decision == Decision.DEADLOCK
 
@@ -430,7 +486,14 @@ class TestConsensusEngine:
         votes = [Vote("a1", True), Vote("a2", False)]
         result = engine.resolve(votes)
         d = result.to_dict()
-        for key in ("decision", "approval_score", "strategy", "votes_for", "votes_against", "total_votes"):
+        for key in (
+            "decision",
+            "approval_score",
+            "strategy",
+            "votes_for",
+            "votes_against",
+            "total_votes",
+        ):
             assert key in d
 
     def test_consensus_result_to_dict_counts_correct(self):
@@ -606,7 +669,9 @@ class TestAgentPool:
         """assign() raises AssignmentError when no agent has the required role."""
         pool = AgentPool()
         pool.register(SwarmAgent("a1", AgentRole.REVIEWER))
-        assignment = TaskAssignment(description="code it", required_role=AgentRole.CODER)
+        assignment = TaskAssignment(
+            description="code it", required_role=AgentRole.CODER
+        )
         with pytest.raises(AssignmentError):
             pool.assign(assignment)
 
@@ -615,7 +680,9 @@ class TestAgentPool:
         pool = AgentPool()
         pool.register(SwarmAgent("coder-1", AgentRole.CODER))
         pool.register(SwarmAgent("rev-1", AgentRole.REVIEWER))
-        assignment = TaskAssignment(description="code it", required_role=AgentRole.CODER)
+        assignment = TaskAssignment(
+            description="code it", required_role=AgentRole.CODER
+        )
         agent = pool.assign(assignment)
         assert agent.role == AgentRole.CODER
 
@@ -712,7 +779,14 @@ class TestAgentPool:
         """SwarmAgent.to_dict() contains role, agent_id, capabilities, available."""
         agent = SwarmAgent("a1", AgentRole.TESTER, {"pytest"})
         d = agent.to_dict()
-        for key in ("agent_id", "role", "capabilities", "active_tasks", "available", "load"):
+        for key in (
+            "agent_id",
+            "role",
+            "capabilities",
+            "active_tasks",
+            "available",
+            "load",
+        ):
             assert key in d
 
 
@@ -840,7 +914,14 @@ class TestMessageBus:
         """SwarmMessage.to_dict() contains all required keys."""
         msg = self._make_message()
         d = msg.to_dict()
-        for key in ("message_type", "sender", "recipient", "payload", "message_id", "timestamp"):
+        for key in (
+            "message_type",
+            "sender",
+            "recipient",
+            "payload",
+            "message_id",
+            "timestamp",
+        ):
             assert key in d
 
 
@@ -859,6 +940,7 @@ class TestQueueChannel:
     async def test_send_and_receive_message(self):
         """Messages sent through QueueChannel are retrievable via receive()."""
         from codomyrmex.collaboration.communication.channels import QueueChannel
+
         ch = QueueChannel(name="test-ch")
         msg = self._make_message()
         await ch.send(msg)
@@ -869,6 +951,7 @@ class TestQueueChannel:
     async def test_send_on_closed_channel_raises_channel_error(self):
         """Sending to a closed channel raises ChannelError."""
         from codomyrmex.collaboration.communication.channels import QueueChannel
+
         ch = QueueChannel(name="closed-ch")
         ch.close()
         with pytest.raises(ChannelError):
@@ -880,6 +963,7 @@ class TestQueueChannel:
             ChannelState,
             QueueChannel,
         )
+
         ch = QueueChannel(name="state-ch")
         assert ch.state == ChannelState.OPEN
         ch.pause()
@@ -892,6 +976,7 @@ class TestQueueChannel:
     def test_get_info_returns_channel_info(self):
         """get_info() returns a ChannelInfo with correct channel_id and name."""
         from codomyrmex.collaboration.communication.channels import QueueChannel
+
         ch = QueueChannel(name="info-ch")
         info = ch.get_info()
         assert info.channel_id == ch.channel_id
@@ -900,15 +985,24 @@ class TestQueueChannel:
     def test_get_info_to_dict_has_all_keys(self):
         """ChannelInfo.to_dict() contains all required keys."""
         from codomyrmex.collaboration.communication.channels import QueueChannel
+
         ch = QueueChannel(name="x")
         info = ch.get_info()
         d = info.to_dict()
-        for key in ("channel_id", "name", "state", "subscriber_count", "message_count", "created_at"):
+        for key in (
+            "channel_id",
+            "name",
+            "state",
+            "subscriber_count",
+            "message_count",
+            "created_at",
+        ):
             assert key in d
 
     def test_channel_manager_creates_channel(self):
         """ChannelManager.create_channel() returns a channel with the given name."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
+
         mgr = ChannelManager()
         ch = mgr.create_channel("my-channel")
         assert ch.name == "my-channel"
@@ -916,6 +1010,7 @@ class TestQueueChannel:
     def test_channel_manager_get_by_id(self):
         """ChannelManager.get_channel() retrieves channel by ID."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
+
         mgr = ChannelManager()
         ch = mgr.create_channel("ch-by-id")
         retrieved = mgr.get_channel(ch.channel_id)
@@ -924,6 +1019,7 @@ class TestQueueChannel:
     def test_channel_manager_get_by_name(self):
         """ChannelManager.get_channel_by_name() retrieves channel by name."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
+
         mgr = ChannelManager()
         ch = mgr.create_channel("named-ch")
         retrieved = mgr.get_channel_by_name("named-ch")
@@ -932,6 +1028,7 @@ class TestQueueChannel:
     def test_channel_manager_list_channels(self):
         """ChannelManager.list_channels() returns info for all created channels."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
+
         mgr = ChannelManager()
         mgr.create_channel("ch-a")
         mgr.create_channel("ch-b")
@@ -941,6 +1038,7 @@ class TestQueueChannel:
     def test_channel_manager_close_channel(self):
         """close_channel() removes the channel from the manager."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
+
         mgr = ChannelManager()
         ch = mgr.create_channel("close-me")
         result = mgr.close_channel(ch.channel_id)
@@ -950,6 +1048,7 @@ class TestQueueChannel:
     def test_channel_manager_close_all(self):
         """close_all() removes all channels."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
+
         mgr = ChannelManager()
         mgr.create_channel("x")
         mgr.create_channel("y")
@@ -959,6 +1058,7 @@ class TestQueueChannel:
     def test_channel_manager_unknown_type_raises(self):
         """create_channel() with unknown type raises ValueError."""
         from codomyrmex.collaboration.communication.channels import ChannelManager
+
         mgr = ChannelManager()
         with pytest.raises(ValueError):
             mgr.create_channel("bad-ch", channel_type="ftp")
@@ -971,6 +1071,7 @@ class TestMessageQueue:
     async def test_put_and_get_roundtrip(self):
         """Messages put into the queue can be retrieved via get()."""
         from codomyrmex.collaboration.communication.channels import MessageQueue
+
         q = MessageQueue()
         msg = AgentMessage(sender_id="s", content="data")
         await q.put(msg)
@@ -980,6 +1081,7 @@ class TestMessageQueue:
     def test_put_nowait_on_full_queue_raises(self):
         """put_nowait() raises ChannelError when queue capacity is reached."""
         from codomyrmex.collaboration.communication.channels import MessageQueue
+
         q = MessageQueue(max_size=1)
         msg1 = AgentMessage(sender_id="s", content="1")
         msg2 = AgentMessage(sender_id="s", content="2")
@@ -990,12 +1092,14 @@ class TestMessageQueue:
     def test_is_empty_on_fresh_queue(self):
         """A fresh MessageQueue reports is_empty == True."""
         from codomyrmex.collaboration.communication.channels import MessageQueue
+
         q = MessageQueue()
         assert q.is_empty is True
 
     def test_clear_removes_all_messages(self):
         """clear() drains the queue and returns the count of removed messages."""
         from codomyrmex.collaboration.communication.channels import MessageQueue
+
         q = MessageQueue()
         for i in range(3):
             q.put_nowait(AgentMessage(sender_id="s", content=str(i)))
@@ -1006,6 +1110,7 @@ class TestMessageQueue:
     def test_get_nowait_returns_none_when_empty(self):
         """get_nowait() returns None on an empty queue (no exception)."""
         from codomyrmex.collaboration.communication.channels import MessageQueue
+
         q = MessageQueue()
         result = q.get_nowait()
         assert result is None
@@ -1023,8 +1128,16 @@ class TestAgentProtocols:
         """AgentMessage.to_dict() returns all expected keys."""
         msg = AgentMessage(sender_id="a1", content="hello")
         d = msg.to_dict()
-        for key in ("id", "sender_id", "receiver_id", "message_type", "content",
-                    "metadata", "timestamp", "reply_to"):
+        for key in (
+            "id",
+            "sender_id",
+            "receiver_id",
+            "message_type",
+            "content",
+            "metadata",
+            "timestamp",
+            "reply_to",
+        ):
             assert key in d
 
     def test_agent_message_create_reply(self):
@@ -1038,7 +1151,9 @@ class TestAgentProtocols:
 
     def test_agent_capability_to_dict(self):
         """AgentCapability.to_dict() contains name, description, and schema fields."""
-        cap = AgentCapability(name="code-review", description="Reviews code", input_schema={"code": "str"})
+        cap = AgentCapability(
+            name="code-review", description="Reviews code", input_schema={"code": "str"}
+        )
         d = cap.to_dict()
         assert d["name"] == "code-review"
         assert d["description"] == "Reviews code"
@@ -1052,7 +1167,14 @@ class TestAgentProtocols:
     def test_message_type_enum_values(self):
         """MessageType enum contains expected types."""
         types = {t.value for t in MessageType}
-        assert {"request", "response", "broadcast", "handoff", "status", "error"}.issubset(types)
+        assert {
+            "request",
+            "response",
+            "broadcast",
+            "handoff",
+            "status",
+            "error",
+        }.issubset(types)
 
     def test_agent_coordinator_register_and_get_idle(self):
         """AgentCoordinator.register() adds agents; get_idle_agents() returns idle ones."""
@@ -1163,7 +1285,15 @@ class TestTaskAssignment:
         """TaskAssignment.to_dict() contains all required keys."""
         ta = TaskAssignment(description="code review", required_role=AgentRole.REVIEWER)
         d = ta.to_dict()
-        for key in ("task_id", "description", "assignee", "required_role", "status", "priority", "result"):
+        for key in (
+            "task_id",
+            "description",
+            "assignee",
+            "required_role",
+            "status",
+            "priority",
+            "result",
+        ):
             assert key in d
 
     def test_task_assignment_required_role_serialized_as_string(self):

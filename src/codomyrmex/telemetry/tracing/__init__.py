@@ -19,25 +19,31 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class SpanKind(Enum):
     """Type of span."""
+
     INTERNAL = "internal"
     SERVER = "server"
     CLIENT = "client"
     PRODUCER = "producer"
     CONSUMER = "consumer"
 
+
 class SpanStatus(Enum):
     """Status of a span."""
+
     UNSET = "unset"
     OK = "ok"
     ERROR = "error"
 
+
 @dataclass
 class SpanContext:
     """Context for trace propagation."""
+
     trace_id: str
     span_id: str
     parent_span_id: str | None = None
@@ -89,13 +95,15 @@ class SpanContext:
         return cls(
             trace_id=trace_id,
             span_id=span_id,
-            parent_span_id=parent if parent else None,
+            parent_span_id=parent or None,
             sampled=sampled,
         )
+
 
 @dataclass
 class Span:
     """A trace span representing a unit of work."""
+
     name: str
     context: SpanContext
     kind: SpanKind = SpanKind.INTERNAL
@@ -146,11 +154,13 @@ class Span:
         timestamp: float | None = None,
     ) -> "Span":
         """Add an event to the span."""
-        self.events.append({
-            "name": name,
-            "timestamp": timestamp or time.time(),
-            "attributes": attributes or {},
-        })
+        self.events.append(
+            {
+                "name": name,
+                "timestamp": timestamp or time.time(),
+                "attributes": attributes or {},
+            }
+        )
         return self
 
     def set_status(
@@ -170,7 +180,7 @@ class Span:
             {
                 "exception.type": type(exception).__name__,
                 "exception.message": str(exception),
-            }
+            },
         )
         self.set_status(SpanStatus.ERROR, str(exception))
         return self
@@ -197,18 +207,18 @@ class Span:
             "events": self.events,
         }
 
+
 class SpanExporter(ABC):
     """Base class for span exporters."""
 
     @abstractmethod
     def export(self, spans: list[Span]) -> None:
         """Export spans."""
-        pass
 
     @abstractmethod
     def shutdown(self) -> None:
         """Shutdown exporter."""
-        pass
+
 
 class ConsoleExporter(SpanExporter):
     """Export spans to console."""
@@ -227,7 +237,8 @@ class ConsoleExporter(SpanExporter):
 
     def shutdown(self) -> None:
         """No-op shutdown for console exporter."""
-        return None  # Intentional no-op
+        return  # Intentional no-op
+
 
 class InMemoryExporter(SpanExporter):
     """Store spans in memory (useful for testing)."""
@@ -243,7 +254,7 @@ class InMemoryExporter(SpanExporter):
             self.spans.extend(spans)
             # Trim if over limit
             if len(self.spans) > self.max_spans:
-                self.spans = self.spans[-self.max_spans:]
+                self.spans = self.spans[-self.max_spans :]
 
     def get_spans(self, trace_id: str | None = None) -> list[Span]:
         """Get spans, optionally filtered by trace_id."""
@@ -261,12 +272,15 @@ class InMemoryExporter(SpanExporter):
         """Clear spans on shutdown."""
         self.clear()
 
+
 # Thread-local storage for context
 _context_local = threading.local()
+
 
 def _generate_id(length: int = 16) -> str:
     """Generate a random hex ID."""
     return uuid.uuid4().hex[:length]
+
 
 class Tracer:
     """
@@ -299,7 +313,7 @@ class Tracer:
 
     def _get_current_context(self) -> SpanContext | None:
         """Get current span context from thread-local storage."""
-        return getattr(_context_local, 'context', None)
+        return getattr(_context_local, "context", None)
 
     def _set_current_context(self, context: SpanContext | None) -> None:
         """Set current span context in thread-local storage."""
@@ -400,9 +414,11 @@ class Tracer:
         self.flush()
         self.exporter.shutdown()
 
+
 # Global tracer registry
 _tracers: dict[str, Tracer] = {}
 _tracers_lock = threading.Lock()
+
 
 def get_tracer(
     name: str = "default",
@@ -413,6 +429,7 @@ def get_tracer(
         if name not in _tracers:
             _tracers[name] = Tracer(name, exporter)
         return _tracers[name]
+
 
 def trace(
     name: str | None = None,
@@ -431,6 +448,7 @@ def trace(
         def another_function():
             ...
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         """Decorator."""
         span_name = name or func.__name__
@@ -447,10 +465,12 @@ def trace(
 
     return decorator
 
+
 def get_current_span() -> Span | None:
     """Get the current active span context."""
-    context = getattr(_context_local, 'context', None)
+    context = getattr(_context_local, "context", None)
     return context
+
 
 __all__ = [
     # Enums

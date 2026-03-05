@@ -29,12 +29,14 @@ def _validate_positive_int(name: str, value: int, default: int) -> int:
 def _bridge(repo_path: str):
     """Lazy import + instantiation of GitNexusBridge."""
     from .core.gitnexus_bridge import GitNexusBridge
+
     return GitNexusBridge(repo_path)
 
 
 def _analyzer(repo_path: str):
     """Lazy import + instantiation of GitHistoryAnalyzer."""
     from .core.history_analyzer import GitHistoryAnalyzer
+
     return GitHistoryAnalyzer(repo_path)
 
 
@@ -54,7 +56,8 @@ def git_analysis_index_repo(repo_path: str) -> dict[str, Any]:
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
+                "status": "error",
+                "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.analyze()
         return {"status": "success", "repo_path": repo_path, "result": result}
@@ -78,7 +81,8 @@ def git_analysis_query(
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
+                "status": "error",
+                "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.query(query_text, limit=limit)
         return {"status": "success", "query": query_text, "results": result}
@@ -99,7 +103,8 @@ def git_analysis_symbol_context(repo_path: str, symbol: str) -> dict[str, Any]:
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
+                "status": "error",
+                "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.get_context(symbol)
         return {"status": "success", "symbol": symbol, "context": result}
@@ -120,7 +125,8 @@ def git_analysis_impact(repo_path: str, symbol: str) -> dict[str, Any]:
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
+                "status": "error",
+                "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.assess_impact(symbol)
         return {"status": "success", "symbol": symbol, "impact": result}
@@ -143,7 +149,8 @@ def git_analysis_detect_changes(
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
+                "status": "error",
+                "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.detect_changes(diff=diff)
         return {"status": "success", "impact": result}
@@ -164,7 +171,8 @@ def git_analysis_cypher_query(repo_path: str, cypher_query: str) -> dict[str, An
         b = _bridge(repo_path)
         if not b.check_availability():
             return {
-                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
+                "status": "error",
+                "message": "GitNexus not available. Install Node.js or npx.",
             }
         result = b.run_cypher(cypher_query)
         return {"status": "success", "query": cypher_query, "result": result}
@@ -186,7 +194,8 @@ def git_analysis_list_indexed() -> dict[str, Any]:
         b = _bridge(".")
         if not b.check_availability():
             return {
-                "status": "error", "message": "GitNexus not available. Install Node.js or npx.",
+                "status": "error",
+                "message": "GitNexus not available. Install Node.js or npx.",
             }
         repos = b.list_repos()
         return {"status": "success", "repos": repos, "count": len(repos)}
@@ -283,7 +292,10 @@ def git_analysis_commit_frequency(
 ) -> dict[str, Any]:
     """Get commit frequency bucketed by time period (day/week/month)."""
     if by not in {"day", "week", "month"}:
-        return {"status": "error", "message": f"by must be one of 'day', 'week', 'month', got {by!r}"}
+        return {
+            "status": "error",
+            "message": f"by must be one of 'day', 'week', 'month', got {by!r}",
+        }
     try:
         result = _analyzer(repo_path).get_commit_frequency(by=by)
         return {"status": "success", "frequency": result, "bucket": by}
@@ -332,8 +344,15 @@ def git_analysis_file_history(
     """Get commit history for a specific file."""
     try:
         max_count = _validate_positive_int("max_count", max_count, 50)
-        result = _analyzer(repo_path).get_file_history(file_path=file_path, max_count=max_count)
-        return {"status": "success", "file": file_path, "commits": result, "count": len(result)}
+        result = _analyzer(repo_path).get_file_history(
+            file_path=file_path, max_count=max_count
+        )
+        return {
+            "status": "success",
+            "file": file_path,
+            "commits": result,
+            "count": len(result),
+        }
     except ValueError as exc:
         return {"status": "error", "message": str(exc)}
     except Exception as exc:
@@ -368,9 +387,7 @@ def git_analysis_directory_churn(
         "High-score files are both frequently changed and recently touched."
     ),
 )
-def git_analysis_hotspots(
-    repo_path: str = ".", top_n: int = 20
-) -> dict[str, Any]:
+def git_analysis_hotspots(repo_path: str = ".", top_n: int = 20) -> dict[str, Any]:
     """Identify high-risk hotspot files by churn and recency."""
     try:
         top_n = _validate_positive_int("top_n", top_n, 20)

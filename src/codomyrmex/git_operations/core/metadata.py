@@ -285,12 +285,11 @@ class RepositoryMetadataManager:
 
         if permissions.get("admin", False):
             return AccessLevel.ADMIN
-        elif permissions.get("push", False):
+        if permissions.get("push", False):
             return AccessLevel.READ_WRITE
-        elif permissions.get("pull", True):  # Default assumption
+        if permissions.get("pull", True):  # Default assumption
             return AccessLevel.READ_ONLY
-        else:
-            return AccessLevel.UNKNOWN
+        return AccessLevel.UNKNOWN
 
     def update_local_repository_info(self, metadata: RepositoryMetadata) -> None:
         """Update local repository information."""

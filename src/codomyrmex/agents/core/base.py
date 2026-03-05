@@ -88,12 +88,10 @@ class AgentInterface(ABC):
     @abstractmethod
     def get_capabilities(self) -> list[AgentCapabilities]:
         """Get list of capabilities supported by this agent."""
-        pass
 
     @abstractmethod
     def execute(self, request: AgentRequest) -> AgentResponse:
         """Execute an agent request."""
-        pass
 
     @abstractmethod
     def stream(self, request: AgentRequest) -> Iterator[str]:
@@ -106,7 +104,6 @@ class AgentInterface(ABC):
         Yields:
             Response chunks
         """
-        pass
 
     @abstractmethod
     def setup(self) -> None:
@@ -117,7 +114,6 @@ class AgentInterface(ABC):
         checking for necessary environment variables, API keys, and other
         requirements.
         """
-        pass
 
     @abstractmethod
     def test_connection(self) -> bool:
@@ -127,12 +123,10 @@ class AgentInterface(ABC):
         Returns:
             True if connection is successful, False otherwise
         """
-        pass
 
     @abstractmethod
     def supports_capability(self, capability: AgentCapabilities) -> bool:
         """Check if agent supports a specific capability."""
-        pass
 
 
 @runtime_checkable
@@ -227,7 +221,6 @@ class BaseAgent(AgentInterface):
         """
         self.logger.info(f"Setting up agent: {self.name}")
         # Base implementation does nothing but log
-        pass
 
     def test_connection(self) -> bool:
         """
@@ -277,7 +270,7 @@ class BaseAgent(AgentInterface):
             yield from self._stream_impl(request)
         except Exception as e:
             self.logger.exception(f"Error streaming {self.name} response")
-            yield f"Error: {str(e)}"
+            yield f"Error: {e!s}"
 
     def _validate_request(self, request: AgentRequest) -> None:
         """
@@ -296,7 +289,9 @@ class BaseAgent(AgentInterface):
         if request.capabilities:
             for cap in request.capabilities:
                 if cap not in self.capabilities:
-                    self.logger.warning(f"Request requires capability {cap} not supported by agent {self.name}")
+                    self.logger.warning(
+                        f"Request requires capability {cap} not supported by agent {self.name}"
+                    )
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """
@@ -396,18 +391,15 @@ class AgentIntegrationAdapter(ABC):
         self, prompt: str, language: str = "python", **kwargs: Any
     ) -> str:
         """Adapt agent for AI code editing module."""
-        pass
 
     @abstractmethod
     def adapt_for_llm(
         self, messages: list[dict[str, Any]], model: str | None = None, **kwargs: Any
     ) -> dict[str, Any]:
         """Adapt agent for LLM module."""
-        pass
 
     @abstractmethod
     def adapt_for_code_execution(
         self, code: str, language: str = "python", **kwargs: Any
     ) -> dict[str, Any]:
         """Adapt agent for code execution sandbox."""
-        pass

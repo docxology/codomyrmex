@@ -2,7 +2,6 @@
 Tests for collaboration communication submodule.
 """
 
-
 import pytest
 
 from codomyrmex.collaboration.communication import (

@@ -110,15 +110,19 @@ class ToolChain:
         # ... register tools "fetch" and "parse" ...
 
         chain = ToolChain(registry=registry)
-        chain.add_step(ChainStep(
-            tool_name="fetch",
-            output_key="raw",
-        ))
-        chain.add_step(ChainStep(
-            tool_name="parse",
-            input_mapping={"content": "raw.body"},
-            output_key="parsed",
-        ))
+        chain.add_step(
+            ChainStep(
+                tool_name="fetch",
+                output_key="raw",
+            )
+        )
+        chain.add_step(
+            ChainStep(
+                tool_name="parse",
+                input_mapping={"content": "raw.body"},
+                output_key="parsed",
+            )
+        )
 
         result = chain.execute({"url": "https://example.com"})
     """
@@ -277,7 +281,7 @@ class ToolChain:
 
 
 __all__ = [
-    "ChainStep",
     "ChainResult",
+    "ChainStep",
     "ToolChain",
 ]

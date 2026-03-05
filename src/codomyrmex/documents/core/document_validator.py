@@ -11,7 +11,9 @@ logger = get_logger(__name__)
 class ValidationResult:
     """Result of document validation."""
 
-    def __init__(self, is_valid: bool, errors: list[str] = None, warnings: list[str] = None):
+    def __init__(
+        self, is_valid: bool, errors: list[str] = None, warnings: list[str] = None
+    ):
 
         self.is_valid = is_valid
         self.errors = errors or []
@@ -72,6 +74,7 @@ class DocumentValidator:
         try:
             if isinstance(document.content, str):
                 import json
+
                 json.loads(document.content)
             elif isinstance(document.content, dict):
                 # Already parsed, validate structure
@@ -79,7 +82,7 @@ class DocumentValidator:
             else:
                 errors.append("JSON content must be string or dict")
         except json.JSONDecodeError as e:
-            errors.append(f"Invalid JSON: {str(e)}")
+            errors.append(f"Invalid JSON: {e!s}")
         return errors
 
     def _validate_yaml(self, document: Document) -> list[str]:
@@ -88,6 +91,7 @@ class DocumentValidator:
         try:
             if isinstance(document.content, str):
                 import yaml
+
                 yaml.safe_load(document.content)
             elif isinstance(document.content, dict):
                 # Already parsed
@@ -95,7 +99,7 @@ class DocumentValidator:
             else:
                 errors.append("YAML content must be string or dict")
         except yaml.YAMLError as e:
-            errors.append(f"Invalid YAML: {str(e)}")
+            errors.append(f"Invalid YAML: {e!s}")
         return errors
 
     def _validate_against_schema(self, document: Document, schema: dict) -> list[str]:
@@ -110,9 +114,11 @@ class DocumentValidator:
             elif isinstance(document.content, str):
                 if document.format.value == "json":
                     import json
+
                     content_dict = json.loads(document.content)
                 elif document.format.value == "yaml":
                     import yaml
+
                     content_dict = yaml.safe_load(document.content)
                 else:
                     return errors  # Schema validation only for structured formats
@@ -122,9 +128,9 @@ class DocumentValidator:
             jsonschema.validate(instance=content_dict, schema=schema)
 
         except jsonschema.ValidationError as e:
-            errors.append(f"Schema validation error: {str(e)}")
+            errors.append(f"Schema validation error: {e!s}")
         except Exception as e:
-            errors.append(f"Schema validation failed: {str(e)}")
+            errors.append(f"Schema validation failed: {e!s}")
 
         return errors
 
@@ -147,4 +153,3 @@ def validate_document(
     """
     validator = DocumentValidator()
     return validator.validate(document, schema)
-

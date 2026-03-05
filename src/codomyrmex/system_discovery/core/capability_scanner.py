@@ -21,11 +21,10 @@ functionality.
 
 
 try:
-
     logger = get_logger(__name__)
 except ImportError:
-
     logger = logging.getLogger(__name__)
+
 
 @dataclass
 class FunctionCapability:
@@ -43,6 +42,7 @@ class FunctionCapability:
     decorators: list[str]
     complexity_score: int
 
+
 @dataclass
 class ClassCapability:
     """Metadata about a discovered class capability."""
@@ -57,6 +57,7 @@ class ClassCapability:
     line_number: int
     is_abstract: bool
     decorators: list[str]
+
 
 @dataclass
 class ModuleCapability:
@@ -73,6 +74,7 @@ class ModuleCapability:
     file_count: int
     line_count: int
     last_modified: str
+
 
 class CapabilityScanner:
     """
@@ -96,7 +98,8 @@ class CapabilityScanner:
         # Ensure src is in Python path
         if str(self.src_path) not in sys.path:
             pass
-#             sys.path.insert(0, str(self.src_path))  # Removed sys.path manipulation
+
+    #             sys.path.insert(0, str(self.src_path))  # Removed sys.path manipulation
 
     def scan_all_modules(self) -> dict[str, ModuleCapability]:
         """Scan all modules under the codomyrmex package path.
@@ -286,7 +289,9 @@ class CapabilityScanner:
 
         return functions, classes, constants, imports
 
-    def _extract_parameters(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[dict[str, Any]]:
+    def _extract_parameters(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef
+    ) -> list[dict[str, Any]]:
         """Extract parameter information from function node."""
         parameters = []
 
@@ -312,31 +317,37 @@ class CapabilityScanner:
 
         # Add *args if present
         if node.args.vararg:
-            parameters.append({
-                "name": f"*{node.args.vararg.arg}",
-                "annotation": (
-                    ast.unparse(node.args.vararg.annotation)
-                    if node.args.vararg.annotation
-                    else None
-                ),
-                "default": None,
-            })
+            parameters.append(
+                {
+                    "name": f"*{node.args.vararg.arg}",
+                    "annotation": (
+                        ast.unparse(node.args.vararg.annotation)
+                        if node.args.vararg.annotation
+                        else None
+                    ),
+                    "default": None,
+                }
+            )
 
         # Add **kwargs if present
         if node.args.kwarg:
-            parameters.append({
-                "name": f"**{node.args.kwarg.arg}",
-                "annotation": (
-                    ast.unparse(node.args.kwarg.annotation)
-                    if node.args.kwarg.annotation
-                    else None
-                ),
-                "default": None,
-            })
+            parameters.append(
+                {
+                    "name": f"**{node.args.kwarg.arg}",
+                    "annotation": (
+                        ast.unparse(node.args.kwarg.annotation)
+                        if node.args.kwarg.annotation
+                        else None
+                    ),
+                    "default": None,
+                }
+            )
 
         return parameters
 
-    def _extract_return_annotation(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> str:
+    def _extract_return_annotation(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef
+    ) -> str:
         """Extract return type annotation from function node."""
         if node.returns:
             try:
@@ -345,7 +356,9 @@ class CapabilityScanner:
                 return "complex_annotation"
         return ""
 
-    def _build_signature(self, name: str, parameters: list[dict[str, Any]], return_annotation: str) -> str:
+    def _build_signature(
+        self, name: str, parameters: list[dict[str, Any]], return_annotation: str
+    ) -> str:
         """Build function signature string."""
         param_strs = []
         for param in parameters:
@@ -361,7 +374,9 @@ class CapabilityScanner:
             signature += f" -> {return_annotation}"
         return signature
 
-    def _extract_decorators(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[str]:
+    def _extract_decorators(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef
+    ) -> list[str]:
         """Extract decorator information from function node."""
         decorators = []
         for decorator in node.decorator_list:
@@ -499,12 +514,12 @@ class CapabilityScanner:
         complexity = 1  # Base complexity
 
         for child in ast.walk(node):
-            if isinstance(child, (ast.If, ast.For, ast.While, ast.With)):
-                complexity += 1
-            elif isinstance(child, ast.ExceptHandler):
-                complexity += 1
-            elif isinstance(
-                child, (ast.ListComp, ast.DictComp, ast.SetComp, ast.GeneratorExp)
+            if (
+                isinstance(child, (ast.If, ast.For, ast.While, ast.With))
+                or isinstance(child, ast.ExceptHandler)
+                or isinstance(
+                    child, (ast.ListComp, ast.DictComp, ast.SetComp, ast.GeneratorExp)
+                )
             ):
                 complexity += 1
 
@@ -530,11 +545,9 @@ class CapabilityScanner:
             latest_time = 0
             for py_file in module_path.rglob("*.py"):
                 mtime = py_file.stat().st_mtime
-                if mtime > latest_time:
-                    latest_time = mtime
+                latest_time = max(latest_time, mtime)
 
             if latest_time > 0:
-
                 return datetime.datetime.fromtimestamp(latest_time).strftime(
                     "%Y-%m-%d %H:%M:%S"
                 )
@@ -605,7 +618,6 @@ class CapabilityScanner:
     ) -> str:
         """Export detailed capabilities report to JSON."""
         if filename is None:
-
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"codomyrmex_capabilities_{timestamp}.json"
 
@@ -676,6 +688,7 @@ class CapabilityScanner:
         except Exception as e:
             logger.error(f"Failed to export capabilities report: {e}")
             return ""
+
 
 if __name__ == "__main__":
     # Demo the capability scanner

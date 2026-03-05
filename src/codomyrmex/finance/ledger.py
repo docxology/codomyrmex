@@ -7,9 +7,11 @@ from .account import Account, AccountType
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass(frozen=True)
 class Transaction:
     """Immutable record of a financial event."""
+
     debit_account: str
     credit_account: str
     amount: float
@@ -17,9 +19,10 @@ class Transaction:
     timestamp: datetime = field(default_factory=datetime.now)
     id: UUID = field(default_factory=uuid4)
 
+
 class LedgerError(Exception):
     """Base exception for ledger operations."""
-    pass
+
 
 class Ledger:
     """Double-entry bookkeeping engine."""
@@ -73,11 +76,10 @@ class Ledger:
                 account.balance += amount
             else:
                 account.balance -= amount
-        else:  # Normal Credit balance
-            if is_debit:
-                account.balance -= amount
-            else:
-                account.balance += amount
+        elif is_debit:
+            account.balance -= amount
+        else:
+            account.balance += amount
 
     def get_balance(self, account_name: str) -> float:
         """Get the current balance of an account."""

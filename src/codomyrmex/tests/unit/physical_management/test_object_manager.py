@@ -78,8 +78,14 @@ class TestEnums:
 
     def test_object_status_all_members(self):
         expected = {
-            "active", "inactive", "maintenance", "error",
-            "offline", "initializing", "shutting_down", "calibrating",
+            "active",
+            "inactive",
+            "maintenance",
+            "error",
+            "offline",
+            "initializing",
+            "shutting_down",
+            "calibrating",
         }
         assert {m.value for m in ObjectStatus} == expected
 
@@ -90,8 +96,15 @@ class TestEnums:
 
     def test_material_type_all_members(self):
         expected = {
-            "metal", "plastic", "wood", "glass", "ceramic",
-            "composite", "liquid", "gas", "unknown",
+            "metal",
+            "plastic",
+            "wood",
+            "glass",
+            "ceramic",
+            "composite",
+            "liquid",
+            "gas",
+            "unknown",
         }
         assert {m.value for m in MaterialType} == expected
 
@@ -102,8 +115,14 @@ class TestEnums:
 
     def test_event_type_all_members(self):
         expected = {
-            "created", "moved", "status_changed", "property_updated",
-            "collision", "destroyed", "connected", "disconnected",
+            "created",
+            "moved",
+            "status_changed",
+            "property_updated",
+            "collision",
+            "destroyed",
+            "connected",
+            "disconnected",
         }
         assert {m.value for m in EventType} == expected
 
@@ -123,8 +142,11 @@ class TestMaterialProperties:
 
     def test_direct_construction(self):
         mp = MaterialProperties(
-            density=7850, elasticity=200e9, thermal_conductivity=45,
-            specific_heat=500, melting_point=1811,
+            density=7850,
+            elasticity=200e9,
+            thermal_conductivity=45,
+            specific_heat=500,
+            melting_point=1811,
         )
         assert mp.density == 7850
         assert mp.friction_coefficient == 0.5  # default
@@ -132,9 +154,13 @@ class TestMaterialProperties:
 
     def test_custom_friction_and_restitution(self):
         mp = MaterialProperties(
-            density=1000, elasticity=1e9, thermal_conductivity=1.0,
-            specific_heat=1000, melting_point=500,
-            friction_coefficient=0.1, restitution=0.9,
+            density=1000,
+            elasticity=1e9,
+            thermal_conductivity=1.0,
+            specific_heat=1000,
+            melting_point=500,
+            friction_coefficient=0.1,
+            restitution=0.9,
         )
         assert mp.friction_coefficient == 0.1
         assert mp.restitution == 0.9
@@ -214,8 +240,10 @@ class TestObjectEvent:
 
     def test_construction_with_data(self):
         evt = ObjectEvent(
-            event_type=EventType.MOVED, object_id="y",
-            data={"dx": 1}, source="test",
+            event_type=EventType.MOVED,
+            object_id="y",
+            data={"dx": 1},
+            source="test",
         )
         assert evt.data == {"dx": 1}
         assert evt.source == "test"
@@ -384,8 +412,11 @@ class TestPhysicalObject:
 
     def test_post_init_explicit_material_props_preserved(self):
         custom_props = MaterialProperties(
-            density=9999, elasticity=1e9, thermal_conductivity=5.0,
-            specific_heat=100, melting_point=2000,
+            density=9999,
+            elasticity=1e9,
+            thermal_conductivity=5.0,
+            specific_heat=100,
+            melting_point=2000,
         )
         obj = PhysicalObject(
             id="custom",
@@ -649,9 +680,21 @@ class TestPhysicalObject:
         obj = _make_obj()
         d = obj.to_dict()
         expected_keys = {
-            "id", "name", "object_type", "location", "properties",
-            "status", "created_at", "last_updated", "material",
-            "mass", "volume", "temperature", "connections", "tags", "metadata",
+            "id",
+            "name",
+            "object_type",
+            "location",
+            "properties",
+            "status",
+            "created_at",
+            "last_updated",
+            "material",
+            "mass",
+            "volume",
+            "temperature",
+            "connections",
+            "tags",
+            "metadata",
         }
         assert set(d.keys()) == expected_keys
 
@@ -787,7 +830,10 @@ class TestObjectRegistry:
         reg.unregister_object("obj-1")
         # After unregister, the _location_index cell should be clean
         grid_key = (5, 5, 5)
-        assert grid_key not in reg._location_index or "obj-1" not in reg._location_index.get(grid_key, set())
+        assert (
+            grid_key not in reg._location_index
+            or "obj-1" not in reg._location_index.get(grid_key, set())
+        )
 
     def test_unregister_nonexistent(self):
         reg = self._fresh_registry()
@@ -1017,7 +1063,11 @@ class TestObjectRegistry:
         assert len(reg.event_history) == 3
         # The events should be for the most recent objects
         retained_ids = {e.object_id for e in reg.event_history}
-        assert "obj-3" in retained_ids or "obj-4" in retained_ids or "obj-5" in retained_ids
+        assert (
+            "obj-3" in retained_ids
+            or "obj-4" in retained_ids
+            or "obj-5" in retained_ids
+        )
 
     def test_get_events_filters(self):
         reg = self._fresh_registry()
@@ -1274,11 +1324,13 @@ class TestObjectRegistry:
     def test_save_and_load_multiple_objects(self, tmp_path):
         reg = self._fresh_registry()
         for i in range(5):
-            reg.register_object(_make_obj(
-                obj_id=f"obj-{i}",
-                location=(float(i), 0.0, 0.0),
-                obj_type=ObjectType.SENSOR,
-            ))
+            reg.register_object(
+                _make_obj(
+                    obj_id=f"obj-{i}",
+                    location=(float(i), 0.0, 0.0),
+                    obj_type=ObjectType.SENSOR,
+                )
+            )
         fp = tmp_path / "multi.json"
         reg.save_to_file(fp)
 
@@ -1331,6 +1383,7 @@ class TestObjectRegistry:
     def test_thread_safety_concurrent_registration(self):
         """Test that concurrent registrations don't corrupt the registry."""
         import threading
+
         reg = self._fresh_registry()
         errors = []
 
@@ -1341,7 +1394,9 @@ class TestObjectRegistry:
             except Exception as e:
                 errors.append(e)
 
-        threads = [threading.Thread(target=register_batch, args=(i * 10, 10)) for i in range(5)]
+        threads = [
+            threading.Thread(target=register_batch, args=(i * 10, 10)) for i in range(5)
+        ]
         for t in threads:
             t.start()
         for t in threads:
@@ -1369,8 +1424,14 @@ class TestPhysicalObjectManager:
     def test_create_object_basic(self):
         mgr = self._fresh_manager()
         obj = mgr.create_object(
-            "t1", "Thermometer", ObjectType.SENSOR, 1.0, 2.0, 3.0,
-            material=MaterialType.GLASS, mass=0.5,
+            "t1",
+            "Thermometer",
+            ObjectType.SENSOR,
+            1.0,
+            2.0,
+            3.0,
+            material=MaterialType.GLASS,
+            mass=0.5,
         )
         assert obj.id == "t1"
         assert obj.location == (1.0, 2.0, 3.0)
@@ -1380,8 +1441,14 @@ class TestPhysicalObjectManager:
     def test_create_object_with_extra_properties(self):
         mgr = self._fresh_manager()
         obj = mgr.create_object(
-            "p1", "Device", ObjectType.DEVICE, 0.0, 0.0, 0.0,
-            color="red", serial="ABC123",
+            "p1",
+            "Device",
+            ObjectType.DEVICE,
+            0.0,
+            0.0,
+            0.0,
+            color="red",
+            serial="ABC123",
         )
         assert obj.properties["color"] == "red"
         assert obj.properties["serial"] == "ABC123"
@@ -1393,12 +1460,16 @@ class TestPhysicalObjectManager:
 
     def test_create_object_custom_temperature(self):
         mgr = self._fresh_manager()
-        obj = mgr.create_object("t1", "Hot", ObjectType.SENSOR, 0, 0, 0, temperature=500.0)
+        obj = mgr.create_object(
+            "t1", "Hot", ObjectType.SENSOR, 0, 0, 0, temperature=500.0
+        )
         assert obj.temperature == 500.0
 
     def test_create_object_custom_volume(self):
         mgr = self._fresh_manager()
-        obj = mgr.create_object("v1", "Volume", ObjectType.CONTAINER, 0, 0, 0, volume=5.0)
+        obj = mgr.create_object(
+            "v1", "Volume", ObjectType.CONTAINER, 0, 0, 0, volume=5.0
+        )
         assert obj.volume == 5.0
 
     def test_create_object_all_object_types(self):

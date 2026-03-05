@@ -85,7 +85,7 @@ class FirecrawlClient:
             result = client.scrape_url(
                 "https://example.com",
                 formats=["markdown", "html"],
-                actions=[{"type": "wait", "milliseconds": 2000}]
+                actions=[{"type": "wait", "milliseconds": 2000}],
             )
             print(result["markdown"])
             ```
@@ -105,10 +105,17 @@ class FirecrawlClient:
                     url=url,
                     timeout=self.config.default_timeout,
                 ) from e
-            elif "connection" in error_msg or "network" in error_msg or "refused" in error_msg:
-                raise ScrapeConnectionError(f"Connection error scraping {url}", url=url) from e
-            else:
-                raise FirecrawlError(f"Firecrawl error scraping {url}: {e}", firecrawl_error=e) from e
+            if (
+                "connection" in error_msg
+                or "network" in error_msg
+                or "refused" in error_msg
+            ):
+                raise ScrapeConnectionError(
+                    f"Connection error scraping {url}", url=url
+                ) from e
+            raise FirecrawlError(
+                f"Firecrawl error scraping {url}: {e}", firecrawl_error=e
+            ) from e
 
     def crawl_url(
         self,
@@ -141,7 +148,7 @@ class FirecrawlClient:
             result = client.crawl_url(
                 "https://example.com",
                 limit=10,
-                scrape_options={"formats": ["markdown"]}
+                scrape_options={"formats": ["markdown"]},
             )
             print(f"Job ID: {result['id']}")
             ```
@@ -159,9 +166,12 @@ class FirecrawlClient:
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
-                raise ScrapeConnectionError(f"Connection error crawling {url}", url=url) from e
-            else:
-                raise FirecrawlError(f"Firecrawl error crawling {url}: {e}", firecrawl_error=e) from e
+                raise ScrapeConnectionError(
+                    f"Connection error crawling {url}", url=url
+                ) from e
+            raise FirecrawlError(
+                f"Firecrawl error crawling {url}: {e}", firecrawl_error=e
+            ) from e
 
     def map_url(self, url: str, search: str | None = None) -> dict[str, Any]:
         """Map the structure of a website.
@@ -187,20 +197,30 @@ class FirecrawlClient:
                 print(f"{link['title']}: {link['url']}")
             ```
         """
-        logger.debug(f"Mapping URL with Firecrawl: {url}" + (f" (search: {search})" if search else ""))
+        logger.debug(
+            f"Mapping URL with Firecrawl: {url}"
+            + (f" (search: {search})" if search else "")
+        )
 
         try:
             # Note: Firecrawl SDK may have different method signature
             # Adjust based on actual SDK API
-            result = self._client.map(url, search=search) if search else self._client.map(url)
+            result = (
+                self._client.map(url, search=search)
+                if search
+                else self._client.map(url)
+            )
             logger.debug(f"Successfully mapped {url}")
             return result
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
-                raise ScrapeConnectionError(f"Connection error mapping {url}", url=url) from e
-            else:
-                raise FirecrawlError(f"Firecrawl error mapping {url}: {e}", firecrawl_error=e) from e
+                raise ScrapeConnectionError(
+                    f"Connection error mapping {url}", url=url
+                ) from e
+            raise FirecrawlError(
+                f"Firecrawl error mapping {url}: {e}", firecrawl_error=e
+            ) from e
 
     def search_web(
         self,
@@ -228,9 +248,7 @@ class FirecrawlClient:
             ```python
             client = FirecrawlClient(config)
             result = client.search_web(
-                "python web scraping",
-                limit=5,
-                scrape_options={"formats": ["markdown"]}
+                "python web scraping", limit=5, scrape_options={"formats": ["markdown"]}
             )
             for item in result["data"]:
                 print(f"{item['url']}: {item.get('markdown', '')[:100]}")
@@ -240,15 +258,20 @@ class FirecrawlClient:
 
         try:
             # Note: Adjust method name based on actual Firecrawl SDK API
-            result = self._client.search(query, limit=limit, scrapeOptions=scrape_options)
+            result = self._client.search(
+                query, limit=limit, scrapeOptions=scrape_options
+            )
             logger.debug(f"Search completed for: {query}")
             return result
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
-                raise ScrapeConnectionError(f"Connection error searching '{query}'") from e
-            else:
-                raise FirecrawlError(f"Firecrawl error searching '{query}': {e}", firecrawl_error=e) from e
+                raise ScrapeConnectionError(
+                    f"Connection error searching '{query}'"
+                ) from e
+            raise FirecrawlError(
+                f"Firecrawl error searching '{query}': {e}", firecrawl_error=e
+            ) from e
 
     def extract_data(
         self,
@@ -277,14 +300,9 @@ class FirecrawlClient:
         Example:
             ```python
             client = FirecrawlClient(config)
-            schema = {
-                "type": "object",
-                "properties": {"title": {"type": "string"}}
-            }
+            schema = {"type": "object", "properties": {"title": {"type": "string"}}}
             result = client.extract_data(
-                ["https://example.com"],
-                schema=schema,
-                prompt="Extract the page title"
+                ["https://example.com"], schema=schema, prompt="Extract the page title"
             )
             print(result["data"])
             ```
@@ -300,6 +318,6 @@ class FirecrawlClient:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
                 raise ScrapeConnectionError("Connection error during extraction") from e
-            else:
-                raise FirecrawlError(f"Firecrawl error during extraction: {e}", firecrawl_error=e) from e
-
+            raise FirecrawlError(
+                f"Firecrawl error during extraction: {e}", firecrawl_error=e
+            ) from e

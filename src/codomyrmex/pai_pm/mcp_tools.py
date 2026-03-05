@@ -138,6 +138,8 @@ def pai_pm_dispatch(
     """
     try:
         client = _get_client()
-        return client.dispatch_execute(action, backend=backend, model=model, context=context)
+        return client.dispatch_execute(
+            action, backend=backend, model=model, context=context
+        )
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

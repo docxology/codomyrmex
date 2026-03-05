@@ -5,6 +5,7 @@ inheritance hierarchy, and exception raising.
 
 No mocks. No MagicMock. No monkeypatch.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -97,7 +98,9 @@ class TestMemoryLimitError:
         assert exc.context["used_bytes"] == 300000000
 
     def test_both_fields_stored(self):
-        exc = MemoryLimitError("OOM", limit_bytes=256 * 1024 * 1024, used_bytes=300 * 1024 * 1024)
+        exc = MemoryLimitError(
+            "OOM", limit_bytes=256 * 1024 * 1024, used_bytes=300 * 1024 * 1024
+        )
         assert "limit_bytes" in exc.context
         assert "used_bytes" in exc.context
 
@@ -130,7 +133,9 @@ class TestSandboxSecurityError:
 
     def test_can_be_raised_and_caught(self):
         with pytest.raises(SandboxSecurityError):
-            raise SandboxSecurityError("Network access denied", violation_type="network")
+            raise SandboxSecurityError(
+                "Network access denied", violation_type="network"
+            )
 
 
 @pytest.mark.unit
@@ -286,7 +291,9 @@ class TestCodingRuntimeError:
         assert exc.context["error_type"] == "ZeroDivisionError"
 
     def test_traceback_stored(self):
-        exc = CodingRuntimeError("Error", traceback="Traceback (most recent call last):\n...")
+        exc = CodingRuntimeError(
+            "Error", traceback="Traceback (most recent call last):\n..."
+        )
         assert "traceback" in exc.context
 
     def test_can_be_raised(self):

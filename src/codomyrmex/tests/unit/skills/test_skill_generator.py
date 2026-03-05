@@ -55,7 +55,13 @@ def test_default_phase_maps_structure():
         assert isinstance(phases, dict), f"{skill_name} phases should be dict"
         for phase, tools in phases.items():
             assert phase in (
-                "OBSERVE", "THINK", "PLAN", "BUILD", "EXECUTE", "VERIFY", "LEARN"
+                "OBSERVE",
+                "THINK",
+                "PLAN",
+                "BUILD",
+                "EXECUTE",
+                "VERIFY",
+                "LEARN",
             ), f"Unknown phase {phase} in {skill_name}"
             assert isinstance(tools, list), f"{skill_name}.{phase} should be list"
             assert all(isinstance(t, str) for t in tools)
@@ -122,6 +128,7 @@ def test_extract_phase_mapping_from_pai_md():
 
         # Monkey-patch _SRC_ROOT temporarily
         import codomyrmex.skills.skill_generator as sg
+
         orig = sg._SRC_ROOT
         sg._SRC_ROOT = Path(tmpdir)
         try:
@@ -220,8 +227,12 @@ def test_auto_description():
 def test_render_skill_md_structure():
     """Rendered SKILL.md should have frontmatter, title, and tools table."""
     tools = [
-        {"name": "test_tool", "description": "Test", "trust_level": "VERIFIED",
-         "category": "general"},
+        {
+            "name": "test_tool",
+            "description": "Test",
+            "trust_level": "VERIFIED",
+            "category": "general",
+        },
     ]
     result = render_skill_md("TestSkill", tools, ["general"])
     assert "---" in result
@@ -234,7 +245,9 @@ def test_render_skill_md_structure():
 def test_render_skill_md_preserves_keep_blocks():
     """Existing keep blocks should survive re-rendering."""
     existing = "<!-- keep-start -->My custom notes<!-- keep-end -->"
-    tools = [{"name": "t1", "description": "D", "trust_level": "VERIFIED", "category": "x"}]
+    tools = [
+        {"name": "t1", "description": "D", "trust_level": "VERIFIED", "category": "x"}
+    ]
     result = render_skill_md("S", tools, ["x"], existing_content=existing)
     assert "My custom notes" in result
 

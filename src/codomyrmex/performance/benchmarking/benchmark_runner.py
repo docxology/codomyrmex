@@ -90,12 +90,14 @@ class BenchmarkRunner:
             iterations: Number of iterations.
             threshold_ms: Max allowable mean (0 = no limit).
         """
-        self._benchmarks.append({
-            "name": name,
-            "fn": fn,
-            "iterations": iterations,
-            "threshold_ms": threshold_ms,
-        })
+        self._benchmarks.append(
+            {
+                "name": name,
+                "fn": fn,
+                "iterations": iterations,
+                "threshold_ms": threshold_ms,
+            }
+        )
 
     def run(self) -> BenchmarkSuite:
         """Execute all benchmarks.

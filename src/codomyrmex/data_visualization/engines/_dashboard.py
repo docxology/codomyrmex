@@ -101,9 +101,7 @@ def _plot_dataset(ax: plt.Axes, dataset: Dataset):
             alpha=dataset.alpha,
         )
     elif dataset.plot_type == PlotType.HISTOGRAM:
-        ax.hist(
-            y_data, color=dataset.color, label=dataset.label, alpha=dataset.alpha
-        )
+        ax.hist(y_data, color=dataset.color, label=dataset.label, alpha=dataset.alpha)
 
     if dataset.label:
         ax.legend()

@@ -11,22 +11,22 @@ from decimal import ROUND_HALF_EVEN, Decimal
 
 # Default US-style federal brackets (simplified, 2024-era rates)
 US_FEDERAL_2024: list[dict] = [
-    {"min": Decimal("0"), "max": Decimal("11600"), "rate": Decimal("0.10")},
-    {"min": Decimal("11600"), "max": Decimal("47150"), "rate": Decimal("0.12")},
-    {"min": Decimal("47150"), "max": Decimal("100525"), "rate": Decimal("0.22")},
-    {"min": Decimal("100525"), "max": Decimal("191950"), "rate": Decimal("0.24")},
-    {"min": Decimal("191950"), "max": Decimal("243725"), "rate": Decimal("0.32")},
-    {"min": Decimal("243725"), "max": Decimal("609350"), "rate": Decimal("0.35")},
-    {"min": Decimal("609350"), "max": Decimal("Infinity"), "rate": Decimal("0.37")},
+    {"min": Decimal(0), "max": Decimal(11600), "rate": Decimal("0.10")},
+    {"min": Decimal(11600), "max": Decimal(47150), "rate": Decimal("0.12")},
+    {"min": Decimal(47150), "max": Decimal(100525), "rate": Decimal("0.22")},
+    {"min": Decimal(100525), "max": Decimal(191950), "rate": Decimal("0.24")},
+    {"min": Decimal(191950), "max": Decimal(243725), "rate": Decimal("0.32")},
+    {"min": Decimal(243725), "max": Decimal(609350), "rate": Decimal("0.35")},
+    {"min": Decimal(609350), "max": Decimal("Infinity"), "rate": Decimal("0.37")},
 ]
 
 JURISDICTIONS: dict[str, list[dict]] = {
     "US": US_FEDERAL_2024,
     "UK": [  # Simplified UK 2024/25
-        {"min": Decimal("0"), "max": Decimal("12570"), "rate": Decimal("0.00")},
-        {"min": Decimal("12570"), "max": Decimal("50270"), "rate": Decimal("0.20")},
-        {"min": Decimal("50270"), "max": Decimal("125140"), "rate": Decimal("0.40")},
-        {"min": Decimal("125140"), "max": Decimal("Infinity"), "rate": Decimal("0.45")},
+        {"min": Decimal(0), "max": Decimal(12570), "rate": Decimal("0.00")},
+        {"min": Decimal(12570), "max": Decimal(50270), "rate": Decimal("0.20")},
+        {"min": Decimal(50270), "max": Decimal(125140), "rate": Decimal("0.40")},
+        {"min": Decimal(125140), "max": Decimal("Infinity"), "rate": Decimal("0.45")},
     ],
 }
 
@@ -112,8 +112,10 @@ class TaxCalculator:
         Raises:
             TaxError: If income is negative.
         """
-        income = Decimal(str(income)).quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
-        if income < Decimal("0"):
+        income = Decimal(str(income)).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
+        if income < Decimal(0):
             raise TaxError("Income must be non-negative.")
 
         total_tax = Decimal("0.00")
@@ -122,14 +124,14 @@ class TaxCalculator:
 
         remaining = income
         for bracket in self.brackets:
-            if remaining <= Decimal("0"):
+            if remaining <= Decimal(0):
                 break
             bracket_min = bracket["min"]
             bracket_max = bracket["max"]
             rate = bracket["rate"]
 
             taxable_in_bracket = min(remaining, bracket_max - bracket_min)
-            if taxable_in_bracket <= Decimal("0"):
+            if taxable_in_bracket <= Decimal(0):
                 continue
 
             tax_for_bracket = (taxable_in_bracket * rate).quantize(
@@ -139,13 +141,15 @@ class TaxCalculator:
             marginal_rate = rate
             remaining -= taxable_in_bracket
 
-            breakdown.append({
-                "bracket_min": bracket_min,
-                "bracket_max": bracket_max,
-                "rate": rate,
-                "taxable_amount": taxable_in_bracket,
-                "tax": tax_for_bracket,
-            })
+            breakdown.append(
+                {
+                    "bracket_min": bracket_min,
+                    "bracket_max": bracket_max,
+                    "rate": rate,
+                    "taxable_amount": taxable_in_bracket,
+                    "tax": tax_for_bracket,
+                }
+            )
 
         effective_rate = (
             (total_tax / income).quantize(Decimal("0.000001"), rounding=ROUND_HALF_EVEN)
@@ -184,8 +188,10 @@ class TaxCalculator:
         Returns:
             Adjusted taxable income.
         """
-        income = Decimal(str(income)).quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
-        if income < Decimal("0"):
+        income = Decimal(str(income)).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_EVEN
+        )
+        if income < Decimal(0):
             raise TaxError("Income must be non-negative.")
 
         total_deduction = Decimal("0.00")
@@ -193,7 +199,7 @@ class TaxCalculator:
             amount = Decimal(str(ded.get("amount", 0))).quantize(
                 Decimal("0.01"), rounding=ROUND_HALF_EVEN
             )
-            if amount < Decimal("0"):
+            if amount < Decimal(0):
                 raise TaxError(f"Deduction amount must be non-negative: {ded}")
             total_deduction += amount
 

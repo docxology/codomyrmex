@@ -123,9 +123,9 @@ def networks_to_dict(
     try:
         Network = _get_network()
         net = Network(name)
-        for nid in (nodes or []):
+        for nid in nodes or []:
             net.add_node(nid)
-        for edge in (edges or []):
+        for edge in edges or []:
             if len(edge) >= 2:
                 net.add_edge(edge[0], edge[1])
         return {"status": "success", "network": net.to_dict()}

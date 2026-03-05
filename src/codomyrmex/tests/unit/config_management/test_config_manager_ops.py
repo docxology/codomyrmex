@@ -17,6 +17,7 @@ from codomyrmex.config_management.core.config_loader import (
 # ConfigurationManager -- save tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerSave:
     """Tests for saving configurations to files."""
@@ -58,6 +59,7 @@ class TestConfigurationManagerSave:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- reload / list / get tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerOperations:
@@ -135,6 +137,7 @@ class TestConfigurationManagerOperations:
 # ConfigurationManager -- template generation tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerTemplates:
     """Tests for configuration template generation from schemas."""
@@ -207,6 +210,7 @@ class TestConfigurationManagerTemplates:
 # Convenience functions
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions."""
@@ -236,6 +240,7 @@ class TestConvenienceFunctions:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- backup tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerBackup:
@@ -283,6 +288,7 @@ class TestConfigurationManagerBackup:
 # ---------------------------------------------------------------------------
 # Edge cases and error handling
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestEdgeCases:
@@ -346,6 +352,7 @@ class TestEdgeCases:
 # ConfigurationManager -- save error path (lines 405-407)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerSaveErrors:
     """Tests for save_configuration error handling."""
@@ -366,6 +373,7 @@ class TestConfigurationManagerSaveErrors:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- reload error path (lines 449-451)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerReloadErrors:
@@ -392,6 +400,7 @@ class TestConfigurationManagerReloadErrors:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- template generation error paths (lines 489-491)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerTemplateErrors:
@@ -427,6 +436,7 @@ class TestConfigurationManagerTemplateErrors:
 # ConfigurationManager -- _generate_property_template edge cases (lines 514, 522)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestPropertyTemplateGeneration:
     """Tests for _generate_property_template edge cases."""
@@ -458,13 +468,15 @@ class TestPropertyTemplateGeneration:
     def test_object_type_recurses(self, tmp_path):
         """Property type 'object' recurses into _generate_template_from_schema (line 520)."""
         manager = ConfigurationManager(config_dir=str(tmp_path))
-        result = manager._generate_property_template({
-            "type": "object",
-            "properties": {
-                "inner": {"type": "string"},
-                "count": {"type": "integer", "default": 42},
-            },
-        })
+        result = manager._generate_property_template(
+            {
+                "type": "object",
+                "properties": {
+                    "inner": {"type": "string"},
+                    "count": {"type": "integer", "default": 42},
+                },
+            }
+        )
         assert result == {"inner": "example_value", "count": 42}
 
     def test_boolean_type_generates_false(self, tmp_path):
@@ -488,7 +500,9 @@ class TestPropertyTemplateGeneration:
     def test_default_value_takes_precedence(self, tmp_path):
         """When a default is present, it is returned regardless of type."""
         manager = ConfigurationManager(config_dir=str(tmp_path))
-        result = manager._generate_property_template({"type": "string", "default": "custom"})
+        result = manager._generate_property_template(
+            {"type": "string", "default": "custom"}
+        )
         assert result == "custom"
 
     def test_no_type_defaults_to_string(self, tmp_path):
@@ -507,6 +521,7 @@ class TestPropertyTemplateGeneration:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- migrate_configuration (lines 597-635)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMigrateConfiguration:

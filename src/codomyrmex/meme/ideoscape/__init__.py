@@ -11,12 +11,12 @@ from codomyrmex.meme.ideoscape.models import (
 )
 
 __all__ = [
+    "CoordinateSystem",
+    "IdeoscapeEngine",
     "IdeoscapeLayer",
     "MapFeature",
-    "CoordinateSystem",
     "ProjectionType",
     "TerrainMap",
-    "IdeoscapeEngine",
     "generate_terrain",
     "locate_features",
 ]

@@ -28,11 +28,14 @@ def get_scheduler_metrics() -> dict:
                 "completed": metrics.jobs_completed,
                 "failed": metrics.jobs_failed,
                 "cancelled": metrics.jobs_cancelled,
-                "execution_time": metrics.total_execution_time
-            }
+                "execution_time": metrics.total_execution_time,
+            },
         }
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-        return {"status": "error", "message": f"Failed to retrieve scheduler metrics: {e}"}
+        return {
+            "status": "error",
+            "message": f"Failed to retrieve scheduler metrics: {e}",
+        }
 
 
 @mcp_tool(category="orchestrator")
@@ -63,8 +66,16 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
             for dep in deps:
                 try:
                     workflow.add_dependency(task_id, dep)
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                    logger.warning("Failed to add dependency %s -> %s: %s", task_id, dep, e)
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
+                    logger.warning(
+                        "Failed to add dependency %s -> %s: %s", task_id, dep, e
+                    )
 
         # Verification happens implicitly or through a topological sort check
         # This will raise CycleError if a cycle exists
@@ -73,7 +84,7 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
         return {
             "status": "success",
             "valid_dag": True,
-            "execution_order": execution_order
+            "execution_order": execution_order,
         }
     except CycleError as e:
         return {"status": "error", "valid_dag": False, "message": str(e)}

@@ -34,34 +34,28 @@ class AbstractAgent(ABC):
     @abstractmethod
     def agent_id(self) -> str:
         """Unique identifier for this agent."""
-        pass
 
     @property
     @abstractmethod
     def name(self) -> str:
         """Human-readable name for this agent."""
-        pass
 
     @property
     @abstractmethod
     def state(self) -> AgentState:
         """Current state of the agent."""
-        pass
 
     @abstractmethod
     async def process_task(self, task: Task) -> TaskResult:
         """Process a task and return a result."""
-        pass
 
     @abstractmethod
     def get_capabilities(self) -> list[str]:
         """Get list of capability names this agent possesses."""
-        pass
 
     @abstractmethod
     def get_status(self) -> AgentStatus:
         """Get current agent status."""
-        pass
 
 
 class CollaborativeAgent(AbstractAgent):
@@ -167,7 +161,9 @@ class CollaborativeAgent(AbstractAgent):
                 if handler:
                     await handler(message)
                 else:
-                    logger.warning(f"No handler for message type: {message.message_type}")
+                    logger.warning(
+                        f"No handler for message type: {message.message_type}"
+                    )
             except TimeoutError:
                 continue
             except Exception as e:
@@ -193,8 +189,7 @@ class CollaborativeAgent(AbstractAgent):
         """
         if self._state == AgentState.BUSY:
             raise AgentBusyError(
-                self._agent_id,
-                self._current_task.id if self._current_task else None
+                self._agent_id, self._current_task.id if self._current_task else None
             )
 
         self._state = AgentState.BUSY
@@ -236,7 +231,9 @@ class CollaborativeAgent(AbstractAgent):
         Subclasses should override this method to implement
         task-specific logic.
         """
-        raise NotImplementedError("Subclasses must implement _execute_task")  # ABC: intentional
+        raise NotImplementedError(
+            "Subclasses must implement _execute_task"
+        )  # ABC: intentional
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize agent to dictionary."""

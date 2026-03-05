@@ -13,6 +13,7 @@ from typing import Any
 
 class EvaluationType(Enum):
     """Types of prompt evaluation."""
+
     EXACT_MATCH = "exact_match"
     CONTAINS = "contains"
     NOT_CONTAINS = "not_contains"
@@ -22,6 +23,7 @@ class EvaluationType(Enum):
 
 class TestStatus(Enum):
     """Status of a test run."""
+
     __test__ = False
     PENDING = "pending"
     RUNNING = "running"
@@ -33,6 +35,7 @@ class TestStatus(Enum):
 @dataclass
 class PromptTestCase:
     """A single test case for prompt evaluation."""
+
     id: str
     prompt: str
     expected_output: str = ""
@@ -59,6 +62,7 @@ class PromptTestCase:
 @dataclass
 class TestResult:
     """Result of running a single test case."""
+
     __test__ = False
     test_case_id: str
     status: TestStatus
@@ -89,6 +93,7 @@ class TestResult:
 @dataclass
 class TestSuiteResult:
     """Result of running a complete test suite."""
+
     __test__ = False
     suite_id: str
     prompt_version: str
@@ -144,7 +149,9 @@ class TestSuiteResult:
             "average_latency_ms": self.average_latency_ms,
             "average_score": self.average_score,
             "started_at": self.started_at.isoformat(),
-            "completed_at": self.completed_at.isoformat() if self.completed_at else None,
+            "completed_at": self.completed_at.isoformat()
+            if self.completed_at
+            else None,
         }
 
     def worst_tests(self, n: int = 5) -> list[TestResult]:
@@ -185,7 +192,9 @@ class TestSuiteResult:
         dist[last_label] += sum(1 for r in self.results if r.score == 1.0)
         return dist
 
-    def regression_check(self, baseline: "TestSuiteResult", threshold: float = 0.05) -> dict[str, Any]:
+    def regression_check(
+        self, baseline: "TestSuiteResult", threshold: float = 0.05
+    ) -> dict[str, Any]:
         """Compare against a baseline suite run to detect regressions.
 
         Args:
@@ -231,6 +240,7 @@ class TestSuiteResult:
         ]
         for r in self.results:
             icon = "✅" if r.passed else ("⚠️" if r.status == TestStatus.ERROR else "❌")
-            lines.append(f"| {r.test_case_id} | {icon} {r.status.value} | {r.score:.3f} | {r.latency_ms:.1f}ms |")
+            lines.append(
+                f"| {r.test_case_id} | {icon} {r.status.value} | {r.score:.3f} | {r.latency_ms:.1f}ms |"
+            )
         return "\n".join(lines)
-

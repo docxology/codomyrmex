@@ -14,6 +14,7 @@ def test_skill_management():
     assert len(lib.search("code")) == 1
     assert len(lib.search("music")) == 0
 
+
 def test_duplicate_skill():
     """Verify duplicate skill behavior."""
     lib = SkillLibrary()

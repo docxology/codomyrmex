@@ -28,6 +28,7 @@ class TestWalletExceptions:
 
     def test_wallet_error_is_codomyrmex_error(self):
         from codomyrmex.exceptions import CodomyrmexError
+
         assert issubclass(WalletError, CodomyrmexError)
 
     def test_wallet_not_found_is_wallet_error(self):
@@ -69,7 +70,9 @@ class TestRitualStep:
     """Tests for the RitualStep dataclass."""
 
     def test_ritual_step_creation(self):
-        step = RitualStep(prompt="What is your pet's name?", expected_response_hash="abc123")
+        step = RitualStep(
+            prompt="What is your pet's name?", expected_response_hash="abc123"
+        )
         assert step.prompt == "What is your pet's name?"
         assert step.expected_response_hash == "abc123"
 
@@ -81,8 +84,12 @@ class TestNaturalRitualRecovery:
     def setup_method(self):
         self.recovery = NaturalRitualRecovery()
         self.steps = [
-            RitualStep(prompt="Pet name?", expected_response_hash=hash_response("fluffy")),
-            RitualStep(prompt="City born?", expected_response_hash=hash_response("portland")),
+            RitualStep(
+                prompt="Pet name?", expected_response_hash=hash_response("fluffy")
+            ),
+            RitualStep(
+                prompt="City born?", expected_response_hash=hash_response("portland")
+            ),
         ]
 
     def test_init(self):
@@ -291,6 +298,7 @@ class TestWalletManager:
 
     def setup_method(self):
         from codomyrmex.wallet.core import WalletManager
+
         self.mgr = WalletManager()
 
     def test_create_wallet(self):

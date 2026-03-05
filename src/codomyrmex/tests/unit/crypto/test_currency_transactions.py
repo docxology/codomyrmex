@@ -17,7 +17,7 @@ from codomyrmex.crypto.exceptions import WalletError
 pytestmark = [pytest.mark.crypto, pytest.mark.unit]
 
 
-@pytest.fixture()
+@pytest.fixture
 def keypair():
     """Generate a fresh secp256k1 key pair."""
     private_key = ec.generate_private_key(ec.SECP256K1())

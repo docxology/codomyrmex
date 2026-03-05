@@ -97,9 +97,20 @@ class DashboardExporter:
     def agent_dashboard(cls) -> DashboardExporter:
         """Pre-configured dashboard for agent monitoring."""
         exp = cls("Agent Operations")
-        exp.add_panel(Panel("Task Success Rate", "stat", "agent_task_success_rate", [0.9]))
-        exp.add_panel(Panel("Error Rate", "graph", "rate(agent_errors_total[5m])", [0.05]))
-        exp.add_panel(Panel("Latency P99", "graph", "histogram_quantile(0.99, agent_latency)", [1000]))
+        exp.add_panel(
+            Panel("Task Success Rate", "stat", "agent_task_success_rate", [0.9])
+        )
+        exp.add_panel(
+            Panel("Error Rate", "graph", "rate(agent_errors_total[5m])", [0.05])
+        )
+        exp.add_panel(
+            Panel(
+                "Latency P99",
+                "graph",
+                "histogram_quantile(0.99, agent_latency)",
+                [1000],
+            )
+        )
         exp.add_panel(Panel("Active Agents", "gauge", "agent_pool_active", [10]))
         return exp
 

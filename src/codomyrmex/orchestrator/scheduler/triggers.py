@@ -12,6 +12,7 @@ from enum import Enum
 
 class TriggerType(Enum):
     """Types of job triggers."""
+
     ONCE = "once"
     INTERVAL = "interval"
     CRON = "cron"
@@ -24,17 +25,16 @@ class Trigger(ABC):
     @abstractmethod
     def get_next_run(self, from_time: datetime | None = None) -> datetime | None:
         """Get the next run time."""
-        pass
 
     @abstractmethod
     def get_type(self) -> TriggerType:
         """Get trigger type."""
-        pass
 
 
 @dataclass
 class OnceTrigger(Trigger):
     """Trigger that fires once at a specific time."""
+
     run_at: datetime
 
     def get_next_run(self, from_time: datetime | None = None) -> datetime | None:
@@ -50,6 +50,7 @@ class OnceTrigger(Trigger):
 @dataclass
 class IntervalTrigger(Trigger):
     """Trigger that fires at regular intervals."""
+
     seconds: int = 0
     minutes: int = 0
     hours: int = 0
@@ -59,12 +60,7 @@ class IntervalTrigger(Trigger):
 
     @property
     def interval_seconds(self) -> int:
-        return (
-            self.seconds +
-            self.minutes * 60 +
-            self.hours * 3600 +
-            self.days * 86400
-        )
+        return self.seconds + self.minutes * 60 + self.hours * 3600 + self.days * 86400
 
     def get_next_run(self, from_time: datetime | None = None) -> datetime | None:
         from_time = from_time or datetime.now()
@@ -89,6 +85,7 @@ class IntervalTrigger(Trigger):
 @dataclass
 class CronTrigger(Trigger):
     """Cron-style trigger (simplified)."""
+
     minute: str = "*"
     hour: str = "*"
     day_of_month: str = "*"
@@ -114,9 +111,8 @@ class CronTrigger(Trigger):
                 if base == "*":
                     if value % step == 0:
                         return True
-            else:
-                if int(part) == value:
-                    return True
+            elif int(part) == value:
+                return True
 
         return False
 
@@ -130,11 +126,11 @@ class CronTrigger(Trigger):
 
         for _ in range(max_iterations):
             if (
-                self._match_field(self.minute, candidate.minute, 59) and
-                self._match_field(self.hour, candidate.hour, 23) and
-                self._match_field(self.day_of_month, candidate.day, 31) and
-                self._match_field(self.month, candidate.month, 12) and
-                self._match_field(self.day_of_week, candidate.weekday(), 6)
+                self._match_field(self.minute, candidate.minute, 59)
+                and self._match_field(self.hour, candidate.hour, 23)
+                and self._match_field(self.day_of_month, candidate.day, 31)
+                and self._match_field(self.month, candidate.month, 12)
+                and self._match_field(self.day_of_week, candidate.weekday(), 6)
             ):
                 return candidate
             candidate += timedelta(minutes=1)

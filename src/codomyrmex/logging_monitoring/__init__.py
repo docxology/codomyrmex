@@ -14,11 +14,13 @@ To use:
 3. In your main application script, call `setup_logging()` once at the beginning:
    ```python
    from codomyrmex.logging_monitoring import setup_logging
+
    setup_logging()
    ```
 4. In any module, get a logger instance:
    ```python
    from codomyrmex.logging_monitoring import get_logger
+
    logger = get_logger(__name__)
    logger.info("This is an informational message.")
    ```
@@ -44,9 +46,12 @@ from .core.correlation import (
     with_correlation,
 )
 from .core.logger_config import (
+    DEFAULT_LOG_FORMAT,
+    DETAILED_LOG_FORMAT,
     JSONFormatter,
     LogContext,
     configure_all_structured,
+    create_correlation_id,
     enable_structured_json,
     get_logger,
     log_with_context,
@@ -56,15 +61,24 @@ from .core.logger_config import (
 
 def cli_commands() -> dict[str, object]:
     """Return CLI commands for the logging_monitoring module."""
+
     def _show_config() -> None:
         import os
+
         print("Logging configuration:")
-        print(f"  CODOMYRMEX_LOG_LEVEL: {os.environ.get('CODOMYRMEX_LOG_LEVEL', 'INFO (default)')}")
-        print(f"  CODOMYRMEX_LOG_FILE: {os.environ.get('CODOMYRMEX_LOG_FILE', 'None (console only)')}")
-        print(f"  CODOMYRMEX_LOG_FORMAT: {os.environ.get('CODOMYRMEX_LOG_FORMAT', 'default')}")
+        print(
+            f"  CODOMYRMEX_LOG_LEVEL: {os.environ.get('CODOMYRMEX_LOG_LEVEL', 'INFO (default)')}"
+        )
+        print(
+            f"  CODOMYRMEX_LOG_FILE: {os.environ.get('CODOMYRMEX_LOG_FILE', 'None (console only)')}"
+        )
+        print(
+            f"  CODOMYRMEX_LOG_FORMAT: {os.environ.get('CODOMYRMEX_LOG_FORMAT', 'default')}"
+        )
 
     def _list_levels() -> None:
         import logging
+
         levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         print("Available log levels:")
         for level in levels:
@@ -81,6 +95,9 @@ __all__ = [
     "cli_commands",
     "setup_logging",
     "get_logger",
+    # log format constants
+    "DEFAULT_LOG_FORMAT",
+    "DETAILED_LOG_FORMAT",
     # v0.2.0 correlation
     "new_correlation_id",
     "get_correlation_id",
@@ -90,6 +107,7 @@ __all__ = [
     "CorrelationFilter",
     "enrich_event_data",
     "create_mcp_correlation_header",
+    "create_correlation_id",
     # context management
     "LogContext",
     "log_with_context",

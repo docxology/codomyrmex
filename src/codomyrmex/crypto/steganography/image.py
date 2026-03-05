@@ -65,7 +65,10 @@ def calculate_capacity(image_path: str) -> int:
 
     logger.debug(
         "Image capacity: %d bytes (%dx%d, %d usable bits)",
-        capacity, width, height, total_bits,
+        capacity,
+        width,
+        height,
+        total_bits,
     )
     return max(0, capacity)
 
@@ -144,7 +147,10 @@ def embed_in_image(image_path: str, message: str, output_path: str) -> bool:
 
     logger.info(
         "Embedded %d bytes in image (%dx%d), saved to %s",
-        len(message_bytes), width, height, output_path,
+        len(message_bytes),
+        width,
+        height,
+        output_path,
     )
     return True
 

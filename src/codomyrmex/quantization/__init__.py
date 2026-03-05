@@ -9,15 +9,15 @@ from .int8 import Int8Quantizer, QuantizedTensor, dequantize_int8, quantize_int8
 from .utils import compute_scale_zero_point, per_channel_scale, quantization_error
 
 __all__ = [
-    "Int8Quantizer",
-    "QuantizedTensor",
-    "quantize_int8",
-    "dequantize_int8",
     "FP4Quantizer",
     "FP4Tensor",
-    "quantize_fp4",
-    "dequantize_fp4",
+    "Int8Quantizer",
+    "QuantizedTensor",
     "compute_scale_zero_point",
+    "dequantize_fp4",
+    "dequantize_int8",
     "per_channel_scale",
     "quantization_error",
+    "quantize_fp4",
+    "quantize_int8",
 ]

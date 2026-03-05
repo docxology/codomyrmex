@@ -10,6 +10,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class UtilsMixin:
     """Reusable Coda API utility endpoints: current user info, URL resolution, and mutation status."""
 
@@ -57,4 +58,3 @@ class UtilsMixin:
         path = f"/mutationStatus/{request_id}"
         data = self._get(path)
         return MutationStatus.from_dict(data)
-

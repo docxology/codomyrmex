@@ -5,4 +5,4 @@ Exposes the core Network class and graph primitives.
 
 from .core import Edge, Network, Node
 
-__all__ = ["Network", "Node", "Edge"]
+__all__ = ["Edge", "Network", "Node"]

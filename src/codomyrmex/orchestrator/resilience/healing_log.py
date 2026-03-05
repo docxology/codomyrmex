@@ -66,12 +66,14 @@ class HealingLog:
     Usage::
 
         log = HealingLog()
-        log.record(HealingEvent(
-            error_category="timeout",
-            diagnosis="API latency spike",
-            recovery_action="Retry with increased timeout",
-            outcome="success",
-        ))
+        log.record(
+            HealingEvent(
+                error_category="timeout",
+                diagnosis="API latency spike",
+                recovery_action="Retry with increased timeout",
+                outcome="success",
+            )
+        )
         print(log.success_rate)
     """
 

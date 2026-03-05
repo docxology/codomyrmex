@@ -106,8 +106,10 @@ class APIContract:
     def _compute_checksum(self) -> str:
         """Compute SHA-256 over sorted endpoint signatures."""
         payload = json.dumps(
-            {name: {"sig": ep.signature, "ret": ep.return_type, "ver": ep.version}
-             for name, ep in sorted(self.endpoints.items())},
+            {
+                name: {"sig": ep.signature, "ret": ep.return_type, "ver": ep.version}
+                for name, ep in sorted(self.endpoints.items())
+            },
             sort_keys=True,
         )
         return hashlib.sha256(payload.encode()).hexdigest()[:16]
@@ -162,35 +164,41 @@ class ContractValidator:
         # Check for removed endpoints
         for name, ep in self._baseline.endpoints.items():
             if name not in current.endpoints:
-                changes.append(BreakingChange(
-                    endpoint=name,
-                    kind=BreakingChangeKind.REMOVED,
-                    old_value=ep.signature,
-                    message=f"Endpoint '{name}' was removed",
-                ))
+                changes.append(
+                    BreakingChange(
+                        endpoint=name,
+                        kind=BreakingChangeKind.REMOVED,
+                        old_value=ep.signature,
+                        message=f"Endpoint '{name}' was removed",
+                    )
+                )
                 continue
 
             curr_ep = current.endpoints[name]
 
             # Check signature changes
             if ep.signature and curr_ep.signature != ep.signature:
-                changes.append(BreakingChange(
-                    endpoint=name,
-                    kind=BreakingChangeKind.SIGNATURE_CHANGED,
-                    old_value=ep.signature,
-                    new_value=curr_ep.signature,
-                    message=f"Signature changed: {ep.signature} → {curr_ep.signature}",
-                ))
+                changes.append(
+                    BreakingChange(
+                        endpoint=name,
+                        kind=BreakingChangeKind.SIGNATURE_CHANGED,
+                        old_value=ep.signature,
+                        new_value=curr_ep.signature,
+                        message=f"Signature changed: {ep.signature} → {curr_ep.signature}",
+                    )
+                )
 
             # Check return type changes
             if ep.return_type and curr_ep.return_type != ep.return_type:
-                changes.append(BreakingChange(
-                    endpoint=name,
-                    kind=BreakingChangeKind.RETURN_TYPE_CHANGED,
-                    old_value=ep.return_type,
-                    new_value=curr_ep.return_type,
-                    message=f"Return type changed: {ep.return_type} → {curr_ep.return_type}",
-                ))
+                changes.append(
+                    BreakingChange(
+                        endpoint=name,
+                        kind=BreakingChangeKind.RETURN_TYPE_CHANGED,
+                        old_value=ep.return_type,
+                        new_value=curr_ep.return_type,
+                        message=f"Return type changed: {ep.return_type} → {curr_ep.return_type}",
+                    )
+                )
 
         return changes
 

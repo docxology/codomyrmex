@@ -183,38 +183,138 @@ class PAIMemoryStore:
 # =====================================================================
 
 ALGORITHM_PHASES: list[dict[str, str]] = [
-    {"phase": "1/7", "name": "OBSERVE", "description": "Reverse-engineer intent and create ISC (Ideal State Criteria)"},
-    {"phase": "2/7", "name": "THINK", "description": "Thinking Tools assessment, Skill Check, and Capability Selection"},
+    {
+        "phase": "1/7",
+        "name": "OBSERVE",
+        "description": "Reverse-engineer intent and create ISC (Ideal State Criteria)",
+    },
+    {
+        "phase": "2/7",
+        "name": "THINK",
+        "description": "Thinking Tools assessment, Skill Check, and Capability Selection",
+    },
     {"phase": "3/7", "name": "PLAN", "description": "Finalize the technical approach"},
-    {"phase": "4/7", "name": "BUILD", "description": "Create artifacts and prepare logic"},
-    {"phase": "5/7", "name": "EXECUTE", "description": "Run the work (parallel where possible)"},
-    {"phase": "6/7", "name": "VERIFY", "description": "Evidence-based verification against ISC"},
-    {"phase": "7/7", "name": "LEARN", "description": "Capture insights for future improvement"},
+    {
+        "phase": "4/7",
+        "name": "BUILD",
+        "description": "Create artifacts and prepare logic",
+    },
+    {
+        "phase": "5/7",
+        "name": "EXECUTE",
+        "description": "Run the work (parallel where possible)",
+    },
+    {
+        "phase": "6/7",
+        "name": "VERIFY",
+        "description": "Evidence-based verification against ISC",
+    },
+    {
+        "phase": "7/7",
+        "name": "LEARN",
+        "description": "Capture insights for future improvement",
+    },
 ]
 
 RESPONSE_DEPTH_LEVELS: list[dict[str, str]] = [
-    {"depth": "FULL", "when": "Non-trivial problem solving, design, implementation", "format": "7 phases (Observe → Learn)"},
-    {"depth": "ITERATION", "when": "Adjusting work in progress", "format": "Condensed: Change + Verify"},
-    {"depth": "MINIMAL", "when": "Pure social (greetings, ratings)", "format": "Summary + Voice"},
+    {
+        "depth": "FULL",
+        "when": "Non-trivial problem solving, design, implementation",
+        "format": "7 phases (Observe → Learn)",
+    },
+    {
+        "depth": "ITERATION",
+        "when": "Adjusting work in progress",
+        "format": "Condensed: Change + Verify",
+    },
+    {
+        "depth": "MINIMAL",
+        "when": "Pure social (greetings, ratings)",
+        "format": "Summary + Voice",
+    },
 ]
 
 PAI_PRINCIPLES: list[dict[str, str]] = [
-    {"num": "1", "name": "User Centricity", "summary": "PAI is built around you, not tooling"},
-    {"num": "2", "name": "The Foundational Algorithm", "summary": "Observe → Think → Plan → Build → Execute → Verify → Learn"},
-    {"num": "3", "name": "Clear Thinking First", "summary": "Clarify the problem before writing the prompt"},
-    {"num": "4", "name": "Scaffolding > Model", "summary": "System architecture matters more than which model you use"},
-    {"num": "5", "name": "Deterministic Infrastructure", "summary": "AI is probabilistic; your infrastructure shouldn't be"},
-    {"num": "6", "name": "Code Before Prompts", "summary": "If you can solve it with a bash script, don't use AI"},
-    {"num": "7", "name": "Spec / Test / Evals First", "summary": "Write specifications and tests before building"},
-    {"num": "8", "name": "UNIX Philosophy", "summary": "Do one thing well. Make tools composable"},
-    {"num": "9", "name": "ENG / SRE Principles", "summary": "Treat AI infrastructure like production software"},
-    {"num": "10", "name": "CLI as Interface", "summary": "Command-line interfaces are faster and more scriptable"},
-    {"num": "11", "name": "Goal → Code → CLI → Prompts → Agents", "summary": "The decision hierarchy"},
-    {"num": "12", "name": "Skill Management", "summary": "Modular capabilities that route intelligently"},
-    {"num": "13", "name": "Memory System", "summary": "Everything worth knowing gets captured"},
-    {"num": "14", "name": "Agent Personalities", "summary": "Specialized agents with unique voices"},
-    {"num": "15", "name": "Science as Meta-Loop", "summary": "Hypothesis → Experiment → Measure → Iterate"},
-    {"num": "16", "name": "Permission to Fail", "summary": "Explicit permission to say 'I don't know'"},
+    {
+        "num": "1",
+        "name": "User Centricity",
+        "summary": "PAI is built around you, not tooling",
+    },
+    {
+        "num": "2",
+        "name": "The Foundational Algorithm",
+        "summary": "Observe → Think → Plan → Build → Execute → Verify → Learn",
+    },
+    {
+        "num": "3",
+        "name": "Clear Thinking First",
+        "summary": "Clarify the problem before writing the prompt",
+    },
+    {
+        "num": "4",
+        "name": "Scaffolding > Model",
+        "summary": "System architecture matters more than which model you use",
+    },
+    {
+        "num": "5",
+        "name": "Deterministic Infrastructure",
+        "summary": "AI is probabilistic; your infrastructure shouldn't be",
+    },
+    {
+        "num": "6",
+        "name": "Code Before Prompts",
+        "summary": "If you can solve it with a bash script, don't use AI",
+    },
+    {
+        "num": "7",
+        "name": "Spec / Test / Evals First",
+        "summary": "Write specifications and tests before building",
+    },
+    {
+        "num": "8",
+        "name": "UNIX Philosophy",
+        "summary": "Do one thing well. Make tools composable",
+    },
+    {
+        "num": "9",
+        "name": "ENG / SRE Principles",
+        "summary": "Treat AI infrastructure like production software",
+    },
+    {
+        "num": "10",
+        "name": "CLI as Interface",
+        "summary": "Command-line interfaces are faster and more scriptable",
+    },
+    {
+        "num": "11",
+        "name": "Goal → Code → CLI → Prompts → Agents",
+        "summary": "The decision hierarchy",
+    },
+    {
+        "num": "12",
+        "name": "Skill Management",
+        "summary": "Modular capabilities that route intelligently",
+    },
+    {
+        "num": "13",
+        "name": "Memory System",
+        "summary": "Everything worth knowing gets captured",
+    },
+    {
+        "num": "14",
+        "name": "Agent Personalities",
+        "summary": "Specialized agents with unique voices",
+    },
+    {
+        "num": "15",
+        "name": "Science as Meta-Loop",
+        "summary": "Hypothesis → Experiment → Measure → Iterate",
+    },
+    {
+        "num": "16",
+        "name": "Permission to Fail",
+        "summary": "Explicit permission to say 'I don't know'",
+    },
 ]
 
 
@@ -358,15 +458,19 @@ class PAIBridge:
                 skill_md = entry / "SKILL.md"
                 tools_dir = entry / "Tools"
                 workflows_dir = entry / "Workflows"
-                file_count = sum(1 for _ in itertools.islice(entry.rglob("*"), 10000) if _.is_file())
-                result.append(PAISkillInfo(
-                    name=entry.name,
-                    path=str(entry),
-                    has_skill_md=skill_md.is_file(),
-                    has_tools=tools_dir.is_dir(),
-                    has_workflows=workflows_dir.is_dir(),
-                    file_count=file_count,
-                ))
+                file_count = sum(
+                    1 for _ in itertools.islice(entry.rglob("*"), 10000) if _.is_file()
+                )
+                result.append(
+                    PAISkillInfo(
+                        name=entry.name,
+                        path=str(entry),
+                        has_skill_md=skill_md.is_file(),
+                        has_tools=tools_dir.is_dir(),
+                        has_workflows=workflows_dir.is_dir(),
+                        file_count=file_count,
+                    )
+                )
         except OSError as exc:
             logger.warning("Failed to list skills: %s", exc)
 
@@ -404,11 +508,13 @@ class PAIBridge:
         try:
             for entry in sorted(tools_dir.iterdir()):
                 if entry.is_file() and entry.suffix == ".ts":
-                    result.append(PAIToolInfo(
-                        name=entry.stem,
-                        path=str(entry),
-                        size_bytes=entry.stat().st_size,
-                    ))
+                    result.append(
+                        PAIToolInfo(
+                            name=entry.stem,
+                            path=str(entry),
+                            size_bytes=entry.stat().st_size,
+                        )
+                    )
         except OSError as exc:
             logger.warning("Failed to list tools: %s", exc)
 
@@ -445,13 +551,19 @@ class PAIBridge:
                     continue
                 if ".hook." not in entry.name:
                     continue
-                is_archived = entry.name.endswith(".v25-archived") or "-archived" in entry.name
-                result.append(PAIHookInfo(
-                    name=entry.name.split(".hook.")[0] if ".hook." in entry.name else entry.stem,
-                    path=str(entry),
-                    size_bytes=entry.stat().st_size,
-                    is_archived=is_archived,
-                ))
+                is_archived = (
+                    entry.name.endswith(".v25-archived") or "-archived" in entry.name
+                )
+                result.append(
+                    PAIHookInfo(
+                        name=entry.name.split(".hook.")[0]
+                        if ".hook." in entry.name
+                        else entry.stem,
+                        path=str(entry),
+                        size_bytes=entry.stat().st_size,
+                        is_archived=is_archived,
+                    )
+                )
         except OSError as exc:
             logger.warning("Failed to list hooks: %s", exc)
 
@@ -488,12 +600,18 @@ class PAIBridge:
         result: list[PAIAgentInfo] = []
         try:
             for entry in sorted(agents_dir.iterdir()):
-                if entry.is_file() and entry.suffix == ".md" and entry.stem not in ("README", "AGENTS"):
-                    result.append(PAIAgentInfo(
-                        name=entry.stem,
-                        path=str(entry),
-                        size_bytes=entry.stat().st_size,
-                    ))
+                if (
+                    entry.is_file()
+                    and entry.suffix == ".md"
+                    and entry.stem not in ("README", "AGENTS")
+                ):
+                    result.append(
+                        PAIAgentInfo(
+                            name=entry.stem,
+                            path=str(entry),
+                            size_bytes=entry.stat().st_size,
+                        )
+                    )
         except OSError as exc:
             logger.warning("Failed to list agents: %s", exc)
 
@@ -529,12 +647,18 @@ class PAIBridge:
         try:
             for entry in sorted(memory_dir.iterdir()):
                 if entry.is_dir():
-                    item_count = sum(1 for _ in itertools.islice(entry.rglob("*"), 10000) if _.is_file())
-                    result.append(PAIMemoryStore(
-                        name=entry.name,
-                        path=str(entry),
-                        item_count=item_count,
-                    ))
+                    item_count = sum(
+                        1
+                        for _ in itertools.islice(entry.rglob("*"), 10000)
+                        if _.is_file()
+                    )
+                    result.append(
+                        PAIMemoryStore(
+                            name=entry.name,
+                            path=str(entry),
+                            item_count=item_count,
+                        )
+                    )
         except OSError as exc:
             logger.warning("Failed to list memory stores: %s", exc)
 
@@ -560,14 +684,18 @@ class PAIBridge:
         """
         sec_dir = self.config.security_dir
         if not sec_dir.is_dir():
-            return {"exists": False, "path": str(sec_dir), "files": [], "patterns": None}
+            return {
+                "exists": False,
+                "path": str(sec_dir),
+                "files": [],
+                "patterns": None,
+            }
 
         files: list[str] = []
         try:
             files = sorted(f.name for f in sec_dir.iterdir() if f.is_file())
         except OSError as e:
             logger.warning("Failed to list security config files in %s: %s", sec_dir, e)
-
 
         return {
             "exists": True,

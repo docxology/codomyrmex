@@ -120,7 +120,7 @@ class TestMerkleTree:
 class TestMerkleProof:
     """Tests for Merkle proof generation and verification."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def four_leaf_tree(self):
         leaves = [_leaf(c) for c in "abcd"]
         return build_merkle_tree(leaves)

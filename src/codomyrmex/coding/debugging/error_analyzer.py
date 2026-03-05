@@ -42,9 +42,10 @@ class ErrorDiagnosis:
         ...     error_type="TypeError",
         ...     message="unsupported operand type(s)",
         ...     line_number=42,
-        ...     file_path="script.py"
+        ...     file_path="script.py",
         ... )
     """
+
     error_type: str
     message: str
     file_path: str | None = None
@@ -77,14 +78,16 @@ class ErrorAnalyzer:
         # Patterns for common Python errors
         self.python_traceback_pattern = re.compile(
             r'File "(?P<file>[^"]+)", line (?P<line>\d+), in .*?\n(?P<line_content>.*?)\n(?P<error_type>\w+): (?P<message>.*)',
-            re.DOTALL
+            re.DOTALL,
         )
         self.python_syntax_error_pattern = re.compile(
             r'File "(?P<file>[^"]+)", line (?P<line>\d+)\n(?P<line_content>.*?)\nSyntaxError: (?P<message>.*)',
-            re.DOTALL
+            re.DOTALL,
         )
 
-    def analyze(self, stdout: str, stderr: str, exit_code: int) -> ErrorDiagnosis | None:
+    def analyze(
+        self, stdout: str, stderr: str, exit_code: int
+    ) -> ErrorDiagnosis | None:
         """Analyze execution output to identify and diagnose the primary error.
 
         Parses the stdout and stderr from a code execution to extract
@@ -107,7 +110,7 @@ class ErrorAnalyzer:
             >>> diagnosis = analyzer.analyze(
             ...     stdout="",
             ...     stderr='File "test.py", line 5\\n    x = \\nSyntaxError: invalid syntax',
-            ...     exit_code=1
+            ...     exit_code=1,
             ... )
             >>> print(diagnosis.error_type)  # "SyntaxError"
             >>> print(diagnosis.is_syntax_error)  # True
@@ -118,12 +121,12 @@ class ErrorAnalyzer:
         # Combine output for analysis, prioritizing stderr which usually has the traceback
 
         # Check for timeout (this usually comes from the runner but we might see SIGTERM/124)
-        if exit_code == 124: # Standard timeout exit code on linux
-             return ErrorDiagnosis(
+        if exit_code == 124:  # Standard timeout exit code on linux
+            return ErrorDiagnosis(
                 error_type="TimeoutError",
                 message="Execution timed out",
                 is_timeout=True,
-                stack_trace=stderr
+                stack_trace=stderr,
             )
 
         # Try to parse Python SyntaxError
@@ -135,7 +138,7 @@ class ErrorAnalyzer:
                 file_path=syntax_match.group("file"),
                 line_number=int(syntax_match.group("line")),
                 stack_trace=stderr,
-                is_syntax_error=True
+                is_syntax_error=True,
             )
 
         # Try to parse standard Python Traceback
@@ -148,14 +151,12 @@ class ErrorAnalyzer:
                 message=last_match.group("message"),
                 file_path=last_match.group("file"),
                 line_number=int(last_match.group("line")),
-                stack_trace=stderr
+                stack_trace=stderr,
             )
 
         # Fallback for generic errors
-        lines = stderr.strip().split('\n')
+        lines = stderr.strip().split("\n")
         last_line = lines[-1] if lines else "Unknown Error"
         return ErrorDiagnosis(
-            error_type="RuntimeError",
-            message=last_line,
-            stack_trace=stderr
+            error_type="RuntimeError", message=last_line, stack_trace=stderr
         )

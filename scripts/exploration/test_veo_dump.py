@@ -1,4 +1,5 @@
 import os
+
 from google import genai
 
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
@@ -6,10 +7,11 @@ print("Starting generation...")
 operation = client.models.generate_videos(
     model="veo-2.0-generate-001",
     prompt="A minimalist animation of a loading circle, 2 seconds",
-    config={"person_generation": "ALLOW_ADULT"}
+    config={"person_generation": "ALLOW_ADULT"},
 )
 print("Polling operation...")
 import time
+
 while not operation.done:
     time.sleep(5)
     operation = client.operations.get(operation=operation)

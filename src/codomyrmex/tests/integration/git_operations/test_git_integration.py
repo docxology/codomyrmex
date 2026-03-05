@@ -1,5 +1,3 @@
-
-
 import pytest
 
 from codomyrmex.git_operations.core.git import (
@@ -51,8 +49,10 @@ def test_git_workflow_real_repo(real_git_repo):
     junk_file = real_git_repo / "junk.tmp"
     junk_file.write_text("junk")
     from codomyrmex.git_operations.core.git import clean_repository
+
     clean_repository(force=True, repository_path=repo_path)
     assert not junk_file.exists()
+
 
 @pytest.mark.integration
 def test_git_init_real(tmp_path):
@@ -66,6 +66,7 @@ def test_git_init_real(tmp_path):
 
     # Check commit history to verify initial commit
     from codomyrmex.git_operations.core.git import get_commit_history
+
     commits = get_commit_history(repository_path=str(repo_path))
     assert len(commits) == 1
     assert commits[0]["message"] == "Initial commit"

@@ -14,7 +14,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from codomyrmex.logging_monitoring import get_logger  # noqa: F401
+from codomyrmex.logging_monitoring import get_logger
 
 # Submodule exports - import first
 from . import dashboard, exporters, metrics, spans
@@ -24,7 +24,10 @@ try:
     from . import context
 except ImportError as e:
     import logging as _logging
-    _logging.getLogger(__name__).debug("Optional telemetry.context not available: %s", e)
+
+    _logging.getLogger(__name__).debug(
+        "Optional telemetry.context not available: %s", e
+    )
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:
@@ -35,6 +38,7 @@ try:
         start_span,
         traced,
     )
+
     HAS_TRACE_CONTEXT = True
 except ImportError:
     HAS_TRACE_CONTEXT = False
@@ -45,12 +49,14 @@ try:
         BatchSpanProcessor,
         SimpleSpanProcessor,
     )
+
     HAS_SPAN_PROCESSOR = True
 except ImportError:
     HAS_SPAN_PROCESSOR = False
 
 try:
     from .exporters.otlp_exporter import OTLPExporter
+
     HAS_OTLP_EXPORTER = True
 except ImportError:
     HAS_OTLP_EXPORTER = False
@@ -61,12 +67,19 @@ from . import alerting, sampling, tracing
 
 def cli_commands():
     """Return CLI commands for the telemetry module."""
+
     def _status(**kwargs):
         """Show telemetry status."""
         print("=== Telemetry Status ===")
-        print(f"  Trace context: {'available' if HAS_TRACE_CONTEXT else 'not available'}")
-        print(f"  Span processor: {'available' if HAS_SPAN_PROCESSOR else 'not available'}")
-        print(f"  OTLP exporter: {'available' if HAS_OTLP_EXPORTER else 'not available'}")
+        print(
+            f"  Trace context: {'available' if HAS_TRACE_CONTEXT else 'not available'}"
+        )
+        print(
+            f"  Span processor: {'available' if HAS_SPAN_PROCESSOR else 'not available'}"
+        )
+        print(
+            f"  OTLP exporter: {'available' if HAS_OTLP_EXPORTER else 'not available'}"
+        )
         print("  Alerting module: loaded")
         print("  Sampling module: loaded")
 
@@ -78,10 +91,14 @@ def cli_commands():
             print("  Use OTLPExporter class to configure export targets")
         else:
             print("  OTLP exporter not available (install opentelemetry dependencies)")
-        print("  Span processors: " + (
-            "BatchSpanProcessor, SimpleSpanProcessor" if HAS_SPAN_PROCESSOR
-            else "not available"
-        ))
+        print(
+            "  Span processors: "
+            + (
+                "BatchSpanProcessor, SimpleSpanProcessor"
+                if HAS_SPAN_PROCESSOR
+                else "not available"
+            )
+        )
 
     return {
         "status": {"handler": _status, "help": "Show telemetry status"},
@@ -90,20 +107,22 @@ def cli_commands():
 
 
 __all__ = [
-    "dashboard",
-    'alerting',
-    'sampling',
-    'tracing',
-    "exporters",
-    "spans",
-    "metrics",
+    "alerting",
     "cli_commands",
+    "dashboard",
+    "exporters",
+    "metrics",
+    "sampling",
+    "spans",
+    "tracing",
 ]
 
 if HAS_TRACE_CONTEXT:
-    __all__.extend(["TraceContext", "start_span", "get_current_span", "traced", "link_span"])
+    __all__.extend(
+        ["TraceContext", "get_current_span", "link_span", "start_span", "traced"]
+    )
 if HAS_SPAN_PROCESSOR:
-    __all__.extend(["SimpleSpanProcessor", "BatchSpanProcessor"])
+    __all__.extend(["BatchSpanProcessor", "SimpleSpanProcessor"])
 if HAS_OTLP_EXPORTER:
     __all__.append("OTLPExporter")
 

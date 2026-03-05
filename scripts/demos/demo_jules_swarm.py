@@ -100,9 +100,11 @@ def main() -> int:
     )
 
     task_count = len(dispatcher.tasks)
-    batch_count = (task_count + args.batch_size - 1) // args.batch_size if task_count else 0
+    batch_count = (
+        (task_count + args.batch_size - 1) // args.batch_size if task_count else 0
+    )
 
-    print(f"Jules Swarm Dispatcher")
+    print("Jules Swarm Dispatcher")
     print(f"  TODO file  : {args.todo}")
     print(f"  Repo       : {args.repo or '(not set — dry run)'}")
     print(f"  Priority   : {args.priority or 'ALL'}")
@@ -120,14 +122,22 @@ def main() -> int:
         for i, task in enumerate(dispatcher.tasks, 1):
             print(f"  {i:3}. {task}")
         print()
-        print(f"[dry-run] Would dispatch {task_count} tasks in {batch_count} batch(es).")
+        print(
+            f"[dry-run] Would dispatch {task_count} tasks in {batch_count} batch(es)."
+        )
         return 0
 
     # Check jules availability before dispatching
     help_info = client.get_jules_help()
     if not help_info.get("available"):
-        print("ERROR: Jules CLI not found. Install via your Jules account.", file=sys.stderr)
-        print("  Hint: ensure 'jules' (or 'julius') is in PATH and authenticated.", file=sys.stderr)
+        print(
+            "ERROR: Jules CLI not found. Install via your Jules account.",
+            file=sys.stderr,
+        )
+        print(
+            "  Hint: ensure 'jules' (or 'julius') is in PATH and authenticated.",
+            file=sys.stderr,
+        )
         return 1
 
     print(f"Dispatching {task_count} tasks across {batch_count} batches...")

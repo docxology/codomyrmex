@@ -54,9 +54,13 @@ def test_success_resets_failure_count():
 
 def test_open_transitions_to_half_open_after_timeout():
     """Verify open transitions to half open after timeout behavior."""
-    cb = CircuitBreaker("test", CircuitBreakerConfig(
-        failure_threshold=1, reset_timeout=0.05,
-    ))
+    cb = CircuitBreaker(
+        "test",
+        CircuitBreakerConfig(
+            failure_threshold=1,
+            reset_timeout=0.05,
+        ),
+    )
     cb.record_failure()
     assert cb.state == CircuitState.OPEN
     time.sleep(0.06)
@@ -65,9 +69,14 @@ def test_open_transitions_to_half_open_after_timeout():
 
 def test_half_open_closes_after_success_threshold():
     """Verify half open closes after success threshold behavior."""
-    cb = CircuitBreaker("test", CircuitBreakerConfig(
-        failure_threshold=1, reset_timeout=0.01, success_threshold=2,
-    ))
+    cb = CircuitBreaker(
+        "test",
+        CircuitBreakerConfig(
+            failure_threshold=1,
+            reset_timeout=0.01,
+            success_threshold=2,
+        ),
+    )
     cb.record_failure()
     time.sleep(0.02)
     assert cb.state == CircuitState.HALF_OPEN
@@ -79,9 +88,13 @@ def test_half_open_closes_after_success_threshold():
 
 def test_half_open_reopens_on_failure():
     """Verify half open reopens on failure behavior."""
-    cb = CircuitBreaker("test", CircuitBreakerConfig(
-        failure_threshold=1, reset_timeout=0.01,
-    ))
+    cb = CircuitBreaker(
+        "test",
+        CircuitBreakerConfig(
+            failure_threshold=1,
+            reset_timeout=0.01,
+        ),
+    )
     cb.record_failure()
     time.sleep(0.02)
     assert cb.state == CircuitState.HALF_OPEN
@@ -104,9 +117,13 @@ def test_manual_reset():
 
 def test_check_state_raises_when_open():
     """Verify check state raises when open behavior."""
-    cb = CircuitBreaker("test-open", CircuitBreakerConfig(
-        failure_threshold=1, reset_timeout=60,
-    ))
+    cb = CircuitBreaker(
+        "test-open",
+        CircuitBreakerConfig(
+            failure_threshold=1,
+            reset_timeout=60,
+        ),
+    )
     cb.record_failure()
     with pytest.raises(CircuitOpenError) as exc_info:
         cb._check_state()
@@ -136,9 +153,13 @@ async def test_context_manager_records_failure():
 
 @pytest.mark.asyncio
 async def test_context_manager_rejects_when_open():
-    cb = CircuitBreaker("cm-open", CircuitBreakerConfig(
-        failure_threshold=1, reset_timeout=60,
-    ))
+    cb = CircuitBreaker(
+        "cm-open",
+        CircuitBreakerConfig(
+            failure_threshold=1,
+            reset_timeout=60,
+        ),
+    )
     cb.record_failure()
     with pytest.raises(CircuitOpenError):
         async with cb:

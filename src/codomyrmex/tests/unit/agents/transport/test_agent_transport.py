@@ -17,6 +17,7 @@ from codomyrmex.agents.transport.serializer import AgentSerializer, AgentSnapsho
 
 # ─── AgentSerializer ──────────────────────────────────────────────────
 
+
 class TestAgentSerializer:
     """Test suite for AgentSerializer."""
 
@@ -58,6 +59,7 @@ class TestAgentSerializer:
 
 # ─── AgentDeserializer + HMAC ─────────────────────────────────────────
 
+
 class TestAgentDeserializer:
     """Test suite for AgentDeserializer."""
 
@@ -98,6 +100,7 @@ class TestAgentDeserializer:
 
 # ─── TransportMessage ────────────────────────────────────────────────
 
+
 class TestTransportMessage:
     """Test suite for TransportMessage."""
 
@@ -137,6 +140,7 @@ class TestTransportMessage:
 
 
 # ─── Checkpoint ───────────────────────────────────────────────────────
+
 
 class TestCheckpoint:
     """Test suite for Checkpoint."""

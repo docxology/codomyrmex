@@ -92,7 +92,9 @@ class ReleaseValidator:
     def check_count(self) -> int:
         return len(self._checks)
 
-    def check_tests(self, failures: int, total: int, max_skips: int = 50) -> CertificationCheck:
+    def check_tests(
+        self, failures: int, total: int, max_skips: int = 50
+    ) -> CertificationCheck:
         """Validate test results."""
         status = CertificationStatus.PASS if failures == 0 else CertificationStatus.FAIL
         check = CertificationCheck(
@@ -169,8 +171,7 @@ class ReleaseValidator:
     def certify(self) -> ReleaseCertification:
         """Run certification and produce report."""
         blockers = [
-            c.name for c in self._checks
-            if c.status == CertificationStatus.FAIL
+            c.name for c in self._checks if c.status == CertificationStatus.FAIL
         ]
         certified = len(blockers) == 0
 
@@ -195,7 +196,9 @@ class ReleaseValidator:
             "|-------|----------|--------|-------|-----------|",
         ]
         for c in cert.checks:
-            status_icon = {"pass": "✅", "fail": "❌", "warn": "⚠️", "skip": "⏭️"}.get(c.status.value, "")
+            status_icon = {"pass": "✅", "fail": "❌", "warn": "⚠️", "skip": "⏭️"}.get(
+                c.status.value, ""
+            )
             lines.append(
                 f"| {c.name} | {c.category} | {status_icon} | {c.value} | {c.threshold} |"
             )

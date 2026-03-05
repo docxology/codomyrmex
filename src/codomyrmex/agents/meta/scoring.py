@@ -48,10 +48,14 @@ class OutcomeScorer:
 
         scorer = OutcomeScorer()
         score = scorer.score(
-            tests_passed=9, tests_total=10,
-            tokens_used=500, token_budget=1000,
-            quality_issues=2, max_quality_issues=10,
-            elapsed_seconds=5.0, time_budget=30.0,
+            tests_passed=9,
+            tests_total=10,
+            tokens_used=500,
+            token_budget=1000,
+            quality_issues=2,
+            max_quality_issues=10,
+            elapsed_seconds=5.0,
+            time_budget=30.0,
         )
         print(f"Composite: {score.composite:.2f}")
     """

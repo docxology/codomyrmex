@@ -55,13 +55,16 @@ class AuditEntry:
 
     def payload(self) -> str:
         """Payload."""
-        return json.dumps({
-            "action": self.action,
-            "actor": self.actor,
-            "resource": self.resource,
-            "timestamp": self.timestamp,
-            "previous_hash": self.previous_hash,
-        }, sort_keys=True)
+        return json.dumps(
+            {
+                "action": self.action,
+                "actor": self.actor,
+                "resource": self.resource,
+                "timestamp": self.timestamp,
+                "previous_hash": self.previous_hash,
+            },
+            sort_keys=True,
+        )
 
 
 class AuditTrail:
@@ -126,7 +129,9 @@ class AuditTrail:
         return "\n".join(json.dumps(e.to_dict()) for e in self._entries)
 
     def _compute_hash(self, entry: AuditEntry) -> str:
-        return hmac.new(self._key, entry.payload().encode(), hashlib.sha256).hexdigest()[:16]
+        return hmac.new(
+            self._key, entry.payload().encode(), hashlib.sha256
+        ).hexdigest()[:16]
 
 
 __all__ = ["AuditEntry", "AuditTrail"]

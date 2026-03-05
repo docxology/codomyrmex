@@ -1,6 +1,6 @@
 # test_project — Codomyrmex Reference Implementation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -37,7 +37,14 @@ uv run pytest tests/ -v
 | Performance profiling | `performance` | `src/pipeline.py` |
 | Data visualization | `data_visualization` | `src/visualizer.py` |
 | Multi-format reporting | `documentation` | `src/reporter.py` |
-| LLM integration | `llm` | Integration tests |
+| Agent registry + memory | `agents`, `agentic_memory` | `src/agent_brain.py` |
+| Git operations + history | `git_operations`, `git_analysis` | `src/git_workflow.py` |
+| Full-text + fuzzy search | `search`, `scrape`, `formal_verification` | `src/knowledge_search.py` |
+| Security + cryptography | `security`, `crypto`, `maintenance`, `system_discovery` | `src/security_audit.py` |
+| MCP discovery + skills | `model_context_protocol`, `skills`, `plugin_system` | `src/mcp_explorer.py` |
+| LLM + swarm coordination | `llm`, `collaboration` | `src/llm_inference.py` |
+
+**Coverage**: ~28 modules across Foundation, Core, Service, and Extended layers (~23% of 121 auto-discovered modules).
 
 ## Directory Structure
 
@@ -49,11 +56,17 @@ test_project/
 │   ├── modules.yaml   # Module enablement and overrides
 │   └── workflows.yaml # DAG workflow definitions
 ├── src/               # Source modules
-│   ├── main.py        # Entry point — logging, config, events
-│   ├── analyzer.py    # Code analysis — static_analysis, pattern_matching
-│   ├── visualizer.py  # Visualization — data_visualization
-│   ├── reporter.py    # Reporting — documentation, serialization
-│   └── pipeline.py    # Orchestration — orchestrator, events, performance
+│   ├── main.py           # Entry point — logging, config, events
+│   ├── analyzer.py       # Code analysis — static_analysis, pattern_matching
+│   ├── visualizer.py     # Visualization — data_visualization
+│   ├── reporter.py       # Reporting — documentation, serialization
+│   ├── pipeline.py       # Orchestration — orchestrator, events, performance
+│   ├── agent_brain.py    # Agents + agentic_memory
+│   ├── git_workflow.py   # git_operations + git_analysis
+│   ├── knowledge_search.py # search + scrape + formal_verification
+│   ├── security_audit.py # security + crypto + maintenance + system_discovery
+│   ├── mcp_explorer.py   # model_context_protocol + skills + plugin_system
+│   └── llm_inference.py  # llm + collaboration
 ├── data/              # Input/output data
 ├── reports/           # Generated reports, dashboards, visualizations
 ├── tests/             # Pytest suite (100% zero-mock)

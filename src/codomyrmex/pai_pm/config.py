@@ -11,12 +11,8 @@ from pathlib import Path
 class PaiPmConfig:
     """Configuration for PAI Project Manager server operations."""
 
-    port: int = field(
-        default_factory=lambda: int(os.getenv("PAI_PM_PORT", "8889"))
-    )
-    host: str = field(
-        default_factory=lambda: os.getenv("PAI_PM_HOST", "127.0.0.1")
-    )
+    port: int = field(default_factory=lambda: int(os.getenv("PAI_PM_PORT", "8889")))
+    host: str = field(default_factory=lambda: os.getenv("PAI_PM_HOST", "127.0.0.1"))
     startup_timeout: int = field(
         default_factory=lambda: int(os.getenv("PAI_PM_STARTUP_TIMEOUT", "10"))
     )

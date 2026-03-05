@@ -9,22 +9,29 @@ from typing import Any
 
 try:
     import psutil
+
     PSUTIL_AVAILABLE = True
 except ImportError:
     PSUTIL_AVAILABLE = False
+
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
         """No-op psutil stub used when psutil is not installed; all metrics return zero."""
+
         Process = None
+
         def cpu_percent(*args, **kwargs):
             return 0.0
+
         def virtual_memory():
-            return type('obj', (object,), {'used': 0, 'total': 0})()
+            return type("obj", (object,), {"used": 0, "total": 0})()
+
     psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
 
 class ResourceMonitor:
     """Monitor resource usage during code execution."""
@@ -75,6 +82,8 @@ class ResourceMonitor:
             "memory_start_mb": round(self.start_memory or 0, 2),
             "memory_peak_mb": round(self.peak_memory, 2),
             "cpu_samples": len(self.cpu_usage),
-            "cpu_average_percent": round(sum(self.cpu_usage) / len(self.cpu_usage), 2) if self.cpu_usage else 0,
+            "cpu_average_percent": round(sum(self.cpu_usage) / len(self.cpu_usage), 2)
+            if self.cpu_usage
+            else 0,
             "cpu_peak_percent": round(max(self.cpu_usage), 2) if self.cpu_usage else 0,
         }

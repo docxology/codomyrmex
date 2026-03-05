@@ -24,7 +24,9 @@ class TestWorkflowSearch:
         """Search results include file path information."""
         from codomyrmex.model_context_protocol.tools import search_codebase
 
-        result = search_codebase(pattern="import pytest", path=str(project_root / "src"))
+        result = search_codebase(
+            pattern="import pytest", path=str(project_root / "src")
+        )
         matches = result.get("matches", result.get("results", []))
         if isinstance(matches, list) and len(matches) > 0:
             match = matches[0]

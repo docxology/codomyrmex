@@ -1,4 +1,5 @@
 """Base class for all reports."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -14,6 +15,7 @@ class BaseReport:
         title: Report title.
         sections: List of content sections.
     """
+
     title: str = ""
     sections: list[Any] = field(default_factory=list)
 

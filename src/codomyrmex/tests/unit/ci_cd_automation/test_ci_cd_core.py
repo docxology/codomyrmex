@@ -72,6 +72,7 @@ from codomyrmex.exceptions import CodomyrmexError
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_environment(**overrides) -> Environment:
     """Build an Environment with sensible defaults, overridden by kwargs."""
     defaults = {
@@ -103,6 +104,7 @@ def _make_deployment(env: Environment | None = None, **overrides) -> Deployment:
 # ===========================================================================
 # 1. DeploymentStatus / EnvironmentType enum completeness
 # ===========================================================================
+
 
 class TestDeploymentStatusEnum:
     """Verify every deployment status value is accessible and round-trips."""
@@ -155,6 +157,7 @@ class TestEnvironmentTypeEnum:
 # ===========================================================================
 # 2. Environment dataclass modelling
 # ===========================================================================
+
 
 class TestEnvironmentDataclass:
     """Tests for the Environment dataclass beyond basic creation."""
@@ -209,6 +212,7 @@ class TestEnvironmentDataclass:
 # 3. Deployment dataclass modelling and serialization
 # ===========================================================================
 
+
 class TestDeploymentDataclass:
     """Tests for Deployment dataclass creation and to_dict round-trip."""
 
@@ -223,16 +227,29 @@ class TestDeploymentDataclass:
         dep = _make_deployment()
         d = dep.to_dict()
         expected_keys = {
-            "name", "version", "environment", "artifacts", "strategy",
-            "timeout", "rollback_on_failure", "status", "created_at",
-            "started_at", "finished_at", "duration", "logs", "metrics",
+            "name",
+            "version",
+            "environment",
+            "artifacts",
+            "strategy",
+            "timeout",
+            "rollback_on_failure",
+            "status",
+            "created_at",
+            "started_at",
+            "finished_at",
+            "duration",
+            "logs",
+            "metrics",
             "previous_version",
         }
         assert expected_keys == set(d.keys())
 
     @pytest.mark.unit
     def test_deployment_to_dict_nested_environment(self):
-        env = _make_environment(name="prod", type=EnvironmentType.PRODUCTION, host="prod.example.com")
+        env = _make_environment(
+            name="prod", type=EnvironmentType.PRODUCTION, host="prod.example.com"
+        )
         dep = _make_deployment(env=env)
         d = dep.to_dict()
         assert d["environment"]["name"] == "prod"
@@ -260,6 +277,7 @@ class TestDeploymentDataclass:
 # ===========================================================================
 # 4. Rollback dataclass and enum modelling
 # ===========================================================================
+
 
 class TestRollbackStrategyEnum:
     """Ensure all rollback strategy variants are accessible."""
@@ -361,6 +379,7 @@ class TestRollbackExecutionDataclass:
 # 5. RollbackManager — plan creation and strategy-specific default steps
 # ===========================================================================
 
+
 class TestRollbackManagerPlanCreation:
     """Test RollbackManager.create_rollback_plan default step generation."""
 
@@ -433,6 +452,7 @@ class TestRollbackManagerPlanCreation:
 # 6. AsyncPipelineResult edge cases
 # ===========================================================================
 
+
 class TestAsyncPipelineResultEdgeCases:
     """Edge cases for AsyncPipelineResult serialization."""
 
@@ -479,6 +499,7 @@ class TestAsyncPipelineResultEdgeCases:
 # ===========================================================================
 # 7. Exception hierarchy with context metadata
 # ===========================================================================
+
 
 class TestExceptionHierarchy:
     """Test CI/CD exception classes carry context metadata."""
@@ -553,6 +574,7 @@ class TestExceptionHierarchy:
 # 8. Dependency scan models (Vulnerability, ScanReport)
 # ===========================================================================
 
+
 class TestVulnerabilityDataclass:
     """Test the Vulnerability dataclass."""
 
@@ -571,7 +593,9 @@ class TestVulnerabilityDataclass:
 
     @pytest.mark.unit
     def test_vulnerability_to_dict(self):
-        vuln = Vulnerability(package="flask", version="1.0", cve_id="CVE-XXXX", severity="medium")
+        vuln = Vulnerability(
+            package="flask", version="1.0", cve_id="CVE-XXXX", severity="medium"
+        )
         d = vuln.to_dict()
         assert d["package"] == "flask"
         assert d["severity"] == "medium"
@@ -622,6 +646,7 @@ class TestScanReport:
 # ===========================================================================
 # 9. PipelineMonitor multi-step metrics flow
 # ===========================================================================
+
 
 class TestPipelineMonitorMetricsFlow:
     """Test the full start -> record -> finish monitoring lifecycle."""
@@ -690,6 +715,7 @@ class TestPipelineMonitorMetricsFlow:
 # ===========================================================================
 # 10. Pipeline config round-trip with deeply nested structures
 # ===========================================================================
+
 
 class TestPipelineConfigRoundTrip:
     """Test save/load round-trip with complex nested pipeline configs."""
@@ -794,11 +820,13 @@ class TestPipelineConfigRoundTrip:
     @pytest.mark.unit
     def test_pipeline_config_validation_rejects_negative_timeout(self):
         mgr = PipelineManager()
-        valid, errors = mgr.validate_pipeline_config({
-            "name": "t",
-            "stages": [],
-            "timeout": -10,
-        })
+        valid, errors = mgr.validate_pipeline_config(
+            {
+                "name": "t",
+                "stages": [],
+                "timeout": -10,
+            }
+        )
         assert valid is False
         assert any("Timeout" in e for e in errors)
 
@@ -806,11 +834,13 @@ class TestPipelineConfigRoundTrip:
     @pytest.mark.parametrize("bad_trigger", ["cron", "webhook", "merge_request"])
     def test_pipeline_config_validation_rejects_invalid_triggers(self, bad_trigger):
         mgr = PipelineManager()
-        valid, errors = mgr.validate_pipeline_config({
-            "name": "t",
-            "stages": [],
-            "triggers": [bad_trigger],
-        })
+        valid, errors = mgr.validate_pipeline_config(
+            {
+                "name": "t",
+                "stages": [],
+                "triggers": [bad_trigger],
+            }
+        )
         assert valid is False
         assert any("Invalid trigger" in e for e in errors)
 
@@ -818,6 +848,7 @@ class TestPipelineConfigRoundTrip:
 # ===========================================================================
 # 11. Pipeline model status enum completeness
 # ===========================================================================
+
 
 class TestPipelineStatusEnums:
     """Ensure all pipeline/stage/job status enums are consistent."""

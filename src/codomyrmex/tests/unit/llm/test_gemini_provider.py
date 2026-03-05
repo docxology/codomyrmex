@@ -47,7 +47,9 @@ class TestGeminiProviderInit:
         config = ProviderConfig()
         provider = GeminiProvider(config)
 
-        expected_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        expected_key = os.environ.get("GEMINI_API_KEY") or os.environ.get(
+            "GOOGLE_API_KEY"
+        )
         assert provider.config.api_key == expected_key
 
 
@@ -87,7 +89,9 @@ class TestGeminiProviderModels:
 
     def test_get_model_uses_config_default_model(self):
         """Test that get_model uses config default_model if set."""
-        config = ProviderConfig(api_key="test-key", default_model="gemini-3.1-pro-preview")
+        config = ProviderConfig(
+            api_key="test-key", default_model="gemini-3.1-pro-preview"
+        )
         provider = GeminiProvider(config)
 
         model = provider.get_model(None)
@@ -175,7 +179,9 @@ class TestGeminiProviderComplete:
         config = ProviderConfig(api_key=_GEMINI_KEY)
         with GeminiProvider(config) as provider:
             messages = [
-                Message(role="system", content="You are a pirate. Reply in pirate speak."),
+                Message(
+                    role="system", content="You are a pirate. Reply in pirate speak."
+                ),
                 Message(role="user", content="Hello"),
             ]
             response = provider.complete(messages, model="gemini-3.1-pro-preview")
@@ -197,7 +203,9 @@ class TestGeminiProviderComplete:
         config = ProviderConfig(api_key=_GEMINI_KEY)
         with GeminiProvider(config) as provider:
             messages = [Message(role="user", content="Count from 1 to 3")]
-            chunks = list(provider.complete_stream(messages, model="gemini-3.1-pro-preview"))
+            chunks = list(
+                provider.complete_stream(messages, model="gemini-3.1-pro-preview")
+            )
 
             assert len(chunks) >= 1
             assert any(len(c) > 0 for c in chunks)

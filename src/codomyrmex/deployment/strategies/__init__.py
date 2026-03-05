@@ -20,16 +20,16 @@ BlueGreenStrategy = BlueGreenDeployment
 RollingStrategy = RollingDeployment
 
 __all__ = [
-    "DeploymentState",
-    "DeploymentTarget",
-    "DeploymentResult",
-    "DeploymentStrategy",
-    "RollingDeployment",
     "BlueGreenDeployment",
-    "CanaryDeployment",
-    "create_strategy",
-    "StrategyProgress",
-    "CanaryStrategy",
     "BlueGreenStrategy",
+    "CanaryDeployment",
+    "CanaryStrategy",
+    "DeploymentResult",
+    "DeploymentState",
+    "DeploymentStrategy",
+    "DeploymentTarget",
+    "RollingDeployment",
     "RollingStrategy",
+    "StrategyProgress",
+    "create_strategy",
 ]

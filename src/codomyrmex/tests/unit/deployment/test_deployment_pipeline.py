@@ -12,11 +12,14 @@ import pytest
 
 try:
     from codomyrmex.api.health import HealthStatus as _probe  # noqa: F401
+
     _API_AVAILABLE = True
 except ImportError:
     _API_AVAILABLE = False
 
-pytestmark = pytest.mark.skipif(not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api")
+pytestmark = pytest.mark.skipif(
+    not _API_AVAILABLE, reason="api extra not installed; run: uv sync --extra api"
+)
 
 try:
     from codomyrmex.api.health import (
@@ -37,13 +40,16 @@ try:
         MetricComparison,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ── AutoBuilder ──────────────────────────────────────────────────
 
 
 class TestDockerStage:
     """Test suite for DockerStage."""
+
     def test_render(self) -> None:
         stage = DockerStage("builder", "python:3.12", ["WORKDIR /build"])
         rendered = stage.render()
@@ -53,11 +59,14 @@ class TestDockerStage:
 
 class TestDockerfileSpec:
     """Test suite for DockerfileSpec."""
+
     def test_render_multi_stage(self) -> None:
-        spec = DockerfileSpec(stages=[
-            DockerStage("builder", "python:3.12", ["WORKDIR /build"]),
-            DockerStage("runtime", "python:3.12-slim", ["WORKDIR /app"]),
-        ])
+        spec = DockerfileSpec(
+            stages=[
+                DockerStage("builder", "python:3.12", ["WORKDIR /build"]),
+                DockerStage("runtime", "python:3.12-slim", ["WORKDIR /app"]),
+            ]
+        )
         rendered = spec.render()
         assert "AS builder" in rendered
         assert "AS runtime" in rendered
@@ -74,13 +83,14 @@ class TestDockerfileSpec:
 
 class TestAutoBuilder:
     """Test suite for AutoBuilder."""
+
     def test_from_pyproject(self) -> None:
-        content = '''
+        content = """
 [project]
 name = "my-app"
 version = "1.2.3"
 requires-python = ">=3.11"
-'''
+"""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             f.flush()
@@ -115,6 +125,7 @@ requires-python = ">=3.11"
 
 class TestComponentHealth:
     """Test suite for ComponentHealth."""
+
     def test_to_dict(self) -> None:
         h = ComponentHealth("db", HealthStatus.HEALTHY, 5.2)
         d = h.to_dict()
@@ -123,6 +134,7 @@ class TestComponentHealth:
 
 class TestHealthReport:
     """Test suite for HealthReport."""
+
     def test_is_healthy(self) -> None:
         r = HealthReport(status=HealthStatus.HEALTHY)
         assert r.is_healthy
@@ -132,6 +144,7 @@ class TestHealthReport:
 
 class TestHealthChecker:
     """Test suite for HealthChecker."""
+
     def test_all_healthy(self) -> None:
         checker = HealthChecker()
         checker.register("db", lambda: ComponentHealth("db"))
@@ -175,6 +188,7 @@ class TestHealthChecker:
 
 class TestMetricComparison:
     """Test suite for MetricComparison."""
+
     def test_within_threshold(self) -> None:
         mc = MetricComparison("err_rate", 0.01, 0.011, threshold=0.15)
         assert mc.passed
@@ -190,6 +204,7 @@ class TestMetricComparison:
 
 class TestCanaryAnalyzer:
     """Test suite for CanaryAnalyzer."""
+
     def test_promote(self) -> None:
         analyzer = CanaryAnalyzer(promote_threshold=0.9)
         report = analyzer.analyze(

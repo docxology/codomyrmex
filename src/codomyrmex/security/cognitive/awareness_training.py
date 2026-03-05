@@ -11,6 +11,7 @@ logger = get_logger(__name__)
 
 class TrainingTopic(Enum):
     """Topics available for security awareness training."""
+
     PHISHING = "phishing"
     SOCIAL_ENGINEERING = "social_engineering"
     PASSWORD_SECURITY = "password_security"
@@ -23,6 +24,7 @@ class TrainingTopic(Enum):
 
 class TrainingDifficulty(Enum):
     """Difficulty levels for training modules."""
+
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
@@ -147,7 +149,9 @@ class AwarenessTrainer:
 
         avg_score = sum(r.score for r in user_results) / len(user_results)
 
-        effectiveness = "high" if avg_score > 0.8 else "medium" if avg_score > 0.6 else "low"
+        effectiveness = (
+            "high" if avg_score > 0.8 else "medium" if avg_score > 0.6 else "low"
+        )
 
         return {
             "user_id": user_id,
@@ -179,4 +183,3 @@ def assess_training_effectiveness(
     if trainer is None:
         trainer = AwarenessTrainer()
     return trainer.assess_effectiveness(user_id)
-

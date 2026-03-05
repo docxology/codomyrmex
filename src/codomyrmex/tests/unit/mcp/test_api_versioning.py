@@ -18,6 +18,7 @@ from codomyrmex.model_context_protocol.versioning.version_registry import (
 
 # ─── APIVersion ──────────────────────────────────────────────────────
 
+
 class TestAPIVersion:
     """Test suite for APIVersion."""
 
@@ -42,6 +43,7 @@ class TestAPIVersion:
 
 # ─── Decorators ──────────────────────────────────────────────────────
 
+
 class TestDecorators:
     """Test suite for Decorators."""
 
@@ -49,6 +51,7 @@ class TestDecorators:
         @versioned("2.1.0")
         def my_tool():
             return 42
+
         assert my_tool._api_version == APIVersion(2, 1, 0)
         assert my_tool() == 42
 
@@ -56,6 +59,7 @@ class TestDecorators:
         @deprecated(since="1.0.0", removal="2.0.0", replacement="new_fn")
         def old_fn():
             return "result"
+
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             result = old_fn()
@@ -65,6 +69,7 @@ class TestDecorators:
 
 
 # ─── VersionRegistry ────────────────────────────────────────────────
+
 
 class TestVersionRegistry:
     """Test suite for VersionRegistry."""
@@ -104,6 +109,7 @@ class TestVersionRegistry:
 
 # ─── CompatShimGenerator ────────────────────────────────────────────
 
+
 class TestCompatShimGenerator:
     """Test suite for CompatShimGenerator."""
 
@@ -121,18 +127,24 @@ class TestCompatShimGenerator:
             return query.upper()
 
         gen = CompatShimGenerator()
-        gen.add_mapping(ShimMapping(
-            old_name="find", new_name="search",
-            param_renames={"q": "query"},
-        ))
+        gen.add_mapping(
+            ShimMapping(
+                old_name="find",
+                new_name="search",
+                param_renames={"q": "query"},
+            )
+        )
         shim = gen.create_shim("find", target_fn=new_fn)
         assert shim(q="hello") == "HELLO"
 
     def test_translate_params(self):
         gen = CompatShimGenerator()
-        gen.add_mapping(ShimMapping(
-            old_name="old", new_name="new",
-            param_renames={"x": "y"},
-        ))
+        gen.add_mapping(
+            ShimMapping(
+                old_name="old",
+                new_name="new",
+                param_renames={"x": "y"},
+            )
+        )
         result = gen.translate_params("old", {"x": 1, "z": 2})
         assert result == {"y": 1, "z": 2}

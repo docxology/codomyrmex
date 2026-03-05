@@ -1,6 +1,5 @@
 """Extended validation tests: custom, pydantic, contextual, TypeSafeParser, ValidationManager."""
 
-
 import pytest
 from pydantic import BaseModel
 
@@ -171,10 +170,7 @@ class TestPydanticValidation:
             address: AddressModel
 
         validator = Validator(validator_type="pydantic")
-        data = {
-            "name": "John",
-            "address": {"street": "123 Main St", "city": "Boston"}
-        }
+        data = {"name": "John", "address": {"street": "123 Main St", "city": "Boston"}}
 
         result = validator.validate(data, UserModel)
 
@@ -195,7 +191,7 @@ class TestPydanticValidation:
         validator = Validator(validator_type="pydantic")
         data = {
             "name": "John",
-            "address": {"street": "123 Main St"}  # Missing city
+            "address": {"street": "123 Main St"},  # Missing city
         }
 
         result = validator.validate(data, UserModel)
@@ -316,16 +312,14 @@ class TestContextualValidator:
         def password_match_rule(data):
             if data.get("password") != data.get("confirm_password"):
                 return ValidationIssue(
-                    field="confirm_password",
-                    message="Passwords do not match"
+                    field="confirm_password", message="Passwords do not match"
                 )
             return None
 
         validator.add_rule(password_match_rule)
-        issues = validator.validate({
-            "password": "secret",
-            "confirm_password": "different"
-        })
+        issues = validator.validate(
+            {"password": "secret", "confirm_password": "different"}
+        )
 
         assert len(issues) == 1
 
@@ -356,9 +350,7 @@ class TestValidationIssue:
         from codomyrmex.validation.contextual import ValidationIssue
 
         issue = ValidationIssue(
-            field="test",
-            message="Test warning",
-            severity="warning"
+            field="test", message="Test warning", severity="warning"
         )
 
         assert issue.severity == "warning"
@@ -572,10 +564,12 @@ class TestValidationSummary:
 class TestExamplesValidator:
     def test_validation_severity(self):
         from codomyrmex.validation.examples_validator import ValidationSeverity
+
         assert len(list(ValidationSeverity)) > 0
 
     def test_validation_type(self):
         from codomyrmex.validation.examples_validator import ValidationType
+
         assert len(list(ValidationType)) > 0
 
     def test_validation_issue(self):
@@ -584,14 +578,22 @@ class TestExamplesValidator:
             ValidationSeverity,
             ValidationType,
         )
-        issue = ValidationIssue(module="test", validation_type=list(ValidationType)[0], severity=list(ValidationSeverity)[0], message="test issue", file_path="test.py")
+
+        issue = ValidationIssue(
+            module="test",
+            validation_type=list(ValidationType)[0],
+            severity=list(ValidationSeverity)[0],
+            message="test issue",
+            file_path="test.py",
+        )
         assert issue.message == "test issue"
 
     def test_examples_validator(self):
         from pathlib import Path
 
         from codomyrmex.validation.examples_validator import ExamplesValidator
-        v = ExamplesValidator(root_dir=Path("."), output_dir=Path("/tmp/ev_test"))
+
+        v = ExamplesValidator(root_dir=Path(), output_dir=Path("/tmp/ev_test"))
         assert v is not None
 
 
@@ -601,10 +603,12 @@ class TestValidationDataclasses:
 
     def test_validation_type_enum(self):
         from codomyrmex.validation.examples_validator import ValidationType
+
         assert len(list(ValidationType)) > 0
 
     def test_validation_severity_enum(self):
         from codomyrmex.validation.examples_validator import ValidationSeverity
+
         assert len(list(ValidationSeverity)) > 0
 
     def test_validation_issue(self):
@@ -613,6 +617,7 @@ class TestValidationDataclasses:
             ValidationSeverity,
             ValidationType,
         )
+
         issue = ValidationIssue(
             module="test",
             validation_type=list(ValidationType)[0],
@@ -626,6 +631,7 @@ class TestValidationDataclasses:
 
     def test_module_validation_result(self):
         from codomyrmex.validation.examples_validator import ModuleValidationResult
+
         result = ModuleValidationResult(module="utils", success=True, duration=1.5)
         assert result.success is True
         assert result.duration == 1.5
@@ -637,9 +643,12 @@ class TestValidationDataclasses:
             ValidationSeverity,
             ValidationType,
         )
+
         issue = ValidationIssue(
-            module="utils", validation_type=list(ValidationType)[0],
-            severity=list(ValidationSeverity)[0], message="warning",
+            module="utils",
+            validation_type=list(ValidationType)[0],
+            severity=list(ValidationSeverity)[0],
+            message="warning",
         )
         result = ModuleValidationResult(module="utils", success=False, issues=[issue])
         assert len(result.issues) == 1

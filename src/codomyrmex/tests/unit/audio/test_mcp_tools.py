@@ -66,7 +66,7 @@ def test_audio_transcribe_invalid_file(monkeypatch: pytest.MonkeyPatch) -> None:
         def __enter__(self) -> "MockTranscriber":
             return self
 
-        def __exit__(self, *args: Any) -> None:
+        def __exit__(self, *args: object) -> None:
             pass
 
         def transcribe(self, path: str, *args: Any, **kwargs: Any) -> None:
@@ -91,7 +91,7 @@ def test_audio_detect_language_invalid_file(monkeypatch: pytest.MonkeyPatch) -> 
         def __enter__(self) -> "MockTranscriber":
             return self
 
-        def __exit__(self, *args: Any) -> None:
+        def __exit__(self, *args: object) -> None:
             pass
 
         def detect_language(self, path: str, *args: Any, **kwargs: Any) -> None:
@@ -127,7 +127,7 @@ def test_audio_batch_transcribe_invalid_files(
         def __enter__(self) -> "MockTranscriber":
             return self
 
-        def __exit__(self, *args: Any) -> None:
+        def __exit__(self, *args: object) -> None:
             pass
 
         def transcribe(self, path: str, *args: Any, **kwargs: Any) -> None:

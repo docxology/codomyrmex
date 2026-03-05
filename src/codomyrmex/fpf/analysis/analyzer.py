@@ -1,4 +1,3 @@
-
 """Analyzer for FPF specifications.
 
 logger = get_logger(__name__)
@@ -49,12 +48,26 @@ class FPFAnalyzer:
 
         # Normalize and combine
         importance_scores = {}
-        max_degree = max(degree_centrality.values()) if degree_centrality.values() else 1
-        max_betweenness = max(betweenness_centrality.values()) if betweenness_centrality.values() else 1
+        max_degree = (
+            max(degree_centrality.values()) if degree_centrality.values() else 1
+        )
+        max_betweenness = (
+            max(betweenness_centrality.values())
+            if betweenness_centrality.values()
+            else 1
+        )
 
         for pattern_id in G.nodes():
-            degree_norm = degree_centrality.get(pattern_id, 0) / max_degree if max_degree > 0 else 0
-            betweenness_norm = betweenness_centrality.get(pattern_id, 0) / max_betweenness if max_betweenness > 0 else 0
+            degree_norm = (
+                degree_centrality.get(pattern_id, 0) / max_degree
+                if max_degree > 0
+                else 0
+            )
+            betweenness_norm = (
+                betweenness_centrality.get(pattern_id, 0) / max_betweenness
+                if max_betweenness > 0
+                else 0
+            )
             # Combined score (weighted average)
             importance_scores[pattern_id] = 0.6 * degree_norm + 0.4 * betweenness_norm
 
@@ -103,8 +116,12 @@ class FPFAnalyzer:
             target_importance = importance.get(relationship.target, 0.5)
 
             # Combined strength
-            strength = base_strength * (0.5 + 0.5 * (source_importance + target_importance) / 2)
-            strengths[(relationship.source, relationship.target, relationship.type)] = strength
+            strength = base_strength * (
+                0.5 + 0.5 * (source_importance + target_importance) / 2
+            )
+            strengths[(relationship.source, relationship.target, relationship.type)] = (
+                strength
+            )
 
         return strengths
 
@@ -126,7 +143,6 @@ class FPFAnalyzer:
 
         def calculate_depth(node: str, visited: set) -> int:
 
-
             if node in visited:
                 return 0
             visited.add(node)
@@ -136,7 +152,8 @@ class FPFAnalyzer:
                 return 0
 
             max_pred_depth = max(
-                [calculate_depth(pred, visited.copy()) for pred in predecessors], default=0
+                [calculate_depth(pred, visited.copy()) for pred in predecessors],
+                default=0,
             )
             return max_pred_depth + 1
 
@@ -155,9 +172,7 @@ class FPFAnalyzer:
             List of tuples (pattern_id, importance_score)
         """
         importance = self.calculate_pattern_importance()
-        sorted_patterns = sorted(
-            importance.items(), key=lambda x: x[1], reverse=True
-        )
+        sorted_patterns = sorted(importance.items(), key=lambda x: x[1], reverse=True)
         return sorted_patterns[:top_n]
 
     def get_isolated_patterns(self) -> list[str]:
@@ -238,7 +253,9 @@ class FPFAnalyzer:
                 "total_patterns": len(self.spec.patterns),
                 "total_concepts": len(self.spec.concepts),
                 "total_relationships": len(self.spec.relationships),
-                "avg_importance": sum(importance.values()) / len(importance) if importance else 0,
+                "avg_importance": sum(importance.values()) / len(importance)
+                if importance
+                else 0,
                 "avg_depth": sum(depths.values()) / len(depths) if depths else 0,
             },
         }
@@ -274,11 +291,10 @@ class FPFAnalyzer:
 
         concepts_list = list(self.spec.concepts)
         for i, concept1 in enumerate(concepts_list):
-            for concept2 in concepts_list[i + 1:]:
+            for concept2 in concepts_list[i + 1 :]:
                 patterns1 = concept_patterns.get(concept1.name, set())
                 patterns2 = concept_patterns.get(concept2.name, set())
                 if patterns1 & patterns2:
                     G.add_edge(concept1.name, concept2.name)
 
         self._concept_graph = G
-

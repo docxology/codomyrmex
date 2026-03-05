@@ -3,6 +3,7 @@
 This module provides structured TODO list management for the droid runner,
 including parsing, validation, and migration between formats.
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterable, Sequence
@@ -29,6 +30,7 @@ class TodoItem:
     Legacy format columns:
       operation_id | handler_path | description
     """
+
     task_name: str
     description: str
     outcomes: str
@@ -52,11 +54,21 @@ class TodoItem:
         # Handler-based format detection.
         if ":" in parts[1] and "/" not in parts[1]:
             operation_id, handler_path, description = parts
-            return cls(task_name=operation_id, description=description, outcomes="", handler_path=handler_path)
+            return cls(
+                task_name=operation_id,
+                description=description,
+                outcomes="",
+                handler_path=handler_path,
+            )
 
         # New format
         task_name, description, outcomes = parts
-        return cls(task_name=task_name, description=description, outcomes=outcomes, handler_path=None)
+        return cls(
+            task_name=task_name,
+            description=description,
+            outcomes=outcomes,
+            handler_path=None,
+        )
 
     def serialise(self) -> str:
         """Serialise in the new 3-column format."""
@@ -103,9 +115,7 @@ class TodoManager:
                 bucket.append(TodoItem.parse(stripped))
             except ValueError as e:
                 skipped_lines.append((line_num, stripped, str(e)))
-                logger.warning(
-                    f"Skipping malformed TODO entry on line {line_num}: {e}"
-                )
+                logger.warning(f"Skipping malformed TODO entry on line {line_num}: {e}")
                 continue
 
         if skipped_lines:
@@ -153,7 +163,10 @@ class TodoManager:
             return False, issues
 
         # Basic checks
-        for bucket_name, items in (("TODO", todo_items), ("COMPLETED", completed_items)):
+        for bucket_name, items in (
+            ("TODO", todo_items),
+            ("COMPLETED", completed_items),
+        ):
             for idx, item in enumerate(items, 1):
                 if not item.task_name:
                     issues.append((idx, bucket_name, "Missing task_name"))
@@ -161,7 +174,9 @@ class TodoManager:
                     issues.append((idx, bucket_name, "Missing description"))
                 # outcomes optional in TODO; recommended in COMPLETED
                 if bucket_name == "COMPLETED" and not item.outcomes:
-                    issues.append((idx, bucket_name, "Missing outcomes for completed item"))
+                    issues.append(
+                        (idx, bucket_name, "Missing outcomes for completed item")
+                    )
 
         return (len(issues) == 0), issues
 
@@ -209,4 +224,4 @@ class TodoManager:
         return changed
 
 
-__all__ = ["TodoManager", "TodoItem", "TODO_HEADER", "COMPLETED_HEADER"]
+__all__ = ["COMPLETED_HEADER", "TODO_HEADER", "TodoItem", "TodoManager"]

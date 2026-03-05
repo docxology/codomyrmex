@@ -13,6 +13,7 @@ try:
         create_vector_store,
         normalize_embedding,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -24,6 +25,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestDistanceMetric:
     """Test suite for DistanceMetric."""
+
     def test_cosine_metric(self):
         score = DistanceMetric.cosine([1.0, 0.0], [1.0, 0.0])
         assert abs(score - 1.0) < 1e-6
@@ -40,8 +42,11 @@ class TestDistanceMetric:
 @pytest.mark.unit
 class TestVectorEntry:
     """Test suite for VectorEntry."""
+
     def test_create_entry(self):
-        entry = VectorEntry(id="doc-1", embedding=[0.1, 0.2, 0.3], metadata={"text": "hello"})
+        entry = VectorEntry(
+            id="doc-1", embedding=[0.1, 0.2, 0.3], metadata={"text": "hello"}
+        )
         assert entry.id == "doc-1"
         assert len(entry.embedding) == 3
 
@@ -53,6 +58,7 @@ class TestVectorEntry:
 @pytest.mark.unit
 class TestNormalizeEmbedding:
     """Test suite for NormalizeEmbedding."""
+
     def test_normalize_unit_vector(self):
         result = normalize_embedding([1.0, 0.0, 0.0])
         assert abs(result[0] - 1.0) < 1e-6
@@ -71,6 +77,7 @@ class TestNormalizeEmbedding:
 @pytest.mark.unit
 class TestInMemoryVectorStore:
     """Test suite for InMemoryVectorStore."""
+
     def test_create_store(self):
         store = InMemoryVectorStore()
         assert store is not None
@@ -117,6 +124,7 @@ class TestInMemoryVectorStore:
 @pytest.mark.unit
 class TestNamespacedVectorStore:
     """Test suite for NamespacedVectorStore."""
+
     def test_create_namespaced_store(self):
         store = NamespacedVectorStore()
         assert store is not None
@@ -132,6 +140,7 @@ class TestNamespacedVectorStore:
 @pytest.mark.unit
 class TestCreateVectorStore:
     """Test suite for CreateVectorStore."""
+
     def test_factory_creates_store(self):
         store = create_vector_store()
         assert store is not None

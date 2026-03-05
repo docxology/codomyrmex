@@ -11,7 +11,7 @@ from codomyrmex.collaboration.mcp_tools import (
 def test_swarm_submit_task():
     result = swarm_submit_task(
         mission="Build a web app and test it",
-        agents=[{"name": "Alice", "role": "coder"}, {"name": "Bob", "role": "tester"}]
+        agents=[{"name": "Alice", "role": "coder"}, {"name": "Bob", "role": "tester"}],
     )
     assert result["mission"] == "Build a web app and test it"
     assert "agent_count" in result
@@ -19,11 +19,13 @@ def test_swarm_submit_task():
     assert "results" in result
     assert "subtasks" in result
 
+
 @pytest.mark.unit
 def test_swarm_submit_task_no_agents():
     result = swarm_submit_task(mission="Do something")
     assert result["mission"] == "Do something"
     assert result["agent_count"] == 1
+
 
 @pytest.mark.unit
 def test_pool_status():
@@ -33,6 +35,7 @@ def test_pool_status():
     assert "enums" in status
     assert "task_priorities" in status["enums"]
     assert "task_statuses" in status["enums"]
+
 
 @pytest.mark.unit
 def test_list_agents():

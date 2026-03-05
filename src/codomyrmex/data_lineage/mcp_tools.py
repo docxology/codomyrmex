@@ -53,7 +53,10 @@ def data_lineage_track(
         dict with keys: status, node_id, node_type
     """
     if event_type not in ("dataset", "transformation"):
-        return {"status": "error", "message": f"Unknown event_type: {event_type}. Use 'dataset' or 'transformation'."}
+        return {
+            "status": "error",
+            "message": f"Unknown event_type: {event_type}. Use 'dataset' or 'transformation'.",
+        }
     try:
         lineage = _get_data_lineage()
         if event_type == "dataset":

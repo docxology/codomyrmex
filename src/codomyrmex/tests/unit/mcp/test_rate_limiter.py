@@ -73,26 +73,30 @@ def test_limiter_rejects_over_burst():
 
 def test_per_tool_rate_limit():
     """Verify per tool rate limit behavior."""
-    rl = RateLimiter(RateLimiterConfig(
-        rate=1000,
-        burst=1000,
-        per_tool_rate={"slow_tool": 1},
-        per_tool_burst={"slow_tool": 2},
-    ))
+    rl = RateLimiter(
+        RateLimiterConfig(
+            rate=1000,
+            burst=1000,
+            per_tool_rate={"slow_tool": 1},
+            per_tool_burst={"slow_tool": 2},
+        )
+    )
     assert rl.allow("slow_tool")
     assert rl.allow("slow_tool")
     assert not rl.allow("slow_tool")  # per-tool exhausted
-    assert rl.allow("fast_tool")      # global still ok
+    assert rl.allow("fast_tool")  # global still ok
 
 
 def test_per_tool_does_not_affect_other_tools():
     """Verify per tool does not affect other tools behavior."""
-    rl = RateLimiter(RateLimiterConfig(
-        rate=100,
-        burst=100,
-        per_tool_rate={"limited": 1},
-        per_tool_burst={"limited": 1},
-    ))
+    rl = RateLimiter(
+        RateLimiterConfig(
+            rate=100,
+            burst=100,
+            per_tool_rate={"limited": 1},
+            per_tool_burst={"limited": 1},
+        )
+    )
     assert rl.allow("limited")
     assert not rl.allow("limited")
     # Other tools should still work
@@ -115,10 +119,14 @@ def test_limiter_recovers_over_time():
 
 def test_metrics_structure():
     """Verify metrics structure behavior."""
-    rl = RateLimiter(RateLimiterConfig(
-        rate=10, burst=20,
-        per_tool_rate={"x": 5}, per_tool_burst={"x": 10},
-    ))
+    rl = RateLimiter(
+        RateLimiterConfig(
+            rate=10,
+            burst=20,
+            per_tool_rate={"x": 5},
+            per_tool_burst={"x": 10},
+        )
+    )
     rl.allow("x")
     m = rl.metrics
     assert "global" in m

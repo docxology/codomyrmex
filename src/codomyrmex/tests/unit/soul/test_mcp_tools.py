@@ -34,7 +34,9 @@ class TestSoulStatus:
         assert result["soul_size_bytes"] == 0
         assert result["memory_size_bytes"] == 0
 
-    def test_existing_files_reports_size(self, existing_soul_file, existing_memory_file):
+    def test_existing_files_reports_size(
+        self, existing_soul_file, existing_memory_file
+    ):
         """soul_status must report positive size_bytes for existing files."""
         result = soul_status(
             soul_path=existing_soul_file, memory_path=existing_memory_file
@@ -219,9 +221,7 @@ class TestSoulAskLive:
         content = open(memory_path, encoding="utf-8").read()
         assert len(content) > 0
 
-    def test_soul_ask_no_remember_does_not_create_memory(
-        self, soul_path, memory_path
-    ):
+    def test_soul_ask_no_remember_does_not_create_memory(self, soul_path, memory_path):
         """soul_ask with remember=False must not create MEMORY.md."""
         soul_ask(
             question="Hello.",

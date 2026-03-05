@@ -12,15 +12,15 @@ from codomyrmex.meme.contagion.models import (
 from codomyrmex.meme.contagion.simulation import run_simulation
 
 __all__ = [
-    "ContagionModel",
-    "CascadeDetector",
-    "PropagationTrace",
     "Cascade",
+    "CascadeDetector",
     "CascadeType",
+    "ContagionModel",
+    "PropagationTrace",
     "ResonanceMap",
+    "SEIRModel",
     "SIRModel",
     "SISModel",
-    "SEIRModel",
     "detect_cascades",
     "run_simulation",
 ]

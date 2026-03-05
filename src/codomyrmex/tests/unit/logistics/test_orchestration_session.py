@@ -168,10 +168,21 @@ class TestOrchestrationSession:
         session = OrchestrationSession()
         d = session.to_dict()
         expected_keys = {
-            "session_id", "name", "description", "user_id", "mode",
-            "max_parallel_tasks", "max_parallel_workflows", "timeout_seconds",
-            "resource_requirements", "metadata", "status",
-            "created_at", "started_at", "updated_at", "completed_at",
+            "session_id",
+            "name",
+            "description",
+            "user_id",
+            "mode",
+            "max_parallel_tasks",
+            "max_parallel_workflows",
+            "timeout_seconds",
+            "resource_requirements",
+            "metadata",
+            "status",
+            "created_at",
+            "started_at",
+            "updated_at",
+            "completed_at",
         }
         assert set(d.keys()) == expected_keys
 
@@ -195,9 +206,7 @@ class TestOrchestrationSession:
 
     def test_to_dict_with_timestamps(self):
         now = datetime.now(UTC)
-        session = OrchestrationSession(
-            started_at=now, completed_at=now, updated_at=now
-        )
+        session = OrchestrationSession(started_at=now, completed_at=now, updated_at=now)
         d = session.to_dict()
         assert d["started_at"] == now.isoformat()
         assert d["completed_at"] == now.isoformat()

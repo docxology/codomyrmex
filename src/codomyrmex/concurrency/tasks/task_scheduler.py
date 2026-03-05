@@ -48,7 +48,9 @@ class TaskScheduler:
         worker_id = scheduler.assign(task)
     """
 
-    def __init__(self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN) -> None:
+    def __init__(
+        self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN
+    ) -> None:
         """Initialize the task scheduler."""
         self._strategy = strategy
         self._workers: dict[str, WorkerInfo] = {}
@@ -118,9 +120,9 @@ class TaskScheduler:
 
         if self._strategy == SchedulingStrategy.ROUND_ROBIN:
             return self._round_robin(eligible)
-        elif self._strategy == SchedulingStrategy.LEAST_LOADED:
+        if self._strategy == SchedulingStrategy.LEAST_LOADED:
             return self._least_loaded(eligible)
-        elif self._strategy == SchedulingStrategy.AFFINITY:
+        if self._strategy == SchedulingStrategy.AFFINITY:
             return self._affinity(task, eligible)
 
         return eligible[0].worker_id
@@ -162,7 +164,11 @@ class TaskScheduler:
         for w in self._workers.values():
             if w.current_load >= w.max_concurrent:
                 continue
-            if w.capabilities and task.task_type and task.task_type not in w.capabilities:
+            if (
+                w.capabilities
+                and task.task_type
+                and task.task_type not in w.capabilities
+            ):
                 continue
             eligible.append(w)
         return eligible

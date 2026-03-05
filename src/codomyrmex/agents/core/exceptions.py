@@ -8,13 +8,17 @@ logger = get_logger(__name__)
 
 class AgentError(CodomyrmexError):
     """Base exception class for all agent-related errors."""
-    pass
 
 
 class AgentTimeoutError(AgentError):
     """Raised when an agent operation times out."""
 
-    def __init__(self, message: str = "Agent operation timed out", timeout: float | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Agent operation timed out",
+        timeout: float | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if timeout is not None:
             self.context["timeout"] = timeout
@@ -23,7 +27,12 @@ class AgentTimeoutError(AgentError):
 class AgentConfigurationError(AgentError):
     """Raised when agent configuration is invalid or missing."""
 
-    def __init__(self, message: str = "Agent configuration error", config_key: str | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Agent configuration error",
+        config_key: str | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if config_key:
             self.context["config_key"] = config_key
@@ -32,7 +41,13 @@ class AgentConfigurationError(AgentError):
 class JulesError(AgentError):
     """Raised when Jules CLI operations fail."""
 
-    def __init__(self, message: str = "Jules operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Jules operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -55,7 +70,7 @@ class ClaudeError(AgentError):
         status_code: int | None = None,
         retry_after: float | None = None,
         request_id: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         """Initialize ClaudeError.
 
@@ -93,7 +108,12 @@ class ClaudeError(AgentError):
 class CodexError(AgentError):
     """Raised when OpenAI Codex API operations fail."""
 
-    def __init__(self, message: str = "Codex operation failed", model: str | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Codex operation failed",
+        model: str | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if model:
             self.context["model"] = model
@@ -102,7 +122,13 @@ class CodexError(AgentError):
 class OpenCodeError(AgentError):
     """Raised when OpenCode CLI operations fail."""
 
-    def __init__(self, message: str = "OpenCode operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "OpenCode operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -113,7 +139,13 @@ class OpenCodeError(AgentError):
 class GeminiError(AgentError):
     """Raised when Gemini CLI operations fail."""
 
-    def __init__(self, message: str = "Gemini operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Gemini operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -124,7 +156,13 @@ class GeminiError(AgentError):
 class MistralVibeError(AgentError):
     """Raised when Mistral Vibe CLI operations fail."""
 
-    def __init__(self, message: str = "Mistral Vibe operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Mistral Vibe operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -135,7 +173,13 @@ class MistralVibeError(AgentError):
 class EveryCodeError(AgentError):
     """Raised when Every Code CLI operations fail."""
 
-    def __init__(self, message: str = "Every Code operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Every Code operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -146,7 +190,13 @@ class EveryCodeError(AgentError):
 class OpenClawError(AgentError):
     """Raised when OpenClaw CLI operations fail."""
 
-    def __init__(self, message: str = "OpenClaw operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "OpenClaw operation failed",
+        command: str | None = None,
+        exit_code: int | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if command:
             self.context["command"] = command
@@ -154,12 +204,15 @@ class OpenClawError(AgentError):
             self.context["exit_code"] = exit_code
 
 
-
-
 class SessionError(AgentError):
     """Raised when agent session operations fail."""
 
-    def __init__(self, message: str = "Session operation failed", session_id: str | None = None, **kwargs):
+    def __init__(
+        self,
+        message: str = "Session operation failed",
+        session_id: str | None = None,
+        **kwargs,
+    ):
         super().__init__(message, **kwargs)
         if session_id:
             self.context["session_id"] = session_id
@@ -178,7 +231,7 @@ class ExecutionError(AgentError):
         task_id: str | None = None,
         action: str | None = None,
         exit_code: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         """Initialize ExecutionError.
 
@@ -210,7 +263,7 @@ class ToolError(AgentError):
         message: str = "Tool operation failed",
         tool_name: str | None = None,
         tool_input: dict | None = None,
-        **kwargs
+        **kwargs,
     ):
         """Initialize ToolError.
 
@@ -226,7 +279,9 @@ class ToolError(AgentError):
         if tool_input:
             # Truncate tool input to avoid huge context
             input_str = str(tool_input)
-            self.context["tool_input"] = input_str[:500] + "..." if len(input_str) > 500 else input_str
+            self.context["tool_input"] = (
+                input_str[:500] + "..." if len(input_str) > 500 else input_str
+            )
 
 
 class ContextError(AgentError):
@@ -242,7 +297,7 @@ class ContextError(AgentError):
         context_size: int | None = None,
         max_context: int | None = None,
         context_type: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         """Initialize ContextError.
 

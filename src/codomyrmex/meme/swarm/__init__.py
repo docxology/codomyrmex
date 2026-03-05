@@ -12,13 +12,13 @@ from codomyrmex.meme.swarm.models import (
 )
 
 __all__ = [
-    "SwarmAgent",
-    "SwarmState",
-    "FlockingParams",
-    "EmergentPattern",
     "ConsensusState",
+    "EmergentPattern",
+    "FlockingParams",
+    "SwarmAgent",
     "SwarmEngine",
-    "update_flock",
-    "reach_consensus",
+    "SwarmState",
     "quorum_sensing",
+    "reach_consensus",
+    "update_flock",
 ]

@@ -14,14 +14,15 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 def find_markdown_files(docs_dir: Path) -> list[Path]:
     """Find all markdown files in the documentation directory."""
     markdown_files = []
     for root, dirs, files in os.walk(docs_dir):
         # Skip hidden directories
-        dirs[:] = [d for d in dirs if not d.startswith('.')]
+        dirs[:] = [d for d in dirs if not d.startswith(".")]
         for file in files:
-            if file.endswith('.md'):
+            if file.endswith(".md"):
                 markdown_files.append(Path(root) / file)
     return sorted(markdown_files)
 
@@ -35,9 +36,9 @@ def extract_links(content: str, file_path: Path) -> list[tuple[str, int, str]]:
     links = []
 
     # Pattern for markdown links: [text](url) or [text](url "title")
-    link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+    link_pattern = r"\[([^\]]+)\]\(([^)]+)\)"
 
-    for line_num, line in enumerate(content.split('\n'), start=1):
+    for line_num, line in enumerate(content.split("\n"), start=1):
         for match in re.finditer(link_pattern, line):
             link_text = match.group(1)
             link_url = match.group(2)
@@ -56,28 +57,31 @@ def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> tuple[bool,
     Returns: (exists, resolved_path)
     """
     # Skip external links
-    if link_url.startswith('http://') or link_url.startswith('https://') or link_url.startswith('mailto:'):
-        return (True, 'external')  # Assume external links are valid
+    if (
+        link_url.startswith("http://")
+        or link_url.startswith("https://")
+        or link_url.startswith("mailto:")
+    ):
+        return (True, "external")  # Assume external links are valid
 
     # Skip anchor-only links
-    if link_url.startswith('#'):
-        return (True, 'anchor')
+    if link_url.startswith("#"):
+        return (True, "anchor")
 
     # Remove anchor from URL if present
-    if '#' in link_url:
-        link_url = link_url.split('#')[0]
+    if "#" in link_url:
+        link_url = link_url.split("#", maxsplit=1)[0]
 
     # Handle relative paths
-    if link_url.startswith('./'):
-        link_url = link_url[2:]
+    link_url = link_url.removeprefix("./")
 
     # Get project root (parent of docs) - resolve to absolute path
     project_root = docs_root.parent.resolve()
 
     # Resolve relative to current file's directory
-    if link_url.startswith('../'):
+    if link_url.startswith("../"):
         # Count how many levels up by counting '../' sequences
-        levels_up = link_url.count('../')
+        levels_up = link_url.count("../")
         current_dir = from_file.parent.resolve()
         # Go up the specified number of levels
         for _ in range(levels_up):
@@ -91,12 +95,12 @@ def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> tuple[bool,
             else:
                 # Would go beyond project root, stop here
                 break
-        while link_url.startswith('../'):
-            link_url = link_url.removeprefix('../')
+        while link_url.startswith("../"):
+            link_url = link_url.removeprefix("../")
         resolved = current_dir / link_url
-    elif link_url.startswith('/'):
+    elif link_url.startswith("/"):
         # Absolute from docs root
-        resolved = docs_root / link_url.lstrip('/')
+        resolved = docs_root / link_url.lstrip("/")
     else:
         # Relative to current file's directory
         resolved = from_file.parent / link_url
@@ -118,19 +122,27 @@ def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> tuple[bool,
     project_root_str = str(project_root.resolve())
 
     if not exists:
-        if not resolved_str.startswith(docs_root_str) and resolved_str.startswith(project_root_str):
+        if not resolved_str.startswith(docs_root_str) and resolved_str.startswith(
+            project_root_str
+        ):
             # Link to file outside docs but within project - check if it exists
             exists = resolved.exists() and (resolved.is_file() or resolved.is_dir())
             if exists:
-                return (True, f'external:{resolved.relative_to(project_root)}')
-            else:
-                # File doesn't exist, return the broken link info
-                return (False, str(resolved))
-    elif not resolved_str.startswith(docs_root_str) and resolved_str.startswith(project_root_str):
+                return (True, f"external:{resolved.relative_to(project_root)}")
+            # File doesn't exist, return the broken link info
+            return (False, str(resolved))
+    elif not resolved_str.startswith(docs_root_str) and resolved_str.startswith(
+        project_root_str
+    ):
         # File exists and is outside docs but within project - valid external link
-        return (True, f'external:{resolved.relative_to(project_root)}')
+        return (True, f"external:{resolved.relative_to(project_root)}")
 
-    return (exists, str(resolved.relative_to(docs_root)) if resolved_str.startswith(docs_root_str) else str(resolved))
+    return (
+        exists,
+        str(resolved.relative_to(docs_root))
+        if resolved_str.startswith(docs_root_str)
+        else str(resolved),
+    )
 
 
 def check_links(docs_dir: Path) -> dict[str, list[dict]]:
@@ -144,32 +156,36 @@ def check_links(docs_dir: Path) -> dict[str, list[dict]]:
 
     for file_path in markdown_files:
         try:
-            content = file_path.read_text(encoding='utf-8')
+            content = file_path.read_text(encoding="utf-8")
             links = extract_links(content, file_path)
 
             file_issues = []
             for link_text, line_num, link_url in links:
                 exists, resolved = resolve_link(link_url, file_path, docs_dir)
                 if not exists:
-                    file_issues.append({
-                        'line': line_num,
-                        'text': link_text,
-                        'url': link_url,
-                        'resolved': resolved,
-                        'issue': 'broken_link'
-                    })
+                    file_issues.append(
+                        {
+                            "line": line_num,
+                            "text": link_text,
+                            "url": link_url,
+                            "resolved": resolved,
+                            "issue": "broken_link",
+                        }
+                    )
 
             if file_issues:
                 issues[str(file_path.relative_to(docs_dir))] = file_issues
 
         except Exception as e:
-            issues[str(file_path.relative_to(docs_dir))] = [{
-                'line': 0,
-                'text': '',
-                'url': '',
-                'resolved': '',
-                'issue': f'error_reading_file: {str(e)}'
-            }]
+            issues[str(file_path.relative_to(docs_dir))] = [
+                {
+                    "line": 0,
+                    "text": "",
+                    "url": "",
+                    "resolved": "",
+                    "issue": f"error_reading_file: {e!s}",
+                }
+            ]
 
     return issues
 
@@ -186,7 +202,7 @@ def main():
     # 4. src
     # 5. REPO_ROOT
     project_root = script_dir.parent.parent.parent.parent
-    docs_dir = project_root / 'docs'
+    docs_dir = project_root / "docs"
 
     if not docs_dir.exists():
         print(f"Error: Documentation directory not found: {docs_dir}")
@@ -201,12 +217,14 @@ def main():
         print("✅ All links are valid!")
         return 0
 
-    print(f"\n❌ Found {sum(len(v) for v in issues.values())} link issues in {len(issues)} files:\n")
+    print(
+        f"\n❌ Found {sum(len(v) for v in issues.values())} link issues in {len(issues)} files:\n"
+    )
 
     for file_path, file_issues in sorted(issues.items()):
         print(f"\n📄 {file_path}:")
         for issue in file_issues:
-            if issue['issue'] == 'broken_link':
+            if issue["issue"] == "broken_link":
                 print(f"  Line {issue['line']}: [{issue['text']}]({issue['url']})")
                 print(f"    → Broken link to: {issue['resolved']}")
             else:
@@ -215,5 +233,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

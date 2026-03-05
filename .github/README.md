@@ -14,8 +14,9 @@
   <a href="https://github.com/docxology/codomyrmex/commits/main"><img src="https://img.shields.io/github/last-commit/docxology/codomyrmex?style=flat-square&color=green" alt="Last Commit"></a>
   <a href="https://github.com/docxology/codomyrmex/issues"><img src="https://img.shields.io/github/issues/docxology/codomyrmex?style=flat-square&color=orange" alt="Issues"></a>
   <img src="https://img.shields.io/github/repo-size/docxology/codomyrmex?style=flat-square&color=lightgrey" alt="Repo Size">
-  <img src="https://img.shields.io/badge/python-≥3.10-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/code%20style-ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" alt="Ruff">
+  <img src="https://img.shields.io/badge/types-ty-blue?style=flat-square" alt="ty">
 </p>
 
 # 🐜 Codomyrmex
@@ -37,6 +38,8 @@ Codomyrmex is a production-grade library of **127 deeply integrated modules** sp
 | [**docs/AGENTS.md**](docs/AGENTS.md) | Agent coordination rules and autonomous workflows |
 | [**docs/SPEC.md**](docs/SPEC.md) | Technical specification, API contracts, schemas |
 | [**docs/PAI.md**](docs/PAI.md) | Personal AI Infrastructure integration reference |
+| [**docs/PAI_DASHBOARD.md**](docs/PAI_DASHBOARD.md) | PAI dashboard GUI reference and tab guide |
+| [**docs/index.md**](docs/index.md) | MkDocs site index and navigation entry point |
 
 ### Documentation Directories
 
@@ -59,6 +62,7 @@ Codomyrmex is a production-grade library of **127 deeply integrated modules** sp
 | [**docs/project/**](docs/project/) | 9 | Architecture, roadmap, contributing, governance |
 | [**docs/project_orchestration/**](docs/project_orchestration/) | 11 | Multi-project workflow guides and pipelines |
 | [**docs/skills/**](docs/skills/) | 9 | Skill system lifecycle, governance, authoring |
+| [**docs/plans/**](docs/plans/) | 1 | Implementation plans and integration roadmaps |
 
 ---
 
@@ -450,17 +454,19 @@ sequenceDiagram
 codomyrmex/
 ├── .github/                  # 36 GitHub Actions workflows, templates, docs
 ├── config/                   # 127 module-specific config.yaml files
-├── docs/                     # 1,029+ documentation files across 17 directories
+├── docs/                     # 1,029+ documentation files across 18 directories
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
 │   ├── PAI.md                # Personal AI reference
+│   ├── PAI_DASHBOARD.md      # PAI dashboard reference
+│   ├── index.md              # MkDocs site index
 │   ├── getting-started/      # 9 quick-start docs
 │   ├── development/          # 10 dev guides
 │   ├── modules/              # 126 per-module doc directories
 │   ├── security/             # 11 security guides
 │   ├── agi/                  # 14 AGI theory docs
-│   └── ... (17 directories)
+│   └── ... (18 directories)
 ├── scripts/                  # 445+ orchestrator scripts
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
@@ -473,7 +479,7 @@ codomyrmex/
 │   └── ... (122 more modules)
 ├── CHANGELOG.md              # Release history
 ├── CITATION.cff              # Citation metadata
-└── pyproject.toml            # uv-managed project configuration
+└── pyproject.toml            # uv-managed project config (uv_build backend)
 ```
 
 ---
@@ -491,7 +497,7 @@ codomyrmex/
 | **Testing Policy** | Zero-Mock (100% real methods) |
 | **Default LLM** | Gemini 2.5 Pro |
 | **Package Manager** | uv |
-| **Python Version** | ≥3.10 |
+| **Python Version** | ≥3.11 |
 
 ---
 
@@ -571,10 +577,15 @@ graph LR
 
 ```bash
 # Run all tests
-uv run python -m pytest src/codomyrmex/tests/ -v --tb=short
+uv run pytest src/codomyrmex/tests/ -v --tb=short
 
 # Run a specific module
-uv run python -m pytest src/codomyrmex/tests/unit/llm/ -v
+uv run pytest src/codomyrmex/tests/unit/llm/ -v
+
+# Lint and format
+uv run ruff check .          # lint
+uv run ruff format .         # format
+uv run ty check src/         # type check
 ```
 
 ---
@@ -655,17 +666,20 @@ graph LR
 # Clone
 git clone https://github.com/docxology/codomyrmex.git && cd codomyrmex
 
-# Install
-uv sync
+# Install (all dev dependencies)
+uv sync --all-groups
 
 # Set up environment
 cp .env.example .env   # Edit with your API keys
 
 # Run CLI
-uv run python -m codomyrmex.cli --help
+uv run codomyrmex --help
 
 # Run tests
-uv run python -m pytest src/codomyrmex/tests/ -v
+uv run pytest src/codomyrmex/tests/ -v
+
+# Lint & format
+uv run ruff check . && uv run ruff format .
 
 # Dispatch Jules agents
 uv run python scripts/agents/mega_swarm_dispatcher.py

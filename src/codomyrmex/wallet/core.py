@@ -65,8 +65,7 @@ class WalletManager:
             self._created_at[user_id] = datetime.now(UTC).isoformat()
             logger.info(f"Created wallet {wallet_id} for user {user_id}")
             return wallet_id
-        else:
-            raise WalletKeyError(f"Failed to store wallet key for user {user_id}")
+        raise WalletKeyError(f"Failed to store wallet key for user {user_id}")
 
     def get_wallet_address(self, user_id: str) -> str | None:
         """Retrieve wallet address for a user.
@@ -163,8 +162,7 @@ class WalletManager:
                 f"Rotated keys for user {user_id}: {old_id} -> {new_wallet_id} ({reason})"
             )
             return new_wallet_id
-        else:
-            raise WalletKeyError(f"Failed to store new key for user {user_id}")
+        raise WalletKeyError(f"Failed to store new key for user {user_id}")
 
     def backup_wallet(self, user_id: str) -> dict:
         """Return backup metadata for a user's wallet.

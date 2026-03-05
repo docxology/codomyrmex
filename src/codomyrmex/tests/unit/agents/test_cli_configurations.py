@@ -12,6 +12,7 @@ try:
         reset_config,
         set_config,
     )
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -38,9 +39,7 @@ class TestSimpleConfigurationConfirmations:
     def test_configuration_display(self):
         """Test that configuration can be displayed."""
         config = AgentConfig(
-            jules_command="test-jules",
-            default_timeout=60,
-            log_level="DEBUG"
+            jules_command="test-jules", default_timeout=60, log_level="DEBUG"
         )
 
         config_dict = config.to_dict()
@@ -256,5 +255,3 @@ class TestComplexConfigurationScenarios:
         config2 = AgentConfig()
         assert config2.output_dir is not None
         assert isinstance(config2.output_dir, Path)
-
-

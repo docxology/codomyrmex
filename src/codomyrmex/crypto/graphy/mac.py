@@ -74,7 +74,9 @@ def compute_poly1305(data: bytes, key: bytes) -> bytes:
         CryptoError: On computation failure or invalid key size.
     """
     if len(key) != 32:
-        raise CryptoError(f"Poly1305 requires exactly 32-byte key, got {len(key)} bytes")
+        raise CryptoError(
+            f"Poly1305 requires exactly 32-byte key, got {len(key)} bytes"
+        )
     try:
         p = Poly1305(key)
         p.update(data)

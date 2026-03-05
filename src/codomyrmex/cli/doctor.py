@@ -36,7 +36,7 @@ _SRC_CODOMYRMEX = Path(__file__).resolve().parents[1]  # cli → codomyrmex
 class CheckResult:
     """Single diagnostic check result."""
 
-    __slots__ = ("name", "status", "message", "details")
+    __slots__ = ("details", "message", "name", "status")
 
     OK = "ok"
     WARN = "warn"
@@ -123,7 +123,9 @@ def check_pai() -> list[CheckResult]:
             )
         )
     except Exception as exc:
-        results.append(CheckResult("pai_verify_capabilities", CheckResult.ERROR, str(exc)))
+        results.append(
+            CheckResult("pai_verify_capabilities", CheckResult.ERROR, str(exc))
+        )
 
     return results
 
@@ -199,7 +201,11 @@ def check_rasp() -> list[CheckResult]:
             "rasp_completeness",
             CheckResult.OK if not missing else CheckResult.WARN,
             f"{complete} complete, {len(missing)} missing docs",
-            {"complete": complete, "missing_count": len(missing), "missing": missing[:20]},
+            {
+                "complete": complete,
+                "missing_count": len(missing),
+                "missing": missing[:20],
+            },
         )
     )
     return results
@@ -211,7 +217,9 @@ def check_workflows() -> list[CheckResult]:
     workflow_dir = _PROJECT_ROOT / ".agent" / "workflows"
 
     if not workflow_dir.exists():
-        return [CheckResult("workflows_dir", CheckResult.ERROR, "Missing .agent/workflows/")]
+        return [
+            CheckResult("workflows_dir", CheckResult.ERROR, "Missing .agent/workflows/")
+        ]
 
     valid = 0
     invalid: list[str] = []
@@ -335,7 +343,11 @@ def fix_env() -> list[CheckResult]:
             encoding="utf-8",
         )
         results.append(
-            CheckResult("fix_env", CheckResult.OK, "Created minimal .env (no .env.example found)")
+            CheckResult(
+                "fix_env",
+                CheckResult.OK,
+                "Created minimal .env (no .env.example found)",
+            )
         )
 
     return results
@@ -374,7 +386,11 @@ def fix_optional_deps() -> list[CheckResult]:
         )
     else:
         results.append(
-            CheckResult("fix_optional_deps", CheckResult.OK, "All checked optional deps installed")
+            CheckResult(
+                "fix_optional_deps",
+                CheckResult.OK,
+                "All checked optional deps installed",
+            )
         )
 
     return results
@@ -437,7 +453,11 @@ def run_doctor(
         print(
             json_mod.dumps(
                 {
-                    "status": "error" if has_errors else "warn" if has_warnings else "ok",
+                    "status": "error"
+                    if has_errors
+                    else "warn"
+                    if has_warnings
+                    else "ok",
                     "checks": [c.to_dict() for c in checks],
                 },
                 indent=2,

@@ -98,6 +98,7 @@ def empty_contract(eth_address):
 @pytest.mark.unit
 class TestNetwork:
     """Test suite for Network."""
+
     def test_ethereum(self):
         assert Network.ETHEREUM is not None
 
@@ -114,6 +115,7 @@ class TestNetwork:
 @pytest.mark.unit
 class TestTransactionStatus:
     """Test suite for TransactionStatus."""
+
     def test_pending(self):
         assert TransactionStatus.PENDING is not None
 
@@ -127,6 +129,7 @@ class TestTransactionStatus:
 @pytest.mark.unit
 class TestAddress:
     """Test suite for Address."""
+
     def test_create_address(self):
         addr = Address(value="0x1234567890abcdef")
         assert addr.value == "0x1234567890abcdef"
@@ -140,6 +143,7 @@ class TestAddress:
 @pytest.mark.unit
 class TestTransaction:
     """Test suite for Transaction."""
+
     def test_create_transaction(self):
         from_addr = Address(value="0xfrom")
         to_addr = Address(value="0xto")
@@ -156,7 +160,9 @@ class TestTransaction:
     def test_transaction_defaults(self):
         from_addr = Address(value="0xfrom")
         to_addr = Address(value="0xto")
-        tx = Transaction(hash="0x1", from_address=from_addr, to_address=to_addr, value=0)
+        tx = Transaction(
+            hash="0x1", from_address=from_addr, to_address=to_addr, value=0
+        )
         assert tx.data == ""
         assert tx.gas_limit == 21000
         assert tx.gas_price == 0
@@ -167,6 +173,7 @@ class TestTransaction:
 @pytest.mark.unit
 class TestContractFunction:
     """Test suite for ContractFunction."""
+
     def test_create_function(self):
         func = ContractFunction(name="transfer")
         assert func.name == "transfer"
@@ -177,6 +184,7 @@ class TestContractFunction:
 @pytest.mark.unit
 class TestContract:
     """Test suite for Contract."""
+
     def test_create_contract(self):
         addr = Address(value="0xcontract")
         contract = Contract(address=addr)
@@ -187,6 +195,7 @@ class TestContract:
 @pytest.mark.unit
 class TestContractCall:
     """Test suite for ContractCall."""
+
     def test_create_call(self):
         addr = Address(value="0xcontract")
         contract = Contract(address=addr, name="ERC20")
@@ -197,6 +206,7 @@ class TestContractCall:
 @pytest.mark.unit
 class TestTransactionBuilder:
     """Test suite for TransactionBuilder."""
+
     def test_create_builder(self):
         addr = Address(value="0xfrom")
         builder = TransactionBuilder(from_address=addr)
@@ -206,6 +216,7 @@ class TestTransactionBuilder:
 @pytest.mark.unit
 class TestContractRegistry:
     """Test suite for ContractRegistry."""
+
     def test_create_registry(self):
         registry = ContractRegistry()
         assert registry is not None
@@ -214,6 +225,7 @@ class TestContractRegistry:
 @pytest.mark.unit
 class TestConversionFunctions:
     """Test suite for ConversionFunctions."""
+
     def test_wei_to_ether(self):
         result = wei_to_ether(1000000000000000000)
         assert result == 1.0
@@ -327,8 +339,12 @@ class TestContractFunctionEncode:
         assert len(result) > 2
 
     def test_different_functions_produce_different_selectors(self):
-        func_a = ContractFunction(name="transfer", inputs=[{"name": "to", "type": "address"}])
-        func_b = ContractFunction(name="approve", inputs=[{"name": "to", "type": "address"}])
+        func_a = ContractFunction(
+            name="transfer", inputs=[{"name": "to", "type": "address"}]
+        )
+        func_b = ContractFunction(
+            name="approve", inputs=[{"name": "to", "type": "address"}]
+        )
         assert func_a.encode_call("0x1") != func_b.encode_call("0x1")
 
 
@@ -416,7 +432,9 @@ class TestContractCallFluent:
         with pytest.raises(ValueError, match="Function not found"):
             call.encode()
 
-    def test_to_transaction_creates_proper_transaction(self, contract_with_abi, eth_address):
+    def test_to_transaction_creates_proper_transaction(
+        self, contract_with_abi, eth_address
+    ):
         call = (
             ContractCall(contract_with_abi, "transfer")
             .with_args("0xrecipient", 100)
@@ -650,9 +668,7 @@ class TestEventFilter:
     def test_filter_combined_criteria(self):
         addr = Address(value=VALID_ETH_ADDRESS)
         f = EventFilter().event("Transfer").from_block(5).to_block(15).address(addr)
-        good = ContractEvent(
-            name="Transfer", block_number=10, contract_address=addr
-        )
+        good = ContractEvent(name="Transfer", block_number=10, contract_address=addr)
         wrong_name = ContractEvent(
             name="Approval", block_number=10, contract_address=addr
         )

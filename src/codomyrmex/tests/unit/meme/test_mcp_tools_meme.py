@@ -42,7 +42,15 @@ class TestMemeDissect:
         """Each meme dict has all expected fields."""
         result = meme_dissect("We know this to be a fact.")
         meme = result["memes"][0]
-        expected_keys = {"id", "content", "meme_type", "fitness", "fidelity", "fecundity", "longevity"}
+        expected_keys = {
+            "id",
+            "content",
+            "meme_type",
+            "fitness",
+            "fidelity",
+            "fecundity",
+            "longevity",
+        }
         assert expected_keys.issubset(set(meme.keys()))
 
 
@@ -58,19 +66,25 @@ class TestMemeFitness:
 
     def test_perfect_scores(self):
         """All 1.0 scores yield fitness = 1.0."""
-        result = meme_fitness(content="Perfect", fidelity=1.0, fecundity=1.0, longevity=1.0)
+        result = meme_fitness(
+            content="Perfect", fidelity=1.0, fecundity=1.0, longevity=1.0
+        )
         assert result["status"] == "success"
         assert abs(result["fitness"] - 1.0) < 1e-6
 
     def test_zero_score(self):
         """A zero in any dimension yields fitness = 0."""
-        result = meme_fitness(content="Zero", fidelity=0.0, fecundity=0.5, longevity=0.5)
+        result = meme_fitness(
+            content="Zero", fidelity=0.0, fecundity=0.5, longevity=0.5
+        )
         assert result["status"] == "success"
         assert result["fitness"] == 0.0
 
     def test_clamping(self):
         """Values above 1.0 are clamped."""
-        result = meme_fitness(content="Over", fidelity=2.0, fecundity=1.5, longevity=3.0)
+        result = meme_fitness(
+            content="Over", fidelity=2.0, fecundity=1.5, longevity=3.0
+        )
         assert result["status"] == "success"
         assert result["fidelity"] == 1.0
         assert result["fecundity"] == 1.0

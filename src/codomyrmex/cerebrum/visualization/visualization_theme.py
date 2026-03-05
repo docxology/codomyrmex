@@ -7,6 +7,7 @@ from typing import Any
 @dataclass
 class ThemeColors:
     """Theme color palette."""
+
     background: str = "#ffffff"
     text: str = "#000000"
     primary: str = "#3498db"
@@ -18,13 +19,16 @@ class ThemeColors:
     status_error: str = "#e74c3c"
     status_neutral: str = "#95a5a6"
 
+
 @dataclass
 class ThemeFont:
     """Theme font settings."""
+
     family: str = "sans-serif"
     title_size: int = 16
     label_size: int = 12
     tick_size: int = 10
+
 
 class Theme:
     """Visualization theme manager."""
@@ -53,23 +57,26 @@ class Theme:
         status = status.lower()
         if status in ["active", "success", "stable", "complete"]:
             return self.colors.status_success
-        elif status in ["warning", "draft", "in_progress"]:
+        if status in ["warning", "draft", "in_progress"]:
             return self.colors.status_warning
-        elif status in ["error", "deprecated", "removed"]:
+        if status in ["error", "deprecated", "removed"]:
             return self.colors.status_error
-        else:
-            return self.colors.status_neutral
+        return self.colors.status_neutral
 
     def apply_to_axes(self, ax: Any) -> None:
         """Apply theme to matplotlib axes."""
-        if hasattr(ax, 'set_facecolor'):
+        if hasattr(ax, "set_facecolor"):
             ax.set_facecolor(self.colors.background)
-        if hasattr(ax, 'tick_params'):
+        if hasattr(ax, "tick_params"):
             ax.tick_params(colors=self.colors.text, labelsize=self.font.tick_size)
-        if hasattr(ax, 'set_title') and ax.get_title():
-            ax.set_title(ax.get_title(), color=self.colors.text, fontsize=self.font.title_size)
+        if hasattr(ax, "set_title") and ax.get_title():
+            ax.set_title(
+                ax.get_title(), color=self.colors.text, fontsize=self.font.title_size
+            )
 
-    def create_legend(self, ax: Any, handles: list[Any], labels: list[str], **kwargs) -> None:
+    def create_legend(
+        self, ax: Any, handles: list[Any], labels: list[str], **kwargs
+    ) -> None:
         """Create styled legend."""
         ax.legend(handles, labels, **kwargs)
 

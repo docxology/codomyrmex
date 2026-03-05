@@ -41,9 +41,11 @@ from .websocket_client import WebSocketClient
 
 def cli_commands():
     """Return CLI commands for the networking module."""
+
     def _interfaces(**kwargs):
         """List network interfaces."""
         import socket
+
         hostname = socket.gethostname()
         print("=== Network Interfaces ===")
         print(f"  Hostname: {hostname}")
@@ -61,6 +63,7 @@ def cli_commands():
     def _check(**kwargs):
         """Check network connectivity."""
         import socket
+
         print("=== Connectivity Check ===")
         targets = [("dns.google", 443), ("1.1.1.1", 53)]
         for host, port in targets:
@@ -110,5 +113,3 @@ __version__ = "0.1.0"
 def get_http_client() -> HTTPClient:
     """Get an HTTP client instance."""
     return HTTPClient()
-
-

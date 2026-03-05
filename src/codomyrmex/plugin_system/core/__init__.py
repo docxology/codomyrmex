@@ -27,19 +27,19 @@ from .plugin_registry import (
 )
 
 __all__ = [
-    "PluginManager",
-    "PluginLoader",
-    "PluginRegistry",
-    "Plugin",
-    "PluginInfo",
-    "PluginType",
-    "PluginState",
     "Hook",
     "LoadResult",
-    "get_plugin_manager",
-    "get_registry",
+    "Plugin",
+    "PluginInfo",
+    "PluginLoader",
+    "PluginManager",
+    "PluginRegistry",
+    "PluginState",
+    "PluginType",
     "create_plugin_info",
     "discover_plugins",
+    "get_plugin_manager",
+    "get_registry",
     "load_plugin",
     "unload_plugin",
 ]

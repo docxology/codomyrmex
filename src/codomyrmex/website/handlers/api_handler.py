@@ -36,9 +36,14 @@ class APIHandler:
     _test_results: dict | None = None
 
     # Config files must carry one of these extensions to be readable/writable.
-    _ALLOWED_CONFIG_EXTENSIONS: frozenset[str] = frozenset({
-        ".json", ".toml", ".yaml", ".yml",
-    })
+    _ALLOWED_CONFIG_EXTENSIONS: frozenset[str] = frozenset(
+        {
+            ".json",
+            ".toml",
+            ".yaml",
+            ".yml",
+        }
+    )
 
     def _is_allowed_config_file(self, filename: str) -> bool:
         """Return True if *filename* has an allowed config file extension.
@@ -126,15 +131,15 @@ class APIHandler:
 
     def handle_config_save(self) -> None:
         """Handle config save request."""
-        content_length = int(self.headers.get('Content-Length', 0))
+        content_length = int(self.headers.get("Content-Length", 0))
         if content_length == 0:
             self.send_error(400, "No content provided")
             return
 
         post_data = self.rfile.read(content_length)
-        data = json.loads(post_data.decode('utf-8'))
-        content = data.get('content')
-        filename = data.get('filename')
+        data = json.loads(post_data.decode("utf-8"))
+        content = data.get("content")
+        filename = data.get("filename")
 
         if not filename:
             # Extract from URL path
@@ -183,6 +188,7 @@ class APIHandler:
     def handle_docs_get(self, path: str) -> None:
         """Handle GET /api/docs/{path} -- return doc file content."""
         from urllib.parse import unquote
+
         doc_path = unquote(path.replace("/api/docs/", "", 1))
         if not self.data_provider:
             self.send_error(500, "Data provider missing")
@@ -200,7 +206,7 @@ class APIHandler:
     def handle_execute(self) -> None:
         """Execute a script from the scripts directory."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -208,13 +214,13 @@ class APIHandler:
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
 
-        script_name = data.get('script')
-        raw_args = data.get('args', [])
+        script_name = data.get("script")
+        raw_args = data.get("args", [])
 
         if not script_name:
             self.send_error(400, "Script name required")
@@ -224,7 +230,7 @@ class APIHandler:
         if not isinstance(raw_args, list):
             self.send_error(400, "args must be a list of strings")
             return
-        _SHELL_META = set(';&|`$(){}\n\r')
+        _SHELL_META = set(";&|`$(){}\n\r")
         sanitized_args: list[str] = []
         for arg in raw_args:
             if not isinstance(arg, str):
@@ -239,7 +245,10 @@ class APIHandler:
         script_path = (self.root_dir / "scripts" / script_name).resolve()
         scripts_root = (self.root_dir / "scripts").resolve()
 
-        if not str(script_path).startswith(str(scripts_root)) or not script_path.exists():
+        if (
+            not str(script_path).startswith(str(scripts_root))
+            or not script_path.exists()
+        ):
             self.send_error(403, f"Invalid script path: {script_name}")
             return
 
@@ -256,24 +265,27 @@ class APIHandler:
                 text=True,
                 env=env,
                 cwd=self.root_dir,  # Run from project root
-                timeout=300  # 5 minute timeout safety
+                timeout=300,  # 5 minute timeout safety
             )
 
             response = {
                 "success": result.returncode == 0,
                 "stdout": result.stdout,
                 "stderr": result.stderr,
-                "returncode": result.returncode
+                "returncode": result.returncode,
             }
 
             self.send_json_response(response)
 
         except subprocess.TimeoutExpired:
-            self.send_json_response({
-                "success": False,
-                "error": "Script execution timed out after 300 seconds",
-                "stderr": "TimeoutExpired"
-            }, status=504)
+            self.send_json_response(
+                {
+                    "success": False,
+                    "error": "Script execution timed out after 300 seconds",
+                    "stderr": "TimeoutExpired",
+                },
+                status=504,
+            )
         except Exception as e:
             self.send_json_response({"success": False, "error": str(e)}, status=500)
 
@@ -284,7 +296,7 @@ class APIHandler:
                 "system": self.data_provider.get_system_summary(),
                 "modules": self.data_provider.get_modules(),
                 "agents": self.data_provider.get_actual_agents(),
-                "scripts": self.data_provider.get_available_scripts()
+                "scripts": self.data_provider.get_available_scripts(),
             }
             self.send_json_response(data)
         else:
@@ -310,15 +322,15 @@ class APIHandler:
             WebsiteServer._test_running = True
 
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         module = None
         if content_length > 0:
             try:
                 post_data = self.rfile.read(content_length)
-                data = json.loads(post_data.decode('utf-8'))
-                module = data.get('module')
+                data = json.loads(post_data.decode("utf-8"))
+                module = data.get("module")
             except (json.JSONDecodeError, KeyError):
                 with self._test_lock:
                     WebsiteServer._test_running = False
@@ -368,28 +380,33 @@ class APIHandler:
         """Handle GET /api/trust/status -- return trust gateway tool counts."""
         try:
             from codomyrmex.agents.pai.trust_gateway import get_trust_report
+
             report = get_trust_report()
             counts = report.get("counts", {})
-            self.send_json_response({
-                "counts": {
-                    "untrusted": counts.get("untrusted", 0),
-                    "verified": counts.get("verified", 0),
-                    "trusted": counts.get("trusted", 0),
-                },
-                "total_tools": report.get("total_tools", 0),
-                "destructive_tools": report.get("destructive_tools", {}),
-            })
+            self.send_json_response(
+                {
+                    "counts": {
+                        "untrusted": counts.get("untrusted", 0),
+                        "verified": counts.get("verified", 0),
+                        "trusted": counts.get("trusted", 0),
+                    },
+                    "total_tools": report.get("total_tools", 0),
+                    "destructive_tools": report.get("destructive_tools", {}),
+                }
+            )
         except Exception as e:
             # Fallback if trust gateway not available
-            self.send_json_response({
-                "counts": {"untrusted": 0, "verified": 0, "trusted": 0},
-                "error": str(e),
-            })
+            self.send_json_response(
+                {
+                    "counts": {"untrusted": 0, "verified": 0, "trusted": 0},
+                    "error": str(e),
+                }
+            )
 
     def handle_pai_action(self) -> None:
         """Handle POST /api/pai/action -- execute a PAI workflow action."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -397,7 +414,7 @@ class APIHandler:
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
@@ -408,23 +425,29 @@ class APIHandler:
         try:
             if action == "verify":
                 from codomyrmex.agents.pai.trust_gateway import verify_capabilities
+
                 raw = verify_capabilities()
                 result = {
                     "modules": raw.get("modules", {}).get("total", 0),
                     "tools_total": raw.get("tools", {}).get("total", 0),
-                    "promoted": len(raw.get("trust", {}).get("promoted_to_verified", [])),
+                    "promoted": len(
+                        raw.get("trust", {}).get("promoted_to_verified", [])
+                    ),
                 }
             elif action == "trust":
                 from codomyrmex.agents.pai.trust_gateway import trust_all
+
                 raw = trust_all()
                 result = raw
             elif action == "reset":
                 from codomyrmex.agents.pai.trust_gateway import reset_trust
+
                 reset_trust()
                 result = {"message": "Trust levels reset to UNTRUSTED"}
             elif action == "status":
                 try:
                     from codomyrmex.agents.pai.mcp_bridge import tool_pai_status
+
                     result = tool_pai_status()
                 except Exception as _status_err:
                     result = {
@@ -434,9 +457,15 @@ class APIHandler:
                     }
             elif action == "analyze":
                 modules = self.data_provider.get_modules() if self.data_provider else []
-                summary = self.data_provider.get_system_summary() if self.data_provider else {}
+                summary = (
+                    self.data_provider.get_system_summary()
+                    if self.data_provider
+                    else {}
+                )
                 active = sum(1 for m in modules if m.get("status") == "Active")
-                error_count = sum(1 for m in modules if m.get("status") not in ("Active", "Unknown"))
+                error_count = sum(
+                    1 for m in modules if m.get("status") not in ("Active", "Unknown")
+                )
                 result = {
                     "total_modules": len(modules),
                     "active_modules": active,
@@ -446,32 +475,57 @@ class APIHandler:
             elif action == "search":
                 query = data.get("query", "").strip()
                 if not query:
-                    self.send_json_response({"error": "search requires 'query' field", "success": False}, status=400)
+                    self.send_json_response(
+                        {"error": "search requires 'query' field", "success": False},
+                        status=400,
+                    )
                     return
                 # CWE-1333: Escape user input to prevent regex injection / ReDoS
                 escaped_query = re.escape(query)
                 pattern = re.compile(escaped_query, re.IGNORECASE)
                 modules = self.data_provider.get_modules() if self.data_provider else []
                 hits = [
-                    m for m in modules
-                    if pattern.search(m.get("name", "")) or pattern.search(m.get("description", ""))
+                    m
+                    for m in modules
+                    if pattern.search(m.get("name", ""))
+                    or pattern.search(m.get("description", ""))
                 ]
                 result = {"query": query, "hits": hits, "count": len(hits)}
             elif action == "docs":
                 module_name = data.get("module", "").strip()
                 if not module_name:
-                    self.send_json_response({"error": "docs requires 'module' field", "success": False}, status=400)
+                    self.send_json_response(
+                        {"error": "docs requires 'module' field", "success": False},
+                        status=400,
+                    )
                     return
-                detail = self.data_provider.get_module_detail(module_name) if self.data_provider else None
+                detail = (
+                    self.data_provider.get_module_detail(module_name)
+                    if self.data_provider
+                    else None
+                )
                 if detail is None:
-                    self.send_json_response({"error": f"Module '{module_name}' not found", "success": False}, status=404)
+                    self.send_json_response(
+                        {
+                            "error": f"Module '{module_name}' not found",
+                            "success": False,
+                        },
+                        status=404,
+                    )
                     return
                 result = detail
             elif action == "add_memory":
                 from codomyrmex.agentic_memory.mcp_tools import memory_put
+
                 content = data.get("content", "")
                 if not content:
-                    self.send_json_response({"error": "Content is required for add_memory", "success": False}, status=400)
+                    self.send_json_response(
+                        {
+                            "error": "Content is required for add_memory",
+                            "success": False,
+                        },
+                        status=400,
+                    )
                     return
                 # memory_put expects **kwargs, so we pass content=content directly
                 result = memory_put(content=content)
@@ -484,19 +538,22 @@ class APIHandler:
 
             # After any trust-changing action, include updated counts
             from codomyrmex.agents.pai.trust_gateway import get_trust_report
+
             report = get_trust_report()
             counts = report.get("counts", {})
 
-            self.send_json_response({
-                "success": True,
-                "action": action,
-                "result": result,
-                "trust_counts": {
-                    "untrusted": counts.get("untrusted", 0),
-                    "verified": counts.get("verified", 0),
-                    "trusted": counts.get("trusted", 0),
-                },
-            })
+            self.send_json_response(
+                {
+                    "success": True,
+                    "action": action,
+                    "result": result,
+                    "trust_counts": {
+                        "untrusted": counts.get("untrusted", 0),
+                        "verified": counts.get("verified", 0),
+                        "trusted": counts.get("trusted", 0),
+                    },
+                }
+            )
         except Exception as e:
             self.send_json_response(
                 {"success": False, "error": str(e), "action": action},
@@ -508,7 +565,7 @@ class APIHandler:
         from codomyrmex.website.server import WebsiteServer
 
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
 
@@ -516,9 +573,11 @@ class APIHandler:
         if content_length > 0:
             try:
                 post_data = self.rfile.read(content_length)
-                payload = post_data.decode('utf-8').strip()
+                payload = post_data.decode("utf-8").strip()
                 if not payload:
-                    self.send_json_response({"error": "No content provided"}, status=400)
+                    self.send_json_response(
+                        {"error": "No content provided"}, status=400
+                    )
                     return
                 data = json.loads(payload)
             except (json.JSONDecodeError, KeyError):
@@ -533,8 +592,13 @@ class APIHandler:
         agents = data.get("agents")
 
         with self._dispatch_lock:
-            if WebsiteServer._dispatch_thread and WebsiteServer._dispatch_thread.is_alive():
-                self.send_json_response({"error": "A dispatch run is already in progress"}, status=429)
+            if (
+                WebsiteServer._dispatch_thread
+                and WebsiteServer._dispatch_thread.is_alive()
+            ):
+                self.send_json_response(
+                    {"error": "A dispatch run is already in progress"}, status=429
+                )
                 return
 
             try:
@@ -546,17 +610,25 @@ class APIHandler:
                     WebsiteServer._dispatch_orch = ConversationOrchestrator.dev_loop(
                         todo_path=todo_path,
                         channel=f"dispatch-{int(time.time())}",
-                        agents=agents
+                        agents=agents,
                     )
                 else:
                     default_agents = [
-                        {"identity": "architect", "persona": "system planner", "provider": "ollama"},
-                        {"identity": "reviewer", "persona": "code executor", "provider": "antigravity"}
+                        {
+                            "identity": "architect",
+                            "persona": "system planner",
+                            "provider": "ollama",
+                        },
+                        {
+                            "identity": "reviewer",
+                            "persona": "code executor",
+                            "provider": "antigravity",
+                        },
                     ]
                     WebsiteServer._dispatch_orch = ConversationOrchestrator(
                         channel=f"dispatch-{int(time.time())}",
                         seed_prompt=seed_prompt,
-                        agents=agents if agents else default_agents
+                        agents=agents or default_agents,
                     )
 
                 def run_orch():
@@ -565,14 +637,18 @@ class APIHandler:
                     except Exception as e:
                         logger.error(f"Dispatch error: {e}")
 
-                WebsiteServer._dispatch_thread = threading.Thread(target=run_orch, daemon=True)
+                WebsiteServer._dispatch_thread = threading.Thread(
+                    target=run_orch, daemon=True
+                )
                 WebsiteServer._dispatch_thread.start()
 
-                self.send_json_response({
-                    "success": True,
-                    "message": "Dispatch started",
-                    "channel": WebsiteServer._dispatch_orch.channel_id
-                })
+                self.send_json_response(
+                    {
+                        "success": True,
+                        "message": "Dispatch started",
+                        "channel": WebsiteServer._dispatch_orch.channel_id,
+                    }
+                )
             except Exception as e:
                 self.send_json_response({"error": str(e)}, status=500)
 
@@ -597,15 +673,17 @@ class APIHandler:
 
             try:
                 from dataclasses import asdict
+
                 log = WebsiteServer._dispatch_orch.get_log()
                 turns = [asdict(t) for t in log.turns]
 
-                is_active = WebsiteServer._dispatch_thread and WebsiteServer._dispatch_thread.is_alive()
+                is_active = (
+                    WebsiteServer._dispatch_thread
+                    and WebsiteServer._dispatch_thread.is_alive()
+                )
 
-                self.send_json_response({
-                    "active": is_active,
-                    "summary": log.summary(),
-                    "turns": turns
-                })
+                self.send_json_response(
+                    {"active": is_active, "summary": log.summary(), "turns": turns}
+                )
             except Exception as e:
                 self.send_json_response({"error": str(e)}, status=500)

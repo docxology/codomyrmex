@@ -11,8 +11,10 @@ except ImportError:
 
     def monitor_performance(*args, **kwargs):
         """No-op decorator used when codomyrmex.performance is not installed."""
+
         def decorator(func):
             return func
+
         return decorator
 
 

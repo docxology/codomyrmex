@@ -131,11 +131,11 @@ class ContactManager:
         q = query.lower()
         results: list[Contact] = []
         for contact in self._contacts.values():
-            if q in contact.name.lower():
-                results.append(contact)
-            elif q in contact.email.lower():
-                results.append(contact)
-            elif any(q in tag.lower() for tag in contact.tags):
+            if (
+                q in contact.name.lower()
+                or q in contact.email.lower()
+                or any(q in tag.lower() for tag in contact.tags)
+            ):
                 results.append(contact)
         return results
 

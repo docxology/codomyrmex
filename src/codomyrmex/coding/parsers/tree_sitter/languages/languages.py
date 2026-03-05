@@ -12,6 +12,7 @@ _tree_sitter = importlib.import_module("tree_sitter")
 
 logger = get_logger(__name__)
 
+
 class LanguageManager:
     """Manages tree-sitter language libraries."""
 
@@ -27,7 +28,9 @@ class LanguageManager:
             cls._languages[lang_name] = lang
             return True
         except Exception as e:
-            logger.error(f"Failed to load tree-sitter language {lang_name} from {library_path}: {e}")
+            logger.error(
+                f"Failed to load tree-sitter language {lang_name} from {library_path}: {e}"
+            )
             return False
 
     @classmethod

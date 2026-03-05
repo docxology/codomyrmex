@@ -61,26 +61,43 @@ class TaskDecomposer:
     Usage::
 
         decomposer = TaskDecomposer()
-        subtasks = decomposer.decompose(
-            "Add user authentication with tests and docs"
-        )
+        subtasks = decomposer.decompose("Add user authentication with tests and docs")
         order = decomposer.execution_order(subtasks)
     """
 
     # Keyword → (role, description_template, priority)
     _PHASE_MAP: list[tuple[set[str], AgentRole, str, int]] = [
-        ({"design", "architect", "plan", "structure"},
-         AgentRole.ARCHITECT, "Design architecture for: {task}", 1),
-        ({"implement", "code", "build", "add", "create", "fix", "write"},
-         AgentRole.CODER, "Implement: {task}", 3),
-        ({"test", "verify", "validate", "check"},
-         AgentRole.TESTER, "Write tests for: {task}", 4),
-        ({"review", "inspect", "audit"},
-         AgentRole.REVIEWER, "Review: {task}", 5),
-        ({"document", "docs", "readme", "docstring"},
-         AgentRole.DOCUMENTER, "Document: {task}", 6),
-        ({"deploy", "ci", "cd", "pipeline", "release"},
-         AgentRole.DEVOPS, "Deploy: {task}", 7),
+        (
+            {"design", "architect", "plan", "structure"},
+            AgentRole.ARCHITECT,
+            "Design architecture for: {task}",
+            1,
+        ),
+        (
+            {"implement", "code", "build", "add", "create", "fix", "write"},
+            AgentRole.CODER,
+            "Implement: {task}",
+            3,
+        ),
+        (
+            {"test", "verify", "validate", "check"},
+            AgentRole.TESTER,
+            "Write tests for: {task}",
+            4,
+        ),
+        ({"review", "inspect", "audit"}, AgentRole.REVIEWER, "Review: {task}", 5),
+        (
+            {"document", "docs", "readme", "docstring"},
+            AgentRole.DOCUMENTER,
+            "Document: {task}",
+            6,
+        ),
+        (
+            {"deploy", "ci", "cd", "pipeline", "release"},
+            AgentRole.DEVOPS,
+            "Deploy: {task}",
+            7,
+        ),
     ]
 
     def decompose(self, task: str) -> list[SubTask]:
@@ -150,7 +167,9 @@ class TaskDecomposer:
         try:
             ordered_ids = kahn_topological_sort(
                 task_map,
-                lambda tid: [d for d in task_map[tid].depends_on if d and d in valid_ids],
+                lambda tid: [
+                    d for d in task_map[tid].depends_on if d and d in valid_ids
+                ],
             )
         except ValueError as exc:
             raise CyclicDependencyError(str(exc)) from exc

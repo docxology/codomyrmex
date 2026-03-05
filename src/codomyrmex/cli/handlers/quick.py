@@ -22,7 +22,7 @@ def handle_quick_run(
     args: list[str] | None = None,
     timeout: int = 60,
     parallel: bool = False,
-    verbose: bool = False
+    verbose: bool = False,
 ) -> bool:
     """Quick run a script, module, or workflow.
 
@@ -63,7 +63,7 @@ def handle_quick_run(
             return result["status"] == "passed"
 
         # Case 2: Directory of scripts
-        elif target_path.is_dir():
+        if target_path.is_dir():
             scripts = discover_scripts(target_path, max_depth=2)
             if not scripts:
                 print(f"No scripts found in {target_path}")
@@ -76,26 +76,27 @@ def handle_quick_run(
                 result = runner.run_scripts(scripts, timeout=timeout)
                 _print_batch_result(result)
                 return result.success
-            else:
-                success = True
-                for script in scripts:
-                    print(f"  Running: {script.name}")
-                    r = run_script(script, timeout=timeout)
-                    if r["status"] != "passed":
-                        success = False
-                        if not verbose:
-                            print(f"    FAILED: {r.get('error', 'Unknown error')}")
-                return success
+            success = True
+            for script in scripts:
+                print(f"  Running: {script.name}")
+                r = run_script(script, timeout=timeout)
+                if r["status"] != "passed":
+                    success = False
+                    if not verbose:
+                        print(f"    FAILED: {r.get('error', 'Unknown error')}")
+            return success
 
         # Case 3: Module name (try to run module demo)
-        elif "." not in target and "/" not in target:
+        if "." not in target and "/" not in target:
             print(f"Running module: {target}")
             from codomyrmex.cli.handlers import handle_module_demo
+
             return handle_module_demo(target)
 
         # Case 4: Glob pattern
-        elif "*" in target:
+        if "*" in target:
             from glob import glob
+
             scripts = [Path(p) for p in glob(target) if p.endswith(".py")]
             if not scripts:
                 print(f"No scripts matching pattern: {target}")
@@ -107,9 +108,8 @@ def handle_quick_run(
             _print_batch_result(result)
             return result.success
 
-        else:
-            print(f"Unknown target: {target}")
-            return False
+        print(f"Unknown target: {target}")
+        return False
 
     except Exception as e:
         print(f"Error: {e}")
@@ -135,6 +135,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
     async def run_command(cmd: str, _task_results: dict = None) -> dict[str, Any]:
         """Run a single command."""
         import subprocess
+
         result = subprocess.run(
             cmd,
             shell=True,  # SECURITY: Intentional — pipe executor runs CLI command strings
@@ -147,7 +148,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
             "returncode": result.returncode,
             "stdout": result.stdout,
             "stderr": result.stderr,
-            "success": result.returncode == 0
+            "success": result.returncode == 0,
         }
 
     # Create tasks for each command
@@ -162,13 +163,10 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
         def make_action(command):
             async def action(_task_results=None):
                 return await run_command(command, _task_results)
+
             return action
 
-        workflow.add_task(
-            name=task_name,
-            action=make_action(cmd),
-            dependencies=deps
-        )
+        workflow.add_task(name=task_name, action=make_action(cmd), dependencies=deps)
         prev_task = task_name
 
     # Run workflow
@@ -193,10 +191,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
 
 
 def handle_quick_batch(
-    targets: list[str],
-    workers: int = 4,
-    timeout: int = 60,
-    verbose: bool = False
+    targets: list[str], workers: int = 4, timeout: int = 60, verbose: bool = False
 ) -> bool:
     """Run multiple targets in parallel batches.
 
@@ -222,6 +217,7 @@ def handle_quick_batch(
             all_scripts.extend(discover_scripts(target_path))
         elif "*" in target:
             from glob import glob
+
             all_scripts.extend(Path(p) for p in glob(target) if p.endswith(".py"))
 
     if not all_scripts:
@@ -238,7 +234,7 @@ def handle_quick_batch(
     runner = ParallelRunner(
         max_workers=workers,
         progress_callback=progress if verbose else None,
-        default_timeout=timeout
+        default_timeout=timeout,
     )
 
     result = runner.run_scripts(all_scripts)
@@ -248,9 +244,7 @@ def handle_quick_batch(
 
 
 def handle_quick_chain(
-    scripts: list[str],
-    timeout: int = 60,
-    continue_on_error: bool = False
+    scripts: list[str], timeout: int = 60, continue_on_error: bool = False
 ) -> bool:
     """Chain scripts to run sequentially, passing results.
 
@@ -299,16 +293,16 @@ def handle_quick_chain(
 
         prev_result = result
 
-    print(f"\nChain {'completed' if success else 'failed'}: "
-          f"{sum(1 for r in results if r['status'] == 'passed')}/{len(results)} passed")
+    print(
+        f"\nChain {'completed' if success else 'failed'}: "
+        f"{sum(1 for r in results if r['status'] == 'passed')}/{len(results)} passed"
+    )
 
     return success
 
 
 def handle_quick_workflow(
-    definition_file: str,
-    params: str | None = None,
-    verbose: bool = False
+    definition_file: str, params: str | None = None, verbose: bool = False
 ) -> bool:
     """Execute a workflow from a definition file.
 
@@ -366,9 +360,8 @@ def handle_quick_workflow(
                 for step, _step_result in result["results"].items():
                     print(f"  ✓ {step}")
             return True
-        else:
-            print(f"Workflow failed: {result.get('error', 'Unknown error')}")
-            return False
+        print(f"Workflow failed: {result.get('error', 'Unknown error')}")
+        return False
 
     except Exception as e:
         print(f"Workflow execution failed: {e}")
@@ -405,4 +398,6 @@ def _print_batch_result(result):
         print("\nFailed scripts:")
         for r in result.results:
             if r.get("status") != "passed":
-                print(f"  ✗ {r.get('name', 'unknown')}: {r.get('error', r.get('status'))}")
+                print(
+                    f"  ✗ {r.get('name', 'unknown')}: {r.get('error', r.get('status'))}"
+                )

@@ -89,7 +89,6 @@ class ModelBase(ABC):
         Returns:
             Prediction results
         """
-        pass
 
     @abstractmethod
     def update(self, data: dict[str, Any], outcome: Any) -> None:
@@ -99,7 +98,6 @@ class ModelBase(ABC):
             data: Input data
             outcome: Observed outcome
         """
-        pass
 
     def to_dict(self) -> dict[str, Any]:
         """Convert model to dictionary."""
@@ -107,4 +105,3 @@ class ModelBase(ABC):
             "name": self.name,
             "config": self.config,
         }
-

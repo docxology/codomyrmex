@@ -105,10 +105,7 @@ class TestTranscriberInterfaceIntegration:
     @pytest.mark.skipif(not WHISPER_AVAILABLE, reason="faster-whisper is not installed")
     def test_transcriber_whisper(self, generated_audio_file: Path):
         """Test Transcriber interface with whisper provider."""
-        transcriber = Transcriber(
-            provider="whisper",
-            model_size=WhisperModelSize.TINY
-        )
+        transcriber = Transcriber(provider="whisper", model_size=WhisperModelSize.TINY)
         result = transcriber.transcribe(generated_audio_file)
 
         assert result.text

@@ -273,9 +273,8 @@ class TestLocalSemaphoreBasic:
 
     def test_context_manager_timeout_raises(self):
         sem = LocalSemaphore(value=0)
-        with pytest.raises(TimeoutError):
-            with sem:
-                pass
+        with pytest.raises(TimeoutError), sem:
+            pass
 
     def test_threaded_contention(self):
         sem = LocalSemaphore(value=2)

@@ -3,6 +3,7 @@
 Tests DashboardMixin via a minimal concrete subclass that supplies controlled
 stub implementations of all required collaborators (pyscn_analyzer, etc.).
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -108,7 +109,9 @@ class TestCalculateOverallScore:
 
     def test_missing_score_key_treated_as_zero(self) -> None:
         empty: dict = {}
-        assert self.dash._calculate_overall_score(empty, empty, empty, empty, empty) == 0.0
+        assert (
+            self.dash._calculate_overall_score(empty, empty, empty, empty, empty) == 0.0
+        )
 
     def test_complexity_weight_is_25_pct(self) -> None:
         complexity = {"score": 100.0}
@@ -135,16 +138,32 @@ class TestDetermineActions:
 
     def test_low_complexity_not_actioned(self) -> None:
         issues = [{"function_name": "bar", "file_path": "a.py", "complexity": 10}]
-        assert self.dash._determine_priority_actions_from_dashboard(issues, [], []) == []
+        assert (
+            self.dash._determine_priority_actions_from_dashboard(issues, [], []) == []
+        )
 
     def test_critical_dead_code_adds_action(self) -> None:
-        dead = [{"severity": "critical", "file_path": "a.py", "line_number": 10, "reason": "unused"}]
+        dead = [
+            {
+                "severity": "critical",
+                "file_path": "a.py",
+                "line_number": 10,
+                "reason": "unused",
+            }
+        ]
         actions = self.dash._determine_priority_actions_from_dashboard([], dead, [])
         assert len(actions) == 1
         assert actions[0]["type"] == "dead_code_removal"
 
     def test_warning_dead_code_not_actioned(self) -> None:
-        dead = [{"severity": "warning", "file_path": "a.py", "line_number": 10, "reason": "unused"}]
+        dead = [
+            {
+                "severity": "warning",
+                "file_path": "a.py",
+                "line_number": 10,
+                "reason": "unused",
+            }
+        ]
         result = self.dash._determine_priority_actions_from_dashboard([], dead, [])
         assert result == []
 

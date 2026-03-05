@@ -129,7 +129,9 @@ class Identity:
         pw.register("alice", "s3cret")
         ident.register_provider("password", pw)
 
-        token = ident.login("alice", {"user_id": "alice", "password": "s3cret"}, provider="password")
+        token = ident.login(
+            "alice", {"user_id": "alice", "password": "s3cret"}, provider="password"
+        )
         assert token is not None
         assert ident.validate_token(token.token)
         ident.logout(token.token)

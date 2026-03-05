@@ -99,7 +99,12 @@ class ProjectScanner:
     ) -> None:
         self._extensions = extensions or {"py", "md", "toml", "yaml", "yml"}
         self._exclude_dirs = exclude_dirs or {
-            "__pycache__", ".git", ".venv", "node_modules", ".eggs", "*.egg-info",
+            "__pycache__",
+            ".git",
+            ".venv",
+            "node_modules",
+            ".eggs",
+            "*.egg-info",
         }
 
     def scan(self, root: str | Path) -> ProjectContext:
@@ -122,7 +127,8 @@ class ProjectScanner:
         for dirpath, dirnames, filenames in os.walk(root_path):
             # Exclude dirs
             dirnames[:] = [
-                d for d in dirnames
+                d
+                for d in dirnames
                 if d not in self._exclude_dirs and not d.endswith(".egg-info")
             ]
 

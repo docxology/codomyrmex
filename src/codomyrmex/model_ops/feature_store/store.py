@@ -17,27 +17,22 @@ class FeatureStore(ABC):
     @abstractmethod
     def register_feature(self, definition: FeatureDefinition) -> None:
         """Register a feature definition."""
-        pass
 
     @abstractmethod
     def get_feature_definition(self, name: str) -> FeatureDefinition | None:
         """Get feature definition by name."""
-        pass
 
     @abstractmethod
     def set_value(self, feature_name: str, entity_id: str, value: Any) -> None:
         """Set a feature value for an entity."""
-        pass
 
     @abstractmethod
     def get_value(self, feature_name: str, entity_id: str) -> FeatureValue | None:
         """Get a feature value for an entity."""
-        pass
 
     @abstractmethod
     def get_vector(self, entity_id: str, feature_names: list[str]) -> FeatureVector:
         """Get multiple features for an entity."""
-        pass
 
 
 class InMemoryFeatureStore(FeatureStore):
@@ -64,7 +59,9 @@ class InMemoryFeatureStore(FeatureStore):
 
     def __init__(self):
         self._definitions: dict[str, FeatureDefinition] = {}
-        self._values: dict[str, dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
+        self._values: dict[
+            str, dict[str, FeatureValue]
+        ] = {}  # feature_name -> entity_id -> value
         self._lock = threading.Lock()
 
     def register_feature(self, definition: FeatureDefinition) -> None:

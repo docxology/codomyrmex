@@ -23,13 +23,13 @@ __version__ = "1.0.0"
 HAS_AIDER: bool = shutil.which("aider") is not None
 
 __all__ = [
+    "HAS_AIDER",
+    "AiderAPIKeyError",
     "AiderConfig",
     "AiderError",
     "AiderNotInstalledError",
-    "AiderTimeoutError",
-    "AiderAPIKeyError",
     "AiderRunner",
-    "HAS_AIDER",
+    "AiderTimeoutError",
     "get_aider_version",
     "get_config",
 ]

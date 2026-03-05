@@ -127,8 +127,10 @@ class Ledger:
         cash = ledger.create_account("Cash", AccountType.ASSET)
         revenue = ledger.create_account("Sales Revenue", AccountType.REVENUE)
         ledger.post_transaction(
-            [{"account_id": cash.id, "amount": 1000},
-             {"account_id": revenue.id, "amount": -1000}],
+            [
+                {"account_id": cash.id, "amount": 1000},
+                {"account_id": revenue.id, "amount": -1000},
+            ],
             description="Sold goods for cash",
         )
         print(ledger.get_balance(cash.id))  # 1000.0
@@ -227,8 +229,7 @@ class Ledger:
         total = sum(e.amount for e in tx_entries)
         if total != Decimal("0.00"):
             raise LedgerError(
-                f"Transaction does not balance: net amount is {total} "
-                "(must be 0)."
+                f"Transaction does not balance: net amount is {total} (must be 0)."
             )
 
         txn = Transaction(
@@ -334,9 +335,9 @@ class Ledger:
                         entry.amount
                     )
                 elif acct.account_type == AccountType.EXPENSE:
-                    expenses[acct.name] = expenses.get(acct.name, Decimal("0.00")) + abs(
-                        entry.amount
-                    )
+                    expenses[acct.name] = expenses.get(
+                        acct.name, Decimal("0.00")
+                    ) + abs(entry.amount)
 
         total_rev = sum(revenue.values(), Decimal("0.00"))
         total_exp = sum(expenses.values(), Decimal("0.00"))

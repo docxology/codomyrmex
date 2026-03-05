@@ -24,6 +24,7 @@ logger = get_logger(__name__)
 # Optional database drivers
 try:
     import psycopg2
+
     POSTGRESQL_AVAILABLE = True
 except ImportError:
     psycopg2 = None
@@ -31,12 +32,19 @@ except ImportError:
 
 try:
     import pymysql
+
     MYSQL_AVAILABLE = True
 except ImportError:
     pymysql = None
     MYSQL_AVAILABLE = False
 
-__all__ = ["Migration", "MigrationResult", "DatabaseConnector", "MigrationManager", "run_migrations"]
+__all__ = [
+    "DatabaseConnector",
+    "Migration",
+    "MigrationManager",
+    "MigrationResult",
+    "run_migrations",
+]
 
 
 @dataclass
@@ -93,12 +101,11 @@ class DatabaseConnector:
         """Parse database type from URL."""
         if url.startswith("sqlite"):
             return "sqlite"
-        elif url.startswith("postgresql") or url.startswith("postgres"):
+        if url.startswith("postgresql") or url.startswith("postgres"):
             return "postgresql"
-        elif url.startswith("mysql"):
+        if url.startswith("mysql"):
             return "mysql"
-        else:
-            raise CodomyrmexError(f"Unsupported database URL format: {url}")
+        raise CodomyrmexError(f"Unsupported database URL format: {url}")
 
     def _parse_connection_params(self) -> dict[str, Any]:
         """Parse connection parameters from URL."""
@@ -106,21 +113,24 @@ class DatabaseConnector:
 
         if self._db_type == "sqlite":
             # sqlite:///path/to/db.sqlite or sqlite:///:memory:
-            match = re.match(r'sqlite:///(.+)', url)
+            match = re.match(r"sqlite:///(.+)", url)
             if match:
                 return {"database": match.group(1)}
             raise CodomyrmexError(f"Invalid SQLite URL: {url}")
 
         # PostgreSQL or MySQL: protocol://user:pass@host:port/database
-        pattern = r'(?:postgresql|postgres|mysql)://(?:([^:]+):([^@]+)@)?([^:\/]+)(?::(\d+))?/(.+)'
+        pattern = r"(?:postgresql|postgres|mysql)://(?:([^:]+):([^@]+)@)?([^:\/]+)(?::(\d+))?/(.+)"
         match = re.match(pattern, url)
         if match:
             return {
-                "user": match.group(1) or ("postgres" if self._db_type == "postgresql" else "root"),
+                "user": match.group(1)
+                or ("postgres" if self._db_type == "postgresql" else "root"),
                 "password": match.group(2) or "",
                 "host": match.group(3),
-                "port": int(match.group(4)) if match.group(4) else (5432 if self._db_type == "postgresql" else 3306),
-                "database": match.group(5)
+                "port": int(match.group(4))
+                if match.group(4)
+                else (5432 if self._db_type == "postgresql" else 3306),
+                "database": match.group(5),
             }
         raise CodomyrmexError(f"Invalid database URL: {url}")
 
@@ -144,7 +154,7 @@ class DatabaseConnector:
                 port=params["port"],
                 database=params["database"],
                 user=params["user"],
-                password=params["password"]
+                password=params["password"],
             )
             logger.info(f"Connected to PostgreSQL database: {params['database']}")
 
@@ -158,7 +168,7 @@ class DatabaseConnector:
                 port=params["port"],
                 database=params["database"],
                 user=params["user"],
-                password=params["password"]
+                password=params["password"],
             )
             logger.info(f"Connected to MySQL database: {params['database']}")
 
@@ -190,7 +200,7 @@ class DatabaseConnector:
             else:
                 cursor.execute(sql)
 
-            rows_affected = cursor.rowcount if cursor.rowcount >= 0 else 0
+            rows_affected = max(cursor.rowcount, 0)
             return rows_affected, cursor
         except Exception as e:
             raise CodomyrmexError(f"SQL execution failed: {e}") from e
@@ -228,17 +238,17 @@ class DatabaseConnector:
         statements = []
         current = []
 
-        for line in sql_script.split('\n'):
+        for line in sql_script.split("\n"):
             line = line.strip()
-            if line.startswith('--'):
+            if line.startswith("--"):
                 continue
             current.append(line)
-            if line.endswith(';'):
-                statements.append('\n'.join(current))
+            if line.endswith(";"):
+                statements.append("\n".join(current))
                 current = []
 
         if current:
-            statements.append('\n'.join(current))
+            statements.append("\n".join(current))
 
         return [s for s in statements if s.strip()]
 
@@ -274,9 +284,7 @@ class MigrationManager:
     """
 
     def __init__(
-        self,
-        workspace_dir: str | None = None,
-        database_url: str | None = None
+        self, workspace_dir: str | None = None, database_url: str | None = None
     ):
         """Initialize migration manager.
 
@@ -308,7 +316,9 @@ class MigrationManager:
     def _get_connector(self) -> DatabaseConnector:
         """Get or create database connector."""
         if not self._database_url:
-            raise CodomyrmexError("Database URL not set. Call set_database_url() first.")
+            raise CodomyrmexError(
+                "Database URL not set. Call set_database_url() first."
+            )
 
         if not self._connector:
             self._connector = DatabaseConnector(self._database_url)
@@ -339,9 +349,11 @@ class MigrationManager:
                     sql=data["sql"],
                     rollback_sql=data.get("rollback_sql"),
                     dependencies=data.get("dependencies", []),
-                    created_at=datetime.fromisoformat(data.get("created_at", datetime.now().isoformat())),
+                    created_at=datetime.fromisoformat(
+                        data.get("created_at", datetime.now().isoformat())
+                    ),
                     status=data.get("status", "pending"),
-                    checksum=data.get("checksum", "")
+                    checksum=data.get("checksum", ""),
                 )
 
                 self._migrations[migration.id] = migration
@@ -349,7 +361,9 @@ class MigrationManager:
             except (json.JSONDecodeError, KeyError) as e:
                 logger.warning(f"Failed to load migration {migration_file}: {e}")
 
-        logger.info(f"Loaded {len(self._migrations)} migrations from {self.migrations_dir}")
+        logger.info(
+            f"Loaded {len(self._migrations)} migrations from {self.migrations_dir}"
+        )
 
     def create_migration(
         self,
@@ -357,7 +371,7 @@ class MigrationManager:
         description: str,
         sql: str,
         rollback_sql: str | None = None,
-        dependencies: list[str] | None = None
+        dependencies: list[str] | None = None,
     ) -> Migration:
         """Create a new migration.
 
@@ -380,33 +394,35 @@ class MigrationManager:
             description=description,
             sql=sql,
             rollback_sql=rollback_sql,
-            dependencies=dependencies or []
+            dependencies=dependencies or [],
         )
 
         self._migrations[migration_id] = migration
 
         # Save migration to file
         migration_file = self.migrations_dir / f"{migration_id}.json"
-        with open(migration_file, 'w') as f:
-            json.dump({
-                "id": migration.id,
-                "name": migration.name,
-                "description": migration.description,
-                "sql": migration.sql,
-                "rollback_sql": migration.rollback_sql,
-                "dependencies": migration.dependencies,
-                "created_at": migration.created_at.isoformat(),
-                "status": migration.status,
-                "checksum": migration.checksum
-            }, f, indent=2)
+        with open(migration_file, "w") as f:
+            json.dump(
+                {
+                    "id": migration.id,
+                    "name": migration.name,
+                    "description": migration.description,
+                    "sql": migration.sql,
+                    "rollback_sql": migration.rollback_sql,
+                    "dependencies": migration.dependencies,
+                    "created_at": migration.created_at.isoformat(),
+                    "status": migration.status,
+                    "checksum": migration.checksum,
+                },
+                f,
+                indent=2,
+            )
 
         logger.info(f"Created migration: {migration_id}")
         return migration
 
     def apply_migration(
-        self,
-        migration_id: str,
-        dry_run: bool = False
+        self, migration_id: str, dry_run: bool = False
     ) -> MigrationResult:
         """Apply a migration to the database.
 
@@ -430,7 +446,7 @@ class MigrationManager:
                 migration_id=migration_id,
                 success=True,
                 execution_time=0.0,
-                error_message="Already applied"
+                error_message="Already applied",
             )
 
         # Check dependencies
@@ -444,7 +460,7 @@ class MigrationManager:
                 migration_id=migration_id,
                 success=True,
                 execution_time=0.0,
-                error_message="Dry run - not executed"
+                error_message="Dry run - not executed",
             )
 
         connector = self._get_connector()
@@ -459,8 +475,13 @@ class MigrationManager:
             connector.execute(
                 """INSERT INTO _migrations (id, name, description, checksum, execution_time_ms, status)
                    VALUES (?, ?, ?, ?, ?, 'applied')""",
-                (migration.id, migration.name, migration.description,
-                 migration.checksum, int(execution_time * 1000))
+                (
+                    migration.id,
+                    migration.name,
+                    migration.description,
+                    migration.checksum,
+                    int(execution_time * 1000),
+                ),
             )
 
             connector.commit()
@@ -474,7 +495,7 @@ class MigrationManager:
                 success=True,
                 execution_time=execution_time,
                 rows_affected=rows_affected,
-                statements_executed=statements_executed
+                statements_executed=statements_executed,
             )
 
             self._applied_migrations[migration_id] = result
@@ -495,7 +516,7 @@ class MigrationManager:
                 migration_id=migration_id,
                 success=False,
                 execution_time=execution_time,
-                error_message=str(e)
+                error_message=str(e),
             )
 
             migration.status = "failed"
@@ -521,14 +542,18 @@ class MigrationManager:
             raise CodomyrmexError(f"Migration not found: {migration_id}")
 
         if not migration.rollback_sql:
-            raise CodomyrmexError(f"No rollback SQL defined for migration: {migration_id}")
+            raise CodomyrmexError(
+                f"No rollback SQL defined for migration: {migration_id}"
+            )
 
         connector = self._get_connector()
         start_time = time.time()
 
         try:
             # Execute rollback SQL
-            rows_affected, statements_executed = connector.execute_script(migration.rollback_sql)
+            rows_affected, statements_executed = connector.execute_script(
+                migration.rollback_sql
+            )
             execution_time = time.time() - start_time
 
             # Remove from tracking table
@@ -548,7 +573,7 @@ class MigrationManager:
                 success=True,
                 execution_time=execution_time,
                 rows_affected=rows_affected,
-                statements_executed=statements_executed
+                statements_executed=statements_executed,
             )
 
             logger.info(
@@ -566,7 +591,7 @@ class MigrationManager:
                 migration_id=f"rollback_{migration_id}",
                 success=False,
                 execution_time=execution_time,
-                error_message=str(e)
+                error_message=str(e),
             )
 
             logger.error(f"Failed to rollback migration {migration_id}: {e}")
@@ -578,27 +603,35 @@ class MigrationManager:
             connector = self._get_connector()
             _, cursor = connector.execute(
                 "SELECT 1 FROM _migrations WHERE id = ? AND status = 'applied'",
-                (migration_id,)
+                (migration_id,),
             )
             return cursor.fetchone() is not None
         except Exception as e:
-            logger.warning("Failed to check migration applied status for %s: %s", migration_id, e)
+            logger.warning(
+                "Failed to check migration applied status for %s: %s", migration_id, e
+            )
             return False
 
     def _save_migration_history(self, migration: Migration, result: MigrationResult):
         """Save migration result to history file."""
         history_file = self.migration_history_dir / f"{migration.id}_history.json"
-        with open(history_file, 'w') as f:
-            json.dump({
-                "migration_id": migration.id,
-                "name": migration.name,
-                "applied_at": migration.applied_at.isoformat() if migration.applied_at else None,
-                "success": result.success,
-                "execution_time": result.execution_time,
-                "rows_affected": result.rows_affected,
-                "statements_executed": result.statements_executed,
-                "error_message": result.error_message
-            }, f, indent=2)
+        with open(history_file, "w") as f:
+            json.dump(
+                {
+                    "migration_id": migration.id,
+                    "name": migration.name,
+                    "applied_at": migration.applied_at.isoformat()
+                    if migration.applied_at
+                    else None,
+                    "success": result.success,
+                    "execution_time": result.execution_time,
+                    "rows_affected": result.rows_affected,
+                    "statements_executed": result.statements_executed,
+                    "error_message": result.error_message,
+                },
+                f,
+                indent=2,
+            )
 
     def get_migration_status(self, migration_id: str) -> dict[str, Any] | None:
         """Get status of a migration."""
@@ -613,9 +646,11 @@ class MigrationManager:
             "name": migration.name,
             "description": migration.description,
             "status": "applied" if is_applied else migration.status,
-            "applied_at": migration.applied_at.isoformat() if migration.applied_at else None,
+            "applied_at": migration.applied_at.isoformat()
+            if migration.applied_at
+            else None,
             "dependencies": migration.dependencies,
-            "checksum": migration.checksum
+            "checksum": migration.checksum,
         }
 
     def list_migrations(self) -> list[dict[str, Any]]:
@@ -624,15 +659,19 @@ class MigrationManager:
 
         for migration in self._migrations.values():
             is_applied = self._is_migration_applied(migration.id)
-            migrations.append({
-                "id": migration.id,
-                "name": migration.name,
-                "description": migration.description,
-                "status": "applied" if is_applied else migration.status,
-                "applied_at": migration.applied_at.isoformat() if migration.applied_at else None,
-                "dependencies": migration.dependencies,
-                "checksum": migration.checksum
-            })
+            migrations.append(
+                {
+                    "id": migration.id,
+                    "name": migration.name,
+                    "description": migration.description,
+                    "status": "applied" if is_applied else migration.status,
+                    "applied_at": migration.applied_at.isoformat()
+                    if migration.applied_at
+                    else None,
+                    "dependencies": migration.dependencies,
+                    "checksum": migration.checksum,
+                }
+            )
 
         # Sort by ID (which includes timestamp)
         migrations.sort(key=lambda m: m["id"])
@@ -668,9 +707,7 @@ class MigrationManager:
 
 
 def run_migrations(
-    migration_dir: str,
-    database_url: str,
-    direction: str = "up"
+    migration_dir: str, database_url: str, direction: str = "up"
 ) -> dict[str, Any]:
     """Run database migrations.
 
@@ -708,13 +745,13 @@ def run_migrations(
                         "migration_id": r.migration_id,
                         "success": r.success,
                         "execution_time": r.execution_time,
-                        "error_message": r.error_message
+                        "error_message": r.error_message,
                     }
                     for r in results
-                ]
+                ],
             }
 
-        elif direction == "down":
+        if direction == "down":
             # Rollback the most recently applied migration
             applied = [m for m in all_migrations if m["status"] == "applied"]
             if not applied:
@@ -722,7 +759,7 @@ def run_migrations(
                     "direction": "down",
                     "migrations_processed": 0,
                     "success": True,
-                    "message": "No migrations to rollback"
+                    "message": "No migrations to rollback",
                 }
 
             # Get most recent migration
@@ -737,12 +774,11 @@ def run_migrations(
                     "migration_id": result.migration_id,
                     "success": result.success,
                     "execution_time": result.execution_time,
-                    "error_message": result.error_message
-                }
+                    "error_message": result.error_message,
+                },
             }
 
-        else:
-            raise CodomyrmexError(f"Invalid migration direction: {direction}")
+        raise CodomyrmexError(f"Invalid migration direction: {direction}")
 
     finally:
         manager.close()

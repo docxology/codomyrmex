@@ -23,17 +23,17 @@ from codomyrmex.cloud.google_workspace.gmail import GoogleGmailClient
 from codomyrmex.cloud.google_workspace.sheets import GoogleSheetsClient
 
 __all__ = [
+    "GoogleCalendarClient",
+    "GoogleChatClient",
     "GoogleCredentials",
-    "GoogleWorkspaceBase",
+    "GoogleDocsClient",
     "GoogleDriveClient",
     "GoogleGmailClient",
-    "GoogleCalendarClient",
     "GoogleSheetsClient",
-    "GoogleDocsClient",
-    "GoogleChatClient",
-    "GoogleWorkspaceError",
+    "GoogleWorkspaceAPIError",
     "GoogleWorkspaceAuthError",
+    "GoogleWorkspaceBase",
+    "GoogleWorkspaceError",
     "GoogleWorkspaceNotFoundError",
     "GoogleWorkspaceQuotaError",
-    "GoogleWorkspaceAPIError",
 ]

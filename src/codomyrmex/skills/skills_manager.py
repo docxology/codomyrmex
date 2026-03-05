@@ -9,6 +9,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -205,7 +206,9 @@ class SkillsManager:
             try:
                 import yaml
             except ImportError:
-                logger.error("PyYAML not installed. Install with: uv pip install pyyaml")
+                logger.error(
+                    "PyYAML not installed. Install with: uv pip install pyyaml"
+                )
                 return False
 
             with open(skill_file, "w", encoding="utf-8") as f:

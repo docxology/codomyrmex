@@ -59,7 +59,10 @@ class AlertManager:
         for rule_name, rule in self._rules.items():
             try:
                 if rule["condition"](metrics):
-                    if rule_name not in self._alerts or not self._alerts[rule_name].is_active:
+                    if (
+                        rule_name not in self._alerts
+                        or not self._alerts[rule_name].is_active
+                    ):
                         with self._lock:
                             self._counter += 1
                             alert = Alert(
@@ -70,9 +73,8 @@ class AlertManager:
                             )
                             self._alerts[rule_name] = alert
                             new_alerts.append(alert)
-                else:
-                    if rule_name in self._alerts and self._alerts[rule_name].is_active:
-                        self._alerts[rule_name].resolve()
+                elif rule_name in self._alerts and self._alerts[rule_name].is_active:
+                    self._alerts[rule_name].resolve()
             except Exception as e:
                 logger.warning("Alert rule evaluation failed for %s: %s", rule_name, e)
 

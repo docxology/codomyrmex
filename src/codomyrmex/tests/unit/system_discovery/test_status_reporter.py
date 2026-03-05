@@ -790,7 +790,9 @@ class TestDisplayHelpers:
 class TestDisplaySummary:
     """Tests for _display_summary with various health scores."""
 
-    def _make_report(self, venv=True, src=True, pkg=True, dep_rate=90.0, git=True, tools_any=True):
+    def _make_report(
+        self, venv=True, src=True, pkg=True, dep_rate=90.0, git=True, tools_any=True
+    ):
         return {
             "python_environment": {"virtual_env": venv},
             "project_structure": {"src_exists": src, "codomyrmex_package": pkg},
@@ -830,7 +832,12 @@ class TestDisplaySummary:
 
         reporter = StatusReporter()
         report = self._make_report(
-            venv=False, src=False, pkg=False, dep_rate=10.0, git=False, tools_any=False,
+            venv=False,
+            src=False,
+            pkg=False,
+            dep_rate=10.0,
+            git=False,
+            tools_any=False,
         )
         reporter._display_summary(report)
         captured = capsys.readouterr()

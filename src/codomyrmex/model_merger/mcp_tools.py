@@ -72,10 +72,7 @@ def create_model_soup(
 
         from .merger import model_soup
 
-        np_dicts = [
-            {k: np.array(v) for k, v in d.items()}
-            for d in param_dicts
-        ]
+        np_dicts = [{k: np.array(v) for k, v in d.items()} for d in param_dicts]
 
         result = model_soup(np_dicts, weights=weights)
 

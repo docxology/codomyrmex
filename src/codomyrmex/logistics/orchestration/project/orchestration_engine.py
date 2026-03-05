@@ -33,6 +33,7 @@ except ImportError:
 
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
+
         def decorator(func):
             return func
 
@@ -152,15 +153,15 @@ class OrchestrationSession:
             try:
                 sess.created_at = datetime.fromisoformat(data["created_at"])
             except Exception as e:
-                logger.warning("Failed to parse created_at '%s': %s", data["created_at"], e)
+                logger.warning(
+                    "Failed to parse created_at '%s': %s", data["created_at"], e
+                )
         if data.get("status"):
             try:
                 sess.status = SessionStatus(data["status"])
             except Exception:
                 sess.status = SessionStatus.PENDING
         return sess
-
-
 
 
 class OrchestrationEngine:
@@ -339,7 +340,9 @@ class OrchestrationEngine:
             }
 
             # Update context
-            context.status = SessionStatus.COMPLETED if result["success"] else SessionStatus.FAILED
+            context.status = (
+                SessionStatus.COMPLETED if result["success"] else SessionStatus.FAILED
+            )
             context.completed_at = datetime.now(UTC)
 
             # Emit events
@@ -492,8 +495,7 @@ class OrchestrationEngine:
                     "results": results,
                     "execution_stats": self.task_orchestrator.get_execution_stats(),
                 }
-            else:
-                return {"success": False, "error": "Workflow execution timed out"}
+            return {"success": False, "error": "Workflow execution timed out"}
 
         except Exception as e:
             logger.error(f"Complex workflow execution failed: {e}")
@@ -593,7 +595,7 @@ class OrchestrationEngine:
                     except Exception as e:
                         component_health["status"] = "error"
                         component_health["error"] = str(e)
-                        health["issues"].append(f"{name}: {str(e)}")
+                        health["issues"].append(f"{name}: {e!s}")
 
                 health["components"][name] = component_health
 
@@ -649,7 +651,7 @@ class OrchestrationEngine:
             logger.info("Shutting down OrchestrationEngine...")
         except (ValueError, OSError) as e:
             print(f"Warning: log stream error during shutdown: {e}")
-            pass  # stream already closed at interpreter shutdown
+            # stream already closed at interpreter shutdown
 
         # Close all active sessions
         session_ids = list(self.active_sessions.keys())
@@ -657,8 +659,9 @@ class OrchestrationEngine:
             try:
                 self.close_session(session_id)
             except (ValueError, OSError) as e:
-                print(f"Warning: error closing session {session_id} during shutdown: {e}")
-                pass
+                print(
+                    f"Warning: error closing session {session_id} during shutdown: {e}"
+                )
 
         # Stop components
         self.task_orchestrator.stop_execution()
@@ -671,7 +674,6 @@ class OrchestrationEngine:
             logger.info("OrchestrationEngine shutdown complete")
         except (ValueError, OSError) as e:
             print(f"Warning: log stream error during shutdown: {e}")
-            pass
 
     def __del__(self):
         """Cleanup on deletion."""
@@ -680,7 +682,6 @@ class OrchestrationEngine:
         except (AttributeError, RuntimeError, OSError, ValueError) as e:
             # Ignore errors during cleanup - object may be partially destroyed
             print(f"Warning: error during OrchestrationEngine cleanup: {e}")
-            pass
 
 
 # MCP Tool Integration (if available)

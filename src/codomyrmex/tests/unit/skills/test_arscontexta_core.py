@@ -59,9 +59,14 @@ class TestMethodologyGraphExtended:
         """list_all returns all added claims."""
         graph = MethodologyGraph()
         for i in range(5):
-            graph.add_claim(ResearchClaim(
-                claim_id=f"RC-{i}", statement=f"s{i}", source="x", domain="d",
-            ))
+            graph.add_claim(
+                ResearchClaim(
+                    claim_id=f"RC-{i}",
+                    statement=f"s{i}",
+                    source="x",
+                    domain="d",
+                )
+            )
         all_claims = graph.list_all()
         assert len(all_claims) == 5
 
@@ -81,9 +86,15 @@ class TestMethodologyGraphExtended:
         """Statistics correctly count edges (bidirectional counted once)."""
         graph = MethodologyGraph()
         for i in range(4):
-            graph.add_claim(ResearchClaim(
-                claim_id=str(i), statement=f"s{i}", source="x", domain="d", confidence=0.5,
-            ))
+            graph.add_claim(
+                ResearchClaim(
+                    claim_id=str(i),
+                    statement=f"s{i}",
+                    source="x",
+                    domain="d",
+                    confidence=0.5,
+                )
+            )
         graph.add_edge("0", "1")
         graph.add_edge("1", "2")
         graph.add_edge("2", "3")
@@ -247,42 +258,64 @@ class TestKernelConfigExtended:
 
     def test_get_by_name_found(self):
         """get_by_name returns the matching primitive."""
-        cfg = KernelConfig(primitives=[
-            KernelPrimitive(name="alpha", layer=KernelLayer.FOUNDATION, description="A"),
-            KernelPrimitive(name="beta", layer=KernelLayer.CONVENTION, description="B"),
-        ])
+        cfg = KernelConfig(
+            primitives=[
+                KernelPrimitive(
+                    name="alpha", layer=KernelLayer.FOUNDATION, description="A"
+                ),
+                KernelPrimitive(
+                    name="beta", layer=KernelLayer.CONVENTION, description="B"
+                ),
+            ]
+        )
         p = cfg.get_by_name("alpha")
         assert p is not None
         assert p.name == "alpha"
 
     def test_get_by_name_not_found(self):
         """get_by_name returns None when name not present."""
-        cfg = KernelConfig(primitives=[
-            KernelPrimitive(name="alpha", layer=KernelLayer.FOUNDATION, description="A"),
-        ])
+        cfg = KernelConfig(
+            primitives=[
+                KernelPrimitive(
+                    name="alpha", layer=KernelLayer.FOUNDATION, description="A"
+                ),
+            ]
+        )
         assert cfg.get_by_name("missing") is None
 
     def test_get_by_layer(self):
         """get_by_layer returns only primitives of the given layer."""
-        cfg = KernelConfig(primitives=[
-            KernelPrimitive(name="a", layer=KernelLayer.FOUNDATION, description="A"),
-            KernelPrimitive(name="b", layer=KernelLayer.CONVENTION, description="B"),
-            KernelPrimitive(name="c", layer=KernelLayer.FOUNDATION, description="C"),
-        ])
+        cfg = KernelConfig(
+            primitives=[
+                KernelPrimitive(
+                    name="a", layer=KernelLayer.FOUNDATION, description="A"
+                ),
+                KernelPrimitive(
+                    name="b", layer=KernelLayer.CONVENTION, description="B"
+                ),
+                KernelPrimitive(
+                    name="c", layer=KernelLayer.FOUNDATION, description="C"
+                ),
+            ]
+        )
         foundation = cfg.get_by_layer(KernelLayer.FOUNDATION)
         assert len(foundation) == 2
 
     def test_validate_dependencies_with_missing(self):
         """validate_dependencies returns names of unresolved deps."""
-        cfg = KernelConfig(primitives=[
-            KernelPrimitive(
-                name="child",
-                layer=KernelLayer.AUTOMATION,
-                description="C",
-                dependencies=["parent-a", "parent-b"],
-            ),
-            KernelPrimitive(name="parent-a", layer=KernelLayer.FOUNDATION, description="PA"),
-        ])
+        cfg = KernelConfig(
+            primitives=[
+                KernelPrimitive(
+                    name="child",
+                    layer=KernelLayer.AUTOMATION,
+                    description="C",
+                    dependencies=["parent-a", "parent-b"],
+                ),
+                KernelPrimitive(
+                    name="parent-a", layer=KernelLayer.FOUNDATION, description="PA"
+                ),
+            ]
+        )
         missing = cfg.validate_dependencies()
         assert "parent-b" in missing
         assert "parent-a" not in missing

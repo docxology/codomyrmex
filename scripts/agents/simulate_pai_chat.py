@@ -13,14 +13,28 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from codomyrmex.tests.simulation.pai_simulator import PAISimulator
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    setup_logging,
+)
 
 
 def main() -> int:
     setup_logging()
-    parser = argparse.ArgumentParser(description="Simulate PAI/Claude Code interaction.")
-    parser.add_argument("--skill-path", default="~/.claude/skills/Codomyrmex", help="Path to PAI skill")
-    parser.add_argument("--command", required=True, help="Slash command to simulate (e.g., /codomyrmexVerify)")
+    parser = argparse.ArgumentParser(
+        description="Simulate PAI/Claude Code interaction."
+    )
+    parser.add_argument(
+        "--skill-path", default="~/.claude/skills/Codomyrmex", help="Path to PAI skill"
+    )
+    parser.add_argument(
+        "--command",
+        required=True,
+        help="Slash command to simulate (e.g., /codomyrmexVerify)",
+    )
 
     args = parser.parse_args()
 
@@ -39,13 +53,13 @@ def main() -> int:
         if success:
             print_success("Simulation Completed Successfully")
             return 0
-        else:
-            print_error("Simulation Failed")
-            return 1
+        print_error("Simulation Failed")
+        return 1
 
     except Exception as e:
         print_error(f"Critical Error: {e}")
         return 1
+
 
 if __name__ == "__main__":
     sys.exit(main())

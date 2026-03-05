@@ -28,6 +28,7 @@ logger = get_logger(__name__)
 @dataclass
 class ExecutionResult:
     """Result of a parallel execution batch."""
+
     total: int = 0
     passed: int = 0
     failed: int = 0
@@ -83,7 +84,7 @@ class ParallelRunner:
         max_workers: int | None = None,
         progress_callback: ProgressCallback | None = None,
         default_timeout: int = 60,
-        fail_fast: bool = False
+        fail_fast: bool = False,
     ):
         """Initialize parallel runner.
 
@@ -146,9 +147,13 @@ class ParallelRunner:
         result = ExecutionResult(total=len(scripts))
         start_time = time.time()
 
-        self._emit_progress("batch", "started", {"total": len(scripts), "workers": self.max_workers})
+        self._emit_progress(
+            "batch", "started", {"total": len(scripts), "workers": self.max_workers}
+        )
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=self.max_workers) as executor:
+        with concurrent.futures.ProcessPoolExecutor(
+            max_workers=self.max_workers
+        ) as executor:
             self._executor = executor
             futures = {}
 
@@ -159,12 +164,7 @@ class ParallelRunner:
 
                 config = configs.get(script.name, {})
                 future = executor.submit(
-                    run_script,
-                    script,
-                    timeout=timeout,
-                    env=env,
-                    cwd=cwd,
-                    config=config
+                    run_script, script, timeout=timeout, env=env, cwd=cwd, config=config
                 )
                 futures[future] = script
                 self._emit_progress(script.name, "submitted", {})
@@ -190,21 +190,31 @@ class ParallelRunner:
                     else:
                         result.failed += 1
 
-                    self._emit_progress(script.name, status, {
-                        "execution_time": script_result.get("execution_time", 0)
-                    })
+                    self._emit_progress(
+                        script.name,
+                        status,
+                        {"execution_time": script_result.get("execution_time", 0)},
+                    )
 
                 except concurrent.futures.CancelledError:
                     result.skipped += 1
                     self._emit_progress(script.name, "cancelled", {})
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
                     result.failed += 1
-                    result.results.append({
-                        "script": str(script),
-                        "name": script.name,
-                        "status": "error",
-                        "error": str(e)
-                    })
+                    result.results.append(
+                        {
+                            "script": str(script),
+                            "name": script.name,
+                            "status": "error",
+                            "error": str(e),
+                        }
+                    )
                     self._emit_progress(script.name, "error", {"error": str(e)})
 
             self._executor = None
@@ -220,7 +230,7 @@ class ParallelRunner:
         timeout: int | None = None,
         cwd: Path | None = None,
         env: dict[str, str] | None = None,
-        configs: dict[str, dict[str, Any]] | None = None
+        configs: dict[str, dict[str, Any]] | None = None,
     ) -> ExecutionResult:
         """Run scripts in parallel asynchronously.
 
@@ -236,8 +246,7 @@ class ParallelRunner:
         """
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
-            None,
-            lambda: self.run_scripts(scripts, timeout, cwd, env, configs)
+            None, lambda: self.run_scripts(scripts, timeout, cwd, env, configs)
         )
 
     def cancel(self):
@@ -253,7 +262,7 @@ class BatchRunner:
     def __init__(
         self,
         max_workers: int | None = None,
-        progress_callback: ProgressCallback | None = None
+        progress_callback: ProgressCallback | None = None,
     ):
         """Initialize batch runner.
 
@@ -262,8 +271,7 @@ class BatchRunner:
             progress_callback: Callback for progress updates
         """
         self.parallel_runner = ParallelRunner(
-            max_workers=max_workers,
-            progress_callback=progress_callback
+            max_workers=max_workers, progress_callback=progress_callback
         )
 
     def run_batches(
@@ -271,7 +279,7 @@ class BatchRunner:
         batches: list[list[Path]],
         timeout: int = 60,
         cwd: Path | None = None,
-        stop_on_batch_failure: bool = True
+        stop_on_batch_failure: bool = True,
     ) -> list[ExecutionResult]:
         """Run batches sequentially, scripts within batches in parallel.
 
@@ -290,9 +298,7 @@ class BatchRunner:
             logger.info(f"Running batch {i + 1}/{len(batches)} ({len(batch)} scripts)")
 
             result = self.parallel_runner.run_scripts(
-                scripts=batch,
-                timeout=timeout,
-                cwd=cwd
+                scripts=batch, timeout=timeout, cwd=cwd
             )
             results.append(result)
 
@@ -307,7 +313,7 @@ def run_parallel(
     scripts: list[Path],
     max_workers: int | None = None,
     timeout: int = 60,
-    progress_callback: ProgressCallback | None = None
+    progress_callback: ProgressCallback | None = None,
 ) -> ExecutionResult:
     """Convenience function to run scripts in parallel.
 
@@ -323,7 +329,7 @@ def run_parallel(
     runner = ParallelRunner(
         max_workers=max_workers,
         progress_callback=progress_callback,
-        default_timeout=timeout
+        default_timeout=timeout,
     )
     return runner.run_scripts(scripts)
 
@@ -332,7 +338,7 @@ async def run_parallel_async(
     scripts: list[Path],
     max_workers: int | None = None,
     timeout: int = 60,
-    progress_callback: ProgressCallback | None = None
+    progress_callback: ProgressCallback | None = None,
 ) -> ExecutionResult:
     """Async convenience function to run scripts in parallel.
 
@@ -348,6 +354,6 @@ async def run_parallel_async(
     runner = ParallelRunner(
         max_workers=max_workers,
         progress_callback=progress_callback,
-        default_timeout=timeout
+        default_timeout=timeout,
     )
     return await runner.run_scripts_async(scripts)

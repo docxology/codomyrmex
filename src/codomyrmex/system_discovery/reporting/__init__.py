@@ -8,7 +8,7 @@ from .profilers import EnvironmentProfiler, HardwareProfiler
 from .status_reporter import StatusReporter
 
 __all__ = [
-    "StatusReporter",
-    "HardwareProfiler",
     "EnvironmentProfiler",
+    "HardwareProfiler",
+    "StatusReporter",
 ]

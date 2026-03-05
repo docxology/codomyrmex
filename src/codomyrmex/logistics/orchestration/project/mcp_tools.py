@@ -34,10 +34,14 @@ try:
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False
-    logger.error("CRITICAL: MCP core modules are not installed. Cannot instantiate MCP tools. Zero mock policy enforces crashing instead of mocking.")
+    logger.error(
+        "CRITICAL: MCP core modules are not installed. Cannot instantiate MCP tools. Zero mock policy enforces crashing instead of mocking."
+    )
 
     def __raise_mcp_error(*args, **kwargs):
-        raise RuntimeError("MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed.")
+        raise RuntimeError(
+            "MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed."
+        )
 
     MCPToolResult = __raise_mcp_error
     MCPErrorDetail = __raise_mcp_error
@@ -71,7 +75,9 @@ class OrchestrationMCPTools:
         self.resource_manager = get_resource_manager()
 
         if not MCP_AVAILABLE:
-            raise RuntimeError("Cannot initialize OrchestrationMCPTools: MCP not available (Zero-Mock strict mode)")
+            raise RuntimeError(
+                "Cannot initialize OrchestrationMCPTools: MCP not available (Zero-Mock strict mode)"
+            )
 
     def get_tool_definitions(self) -> dict[str, dict[str, Any]]:
         """Get MCP tool definitions."""
@@ -288,34 +294,33 @@ class OrchestrationMCPTools:
         try:
             if tool_name == "execute_workflow":
                 return self._execute_workflow_tool(arguments)
-            elif tool_name == "create_workflow":
+            if tool_name == "create_workflow":
                 return self._create_workflow_tool(arguments)
-            elif tool_name == "list_workflows":
+            if tool_name == "list_workflows":
                 return self._list_workflows_tool(arguments)
-            elif tool_name == "create_project":
+            if tool_name == "create_project":
                 return self._create_project_tool(arguments)
-            elif tool_name == "list_projects":
+            if tool_name == "list_projects":
                 return self._list_projects_tool(arguments)
-            elif tool_name == "execute_task":
+            if tool_name == "execute_task":
                 return self._execute_task_tool(arguments)
-            elif tool_name == "get_system_status":
+            if tool_name == "get_system_status":
                 return self._get_system_status_tool(arguments)
-            elif tool_name == "get_health_status":
+            if tool_name == "get_health_status":
                 return self._get_health_status_tool(arguments)
-            elif tool_name == "allocate_resources":
+            if tool_name == "allocate_resources":
                 return self._allocate_resources_tool(arguments)
-            elif tool_name == "create_complex_workflow":
+            if tool_name == "create_complex_workflow":
                 return self._create_complex_workflow_tool(arguments)
-            else:
-                return MCPToolResult(
-                    success=False,
-                    error=f"Unknown tool: {tool_name}",
-                    error_details=[
-                        MCPErrorDetail(
-                            type="ValueError", message=f"Tool '{tool_name}' not found"
-                        )
-                    ],
-                )
+            return MCPToolResult(
+                success=False,
+                error=f"Unknown tool: {tool_name}",
+                error_details=[
+                    MCPErrorDetail(
+                        type="ValueError", message=f"Tool '{tool_name}' not found"
+                    )
+                ],
+            )
         except Exception as e:
             logger.error(f"Error executing tool {tool_name}: {e}")
             return MCPToolResult(

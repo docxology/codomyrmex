@@ -29,7 +29,9 @@ def dark_status() -> dict[str, Any]:
             try:
                 from codomyrmex.dark.pdf.dark_pdf_wrapper import DarkPDF
 
-                presets = list(DarkPDF.PRESETS.keys()) if hasattr(DarkPDF, "PRESETS") else []
+                presets = (
+                    list(DarkPDF.PRESETS.keys()) if hasattr(DarkPDF, "PRESETS") else []
+                )
             except (ImportError, AttributeError):
                 pass
 

@@ -68,10 +68,7 @@ _HELP_SCRIPTS = {
 
 @pytest.mark.parametrize(
     "script_path, expected_text",
-    [
-        pytest.param(v[0], v[1], id=k)
-        for k, v in _HELP_SCRIPTS.items()
-    ],
+    [pytest.param(v[0], v[1], id=k) for k, v in _HELP_SCRIPTS.items()],
 )
 def test_script_help(script_path: str, expected_text: str) -> None:
     """Verify script responds to --help with expected description."""
@@ -87,6 +84,7 @@ def test_script_help(script_path: str, expected_text: str) -> None:
 
 
 # ── Execution tests ──────────────────────────────────────────────
+
 
 def test_demo_defense_runs() -> None:
     """Verify demo_defense.py runs to completion."""

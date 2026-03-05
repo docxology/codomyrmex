@@ -250,8 +250,7 @@ class StreamingAnalytics:
     """Central streaming analytics manager."""
 
     def __init__(self):
-        """  Init  .
-            """
+        """Init  ."""
         self.streams: dict[str, DataStream] = {}
         self.processors: list[Callable[[str, DataPoint], None]] = []
         self.alerts: list[dict[str, Any]] = []
@@ -345,11 +344,11 @@ class StreamingAnalytics:
             threshold = alert["threshold"]
             triggered = False
 
-            if condition == "above" and point.value > threshold:
-                triggered = True
-            elif condition == "below" and point.value < threshold:
-                triggered = True
-            elif condition == "equal" and abs(point.value - threshold) < 1e-10:
+            if (
+                (condition == "above" and point.value > threshold)
+                or (condition == "below" and point.value < threshold)
+                or (condition == "equal" and abs(point.value - threshold) < 1e-10)
+            ):
                 triggered = True
             # Add more conditions as needed
 
@@ -401,8 +400,7 @@ class StreamingAnalytics:
                         "end_time": w.end_time,
                         "duration": w.duration,
                         "metrics": {
-                            k.value: v
-                            for k, v in w.calculate_metrics().items()
+                            k.value: v for k, v in w.calculate_metrics().items()
                         },
                     }
                     for w in stream.completed_windows
@@ -411,8 +409,7 @@ class StreamingAnalytics:
 
         if format == "json":
             return json.dumps(data, indent=2)
-        else:
-            raise ValueError(f"Unsupported export format: {format}")
+        raise ValueError(f"Unsupported export format: {format}")
 
     def _process_data_point(self, stream_id: str, point: DataPoint) -> None:
         """Process a data point through all processors."""
@@ -529,7 +526,8 @@ class PredictiveAnalytics:
             mean2 = statistics.mean(values2)
 
             numerator = sum(
-                (v1 - mean1) * (v2 - mean2) for v1, v2 in zip(values1, values2, strict=False)
+                (v1 - mean1) * (v2 - mean2)
+                for v1, v2 in zip(values1, values2, strict=False)
             )
             sum_sq1 = sum((v1 - mean1) ** 2 for v1 in values1)
             sum_sq2 = sum((v2 - mean2) ** 2 for v2 in values2)
@@ -549,10 +547,10 @@ class PredictiveAnalytics:
 
 __all__ = [
     "AnalyticsMetric",
-    "StreamingMode",
-    "DataPoint",
     "AnalyticsWindow",
+    "DataPoint",
     "DataStream",
-    "StreamingAnalytics",
     "PredictiveAnalytics",
+    "StreamingAnalytics",
+    "StreamingMode",
 ]

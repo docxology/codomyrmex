@@ -91,7 +91,9 @@ class ProjectAnalyzer:
         >>> analyzer = ProjectAnalyzer()
         >>> results = analyzer.analyze(Path("."))
         >>> for file_result in results["files"]:
-        ...     print(f"{file_result['file']}: {file_result['metrics']['lines_of_code']} lines")
+        ...     print(
+        ...         f"{file_result['file']}: {file_result['metrics']['lines_of_code']} lines"
+        ...     )
     """
 
     def __init__(self, config_path: Path | None = None):
@@ -345,10 +347,9 @@ class ProjectAnalyzer:
                 check = pattern.replace("**", "").replace("*", "").strip("/")
                 if check and filename.startswith(check.lstrip("_")):
                     return True
-            else:
-                # Direct match
-                if pattern in path_str:
-                    return True
+            # Direct match
+            elif pattern in path_str:
+                return True
         return False
 
     def _generate_summary(self, results: list[dict[str, Any]]) -> dict[str, Any]:

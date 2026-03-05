@@ -16,7 +16,7 @@ from .correlation import (
     set_correlation_id,
     with_correlation,
 )
-from .log_aggregator import *  # noqa: F401,F403
+from .log_aggregator import *
 from .logger_config import (
     DEFAULT_LOG_FORMAT,
     DETAILED_LOG_FORMAT,
@@ -30,9 +30,9 @@ from .logger_config import (
 )
 
 __all__ = [
-    "AuditLogger",
     "DEFAULT_LOG_FORMAT",
     "DETAILED_LOG_FORMAT",
+    "AuditLogger",
     "JSONFormatter",
     "LogContext",
     "PerformanceLogger",

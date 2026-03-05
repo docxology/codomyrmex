@@ -13,6 +13,7 @@ from typing import Any, Optional
 
 class CloudProvider(Enum):
     """Supported cloud providers."""
+
     AWS = "aws"
     GCP = "gcp"
     AZURE = "azure"
@@ -20,8 +21,10 @@ class CloudProvider(Enum):
     CODA = "coda"
     LOCAL = "local"
 
+
 class ResourceType(Enum):
     """Types of cloud resources."""
+
     COMPUTE = "compute"
     STORAGE = "storage"
     DATABASE = "database"
@@ -31,16 +34,20 @@ class ResourceType(Enum):
     QUEUE = "queue"
     DOCUMENT = "document"
 
+
 class CloudError(Exception):
     """Base class for cloud-related errors."""
+
     def __init__(self, message: str, provider: CloudProvider | None = None, **kwargs):
         super().__init__(message)
         self.provider = provider
         self.metadata = kwargs
 
+
 @dataclass
 class CloudCredentials:
     """Credentials for cloud access."""
+
     provider: CloudProvider
     access_key: str | None = None
     secret_key: str | None = None
@@ -49,9 +56,11 @@ class CloudCredentials:
     profile: str | None = None
     metadata: dict[str, str] = field(default_factory=dict)
 
+
 @dataclass
 class CloudResource:
     """A cloud resource."""
+
     id: str
     name: str
     resource_type: ResourceType
@@ -75,6 +84,7 @@ class CloudResource:
             "metadata": self.metadata,
         }
 
+
 class CloudClient(ABC):
     """Abstract base class for cloud clients."""
 
@@ -90,12 +100,10 @@ class CloudClient(ABC):
         resource_type: ResourceType | None = None,
     ) -> list[CloudResource]:
         """List cloud resources."""
-        pass
 
     @abstractmethod
     def get_resource(self, resource_id: str) -> CloudResource | None:
         """Get a specific resource."""
-        pass
 
     @abstractmethod
     def create_resource(
@@ -105,12 +113,11 @@ class CloudClient(ABC):
         config: dict[str, Any],
     ) -> CloudResource:
         """Create a new resource."""
-        pass
 
     @abstractmethod
     def delete_resource(self, resource_id: str) -> bool:
         """Delete a resource."""
-        pass
+
 
 class StorageClient(ABC):
     """Abstract storage client."""
@@ -118,22 +125,18 @@ class StorageClient(ABC):
     @abstractmethod
     def list_buckets(self) -> list[str]:
         """List storage buckets."""
-        pass
 
     @abstractmethod
     def create_bucket(self, name: str, region: str | None = None) -> bool:
         """Create a bucket."""
-        pass
 
     @abstractmethod
     def delete_bucket(self, name: str) -> bool:
         """Delete a bucket."""
-        pass
 
     @abstractmethod
     def bucket_exists(self, name: str) -> bool:
         """Check if a bucket exists."""
-        pass
 
     @abstractmethod
     def upload_file(
@@ -144,27 +147,22 @@ class StorageClient(ABC):
         content_type: str | None = None,
     ) -> bool:
         """Upload a file from local disk."""
-        pass
 
     @abstractmethod
     def download_file(self, bucket: str, key: str, file_path: str) -> bool:
         """Download a file to local disk."""
-        pass
 
     @abstractmethod
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
         """List objects in a bucket."""
-        pass
 
     @abstractmethod
     def delete_object(self, bucket: str, key: str) -> bool:
         """Delete an object."""
-        pass
 
     @abstractmethod
     def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
         """Get object metadata."""
-        pass
 
     @abstractmethod
     def generate_presigned_url(
@@ -175,7 +173,7 @@ class StorageClient(ABC):
         operation: str = "get_object",
     ) -> str:
         """Generate a presigned URL."""
-        pass
+
 
 class ComputeClient(ABC):
     """Abstract compute client."""
@@ -183,33 +181,25 @@ class ComputeClient(ABC):
     @abstractmethod
     def list_instances(self) -> list[dict[str, Any]]:
         """List compute instances."""
-        pass
 
     @abstractmethod
     def start_instance(self, instance_id: str) -> bool:
         """Start an instance."""
-        pass
 
     @abstractmethod
     def stop_instance(self, instance_id: str) -> bool:
         """Stop an instance."""
-        pass
 
     @abstractmethod
     def terminate_instance(self, instance_id: str) -> bool:
         """Terminate an instance."""
-        pass
 
     @abstractmethod
     def create_instance(
-        self,
-        name: str,
-        instance_type: str,
-        image_id: str,
-        **kwargs
+        self, name: str, instance_type: str, image_id: str, **kwargs
     ) -> dict[str, Any]:
         """Create a new instance."""
-        pass
+
 
 class ServerlessClient(ABC):
     """Abstract serverless client."""
@@ -217,7 +207,6 @@ class ServerlessClient(ABC):
     @abstractmethod
     def list_functions(self) -> list[dict[str, Any]]:
         """List serverless functions."""
-        pass
 
     @abstractmethod
     def invoke_function(
@@ -226,24 +215,17 @@ class ServerlessClient(ABC):
         payload: dict[str, Any],
     ) -> dict[str, Any]:
         """Invoke a function."""
-        pass
 
     @abstractmethod
     def create_function(
-        self,
-        name: str,
-        runtime: str,
-        handler: str,
-        code_path: str,
-        **kwargs
+        self, name: str, runtime: str, handler: str, code_path: str, **kwargs
     ) -> dict[str, Any]:
         """Create a new function."""
-        pass
 
     @abstractmethod
     def delete_function(self, function_name: str) -> bool:
         """Delete a function."""
-        pass
+
 
 class CloudConfig:
     """Configuration for cloud operations."""
@@ -264,57 +246,68 @@ class CloudConfig:
         return provider in self._providers
 
     @classmethod
-    def from_env(cls) -> 'CloudConfig':
+    def from_env(cls) -> "CloudConfig":
         """Create config from environment variables."""
         import os
 
         config = cls()
 
         # AWS
-        if os.environ.get('AWS_ACCESS_KEY_ID'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.AWS,
-                access_key=os.environ.get('AWS_ACCESS_KEY_ID'),
-                secret_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-                region=os.environ.get('AWS_DEFAULT_REGION', 'us-east-1'),
-            ))
+        if os.environ.get("AWS_ACCESS_KEY_ID"):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.AWS,
+                    access_key=os.environ.get("AWS_ACCESS_KEY_ID"),
+                    secret_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
+                    region=os.environ.get("AWS_DEFAULT_REGION", "us-east-1"),
+                )
+            )
 
         # GCP
-        if os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') or os.environ.get('GCP_PROJECT_ID'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.GCP,
-                project_id=os.environ.get('GCP_PROJECT_ID'),
-                region=os.environ.get('GCP_REGION', 'us-central1'),
-            ))
+        if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") or os.environ.get(
+            "GCP_PROJECT_ID"
+        ):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.GCP,
+                    project_id=os.environ.get("GCP_PROJECT_ID"),
+                    region=os.environ.get("GCP_REGION", "us-central1"),
+                )
+            )
 
         # Infomaniak
-        if os.environ.get('INFOMANIAK_APP_CREDENTIAL_ID'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.INFOMANIAK,
-                access_key=os.environ.get('INFOMANIAK_APP_CREDENTIAL_ID'),
-                secret_key=os.environ.get('INFOMANIAK_APP_CREDENTIAL_SECRET'),
-                region=os.environ.get('INFOMANIAK_REGION', 'dc3-a'),
-                project_id=os.environ.get('INFOMANIAK_PROJECT_ID'),
-            ))
+        if os.environ.get("INFOMANIAK_APP_CREDENTIAL_ID"):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.INFOMANIAK,
+                    access_key=os.environ.get("INFOMANIAK_APP_CREDENTIAL_ID"),
+                    secret_key=os.environ.get("INFOMANIAK_APP_CREDENTIAL_SECRET"),
+                    region=os.environ.get("INFOMANIAK_REGION", "dc3-a"),
+                    project_id=os.environ.get("INFOMANIAK_PROJECT_ID"),
+                )
+            )
 
         # Coda
-        if os.environ.get('CODA_API_TOKEN'):
-            config.add_provider(CloudCredentials(
-                provider=CloudProvider.CODA,
-                access_key=os.environ.get('CODA_API_TOKEN'),
-            ))
+        if os.environ.get("CODA_API_TOKEN"):
+            config.add_provider(
+                CloudCredentials(
+                    provider=CloudProvider.CODA,
+                    access_key=os.environ.get("CODA_API_TOKEN"),
+                )
+            )
 
         return config
 
+
 __all__ = [
-    "CloudProvider",
-    "ResourceType",
-    "CloudCredentials",
-    "CloudResource",
     "CloudClient",
-    "StorageClient",
-    "ComputeClient",
-    "ServerlessClient",
     "CloudConfig",
+    "CloudCredentials",
     "CloudError",
+    "CloudProvider",
+    "CloudResource",
+    "ComputeClient",
+    "ResourceType",
+    "ServerlessClient",
+    "StorageClient",
 ]

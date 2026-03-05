@@ -206,23 +206,23 @@ class DependencyScanner:
 
         for advisory in advisories:
             # Simple version comparison (real impl would use packaging.version)
-            report.vulnerabilities.append(Vulnerability(
-                package=pkg_name,
-                version=version_spec,
-                cve_id=advisory["cve_id"],
-                severity=advisory["severity"],
-                summary=advisory["summary"],
-                fixed_in=advisory.get("fixed_in", ""),
-            ))
+            report.vulnerabilities.append(
+                Vulnerability(
+                    package=pkg_name,
+                    version=version_spec,
+                    cve_id=advisory["cve_id"],
+                    severity=advisory["severity"],
+                    summary=advisory["summary"],
+                    fixed_in=advisory.get("fixed_in", ""),
+                )
+            )
 
     @staticmethod
     def _parse_dependencies(content: str) -> dict[str, str]:
         """Parse dependencies from pyproject.toml content."""
         deps: dict[str, str] = {}
         # Simple regex for dependencies = ["pkg>=version", ...]
-        dep_pattern = re.compile(
-            r'"([a-zA-Z0-9_-]+)\s*([><=!~]*\s*[\d.]*[^"]*)"'
-        )
+        dep_pattern = re.compile(r'"([a-zA-Z0-9_-]+)\s*([><=!~]*\s*[\d.]*[^"]*)"')
         for match in dep_pattern.finditer(content):
             pkg = match.group(1)
             version = match.group(2).strip()

@@ -1,4 +1,5 @@
 """Marketing report."""
+
 from pathlib import Path
 
 from codomyrmex.data_visualization.core.ui import Card, Dashboard
@@ -16,8 +17,12 @@ class MarketingReport(BaseReport):
 
     def generate(self) -> None:
         """Generate the marketing report content."""
-        self.dashboard.add_section("Marketing Analysis", Card(title="Brand Awareness", content="78%"))
-        self.dashboard.add_section("Acquisition", Card(title="User Acquisition", content="12,500 new users"))
+        self.dashboard.add_section(
+            "Marketing Analysis", Card(title="Brand Awareness", content="78%")
+        )
+        self.dashboard.add_section(
+            "Acquisition", Card(title="User Acquisition", content="12,500 new users")
+        )
         self._generated = True
 
     def save(self, output_path: str) -> str:

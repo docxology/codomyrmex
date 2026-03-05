@@ -29,12 +29,14 @@ class TestMCPResourceRead:
         test_file.write_text("# Hello World\n\nThis is a test.")
         uri = f"file://{test_file}"
 
-        self.bridge.register_resource(MCPResource(
-            uri=uri,
-            name="readme",
-            description="Test readme file",
-            mime_type="text/markdown",
-        ))
+        self.bridge.register_resource(
+            MCPResource(
+                uri=uri,
+                name="readme",
+                description="Test readme file",
+                mime_type="text/markdown",
+            )
+        )
 
         result = _run(self.bridge._handle_resource_read({"uri": uri}))
         assert "contents" in result
@@ -45,11 +47,13 @@ class TestMCPResourceRead:
     def test_read_nonfile_resource_returns_metadata(self):
         """Non-file resources return JSON metadata as content."""
         uri = "codomyrmex://config/settings"
-        self.bridge.register_resource(MCPResource(
-            uri=uri,
-            name="settings",
-            description="Application settings",
-        ))
+        self.bridge.register_resource(
+            MCPResource(
+                uri=uri,
+                name="settings",
+                description="Application settings",
+            )
+        )
 
         result = _run(self.bridge._handle_resource_read({"uri": uri}))
         assert "contents" in result

@@ -7,7 +7,6 @@ to secure execution in the sandbox environment, ensuring that generated code
 executes correctly and safely.
 """
 
-
 import pytest
 
 try:
@@ -16,6 +15,7 @@ try:
         get_logger,
         setup_logging,
     )
+
     AI_CODE_EDITING_AVAILABLE = True
 except ImportError:
     setup_logging = None
@@ -24,6 +24,7 @@ except ImportError:
 
 try:
     from codomyrmex.coding import execute_code
+
     CODE_EXECUTION_AVAILABLE = True
 except ImportError:
     CODE_EXECUTION_AVAILABLE = False
@@ -41,8 +42,10 @@ logger = get_logger(__name__) if get_logger else None
 class TestAICodeExecutionWorkflow:
     """Integration tests for AI code editing to execution sandbox workflow."""
 
-    @pytest.mark.skipif(not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
-                       reason="Required modules not available")
+    @pytest.mark.skipif(
+        not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
+        reason="Required modules not available",
+    )
     def test_simple_function_generation_and_execution(self):
         """Test generating a simple function and executing it successfully."""
         # Step 1: Generate code using AI
@@ -65,13 +68,14 @@ print(f"Factorial of 5 is: {result}")
 
         # Step 2: Execute the generated code in sandbox
         execution_result = execute_code(
-            language=language,
-            code=generated_code,
-            timeout=10
+            language=language, code=generated_code, timeout=10
         )
 
         # Step 3: Validate execution results
-        if execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
+        if (
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
+        ):
             pytest.skip("Docker not available")
 
         assert execution_result["status"] == "success"
@@ -79,59 +83,63 @@ print(f"Factorial of 5 is: {result}")
         assert "Factorial of 5 is: 120" in execution_result["stdout"]
         assert execution_result["execution_time"] > 0
 
-    @pytest.mark.skipif(not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
-                       reason="Required modules not available")
+    @pytest.mark.skipif(
+        not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
+        reason="Required modules not available",
+    )
     def test_code_with_input_execution(self):
         """Test generating code that requires input and executing it."""
         # Generated code that reads from stdin
-        generated_code = '''
+        generated_code = """
 import sys
 name = input("Enter your name: ")
 print(f"Hello, {name}! Welcome to the sandbox.")
-'''
+"""
 
         user_input = "Alice"
 
         execution_result = execute_code(
-            language="python",
-            code=generated_code,
-            stdin=user_input,
-            timeout=10
+            language="python", code=generated_code, stdin=user_input, timeout=10
         )
 
-        if execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
+        if (
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
+        ):
             pytest.skip("Docker not available")
 
         assert execution_result["status"] == "success"
         assert execution_result["exit_code"] == 0
         assert "Hello, Alice! Welcome to the sandbox." in execution_result["stdout"]
 
-    @pytest.mark.skipif(not CODE_EXECUTION_AVAILABLE,
-                       reason="Code execution sandbox not available")
+    @pytest.mark.skipif(
+        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
+    )
     def test_execution_with_resource_limits(self):
         """Test executing code with resource limits."""
         # Code that should complete within limits
-        safe_code = '''
+        safe_code = """
 import time
 # Short computation
 result = sum(range(100))
 print(f"Sum: {result}")
-'''
+"""
 
         limits = ExecutionLimits(
             time_limit=5,  # 5 seconds
             memory_limit=64,  # 64 MB
             cpu_limit=0.5,  # 50% CPU
-            max_output_chars=1000
+            max_output_chars=1000,
         )
 
         execution_result = execute_with_limits(
-            language="python",
-            code=safe_code,
-            limits=limits
+            language="python", code=safe_code, limits=limits
         )
 
-        if execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
+        if (
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
+        ):
             pytest.skip("Docker not available")
 
         assert execution_result["status"] == "success"
@@ -149,37 +157,42 @@ print(f"Sum: {result}")
         assert "execution_time_seconds" in resource_usage
         assert "memory_peak_mb" in resource_usage
 
-    @pytest.mark.skipif(not CODE_EXECUTION_AVAILABLE,
-                       reason="Code execution sandbox not available")
+    @pytest.mark.skipif(
+        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
+    )
     def test_execution_timeout_handling(self):
         """Test handling of code that exceeds time limits."""
         # Code that will run too long
-        slow_code = '''
+        slow_code = """
 import time
 time.sleep(10)  # Sleep longer than our timeout
 print("This should not print")
-'''
+"""
 
         execution_result = execute_code(
             language="python",
             code=slow_code,
-            timeout=2  # 2 second timeout
+            timeout=2,  # 2 second timeout
         )
 
         # Should timeout or setup error if docker missing
-        if execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
+        if (
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
+        ):
             pytest.skip("Docker not available")
 
         assert execution_result["status"] == "timeout"
         assert execution_result["exit_code"] == -1
         assert "timeout" in execution_result["error_message"].lower()
 
-    @pytest.mark.skipif(not CODE_EXECUTION_AVAILABLE,
-                       reason="Code execution sandbox not available")
+    @pytest.mark.skipif(
+        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
+    )
     def test_security_isolation(self):
         """Test that dangerous code is properly isolated."""
         # Code that tries to access file system (should be blocked by Docker)
-        dangerous_code = '''
+        dangerous_code = """
 import os
 
 pytestmark = pytest.mark.integration
@@ -189,12 +202,10 @@ try:
     print(f"Root directory files: {files}")
 except Exception as e:
     print(f"Access blocked: {type(e).__name__}")
-'''
+"""
 
         execution_result = execute_code(
-            language="python",
-            code=dangerous_code,
-            timeout=10
+            language="python", code=dangerous_code, timeout=10
         )
 
         # Should either succeed (if Docker allows) or fail safely
@@ -203,47 +214,52 @@ except Exception as e:
         assert "status" in execution_result
         # Should not crash the test environment
 
-    @pytest.mark.skipif(not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
-                       reason="Required modules not available")
+    @pytest.mark.skipif(
+        not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
+        reason="Required modules not available",
+    )
     def test_error_handling_workflow(self):
         """Test the complete workflow when errors occur."""
         # Code with syntax error
-        bad_code = '''
+        bad_code = """
 def broken_function(
     print("This has syntax error - missing closing paren"
-'''
+"""
 
-        execution_result = execute_code(
-            language="python",
-            code=bad_code,
-            timeout=10
-        )
+        execution_result = execute_code(language="python", code=bad_code, timeout=10)
 
         # Should handle the error gracefully
-        if execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
+        if (
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
+        ):
             pytest.skip("Docker not available")
 
         assert execution_result["status"] in ["execution_error", "setup_error"]
         assert execution_result["exit_code"] != 0
-        assert "error" in execution_result["error_message"].lower() or "syntax" in execution_result["stderr"].lower()
+        assert (
+            "error" in execution_result["error_message"].lower()
+            or "syntax" in execution_result["stderr"].lower()
+        )
 
-    @pytest.mark.skipif(not CODE_EXECUTION_AVAILABLE,
-                       reason="Code execution sandbox not available")
+    @pytest.mark.skipif(
+        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
+    )
     def test_multiple_languages_integration(self):
         """Test that different language outputs are handled correctly."""
         test_cases = [
             ("python", 'print("Hello from Python")', "Hello from Python"),
-            ("javascript", 'console.log("Hello from JavaScript");', "Hello from JavaScript"),
+            (
+                "javascript",
+                'console.log("Hello from JavaScript");',
+                "Hello from JavaScript",
+            ),
             ("bash", 'echo "Hello from Bash"', "Hello from Bash"),
         ]
 
         for language, code, expected_output in test_cases:
             # Replaces subTests with loop
-            execution_result = execute_code(
-                language=language,
-                code=code,
-                timeout=10
-            )
+            execution_result = execute_code(language=language, code=code, timeout=10)
 
             # Should succeed or fail gracefully
             assert isinstance(execution_result, dict)
@@ -253,8 +269,11 @@ def broken_function(
             if execution_result["status"] == "success":
                 output = execution_result["stdout"] + execution_result["stderr"]
                 assert expected_output in output or "Hello from" in output
-            elif execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
-                continue # Skip check if docker missing
+            elif (
+                execution_result["status"] == "setup_error"
+                and "docker" in execution_result.get("error_message", "").lower()
+            ):
+                continue  # Skip check if docker missing
 
     def test_workflow_performance_monitoring(self):
         """Test that the workflow can be monitored for performance."""
@@ -271,7 +290,10 @@ def broken_function(
 
         # Should complete quickly
         assert total_time < 10  # Less than 10 seconds for the whole workflow
-        if result["status"] == "setup_error" and "docker" in result.get("error_message", "").lower():
+        if (
+            result["status"] == "setup_error"
+            and "docker" in result.get("error_message", "").lower()
+        ):
             pytest.skip("Docker not available")
 
         assert result["status"] == "success"
@@ -296,14 +318,17 @@ def broken_function(
     def test_large_output_handling(self):
         """Test handling of code that produces large output."""
         # Code that generates a lot of output
-        large_output_code = '''
+        large_output_code = """
 for i in range(100):
     print(f"Line {i}: " + "x" * 50)
-'''
+"""
 
         result = execute_code("python", large_output_code, timeout=10)
 
-        if result["status"] == "setup_error" and "docker" in result.get("error_message", "").lower():
+        if (
+            result["status"] == "setup_error"
+            and "docker" in result.get("error_message", "").lower()
+        ):
             pytest.skip("Docker not available")
 
         assert result["status"] == "success"

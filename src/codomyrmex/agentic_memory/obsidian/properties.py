@@ -42,6 +42,7 @@ def get_aliases(
     Maps to ``obsidian aliases [file=|path=] [total] [verbose] [active]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     flags: list[str] = []
     if total:
@@ -76,6 +77,7 @@ def get_properties(
     [sort=count] [format=yaml|json|tsv] [total] [counts] [active]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     flags: list[str] = []
     if name:
@@ -96,9 +98,7 @@ def get_properties(
     for line in result.lines:
         if ":" in line:
             key, _, value = line.partition(":")
-            props.append(PropertyValue(
-                key=key.strip(), value=value.strip(), raw=line
-            ))
+            props.append(PropertyValue(key=key.strip(), value=value.strip(), raw=line))
         else:
             props.append(PropertyValue(key=line.strip(), value="", raw=line))
     return props
@@ -117,6 +117,7 @@ def read_property(
     Maps to ``obsidian property:read name=<name> [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     params["name"] = name
     return cli.run("property:read", vault=vault, params=params).text
@@ -138,6 +139,7 @@ def set_property(
     [type=text|list|number|checkbox|date|datetime] [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     params["name"] = name
     params["value"] = value
@@ -159,6 +161,7 @@ def remove_property(
     Maps to ``obsidian property:remove name=<name> [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     params["name"] = name
     return cli.run("property:remove", vault=vault, params=params)

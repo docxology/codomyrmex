@@ -89,7 +89,9 @@ class ROS2Bridge:
         """Initialize ROS2 connection (simulated)."""
         if uri:
             self.uri = uri
-        logger.info("Connecting ROS2Bridge '%s' to %s...", self.node_name, self.uri or "local")
+        logger.info(
+            "Connecting ROS2Bridge '%s' to %s...", self.node_name, self.uri or "local"
+        )
         # Simulate connection delay
         await asyncio.sleep(0.01)
         self._is_connected = True
@@ -110,7 +112,9 @@ class ROS2Bridge:
     ) -> None:
         """Register a topic. Idempotent — already-registered topics are updated."""
         if topic not in self._topic_meta:
-            self._topic_meta[topic] = TopicInfo(name=topic, message_type=message_type, latched=latched)
+            self._topic_meta[topic] = TopicInfo(
+                name=topic, message_type=message_type, latched=latched
+            )
             self._subscribers.setdefault(topic, [])
             self._history.setdefault(topic, deque(maxlen=self._history_depth))
             self._latched[topic] = None
@@ -186,7 +190,11 @@ class ROS2Bridge:
         self._topic_meta[topic].subscriber_count += 1
 
         # Replay latched message for late subscriber
-        if replay_latched and self._topic_meta[topic].latched and self._latched.get(topic):
+        if (
+            replay_latched
+            and self._topic_meta[topic].latched
+            and self._latched.get(topic)
+        ):
             try:
                 msg = self._latched[topic]
                 if msg:
@@ -203,7 +211,11 @@ class ROS2Bridge:
                 self._subscribers[topic].remove(callback)
                 self._topic_meta[topic].subscriber_count -= 1
             except ValueError as e:
-                logger.debug("Unsubscribe called for already-removed callback on topic '%s': %s", topic, e)
+                logger.debug(
+                    "Unsubscribe called for already-removed callback on topic '%s': %s",
+                    topic,
+                    e,
+                )
 
         return _unsubscribe
 

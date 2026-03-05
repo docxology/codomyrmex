@@ -19,11 +19,12 @@ from .core.history_analyzer import GitHistoryAnalyzer
 
 try:
     from .core.gitnexus_bridge import GitNexusBridge, GitNexusNotAvailableError
+
     GITNEXUS_AVAILABLE = True
 except ImportError:
     GITNEXUS_AVAILABLE = False
 
-__all__ = ["GitHistoryAnalyzer", "GITNEXUS_AVAILABLE"]
+__all__ = ["GITNEXUS_AVAILABLE", "GitHistoryAnalyzer"]
 if GITNEXUS_AVAILABLE:
     __all__ += ["GitNexusBridge", "GitNexusNotAvailableError"]
 

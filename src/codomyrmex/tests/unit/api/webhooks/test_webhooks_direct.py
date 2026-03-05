@@ -18,11 +18,13 @@ import pytest
 # Direct-import helper
 # ---------------------------------------------------------------------------
 
+
 def _load_webhooks():
     name = "codomyrmex.api.webhooks"
     if name in sys.modules:
         return sys.modules[name]
     import codomyrmex.logging_monitoring  # noqa: F401
+
     spec = importlib.util.spec_from_file_location(
         name,
         "src/codomyrmex/api/webhooks/__init__.py",
@@ -63,9 +65,16 @@ pytestmark = pytest.mark.skipif(
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _make_config(url="https://hooks.example.com/recv", secret="test-secret",
-                 events=None, active=True, max_retries=3, retry_delay=0.0,
-                 algorithm=None):
+
+def _make_config(
+    url="https://hooks.example.com/recv",
+    secret="test-secret",
+    events=None,
+    active=True,
+    max_retries=3,
+    retry_delay=0.0,
+    algorithm=None,
+):
     kwargs = {
         "url": url,
         "secret": secret,
@@ -97,6 +106,7 @@ def _make_transport(status_code=200, body="OK"):
 # ===========================================================================
 # Enums
 # ===========================================================================
+
 
 class TestWebhookEventTypeEnum:
     def test_created(self):
@@ -141,6 +151,7 @@ class TestSignatureAlgorithmEnum:
 # WebhookEvent
 # ===========================================================================
 
+
 class TestWebhookEvent:
     def test_uuid_event_id_generated(self):
         e = _make_event()
@@ -154,6 +165,7 @@ class TestWebhookEvent:
 
     def test_timestamp_is_datetime(self):
         from datetime import datetime
+
         e = _make_event()
         assert isinstance(e.timestamp, datetime)
 
@@ -164,7 +176,13 @@ class TestWebhookEvent:
     def test_to_dict_contains_all_keys(self):
         e = _make_event()
         d = e.to_dict()
-        assert set(d.keys()) == {"event_id", "event_type", "payload", "timestamp", "source"}
+        assert set(d.keys()) == {
+            "event_id",
+            "event_type",
+            "payload",
+            "timestamp",
+            "source",
+        }
 
     def test_to_dict_event_type_is_value(self):
         e = _make_event(event_type=WebhookEventType.DELETED)
@@ -189,6 +207,7 @@ class TestWebhookEvent:
 # WebhookConfig
 # ===========================================================================
 
+
 class TestWebhookConfig:
     def test_defaults(self):
         c = WebhookConfig(url="https://x.com", secret="s")
@@ -211,6 +230,7 @@ class TestWebhookConfig:
 # ===========================================================================
 # DeliveryResult
 # ===========================================================================
+
 
 class TestDeliveryResult:
     def test_to_dict_all_fields(self):
@@ -244,15 +264,15 @@ class TestDeliveryResult:
 
     def test_auto_timestamp(self):
         from datetime import datetime
-        r = DeliveryResult(
-            webhook_id="x", event_id="y", status=WebhookStatus.PENDING
-        )
+
+        r = DeliveryResult(webhook_id="x", event_id="y", status=WebhookStatus.PENDING)
         assert isinstance(r.timestamp, datetime)
 
 
 # ===========================================================================
 # WebhookSignature
 # ===========================================================================
+
 
 class TestWebhookSignature:
     def test_sign_returns_hex_sha256(self):
@@ -290,7 +310,9 @@ class TestWebhookSignature:
 
     def test_sha512_verify(self):
         sig = WebhookSignature.sign("data", "key", SignatureAlgorithm.HMAC_SHA512)
-        assert WebhookSignature.verify("data", "key", sig, SignatureAlgorithm.HMAC_SHA512)
+        assert WebhookSignature.verify(
+            "data", "key", sig, SignatureAlgorithm.HMAC_SHA512
+        )
 
     def test_cross_algorithm_verify_fails(self):
         sig256 = WebhookSignature.sign("data", "key", SignatureAlgorithm.HMAC_SHA256)
@@ -302,6 +324,7 @@ class TestWebhookSignature:
 # ===========================================================================
 # WebhookRegistry
 # ===========================================================================
+
 
 class TestWebhookRegistry:
     def test_empty_on_creation(self):
@@ -379,6 +402,7 @@ class TestWebhookRegistry:
 # HTTPWebhookTransport
 # ===========================================================================
 
+
 class TestHTTPWebhookTransport:
     def test_delegates_to_handler(self):
         received = {}
@@ -411,6 +435,7 @@ class TestHTTPWebhookTransport:
 # ===========================================================================
 # WebhookDispatcher
 # ===========================================================================
+
 
 class TestWebhookDispatcher:
     def test_dispatch_no_targets_returns_empty_list(self):
@@ -550,6 +575,7 @@ class TestWebhookDispatcher:
 # ===========================================================================
 # Factory functions
 # ===========================================================================
+
 
 class TestFactoryFunctions:
     def test_create_webhook_registry_empty(self):

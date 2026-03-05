@@ -13,14 +13,14 @@ from .controller import (
 from .todo import TodoItem, TodoManager
 
 __all__ = [
+    "DroidConfig",
+    "DroidController",
+    "DroidMetrics",
     "DroidMode",
     "DroidStatus",
-    "DroidConfig",
-    "DroidMetrics",
-    "DroidController",
+    "TodoItem",
+    "TodoManager",
     "create_default_controller",
     "load_config_from_file",
     "save_config_to_file",
-    "TodoManager",
-    "TodoItem",
 ]

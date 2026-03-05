@@ -26,6 +26,7 @@ pytestmark = [
 # Force non-interactive backend before any matplotlib import
 if _has_matplotlib:
     import matplotlib
+
     matplotlib.use("Agg")
 
 
@@ -64,19 +65,19 @@ def _close_figures():
     plt.close("all")
 
 
-@pytest.fixture()
+@pytest.fixture
 def plotter():
     """Return an AdvancedPlotter with show_plot disabled."""
     config = PlotConfig(show_plot=False)
     return AdvancedPlotter(config)
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_x():
     return [1, 2, 3, 4, 5]
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_y():
     return [10, 20, 15, 25, 30]
 
@@ -374,8 +375,11 @@ class TestPlotHeatmap:
         plotter.create_figure()
         data = np.array([[1, 2, 3], [4, 5, 6]])
         hm = plotter.plot_heatmap(
-            data, x_labels=["a", "b", "c"], y_labels=["r1", "r2"],
-            annot=True, fmt=".1f",
+            data,
+            x_labels=["a", "b", "c"],
+            y_labels=["r1", "r2"],
+            annot=True,
+            fmt=".1f",
         )
         assert hm is not None
 
@@ -578,14 +582,18 @@ class TestPlotDataset:
         """Cover lines 737-747."""
         fig, ax = plotter.create_figure()
         points = [DataPoint(x=i, y=i * 2, size=10.0, color="red") for i in range(5)]
-        ds = Dataset(name="sc", data=points, plot_type=PlotType.SCATTER, label="S", color="blue")
+        ds = Dataset(
+            name="sc", data=points, plot_type=PlotType.SCATTER, label="S", color="blue"
+        )
         plotter._plot_dataset(ax, ds)
 
     def test_plot_dataset_bar(self, plotter):
         """Cover lines 748-755."""
         fig, ax = plotter.create_figure()
         points = [DataPoint(x=i, y=i * 3) for i in range(5)]
-        ds = Dataset(name="bar", data=points, plot_type=PlotType.BAR, label="B", color="green")
+        ds = Dataset(
+            name="bar", data=points, plot_type=PlotType.BAR, label="B", color="green"
+        )
         plotter._plot_dataset(ax, ds)
 
     def test_plot_dataset_histogram(self, plotter):
@@ -623,7 +631,9 @@ class TestFinalizePlot:
         assert fig is not None
 
     def test_finalize_with_config_title(self, sample_x, sample_y):
-        cfg = PlotConfig(title="Config Title", xlabel="CX", ylabel="CY", show_plot=False)
+        cfg = PlotConfig(
+            title="Config Title", xlabel="CX", ylabel="CY", show_plot=False
+        )
         p = AdvancedPlotter(cfg)
         p.create_figure()
         p.plot_line(sample_x, sample_y)
@@ -752,8 +762,13 @@ class TestConvenienceFunctions:
         save_path = str(tmp_path / "line.png")
         cfg = PlotConfig(show_plot=False)
         fig = create_advanced_line_plot(
-            sample_x, sample_y, title="Line", xlabel="x", ylabel="y",
-            config=cfg, save_path=save_path,
+            sample_x,
+            sample_y,
+            title="Line",
+            xlabel="x",
+            ylabel="y",
+            config=cfg,
+            save_path=save_path,
         )
         assert fig is not None
         assert os.path.exists(save_path)
@@ -762,7 +777,10 @@ class TestConvenienceFunctions:
         """Cover lines 958-960."""
         cfg = PlotConfig(show_plot=False)
         fig = create_advanced_scatter_plot(
-            sample_x, sample_y, title="Scatter", config=cfg,
+            sample_x,
+            sample_y,
+            title="Scatter",
+            config=cfg,
         )
         assert fig is not None
 
@@ -771,8 +789,11 @@ class TestConvenienceFunctions:
         save_path = str(tmp_path / "bar.png")
         cfg = PlotConfig(show_plot=False)
         fig = create_advanced_bar_chart(
-            ["A", "B", "C"], [10, 20, 30],
-            title="Bar", config=cfg, save_path=save_path,
+            ["A", "B", "C"],
+            [10, 20, 30],
+            title="Bar",
+            config=cfg,
+            save_path=save_path,
         )
         assert fig is not None
 
@@ -780,7 +801,9 @@ class TestConvenienceFunctions:
         """Cover lines 986-988."""
         cfg = PlotConfig(show_plot=False)
         fig = create_advanced_histogram(
-            list(range(50)), title="Hist", config=cfg,
+            list(range(50)),
+            title="Hist",
+            config=cfg,
         )
         assert fig is not None
 
@@ -788,8 +811,11 @@ class TestConvenienceFunctions:
         """Cover lines 999-1001."""
         cfg = PlotConfig(show_plot=False)
         fig = create_advanced_heatmap(
-            [[1, 2], [3, 4]], title="Heatmap", config=cfg,
-            x_labels=["a", "b"], y_labels=["c", "d"],
+            [[1, 2], [3, 4]],
+            title="Heatmap",
+            config=cfg,
+            x_labels=["a", "b"],
+            y_labels=["c", "d"],
         )
         assert fig is not None
 
@@ -801,7 +827,9 @@ class TestConvenienceFunctions:
             Dataset(name="d1", data=points, plot_type=PlotType.LINE, label="D1"),
             Dataset(name="d2", data=points, plot_type=PlotType.SCATTER, label="D2"),
         ]
-        fig = create_advanced_dashboard(datasets, title="Dash", layout=(1, 2), config=cfg)
+        fig = create_advanced_dashboard(
+            datasets, title="Dash", layout=(1, 2), config=cfg
+        )
         assert fig is not None
 
 
@@ -870,7 +898,10 @@ class TestEdgeCases:
     def test_heatmap_no_colorbar(self, plotter):
         plotter.create_figure()
         hm = plotter.plot_heatmap(
-            [[1, 2], [3, 4]], x_labels=["a", "b"], y_labels=["c", "d"], cbar=False,
+            [[1, 2], [3, 4]],
+            x_labels=["a", "b"],
+            y_labels=["c", "d"],
+            cbar=False,
         )
         assert hm is not None
 
@@ -1022,6 +1053,7 @@ class TestDataPointVariations:
 
     def test_data_point_datetime_x(self):
         from datetime import datetime
+
         now = datetime(2026, 1, 1, 12, 0, 0)
         dp = DataPoint(x=now, y=42)
         assert dp.x == now
@@ -1119,7 +1151,9 @@ class TestSavePlotBboxNone:
     """Cover the path where bbox_inches override is explicitly None
     so the config value is used."""
 
-    def test_save_plot_bbox_inches_none_uses_config(self, plotter, sample_x, sample_y, tmp_path):
+    def test_save_plot_bbox_inches_none_uses_config(
+        self, plotter, sample_x, sample_y, tmp_path
+    ):
         plotter.create_figure()
         plotter.plot_line(sample_x, sample_y)
         path = str(tmp_path / "bbox_none.png")

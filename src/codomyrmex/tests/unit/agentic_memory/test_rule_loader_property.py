@@ -1,4 +1,5 @@
 """Property-based tests for RuleLoader._parse_sections using Hypothesis (zero-mock)."""
+
 from __future__ import annotations
 
 import re
@@ -90,7 +91,9 @@ class TestParseSectionsCounting:
 class TestParseSectionsOrdering:
     """Section numbers follow heading input order; _parse_sections never sorts."""
 
-    @given(st.lists(st.integers(0, 50), min_size=2, max_size=6, unique=True).map(sorted))
+    @given(
+        st.lists(st.integers(0, 50), min_size=2, max_size=6, unique=True).map(sorted)
+    )
     def test_ascending_numbers_preserved(self, numbers: list[int]) -> None:
         raw = _build_raw([f"B{n}" for n in numbers], numbers)
         result = [s.number for s in RuleLoader._parse_sections(raw)]
@@ -118,7 +121,13 @@ class TestParseSectionsQuality:
         for s in sections:
             assert isinstance(s.title, str) and s.title
 
-    @given(st.text(alphabet=st.characters(blacklist_characters="\n\r#"), min_size=1, max_size=_SAFE_TITLE_MAX))
+    @given(
+        st.text(
+            alphabet=st.characters(blacklist_characters="\n\r#"),
+            min_size=1,
+            max_size=_SAFE_TITLE_MAX,
+        )
+    )
     def test_heading_title_captured_correctly(self, title: str) -> None:
         safe = title.strip()
         assume(len(safe) >= 1)

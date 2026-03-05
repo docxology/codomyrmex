@@ -22,7 +22,7 @@ class PluginError(CodomyrmexError):
         message: str,
         plugin_name: str | None = None,
         plugin_version: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize PluginError.
 
@@ -51,7 +51,7 @@ class LoadError(PluginError):
         message: str,
         plugin_path: str | None = None,
         module_name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize LoadError.
 
@@ -81,7 +81,7 @@ class DependencyError(PluginError):
         required_dependency: str | None = None,
         required_version: str | None = None,
         available_version: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize DependencyError.
 
@@ -113,7 +113,7 @@ class HookError(PluginError):
         message: str,
         hook_name: str | None = None,
         hook_type: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize HookError.
 
@@ -138,10 +138,7 @@ class PluginValidationError(PluginError):
     """
 
     def __init__(
-        self,
-        message: str,
-        validation_errors: list[str] | None = None,
-        **kwargs: Any
+        self, message: str, validation_errors: list[str] | None = None, **kwargs: Any
     ):
         """Initialize PluginValidationError.
 
@@ -167,7 +164,7 @@ class PluginStateError(PluginError):
         message: str,
         current_state: str | None = None,
         attempted_state: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize PluginStateError.
 
@@ -196,7 +193,7 @@ class PluginConflictError(PluginError):
         message: str,
         conflicting_plugin: str | None = None,
         conflict_type: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize PluginConflictError.
 
@@ -214,11 +211,11 @@ class PluginConflictError(PluginError):
 
 
 __all__ = [
-    "PluginError",
-    "LoadError",
     "DependencyError",
     "HookError",
-    "PluginValidationError",
-    "PluginStateError",
+    "LoadError",
     "PluginConflictError",
+    "PluginError",
+    "PluginStateError",
+    "PluginValidationError",
 ]

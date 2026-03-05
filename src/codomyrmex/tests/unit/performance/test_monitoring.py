@@ -35,6 +35,7 @@ try:
         format_health_report,
         generate_health_report,
     )
+
     _HAS_MONITORING = True
 except ImportError:
     _HAS_MONITORING = False
@@ -101,9 +102,15 @@ class TestSystemMonitor:
         result = get_system_metrics()
 
         expected_keys = [
-            "cpu_percent", "memory_percent", "memory_used_mb",
-            "memory_total_mb", "disk_usage_percent", "disk_free_gb",
-            "network_bytes_sent", "network_bytes_recv", "timestamp"
+            "cpu_percent",
+            "memory_percent",
+            "memory_used_mb",
+            "memory_total_mb",
+            "disk_usage_percent",
+            "disk_free_gb",
+            "network_bytes_sent",
+            "network_bytes_recv",
+            "timestamp",
         ]
 
         for key in expected_keys:
@@ -177,7 +184,7 @@ class TestResourceTracker:
                 peak_memory_vms_mb=150.0,
                 average_cpu_percent=50.0,
                 total_cpu_time=0.5,
-                memory_delta_mb=10.0
+                memory_delta_mb=10.0,
             ),
             ResourceTrackingResult(
                 operation="operation2",
@@ -189,8 +196,8 @@ class TestResourceTracker:
                 peak_memory_vms_mb=250.0,
                 average_cpu_percent=75.0,
                 total_cpu_time=1.5,
-                memory_delta_mb=-5.0
-            )
+                memory_delta_mb=-5.0,
+            ),
         ]
 
         report = create_resource_report(results)
@@ -211,7 +218,7 @@ class TestHealthChecker:
         """Test creating a HealthChecker."""
         checker = HealthChecker()
         assert checker is not None
-        assert hasattr(checker, 'module_checks')
+        assert hasattr(checker, "module_checks")
 
     def test_module_availability_check(self):
         """Test checking module availability with real importlib."""
@@ -221,7 +228,9 @@ class TestHealthChecker:
         assert checker._check_module_availability("logging_monitoring")
 
         # Test unavailable module
-        assert not checker._check_module_availability("definitely_does_not_exist_module_12345")
+        assert not checker._check_module_availability(
+            "definitely_does_not_exist_module_12345"
+        )
 
     def test_perform_health_check(self):
         """Test performing a health check with real implementation."""
@@ -301,7 +310,7 @@ class TestHealthReporter:
             healthy_modules=1,
             degraded_modules=1,
             unhealthy_modules=0,
-            unknown_modules=0
+            unknown_modules=0,
         )
 
         formatted = reporter.format_health_report(report, "text")
@@ -341,17 +350,10 @@ class TestHealthReporter:
         reporter = HealthReporter()
 
         # Create two reports with different timestamps
-        report1 = HealthReport(
-            timestamp=1000.0,
-            total_modules=1,
-            healthy_modules=1
-        )
+        report1 = HealthReport(timestamp=1000.0, total_modules=1, healthy_modules=1)
 
         report2 = HealthReport(
-            timestamp=1100.0,
-            total_modules=1,
-            healthy_modules=0,
-            degraded_modules=1
+            timestamp=1100.0, total_modules=1, healthy_modules=0, degraded_modules=1
         )
 
         comparison = reporter.compare_health_reports(report2, report1)
@@ -374,7 +376,9 @@ class TestHealthReporter:
         assert "total_modules" in parsed
 
         # Test export_health_report
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as tmp_file:
+        with tempfile.NamedTemporaryFile(
+            mode="w", delete=False, suffix=".txt"
+        ) as tmp_file:
             report_path = tmp_file.name
             export_health_report(report, report_path)
             assert os.path.exists(report_path)
@@ -530,6 +534,7 @@ class TestAsyncPerformancePatterns:
 
     async def test_async_timeout_pattern(self):
         """Test async timeout pattern."""
+
         async def slow_operation():
             await asyncio.sleep(10)  # Would take 10 seconds
             return "done"
@@ -577,6 +582,7 @@ class TestRegressionDetector:
             BenchmarkResult,
             RegressionDetector,
         )
+
         detector = RegressionDetector()
         detector.set_baseline(Baseline("import_time", mean=100.0))
         result = BenchmarkResult("import_time", value=105.0)
@@ -589,8 +595,11 @@ class TestRegressionDetector:
             BenchmarkResult,
             RegressionDetector,
         )
+
         detector = RegressionDetector()
-        detector.set_baseline(Baseline("import_time", mean=100.0, warning_threshold=0.10))
+        detector.set_baseline(
+            Baseline("import_time", mean=100.0, warning_threshold=0.10)
+        )
         result = BenchmarkResult("import_time", value=115.0)
         report = detector.check(result)
         assert report.severity.value == "warning"
@@ -602,8 +611,11 @@ class TestRegressionDetector:
             BenchmarkResult,
             RegressionDetector,
         )
+
         detector = RegressionDetector()
-        detector.set_baseline(Baseline("import_time", mean=100.0, critical_threshold=0.25))
+        detector.set_baseline(
+            Baseline("import_time", mean=100.0, critical_threshold=0.25)
+        )
         result = BenchmarkResult("import_time", value=130.0)
         report = detector.check(result)
         assert report.severity.value == "critical"
@@ -613,6 +625,7 @@ class TestRegressionDetector:
             BenchmarkResult,
             RegressionDetector,
         )
+
         detector = RegressionDetector()
         with pytest.raises(KeyError):
             detector.check(BenchmarkResult("unknown", value=1.0))
@@ -626,7 +639,10 @@ class TestBenchmarkComparison:
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             compute_delta,
         )
-        delta = compute_delta("latency", before=100.0, after=80.0, higher_is_better=False)
+
+        delta = compute_delta(
+            "latency", before=100.0, after=80.0, higher_is_better=False
+        )
         assert delta.improved is True
         assert delta.absolute_delta == -20.0
 
@@ -634,7 +650,10 @@ class TestBenchmarkComparison:
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             compute_delta,
         )
-        delta = compute_delta("latency", before=100.0, after=120.0, higher_is_better=False)
+
+        delta = compute_delta(
+            "latency", before=100.0, after=120.0, higher_is_better=False
+        )
         assert delta.improved is False
         assert delta.relative_delta == pytest.approx(20.0)
 
@@ -643,6 +662,7 @@ class TestBenchmarkComparison:
             mean,
             stddev,
         )
+
         vals = [10.0, 20.0, 30.0]
         assert mean(vals) == pytest.approx(20.0)
         assert stddev(vals) > 0
@@ -651,5 +671,6 @@ class TestBenchmarkComparison:
         from codomyrmex.performance.benchmarking.benchmark_comparison import (
             coefficient_of_variation,
         )
+
         # Identical values → CV = 0
         assert coefficient_of_variation([5.0, 5.0, 5.0]) == pytest.approx(0.0)

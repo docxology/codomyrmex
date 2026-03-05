@@ -21,7 +21,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-__all__ = ["TaskResult", "PoolStats", "AsyncWorkerPool"]
+__all__ = ["AsyncWorkerPool", "PoolStats", "TaskResult"]
 
 T = TypeVar("T")
 R = TypeVar("R")
@@ -70,7 +70,7 @@ class AsyncWorkerPool:
         """Enter async context."""
         return self
 
-    async def __aexit__(self, *exc: Any) -> None:
+    async def __aexit__(self, *exc: object) -> None:
         """Exit async context."""
         await self.shutdown()
 

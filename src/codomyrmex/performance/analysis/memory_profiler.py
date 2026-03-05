@@ -78,6 +78,7 @@ class MemoryProfiler:
         """
         # Use sys.getrefcount and gc-style counting
         import gc
+
         gc.collect()
 
         type_counts: dict[str, int] = {}
@@ -95,7 +96,9 @@ class MemoryProfiler:
         self._snapshots[label] = snap
         return snap
 
-    def snapshot_lightweight(self, label: str, tracked_count: int = 0) -> MemorySnapshot:
+    def snapshot_lightweight(
+        self, label: str, tracked_count: int = 0
+    ) -> MemorySnapshot:
         """Take a lightweight snapshot without gc traversal.
 
         Args:

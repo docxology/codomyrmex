@@ -47,7 +47,7 @@ class CodeSimilarity:
 
     # Regex to strip comments and normalise whitespace for tokenisation
     _COMMENT_RE = re.compile(r"#.*$", re.MULTILINE)
-    _DOCSTRING_RE = re.compile(r'(\"\"\"[\s\S]*?\"\"\"|\'\'\'[\s\S]*?\'\'\')')
+    _DOCSTRING_RE = re.compile(r"(\"\"\"[\s\S]*?\"\"\"|\'\'\'[\s\S]*?\'\'\')")
     _WHITESPACE_RE = re.compile(r"\s+")
 
     def __init__(self) -> None:
@@ -114,7 +114,9 @@ class CodeSimilarity:
         contents: dict[str, str] = {}
         for fpath in files:
             try:
-                contents[fpath] = Path(fpath).read_text(encoding="utf-8", errors="ignore")
+                contents[fpath] = Path(fpath).read_text(
+                    encoding="utf-8", errors="ignore"
+                )
             except Exception as exc:
                 logger.warning("Could not read %s: %s", fpath, exc)
 
@@ -126,11 +128,13 @@ class CodeSimilarity:
                 fa, fb = file_list[i], file_list[j]
                 score = self.compute_similarity(contents[fa], contents[fb])
                 if score >= threshold:
-                    results.append(DuplicateResult(
-                        file_a=fa,
-                        file_b=fb,
-                        similarity=score,
-                    ))
+                    results.append(
+                        DuplicateResult(
+                            file_a=fa,
+                            file_b=fb,
+                            similarity=score,
+                        )
+                    )
 
         results.sort(key=lambda r: r.similarity, reverse=True)
         return results
@@ -183,8 +187,8 @@ class CodeSimilarity:
             return 0.0
 
         dot_product = sum(counter_a.get(t, 0) * counter_b.get(t, 0) for t in all_tokens)
-        mag_a = sum(v ** 2 for v in counter_a.values()) ** 0.5
-        mag_b = sum(v ** 2 for v in counter_b.values()) ** 0.5
+        mag_a = sum(v**2 for v in counter_a.values()) ** 0.5
+        mag_b = sum(v**2 for v in counter_b.values()) ** 0.5
 
         if mag_a == 0 or mag_b == 0:
             return 0.0

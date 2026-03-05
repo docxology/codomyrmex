@@ -14,9 +14,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class ConfigChange:
     """Configuration change record."""
+
     change_id: str
     config_path: str
     change_type: str  # "created", "modified", "deleted"
@@ -26,9 +28,11 @@ class ConfigChange:
     changes: dict[str, Any] = field(default_factory=dict)
     source: str = "unknown"  # Who made the change
 
+
 @dataclass
 class ConfigAudit:
     """Configuration audit record."""
+
     audit_id: str
     timestamp: datetime
     environment: str
@@ -37,14 +41,17 @@ class ConfigAudit:
     recommendations: list[str]
     audit_scope: dict[str, Any]
 
+
 @dataclass
 class ConfigSnapshot:
     """Configuration snapshot for drift detection."""
+
     snapshot_id: str
     timestamp: datetime
     environment: str
     config_hashes: dict[str, str]
     total_files: int
+
 
 class ConfigurationMonitor:
     """Configuration monitoring and auditing system."""
@@ -84,7 +91,7 @@ class ConfigurationMonitor:
         if not path.exists():
             return ""
 
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             content = f.read()
 
         return hashlib.sha256(content).hexdigest()
@@ -111,7 +118,7 @@ class ConfigurationMonitor:
                     change_type="deleted",
                     timestamp=datetime.now(),
                     previous_hash=self._get_previous_hash(str(path)),
-                    current_hash=""
+                    current_hash="",
                 )
                 changes.append(change)
                 logger.info(f"Detected configuration file deletion: {path}")
@@ -129,7 +136,7 @@ class ConfigurationMonitor:
                     config_path=str(path),
                     change_type="created",
                     timestamp=datetime.now(),
-                    current_hash=current_hash
+                    current_hash=current_hash,
                 )
                 changes.append(change)
                 logger.info(f"Detected new configuration file: {path}")
@@ -142,7 +149,7 @@ class ConfigurationMonitor:
                     change_type="modified",
                     timestamp=datetime.now(),
                     previous_hash=previous_hash,
-                    current_hash=current_hash
+                    current_hash=current_hash,
                 )
                 changes.append(change)
                 logger.info(f"Detected configuration file modification: {path}")
@@ -183,7 +190,9 @@ class ConfigurationMonitor:
         with open(hash_store_path, "w") as f:
             json.dump(existing, f, indent=2)
 
-    def create_snapshot(self, environment: str, config_paths: list[str]) -> ConfigSnapshot:
+    def create_snapshot(
+        self, environment: str, config_paths: list[str]
+    ) -> ConfigSnapshot:
         """Create a snapshot of configuration files for drift detection.
 
         Args:
@@ -204,26 +213,34 @@ class ConfigurationMonitor:
             timestamp=datetime.now(),
             environment=environment,
             config_hashes=config_hashes,
-            total_files=len(config_paths)
+            total_files=len(config_paths),
         )
 
         self._snapshots[snapshot_id] = snapshot
 
         # Save snapshot
         snapshot_file = self.snapshots_dir / f"{snapshot_id}.json"
-        with open(snapshot_file, 'w') as f:
-            json.dump({
-                "snapshot_id": snapshot.snapshot_id,
-                "timestamp": snapshot.timestamp.isoformat(),
-                "environment": snapshot.environment,
-                "config_hashes": snapshot.config_hashes,
-                "total_files": snapshot.total_files
-            }, f, indent=2)
+        with open(snapshot_file, "w") as f:
+            json.dump(
+                {
+                    "snapshot_id": snapshot.snapshot_id,
+                    "timestamp": snapshot.timestamp.isoformat(),
+                    "environment": snapshot.environment,
+                    "config_hashes": snapshot.config_hashes,
+                    "total_files": snapshot.total_files,
+                },
+                f,
+                indent=2,
+            )
 
-        logger.info(f"Created configuration snapshot: {snapshot_id} ({len(config_paths)} files)")
+        logger.info(
+            f"Created configuration snapshot: {snapshot_id} ({len(config_paths)} files)"
+        )
         return snapshot
 
-    def detect_drift(self, snapshot_id: str, current_paths: list[str]) -> dict[str, Any]:
+    def detect_drift(
+        self, snapshot_id: str, current_paths: list[str]
+    ) -> dict[str, Any]:
         """Detect configuration drift against a snapshot.
 
         Args:
@@ -244,42 +261,48 @@ class ConfigurationMonitor:
             "files_in_drift": 0,
             "files_missing": 0,
             "files_added": 0,
-            "drift_details": []
+            "drift_details": [],
         }
 
         # Check for modified files
         for config_path in snapshot.config_hashes:
             if config_path not in current_paths:
                 drift_report["files_missing"] += 1
-                drift_report["drift_details"].append({
-                    "path": config_path,
-                    "issue": "file_missing",
-                    "expected_hash": snapshot.config_hashes[config_path],
-                    "current_hash": None
-                })
+                drift_report["drift_details"].append(
+                    {
+                        "path": config_path,
+                        "issue": "file_missing",
+                        "expected_hash": snapshot.config_hashes[config_path],
+                        "current_hash": None,
+                    }
+                )
             else:
                 current_hash = self.calculate_file_hash(config_path)
                 expected_hash = snapshot.config_hashes[config_path]
 
                 if current_hash != expected_hash:
                     drift_report["files_in_drift"] += 1
-                    drift_report["drift_details"].append({
-                        "path": config_path,
-                        "issue": "file_modified",
-                        "expected_hash": expected_hash,
-                        "current_hash": current_hash
-                    })
+                    drift_report["drift_details"].append(
+                        {
+                            "path": config_path,
+                            "issue": "file_modified",
+                            "expected_hash": expected_hash,
+                            "current_hash": current_hash,
+                        }
+                    )
 
         # Check for added files
         for current_path in current_paths:
             if current_path not in snapshot.config_hashes:
                 drift_report["files_added"] += 1
-                drift_report["drift_details"].append({
-                    "path": current_path,
-                    "issue": "file_added",
-                    "expected_hash": None,
-                    "current_hash": self.calculate_file_hash(current_path)
-                })
+                drift_report["drift_details"].append(
+                    {
+                        "path": current_path,
+                        "issue": "file_added",
+                        "expected_hash": None,
+                        "current_hash": self.calculate_file_hash(current_path),
+                    }
+                )
 
         logger.info(f"Configuration drift analysis complete for {snapshot_id}")
         return drift_report
@@ -288,7 +311,7 @@ class ConfigurationMonitor:
         self,
         environment: str,
         config_paths: list[str],
-        compliance_rules: dict[str, Any] | None = None
+        compliance_rules: dict[str, Any] | None = None,
     ) -> ConfigAudit:
         """Audit configuration for compliance and best practices.
 
@@ -314,16 +337,22 @@ class ConfigurationMonitor:
 
             # Check file permissions
             if path.stat().st_mode & 0o077:  # World-readable
-                issues_found.append(f"Configuration file has overly permissive permissions: {config_path}")
+                issues_found.append(
+                    f"Configuration file has overly permissive permissions: {config_path}"
+                )
 
             # Check for sensitive data in plain text
             content = path.read_text()
             if self._contains_sensitive_data(content):
-                issues_found.append(f"Potential sensitive data in plain text: {config_path}")
+                issues_found.append(
+                    f"Potential sensitive data in plain text: {config_path}"
+                )
 
             # Check for required configuration sections
             if not self._has_required_sections(content):
-                issues_found.append(f"Missing required configuration sections: {config_path}")
+                issues_found.append(
+                    f"Missing required configuration sections: {config_path}"
+                )
 
         # Generate recommendations
         if issues_found:
@@ -336,7 +365,7 @@ class ConfigurationMonitor:
             compliance_rules = {
                 "require_encryption": True,
                 "require_validation": True,
-                "require_backups": True
+                "require_backups": True,
             }
 
         compliance_status = "compliant" if not issues_found else "non_compliant"
@@ -348,23 +377,30 @@ class ConfigurationMonitor:
             compliance_status=compliance_status,
             issues_found=issues_found,
             recommendations=recommendations,
-            audit_scope={"files_audited": len(config_paths), "rules_applied": compliance_rules}
+            audit_scope={
+                "files_audited": len(config_paths),
+                "rules_applied": compliance_rules,
+            },
         )
 
         self._audits.append(audit)
 
         # Save audit results
         audit_file = self.audits_dir / f"{audit_id}.json"
-        with open(audit_file, 'w') as f:
-            json.dump({
-                "audit_id": audit.audit_id,
-                "timestamp": audit.timestamp.isoformat(),
-                "environment": audit.environment,
-                "compliance_status": audit.compliance_status,
-                "issues_found": audit.issues_found,
-                "recommendations": audit.recommendations,
-                "audit_scope": audit.audit_scope
-            }, f, indent=2)
+        with open(audit_file, "w") as f:
+            json.dump(
+                {
+                    "audit_id": audit.audit_id,
+                    "timestamp": audit.timestamp.isoformat(),
+                    "environment": audit.environment,
+                    "compliance_status": audit.compliance_status,
+                    "issues_found": audit.issues_found,
+                    "recommendations": audit.recommendations,
+                    "audit_scope": audit.audit_scope,
+                },
+                f,
+                indent=2,
+            )
 
         logger.info(f"Completed configuration audit: {audit_id} ({compliance_status})")
         return audit
@@ -401,10 +437,7 @@ class ConfigurationMonitor:
         """
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
-        return [
-            change for change in self._changes
-            if change.timestamp >= cutoff_time
-        ]
+        return [change for change in self._changes if change.timestamp >= cutoff_time]
 
     def get_audit_history(self, environment: str | None = None) -> list[ConfigAudit]:
         """Get audit history.
@@ -438,14 +471,17 @@ class ConfigurationMonitor:
             "total_changes": len(self._changes),
             "recent_changes": len(recent_changes),
             "total_audits": len(self._audits),
-            "last_audit": self._audits[-1].timestamp.isoformat() if self._audits else None,
-            "monitoring_status": "active"
+            "last_audit": self._audits[-1].timestamp.isoformat()
+            if self._audits
+            else None,
+            "monitoring_status": "active",
         }
+
 
 def monitor_config_changes(
     config_paths: list[str],
     interval_seconds: int = 300,  # 5 minutes
-    workspace_dir: str | None = None
+    workspace_dir: str | None = None,
 ) -> dict[str, Any]:
     """Monitor configuration changes continuously.
 
@@ -469,5 +505,5 @@ def monitor_config_changes(
         "interval_seconds": interval_seconds,
         "paths_monitored": len(config_paths),
         "initial_changes_detected": len(changes),
-        "changes": [change.__dict__ for change in changes]
+        "changes": [change.__dict__ for change in changes],
     }

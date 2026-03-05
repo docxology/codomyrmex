@@ -15,6 +15,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)
@@ -324,7 +325,9 @@ class MermaidDiagramGenerator:
 
     def _get_file_icon(self, filename: str) -> str:
         """Get appropriate icon for file type."""
-        extension = filename.split(".")[-1].lower() if "." in filename else ""
+        extension = (
+            filename.rsplit(".", maxsplit=1)[-1].lower() if "." in filename else ""
+        )
 
         icons = {
             "py": "🐍",
@@ -536,6 +539,7 @@ if __name__ == "__main__":
     # Basic logging setup if running standalone
     if not logger.hasHandlers():
         import logging
+
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -543,4 +547,3 @@ if __name__ == "__main__":
         logger.info(
             "Basic logging configured for direct script execution of mermaid_generator.py."
         )
-

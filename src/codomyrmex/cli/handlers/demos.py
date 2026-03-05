@@ -1,17 +1,19 @@
-
 from codomyrmex.cli.utils import get_logger
 
 # Lazy imports for demos to avoid hard dependencies
 logger = get_logger(__name__)
 
+
 def demo_data_visualization() -> bool:
     """Demo data visualization capabilities."""
     try:
         import matplotlib
-        matplotlib.use('Agg')
+
+        matplotlib.use("Agg")
         import os
 
         from codomyrmex.data_visualization import create_bar_chart, create_line_plot
+
         # Generate sample data
         output_dir = "output"
         os.makedirs(output_dir, exist_ok=True)
@@ -23,9 +25,7 @@ def demo_data_visualization() -> bool:
         create_line_plot(
             x, y, title="Demo: Quadratic Function", save_path="output/demo_line.png"
         )
-        create_bar_chart(
-            x, y, title="Demo: Bar Chart", save_path="output/demo_bar.png"
-        )
+        create_bar_chart(x, y, title="Demo: Bar Chart", save_path="output/demo_bar.png")
 
         print("✅ Data visualization demo complete. Check output/ directory.")
         return True
@@ -36,7 +36,7 @@ def demo_data_visualization() -> bool:
         return False
     except Exception as e:
         logger.error(f"Data visualization demo failed: {e}", exc_info=True)
-        print(f"❌ Demo failed: {str(e)}")
+        print(f"❌ Demo failed: {e!s}")
         return False
 
 
@@ -56,9 +56,8 @@ def demo_ai_code_editing() -> bool:
             print(result["generated_code"])
             print("-" * 40)
             return True
-        else:
-            print(f"❌ Demo failed: {result['error_message']}")
-            return False
+        print(f"❌ Demo failed: {result['error_message']}")
+        return False
 
     except ImportError:
         logger.warning("AI code editing module not available")
@@ -66,7 +65,7 @@ def demo_ai_code_editing() -> bool:
         return False
     except Exception as e:
         logger.error(f"AI code editing demo failed: {e}", exc_info=True)
-        print(f"❌ Demo failed: {str(e)}")
+        print(f"❌ Demo failed: {e!s}")
         return False
 
 
@@ -94,9 +93,10 @@ for i in range(8):
             print(result.get("stdout", "No output"))
             print("-" * 40)
             return True
-        else:
-            print(f"❌ Demo failed: {result.get('error_message', result.get('stderr', 'Unknown error'))}")
-            return False
+        print(
+            f"❌ Demo failed: {result.get('error_message', result.get('stderr', 'Unknown error'))}"
+        )
+        return False
 
     except ImportError:
         logger.warning("Code execution sandbox module not available")
@@ -104,7 +104,7 @@ for i in range(8):
         return False
     except Exception as e:
         logger.error(f"Code execution demo failed: {e}", exc_info=True)
-        print(f"❌ Demo failed: {str(e)}")
+        print(f"❌ Demo failed: {e!s}")
         return False
 
 
@@ -127,7 +127,7 @@ def demo_git_operations() -> bool:
         return False
     except Exception as e:
         logger.error(f"Git operations demo failed: {e}", exc_info=True)
-        print(f"❌ Demo failed: {str(e)}")
+        print(f"❌ Demo failed: {e!s}")
         return False
 
 
@@ -144,6 +144,5 @@ def handle_module_demo(module_name: str) -> bool:
 
     if module_name in demos:
         return demos[module_name]()
-    else:
-        print(f"❌ No demo available for module: {module_name}")
-        return False
+    print(f"❌ No demo available for module: {module_name}")
+    return False

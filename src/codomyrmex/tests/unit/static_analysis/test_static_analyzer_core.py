@@ -15,6 +15,7 @@ try:
         SeverityLevel,
         StaticAnalyzer,
     )
+
     STATIC_ANALYZER_AVAILABLE = True
 except ImportError as e:
     STATIC_ANALYZER_AVAILABLE = False

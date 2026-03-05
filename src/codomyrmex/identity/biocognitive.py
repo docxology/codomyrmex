@@ -70,7 +70,9 @@ class BioCognitiveVerifier:
 
         samples = self._baselines[user_id][metric]
         if len(samples) < 10:
-            logger.info("Insufficient samples for verification, assuming true for training")
+            logger.info(
+                "Insufficient samples for verification, assuming true for training"
+            )
             return True
 
         mean = float(np.mean(samples))

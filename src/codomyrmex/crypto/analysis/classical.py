@@ -128,7 +128,8 @@ def break_caesar(ciphertext: str) -> list[CaesarResult]:
 
     logger.debug(
         "Caesar break: best shift=%d, score=%.2f",
-        results[0].shift, results[0].score,
+        results[0].shift,
+        results[0].score,
     )
     return results
 
@@ -236,7 +237,8 @@ def _estimate_key_length(ciphertext: str, max_key_length: int) -> int:
 
 
 def break_vigenere(
-    ciphertext: str, max_key_length: int = 20,
+    ciphertext: str,
+    max_key_length: int = 20,
 ) -> VigenereResult:
     """Break a Vigenere cipher by finding the key.
 
@@ -346,13 +348,11 @@ def detect_cipher_type(ciphertext: str) -> str:
         best_shift = results[0].shift
         if best_shift == 0:
             return "plaintext"
-        elif results[0].score < 200:
+        if results[0].score < 200:
             # Strong frequency match at a non-zero shift indicates Caesar
             return "caesar"
-        else:
-            # High IC but poor frequency match at all shifts -- unusual
-            return "vigenere" if ic < 0.055 else "caesar"
-    elif ic >= 0.038:
+        # High IC but poor frequency match at all shifts -- unusual
+        return "vigenere" if ic < 0.055 else "caesar"
+    if ic >= 0.038:
         return "vigenere"
-    else:
-        return "random/unknown"
+    return "random/unknown"

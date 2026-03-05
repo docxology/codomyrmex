@@ -24,19 +24,23 @@ from codomyrmex.agents.agentic_seek.agent_types import (
 # AgenticSeekAgentType
 # ===================================================================
 
+
 class TestAgenticSeekAgentType:
     """Enum membership, values, and from_string resolution."""
 
     def test_has_five_members(self):
         assert len(AgenticSeekAgentType) == 5
 
-    @pytest.mark.parametrize("member,value", [
-        (AgenticSeekAgentType.CODER, "coder"),
-        (AgenticSeekAgentType.BROWSER, "browser"),
-        (AgenticSeekAgentType.PLANNER, "planner"),
-        (AgenticSeekAgentType.FILE, "file"),
-        (AgenticSeekAgentType.CASUAL, "casual"),
-    ])
+    @pytest.mark.parametrize(
+        "member,value",
+        [
+            (AgenticSeekAgentType.CODER, "coder"),
+            (AgenticSeekAgentType.BROWSER, "browser"),
+            (AgenticSeekAgentType.PLANNER, "planner"),
+            (AgenticSeekAgentType.FILE, "file"),
+            (AgenticSeekAgentType.CASUAL, "casual"),
+        ],
+    )
     def test_member_values(self, member, value):
         assert member.value == value
 
@@ -44,10 +48,14 @@ class TestAgenticSeekAgentType:
         assert AgenticSeekAgentType.from_string("coder") is AgenticSeekAgentType.CODER
 
     def test_from_string_uppercase(self):
-        assert AgenticSeekAgentType.from_string("BROWSER") is AgenticSeekAgentType.BROWSER
+        assert (
+            AgenticSeekAgentType.from_string("BROWSER") is AgenticSeekAgentType.BROWSER
+        )
 
     def test_from_string_mixed_case(self):
-        assert AgenticSeekAgentType.from_string("Planner") is AgenticSeekAgentType.PLANNER
+        assert (
+            AgenticSeekAgentType.from_string("Planner") is AgenticSeekAgentType.PLANNER
+        )
 
     def test_from_string_with_whitespace(self):
         assert AgenticSeekAgentType.from_string("  file  ") is AgenticSeekAgentType.FILE
@@ -60,6 +68,7 @@ class TestAgenticSeekAgentType:
 # ===================================================================
 # AgenticSeekProvider
 # ===================================================================
+
 
 class TestAgenticSeekProvider:
     def test_has_nine_members(self):
@@ -75,6 +84,7 @@ class TestAgenticSeekProvider:
 # ===================================================================
 # AgenticSeekConfig
 # ===================================================================
+
 
 class TestAgenticSeekConfig:
     def test_default_construction(self):
@@ -120,6 +130,7 @@ class TestAgenticSeekConfig:
 # AgenticSeekMemoryEntry
 # ===================================================================
 
+
 class TestAgenticSeekMemoryEntry:
     def test_construction(self):
         entry = AgenticSeekMemoryEntry(role="user", content="Hello")
@@ -143,16 +154,20 @@ class TestAgenticSeekMemoryEntry:
 # AgenticSeekTaskStatus
 # ===================================================================
 
+
 class TestAgenticSeekTaskStatus:
     def test_has_four_members(self):
         assert len(AgenticSeekTaskStatus) == 4
 
-    @pytest.mark.parametrize("member,value", [
-        (AgenticSeekTaskStatus.PENDING, "pending"),
-        (AgenticSeekTaskStatus.RUNNING, "running"),
-        (AgenticSeekTaskStatus.COMPLETED, "completed"),
-        (AgenticSeekTaskStatus.FAILED, "failed"),
-    ])
+    @pytest.mark.parametrize(
+        "member,value",
+        [
+            (AgenticSeekTaskStatus.PENDING, "pending"),
+            (AgenticSeekTaskStatus.RUNNING, "running"),
+            (AgenticSeekTaskStatus.COMPLETED, "completed"),
+            (AgenticSeekTaskStatus.FAILED, "failed"),
+        ],
+    )
     def test_member_values(self, member, value):
         assert member.value == value
 
@@ -160,6 +175,7 @@ class TestAgenticSeekTaskStatus:
 # ===================================================================
 # AgenticSeekTaskStep
 # ===================================================================
+
 
 class TestAgenticSeekTaskStep:
     def test_construction(self):
@@ -188,11 +204,15 @@ class TestAgenticSeekTaskStep:
 # AgenticSeekExecutionResult
 # ===================================================================
 
+
 class TestAgenticSeekExecutionResult:
     def test_success_str(self):
         r = AgenticSeekExecutionResult(
-            code="print(1)", feedback="1", success=True,
-            tool_type="python", execution_time=0.5,
+            code="print(1)",
+            feedback="1",
+            success=True,
+            tool_type="python",
+            execution_time=0.5,
         )
         s = str(r)
         assert "✓" in s
@@ -200,8 +220,11 @@ class TestAgenticSeekExecutionResult:
 
     def test_failure_str(self):
         r = AgenticSeekExecutionResult(
-            code="x", feedback="error", success=False,
-            tool_type="bash", execution_time=0.1,
+            code="x",
+            feedback="error",
+            success=False,
+            tool_type="bash",
+            execution_time=0.1,
         )
         s = str(r)
         assert "✗" in s
@@ -210,6 +233,7 @@ class TestAgenticSeekExecutionResult:
 # ===================================================================
 # resolve_language
 # ===================================================================
+
 
 class TestResolveLanguage:
     def test_canonical_name(self):
@@ -240,6 +264,7 @@ class TestResolveLanguage:
 # ===================================================================
 # SUPPORTED_LANGUAGES
 # ===================================================================
+
 
 class TestSupportedLanguages:
     def test_has_five_languages(self):

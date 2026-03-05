@@ -32,15 +32,27 @@ from codomyrmex.utils.cli_helpers import (
 )
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser(description="Audio Basic Usage Example")
-    parser.add_argument("--text", default="Hello! This is Codomyrmex.", help="Input for generation")
-    parser.add_argument("--provider", choices=["edge-tts", "pyttsx3", "auto"], default="auto", help="TTS Provider to use")
-    parser.add_argument("--voice", help="Specific voice to use (e.g., en-US-AriaNeural or a system voice ID)")
-    parser.add_argument("--rate", type=float, default=1.0, help="Speaking rate (1.0 is normal)")
+    parser.add_argument(
+        "--text", default="Hello! This is Codomyrmex.", help="Input for generation"
+    )
+    parser.add_argument(
+        "--provider",
+        choices=["edge-tts", "pyttsx3", "auto"],
+        default="auto",
+        help="TTS Provider to use",
+    )
+    parser.add_argument(
+        "--voice",
+        help="Specific voice to use (e.g., en-US-AriaNeural or a system voice ID)",
+    )
+    parser.add_argument(
+        "--rate", type=float, default=1.0, help="Speaking rate (1.0 is normal)"
+    )
     parser.add_argument("--output-dir", default="output/audio", help="Output directory")
     return parser.parse_args()
+
 
 def main() -> int:
     setup_logging()
@@ -49,8 +61,16 @@ def main() -> int:
 
     # ── 0. Import guard ────────────────────────────────────────────────
     try:
-        from codomyrmex.audio import Synthesizer, TTS_AVAILABLE, EDGE_TTS_AVAILABLE, PYTTSX3_AVAILABLE
-        from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
+        from codomyrmex.audio import (
+            EDGE_TTS_AVAILABLE,
+            PYTTSX3_AVAILABLE,
+            TTS_AVAILABLE,
+            Synthesizer,
+        )
+        from codomyrmex.audio.exceptions import (
+            ProviderNotAvailableError,
+            SynthesisError,
+        )
     except ImportError:
         print_error("Audio module not importable.")
         print_info("  Install: uv sync --extra audio")
@@ -69,13 +89,21 @@ def main() -> int:
 
     # ── Decide provider based on args ────────────────────────────
     use_edge = args.provider in ("edge-tts", "auto") and EDGE_TTS_AVAILABLE
-    use_offline = args.provider in ("pyttsx3", "auto") and PYTTSX3_AVAILABLE 
-    
-    if args.provider != "auto" and args.provider == "edge-tts" and not EDGE_TTS_AVAILABLE:
-        print_error("edge-tts requested but not available. Install: uv sync --extra audio")
+    use_offline = args.provider in ("pyttsx3", "auto") and PYTTSX3_AVAILABLE
+
+    if (
+        args.provider != "auto"
+        and args.provider == "edge-tts"
+        and not EDGE_TTS_AVAILABLE
+    ):
+        print_error(
+            "edge-tts requested but not available. Install: uv sync --extra audio"
+        )
         return 1
     if args.provider != "auto" and args.provider == "pyttsx3" and not PYTTSX3_AVAILABLE:
-        print_error("pyttsx3 requested but not available. Install: uv sync --extra audio")
+        print_error(
+            "pyttsx3 requested but not available. Install: uv sync --extra audio"
+        )
         return 1
 
     success_count = 0
@@ -85,7 +113,7 @@ def main() -> int:
         print_info("1. edge-tts — Neural TTS (Microsoft Edge voices)...")
         try:
             synth = Synthesizer(provider="edge-tts")
-            print_success(f"   Synthesizer ready with edge-tts.")
+            print_success("   Synthesizer ready with edge-tts.")
 
             # Synthesize to file
             out = output_dir / "basic_usage_edge_tts.mp3"
@@ -103,16 +131,17 @@ def main() -> int:
                 "The first sentence in a batch.",
                 "The second sentence with different content.",
             ]
-            results = synth.synthesize_batch(batch_texts, voice=args.voice or "en-US-GuyNeural", rate=args.rate)
+            results = synth.synthesize_batch(
+                batch_texts, voice=args.voice or "en-US-GuyNeural", rate=args.rate
+            )
             print_success(f"   Batch: {len(results)} results synthesized.")
 
         except ProviderNotAvailableError as e:
             print_error(f"   edge-tts unavailable: {e}")
         except SynthesisError as e:
             print_error(f"   Synthesis failed: {e}")
-    else:
-        if args.provider == "auto":
-            print_warning("1. edge-tts not installed (skip).")
+    elif args.provider == "auto":
+        print_warning("1. edge-tts not installed (skip).")
 
     # ── 2. pyttsx3 (offline, system voices) ───────────────────────────
     if use_offline:
@@ -135,9 +164,8 @@ def main() -> int:
             print_error(f"   pyttsx3 unavailable: {e}")
         except SynthesisError as e:
             print_error(f"   Synthesis failed: {e}")
-    else:
-        if args.provider == "auto":
-            print_warning("2. pyttsx3 not installed (skip).")
+    elif args.provider == "auto":
+        print_warning("2. pyttsx3 not installed (skip).")
 
     # ── 3. In-memory synthesis ─────────────────────────────────────────
     if success_count > 0:
@@ -147,7 +175,8 @@ def main() -> int:
             synth_mem = Synthesizer(provider=provider)
             result = synth_mem.synthesize(
                 "This is an in-memory synthesis — result.audio_data holds the bytes.",
-                voice=args.voice or ("en-US-AriaNeural" if provider == "edge-tts" else None),
+                voice=args.voice
+                or ("en-US-AriaNeural" if provider == "edge-tts" else None),
                 rate=args.rate,
             )
             print_success(f"   SynthesisResult: {type(result).__name__}")
@@ -156,7 +185,9 @@ def main() -> int:
         except Exception as e:
             print_error(f"   In-memory synthesis failed: {e}")
     else:
-        print_error("3. No provider available for in-memory test, or previous synthesis failed.")
+        print_error(
+            "3. No provider available for in-memory test, or previous synthesis failed."
+        )
         return 1
 
     print_section("Basic Usage Complete")

@@ -16,6 +16,7 @@ from .base import (
 
 logger = get_logger(__name__)
 
+
 def create_github_repository(
     name: str,
     private: bool = True,
@@ -85,22 +86,22 @@ def create_github_repository(
                 },
                 "created_at": datetime.now().isoformat(),
             }
-        else:
-            error_msg = f"Failed to create repository: {response.status_code}"
-            if response.text:
-                try:
-                    error_data = response.json()
-                    error_msg += f" - {error_data.get('message', response.text)}"
-                except (ValueError, json.JSONDecodeError):
-                    error_msg += f" - {response.text}"
+        error_msg = f"Failed to create repository: {response.status_code}"
+        if response.text:
+            try:
+                error_data = response.json()
+                error_msg += f" - {error_data.get('message', response.text)}"
+            except (ValueError, json.JSONDecodeError):
+                error_msg += f" - {response.text}"
 
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error creating repository: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def delete_github_repository(
     owner: str, repo_name: str, github_token: str | None = None
@@ -132,22 +133,22 @@ def delete_github_repository(
         if response.status_code == 204:
             logger.info(f"Successfully deleted repository: {owner}/{repo_name}")
             return True
-        else:
-            error_msg = f"Failed to delete repository: {response.status_code}"
-            if response.text:
-                try:
-                    error_data = response.json()
-                    error_msg += f" - {error_data.get('message', response.text)}"
-                except (ValueError, json.JSONDecodeError):
-                    error_msg += f" - {response.text}"
+        error_msg = f"Failed to delete repository: {response.status_code}"
+        if response.text:
+            try:
+                error_data = response.json()
+                error_msg += f" - {error_data.get('message', response.text)}"
+            except (ValueError, json.JSONDecodeError):
+                error_msg += f" - {response.text}"
 
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error deleting repository: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def get_repository_info(
     repo_owner: str, repo_name: str, github_token: str | None = None
@@ -199,22 +200,22 @@ def get_repository_info(
                 "forks_count": repo["forks_count"],
                 "open_issues_count": repo["open_issues_count"],
             }
-        else:
-            error_msg = f"Failed to fetch repository info: {response.status_code}"
-            if response.text:
-                try:
-                    error_data = response.json()
-                    error_msg += f" - {error_data.get('message', response.text)}"
-                except (ValueError, json.JSONDecodeError):
-                    error_msg += f" - {response.text}"
+        error_msg = f"Failed to fetch repository info: {response.status_code}"
+        if response.text:
+            try:
+                error_data = response.json()
+                error_msg += f" - {error_data.get('message', response.text)}"
+            except (ValueError, json.JSONDecodeError):
+                error_msg += f" - {response.text}"
 
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error fetching repository info: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 async def async_get_repo_info(
     repo_owner: str, repo_name: str, github_token: str | None = None
@@ -267,13 +268,11 @@ async def async_get_repo_info(
             "forks_count": repo["forks_count"],
             "open_issues_count": repo["open_issues_count"],
         }
-    else:
-        error_msg = f"Failed to fetch repository info: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to fetch repository info: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
-
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None

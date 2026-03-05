@@ -543,4 +543,4 @@ class WhisperProvider(STTProvider):
             self._model = None
 
 
-__all__ = ["WhisperProvider", "WHISPER_LANGUAGES", "SUPPORTED_FORMATS"]
+__all__ = ["SUPPORTED_FORMATS", "WHISPER_LANGUAGES", "WhisperProvider"]

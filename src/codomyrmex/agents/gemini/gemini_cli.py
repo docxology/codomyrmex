@@ -32,7 +32,9 @@ class GeminiCLIWrapper(BaseAgent):
         )
 
         self.cli_path = shutil.which("gemini")
-        self.default_model = self.get_config_value("gemini_model", default=None, config=config)
+        self.default_model = self.get_config_value(
+            "gemini_model", default=None, config=config
+        )
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         if not self.cli_path:
@@ -55,10 +57,10 @@ class GeminiCLIWrapper(BaseAgent):
             cmd.extend(["--model", model])
 
         # Additional options from context
-        if "sandbox" in context and context["sandbox"]:
+        if context.get("sandbox"):
             cmd.append("--sandbox")
 
-        if "yolo" in context and context["yolo"]:
+        if context.get("yolo"):
             cmd.append("--yolo")
 
         if "extensions" in context:
@@ -76,7 +78,9 @@ class GeminiCLIWrapper(BaseAgent):
             if result.returncode != 0:
                 # Sometimes the CLI writes error to stdout instead of stderr depending on how it's handled
                 error_msg = result.stderr.strip() or result.stdout.strip()
-                raise GeminiError(f"Gemini CLI execution failed with code {result.returncode}: {error_msg}")
+                raise GeminiError(
+                    f"Gemini CLI execution failed with code {result.returncode}: {error_msg}"
+                )
 
             # Attempt to parse json
             content = result.stdout.strip()
@@ -94,7 +98,7 @@ class GeminiCLIWrapper(BaseAgent):
                 metadata={
                     "model": model,
                     "raw": parsed_json,
-                }
+                },
             )
 
         except subprocess.SubprocessError as e:
@@ -103,7 +107,9 @@ class GeminiCLIWrapper(BaseAgent):
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         # CLI streaming is complex. We will implement simple blocking execution for now
         # and yield it as a single chunk.
-        logger.warning("Streaming is not fully supported via CLI subprocess. Falling back to block execute.")
+        logger.warning(
+            "Streaming is not fully supported via CLI subprocess. Falling back to block execute."
+        )
         try:
             response = self._execute_impl(request)
             yield response.content
@@ -120,7 +126,9 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "--list-sessions"]
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, check=True, timeout=60
+            )
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to list sessions: {e}") from e
@@ -132,10 +140,14 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "--delete-session", str(session_identifier)]
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, check=True, timeout=60
+            )
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
-            raise GeminiError(f"Failed to delete session {session_identifier}: {e}") from e
+            raise GeminiError(
+                f"Failed to delete session {session_identifier}: {e}"
+            ) from e
 
     def list_extensions(self) -> str:
         """List all available extensions."""
@@ -144,7 +156,9 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "--list-extensions"]
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, check=True, timeout=60
+            )
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to list extensions: {e}") from e
@@ -156,7 +170,9 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "mcp"] + mcp_args
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, check=True, timeout=60
+            )
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
             raise GeminiError(f"Failed to manage mcp with args {mcp_args}: {e}") from e
@@ -168,7 +184,11 @@ class GeminiCLIWrapper(BaseAgent):
 
         cmd = [self.cli_path, "extensions"] + ext_args
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=60)
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, check=True, timeout=60
+            )
             return result.stdout.strip()
         except subprocess.SubprocessError as e:
-            raise GeminiError(f"Failed to manage extensions with args {ext_args}: {e}") from e
+            raise GeminiError(
+                f"Failed to manage extensions with args {ext_args}: {e}"
+            ) from e

@@ -28,6 +28,7 @@ except ImportError:
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -35,32 +36,38 @@ except ImportError:
 
 
 # Classification of Antigravity tools by safety level
-SAFE_TOOLS: frozenset[str] = frozenset({
-    "view_file",
-    "view_file_outline",
-    "view_code_item",
-    "find_by_name",
-    "grep_search",
-    "list_dir",
-    "command_status",
-    "search_web",
-    "read_url_content",
-})
+SAFE_TOOLS: frozenset[str] = frozenset(
+    {
+        "view_file",
+        "view_file_outline",
+        "view_code_item",
+        "find_by_name",
+        "grep_search",
+        "list_dir",
+        "command_status",
+        "search_web",
+        "read_url_content",
+    }
+)
 
-DESTRUCTIVE_TOOLS: frozenset[str] = frozenset({
-    "write_to_file",
-    "replace_file_content",
-    "multi_replace_file_content",
-    "run_command",
-    "send_command_input",
-    "browser_subagent",
-    "generate_image",
-})
+DESTRUCTIVE_TOOLS: frozenset[str] = frozenset(
+    {
+        "write_to_file",
+        "replace_file_content",
+        "multi_replace_file_content",
+        "run_command",
+        "send_command_input",
+        "browser_subagent",
+        "generate_image",
+    }
+)
 
-CONTROL_TOOLS: frozenset[str] = frozenset({
-    "task_boundary",
-    "notify_user",
-})
+CONTROL_TOOLS: frozenset[str] = frozenset(
+    {
+        "task_boundary",
+        "notify_user",
+    }
+)
 
 
 # Full schema definitions for all 18 tools
@@ -70,13 +77,28 @@ _TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "TaskName": {"type": "string", "description": "Name of the task boundary"},
-                "Mode": {"type": "string", "enum": ["PLANNING", "EXECUTION", "VERIFICATION"]},
+                "TaskName": {
+                    "type": "string",
+                    "description": "Name of the task boundary",
+                },
+                "Mode": {
+                    "type": "string",
+                    "enum": ["PLANNING", "EXECUTION", "VERIFICATION"],
+                },
                 "TaskSummary": {"type": "string", "description": "Summary of progress"},
                 "TaskStatus": {"type": "string", "description": "Current activity"},
-                "PredictedTaskSize": {"type": "integer", "description": "Estimated tool calls"},
+                "PredictedTaskSize": {
+                    "type": "integer",
+                    "description": "Estimated tool calls",
+                },
             },
-            "required": ["TaskName", "Mode", "TaskSummary", "TaskStatus", "PredictedTaskSize"],
+            "required": [
+                "TaskName",
+                "Mode",
+                "TaskSummary",
+                "TaskStatus",
+                "PredictedTaskSize",
+            ],
         },
     },
     "notify_user": {
@@ -89,7 +111,12 @@ _TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
                 "BlockedOnUser": {"type": "boolean"},
                 "ShouldAutoProceed": {"type": "boolean"},
             },
-            "required": ["Message", "PathsToReview", "BlockedOnUser", "ShouldAutoProceed"],
+            "required": [
+                "Message",
+                "PathsToReview",
+                "BlockedOnUser",
+                "ShouldAutoProceed",
+            ],
         },
     },
     "write_to_file": {
@@ -97,7 +124,10 @@ _TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "TargetFile": {"type": "string", "description": "Absolute path to file"},
+                "TargetFile": {
+                    "type": "string",
+                    "description": "Absolute path to file",
+                },
                 "CodeContent": {"type": "string", "description": "Content to write"},
                 "Overwrite": {"type": "boolean"},
                 "EmptyFile": {"type": "boolean"},
@@ -119,7 +149,13 @@ _TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
                 "StartLine": {"type": "integer"},
                 "EndLine": {"type": "integer"},
             },
-            "required": ["TargetFile", "TargetContent", "ReplacementContent", "StartLine", "EndLine"],
+            "required": [
+                "TargetFile",
+                "TargetContent",
+                "ReplacementContent",
+                "StartLine",
+                "EndLine",
+            ],
         },
     },
     "multi_replace_file_content": {
@@ -138,7 +174,10 @@ _TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "AbsolutePath": {"type": "string", "description": "Absolute path to file"},
+                "AbsolutePath": {
+                    "type": "string",
+                    "description": "Absolute path to file",
+                },
                 "StartLine": {"type": "integer"},
                 "EndLine": {"type": "integer"},
             },
@@ -325,9 +364,11 @@ class AntigravityToolProvider:
         Returns:
             A callable that invokes the tool.
         """
+
         def _invoke(**kwargs: Any) -> Any:
             """Invoke the specified callable."""
             return self.client.invoke_tool(tool_name, kwargs)
+
         _invoke.__name__ = tool_name
         _invoke.__doc__ = _TOOL_SCHEMAS.get(tool_name, {}).get(
             "description", f"Invoke Antigravity tool: {tool_name}"
@@ -431,8 +472,8 @@ class AntigravityToolProvider:
 
 
 __all__ = [
-    "AntigravityToolProvider",
-    "SAFE_TOOLS",
-    "DESTRUCTIVE_TOOLS",
     "CONTROL_TOOLS",
+    "DESTRUCTIVE_TOOLS",
+    "SAFE_TOOLS",
+    "AntigravityToolProvider",
 ]

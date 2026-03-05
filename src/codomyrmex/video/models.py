@@ -11,6 +11,7 @@ from typing import Any
 
 try:
     from PIL import Image
+
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
@@ -236,12 +237,12 @@ class VideoComparison:
 
 
 __all__ = [
-    "FilterType",
-    "VideoCodec",
-    "AudioCodec",
-    "VideoInfo",
-    "ProcessingResult",
-    "ExtractionResult",
-    "VideoComparison",
     "PIL_AVAILABLE",
+    "AudioCodec",
+    "ExtractionResult",
+    "FilterType",
+    "ProcessingResult",
+    "VideoCodec",
+    "VideoComparison",
+    "VideoInfo",
 ]

@@ -22,7 +22,7 @@ class TestPipelineJob:
             name="test_job",
             commands=["echo 'hello'", "echo 'world'"],
             environment={"TEST_VAR": "test_value"},
-            timeout=300
+            timeout=300,
         )
 
         assert job.name == "test_job"
@@ -49,7 +49,7 @@ class TestPipelineJob:
             name="test_job",
             commands=["echo test"],
             status=JobStatus.RUNNING,
-            start_time=datetime.now(UTC)
+            start_time=datetime.now(UTC),
         )
 
         job_dict = job.to_dict()
@@ -70,7 +70,7 @@ class TestPipelineStage:
             name="test_stage",
             jobs=[job],
             dependencies=["previous_stage"],
-            parallel=False
+            parallel=False,
         )
 
         assert stage.name == "test_stage"
@@ -82,9 +82,7 @@ class TestPipelineStage:
     def test_pipeline_stage_to_dict(self):
         """Test PipelineStage to_dict conversion."""
         stage = PipelineStage(
-            name="test_stage",
-            status=StageStatus.RUNNING,
-            start_time=datetime.now(UTC)
+            name="test_stage", status=StageStatus.RUNNING, start_time=datetime.now(UTC)
         )
 
         stage_dict = stage.to_dict()
@@ -105,7 +103,7 @@ class TestPipeline:
             name="test_pipeline",
             description="Test pipeline",
             stages=[stage],
-            timeout=1800
+            timeout=1800,
         )
 
         assert pipeline.name == "test_pipeline"
@@ -127,7 +125,7 @@ class TestPipeline:
             name="test_pipeline",
             stages=[],
             status=PipelineStatus.RUNNING,
-            started_at=datetime.now(UTC)
+            started_at=datetime.now(UTC),
         )
 
         pipeline_dict = pipeline.to_dict()
@@ -147,7 +145,7 @@ class TestAsyncPipelineResult:
             pipeline_id="test_123",
             status=PipelineStatus.SUCCESS,
             message="Pipeline completed successfully",
-            data={"run_id": 456}
+            data={"run_id": 456},
         )
 
         assert result.pipeline_id == "test_123"
@@ -160,7 +158,7 @@ class TestAsyncPipelineResult:
             pipeline_id="test_123",
             status=PipelineStatus.FAILURE,
             message="Pipeline failed",
-            error="Connection timeout"
+            error="Connection timeout",
         )
 
         result_dict = result.to_dict()
@@ -181,7 +179,9 @@ class TestDeploymentEnvironment:
             EnvironmentType,
         )
 
-        env = Environment(name="dev", type=EnvironmentType.DEVELOPMENT, host="localhost")
+        env = Environment(
+            name="dev", type=EnvironmentType.DEVELOPMENT, host="localhost"
+        )
         assert env.name == "dev"
         assert env.type == EnvironmentType.DEVELOPMENT
 
@@ -192,8 +192,10 @@ class TestDeploymentEnvironment:
         )
 
         env = Environment(
-            name="staging", type=EnvironmentType.STAGING,
-            host="staging.example.com", port=22,
+            name="staging",
+            type=EnvironmentType.STAGING,
+            host="staging.example.com",
+            port=22,
         )
         d = env.to_dict()
         assert d["name"] == "staging"
@@ -241,12 +243,19 @@ class TestPipelineModels:
             name="ci",
             description="CI pipeline",
             stages=[
-                PipelineStage(name="build", jobs=[
-                    PipelineJob(name="compile", commands=["make build"]),
-                ]),
-                PipelineStage(name="test", jobs=[
-                    PipelineJob(name="unit", commands=["pytest"]),
-                ], dependencies=["build"]),
+                PipelineStage(
+                    name="build",
+                    jobs=[
+                        PipelineJob(name="compile", commands=["make build"]),
+                    ],
+                ),
+                PipelineStage(
+                    name="test",
+                    jobs=[
+                        PipelineJob(name="unit", commands=["pytest"]),
+                    ],
+                    dependencies=["build"],
+                ),
             ],
         )
         assert pipeline.status == PipelineStatus.PENDING

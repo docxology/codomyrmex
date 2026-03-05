@@ -9,15 +9,25 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class CrumbCleaner:
     """Sanitizes data by removing tracking crumbs and metadata."""
 
     def __init__(self):
         self._blacklist: set[str] = {
-            "timestamp", "created_at", "updated_at",
-            "ip_address", "device_id", "geo_lat", "geo_lon",
-            "user_agent", "referrer", "cookie_id",
-            "session_id", "trace_id", "crumb"
+            "timestamp",
+            "created_at",
+            "updated_at",
+            "ip_address",
+            "device_id",
+            "geo_lat",
+            "geo_lon",
+            "user_agent",
+            "referrer",
+            "cookie_id",
+            "session_id",
+            "trace_id",
+            "crumb",
         }
 
     def scrub(self, data: Any) -> Any:
@@ -30,17 +40,19 @@ class CrumbCleaner:
                 for k, v in data.items()
                 if k.lower() not in self._blacklist
             }
-        elif isinstance(data, list):
+        if isinstance(data, list):
             return [self.scrub(item) for item in data]
-        else:
-            return data
+        return data
 
     def generate_noise(self, size_bytes: int = 64) -> bytes:
         """Generate random noise to obscure activity patterns."""
         import os
+
         return os.urandom(size_bytes)
 
-    def configure_blacklist(self, add: list[str] = None, remove: list[str] = None) -> None:
+    def configure_blacklist(
+        self, add: list[str] = None, remove: list[str] = None
+    ) -> None:
         """Dynamically configure the metadata blacklist."""
         if add:
             for key in add:

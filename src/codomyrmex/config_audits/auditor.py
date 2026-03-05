@@ -38,12 +38,14 @@ class ConfigAuditor:
                 audit_id=str(uuid.uuid4()),
                 success=False,
                 summary=f"File not found: {file_path}",
-                issues=[AuditIssue(
-                    rule_id="SYS001",
-                    message=f"Configuration file missing: {file_path}",
-                    severity=Severity.HIGH,
-                    file_path=str(file_path)
-                )]
+                issues=[
+                    AuditIssue(
+                        rule_id="SYS001",
+                        message=f"Configuration file missing: {file_path}",
+                        severity=Severity.HIGH,
+                        file_path=str(file_path),
+                    )
+                ],
             )
 
         try:
@@ -53,12 +55,14 @@ class ConfigAuditor:
                 audit_id=str(uuid.uuid4()),
                 success=False,
                 summary=f"Error reading file: {e}",
-                issues=[AuditIssue(
-                    rule_id="SYS002",
-                    message=f"Failed to read file {file_path}: {e}",
-                    severity=Severity.HIGH,
-                    file_path=str(file_path)
-                )]
+                issues=[
+                    AuditIssue(
+                        rule_id="SYS002",
+                        message=f"Failed to read file {file_path}: {e}",
+                        severity=Severity.HIGH,
+                        file_path=str(file_path),
+                    )
+                ],
             )
 
         for rule in self.rules:
@@ -67,21 +71,25 @@ class ConfigAuditor:
                 issues.extend(rule_issues)
             except Exception as e:
                 logger.error(f"Error applying rule {rule.rule_id}: {e}")
-                issues.append(AuditIssue(
-                    rule_id="SYS003",
-                    message=f"Error applying rule {rule.rule_id}: {e}",
-                    severity=Severity.MEDIUM,
-                    file_path=str(path)
-                ))
+                issues.append(
+                    AuditIssue(
+                        rule_id="SYS003",
+                        message=f"Error applying rule {rule.rule_id}: {e}",
+                        severity=Severity.MEDIUM,
+                        file_path=str(path),
+                    )
+                )
 
         return AuditResult(
             audit_id=str(uuid.uuid4()),
             issues=issues,
             success=True,
-            summary=f"Audited {file_path}. Found {len(issues)} issues."
+            summary=f"Audited {file_path}. Found {len(issues)} issues.",
         )
 
-    def audit_directory(self, directory_path: str | Path, pattern: str = "*.json") -> list[AuditResult]:
+    def audit_directory(
+        self, directory_path: str | Path, pattern: str = "*.json"
+    ) -> list[AuditResult]:
         """Audit all configuration files in a directory.
 
         Args:
@@ -144,7 +152,9 @@ class ConfigAuditor:
             status = "PASS" if result.is_compliant else "FAIL"
             report.append(f"File: {result.summary.split(' ')[1]} [{status}]")
             for issue in result.issues:
-                report.append(f"  - [{issue.severity.value.upper()}] {issue.rule_id}: {issue.message}")
+                report.append(
+                    f"  - [{issue.severity.value.upper()}] {issue.rule_id}: {issue.message}"
+                )
                 if issue.recommendation:
                     report.append(f"    Recommendation: {issue.recommendation}")
             report.append("")

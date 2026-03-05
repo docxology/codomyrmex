@@ -28,7 +28,7 @@ def verify_claim(statement: str, evidence: list[Evidence]) -> Fact:
     return Fact(
         statement=statement,
         verification_method="evidence_aggregation",
-        confidence=confidence
+        confidence=confidence,
     )
 
 

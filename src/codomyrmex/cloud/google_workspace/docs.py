@@ -25,13 +25,9 @@ class GoogleDocsClient(GoogleWorkspaceBase):
         Returns:
             Document dict with content, or empty dict on error.
         """
+
         def _call():
-            return (
-                self._get_service()
-                .documents()
-                .get(documentId=document_id)
-                .execute()
-            )
+            return self._get_service().documents().get(documentId=document_id).execute()
 
         return (
             self._safe_call(_call, "get", f"document/{document_id}", default={}) or {}

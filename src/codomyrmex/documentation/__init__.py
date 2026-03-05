@@ -1,6 +1,7 @@
 """
 Documentation management and audit utilities.
 """
+
 from . import quality
 from .documentation_website import (
     aggregate_docs,
@@ -27,28 +28,28 @@ from .quality.quality_assessment import (
 )
 
 __all__ = [
-    "quality",
-    "ModuleAudit",
-    "audit_documentation",
-    "audit_rasp",
-    "update_root_docs",
-    "finalize_docs",
-    "update_spec",
-    "update_pai_docs",
-    "generate_pai_md",
-    "write_pai_md",
-    "check_doc_environment",
-    "install_dependencies",
-    "start_dev_server",
-    "build_static_site",
-    "serve_static_site",
-    "aggregate_docs",
-    "validate_doc_versions",
-    "assess_site",
-    "DocumentationQualityAnalyzer",
-    "generate_quality_report",
-    "DocumentationConsistencyChecker",
     "ConsistencyIssue",
     "ConsistencyReport",
+    "DocumentationConsistencyChecker",
+    "DocumentationQualityAnalyzer",
+    "ModuleAudit",
+    "aggregate_docs",
+    "assess_site",
+    "audit_documentation",
+    "audit_rasp",
+    "build_static_site",
+    "check_doc_environment",
     "check_documentation_consistency",
+    "finalize_docs",
+    "generate_pai_md",
+    "generate_quality_report",
+    "install_dependencies",
+    "quality",
+    "serve_static_site",
+    "start_dev_server",
+    "update_pai_docs",
+    "update_root_docs",
+    "update_spec",
+    "validate_doc_versions",
+    "write_pai_md",
 ]

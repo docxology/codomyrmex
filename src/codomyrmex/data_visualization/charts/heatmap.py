@@ -57,7 +57,9 @@ def create_heatmap(
         The matplotlib Figure, or None if data is invalid.
     """
     if not data or not isinstance(data, list) or not isinstance(data[0], list):
-        raise ValueError("Invalid or empty 2D data provided for heatmap. No plot generated.")
+        raise ValueError(
+            "Invalid or empty 2D data provided for heatmap. No plot generated."
+        )
 
     fig, ax = plt.subplots(figsize=figure_size)
 
@@ -85,9 +87,11 @@ def create_heatmap(
             for j in range(np_data.shape[1]):
                 text_color = "black" if im.norm(np_data[i, j]) > 0.5 else "white"
                 ax.text(
-                    j, i,
+                    j,
+                    i,
                     format(np_data[i, j], fmt),
-                    ha="center", va="center",
+                    ha="center",
+                    va="center",
                     color=text_color,
                 )
 

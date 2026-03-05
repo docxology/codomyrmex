@@ -24,14 +24,14 @@ from codomyrmex.agents.google_workspace.exceptions import (
 HAS_GWS: bool = shutil.which("gws") is not None
 
 __all__ = [
+    "HAS_GWS",
+    "GWSAuthError",
+    "GWSCommandError",
     "GWSConfig",
     "GWSError",
     "GWSNotInstalledError",
     "GWSTimeoutError",
-    "GWSAuthError",
-    "GWSCommandError",
     "GoogleWorkspaceRunner",
-    "HAS_GWS",
-    "get_gws_version",
     "get_config",
+    "get_gws_version",
 ]

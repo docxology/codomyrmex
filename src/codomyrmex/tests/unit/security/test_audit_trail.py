@@ -48,7 +48,14 @@ class TestAuditEntryDataclass:
         """to_dict includes action, actor, resource, timestamp, hashes."""
         entry = AuditEntry(action="login", actor="bob", resource="auth")
         d = entry.to_dict()
-        for key in ("action", "actor", "resource", "timestamp", "previous_hash", "entry_hash"):
+        for key in (
+            "action",
+            "actor",
+            "resource",
+            "timestamp",
+            "previous_hash",
+            "entry_hash",
+        ):
             assert key in d, f"Missing key: {key}"
 
     def test_to_dict_values(self):
@@ -123,7 +130,9 @@ class TestAuditTrailRecord:
     def test_record_with_all_params(self):
         """record() stores actor, resource, and metadata."""
         trail = AuditTrail()
-        entry = trail.record("write", actor="agent-1", resource="file.py", metadata={"size": 100})
+        entry = trail.record(
+            "write", actor="agent-1", resource="file.py", metadata={"size": 100}
+        )
         assert entry.actor == "agent-1"
         assert entry.resource == "file.py"
         assert entry.metadata == {"size": 100}

@@ -5,6 +5,7 @@ from collections.abc import Callable
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except Exception:
     logger = logging.getLogger(__name__)
@@ -16,6 +17,7 @@ try:
         SkillCategory,
         SkillMetadata,
     )
+
     _HAS_DISCOVERY = True
 except ImportError:
     _HAS_DISCOVERY = False
@@ -30,7 +32,9 @@ from .core import ArsContextaManager
 def _register_arscontexta_skills() -> None:
     """Register 6 MCP-ready skills into the global discovery registry."""
     if not _HAS_DISCOVERY:
-        logger.debug("Skipping arscontexta skill registration — discovery module unavailable")
+        logger.debug(
+            "Skipping arscontexta skill registration — discovery module unavailable"
+        )
         return
 
     manager = ArsContextaManager()
@@ -70,34 +74,70 @@ def _register_arscontexta_skills() -> None:
             arscontexta_setup,
             "arscontexta_setup",
             "Initialise an Ars Contexta vault at the given path.",
-            [ParameterSchema(name="vault_path", param_type="string", description="Filesystem path for the vault")],
+            [
+                ParameterSchema(
+                    name="vault_path",
+                    param_type="string",
+                    description="Filesystem path for the vault",
+                )
+            ],
         ),
         (
             arscontexta_health,
             "arscontexta_health",
             "Run vault health diagnostics.",
-            [ParameterSchema(name="vault_path", param_type="string", description="Filesystem path of the vault")],
+            [
+                ParameterSchema(
+                    name="vault_path",
+                    param_type="string",
+                    description="Filesystem path of the vault",
+                )
+            ],
         ),
         (
             arscontexta_process,
             "arscontexta_process",
             "Run the 6R processing pipeline on content.",
             [
-                ParameterSchema(name="content", param_type="string", description="Content to process"),
-                ParameterSchema(name="context", param_type="string", description="JSON context object", required=False, default="{}"),
+                ParameterSchema(
+                    name="content",
+                    param_type="string",
+                    description="Content to process",
+                ),
+                ParameterSchema(
+                    name="context",
+                    param_type="string",
+                    description="JSON context object",
+                    required=False,
+                    default="{}",
+                ),
             ],
         ),
         (
             arscontexta_derive,
             "arscontexta_derive",
             "Extract configuration dimension signals from user text.",
-            [ParameterSchema(name="user_text", param_type="string", description="Free-form user text")],
+            [
+                ParameterSchema(
+                    name="user_text",
+                    param_type="string",
+                    description="Free-form user text",
+                )
+            ],
         ),
         (
             arscontexta_primitives,
             "arscontexta_primitives",
             "List kernel primitives, optionally filtered by layer.",
-            [ParameterSchema(name="layer", param_type="string", description="Layer filter", required=False, default="")],
+            [
+                ParameterSchema(
+                    name="layer",
+                    param_type="string",
+                    description="Layer filter",
+                    required=False,
+                    default="",
+                )
+            ],
         ),
         (
             arscontexta_stats,
@@ -127,5 +167,3 @@ def _register_arscontexta_skills() -> None:
 
 # Auto-register on import
 _register_arscontexta_skills()
-
-

@@ -30,15 +30,14 @@ def read_csv(file_path: str | Path, encoding: str | None = None) -> list[dict]:
     encoding = encoding or get_config().default_encoding
 
     try:
-        with open(file_path, encoding=encoding, newline='') as f:
+        with open(file_path, encoding=encoding, newline="") as f:
             reader = csv.DictReader(f)
             rows = list(reader)
         return rows
     except Exception as e:
         logger.error(f"Error reading CSV file {file_path}: {e}")
         raise DocumentReadError(
-            f"Failed to read CSV file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to read CSV file: {e!s}", file_path=str(file_path)
         ) from e
 
 
@@ -68,7 +67,7 @@ def write_csv(
         try:
             file_path.parent.mkdir(parents=True, exist_ok=True)
             if fieldnames:
-                with open(file_path, 'w', encoding=encoding, newline='') as f:
+                with open(file_path, "w", encoding=encoding, newline="") as f:
                     writer = csv.DictWriter(f, fieldnames=fieldnames)
                     writer.writeheader()
             else:
@@ -76,8 +75,7 @@ def write_csv(
             return
         except Exception as e:
             raise DocumentWriteError(
-                f"Failed to write CSV file: {str(e)}",
-                file_path=str(file_path)
+                f"Failed to write CSV file: {e!s}", file_path=str(file_path)
             ) from e
 
     if fieldnames is None:
@@ -85,7 +83,7 @@ def write_csv(
 
     try:
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(file_path, 'w', encoding=encoding, newline='') as f:
+        with open(file_path, "w", encoding=encoding, newline="") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(data)
@@ -93,6 +91,5 @@ def write_csv(
     except Exception as e:
         logger.error(f"Error writing CSV file {file_path}: {e}")
         raise DocumentWriteError(
-            f"Failed to write CSV file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to write CSV file: {e!s}", file_path=str(file_path)
         ) from e

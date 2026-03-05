@@ -16,6 +16,7 @@ import numpy as np
 # Scalar Autograd: Value
 # ---------------------------------------------------------------------------
 
+
 class Value:
     """A scalar value that tracks its computation graph for reverse-mode autodiff.
 
@@ -24,7 +25,7 @@ class Value:
     order and accumulates gradients via the chain rule.
     """
 
-    __slots__ = ("data", "grad", "_backward", "_prev", "_op", "label")
+    __slots__ = ("_backward", "_op", "_prev", "data", "grad", "label")
 
     def __init__(
         self,
@@ -42,7 +43,7 @@ class Value:
 
     # -- forward ops --------------------------------------------------------
 
-    def __add__(self, other: Value | float | int) -> Value:
+    def __add__(self, other: Value | float) -> Value:
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data + other.data, (self, other), "+")
 
@@ -53,7 +54,7 @@ class Value:
         out._backward = _backward
         return out
 
-    def __mul__(self, other: Value | float | int) -> Value:
+    def __mul__(self, other: Value | float) -> Value:
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data * other.data, (self, other), "*")
 
@@ -64,10 +65,12 @@ class Value:
         out._backward = _backward
         return out
 
-    def __pow__(self, other: float | int) -> Value:
+    def __pow__(self, other: float) -> Value:
         if isinstance(other, Value):
-            raise NotImplementedError("Value**Value is not supported; use float exponent")
-        out = Value(self.data ** other, (self,), f"**{other}")
+            raise NotImplementedError(
+                "Value**Value is not supported; use float exponent"
+            )
+        out = Value(self.data**other, (self,), f"**{other}")
 
         def _backward() -> None:
             self.grad += (other * self.data ** (other - 1)) * out.grad
@@ -78,23 +81,23 @@ class Value:
     def __neg__(self) -> Value:
         return self * -1
 
-    def __sub__(self, other: Value | float | int) -> Value:
+    def __sub__(self, other: Value | float) -> Value:
         return self + (-other if isinstance(other, Value) else Value(-other))
 
-    def __truediv__(self, other: Value | float | int) -> Value:
-        return self * (other ** -1 if isinstance(other, Value) else Value(other) ** -1)
+    def __truediv__(self, other: Value | float) -> Value:
+        return self * (other**-1 if isinstance(other, Value) else Value(other) ** -1)
 
-    def __radd__(self, other: float | int) -> Value:
+    def __radd__(self, other: float) -> Value:
         return self + other
 
-    def __rmul__(self, other: float | int) -> Value:
+    def __rmul__(self, other: float) -> Value:
         return self * other
 
-    def __rsub__(self, other: float | int) -> Value:
+    def __rsub__(self, other: float) -> Value:
         return Value(other) + (-self)
 
-    def __rtruediv__(self, other: float | int) -> Value:
-        return Value(other) * (self ** -1)
+    def __rtruediv__(self, other: float) -> Value:
+        return Value(other) * (self**-1)
 
     # -- special math -------------------------------------------------------
 
@@ -115,7 +118,7 @@ class Value:
         out = Value(t, (self,), "tanh")
 
         def _backward() -> None:
-            self.grad += (1 - t ** 2) * out.grad
+            self.grad += (1 - t**2) * out.grad
 
         out._backward = _backward
         return out
@@ -177,6 +180,7 @@ class Value:
 # Tensor Autograd
 # ---------------------------------------------------------------------------
 
+
 class Tensor:
     """A thin numpy-backed tensor with reverse-mode autodiff support.
 
@@ -205,7 +209,7 @@ class Tensor:
 
     # -- forward ops --------------------------------------------------------
 
-    def __add__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+    def __add__(self, other: Tensor | float | np.ndarray) -> Tensor:
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data + other.data, _children=(self, other), _op="+")
 
@@ -227,7 +231,7 @@ class Tensor:
         out._backward = _backward
         return out
 
-    def __mul__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+    def __mul__(self, other: Tensor | float | np.ndarray) -> Tensor:
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         out = Tensor(self.data * other.data, _children=(self, other), _op="*")
 
@@ -265,14 +269,14 @@ class Tensor:
     def __neg__(self) -> Tensor:
         return self * -1.0
 
-    def __sub__(self, other: Tensor | float | int | np.ndarray) -> Tensor:
+    def __sub__(self, other: Tensor | float | np.ndarray) -> Tensor:
         other = other if isinstance(other, Tensor) else Tensor(np.asarray(other))
         return self + (other * -1.0)
 
-    def __radd__(self, other: float | int) -> Tensor:
+    def __radd__(self, other: float) -> Tensor:
         return self + other
 
-    def __rmul__(self, other: float | int) -> Tensor:
+    def __rmul__(self, other: float) -> Tensor:
         return self * other
 
     # -- reductions ---------------------------------------------------------
@@ -364,6 +368,7 @@ class Tensor:
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _unbroadcast(grad: np.ndarray, target_shape: tuple[int, ...]) -> np.ndarray:
     """Sum out dimensions that were broadcast to match *target_shape*."""
     # Pad target_shape with leading 1s to match grad ndim
@@ -373,18 +378,14 @@ def _unbroadcast(grad: np.ndarray, target_shape: tuple[int, ...]) -> np.ndarray:
     # Sum over axes that were broadcast (size-1 in target or added)
     axes_to_sum = []
     for i, (g, t) in enumerate(zip(grad.shape, padded, strict=False)):
-        if t == 1 and g != 1:
-            axes_to_sum.append(i)
-        elif t != g:
+        if (t == 1 and g != 1) or t != g:
             axes_to_sum.append(i)
 
     if axes_to_sum:
         grad = grad.sum(axis=tuple(axes_to_sum), keepdims=True)
 
     # Remove leading dims that were added by broadcasting
-    if ndim_diff > 0:
-        grad = grad.reshape(target_shape)
-    elif grad.shape != target_shape:
+    if ndim_diff > 0 or grad.shape != target_shape:
         grad = grad.reshape(target_shape)
 
     return grad

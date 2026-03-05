@@ -51,11 +51,19 @@ class MigrationRunner:
             steps_total=len(migration.steps),
         )
 
-        steps = migration.steps if direction == MigrationDirection.UP else reversed(migration.steps)
+        steps = (
+            migration.steps
+            if direction == MigrationDirection.UP
+            else reversed(migration.steps)
+        )
 
         try:
             for step in steps:
-                success = step.run_up() if direction == MigrationDirection.UP else step.run_down()
+                success = (
+                    step.run_up()
+                    if direction == MigrationDirection.UP
+                    else step.run_down()
+                )
                 if success:
                     result.steps_completed += 1
                 else:
@@ -68,9 +76,8 @@ class MigrationRunner:
                 with self._lock:
                     if direction == MigrationDirection.UP:
                         self._completed.append(migration.id)
-                    else:
-                        if migration.id in self._completed:
-                            self._completed.remove(migration.id)
+                    elif migration.id in self._completed:
+                        self._completed.remove(migration.id)
 
         except Exception as e:
             result.status = MigrationStatus.FAILED

@@ -22,6 +22,7 @@ from codomyrmex.agentic_memory.stores import InMemoryStore
 
 # ── helpers ──────────────────────────────────────────────────────────
 
+
 def _relevance(query: str, content: str) -> float:
     """Token-overlap relevance scorer (simple but real)."""
     if not query:
@@ -38,10 +39,12 @@ def _recency_score(created_at: float, half_life: float = 3600.0) -> float:
     """Exponential-decay recency score."""
     age = max(0.0, time.time() - created_at)
     import math
+
     return math.exp(-age / half_life)
 
 
 # ── AgentMemory ──────────────────────────────────────────────────────
+
 
 class AgentMemory:
     """Agent-level memory with remember / recall / forget / search."""
@@ -94,7 +97,10 @@ class AgentMemory:
     ) -> list[RetrievalResult]:
         """Return the top-*k* memories matching *query*."""
         return self._search_internal(
-            query, k=k, memory_type=memory_type, min_importance=min_importance,
+            query,
+            k=k,
+            memory_type=memory_type,
+            min_importance=min_importance,
         )
 
     def search(self, query: str, k: int = 10) -> list[RetrievalResult]:
@@ -122,12 +128,14 @@ class AgentMemory:
             rel = _relevance(query, mem.content) if query else 0.0
             rec = _recency_score(mem.created_at)
             imp = mem.importance.value / 4.0
-            results.append(RetrievalResult(
-                memory=mem,
-                relevance_score=rel,
-                recency_score=rec,
-                importance_score=imp,
-            ))
+            results.append(
+                RetrievalResult(
+                    memory=mem,
+                    relevance_score=rel,
+                    recency_score=rec,
+                    importance_score=imp,
+                )
+            )
 
         # If no query, return all (filtered). Otherwise sort by score.
         if query:
@@ -153,6 +161,7 @@ class AgentMemory:
 
 # ── VectorStoreMemory ────────────────────────────────────────────────
 
+
 class VectorStoreMemory:
     """Memory with pluggable store backend and search."""
 
@@ -175,6 +184,7 @@ class VectorStoreMemory:
 
 # ── ConversationMemory ───────────────────────────────────────────────
 
+
 class ConversationMemory:
     """Specialised memory for conversation turns."""
 
@@ -196,6 +206,7 @@ class ConversationMemory:
 
 
 # ── KnowledgeMemory ─────────────────────────────────────────────────
+
 
 class KnowledgeMemory:
     """Specialised memory for factual knowledge."""

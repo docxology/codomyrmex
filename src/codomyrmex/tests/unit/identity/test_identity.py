@@ -11,6 +11,7 @@ from codomyrmex.identity.persona import Persona, VerificationLevel
 
 try:
     import numpy as np  # noqa: F401
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
@@ -65,7 +66,9 @@ class TestPersona:
         assert not p.has_capability("write")
 
     def test_persona_to_dict(self):
-        p = Persona(id="p1", name="Alice", level=VerificationLevel.KYC, capabilities=["root"])
+        p = Persona(
+            id="p1", name="Alice", level=VerificationLevel.KYC, capabilities=["root"]
+        )
         p.add_attribute("email", "alice@example.com")
         p.add_crumb("logged_in")
         d = p.to_dict()
@@ -90,7 +93,9 @@ class TestIdentityManager:
         assert self.mgr._active_persona_id is None
 
     def test_create_persona(self):
-        persona = self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON, capabilities=["test"])
+        persona = self.mgr.create_persona(
+            "p1", "Alice", VerificationLevel.ANON, capabilities=["test"]
+        )
         assert persona.id == "p1"
         assert persona.name == "Alice"
         assert "test" in persona.capabilities
@@ -185,7 +190,9 @@ class TestIdentityOrchestrator:
         self.ident.register_provider("password", self.pw_prov)
 
     def test_login_logout(self):
-        token = self.ident.login("alice", {"user_id": "alice", "password": "password123"})
+        token = self.ident.login(
+            "alice", {"user_id": "alice", "password": "password123"}
+        )
         assert token is not None
         assert self.ident.validate_token(token.token) is True
 
@@ -201,7 +208,9 @@ class TestIdentityOrchestrator:
         assert ident.validate_token(token.token) is False
 
     def test_refresh_token(self):
-        token = self.ident.login("alice", {"user_id": "alice", "password": "password123"})
+        token = self.ident.login(
+            "alice", {"user_id": "alice", "password": "password123"}
+        )
         old_token_str = token.token
         new_token = self.ident.refresh_token(old_token_str)
         assert new_token is not None

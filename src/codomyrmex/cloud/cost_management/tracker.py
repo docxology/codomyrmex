@@ -182,7 +182,9 @@ class BudgetManager:
     def __init__(self, tracker: CostTracker):
         self.tracker = tracker
         self._budgets: dict[str, Budget] = {}
-        self._triggered_alerts: set[str] = set()  # Track which thresholds were triggered
+        self._triggered_alerts: set[str] = (
+            set()
+        )  # Track which thresholds were triggered
         self._lock = threading.Lock()
 
     def create(
@@ -250,12 +252,14 @@ class BudgetManager:
                 alert_key = f"{budget.id}_{threshold}"
 
                 if utilization >= threshold and alert_key not in self._triggered_alerts:
-                    alerts.append(BudgetAlert(
-                        budget_id=budget.id,
-                        threshold=threshold,
-                        current_spend=spend,
-                        budget_amount=budget.amount,
-                    ))
+                    alerts.append(
+                        BudgetAlert(
+                            budget_id=budget.id,
+                            threshold=threshold,
+                            current_spend=spend,
+                            budget_amount=budget.amount,
+                        )
+                    )
                     self._triggered_alerts.add(alert_key)
 
         return alerts

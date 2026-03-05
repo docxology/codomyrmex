@@ -60,6 +60,7 @@ class GoogleGmailClient(GoogleWorkspaceBase):
         Returns:
             Message dict, or empty dict on error.
         """
+
         def _call():
             return (
                 self._get_service()
@@ -69,9 +70,7 @@ class GoogleGmailClient(GoogleWorkspaceBase):
                 .execute()
             )
 
-        return (
-            self._safe_call(_call, "get", f"message/{message_id}", default={}) or {}
-        )
+        return self._safe_call(_call, "get", f"message/{message_id}", default={}) or {}
 
     def send_message(
         self,

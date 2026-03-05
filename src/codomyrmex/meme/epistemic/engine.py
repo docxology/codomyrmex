@@ -31,5 +31,7 @@ class EpistemicEngine:
         for belief in self.state.beliefs:
             for fact in self.state.facts:
                 if f"not {fact.statement}" in belief.statement:
-                    conflicts.append(f"Conflict: {belief.statement} vs Fact: {fact.statement}")
+                    conflicts.append(
+                        f"Conflict: {belief.statement} vs Fact: {fact.statement}"
+                    )
         return conflicts

@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build>=0.9,<1"]
+build-backend = "uv_build"
 
 [project]
 name = "codomyrmex"
@@ -299,44 +299,42 @@ Issues = "https://github.com/docxology/codomyrmex/issues"
 Documentation = "https://codomyrmex.readthedocs.io/"
 Changelog = "https://github.com/docxology/codomyrmex/blob/main/CHANGELOG.md"
 
-[tool.hatch.build]
-exclude = [
-    "**/.cursor",
-    "**/.cursorrules",
-    "**/__pycache__",
-    "**/htmlcov",
-    "**/.mypy_cache",
-    "**/.pytest_cache",
-    "**/tests",
-    "**/*.pyc",
-    "projects/",
-    "scripts/",
-    "docs/",
-    ".github/",
-    ".pre-commit-config.yaml",
-    "TODO.md",
-    "CLAUDE.md",
-]
+[tool.uv]
+default-groups = ["dev"]
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/codomyrmex"]
+[tool.uv.build-backend]
+module-root = "src"
+source-include = ["src/codomyrmex/**"]
+source-exclude = [
+    "**/.cursor/**",
+    "**/.git/**",
+    "**/__pycache__/**",
+    "**/htmlcov/**",
+    "**/.mypy_cache/**",
+    "**/.pytest_cache/**",
+    "**/tests/**",
+    "**/vendor/**",
+    "**/node_modules/**",
+    "**/*.pyc",
+]
 
 [dependency-groups]
 dev = [
+    {include-group = "lint"},
+    {include-group = "test"},
+]
+lint = ["ruff>=0.11.0", "ty"]
+test = [
     "pytest>=8.0.0",
     "pytest-cov>=4.0.0",
     "pytest-timeout>=2.1.0",
     "pytest-asyncio>=0.23.0",
-    "black>=23.0.0",
-    "mypy>=1.0.0",
-    "ruff>=0.1.0",
-    "pre-commit>=3.0.0",
     "pytest-benchmark>=4.0.0",
+    "hypothesis>=6.0.0",
+    "fakeredis>=2.0.0",
     "pyyaml>=6.0.2",
     "mutmut>=3.4.0",
     "fire>=0.5.0",
-    "fakeredis>=2.0.0",
-    "hypothesis>=6.0.0",
 ]
 
 [project.scripts]
@@ -369,56 +367,83 @@ exclude_lines = [
 ]
 
 [tool.pytest.ini_options]
+testpaths = ["src/codomyrmex"]
+pythonpath = ["src"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = [
+    "--import-mode=importlib",
+    "--verbose",
+    "--tb=short",
+    "--cov=src/codomyrmex",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-report=json:coverage.json",
+    "--cov-fail-under=31",
+    "--timeout=300",
+    "--timeout-method=thread",
+]
 markers = [
     "unit: Unit tests (fast, isolated)",
     "integration: Integration tests (may require external services)",
+    "smoke: Smoke tests that exercise code paths without explicit assertions",
     "slow: Slow tests (>10s execution time)",
+    "performance: Performance and benchmarking tests",
+    "examples: Example validation tests",
+    "network: Tests requiring network access",
+    "database: Tests requiring database access",
+    "external: Tests requiring external services",
+    "security: Security-related tests",
+    "asyncio: Asynchronous tests",
+    "crypto: Cryptography tests",
+    "orchestrator: Orchestrator and workflow tests",
+    "soul: soul module tests (persistent markdown-memory LLM agents)",
+    "aider: Aider AI pair programming tests",
+    "pai_pm: PAI Project Manager module tests (requires bun for server tests)",
+    "google_workspace: Google Workspace API and gws CLI tests",
+]
+filterwarnings = [
+    "ignore:The embodiment module is deprecated:DeprecationWarning",
+    "ignore:codomyrmex\\.defense is deprecated:DeprecationWarning",
+    "ignore:builtin type Swig.*has no __module__ attribute:DeprecationWarning",
+    "ignore:ast\\.Str is deprecated:DeprecationWarning",
+    "ignore:The verify_requirements argument is now a no-op:DeprecationWarning",
+    "ignore:datetime\\.datetime\\.utcnow\\(\\) is deprecated:DeprecationWarning",
+    "ignore::ResourceWarning",
+    "ignore:.*google\\.generativeai.*:FutureWarning",
+    "ignore::pytest.PytestCollectionWarning",
 ]
 
-# Black configuration
-[tool.black]
-line-length = 88
-target-version = ['py310', 'py311', 'py312', 'py313']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
 
-# Ruff configuration
+
+# Ruff configuration (replaces flake8, black, isort, pyupgrade)
 [tool.ruff]
 target-version = "py311"
 line-length = 88
+src = ["src"]
 
 [tool.ruff.lint]
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-    "C4", # flake8-comprehensions
-    "UP", # pyupgrade
-    "TID", # flake8-tidy-imports (for banning mocks)
-]
+select = ["ALL"]
 ignore = [
-    "E501", # line too long, handled by black
-    "B008", # do not perform function calls in argument defaults
-    "C901", # too complex
+    "D",        # pydocstyle (enable selectively later)
+    "COM812",   # trailing comma (formatter conflict)
+    "ISC001",   # string concat (formatter conflict)
+    "ANN401",   # Dynamically typed Any
+    "TD002",    # Missing TODO author
+    "TD003",    # Missing TODO link
+    "FIX002",   # Line contains TODO
+    "E501",     # line too long (handled by formatter)
+    "B008",     # do not perform function calls in argument defaults
+    "C901",     # too complex
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
-"tests/**/*" = ["B011"]
+"tests/**/*" = ["S101", "PLR2004", "ANN", "B011"]
+"scripts/**/*.py" = ["T20", "INP001"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "unittest.mock" = { msg = "Zero-Mock Policy: Use real functional implementations and authentic fixtures instead of mocks." }
@@ -426,74 +451,24 @@ ignore = [
 "pytest_mock" = { msg = "Zero-Mock Policy: Use real functional implementations and authentic fixtures instead of mocks." }
 "monkeypatch" = { msg = "Zero-Mock Policy: Do not patch internals. Use real implementations." }
 
-# MyPy configuration
-[tool.mypy]
-python_version = "3.11"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
-show_error_codes = true
-namespace_packages = true
-explicit_package_bases = true
-plugins = ["pydantic.mypy"]
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
 
-[tool.pydantic-mypy]
-init_forbid_extra = false
-init_typed = true
-warn_required_dynamic_aliases = false
+# ty type checker (replaces mypy — faster, from Astral team)
+[tool.ty.environment]
+python-version = "3.11"
 
-[[tool.mypy.overrides]]
-module = [
-    "cased.kit.*",
-    "sentence_transformers.*",
-    "chromadb.*",
-    "docker.*",
-    "matplotlib.*",
-    "seaborn.*",
-    "GitPython.*",
-    "git.*",
-    "ollama.*",
-    "httpx.*",
-    "jsonschema.*",
-]
-ignore_missing_imports = true
-
-# Sprint 8: logging_monitoring is fully strict (0 errors)
-[[tool.mypy.overrides]]
-module = "codomyrmex.logging_monitoring.*"
-strict = true
-
-# Sprint 8: model_context_protocol — gradual strictness ramp
-[[tool.mypy.overrides]]
-module = "codomyrmex.model_context_protocol.*"
-disallow_untyped_defs = false
-disallow_untyped_decorators = false
-warn_return_any = false
-
-# Sprint 23 → v1.1.0: agents — intermediate strictness (ramped from baseline)
-[[tool.mypy.overrides]]
-module = "codomyrmex.agents.*"
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-disallow_untyped_decorators = false
-warn_return_any = false
-check_untyped_defs = false
-
-# v1.1.0: events core — strict
-[[tool.mypy.overrides]]
-module = "codomyrmex.events.*"
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-warn_return_any = true
+[tool.ty.rules]
+# Lenient for legacy codebase — tighten over time
+possibly-unresolved-reference = "warn"
+unresolved-import = "ignore"
+possibly-missing-attribute = "ignore"
+invalid-argument-type = "ignore"
+not-subscriptable = "ignore"
+unresolved-attribute = "ignore"
+unused-ignore-comment = "warn"
 
 # v1.1.0: Mutation testing configuration (expanded from 3 → 6 files)
 [tool.mutmut]

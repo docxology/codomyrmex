@@ -4,6 +4,7 @@ from codomyrmex.cli.utils import get_logger, print_error, print_success
 
 logger = get_logger(__name__)
 
+
 def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
     """Handle AI code generation command."""
     try:
@@ -20,9 +21,8 @@ def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
             print(result["generated_code"])
             print("-" * 40)
             return True
-        else:
-            print_error(f"Code generation failed: {result['error_message']}")
-            return False
+        print_error(f"Code generation failed: {result['error_message']}")
+        return False
 
     except ImportError:
         logger.warning("AI code editing module not available")
@@ -30,7 +30,7 @@ def handle_ai_generate(prompt: str, language: str, provider: str) -> bool:
         return False
     except (ValueError, TypeError, AttributeError, RuntimeError) as e:
         logger.error(f"Error generating code: {e}", exc_info=True)
-        print_error(f"Error generating code: {str(e)}")
+        print_error(f"Error generating code: {e!s}")
         return False
 
 
@@ -67,9 +67,8 @@ def handle_ai_refactor(file_path: str, instruction: str) -> bool:
             if result.get("explanation"):
                 print(f"Explanation: {result['explanation']}")
             return True
-        else:
-            print_error(f"Refactoring failed: {result['error_message']}")
-            return False
+        print_error(f"Refactoring failed: {result['error_message']}")
+        return False
 
     except ImportError:
         logger.warning("AI code editing module not available")
@@ -77,5 +76,5 @@ def handle_ai_refactor(file_path: str, instruction: str) -> bool:
         return False
     except (ValueError, TypeError, AttributeError, RuntimeError, OSError) as e:
         logger.error(f"Error refactoring code: {e}", exc_info=True)
-        print_error(f"Error refactoring code: {str(e)}")
+        print_error(f"Error refactoring code: {e!s}")
         return False

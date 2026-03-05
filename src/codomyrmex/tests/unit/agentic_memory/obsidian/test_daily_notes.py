@@ -49,8 +49,11 @@ class TestDailyNotesUnavailable:
     def test_append_daily_with_flags(self):
         with pytest.raises(ObsidianCLINotAvailable):
             append_daily(
-                self._cli(), "content",
-                pane_type="split", inline=True, open=True,
+                self._cli(),
+                "content",
+                pane_type="split",
+                inline=True,
+                open=True,
             )
 
     def test_prepend_daily(self):
@@ -60,8 +63,11 @@ class TestDailyNotesUnavailable:
     def test_prepend_daily_with_flags(self):
         with pytest.raises(ObsidianCLINotAvailable):
             prepend_daily(
-                self._cli(), "content",
-                pane_type="window", inline=True, open=True,
+                self._cli(),
+                "content",
+                pane_type="window",
+                inline=True,
+                open=True,
             )
 
 

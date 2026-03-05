@@ -128,7 +128,7 @@ def fpf_search_patterns(
         if status_filter:
             filters["status"] = status_filter
 
-        results = indexer.search_patterns(query, filters if filters else None)
+        results = indexer.search_patterns(query, filters or None)
 
         matches = [
             {

@@ -19,6 +19,7 @@ class TestCodeExecutionSandboxComprehensive:
 
         try:
             from codomyrmex.coding.execution import executor
+
             assert executor is not None
         except ImportError as e:
             pytest.fail(f"Failed to import executor: {e}")
@@ -43,7 +44,7 @@ class TestCodeExecutionSandboxComprehensive:
         from codomyrmex.coding.execution.language_support import validate_language
 
         # Test supported languages
-        supported_languages = ['python', 'javascript', 'java', 'cpp', 'c', 'go', 'rust']
+        supported_languages = ["python", "javascript", "java", "cpp", "c", "go", "rust"]
         for lang in supported_languages:
             assert validate_language(lang) is True
 
@@ -102,7 +103,9 @@ class TestCodeExecutionSandboxComprehensive:
         assert file_path.exists()
         assert file_path.read_text() == code
 
-    def test_run_code_in_docker_success(self, code_dir, real_docker_available, tmp_path):
+    def test_run_code_in_docker_success(
+        self, code_dir, real_docker_available, tmp_path
+    ):
         """Test run_code_in_docker successful execution with real Docker."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
@@ -127,7 +130,7 @@ class TestCodeExecutionSandboxComprehensive:
             temp_dir=str(tmp_path),
             stdin_file=None,
             timeout=10,  # Short timeout for testing
-            session_id="test-session-id"
+            session_id="test-session-id",
         )
 
         assert isinstance(result, dict)
@@ -151,7 +154,7 @@ class TestCodeExecutionSandboxComprehensive:
             code="print('Hello, World!')",
             stdin=None,
             timeout=10,  # Short timeout for testing
-            session_id="test-session-id"
+            session_id="test-session-id",
         )
 
         assert isinstance(result, dict)
@@ -174,14 +177,14 @@ class TestCodeExecutionSandboxComprehensive:
         # Check that language configurations exist
         assert SUPPORTED_LANGUAGES is not None
 
-        supported_langs = ['python', 'javascript', 'bash']
+        supported_langs = ["python", "javascript", "bash"]
         for lang in supported_langs:
             assert lang in SUPPORTED_LANGUAGES
             config = SUPPORTED_LANGUAGES[lang]
-            assert 'image' in config
-            assert 'extension' in config
-            assert 'command' in config
-            assert 'timeout_factor' in config
+            assert "image" in config
+            assert "extension" in config
+            assert "command" in config
+            assert "timeout_factor" in config
 
     def test_constants_defined(self, code_dir):
         """Test that all required constants are defined."""

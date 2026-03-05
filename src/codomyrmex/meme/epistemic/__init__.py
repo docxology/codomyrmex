@@ -5,11 +5,11 @@ from codomyrmex.meme.epistemic.models import Belief, EpistemicState, Evidence, F
 from codomyrmex.meme.epistemic.truth import calculate_certainty, verify_claim
 
 __all__ = [
-    "Fact",
     "Belief",
-    "Evidence",
-    "EpistemicState",
     "EpistemicEngine",
-    "verify_claim",
+    "EpistemicState",
+    "Evidence",
+    "Fact",
     "calculate_certainty",
+    "verify_claim",
 ]

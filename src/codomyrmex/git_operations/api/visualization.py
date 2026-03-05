@@ -158,7 +158,7 @@ def visualize_git_branches(
                 "title": title,
             }
 
-        elif format_type == "mermaid":
+        if format_type == "mermaid":
             visualizer = GitVisualizer()
             content = visualizer.visualize_git_tree_mermaid(
                 repository_path=repository_path, title=title, output_path=output_path
@@ -171,8 +171,7 @@ def visualize_git_branches(
                 "content": content,
                 "title": title,
             }
-        else:
-            return {"error": f"Unsupported format: {format_type}"}
+        return {"error": f"Unsupported format: {format_type}"}
 
     except Exception as e:
         logger.error(f"Error creating Git branch visualization: {e}", exc_info=True)

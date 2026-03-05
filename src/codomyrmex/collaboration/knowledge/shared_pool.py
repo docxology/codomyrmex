@@ -125,7 +125,9 @@ class SharedMemoryPool:
         self._namespaces[target_ns][key] = entry
         return True
 
-    def get(self, agent_id: str, key: str, namespace: str | None = None) -> KnowledgeEntry | None:
+    def get(
+        self, agent_id: str, key: str, namespace: str | None = None
+    ) -> KnowledgeEntry | None:
         """Retrieve a knowledge entry.
 
         Args:
@@ -202,10 +204,9 @@ class SharedMemoryPool:
                     continue
 
                 # Term matching: check key, domain, tags
-                searchable = (
-                    [entry.key.lower(), entry.domain.lower()]
-                    + [t.lower() for t in entry.tags]
-                )
+                searchable = [entry.key.lower(), entry.domain.lower()] + [
+                    t.lower() for t in entry.tags
+                ]
                 if any(term in s for term in terms_lower for s in searchable):
                     results.append(entry)
 
@@ -252,7 +253,9 @@ class SharedMemoryPool:
         return True
 
     def _resolve_conflict(
-        self, existing: KnowledgeEntry, incoming: KnowledgeEntry,
+        self,
+        existing: KnowledgeEntry,
+        incoming: KnowledgeEntry,
     ) -> KnowledgeEntry:
         """Resolve a conflict between existing and incoming entries."""
         if self._conflict_strategy == ConflictStrategy.LAST_WRITE_WINS:
@@ -260,7 +263,11 @@ class SharedMemoryPool:
             return incoming
 
         if self._conflict_strategy == ConflictStrategy.HIGHEST_CITATION:
-            return existing if existing.citation_count >= incoming.citation_count else incoming
+            return (
+                existing
+                if existing.citation_count >= incoming.citation_count
+                else incoming
+            )
 
         # MERGE: combine tags, keep incoming value
         merged_tags = list(set(existing.tags + incoming.tags))

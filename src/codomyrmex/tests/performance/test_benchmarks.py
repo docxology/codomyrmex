@@ -1,4 +1,3 @@
-
 import importlib
 
 import pytest
@@ -10,11 +9,14 @@ from codomyrmex.coding.parsers.tree_sitter.languages.languages import LanguageMa
 @pytest.mark.benchmark
 def test_module_import_time(benchmark):
     """Benchmark import time of the main codomyrmex package."""
+
     def import_codomyrmex():
         import codomyrmex
+
         importlib.reload(codomyrmex)
 
     benchmark(import_codomyrmex)
+
 
 @pytest.mark.benchmark
 def test_ast_parsing_speed(benchmark):
@@ -31,7 +33,8 @@ def test_ast_parsing_speed(benchmark):
 
     parser = TreeSitterParser(python_lang)
     # A decently sized python snippet
-    code = """
+    code = (
+        """
     class Example:
         def __init__(self):
             self.value = 0
@@ -45,7 +48,9 @@ def test_ast_parsing_speed(benchmark):
         def loop(self):
             for i in range(100):
                 self.compute(i)
-    """ * 10
+    """
+        * 10
+    )
 
     def parse_code():
         parser.parse(code)

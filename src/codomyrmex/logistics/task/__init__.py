@@ -15,10 +15,10 @@ from .queue import Queue
 from .scheduler import JobScheduler
 
 __all__ = [
-    "Queue",
     "Job",
-    "JobStatus",
     "JobScheduler",
+    "JobStatus",
+    "Queue",
     "get_queue",
 ]
 
@@ -27,8 +27,6 @@ __version__ = "0.1.0"
 
 class QueueError(CodomyrmexError):
     """Raised when queue operations fail."""
-
-    pass
 
 
 def get_queue(backend: str = "in_memory") -> Queue:
@@ -41,5 +39,3 @@ def get_queue(backend: str = "in_memory") -> Queue:
         Queue instance
     """
     return Queue(backend=backend)
-
-

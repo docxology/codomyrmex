@@ -232,9 +232,7 @@ class TestDeadLetterQueueReplay:
         dlq, path = _tmp_dlq()
         try:
             calls = []
-            entry_id = dlq.add(
-                operation="my_tool", args={"x": 1}, error="err"
-            )
+            entry_id = dlq.add(operation="my_tool", args={"x": 1}, error="err")
             dlq.replay(
                 entry_id,
                 callback=lambda op, args: calls.append((op, args)),

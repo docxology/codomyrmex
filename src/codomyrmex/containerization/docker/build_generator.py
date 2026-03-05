@@ -12,9 +12,11 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BuildStage:
     """Represents a single build stage in a multi-stage build."""
+
     name: str
     base_image: str
     commands: list[str] = field(default_factory=list)
@@ -48,9 +50,11 @@ class BuildStage:
 
         return "\n".join(lines)
 
+
 @dataclass
 class MultiStageBuild:
     """Represents a complete multi-stage Docker build."""
+
     stages: list[BuildStage] = field(default_factory=list)
     final_stage: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -76,9 +80,11 @@ class MultiStageBuild:
 
         return "\n".join(lines)
 
+
 @dataclass
 class BuildScript:
     """Represents a build script for containerization."""
+
     name: str
     dockerfile_path: str
     context_path: str
@@ -95,7 +101,9 @@ class BuildScript:
         for tag in self.tags:
             build_cmd = f"docker build -f {self.dockerfile_path} -t {tag}"
             if self.build_args:
-                args_str = " ".join(f"--build-arg {k}={v}" for k, v in self.build_args.items())
+                args_str = " ".join(
+                    f"--build-arg {k}={v}" for k, v in self.build_args.items()
+                )
                 build_cmd += f" {args_str}"
             build_cmd += f" {self.context_path}"
             lines.append(build_cmd)
@@ -107,6 +115,7 @@ class BuildScript:
                 lines.append(f"docker push {target}")
 
         return "\n".join(lines)
+
 
 class BuildGenerator:
     """
@@ -163,7 +172,7 @@ class BuildGenerator:
             with open(dockerfile_path) as f:
                 content = f.read()
 
-            lines = content.split('\n')
+            lines = content.split("\n")
             optimized_lines = []
 
             i = 0
@@ -171,27 +180,37 @@ class BuildGenerator:
                 line = lines[i].strip()
 
                 # Combine RUN commands where possible
-                if line.startswith('RUN ') and i + 1 < len(lines):
+                if line.startswith("RUN ") and i + 1 < len(lines):
                     combined_commands = [line]
                     j = i + 1
-                    while j < len(lines) and lines[j].strip().startswith('RUN '):
+                    while j < len(lines) and lines[j].strip().startswith("RUN "):
                         combined_commands.append(lines[j].strip()[4:])  # Remove 'RUN '
                         j += 1
 
                     if len(combined_commands) > 1:
                         # Combine with &&
-                        combined = 'RUN ' + ' && '.join(cmd[4:] for cmd in combined_commands)
+                        combined = "RUN " + " && ".join(
+                            cmd[4:] for cmd in combined_commands
+                        )
                         optimized_lines.append(combined)
                         i = j
                         continue
 
                 # Add cache cleaning for apt
-                if line.startswith('RUN ') and 'apt-get install' in line and 'rm -rf /var/lib/apt/lists/*' not in line:
-                    optimized_lines.append(line + ' && rm -rf /var/lib/apt/lists/*')
-                elif line.startswith('RUN ') and 'pip install' in line and '--no-cache-dir' not in line:
+                if (
+                    line.startswith("RUN ")
+                    and "apt-get install" in line
+                    and "rm -rf /var/lib/apt/lists/*" not in line
+                ):
+                    optimized_lines.append(line + " && rm -rf /var/lib/apt/lists/*")
+                elif (
+                    line.startswith("RUN ")
+                    and "pip install" in line
+                    and "--no-cache-dir" not in line
+                ):
                     # Add --no-cache-dir to pip installs
-                    if 'pip install' in line and '--no-cache-dir' not in line:
-                        optimized_lines.append(line + ' --no-cache-dir')
+                    if "pip install" in line and "--no-cache-dir" not in line:
+                        optimized_lines.append(line + " --no-cache-dir")
                     else:
                         optimized_lines.append(line)
                 else:
@@ -199,7 +218,7 @@ class BuildGenerator:
 
                 i += 1
 
-            return '\n'.join(optimized_lines)
+            return "\n".join(optimized_lines)
 
         except Exception as e:
             logger.error(f"Error optimizing Dockerfile {dockerfile_path}: {e}")
@@ -222,7 +241,7 @@ class BuildGenerator:
             build_args=config.get("build_args", {}),
             tags=config.get("tags", []),
             push_targets=config.get("push_targets", []),
-            dependencies=config.get("dependencies", [])
+            dependencies=config.get("dependencies", []),
         )
 
         return script
@@ -238,7 +257,7 @@ class BuildGenerator:
             Tuple of (is_valid, list_of_issues)
         """
         issues = []
-        lines = dockerfile_content.split('\n')
+        lines = dockerfile_content.split("\n")
 
         has_from = False
         has_user = False
@@ -246,33 +265,39 @@ class BuildGenerator:
         for line_num, line in enumerate(lines, 1):
             line = line.strip()
 
-            if not line or line.startswith('#'):
+            if not line or line.startswith("#"):
                 continue
 
             # Check for FROM instruction
-            if line.upper().startswith('FROM '):
+            if line.upper().startswith("FROM "):
                 has_from = True
 
                 # Check for latest tag
-                if ':latest' in line or ':' not in line:
-                    issues.append(f"Line {line_num}: Avoid using 'latest' tag for reproducible builds")
+                if ":latest" in line or ":" not in line:
+                    issues.append(
+                        f"Line {line_num}: Avoid using 'latest' tag for reproducible builds"
+                    )
 
             # Check for root user
-            if line.upper().startswith('USER '):
+            if line.upper().startswith("USER "):
                 has_user = True
-                if 'root' in line.lower():
-                    issues.append(f"Line {line_num}: Avoid running as root user for security")
+                if "root" in line.lower():
+                    issues.append(
+                        f"Line {line_num}: Avoid running as root user for security"
+                    )
 
             # Check for WORKDIR
-            if line.upper().startswith('WORKDIR '):
+            if line.upper().startswith("WORKDIR "):
                 pass
 
             # Check for security issues
-            if 'chmod 777' in line or 'chmod +x' in line:
+            if "chmod 777" in line or "chmod +x" in line:
                 issues.append(f"Line {line_num}: Overly permissive file permissions")
 
-            if 'password' in line.lower() and 'env' in line.lower():
-                issues.append(f"Line {line_num}: Avoid hardcoding passwords in environment variables")
+            if "password" in line.lower() and "env" in line.lower():
+                issues.append(
+                    f"Line {line_num}: Avoid hardcoding passwords in environment variables"
+                )
 
         # Required instructions
         if not has_from:
@@ -282,7 +307,9 @@ class BuildGenerator:
 
         return len(issues) == 0, issues
 
-    def _create_python_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
+    def _create_python_multi_stage_build(
+        self, config: dict[str, Any]
+    ) -> MultiStageBuild:
         """Create multi-stage build for Python applications."""
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -295,28 +322,23 @@ class BuildGenerator:
                 "RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*",
                 "WORKDIR /app",
                 "COPY requirements*.txt ./",
-                "RUN pip install --no-cache-dir -r requirements.txt"
+                "RUN pip install --no-cache-dir -r requirements.txt",
             ],
-            copy_commands=[
-                "COPY . ."
-            ],
-            environment={"PYTHONUNBUFFERED": "1"}
+            copy_commands=["COPY . ."],
+            environment={"PYTHONUNBUFFERED": "1"},
         )
 
         # Runtime stage
         runtime_stage = BuildStage(
             name="runtime",
             base_image="python:3.9-slim",
-            commands=[
-                "RUN useradd -m appuser",
-                "WORKDIR /app"
-            ],
+            commands=["RUN useradd -m appuser", "WORKDIR /app"],
             copy_commands=[
                 "COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages",
-                "COPY --from=builder /app ."
+                "COPY --from=builder /app .",
             ],
             environment={"PYTHONUNBUFFERED": "1"},
-            user="appuser"
+            user="appuser",
         )
 
         build.stages = [build_stage, runtime_stage]
@@ -336,29 +358,23 @@ class BuildGenerator:
             commands=[
                 "WORKDIR /app",
                 "COPY package*.json ./",
-                "RUN npm ci --only=production"
+                "RUN npm ci --only=production",
             ],
-            copy_commands=[
-                "COPY . .",
-                "RUN npm run build"
-            ]
+            copy_commands=["COPY . .", "RUN npm run build"],
         )
 
         # Runtime stage
         runtime_stage = BuildStage(
             name="runtime",
             base_image="node:18-alpine",
-            commands=[
-                "RUN adduser -D appuser",
-                "WORKDIR /app"
-            ],
+            commands=["RUN adduser -D appuser", "WORKDIR /app"],
             copy_commands=[
                 "COPY --from=builder /app/package*.json ./",
                 "COPY --from=builder /app/node_modules ./node_modules",
-                "COPY --from=builder /app/dist ./dist"
+                "COPY --from=builder /app/dist ./dist",
             ],
             environment={"NODE_ENV": "production"},
-            user="appuser"
+            user="appuser",
         )
 
         build.stages = [build_stage, runtime_stage]
@@ -375,28 +391,17 @@ class BuildGenerator:
         build_stage = BuildStage(
             name="builder",
             base_image=config.get("base_image", "openjdk:11-jdk-slim"),
-            commands=[
-                "WORKDIR /app",
-                "COPY pom.xml .",
-                "COPY src ./src"
-            ],
-            copy_commands=[
-                "RUN ./mvnw clean package -DskipTests"
-            ]
+            commands=["WORKDIR /app", "COPY pom.xml .", "COPY src ./src"],
+            copy_commands=["RUN ./mvnw clean package -DskipTests"],
         )
 
         # Runtime stage
         runtime_stage = BuildStage(
             name="runtime",
             base_image="openjdk:11-jre-slim",
-            commands=[
-                "RUN useradd -m appuser",
-                "WORKDIR /app"
-            ],
-            copy_commands=[
-                "COPY --from=builder /app/target/*.jar ./app.jar"
-            ],
-            user="appuser"
+            commands=["RUN useradd -m appuser", "WORKDIR /app"],
+            copy_commands=["COPY --from=builder /app/target/*.jar ./app.jar"],
+            user="appuser",
         )
 
         build.stages = [build_stage, runtime_stage]
@@ -413,29 +418,20 @@ class BuildGenerator:
         build_stage = BuildStage(
             name="builder",
             base_image=config.get("base_image", "golang:1.19-alpine"),
-            commands=[
-                "WORKDIR /app",
-                "COPY go.mod go.sum ./",
-                "RUN go mod download"
-            ],
+            commands=["WORKDIR /app", "COPY go.mod go.sum ./", "RUN go mod download"],
             copy_commands=[
                 "COPY . .",
-                "RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ."
-            ]
+                "RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .",
+            ],
         )
 
         # Runtime stage
         runtime_stage = BuildStage(
             name="runtime",
             base_image="alpine:latest",
-            commands=[
-                "RUN adduser -D appuser",
-                "WORKDIR /app"
-            ],
-            copy_commands=[
-                "COPY --from=builder /app/main ."
-            ],
-            user="appuser"
+            commands=["RUN adduser -D appuser", "WORKDIR /app"],
+            copy_commands=["COPY --from=builder /app/main ."],
+            user="appuser",
         )
 
         build.stages = [build_stage, runtime_stage]
@@ -443,7 +439,9 @@ class BuildGenerator:
 
         return build
 
-    def _create_generic_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
+    def _create_generic_multi_stage_build(
+        self, config: dict[str, Any]
+    ) -> MultiStageBuild:
         """Create generic multi-stage build."""
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -454,7 +452,7 @@ class BuildGenerator:
             base_image=config.get("base_image", "ubuntu:20.04"),
             commands=config.get("build_commands", []),
             copy_commands=["COPY . /app"],
-            working_directory="/app"
+            working_directory="/app",
         )
 
         # Runtime stage
@@ -464,7 +462,7 @@ class BuildGenerator:
             commands=config.get("runtime_commands", []),
             copy_commands=["COPY --from=builder /app /app"],
             working_directory="/app",
-            user="appuser"
+            user="appuser",
         )
 
         build.stages = [build_stage, runtime_stage]
@@ -481,21 +479,19 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 CMD ["python", "app.py"]""",
-
             "node_basic": """FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 COPY . .
 CMD ["npm", "start"]""",
-
             "security_hardened": """FROM base_image
 RUN useradd -m appuser && \\
     apt-get update && \\
     apt-get install -y --no-install-recommends packages && \\
     rm -rf /var/lib/apt/lists/*
 USER appuser
-WORKDIR /app"""
+WORKDIR /app""",
         }
 
         return templates

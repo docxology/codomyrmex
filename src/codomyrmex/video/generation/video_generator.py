@@ -23,10 +23,7 @@ class VideoGenerator:
         self.client = client or GeminiClient()
 
     def generate(
-        self,
-        prompt: str,
-        model: str = "veo-2.0-generate-001",
-        **kwargs: Any
+        self, prompt: str, model: str = "veo-2.0-generate-001", **kwargs: Any
     ) -> list[dict[str, Any]]:
         """
         Generate videos from a text prompt.

@@ -18,8 +18,9 @@ logger = get_logger(__name__)
 
 class CircuitState(Enum):
     """Circuit breaker state."""
-    CLOSED = "closed"      # Normal operation
-    OPEN = "open"          # Failures exceeded threshold — reject calls
+
+    CLOSED = "closed"  # Normal operation
+    OPEN = "open"  # Failures exceeded threshold — reject calls
     HALF_OPEN = "half_open"  # Cooldown elapsed — probe with one call
 
 

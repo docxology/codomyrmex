@@ -24,12 +24,10 @@ class NotificationProvider(ABC):
     @abstractmethod
     def channel(self) -> NotificationChannel:
         """Get the channel this provider handles."""
-        pass
 
     @abstractmethod
     def send(self, notification: Notification) -> NotificationResult:
         """Send a notification."""
-        pass
 
 
 class ConsoleProvider(NotificationProvider):
@@ -50,7 +48,9 @@ class ConsoleProvider(NotificationProvider):
         }
 
         prefix = priority_prefix.get(notification.priority, "")
-        print(f"\n{prefix} [{notification.priority.value.upper()}] {notification.subject}")
+        print(
+            f"\n{prefix} [{notification.priority.value.upper()}] {notification.subject}"
+        )
         print(f"   {notification.body}")
 
         return NotificationResult(

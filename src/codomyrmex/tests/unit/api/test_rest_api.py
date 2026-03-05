@@ -18,12 +18,14 @@ import pytest
 # Direct-import helper — load rest_api.py without triggering parent __init__
 # ---------------------------------------------------------------------------
 
+
 def _load_rest_api():
     """Load rest_api module directly, bypassing the circular-import chain."""
     name = "codomyrmex.api.standardization.rest_api"
     if name in sys.modules:
         return sys.modules[name]
     import codomyrmex.logging_monitoring  # noqa: F401 — loads cleanly, no cycles
+
     spec = importlib.util.spec_from_file_location(
         name,
         "src/codomyrmex/api/standardization/rest_api.py",
@@ -60,7 +62,8 @@ pytestmark = pytest.mark.skipif(
 # Fixtures
 # ---------------------------------------------------------------------------
 
-@pytest.fixture()
+
+@pytest.fixture
 def simple_router():
     """A router with a single GET /hello endpoint."""
     router = APIRouter(prefix="/api")
@@ -72,7 +75,7 @@ def simple_router():
     return router
 
 
-@pytest.fixture()
+@pytest.fixture
 def rest_api():
     """A RESTAPI instance with a basic echo endpoint registered."""
     api = create_api(title="TestAPI", version="0.1.0")
@@ -98,6 +101,7 @@ def rest_api():
 # ===========================================================================
 # HTTPMethod
 # ===========================================================================
+
 
 class TestHTTPMethod:
     """HTTPMethod enum — all seven verbs must be present and have correct values."""
@@ -134,6 +138,7 @@ class TestHTTPMethod:
 # HTTPStatus
 # ===========================================================================
 
+
 class TestHTTPStatus:
     """HTTPStatus enum — spot-check key codes."""
 
@@ -159,6 +164,7 @@ class TestHTTPStatus:
 # ===========================================================================
 # APIRequest
 # ===========================================================================
+
 
 class TestAPIRequest:
     """APIRequest dataclass — construction, json_body parsing, defaults."""
@@ -203,6 +209,7 @@ class TestAPIRequest:
 # ===========================================================================
 # APIResponse
 # ===========================================================================
+
 
 class TestAPIResponse:
     """APIResponse dataclass — construction, factory methods, headers."""
@@ -259,6 +266,7 @@ class TestAPIResponse:
 # ===========================================================================
 # APIRouter
 # ===========================================================================
+
 
 class TestAPIRouter:
     """APIRouter — endpoint registration, normalization, matching."""
@@ -440,6 +448,7 @@ class TestAPIRouter:
 # ===========================================================================
 # RESTAPI
 # ===========================================================================
+
 
 class TestRESTAPI:
     """RESTAPI — handle_request, metrics, OPTIONS middleware."""
@@ -651,6 +660,7 @@ class TestRESTAPI:
 # create_router convenience function
 # ===========================================================================
 
+
 class TestCreateRouter:
     """create_router factory."""
 
@@ -667,6 +677,7 @@ class TestCreateRouter:
 # ===========================================================================
 # Path-to-regex conversion
 # ===========================================================================
+
 
 class TestPathToRegex:
     """Internal _path_to_regex — parametrized and non-parametrized paths."""

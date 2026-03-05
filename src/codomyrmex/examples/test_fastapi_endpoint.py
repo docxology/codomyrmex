@@ -1,5 +1,5 @@
-import pytest
 from fastapi.testclient import TestClient
+
 from .fastapi_endpoint import app
 
 client = TestClient(app)

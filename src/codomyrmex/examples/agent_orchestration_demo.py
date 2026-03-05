@@ -1,4 +1,3 @@
-
 """
 Agent Orchestration Demo
 ========================
@@ -29,6 +28,7 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 logger = get_logger(__name__)
 
+
 class SimulatedAgent(AgentInterface):
     """A simulated agent with configurable delay and failure rate."""
 
@@ -57,7 +57,7 @@ class SimulatedAgent(AgentInterface):
 
         return AgentResponse(
             content=response_content,
-            metadata={"agent": self.name, "latency": self.delay}
+            metadata={"agent": self.name, "latency": self.delay},
         )
 
     def stream(self, request: AgentRequest) -> Iterator[str]:
@@ -67,7 +67,7 @@ class SimulatedAgent(AgentInterface):
 
     def setup(self) -> None:
         """Configure and prepare this instance for use."""
-        return None  # Demo agent — no setup needed
+        return  # Demo agent — no setup needed
 
     def test_connection(self) -> bool:
         return True
@@ -92,7 +92,9 @@ def main():
     agent_c = SimulatedAgent("Agent C (Fast)", delay=1.0)
 
     # 2. Slow/Failing agents (for fallback demo)
-    agent_unreliable = SimulatedAgent("Agent D (Unreliable)", delay=0.5, failure_rate=1.0)
+    agent_unreliable = SimulatedAgent(
+        "Agent D (Unreliable)", delay=0.5, failure_rate=1.0
+    )
     agent_reliable = SimulatedAgent("Agent E (Reliable)", delay=0.5, failure_rate=0.0)
 
     orchestrator = AgentOrchestrator([agent_a, agent_b, agent_c])
@@ -100,10 +102,10 @@ def main():
     req = AgentRequest(prompt="Analyze this code block.")
 
     # --- Parallel Execution Demo ---
-    print("\n" + "="*50)
+    print("\n" + "=" * 50)
     print("DEMO 1: Parallel Execution")
     print("Expected: All 3 agents finish in ~1.0s (not 3.0s)")
-    print("="*50)
+    print("=" * 50)
 
     start_time = time.perf_counter()
     responses = orchestrator.execute_parallel(req, agents=[agent_a, agent_b, agent_c])
@@ -115,10 +117,10 @@ def main():
             print(f"Result: {r.content}")
 
     # --- Sequential Execution Demo ---
-    print("\n" + "="*50)
+    print("\n" + "=" * 50)
     print("DEMO 2: Sequential Execution")
     print("Expected: Agents finish one by one ~2.0s total")
-    print("="*50)
+    print("=" * 50)
 
     start_time = time.perf_counter()
     responses = orchestrator.execute_sequential(req, agents=[agent_a, agent_b])
@@ -127,10 +129,10 @@ def main():
     print(f"\nSequential execution took: {duration:.2f}s")
 
     # --- Fallback Demo ---
-    print("\n" + "="*50)
+    print("\n" + "=" * 50)
     print("DEMO 3: Fallback Strategy")
     print("Expected: First agent fails, second agent succeeds")
-    print("="*50)
+    print("=" * 50)
 
     orchestrator_fallback = AgentOrchestrator([agent_unreliable, agent_reliable])
 
@@ -140,6 +142,7 @@ def main():
         print(f"\nFallback success! Result from: {response.content}")
     else:
         print("\nFallback failed!")
+
 
 if __name__ == "__main__":
     main()

@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class SecurityEventType(Enum):
     """Types of security events."""
+
     AUTHENTICATION_FAILURE = "authentication_failure"
     AUTHORIZATION_FAILURE = "authorization_failure"
     SUSPICIOUS_ACTIVITY = "suspicious_activity"
@@ -36,6 +37,7 @@ class SecurityEventType(Enum):
 
 class AlertLevel(Enum):
     """Alert severity levels."""
+
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
@@ -45,6 +47,7 @@ class AlertLevel(Enum):
 @dataclass
 class SecurityEvent:
     """Represents a security event."""
+
     event_id: str
     event_type: SecurityEventType
     timestamp: datetime
@@ -75,6 +78,7 @@ class SecurityEvent:
 @dataclass
 class AlertRule:
     """Represents an alert rule for security monitoring."""
+
     rule_id: str
     name: str
     description: str
@@ -148,7 +152,7 @@ class SecurityMonitor:
                 },
                 alert_level=AlertLevel.CRITICAL,
             ),
-             AlertRule(
+            AlertRule(
                 rule_id="config_change",
                 name="Configuration File Change",
                 description="Unauthorized configuration file modification",
@@ -218,7 +222,7 @@ class SecurityMonitor:
         for log_file in log_files:
             if os.path.exists(log_file):
                 try:
-                    with open(log_file, errors='ignore') as f:
+                    with open(log_file, errors="ignore") as f:
                         lines = f.readlines()
                         for line in lines[-100:]:
                             event = self._parse_log_line(line.strip(), log_file)
@@ -262,13 +266,15 @@ class SecurityMonitor:
                     )
 
                     if event_type == SecurityEventType.AUTHENTICATION_FAILURE:
-                         if match.groups():
+                        if match.groups():
                             if len(match.groups()) >= 1:
                                 event.user_id = match.group(1)
                             if len(match.groups()) >= 2:
                                 event.source_ip = match.group(2)
                             else:
-                                ip_match = re.search(r"from (\d+\.\d+\.\d+\.\d+)", line, re.IGNORECASE)
+                                ip_match = re.search(
+                                    r"from (\d+\.\d+\.\d+\.\d+)", line, re.IGNORECASE
+                                )
                                 if ip_match:
                                     event.source_ip = ip_match.group(1)
                     return event
@@ -321,7 +327,7 @@ class SecurityMonitor:
         """Get summary of security events."""
         return {
             "total_events": len(self.events),
-            "active_alerts": len(self.active_alerts)
+            "active_alerts": len(self.active_alerts),
         }
 
 
@@ -331,6 +337,7 @@ def monitor_security_events(config_path: str | None = None) -> SecurityMonitor:
     monitor = SecurityMonitor(config_path)
     monitor.start_monitoring()
     return monitor
+
 
 def audit_access_logs(log_files: list[str] | None = None) -> list[SecurityEvent]:
     """Convenience function to audit access logs for security events."""

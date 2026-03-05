@@ -36,7 +36,7 @@ class TestModuleConstants:
     def test_default_docs_port_type_and_value(self):
         mod = _import_website()
         assert isinstance(mod.DEFAULT_DOCS_PORT, int)
-        assert mod.DEFAULT_DOCS_PORT == int(os.getenv("DOCS_PORT", "3000"))
+        assert int(os.getenv("DOCS_PORT", "3000")) == mod.DEFAULT_DOCS_PORT
 
     def test_docusaurus_base_path(self):
         mod = _import_website()
@@ -66,7 +66,7 @@ class TestModuleConstants:
 
     def test_logger_is_not_none(self):
         mod = _import_website()
-        assert hasattr(mod.logger, 'info')
+        assert hasattr(mod.logger, "info")
 
 
 # ---------------------------------------------------------------------------
@@ -119,9 +119,7 @@ class TestCheckDocEnvironment:
         result = check_doc_environment()
         assert isinstance(result, bool)
 
-    @pytest.mark.skipif(
-        shutil.which("node") is None, reason="Node.js not installed"
-    )
+    @pytest.mark.skipif(shutil.which("node") is None, reason="Node.js not installed")
     def test_passes_when_node_available(self):
         from codomyrmex.documentation.documentation_website import (
             check_doc_environment,
@@ -131,9 +129,7 @@ class TestCheckDocEnvironment:
         result = check_doc_environment()
         assert result is True
 
-    @pytest.mark.skipif(
-        shutil.which("node") is not None, reason="Node.js IS installed"
-    )
+    @pytest.mark.skipif(shutil.which("node") is not None, reason="Node.js IS installed")
     def test_fails_when_node_missing(self):
         from codomyrmex.documentation.documentation_website import (
             check_doc_environment,
@@ -196,9 +192,7 @@ class TestRunCommandStreamOutput:
             run_command_stream_output,
         )
 
-        result = run_command_stream_output(
-            ["echo", "line1\nline2"], cwd=str(tmp_path)
-        )
+        result = run_command_stream_output(["echo", "line1\nline2"], cwd=str(tmp_path))
         assert result is True
 
 

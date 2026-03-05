@@ -69,7 +69,7 @@ def format_exception_chain(exception: Exception) -> str:
         if isinstance(current, CodomyrmexError):
             lines.append(str(current))
         else:
-            lines.append(f"[{current.__class__.__name__}] {str(current)}")
+            lines.append(f"[{current.__class__.__name__}] {current!s}")
         current = current.__cause__ or current.__context__
 
     return "\n".join(lines)

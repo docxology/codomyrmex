@@ -24,6 +24,7 @@ from pydantic import BaseModel, Field
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -39,10 +40,18 @@ router = APIRouter(tags=["PAI"])
 class PAIEvent(BaseModel):
     """Incoming PAI event payload."""
 
-    event_type: str = Field(..., description="Event type (phase_transition, tool_result, status)")
-    phase: str | None = Field(None, description="PAI Algorithm phase (e.g., Awareness, Assessment)")
-    tool_name: str | None = Field(None, description="MCP tool that generated this event")
-    payload: dict[str, Any] = Field(default_factory=dict, description="Event payload data")
+    event_type: str = Field(
+        ..., description="Event type (phase_transition, tool_result, status)"
+    )
+    phase: str | None = Field(
+        None, description="PAI Algorithm phase (e.g., Awareness, Assessment)"
+    )
+    tool_name: str | None = Field(
+        None, description="MCP tool that generated this event"
+    )
+    payload: dict[str, Any] = Field(
+        default_factory=dict, description="Event payload data"
+    )
     timestamp: str = Field(default_factory=lambda: datetime.now().isoformat())
 
 
@@ -84,7 +93,9 @@ async def receive_pai_event(event: PAIEvent) -> PAIEventResponse:
 
         bus = EventBus.get_default()
         bus.emit(f"pai.{event.event_type}", event_record)
-        logger.info("PAI event %s dispatched to EventBus: %s", event_id, event.event_type)
+        logger.info(
+            "PAI event %s dispatched to EventBus: %s", event_id, event.event_type
+        )
     except Exception as exc:
         logger.warning("EventBus dispatch failed (non-fatal): %s", exc)
 

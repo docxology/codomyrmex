@@ -22,7 +22,6 @@ class Stream(ABC):
     @abstractmethod
     async def publish(self, event: Event) -> None:
         """Publish an event to the stream."""
-        pass
 
     @abstractmethod
     async def subscribe(
@@ -32,12 +31,10 @@ class Stream(ABC):
         filter_fn: Callable[[Event], bool] | None = None,
     ) -> Subscription:
         """Subscribe to events."""
-        pass
 
     @abstractmethod
     async def unsubscribe(self, subscription_id: str) -> bool:
         """Unsubscribe from events."""
-        pass
 
 
 class InMemoryStream(Stream):
@@ -59,8 +56,18 @@ class InMemoryStream(Stream):
                 if sub.should_receive(event) and sub.handler:
                     try:
                         sub.handler(event)
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                        logger.warning("Stream handler error for subscription '%s': %s", sub.topic, e)
+                    except (
+                        ValueError,
+                        RuntimeError,
+                        AttributeError,
+                        OSError,
+                        TypeError,
+                    ) as e:
+                        logger.warning(
+                            "Stream handler error for subscription '%s': %s",
+                            sub.topic,
+                            e,
+                        )
 
     async def subscribe(
         self,

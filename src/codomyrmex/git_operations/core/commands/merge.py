@@ -8,6 +8,7 @@ from .branching import get_current_branch, switch_branch
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_merge")
 def merge_branch(
     source_branch: str,
@@ -55,6 +56,7 @@ def merge_branch(
         logger.error(f"Unexpected error merging branch: {e}")
         raise
 
+
 @mcp_tool(name="git_rebase")
 def rebase_branch(
     target_branch: str, repository_path: str = None, interactive: bool = False
@@ -89,4 +91,3 @@ def rebase_branch(
     except Exception as e:
         logger.error(f"Unexpected error rebasing branch: {e}")
         raise
-

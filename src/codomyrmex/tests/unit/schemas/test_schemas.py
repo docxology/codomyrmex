@@ -72,13 +72,33 @@ class TestSchemasModuleImport:
         from codomyrmex.validation import schemas
 
         expected = [
-            "Result", "ResultStatus", "Task", "TaskStatus",
-            "Config", "ModuleInfo", "ToolDefinition", "Notification",
-            "CodeEntity", "CodeEntityType", "AnalysisResult", "AnalysisSeverity",
-            "SecurityFinding", "SecuritySeverity", "TestResult", "TestStatus",
-            "Deployment", "DeploymentStatus", "Pipeline", "PipelineStatus",
-            "Resource", "BuildArtifact", "Metric", "MetricType",
-            "Credential", "Permission", "WorkflowStep",
+            "Result",
+            "ResultStatus",
+            "Task",
+            "TaskStatus",
+            "Config",
+            "ModuleInfo",
+            "ToolDefinition",
+            "Notification",
+            "CodeEntity",
+            "CodeEntityType",
+            "AnalysisResult",
+            "AnalysisSeverity",
+            "SecurityFinding",
+            "SecuritySeverity",
+            "TestResult",
+            "TestStatus",
+            "Deployment",
+            "DeploymentStatus",
+            "Pipeline",
+            "PipelineStatus",
+            "Resource",
+            "BuildArtifact",
+            "Metric",
+            "MetricType",
+            "Credential",
+            "Permission",
+            "WorkflowStep",
         ]
         for name in expected:
             assert hasattr(schemas, name), f"{name} missing from schemas package"
@@ -307,7 +327,9 @@ class TestToolDefinition:
     """Tests for ToolDefinition dataclass."""
 
     def test_construction_with_defaults(self):
-        td = ToolDefinition(name="analyze", description="Run analysis", module="static_analysis")
+        td = ToolDefinition(
+            name="analyze", description="Run analysis", module="static_analysis"
+        )
         assert td.name == "analyze"
         assert td.description == "Run analysis"
         assert td.module == "static_analysis"

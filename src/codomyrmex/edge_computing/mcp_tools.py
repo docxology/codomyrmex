@@ -77,7 +77,9 @@ def edge_computing_list_capabilities() -> dict[str, Any]:
     category="edge_computing",
     description="Check health of edge nodes and get recovery recommendations.",
 )
-def edge_computing_health_check(heartbeat_timeout_seconds: float = 60.0) -> dict[str, Any]:
+def edge_computing_health_check(
+    heartbeat_timeout_seconds: float = 60.0,
+) -> dict[str, Any]:
     """Run a health check on the monitoring subsystem.
 
     Args:

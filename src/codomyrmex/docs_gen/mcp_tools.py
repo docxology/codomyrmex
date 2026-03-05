@@ -34,7 +34,11 @@ def docs_gen_extract_api(
                 for f in doc.functions
             ],
             "classes": [
-                {"name": c.name, "docstring": c.docstring, "methods": [m.name for m in c.methods]}
+                {
+                    "name": c.name,
+                    "docstring": c.docstring,
+                    "methods": [m.name for m in c.methods],
+                }
                 for c in doc.classes
             ],
             "function_count": len(doc.functions),
@@ -70,9 +74,13 @@ def docs_gen_build_search_index(
         index = SearchIndex()
         # Index each function and class as a separate entry
         for fn in doc.functions:
-            index.add(fn.name, title=fn.name, content=fn.docstring or "", tags=["function"])
+            index.add(
+                fn.name, title=fn.name, content=fn.docstring or "", tags=["function"]
+            )
         for cls in doc.classes:
-            index.add(cls.name, title=cls.name, content=cls.docstring or "", tags=["class"])
+            index.add(
+                cls.name, title=cls.name, content=cls.docstring or "", tags=["class"]
+            )
 
         return {
             "status": "success",

@@ -8,6 +8,7 @@ from .engine_3d import Camera3D, Light3D, Object3D, Scene3D
 
 logger = get_logger(__name__)
 
+
 class ShaderManager:
     """Manages 3D shaders."""
 
@@ -95,7 +96,9 @@ class RenderPipeline:
 
     def _render_geometry(self, obj: Object3D) -> None:
         """Render object geometry."""
-        logger.debug(f"Rendering geometry for object: {obj.name} ({len(obj.vertices)} vertices)")
+        logger.debug(
+            f"Rendering geometry for object: {obj.name} ({len(obj.vertices)} vertices)"
+        )
         # Draw arrays or elements
         # gl.drawArrays(...)
 

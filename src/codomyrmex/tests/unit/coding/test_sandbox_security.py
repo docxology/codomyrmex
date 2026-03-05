@@ -6,6 +6,7 @@ DEFAULT_DOCKER_ARGS structure.
 All file I/O uses real temp directories via tmp_path fixture.
 No mocks. No MagicMock. No monkeypatch.
 """
+
 from __future__ import annotations
 
 import os
@@ -60,7 +61,7 @@ class TestPrepareCodeFile:
 
     def test_cpp_extension_is_cpp(self):
         """C++ code files get .cpp extension."""
-        temp_dir, rel_path = prepare_code_file('#include <iostream>', "cpp")
+        temp_dir, rel_path = prepare_code_file("#include <iostream>", "cpp")
         try:
             assert rel_path.endswith(".cpp")
         finally:

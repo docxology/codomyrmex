@@ -13,8 +13,8 @@ from .advanced_plotter import AdvancedPlotter
 from .plotter import Plotter
 
 __all__ = [
-    "Plotter",
     "AdvancedPlotter",
-    "save_plot",
+    "Plotter",
     "apply_style",
+    "save_plot",
 ]

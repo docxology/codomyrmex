@@ -309,7 +309,7 @@ class TestCurriculumLearningPath:
         c = Curriculum(name="C")
         # EXPERT difficulty index=3, BEGINNER index=0
         c.add_module("basic")  # default BEGINNER
-        c.add_module("hard", )
+        c.add_module("hard")
         # Manually set difficulty on the hard module
         c.get_module("hard").difficulty = Difficulty.EXPERT
         path = c.generate_learning_path(student_level="expert")
@@ -384,7 +384,7 @@ class TestVisualizationImport:
     def test_visualization_module_importable_or_raises_import_error(self):
         """render_curriculum_path requires MermaidDiagram from data_visualization."""
         try:
-            from codomyrmex.documentation.education import visualization  # noqa: F401
+            from codomyrmex.documentation.education import visualization
 
             assert hasattr(visualization, "render_curriculum_path")
         except ImportError:

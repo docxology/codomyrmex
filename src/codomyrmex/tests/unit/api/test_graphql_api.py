@@ -14,11 +14,13 @@ import pytest
 # Direct-import helper
 # ---------------------------------------------------------------------------
 
+
 def _load_graphql_api():
     name = "codomyrmex.api.standardization.graphql_api"
     if name in sys.modules:
         return sys.modules[name]
     import codomyrmex.logging_monitoring  # noqa: F401
+
     spec = importlib.util.spec_from_file_location(
         name,
         "src/codomyrmex/api/standardization/graphql_api.py",
@@ -59,7 +61,8 @@ pytestmark = pytest.mark.skipif(
 # Fixtures
 # ---------------------------------------------------------------------------
 
-@pytest.fixture()
+
+@pytest.fixture
 def user_type():
     """A simple User GraphQL object type."""
     t = GraphQLObjectType(name="User", description="A user entity")
@@ -69,7 +72,7 @@ def user_type():
     return t
 
 
-@pytest.fixture()
+@pytest.fixture
 def post_type():
     """A simple Post GraphQL object type."""
     t = GraphQLObjectType(name="Post")
@@ -79,7 +82,7 @@ def post_type():
     return t
 
 
-@pytest.fixture()
+@pytest.fixture
 def simple_schema(user_type, post_type):
     """Schema with User, Post types and a Query type."""
     schema = GraphQLSchema()
@@ -90,14 +93,12 @@ def simple_schema(user_type, post_type):
     query_type.add_field(
         GraphQLField(name="user", type="User", args={"id": "ID"}, required=True)
     )
-    query_type.add_field(
-        GraphQLField(name="users", type="[User]")
-    )
+    query_type.add_field(GraphQLField(name="users", type="[User]"))
     schema.query_type = query_type
     return schema
 
 
-@pytest.fixture()
+@pytest.fixture
 def graphql_api(simple_schema):
     return GraphQLAPI(schema=simple_schema)
 
@@ -105,6 +106,7 @@ def graphql_api(simple_schema):
 # ===========================================================================
 # GraphQLType enum
 # ===========================================================================
+
 
 class TestGraphQLType:
     """GraphQLType enum — five scalar types."""
@@ -131,6 +133,7 @@ class TestGraphQLType:
 # ===========================================================================
 # GraphQLField
 # ===========================================================================
+
 
 class TestGraphQLField:
     """GraphQLField dataclass — construction and defaults."""
@@ -163,6 +166,7 @@ class TestGraphQLField:
 # ===========================================================================
 # GraphQLObjectType
 # ===========================================================================
+
 
 class TestGraphQLObjectType:
     """GraphQLObjectType — add_field, get_field, defaults."""
@@ -201,6 +205,7 @@ class TestGraphQLObjectType:
 # ===========================================================================
 # GraphQLSchema
 # ===========================================================================
+
 
 class TestGraphQLSchema:
     """GraphQLSchema — add_type, get_type, generate_sdl."""
@@ -255,9 +260,7 @@ class TestGraphQLSchema:
     def test_generate_sdl_field_args_in_output(self):
         s = GraphQLSchema()
         t = GraphQLObjectType(name="Query")
-        t.add_field(
-            GraphQLField(name="user", type="User", args={"id": "ID"})
-        )
+        t.add_field(GraphQLField(name="user", type="User", args={"id": "ID"}))
         s.query_type = t
         sdl = s.generate_sdl()
         assert "id: ID" in sdl
@@ -268,9 +271,7 @@ class TestGraphQLSchema:
         address_type = GraphQLObjectType(name="Address")
         s.add_type(address_type)
         person_type = GraphQLObjectType(name="Person")
-        person_type.add_field(
-            GraphQLField(name="address", type=address_type)
-        )
+        person_type.add_field(GraphQLField(name="address", type=address_type))
         s.add_type(person_type)
         sdl = s.generate_sdl()
         assert "Address" in sdl
@@ -331,6 +332,7 @@ class TestGraphQLSchema:
 # GraphQLResolver
 # ===========================================================================
 
+
 class TestGraphQLResolver:
     """GraphQLResolver — resolve delegates to the wrapped function."""
 
@@ -369,14 +371,17 @@ class TestGraphQLResolver:
 # GraphQLMutation
 # ===========================================================================
 
+
 class TestGraphQLMutation:
     """GraphQLMutation — execute delegates to resolver."""
 
     def _make_mutation(self, resolver_func=None):
         input_type = GraphQLObjectType(name="CreateUserInput")
         if resolver_func is None:
+
             def resolver_func(data, ctx):
                 return {"id": "1", "name": data.get("name")}
+
         return GraphQLMutation(
             name="createUser",
             input_type=input_type,
@@ -401,8 +406,12 @@ class TestGraphQLMutation:
     def test_mutation_decorator(self):
         input_type = GraphQLObjectType(name="DeleteInput")
 
-        @mutation("deleteUser", input_type=input_type, output_type="Boolean",
-                  description="Delete a user")
+        @mutation(
+            "deleteUser",
+            input_type=input_type,
+            output_type="Boolean",
+            description="Delete a user",
+        )
         def delete_resolver(data, ctx):
             return True
 
@@ -414,6 +423,7 @@ class TestGraphQLMutation:
 # ===========================================================================
 # GraphQLQuery
 # ===========================================================================
+
 
 class TestGraphQLQuery:
     """GraphQLQuery dataclass."""
@@ -437,6 +447,7 @@ class TestGraphQLQuery:
 # ===========================================================================
 # GraphQLAPI
 # ===========================================================================
+
 
 class TestGraphQLAPI:
     """GraphQLAPI — execute_query, register_resolver, register_mutation, metrics."""
@@ -527,6 +538,7 @@ class TestGraphQLAPI:
 # Field resolution via custom resolvers
 # ===========================================================================
 
+
 class TestFieldResolutionWithCustomResolver:
     """Resolvers on schema fields are invoked during _execute_selection_set."""
 
@@ -598,6 +610,7 @@ class TestFieldResolutionWithCustomResolver:
 # _parse_query
 # ===========================================================================
 
+
 class TestParseQuery:
     """_parse_query — operation detection and name extraction."""
 
@@ -621,6 +634,7 @@ class TestParseQuery:
 # ===========================================================================
 # Convenience functions
 # ===========================================================================
+
 
 class TestConvenienceFunctions:
     """create_schema, create_object_type, create_field."""

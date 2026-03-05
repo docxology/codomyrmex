@@ -68,13 +68,13 @@ def cli_commands():
 
 
 __all__ = [
+    "DateFormatter",
     "Locale",
     "MessageBundle",
-    "Translator",
-    "PluralRules",
     "NumberFormatter",
-    "DateFormatter",
+    "PluralRules",
+    "Translator",
+    "cli_commands",
     "init",
     "t",
-    "cli_commands",
 ]

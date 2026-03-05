@@ -6,7 +6,6 @@ This module tests all components of the terminal interface functionality:
 - TerminalUtils for formatting and utilities
 """
 
-
 import pytest
 
 try:
@@ -27,10 +26,10 @@ class TestInteractiveShell:
         """Test InteractiveShell initialization."""
         assert self.shell.prompt == "🐜 codomyrmex> "
         assert isinstance(self.shell.session_data, dict)
-        assert 'commands_run' in self.shell.session_data
-        assert 'modules_explored' in self.shell.session_data
-        assert 'discoveries_made' in self.shell.session_data
-        assert 'demos_run' in self.shell.session_data
+        assert "commands_run" in self.shell.session_data
+        assert "modules_explored" in self.shell.session_data
+        assert "discoveries_made" in self.shell.session_data
+        assert "demos_run" in self.shell.session_data
 
         assert isinstance(self.shell.foraging_messages, list)
         assert len(self.shell.foraging_messages) > 0
@@ -55,27 +54,32 @@ class TestInteractiveShell:
 
         # Capture output
         captured = capsys.readouterr()
-        assert "System discovery not available" in captured.out or "limited mode" in captured.out
+        assert (
+            "System discovery not available" in captured.out
+            or "limited mode" in captured.out
+        )
 
     def test_do_explore_overview(self):
         """Test explore command overview functionality with real discovery."""
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             discovery = SystemDiscovery()
             self.shell.discovery = discovery
         except ImportError:
             pytest.skip("SystemDiscovery not available")
 
-        initial_commands = self.shell.session_data['commands_run']
+        initial_commands = self.shell.session_data["commands_run"]
         self.shell.do_explore("")
 
         # Should increment commands_run
-        assert self.shell.session_data['commands_run'] == initial_commands + 1
+        assert self.shell.session_data["commands_run"] == initial_commands + 1
 
     def test_do_explore_specific_module(self):
         """Test explore command for specific module with real discovery."""
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             discovery = SystemDiscovery()
             self.shell.discovery = discovery
         except ImportError:
@@ -85,7 +89,7 @@ class TestInteractiveShell:
         self.shell.do_explore("logging_monitoring")
 
         # Should have attempted to explore
-        assert self.shell.session_data['commands_run'] > 0
+        assert self.shell.session_data["commands_run"] > 0
 
     def test_do_status(self, capsys):
         """Test status command with real print."""
@@ -100,6 +104,7 @@ class TestInteractiveShell:
         """Test status command with discovery available."""
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             discovery = SystemDiscovery()
             self.shell.discovery = discovery
         except ImportError:
@@ -115,12 +120,15 @@ class TestInteractiveShell:
 
         # Capture output
         captured = capsys.readouterr()
-        assert "Discovery system not available" in captured.out or len(captured.out) >= 0
+        assert (
+            "Discovery system not available" in captured.out or len(captured.out) >= 0
+        )
 
     def test_do_demo_with_discovery(self):
         """Test demo command with discovery available."""
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             discovery = SystemDiscovery()
             self.shell.discovery = discovery
         except ImportError:
@@ -189,6 +197,7 @@ class TestInteractiveShell:
         """Test dive command with real discovery."""
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             discovery = SystemDiscovery()
             self.shell.discovery = discovery
         except ImportError:
@@ -209,15 +218,15 @@ class TestInteractiveShell:
     def test_do_clear(self):
         """Test clear command."""
         # Set some session data
-        self.shell.session_data['commands_run'] = 5
-        self.shell.session_data['modules_explored'].add('test_module')
+        self.shell.session_data["commands_run"] = 5
+        self.shell.session_data["modules_explored"].add("test_module")
 
         # Clear session
         self.shell.do_clear("")
 
         # Should reset session data
-        assert self.shell.session_data['commands_run'] == 0
-        assert len(self.shell.session_data['modules_explored']) == 0
+        assert self.shell.session_data["commands_run"] == 0
+        assert len(self.shell.session_data["modules_explored"]) == 0
 
     def test_do_history(self, capsys):
         """Test history command with real print."""
@@ -236,22 +245,25 @@ class TestInteractiveShell:
         assert len(names) > 0
 
         # Should include our custom methods
-        method_names = [name for name in names if name.startswith('do_')]
-        assert 'do_explore' in method_names
-        assert 'do_status' in method_names
-        assert 'do_quit' in method_names
+        method_names = [name for name in names if name.startswith("do_")]
+        assert "do_explore" in method_names
+        assert "do_status" in method_names
+        assert "do_quit" in method_names
 
     def test_complete_explore(self):
         """Test command completion for explore with real discovery."""
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             discovery = SystemDiscovery()
             self.shell.discovery = discovery
         except ImportError:
             pytest.skip("SystemDiscovery not available")
 
         # Test completion
-        completions = self.shell.complete_explore("log", line="explore log", begidx=8, endidx=11)
+        completions = self.shell.complete_explore(
+            "log", line="explore log", begidx=8, endidx=11
+        )
 
         # Should return a list
         assert isinstance(completions, list)
@@ -278,11 +290,12 @@ class TestInteractiveShell:
 
     def test_session_data_tracking(self):
         """Test that session data is properly tracked."""
-        initial_commands = self.shell.session_data['commands_run']
+        initial_commands = self.shell.session_data["commands_run"]
 
         # Run a command
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             discovery = SystemDiscovery()
             self.shell.discovery = discovery
         except ImportError:
@@ -291,7 +304,7 @@ class TestInteractiveShell:
         self.shell.do_explore("")
 
         # Should increment command count
-        assert self.shell.session_data['commands_run'] == initial_commands + 1
+        assert self.shell.session_data["commands_run"] == initial_commands + 1
 
     def test_foraging_messages_variety(self):
         """Test that foraging messages are varied."""
@@ -312,9 +325,12 @@ class TestShellIntegration:
         """Test shell initialization with working discovery."""
         try:
             from codomyrmex.system_discovery import SystemDiscovery
+
             shell = InteractiveShell()
             # Discovery may or may not be available
-            assert shell.discovery is None or isinstance(shell.discovery, SystemDiscovery)
+            assert shell.discovery is None or isinstance(
+                shell.discovery, SystemDiscovery
+            )
         except ImportError:
             pytest.skip("SystemDiscovery not available")
 
@@ -337,7 +353,7 @@ class TestShellIntegration:
     def test_help_system(self):
         """Test that help system works for all commands."""
         # Get all do_ methods
-        do_methods = [method for method in dir(self.shell) if method.startswith('do_')]
+        do_methods = [method for method in dir(self.shell) if method.startswith("do_")]
 
         for method_name in do_methods[:5]:  # Test first 5 to avoid too many calls
             command_name = method_name[3:]  # Remove 'do_' prefix
@@ -360,7 +376,9 @@ class TestCommandValidation:
 
         # Capture output
         captured = capsys.readouterr()
-        assert "Unknown command" in captured.out or "invalid_command_xyz" in captured.out
+        assert (
+            "Unknown command" in captured.out or "invalid_command_xyz" in captured.out
+        )
 
     def test_command_with_arguments(self):
         """Test commands that accept arguments."""
@@ -419,7 +437,7 @@ class TestShellStateManagement:
 
     def test_session_persistence(self):
         """Test that session data persists across commands."""
-        initial_commands = self.shell.session_data['commands_run']
+        initial_commands = self.shell.session_data["commands_run"]
 
         # Run multiple commands
         self.shell.discovery = None
@@ -429,22 +447,22 @@ class TestShellStateManagement:
 
         # Should have incremented command count for each command
         expected_commands = initial_commands + 3
-        assert self.shell.session_data['commands_run'] == expected_commands
+        assert self.shell.session_data["commands_run"] == expected_commands
 
     def test_module_exploration_tracking(self):
         """Test tracking of explored modules."""
-        initial_explored = len(self.shell.session_data['modules_explored'])
+        initial_explored = len(self.shell.session_data["modules_explored"])
 
         # Simulate exploring modules
-        self.shell.session_data['modules_explored'].add('test_module1')
-        self.shell.session_data['modules_explored'].add('test_module2')
+        self.shell.session_data["modules_explored"].add("test_module1")
+        self.shell.session_data["modules_explored"].add("test_module2")
 
-        assert len(self.shell.session_data['modules_explored']) == initial_explored + 2
-        assert 'test_module1' in self.shell.session_data['modules_explored']
-        assert 'test_module2' in self.shell.session_data['modules_explored']
+        assert len(self.shell.session_data["modules_explored"]) == initial_explored + 2
+        assert "test_module1" in self.shell.session_data["modules_explored"]
+        assert "test_module2" in self.shell.session_data["modules_explored"]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pytest.main([__file__])
 
 
@@ -454,12 +472,14 @@ class TestTerminalUtils:
 
     def test_create_ascii_art(self):
         from codomyrmex.terminal_interface.utils.terminal_utils import create_ascii_art
+
         result = create_ascii_art("Hello")
         assert isinstance(result, str)
         assert len(result) > 0
 
     def test_command_runner_init(self):
         from codomyrmex.terminal_interface.utils.terminal_utils import CommandRunner
+
         runner = CommandRunner()
         assert runner is not None
 
@@ -469,17 +489,20 @@ class TestCommandRunnerDeep:
 
     def test_run_simple_command(self):
         from codomyrmex.terminal_interface.utils.terminal_utils import CommandRunner
+
         runner = CommandRunner()
         result = runner.run("echo hello")
         assert result is not None
 
     def test_run_command_with_timeout(self):
         from codomyrmex.terminal_interface.utils.terminal_utils import CommandRunner
+
         runner = CommandRunner()
         result = runner.run("echo test", timeout=10)
         assert result is not None
 
     def test_ascii_art_styles(self):
         from codomyrmex.terminal_interface.utils.terminal_utils import create_ascii_art
+
         simple = create_ascii_art("Hi", style="simple")
         assert isinstance(simple, str)

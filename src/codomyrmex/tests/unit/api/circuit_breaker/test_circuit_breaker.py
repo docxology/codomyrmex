@@ -2,7 +2,6 @@
 Tests for API Circuit Breaker Module
 """
 
-
 import pytest
 
 try:
@@ -18,7 +17,9 @@ try:
         retry,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 
 class TestCircuitBreaker:
@@ -95,9 +96,8 @@ class TestCircuitBreaker:
         cb = CircuitBreaker(config=config)
         cb.record_failure()
 
-        with pytest.raises(CircuitOpenError):
-            with cb:
-                pass
+        with pytest.raises(CircuitOpenError), cb:
+            pass
 
     def test_reset(self):
         """Reset should clear state."""
@@ -124,7 +124,9 @@ class TestRetryPolicy:
 
     def test_delay_max(self):
         """Delay should be capped at max."""
-        policy = RetryPolicy(backoff_base=1.0, backoff_multiplier=10.0, backoff_max=5.0, jitter=False)
+        policy = RetryPolicy(
+            backoff_base=1.0, backoff_multiplier=10.0, backoff_max=5.0, jitter=False
+        )
 
         assert policy.get_delay(3) == 5.0
 
@@ -177,9 +179,8 @@ class TestBulkhead:
         """Context manager should raise when full."""
         bulkhead = Bulkhead(max_concurrent=0)
 
-        with pytest.raises(BulkheadFullError):
-            with bulkhead:
-                pass
+        with pytest.raises(BulkheadFullError), bulkhead:
+            pass
 
 
 class TestDecorators:

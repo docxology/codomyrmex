@@ -33,12 +33,14 @@ class FileBasedCache(Cache):
     def _get_file_path(self, key: str) -> Path:
         """Get file path for a cache key."""
         import hashlib
+
         key_hash = hashlib.md5(key.encode()).hexdigest()
         return self.cache_dir / f"{key_hash}.cache"
 
     def _get_meta_path(self, key: str) -> Path:
         """Get metadata file path for a cache key."""
         import hashlib
+
         key_hash = hashlib.md5(key.encode()).hexdigest()
         return self.cache_dir / f"{key_hash}.meta"
 
@@ -68,7 +70,9 @@ class FileBasedCache(Cache):
 
             # Read value
             with open(file_path, encoding="utf-8") as f:
-                value = json.load(f)  # SECURITY: JSON instead of pickle to prevent code injection
+                value = json.load(
+                    f
+                )  # SECURITY: JSON instead of pickle to prevent code injection
 
             self._stats.hits += 1
             return value
@@ -162,6 +166,3 @@ class FileBasedCache(Cache):
         """Get cache statistics."""
         self._stats.size = len(list(self.cache_dir.glob("*.cache")))
         return self._stats
-
-
-

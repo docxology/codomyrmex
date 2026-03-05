@@ -64,9 +64,7 @@ def run_code_in_docker(
     real_temp = os.path.realpath(temp_dir)
     _tmp_base = os.path.realpath(tempfile.gettempdir())
     if not (real_temp == _tmp_base or real_temp.startswith(_tmp_base + os.sep)):
-        raise ValueError(
-            f"temp_dir must be within system temp directory: {temp_dir!r}"
-        )
+        raise ValueError(f"temp_dir must be within system temp directory: {temp_dir!r}")
 
     # Add volume mapping for code and working directory
     docker_args.append(f"-v={real_temp}:/sandbox")
@@ -81,9 +79,7 @@ def run_code_in_docker(
     if stdin_file:
         real_stdin = os.path.realpath(stdin_file)
         if not real_stdin.startswith(real_temp + os.sep):
-            raise ValueError(
-                f"stdin_file must be inside temp_dir: {stdin_file!r}"
-            )
+            raise ValueError(f"stdin_file must be inside temp_dir: {stdin_file!r}")
 
     # Calculate the docker command timeout (slightly longer than the code timeout)
     docker_timeout = timeout * language_config.get("timeout_factor", 1.2)
@@ -100,7 +96,7 @@ def run_code_in_docker(
 
     try:
         # Open stdin file outside shell (no shell injection possible) (C3)
-        _stdin_fh = open(os.path.realpath(stdin_file)) if stdin_file else None  # noqa: WPS515
+        _stdin_fh = open(os.path.realpath(stdin_file)) if stdin_file else None
         try:
             process = subprocess.Popen(
                 docker_cmd,
@@ -139,7 +135,9 @@ def run_code_in_docker(
                     f"ancestor={language_config['image']}",
                 ]
                 container_ids = (
-                    subprocess.check_output(container_id_cmd, universal_newlines=True, timeout=10)
+                    subprocess.check_output(
+                        container_id_cmd, universal_newlines=True, timeout=10
+                    )
                     .strip()
                     .split("\n")
                 )
@@ -151,14 +149,16 @@ def run_code_in_docker(
                             timeout=10,
                         )
             except subprocess.SubprocessError as e:
-                logger.warning("Container cleanup error — orphaned container may remain: %s", e)
+                logger.warning(
+                    "Container cleanup error — orphaned container may remain: %s", e
+                )
 
     except subprocess.SubprocessError as e:
         stdout = ""
-        stderr = f"Failed to run Docker container: {str(e)}"
+        stderr = f"Failed to run Docker container: {e!s}"
         exit_code = -1
         status = "setup_error"
-        error_message = f"Container setup failed: {str(e)}"
+        error_message = f"Container setup failed: {e!s}"
 
     execution_time = time.time() - start_time
 
@@ -182,4 +182,3 @@ def run_code_in_docker(
         "status": status,
         "error_message": error_message,
     }
-

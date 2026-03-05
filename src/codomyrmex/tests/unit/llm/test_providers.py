@@ -43,6 +43,7 @@ _has_openai_key = bool(os.getenv("OPENAI_API_KEY"))
 # 1. Message dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestMessageDataclass:
     """Tests for the Message dataclass."""
@@ -103,6 +104,7 @@ class TestMessageDataclass:
 # 2. CompletionResponse dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestCompletionResponse:
     """Tests for the CompletionResponse dataclass."""
@@ -159,6 +161,7 @@ class TestCompletionResponse:
 # 3. ProviderType enum
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestProviderTypeEnum:
     """Tests for the ProviderType enum."""
@@ -193,6 +196,7 @@ class TestProviderTypeEnum:
 # ===========================================================================
 # 4. ProviderConfig dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestProviderConfig:
@@ -240,6 +244,7 @@ class TestProviderConfig:
 # 5. LLMProvider base class (via concrete subclass)
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestLLMProviderBase:
     """Tests for the LLMProvider ABC contract."""
@@ -253,17 +258,23 @@ class TestLLMProviderBase:
         class ConcreteProvider(LLMProvider):
             provider_type = ProviderType.OPENAI
 
-            def complete(self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs):
+            def complete(
+                self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs
+            ):
                 return CompletionResponse(
                     content="test",
                     model=self.get_model(model),
                     provider=self.provider_type,
                 )
 
-            def complete_stream(self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs) -> Iterator[str]:
+            def complete_stream(
+                self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs
+            ) -> Iterator[str]:
                 yield "test"
 
-            async def complete_async(self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs):
+            async def complete_async(
+                self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs
+            ):
                 return CompletionResponse(
                     content="test",
                     model=self.get_model(model),
@@ -307,13 +318,19 @@ class TestLLMProviderBase:
         class MinimalProvider(LLMProvider):
             provider_type = ProviderType.ANTHROPIC
 
-            def complete(self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs):
+            def complete(
+                self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs
+            ):
                 return None
 
-            def complete_stream(self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs) -> Iterator[str]:
+            def complete_stream(
+                self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs
+            ) -> Iterator[str]:
                 yield ""
 
-            async def complete_async(self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs):
+            async def complete_async(
+                self, messages, model=None, temperature=0.7, max_tokens=None, **kwargs
+            ):
                 return None
 
             def list_models(self):
@@ -335,6 +352,7 @@ class TestLLMProviderBase:
 # 6. Provider factory
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestProviderFactory:
     """Tests for the get_provider factory function."""
@@ -342,18 +360,21 @@ class TestProviderFactory:
     def test_raises_for_unsupported_ollama(self):
         """get_provider raises ValueError for OLLAMA (not in factory map)."""
         from codomyrmex.llm.providers.factory import get_provider
+
         with pytest.raises(ValueError, match="Unsupported provider"):
             get_provider(ProviderType.OLLAMA)
 
     def test_raises_for_unsupported_azure_openai(self):
         """get_provider raises ValueError for AZURE_OPENAI."""
         from codomyrmex.llm.providers.factory import get_provider
+
         with pytest.raises(ValueError, match="Unsupported provider"):
             get_provider(ProviderType.AZURE_OPENAI)
 
     def test_creates_config_from_kwargs(self):
         """get_provider creates ProviderConfig from kwargs when config=None."""
         from codomyrmex.llm.providers.factory import get_provider
+
         provider = get_provider(ProviderType.OPENROUTER, api_key="test-key")
         assert provider.config.api_key == "test-key"
 
@@ -361,6 +382,7 @@ class TestProviderFactory:
         """get_provider returns OpenRouterProvider for OPENROUTER type."""
         from codomyrmex.llm.providers.factory import get_provider
         from codomyrmex.llm.providers.openrouter import OpenRouterProvider
+
         # api_key required by openai SDK even without a real key
         provider = get_provider(ProviderType.OPENROUTER, api_key="test-key")
         assert isinstance(provider, OpenRouterProvider)
@@ -369,12 +391,14 @@ class TestProviderFactory:
         """get_provider returns AnthropicProvider for ANTHROPIC type."""
         from codomyrmex.llm.providers.anthropic import AnthropicProvider
         from codomyrmex.llm.providers.factory import get_provider
+
         provider = get_provider(ProviderType.ANTHROPIC, api_key="test-key")
         assert isinstance(provider, AnthropicProvider)
 
     def test_existing_config_passed_through(self):
         """get_provider uses provided config object without modification."""
         from codomyrmex.llm.providers.factory import get_provider
+
         cfg = ProviderConfig(api_key="existing", timeout=45.0)
         provider = get_provider(ProviderType.OPENROUTER, config=cfg)
         assert provider.config.api_key == "existing"
@@ -385,12 +409,14 @@ class TestProviderFactory:
 # 7. OpenRouterProvider
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestOpenRouterProvider:
     """Tests for OpenRouterProvider initialization and static logic."""
 
     def _make(self, **kwargs):
         from codomyrmex.llm.providers.openrouter import OpenRouterProvider
+
         # openai SDK requires api_key; use a placeholder to avoid OpenAIError
         kwargs.setdefault("api_key", "test-placeholder-key")
         cfg = ProviderConfig(**kwargs)
@@ -399,6 +425,7 @@ class TestOpenRouterProvider:
     def test_base_url_set_when_not_specified(self):
         """base_url is set to BASE_URL when config.base_url is None."""
         from codomyrmex.llm.providers.openrouter import OpenRouterProvider
+
         p = self._make()
         assert p.config.base_url == OpenRouterProvider.BASE_URL
 
@@ -417,6 +444,7 @@ class TestOpenRouterProvider:
     def test_list_models_returns_free_models(self):
         """list_models() returns the FREE_MODELS class attribute."""
         from codomyrmex.llm.providers.openrouter import OpenRouterProvider
+
         p = self._make()
         models = p.list_models()
         assert models is OpenRouterProvider.FREE_MODELS
@@ -458,12 +486,14 @@ class TestOpenRouterProvider:
 # 8. AnthropicProvider
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestAnthropicProvider:
     """Tests for AnthropicProvider static/structural logic."""
 
     def _make(self, **kwargs):
         from codomyrmex.llm.providers.anthropic import AnthropicProvider
+
         cfg = ProviderConfig(**kwargs)
         return AnthropicProvider(cfg)
 
@@ -505,12 +535,14 @@ class TestAnthropicProvider:
 # 9. OpenAIProvider
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestOpenAIProvider:
     """Tests for OpenAIProvider structural logic."""
 
     def _make(self, **kwargs):
         from codomyrmex.llm.providers.openai import OpenAIProvider
+
         kwargs.setdefault("api_key", "test-placeholder-key")
         cfg = ProviderConfig(**kwargs)
         return OpenAIProvider(cfg)
@@ -551,6 +583,7 @@ class TestOpenAIProvider:
 # ===========================================================================
 # 10. LLM Exceptions
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestLLMExceptions:
@@ -593,7 +626,9 @@ class TestLLMExceptions:
 
     def test_prompt_too_long_stores_token_counts(self):
         """PromptTooLongError stores token_count and max_tokens in context."""
-        exc = PromptTooLongError("too long", token_count=8192, max_tokens=4096, model="gpt-4")
+        exc = PromptTooLongError(
+            "too long", token_count=8192, max_tokens=4096, model="gpt-4"
+        )
         assert exc.context["token_count"] == 8192
         assert exc.context["max_tokens"] == 4096
         assert exc.context["model"] == "gpt-4"
@@ -647,7 +682,9 @@ class TestLLMExceptions:
 
     def test_token_limit_error_stores_requested_and_available(self):
         """TokenLimitError stores requested_tokens and available_tokens."""
-        exc = TokenLimitError("limit exceeded", requested_tokens=2000, available_tokens=1000)
+        exc = TokenLimitError(
+            "limit exceeded", requested_tokens=2000, available_tokens=1000
+        )
         assert exc.context["requested_tokens"] == 2000
         assert exc.context["available_tokens"] == 1000
 
@@ -673,6 +710,7 @@ class TestLLMExceptions:
         """LLMConnectionError is a subclass of LLMError and AIProviderError."""
         from codomyrmex.exceptions import AIProviderError
         from codomyrmex.llm.exceptions import LLMError
+
         exc = LLMConnectionError("test")
         assert isinstance(exc, LLMError)
         assert isinstance(exc, AIProviderError)
@@ -682,6 +720,7 @@ class TestLLMExceptions:
 # 11. MCP tools metadata
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestMCPToolsMetadata:
     """Tests verifying MCP tool metadata is correctly registered."""
@@ -689,54 +728,64 @@ class TestMCPToolsMetadata:
     def test_generate_text_has_mcp_meta(self):
         """generate_text has _mcp_tool_meta attribute."""
         from codomyrmex.llm.mcp_tools import generate_text
+
         assert hasattr(generate_text, "_mcp_tool_meta")
 
     def test_list_local_models_has_mcp_meta(self):
         """list_local_models has _mcp_tool_meta attribute."""
         from codomyrmex.llm.mcp_tools import list_local_models
+
         assert hasattr(list_local_models, "_mcp_tool_meta")
 
     def test_query_fabric_metadata_has_mcp_meta(self):
         """query_fabric_metadata has _mcp_tool_meta attribute."""
         from codomyrmex.llm.mcp_tools import query_fabric_metadata
+
         assert hasattr(query_fabric_metadata, "_mcp_tool_meta")
 
     def test_reason_has_mcp_meta(self):
         """reason has _mcp_tool_meta attribute."""
         from codomyrmex.llm.mcp_tools import reason
+
         assert hasattr(reason, "_mcp_tool_meta")
 
     def test_generate_text_meta_category_is_llm(self):
         """generate_text._mcp_tool_meta category is 'llm'."""
         from codomyrmex.llm.mcp_tools import generate_text
+
         assert generate_text._mcp_tool_meta["category"] == "llm"
 
     def test_generate_text_meta_schema_has_required_prompt(self):
         """generate_text schema marks 'prompt' as required."""
         from codomyrmex.llm.mcp_tools import generate_text
+
         schema = generate_text._mcp_tool_meta["schema"]
         assert "prompt" in schema.get("required", [])
 
     def test_generate_text_meta_schema_has_provider_param(self):
         """generate_text schema includes 'provider' parameter."""
         from codomyrmex.llm.mcp_tools import generate_text
+
         schema = generate_text._mcp_tool_meta["schema"]
         assert "provider" in schema["properties"]
 
     def test_generate_text_meta_schema_has_model_param(self):
         """generate_text schema includes 'model' parameter."""
         from codomyrmex.llm.mcp_tools import generate_text
+
         schema = generate_text._mcp_tool_meta["schema"]
         assert "model" in schema["properties"]
 
     def test_reason_meta_returns_unsupported_provider_error(self):
         """generate_text with unknown provider returns error status dict."""
         from codomyrmex.llm.mcp_tools import generate_text
+
         result = generate_text(prompt="test", provider="nonexistent_provider_xyz")
         assert result["status"] == "error"
 
     def test_reason_meta_schema_has_prompt_required(self):
         """reason schema marks 'prompt' as required."""
         from codomyrmex.llm.mcp_tools import reason
+
         schema = reason._mcp_tool_meta["schema"]
         assert "prompt" in schema.get("required", [])

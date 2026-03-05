@@ -3,7 +3,7 @@
 
 Thin wrapper — test logic has moved to::
 
-    src/codomyrmex/tests/integration/pai/test_email_compose.py
+    src / codomyrmex / tests / integration / pai / test_email_compose.py
 
 Run directly::
 

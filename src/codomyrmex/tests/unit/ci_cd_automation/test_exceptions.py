@@ -440,28 +440,56 @@ class TestExceptionHierarchy:
 
     @pytest.mark.parametrize(
         "exc_cls",
-        [PipelineError, BuildError, DeploymentError, ArtifactError, StageError, RollbackError],
+        [
+            PipelineError,
+            BuildError,
+            DeploymentError,
+            ArtifactError,
+            StageError,
+            RollbackError,
+        ],
     )
     def test_all_are_subclass_of_cicd_error(self, exc_cls):
         assert issubclass(exc_cls, CICDError)
 
     @pytest.mark.parametrize(
         "exc_cls",
-        [PipelineError, BuildError, DeploymentError, ArtifactError, StageError, RollbackError],
+        [
+            PipelineError,
+            BuildError,
+            DeploymentError,
+            ArtifactError,
+            StageError,
+            RollbackError,
+        ],
     )
     def test_all_are_subclass_of_codomyrmex_error(self, exc_cls):
         assert issubclass(exc_cls, CodomyrmexError)
 
     @pytest.mark.parametrize(
         "exc_cls",
-        [PipelineError, BuildError, DeploymentError, ArtifactError, StageError, RollbackError],
+        [
+            PipelineError,
+            BuildError,
+            DeploymentError,
+            ArtifactError,
+            StageError,
+            RollbackError,
+        ],
     )
     def test_all_are_subclass_of_exception(self, exc_cls):
         assert issubclass(exc_cls, Exception)
 
     @pytest.mark.parametrize(
         "exc_cls",
-        [PipelineError, BuildError, DeploymentError, ArtifactError, StageError, RollbackError],
+        [
+            PipelineError,
+            BuildError,
+            DeploymentError,
+            ArtifactError,
+            StageError,
+            RollbackError,
+        ],
     )
     def test_catch_as_base_exception(self, exc_cls):
         with pytest.raises(CodomyrmexError):
@@ -469,7 +497,14 @@ class TestExceptionHierarchy:
 
     @pytest.mark.parametrize(
         "exc_cls",
-        [PipelineError, BuildError, DeploymentError, ArtifactError, StageError, RollbackError],
+        [
+            PipelineError,
+            BuildError,
+            DeploymentError,
+            ArtifactError,
+            StageError,
+            RollbackError,
+        ],
     )
     def test_empty_context_by_default(self, exc_cls):
         err = exc_cls("msg")
@@ -477,7 +512,14 @@ class TestExceptionHierarchy:
 
     @pytest.mark.parametrize(
         "exc_cls",
-        [PipelineError, BuildError, DeploymentError, ArtifactError, StageError, RollbackError],
+        [
+            PipelineError,
+            BuildError,
+            DeploymentError,
+            ArtifactError,
+            StageError,
+            RollbackError,
+        ],
     )
     def test_str_without_context_omits_context_section(self, exc_cls):
         err = exc_cls("bare message")

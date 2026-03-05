@@ -5,18 +5,21 @@ from enum import Enum, auto
 
 class DisputeStatus(Enum):
     """Lifecycle states of a contract dispute from open to closed."""
+
     OPEN = auto()
     UNDER_REVIEW = auto()
     RESOLVED = auto()
     CLOSED = auto()
 
+
 class DisputeError(Exception):
     """Exception raised for dispute-related errors."""
-    pass
+
 
 @dataclass
 class Dispute:
     """A formal dispute filed against a contract, tracking filer identity and resolution status."""
+
     id: str
     contract_id: str
     filer_id: str
@@ -24,6 +27,7 @@ class Dispute:
     status: DisputeStatus = DisputeStatus.OPEN
     created_at: datetime = field(default_factory=datetime.now)
     resolution: str | None = None
+
 
 class DisputeResolver:
     """Handles and resolves disputes between parties."""

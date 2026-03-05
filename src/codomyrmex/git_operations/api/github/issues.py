@@ -13,6 +13,7 @@ from .base import (
 
 logger = get_logger(__name__)
 
+
 def create_issue(
     owner: str,
     repo_name: str,
@@ -45,15 +46,15 @@ def create_issue(
             issue = response.json()
             logger.info(f"Successfully created issue #{issue['number']}")
             return issue
-        else:
-            error_msg = f"Failed to create issue: {response.status_code} - {response.text}"
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        error_msg = f"Failed to create issue: {response.status_code} - {response.text}"
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error creating issue: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def list_issues(
     owner: str,
@@ -88,15 +89,15 @@ def list_issues(
             issues = [item for item in all_items if "pull_request" not in item]
             logger.info(f"Found {len(issues)} issues")
             return issues
-        else:
-            error_msg = f"Failed to list issues: {response.status_code} - {response.text}"
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        error_msg = f"Failed to list issues: {response.status_code} - {response.text}"
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error listing issues: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def close_issue(
     owner: str,
@@ -122,15 +123,15 @@ def close_issue(
         if response.status_code == 200:
             logger.info(f"Successfully closed issue #{issue_number}")
             return response.json()
-        else:
-            error_msg = f"Failed to close issue: {response.status_code} - {response.text}"
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        error_msg = f"Failed to close issue: {response.status_code} - {response.text}"
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error closing issue: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def add_comment(
     owner: str,
@@ -157,15 +158,15 @@ def add_comment(
         if response.status_code == 201:
             logger.info(f"Successfully added comment to #{issue_number}")
             return response.json()
-        else:
-            error_msg = f"Failed to add comment: {response.status_code} - {response.text}"
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        error_msg = f"Failed to add comment: {response.status_code} - {response.text}"
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error adding comment: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 async def async_create_issue(
     owner: str,
@@ -216,15 +217,15 @@ async def async_create_issue(
         issue = data
         logger.info(f"[ASYNC] Successfully created issue #{issue['number']}")
         return issue
-    else:
-        error_msg = f"Failed to create issue: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to create issue: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None
+
 
 async def async_list_issues(
     owner: str,
@@ -271,15 +272,15 @@ async def async_list_issues(
         issues = [item for item in all_items if "pull_request" not in item]
         logger.info(f"[ASYNC] Found {len(issues)} issues")
         return issues
-    else:
-        error_msg = f"Failed to list issues: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to list issues: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None
+
 
 async def async_close_issue(
     owner: str,
@@ -317,15 +318,15 @@ async def async_close_issue(
     if status == 200:
         logger.info(f"[ASYNC] Successfully closed issue #{issue_number}")
         return data
-    else:
-        error_msg = f"Failed to close issue: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to close issue: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None
+
 
 async def async_add_comment(
     owner: str,
@@ -365,13 +366,11 @@ async def async_add_comment(
     if status == 201:
         logger.info(f"[ASYNC] Successfully added comment to #{issue_number}")
         return data
-    else:
-        error_msg = f"Failed to add comment: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to add comment: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
-
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None

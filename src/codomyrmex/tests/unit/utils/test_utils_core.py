@@ -587,7 +587,7 @@ class TestScriptBase:
             start_time="2024-01-01T00:00:00",
             end_time="2024-01-01T00:00:01",
             duration_seconds=1.0,
-            exit_code=0
+            exit_code=0,
         )
 
         d = result.to_dict()
@@ -606,7 +606,7 @@ class TestScriptBase:
             start_time="2024-01-01T00:00:00",
             end_time="2024-01-01T00:00:01",
             duration_seconds=1.0,
-            exit_code=0
+            exit_code=0,
         )
 
         json_str = result.to_json()

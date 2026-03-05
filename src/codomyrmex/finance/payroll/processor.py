@@ -108,7 +108,7 @@ class PayrollProcessor:
         gross_salary = Decimal(str(gross_salary)).quantize(
             Decimal("0.01"), rounding=ROUND_HALF_EVEN
         )
-        if gross_salary < Decimal("0"):
+        if gross_salary < Decimal(0):
             raise PayrollError("Gross salary must be non-negative.")
         if pay_period not in self.PERIODS_PER_YEAR:
             raise PayrollError(

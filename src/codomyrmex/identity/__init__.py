@@ -41,9 +41,9 @@ def cli_commands():
 
 
 __all__ = [
+    "BioCognitiveVerifier",
+    "IdentityManager",
     "Persona",
     "VerificationLevel",
-    "IdentityManager",
-    "BioCognitiveVerifier",
     "cli_commands",
 ]

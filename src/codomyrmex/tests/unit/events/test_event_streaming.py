@@ -5,12 +5,12 @@ EventReplayer (deterministic replay, diff), and StreamProjection
 (counter, latest-per-key, fold, running aggregate).
 """
 
-
 from codomyrmex.events.event_store import EventStore, StreamEvent
 from codomyrmex.events.projections import StreamProjection
 from codomyrmex.events.replayer import EventReplayer
 
 # ─── EventStore ───────────────────────────────────────────────────────
+
 
 class TestEventStore:
     """Test suite for EventStore."""
@@ -63,6 +63,7 @@ class TestEventStore:
 
 # ─── EventReplayer ───────────────────────────────────────────────────
 
+
 class TestEventReplayer:
     """Test suite for EventReplayer."""
 
@@ -99,6 +100,7 @@ class TestEventReplayer:
 
 
 # ─── StreamProjection ───────────────────────────────────────────────
+
 
 class TestStreamProjection:
     """Test suite for StreamProjection."""

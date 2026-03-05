@@ -33,7 +33,7 @@ def confirm_logging_integrations(*, prompt: str, description: str) -> str:
 
 def verify_real_methods(*, prompt: str, description: str) -> str:
     """Check that referenced methods exist before marking TODO complete."""
-    target_module = import_module('codomyrmex.agents.droid.controller')
+    target_module = import_module("codomyrmex.agents.droid.controller")
     required = ["DroidController", "save_config_to_file", "load_config_from_file"]
     for name in required:
         if not hasattr(target_module, name):
@@ -62,8 +62,8 @@ def verify_readiness(*, prompt: str, description: str) -> str:
 
 
 __all__ = [
-    "ensure_documentation_exists",
     "confirm_logging_integrations",
-    "verify_real_methods",
+    "ensure_documentation_exists",
     "verify_readiness",
+    "verify_real_methods",
 ]

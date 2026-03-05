@@ -28,6 +28,7 @@ from codomyrmex.telemetry.dashboard.slo import (
 # SLIType enum
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSLIType:
     """Tests for SLIType enumeration."""
@@ -48,6 +49,7 @@ class TestSLIType:
 # ===========================================================================
 # SLI dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSLI:
@@ -109,6 +111,7 @@ class TestSLI:
 # ===========================================================================
 # SLO dataclass
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSLO:
@@ -176,6 +179,7 @@ class TestSLO:
 # SLOViolation dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestSLOViolation:
     """Tests for SLOViolation dataclass."""
@@ -192,8 +196,12 @@ class TestSLOViolation:
     def test_custom_timestamp(self):
         ts = datetime(2026, 1, 1, 12, 0, 0)
         v = SLOViolation(
-            slo_id="s1", slo_name="Avail", target=99.9, actual=98.0,
-            occurred_at=ts, duration_minutes=15.0,
+            slo_id="s1",
+            slo_name="Avail",
+            target=99.9,
+            actual=98.0,
+            occurred_at=ts,
+            duration_minutes=15.0,
         )
         assert v.occurred_at == ts
         assert v.duration_minutes == 15.0
@@ -202,6 +210,7 @@ class TestSLOViolation:
 # ===========================================================================
 # SLOTracker
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestSLOTracker:
@@ -356,6 +365,7 @@ class TestSLOTracker:
 # ===========================================================================
 # ErrorBudgetPolicy
 # ===========================================================================
+
 
 @pytest.mark.unit
 class TestErrorBudgetPolicy:

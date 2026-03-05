@@ -15,13 +15,13 @@ from codomyrmex.meme.cultural_dynamics.oscillation import (
 from codomyrmex.meme.cultural_dynamics.power import map_power_dynamics
 
 __all__ = [
+    "CulturalDynamicsEngine",
     "CulturalState",
-    "Trajectory",
+    "FrequencyMap",
     "PowerMap",
     "Signal",
-    "FrequencyMap",
-    "CulturalDynamicsEngine",
-    "detect_oscillation",
+    "Trajectory",
     "backlash_model",
+    "detect_oscillation",
     "map_power_dynamics",
 ]

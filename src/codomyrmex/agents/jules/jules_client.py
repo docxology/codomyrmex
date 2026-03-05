@@ -101,7 +101,9 @@ class JulesClient(CLIAgentBase):
                 # Check for auth errors in output
                 stdout = result.get("stdout", "").lower()
                 stderr = result.get("stderr", "").lower()
-                if any(marker in stdout or marker in stderr for marker in _AUTH_MARKERS):
+                if any(
+                    marker in stdout or marker in stderr for marker in _AUTH_MARKERS
+                ):
                     raise JulesError(
                         "Jules authentication failed. Please run 'jules auth login'.",
                         command=self.command,
@@ -187,7 +189,12 @@ class JulesClient(CLIAgentBase):
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get Jules help: {e}")
-            return {"help_text": "", "exit_code": -1, "available": False, "error": str(e)}
+            return {
+                "help_text": "",
+                "exit_code": -1,
+                "available": False,
+                "error": str(e),
+            }
 
     def execute_jules_command(
         self,

@@ -29,7 +29,7 @@ class StepError(OrchestrationError):
         step_name: str | None = None,
         step_index: int | None = None,
         workflow_name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize StepError.
 
@@ -64,7 +64,7 @@ class OrchestratorTimeoutError(OrchestrationError):
         message: str,
         timeout_seconds: float | None = None,
         operation: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize OrchestratorTimeoutError.
 
@@ -94,7 +94,7 @@ class StateError(OrchestrationError):
         current_state: str | None = None,
         expected_state: str | None = None,
         workflow_id: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize StateError.
 
@@ -122,7 +122,7 @@ class DependencyResolutionError(OrchestrationError):
         message: str,
         task_name: str | None = None,
         missing_dependencies: list[str] | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize DependencyResolutionError.
 
@@ -151,7 +151,7 @@ class ConcurrencyError(OrchestrationError):
         message: str,
         resource_name: str | None = None,
         max_workers: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ):
         """Initialize ConcurrencyError.
 
@@ -166,8 +166,6 @@ class ConcurrencyError(OrchestrationError):
             self.context["resource_name"] = resource_name
         if max_workers is not None:
             self.context["max_workers"] = max_workers
-
-
 
 
 __all__ = [

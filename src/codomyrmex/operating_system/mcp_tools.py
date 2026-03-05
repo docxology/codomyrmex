@@ -13,6 +13,7 @@ def os_system_info() -> dict:
     """
     try:
         from codomyrmex.operating_system.detector import get_system_info
+
         info = get_system_info()
         return {"status": "success", **info.to_dict()}
     except Exception as e:
@@ -31,6 +32,7 @@ def os_list_processes(limit: int = 50) -> dict:
     """
     try:
         from codomyrmex.operating_system.detector import list_processes
+
         processes = list_processes(limit=limit)
         return {
             "status": "success",
@@ -50,6 +52,7 @@ def os_disk_usage() -> dict:
     """
     try:
         from codomyrmex.operating_system.detector import get_disk_usage
+
         disks = get_disk_usage()
         return {
             "status": "success",
@@ -69,6 +72,7 @@ def os_network_info() -> dict:
     """
     try:
         from codomyrmex.operating_system.detector import get_network_interfaces
+
         interfaces = get_network_interfaces()
         return {
             "status": "success",
@@ -92,6 +96,7 @@ def os_execute_command(command: str, timeout: float = 30.0) -> dict:
     """
     try:
         from codomyrmex.operating_system.detector import execute_command
+
         result = execute_command(command, timeout=timeout)
         return {"status": "success", **result.to_dict()}
     except Exception as e:
@@ -110,6 +115,7 @@ def os_environment_variables(prefix: str = "") -> dict:
     """
     try:
         from codomyrmex.operating_system.detector import get_environment_variables
+
         env_vars = get_environment_variables(prefix=prefix)
         return {
             "status": "success",

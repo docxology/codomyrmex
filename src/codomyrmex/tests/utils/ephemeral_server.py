@@ -13,9 +13,9 @@ class EchoHandler(BaseHTTPRequestHandler):
 
     def _send_response_json(self, data: dict[str, Any], status_code: int = 200):
         self.send_response(status_code)
-        self.send_header('Content-Type', 'application/json')
+        self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps(data).encode('utf-8'))
+        self.wfile.write(json.dumps(data).encode("utf-8"))
 
     def do_GET(self):
         # Handle specific status codes
@@ -33,36 +33,36 @@ class EchoHandler(BaseHTTPRequestHandler):
             "url": f"http://{self.headers.get('Host')}{self.path}",
             "headers": dict(self.headers),
             "args": {},  # Query params parsing could be added if needed
-            "origin": self.client_address[0]
+            "origin": self.client_address[0],
         }
         self._send_response_json(data)
 
     def do_POST(self):
-        content_length = int(self.headers.get('Content-Length', 0))
+        content_length = int(self.headers.get("Content-Length", 0))
         post_data = self.rfile.read(content_length)
 
         try:
-            json_data = json.loads(post_data.decode('utf-8'))
+            json_data = json.loads(post_data.decode("utf-8"))
         except json.JSONDecodeError:
             json_data = None
 
         data = {
             "url": f"http://{self.headers.get('Host')}{self.path}",
             "headers": dict(self.headers),
-            "data": post_data.decode('utf-8'),
+            "data": post_data.decode("utf-8"),
             "json": json_data,
-            "origin": self.client_address[0]
+            "origin": self.client_address[0],
         }
         self._send_response_json(data)
 
     def do_PUT(self):
-        self.do_POST() # Same logic for echo
+        self.do_POST()  # Same logic for echo
 
     def do_DELETE(self):
         data = {
-             "url": f"http://{self.headers.get('Host')}{self.path}",
-             "headers": dict(self.headers),
-             "origin": self.client_address[0]
+            "url": f"http://{self.headers.get('Host')}{self.path}",
+            "headers": dict(self.headers),
+            "origin": self.client_address[0],
         }
         self._send_response_json(data)
 
@@ -71,6 +71,7 @@ class EphemeralServer:
     """
     Context manager for a temporary local HTTP server.
     """
+
     def __init__(self, host="127.0.0.1", port=0):
         self.server = HTTPServer((host, port), EchoHandler)
         self.host, self.port = self.server.server_address

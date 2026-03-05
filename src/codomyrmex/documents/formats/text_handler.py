@@ -30,6 +30,7 @@ def read_text(file_path: str | Path, encoding: str | None = None) -> str:
     # Try to detect encoding if not provided
     if encoding is None:
         from codomyrmex.documents.utils.encoding_detector import detect_encoding
+
         encoding = detect_encoding(file_path) or get_config().default_encoding
 
     try:
@@ -37,9 +38,11 @@ def read_text(file_path: str | Path, encoding: str | None = None) -> str:
             content = f.read()
         return content
     except UnicodeDecodeError as e:
-        logger.warning(f"Encoding error reading {file_path}, trying different encodings")
+        logger.warning(
+            f"Encoding error reading {file_path}, trying different encodings"
+        )
         # Try common encodings
-        for enc in ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1']:
+        for enc in ["utf-8", "latin-1", "cp1252", "iso-8859-1"]:
             try:
                 with open(file_path, encoding=enc) as f:
                     content = f.read()
@@ -48,18 +51,18 @@ def read_text(file_path: str | Path, encoding: str | None = None) -> str:
             except UnicodeDecodeError:
                 continue
         raise DocumentReadError(
-            f"Could not decode file with any encoding: {str(e)}",
-            file_path=str(file_path)
+            f"Could not decode file with any encoding: {e!s}", file_path=str(file_path)
         ) from e
     except Exception as e:
         logger.error(f"Error reading text file {file_path}: {e}")
         raise DocumentReadError(
-            f"Failed to read text file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to read text file: {e!s}", file_path=str(file_path)
         ) from e
 
 
-def write_text(content: str, file_path: str | Path, encoding: str | None = None) -> None:
+def write_text(
+    content: str, file_path: str | Path, encoding: str | None = None
+) -> None:
     """
     Write text content to a file.
 
@@ -76,15 +79,11 @@ def write_text(content: str, file_path: str | Path, encoding: str | None = None)
 
     try:
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(file_path, 'w', encoding=encoding) as f:
+        with open(file_path, "w", encoding=encoding) as f:
             f.write(content)
         logger.debug(f"Wrote text to {file_path}")
     except Exception as e:
         logger.error(f"Error writing text file {file_path}: {e}")
         raise DocumentWriteError(
-            f"Failed to write text file: {str(e)}",
-            file_path=str(file_path)
+            f"Failed to write text file: {e!s}", file_path=str(file_path)
         ) from e
-
-
-

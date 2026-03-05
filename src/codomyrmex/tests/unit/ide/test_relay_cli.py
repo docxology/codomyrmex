@@ -36,13 +36,13 @@ from codomyrmex.ide.antigravity.relay_cli import (
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture()
+@pytest.fixture
 def relay_dir(tmp_path):
     """Return a temporary directory to use as relay root."""
     return tmp_path / "agent_relay"
 
 
-@pytest.fixture()
+@pytest.fixture
 def relay(relay_dir):
     """Return an AgentRelay with a fresh channel in a temp directory."""
     return AgentRelay("test-channel", relay_dir=relay_dir)
@@ -97,7 +97,9 @@ class TestBuildParser:
     def test_start_custom_model(self):
         """start --model claude-sonnet-4-20250514 parses correctly."""
         parser = build_parser()
-        args = parser.parse_args(["start", "-c", "ch", "-m", "claude-sonnet-4-20250514"])
+        args = parser.parse_args(
+            ["start", "-c", "ch", "-m", "claude-sonnet-4-20250514"]
+        )
         assert args.model == "claude-sonnet-4-20250514"
 
     def test_start_no_auto_flag_default_false(self):

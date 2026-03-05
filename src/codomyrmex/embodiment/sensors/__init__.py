@@ -6,4 +6,4 @@ Camera, lidar, IMU interfaces
 
 from .base import MockSensor, SensorData, SensorInterface
 
-__all__ = ["SensorInterface", "SensorData", "MockSensor"]
+__all__ = ["MockSensor", "SensorData", "SensorInterface"]

@@ -9,6 +9,7 @@ _GIT_TIMEOUT = 60  # seconds
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_add")
 def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     """Add files to the Git staging area."""
@@ -24,8 +25,12 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
 
         cmd = ["git", "add"] + file_paths
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Files added to staging area successfully")
@@ -39,6 +44,7 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error adding files: {e}")
         return False
+
 
 @mcp_tool(name="git_repo_status")
 def get_status(repository_path: str = None) -> dict[str, Any]:
@@ -55,7 +61,7 @@ def get_status(repository_path: str = None) -> dict[str, Any]:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         status_lines = (
@@ -116,8 +122,11 @@ def get_status(repository_path: str = None) -> dict[str, Any]:
         logger.error(f"Unexpected error getting status: {e}")
         return {"error": str(e)}
 
+
 @mcp_tool(name="git_clean")
-def clean_repository(force: bool = False, directories: bool = False, repository_path: str = None) -> bool:
+def clean_repository(
+    force: bool = False, directories: bool = False, repository_path: str = None
+) -> bool:
     """Clean untracked files from the repository."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -138,7 +147,7 @@ def clean_repository(force: bool = False, directories: bool = False, repository_
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -150,8 +159,11 @@ def clean_repository(force: bool = False, directories: bool = False, repository_
         logger.error(f"Unexpected error cleaning repository: {e}")
         return False
 
+
 @mcp_tool(name="git_diff")
-def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = False) -> str:
+def get_diff(
+    target: str = "HEAD", repository_path: str = None, cached: bool = False
+) -> str:
     """Get the diff of current changes against a target."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -168,7 +180,7 @@ def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = F
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
         return result.stdout
     except subprocess.CalledProcessError as e:
@@ -180,6 +192,7 @@ def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = F
     except Exception as e:
         logger.error(f"Unexpected error getting diff: {e}")
         return ""
+
 
 @mcp_tool(name="git_diff_files")
 def get_diff_files(
@@ -199,8 +212,12 @@ def get_diff_files(
             cmd.append(file_path)
 
         result = subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.debug(f"Retrieved diff ({len(result.stdout)} characters)")
@@ -212,6 +229,7 @@ def get_diff_files(
     except Exception as e:
         logger.error(f"Unexpected error getting diff: {e}")
         return ""
+
 
 @mcp_tool(name="git_reset")
 def reset_changes(
@@ -233,8 +251,12 @@ def reset_changes(
 
         cmd = ["git", "reset", f"--{mode}", target]
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
-        timeout=_GIT_TIMEOUT
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Repository reset successfully")
@@ -248,4 +270,3 @@ def reset_changes(
     except Exception as e:
         logger.error(f"Unexpected error resetting repository: {e}")
         return False
-

@@ -15,6 +15,7 @@ _flags: dict[str, object] = {}
 def _get_evaluator():  # type: ignore[return]
     """Return a shared FlagEvaluator instance."""
     from codomyrmex.feature_flags.evaluation import FlagEvaluator
+
     return FlagEvaluator()
 
 

@@ -62,8 +62,7 @@ class DeploymentManager:
     ) -> DeploymentPlan:
         """Create a deployment plan."""
         nodes = target_nodes or [
-            n.id
-            for n in self._cluster.list_nodes(status=EdgeNodeStatus.ONLINE)
+            n.id for n in self._cluster.list_nodes(status=EdgeNodeStatus.ONLINE)
         ]
         plan = DeploymentPlan(
             function=function,
@@ -80,9 +79,9 @@ class DeploymentManager:
 
         if plan.strategy == DeploymentStrategy.ROLLING:
             return self._rolling_deploy(plan)
-        elif plan.strategy == DeploymentStrategy.BLUE_GREEN:
+        if plan.strategy == DeploymentStrategy.BLUE_GREEN:
             return self._blue_green_deploy(plan)
-        elif plan.strategy == DeploymentStrategy.CANARY:
+        if plan.strategy == DeploymentStrategy.CANARY:
             return self._canary_deploy(plan)
 
         plan.state = DeploymentState.FAILED
@@ -140,7 +139,9 @@ class DeploymentManager:
                     return plan
 
         plan.state = (
-            DeploymentState.COMPLETED if not plan.failed_nodes else DeploymentState.FAILED
+            DeploymentState.COMPLETED
+            if not plan.failed_nodes
+            else DeploymentState.FAILED
         )
         return plan
 
@@ -219,6 +220,8 @@ class DeploymentManager:
                 plan.failed_nodes.append(node_id)
 
         plan.state = (
-            DeploymentState.COMPLETED if not plan.failed_nodes else DeploymentState.FAILED
+            DeploymentState.COMPLETED
+            if not plan.failed_nodes
+            else DeploymentState.FAILED
         )
         return plan

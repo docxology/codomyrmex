@@ -5,7 +5,9 @@ from typing import Any
 import numpy as np
 
 
-def softmax(x: np.ndarray, axis: int = -1, temperature: float = 1.0) -> np.ndarray[Any, Any]:
+def softmax(
+    x: np.ndarray, axis: int = -1, temperature: float = 1.0
+) -> np.ndarray[Any, Any]:
     """
     Numerically stable softmax using max subtraction.
 
@@ -88,7 +90,9 @@ def online_softmax(x: np.ndarray, axis: int = -1) -> np.ndarray[Any, Any]:
     return np.moveaxis(result, -1, axis)
 
 
-def safe_softmax(x: np.ndarray, axis: int = -1, eps: float = 1e-8) -> np.ndarray[Any, Any]:
+def safe_softmax(
+    x: np.ndarray, axis: int = -1, eps: float = 1e-8
+) -> np.ndarray[Any, Any]:
     """
     Softmax with epsilon for numerical safety in attention masks.
     Adds epsilon to denominator to prevent division by zero.

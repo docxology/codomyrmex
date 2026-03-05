@@ -25,6 +25,7 @@ try:
         concatenate_videoclips,
         vfx,
     )
+
     MOVIEPY_AVAILABLE = True
 except ImportError:
     MOVIEPY_AVAILABLE = False
@@ -34,6 +35,7 @@ except ImportError:
 try:
     import cv2
     import numpy as np
+
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
@@ -41,7 +43,16 @@ except ImportError:
     np = None  # type: ignore
 
 
-SUPPORTED_INPUT_FORMATS = {".mp4", ".avi", ".mov", ".mkv", ".webm", ".wmv", ".flv", ".m4v"}
+SUPPORTED_INPUT_FORMATS = {
+    ".mp4",
+    ".avi",
+    ".mov",
+    ".mkv",
+    ".webm",
+    ".wmv",
+    ".flv",
+    ".m4v",
+}
 SUPPORTED_OUTPUT_FORMATS = {".mp4", ".avi", ".mov", ".webm", ".mkv"}
 
 
@@ -555,8 +566,7 @@ class VideoProcessor:
 
         try:
             with VideoFileClip(str(input_path)) as clip:
-                if end > clip.duration:
-                    end = clip.duration
+                end = min(end, clip.duration)
 
                 if start >= end:
                     raise VideoProcessingError(
@@ -678,4 +688,4 @@ class VideoProcessor:
         )
 
 
-__all__ = ["VideoProcessor", "MOVIEPY_AVAILABLE", "OPENCV_AVAILABLE"]
+__all__ = ["MOVIEPY_AVAILABLE", "OPENCV_AVAILABLE", "VideoProcessor"]

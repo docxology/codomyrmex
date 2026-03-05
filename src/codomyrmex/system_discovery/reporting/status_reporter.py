@@ -19,11 +19,10 @@ including health checks, dependency analysis, and system diagnostics.
 """
 
 try:
-
     logger = get_logger(__name__)
 except ImportError:
-
     logger = logging.getLogger(__name__)
+
 
 class StatusReporter:
     """
@@ -46,7 +45,6 @@ class StatusReporter:
 
         # Import terminal formatter if available
         try:
-
             self.formatter = TerminalFormatter()
         except ImportError:
             self.formatter = None
@@ -58,12 +56,11 @@ class StatusReporter:
 
         if msg_type == "success":
             return self.formatter.success(message)
-        elif msg_type == "error":
+        if msg_type == "error":
             return self.formatter.error(message)
-        elif msg_type == "warning":
+        if msg_type == "warning":
             return self.formatter.warning(message)
-        else:
-            return self.formatter.info(message)
+        return self.formatter.info(message)
 
     def check_python_environment(self) -> dict[str, Any]:
         """Check the current Python environment and return diagnostic info.
@@ -312,7 +309,7 @@ class StatusReporter:
             "uv": False,
         }
 
-        for tool in tools.keys():
+        for tool in tools:
             try:
                 result = subprocess.run(
                     [tool, "--version"], capture_output=True, text=True, timeout=5
@@ -536,9 +533,7 @@ class StatusReporter:
             recommendations.append("Create and activate a virtual environment")
 
         if report["dependencies"]["success_rate"] < 80:
-            recommendations.append(
-                "Install missing dependencies: uv sync"
-            )
+            recommendations.append("Install missing dependencies: uv sync")
 
         if not report["git_status"]["is_git_repo"]:
             recommendations.append("Initialize git repository: git init")
@@ -575,6 +570,7 @@ class StatusReporter:
         except Exception as e:
             print(self.format_message(f"Failed to export report: {e}", "error"))
             return ""
+
 
 if __name__ == "__main__":
     # Demo the status reporter

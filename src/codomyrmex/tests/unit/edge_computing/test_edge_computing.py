@@ -36,6 +36,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestEdgeNodeStatus:
     """Test suite for EdgeNodeStatus."""
+
     def test_online(self):
         assert EdgeNodeStatus.ONLINE is not None
 
@@ -52,6 +53,7 @@ class TestEdgeNodeStatus:
 @pytest.mark.unit
 class TestEdgeNode:
     """Test suite for EdgeNode."""
+
     def test_create_node(self):
         node = EdgeNode(id="node-1", name="Edge US West")
         assert node.id == "node-1"
@@ -68,6 +70,7 @@ class TestEdgeNode:
 @pytest.mark.unit
 class TestEdgeFunction:
     """Test suite for EdgeFunction."""
+
     def test_create_function(self):
         func = EdgeFunction(id="fn-1", name="handler", handler=lambda: None)
         assert func.id == "fn-1"
@@ -87,6 +90,7 @@ class TestEdgeFunction:
 @pytest.mark.unit
 class TestSyncState:
     """Test suite for SyncState."""
+
     def test_create_sync_state(self):
         state = SyncState(version=1, data={"key": "value"}, checksum="abc123")
         assert state.version == 1
@@ -101,6 +105,7 @@ class TestSyncState:
 @pytest.mark.unit
 class TestEdgeExecutionError:
     """Test suite for EdgeExecutionError."""
+
     def test_is_exception(self):
         with pytest.raises(EdgeExecutionError):
             raise EdgeExecutionError("execution failed")
@@ -109,6 +114,7 @@ class TestEdgeExecutionError:
 @pytest.mark.unit
 class TestEdgeSynchronizer:
     """Test suite for EdgeSynchronizer."""
+
     def test_create_synchronizer(self):
         sync = EdgeSynchronizer()
         assert sync is not None
@@ -117,6 +123,7 @@ class TestEdgeSynchronizer:
 @pytest.mark.unit
 class TestEdgeRuntime:
     """Test suite for EdgeRuntime."""
+
     def test_create_runtime(self):
         node = EdgeNode(id="n1", name="test")
         runtime = EdgeRuntime(node=node)
@@ -126,6 +133,7 @@ class TestEdgeRuntime:
 @pytest.mark.unit
 class TestEdgeCluster:
     """Test suite for EdgeCluster."""
+
     def test_create_cluster(self):
         cluster = EdgeCluster()
         assert cluster is not None
@@ -266,12 +274,12 @@ class TestEdgeSynchronizerLifecycle:
 class TestEdgeRuntimeBehavior:
     """Deep behavioral tests for EdgeRuntime."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def runtime(self):
         node = EdgeNode(id="rt-node", name="Runtime Test Node")
         return EdgeRuntime(node=node)
 
-    @pytest.fixture()
+    @pytest.fixture
     def adder_function(self):
         return EdgeFunction(
             id="adder",
@@ -346,15 +354,15 @@ class TestEdgeRuntimeBehavior:
 class TestEdgeClusterBehavior:
     """Deep behavioral tests for EdgeCluster."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def cluster(self):
         return EdgeCluster()
 
-    @pytest.fixture()
+    @pytest.fixture
     def node_a(self):
         return EdgeNode(id="a", name="Node A", location="US-West")
 
-    @pytest.fixture()
+    @pytest.fixture
     def node_b(self):
         return EdgeNode(id="b", name="Node B", location="US-East")
 
@@ -424,9 +432,7 @@ class TestEdgeClusterBehavior:
         assert len(online) == 1
         assert online[0].id == "a"
 
-    def test_list_nodes_filter_returns_empty_when_none_match(
-        self, cluster, node_a
-    ):
+    def test_list_nodes_filter_returns_empty_when_none_match(self, cluster, node_a):
         """Verify list nodes filter returns empty when none match behavior."""
         node_a.status = EdgeNodeStatus.ONLINE
         cluster.register_node(node_a)
@@ -487,7 +493,7 @@ class TestInvocationRecord:
 class TestEdgeMetrics:
     """Tests for EdgeMetrics tracking class."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def metrics(self):
         return EdgeMetrics()
 

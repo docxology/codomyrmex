@@ -100,6 +100,7 @@ except ImportError:
 
 def cli_commands():
     """Return CLI commands for the coding module."""
+
     def _list_languages():
         print("Supported languages:")
         for lang in sorted(SUPPORTED_LANGUAGES):
@@ -119,6 +120,7 @@ def cli_commands():
         "languages": _list_languages,
         "execute": _execute,
     }
+
 
 __all__ = [
     "pattern_matching",
@@ -176,4 +178,3 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
-

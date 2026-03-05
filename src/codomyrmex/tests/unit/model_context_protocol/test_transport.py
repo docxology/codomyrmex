@@ -145,71 +145,99 @@ class TestMCPServerBasicProtocol:
         return srv
 
     def test_initialize_returns_protocol_version(self, server):
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "initialize",
-            "params": {
-                "protocolVersion": "2024-11-05",
-                "clientInfo": {"name": "test", "version": "1.0"},
-            },
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {
+                        "protocolVersion": "2024-11-05",
+                        "clientInfo": {"name": "test", "version": "1.0"},
+                    },
+                }
+            )
+        )
         assert resp["result"]["protocolVersion"] == "2025-06-18"
 
     def test_initialize_returns_server_info(self, server):
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "initialize",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {},
+                }
+            )
+        )
         info = resp["result"]["serverInfo"]
         assert info["name"] == "test-protocol"
         assert info["version"] == "0.1.0"
 
     def test_notification_returns_none(self, server):
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "method": "notifications/initialized",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "method": "notifications/initialized",
+                    "params": {},
+                }
+            )
+        )
         assert resp is None
 
     def test_unknown_method_returns_error_code(self, server):
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 99,
-            "method": "completely/unknown",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 99,
+                    "method": "completely/unknown",
+                    "params": {},
+                }
+            )
+        )
         assert "error" in resp
         assert resp["error"]["code"] == -32603
 
     def test_empty_tools_list(self, server):
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 2,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         assert resp["result"]["tools"] == []
 
     def test_empty_resources_list(self, server):
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 3,
-            "method": "resources/list",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         assert resp["result"]["resources"] == []
 
     def test_empty_prompts_list(self, server):
-        resp = _run(server.handle_request({
-            "jsonrpc": "2.0",
-            "id": 4,
-            "method": "prompts/list",
-            "params": {},
-        }))
+        resp = _run(
+            server.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 4,
+                    "method": "prompts/list",
+                    "params": {},
+                }
+            )
+        )
         assert resp["result"]["prompts"] == []
 
 
@@ -230,23 +258,31 @@ class TestMCPServerToolRegistration:
         return srv
 
     def test_registered_tool_appears_in_list(self, server_with_tool):
-        resp = _run(server_with_tool.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            server_with_tool.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tools = resp["result"]["tools"]
         names = [t["name"] for t in tools]
         assert "echo" in names
 
     def test_tool_schema_has_input_schema(self, server_with_tool):
-        resp = _run(server_with_tool.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "tools/list",
-            "params": {},
-        }))
+        resp = _run(
+            server_with_tool.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "tools/list",
+                    "params": {},
+                }
+            )
+        )
         tool = resp["result"]["tools"][0]
         assert "inputSchema" in tool
         assert tool["inputSchema"]["type"] == "object"
@@ -259,12 +295,16 @@ class TestMCPServerToolRegistration:
             description="Test resource",
             content_provider=lambda: "resource content",
         )
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/list",
-            "params": {},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/list",
+                    "params": {},
+                }
+            )
+        )
         resources = resp["result"]["resources"]
         assert len(resources) == 1
         assert resources[0]["uri"] == "test://data"
@@ -277,23 +317,31 @@ class TestMCPServerToolRegistration:
             name="Hello",
             content_provider=lambda: "Hello World",
         )
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/read",
-            "params": {"uri": "test://hello"},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/read",
+                    "params": {"uri": "test://hello"},
+                }
+            )
+        )
         contents = resp["result"]["contents"]
         assert contents[0]["text"] == "Hello World"
 
     def test_read_nonexistent_resource_returns_error(self):
         srv = MCPServer(MCPServerConfig(name="res-err", version="0.1.0"))
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "resources/read",
-            "params": {"uri": "test://missing"},
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "resources/read",
+                    "params": {"uri": "test://missing"},
+                }
+            )
+        )
         assert "error" in resp
 
     def test_register_prompt_and_get(self):
@@ -307,15 +355,19 @@ class TestMCPServerToolRegistration:
                 {"name": "place", "description": "Location"},
             ],
         )
-        resp = _run(srv.handle_request({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "prompts/get",
-            "params": {
-                "name": "greet",
-                "arguments": {"name": "Alice", "place": "Wonderland"},
-            },
-        }))
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "prompts/get",
+                    "params": {
+                        "name": "greet",
+                        "arguments": {"name": "Alice", "place": "Wonderland"},
+                    },
+                }
+            )
+        )
         messages = resp["result"]["messages"]
         text = messages[0]["content"]["text"]
         assert "Alice" in text
@@ -333,9 +385,15 @@ class TestMCPErrorCode:
 
     def test_all_error_codes_exist(self):
         expected = {
-            "VALIDATION_ERROR", "EXECUTION_ERROR", "TIMEOUT",
-            "NOT_FOUND", "RATE_LIMITED", "CIRCUIT_OPEN",
-            "DEPENDENCY_MISSING", "ACCESS_DENIED", "INTERNAL",
+            "VALIDATION_ERROR",
+            "EXECUTION_ERROR",
+            "TIMEOUT",
+            "NOT_FOUND",
+            "RATE_LIMITED",
+            "CIRCUIT_OPEN",
+            "DEPENDENCY_MISSING",
+            "ACCESS_DENIED",
+            "INTERNAL",
         }
         actual = {e.value for e in MCPErrorCode}
         assert expected == actual

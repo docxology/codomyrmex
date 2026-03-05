@@ -10,6 +10,7 @@ _GIT_TIMEOUT = 120  # seconds
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_push")
 def push_changes(
     remote: str = "origin", branch: str = None, repository_path: str = None
@@ -33,7 +34,7 @@ def push_changes(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Changes pushed successfully")
@@ -47,6 +48,7 @@ def push_changes(
     except Exception as e:
         logger.error(f"Unexpected error pushing changes: {e}")
         raise
+
 
 @mcp_tool(name="git_pull")
 def pull_changes(
@@ -71,7 +73,7 @@ def pull_changes(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Changes pulled successfully")
@@ -85,6 +87,7 @@ def pull_changes(
     except Exception as e:
         logger.error(f"Unexpected error pulling changes: {e}")
         raise
+
 
 @mcp_tool(name="git_fetch_changes")
 def fetch_changes(
@@ -113,7 +116,7 @@ def fetch_changes(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Successfully fetched changes from {remote}")
@@ -127,4 +130,3 @@ def fetch_changes(
     except Exception as e:
         logger.error(f"Unexpected error fetching changes: {e}")
         raise
-

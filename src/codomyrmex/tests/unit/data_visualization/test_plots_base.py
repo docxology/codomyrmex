@@ -9,6 +9,7 @@ engines/scatter_plot circular dependency chain.
 
 matplotlib-dependent tests are skipped when the library is not installed.
 """
+
 from __future__ import annotations
 
 import base64
@@ -17,6 +18,7 @@ import pytest
 
 try:
     import matplotlib  # noqa: F401
+
     MATPLOTLIB_AVAILABLE = True
 except ImportError:
     MATPLOTLIB_AVAILABLE = False
@@ -26,43 +28,51 @@ except ImportError:
 # Construction and dataclass defaults
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBasePlotConstruction:
     """BasePlot construction and default attribute values."""
 
     def test_default_title_is_empty_string(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert p.title == ""
 
     def test_default_width(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert p.width == 800
 
     def test_default_height(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert p.height == 400
 
     def test_default_data_is_empty_list(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert p.data == []
 
     def test_custom_title(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="Sales Q1")
         assert p.title == "Sales Q1"
 
     def test_custom_dimensions(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(width=1920, height=1080)
         assert p.width == 1920
         assert p.height == 1080
 
     def test_custom_data(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(data=[10, 20, 30])
         assert len(p.data) == 3
         assert p.data[1] == 20
@@ -70,6 +80,7 @@ class TestBasePlotConstruction:
     def test_data_lists_are_independent(self):
         """Different instances must not share the same list object."""
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p1 = BasePlot()
         p2 = BasePlot()
         p1.data.append(99)
@@ -77,8 +88,10 @@ class TestBasePlotConstruction:
 
     def test_can_be_subclassed(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         class MyPlot(BasePlot):
             pass
+
         p = MyPlot(title="Sub", data=[1, 2])
         assert p.title == "Sub"
         assert len(p.data) == 2
@@ -88,39 +101,47 @@ class TestBasePlotConstruction:
 # render()
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBasePlotRender:
     """render() returns a self-contained HTML div."""
 
     def test_render_returns_string(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert isinstance(p.render(), str)
 
     def test_render_contains_div_tag(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert "<div" in p.render()
 
     def test_render_includes_title(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="Monthly Revenue")
         assert "Monthly Revenue" in p.render()
 
     def test_render_includes_class_name(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="T")
         assert "BasePlot" in p.render()
 
     def test_render_subclass_name_appears(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         class BarPlot(BasePlot):
             pass
+
         p = BarPlot(title="Bar")
         assert "BarPlot" in p.render()
 
     def test_render_empty_title(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         html = p.render()
         assert "<div" in html
@@ -130,27 +151,32 @@ class TestBasePlotRender:
 # to_dict()
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBasePlotToDict:
     """to_dict() serialises metadata correctly."""
 
     def test_to_dict_returns_dict(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert isinstance(p.to_dict(), dict)
 
     def test_to_dict_type_field(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert p.to_dict()["type"] == "BasePlot"
 
     def test_to_dict_title_field(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="Revenue")
         assert p.to_dict()["title"] == "Revenue"
 
     def test_to_dict_width_and_height(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(width=640, height=480)
         d = p.to_dict()
         assert d["width"] == 640
@@ -158,23 +184,28 @@ class TestBasePlotToDict:
 
     def test_to_dict_data_count(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(data=[1, 2, 3, 4, 5])
         assert p.to_dict()["data_count"] == 5
 
     def test_to_dict_empty_data_count_zero(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert p.to_dict()["data_count"] == 0
 
     def test_to_dict_subclass_type_field(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         class LinePlot(BasePlot):
             pass
+
         p = LinePlot()
         assert p.to_dict()["type"] == "LinePlot"
 
     def test_to_dict_keys_present(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         keys = set(p.to_dict().keys())
         assert {"type", "title", "width", "height", "data_count"}.issubset(keys)
@@ -184,27 +215,32 @@ class TestBasePlotToDict:
 # __repr__ and __str__
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBasePlotReprStr:
     """repr() and str() output contracts."""
 
     def test_repr_includes_class_name(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot()
         assert "BasePlot" in repr(p)
 
     def test_repr_includes_title(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="My Title")
         assert "My Title" in repr(p)
 
     def test_repr_includes_data_count(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(data=[1, 2])
         assert "data_count=2" in repr(p)
 
     def test_repr_format(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="T", data=[1])
         assert repr(p) == "BasePlot(title='T', data_count=1)"
 
@@ -214,6 +250,7 @@ class TestBasePlotReprStr:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="S")
         result = str(p)
         plt.close("all")
@@ -224,6 +261,7 @@ class TestBasePlotReprStr:
 # save()
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 @pytest.mark.skipif(not MATPLOTLIB_AVAILABLE, reason="matplotlib not installed")
 class TestBasePlotSave:
@@ -233,6 +271,7 @@ class TestBasePlotSave:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         output = str(tmp_path / "plot.html")
         p = BasePlot(title="Save Test")
         result = p.save(output)
@@ -245,6 +284,7 @@ class TestBasePlotSave:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         output = str(tmp_path / "chart.html")
         BasePlot(title="File Created").save(output)
         plt.close("all")
@@ -256,6 +296,7 @@ class TestBasePlotSave:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         output = str(tmp_path / "out.html")
         BasePlot(title="IMG Tag").save(output)
         plt.close("all")
@@ -268,6 +309,7 @@ class TestBasePlotSave:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         output = str(tmp_path / "valid.html")
         BasePlot(title="Valid HTML").save(output)
         plt.close("all")
@@ -282,6 +324,7 @@ class TestBasePlotSave:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         output = str(tmp_path / "titled.html")
         BasePlot(title="My Unique Title").save(output)
         plt.close("all")
@@ -292,6 +335,7 @@ class TestBasePlotSave:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         output = str(tmp_path / "type_check.html")
         p = BasePlot()
         result = p.save(output)
@@ -303,6 +347,7 @@ class TestBasePlotSave:
 # to_html()
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 @pytest.mark.skipif(not MATPLOTLIB_AVAILABLE, reason="matplotlib not installed")
 class TestBasePlotToHtml:
@@ -312,6 +357,7 @@ class TestBasePlotToHtml:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="T")
         result = p.to_html()
         plt.close("all")
@@ -321,6 +367,7 @@ class TestBasePlotToHtml:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="T")
         result = p.to_html()
         plt.close("all")
@@ -330,6 +377,7 @@ class TestBasePlotToHtml:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="T")
         result = p.to_html()
         plt.close("all")
@@ -339,6 +387,7 @@ class TestBasePlotToHtml:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         p = BasePlot(title="My Chart")
         result = p.to_html()
         plt.close("all")
@@ -349,6 +398,7 @@ class TestBasePlotToHtml:
         import matplotlib.pyplot as plt
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         backend_before = plt.get_backend()
         BasePlot(title="backend").to_html()
         plt.close("all")
@@ -359,6 +409,7 @@ class TestBasePlotToHtml:
 # _fig_to_base64 static method
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 @pytest.mark.skipif(not MATPLOTLIB_AVAILABLE, reason="matplotlib not installed")
 class TestFigToBase64:
@@ -368,6 +419,7 @@ class TestFigToBase64:
         from matplotlib.figure import Figure
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         fig = Figure()
         result = BasePlot._fig_to_base64(fig)
         assert isinstance(result, str)
@@ -376,6 +428,7 @@ class TestFigToBase64:
         from matplotlib.figure import Figure
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         fig = Figure()
         result = BasePlot._fig_to_base64(fig)
         assert len(result) > 0
@@ -384,6 +437,7 @@ class TestFigToBase64:
         from matplotlib.figure import Figure
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         fig = Figure()
         result = BasePlot._fig_to_base64(fig)
         decoded = base64.b64decode(result)
@@ -393,6 +447,7 @@ class TestFigToBase64:
         from matplotlib.figure import Figure
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         fig = Figure()
         result = BasePlot._fig_to_base64(fig)
         result.encode("ascii")  # raises if non-ASCII present
@@ -401,6 +456,7 @@ class TestFigToBase64:
         from matplotlib.figure import Figure
 
         from codomyrmex.data_visualization.plots._base import BasePlot
+
         small = Figure(figsize=(1, 1))
         large = Figure(figsize=(20, 20))
         small_b64 = BasePlot._fig_to_base64(small)
@@ -411,6 +467,7 @@ class TestFigToBase64:
 # ---------------------------------------------------------------------------
 # _render_figure extension point
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestRenderFigureExtensionPoint:

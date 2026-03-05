@@ -41,7 +41,7 @@ def cli_commands():
         print("Vector Store Statistics")
         print(f"  Backend: {store.__class__.__name__}")
         print(f"  Distance Metrics: {[dm.value for dm in DistanceMetric]}")
-        count = len(store) if hasattr(store, '__len__') else 'N/A'
+        count = len(store) if hasattr(store, "__len__") else "N/A"
         print(f"  Stored Vectors: {count}")
 
     return {
@@ -51,13 +51,13 @@ def cli_commands():
 
 
 __all__ = [
-    "SearchResult",
-    "VectorEntry",
     "DistanceMetric",
-    "normalize_embedding",
-    "VectorStore",
     "InMemoryVectorStore",
     "NamespacedVectorStore",
-    "create_vector_store",
+    "SearchResult",
+    "VectorEntry",
+    "VectorStore",
     "cli_commands",
+    "create_vector_store",
+    "normalize_embedding",
 ]

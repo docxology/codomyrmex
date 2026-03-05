@@ -38,7 +38,9 @@ class ModelManager:
         self.models: dict[str, Model] = {}
         self.logger = get_logger(__name__)
 
-    def create_model(self, name: str, model_type: str, config: dict[str, Any] | None = None) -> Model:
+    def create_model(
+        self, name: str, model_type: str, config: dict[str, Any] | None = None
+    ) -> Model:
         """Create a new model.
 
         Args:
@@ -115,13 +117,16 @@ class ReasoningEngine:
         self.inference_engine: InferenceEngine | None = None
         if bayesian_network:
             from codomyrmex.cerebrum.inference.bayesian import InferenceEngine
+
             self.inference_engine = InferenceEngine(
                 bayesian_network, method=self.config.inference_method
             )
 
         self.logger = get_logger(__name__)
 
-    def reason(self, query: Case, context: dict[str, Any] | None = None) -> ReasoningResult:
+    def reason(
+        self, query: Case, context: dict[str, Any] | None = None
+    ) -> ReasoningResult:
         """Perform reasoning combining case-based and Bayesian inference.
 
         Args:
@@ -135,7 +140,9 @@ class ReasoningEngine:
 
         # Case-based reasoning: retrieve similar cases
         similar_cases = self.case_retriever.retrieve(
-            query, k=self.config.max_retrieved_cases, threshold=self.config.case_similarity_threshold
+            query,
+            k=self.config.max_retrieved_cases,
+            threshold=self.config.case_similarity_threshold,
         )
 
         # Extract outcomes from similar cases
@@ -151,7 +158,9 @@ class ReasoningEngine:
             if total_weight > 0:
                 # Check if outcomes are numeric
                 if all(isinstance(o, (int, float)) for o, _ in outcomes):
-                    weighted_outcome = sum(outcome * sim for outcome, sim in outcomes) / total_weight
+                    weighted_outcome = (
+                        sum(outcome * sim for outcome, sim in outcomes) / total_weight
+                    )
                 else:
                     # Categorical voting
                     scores = {}
@@ -172,12 +181,22 @@ class ReasoningEngine:
         if self.inference_engine and self.bayesian_network:
             try:
                 # Convert query features to evidence
-                evidence = {k: v for k, v in query.features.items() if isinstance(v, (int, float, str))}
+                evidence = {
+                    k: v
+                    for k, v in query.features.items()
+                    if isinstance(v, (int, float, str))
+                }
 
                 # Perform inference
-                query_vars = {var: None for var in self.bayesian_network.nodes if var not in evidence}
+                query_vars = {
+                    var: None
+                    for var in self.bayesian_network.nodes
+                    if var not in evidence
+                }
                 if query_vars:
-                    inference_results = self.inference_engine.infer(query_vars, evidence)
+                    inference_results = self.inference_engine.infer(
+                        query_vars, evidence
+                    )
 
                     # Update prediction if inference provides better estimate
                     if inference_results:
@@ -187,7 +206,10 @@ class ReasoningEngine:
                             key=lambda v: max(inference_results[v].probabilities),
                         )
                         best_dist = inference_results[best_var]
-                        if weighted_outcome is None or best_dist.probabilities[0] > confidence:
+                        if (
+                            weighted_outcome is None
+                            or best_dist.probabilities[0] > confidence
+                        ):
                             weighted_outcome = best_dist.mode()
                             confidence = max(best_dist.probabilities)
             except Exception as e:
@@ -224,7 +246,8 @@ class CerebrumEngine:
 
         # Register default transformers
         self.transformation_manager.register_transformer(
-            "adaptation", AdaptationTransformer(adaptation_rate=self.config.adaptation_rate)
+            "adaptation",
+            AdaptationTransformer(adaptation_rate=self.config.adaptation_rate),
         )
         self.transformation_manager.register_transformer(
             "learning", LearningTransformer(learning_rate=self.config.learning_rate)
@@ -237,7 +260,9 @@ class CerebrumEngine:
 
         self.logger.info("Initialized CEREBRUM engine")
 
-    def create_model(self, name: str, model_type: str, config: dict[str, Any] | None = None) -> Model:
+    def create_model(
+        self, name: str, model_type: str, config: dict[str, Any] | None = None
+    ) -> Model:
         """Create a new cognitive model.
 
         Args:
@@ -259,7 +284,9 @@ class CerebrumEngine:
         self.case_base.add_case(case)
         self.logger.debug(f"Added case: {case.case_id}")
 
-    def reason(self, case: Case, context: dict[str, Any] | None = None) -> ReasoningResult:
+    def reason(
+        self, case: Case, context: dict[str, Any] | None = None
+    ) -> ReasoningResult:
         """Perform reasoning on a case.
 
         Args:
@@ -288,7 +315,10 @@ class CerebrumEngine:
         self.logger.debug(f"Learned from case: {case.case_id}")
 
     def decide(
-        self, options: list[Any], criteria: dict[str, float], context: dict[str, Any] | None = None
+        self,
+        options: list[Any],
+        criteria: dict[str, float],
+        context: dict[str, Any] | None = None,
     ) -> Decision:
         """Make a decision among options.
 
@@ -311,9 +341,7 @@ class CerebrumEngine:
         """
         return ReasoningChain()
 
-    def transform_model(
-        self, model: Model, transformation: str, **kwargs
-    ) -> Model:
+    def transform_model(self, model: Model, transformation: str, **kwargs) -> Model:
         """Transform a model.
 
         Args:
@@ -389,6 +417,11 @@ class CerebrumEngine:
         return {
             "config": self.config.to_dict(),
             "case_base": self.case_base.to_dict(),
-            "models": {name: model.to_dict() for name, model in self.model_manager.models.items()},
-            "bayesian_network": self.bayesian_network.to_dict() if self.bayesian_network else None,
+            "models": {
+                name: model.to_dict()
+                for name, model in self.model_manager.models.items()
+            },
+            "bayesian_network": self.bayesian_network.to_dict()
+            if self.bayesian_network
+            else None,
         }

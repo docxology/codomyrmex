@@ -12,7 +12,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-__all__ = ["HealthStatus", "HealthCheckResult", "HealthCheck", "AggregateHealthReport", "HealthChecker"]
+__all__ = [
+    "AggregateHealthReport",
+    "HealthCheck",
+    "HealthCheckResult",
+    "HealthChecker",
+    "HealthStatus",
+]
 
 
 class HealthStatus(Enum):
@@ -94,12 +100,14 @@ class HealthChecker:
     Example::
 
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="db_connection",
-            description="Database connectivity",
-            check_fn=lambda: (HealthStatus.HEALTHY, "Connected", {}),
-            critical=True,
-        ))
+        checker.register(
+            HealthCheck(
+                name="db_connection",
+                description="Database connectivity",
+                check_fn=lambda: (HealthStatus.HEALTHY, "Connected", {}),
+                critical=True,
+            )
+        )
         report = checker.run_all()
     """
 
@@ -213,7 +221,9 @@ class HealthChecker:
             f"({report.healthy_count}✓ {report.degraded_count}~ {report.unhealthy_count}✗)"
         ]
         for r in report.checks:
-            icon = {"healthy": "✓", "degraded": "~", "unhealthy": "✗"}.get(r.status.value, "?")
+            icon = {"healthy": "✓", "degraded": "~", "unhealthy": "✗"}.get(
+                r.status.value, "?"
+            )
             lines.append(f"  {icon} {r.name}: {r.message} ({r.duration_ms:.1f}ms)")
         return "\n".join(lines)
 

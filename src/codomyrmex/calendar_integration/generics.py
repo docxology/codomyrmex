@@ -16,21 +16,36 @@ class CalendarEvent(BaseModel):
     ``InvalidEventError`` when they receive timezone-naive values.
     """
 
-    id: str | None = Field(default=None, description="Provider-assigned event ID; None for unsaved events.")
+    id: str | None = Field(
+        default=None, description="Provider-assigned event ID; None for unsaved events."
+    )
     summary: str = Field(description="Event title shown in calendar UIs.")
-    description: str | None = Field(default=None, description="Free-text body or agenda for the event.")
-    start_time: datetime = Field(description="Timezone-aware start datetime of the event.")
+    description: str | None = Field(
+        default=None, description="Free-text body or agenda for the event."
+    )
+    start_time: datetime = Field(
+        description="Timezone-aware start datetime of the event."
+    )
     end_time: datetime = Field(description="Timezone-aware end datetime of the event.")
-    location: str | None = Field(default=None, description="Physical or virtual location string.")
-    attendees: list[str] = Field(default_factory=list, description="List of attendee email addresses.")
-    html_link: str | None = Field(default=None, description="URL to open the event in a browser (provider-assigned).")
+    location: str | None = Field(
+        default=None, description="Physical or virtual location string."
+    )
+    attendees: list[str] = Field(
+        default_factory=list, description="List of attendee email addresses."
+    )
+    html_link: str | None = Field(
+        default=None,
+        description="URL to open the event in a browser (provider-assigned).",
+    )
 
 
 class CalendarProvider(abc.ABC):
     """Abstract base class for all calendar providers."""
 
     @abc.abstractmethod
-    def list_events(self, time_min: datetime, time_max: datetime) -> list[CalendarEvent]:
+    def list_events(
+        self, time_min: datetime, time_max: datetime
+    ) -> list[CalendarEvent]:
         """List events within a time window.
 
         Args:

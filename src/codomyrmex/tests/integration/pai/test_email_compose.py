@@ -37,6 +37,7 @@ BASE_URL = "http://localhost:8888"
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
+
 def _get(path: str) -> dict | list | None:
     """Send GET request, return parsed JSON or None on error."""
     try:
@@ -79,6 +80,7 @@ def _fail(label: str) -> None:
 
 # ── Test Functions ───────────────────────────────────────────────────────────
 
+
 def test_server_health() -> bool:
     """Verify PMServer is running and responsive."""
     print("\n── Server Health ──")
@@ -104,7 +106,9 @@ def test_calendar_api() -> bool:
         return True  # Not a hard failure
     _ok(f"Calendar API: {len(events)} events")
     for ev in events[:5]:
-        start = ev.get("start", {}).get("dateTime", ev.get("start", {}).get("date", "?"))
+        start = ev.get("start", {}).get(
+            "dateTime", ev.get("start", {}).get("date", "?")
+        )
         summary = ev.get("summary", "untitled")
         print(f"    📅 {start}: {summary}")
     return True
@@ -238,6 +242,7 @@ def test_compose_all_templates(backend: str) -> dict:
 
 # ── Dry-Run Mode ─────────────────────────────────────────────────────────────
 
+
 def test_dry_run() -> dict:
     """Test API connectivity without invoking LLM backends."""
     print("\n══════════════════════════════════════════")
@@ -253,6 +258,7 @@ def test_dry_run() -> dict:
 
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -329,9 +335,9 @@ def main() -> int:
     if passed == total:
         print("\n✅ All LLM email compose tests passed!")
         return 0
-    else:
-        print(f"\n⚠ {total - passed} template(s) failed.")
-        return 1
+    print(f"\n⚠ {total - passed} template(s) failed.")
+    return 1
+
 
 if __name__ == "__main__":
     sys.exit(main())

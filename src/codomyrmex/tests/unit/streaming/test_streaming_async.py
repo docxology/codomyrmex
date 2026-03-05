@@ -11,6 +11,7 @@ try:
         BatchingStream,
         WebSocketStream,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -28,9 +29,11 @@ def _run(coro):
 # AsyncStream
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAsyncStream:
     """Test suite for AsyncStream."""
+
     def test_create(self):
         stream = AsyncStream(buffer_size=100)
         assert stream._running is False
@@ -50,6 +53,7 @@ class TestAsyncStream:
             assert stream._running is True
             await stream.stop()
             assert stream._running is False
+
         _run(_test())
 
     def test_subscribe(self):
@@ -59,6 +63,7 @@ class TestAsyncStream:
             assert sub_id is not None
             assert isinstance(sub_id, str)
             assert sub_id in stream._subscribers
+
         _run(_test())
 
     def test_unsubscribe(self):
@@ -68,6 +73,7 @@ class TestAsyncStream:
             result = await stream.unsubscribe(sub_id)
             assert result is True
             assert sub_id not in stream._subscribers
+
         _run(_test())
 
     def test_unsubscribe_nonexistent(self):
@@ -75,6 +81,7 @@ class TestAsyncStream:
             stream = AsyncStream()
             result = await stream.unsubscribe("nonexistent")
             assert result is False
+
         _run(_test())
 
     def test_publish(self):
@@ -83,6 +90,7 @@ class TestAsyncStream:
             event = Event(type=EventType.MESSAGE, data="hello")
             result = await stream.publish(event)
             assert result is True
+
         _run(_test())
 
     def test_subscribe_custom_buffer(self):
@@ -90,6 +98,7 @@ class TestAsyncStream:
             stream = AsyncStream()
             sub_id = await stream.subscribe(buffer_size=50)
             assert stream._subscribers[sub_id].maxsize == 50
+
         _run(_test())
 
     def test_multiple_subscribers(self):
@@ -99,6 +108,7 @@ class TestAsyncStream:
             sub2 = await stream.subscribe()
             assert sub1 != sub2
             assert len(stream._subscribers) == 2
+
         _run(_test())
 
     def test_broadcast_to_subscribers(self):
@@ -111,6 +121,7 @@ class TestAsyncStream:
             assert not queue.empty()
             received = queue.get_nowait()
             assert received.data == "test"
+
         _run(_test())
 
 
@@ -118,9 +129,11 @@ class TestAsyncStream:
 # WebSocketStream
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestWebSocketStream:
     """Test suite for WebSocketStream."""
+
     def test_create(self):
         ws_stream = WebSocketStream()
         assert ws_stream._connections == {}
@@ -137,6 +150,7 @@ class TestWebSocketStream:
             sub_id = await ws_stream.connect(ws, "client1")
             assert sub_id is not None
             assert "client1" in ws_stream._connections
+
         _run(_test())
 
     def test_disconnect(self):
@@ -151,12 +165,14 @@ class TestWebSocketStream:
             await ws_stream.connect(ws, "client1")
             await ws_stream.disconnect("client1")
             assert "client1" not in ws_stream._connections
+
         _run(_test())
 
     def test_disconnect_nonexistent(self):
         async def _test():
             ws_stream = WebSocketStream()
             await ws_stream.disconnect("nonexistent")
+
         _run(_test())
 
     def test_send_to_nonexistent(self):
@@ -165,6 +181,7 @@ class TestWebSocketStream:
             event = Event(type=EventType.MESSAGE, data="hello")
             result = await ws_stream.send_to("nonexistent", event)
             assert result is False
+
         _run(_test())
 
     def test_send_to_connected(self):
@@ -182,6 +199,7 @@ class TestWebSocketStream:
             result = await ws_stream.send_to("client1", event)
             assert result is True
             assert len(sent_data) == 1
+
         _run(_test())
 
     def test_send_to_failing_ws(self):
@@ -197,6 +215,7 @@ class TestWebSocketStream:
             event = Event(type=EventType.MESSAGE, data="hello")
             result = await ws_stream.send_to("client1", event)
             assert result is False
+
         _run(_test())
 
 
@@ -204,9 +223,11 @@ class TestWebSocketStream:
 # BatchingStream
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBatchingStream:
     """Test suite for BatchingStream."""
+
     def test_create(self):
         stream = BatchingStream(batch_size=100, flush_interval=1.0)
         assert stream._batch_size == 100
@@ -219,6 +240,7 @@ class TestBatchingStream:
             event = Event(type=EventType.MESSAGE, data="test")
             await stream.add(event)
             assert len(stream._batch) == 1
+
         _run(_test())
 
     def test_on_batch_handler(self):
@@ -232,6 +254,7 @@ class TestBatchingStream:
 
             assert len(batches_received) == 1
             assert len(batches_received[0]) == 2
+
         _run(_test())
 
     def test_flush_empties_batch(self):
@@ -241,12 +264,14 @@ class TestBatchingStream:
             assert len(stream._batch) == 1
             await stream._flush()
             assert len(stream._batch) == 0
+
         _run(_test())
 
     def test_flush_empty_batch_noop(self):
         async def _test():
             stream = BatchingStream()
             await stream._flush()
+
         _run(_test())
 
     def test_start_stop(self):
@@ -256,6 +281,7 @@ class TestBatchingStream:
             assert stream._running is True
             await stream.stop()
             assert stream._running is False
+
         _run(_test())
 
     def test_stop_flushes_remaining(self):
@@ -266,6 +292,7 @@ class TestBatchingStream:
             await stream.add(Event(type=EventType.MESSAGE, data="remaining"))
             await stream.stop()
             assert len(flushed) == 1
+
         _run(_test())
 
     def test_multiple_handlers(self):
@@ -281,4 +308,5 @@ class TestBatchingStream:
 
             assert len(handler1_calls) == 1
             assert len(handler2_calls) == 1
+
         _run(_test())

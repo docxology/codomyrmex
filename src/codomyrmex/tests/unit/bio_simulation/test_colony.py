@@ -13,6 +13,7 @@ def test_colony_simulation():
     # Check energy drain
     assert colony.ants[0].energy < 1.0
 
+
 def test_census():
     """Verify state distribution behavior."""
     colony = Colony(population=10)

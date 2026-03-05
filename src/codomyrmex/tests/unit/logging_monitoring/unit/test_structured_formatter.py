@@ -212,7 +212,7 @@ class TestStructuredFormatterContext:
 
     def test_entry_fields_included(self):
         fmt = StructuredFormatter()
-        entry = _entry(message="test", **{"duration_ms": 42})
+        entry = _entry(message="test", duration_ms=42)
         parsed = json.loads(fmt.format(entry))
         assert parsed["duration_ms"] == 42
 

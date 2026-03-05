@@ -26,14 +26,20 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
 
         formatted_results = []
         for case, score in results:
-            formatted_results.append({
-                "id": case.id,
-                "features": case.features,
-                "solution": case.solution,
-                "similarity_score": score
-            })
+            formatted_results.append(
+                {
+                    "id": case.id,
+                    "features": case.features,
+                    "solution": case.solution,
+                    "similarity_score": score,
+                }
+            )
 
-        return {"status": "success", "results": formatted_results, "count": len(formatted_results)}
+        return {
+            "status": "success",
+            "results": formatted_results,
+            "count": len(formatted_results),
+        }
     except Exception as e:
         return {"status": "error", "message": f"Knowledge base query failed: {e}"}
 
@@ -59,7 +65,7 @@ def add_case_reference(concept: str, solution: str) -> dict:
         return {
             "status": "success",
             "message": "Case stored successfully",
-            "case_id": case.id
+            "case_id": case.id,
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to store case: {e}"}

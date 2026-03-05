@@ -18,6 +18,7 @@ try:
     from codomyrmex.llm.ollama.config_manager import ConfigManager
     from codomyrmex.llm.ollama.model_runner import ExecutionOptions
     from codomyrmex.llm.ollama.output_manager import OutputManager
+
     OLLAMA_AVAILABLE = True
 except ImportError:
     OLLAMA_AVAILABLE = False
@@ -38,9 +39,11 @@ Provides reusable utilities, fixtures, and helpers for comprehensive
 Ollama integration testing. All utilities use real Ollama API calls (no mocks).
 """
 
+
 @dataclass
 class TestModel:
     """Test model information."""
+
     name: str
     description: str
     recommended_for: list[str]  # e.g., ["quick_tests", "parameter_tests"]
@@ -51,12 +54,12 @@ TEST_MODELS = [
     TestModel(
         name="gemma3:4b",
         description="Small model for quick tests",
-        recommended_for=["quick_tests", "parameter_tests", "integration_tests"]
+        recommended_for=["quick_tests", "parameter_tests", "integration_tests"],
     ),
     TestModel(
         name="llama3:latest",
         description="Standard model for general tests",
-        recommended_for=["general_tests", "execution_tests"]
+        recommended_for=["general_tests", "execution_tests"],
     ),
 ]
 
@@ -73,7 +76,7 @@ class OllamaTestFixture:
         self,
         use_http_api: bool = True,
         output_dir: str | None = None,
-        auto_cleanup: bool = True
+        auto_cleanup: bool = True,
     ):
         """
         Initialize test fixture.
@@ -140,7 +143,7 @@ class OllamaTestFixture:
 
     def cleanup(self):
         """Clean up test resources."""
-        if self.auto_cleanup and hasattr(self, 'temp_dir'):
+        if self.auto_cleanup and hasattr(self, "temp_dir"):
             if Path(self.temp_dir).exists():
                 shutil.rmtree(self.temp_dir, ignore_errors=True)
 
@@ -201,7 +204,9 @@ class TestDataGenerator:
             ExecutionOptions(repeat_penalty=1.0),  # No penalty
             ExecutionOptions(repeat_penalty=1.2),  # High penalty
             ExecutionOptions(format="json"),  # JSON output
-            ExecutionOptions(system_prompt="You are a helpful coding assistant."),  # System prompt
+            ExecutionOptions(
+                system_prompt="You are a helpful coding assistant."
+            ),  # System prompt
             ExecutionOptions(context_window=32768),  # Large context
         ]
 
@@ -227,7 +232,9 @@ class AssertionHelpers:
             model_name: Model name for error messages
         """
         assert result is not None, f"Execution result is None for {model_name}"
-        assert result.success, f"Execution failed for {model_name}: {result.error_message}"
+        assert result.success, (
+            f"Execution failed for {model_name}: {result.error_message}"
+        )
         assert result.response is not None, f"Response is None for {model_name}"
         assert len(result.response) > 0, f"Response is empty for {model_name}"
         assert result.execution_time > 0, f"Execution time is invalid for {model_name}"
@@ -244,8 +251,9 @@ class AssertionHelpers:
             manager: OllamaManager instance
             model_name: Model name to check
         """
-        assert manager.is_model_available(model_name), \
+        assert manager.is_model_available(model_name), (
             f"Model {model_name} is not available. Available models: {[m.name for m in manager.list_models()]}"
+        )
 
     @staticmethod
     def assert_valid_execution_options(options: ExecutionOptions):
@@ -258,10 +266,14 @@ class AssertionHelpers:
         Args:
             options: ExecutionOptions object
         """
-        assert 0.0 <= options.temperature <= 2.0, f"Temperature out of range: {options.temperature}"
+        assert 0.0 <= options.temperature <= 2.0, (
+            f"Temperature out of range: {options.temperature}"
+        )
         assert 0.0 <= options.top_p <= 1.0, f"Top P out of range: {options.top_p}"
         assert options.top_k >= 1, f"Top K must be >= 1: {options.top_k}"
-        assert options.repeat_penalty >= 1.0, f"Repeat penalty must be >= 1.0: {options.repeat_penalty}"
+        assert options.repeat_penalty >= 1.0, (
+            f"Repeat penalty must be >= 1.0: {options.repeat_penalty}"
+        )
         assert options.max_tokens > 0, f"Max tokens must be > 0: {options.max_tokens}"
 
     @staticmethod
@@ -277,8 +289,8 @@ class AssertionHelpers:
             model_name: Model name to check
         """
         stats = output_manager.get_output_stats()
-        assert stats['total_outputs'] > 0, "No outputs were saved"
-        assert stats['total_size'] > 0, "Output size is invalid"
+        assert stats["total_outputs"] > 0, "No outputs were saved"
+        assert stats["total_size"] > 0, "Output size is invalid"
 
 
 class ModelAvailabilityChecker:
@@ -336,7 +348,9 @@ class ModelAvailabilityChecker:
             # Simple matching logic (can be enhanced)
             if "small" in requirements and "4b" in model_name.lower():
                 return model_name
-            if "fast" in requirements and any(x in model_name.lower() for x in ["4b", "7b", "8b"]):
+            if "fast" in requirements and any(
+                x in model_name.lower() for x in ["4b", "7b", "8b"]
+            ):
                 return model_name
 
         # Fallback to first available
@@ -396,11 +410,11 @@ def create_test_config(output_dir: Path) -> dict[str, Any]:
         "output_settings": {
             "save_all_outputs": True,
             "base_output_dir": str(output_dir),
-        }
+        },
     }
 
     config_path = output_dir / "test_config.json"
-    with open(config_path, 'w') as f:
+    with open(config_path, "w") as f:
         json.dump(config, f, indent=2)
 
     return config

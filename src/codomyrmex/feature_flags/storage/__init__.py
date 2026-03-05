@@ -165,7 +165,9 @@ class FileFlagStore(FlagStore):
         except FileNotFoundError:
             return {}  # Valid: first-use, no flags file yet
         except json.JSONDecodeError as e:
-            logger.warning("Feature flags storage file is corrupt, cannot parse JSON: %s", str(e))
+            logger.warning(
+                "Feature flags storage file is corrupt, cannot parse JSON: %s", str(e)
+            )
             raise
 
     def _write(self, data: dict[str, Any]) -> None:
@@ -182,7 +184,7 @@ class FileFlagStore(FlagStore):
 
 
 __all__ = [
-    "FlagStore",
     "FileFlagStore",
+    "FlagStore",
     "InMemoryFlagStore",
 ]

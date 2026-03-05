@@ -17,19 +17,19 @@ from .protocol import (
 )
 
 __all__ = [
-    "SwarmManager",
     "AgentPool",
-    "MessageBus",
-    "TaskDecomposer",
-    "SubTask",
+    "AgentRole",
     "ConsensusEngine",
-    "SwarmVote",
     "ConsensusResult",
     "Decision",
-    "AgentRole",
-    "SwarmMessageType",
+    "MessageBus",
+    "SubTask",
     "SwarmAgent",
+    "SwarmManager",
     "SwarmMessage",
+    "SwarmMessageType",
+    "SwarmVote",
     "TaskAssignment",
+    "TaskDecomposer",
     "TaskStatus",
 ]

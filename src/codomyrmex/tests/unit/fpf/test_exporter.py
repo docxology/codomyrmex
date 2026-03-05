@@ -149,5 +149,3 @@ def test_export_for_context_with_filters():
     context_data = exporter.export_for_context(spec, filters={"status": "Stable"})
     assert len(context_data["patterns"]) == 1
     assert context_data["patterns"][0]["status"] == "Stable"
-
-

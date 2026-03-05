@@ -35,6 +35,7 @@ from codomyrmex.data_visualization.core.theme import DEFAULT_THEME
 def test_module_import():
     """visualization module is importable."""
     import codomyrmex.data_visualization as visualization
+
     assert hasattr(visualization, "__all__")
 
 
@@ -42,6 +43,7 @@ def test_module_import():
 def test_module_exports():
     """visualization __all__ contains key classes."""
     import codomyrmex.data_visualization as visualization
+
     assert "Dashboard" in visualization.__all__
     assert "Grid" in visualization.__all__
     assert "Theme" in visualization.__all__

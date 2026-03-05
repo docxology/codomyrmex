@@ -139,15 +139,19 @@ class VersionRegistry:
         details: str = "",
     ) -> None:
         """Record a migration step."""
-        self._migrations.append(MigrationStep(
-            tool_name=tool_name,
-            from_version=from_version,
-            to_version=to_version,
-            action=action,
-            details=details,
-        ))
+        self._migrations.append(
+            MigrationStep(
+                tool_name=tool_name,
+                from_version=from_version,
+                to_version=to_version,
+                action=action,
+                details=details,
+            )
+        )
 
-    def migration_guide(self, from_ver: str = "", to_ver: str = "") -> list[MigrationStep]:
+    def migration_guide(
+        self, from_ver: str = "", to_ver: str = ""
+    ) -> list[MigrationStep]:
         """Get migration steps between versions."""
         if not from_ver and not to_ver:
             return list(self._migrations)

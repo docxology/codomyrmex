@@ -12,22 +12,25 @@ def test_histogram_render():
     assert "data:image/png;base64" in html
     assert 'alt="Test Hist"' in html
 
+
 def test_pie_chart_render():
     """Verify pie chart render behavior."""
-    labels = ['A', 'B']
+    labels = ["A", "B"]
     sizes = [30, 70]
     plot = PieChart("Test Pie", labels, sizes)
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test Pie"' in html
 
+
 def test_box_plot_render():
     """Verify box plot render behavior."""
     data = [[1, 2, 3], [2, 3, 4]]
-    plot = BoxPlot("Test Box", data, labels=['G1', 'G2'])
+    plot = BoxPlot("Test Box", data, labels=["G1", "G2"])
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test Box"' in html
+
 
 def test_area_plot_render():
     """Verify area plot render behavior."""

@@ -14,21 +14,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """Script Discovery.
 
 Handles finding scripts to run based on criteria.
@@ -58,15 +43,16 @@ SKIP_DIRS = {
     "output",
     "_templates",
     ".cursor",
-    ".DS_Store"
+    ".DS_Store",
 }
 
 SKIP_PATTERNS = {
     "__init__.py",
     "conftest.py",
     "_orchestrator_utils.py",
-    "run_all_scripts.py"
+    "run_all_scripts.py",
 }
+
 
 def discover_scripts(
     scripts_dir: Path,
@@ -90,9 +76,15 @@ def discover_scripts(
 
     # Get subdirectories to search
     if subdirs:
-        search_dirs = [scripts_dir / subdir for subdir in subdirs if (scripts_dir / subdir).is_dir()]
+        search_dirs = [
+            scripts_dir / subdir
+            for subdir in subdirs
+            if (scripts_dir / subdir).is_dir()
+        ]
     else:
-        search_dirs = [d for d in scripts_dir.iterdir() if d.is_dir() and d.name not in SKIP_DIRS]
+        search_dirs = [
+            d for d in scripts_dir.iterdir() if d.is_dir() and d.name not in SKIP_DIRS
+        ]
 
     for subdir in search_dirs:
         if subdir.name in SKIP_DIRS:

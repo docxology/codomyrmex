@@ -12,6 +12,7 @@ consistency, and technical accuracy across the Codomyrmex platform.
 
 logger = get_logger(__name__)
 
+
 class DocumentationQualityAnalyzer:
     """Analyzes documentation quality metrics."""
 
@@ -22,7 +23,7 @@ class DocumentationQualityAnalyzer:
             "consistency": 0,
             "technical_accuracy": 0,
             "readability": 0,
-            "structure": 0
+            "structure": 0,
         }
 
     def analyze_file(self, file_path: Path) -> dict[str, float]:
@@ -38,7 +39,7 @@ class DocumentationQualityAnalyzer:
             "technical_accuracy": self._assess_technical_accuracy(content),
             "readability": self._assess_readability(content),
             "structure": self._assess_structure(content),
-            "overall_score": self._calculate_overall_score(content)
+            "overall_score": self._calculate_overall_score(content),
         }
 
     def _assess_completeness(self, content: str) -> float:
@@ -47,12 +48,18 @@ class DocumentationQualityAnalyzer:
 
         # Check for essential sections
         essential_sections = [
-            "overview", "installation", "usage", "api", "examples", "navigation", "purpose"
+            "overview",
+            "installation",
+            "usage",
+            "api",
+            "examples",
+            "navigation",
+            "purpose",
         ]
 
         found_sections = 0
         for section in essential_sections:
-            if re.search(rf'^#+.*{section}', content, re.IGNORECASE | re.MULTILINE):
+            if re.search(rf"^#+.*{section}", content, re.IGNORECASE | re.MULTILINE):
                 found_sections += 1
 
         score += (found_sections / len(essential_sections)) * 60.0
@@ -99,24 +106,45 @@ class DocumentationQualityAnalyzer:
 
         # Check for technical terms
         technical_terms = [
-            "api", "method", "function", "class", "module", "parameter",
-            "return", "exception", "error", "configuration", "interface",
-            "asynchronous", "decorator", "yield", "generator", "context manager"
+            "api",
+            "method",
+            "function",
+            "class",
+            "module",
+            "parameter",
+            "return",
+            "exception",
+            "error",
+            "configuration",
+            "interface",
+            "asynchronous",
+            "decorator",
+            "yield",
+            "generator",
+            "context manager",
         ]
 
-        found_terms = sum(1 for term in technical_terms if term.lower() in content.lower())
+        found_terms = sum(
+            1 for term in technical_terms if term.lower() in content.lower()
+        )
         score += min(found_terms * 4.0, 40.0)
 
         # Check for code references
-        if any(pattern in content for pattern in ["def ", "class ", "import ", "from "]):
+        if any(
+            pattern in content for pattern in ["def ", "class ", "import ", "from "]
+        ):
             score += 30.0
 
         # Check for proper error handling documentation
-        if "error" in content.lower() or "exception" in content.lower() or "raise" in content.lower():
+        if (
+            "error" in content.lower()
+            or "exception" in content.lower()
+            or "raise" in content.lower()
+        ):
             score += 15.0
 
         # Check for version information
-        if re.search(r'v\d+\.\d+\.\d+', content) or "version" in content.lower():
+        if re.search(r"v\d+\.\d+\.\d+", content) or "version" in content.lower():
             score += 15.0
 
         return min(score, 100.0)
@@ -133,7 +161,7 @@ class DocumentationQualityAnalyzer:
             score -= 20.0
 
         # Check for overly long sentences
-        sentences = re.split(r'[.!?]+', content)
+        sentences = re.split(r"[.!?]+", content)
         long_sentences = sum(1 for s in sentences if len(s.strip()) > 150)
 
         if long_sentences > 5:
@@ -141,7 +169,9 @@ class DocumentationQualityAnalyzer:
 
         # Check for excessive jargon
         jargon_words = ["utilize", "facilitate", "paradigm", "methodology"]
-        jargon_count = sum(1 for word in jargon_words if word.lower() in content.lower())
+        jargon_count = sum(
+            1 for word in jargon_words if word.lower() in content.lower()
+        )
 
         if jargon_count > 3:
             score -= 10.0
@@ -170,7 +200,9 @@ class DocumentationQualityAnalyzer:
         score += found_sections * 15.0
 
         # Check for consistent formatting
-        if headings and all("=" in heading or "-" in heading for heading in headings[-3:]):
+        if headings and all(
+            "=" in heading or "-" in heading for heading in headings[-3:]
+        ):
             score += 15.0
 
         return min(score, 100.0)
@@ -182,7 +214,7 @@ class DocumentationQualityAnalyzer:
             "consistency": self._assess_consistency(content),
             "technical_accuracy": self._assess_technical_accuracy(content),
             "readability": self._assess_readability(content),
-            "structure": self._assess_structure(content)
+            "structure": self._assess_structure(content),
         }
 
         return sum(metrics.values()) / len(metrics)
@@ -194,14 +226,16 @@ def generate_quality_report(project_path: Path) -> str:
 
     report_lines = []
     report_lines.append("# Documentation Quality Report")
-    report_lines.append(f"Generated: {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    report_lines.append(
+        f"Generated: {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    )
     report_lines.append("")
 
     # Analyze key documentation files
     key_files = [
         project_path / "README.md",
         project_path / "src" / "README.md",
-        project_path / "AGENTS.md"
+        project_path / "AGENTS.md",
     ]
 
     total_score = 0.0
@@ -215,7 +249,9 @@ def generate_quality_report(project_path: Path) -> str:
 
             for metric, score in analysis.items():
                 if isinstance(score, float):
-                    report_lines.append(f"- {metric.replace('_', ' ').title()}: {score:.1f}/100")
+                    report_lines.append(
+                        f"- {metric.replace('_', ' ').title()}: {score:.1f}/100"
+                    )
 
             file_score = analysis.get("overall_score", 0)
             total_score += file_score
@@ -229,9 +265,13 @@ def generate_quality_report(project_path: Path) -> str:
         if average_score >= 80:
             report_lines.append("🎉 Excellent documentation quality!")
         elif average_score >= 60:
-            report_lines.append("👍 Good documentation quality with room for improvement.")
+            report_lines.append(
+                "👍 Good documentation quality with room for improvement."
+            )
         else:
-            report_lines.append("⚠️ Documentation quality needs significant improvement.")
+            report_lines.append(
+                "⚠️ Documentation quality needs significant improvement."
+            )
 
     return "\n".join(report_lines)
 

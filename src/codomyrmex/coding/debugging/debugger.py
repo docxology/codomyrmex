@@ -11,7 +11,7 @@ Example:
     ...     source_code="print(undefined_var)",
     ...     stdout="",
     ...     stderr="NameError: name 'undefined_var' is not defined",
-    ...     exit_code=1
+    ...     exit_code=1,
     ... )
 """
 
@@ -57,7 +57,9 @@ class Debugger:
         self.patcher = PatchGenerator(llm_client)
         self.verifier = FixVerifier()
 
-    def debug(self, source_code: str, stdout: str, stderr: str, exit_code: int) -> str | None:
+    def debug(
+        self, source_code: str, stdout: str, stderr: str, exit_code: int
+    ) -> str | None:
         """Attempt to automatically fix a failing code execution.
 
         Performs a complete debugging cycle: analyzing the error, generating
@@ -90,7 +92,9 @@ class Debugger:
             logger.info("No error diagnosed or clean exit.")
             return None
 
-        logger.info(f"Diagnosed error: {diagnosis.error_type} at line {diagnosis.line_number}")
+        logger.info(
+            f"Diagnosed error: {diagnosis.error_type} at line {diagnosis.line_number}"
+        )
 
         # 2. Generate Patches
         patches = self.patcher.generate(source_code, diagnosis)

@@ -100,15 +100,21 @@ class TestVotingResult:
         return VotingResult(**defaults)
 
     def test_participation_rate_all_voted(self):
-        r = self._make_result(votes_for=3, votes_against=1, abstentions=0, total_voters=4)
+        r = self._make_result(
+            votes_for=3, votes_against=1, abstentions=0, total_voters=4
+        )
         assert r.participation_rate == 1.0
 
     def test_participation_rate_zero_voters(self):
-        r = self._make_result(votes_for=0, votes_against=0, abstentions=0, total_voters=0)
+        r = self._make_result(
+            votes_for=0, votes_against=0, abstentions=0, total_voters=0
+        )
         assert r.participation_rate == 0.0
 
     def test_participation_rate_partial(self):
-        r = self._make_result(votes_for=1, votes_against=1, abstentions=0, total_voters=4)
+        r = self._make_result(
+            votes_for=1, votes_against=1, abstentions=0, total_voters=4
+        )
         assert r.participation_rate == 0.5
 
     def test_to_dict_passed_key(self):

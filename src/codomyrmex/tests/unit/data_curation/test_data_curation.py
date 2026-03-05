@@ -215,7 +215,9 @@ class TestLSHIndex:
         mh = MinHash()
         lsh = LSHIndex()
         for i in range(10):
-            sig = mh.signature(f"document number {i} with unique content variation {i * 7}")
+            sig = mh.signature(
+                f"document number {i} with unique content variation {i * 7}"
+            )
             lsh.add(f"doc{i}", sig)
         assert len(lsh.signatures) == 10
 

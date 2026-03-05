@@ -5,7 +5,6 @@ This module provides template engine support (Jinja2, Mako) for code generation,
 documentation templates, and dynamic content.
 """
 
-
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -45,6 +44,7 @@ except ImportError:
 
 # Default engine instance for convenience functions
 _default_engine = None
+
 
 def get_default_engine(engine_type: str = "jinja2"):
     """Get or create default template engine instance."""
@@ -104,6 +104,7 @@ def render_file(path: str, context: dict = None, engine: str = "jinja2") -> str:
 
 def cli_commands():
     """Return CLI commands for the templating module."""
+
     def _list_engines():
         """List template engines."""
         print("Templating Module - Engines:")
@@ -133,17 +134,17 @@ def cli_commands():
 
 
 __all__ = [
+    "cli_commands",
+    "context",
     "engines",
     "filters",
-    "context",
+    "get_default_engine",
     "render",
     "render_file",
-    "get_default_engine",
-    "cli_commands",
 ]
 
 if TemplateEngine:
-    __all__.extend(["TemplateEngine", "Template"])
+    __all__.extend(["Template", "TemplateEngine"])
 if TemplateManager:
     __all__.append("TemplateManager")
 
@@ -152,5 +153,3 @@ __version__ = "0.1.0"
 
 class TemplatingError(CodomyrmexError):
     """Raised when templating operations fail."""
-    pass
-

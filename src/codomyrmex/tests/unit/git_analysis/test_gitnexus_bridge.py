@@ -83,7 +83,9 @@ def test_list_repos_handles_dict_response() -> None:
     # we verify the logic is correct by examining the source behaviour
     fake_dict: dict = {"repos": [{"name": "test"}]}
     # Replicate the normalization logic
-    result = fake_dict.get("repos", fake_dict) if isinstance(fake_dict, dict) else fake_dict
+    result = (
+        fake_dict.get("repos", fake_dict) if isinstance(fake_dict, dict) else fake_dict
+    )
     assert result == [{"name": "test"}]
 
 
@@ -91,7 +93,9 @@ def test_list_repos_handles_dict_response() -> None:
 def test_list_repos_handles_list_response() -> None:
     """list_repos passes through a bare list JSON response unchanged."""
     fake_list = [{"name": "test2"}]
-    result = fake_list.get("repos", fake_list) if isinstance(fake_list, dict) else fake_list  # type: ignore[union-attr]
+    result = (
+        fake_list.get("repos", fake_list) if isinstance(fake_list, dict) else fake_list
+    )  # type: ignore[union-attr]
     assert result == fake_list
 
 

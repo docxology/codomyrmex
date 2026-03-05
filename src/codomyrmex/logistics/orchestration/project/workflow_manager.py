@@ -25,6 +25,7 @@ logger = get_logger(__name__)
 
 class WorkflowStatus(Enum):
     """Status of a workflow."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -35,6 +36,7 @@ class WorkflowStatus(Enum):
 @dataclass
 class WorkflowStep:
     """Definition of a step in a workflow."""
+
     name: str
     module: str
     action: str
@@ -49,6 +51,7 @@ class WorkflowStep:
 @dataclass
 class WorkflowExecution:
     """Track execution of a workflow."""
+
     workflow_name: str
     execution_id: str
     start_time: datetime = field(default_factory=lambda: datetime.now(UTC))
@@ -68,7 +71,9 @@ class WorkflowExecution:
 class WorkflowManager:
     """Manages workflow definitions and execution."""
 
-    def __init__(self, persistence_dir: Path | None = None, config_dir: Path | None = None):
+    def __init__(
+        self, persistence_dir: Path | None = None, config_dir: Path | None = None
+    ):
         """Initialize the workflow manager.
 
         Args:
@@ -83,7 +88,9 @@ class WorkflowManager:
         self.persistence_dir.mkdir(parents=True, exist_ok=True)
 
         # Config directory for workflow JSON definitions
-        self.config_dir: Path = config_dir or (Path.cwd() / "config" / "workflows" / "production")
+        self.config_dir: Path = config_dir or (
+            Path.cwd() / "config" / "workflows" / "production"
+        )
         self.config_dir.mkdir(parents=True, exist_ok=True)
 
         # Load any workflow definitions found in config_dir
@@ -112,10 +119,7 @@ class WorkflowManager:
             raise ValueError(f"Workflow not found: {name}")
 
         execution_id = str(uuid.uuid4())
-        execution = WorkflowExecution(
-            workflow_name=name,
-            execution_id=execution_id
-        )
+        execution = WorkflowExecution(workflow_name=name, execution_id=execution_id)
         self.executions[execution_id] = execution
         execution.status = WorkflowStatus.RUNNING
 
@@ -132,7 +136,9 @@ class WorkflowManager:
                 step_params.update(params)
 
                 # Resolve dependencies to task IDs
-                task_deps = [step_tasks[dep] for dep in step.dependencies if dep in step_tasks]
+                task_deps = [
+                    step_tasks[dep] for dep in step.dependencies if dep in step_tasks
+                ]
 
                 task = Task(
                     name=step.name,
@@ -141,7 +147,7 @@ class WorkflowManager:
                     parameters=step_params,
                     dependencies=task_deps,
                     timeout=step.timeout,
-                    retry_count=step.retry_count
+                    retry_count=step.retry_count,
                 )
 
                 task_id = self.task_orchestrator.submit_task(task)
@@ -188,15 +194,17 @@ class WorkflowManager:
 
                 steps: list[WorkflowStep] = []
                 for raw in raw_steps:
-                    steps.append(WorkflowStep(
-                        name=raw.get("name", ""),
-                        module=raw.get("module", ""),
-                        action=raw.get("action", ""),
-                        parameters=raw.get("parameters", {}),
-                        dependencies=raw.get("dependencies", []),
-                        timeout=raw.get("timeout"),
-                        retry_count=raw.get("max_retries", 0),
-                    ))
+                    steps.append(
+                        WorkflowStep(
+                            name=raw.get("name", ""),
+                            module=raw.get("module", ""),
+                            action=raw.get("action", ""),
+                            parameters=raw.get("parameters", {}),
+                            dependencies=raw.get("dependencies", []),
+                            timeout=raw.get("timeout"),
+                            retry_count=raw.get("max_retries", 0),
+                        )
+                    )
 
                 self.workflows[workflow_name] = steps
                 logger.info(f"Loaded workflow '{workflow_name}' from {workflow_file}")
@@ -218,6 +226,7 @@ class WorkflowManager:
             A populated :class:`WorkflowDAG` instance.
         """
         from .workflow_dag import WorkflowDAG
+
         return WorkflowDAG(tasks)
 
     def validate_workflow_dependencies(self, tasks: list[dict[str, Any]]) -> list[str]:
@@ -230,9 +239,12 @@ class WorkflowManager:
             List of error strings. Empty list means valid.
         """
         from .parallel_executor import validate_workflow_dependencies
+
         return validate_workflow_dependencies(tasks)
 
-    def get_workflow_execution_order(self, tasks: list[dict[str, Any]]) -> list[list[str]]:
+    def get_workflow_execution_order(
+        self, tasks: list[dict[str, Any]]
+    ) -> list[list[str]]:
         """Get the topological execution order for a set of tasks.
 
         Args:
@@ -243,6 +255,7 @@ class WorkflowManager:
             in parallel at that level.
         """
         from .parallel_executor import get_workflow_execution_order
+
         return get_workflow_execution_order(tasks)
 
     def execute_parallel_workflow(self, workflow: dict[str, Any]) -> dict[str, Any]:
@@ -267,11 +280,11 @@ class WorkflowManager:
             results = executor.execute_tasks(tasks, dependencies)
 
         completed_count = sum(
-            1 for r in results.values()
-            if r.status.value == "completed"
+            1 for r in results.values() if r.status.value == "completed"
         )
         failed_count = sum(
-            1 for r in results.values()
+            1
+            for r in results.values()
             if r.status.value in ("failed", "timeout", "cancelled")
         )
 
@@ -307,4 +320,3 @@ def get_workflow_manager() -> WorkflowManager:
     if _workflow_manager is None:
         _workflow_manager = WorkflowManager()
     return _workflow_manager
-

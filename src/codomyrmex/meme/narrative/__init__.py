@@ -15,13 +15,13 @@ from codomyrmex.meme.narrative.structure import (
 )
 
 __all__ = [
+    "Archetype",
     "Narrative",
     "NarrativeArc",
-    "Archetype",
-    "NarrativeTemplate",
     "NarrativeEngine",
-    "heros_journey_arc",
-    "freytag_pyramid_arc",
+    "NarrativeTemplate",
     "fichtean_curve_arc",
+    "freytag_pyramid_arc",
+    "heros_journey_arc",
     "synthesize_myth",
 ]

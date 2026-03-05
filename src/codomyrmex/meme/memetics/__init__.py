@@ -24,8 +24,15 @@ from codomyrmex.meme.memetics.mutation import (
 )
 
 __all__ = [
-    "Meme", "Memeplex", "MemeticCode", "FitnessMap",
+    "FitnessMap",
+    "Meme",
+    "Memeplex",
+    "MemeticCode",
     "MemeticEngine",
-    "semantic_drift", "recombine", "splice",
-    "virality_score", "robustness_score", "decay_rate",
+    "decay_rate",
+    "recombine",
+    "robustness_score",
+    "semantic_drift",
+    "splice",
+    "virality_score",
 ]

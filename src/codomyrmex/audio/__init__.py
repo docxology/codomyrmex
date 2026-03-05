@@ -168,25 +168,25 @@ __all__ = [
 if STT_AVAILABLE:
     __all__.extend(
         [
-            "Transcriber",
-            "TranscriptionResult",
-            "TranscriptionConfig",
-            "Segment",
-            "Word",
-            "WhisperModelSize",
             "STTProvider",
+            "Segment",
+            "Transcriber",
+            "TranscriptionConfig",
+            "TranscriptionResult",
+            "WhisperModelSize",
+            "Word",
         ]
     )
 
 if TTS_AVAILABLE:
     __all__.extend(
         [
-            "Synthesizer",
-            "SynthesisResult",
-            "TTSConfig",
             "AudioFormat",
-            "VoiceInfo",
-            "VoiceGender",
+            "SynthesisResult",
+            "Synthesizer",
+            "TTSConfig",
             "TTSProvider",
+            "VoiceGender",
+            "VoiceInfo",
         ]
     )

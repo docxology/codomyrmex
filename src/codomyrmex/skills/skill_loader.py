@@ -14,6 +14,7 @@ except ImportError:
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -23,7 +24,9 @@ except ImportError:
 class SkillLoader:
     """Loads and parses YAML skill files with merge logic."""
 
-    def __init__(self, upstream_dir: Path, custom_dir: Path, cache_dir: Path | None = None):
+    def __init__(
+        self, upstream_dir: Path, custom_dir: Path, cache_dir: Path | None = None
+    ):
         """
         Initialize SkillLoader.
 
@@ -78,7 +81,9 @@ class SkillLoader:
             logger.error(f"Error loading skill file {path}: {e}")
             return None
 
-    def get_skill_paths(self, category: str, name: str) -> tuple[Path | None, Path | None]:
+    def get_skill_paths(
+        self, category: str, name: str
+    ) -> tuple[Path | None, Path | None]:
         """
         Get paths for upstream and custom skill files.
 
@@ -220,7 +225,9 @@ class SkillLoader:
 
         return all_skills
 
-    def merge_skills(self, upstream: dict[str, Any], custom: dict[str, Any]) -> dict[str, Any]:
+    def merge_skills(
+        self, upstream: dict[str, Any], custom: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Merge upstream and custom skills (custom overrides upstream).
 

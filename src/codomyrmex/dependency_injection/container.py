@@ -153,7 +153,11 @@ class ScopeContext:
                         try:
                             method()
                         except Exception as e:
-                            logger.debug("Error disposing scoped instance via %s: %s", method_name, e)
+                            logger.debug(
+                                "Error disposing scoped instance via %s: %s",
+                                method_name,
+                                e,
+                            )
                         break
             self._instances.clear()
 
@@ -188,17 +192,19 @@ class ServiceDescriptor:
 
     def is_instance_registration(self) -> bool:
         """Return True if this descriptor was created via register_instance."""
-        return self.instance is not None and self.implementation is None and self.factory is None
+        return (
+            self.instance is not None
+            and self.implementation is None
+            and self.factory is None
+        )
 
 
 class ResolutionError(Exception):
     """Raised when the container cannot resolve a requested type."""
-    pass
 
 
 class CircularDependencyError(ResolutionError):
     """Raised when a circular dependency chain is detected during resolution."""
-    pass
 
 
 class Container:
@@ -427,9 +433,7 @@ class Container:
         scope_ctx = self._current_scope()
         return [self._resolve_descriptor(d, scope_ctx) for d in descriptors]
 
-    def _resolve_with_scope(
-        self, interface: type[T], scope_context: ScopeContext
-    ) -> T:
+    def _resolve_with_scope(self, interface: type[T], scope_context: ScopeContext) -> T:
         """Resolve with an explicit scope context.
 
         Called internally by ScopeContext.resolve() and by resolve() when
@@ -472,7 +476,9 @@ class Container:
 
         if descriptor is None:
             raise KeyError(
-                f"No registration found for {interface.__name__}" + (f" (name='{name}')" if name else "") + ". "
+                f"No registration found for {interface.__name__}"
+                + (f" (name='{name}')" if name else "")
+                + ". "
                 "Register it with container.register() first."
             )
 
@@ -491,7 +497,10 @@ class Container:
         resolving_set = self._get_resolving_set()
         res_key = (interface, name)
         if res_key in resolving_set:
-            chain = " -> ".join(f"{t[0].__name__}" + (f"('{t[1]}')" if t[1] else "") for t in resolving_set)
+            chain = " -> ".join(
+                f"{t[0].__name__}" + (f"('{t[1]}')" if t[1] else "")
+                for t in resolving_set
+            )
             raise CircularDependencyError(
                 f"Circular dependency detected: {chain} -> {interface.__name__}"
             )
@@ -559,7 +568,9 @@ class Container:
             kwargs = {}
             for name, hint in inject_params.items():
                 try:
-                    kwargs[name] = self._resolve_internal(hint, name=None, scope_context=scope_context)
+                    kwargs[name] = self._resolve_internal(
+                        hint, name=None, scope_context=scope_context
+                    )
                 except KeyError:
                     pass
             return impl(**kwargs)
@@ -583,7 +594,9 @@ class Container:
             hint = hints.get(name)
             if hint is not None:
                 try:
-                    kwargs[name] = self._resolve_internal(hint, name=None, scope_context=scope_context)
+                    kwargs[name] = self._resolve_internal(
+                        hint, name=None, scope_context=scope_context
+                    )
                 except KeyError:
                     if param.default is inspect.Parameter.empty:
                         # Required but not registered
@@ -610,7 +623,9 @@ class Container:
                 return (interface, name) in self._named_registry
             return interface in self._registry
 
-    def get_descriptor(self, interface: type[Any], name: str | None = None) -> ServiceDescriptor | None:
+    def get_descriptor(
+        self, interface: type[Any], name: str | None = None
+    ) -> ServiceDescriptor | None:
         """Retrieve the ServiceDescriptor for a registration, if it exists.
 
         Args:

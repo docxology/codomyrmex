@@ -67,7 +67,9 @@ def test_loader_module_rule() -> None:
 
 
 def test_loader_cross_module_rule() -> None:
-    rule = RuleLoader.load(RULES_ROOT / "cross-module" / "logging_monitoring.cursorrules")
+    rule = RuleLoader.load(
+        RULES_ROOT / "cross-module" / "logging_monitoring.cursorrules"
+    )
     assert rule.priority == RulePriority.CROSS_MODULE
 
 
@@ -168,14 +170,20 @@ def test_engine_applicable_with_module() -> None:
     assert RulePriority.GENERAL in priorities
     assert RulePriority.MODULE in priorities
     # MODULE rule should appear after GENERAL (lower value = higher priority = earlier)
-    module_idx = next(i for i, r in enumerate(resolved) if r.priority == RulePriority.MODULE)
-    general_idx = next(i for i, r in enumerate(resolved) if r.priority == RulePriority.GENERAL)
+    module_idx = next(
+        i for i, r in enumerate(resolved) if r.priority == RulePriority.MODULE
+    )
+    general_idx = next(
+        i for i, r in enumerate(resolved) if r.priority == RulePriority.GENERAL
+    )
     assert module_idx < general_idx
 
 
 def test_engine_applicable_with_py_file() -> None:
     engine = RuleEngine(RULES_ROOT)
-    rule_set = engine.get_applicable_rules(file_path="memory.py", module_name="agentic_memory")
+    rule_set = engine.get_applicable_rules(
+        file_path="memory.py", module_name="agentic_memory"
+    )
     resolved = rule_set.resolved()
     priorities = [r.priority for r in resolved]
     assert RulePriority.FILE_SPECIFIC in priorities

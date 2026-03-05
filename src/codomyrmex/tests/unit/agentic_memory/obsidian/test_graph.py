@@ -1,6 +1,5 @@
 """Tests for Obsidian link graph analysis."""
 
-
 from codomyrmex.agentic_memory.obsidian.graph import (
     build_link_graph,
     find_broken_links,
@@ -14,6 +13,7 @@ from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 class TestBuildLinkGraph:
     """Test suite for BuildLinkGraph."""
+
     def test_graph_has_nodes(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         graph = build_link_graph(vault)
@@ -33,6 +33,7 @@ class TestBuildLinkGraph:
 
 class TestBacklinks:
     """Test suite for Backlinks."""
+
     def test_backlinks_found(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         # Simple Note links to My Test Note
@@ -54,6 +55,7 @@ class TestBacklinks:
 
 class TestForwardLinks:
     """Test suite for ForwardLinks."""
+
     def test_forward_links(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         # Simple Note links to My Test Note
@@ -64,6 +66,7 @@ class TestForwardLinks:
 
 class TestOrphans:
     """Test suite for Orphans."""
+
     def test_finds_orphans(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         orphans = find_orphans(vault)
@@ -75,6 +78,7 @@ class TestOrphans:
 
 class TestBrokenLinks:
     """Test suite for BrokenLinks."""
+
     def test_finds_broken(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         broken = find_broken_links(vault)
@@ -94,6 +98,7 @@ class TestBrokenLinks:
 
 class TestLinkStats:
     """Test suite for LinkStats."""
+
     def test_stats_structure(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         stats = get_link_stats(vault)

@@ -120,8 +120,7 @@ class TestExtractExports:
     def test_extracts_all_list(self, tmp_path: Path):
         init = tmp_path / "__init__.py"
         init.write_text(
-            '"""My module docstring."""\n'
-            '__all__ = ["MyClass", "my_func", "CONSTANT"]\n'
+            '"""My module docstring."""\n__all__ = ["MyClass", "my_func", "CONSTANT"]\n'
         )
         result = extract_exports(init)
         assert "MyClass" in result["all"]
@@ -269,8 +268,7 @@ class TestGeneratePaiMd:
             '__all__ = ["MyClass", "do_stuff"]\n'
         )
         (d / "README.md").write_text(
-            f"# {name.title()}\n\n"
-            f"This module does important things for {name}.\n"
+            f"# {name.title()}\n\nThis module does important things for {name}.\n"
         )
         return d
 
@@ -501,7 +499,9 @@ class TestPlaceholderCheckFindPlaceholders:
     def test_no_placeholders_returns_empty(self, tmp_path: Path):
         from codomyrmex.documentation.scripts.placeholder_check import find_placeholders
 
-        result = find_placeholders("This is clean content with no placeholders.", tmp_path / "clean.md")
+        result = find_placeholders(
+            "This is clean content with no placeholders.", tmp_path / "clean.md"
+        )
         assert result == []
 
     def test_detects_module_name_placeholder(self, tmp_path: Path):
@@ -737,10 +737,7 @@ class TestFixAgentsStructureFixAgentsFile:
 
         (tmp_path / "subcomp").mkdir()
         agents = tmp_path / "AGENTS.md"
-        agents.write_text(
-            "# AGENTS\n\n"
-            "## Operating Contracts\n- Stay aligned.\n"
-        )
+        agents.write_text("# AGENTS\n\n## Operating Contracts\n- Stay aligned.\n")
         result = fix_agents_file(agents)
         assert result is True
         content = agents.read_text()

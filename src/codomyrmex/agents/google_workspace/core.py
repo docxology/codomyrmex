@@ -121,8 +121,13 @@ class GoogleWorkspaceRunner:
     ) -> dict[str, str]:
         """Run a gws command and return raw output dict."""
         cmd = self._build_cmd(
-            service, resource, method,
-            params=params, body=body, page_all=page_all, dry_run=dry_run,
+            service,
+            resource,
+            method,
+            params=params,
+            body=body,
+            page_all=page_all,
+            dry_run=dry_run,
         )
         proc = self._run_subprocess(cmd)
         return {

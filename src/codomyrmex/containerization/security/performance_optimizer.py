@@ -17,6 +17,7 @@ from typing import Any
 @dataclass
 class ContainerMetrics:
     """Container performance metrics."""
+
     container_id: str
     cpu_percent: float = 0.0
     memory_usage_mb: float = 0.0
@@ -42,7 +43,7 @@ class ContainerMetrics:
             "memory_percent": self.memory_percent,
             "network_io_mb": self.network_io_mb,
             "disk_io_mb": self.disk_io_mb,
-            "timestamp": self.timestamp.isoformat()
+            "timestamp": self.timestamp.isoformat(),
         }
 
 
@@ -109,7 +110,9 @@ class ContainerOptimizer:
         try:
             result = subprocess.run(
                 [
-                    cli, "stats", "--no-stream",
+                    cli,
+                    "stats",
+                    "--no-stream",
                     "--format",
                     (
                         '{"id":"{{.ID}}","cpu":"{{.CPUPerc}}",'
@@ -118,7 +121,10 @@ class ContainerOptimizer:
                     ),
                     container_id,
                 ],
-                check=True, capture_output=True, text=True, timeout=15,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=15,
             )
             raw = json.loads(result.stdout.strip())
 
@@ -129,16 +135,24 @@ class ContainerOptimizer:
                 """Parse strings like '128MiB / 1GiB' or '1.5GB' → MB."""
                 if not s or s == "--":
                     return 0.0
-                part = s.split("/")[0].strip()
-                for unit, mult in [("GiB", 1024.0), ("MiB", 1.0), ("GB", 953.674),
-                                   ("MB", 1.0), ("kB", 0.001), ("B", 0.000001)]:
+                part = s.split("/", maxsplit=1)[0].strip()
+                for unit, mult in [
+                    ("GiB", 1024.0),
+                    ("MiB", 1.0),
+                    ("GB", 953.674),
+                    ("MB", 1.0),
+                    ("kB", 0.001),
+                    ("B", 0.000001),
+                ]:
                     if part.endswith(unit):
                         return float(part[: -len(unit)]) * mult
                 return 0.0
 
             mem_parts = raw.get("mem_usage", "").split("/")
             mem_usage_mb = _parse_mb(mem_parts[0].strip()) if mem_parts else 0.0
-            mem_limit_mb = _parse_mb(mem_parts[1].strip()) if len(mem_parts) > 1 else 0.0
+            mem_limit_mb = (
+                _parse_mb(mem_parts[1].strip()) if len(mem_parts) > 1 else 0.0
+            )
 
             net_parts = raw.get("net_io", "").split("/")
             net_mb = _parse_mb(net_parts[0].strip()) if net_parts else 0.0
@@ -189,22 +203,32 @@ class ContainerOptimizer:
         try:
             result = subprocess.run(
                 [cli, "inspect", "--format", "{{json .HostConfig}}", container_id],
-                check=True, capture_output=True, text=True, timeout=10,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
             host_cfg = json.loads(result.stdout.strip())
             cpu_shares = host_cfg.get("CpuShares", 0)
             memory_bytes = host_cfg.get("Memory", 0)
             memory_mb = memory_bytes / (1024 * 1024) if memory_bytes else 0
 
-            recommendations: dict[str, Any] = {"container_id": container_id, "status": "analyzed"}
+            recommendations: dict[str, Any] = {
+                "container_id": container_id,
+                "status": "analyzed",
+            }
             if cpu_shares == 0:
                 recommendations["cpu_shares"] = 1024
-                recommendations["cpu_note"] = "No CPU shares set; defaulting to 1024 (relative weight)"
+                recommendations["cpu_note"] = (
+                    "No CPU shares set; defaulting to 1024 (relative weight)"
+                )
             else:
                 recommendations["cpu_shares"] = cpu_shares
             if memory_mb == 0:
                 recommendations["memory_limit"] = "512m"
-                recommendations["memory_note"] = "No memory limit set; recommend 512m minimum"
+                recommendations["memory_note"] = (
+                    "No memory limit set; recommend 512m minimum"
+                )
             else:
                 recommendations["memory_limit"] = f"{int(memory_mb)}m"
             return recommendations
@@ -260,8 +284,7 @@ class ContainerOptimizer:
 
 
 def optimize_containers(
-    container_ids: list[str],
-    optimizer: ContainerOptimizer | None = None
+    container_ids: list[str], optimizer: ContainerOptimizer | None = None
 ) -> dict[str, dict[str, Any]]:
     """
     Optimize multiple containers.

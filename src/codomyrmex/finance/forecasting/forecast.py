@@ -77,14 +77,14 @@ class Forecaster:
             ForecastError: If alpha is out of range or data is empty.
         """
         alpha_d = Decimal(str(alpha))
-        if not (Decimal("0") < alpha_d < Decimal("1")):
+        if not (Decimal(0) < alpha_d < Decimal(1)):
             raise ForecastError("Alpha must be between 0 and 1 (exclusive).")
         if not self.data:
             raise ForecastError("No data to smooth.")
 
         smoothed: list[Decimal] = [self.data[0]]
         for i in range(1, len(self.data)):
-            s = alpha_d * self.data[i] + (Decimal("1") - alpha_d) * smoothed[-1]
+            s = alpha_d * self.data[i] + (Decimal(1) - alpha_d) * smoothed[-1]
             smoothed.append(s)
         return smoothed
 
@@ -105,12 +105,11 @@ class Forecaster:
             raise ForecastError("Need at least 2 data points for linear trend.")
 
         x_vals = [Decimal(str(x)) for x in range(n)]
-        x_mean = sum(x_vals, Decimal("0")) / Decimal(str(n))
-        y_mean = sum(self.data, Decimal("0")) / Decimal(str(n))
+        x_mean = sum(x_vals, Decimal(0)) / Decimal(str(n))
+        y_mean = sum(self.data, Decimal(0)) / Decimal(str(n))
 
         ss_xy = sum(
-            (x - x_mean) * (y - y_mean)
-            for x, y in zip(x_vals, self.data, strict=False)
+            (x - x_mean) * (y - y_mean) for x, y in zip(x_vals, self.data, strict=False)
         )
         ss_xx = sum((x - x_mean) ** 2 for x in x_vals)
         ss_yy = sum((y - y_mean) ** 2 for y in self.data)
@@ -172,7 +171,7 @@ class Forecaster:
 
         projections = []
         for i in range(periods):
-            avg = sum(results[i], Decimal("0")) / Decimal(str(iterations))
+            avg = sum(results[i], Decimal(0)) / Decimal(str(iterations))
             projections.append(avg)
 
         return {
@@ -202,7 +201,7 @@ class Forecaster:
             total_cost += qty * cost
 
         total_pnl = total_value - total_cost
-        pnl_percent = (total_pnl / total_cost * 100) if total_cost > 0 else Decimal("0")
+        pnl_percent = (total_pnl / total_cost * 100) if total_cost > 0 else Decimal(0)
 
         # Simplified VaR 95% (Total Value * 1.645 * estimated volatility)
         # Using a fixed 5% volatility for this implementation
@@ -257,13 +256,13 @@ class Forecaster:
             last_value = ma[-1]
             return [last_value] * periods
 
-        elif method == "exponential_smoothing":
+        if method == "exponential_smoothing":
             alpha = kwargs.get("alpha", 0.3)
             smoothed = self.exponential_smoothing(alpha)
             last_value = smoothed[-1]
             return [last_value] * periods
 
-        elif method == "linear_trend":
+        if method == "linear_trend":
             trend = self.linear_trend()
             n = len(self.data)
             return [
@@ -271,12 +270,11 @@ class Forecaster:
                 for i in range(periods)
             ]
 
-        elif method == "monte_carlo":
+        if method == "monte_carlo":
             proj = self.project(periods=periods)
             return proj["projections"]
 
-        else:
-            raise ForecastError(
-                f"Unknown method '{method}'. "
-                "Choose from: moving_average, exponential_smoothing, linear_trend."
-            )
+        raise ForecastError(
+            f"Unknown method '{method}'. "
+            "Choose from: moving_average, exponential_smoothing, linear_trend."
+        )

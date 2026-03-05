@@ -28,7 +28,11 @@ def _run(cmd: str, timeout: float = 10.0) -> str:
     """Run a shell command and return stripped stdout."""
     try:
         result = subprocess.run(
-            cmd, shell=True, capture_output=True, text=True, timeout=timeout,
+            cmd,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
         )
         return result.stdout.strip()
     except Exception:
@@ -64,6 +68,7 @@ class MacOSProvider(OSProviderBase):
         m = re.search(r"sec\s*=\s*(\d+)", boot_raw)
         if m:
             import time
+
             uptime = time.time() - int(m.group(1))
 
         return SystemInfo(
@@ -100,15 +105,17 @@ class MacOSProvider(OSProviderBase):
             elif stat.startswith("Z"):
                 status = ProcessStatus.ZOMBIE
 
-            processes.append(ProcessInfo(
-                pid=pid,
-                name=os.path.basename(comm),
-                status=status,
-                cpu_percent=float(cpu) if cpu.replace(".", "").isdigit() else 0.0,
-                memory_bytes=int(rss) * 1024 if rss.isdigit() else 0,
-                user=user,
-                command=comm,
-            ))
+            processes.append(
+                ProcessInfo(
+                    pid=pid,
+                    name=os.path.basename(comm),
+                    status=status,
+                    cpu_percent=float(cpu) if cpu.replace(".", "").isdigit() else 0.0,
+                    memory_bytes=int(rss) * 1024 if rss.isdigit() else 0,
+                    user=user,
+                    command=comm,
+                )
+            )
         return processes
 
     # ── Disk Usage ──────────────────────────────────────────────────
@@ -135,15 +142,17 @@ class MacOSProvider(OSProviderBase):
             except ValueError:
                 percent = 0.0
             mountpoint = parts[-1]
-            disks.append(DiskInfo(
-                device=device,
-                mountpoint=mountpoint,
-                fstype="apfs",  # predominant on modern macOS
-                total_bytes=total,
-                used_bytes=used,
-                free_bytes=available,
-                percent_used=percent,
-            ))
+            disks.append(
+                DiskInfo(
+                    device=device,
+                    mountpoint=mountpoint,
+                    fstype="apfs",  # predominant on modern macOS
+                    total_bytes=total,
+                    used_bytes=used,
+                    free_bytes=available,
+                    percent_used=percent,
+                )
+            )
         return disks
 
     # ── Services ────────────────────────────────────────────────────
@@ -163,12 +172,14 @@ class MacOSProvider(OSProviderBase):
             except ValueError:
                 pid = None
             status = ServiceStatus.RUNNING if pid else ServiceStatus.STOPPED
-            services.append(ServiceInfo(
-                name=label,
-                status=status,
-                pid=pid,
-                enabled=True,
-            ))
+            services.append(
+                ServiceInfo(
+                    name=label,
+                    status=status,
+                    pid=pid,
+                    enabled=True,
+                )
+            )
         return services
 
     # ── Network ─────────────────────────────────────────────────────
@@ -186,12 +197,14 @@ class MacOSProvider(OSProviderBase):
             m = re.match(r"^(\w[\w\d]*):.*", line)
             if m:
                 if current_iface:
-                    interfaces.append(NetworkInfo(
-                        interface=current_iface,
-                        ip_address=ip_addr,
-                        mac_address=mac_addr,
-                        is_up=is_up,
-                    ))
+                    interfaces.append(
+                        NetworkInfo(
+                            interface=current_iface,
+                            ip_address=ip_addr,
+                            mac_address=mac_addr,
+                            is_up=is_up,
+                        )
+                    )
                 current_iface = m.group(1)
                 ip_addr = ""
                 mac_addr = ""
@@ -209,11 +222,13 @@ class MacOSProvider(OSProviderBase):
                     mac_addr = parts[1]
 
         if current_iface:
-            interfaces.append(NetworkInfo(
-                interface=current_iface,
-                ip_address=ip_addr,
-                mac_address=mac_addr,
-                is_up=is_up,
-            ))
+            interfaces.append(
+                NetworkInfo(
+                    interface=current_iface,
+                    ip_address=ip_addr,
+                    mac_address=mac_addr,
+                    is_up=is_up,
+                )
+            )
 
         return interfaces

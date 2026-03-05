@@ -11,6 +11,7 @@ logger = get_logger(__name__)
 
 class PracticeCategory(Enum):
     """Categories of security best practices."""
+
     AUTHENTICATION = "authentication"
     AUTHORIZATION = "authorization"
     DATA_PROTECTION = "data_protection"
@@ -25,6 +26,7 @@ class PracticeCategory(Enum):
 
 class PracticePriority(Enum):
     """Priority levels for best practices."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -59,11 +61,11 @@ BEST_PRACTICES = {
         examples=[
             "Password policy: 12+ characters, uppercase, lowercase, numbers, symbols",
             "Password history: prevent reuse of last 5 passwords",
-            "Password expiration: 90 days for standard users, 30 days for privileged users"
+            "Password expiration: 90 days for standard users, 30 days for privileged users",
         ],
         related_practices=["multi_factor_authentication", "password_manager"],
         compliance_requirements=["NIST 800-63B", "PCI DSS 8.2"],
-        tools=["Password policy enforcement", "Password strength meters"]
+        tools=["Password policy enforcement", "Password strength meters"],
     ),
     "multi_factor_authentication": SecurityBestPractice(
         name="Multi-Factor Authentication",
@@ -76,11 +78,11 @@ BEST_PRACTICES = {
             "SMS-based OTP",
             "Authenticator app (TOTP)",
             "Hardware security keys",
-            "Biometric authentication"
+            "Biometric authentication",
         ],
         related_practices=["strong_passwords", "single_sign_on"],
         compliance_requirements=["NIST 800-63B", "PCI DSS 8.3"],
-        tools=["MFA providers", "Authenticator apps", "Hardware tokens"]
+        tools=["MFA providers", "Authenticator apps", "Hardware tokens"],
     ),
     "encryption_at_rest": SecurityBestPractice(
         name="Encryption at Rest",
@@ -93,11 +95,15 @@ BEST_PRACTICES = {
             "Database transparent encryption",
             "File system encryption",
             "Cloud storage encryption",
-            "Backup encryption"
+            "Backup encryption",
         ],
         related_practices=["encryption_in_transit", "key_management"],
         compliance_requirements=["PCI DSS 3.4", "HIPAA", "GDPR"],
-        tools=["Database encryption", "File system encryption", "Cloud encryption services"]
+        tools=[
+            "Database encryption",
+            "File system encryption",
+            "Cloud encryption services",
+        ],
     ),
     "encryption_in_transit": SecurityBestPractice(
         name="Encryption in Transit",
@@ -110,11 +116,11 @@ BEST_PRACTICES = {
             "HTTPS for web traffic",
             "TLS for database connections",
             "VPN for remote access",
-            "mTLS for service-to-service communication"
+            "mTLS for service-to-service communication",
         ],
         related_practices=["encryption_at_rest", "certificate_management"],
         compliance_requirements=["PCI DSS 4.1", "HIPAA"],
-        tools=["TLS/SSL", "VPN", "Certificate management"]
+        tools=["TLS/SSL", "VPN", "Certificate management"],
     ),
     "regular_updates": SecurityBestPractice(
         name="Regular Updates",
@@ -127,11 +133,15 @@ BEST_PRACTICES = {
             "Monthly security updates",
             "Critical patches within 48 hours",
             "Automated dependency updates",
-            "Vulnerability scanning"
+            "Vulnerability scanning",
         ],
         related_practices=["vulnerability_management", "dependency_scanning"],
         compliance_requirements=["PCI DSS 6.2", "ISO 27001 A.12.6"],
-        tools=["Patch management systems", "Vulnerability scanners", "Dependency checkers"]
+        tools=[
+            "Patch management systems",
+            "Vulnerability scanners",
+            "Dependency checkers",
+        ],
     ),
     "input_validation": SecurityBestPractice(
         name="Input Validation",
@@ -145,11 +155,11 @@ BEST_PRACTICES = {
             "Length restrictions",
             "Whitelist validation",
             "Parameterized queries",
-            "Output encoding"
+            "Output encoding",
         ],
         related_practices=["output_encoding", "secure_coding"],
         compliance_requirements=["OWASP Top 10 A03", "PCI DSS 6.5"],
-        tools=["Input validation libraries", "Static analysis tools", "WAF"]
+        tools=["Input validation libraries", "Static analysis tools", "WAF"],
     ),
     "least_privilege_access": SecurityBestPractice(
         name="Least Privilege Access",
@@ -162,11 +172,11 @@ BEST_PRACTICES = {
             "Role-based access control",
             "Regular access reviews",
             "Just-in-time access",
-            "Privileged access management"
+            "Privileged access management",
         ],
         related_practices=["separation_of_duties", "access_reviews"],
         compliance_requirements=["ISO 27001 A.9.2", "NIST CSF PR.AC-4"],
-        tools=["IAM systems", "PAM solutions", "Access review tools"]
+        tools=["IAM systems", "PAM solutions", "Access review tools"],
     ),
     "secure_coding": SecurityBestPractice(
         name="Secure Coding",
@@ -179,11 +189,11 @@ BEST_PRACTICES = {
             "OWASP Secure Coding Practices",
             "Code review processes",
             "Static analysis tools",
-            "Security training for developers"
+            "Security training for developers",
         ],
         related_practices=["input_validation", "code_review", "security_testing"],
         compliance_requirements=["OWASP Top 10", "PCI DSS 6.5"],
-        tools=["Static analysis tools", "Code review tools", "Security linters"]
+        tools=["Static analysis tools", "Code review tools", "Security linters"],
     ),
     "security_monitoring": SecurityBestPractice(
         name="Security Monitoring",
@@ -197,11 +207,11 @@ BEST_PRACTICES = {
             "Log aggregation",
             "Real-time alerting",
             "Security event correlation",
-            "Threat intelligence integration"
+            "Threat intelligence integration",
         ],
         related_practices=["incident_response", "audit_logging"],
         compliance_requirements=["ISO 27001 A.12.4", "PCI DSS 10"],
-        tools=["SIEM", "Log management", "Security analytics"]
+        tools=["SIEM", "Log management", "Security analytics"],
     ),
     "incident_response": SecurityBestPractice(
         name="Incident Response",
@@ -215,11 +225,11 @@ BEST_PRACTICES = {
             "Response team roles",
             "Incident playbooks",
             "Regular drills and exercises",
-            "Post-incident reviews"
+            "Post-incident reviews",
         ],
         related_practices=["security_monitoring", "backup_recovery"],
         compliance_requirements=["ISO 27001 A.16", "NIST CSF RS"],
-        tools=["Incident management systems", "Forensic tools", "Communication tools"]
+        tools=["Incident management systems", "Forensic tools", "Communication tools"],
     ),
     "backup_recovery": SecurityBestPractice(
         name="Backup and Recovery",
@@ -233,11 +243,11 @@ BEST_PRACTICES = {
             "Off-site backup storage",
             "Encrypted backups",
             "Regular recovery testing",
-            "Backup retention policies"
+            "Backup retention policies",
         ],
         related_practices=["disaster_recovery", "encryption_at_rest"],
         compliance_requirements=["ISO 27001 A.12.3", "PCI DSS 12.10"],
-        tools=["Backup systems", "Recovery tools", "Backup verification"]
+        tools=["Backup systems", "Recovery tools", "Backup verification"],
     ),
     "vulnerability_management": SecurityBestPractice(
         name="Vulnerability Management",
@@ -251,11 +261,11 @@ BEST_PRACTICES = {
             "Automated scanning",
             "Risk-based prioritization",
             "Remediation tracking",
-            "Vulnerability reporting"
+            "Vulnerability reporting",
         ],
         related_practices=["regular_updates", "security_testing"],
         compliance_requirements=["ISO 27001 A.12.6", "PCI DSS 11.2"],
-        tools=["Vulnerability scanners", "Patch management", "Vulnerability databases"]
+        tools=["Vulnerability scanners", "Patch management", "Vulnerability databases"],
     ),
     "secure_configuration": SecurityBestPractice(
         name="Secure Configuration",
@@ -269,11 +279,11 @@ BEST_PRACTICES = {
             "Configuration hardening guides",
             "Regular configuration audits",
             "Change management",
-            "Configuration baselines"
+            "Configuration baselines",
         ],
         related_practices=["secure_by_default", "configuration_management"],
         compliance_requirements=["ISO 27001 A.12.1", "CIS Controls"],
-        tools=["Configuration management", "Hardening guides", "Compliance scanners"]
+        tools=["Configuration management", "Hardening guides", "Compliance scanners"],
     ),
     "access_reviews": SecurityBestPractice(
         name="Access Reviews",
@@ -286,11 +296,11 @@ BEST_PRACTICES = {
             "Quarterly access reviews",
             "Automated access certification",
             "Privileged access reviews",
-            "Account cleanup processes"
+            "Account cleanup processes",
         ],
         related_practices=["least_privilege_access", "separation_of_duties"],
         compliance_requirements=["ISO 27001 A.9.2", "SOX"],
-        tools=["Access review tools", "IAM systems", "Certification platforms"]
+        tools=["Access review tools", "IAM systems", "Certification platforms"],
     ),
     "secure_development_lifecycle": SecurityBestPractice(
         name="Secure Development Lifecycle",
@@ -304,11 +314,11 @@ BEST_PRACTICES = {
             "Threat modeling",
             "Secure coding practices",
             "Security testing",
-            "Security code reviews"
+            "Security code reviews",
         ],
         related_practices=["secure_coding", "security_testing", "threat_modeling"],
         compliance_requirements=["OWASP SAMM", "BSIMM"],
-        tools=["SDLC tools", "Security testing tools", "Threat modeling tools"]
+        tools=["SDLC tools", "Security testing tools", "Threat modeling tools"],
     ),
 }
 
@@ -363,7 +373,7 @@ def check_compliance_with_practices(context: dict[str, Any]) -> dict[str, Any]:
             "category": practice.category,
             "priority": practice.priority,
             "status": "unknown",  # Would be determined by actual checks
-            "recommendations": []
+            "recommendations": [],
         }
 
         # Basic compliance logic based on practice type
@@ -393,12 +403,19 @@ def check_compliance_with_practices(context: dict[str, Any]) -> dict[str, Any]:
 
     # Calculate compliance percentage
     applicable_practices = total_practices - not_applicable_count
-    compliance_percentage = (compliant_count / applicable_practices * 100) if applicable_practices > 0 else 0
+    compliance_percentage = (
+        (compliant_count / applicable_practices * 100)
+        if applicable_practices > 0
+        else 0
+    )
 
     # Generate recommendations for non-compliant practices
     recommendations = []
     for check in compliance_checks:
-        if check["status"] == "non_compliant" and check["priority"] in ["high", "critical"]:
+        if check["status"] == "non_compliant" and check["priority"] in [
+            "high",
+            "critical",
+        ]:
             recommendations.extend(check["recommendations"])
 
     return {
@@ -411,10 +428,13 @@ def check_compliance_with_practices(context: dict[str, Any]) -> dict[str, Any]:
         "compliance_checks": compliance_checks,
         "recommendations": list(set(recommendations)),  # Remove duplicates
         "critical_recommendations": [
-            r for r in recommendations
-            if any(c["priority"] == "critical" and r in c["recommendations"]
-                   for c in compliance_checks)
-        ]
+            r
+            for r in recommendations
+            if any(
+                c["priority"] == "critical" and r in c["recommendations"]
+                for c in compliance_checks
+            )
+        ],
     }
 
 
@@ -431,7 +451,9 @@ def get_practices_for_category(category: str) -> list[SecurityBestPractice]:
     return [p for p in BEST_PRACTICES.values() if p.category == category]
 
 
-def prioritize_practices(practices: list[SecurityBestPractice]) -> list[SecurityBestPractice]:
+def prioritize_practices(
+    practices: list[SecurityBestPractice],
+) -> list[SecurityBestPractice]:
     """
     Prioritize practices by priority level.
 
@@ -445,11 +467,9 @@ def prioritize_practices(practices: list[SecurityBestPractice]) -> list[Security
         PracticePriority.CRITICAL.value: 4,
         PracticePriority.HIGH.value: 3,
         PracticePriority.MEDIUM.value: 2,
-        PracticePriority.LOW.value: 1
+        PracticePriority.LOW.value: 1,
     }
 
     return sorted(
-        practices,
-        key=lambda p: priority_order.get(p.priority, 0),
-        reverse=True
+        practices, key=lambda p: priority_order.get(p.priority, 0), reverse=True
     )

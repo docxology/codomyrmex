@@ -268,10 +268,7 @@ class SystemHealthChecker:
                 print(f"   Logging demo failed: {e}")
 
         # Code execution demo
-        if (
-            "code" in modules
-            and modules["code"].is_importable
-        ):
+        if "code" in modules and modules["code"].is_importable:
             print("\nTesting Code Execution...")
             try:
                 result = execute_code(

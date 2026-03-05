@@ -23,7 +23,12 @@ def test_all_cursorrules_have_sections_0_to_7() -> None:
 
         missing = expected_sections - actual_sections
         if missing:
-            violations.append(f"{rule.file_path.name} is missing sections: {sorted(missing)}")
+            violations.append(
+                f"{rule.file_path.name} is missing sections: {sorted(missing)}"
+            )
 
     if violations:
-        pytest.fail("The following .cursorrules files are missing required sections:\n" + "\n".join(violations))
+        pytest.fail(
+            "The following .cursorrules files are missing required sections:\n"
+            + "\n".join(violations)
+        )

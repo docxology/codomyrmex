@@ -48,7 +48,6 @@ if PATH_TO_ADD_FOR_MODULE_IMPORT not in sys.path:
 logger = None
 
 try:
-
     # Call setup_logging() which reads .env from the project root and configures handlers.
     # This should be called once, early in the application.
     # setup_logging() itself calls load_dotenv() which should find the .env file
@@ -196,11 +195,10 @@ def run_command_stream_output(command_parts, cwd):
         if process.returncode == 0:
             logger.info(f"Command '{' '.join(command_parts)}' executed successfully.")
             return True
-        else:
-            logger.error(
-                f"Command '{' '.join(command_parts)}' failed with return code {process.returncode}."
-            )
-            return False
+        logger.error(
+            f"Command '{' '.join(command_parts)}' failed with return code {process.returncode}."
+        )
+        return False
     except FileNotFoundError:
         logger.error(
             f"Error: Command '{command_parts[0]}' not found. Is it installed and in PATH?"

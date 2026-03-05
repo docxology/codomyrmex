@@ -63,10 +63,13 @@ class TestRollingDeployment:
 
     def test_deploy_with_health_check(self):
         """Rolling deploy with an integrated health check."""
+
         def health_check(target):
             return target.id == "t1"
 
-        strat = RollingDeployment(batch_size=1, delay_seconds=0, health_check=health_check)
+        strat = RollingDeployment(
+            batch_size=1, delay_seconds=0, health_check=health_check
+        )
         targets = [
             DeploymentTarget(id="t1", name="target1", address="1.1.1.1"),
             DeploymentTarget(id="t2", name="target2", address="1.1.1.2"),

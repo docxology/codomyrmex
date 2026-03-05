@@ -16,10 +16,12 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Optional, TypeVar, Union
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class DataType(Enum):
     """Types of generated data."""
+
     STRING = "string"
     INTEGER = "integer"
     FLOAT = "float"
@@ -31,9 +33,11 @@ class DataType(Enum):
     ADDRESS = "address"
     PHONE = "phone"
 
+
 @dataclass
 class FieldSpec:
     """Specification for a generated field."""
+
     name: str
     data_type: DataType
     nullable: bool = False
@@ -43,17 +47,18 @@ class FieldSpec:
     choices: list[Any] | None = None
     pattern: str | None = None
 
+
 class Generator(ABC):
     """Base class for data generators."""
 
     @abstractmethod
     def generate(self) -> Any:
         """Generate a single value."""
-        pass
 
     def generate_many(self, count: int) -> list[Any]:
         """Generate multiple values."""
         return [self.generate() for _ in range(count)]
+
 
 class StringGenerator(Generator):
     """Generates random strings."""
@@ -71,7 +76,8 @@ class StringGenerator(Generator):
     def generate(self) -> str:
         """Generate."""
         length = random.randint(self.min_length, self.max_length)
-        return ''.join(random.choices(self.charset, k=length))
+        return "".join(random.choices(self.charset, k=length))
+
 
 class IntegerGenerator(Generator):
     """Generates random integers."""
@@ -83,6 +89,7 @@ class IntegerGenerator(Generator):
     def generate(self) -> int:
         """Generate."""
         return random.randint(self.min_value, self.max_value)
+
 
 class FloatGenerator(Generator):
     """Generates random floats."""
@@ -102,6 +109,7 @@ class FloatGenerator(Generator):
         value = random.uniform(self.min_value, self.max_value)
         return round(value, self.precision)
 
+
 class BooleanGenerator(Generator):
     """Generates random booleans."""
 
@@ -111,6 +119,7 @@ class BooleanGenerator(Generator):
     def generate(self) -> bool:
         """Generate."""
         return random.random() < self.true_probability
+
 
 class DateGenerator(Generator):
     """Generates random dates."""
@@ -129,19 +138,23 @@ class DateGenerator(Generator):
         random_days = random.randint(0, delta.days)
         return self.start_date + timedelta(days=random_days)
 
+
 class EmailGenerator(Generator):
     """Generates random email addresses."""
 
     DOMAINS = ["example.com", "test.org", "mail.net", "demo.io"]
 
     def __init__(self):
-        self._string_gen = StringGenerator(min_length=5, max_length=10, charset=string.ascii_lowercase)
+        self._string_gen = StringGenerator(
+            min_length=5, max_length=10, charset=string.ascii_lowercase
+        )
 
     def generate(self) -> str:
         """Generate."""
         username = self._string_gen.generate()
         domain = random.choice(self.DOMAINS)
         return f"{username}@{domain}"
+
 
 class UUIDGenerator(Generator):
     """Generates UUIDs."""
@@ -150,25 +163,36 @@ class UUIDGenerator(Generator):
         """Generate."""
         # Simple UUID-like string
         parts = [
-            ''.join(random.choices('0123456789abcdef', k=8)),
-            ''.join(random.choices('0123456789abcdef', k=4)),
-            ''.join(random.choices('0123456789abcdef', k=4)),
-            ''.join(random.choices('0123456789abcdef', k=4)),
-            ''.join(random.choices('0123456789abcdef', k=12)),
+            "".join(random.choices("0123456789abcdef", k=8)),
+            "".join(random.choices("0123456789abcdef", k=4)),
+            "".join(random.choices("0123456789abcdef", k=4)),
+            "".join(random.choices("0123456789abcdef", k=4)),
+            "".join(random.choices("0123456789abcdef", k=12)),
         ]
-        return '-'.join(parts)
+        return "-".join(parts)
+
 
 class NameGenerator(Generator):
     """Generates random names."""
 
     FIRST_NAMES = ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Grace", "Henry"]
-    LAST_NAMES = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis"]
+    LAST_NAMES = [
+        "Smith",
+        "Johnson",
+        "Williams",
+        "Brown",
+        "Jones",
+        "Garcia",
+        "Miller",
+        "Davis",
+    ]
 
     def generate(self) -> str:
         """Generate."""
         first = random.choice(self.FIRST_NAMES)
         last = random.choice(self.LAST_NAMES)
         return f"{first} {last}"
+
 
 class ChoiceGenerator(Generator):
     """Generates random choice from list."""
@@ -179,6 +203,7 @@ class ChoiceGenerator(Generator):
     def generate(self) -> Any:
         """Generate."""
         return random.choice(self.choices)
+
 
 class RecordGenerator:
     """
@@ -209,6 +234,7 @@ class RecordGenerator:
     def generate_many(self, count: int) -> list[dict[str, Any]]:
         """Generate multiple records."""
         return [self.generate() for _ in range(count)]
+
 
 class DatasetGenerator:
     """
@@ -250,12 +276,13 @@ class DatasetGenerator:
         if not data:
             return ""
 
-        lines = [','.join(self.columns)]
+        lines = [",".join(self.columns)]
         for row in data:
             values = [str(row[col]) for col in self.columns]
-            lines.append(','.join(values))
+            lines.append(",".join(values))
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
+
 
 __all__ = [
     # Enums

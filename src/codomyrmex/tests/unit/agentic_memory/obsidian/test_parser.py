@@ -1,6 +1,5 @@
 """Tests for Obsidian markdown parser."""
 
-
 from codomyrmex.agentic_memory.obsidian.parser import (
     extract_callouts,
     extract_embeds,
@@ -15,6 +14,7 @@ from codomyrmex.agentic_memory.obsidian.parser import (
 
 class TestParseFrontmatter:
     """Test suite for ParseFrontmatter."""
+
     def test_basic_frontmatter(self):
         raw = "---\ntitle: Test\ntags:\n  - a\n  - b\n---\nBody content."
         fm, body = parse_frontmatter(raw)
@@ -43,6 +43,7 @@ class TestParseFrontmatter:
 
 class TestExtractWikilinks:
     """Test suite for ExtractWikilinks."""
+
     def test_simple_link(self):
         links = extract_wikilinks("Link to [[My Note]] here.")
         assert len(links) == 1
@@ -88,6 +89,7 @@ class TestExtractWikilinks:
 
 class TestExtractEmbeds:
     """Test suite for ExtractEmbeds."""
+
     def test_simple_embed(self):
         embeds = extract_embeds("![[image.png]]")
         assert len(embeds) == 1
@@ -115,6 +117,7 @@ class TestExtractEmbeds:
 
 class TestExtractTags:
     """Test suite for ExtractTags."""
+
     def test_inline_tag(self):
         tags = extract_tags("Some text with #mytag here.")
         assert len(tags) == 1
@@ -147,6 +150,7 @@ class TestExtractTags:
 
 class TestExtractCallouts:
     """Test suite for ExtractCallouts."""
+
     def test_basic_callout(self):
         content = "> [!note] My Title\n> Some content here.\n> More content."
         callouts = extract_callouts(content)
@@ -180,6 +184,7 @@ class TestExtractCallouts:
 
 class TestExtractHeadings:
     """Test suite for ExtractHeadings."""
+
     def test_headings(self):
         content = "# H1\n## H2\n### H3\nText\n#### H4"
         headings = extract_headings(content)
@@ -192,6 +197,7 @@ class TestExtractHeadings:
 
 class TestParseNote:
     """Test suite for ParseNote."""
+
     def test_full_parse(self, tmp_path, sample_frontmatter_note):
         note_path = tmp_path / "test.md"
         note_path.write_text(sample_frontmatter_note)
@@ -214,6 +220,7 @@ class TestParseNote:
 
 class TestSerializeNote:
     """Test suite for SerializeNote."""
+
     def test_round_trip(self, tmp_path, sample_frontmatter_note):
         note_path = tmp_path / "roundtrip.md"
         note_path.write_text(sample_frontmatter_note)

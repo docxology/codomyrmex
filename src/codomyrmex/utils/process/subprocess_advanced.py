@@ -137,8 +137,10 @@ def stream_command(
             # Use select to wait up to 0.05s on POSIX systems so we don't block
             readable = []
             import sys
+
             if sys.platform != "win32":
                 import select
+
                 rlist = []
                 if process.stdout:
                     rlist.append(process.stdout)
@@ -303,9 +305,7 @@ def run_with_retry(
         if result.timed_out and retry_on_timeout:
             should_retry = True
         elif not result.success:
-            if retry_on_codes is None:
-                should_retry = True
-            elif result.return_code in retry_on_codes:
+            if retry_on_codes is None or result.return_code in retry_on_codes:
                 should_retry = True
 
         # If successful or no retry needed, return

@@ -16,9 +16,11 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class EvaluationContext:
     """Context for feature flag evaluation."""
+
     user_id: str | None = None
     session_id: str | None = None
     environment: str = "production"
@@ -34,13 +36,16 @@ class EvaluationContext:
         key = f"{self.user_id or ''}-{self.session_id or ''}"
         return hashlib.sha256(key.encode()).hexdigest()
 
+
 @dataclass
 class EvaluationResult:
     """Result of a feature flag evaluation."""
+
     enabled: bool
     variant: str | None = None
     reason: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
+
 
 class EvaluationStrategy(ABC):
     """Abstract base class for evaluation strategies."""
@@ -48,18 +53,16 @@ class EvaluationStrategy(ABC):
     @abstractmethod
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
         """Evaluate the feature flag."""
-        pass
 
     @abstractmethod
     def to_dict(self) -> dict[str, Any]:
         """Serialize the strategy to a dictionary."""
-        pass
 
     @classmethod
     @abstractmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'EvaluationStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "EvaluationStrategy":
         """Deserialize a strategy from a dictionary."""
-        pass
+
 
 class BooleanStrategy(EvaluationStrategy):
     """Simple on/off boolean strategy."""
@@ -70,16 +73,16 @@ class BooleanStrategy(EvaluationStrategy):
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
         """Evaluate."""
         return EvaluationResult(
-            enabled=self.enabled,
-            reason="boolean" if self.enabled else "disabled"
+            enabled=self.enabled, reason="boolean" if self.enabled else "disabled"
         )
 
     def to_dict(self) -> dict[str, Any]:
         return {"type": "boolean", "enabled": self.enabled}
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'BooleanStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "BooleanStrategy":
         return cls(enabled=data.get("enabled", False))
+
 
 class PercentageStrategy(EvaluationStrategy):
     """Percentage-based rollout strategy."""
@@ -101,22 +104,22 @@ class PercentageStrategy(EvaluationStrategy):
         return EvaluationResult(
             enabled=enabled,
             reason=f"percentage:{self.percentage}%",
-            metadata={"percentage": self.percentage, "sticky": self.sticky}
+            metadata={"percentage": self.percentage, "sticky": self.sticky},
         )
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "type": "percentage",
             "percentage": self.percentage,
-            "sticky": self.sticky
+            "sticky": self.sticky,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'PercentageStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "PercentageStrategy":
         return cls(
-            percentage=data.get("percentage", 0.0),
-            sticky=data.get("sticky", True)
+            percentage=data.get("percentage", 0.0), sticky=data.get("sticky", True)
         )
+
 
 class UserListStrategy(EvaluationStrategy):
     """Strategy based on user allowlist/blocklist."""
@@ -125,7 +128,7 @@ class UserListStrategy(EvaluationStrategy):
         self,
         allowed_users: list[str] | None = None,
         blocked_users: list[str] | None = None,
-        default: bool = False
+        default: bool = False,
     ):
         self.allowed_users = set(allowed_users or [])
         self.blocked_users = set(blocked_users or [])
@@ -134,27 +137,15 @@ class UserListStrategy(EvaluationStrategy):
     def evaluate(self, context: EvaluationContext) -> EvaluationResult:
         """Evaluate."""
         if not context.user_id:
-            return EvaluationResult(
-                enabled=self.default,
-                reason="no_user_id"
-            )
+            return EvaluationResult(enabled=self.default, reason="no_user_id")
 
         if context.user_id in self.blocked_users:
-            return EvaluationResult(
-                enabled=False,
-                reason="blocked_user"
-            )
+            return EvaluationResult(enabled=False, reason="blocked_user")
 
         if context.user_id in self.allowed_users:
-            return EvaluationResult(
-                enabled=True,
-                reason="allowed_user"
-            )
+            return EvaluationResult(enabled=True, reason="allowed_user")
 
-        return EvaluationResult(
-            enabled=self.default,
-            reason="default"
-        )
+        return EvaluationResult(enabled=self.default, reason="default")
 
     def add_user(self, user_id: str) -> None:
         """Add a user to the allowlist."""
@@ -173,16 +164,17 @@ class UserListStrategy(EvaluationStrategy):
             "type": "user_list",
             "allowed_users": list(self.allowed_users),
             "blocked_users": list(self.blocked_users),
-            "default": self.default
+            "default": self.default,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'UserListStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "UserListStrategy":
         return cls(
             allowed_users=data.get("allowed_users"),
             blocked_users=data.get("blocked_users"),
-            default=data.get("default", False)
+            default=data.get("default", False),
         )
+
 
 class AttributeStrategy(EvaluationStrategy):
     """Strategy based on context attributes."""
@@ -192,7 +184,7 @@ class AttributeStrategy(EvaluationStrategy):
         attribute: str,
         operator: str,  # eq, neq, gt, lt, gte, lte, in, contains
         value: Any,
-        enabled_value: bool = True
+        enabled_value: bool = True,
     ):
         self.attribute = attribute
         self.operator = operator
@@ -205,8 +197,7 @@ class AttributeStrategy(EvaluationStrategy):
 
         if attr_value is None:
             return EvaluationResult(
-                enabled=not self.enabled_value,
-                reason="attribute_missing"
+                enabled=not self.enabled_value, reason="attribute_missing"
             )
 
         match = self._check_condition(attr_value)
@@ -219,8 +210,8 @@ class AttributeStrategy(EvaluationStrategy):
                 "attribute": self.attribute,
                 "operator": self.operator,
                 "expected": self.value,
-                "actual": attr_value
-            }
+                "actual": attr_value,
+            },
         )
 
     def _check_condition(self, attr_value: Any) -> bool:
@@ -243,7 +234,9 @@ class AttributeStrategy(EvaluationStrategy):
         try:
             return op_func(attr_value, self.value)
         except (TypeError, ValueError) as e:
-            logger.warning("Attribute condition check failed for %s: %s", self.attribute, e)
+            logger.warning(
+                "Attribute condition check failed for %s: %s", self.attribute, e
+            )
             return False
 
     def to_dict(self) -> dict[str, Any]:
@@ -252,17 +245,18 @@ class AttributeStrategy(EvaluationStrategy):
             "attribute": self.attribute,
             "operator": self.operator,
             "value": self.value,
-            "enabled_value": self.enabled_value
+            "enabled_value": self.enabled_value,
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'AttributeStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "AttributeStrategy":
         return cls(
             attribute=data["attribute"],
             operator=data["operator"],
             value=data["value"],
-            enabled_value=data.get("enabled_value", True)
+            enabled_value=data.get("enabled_value", True),
         )
+
 
 class EnvironmentStrategy(EvaluationStrategy):
     """Strategy based on environment."""
@@ -276,18 +270,19 @@ class EnvironmentStrategy(EvaluationStrategy):
         return EvaluationResult(
             enabled=enabled,
             reason=f"environment:{context.environment}",
-            metadata={"environments": list(self.enabled_environments)}
+            metadata={"environments": list(self.enabled_environments)},
         )
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "type": "environment",
-            "enabled_environments": list(self.enabled_environments)
+            "enabled_environments": list(self.enabled_environments),
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'EnvironmentStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "EnvironmentStrategy":
         return cls(enabled_environments=data.get("enabled_environments"))
+
 
 class TimeWindowStrategy(EvaluationStrategy):
     """Strategy that enables a flag only within a time window.
@@ -322,7 +317,7 @@ class TimeWindowStrategy(EvaluationStrategy):
         the evaluation moment for testing or replay scenarios.  Falls back
         to ``datetime.now()`` only when the context has no timestamp.
         """
-        now = context.timestamp if context.timestamp else datetime.now()
+        now = context.timestamp or datetime.now()
         enabled = self.start_time <= now <= self.end_time
 
         reason = "time_window_active" if enabled else "time_window_inactive"
@@ -345,7 +340,7 @@ class TimeWindowStrategy(EvaluationStrategy):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'TimeWindowStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "TimeWindowStrategy":
         return cls(
             start_time=datetime.fromisoformat(data["start_time"]),
             end_time=datetime.fromisoformat(data["end_time"]),
@@ -358,7 +353,7 @@ class CompositeStrategy(EvaluationStrategy):
     def __init__(
         self,
         strategies: list[EvaluationStrategy],
-        operator: str = "and"  # "and" or "or"
+        operator: str = "and",  # "and" or "or"
     ):
         self.strategies = strategies
         self.operator = operator
@@ -380,20 +375,21 @@ class CompositeStrategy(EvaluationStrategy):
             reason=f"composite:{self.operator}",
             metadata={
                 "results": [{"enabled": r.enabled, "reason": r.reason} for r in results]
-            }
+            },
         )
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "type": "composite",
             "operator": self.operator,
-            "strategies": [s.to_dict() for s in self.strategies]
+            "strategies": [s.to_dict() for s in self.strategies],
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'CompositeStrategy':
+    def from_dict(cls, data: dict[str, Any]) -> "CompositeStrategy":
         strategies = [create_strategy(s) for s in data.get("strategies", [])]
         return cls(strategies=strategies, operator=data.get("operator", "and"))
+
 
 def create_strategy(data: dict[str, Any]) -> EvaluationStrategy:
     """Factory function to create strategies from config."""
@@ -415,16 +411,17 @@ def create_strategy(data: dict[str, Any]) -> EvaluationStrategy:
 
     return strategy_class.from_dict(data)
 
+
 __all__ = [
+    "AttributeStrategy",
+    "BooleanStrategy",
+    "CompositeStrategy",
+    "EnvironmentStrategy",
     "EvaluationContext",
     "EvaluationResult",
     "EvaluationStrategy",
-    "BooleanStrategy",
     "PercentageStrategy",
-    "UserListStrategy",
-    "AttributeStrategy",
-    "EnvironmentStrategy",
     "TimeWindowStrategy",
-    "CompositeStrategy",
+    "UserListStrategy",
     "create_strategy",
 ]

@@ -230,7 +230,7 @@ class CaseRetriever:
         if self.weighting_strategy == "distance":
             # Use similarity as weight directly
             return similar_cases
-        elif self.weighting_strategy == "frequency":
+        if self.weighting_strategy == "frequency":
             # Weight by frequency of case usage (if tracked in metadata)
             weighted = []
             for case, similarity in similar_cases:
@@ -239,7 +239,7 @@ class CaseRetriever:
                 weighted.append((case, weight))
             weighted.sort(key=lambda x: x[1], reverse=True)
             return weighted
-        elif self.weighting_strategy == "hybrid":
+        if self.weighting_strategy == "hybrid":
             # Combine distance and frequency
             weighted = []
             for case, similarity in similar_cases:
@@ -248,5 +248,4 @@ class CaseRetriever:
                 weighted.append((case, weight))
             weighted.sort(key=lambda x: x[1], reverse=True)
             return weighted
-        else:
-            return similar_cases
+        return similar_cases

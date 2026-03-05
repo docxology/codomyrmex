@@ -16,6 +16,7 @@ try:
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
     from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
     from codomyrmex.tests.unit.agents.helpers import OPENCODE_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -30,7 +31,12 @@ class StubAgent(BaseAgent):
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
 
-    def __init__(self, name: str, capabilities: list[AgentCapabilities], should_succeed: bool = True):
+    def __init__(
+        self,
+        name: str,
+        capabilities: list[AgentCapabilities],
+        should_succeed: bool = True,
+    ):
         super().__init__(name=name, capabilities=capabilities, config={})
         self.execution_history = []
         self.execution_count = 0
@@ -38,11 +44,13 @@ class StubAgent(BaseAgent):
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         self.execution_count += 1
-        self.execution_history.append({
-            "prompt": request.prompt,
-            "context": request.context,
-            "capabilities": request.capabilities
-        })
+        self.execution_history.append(
+            {
+                "prompt": request.prompt,
+                "context": request.context,
+                "capabilities": request.capabilities,
+            }
+        )
 
         if not self.should_succeed:
             return AgentResponse(content="", error="Simulated failure")
@@ -51,23 +59,21 @@ class StubAgent(BaseAgent):
         if "generate" in request.prompt.lower():
             return AgentResponse(
                 content="def generated_function():\n    return 'result'",
-                metadata={"type": "code_generation"}
+                metadata={"type": "code_generation"},
             )
-        elif "review" in request.prompt.lower():
+        if "review" in request.prompt.lower():
             return AgentResponse(
                 content="Code review: Looks good, minor suggestions",
-                metadata={"type": "code_review"}
+                metadata={"type": "code_review"},
             )
-        elif "analyze" in request.prompt.lower():
+        if "analyze" in request.prompt.lower():
             return AgentResponse(
                 content="Analysis: Code complexity is moderate",
-                metadata={"type": "analysis"}
+                metadata={"type": "analysis"},
             )
-        else:
-            return AgentResponse(
-                content=f"Response to: {request.prompt}",
-                metadata={"type": "general"}
-            )
+        return AgentResponse(
+            content=f"Response to: {request.prompt}", metadata={"type": "general"}
+        )
 
     def _stream_impl(self, request: AgentRequest):
         response = self._execute_impl(request)
@@ -84,7 +90,7 @@ class TestSimpleScenarios:
 
         request = AgentRequest(
             prompt="Generate a Python function to calculate fibonacci",
-            capabilities=[AgentCapabilities.CODE_GENERATION]
+            capabilities=[AgentCapabilities.CODE_GENERATION],
         )
 
         response = agent.execute(request)
@@ -99,7 +105,7 @@ class TestSimpleScenarios:
 
         request = AgentRequest(
             prompt="Complete this sentence: The weather today is",
-            capabilities=[AgentCapabilities.TEXT_COMPLETION]
+            capabilities=[AgentCapabilities.TEXT_COMPLETION],
         )
 
         response = agent.execute(request)
@@ -121,7 +127,7 @@ def example_function():
         request = AgentRequest(
             prompt="Analyze this code",
             context={"code": code_content, "language": "python"},
-            capabilities=[AgentCapabilities.CODE_ANALYSIS]
+            capabilities=[AgentCapabilities.CODE_ANALYSIS],
         )
 
         response = agent.execute(request)
@@ -139,8 +145,7 @@ class TestComplexScenarios:
 
         # Step 1: Generate initial function
         request1 = AgentRequest(
-            prompt="Generate a function to calculate factorial",
-            context={"step": 1}
+            prompt="Generate a function to calculate factorial", context={"step": 1}
         )
         response1 = agent.execute(request1)
 
@@ -153,8 +158,8 @@ class TestComplexScenarios:
             context={
                 "step": 2,
                 "previous_code": generated_code,
-                "previous_response": response1.content
-            }
+                "previous_response": response1.content,
+            },
         )
         response2 = agent.execute(request2)
 
@@ -171,7 +176,7 @@ class TestComplexScenarios:
         # Step 1: Generate code
         gen_request = AgentRequest(
             prompt="Generate a REST API endpoint",
-            capabilities=[AgentCapabilities.CODE_GENERATION]
+            capabilities=[AgentCapabilities.CODE_GENERATION],
         )
         gen_responses = orchestrator.execute_parallel(gen_request)
         generated_code = gen_responses[0].content
@@ -180,42 +185,41 @@ class TestComplexScenarios:
         review_request = AgentRequest(
             prompt="Review this code for best practices",
             context={"code": generated_code},
-            capabilities=[AgentCapabilities.CODE_ANALYSIS]
+            capabilities=[AgentCapabilities.CODE_ANALYSIS],
         )
         review_responses = orchestrator.execute_parallel(review_request)
 
         assert len(gen_responses) == 2
         assert len(review_responses) == 2
-        assert any("review" in r.content.lower() or "analysis" in r.content.lower()
-                  for r in review_responses)
+        assert any(
+            "review" in r.content.lower() or "analysis" in r.content.lower()
+            for r in review_responses
+        )
 
     def test_complex_refactoring_across_multiple_files(self):
         """Test complex refactoring scenario across multiple files."""
-        agent = StubAgent("refactor", [
-            AgentCapabilities.CODE_GENERATION,
-            AgentCapabilities.CODE_EDITING
-        ])
+        agent = StubAgent(
+            "refactor",
+            [AgentCapabilities.CODE_GENERATION, AgentCapabilities.CODE_EDITING],
+        )
 
         files = {
             "file1.py": "class OldClass:\n    pass",
             "file2.py": "from file1 import OldClass",
-            "file3.py": "def use_old_class():\n    obj = OldClass()"
+            "file3.py": "def use_old_class():\n    obj = OldClass()",
         }
 
         # Step 1: Analyze all files
         analyze_request = AgentRequest(
             prompt="Analyze these files for refactoring opportunities",
-            context={"files": files}
+            context={"files": files},
         )
         analyze_response = agent.execute(analyze_request)
 
         # Step 2: Generate refactored version
         refactor_request = AgentRequest(
             prompt="Refactor OldClass to NewClass across all files",
-            context={
-                "files": files,
-                "analysis": analyze_response.content
-            }
+            context={"files": files, "analysis": analyze_response.content},
         )
         refactor_response = agent.execute(refactor_request)
 
@@ -229,16 +233,14 @@ class TestComplexScenarios:
         quality_agent = StubAgent("quality", [AgentCapabilities.CODE_ANALYSIS])
         security_agent = StubAgent("security", [AgentCapabilities.CODE_ANALYSIS])
 
-        orchestrator = AgentOrchestrator([
-            structure_agent,
-            quality_agent,
-            security_agent
-        ])
+        orchestrator = AgentOrchestrator(
+            [structure_agent, quality_agent, security_agent]
+        )
 
         request = AgentRequest(
             prompt="Analyze codebase structure, quality, and security",
             context={"codebase_path": "/path/to/codebase"},
-            capabilities=[AgentCapabilities.CODE_ANALYSIS]
+            capabilities=[AgentCapabilities.CODE_ANALYSIS],
         )
 
         responses = orchestrator.execute_parallel(request)
@@ -277,20 +279,14 @@ class TestComplexScenarios:
         # Build up context across operations
         context = {"project": "test_project", "language": "python"}
 
-        request1 = AgentRequest(
-            prompt="Generate initial structure",
-            context=context
-        )
+        request1 = AgentRequest(prompt="Generate initial structure", context=context)
         response1 = agent.execute(request1)
 
         # Update context with results
         context["initial_structure"] = response1.content
         context["step"] = 2
 
-        request2 = AgentRequest(
-            prompt="Add implementation details",
-            context=context
-        )
+        request2 = AgentRequest(prompt="Add implementation details", context=context)
         agent.execute(request2)
 
         # Verify context was maintained
@@ -313,8 +309,7 @@ class TestComplexScenarios:
             AgentCapabilities.CODE_GENERATION.value
         )
         gen_request = AgentRequest(
-            prompt="Generate code",
-            capabilities=[AgentCapabilities.CODE_GENERATION]
+            prompt="Generate code", capabilities=[AgentCapabilities.CODE_GENERATION]
         )
         gen_response = gen_agents[0].execute(gen_request)
 
@@ -325,7 +320,7 @@ class TestComplexScenarios:
         edit_request = AgentRequest(
             prompt="Edit and improve",
             context={"code": gen_response.content},
-            capabilities=[AgentCapabilities.CODE_EDITING]
+            capabilities=[AgentCapabilities.CODE_EDITING],
         )
         edit_response = edit_agents[0].execute(edit_request)
 
@@ -336,7 +331,7 @@ class TestComplexScenarios:
         analyze_request = AgentRequest(
             prompt="Analyze final code",
             context={"code": edit_response.content},
-            capabilities=[AgentCapabilities.CODE_ANALYSIS]
+            capabilities=[AgentCapabilities.CODE_ANALYSIS],
         )
         analyze_response = analyze_agents[0].execute(analyze_request)
 
@@ -353,8 +348,7 @@ class TestComplexScenarios:
         try:
             # Use adapter for code generation
             code = adapter.adapt_for_ai_code_editing(
-                prompt="Create a REST API endpoint",
-                language="python"
+                prompt="Create a REST API endpoint", language="python"
             )
 
             # Test real result structure or handle graceful failure
@@ -362,7 +356,9 @@ class TestComplexScenarios:
                 assert isinstance(code, str)
                 assert len(code) > 0
             else:
-                 pytest.skip("OpenCode CLI returned empty response (likely auth/network issue)")
+                pytest.skip(
+                    "OpenCode CLI returned empty response (likely auth/network issue)"
+                )
 
         except RuntimeError:
             # Expected if authentication fails or CLI error

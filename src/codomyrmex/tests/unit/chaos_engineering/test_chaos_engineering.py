@@ -14,6 +14,7 @@ try:
         SteadyStateHypothesis,
         with_chaos,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -25,6 +26,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestFaultType:
     """Test suite for FaultType."""
+
     def test_latency(self):
         assert FaultType.LATENCY is not None
 
@@ -44,6 +46,7 @@ class TestFaultType:
 @pytest.mark.unit
 class TestFaultConfig:
     """Test suite for FaultConfig."""
+
     def test_create_config(self):
         config = FaultConfig(fault_type=FaultType.LATENCY)
         assert config.fault_type == FaultType.LATENCY
@@ -62,6 +65,7 @@ class TestFaultConfig:
 @pytest.mark.unit
 class TestInjectedFaultError:
     """Test suite for InjectedFaultError."""
+
     def test_is_exception(self):
         with pytest.raises(InjectedFaultError):
             raise InjectedFaultError("test fault")
@@ -74,6 +78,7 @@ class TestInjectedFaultError:
 @pytest.mark.unit
 class TestFaultInjector:
     """Test suite for FaultInjector."""
+
     def test_create_injector(self):
         injector = FaultInjector()
         assert injector is not None
@@ -82,6 +87,7 @@ class TestFaultInjector:
 @pytest.mark.unit
 class TestSteadyStateHypothesis:
     """Test suite for SteadyStateHypothesis."""
+
     def test_create_hypothesis(self):
         hypothesis = SteadyStateHypothesis(
             name="service is healthy",
@@ -101,6 +107,7 @@ class TestSteadyStateHypothesis:
 @pytest.mark.unit
 class TestChaosExperiment:
     """Test suite for ChaosExperiment."""
+
     def test_create_experiment(self):
         hypothesis = SteadyStateHypothesis(name="test", check_fn=lambda: True)
         experiment = ChaosExperiment(
@@ -124,6 +131,7 @@ class TestChaosExperiment:
 @pytest.mark.unit
 class TestChaosMonkey:
     """Test suite for ChaosMonkey."""
+
     def test_create_monkey(self):
         monkey = ChaosMonkey()
         assert monkey is not None
@@ -137,6 +145,7 @@ class TestChaosMonkey:
 @pytest.mark.unit
 class TestExperimentResult:
     """Test suite for ExperimentResult."""
+
     def test_create_result(self):
         result = ExperimentResult(
             experiment_name="test",
@@ -152,5 +161,6 @@ class TestExperimentResult:
 @pytest.mark.unit
 class TestWithChaos:
     """Test suite for WithChaos."""
+
     def test_decorator_exists(self):
         assert callable(with_chaos)

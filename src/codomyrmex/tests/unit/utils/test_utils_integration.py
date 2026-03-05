@@ -22,6 +22,7 @@ try:
         timed_operation,
         with_retry,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -39,9 +40,11 @@ def _run(coro):
 # setup_module_logging
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSetupModuleLogging:
     """Test suite for SetupModuleLogging."""
+
     def test_creates_logger(self):
         log = setup_module_logging("test_module")
         assert isinstance(log, logging.Logger)
@@ -67,9 +70,11 @@ class TestSetupModuleLogging:
 # log_performance decorator
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLogPerformance:
     """Test suite for LogPerformance."""
+
     def test_decorator_preserves_return_value(self):
         @log_performance("test_op")
         def add(a, b):
@@ -97,9 +102,11 @@ class TestLogPerformance:
 # run_async
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRunAsync:
     """Test suite for RunAsync."""
+
     def test_runs_coroutine(self):
         async def coro():
             return 42
@@ -118,9 +125,11 @@ class TestRunAsync:
 # make_async
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMakeAsync:
     """Test suite for MakeAsync."""
+
     def test_converts_sync_to_async(self):
         def sync_fn(x):
             return x * 2
@@ -144,9 +153,11 @@ class TestMakeAsync:
 # RetryConfig
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestRetryConfig:
     """Test suite for RetryConfig."""
+
     def test_defaults(self):
         config = RetryConfig()
         assert config.max_attempts == 3
@@ -171,9 +182,11 @@ class TestRetryConfig:
 # with_retry decorator
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestWithRetry:
     """Test suite for WithRetry."""
+
     def test_succeeds_first_try(self):
         call_count = 0
 
@@ -211,11 +224,13 @@ class TestWithRetry:
             always_fail()
 
     def test_only_retries_specified_exceptions(self):
-        @with_retry(RetryConfig(
-            max_attempts=3,
-            initial_delay=0.001,
-            retryable_exceptions=(ValueError,),
-        ))
+        @with_retry(
+            RetryConfig(
+                max_attempts=3,
+                initial_delay=0.001,
+                retryable_exceptions=(ValueError,),
+            )
+        )
         def wrong_error():
             raise TypeError("wrong type")
 
@@ -227,9 +242,11 @@ class TestWithRetry:
 # timed_operation
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestTimedOperation:
     """Test suite for TimedOperation."""
+
     def test_context_manager(self):
         with timed_operation("test_op"):
             time.sleep(0.01)
@@ -246,9 +263,11 @@ class TestTimedOperation:
 # async_timed_operation
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAsyncTimedOperation:
     """Test suite for AsyncTimedOperation."""
+
     def test_async_context_manager(self):
         async def _test():
             async with async_timed_operation("test_op"):
@@ -270,9 +289,11 @@ class TestAsyncTimedOperation:
 # ModuleRegistry
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestModuleRegistry:
     """Test suite for ModuleRegistry."""
+
     def test_singleton(self):
         r1 = ModuleRegistry()
         r2 = ModuleRegistry()
@@ -317,9 +338,11 @@ class TestModuleRegistry:
 # HealthStatus
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHealthStatus:
     """Test suite for HealthStatus."""
+
     def test_create_healthy(self):
         status = HealthStatus(healthy=True, name="test_service")
         assert status.healthy is True
@@ -345,9 +368,11 @@ class TestHealthStatus:
 # HealthChecker
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHealthChecker:
     """Test suite for HealthChecker."""
+
     def test_create(self):
         checker = HealthChecker()
         assert checker._checks == {}
@@ -411,9 +436,11 @@ class TestHealthChecker:
 # gather_with_concurrency
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestGatherWithConcurrency:
     """Test suite for GatherWithConcurrency."""
+
     def test_runs_coroutines(self):
         async def _test():
             async def double(x):

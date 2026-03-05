@@ -331,14 +331,20 @@ class TestGenerateOverallRecommendations:
         result = _make_result("bad_mod", HealthStatus.UNHEALTHY, issues=["crash"])
         report.module_results["bad_mod"] = result
         reporter._generate_overall_recommendations(report)
-        assert any("unhealthy" in r.lower() or "critical" in r.lower() for r in report.recommendations)
+        assert any(
+            "unhealthy" in r.lower() or "critical" in r.lower()
+            for r in report.recommendations
+        )
 
     def test_unknown_adds_recommendation(self):
         reporter = HealthReporter()
         report = HealthReport()
         report.unknown_modules = 3
         reporter._generate_overall_recommendations(report)
-        assert any("unknown" in r.lower() or "investigate" in r.lower() for r in report.recommendations)
+        assert any(
+            "unknown" in r.lower() or "investigate" in r.lower()
+            for r in report.recommendations
+        )
 
     def test_degraded_module_adds_recommendation(self):
         reporter = HealthReporter()
@@ -346,7 +352,10 @@ class TestGenerateOverallRecommendations:
         result = _make_result("slow_mod", HealthStatus.DEGRADED)
         report.module_results["slow_mod"] = result
         reporter._generate_overall_recommendations(report)
-        assert any("slow_mod" in r or "performance" in r.lower() for r in report.recommendations)
+        assert any(
+            "slow_mod" in r or "performance" in r.lower()
+            for r in report.recommendations
+        )
 
     def test_high_cpu_adds_recommendation(self):
         reporter = HealthReporter()
@@ -533,7 +542,9 @@ class TestFormatHealthReportMarkdown:
     def test_module_issues_listed_under_module(self):
         reporter = HealthReporter()
         report = HealthReport()
-        result = _make_result("broken_mod", HealthStatus.UNHEALTHY, issues=["crash loop"])
+        result = _make_result(
+            "broken_mod", HealthStatus.UNHEALTHY, issues=["crash loop"]
+        )
         report.module_results["broken_mod"] = result
         md = reporter.format_health_report(report, format="markdown")
         assert "crash loop" in md
@@ -635,7 +646,9 @@ class TestCompareHealthReports:
         curr.total_modules = 2
         curr.healthy_modules = 1
         curr.unhealthy_modules = 1
-        curr.module_results["mod_a"] = _make_result("mod_a", HealthStatus.UNHEALTHY, issues=["disk full"])
+        curr.module_results["mod_a"] = _make_result(
+            "mod_a", HealthStatus.UNHEALTHY, issues=["disk full"]
+        )
         curr.module_results["mod_b"] = _make_result("mod_b", HealthStatus.HEALTHY)
         return curr, prev
 
@@ -721,7 +734,9 @@ class TestCompareHealthReports:
         prev.module_results["m"] = _make_result("m", HealthStatus.HEALTHY)
 
         curr = HealthReport()
-        curr.module_results["m"] = _make_result("m", HealthStatus.UNHEALTHY, issues=["new problem"])
+        curr.module_results["m"] = _make_result(
+            "m", HealthStatus.UNHEALTHY, issues=["new problem"]
+        )
 
         comparison = reporter.compare_health_reports(curr, prev)
         assert "new problem" in comparison["new_issues"]
@@ -729,7 +744,9 @@ class TestCompareHealthReports:
     def test_resolved_issues_detected(self):
         reporter = HealthReporter()
         prev = HealthReport()
-        prev.module_results["m"] = _make_result("m", HealthStatus.UNHEALTHY, issues=["old problem"])
+        prev.module_results["m"] = _make_result(
+            "m", HealthStatus.UNHEALTHY, issues=["old problem"]
+        )
 
         curr = HealthReport()
         curr.module_results["m"] = _make_result("m", HealthStatus.HEALTHY)
@@ -741,6 +758,7 @@ class TestCompareHealthReports:
         reporter = HealthReporter()
         prev = HealthReport()
         import time as _time
+
         _time.sleep(0.01)
         curr = HealthReport()
         comparison = reporter.compare_health_reports(curr, prev)

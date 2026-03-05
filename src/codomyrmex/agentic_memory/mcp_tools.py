@@ -17,8 +17,8 @@ logger = get_logger(__name__)
 def _agent_memory():
     """Lazy import AgentMemory to avoid circular imports."""
     from codomyrmex.agentic_memory.memory import AgentMemory
-    return AgentMemory
 
+    return AgentMemory
 
 
 @mcp_tool(
@@ -87,31 +87,39 @@ def memory_search(
     if context_rules:
         try:
             from codomyrmex.agentic_memory.rules.engine import RuleEngine
+
             engine = RuleEngine()
             # Heuristic: if it has a period or slash, assume file_path, else module_name
-            file_path = context_rules if "." in context_rules or "/" in context_rules else None
+            file_path = (
+                context_rules if "." in context_rules or "/" in context_rules else None
+            )
             module_name = context_rules if not file_path else None
 
-            rule_set = engine.get_applicable_rules(file_path=file_path, module_name=module_name)
+            rule_set = engine.get_applicable_rules(
+                file_path=file_path, module_name=module_name
+            )
 
             # Prepend rules as critical-importance semantic memories
             for rule in reversed(list(rule_set.resolved())):
-                formatted_results.insert(0, {
-                    "memory": {
-                        "id": f"rule-{rule.name}",
-                        "content": rule.raw_content,
-                        "memory_type": "semantic",
-                        "importance": 4,  # CRITICAL
-                        "metadata": {
-                            "source": "rule_engine",
-                            "priority": rule.priority.name,
-                            "rule_name": rule.name,
+                formatted_results.insert(
+                    0,
+                    {
+                        "memory": {
+                            "id": f"rule-{rule.name}",
+                            "content": rule.raw_content,
+                            "memory_type": "semantic",
+                            "importance": 4,  # CRITICAL
+                            "metadata": {
+                                "source": "rule_engine",
+                                "priority": rule.priority.name,
+                                "rule_name": rule.name,
+                            },
+                            "tags": ["rule", rule.priority.name.lower()],
                         },
-                        "tags": ["rule", rule.priority.name.lower()],
+                        "relevance": 1.0,
+                        "combined_score": 1.0,
                     },
-                    "relevance": 1.0,
-                    "combined_score": 1.0,
-                })
+                )
         except Exception:
             logger.warning("Rule injection failed during memory_search", exc_info=True)
 

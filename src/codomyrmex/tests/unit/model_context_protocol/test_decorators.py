@@ -34,7 +34,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool()
         def another():
             """Another."""
-            pass
 
         assert hasattr(another, "_mcp_tool_meta")
         assert another._mcp_tool is another._mcp_tool_meta
@@ -51,7 +50,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool(description="Explicit description")
         def func():
             """Docstring description."""
-            pass
 
         assert func._mcp_tool["description"] == "Explicit description"
 
@@ -59,7 +57,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool()
         def documented():
             """Docstring used as description."""
-            pass
 
         assert documented._mcp_tool["description"] == "Docstring used as description."
 
@@ -74,7 +71,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool()
         def my_tool():
             """Tool."""
-            pass
 
         assert my_tool._mcp_tool["name"].startswith("codomyrmex.")
         assert "my_tool" in my_tool._mcp_tool["name"]
@@ -83,7 +79,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool(name="codomyrmex.custom_name")
         def irrelevant_name():
             """Tool."""
-            pass
 
         assert irrelevant_name._mcp_tool["name"] == "codomyrmex.custom_name"
 
@@ -91,7 +86,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool(name="bare_name")
         def tool():
             """Tool."""
-            pass
 
         assert tool._mcp_tool["name"] == "codomyrmex.bare_name"
 
@@ -99,7 +93,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool()
         def tracked():
             """Tool."""
-            pass
 
         assert "module" in tracked._mcp_tool
         # The module will be this test file's module path
@@ -109,7 +102,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool()
         def versioned():
             """Tool."""
-            pass
 
         assert versioned._mcp_tool["version"] == "1.0"
 
@@ -117,7 +109,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool(version="2.5")
         def v2():
             """Tool."""
-            pass
 
         assert v2._mcp_tool["version"] == "2.5"
 
@@ -125,7 +116,6 @@ class TestMCPToolDecoratorMetadata:
         @mcp_tool(deprecated_in="1.5")
         def old_tool():
             """Old tool."""
-            pass
 
         assert old_tool._mcp_tool["deprecated_in"] == "1.5"
 
@@ -155,7 +145,6 @@ class TestMCPToolDecoratorBehavior:
         @mcp_tool()
         def original_name():
             """Original."""
-            pass
 
         assert original_name.__name__ == "original_name"
 
@@ -163,7 +152,6 @@ class TestMCPToolDecoratorBehavior:
         @mcp_tool()
         def with_doc():
             """My docstring."""
-            pass
 
         assert with_doc.__doc__ == "My docstring."
 
@@ -192,7 +180,9 @@ class TestMCPToolDecoratorBehavior:
             warnings.simplefilter("always")
             result = current()
             assert result == "new"
-            deprecation_warnings = [x for x in w if issubclass(x.category, DeprecationWarning)]
+            deprecation_warnings = [
+                x for x in w if issubclass(x.category, DeprecationWarning)
+            ]
             assert len(deprecation_warnings) == 0
 
 

@@ -219,7 +219,10 @@ class TestCoordinationError:
     """Tests for CoordinationError."""
 
     def test_operation_attribute(self):
-        assert CoordinationError("leader-election", "timeout").operation == "leader-election"
+        assert (
+            CoordinationError("leader-election", "timeout").operation
+            == "leader-election"
+        )
 
     def test_reason_attribute(self):
         assert CoordinationError("leader-election", "timeout").reason == "timeout"
@@ -238,7 +241,9 @@ class TestLeaderElectionError:
     """Tests for LeaderElectionError."""
 
     def test_reason_attribute(self):
-        assert LeaderElectionError("no agents available").reason == "no agents available"
+        assert (
+            LeaderElectionError("no agents available").reason == "no agents available"
+        )
 
     def test_candidates_defaults_to_empty_list(self):
         assert LeaderElectionError("fail").candidates == []
@@ -308,5 +313,9 @@ class TestExceptionHierarchy:
             raise ChannelError("ch", "reason")
 
     def test_all_errors_are_base_exceptions(self):
-        for exc in [CollaborationError("x"), ConsensusError("x"), ChannelError("c", "r")]:
+        for exc in [
+            CollaborationError("x"),
+            ConsensusError("x"),
+            ChannelError("c", "r"),
+        ]:
             assert isinstance(exc, Exception)

@@ -27,6 +27,7 @@ try:
         _is_public_method,
         _method_to_args_schema,
     )
+
     _AGENTS_AVAILABLE = True
 except ImportError:
     _AGENTS_AVAILABLE = False
@@ -41,16 +42,22 @@ pytestmark = pytest.mark.skipif(
 # Lightweight stub client classes (replace MagicMock)
 # ---------------------------------------------------------------------------
 
+
 class StubClient:
     """Minimal stub client that records calls and returns configured values."""
-    pass
 
 
 class StubComputeClient:
     """Stub compute client with common compute methods."""
 
-    def __init__(self, *, list_instances_rv=None, create_instance_rv=None,
-                 list_images_rv=None, validate_connection_rv=True):
+    def __init__(
+        self,
+        *,
+        list_instances_rv=None,
+        create_instance_rv=None,
+        list_images_rv=None,
+        validate_connection_rv=True,
+    ):
         self._list_instances_rv = list_instances_rv or []
         self._create_instance_rv = create_instance_rv or {"id": "new"}
         self._list_images_rv = list_images_rv or []
@@ -123,6 +130,7 @@ class StubPublicPrivateClient:
 # Test InfrastructureAgent Initialization
 # ---------------------------------------------------------------------------
 
+
 class TestInfrastructureAgentInit:
     """Tests for InfrastructureAgent constructor and from_env."""
 
@@ -164,6 +172,7 @@ class TestInfrastructureAgentInit:
 # Test InfrastructureAgent Execution
 # ---------------------------------------------------------------------------
 
+
 class TestInfrastructureAgentExecute:
     """Tests for InfrastructureAgent._execute_impl."""
 
@@ -177,10 +186,14 @@ class TestInfrastructureAgentExecute:
         """Valid JSON dispatches to correct client method."""
         compute = StubComputeClient(list_instances_rv=[{"id": "i-1"}])
         agent = self._make_agent(clients={"compute": compute})
-        request = AgentRequest(prompt=json.dumps({
-            "service": "compute",
-            "action": "list_instances",
-        }))
+        request = AgentRequest(
+            prompt=json.dumps(
+                {
+                    "service": "compute",
+                    "action": "list_instances",
+                }
+            )
+        )
         response = agent.execute(request)
         assert response.is_success()
         assert "i-1" in response.content
@@ -205,10 +218,14 @@ class TestInfrastructureAgentExecute:
     def test_unknown_service(self):
         """Unknown service returns error with available list."""
         agent = self._make_agent(clients={"compute": StubComputeClient()})
-        request = AgentRequest(prompt=json.dumps({
-            "service": "unknown",
-            "action": "list",
-        }))
+        request = AgentRequest(
+            prompt=json.dumps(
+                {
+                    "service": "unknown",
+                    "action": "list",
+                }
+            )
+        )
         response = agent.execute(request)
         assert not response.is_success()
         assert "unknown" in response.error.lower()
@@ -219,10 +236,14 @@ class TestInfrastructureAgentExecute:
         # Create a compute client that only has list_instances
         compute = StubComputeClient()
         agent = self._make_agent(clients={"compute": compute})
-        request = AgentRequest(prompt=json.dumps({
-            "service": "compute",
-            "action": "nonexistent_method",
-        }))
+        request = AgentRequest(
+            prompt=json.dumps(
+                {
+                    "service": "compute",
+                    "action": "nonexistent_method",
+                }
+            )
+        )
         response = agent.execute(request)
         assert not response.is_success()
         assert "nonexistent_method" in response.error
@@ -246,15 +267,22 @@ class TestInfrastructureAgentExecute:
         """Extra JSON keys are forwarded as kwargs to client method."""
         compute = StubComputeClient(create_instance_rv={"id": "new"})
         agent = self._make_agent(clients={"compute": compute})
-        request = AgentRequest(prompt=json.dumps({
-            "service": "compute",
-            "action": "create_instance",
-            "name": "srv-1",
-            "flavor": "small",
-        }))
+        request = AgentRequest(
+            prompt=json.dumps(
+                {
+                    "service": "compute",
+                    "action": "create_instance",
+                    "name": "srv-1",
+                    "flavor": "small",
+                }
+            )
+        )
         response = agent.execute(request)
         assert response.is_success()
-        assert compute._calls["create_instance"][0] == {"name": "srv-1", "flavor": "small"}
+        assert compute._calls["create_instance"][0] == {
+            "name": "srv-1",
+            "flavor": "small",
+        }
 
     def test_security_pipeline_blocks(self):
         """Security pipeline can block execution."""
@@ -263,11 +291,15 @@ class TestInfrastructureAgentExecute:
             clients={"compute": StubComputeClient()},
             security_pipeline=pipeline,
         )
-        request = AgentRequest(prompt=json.dumps({
-            "service": "compute",
-            "action": "create_instance",
-            "name": "bad",
-        }))
+        request = AgentRequest(
+            prompt=json.dumps(
+                {
+                    "service": "compute",
+                    "action": "create_instance",
+                    "name": "bad",
+                }
+            )
+        )
         response = agent.execute(request)
         assert not response.is_success()
         assert "exploit" in response.error.lower()
@@ -277,10 +309,14 @@ class TestInfrastructureAgentExecute:
         """Successful response metadata includes service and action."""
         compute = StubComputeClient(list_images_rv=[])
         agent = self._make_agent(clients={"compute": compute})
-        request = AgentRequest(prompt=json.dumps({
-            "service": "compute",
-            "action": "list_images",
-        }))
+        request = AgentRequest(
+            prompt=json.dumps(
+                {
+                    "service": "compute",
+                    "action": "list_images",
+                }
+            )
+        )
         response = agent.execute(request)
         assert response.metadata.get("service") == "compute"
         assert response.metadata.get("action") == "list_images"
@@ -289,6 +325,7 @@ class TestInfrastructureAgentExecute:
 # ---------------------------------------------------------------------------
 # Test InfrastructureAgent Tool Registry
 # ---------------------------------------------------------------------------
+
 
 class TestInfrastructureAgentToolRegistry:
     """Tests for InfrastructureAgent.populate_tool_registry."""
@@ -341,10 +378,14 @@ class TestInfrastructureAgentToolRegistry:
         agent = InfrastructureAgent(clients={"compute": compute})
         agent._pipeline = None
 
-        request = AgentRequest(prompt=json.dumps({
-            "service": "compute",
-            "action": "list_instances",
-        }))
+        request = AgentRequest(
+            prompt=json.dumps(
+                {
+                    "service": "compute",
+                    "action": "list_instances",
+                }
+            )
+        )
         chunks = list(agent.stream(request))
         assert len(chunks) == 1
 
@@ -369,6 +410,7 @@ class TestInfrastructureAgentToolRegistry:
 # ---------------------------------------------------------------------------
 # Test CloudToolFactory
 # ---------------------------------------------------------------------------
+
 
 class TestCloudToolFactory:
     """Tests for CloudToolFactory."""
@@ -416,6 +458,7 @@ class TestCloudToolFactory:
 
     def test_tool_schema_extraction(self):
         """Tool parameters schema is extracted from method signature."""
+
         def sample_method(name: str, size: int = 50, enabled: bool = True):
             pass
 
@@ -428,6 +471,7 @@ class TestCloudToolFactory:
 
     def test_tool_schema_no_self(self):
         """Schema extraction skips 'self' parameter."""
+
         class Foo:
             def bar(self, x: str):
                 pass

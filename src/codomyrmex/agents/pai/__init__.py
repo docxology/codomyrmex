@@ -22,13 +22,15 @@ Example:
 
     # MCP access to all Codomyrmex modules
     from codomyrmex.agents.pai import call_tool, create_codomyrmex_mcp_server
+
     modules = call_tool("codomyrmex.list_modules")
     server = create_codomyrmex_mcp_server()
 
     # Trust-gated access
     from codomyrmex.agents.pai import verify_capabilities, trust_all, trusted_call_tool
-    verify_capabilities()   # audit + promote safe tools
-    trust_all()             # promote destructive tools
+
+    verify_capabilities()  # audit + promote safe tools
+    trust_all()  # promote destructive tools
     trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
     ```
 
@@ -113,4 +115,3 @@ __all__ = [
 ]
 
 __version__ = "0.4.0"
-

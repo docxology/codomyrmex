@@ -19,6 +19,7 @@ def _get_store():  # type: ignore[return]
     global _store
     if _store is None:
         from codomyrmex.vector_store.store import InMemoryVectorStore
+
         _store = InMemoryVectorStore()
     return _store
 
@@ -71,10 +72,7 @@ def vector_search(
         sorted best-match first.
     """
     results = _get_store().search(query_embedding, k=k)
-    return [
-        {"id": r.id, "score": r.score, "metadata": r.metadata}
-        for r in results
-    ]
+    return [{"id": r.id, "score": r.score, "metadata": r.metadata} for r in results]
 
 
 @mcp_tool(

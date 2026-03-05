@@ -46,34 +46,36 @@ class PAISimulator:
         # Format: | **name** | "trigger", "trigger" | `Workflows/file.md` |
 
         # Look for the table section
-        table_match = re.search(r"## Workflow Routing.*?\n(.*?)(?:\n##|\Z)", content, re.DOTALL)
+        table_match = re.search(
+            r"## Workflow Routing.*?\n(.*?)(?:\n##|\Z)", content, re.DOTALL
+        )
         if not table_match:
             logger.warning("No Workflow Routing table found in SKILL.md")
             return
 
-        rows = table_match.group(1).strip().split('\n')
+        rows = table_match.group(1).strip().split("\n")
         for row in rows:
             if "|" not in row or "---" in row:
                 continue
 
-            parts = [p.strip() for p in row.split('|') if p.strip()]
+            parts = [p.strip() for p in row.split("|") if p.strip()]
             if len(parts) >= 3:
-                name_raw = parts[0].replace('*', '')
+                name_raw = parts[0].replace("*", "")
                 triggers_raw = parts[1]
-                path_raw = parts[2].replace('`', '')
+                path_raw = parts[2].replace("`", "")
 
                 # Parse triggers
-                triggers = [t.strip(' "') for t in triggers_raw.split(',')]
+                triggers = [t.strip(' "') for t in triggers_raw.split(",")]
 
                 trigger_obj = WorkflowTrigger(
                     name=name_raw,
                     description=f"Simulated workflow for {name_raw}",
-                    workflow_file=path_raw
+                    workflow_file=path_raw,
                 )
 
                 for t in triggers:
                     cmd = t.strip()
-                    if cmd.startswith('/'):
+                    if cmd.startswith("/"):
                         self.triggers[cmd] = trigger_obj
                         logger.info(f"Registered command: {cmd} -> {path_raw}")
 
@@ -87,7 +89,9 @@ class PAISimulator:
             return False
 
         trigger = self.triggers[command]
-        logger.info(f"PAI: Recognized command '{command}'. Executing workflow '{trigger.workflow_file}'...")
+        logger.info(
+            f"PAI: Recognized command '{command}'. Executing workflow '{trigger.workflow_file}'..."
+        )
 
         return self._run_workflow(trigger.workflow_file)
 
@@ -141,7 +145,7 @@ class PAISimulator:
                 check=False,
                 executable="/bin/bash",
                 text=True,
-                capture_output=True
+                capture_output=True,
             )
 
             print("--- Output ---")

@@ -75,9 +75,13 @@ class TestSecurityDashboardWithCompliance:
     def _make_report(self, pass_count: int, fail_count: int) -> ComplianceReport:
         report = ComplianceReport()
         for i in range(pass_count):
-            report.add_check(ComplianceCheck(f"P{i}", "owasp", "desc", ComplianceStatus.PASS))
+            report.add_check(
+                ComplianceCheck(f"P{i}", "owasp", "desc", ComplianceStatus.PASS)
+            )
         for i in range(fail_count):
-            report.add_check(ComplianceCheck(f"F{i}", "owasp", "desc", ComplianceStatus.FAIL))
+            report.add_check(
+                ComplianceCheck(f"F{i}", "owasp", "desc", ComplianceStatus.FAIL)
+            )
         return report
 
     def test_compliance_pass_rate_propagated(self):
@@ -107,7 +111,9 @@ class TestSecurityDashboardWithCompliance:
         report = self._make_report(pass_count=0, fail_count=20)
         # 5 secrets × 10 = 50, plus compliance risk = 50 → 100
         secrets = [
-            SecretFinding(file_path="x.py", line_number=1, secret_type="api_key", snippet="***")
+            SecretFinding(
+                file_path="x.py", line_number=1, secret_type="api_key", snippet="***"
+            )
             for _ in range(5)
         ]
         dashboard = SecurityDashboard(compliance=report, secrets=secrets)

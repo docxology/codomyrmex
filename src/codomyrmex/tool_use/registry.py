@@ -70,13 +70,18 @@ class ToolRegistry:
     Example::
 
         registry = ToolRegistry()
-        registry.register(ToolEntry(
-            name="greet",
-            description="Say hello",
-            handler=lambda data: {"message": f"Hello, {data['name']}!"},
-            input_schema={"type": "object", "required": ["name"],
-                          "properties": {"name": {"type": "string"}}},
-        ))
+        registry.register(
+            ToolEntry(
+                name="greet",
+                description="Say hello",
+                handler=lambda data: {"message": f"Hello, {data['name']}!"},
+                input_schema={
+                    "type": "object",
+                    "required": ["name"],
+                    "properties": {"name": {"type": "string"}},
+                },
+            )
+        )
 
         result = registry.invoke("greet", {"name": "World"})
         assert result.ok
@@ -164,9 +169,8 @@ class ToolRegistry:
                 if match_all_tags:
                     if not search_tag_set.issubset(entry_tag_set):
                         continue
-                else:
-                    if not search_tag_set.intersection(entry_tag_set):
-                        continue
+                elif not search_tag_set.intersection(entry_tag_set):
+                    continue
 
             results.append(entry)
 
@@ -266,6 +270,7 @@ class ToolRegistry:
 # Decorator API
 # ======================================================================
 
+
 def tool(
     name: str,
     description: str = "",
@@ -290,12 +295,18 @@ def tool(
 
     Example::
 
-        @tool(name="add", description="Add two numbers",
-              input_schema={"type": "object", "required": ["a", "b"],
-                            "properties": {"a": {"type": "number"},
-                                           "b": {"type": "number"}}})
+        @tool(
+            name="add",
+            description="Add two numbers",
+            input_schema={
+                "type": "object",
+                "required": ["a", "b"],
+                "properties": {"a": {"type": "number"}, "b": {"type": "number"}},
+            },
+        )
         def add(data):
             return {"sum": data["a"] + data["b"]}
+
 
         # Later, register it:
         my_registry.register(add.tool_entry)

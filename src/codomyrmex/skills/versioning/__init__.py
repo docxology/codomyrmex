@@ -10,6 +10,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -20,7 +21,7 @@ __version__ = "0.1.0"
 
 def parse_version(version_str: str) -> tuple[int, ...]:
     """Parse a semver-like version string into a tuple of ints."""
-    parts = re.findall(r'\d+', version_str)
+    parts = re.findall(r"\d+", version_str)
     return tuple(int(p) for p in parts)
 
 
@@ -41,11 +42,11 @@ class SkillVersionManager:
         Returns:
             Version string (defaults to '0.0.0' if not set)
         """
-        if hasattr(skill, 'metadata'):
-            return getattr(skill.metadata, 'version', '0.0.0')
-        elif isinstance(skill, dict):
-            return skill.get('version', '0.0.0')
-        return '0.0.0'
+        if hasattr(skill, "metadata"):
+            return getattr(skill.metadata, "version", "0.0.0")
+        if isinstance(skill, dict):
+            return skill.get("version", "0.0.0")
+        return "0.0.0"
 
     def check_compatibility(self, skill, required_version: str) -> dict[str, Any]:
         """

@@ -8,29 +8,29 @@ Validate all internal links in README.md and AGENTS.md files.
 """
 
 
-
-
 logger = get_logger(__name__)
 
 REPO_ROOT = Path(__file__).parent.parent.parent
 
+
 def find_markdown_links(content: str) -> list[tuple[str, str]]:
     """Find all markdown links in content."""
     # Pattern: [text](path)
-    pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+    pattern = r"\[([^\]]+)\]\(([^)]+)\)"
     return re.findall(pattern, content)
+
 
 def resolve_link(base_path: Path, link: str) -> Path:
     """Resolve a relative link to an absolute path."""
     # Remove anchors
-    link = link.split('#')[0]
+    link = link.split("#", maxsplit=1)[0]
 
     if not link:
         return None
 
     # Absolute links (starting with /)
-    if link.startswith('/'):
-        return REPO_ROOT / link.lstrip('/')
+    if link.startswith("/"):
+        return REPO_ROOT / link.lstrip("/")
 
     # Relative links
     if base_path.is_file():
@@ -49,18 +49,23 @@ def resolve_link(base_path: Path, link: str) -> Path:
         logger.warning("Failed to resolve link %s: %s", link, e)
         return None
 
+
 def validate_file(filepath: Path) -> list[tuple[str, str]]:
     """Validate links in a file."""
     if not filepath.exists():
         return []
 
-    content = filepath.read_text(encoding='utf-8', errors='ignore')
+    content = filepath.read_text(encoding="utf-8", errors="ignore")
     links = find_markdown_links(content)
 
     broken = []
     for text, link in links:
         # Skip external links
-        if link.startswith('http://') or link.startswith('https://') or link.startswith('mailto:'):
+        if (
+            link.startswith("http://")
+            or link.startswith("https://")
+            or link.startswith("mailto:")
+        ):
             continue
 
         resolved = resolve_link(filepath, link)
@@ -69,13 +74,17 @@ def validate_file(filepath: Path) -> list[tuple[str, str]]:
 
     return broken
 
+
 def main():
     """Validate all documentation files."""
     readme_files = list(REPO_ROOT.rglob("README.md"))
     agents_files = list(REPO_ROOT.rglob("AGENTS.md"))
 
-    all_files = [f for f in readme_files + agents_files
-                 if ".venv" not in str(f) and "node_modules" not in str(f)]
+    all_files = [
+        f
+        for f in readme_files + agents_files
+        if ".venv" not in str(f) and "node_modules" not in str(f)
+    ]
 
     total_broken = 0
     files_with_issues = []
@@ -96,6 +105,7 @@ def main():
             print(f"\n... and {len(files_with_issues) - 20} more files")
     else:
         print("All links validated successfully!")
+
 
 if __name__ == "__main__":
     main()

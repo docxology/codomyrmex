@@ -11,6 +11,7 @@ This module defines the core abstractions for the scrape module,
 including result types, configuration options, and abstract base classes.
 """
 
+
 class ScrapeFormat(StrEnum):
     """Supported output formats for scraping operations."""
 
@@ -46,12 +47,16 @@ class ScrapeResult:
 
     def get_format(self, format_type: ScrapeFormat | str) -> Any:
         """Get content in a specific format."""
-        format_key = format_type.value if isinstance(format_type, ScrapeFormat) else format_type
+        format_key = (
+            format_type.value if isinstance(format_type, ScrapeFormat) else format_type
+        )
         return self.formats.get(format_key)
 
     def has_format(self, format_type: ScrapeFormat | str) -> bool:
         """Check if a specific format is available."""
-        format_key = format_type.value if isinstance(format_type, ScrapeFormat) else format_type
+        format_key = (
+            format_type.value if isinstance(format_type, ScrapeFormat) else format_type
+        )
         return format_key in self.formats
 
 
@@ -73,7 +78,9 @@ class ScrapeOptions:
         respect_robots_txt: Whether to respect robots.txt
     """
 
-    formats: list[ScrapeFormat | str] = field(default_factory=lambda: [ScrapeFormat.MARKDOWN])
+    formats: list[ScrapeFormat | str] = field(
+        default_factory=lambda: [ScrapeFormat.MARKDOWN]
+    )
     timeout: float | None = None
     headers: dict[str, str] = field(default_factory=dict)
     wait_for: str | None = None
@@ -200,12 +207,9 @@ class BaseScraper(ABC):
         Returns:
             ScrapeResult containing the scraped content
         """
-        pass
 
     @abstractmethod
-    def crawl(
-        self, url: str, options: ScrapeOptions | None = None
-    ) -> CrawlResult:
+    def crawl(self, url: str, options: ScrapeOptions | None = None) -> CrawlResult:
         """Crawl a website starting from a URL.
 
         Args:
@@ -215,7 +219,6 @@ class BaseScraper(ABC):
         Returns:
             CrawlResult containing the crawl job information
         """
-        pass
 
     @abstractmethod
     def map(self, url: str, search: str | None = None) -> MapResult:
@@ -228,12 +231,9 @@ class BaseScraper(ABC):
         Returns:
             MapResult containing discovered links
         """
-        pass
 
     @abstractmethod
-    def search(
-        self, query: str, options: ScrapeOptions | None = None
-    ) -> SearchResult:
+    def search(self, query: str, options: ScrapeOptions | None = None) -> SearchResult:
         """Search the web and optionally scrape results.
 
         Args:
@@ -243,7 +243,6 @@ class BaseScraper(ABC):
         Returns:
             SearchResult containing search results
         """
-        pass
 
     @abstractmethod
     def extract(
@@ -262,6 +261,3 @@ class BaseScraper(ABC):
         Returns:
             ExtractResult containing extracted data
         """
-        pass
-
-

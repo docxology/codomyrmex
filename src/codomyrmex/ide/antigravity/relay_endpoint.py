@@ -24,6 +24,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -50,6 +51,7 @@ except ImportError:  # pragma: no cover
 # =====================================================================
 # RelayEndpoint
 # =====================================================================
+
 
 class RelayEndpoint:
     """Provider-agnostic LLM relay endpoint.
@@ -92,7 +94,9 @@ class RelayEndpoint:
                 )
             else:
                 self._scheduler = MessageScheduler(
-                    self.relay, scheduler_config, identity=identity,
+                    self.relay,
+                    scheduler_config,
+                    identity=identity,
                 )
 
     # ── Properties ────────────────────────────────────────────────
@@ -134,7 +138,9 @@ class RelayEndpoint:
             daemon=True,
         )
         self._thread.start()
-        logger.info(f"RelayEndpoint started: {self.identity} on {self.relay.channel_id}")
+        logger.info(
+            f"RelayEndpoint started: {self.identity} on {self.relay.channel_id}"
+        )
 
     def stop(self) -> None:
         """Stop background polling and post a departure notice."""
@@ -213,7 +219,8 @@ class RelayEndpoint:
         try:
             request = AgentRequest(prompt=msg.content, metadata=msg.metadata)
             response = self.client.execute_with_session(
-                request, session=self.session,
+                request,
+                session=self.session,
             )
             if response.is_success():
                 self.relay.post_message(
@@ -243,12 +250,16 @@ class RelayEndpoint:
         """Execute a tool request via the MCP bridge."""
         try:
             from codomyrmex.agents.pai.mcp_bridge import call_tool
+
             result = call_tool(msg.tool_name, **(msg.tool_args or {}))
             self.relay.post_tool_result(self.identity, msg.id, result)
         except Exception as exc:
             logger.error(f"Tool request failed: {exc}")
             self.relay.post_tool_result(
-                self.identity, msg.id, None, error=str(exc),
+                self.identity,
+                msg.id,
+                None,
+                error=str(exc),
             )
 
 

@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 
 class SafetyCategory(Enum):
     """Categories of safety concern."""
+
     PII = "pii"
     PROMPT_INJECTION = "prompt_injection"
     HARMFUL_CONTENT = "harmful_content"
@@ -28,6 +29,7 @@ class SafetyCategory(Enum):
 @dataclass
 class SafetyViolation:
     """A detected safety violation."""
+
     category: SafetyCategory
     description: str
     severity: str = "medium"  # low, medium, high, critical
@@ -38,6 +40,7 @@ class SafetyViolation:
 @dataclass
 class SafetyReport:
     """Report from a safety scan."""
+
     is_safe: bool
     violations: list[SafetyViolation] = field(default_factory=list)
     sanitized_text: str = ""
@@ -56,18 +59,20 @@ class SafetyFilter:
     """
 
     # Common PII patterns
-    EMAIL_PATTERN = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
-    PHONE_PATTERN = re.compile(r'\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b')
-    SSN_PATTERN = re.compile(r'\b\d{3}-\d{2}-\d{4}\b')
-    CREDIT_CARD_PATTERN = re.compile(r'\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b')
+    EMAIL_PATTERN = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b")
+    PHONE_PATTERN = re.compile(
+        r"\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b"
+    )
+    SSN_PATTERN = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
+    CREDIT_CARD_PATTERN = re.compile(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b")
 
     # Prompt injection markers
     INJECTION_PATTERNS = [
-        re.compile(r'(?i)ignore\s+(all\s+)?previous\s+instructions'),
-        re.compile(r'(?i)you\s+are\s+now\s+'),
-        re.compile(r'(?i)system\s*:\s*'),
-        re.compile(r'(?i)override\s+(all\s+)?safety'),
-        re.compile(r'(?i)jailbreak'),
+        re.compile(r"(?i)ignore\s+(all\s+)?previous\s+instructions"),
+        re.compile(r"(?i)you\s+are\s+now\s+"),
+        re.compile(r"(?i)system\s*:\s*"),
+        re.compile(r"(?i)override\s+(all\s+)?safety"),
+        re.compile(r"(?i)jailbreak"),
     ]
 
     def __init__(self, auto_sanitize: bool = True) -> None:
@@ -96,37 +101,45 @@ class SafetyFilter:
         """Detect potential PII in text."""
         violations = []
         for match in self.EMAIL_PATTERN.finditer(text):
-            violations.append(SafetyViolation(
-                category=SafetyCategory.PII,
-                description=f"Email address detected: {match.group()[:20]}...",
-                severity="medium",
-                span=match.span(),
-                suggested_action="redact",
-            ))
+            violations.append(
+                SafetyViolation(
+                    category=SafetyCategory.PII,
+                    description=f"Email address detected: {match.group()[:20]}...",
+                    severity="medium",
+                    span=match.span(),
+                    suggested_action="redact",
+                )
+            )
         for match in self.SSN_PATTERN.finditer(text):
-            violations.append(SafetyViolation(
-                category=SafetyCategory.PII,
-                description="SSN-like pattern detected",
-                severity="critical",
-                span=match.span(),
-                suggested_action="redact",
-            ))
+            violations.append(
+                SafetyViolation(
+                    category=SafetyCategory.PII,
+                    description="SSN-like pattern detected",
+                    severity="critical",
+                    span=match.span(),
+                    suggested_action="redact",
+                )
+            )
         for match in self.CREDIT_CARD_PATTERN.finditer(text):
-            violations.append(SafetyViolation(
-                category=SafetyCategory.PII,
-                description="Credit card number detected",
-                severity="critical",
-                span=match.span(),
-                suggested_action="redact",
-            ))
+            violations.append(
+                SafetyViolation(
+                    category=SafetyCategory.PII,
+                    description="Credit card number detected",
+                    severity="critical",
+                    span=match.span(),
+                    suggested_action="redact",
+                )
+            )
         for match in self.PHONE_PATTERN.finditer(text):
-            violations.append(SafetyViolation(
-                category=SafetyCategory.PII,
-                description="Phone number detected",
-                severity="low",
-                span=match.span(),
-                suggested_action="review",
-            ))
+            violations.append(
+                SafetyViolation(
+                    category=SafetyCategory.PII,
+                    description="Phone number detected",
+                    severity="low",
+                    span=match.span(),
+                    suggested_action="review",
+                )
+            )
         return violations
 
     def _check_injection(self, text: str) -> list[SafetyViolation]:
@@ -134,35 +147,39 @@ class SafetyFilter:
         violations = []
         for pattern in self.INJECTION_PATTERNS:
             for match in pattern.finditer(text):
-                violations.append(SafetyViolation(
-                    category=SafetyCategory.PROMPT_INJECTION,
-                    description=f"Potential prompt injection: '{match.group()[:50]}'",
-                    severity="high",
-                    span=match.span(),
-                    suggested_action="block",
-                ))
+                violations.append(
+                    SafetyViolation(
+                        category=SafetyCategory.PROMPT_INJECTION,
+                        description=f"Potential prompt injection: '{match.group()[:50]}'",
+                        severity="high",
+                        span=match.span(),
+                        suggested_action="block",
+                    )
+                )
         return violations
 
     def _check_code_execution(self, text: str) -> list[SafetyViolation]:
         """Detect dangerous code execution patterns."""
         violations = []
         dangerous = [
-            (r'(?i)eval\s*\(', "eval() call"),
-            (r'(?i)exec\s*\(', "exec() call"),
-            (r'(?i)os\.system\s*\(', "os.system() call"),
-            (r'(?i)subprocess\.(run|call|Popen)\s*\(', "subprocess execution"),
-            (r'(?i)__import__\s*\(', "dynamic import"),
+            (r"(?i)eval\s*\(", "eval() call"),
+            (r"(?i)exec\s*\(", "exec() call"),
+            (r"(?i)os\.system\s*\(", "os.system() call"),
+            (r"(?i)subprocess\.(run|call|Popen)\s*\(", "subprocess execution"),
+            (r"(?i)__import__\s*\(", "dynamic import"),
         ]
         for pattern_str, desc in dangerous:
             pattern = re.compile(pattern_str)
             for match in pattern.finditer(text):
-                violations.append(SafetyViolation(
-                    category=SafetyCategory.CODE_EXECUTION,
-                    description=f"Dangerous pattern: {desc}",
-                    severity="high",
-                    span=match.span(),
-                    suggested_action="review",
-                ))
+                violations.append(
+                    SafetyViolation(
+                        category=SafetyCategory.CODE_EXECUTION,
+                        description=f"Dangerous pattern: {desc}",
+                        severity="high",
+                        span=match.span(),
+                        suggested_action="review",
+                    )
+                )
         return violations
 
     def _sanitize(self, text: str, violations: list[SafetyViolation]) -> str:
@@ -175,11 +192,14 @@ class SafetyFilter:
                 result = result[:start] + "[REDACTED]" + result[end:]
         return result
 
-    def add_custom_filter(self, pattern: str, category: SafetyCategory,
-                          severity: str = "medium") -> None:
+    def add_custom_filter(
+        self, pattern: str, category: SafetyCategory, severity: str = "medium"
+    ) -> None:
         """Add a custom regex pattern as a safety filter."""
-        self._custom_filters.append({
-            "pattern": re.compile(pattern),
-            "category": category,
-            "severity": severity,
-        })
+        self._custom_filters.append(
+            {
+                "pattern": re.compile(pattern),
+                "category": category,
+                "severity": severity,
+            }
+        )

@@ -12,6 +12,7 @@ try:
     )
     from codomyrmex.agents.core.exceptions import AgentConfigurationError, AgentError
     from codomyrmex.agents.generic import APIAgentBase
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -24,9 +25,9 @@ if not _HAS_AGENTS:
 # Lightweight stubs replacing unittest.mock.Mock
 # ---------------------------------------------------------------------------
 
+
 class StubClient:
     """A simple stub API client (replaces Mock)."""
-    pass
 
 
 def _stub_client_init(api_key):
@@ -36,6 +37,7 @@ def _stub_client_init(api_key):
 
 class _SimpleNamespace:
     """Minimal attribute container (replaces Mock with attribute assignment)."""
+
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -44,6 +46,7 @@ class _SimpleNamespace:
 # ---------------------------------------------------------------------------
 # Concrete test subclass of APIAgentBase
 # ---------------------------------------------------------------------------
+
 
 class StubAPIAgentBase(APIAgentBase):
     """Stub implementation of APIAgentBase for testing."""
@@ -138,6 +141,7 @@ class StubAPIAgentBaseInitialization:
 
     def test_init_client_initialization_error(self):
         """Test initialization handles client initialization errors."""
+
         def failing_init(api_key):
             raise ValueError("Client init failed")
 
@@ -162,7 +166,9 @@ class StubAPIAgentBaseConfigExtraction:
 
     def test_extract_config_value_from_instance_config(self):
         """Test extracting config value from instance config."""
-        agent = StubAPIAgentBase(config={"test_api_key": "key", "test_key": "value_from_instance"})
+        agent = StubAPIAgentBase(
+            config={"test_api_key": "key", "test_key": "value_from_instance"}
+        )
         value = agent._extract_config_value("test_key")
         assert value == "value_from_instance"
 
@@ -218,7 +224,9 @@ class StubAPIAgentBaseTokenExtraction:
             usage=_SimpleNamespace(input_tokens=10, output_tokens=20)
         )
 
-        input_tokens, output_tokens = agent._extract_tokens_from_response(response, "anthropic")
+        input_tokens, output_tokens = agent._extract_tokens_from_response(
+            response, "anthropic"
+        )
         assert input_tokens == 10
         assert output_tokens == 20
 
@@ -229,7 +237,9 @@ class StubAPIAgentBaseTokenExtraction:
             usage=_SimpleNamespace(prompt_tokens=15, completion_tokens=25)
         )
 
-        input_tokens, output_tokens = agent._extract_tokens_from_response(response, "openai")
+        input_tokens, output_tokens = agent._extract_tokens_from_response(
+            response, "openai"
+        )
         assert input_tokens == 15
         assert output_tokens == 25
 
@@ -238,7 +248,9 @@ class StubAPIAgentBaseTokenExtraction:
         agent = StubAPIAgentBase(config={"test_api_key": "key"})
         response = _SimpleNamespace()
 
-        input_tokens, output_tokens = agent._extract_tokens_from_response(response, "unknown")
+        input_tokens, output_tokens = agent._extract_tokens_from_response(
+            response, "unknown"
+        )
         assert input_tokens == 0
         assert output_tokens == 0
 
@@ -270,6 +282,7 @@ class StubAPIAgentBaseExecution:
 
     def test_execute_impl_not_implemented(self):
         """Test that _execute_impl raises NotImplementedError if not overridden."""
+
         class IncompleteAgent(APIAgentBase):
             def __init__(self):
                 super().__init__(
@@ -294,6 +307,7 @@ class StubAPIAgentBaseExecution:
 
     def test_stream_impl_not_implemented(self):
         """Test that _stream_impl raises NotImplementedError if not overridden."""
+
         class IncompleteAgent(APIAgentBase):
             def __init__(self):
                 super().__init__(
@@ -309,6 +323,7 @@ class StubAPIAgentBaseExecution:
                     error_class=AgentError,
                     config={"test_api_key": "key"},
                 )
+
             def _execute_impl(self, request):
                 return AgentResponse(content="test")
 

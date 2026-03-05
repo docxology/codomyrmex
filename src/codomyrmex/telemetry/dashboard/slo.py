@@ -14,6 +14,7 @@ from typing import Any
 
 class SLIType(Enum):
     """Service Level Indicator types."""
+
     AVAILABILITY = "availability"  # Uptime percentage
     LATENCY = "latency"  # Response time
     THROUGHPUT = "throughput"  # Requests per second
@@ -24,6 +25,7 @@ class SLIType(Enum):
 @dataclass
 class SLI:
     """A Service Level Indicator."""
+
     name: str
     sli_type: SLIType
     good_events: int = 0
@@ -50,6 +52,7 @@ class SLI:
 @dataclass
 class SLO:
     """A Service Level Objective."""
+
     id: str
     name: str
     sli: SLI
@@ -82,6 +85,7 @@ class SLO:
 @dataclass
 class SLOViolation:
     """An SLO violation event."""
+
     slo_id: str
     slo_name: str
     target: float
@@ -148,12 +152,14 @@ class SLOTracker:
 
             # Check for violation
             if not slo.is_met:
-                self._violations.append(SLOViolation(
-                    slo_id=slo.id,
-                    slo_name=slo.name,
-                    target=slo.target,
-                    actual=slo.sli.value,
-                ))
+                self._violations.append(
+                    SLOViolation(
+                        slo_id=slo.id,
+                        slo_name=slo.name,
+                        target=slo.target,
+                        actual=slo.sli.value,
+                    )
+                )
 
     def get_status(self, slo_id: str) -> dict[str, Any] | None:
         """Get SLO status."""
@@ -224,9 +230,9 @@ class ErrorBudgetPolicy:
         # Default thresholds
         if consumed >= 100:
             return "freeze_deployments"
-        elif consumed >= 75:
+        if consumed >= 75:
             return "reduce_risk"
-        elif consumed >= 50:
+        if consumed >= 50:
             return "increase_reviews"
 
         return "normal"
@@ -234,9 +240,9 @@ class ErrorBudgetPolicy:
 
 __all__ = [
     "SLI",
-    "SLIType",
     "SLO",
-    "SLOViolation",
-    "SLOTracker",
     "ErrorBudgetPolicy",
+    "SLIType",
+    "SLOTracker",
+    "SLOViolation",
 ]

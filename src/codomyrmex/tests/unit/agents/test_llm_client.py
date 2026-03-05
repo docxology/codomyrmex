@@ -4,10 +4,12 @@ Tests AgentRequest dataclass, _OllamaResponse dataclass, and OllamaClient
 construction. Network-dependent tests (actual Ollama calls) are skipped
 when no Ollama server is reachable.
 """
+
 import pytest
 
 try:
     from codomyrmex.agents.llm_client import AgentRequest, OllamaClient, _OllamaResponse
+
     LLM_CLIENT_AVAILABLE = True
 except ImportError:
     LLM_CLIENT_AVAILABLE = False

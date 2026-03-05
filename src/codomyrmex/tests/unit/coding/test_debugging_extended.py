@@ -10,6 +10,7 @@ Complements test_debugging.py with coverage of:
 
 No mocks. No MagicMock. No monkeypatch.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -120,7 +121,9 @@ class TestPatchDataclass:
 
     def test_description_is_string(self):
         """Patch description is stored as a string."""
-        p = Patch(file_path="f.py", diff="", description="Fix something", confidence=0.5)
+        p = Patch(
+            file_path="f.py", diff="", description="Fix something", confidence=0.5
+        )
         assert isinstance(p.description, str)
 
     def test_confidence_range_low(self):
@@ -160,7 +163,9 @@ class TestVerificationResultDataclass:
 
     def test_stderr_stored(self):
         """stderr field is stored correctly."""
-        vr = VerificationResult(success=False, stdout="", stderr="error msg", exit_code=1)
+        vr = VerificationResult(
+            success=False, stdout="", stderr="error msg", exit_code=1
+        )
         assert vr.stderr == "error msg"
 
     def test_exit_code_stored(self):
@@ -212,7 +217,9 @@ class TestFixVerifier:
 
     def test_apply_patch_returns_source_unchanged(self):
         """_apply_patch with no content attribute returns original source."""
-        patch = Patch(file_path="f.py", diff="some diff", description="fix", confidence=0.5)
+        patch = Patch(
+            file_path="f.py", diff="some diff", description="fix", confidence=0.5
+        )
         source = "x = undefined\nprint(x)\n"
         result = self.verifier._apply_patch(source, patch)
         assert result == source
@@ -226,7 +233,9 @@ class TestFixVerifier:
 
     def test_apply_patch_with_content_attr_returns_content(self):
         """_apply_patch uses content attribute if present."""
-        patch = Patch(file_path="f.py", diff="some diff", description="fix", confidence=0.5)
+        patch = Patch(
+            file_path="f.py", diff="some diff", description="fix", confidence=0.5
+        )
         # Dynamically attach 'content' attribute to simulate a full-replacement patch
         patch.content = "completely new code"
         result = self.verifier._apply_patch("old code", patch)
@@ -267,9 +276,9 @@ class TestErrorAnalyzerEdgeCases:
     def test_name_error_parsed(self):
         """NameError in standard traceback format is parsed correctly."""
         stderr = (
-            'Traceback (most recent call last):\n'
+            "Traceback (most recent call last):\n"
             '  File "script.py", line 3, in <module>\n'
-            '    print(foo)\n'
+            "    print(foo)\n"
             "NameError: name 'foo' is not defined"
         )
         result = self.analyzer.analyze("", stderr, 1)
@@ -281,10 +290,10 @@ class TestErrorAnalyzerEdgeCases:
     def test_type_error_parsed(self):
         """TypeError in traceback is parsed correctly."""
         stderr = (
-            'Traceback (most recent call last):\n'
+            "Traceback (most recent call last):\n"
             '  File "main.py", line 7, in <module>\n'
             '    result = 1 + "two"\n'
-            'TypeError: unsupported operand type(s) for +: \'int\' and \'str\''
+            "TypeError: unsupported operand type(s) for +: 'int' and 'str'"
         )
         result = self.analyzer.analyze("", stderr, 1)
         assert result is not None
@@ -301,9 +310,9 @@ class TestErrorAnalyzerEdgeCases:
         """SyntaxError in stderr sets is_syntax_error=True."""
         stderr = (
             '  File "code.py", line 2\n'
-            '    if True\n'
-            '           ^\n'
-            'SyntaxError: invalid syntax'
+            "    if True\n"
+            "           ^\n"
+            "SyntaxError: invalid syntax"
         )
         result = self.analyzer.analyze("", stderr, 1)
         assert result is not None
@@ -312,15 +321,15 @@ class TestErrorAnalyzerEdgeCases:
     def test_multiple_tracebacks_uses_last(self):
         """For chained exceptions, the last traceback entry is used."""
         stderr = (
-            'Traceback (most recent call last):\n'
+            "Traceback (most recent call last):\n"
             '  File "a.py", line 1, in <module>\n'
             '    raise ValueError("first")\n'
-            'ValueError: first\n'
-            '\nDuring handling of the above exception, another exception occurred:\n'
-            '\nTraceback (most recent call last):\n'
+            "ValueError: first\n"
+            "\nDuring handling of the above exception, another exception occurred:\n"
+            "\nTraceback (most recent call last):\n"
             '  File "a.py", line 5, in <module>\n'
             '    raise TypeError("second")\n'
-            'TypeError: second'
+            "TypeError: second"
         )
         result = self.analyzer.analyze("", stderr, 1)
         assert result is not None
@@ -343,9 +352,9 @@ class TestDebuggerNoLLM:
     def test_debug_with_error_no_llm_returns_none(self):
         """With an error but no LLM, patcher returns [] → debug returns None."""
         stderr = (
-            'Traceback (most recent call last):\n'
+            "Traceback (most recent call last):\n"
             '  File "test.py", line 1, in <module>\n'
-            '    print(undefined)\n'
+            "    print(undefined)\n"
             "NameError: name 'undefined' is not defined"
         )
         result = self.debugger.debug("print(undefined)", "", stderr, 1)

@@ -114,9 +114,7 @@ class GitNexusBridge:
             Dict with "stdout" and "stderr" from the analyze process, plus
             "indexed": True to confirm completion.
         """
-        result = self._run(
-            "analyze", self.repo_path, timeout=300, json_output=False
-        )
+        result = self._run("analyze", self.repo_path, timeout=300, json_output=False)
         result["indexed"] = True
         return result
 

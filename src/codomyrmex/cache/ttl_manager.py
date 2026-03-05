@@ -8,6 +8,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class TTLManager:
     """Periodically cleans up expired keys from a cache."""
 

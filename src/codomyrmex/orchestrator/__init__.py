@@ -110,7 +110,9 @@ def cli_commands():
             "help": "List available workflows",
             "handler": lambda **kwargs: print(
                 "Available workflows:\n"
-                + "\n".join(f"  - {name}" for name in ["default", "ci", "deploy", "test"])
+                + "\n".join(
+                    f"  - {name}" for name in ["default", "ci", "deploy", "test"]
+                )
             ),
         },
         "run": {
@@ -202,4 +204,3 @@ __all__ = [
     "DependencyResolutionError",
     "ConcurrencyError",
 ]
-

@@ -17,6 +17,7 @@ try:
         with_circuit_breaker,
         with_retry,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -28,6 +29,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestCircuitState:
     """Test suite for CircuitState."""
+
     def test_closed(self):
         assert CircuitState.CLOSED is not None
 
@@ -41,6 +43,7 @@ class TestCircuitState:
 @pytest.mark.unit
 class TestLoadBalancerStrategy:
     """Test suite for LoadBalancerStrategy."""
+
     def test_round_robin(self):
         assert LoadBalancerStrategy.ROUND_ROBIN is not None
 
@@ -57,6 +60,7 @@ class TestLoadBalancerStrategy:
 @pytest.mark.unit
 class TestCircuitBreakerConfig:
     """Test suite for CircuitBreakerConfig."""
+
     def test_create_config(self):
         config = CircuitBreakerConfig()
         assert config.failure_threshold == 5
@@ -72,6 +76,7 @@ class TestCircuitBreakerConfig:
 @pytest.mark.unit
 class TestServiceInstance:
     """Test suite for ServiceInstance."""
+
     def test_create_instance(self):
         instance = ServiceInstance(id="svc-1", host="localhost", port=8080)
         assert instance.id == "svc-1"
@@ -83,6 +88,7 @@ class TestServiceInstance:
 @pytest.mark.unit
 class TestCircuitBreaker:
     """Test suite for CircuitBreaker."""
+
     def test_create_breaker(self):
         breaker = CircuitBreaker(name="test-service")
         assert breaker is not None
@@ -96,6 +102,7 @@ class TestCircuitBreaker:
 @pytest.mark.unit
 class TestCircuitOpenError:
     """Test suite for CircuitOpenError."""
+
     def test_is_exception(self):
         with pytest.raises(CircuitOpenError):
             raise CircuitOpenError("circuit is open")
@@ -104,6 +111,7 @@ class TestCircuitOpenError:
 @pytest.mark.unit
 class TestNoHealthyInstanceError:
     """Test suite for NoHealthyInstanceError."""
+
     def test_is_exception(self):
         with pytest.raises(NoHealthyInstanceError):
             raise NoHealthyInstanceError("no healthy instances")
@@ -112,6 +120,7 @@ class TestNoHealthyInstanceError:
 @pytest.mark.unit
 class TestLoadBalancer:
     """Test suite for LoadBalancer."""
+
     def test_create_balancer(self):
         lb = LoadBalancer()
         assert lb is not None
@@ -124,6 +133,7 @@ class TestLoadBalancer:
 @pytest.mark.unit
 class TestRetryPolicy:
     """Test suite for RetryPolicy."""
+
     def test_create_policy(self):
         policy = RetryPolicy()
         assert policy.max_retries == 3
@@ -140,6 +150,7 @@ class TestRetryPolicy:
 @pytest.mark.unit
 class TestServiceProxy:
     """Test suite for ServiceProxy."""
+
     def test_create_proxy(self):
         proxy = ServiceProxy(service_name="my-service")
         assert proxy is not None
@@ -160,6 +171,7 @@ class TestServiceProxy:
 @pytest.mark.unit
 class TestDecorators:
     """Test suite for Decorators."""
+
     def test_with_circuit_breaker_callable(self):
         assert callable(with_circuit_breaker)
 

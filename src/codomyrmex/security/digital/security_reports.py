@@ -11,11 +11,11 @@ from typing import Any
 
 try:
     import jinja2
+
     JINJA2_AVAILABLE = True
 except ImportError:
     JINJA2_AVAILABLE = False
     # Fallback to prevent immediate crash if jinja2 missing, though functionality will fail
-    pass
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -25,6 +25,7 @@ logger = get_logger(__name__)
 @dataclass
 class SecurityReport:
     """Comprehensive security assessment report."""
+
     report_id: str
     title: str
     generated_at: datetime
@@ -60,7 +61,9 @@ class SecurityReportGenerator:
     def __init__(self, template_dir: str | None = None):
         """Initialize the security report generator."""
         if not JINJA2_AVAILABLE:
-            raise ImportError("jinja2 package not available. Install with: pip install jinja2")
+            raise ImportError(
+                "jinja2 package not available. Install with: pip install jinja2"
+            )
 
         self.template_dir = template_dir or os.path.join(
             os.path.dirname(__file__), "templates"
@@ -208,10 +211,9 @@ class SecurityReportGenerator:
         """Jinja2 filter for risk levels."""
         if score >= 80:
             return "high"
-        elif score >= 60:
+        if score >= 60:
             return "medium"
-        else:
-            return "low"
+        return "low"
 
     def generate_comprehensive_report(
         self,
@@ -229,7 +231,10 @@ class SecurityReportGenerator:
             vulnerability_analysis, compliance_analysis, monitoring_analysis
         )
         executive_summary = self._generate_executive_summary(
-            vulnerability_analysis, compliance_analysis, monitoring_analysis, overall_risk
+            vulnerability_analysis,
+            compliance_analysis,
+            monitoring_analysis,
+            overall_risk,
         )
         recommendations = self._generate_recommendations(
             vulnerability_analysis, compliance_analysis, monitoring_analysis
@@ -258,12 +263,18 @@ class SecurityReportGenerator:
         vulnerabilities = data.get("vulnerabilities", [])
         return {
             "total_vulnerabilities": len(vulnerabilities),
-            "critical_count": sum(1 for v in vulnerabilities if v.get("severity") == "CRITICAL"),
-            "high_count": sum(1 for v in vulnerabilities if v.get("severity") == "HIGH"),
-            "medium_count": sum(1 for v in vulnerabilities if v.get("severity") == "MEDIUM"),
+            "critical_count": sum(
+                1 for v in vulnerabilities if v.get("severity") == "CRITICAL"
+            ),
+            "high_count": sum(
+                1 for v in vulnerabilities if v.get("severity") == "HIGH"
+            ),
+            "medium_count": sum(
+                1 for v in vulnerabilities if v.get("severity") == "MEDIUM"
+            ),
             "low_count": sum(1 for v in vulnerabilities if v.get("severity") == "LOW"),
             "top_vulnerabilities": vulnerabilities[:10],
-            "severity_breakdown": {}
+            "severity_breakdown": {},
         }
 
     def _analyze_compliance(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -273,20 +284,19 @@ class SecurityReportGenerator:
         compliant = sum(1 for c in checks if c.get("status") == "compliant")
 
         return {
-             "total_checks": total,
-             "compliance_percentage": (compliant / total * 100) if total > 0 else 0,
-             "standards_coverage": {}
+            "total_checks": total,
+            "compliance_percentage": (compliant / total * 100) if total > 0 else 0,
+            "standards_coverage": {},
         }
 
     def _analyze_monitoring(self, data: dict[str, Any]) -> dict[str, Any]:
         """Analyze monitoring data."""
         events = data.get("events", [])
-        return {
-            "total_events": len(events),
-            "events_by_type": {}
-        }
+        return {"total_events": len(events), "events_by_type": {}}
 
-    def _calculate_overall_risk(self, vuln: dict, comp: dict, mon: dict) -> dict[str, Any]:
+    def _calculate_overall_risk(
+        self, vuln: dict, comp: dict, mon: dict
+    ) -> dict[str, Any]:
         """Calculate overall risk."""
         # Heuristic risk scoring based on vulnerability counts
         score = 0
@@ -303,13 +313,11 @@ class SecurityReportGenerator:
         elif score > 20:
             level = "MEDIUM"
 
-        return {
-            "score": score,
-            "level": level,
-            "description": f"Risk level is {level}"
-        }
+        return {"score": score, "level": level, "description": f"Risk level is {level}"}
 
-    def _generate_executive_summary(self, vuln: dict, comp: dict, mon: dict, risk: dict) -> str:
+    def _generate_executive_summary(
+        self, vuln: dict, comp: dict, mon: dict, risk: dict
+    ) -> str:
         """Generate summary."""
         return f"System assessment complete. Risk Level: {risk['level']}. Found {vuln.get('total_vulnerabilities', 0)} vulnerabilities."
 
@@ -320,15 +328,19 @@ class SecurityReportGenerator:
             recs.append("Remediate identified vulnerabilities.")
         return recs
 
-    def _compile_findings(self, vuln: dict, comp: dict, mon: dict) -> list[dict[str, Any]]:
+    def _compile_findings(
+        self, vuln: dict, comp: dict, mon: dict
+    ) -> list[dict[str, Any]]:
         """Compile findings."""
         findings = []
         for v in vuln.get("top_vulnerabilities", []):
-            findings.append({
-                "title": v.get("title", "Vulnerability"),
-                "severity": v.get("severity", "UNKNOWN"),
-                "description": v.get("description", "")
-            })
+            findings.append(
+                {
+                    "title": v.get("title", "Vulnerability"),
+                    "severity": v.get("severity", "UNKNOWN"),
+                    "description": v.get("description", ""),
+                }
+            )
         return findings
 
     def _calculate_metrics(self, vuln: dict, comp: dict, mon: dict) -> dict[str, Any]:
@@ -336,10 +348,12 @@ class SecurityReportGenerator:
         return {
             "vulnerability_metrics": vuln,
             "compliance_metrics": comp,
-            "monitoring_metrics": mon
+            "monitoring_metrics": mon,
         }
 
-    def export_report(self, report: SecurityReport, output_path: str, format: str = "json") -> bool:
+    def export_report(
+        self, report: SecurityReport, output_path: str, format: str = "json"
+    ) -> bool:
         """Export report to file."""
         try:
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -354,7 +368,7 @@ class SecurityReportGenerator:
                 with open(output_path, "w") as f:
                     f.write(html)
             else:
-                 return False
+                return False
             return True
         except Exception as e:
             logger.error(f"Export failed: {e}")

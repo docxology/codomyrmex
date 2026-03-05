@@ -61,11 +61,11 @@ def get_provider(
 
 
 __all__ = [
-    "TTSProvider",
-    "Pyttsx3Provider",
-    "EdgeTTSProvider",
-    "PYTTSX3_AVAILABLE",
     "EDGE_TTS_AVAILABLE",
     "POPULAR_VOICES",
+    "PYTTSX3_AVAILABLE",
+    "EdgeTTSProvider",
+    "Pyttsx3Provider",
+    "TTSProvider",
     "get_provider",
 ]

@@ -19,6 +19,7 @@ def _get_swarm_manager() -> Any:
 
     """
     from codomyrmex.collaboration.protocols.swarm import SwarmManager
+
     return SwarmManager()
 
 
@@ -30,6 +31,7 @@ def _get_task_decomposer() -> Any:
 
     """
     from codomyrmex.collaboration.protocols.swarm import TaskDecomposer
+
     return TaskDecomposer
 
 

@@ -1,7 +1,6 @@
 """Unit tests for HTTP method and status code primitives."""
 
 
-
 class TestHTTPMethod:
     """Tests for HTTPMethod enum."""
 

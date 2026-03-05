@@ -27,6 +27,7 @@ from codomyrmex.telemetry.dashboard import (
 # Enum tests
 # ---------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestMetricTypeEnum:
     """Tests for the MetricType enumeration."""
@@ -75,6 +76,7 @@ class TestPanelTypeEnum:
 # ---------------------------------------------------------------
 # MetricValue dataclass tests
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMetricValue:
@@ -140,6 +142,7 @@ class TestMetricValue:
 # Alert dataclass tests
 # ---------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAlert:
     """Tests for the Alert dataclass."""
@@ -188,8 +191,15 @@ class TestAlert:
     def test_to_dict_keys(self):
         alert = Alert(id="a5", name="disk", message="disk full")
         d = alert.to_dict()
-        expected_keys = {"id", "name", "message", "severity", "is_active",
-                         "created_at", "resolved_at"}
+        expected_keys = {
+            "id",
+            "name",
+            "message",
+            "severity",
+            "is_active",
+            "created_at",
+            "resolved_at",
+        }
         assert expected_keys == set(d.keys())
 
     def test_to_dict_resolved_at_none_when_active(self):
@@ -200,7 +210,9 @@ class TestAlert:
 
     def test_to_dict_severity_is_string(self):
         alert = Alert(
-            id="a7", name="x", message="y",
+            id="a7",
+            name="x",
+            message="y",
             severity=AlertSeverity.CRITICAL,
         )
         assert alert.to_dict()["severity"] == "critical"
@@ -209,6 +221,7 @@ class TestAlert:
 # ---------------------------------------------------------------
 # Panel dataclass tests
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestPanel:
@@ -249,6 +262,7 @@ class TestPanel:
 # ---------------------------------------------------------------
 # Dashboard class tests
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestDashboard:
@@ -314,6 +328,7 @@ class TestDashboard:
 # ---------------------------------------------------------------
 # MetricCollector tests
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestMetricCollector:
@@ -412,6 +427,7 @@ class TestMetricCollector:
 # ---------------------------------------------------------------
 # AlertManager tests
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestAlertManager:
@@ -533,6 +549,7 @@ class TestAlertManager:
 # ---------------------------------------------------------------
 # DashboardManager tests
 # ---------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestDashboardManager:

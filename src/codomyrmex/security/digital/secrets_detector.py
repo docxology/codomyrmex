@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 @dataclass
 class SecretFinding:
     """Represents a potential secret found in code."""
+
     file_path: str
     line_number: int
     line_content: str
@@ -56,8 +57,16 @@ class SecretsDetector:
 
     # Files to exclude
     EXCLUDE_FILES = {
-        ".git", ".env.example", "package-lock.json", "yarn.lock",
-        ".jpg", ".png", ".gif", ".ico", ".pdf", ".pyc"
+        ".git",
+        ".env.example",
+        "package-lock.json",
+        "yarn.lock",
+        ".jpg",
+        ".png",
+        ".gif",
+        ".ico",
+        ".pdf",
+        ".pyc",
     }
 
     # Entropy threshold (Shannon entropy)
@@ -84,7 +93,7 @@ class SecretsDetector:
             return findings
 
         try:
-            with open(file_path, encoding='utf-8', errors='ignore') as f:
+            with open(file_path, encoding="utf-8", errors="ignore") as f:
                 lines = f.readlines()
 
             for i, line in enumerate(lines, 1):
@@ -95,13 +104,17 @@ class SecretsDetector:
 
         return findings
 
-    def scan_directory(self, directory_path: str, recursive: bool = True) -> list[SecretFinding]:
+    def scan_directory(
+        self, directory_path: str, recursive: bool = True
+    ) -> list[SecretFinding]:
         """Scan a directory for secrets."""
         all_findings = []
 
         for root, dirs, files in os.walk(directory_path):
             # Skip excluded dirs
-            dirs[:] = [d for d in dirs if d not in self.EXCLUDE_FILES and not d.startswith('.')]
+            dirs[:] = [
+                d for d in dirs if d not in self.EXCLUDE_FILES and not d.startswith(".")
+            ]
 
             for file in files:
                 file_path = os.path.join(root, file)
@@ -112,12 +125,14 @@ class SecretsDetector:
 
         return all_findings
 
-    def _scan_line(self, line: str, line_number: int, file_path: str) -> list[SecretFinding]:
+    def _scan_line(
+        self, line: str, line_number: int, file_path: str
+    ) -> list[SecretFinding]:
         """Scan a line for secrets."""
         line_findings = []
         stripped = line.strip()
 
-        if not stripped or stripped.startswith(('#', '//', '/*', '*', '"""', "'''")):
+        if not stripped or stripped.startswith(("#", "//", "/*", "*", '"""', "'''")):
             return []
 
         # Check regex patterns
@@ -125,33 +140,39 @@ class SecretsDetector:
             match = pattern.search(line)
             if match:
                 confidence = "HIGH" if name != "password_generic" else "MEDIUM"
-                line_findings.append(SecretFinding(
-                    file_path=file_path,
-                    line_number=line_number,
-                    line_content=line.strip(),
-                    secret_type=name,
-                    confidence=confidence,
-                    description=f"Potential {name} detected",
-                    start_index=match.start(),
-                    end_index=match.end()
-                ))
+                line_findings.append(
+                    SecretFinding(
+                        file_path=file_path,
+                        line_number=line_number,
+                        line_content=line.strip(),
+                        secret_type=name,
+                        confidence=confidence,
+                        description=f"Potential {name} detected",
+                        start_index=match.start(),
+                        end_index=match.end(),
+                    )
+                )
 
         # Check entropy for potential high-entropy strings (if not already matched)
         # Simplified: checking words in the line
         if not line_findings:
-            words = re.findall(r'[A-Za-z0-9+/=]{16,}', line) # Look for long alphanum strings
+            words = re.findall(
+                r"[A-Za-z0-9+/=]{16,}", line
+            )  # Look for long alphanum strings
             for word in words:
                 entropy = self._shannon_entropy(word)
                 if entropy > self.ENTROPY_THRESHOLD:
-                    line_findings.append(SecretFinding(
-                        file_path=file_path,
-                        line_number=line_number,
-                        line_content=line.strip(),
-                        secret_type="high_entropy_string",
-                        confidence="LOW",
-                        description=f"High entropy string detected (entropy: {entropy:.2f})",
-                        entropy=entropy
-                    ))
+                    line_findings.append(
+                        SecretFinding(
+                            file_path=file_path,
+                            line_number=line_number,
+                            line_content=line.strip(),
+                            secret_type="high_entropy_string",
+                            confidence="LOW",
+                            description=f"High entropy string detected (entropy: {entropy:.2f})",
+                            entropy=entropy,
+                        )
+                    )
 
         return line_findings
 
@@ -163,13 +184,13 @@ class SecretsDetector:
         for x in range(256):
             p_x = float(data.count(chr(x))) / len(data)
             if p_x > 0:
-                entropy += - p_x * math.log(p_x, 2)
+                entropy += -p_x * math.log(p_x, 2)
         return entropy
 
     def _should_skip(self, file_path: str) -> bool:
         """Check if file should be skipped."""
         filename = os.path.basename(file_path)
-        if filename in self.EXCLUDE_FILES or filename.startswith('.'):
+        if filename in self.EXCLUDE_FILES or filename.startswith("."):
             return True
         ext = os.path.splitext(filename)[1]
         if ext in self.EXCLUDE_FILES:

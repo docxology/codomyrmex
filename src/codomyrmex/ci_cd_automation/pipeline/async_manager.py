@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 @dataclass
 class AsyncPipelineResult:
     """Result of an async pipeline operation."""
+
     pipeline_id: str
     status: PipelineStatus
     message: str
@@ -144,22 +145,21 @@ class AsyncPipelineManager:
                                 "inputs": inputs,
                             },
                         )
-                    else:
-                        error_text = await response.text()
-                        error_msg = f"Failed to trigger pipeline: HTTP {response.status}"
-                        try:
-                            error_data = json.loads(error_text)
-                            error_msg += f" - {error_data.get('message', error_text)}"
-                        except json.JSONDecodeError:
-                            error_msg += f" - {error_text}"
+                    error_text = await response.text()
+                    error_msg = f"Failed to trigger pipeline: HTTP {response.status}"
+                    try:
+                        error_data = json.loads(error_text)
+                        error_msg += f" - {error_data.get('message', error_text)}"
+                    except json.JSONDecodeError:
+                        error_msg += f" - {error_text}"
 
-                        logger.error(f"[ASYNC] {error_msg}")
-                        return AsyncPipelineResult(
-                            pipeline_id=pipeline_name,
-                            status=PipelineStatus.FAILURE,
-                            message="Failed to trigger pipeline",
-                            error=error_msg,
-                        )
+                    logger.error(f"[ASYNC] {error_msg}")
+                    return AsyncPipelineResult(
+                        pipeline_id=pipeline_name,
+                        status=PipelineStatus.FAILURE,
+                        message="Failed to trigger pipeline",
+                        error=error_msg,
+                    )
 
         except TimeoutError:
             error_msg = "Pipeline trigger request timed out"
@@ -201,12 +201,12 @@ class AsyncPipelineManager:
         Returns:
             AsyncPipelineResult with pipeline status details
         """
-        logger.info(
-            f"[ASYNC] Getting pipeline status for {repo_owner}/{repo_name}"
-        )
+        logger.info(f"[ASYNC] Getting pipeline status for {repo_owner}/{repo_name}")
 
         if run_id:
-            url = f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/runs/{run_id}"
+            url = (
+                f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/runs/{run_id}"
+            )
         elif workflow_id:
             url = f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/workflows/{workflow_id}/runs?per_page=1"
         else:
@@ -262,7 +262,8 @@ class AsyncPipelineManager:
                         return AsyncPipelineResult(
                             pipeline_id=str(run_data.get("id", "unknown")),
                             status=status,
-                            message=f"Pipeline {gh_status}" + (f" ({gh_conclusion})" if gh_conclusion else ""),
+                            message=f"Pipeline {gh_status}"
+                            + (f" ({gh_conclusion})" if gh_conclusion else ""),
                             data={
                                 "run_id": run_data.get("id"),
                                 "name": run_data.get("name"),
@@ -276,16 +277,17 @@ class AsyncPipelineManager:
                                 "run_started_at": run_data.get("run_started_at"),
                             },
                         )
-                    else:
-                        await response.text()
-                        error_msg = f"Failed to get pipeline status: HTTP {response.status}"
-                        logger.error(f"[ASYNC] {error_msg}")
-                        return AsyncPipelineResult(
-                            pipeline_id=str(run_id) if run_id else (workflow_id or "unknown"),
-                            status=PipelineStatus.FAILURE,
-                            message="Failed to get status",
-                            error=error_msg,
-                        )
+                    await response.text()
+                    error_msg = f"Failed to get pipeline status: HTTP {response.status}"
+                    logger.error(f"[ASYNC] {error_msg}")
+                    return AsyncPipelineResult(
+                        pipeline_id=str(run_id)
+                        if run_id
+                        else (workflow_id or "unknown"),
+                        status=PipelineStatus.FAILURE,
+                        message="Failed to get status",
+                        error=error_msg,
+                    )
 
         except TimeoutError:
             error_msg = "Pipeline status request timed out"
@@ -418,23 +420,24 @@ class AsyncPipelineManager:
                     headers=self._get_headers(),
                 ) as response:
                     if response.status == 202:
-                        logger.info(f"[ASYNC] Pipeline {run_id} cancel request accepted")
+                        logger.info(
+                            f"[ASYNC] Pipeline {run_id} cancel request accepted"
+                        )
                         return AsyncPipelineResult(
                             pipeline_id=str(run_id),
                             status=PipelineStatus.CANCELLED,
                             message="Pipeline cancellation requested",
                             data={"run_id": run_id},
                         )
-                    else:
-                        await response.text()
-                        error_msg = f"Failed to cancel pipeline: HTTP {response.status}"
-                        logger.error(f"[ASYNC] {error_msg}")
-                        return AsyncPipelineResult(
-                            pipeline_id=str(run_id),
-                            status=PipelineStatus.FAILURE,
-                            message="Failed to cancel pipeline",
-                            error=error_msg,
-                        )
+                    await response.text()
+                    error_msg = f"Failed to cancel pipeline: HTTP {response.status}"
+                    logger.error(f"[ASYNC] {error_msg}")
+                    return AsyncPipelineResult(
+                        pipeline_id=str(run_id),
+                        status=PipelineStatus.FAILURE,
+                        message="Failed to cancel pipeline",
+                        error=error_msg,
+                    )
 
         except TimeoutError:
             error_msg = "Pipeline cancel request timed out"
@@ -480,9 +483,7 @@ class AsyncPipelineManager:
         Returns:
             AsyncPipelineResult with list of workflow runs
         """
-        logger.info(
-            f"[ASYNC] Getting workflow runs for {repo_owner}/{repo_name}"
-        )
+        logger.info(f"[ASYNC] Getting workflow runs for {repo_owner}/{repo_name}")
 
         if workflow_id:
             url = f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/workflows/{workflow_id}/runs"
@@ -507,9 +508,7 @@ class AsyncPipelineManager:
                         data = await response.json()
                         runs = data.get("workflow_runs", [])
 
-                        logger.info(
-                            f"[ASYNC] Found {len(runs)} workflow runs"
-                        )
+                        logger.info(f"[ASYNC] Found {len(runs)} workflow runs")
 
                         return AsyncPipelineResult(
                             pipeline_id="workflow_runs",
@@ -531,16 +530,15 @@ class AsyncPipelineManager:
                                 ],
                             },
                         )
-                    else:
-                        await response.text()
-                        error_msg = f"Failed to get workflow runs: HTTP {response.status}"
-                        logger.error(f"[ASYNC] {error_msg}")
-                        return AsyncPipelineResult(
-                            pipeline_id="workflow_runs",
-                            status=PipelineStatus.FAILURE,
-                            message="Failed to get workflow runs",
-                            error=error_msg,
-                        )
+                    await response.text()
+                    error_msg = f"Failed to get workflow runs: HTTP {response.status}"
+                    logger.error(f"[ASYNC] {error_msg}")
+                    return AsyncPipelineResult(
+                        pipeline_id="workflow_runs",
+                        status=PipelineStatus.FAILURE,
+                        message="Failed to get workflow runs",
+                        error=error_msg,
+                    )
 
         except TimeoutError:
             error_msg = "Workflow runs request timed out"

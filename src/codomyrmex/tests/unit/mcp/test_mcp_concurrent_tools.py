@@ -36,6 +36,7 @@ def _echo_handler(**kwargs):
 def _slow_handler(**kwargs):
     """Handler that simulates work."""
     import time
+
     time.sleep(0.01)
     return {"ok": True}
 
@@ -212,7 +213,9 @@ class TestAsyncConcurrentServer:
         )
 
         async def _call(n: int) -> dict:
-            return await server._call_tool({"name": "async_echo", "arguments": {"n": n}})
+            return await server._call_tool(
+                {"name": "async_echo", "arguments": {"n": n}}
+            )
 
         results = await asyncio.gather(*[_call(i) for i in range(20)])
         assert len(results) == 20

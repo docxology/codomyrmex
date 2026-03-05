@@ -140,11 +140,14 @@ class TestMessageBundle:
 class TestTranslator:
     def _make_translator_with_en(self):
         t = Translator(Locale("en"))
-        bundle = MessageBundle.from_dict(Locale("en"), {
-            "greeting": "Hello",
-            "farewell": "Goodbye",
-            "item_count": "You have {count} items",
-        })
+        bundle = MessageBundle.from_dict(
+            Locale("en"),
+            {
+                "greeting": "Hello",
+                "farewell": "Goodbye",
+                "item_count": "You have {count} items",
+            },
+        )
         t.add_bundle(bundle)
         return t
 
@@ -410,7 +413,7 @@ class TestDateFormatter:
         now = datetime(2024, 1, 1, 12, 0, 0)
         past = now - timedelta(seconds=90)
         result = DateFormatter.relative_time(past, now=now)
-        assert "1 minute ago" == result
+        assert result == "1 minute ago"
 
     def test_relative_time_plural_minutes(self):
         now = datetime(2024, 1, 1, 12, 0, 0)

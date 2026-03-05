@@ -1,7 +1,8 @@
 import os
-import urllib.request
-from google import genai
 import sys
+import urllib.request
+
+from google import genai
 
 api_key = os.environ.get("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)
@@ -12,6 +13,7 @@ try:
         prompt="A minimalist animation of a loading circle, 2 seconds",
     )
     import time
+
     while not operation.done:
         print(".", end="", flush=True)
         time.sleep(5)

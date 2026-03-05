@@ -57,7 +57,11 @@ class SerializationManager:
 
         """
         if format not in self._serializers:
-            fmt = SerializationFormat(format) if format in [f.value for f in SerializationFormat] else SerializationFormat.JSON
+            fmt = (
+                SerializationFormat(format)
+                if format in [f.value for f in SerializationFormat]
+                else SerializationFormat.JSON
+            )
             self._serializers[format] = Serializer(default_format=fmt)
         return self._serializers[format]
 
@@ -87,23 +91,27 @@ class SerializationManager:
         try:
             serializer = self.get_serializer(format)
             result = serializer.serialize(obj)
-            self._stats.append(SerializationResult(
-                format=format,
-                input_type=type(obj).__name__,
-                output_size=len(result) if isinstance(result, (str, bytes)) else 0,
-                duration_seconds=time.time() - start,
-                success=True,
-            ))
+            self._stats.append(
+                SerializationResult(
+                    format=format,
+                    input_type=type(obj).__name__,
+                    output_size=len(result) if isinstance(result, (str, bytes)) else 0,
+                    duration_seconds=time.time() - start,
+                    success=True,
+                )
+            )
             return result
         except Exception as e:
-            self._stats.append(SerializationResult(
-                format=format,
-                input_type=type(obj).__name__,
-                output_size=0,
-                duration_seconds=time.time() - start,
-                success=False,
-                error=str(e),
-            ))
+            self._stats.append(
+                SerializationResult(
+                    format=format,
+                    input_type=type(obj).__name__,
+                    output_size=0,
+                    duration_seconds=time.time() - start,
+                    success=False,
+                    error=str(e),
+                )
+            )
             raise
 
     def deserialize(self, data: str | bytes, format: str | None = None) -> Any:
@@ -119,18 +127,32 @@ class SerializationManager:
         """
         if format is None:
             serializer = Serializer()
-            fmt_enum = serializer.detect_format(data) if hasattr(serializer, 'detect_format') else None
+            fmt_enum = (
+                serializer.detect_format(data)
+                if hasattr(serializer, "detect_format")
+                else None
+            )
             if fmt_enum is None:
                 format = "json"
             else:
-                format = fmt_enum.value if isinstance(fmt_enum, SerializationFormat) else str(fmt_enum)
+                format = (
+                    fmt_enum.value
+                    if isinstance(fmt_enum, SerializationFormat)
+                    else str(fmt_enum)
+                )
         serializer = self.get_serializer(format)
         # Convert format string to SerializationFormat enum for the Serializer
-        fmt_enum = SerializationFormat(format) if format in [f.value for f in SerializationFormat] else SerializationFormat.JSON
-        data_bytes = data.encode('utf-8') if isinstance(data, str) else data
+        fmt_enum = (
+            SerializationFormat(format)
+            if format in [f.value for f in SerializationFormat]
+            else SerializationFormat.JSON
+        )
+        data_bytes = data.encode("utf-8") if isinstance(data, str) else data
         return serializer.deserialize(data_bytes, fmt_enum)
 
-    def serialize_batch(self, objects: list[Any], format: str = "json") -> list[str | bytes]:
+    def serialize_batch(
+        self, objects: list[Any], format: str = "json"
+    ) -> list[str | bytes]:
         """Serialize multiple objects in sequence.
 
         Args:
@@ -175,7 +197,10 @@ class SerializationManager:
             "errors": self.error_count,
             "formats_used": list({s.format for s in self._stats}),
             "total_bytes": sum(s.output_size for s in successful),
-            "avg_duration_ms": (sum(s.duration_seconds for s in successful) / max(len(successful), 1)) * 1000,
+            "avg_duration_ms": (
+                sum(s.duration_seconds for s in successful) / max(len(successful), 1)
+            )
+            * 1000,
         }
 
     def clear_stats(self) -> None:

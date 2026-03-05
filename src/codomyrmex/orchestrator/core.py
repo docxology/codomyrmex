@@ -59,38 +59,44 @@ Examples:
     )
 
     parser.add_argument(
-        "--dry-run", "-n",
+        "--dry-run",
+        "-n",
         action="store_true",
         help="List scripts without executing them",
     )
 
     parser.add_argument(
-        "--timeout", "-t",
+        "--timeout",
+        "-t",
         type=int,
         default=60,
         help="Timeout per script in seconds (default: 60)",
     )
 
     parser.add_argument(
-        "--subdirs", "-s",
+        "--subdirs",
+        "-s",
         nargs="+",
         help="Subdirectories to run scripts from",
     )
 
     parser.add_argument(
-        "--filter", "-f",
+        "--filter",
+        "-f",
         help="Filter scripts by name pattern",
     )
 
     parser.add_argument(
-        "--output-dir", "-o",
+        "--output-dir",
+        "-o",
         type=Path,
         default=None,  # Will default to scripts dir parent / output / script_logs
         help="Output directory for logs",
     )
 
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
         help="Show verbose output",
     )
@@ -133,13 +139,12 @@ def _resolve_scripts_dir(args: argparse.Namespace) -> Path | None:
     cwd = Path.cwd()
     if (cwd / "scripts").exists():
         return (cwd / "scripts").resolve()
-    elif cwd.name == "scripts":
+    if cwd.name == "scripts":
         return cwd.resolve()
-    else:
-        # Try to find from run_all_scripts path in sys.argv[0] if present
-        caller = Path(sys.argv[0]).resolve()
-        if caller.parent.name == "scripts":
-            return caller.parent
+    # Try to find from run_all_scripts path in sys.argv[0] if present
+    caller = Path(sys.argv[0]).resolve()
+    if caller.parent.name == "scripts":
+        return caller.parent
 
     return None
 
@@ -197,7 +202,9 @@ def _discover_and_display_scripts(
         for script in scripts:
             script_config = get_script_config(script, scripts_dir, config)
             if script_config.get("skip"):
-                print(f"  WOULD SKIP: {script.name} ({script_config.get('skip_reason', 'Configured to skip')})")
+                print(
+                    f"  WOULD SKIP: {script.name} ({script_config.get('skip_reason', 'Configured to skip')})"
+                )
                 skipped_count += 1
 
         print(f"  Skipped by config: {skipped_count}")
@@ -236,33 +243,37 @@ def _execute_scripts(
 
         # Check if skipped
         if script_config.get("skip"):
-            results.append({
-                "script": str(script),
-                "name": script.name,
-                "subdirectory": script.parent.name,
-                "status": "skipped",
-                "execution_time": 0.0,
-                "start_time": datetime.now().isoformat(),
-                "end_time": datetime.now().isoformat(),
-                "error": script_config.get('skip_reason', 'Configured to skip'),
-                "stdout": "",
-                "stderr": "",
-                "exit_code": None
-            })
+            results.append(
+                {
+                    "script": str(script),
+                    "name": script.name,
+                    "subdirectory": script.parent.name,
+                    "status": "skipped",
+                    "execution_time": 0.0,
+                    "start_time": datetime.now().isoformat(),
+                    "end_time": datetime.now().isoformat(),
+                    "error": script_config.get("skip_reason", "Configured to skip"),
+                    "stdout": "",
+                    "stderr": "",
+                    "exit_code": None,
+                }
+            )
             continue
 
         result = run_script(
             script,
             timeout=args.timeout,
             cwd=scripts_dir.parent,  # Run from project root
-            config=script_config
+            config=script_config,
         )
 
         # Use improved subdirectory for logging to avoid collisions (e.g. module/examples/)
         result["subdirectory"] = str(script.relative_to(scripts_dir).parent)
 
         # Save individual log
-        log_file = save_log(result, args.output_dir, datetime.now().strftime("%Y%m%d_%H%M%S"))
+        log_file = save_log(
+            result, args.output_dir, datetime.now().strftime("%Y%m%d_%H%M%S")
+        )
         result["log_file"] = str(log_file)
 
         results.append(result)
@@ -271,11 +282,17 @@ def _execute_scripts(
         timestamp = datetime.now().strftime("%H:%M:%S")
         if result["status"] == "passed":
             if args.verbose:
-                print_success(f"  [{timestamp}] {result['name']} ({result['execution_time']:.1f}s)")
+                print_success(
+                    f"  [{timestamp}] {result['name']} ({result['execution_time']:.1f}s)"
+                )
         elif result["status"] == "failed":
-            print_error(f"  [{timestamp}] {result['name']} (exit code {result['exit_code']})")
+            print_error(
+                f"  [{timestamp}] {result['name']} (exit code {result['exit_code']})"
+            )
         elif result["status"] == "timeout":
-            print_warning(f"  [{timestamp}] {result['name']} (timeout after {args.timeout}s)")
+            print_warning(
+                f"  [{timestamp}] {result['name']} (timeout after {args.timeout}s)"
+            )
         else:
             print_error(f"  [{timestamp}] {result['name']} ({result['error']})")
 
@@ -299,9 +316,16 @@ def _report_results(results: list[dict], args: argparse.Namespace, run_id: str) 
 
     print(f"\nTotal Scripts: {summary['total_scripts']}")
     print_with_color(f"  Passed:  {summary['passed']}", "green")
-    print_with_color(f"  Failed:  {summary['failed']}", "red" if summary['failed'] > 0 else "default")
-    print_with_color(f"  Timeout: {summary['timeout']}", "yellow" if summary['timeout'] > 0 else "default")
-    print_with_color(f"  Error:   {summary['error']}", "red" if summary['error'] > 0 else "default")
+    print_with_color(
+        f"  Failed:  {summary['failed']}", "red" if summary["failed"] > 0 else "default"
+    )
+    print_with_color(
+        f"  Timeout: {summary['timeout']}",
+        "yellow" if summary["timeout"] > 0 else "default",
+    )
+    print_with_color(
+        f"  Error:   {summary['error']}", "red" if summary["error"] > 0 else "default"
+    )
     print(f"\nTotal Execution Time: {summary['total_execution_time']:.1f}s")
 
     # By subdirectory breakdown
@@ -336,7 +360,9 @@ def _report_results(results: list[dict], args: argparse.Namespace, run_id: str) 
                 if len(lines) > 1 and "Traceback" not in lines[-1]:
                     print(f"     {lines[-2]}")
 
-    return summary, 1 if summary["failed"] + summary["error"] + summary["timeout"] > 0 else 0
+    return summary, 1 if summary["failed"] + summary["error"] + summary[
+        "timeout"
+    ] > 0 else 0
 
 
 def main(argv=None):
@@ -386,13 +412,16 @@ def main(argv=None):
 
     # Execute scripts with LogContext for correlation ID
     with LogContext(correlation_id=run_id):
-        logger.info("Orchestrator run started", extra={
-            "event": "RUN_STARTED",
-            "run_id": run_id,
-            "scripts_dir": str(scripts_dir),
-            "scripts_count": len(scripts),
-            "timeout": args.timeout,
-        })
+        logger.info(
+            "Orchestrator run started",
+            extra={
+                "event": "RUN_STARTED",
+                "run_id": run_id,
+                "scripts_dir": str(scripts_dir),
+                "scripts_count": len(scripts),
+                "timeout": args.timeout,
+            },
+        )
         perf_logger.start_timer("full_run", {"scripts_count": len(scripts)})
 
         print_section("Executing Scripts", separator="-")
@@ -406,16 +435,19 @@ def main(argv=None):
 
         # Log RUN_COMPLETED event
         perf_logger.end_timer("full_run")
-        logger.info("Orchestrator run completed", extra={
-            "event": "RUN_COMPLETED",
-            "run_id": run_id,
-            "total_scripts": summary["total_scripts"],
-            "passed": summary["passed"],
-            "failed": summary["failed"],
-            "timeout": summary["timeout"],
-            "error": summary["error"],
-            "total_execution_time": summary["total_execution_time"],
-        })
+        logger.info(
+            "Orchestrator run completed",
+            extra={
+                "event": "RUN_COMPLETED",
+                "run_id": run_id,
+                "total_scripts": summary["total_scripts"],
+                "passed": summary["passed"],
+                "failed": summary["failed"],
+                "timeout": summary["timeout"],
+                "error": summary["error"],
+                "total_execution_time": summary["total_execution_time"],
+            },
+        )
 
         return exit_code
 

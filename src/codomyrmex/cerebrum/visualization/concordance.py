@@ -24,7 +24,6 @@ showing agreement, correlation, and concordance patterns.
 
 
 try:
-
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
@@ -82,7 +81,9 @@ class ConcordanceVisualizer:
         if pattern_ids is None:
             pattern_ids = sorted(set(cbr_results.keys()) & set(bayesian_results.keys()))
             if active_inference_results:
-                pattern_ids = sorted(set(pattern_ids) & set(active_inference_results.keys()))
+                pattern_ids = sorted(
+                    set(pattern_ids) & set(active_inference_results.keys())
+                )
 
         if not pattern_ids:
             raise ValueError("No common patterns found for concordance analysis")
@@ -100,12 +101,16 @@ class ConcordanceVisualizer:
             return {k: (v - min_val) / (max_val - min_val) for k, v in scores.items()}
 
         cbr_norm = normalize({pid: cbr_results.get(pid, 0.0) for pid in pattern_ids})
-        bayesian_norm = normalize({pid: bayesian_results.get(pid, 0.0) for pid in pattern_ids})
+        bayesian_norm = normalize(
+            {pid: bayesian_results.get(pid, 0.0) for pid in pattern_ids}
+        )
 
         # Create correlation matrix
         methods = ["CBR", "Bayesian"]
         if active_inference_results:
-            ai_norm = normalize({pid: active_inference_results.get(pid, 0.0) for pid in pattern_ids})
+            ai_norm = normalize(
+                {pid: active_inference_results.get(pid, 0.0) for pid in pattern_ids}
+            )
             methods.append("Active Inference")
 
         n_methods = len(methods)
@@ -189,7 +194,11 @@ class ConcordanceVisualizer:
 
         # Get common pattern IDs
         if pattern_ids is None:
-            pattern_ids = sorted(set.intersection(*[set(metrics.keys()) for metrics in importance_metrics.values()]))
+            pattern_ids = sorted(
+                set.intersection(
+                    *[set(metrics.keys()) for metrics in importance_metrics.values()]
+                )
+            )
 
         if not pattern_ids:
             raise ValueError("No common patterns found")
@@ -215,13 +224,25 @@ class ConcordanceVisualizer:
 
                 if i == j:
                     # Diagonal: show distribution
-                    values = [importance_metrics[metric1].get(pid, 0.0) for pid in pattern_ids]
-                    ax.hist(values, bins=20, color=self.theme.colors.primary[0], alpha=0.7, edgecolor="black")
+                    values = [
+                        importance_metrics[metric1].get(pid, 0.0) for pid in pattern_ids
+                    ]
+                    ax.hist(
+                        values,
+                        bins=20,
+                        color=self.theme.colors.primary[0],
+                        alpha=0.7,
+                        edgecolor="black",
+                    )
                     chart_viz.format_axes_labels(ax, xlabel=metric1, ylabel="Frequency")
                 else:
                     # Off-diagonal: scatter plot
-                    x_vals = [importance_metrics[metric1].get(pid, 0.0) for pid in pattern_ids]
-                    y_vals = [importance_metrics[metric2].get(pid, 0.0) for pid in pattern_ids]
+                    x_vals = [
+                        importance_metrics[metric1].get(pid, 0.0) for pid in pattern_ids
+                    ]
+                    y_vals = [
+                        importance_metrics[metric2].get(pid, 0.0) for pid in pattern_ids
+                    ]
 
                     ax.scatter(
                         x_vals,
@@ -251,7 +272,12 @@ class ConcordanceVisualizer:
                 self.theme.apply_to_axes(ax)
 
         # Format overall title
-        fig.suptitle("Pattern Importance Metric Concordance", fontsize=self.theme.font.title_size, fontweight="bold", y=0.995)
+        fig.suptitle(
+            "Pattern Importance Metric Concordance",
+            fontsize=self.theme.font.title_size,
+            fontweight="bold",
+            y=0.995,
+        )
 
         plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
         return fig
@@ -285,7 +311,9 @@ class ConcordanceVisualizer:
                     min_val = min(values)
                     max_val = max(values)
                     if max_val == min_val:
-                        normalized_results[analysis_name] = dict.fromkeys(pattern_ids, 0.5)
+                        normalized_results[analysis_name] = dict.fromkeys(
+                            pattern_ids, 0.5
+                        )
                     else:
                         normalized_results[analysis_name] = {
                             pid: (results.get(pid, 0.0) - min_val) / (max_val - min_val)
@@ -320,7 +348,9 @@ class ConcordanceVisualizer:
         )
 
         # Format title
-        heatmap_viz.format_title(ax, f"Analysis Agreement Heatmap (threshold: {agreement_threshold:.2f})")
+        heatmap_viz.format_title(
+            ax, f"Analysis Agreement Heatmap (threshold: {agreement_threshold:.2f})"
+        )
 
         # Update colorbar
         im = ax.images[0]
@@ -340,4 +370,3 @@ class ConcordanceVisualizer:
 
         plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
         return fig
-

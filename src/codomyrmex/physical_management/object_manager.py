@@ -340,14 +340,12 @@ class ObjectRegistry:
     """Registry for managing physical objects."""
 
     def __init__(self, spatial_grid_size: float = 10.0):
-        """  Init  .
+        """Init  .
 
-            Args:        spatial_grid_size: Unique identifier.
-            """
+        Args:        spatial_grid_size: Unique identifier.
+        """
         self.objects: dict[str, PhysicalObject] = {}
-        self._location_index: dict[tuple[int, int, int], set[str]] = (
-            {}
-        )
+        self._location_index: dict[tuple[int, int, int], set[str]] = {}
         self.spatial_index = SpatialIndex(grid_size=spatial_grid_size)
         self.event_handlers: dict[EventType, list[Callable[[ObjectEvent], None]]] = (
             defaultdict(list)
@@ -562,9 +560,8 @@ class ObjectRegistry:
             if match_all:
                 if tags.issubset(obj.tags):
                     matching_objects.append(obj)
-            else:
-                if obj.tags.intersection(tags):
-                    matching_objects.append(obj)
+            elif obj.tags.intersection(tags):
+                matching_objects.append(obj)
 
         return matching_objects
 
@@ -927,14 +924,14 @@ class PhysicalObjectManager:
 
 
 __all__ = [
-    "ObjectType",
-    "ObjectStatus",
-    "MaterialType",
     "EventType",
-    "PhysicalObject",
-    "ObjectRegistry",
-    "PhysicalObjectManager",
     "MaterialProperties",
+    "MaterialType",
     "ObjectEvent",
+    "ObjectRegistry",
+    "ObjectStatus",
+    "ObjectType",
+    "PhysicalObject",
+    "PhysicalObjectManager",
     "SpatialIndex",
 ]

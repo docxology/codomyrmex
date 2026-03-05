@@ -41,7 +41,9 @@ class RecurringSchedule:
             raise ValueError("day_of_month required for monthly recurrence")
         if self.recurrence_type == RecurrenceType.YEARLY:
             if self.day_of_month is None or self.month is None:
-                raise ValueError("day_of_month and month required for yearly recurrence")
+                raise ValueError(
+                    "day_of_month and month required for yearly recurrence"
+                )
 
 
 class RecurringScheduler:
@@ -82,19 +84,13 @@ class RecurringScheduler:
         if schedule.recurrence_type == RecurrenceType.DAILY:
             return now.time() >= schedule.time
 
-        elif schedule.recurrence_type == RecurrenceType.WEEKLY:
-            return (
-                now.weekday() == schedule.day_of_week
-                and now.time() >= schedule.time
-            )
+        if schedule.recurrence_type == RecurrenceType.WEEKLY:
+            return now.weekday() == schedule.day_of_week and now.time() >= schedule.time
 
-        elif schedule.recurrence_type == RecurrenceType.MONTHLY:
-            return (
-                now.day == schedule.day_of_month
-                and now.time() >= schedule.time
-            )
+        if schedule.recurrence_type == RecurrenceType.MONTHLY:
+            return now.day == schedule.day_of_month and now.time() >= schedule.time
 
-        elif schedule.recurrence_type == RecurrenceType.YEARLY:
+        if schedule.recurrence_type == RecurrenceType.YEARLY:
             return (
                 now.month == schedule.month
                 and now.day == schedule.day_of_month
@@ -102,5 +98,3 @@ class RecurringScheduler:
             )
 
         return False
-
-

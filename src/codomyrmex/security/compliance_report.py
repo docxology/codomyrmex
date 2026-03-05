@@ -76,9 +76,7 @@ class ComplianceReport:
         """Compute summary statistics."""
         summary: dict[str, int] = {}
         for status in ComplianceStatus:
-            summary[status.value] = sum(
-                1 for c in self.checks if c.status == status
-            )
+            summary[status.value] = sum(1 for c in self.checks if c.status == status)
         self.summary = summary
         return summary
 
@@ -96,14 +94,15 @@ class ComplianceReport:
         lines = [
             f"# {self.title}",
             "",
-            f"**Pass Rate**: {self.pass_rate:.0%} | "
-            f"**Total**: {self.total_checks}",
+            f"**Pass Rate**: {self.pass_rate:.0%} | **Total**: {self.total_checks}",
             "",
             "| Check | Category | Status | Severity |",
             "|-------|----------|--------|----------|",
         ]
         for c in self.checks:
-            icon = {"pass": "✅", "fail": "❌", "warn": "⚠️", "skip": "⏭️"}.get(c.status.value, "")
+            icon = {"pass": "✅", "fail": "❌", "warn": "⚠️", "skip": "⏭️"}.get(
+                c.status.value, ""
+            )
             lines.append(
                 f"| {c.check_id} | {c.category} | {icon} {c.status.value} | {c.severity} |"
             )
@@ -136,16 +135,20 @@ class ComplianceGenerator:
     def __init__(self) -> None:
         self._checks: list[ComplianceCheck] = []
 
-    def add_owasp_checks(self, default_status: ComplianceStatus = ComplianceStatus.PASS) -> None:
+    def add_owasp_checks(
+        self, default_status: ComplianceStatus = ComplianceStatus.PASS
+    ) -> None:
         """Add OWASP Top 10 checks."""
         for check_id, name, desc in self._OWASP_CHECKS:
-            self._checks.append(ComplianceCheck(
-                check_id=check_id,
-                category="owasp",
-                description=f"{name}: {desc}",
-                status=default_status,
-                severity="high",
-            ))
+            self._checks.append(
+                ComplianceCheck(
+                    check_id=check_id,
+                    category="owasp",
+                    description=f"{name}: {desc}",
+                    status=default_status,
+                    severity="high",
+                )
+            )
 
     def add_check(self, check: ComplianceCheck) -> None:
         """Add a custom check."""

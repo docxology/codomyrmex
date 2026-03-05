@@ -48,6 +48,7 @@ class TestPaiPmServerManagerPidFile:
         pid_file = tmp_path / "pai_pm.pid"
         # Temporarily redirect PID file path
         import codomyrmex.pai_pm.server_manager as sm
+
         original = sm._PID_FILE
         sm._PID_FILE = pid_file
         try:
@@ -60,6 +61,7 @@ class TestPaiPmServerManagerPidFile:
         mgr = PaiPmServerManager()
         pid_file = tmp_path / "pai_pm.pid"
         import codomyrmex.pai_pm.server_manager as sm
+
         original = sm._PID_FILE
         sm._PID_FILE = pid_file
         try:
@@ -73,6 +75,7 @@ class TestPaiPmServerManagerPidFile:
         mgr = PaiPmServerManager()
         pid_file = tmp_path / "pai_pm.pid"
         import codomyrmex.pai_pm.server_manager as sm
+
         original = sm._PID_FILE
         sm._PID_FILE = pid_file
         try:
@@ -85,6 +88,7 @@ class TestPaiPmServerManagerPidFile:
     def test_read_pid_returns_none_when_missing(self, tmp_path: Path) -> None:
         mgr = PaiPmServerManager()
         import codomyrmex.pai_pm.server_manager as sm
+
         original = sm._PID_FILE
         sm._PID_FILE = tmp_path / "nonexistent.pid"
         try:

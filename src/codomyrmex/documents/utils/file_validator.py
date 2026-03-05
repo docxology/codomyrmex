@@ -21,10 +21,14 @@ def validate_file_path(file_path: Path, must_exist: bool = True) -> None:
         DocumentReadError: If validation fails
     """
     if must_exist and not file_path.exists():
-        raise DocumentReadError(f"File does not exist: {file_path}", file_path=str(file_path))
+        raise DocumentReadError(
+            f"File does not exist: {file_path}", file_path=str(file_path)
+        )
 
     if file_path.exists() and not file_path.is_file():
-        raise DocumentReadError(f"Path is not a file: {file_path}", file_path=str(file_path))
+        raise DocumentReadError(
+            f"Path is not a file: {file_path}", file_path=str(file_path)
+        )
 
 
 def check_file_size(file_path: Path) -> bool:
@@ -48,6 +52,3 @@ def check_file_size(file_path: Path) -> bool:
         return False
 
     return True
-
-
-

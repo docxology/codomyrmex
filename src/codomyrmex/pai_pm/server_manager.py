@@ -60,8 +60,7 @@ class PaiPmServerManager:
         path = shutil.which("bun")
         if not path:
             raise PaiPmNotInstalledError(
-                "bun runtime not found in PATH. "
-                "Install from https://bun.sh"
+                "bun runtime not found in PATH. Install from https://bun.sh"
             )
         return path
 

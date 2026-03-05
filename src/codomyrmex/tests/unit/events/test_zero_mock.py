@@ -18,6 +18,7 @@ def clean_bus():
     yield bus
     bus.shutdown()
 
+
 @pytest.mark.unit
 class TestEventBusZeroMock:
     """Tests for EventBus without any mocks."""
@@ -25,6 +26,7 @@ class TestEventBusZeroMock:
     def test_subscription_and_delivery(self, clean_bus):
         """Test that events are delivered to subscribers."""
         received = []
+
         def handler(event):
             received.append(event)
 
@@ -43,7 +45,9 @@ class TestEventBusZeroMock:
 
         clean_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
         clean_bus.publish(Event(event_type=EventType.SYSTEM_ERROR, source="test"))
-        clean_bus.publish(Event(event_type=EventType.ANALYSIS_START, source="test")) # Should NOT match
+        clean_bus.publish(
+            Event(event_type=EventType.ANALYSIS_START, source="test")
+        )  # Should NOT match
 
         assert len(received) == 2
 
@@ -60,13 +64,26 @@ class TestEventBusZeroMock:
     def test_filter_function(self, clean_bus):
         """Test subscription filter functions."""
         received = []
+
         def my_filter(event):
             return event.data.get("relevant") is True
 
         clean_bus.subscribe(["*"], lambda e: received.append(e), filter_func=my_filter)
 
-        clean_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test", data={"relevant": False}))
-        clean_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test", data={"relevant": True}))
+        clean_bus.publish(
+            Event(
+                event_type=EventType.SYSTEM_STARTUP,
+                source="test",
+                data={"relevant": False},
+            )
+        )
+        clean_bus.publish(
+            Event(
+                event_type=EventType.SYSTEM_STARTUP,
+                source="test",
+                data={"relevant": True},
+            )
+        )
 
         assert len(received) == 1
         assert received[0].data["relevant"] is True
@@ -86,6 +103,7 @@ class TestEventBusZeroMock:
     def test_error_in_handler_isolation(self, clean_bus):
         """Test that an error in one handler doesn't stop others."""
         received = []
+
         def faulty_handler(e):
             raise RuntimeError("Boom")
 
@@ -97,6 +115,7 @@ class TestEventBusZeroMock:
 
         assert len(received) == 1
         assert clean_bus.get_stats()["events_failed"] == 1
+
 
 @pytest.mark.unit
 class TestEventEmitterZeroMock:
@@ -128,6 +147,7 @@ class TestEventEmitterZeroMock:
         assert any(e.data.get("phase") == "start" for e in received)
         assert any(e.data.get("phase") == "end" for e in received)
 
+
 @pytest.mark.unit
 class TestEventListenerZeroMock:
     """Tests for EventListener and AutoEventListener."""
@@ -136,6 +156,7 @@ class TestEventListenerZeroMock:
         class MyHandler:
             def __init__(self):
                 self.count = 0
+
             @event_handler(EventType.SYSTEM_STARTUP)
             def handle(self, e):
                 self.count += 1
@@ -146,6 +167,7 @@ class TestEventListenerZeroMock:
 
         clean_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test"))
         assert obj.count == 1
+
 
 @pytest.mark.unit
 class TestEventLoggerZeroMock:
@@ -161,6 +183,7 @@ class TestEventLoggerZeroMock:
         assert stats["total_events"] == 2
         assert stats["event_counts"][EventType.SYSTEM_STARTUP.value] == 1
         assert stats["error_counts"][EventType.SYSTEM_ERROR.value] == 1
+
 
 @pytest.mark.unit
 class TestEventStoreZeroMock:

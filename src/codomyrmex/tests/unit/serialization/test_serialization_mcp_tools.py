@@ -68,6 +68,7 @@ def test_serialize_binary_format() -> None:
     deserialize_data(serialized, format="pickle")
     import base64
     import pickle
+
     decoded = base64.b64decode(serialized)
     assert pickle.loads(decoded) == original
 

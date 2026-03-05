@@ -16,10 +16,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Generic, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class LoadBalanceStrategy(Enum):
     """Load balancing strategies."""
+
     ROUND_ROBIN = "round_robin"
     RANDOM = "random"
     LEAST_LATENCY = "least_latency"
@@ -27,16 +29,20 @@ class LoadBalanceStrategy(Enum):
     WEIGHTED = "weighted"
     PRIORITY = "priority"
 
+
 class AgentStatus(Enum):
     """Status of an agent in the pool."""
+
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
     CIRCUIT_OPEN = "circuit_open"
 
+
 @dataclass
 class AgentHealth:
     """Health metrics for a pooled agent."""
+
     status: AgentStatus = AgentStatus.HEALTHY
     last_success: float = 0.0
     last_failure: float = 0.0
@@ -67,9 +73,11 @@ class AgentHealth:
         """Check if agent is available for requests."""
         return self.status in [AgentStatus.HEALTHY, AgentStatus.DEGRADED]
 
+
 @dataclass
 class PooledAgent(Generic[T]):
     """An agent in the pool."""
+
     agent_id: str
     agent: T
     weight: float = 1.0
@@ -77,9 +85,11 @@ class PooledAgent(Generic[T]):
     health: AgentHealth = field(default_factory=AgentHealth)
     metadata: dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PoolConfig:
     """Configuration for agent pool."""
+
     # Circuit breaker settings
     circuit_failure_threshold: int = 5
     circuit_reset_timeout_s: float = 30.0
@@ -96,6 +106,7 @@ class PoolConfig:
 
     # Timeout
     request_timeout_s: float = 30.0
+
 
 class CircuitBreaker:
     """
@@ -152,6 +163,7 @@ class CircuitBreaker:
             self._failures = 0
             self._state = "closed"
             self._last_failure_time = None
+
 
 class AgentPool(Generic[T]):
     """
@@ -390,6 +402,7 @@ class AgentPool(Generic[T]):
         for agent_id in self._agents:
             self.reset_agent(agent_id)
 
+
 class FallbackChain(Generic[T]):
     """
     Chain of agents with fallback behavior.
@@ -441,6 +454,7 @@ class FallbackChain(Generic[T]):
         if last_error:
             raise last_error
         raise RuntimeError("No agents in fallback chain")
+
 
 # Type alias for common use
 

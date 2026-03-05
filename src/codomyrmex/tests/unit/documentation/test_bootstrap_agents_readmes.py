@@ -26,12 +26,13 @@ class TestDocumentationBootstrapper:
     def teardown_method(self):
         """Clean up test fixtures."""
         import shutil
+
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_should_process_directory_excludes_output(self):
         """Test that output directories are excluded."""
         # Create a mock output directory
-        output_dir = self.temp_dir / 'output'
+        output_dir = self.temp_dir / "output"
         output_dir.mkdir()
 
         assert not self.bootstrapper.should_process_directory(output_dir)
@@ -39,7 +40,7 @@ class TestDocumentationBootstrapper:
     def test_should_process_directory_excludes_at_output(self):
         """Test that @output directories are excluded."""
         # Create a mock @output directory
-        at_output_dir = self.temp_dir / '@output'
+        at_output_dir = self.temp_dir / "@output"
         at_output_dir.mkdir()
 
         assert not self.bootstrapper.should_process_directory(at_output_dir)
@@ -47,7 +48,7 @@ class TestDocumentationBootstrapper:
     def test_should_process_directory_excludes_dot_directories(self):
         """Test that dot directories are excluded."""
         # Create a mock .git directory
-        dot_dir = self.temp_dir / '.git'
+        dot_dir = self.temp_dir / ".git"
         dot_dir.mkdir()
 
         assert not self.bootstrapper.should_process_directory(dot_dir)
@@ -55,7 +56,7 @@ class TestDocumentationBootstrapper:
     def test_should_process_directory_allows_surface_roots(self):
         """Test that surface root directories are allowed."""
         # Create a real scripts directory
-        scripts_dir = self.temp_dir / 'scripts'
+        scripts_dir = self.temp_dir / "scripts"
         scripts_dir.mkdir()
 
         # Set the bootstrapper's repo_root to the temp directory to test real logic
@@ -69,9 +70,9 @@ class TestDocumentationBootstrapper:
     def test_should_process_directory_allows_surface_subdirs(self):
         """Test that subdirectories under surface roots are allowed."""
         # Create a real scripts/documentation directory
-        scripts_dir = self.temp_dir / 'scripts'
+        scripts_dir = self.temp_dir / "scripts"
         scripts_dir.mkdir()
-        doc_dir = scripts_dir / 'documentation'
+        doc_dir = scripts_dir / "documentation"
         doc_dir.mkdir()
 
         # Set the bootstrapper's repo_root to test real logic
@@ -85,76 +86,76 @@ class TestDocumentationBootstrapper:
     def test_get_directory_inventory_excludes_special_files(self):
         """Test that special files are excluded from inventory."""
         # Create test directory with various files
-        test_dir = self.temp_dir / 'test'
+        test_dir = self.temp_dir / "test"
         test_dir.mkdir()
 
         # Create normal files
-        (test_dir / 'normal.py').touch()
-        (test_dir / 'config.json').touch()
+        (test_dir / "normal.py").touch()
+        (test_dir / "config.json").touch()
 
         # Create excluded files
-        (test_dir / 'AGENTS.md').touch()
-        (test_dir / 'README.md').touch()
-        (test_dir / '.git').touch()
-        (test_dir / '__pycache__').mkdir()
+        (test_dir / "AGENTS.md").touch()
+        (test_dir / "README.md").touch()
+        (test_dir / ".git").touch()
+        (test_dir / "__pycache__").mkdir()
 
         inventory = self.bootstrapper.get_directory_inventory(test_dir)
 
         # Should include normal.py, config.json, and README.md, but exclude AGENTS.md and special dirs
-        assert 'normal.py' in inventory
-        assert 'config.json' in inventory
-        assert 'README.md' in inventory
-        assert 'AGENTS.md' not in inventory
-        assert '.git' not in inventory
-        assert '__pycache__/' not in inventory
+        assert "normal.py" in inventory
+        assert "config.json" in inventory
+        assert "README.md" in inventory
+        assert "AGENTS.md" not in inventory
+        assert ".git" not in inventory
+        assert "__pycache__/" not in inventory
 
     def test_generate_agents_md_basic_structure(self):
         """Test that generated AGENTS.md has required structure."""
         # Create test directory
-        test_dir = self.temp_dir / 'test'
+        test_dir = self.temp_dir / "test"
         test_dir.mkdir()
-        (test_dir / 'file.py').touch()
+        (test_dir / "file.py").touch()
 
         content = self.bootstrapper.generate_agents_md(test_dir)
 
         # Check required sections
-        assert '# Codomyrmex Agents — test' in content
-        assert '## Purpose' in content
-        assert '## Active Components' in content
-        assert '## Operating Contracts' in content
-        assert '## Navigation Links' in content
+        assert "# Codomyrmex Agents — test" in content
+        assert "## Purpose" in content
+        assert "## Active Components" in content
+        assert "## Operating Contracts" in content
+        assert "## Navigation Links" in content
 
         # Check inventory
-        assert '- `file.py` – Project file' in content
+        assert "- `file.py` – Project file" in content
 
     def test_generate_readme_md_basic_structure(self):
         """Test that generated README.md has basic structure."""
         # Create test directory
-        test_dir = self.temp_dir / 'test'
+        test_dir = self.temp_dir / "test"
         test_dir.mkdir()
-        (test_dir / 'file.py').touch()
+        (test_dir / "file.py").touch()
 
         content = self.bootstrapper.generate_readme_md(test_dir)
 
         # Check basic structure
-        assert '# test' in content
-        assert '## Overview' in content
-        assert '## Directory Contents' in content
+        assert "# test" in content
+        assert "## Overview" in content
+        assert "## Directory Contents" in content
 
         # Check inventory
-        assert '- `file.py` – File' in content
+        assert "- `file.py` – File" in content
 
     def test_get_navigation_links_with_existing_files(self):
         """Test navigation link generation when parent/surface READMEs exist."""
         # Create directory structure
-        scripts_dir = self.temp_dir / 'scripts'
+        scripts_dir = self.temp_dir / "scripts"
         scripts_dir.mkdir()
 
-        test_dir = scripts_dir / 'test'
+        test_dir = scripts_dir / "test"
         test_dir.mkdir()
 
         # Create parent README
-        (scripts_dir / 'README.md').touch()
+        (scripts_dir / "README.md").touch()
 
         # Set repo_root to test real navigation logic
         original_repo_root = self.bootstrapper.repo_root
@@ -162,22 +163,22 @@ class TestDocumentationBootstrapper:
             self.bootstrapper.repo_root = self.temp_dir
             nav_links = self.bootstrapper.get_navigation_links(test_dir)
 
-            assert 'root' in nav_links
-            assert nav_links['root'] == '../../README.md'
-            assert 'parent' in nav_links
-            assert nav_links['parent'] == '../README.md'
+            assert "root" in nav_links
+            assert nav_links["root"] == "../../README.md"
+            assert "parent" in nav_links
+            assert nav_links["parent"] == "../README.md"
         finally:
             self.bootstrapper.repo_root = original_repo_root
 
     def test_bootstrap_creates_files(self):
         """Test that bootstrap creates AGENTS.md and README.md files."""
         # Create test directory structure
-        scripts_dir = self.temp_dir / 'scripts'
+        scripts_dir = self.temp_dir / "scripts"
         scripts_dir.mkdir()
 
-        test_dir = scripts_dir / 'test'
+        test_dir = scripts_dir / "test"
         test_dir.mkdir()
-        (test_dir / 'file.py').touch()
+        (test_dir / "file.py").touch()
 
         # Set repo_root to test real bootstrap logic
         original_repo_root = self.bootstrapper.repo_root
@@ -185,19 +186,19 @@ class TestDocumentationBootstrapper:
             self.bootstrapper.repo_root = self.temp_dir
             self.bootstrapper.process_directory(test_dir)
 
-            assert (test_dir / 'AGENTS.md').exists()
-            assert (test_dir / 'README.md').exists()
+            assert (test_dir / "AGENTS.md").exists()
+            assert (test_dir / "README.md").exists()
         finally:
             self.bootstrapper.repo_root = original_repo_root
 
     def test_bootstrap_skips_excluded_directories(self):
         """Test that bootstrap skips excluded directories."""
         # Create a surface root first
-        scripts_dir = self.temp_dir / 'scripts'
+        scripts_dir = self.temp_dir / "scripts"
         scripts_dir.mkdir()
 
         # Create excluded directory under surface root
-        output_dir = scripts_dir / 'output'
+        output_dir = scripts_dir / "output"
         output_dir.mkdir()
 
         # Set repo_root to test real exclusion logic
@@ -223,9 +224,9 @@ class TestIntegrationWithValidator:
             bootstrapper = DocumentationBootstrapper(temp_dir)
 
             # Create test directory
-            test_dir = temp_dir / 'scripts' / 'test'
+            test_dir = temp_dir / "scripts" / "test"
             test_dir.mkdir(parents=True)
-            (test_dir / 'file.py').touch()
+            (test_dir / "file.py").touch()
 
             # Generate AGENTS.md with real repo_root
             original_repo_root = bootstrapper.repo_root
@@ -235,10 +236,10 @@ class TestIntegrationWithValidator:
 
                 # Check that all required sections are present
                 required_sections = [
-                    '## Purpose',
-                    '## Active Components',
-                    '## Operating Contracts',
-                    '## Navigation Links'
+                    "## Purpose",
+                    "## Active Components",
+                    "## Operating Contracts",
+                    "## Navigation Links",
                 ]
 
                 for section in required_sections:
@@ -248,4 +249,5 @@ class TestIntegrationWithValidator:
 
         finally:
             import shutil
+
             shutil.rmtree(temp_dir, ignore_errors=True)

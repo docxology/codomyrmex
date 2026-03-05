@@ -59,20 +59,20 @@ def cli_commands():
 
 
 __all__ = [
-    "Network",
     "Address",
-    "Transaction",
-    "TransactionStatus",
     "Contract",
-    "ContractFunction",
     "ContractCall",
-    "TransactionBuilder",
-    "ContractRegistry",
     "ContractEvent",
+    "ContractFunction",
+    "ContractRegistry",
     "EventFilter",
     "EventLog",
-    "wei_to_ether",
+    "Network",
+    "Transaction",
+    "TransactionBuilder",
+    "TransactionStatus",
+    "cli_commands",
     "ether_to_wei",
     "gwei_to_wei",
-    "cli_commands",
+    "wei_to_ether",
 ]

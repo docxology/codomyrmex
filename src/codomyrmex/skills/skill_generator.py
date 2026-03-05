@@ -247,7 +247,11 @@ SKILL_DESCRIPTIONS: dict[str, str] = {
 DEFAULT_PHASE_MAPS: dict[str, dict[str, list[str]]] = {
     "CodomyrmexGit": {
         "OBSERVE": ["git_repo_status", "git_log", "git_current_branch", "git_is_repo"],
-        "THINK": ["git_diff", "create_commit_timeline_diagram", "create_git_branch_diagram"],
+        "THINK": [
+            "git_diff",
+            "create_commit_timeline_diagram",
+            "create_git_branch_diagram",
+        ],
         "BUILD": ["git_create_branch", "git_switch_branch", "stash_changes"],
         "EXECUTE": ["git_commit", "git_push", "git_pull", "git_clone"],
         "VERIFY": ["git_repo_status", "git_diff", "list_tags"],
@@ -282,7 +286,11 @@ DEFAULT_PHASE_MAPS: dict[str, dict[str, list[str]]] = {
         "VERIFY": ["full_text_search"],
     },
     "CodomyrmexDeploy": {
-        "OBSERVE": ["container_list", "container_runtime_status", "list_cloud_instances"],
+        "OBSERVE": [
+            "container_list",
+            "container_runtime_status",
+            "list_cloud_instances",
+        ],
         "BUILD": ["container_build"],
         "EXECUTE": ["container_build", "upload_to_s3"],
         "VERIFY": ["container_security_scan", "container_list"],
@@ -334,6 +342,7 @@ _SRC_ROOT = Path(__file__).resolve().parents[1]  # src/codomyrmex/
 # Data collection
 # ---------------------------------------------------------------------------
 
+
 def collect_tools() -> list[dict[str, Any]]:
     """Query ``get_skill_manifest()`` and return annotated tool list."""
     from codomyrmex.agents.pai.mcp_bridge import get_skill_manifest
@@ -367,6 +376,7 @@ def group_by_skill(tools: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]
 # Phase mapping extraction from module PAI.md files
 # ---------------------------------------------------------------------------
 
+
 def _find_pai_md_for_categories(categories: list[str]) -> list[Path]:
     """Find PAI.md files for module directories matching the given categories."""
     pai_mds: list[Path] = []
@@ -378,7 +388,9 @@ def _find_pai_md_for_categories(categories: list[str]) -> list[Path]:
     return pai_mds
 
 
-def extract_phase_mapping(categories: list[str], skill_name: str) -> dict[str, list[str]]:
+def extract_phase_mapping(
+    categories: list[str], skill_name: str
+) -> dict[str, list[str]]:
     """Extract phase → [tool_names] from module PAI.md files.
 
     Falls back to :data:`DEFAULT_PHASE_MAPS` if no PAI.md found or no matches.
@@ -393,7 +405,15 @@ def extract_phase_mapping(categories: list[str], skill_name: str) -> dict[str, l
         except OSError:
             continue
 
-        for phase in ("OBSERVE", "THINK", "PLAN", "BUILD", "EXECUTE", "VERIFY", "LEARN"):
+        for phase in (
+            "OBSERVE",
+            "THINK",
+            "PLAN",
+            "BUILD",
+            "EXECUTE",
+            "VERIFY",
+            "LEARN",
+        ):
             pattern = rf"\|\s*\*\*{phase}\*\*\s*\|\s*(.+?)\s*\|"
             for match in re.finditer(pattern, content):
                 cell = match.group(1)
@@ -414,6 +434,7 @@ def extract_phase_mapping(categories: list[str], skill_name: str) -> dict[str, l
 # Manual section preservation
 # ---------------------------------------------------------------------------
 
+
 def extract_keep_blocks(existing_content: str) -> list[str]:
     """Extract ``<!-- keep-start -->`` … ``<!-- keep-end -->`` blocks."""
     pattern = r"<!--\s*keep-start\s*-->(.*?)<!--\s*keep-end\s*-->"
@@ -423,6 +444,7 @@ def extract_keep_blocks(existing_content: str) -> list[str]:
 # ---------------------------------------------------------------------------
 # SKILL.md rendering
 # ---------------------------------------------------------------------------
+
 
 def _build_trust_note(tools: list[dict[str, Any]]) -> str:
     trusted = [t["name"] for t in tools if t.get("trust_level") == "TRUSTED"]
@@ -461,7 +483,11 @@ def _build_common_operations(tools: list[dict[str, Any]], skill_name: str) -> st
 
 
 def _build_key_tools_table(tools: list[dict[str, Any]]) -> str:
-    rows = ["## Key Tools\n", "| Tool | Description | Trust Level |", "|------|-------------|-------------|"]
+    rows = [
+        "## Key Tools\n",
+        "| Tool | Description | Trust Level |",
+        "|------|-------------|-------------|",
+    ]
     for t in sorted(tools, key=lambda x: x["name"]):
         name = t["name"]
         desc = (t.get("description") or "").split("\n")[0].strip()
@@ -502,7 +528,9 @@ def render_skill_md(
     existing_content: str = "",
 ) -> str:
     """Render a complete SKILL.md file for the given skill group."""
-    description = SKILL_DESCRIPTIONS.get(skill_name, _auto_description(skill_name, categories))
+    description = SKILL_DESCRIPTIONS.get(
+        skill_name, _auto_description(skill_name, categories)
+    )
     phase_map = extract_phase_mapping(categories, skill_name)
     keep_blocks = extract_keep_blocks(existing_content)
     module_str = ", ".join(f"`{c}`" for c in sorted(set(categories)))
@@ -549,6 +577,7 @@ def render_skill_md(
 # Write and index rebuild
 # ---------------------------------------------------------------------------
 
+
 def write_skill(
     skill_name: str,
     content: str,
@@ -559,7 +588,7 @@ def write_skill(
 ) -> None:
     """Write (or print) the SKILL.md for a skill."""
     if dry_run:
-        print(f"\n{'='*70}")
+        print(f"\n{'=' * 70}")
         print(f"DRY RUN: {output_dir / skill_name / 'SKILL.md'}")
         print("=" * 70)
         print(content)
@@ -579,7 +608,9 @@ def write_skill(
 
 def rebuild_index(output_dir: Path) -> None:
     """Run ``GenerateSkillIndex.ts`` to rebuild the skill index."""
-    index_script = Path.home() / ".claude" / "skills" / "PAI" / "Tools" / "GenerateSkillIndex.ts"
+    index_script = (
+        Path.home() / ".claude" / "skills" / "PAI" / "Tools" / "GenerateSkillIndex.ts"
+    )
     if not index_script.exists():
         logger.info("GenerateSkillIndex.ts not found at %s, skipping", index_script)
         return
@@ -594,12 +625,17 @@ def rebuild_index(output_dir: Path) -> None:
     if result.returncode == 0:
         logger.info("Skill index rebuilt.")
     else:
-        logger.warning("GenerateSkillIndex.ts exited %d: %s", result.returncode, result.stderr[:200])
+        logger.warning(
+            "GenerateSkillIndex.ts exited %d: %s",
+            result.returncode,
+            result.stderr[:200],
+        )
 
 
 # ---------------------------------------------------------------------------
 # High-level entry point (called by thin CLI wrapper)
 # ---------------------------------------------------------------------------
+
 
 def generate_skill_files(
     *,
@@ -641,7 +677,9 @@ def generate_skill_files(
 
     if category:
         if category not in groups:
-            print(f"ERROR: Skill '{category}' not found. Known: {', '.join(sorted(groups))}")
+            print(
+                f"ERROR: Skill '{category}' not found. Known: {', '.join(sorted(groups))}"
+            )
             return 1
         groups = {category: groups[category]}
 
@@ -660,7 +698,9 @@ def generate_skill_files(
         if existing_path.exists() and not force:
             existing_content = existing_path.read_text(encoding="utf-8")
 
-        content = render_skill_md(skill_name, skill_tools, categories_list, existing_content)
+        content = render_skill_md(
+            skill_name, skill_tools, categories_list, existing_content
+        )
         write_skill(skill_name, content, out, dry_run=dry_run, force=force)
         generated += 1
 

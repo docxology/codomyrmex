@@ -24,24 +24,24 @@ from codomyrmex.environment_setup import (
 def run_orchestration():
     """Main orchestration loop for environment setup."""
     print("--- Codomyrmex Environment Orchestration ---")
-    
+
     # 1. Report current state
     print("\n[Step 1] System Status Report:")
     report = generate_environment_report()
     print(report)
-    
+
     # 2. Check for .env and required vars
     print("\n[Step 2] Loading Environment Variables:")
     missing = check_and_setup_env_vars(
         repo_root=str(project_root),
         required=["OPENAI_API_KEY", "ANTHROPIC_API_KEY"],
-        optional=["LOG_LEVEL", "DEBUG"]
+        optional=["LOG_LEVEL", "DEBUG"],
     )
     if missing:
         print(f"Warning: Missing required environment variables: {missing}")
     else:
         print("Success: All required environment variables are present.")
-        
+
     # 3. Comprehensive validation
     print("\n[Step 3] Environment Validation:")
     val_report = validate_environment(min_python="3.11")
@@ -49,16 +49,17 @@ def run_orchestration():
         print("Success: Environment validation passed.")
     else:
         print(f"Error: Environment validation failed: {val_report.missing_items}")
-        
+
     # 4. uv Check
     print("\n[Step 4] Package Manager Check:")
     if is_uv_available():
         print("uv is available for fast package management.")
     else:
         print("uv is not found. Falling back to pip for installations.")
-        
+
     print("\n--- Orchestration Complete ---")
     return val_report.valid
+
 
 if __name__ == "__main__":
     success = run_orchestration()

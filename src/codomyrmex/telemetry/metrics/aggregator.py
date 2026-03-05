@@ -23,7 +23,21 @@ logger = get_logger(__name__)
 class HistogramBucket:
     """A histogram with configurable bucket boundaries."""
 
-    boundaries: list[float] = field(default_factory=lambda: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0])
+    boundaries: list[float] = field(
+        default_factory=lambda: [
+            0.005,
+            0.01,
+            0.025,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.5,
+            5.0,
+            10.0,
+        ]
+    )
     counts: list[int] = field(default_factory=list)
     total_count: int = 0
     total_sum: float = 0.0
@@ -48,7 +62,9 @@ class HistogramBucket:
         return self.total_sum / max(self.total_count, 1)
 
     def to_dict(self) -> dict[str, Any]:
-        buckets = {f"le_{b}": c for b, c in zip(self.boundaries, self.counts, strict=False)}
+        buckets = {
+            f"le_{b}": c for b, c in zip(self.boundaries, self.counts, strict=False)
+        }
         buckets["le_inf"] = self.counts[-1]
         return {
             "buckets": buckets,
@@ -75,10 +91,14 @@ class MetricAggregator:
         self._counters: dict[str, float] = {}
         self._gauges: dict[str, float] = {}
         self._histograms: dict[str, HistogramBucket] = {}
-        self._labeled_counters: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
+        self._labeled_counters: dict[str, dict[str, float]] = defaultdict(
+            lambda: defaultdict(float)
+        )
         self._counter_timestamps: dict[str, float] = {}
 
-    def increment(self, name: str, value: float = 1.0, labels: dict[str, str] | None = None) -> None:
+    def increment(
+        self, name: str, value: float = 1.0, labels: dict[str, str] | None = None
+    ) -> None:
         """Increment a counter, optionally with labels."""
         self._counters[name] = self._counters.get(name, 0.0) + value
         if name not in self._counter_timestamps:

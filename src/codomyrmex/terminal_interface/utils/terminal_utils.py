@@ -18,6 +18,7 @@ output, and running commands with beautiful presentation.
 
 logger = get_logger(__name__)
 
+
 class TerminalFormatter:
     """
     Utility class for formatting terminal output with colors and styles.
@@ -233,6 +234,7 @@ class TerminalFormatter:
 
         return "\n".join(result)
 
+
 class CommandRunner:
     """
     Utility class for running commands with beautiful output formatting.
@@ -415,6 +417,7 @@ class CommandRunner:
 
         print(self.formatter.table(headers, rows))
 
+
 @mcp_tool()
 def create_ascii_art(text: str, style: str = "simple") -> str:
     """
@@ -429,7 +432,7 @@ def create_ascii_art(text: str, style: str = "simple") -> str:
     """
     if style == "simple":
         return text
-    elif style == "block":
+    if style == "block":
         # Simple block letters (limited character set)
         block_chars = {
             "A": ["  █  ", " █ █ ", "█████", "█   █", "█   █"],
@@ -453,6 +456,7 @@ def create_ascii_art(text: str, style: str = "simple") -> str:
         return "\n".join(result)
 
     return text
+
 
 if __name__ == "__main__":
     # Demo the terminal utilities

@@ -11,27 +11,36 @@ try:
         Variant,
         VariantType,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
 
 if not HAS_MODULE:
-    pytest.skip("feature_flags.experiments module not available", allow_module_level=True)
+    pytest.skip(
+        "feature_flags.experiments module not available", allow_module_level=True
+    )
 
 
 @pytest.mark.unit
 class TestVariantType:
     """Test suite for VariantType."""
+
     def test_control(self):
-        assert VariantType.CONTROL.value == "control" or isinstance(VariantType.CONTROL.value, (str, int))
+        assert VariantType.CONTROL.value == "control" or isinstance(
+            VariantType.CONTROL.value, (str, int)
+        )
 
     def test_treatment(self):
-        assert VariantType.TREATMENT.value == "treatment" or isinstance(VariantType.TREATMENT.value, (str, int))
+        assert VariantType.TREATMENT.value == "treatment" or isinstance(
+            VariantType.TREATMENT.value, (str, int)
+        )
 
 
 @pytest.mark.unit
 class TestVariant:
     """Test suite for Variant."""
+
     def test_create_variant(self):
         variant = Variant(name="control")
         assert variant.name == "control"
@@ -45,6 +54,7 @@ class TestVariant:
 @pytest.mark.unit
 class TestExperiment:
     """Test suite for Experiment."""
+
     def test_create_experiment(self):
         experiment = Experiment(id="exp-1", name="Button Color Test")
         assert experiment.id == "exp-1"
@@ -63,6 +73,7 @@ class TestExperiment:
 @pytest.mark.unit
 class TestAssignment:
     """Test suite for Assignment."""
+
     def test_create_assignment(self):
         assignment = Assignment(
             experiment_id="exp-1",
@@ -76,6 +87,7 @@ class TestAssignment:
 @pytest.mark.unit
 class TestExperimentEvent:
     """Test suite for ExperimentEvent."""
+
     def test_create_event(self):
         event = ExperimentEvent(
             experiment_id="exp-1",
@@ -99,6 +111,7 @@ class TestExperimentEvent:
 @pytest.mark.unit
 class TestExperimentManager:
     """Test suite for ExperimentManager."""
+
     def test_create_manager(self):
         manager = ExperimentManager()
         assert isinstance(manager, ExperimentManager)
@@ -146,18 +159,21 @@ class TestExperimentIsActive:
 
     def test_future_start_date_not_active(self):
         from datetime import datetime, timedelta
+
         future = datetime.now() + timedelta(hours=1)
         exp = Experiment(id="e1", name="test", start_date=future)
         assert exp.is_active is False
 
     def test_past_end_date_not_active(self):
         from datetime import datetime, timedelta
+
         past = datetime.now() - timedelta(hours=1)
         exp = Experiment(id="e1", name="test", end_date=past)
         assert exp.is_active is False
 
     def test_within_window_active(self):
         from datetime import datetime, timedelta
+
         past = datetime.now() - timedelta(hours=1)
         future = datetime.now() + timedelta(hours=1)
         exp = Experiment(id="e1", name="test", start_date=past, end_date=future)
@@ -197,13 +213,17 @@ class TestExperimentManagerGetVariantExtended:
 
     def test_targeting_list_match(self):
         mgr = ExperimentManager()
-        mgr.create_experiment("exp1", "Test", targeting_rules={"plan": ["pro", "enterprise"]})
+        mgr.create_experiment(
+            "exp1", "Test", targeting_rules={"plan": ["pro", "enterprise"]}
+        )
         variant = mgr.get_variant("exp1", "u1", user_attributes={"plan": "pro"})
         assert variant is not None
 
     def test_targeting_list_no_match(self):
         mgr = ExperimentManager()
-        mgr.create_experiment("exp1", "Test", targeting_rules={"plan": ["pro", "enterprise"]})
+        mgr.create_experiment(
+            "exp1", "Test", targeting_rules={"plan": ["pro", "enterprise"]}
+        )
         result = mgr.get_variant("exp1", "u1", user_attributes={"plan": "free"})
         assert result is None
 
@@ -240,8 +260,14 @@ class TestExperimentManagerResultsExtended:
         mgr = ExperimentManager()
         mgr.create_experiment("exp1", "Test")
         results = mgr.get_results("exp1")
-        for key in ("experiment_id", "total_assignments", "by_variant",
-                    "conversions", "conversion_rates", "event_count"):
+        for key in (
+            "experiment_id",
+            "total_assignments",
+            "by_variant",
+            "conversions",
+            "conversion_rates",
+            "event_count",
+        ):
             assert key in results
 
     def test_get_results_total_assignments(self):

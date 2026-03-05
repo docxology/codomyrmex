@@ -16,6 +16,7 @@ from .base import (
 
 logger = get_logger(__name__)
 
+
 def create_pull_request(
     repo_owner: str,
     repo_name: str,
@@ -86,22 +87,22 @@ def create_pull_request(
                 },
                 "created_at": datetime.now().isoformat(),
             }
-        else:
-            error_msg = f"Failed to create PR: {response.status_code}"
-            if response.text:
-                try:
-                    error_data = response.json()
-                    error_msg += f" - {error_data.get('message', response.text)}"
-                except (ValueError, json.JSONDecodeError):
-                    error_msg += f" - {response.text}"
+        error_msg = f"Failed to create PR: {response.status_code}"
+        if response.text:
+            try:
+                error_data = response.json()
+                error_msg += f" - {error_data.get('message', response.text)}"
+            except (ValueError, json.JSONDecodeError):
+                error_msg += f" - {response.text}"
 
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error creating PR: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def get_pull_requests(
     repo_owner: str,
@@ -157,22 +158,22 @@ def get_pull_requests(
                 }
                 for pr in prs
             ]
-        else:
-            error_msg = f"Failed to fetch PRs: {response.status_code}"
-            if response.text:
-                try:
-                    error_data = response.json()
-                    error_msg += f" - {error_data.get('message', response.text)}"
-                except (ValueError, json.JSONDecodeError):
-                    error_msg += f" - {response.text}"
+        error_msg = f"Failed to fetch PRs: {response.status_code}"
+        if response.text:
+            try:
+                error_data = response.json()
+                error_msg += f" - {error_data.get('message', response.text)}"
+            except (ValueError, json.JSONDecodeError):
+                error_msg += f" - {response.text}"
 
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error fetching PRs: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 def get_pull_request(
     repo_owner: str, repo_name: str, pr_number: int, github_token: str | None = None
@@ -228,22 +229,22 @@ def get_pull_request(
                 "deletions": pr["deletions"],
                 "changed_files": pr["changed_files"],
             }
-        else:
-            error_msg = f"Failed to fetch PR #{pr_number}: {response.status_code}"
-            if response.text:
-                try:
-                    error_data = response.json()
-                    error_msg += f" - {error_data.get('message', response.text)}"
-                except (ValueError, json.JSONDecodeError):
-                    error_msg += f" - {response.text}"
+        error_msg = f"Failed to fetch PR #{pr_number}: {response.status_code}"
+        if response.text:
+            try:
+                error_data = response.json()
+                error_msg += f" - {error_data.get('message', response.text)}"
+            except (ValueError, json.JSONDecodeError):
+                error_msg += f" - {response.text}"
 
-            logger.error(error_msg)
-            raise GitHubAPIError(error_msg) from None
+        logger.error(error_msg)
+        raise GitHubAPIError(error_msg) from None
 
     except requests.RequestException as e:
         error_msg = f"Network error fetching PR #{pr_number}: {e}"
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
+
 
 async def async_list_pull_requests(
     repo_owner: str,
@@ -299,15 +300,15 @@ async def async_list_pull_requests(
             }
             for pr in prs
         ]
-    else:
-        error_msg = f"Failed to fetch PRs: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to fetch PRs: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None
+
 
 async def async_create_pull_request(
     repo_owner: str,
@@ -379,15 +380,15 @@ async def async_create_pull_request(
             },
             "created_at": datetime.now().isoformat(),
         }
-    else:
-        error_msg = f"Failed to create PR: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to create PR: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None
+
 
 async def async_get_pull_request(
     repo_owner: str, repo_name: str, pr_number: int, github_token: str | None = None
@@ -443,13 +444,11 @@ async def async_get_pull_request(
             "deletions": pr["deletions"],
             "changed_files": pr["changed_files"],
         }
-    else:
-        error_msg = f"Failed to fetch PR #{pr_number}: {status}"
-        if isinstance(data, dict):
-            error_msg += f" - {data.get('message', str(data))}"
-        elif data:
-            error_msg += f" - {data}"
+    error_msg = f"Failed to fetch PR #{pr_number}: {status}"
+    if isinstance(data, dict):
+        error_msg += f" - {data.get('message', str(data))}"
+    elif data:
+        error_msg += f" - {data}"
 
-        logger.error(error_msg)
-        raise GitHubAPIError(error_msg) from None
-
+    logger.error(error_msg)
+    raise GitHubAPIError(error_msg) from None

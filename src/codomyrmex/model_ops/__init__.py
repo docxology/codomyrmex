@@ -46,6 +46,7 @@ try:
         analyze_quality,
         create_default_scorer,
     )
+
     _EVALUATION_AVAILABLE = True
 except ImportError:
     _EVALUATION_AVAILABLE = False
@@ -79,6 +80,7 @@ try:
     from . import fine_tuning
 except ImportError:
     fine_tuning = None
+
 
 class Dataset:
     """
@@ -123,11 +125,10 @@ class Dataset:
             path: Output file path
         """
         with open(path, "w") as f:
-            for example in self.data:
-                f.write(json.dumps(example) + "\n")
+            f.writelines(json.dumps(example) + "\n" for example in self.data)
 
     @classmethod
-    def from_file(cls, path: str) -> 'Dataset':
+    def from_file(cls, path: str) -> "Dataset":
         """
         Load dataset from JSONL file.
 
@@ -147,6 +148,7 @@ class Dataset:
     def __len__(self) -> int:
         """Return the number of items."""
         return len(self.data)
+
 
 class DatasetSanitizer:
     """
@@ -172,7 +174,9 @@ class DatasetSanitizer:
         """
         filtered = []
         for example in dataset.data:
-            content = str(example.get("prompt", "")) + str(example.get("completion", ""))
+            content = str(example.get("prompt", "")) + str(
+                example.get("completion", "")
+            )
             if min_length <= len(content) <= max_length:
                 filtered.append(example)
         return Dataset(data=filtered)
@@ -194,6 +198,7 @@ class DatasetSanitizer:
             new_example = {k: v for k, v in example.items() if k not in keys}
             stripped.append(new_example)
         return Dataset(data=stripped)
+
 
 class FineTuningJob:
     """
@@ -241,6 +246,7 @@ class FineTuningJob:
             self.status = "completed"
         return self.status
 
+
 class Evaluator:
     """
     Model output evaluator with customizable metrics.
@@ -278,13 +284,19 @@ class Evaluator:
                 results[name] = 0.0
         return results
 
+
 # Convenience metric functions
 def exact_match_metric(predictions: list[str], references: list[str]) -> float:
     """Calculate exact match ratio (strips whitespace before comparison)."""
     if not predictions:
         return 0.0
-    matches = sum(1 for p, r in zip(predictions, references, strict=False) if p.strip() == r.strip())
+    matches = sum(
+        1
+        for p, r in zip(predictions, references, strict=False)
+        if p.strip() == r.strip()
+    )
     return matches / len(predictions)
+
 
 def length_ratio_metric(predictions: list[str], references: list[str]) -> float:
     """Calculate average length ratio."""
@@ -299,6 +311,7 @@ def length_ratio_metric(predictions: list[str], references: list[str]) -> float:
             ratios.append(1.0 if len(p) == 0 else 0.0)
 
     return sum(ratios) / len(ratios)
+
 
 def cli_commands():
     """Return CLI commands for the model_ops module."""
@@ -326,6 +339,7 @@ def cli_commands():
             ),
         },
     }
+
 
 __all__ = [
     "optimization",
@@ -380,4 +394,3 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
-

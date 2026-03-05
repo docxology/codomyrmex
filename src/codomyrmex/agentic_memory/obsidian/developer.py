@@ -50,7 +50,7 @@ def eval_js(
 
     Example::
 
-        file_count = eval_js(cli, 'app.vault.getFiles().length')
+        file_count = eval_js(cli, "app.vault.getFiles().length")
     """
     return cli.run("eval", vault=vault, params={"code": code}).stdout
 
@@ -103,7 +103,7 @@ def get_console_log(
             bracket_end = stripped.find("]")
             if bracket_end > 0:
                 entry_level = stripped[1:bracket_end].lower()
-                message = stripped[bracket_end + 1:].strip()
+                message = stripped[bracket_end + 1 :].strip()
         entries.append(ConsoleEntry(level=entry_level, message=message, raw=line))
     return entries
 

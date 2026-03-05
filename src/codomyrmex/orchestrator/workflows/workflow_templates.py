@@ -50,11 +50,13 @@ class WorkflowTemplate:
         for step_def in self.steps:
             name = step_def["name"]
             action = overrides.get(name, step_def.get("action"))
-            runner.add_step(WorkflowStep(
-                name=name,
-                action=action,
-                depends_on=step_def.get("depends_on", []),
-            ))
+            runner.add_step(
+                WorkflowStep(
+                    name=name,
+                    action=action,
+                    depends_on=step_def.get("depends_on", []),
+                )
+            )
 
         return runner
 

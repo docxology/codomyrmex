@@ -6,4 +6,4 @@ centrality metrics, and path-finding algorithms.
 
 from .graph import GraphMetrics, SocialGraph
 
-__all__ = ["SocialGraph", "GraphMetrics"]
+__all__ = ["GraphMetrics", "SocialGraph"]

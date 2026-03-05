@@ -136,7 +136,10 @@ class MemeticEngine:
         return selected
 
     def evolve(
-        self, population: list[Memeplex], generations: int = 10, mutation_rate: float = 0.1
+        self,
+        population: list[Memeplex],
+        generations: int = 10,
+        mutation_rate: float = 0.1,
     ) -> list[Memeplex]:
         """Run evolutionary selection on a memeplex population."""
         current_pop = list(population)

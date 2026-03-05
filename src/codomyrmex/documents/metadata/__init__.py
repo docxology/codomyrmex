@@ -6,11 +6,8 @@ from .versioning import get_document_version, set_document_version
 
 __all__ = [
     "extract_metadata",
-    "update_metadata",
-    "get_metadata",
     "get_document_version",
+    "get_metadata",
     "set_document_version",
+    "update_metadata",
 ]
-
-
-

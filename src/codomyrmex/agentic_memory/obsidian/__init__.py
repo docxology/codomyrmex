@@ -6,6 +6,7 @@ CLI-backed commands (requires Obsidian ≥1.12 with CLI enabled).
 Quick usage::
 
     from codomyrmex.agentic_memory.obsidian import ObsidianVault, Note
+
     vault = ObsidianVault("/path/to/vault")
     note = vault.get_note("My Note")
 """

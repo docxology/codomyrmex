@@ -1,4 +1,5 @@
 """Unit tests for graph_rag module."""
+
 import pytest
 
 
@@ -9,11 +10,13 @@ class TestGraphRagImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex import graph_rag
+
         assert graph_rag is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.graph_rag import __all__
+
         expected_exports = [
             "EntityType",
             "RelationType",
@@ -228,12 +231,22 @@ class TestKnowledgeGraph:
         )
 
         graph = KnowledgeGraph()
-        graph.add_entity(Entity(id="center", name="Center", entity_type=EntityType.CONCEPT))
-        graph.add_entity(Entity(id="neighbor1", name="N1", entity_type=EntityType.CONCEPT))
-        graph.add_entity(Entity(id="neighbor2", name="N2", entity_type=EntityType.CONCEPT))
+        graph.add_entity(
+            Entity(id="center", name="Center", entity_type=EntityType.CONCEPT)
+        )
+        graph.add_entity(
+            Entity(id="neighbor1", name="N1", entity_type=EntityType.CONCEPT)
+        )
+        graph.add_entity(
+            Entity(id="neighbor2", name="N2", entity_type=EntityType.CONCEPT)
+        )
 
-        graph.add_relationship(Relationship("center", "neighbor1", RelationType.RELATED_TO))
-        graph.add_relationship(Relationship("center", "neighbor2", RelationType.RELATED_TO))
+        graph.add_relationship(
+            Relationship("center", "neighbor1", RelationType.RELATED_TO)
+        )
+        graph.add_relationship(
+            Relationship("center", "neighbor2", RelationType.RELATED_TO)
+        )
 
         neighbors = graph.get_neighbors("center", direction="out")
         neighbor_ids = [n.id for n in neighbors]
@@ -269,7 +282,9 @@ class TestKnowledgeGraph:
         graph = KnowledgeGraph()
         graph.add_entity(Entity(id="py", name="Python", entity_type=EntityType.CONCEPT))
         graph.add_entity(Entity(id="java", name="Java", entity_type=EntityType.CONCEPT))
-        graph.add_entity(Entity(id="js", name="JavaScript", entity_type=EntityType.CONCEPT))
+        graph.add_entity(
+            Entity(id="js", name="JavaScript", entity_type=EntityType.CONCEPT)
+        )
 
         results = graph.search_entities("Python")
         assert len(results) == 1
@@ -324,7 +339,9 @@ class TestGraphRAGPipeline:
         )
 
         graph = KnowledgeGraph()
-        graph.add_entity(Entity(id="python", name="Python", entity_type=EntityType.CONCEPT))
+        graph.add_entity(
+            Entity(id="python", name="Python", entity_type=EntityType.CONCEPT)
+        )
         graph.add_entity(Entity(id="java", name="Java", entity_type=EntityType.CONCEPT))
 
         pipeline = GraphRAGPipeline(graph=graph)
@@ -344,8 +361,14 @@ class TestGraphRAGPipeline:
         )
 
         graph = KnowledgeGraph()
-        graph.add_entity(Entity(id="ml", name="Machine Learning", entity_type=EntityType.CONCEPT))
-        graph.add_entity(Entity(id="ai", name="Artificial Intelligence", entity_type=EntityType.CONCEPT))
+        graph.add_entity(
+            Entity(id="ml", name="Machine Learning", entity_type=EntityType.CONCEPT)
+        )
+        graph.add_entity(
+            Entity(
+                id="ai", name="Artificial Intelligence", entity_type=EntityType.CONCEPT
+            )
+        )
         graph.add_relationship(Relationship("ml", "ai", RelationType.PART_OF))
 
         pipeline = GraphRAGPipeline(graph=graph)

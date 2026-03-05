@@ -15,13 +15,11 @@ from .reasoning_models import (
 
 __all__ = [
     "AgentArchitecture",
-    "ReactiveArchitecture",
     "DeliberativeArchitecture",
     "HybridArchitecture",
+    "HybridReasoningModel",
+    "NeuralReasoningModel",
+    "ReactiveArchitecture",
     "ReasoningModel",
     "SymbolicReasoningModel",
-    "NeuralReasoningModel",
-    "HybridReasoningModel",
 ]
-
-

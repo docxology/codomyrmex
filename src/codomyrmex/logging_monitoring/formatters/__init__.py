@@ -6,6 +6,6 @@ JSON objects for structured logging and log aggregation.
 """
 
 from .json_formatter import JSONFormatter
-from .structured_formatter import *  # noqa: F401,F403
+from .structured_formatter import *
 
 __all__ = ["JSONFormatter"]

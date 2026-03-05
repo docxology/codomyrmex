@@ -37,6 +37,7 @@ def ec_keypair() -> KeyPair:
 @pytest.mark.unit
 class TestSelfSignedCert:
     """Test suite for SelfSignedCert."""
+
     def test_generate_rsa(self, rsa_keypair: KeyPair) -> None:
         cert = generate_self_signed_cert("test.example.com", rsa_keypair)
         assert isinstance(cert, x509.Certificate)
@@ -70,6 +71,7 @@ class TestSelfSignedCert:
 @pytest.mark.unit
 class TestCSR:
     """Test suite for CSR."""
+
     def test_generate_basic(self, rsa_keypair: KeyPair) -> None:
         csr = generate_csr("csr.example.com", rsa_keypair)
         assert isinstance(csr, x509.CertificateSigningRequest)
@@ -101,6 +103,7 @@ class TestCSR:
 @pytest.mark.unit
 class TestCertificatePEM:
     """Test suite for CertificatePEM."""
+
     def test_export_and_reimport(self, rsa_keypair: KeyPair) -> None:
         cert = generate_self_signed_cert("roundtrip.test", rsa_keypair)
         pem = export_certificate_pem(cert)
@@ -125,6 +128,7 @@ class TestCertificatePEM:
 @pytest.mark.unit
 class TestCertificateChainValidation:
     """Test suite for CertificateChainValidation."""
+
     def test_single_self_signed_valid(self, rsa_keypair: KeyPair) -> None:
         cert = generate_self_signed_cert("root.test", rsa_keypair)
         result = validate_certificate_chain([cert])
@@ -149,13 +153,22 @@ class TestCertificateChainValidation:
         now = datetime.datetime.now(datetime.UTC)
         leaf_cert = (
             x509.CertificateBuilder()
-            .subject_name(x509.Name([x509.NameAttribute(x509.oid.NameOID.COMMON_NAME, "leaf.test")]))
+            .subject_name(
+                x509.Name(
+                    [x509.NameAttribute(x509.oid.NameOID.COMMON_NAME, "leaf.test")]
+                )
+            )
             .issuer_name(ca_cert.subject)
             .public_key(leaf_kp.public_key)
             .serial_number(x509.random_serial_number())
             .not_valid_before(now)
             .not_valid_after(now + datetime.timedelta(days=30))
-            .sign(ca_kp.private_key, algorithm=__import__("cryptography.hazmat.primitives.hashes", fromlist=["SHA256"]).SHA256())
+            .sign(
+                ca_kp.private_key,
+                algorithm=__import__(
+                    "cryptography.hazmat.primitives.hashes", fromlist=["SHA256"]
+                ).SHA256(),
+            )
         )
 
         result = validate_certificate_chain([leaf_cert, ca_cert])

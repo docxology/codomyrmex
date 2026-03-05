@@ -9,8 +9,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-
-
 class ArchitectureMixin:
     """ArchitectureMixin functionality."""
 
@@ -42,14 +40,16 @@ class ArchitectureMixin:
         for data_file in data_files:
             # This is a simplified check - in reality would need AST analysis
             if self._file_imports_presentation_layer(data_file, presentation_files):
-                violations.append(ArchitectureViolation(
-                    file_path=data_file,
-                    violation_type="layering_violation",
-                    description="Data layer should not depend on presentation layer",
-                    severity="high",
-                    suggestion="Move shared code to a common layer or use dependency injection",
-                    affected_modules=["data_access", "presentation"]
-                ))
+                violations.append(
+                    ArchitectureViolation(
+                        file_path=data_file,
+                        violation_type="layering_violation",
+                        description="Data layer should not depend on presentation layer",
+                        severity="high",
+                        suggestion="Move shared code to a common layer or use dependency injection",
+                        affected_modules=["data_access", "presentation"],
+                    )
+                )
 
         return violations
 
@@ -68,18 +68,24 @@ class ArchitectureMixin:
         # Check for files that don't follow naming conventions
         for root, _dirs, files in os.walk(self.project_root):
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = os.path.join(root, file)
 
                     # Check if test files follow naming convention
-                    if 'test' in file.lower() and not file.startswith('test_') and not file.endswith('_test.py'):
-                        violations.append(ArchitectureViolation(
-                            file_path=file_path,
-                            violation_type="naming_convention",
-                            description=f"Test file '{file}' should follow naming convention (test_*.py or *_test.py)",
-                            severity="low",
-                            suggestion="Rename file to follow test naming conventions"
-                        ))
+                    if (
+                        "test" in file.lower()
+                        and not file.startswith("test_")
+                        and not file.endswith("_test.py")
+                    ):
+                        violations.append(
+                            ArchitectureViolation(
+                                file_path=file_path,
+                                violation_type="naming_convention",
+                                description=f"Test file '{file}' should follow naming convention (test_*.py or *_test.py)",
+                                severity="low",
+                                suggestion="Rename file to follow test naming conventions",
+                            )
+                        )
 
         return violations
 
@@ -88,7 +94,7 @@ class ArchitectureMixin:
         layer_patterns = {
             "presentation": ["ui", "interface", "view", "controller", "handler"],
             "business": ["service", "manager", "orchestrator", "engine"],
-            "data": ["repository", "dao", "model", "entity"]
+            "data": ["repository", "dao", "model", "entity"],
         }
 
         matching_files = []
@@ -96,27 +102,35 @@ class ArchitectureMixin:
 
         for root, _dirs, files in os.walk(self.project_root):
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = os.path.join(root, file)
 
                     # Simple pattern matching
                     for pattern in patterns:
-                        if pattern.lower() in file.lower() or pattern.lower() in root.lower():
+                        if (
+                            pattern.lower() in file.lower()
+                            or pattern.lower() in root.lower()
+                        ):
                             matching_files.append(file_path)
                             break
 
         return matching_files
 
-    def _file_imports_presentation_layer(self, file_path: str, presentation_files: list[str]) -> bool:
+    def _file_imports_presentation_layer(
+        self, file_path: str, presentation_files: list[str]
+    ) -> bool:
         """Check if a file imports from presentation layer (simplified check)."""
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # Look for import statements that might reference presentation layer
             for pres_file in presentation_files:
                 pres_module = os.path.splitext(os.path.basename(pres_file))[0]
-                if f"from {pres_module} import" in content or f"import {pres_module}" in content:
+                if (
+                    f"from {pres_module} import" in content
+                    or f"import {pres_module}" in content
+                ):
                     return True
 
         except Exception as e:

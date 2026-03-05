@@ -62,25 +62,33 @@ class LineageTracker:
         self.graph.add_node(transform_node)
 
         for input_id in inputs:
-            self.graph.add_edge(LineageEdge(
-                source_id=input_id,
-                target_id=id,
-                edge_type=EdgeType.INPUT_TO,
-            ))
+            self.graph.add_edge(
+                LineageEdge(
+                    source_id=input_id,
+                    target_id=id,
+                    edge_type=EdgeType.INPUT_TO,
+                )
+            )
 
         for output_id in outputs:
-            self.graph.add_edge(LineageEdge(
-                source_id=id,
-                target_id=output_id,
-                edge_type=EdgeType.PRODUCED_BY,
-            ))
+            self.graph.add_edge(
+                LineageEdge(
+                    source_id=id,
+                    target_id=output_id,
+                    edge_type=EdgeType.PRODUCED_BY,
+                )
+            )
 
         return transform_node
 
     def get_origin(self, node_id: str) -> list[LineageNode]:
         """Get the original source data for a node."""
         upstream = self.graph.get_upstream(node_id)
-        return [n for n in upstream if n.node_type == NodeType.DATASET and not self.graph.get_upstream(n.id)]
+        return [
+            n
+            for n in upstream
+            if n.node_type == NodeType.DATASET and not self.graph.get_upstream(n.id)
+        ]
 
     def get_impact(self, node_id: str) -> list[LineageNode]:
         """Get all nodes affected by changes to this node."""
@@ -106,7 +114,9 @@ class ImpactAnalyzer:
 
         affected_datasets = [n for n in downstream if n.node_type == NodeType.DATASET]
         affected_models = [n for n in downstream if n.node_type == NodeType.MODEL]
-        affected_transforms = [n for n in downstream if n.node_type == NodeType.TRANSFORMATION]
+        affected_transforms = [
+            n for n in downstream if n.node_type == NodeType.TRANSFORMATION
+        ]
 
         return {
             "source_node": node_id,
@@ -114,5 +124,9 @@ class ImpactAnalyzer:
             "affected_datasets": [n.id for n in affected_datasets],
             "affected_models": [n.id for n in affected_models],
             "affected_transformations": [n.id for n in affected_transforms],
-            "risk_level": "high" if affected_models else "medium" if affected_datasets else "low",
+            "risk_level": "high"
+            if affected_models
+            else "medium"
+            if affected_datasets
+            else "low",
         }

@@ -75,12 +75,18 @@ class OpenCodeClient(CLIAgentBase):
                 },
             )
         except AgentTimeoutError as e:
-            raise OpenCodeError(f"OpenCode command timed out: {str(e)}", command=self.command) from e
+            raise OpenCodeError(
+                f"OpenCode command timed out: {e!s}", command=self.command
+            ) from e
         except AgentError as e:
-            raise OpenCodeError(f"OpenCode command failed: {str(e)}", command=self.command) from e
+            raise OpenCodeError(
+                f"OpenCode command failed: {e!s}", command=self.command
+            ) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"OpenCode execution failed: {e}", exc_info=True)
-            raise OpenCodeError(f"OpenCode command failed: {str(e)}", command=self.command) from e
+            raise OpenCodeError(
+                f"OpenCode command failed: {e!s}", command=self.command
+            ) from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream OpenCode command output."""
@@ -102,10 +108,10 @@ class OpenCodeClient(CLIAgentBase):
             if command == "init":
                 args.append("--init")
                 return args
-            elif command == "connect":
+            if command == "connect":
                 args.append("--connect")
                 return args
-            elif command == "share":
+            if command == "share":
                 args.append("--share")
                 return args
 
@@ -116,7 +122,7 @@ class OpenCodeClient(CLIAgentBase):
 
     def initialize_project(self, project_path: Path | None = None) -> dict[str, Any]:
         """Initialize OpenCode for a project."""
-        working_path = project_path or (self.working_dir if self.working_dir else Path.cwd())
+        working_path = project_path or (self.working_dir or Path.cwd())
 
         try:
             result = self._execute_command(args=["--init"], cwd=working_path)
@@ -127,7 +133,9 @@ class OpenCodeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"Failed to initialize OpenCode project: {e}", exc_info=True)
+            self.logger.error(
+                f"Failed to initialize OpenCode project: {e}", exc_info=True
+            )
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
     def get_opencode_version(self) -> dict[str, Any]:

@@ -14,14 +14,14 @@ def render_colony_state(colony: Colony) -> ScatterPlot:
     x_coords = []
     y_coords = []
 
-    if hasattr(colony, 'ants'):
-         x_coords = [ant.position[0] for ant in colony.ants]
-         y_coords = [ant.position[1] for ant in colony.ants]
+    if hasattr(colony, "ants"):
+        x_coords = [ant.position[0] for ant in colony.ants]
+        y_coords = [ant.position[1] for ant in colony.ants]
 
     return ScatterPlot(
         title="Real-time Colony State",
         x_label="X Coordinate",
         y_label="Y Coordinate",
         x_data=x_coords,
-        y_data=y_coords
+        y_data=y_coords,
     )

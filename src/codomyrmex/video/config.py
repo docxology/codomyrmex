@@ -73,7 +73,13 @@ class VideoConfig:
             issues.append(f"thumbnail_width too small: {self.thumbnail_width}")
         if self.default_output_format not in ("mp4", "avi", "mkv", "webm", "mov"):
             issues.append(f"Unsupported format: {self.default_output_format}")
-        if self.quality_preset not in ("ultrafast", "fast", "medium", "slow", "veryslow"):
+        if self.quality_preset not in (
+            "ultrafast",
+            "fast",
+            "medium",
+            "slow",
+            "veryslow",
+        ):
             issues.append(f"Unknown quality_preset: {self.quality_preset}")
         return issues
 
@@ -84,6 +90,7 @@ class VideoConfig:
 
 
 # ── Presets ─────────────────────────────────────────────────────────
+
 
 def high_quality() -> VideoConfig:
     """Preset for high-quality output (slow encoding)."""
@@ -192,12 +199,12 @@ def configure(
 
 __all__ = [
     "VideoConfig",
-    "get_config",
-    "set_config",
-    "reset_config",
     "configure",
+    "get_config",
     "high_quality",
-    "web_optimized",
-    "thumbnail_only",
     "mobile_optimized",
+    "reset_config",
+    "set_config",
+    "thumbnail_only",
+    "web_optimized",
 ]

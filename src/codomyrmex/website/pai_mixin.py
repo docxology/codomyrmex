@@ -34,7 +34,6 @@ _PM_SERVER_PORT = os.environ.get("PAI_PM_PORT", "8889")
 _PM_SERVER_BASE = f"http://localhost:{_PM_SERVER_PORT}"
 
 
-
 class PAIProviderMixin:
     """Mixin providing PAI awareness data methods."""
 
@@ -68,19 +67,25 @@ class PAIProviderMixin:
                 try:
                     progress = _json.loads(progress_file.read_text(encoding="utf-8"))
                 except Exception as e:
-                    logger.debug("Failed to parse progress.json for mission %s: %s", mission_dir.name, e)
+                    logger.debug(
+                        "Failed to parse progress.json for mission %s: %s",
+                        mission_dir.name,
+                        e,
+                    )
 
-            missions.append({
-                "id": mission_dir.name,
-                "title": data.get("title", mission_dir.name),
-                "status": data.get("status", "unknown"),
-                "priority": data.get("priority", "MEDIUM"),
-                "description": data.get("description", ""),
-                "success_criteria": data.get("success_criteria", []),
-                "linked_projects": data.get("linked_projects", []),
-                "completion_percentage": progress.get("completion_percentage", 0),
-                "recent_activity": progress.get("recent_activity", []),
-            })
+            missions.append(
+                {
+                    "id": mission_dir.name,
+                    "title": data.get("title", mission_dir.name),
+                    "status": data.get("status", "unknown"),
+                    "priority": data.get("priority", "MEDIUM"),
+                    "description": data.get("description", ""),
+                    "success_criteria": data.get("success_criteria", []),
+                    "linked_projects": data.get("linked_projects", []),
+                    "completion_percentage": progress.get("completion_percentage", 0),
+                    "recent_activity": progress.get("recent_activity", []),
+                }
+            )
 
         missions.sort(key=lambda m: priority_order.get(m["priority"], 99))
         return missions
@@ -114,20 +119,26 @@ class PAIProviderMixin:
                 try:
                     progress = _json.loads(progress_file.read_text(encoding="utf-8"))
                 except Exception as e:
-                    logger.debug("Failed to parse progress.json for project %s: %s", project_dir.name, e)
+                    logger.debug(
+                        "Failed to parse progress.json for project %s: %s",
+                        project_dir.name,
+                        e,
+                    )
 
-            projects.append({
-                "id": project_dir.name,
-                "title": data.get("title", project_dir.name),
-                "status": data.get("status", "unknown"),
-                "goal": data.get("goal", ""),
-                "priority": data.get("priority", "MEDIUM"),
-                "parent_mission": data.get("parent_mission", ""),
-                "tags": data.get("tags", []),
-                "completion_percentage": progress.get("completion_percentage", 0),
-                "task_counts": progress.get("task_counts", {}),
-                "recent_activity": progress.get("recent_activity", []),
-            })
+            projects.append(
+                {
+                    "id": project_dir.name,
+                    "title": data.get("title", project_dir.name),
+                    "status": data.get("status", "unknown"),
+                    "goal": data.get("goal", ""),
+                    "priority": data.get("priority", "MEDIUM"),
+                    "parent_mission": data.get("parent_mission", ""),
+                    "tags": data.get("tags", []),
+                    "completion_percentage": progress.get("completion_percentage", 0),
+                    "task_counts": progress.get("task_counts", {}),
+                    "recent_activity": progress.get("recent_activity", []),
+                }
+            )
 
         projects.sort(key=lambda p: (p["parent_mission"], p["title"]))
         return projects
@@ -184,12 +195,14 @@ class PAIProviderMixin:
             except Exception:
                 content = ""
                 size = 0
-            telos.append({
-                "name": md_file.stem,
-                "filename": md_file.name,
-                "size_bytes": size,
-                "preview": content[:200],
-            })
+            telos.append(
+                {
+                    "name": md_file.stem,
+                    "filename": md_file.name,
+                    "size_bytes": size,
+                    "preview": content[:200],
+                }
+            )
 
         telos.sort(key=lambda t: t["name"])
         return telos
@@ -219,11 +232,13 @@ class PAIProviderMixin:
                 file_count = 0
                 subdir_count = 0
             total_files += file_count
-            directories.append({
-                "name": item.name,
-                "file_count": file_count,
-                "subdir_count": subdir_count,
-            })
+            directories.append(
+                {
+                    "name": item.name,
+                    "file_count": file_count,
+                    "subdir_count": subdir_count,
+                }
+            )
 
         # Count work sessions
         work_dir = memory_dir / "WORK"
@@ -273,7 +288,7 @@ class PAIProviderMixin:
             status_class = _sanitize(mission.get("status", "unknown"))
             lines.append(f"    class {m_id} {status_class}")
 
-            for proj_ref in (mission.get("linked_projects") or []):
+            for proj_ref in mission.get("linked_projects") or []:
                 p_id = "P_" + _sanitize(str(proj_ref))
                 linked_project_ids.add(str(proj_ref))
                 lines.append(f"    {m_id} --> {p_id}")
@@ -315,11 +330,23 @@ class PAIProviderMixin:
                     if "hooks" not in server_data:
                         server_data["hooks"] = self._discover_hooks()
                     if "metrics" in server_data:
-                        server_data["metrics"]["skill_count"] = len(server_data.get("skills", []))
-                        server_data["metrics"]["hook_count"] = len(server_data.get("hooks", []))
-                    logger.debug("PAI awareness data fetched from PMServer at %s", _PM_SERVER_BASE)
+                        server_data["metrics"]["skill_count"] = len(
+                            server_data.get("skills", [])
+                        )
+                        server_data["metrics"]["hook_count"] = len(
+                            server_data.get("hooks", [])
+                        )
+                    logger.debug(
+                        "PAI awareness data fetched from PMServer at %s",
+                        _PM_SERVER_BASE,
+                    )
                     return server_data
-        except (urllib.error.URLError, OSError, _json.JSONDecodeError, TimeoutError) as e:
+        except (
+            urllib.error.URLError,
+            OSError,
+            _json.JSONDecodeError,
+            TimeoutError,
+        ) as e:
             logger.debug("PMServer not available, falling back to YAML: %s", e)
 
         # ── Fallback: direct YAML reads (offline mode) ──
@@ -346,7 +373,13 @@ class PAIProviderMixin:
             tc = project.get("task_counts", {})
             total_tasks += sum(
                 tc.get(k, 0)
-                for k in ("completed", "in_progress", "remaining", "blocked", "optional")
+                for k in (
+                    "completed",
+                    "in_progress",
+                    "remaining",
+                    "blocked",
+                    "optional",
+                )
             )
             completed_tasks += tc.get("completed", 0)
 
@@ -383,7 +416,8 @@ class PAIProviderMixin:
             skills_dir = self._PAI_ROOT / "skills"
             if skills_dir.exists():
                 return sorted(
-                    d.name for d in skills_dir.iterdir()
+                    d.name
+                    for d in skills_dir.iterdir()
                     if d.is_dir() and not d.name.startswith(".")
                 )
         except Exception as e:
@@ -396,7 +430,8 @@ class PAIProviderMixin:
             hooks_dir = self._PAI_ROOT / "hooks"
             if hooks_dir.exists():
                 return sorted(
-                    f.stem for f in hooks_dir.iterdir()
+                    f.stem
+                    for f in hooks_dir.iterdir()
                     if f.is_file() and not f.name.startswith(".")
                 )
         except Exception as e:
@@ -412,5 +447,4 @@ class PAIProviderMixin:
         try:
             return self._build_pai_mermaid_graph(missions, projects)
         except Exception:
-            return "graph TD\n    ERR[\"Graph unavailable\"]"
-
+            return 'graph TD\n    ERR["Graph unavailable"]'

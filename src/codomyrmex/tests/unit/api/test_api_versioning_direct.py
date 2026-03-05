@@ -15,11 +15,13 @@ import pytest
 # Direct-import helper
 # ---------------------------------------------------------------------------
 
+
 def _load_api_versioning():
     name = "codomyrmex.api.standardization.api_versioning"
     if name in sys.modules:
         return sys.modules[name]
     import codomyrmex.logging_monitoring  # noqa: F401
+
     spec = importlib.util.spec_from_file_location(
         name,
         "src/codomyrmex/api/standardization/api_versioning.py",
@@ -55,6 +57,7 @@ pytestmark = pytest.mark.skipif(
 # ===========================================================================
 # SimpleVersion
 # ===========================================================================
+
 
 class TestSimpleVersion:
     """SimpleVersion — parsing, comparison, compatibility."""
@@ -123,6 +126,7 @@ class TestSimpleVersion:
 # VersionFormat enum
 # ===========================================================================
 
+
 class TestVersionFormat:
     def test_semver_value(self):
         assert VersionFormat.SEMVER.value == "semver"
@@ -140,6 +144,7 @@ class TestVersionFormat:
 # ===========================================================================
 # APIVersion
 # ===========================================================================
+
 
 class TestAPIVersion:
     """APIVersion dataclass — format validation, compatibility, ordering."""
@@ -295,6 +300,7 @@ class TestAPIVersion:
 # VersionedEndpoint
 # ===========================================================================
 
+
 class TestVersionedEndpoint:
     """VersionedEndpoint — handlers, add_version, deprecate_version."""
 
@@ -371,6 +377,7 @@ class TestVersionedEndpoint:
 # ===========================================================================
 # APIVersionManager
 # ===========================================================================
+
 
 class TestAPIVersionManager:
     """APIVersionManager — registration, parsing, migration, info."""
@@ -623,12 +630,8 @@ class TestAPIVersionManager:
             )
         )
         # 1.0.0 → 1.5.0 intermediate, then 1.5.0 → 1.9.0 direct
-        mgr.add_migration_rule(
-            "1.0.0", "1.5.0", lambda d: {**d, "step1": True}
-        )
-        mgr.add_migration_rule(
-            "1.5.0", "1.9.0", lambda d: {**d, "step2": True}
-        )
+        mgr.add_migration_rule("1.0.0", "1.5.0", lambda d: {**d, "step1": True})
+        mgr.add_migration_rule("1.5.0", "1.9.0", lambda d: {**d, "step2": True})
         # Ask for 1.0.0 → 1.9.0 without a direct rule, forcing intermediate lookup
         result = mgr.migrate_data({"original": True}, "1.0.0", "1.9.0")
         assert result["original"] is True
@@ -653,9 +656,7 @@ class TestAPIVersionManager:
             )
         )
         # Only rule: 1.0.0 → 2.0.0, but we want to reach 3.0.0 and 2.x is not compatible with 3.x
-        mgr.add_migration_rule(
-            "1.0.0", "2.0.0", lambda d: {**d, "v2": True}
-        )
+        mgr.add_migration_rule("1.0.0", "2.0.0", lambda d: {**d, "v2": True})
         # No rule from 2.0.0 to 3.0.0 and they're incompatible major versions
         with pytest.raises(ValueError, match="No migration path"):
             mgr.migrate_data({"original": True}, "1.0.0", "3.0.0")
@@ -664,6 +665,7 @@ class TestAPIVersionManager:
 # ===========================================================================
 # Decorators
 # ===========================================================================
+
 
 class TestVersionDecorators:
     """version and deprecated_version decorators."""

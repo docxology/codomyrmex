@@ -13,10 +13,7 @@ class IdeoscapeEngine:
 
     def render_layer(self, layer: IdeoscapeLayer, resolution: int = 100) -> TerrainMap:
         """Render a single layer into a terrain map."""
-        return generate_terrain(
-            features=layer.data_points,
-            resolution=resolution
-        )
+        return generate_terrain(features=layer.data_points, resolution=resolution)
 
     def composite(self, layers: list[IdeoscapeLayer]) -> TerrainMap:
         """Combine multiple layers into a composite view."""

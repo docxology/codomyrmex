@@ -16,6 +16,7 @@ logger = get_logger(__name__)
 @dataclass
 class Tool:
     """Lightweight tool descriptor for agent registries."""
+
     name: str
     description: str
     parameters: dict[str, Any] = field(default_factory=dict)
@@ -37,9 +38,7 @@ def _method_to_args_schema(method: Callable) -> dict[str, Any]:
         prop: dict[str, Any] = {}
         annotation = param.annotation
 
-        if annotation is inspect.Parameter.empty:
-            prop["type"] = "string"
-        elif annotation is str:
+        if annotation is inspect.Parameter.empty or annotation is str:
             prop["type"] = "string"
         elif annotation is int:
             prop["type"] = "integer"
@@ -70,11 +69,7 @@ def _method_to_args_schema(method: Callable) -> dict[str, Any]:
 
 def _is_public_method(name: str, obj: Any) -> bool:
     """Check if name refers to a public, callable method."""
-    return (
-        callable(obj)
-        and not name.startswith("_")
-        and not isinstance(obj, type)
-    )
+    return callable(obj) and not name.startswith("_") and not isinstance(obj, type)
 
 
 class CloudToolFactory:
@@ -123,9 +118,7 @@ class CloudToolFactory:
             registry[tool_name] = tool
             registered.append(tool_name)
 
-        logger.info(
-            f"Registered {len(registered)} tools for service '{service_name}'"
-        )
+        logger.info(f"Registered {len(registered)} tools for service '{service_name}'")
         return registered
 
     @staticmethod
@@ -164,9 +157,7 @@ class CloudToolFactory:
             """Secured."""
             check = pipeline.pre_check(method_name, kwargs)
             if not check.allowed:
-                raise PermissionError(
-                    f"Security check failed: {check.reason}"
-                )
+                raise PermissionError(f"Security check failed: {check.reason}")
             result = method(*args, **kwargs)
             return pipeline.post_process(method_name, result)
 

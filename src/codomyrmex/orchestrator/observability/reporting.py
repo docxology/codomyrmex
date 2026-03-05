@@ -122,17 +122,20 @@ def generate_report(
         json.dump(summary_clean, f, indent=2)
 
     # Log RUN_SUMMARY event
-    logger.info("Run summary generated", extra={
-        "event": "RUN_SUMMARY",
-        "run_id": run_id,
-        "total_scripts": summary["total_scripts"],
-        "passed": summary["passed"],
-        "failed": summary["failed"],
-        "timeout": summary["timeout"],
-        "error": summary["error"],
-        "skipped": summary["skipped"],
-        "total_execution_time": summary["total_execution_time"],
-    })
+    logger.info(
+        "Run summary generated",
+        extra={
+            "event": "RUN_SUMMARY",
+            "run_id": run_id,
+            "total_scripts": summary["total_scripts"],
+            "passed": summary["passed"],
+            "failed": summary["failed"],
+            "timeout": summary["timeout"],
+            "error": summary["error"],
+            "skipped": summary["skipped"],
+            "total_execution_time": summary["total_execution_time"],
+        },
+    )
 
     return summary
 
@@ -159,7 +162,9 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
         # Write Header
         f.write("# Codomyrmex Script Reference\n\n")
         f.write(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-        f.write("This document contains auto-generated documentation for all scripts in the `scripts/` directory.\n\n")
+        f.write(
+            "This document contains auto-generated documentation for all scripts in the `scripts/` directory.\n\n"
+        )
 
         # Table of Contents
         f.write("## Table of Contents\n\n")
@@ -199,7 +204,9 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                     src_path = project_root / "src"
                     if src_path.exists():
                         pythonpath = env.get("PYTHONPATH", "")
-                        env["PYTHONPATH"] = f"{src_path}:{pythonpath}" if pythonpath else str(src_path)
+                        env["PYTHONPATH"] = (
+                            f"{src_path}:{pythonpath}" if pythonpath else str(src_path)
+                        )
 
                     cmd = [sys.executable, str(script), "--help"]
 
@@ -210,7 +217,7 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                         timeout=5,
                         env=env,
                         cwd=script.parent,
-                        stdin=subprocess.DEVNULL
+                        stdin=subprocess.DEVNULL,
                     )
 
                     if process.returncode == 0:
@@ -226,8 +233,14 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                     help_text = "Timed out getting help text"
                     fail_count += 1
                     print(" ⏰")
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                    help_text = f"Error generating docs: {str(e)}"
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
+                    help_text = f"Error generating docs: {e!s}"
                     fail_count += 1
                     print(" 💥")
 

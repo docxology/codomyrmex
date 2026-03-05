@@ -8,7 +8,10 @@ from dataclasses import dataclass
 @dataclass
 class DataSchema:
     """Schema for generating synthetic data."""
-    fields: dict   # {field_name: {"type": "str|int|float|bool|choice", "options": [...]}}
+
+    fields: (
+        dict  # {field_name: {"type": "str|int|float|bool|choice", "options": [...]}}
+    )
     n_samples: int = 100
 
 
@@ -89,7 +92,10 @@ class SyntheticDataGenerator:
                         [random.choice(self.ADJECTIVES)]
                         + [random.choice(self.NOUNS)]
                         + [random.choice(self.VERBS)]
-                        + [random.choice(self.ADJECTIVES) for _ in range(max(0, n_words - 3))]
+                        + [
+                            random.choice(self.ADJECTIVES)
+                            for _ in range(max(0, n_words - 3))
+                        ]
                     )[:n_words]
                     record[field_name] = " ".join(words)
 
@@ -170,11 +176,13 @@ class SyntheticDataGenerator:
         for q in questions:
             winner = random.choice(self.NOUNS) + " " + random.choice(self.VERBS)
             loser = random.choice(self.ADJECTIVES)
-            pairs.append({
-                "prompt": q,
-                "chosen": winner,
-                "rejected": loser,
-                "quality_score_chosen": random.uniform(0.7, 1.0),
-                "quality_score_rejected": random.uniform(0.0, 0.4),
-            })
+            pairs.append(
+                {
+                    "prompt": q,
+                    "chosen": winner,
+                    "rejected": loser,
+                    "quality_score_chosen": random.uniform(0.7, 1.0),
+                    "quality_score_rejected": random.uniform(0.0, 0.4),
+                }
+            )
         return pairs

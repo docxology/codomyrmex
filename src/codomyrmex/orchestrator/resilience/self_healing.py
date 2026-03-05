@@ -65,7 +65,10 @@ class Diagnosis:
             "error": self.error.to_dict(),
             "root_cause": self.root_cause,
             "impact": self.impact,
-            "steps": [{"action": s.action, "strategy": s.strategy.value} for s in self.recovery_plan],
+            "steps": [
+                {"action": s.action, "strategy": s.strategy.value}
+                for s in self.recovery_plan
+            ],
         }
 
 
@@ -115,11 +118,13 @@ class Diagnoser:
         steps = []
         for i, strategy in enumerate(classified.suggested_strategies):
             action = self._ACTION_TEMPLATES.get(strategy, str(strategy))
-            steps.append(RecoveryStep(
-                action=action,
-                strategy=strategy,
-                order=i + 1,
-            ))
+            steps.append(
+                RecoveryStep(
+                    action=action,
+                    strategy=strategy,
+                    order=i + 1,
+                )
+            )
 
         # Assess impact
         impact = self._assess_impact(classified)
@@ -159,8 +164,14 @@ class Diagnoser:
     @staticmethod
     def _assess_impact(error: ClassifiedError) -> str:
         """Assess the impact of the failure."""
-        high_impact = {FailureCategory.RESOURCE_EXHAUSTION, FailureCategory.PERMISSION_ERROR}
-        medium_impact = {FailureCategory.CONFIG_ERROR, FailureCategory.DEPENDENCY_FAILURE}
+        high_impact = {
+            FailureCategory.RESOURCE_EXHAUSTION,
+            FailureCategory.PERMISSION_ERROR,
+        }
+        medium_impact = {
+            FailureCategory.CONFIG_ERROR,
+            FailureCategory.DEPENDENCY_FAILURE,
+        }
         if error.category in high_impact:
             return "high"
         if error.category in medium_impact:

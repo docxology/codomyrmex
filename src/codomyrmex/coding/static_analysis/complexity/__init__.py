@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 
 class ComplexityLevel(Enum):
     """Complexity classification levels."""
+
     LOW = "low"
     MODERATE = "moderate"
     HIGH = "high"
@@ -27,17 +28,17 @@ def _level_from_value(value: int) -> ComplexityLevel:
     """Map a numeric complexity value to a level."""
     if value <= 5:
         return ComplexityLevel.LOW
-    elif value <= 10:
+    if value <= 10:
         return ComplexityLevel.MODERATE
-    elif value < 20:
+    if value < 20:
         return ComplexityLevel.HIGH
-    else:
-        return ComplexityLevel.VERY_HIGH
+    return ComplexityLevel.VERY_HIGH
 
 
 @dataclass
 class ComplexityMetric:
     """A single complexity measurement."""
+
     name: str
     value: int
     level: ComplexityLevel
@@ -51,6 +52,7 @@ class ComplexityMetric:
 @dataclass
 class FunctionMetrics:
     """Metrics for a single function."""
+
     name: str
     file_path: str
     line_number: int
@@ -67,6 +69,7 @@ class FunctionMetrics:
 @dataclass
 class FileMetrics:
     """Metrics for a file."""
+
     file_path: str
     functions: list[FunctionMetrics] = field(default_factory=list)
 
@@ -78,7 +81,9 @@ class FileMetrics:
     def average_complexity(self) -> float:
         if not self.functions:
             return 0.0
-        return sum(f.cyclomatic_complexity for f in self.functions) / len(self.functions)
+        return sum(f.cyclomatic_complexity for f in self.functions) / len(
+            self.functions
+        )
 
 
 def calculate_cyclomatic_complexity(code: str) -> int:
@@ -101,17 +106,14 @@ def calculate_cyclomatic_complexity(code: str) -> int:
 
     complexity = 1
     for node in ast.walk(tree):
-        if isinstance(node, (ast.If, ast.IfExp)):
-            complexity += 1
-        elif isinstance(node, ast.For):
-            complexity += 1
-        elif isinstance(node, ast.While):
-            complexity += 1
-        elif isinstance(node, ast.ExceptHandler):
-            complexity += 1
-        elif isinstance(node, ast.Assert):
-            complexity += 1
-        elif isinstance(node, ast.With):
+        if (
+            isinstance(node, (ast.If, ast.IfExp))
+            or isinstance(node, ast.For)
+            or isinstance(node, ast.While)
+            or isinstance(node, ast.ExceptHandler)
+            or isinstance(node, ast.Assert)
+            or isinstance(node, ast.With)
+        ):
             complexity += 1
         elif isinstance(node, ast.BoolOp):
             # Each 'and'/'or' adds a decision point
@@ -149,7 +151,7 @@ def count_lines(code: str) -> dict[str, int]:
             # Single-line docstring
             comments += 1
             continue
-        elif triple_count == 1:
+        if triple_count == 1:
             in_docstring = not in_docstring
             comments += 1
             continue
@@ -250,17 +252,18 @@ class ComplexityAnalyzer:
             List of FunctionMetrics above threshold.
         """
         return [
-            f for f in metrics.functions
+            f
+            for f in metrics.functions
             if f.cyclomatic_complexity > self.complexity_threshold
         ]
 
 
 __all__ = [
+    "ComplexityAnalyzer",
     "ComplexityLevel",
     "ComplexityMetric",
-    "FunctionMetrics",
     "FileMetrics",
-    "ComplexityAnalyzer",
+    "FunctionMetrics",
     "calculate_cyclomatic_complexity",
     "count_lines",
 ]

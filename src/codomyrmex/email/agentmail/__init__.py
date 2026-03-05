@@ -26,4 +26,4 @@ Usage::
 
 from .provider import AGENTMAIL_AVAILABLE, AgentMailProvider
 
-__all__ = ["AgentMailProvider", "AGENTMAIL_AVAILABLE"]
+__all__ = ["AGENTMAIL_AVAILABLE", "AgentMailProvider"]

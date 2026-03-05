@@ -24,6 +24,7 @@ def get_document_version(file_path: str | Path) -> str | None:
 
     try:
         from .extractor import extract_metadata
+
         metadata = extract_metadata(file_path)
         return metadata.get("version")
     except Exception as e:
@@ -43,10 +44,8 @@ def set_document_version(file_path: str | Path, version: str) -> None:
 
     try:
         from .manager import update_metadata
+
         update_metadata(file_path, {"version": version})
     except Exception as e:
         logger.error(f"Error setting document version: {e}")
-        raise MetadataError(f"Failed to set version: {str(e)}") from e
-
-
-
+        raise MetadataError(f"Failed to set version: {e!s}") from e

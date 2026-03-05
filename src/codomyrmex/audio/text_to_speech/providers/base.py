@@ -31,7 +31,6 @@ class TTSProvider(ABC):
             **kwargs: Provider-specific configuration
 
         """
-        pass
 
     @abstractmethod
     def synthesize(
@@ -53,7 +52,6 @@ class TTSProvider(ABC):
             VoiceNotFoundError: If requested voice is not available
 
         """
-        pass
 
     @abstractmethod
     async def synthesize_async(
@@ -71,7 +69,6 @@ class TTSProvider(ABC):
             SynthesisResult with audio data
 
         """
-        pass
 
     @abstractmethod
     def list_voices(
@@ -87,7 +84,6 @@ class TTSProvider(ABC):
             List of available VoiceInfo objects
 
         """
-        pass
 
     @abstractmethod
     def get_voice(self, voice_id: str) -> VoiceInfo | None:
@@ -100,7 +96,6 @@ class TTSProvider(ABC):
             VoiceInfo if found, None otherwise
 
         """
-        pass
 
     @abstractmethod
     def get_supported_languages(self) -> list[str]:
@@ -110,7 +105,6 @@ class TTSProvider(ABC):
             List of language codes (e.g., ["en-US", "es-ES"])
 
         """
-        pass
 
     @property
     @abstractmethod
@@ -121,7 +115,6 @@ class TTSProvider(ABC):
             Default voice identifier
 
         """
-        pass
 
 
 __all__ = ["TTSProvider"]

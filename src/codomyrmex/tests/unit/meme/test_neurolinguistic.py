@@ -174,8 +174,11 @@ class TestPersuasionAttempt:
     def test_timestamp_is_float(self) -> None:
         """timestamp is a float."""
         import time
+
         before = time.time()
-        attempt = PersuasionAttempt(target="x", technique="y", content="z", success_prob=0.5)
+        attempt = PersuasionAttempt(
+            target="x", technique="y", content="z", success_prob=0.5
+        )
         after = time.time()
         assert before <= attempt.timestamp <= after
 
@@ -294,7 +297,9 @@ class TestAnalyzeFrames:
         """Only frames with matching keywords are returned."""
         freedom_frame = CognitiveFrame(name="Freedom", keywords=["freedom"])
         economy_frame = CognitiveFrame(name="Economy", keywords=["economy"])
-        result = analyze_frames("freedom is the foundation of democracy", [freedom_frame, economy_frame])
+        result = analyze_frames(
+            "freedom is the foundation of democracy", [freedom_frame, economy_frame]
+        )
         names = [f.name for f in result]
         assert "Freedom" in names
         assert "Economy" not in names
@@ -428,6 +433,8 @@ class TestNeurolinguisticEngineSpin:
     def test_spin_injects_keyword(self) -> None:
         """spin injects first keyword of target frame into text."""
         engine = NeurolinguisticEngine()
-        engine.register_frame(CognitiveFrame(name="Growth", keywords=["opportunity", "progress"]))
+        engine.register_frame(
+            CognitiveFrame(name="Growth", keywords=["opportunity", "progress"])
+        )
         result = engine.spin("Here is the situation.", "Growth")
         assert "opportunity" in result

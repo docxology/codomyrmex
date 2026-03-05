@@ -55,10 +55,10 @@ def get_provider(
 
 
 __all__ = [
-    "STTProvider",
-    "WhisperProvider",
+    "SUPPORTED_FORMATS",
     "WHISPER_AVAILABLE",
     "WHISPER_LANGUAGES",
-    "SUPPORTED_FORMATS",
+    "STTProvider",
+    "WhisperProvider",
     "get_provider",
 ]

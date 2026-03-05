@@ -1,4 +1,5 @@
 """Finance report."""
+
 from pathlib import Path
 
 from codomyrmex.data_visualization.core.ui import Card, Dashboard
@@ -16,7 +17,9 @@ class FinanceReport(BaseReport):
 
     def generate(self) -> None:
         """Generate the finance report content."""
-        self.dashboard.add_section("Financial Overview", Card(title="Net Profit", content="$1.2M"))
+        self.dashboard.add_section(
+            "Financial Overview", Card(title="Net Profit", content="$1.2M")
+        )
         self.dashboard.add_section("Stocks", Card(title="CDMX Stock", content="$42.50"))
         self._generated = True
 

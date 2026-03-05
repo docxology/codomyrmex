@@ -36,24 +36,27 @@ pytestmark = [
 # Lightweight stubs for CLI testing
 # ---------------------------------------------------------------------------
 
+
 class StubRepo:
     """Stub for a Repository dataclass."""
+
     def __init__(self, full_name="owner/repo"):
         self.full_name = full_name
 
 
 class StubArgs:
     """Stub for CLI parsed args (replaces MagicMock for argparse namespace)."""
+
     def __init__(self, **kwargs):
         self.repository = kwargs.get("repository", "owner/repo")
-        self.path = kwargs.get("path", None)
+        self.path = kwargs.get("path")
         self.verbose = kwargs.get("verbose", False)
         # remote sub-command attrs
         self.list = kwargs.get("list", False)
-        self.add = kwargs.get("add", None)
-        self.remove = kwargs.get("remove", None)
-        self.prune = kwargs.get("prune", None)
-        self.url = kwargs.get("url", None)
+        self.add = kwargs.get("add")
+        self.remove = kwargs.get("remove")
+        self.prune = kwargs.get("prune")
+        self.url = kwargs.get("url")
         # clean
         self.force = kwargs.get("force", False)
 
@@ -90,8 +93,10 @@ class StubRepositoryManager:
 # Tests
 # ---------------------------------------------------------------------------
 
+
 class TestCmdSync:
     """Test suite for CmdSync."""
+
     def test_cmd_sync_calls_manager(self):
         manager = StubRepositoryManager()
         args = StubArgs(repository="owner/repo")
@@ -103,6 +108,7 @@ class TestCmdSync:
 
 class TestCmdPrune:
     """Test suite for CmdPrune."""
+
     def test_cmd_prune_calls_manager(self):
         manager = StubRepositoryManager()
         args = StubArgs(repository="owner/repo")
@@ -112,19 +118,28 @@ class TestCmdPrune:
 
 class TestCmdClean:
     """Test suite for CmdClean."""
+
     def test_cmd_clean_real_repo(self, tmp_path):
         """Test cmd_clean against a real git repo."""
         repo_dir = str(tmp_path / "repo")
         os.makedirs(repo_dir)
         subprocess.run(["git", "init"], cwd=repo_dir, capture_output=True, check=True)
-        subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=repo_dir, capture_output=True)
-        subprocess.run(["git", "config", "user.name", "T"], cwd=repo_dir, capture_output=True)
+        subprocess.run(
+            ["git", "config", "user.email", "t@t.com"],
+            cwd=repo_dir,
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "config", "user.name", "T"], cwd=repo_dir, capture_output=True
+        )
 
         # Create initial commit
         with open(os.path.join(repo_dir, "README.md"), "w") as f:
             f.write("# Test\n")
         subprocess.run(["git", "add", "."], cwd=repo_dir, capture_output=True)
-        subprocess.run(["git", "commit", "-m", "init"], cwd=repo_dir, capture_output=True)
+        subprocess.run(
+            ["git", "commit", "-m", "init"], cwd=repo_dir, capture_output=True
+        )
 
         # Create untracked file that clean should remove
         junk = os.path.join(repo_dir, "junk.tmp")
@@ -139,26 +154,39 @@ class TestCmdClean:
 
 class TestCmdRemote:
     """Test suite for CmdRemote."""
+
     def test_cmd_remote_list(self, tmp_path):
         """Test listing remotes on a real git repo."""
         repo_dir = str(tmp_path / "repo")
         os.makedirs(repo_dir)
         subprocess.run(["git", "init"], cwd=repo_dir, capture_output=True, check=True)
-        subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=repo_dir, capture_output=True)
-        subprocess.run(["git", "config", "user.name", "T"], cwd=repo_dir, capture_output=True)
+        subprocess.run(
+            ["git", "config", "user.email", "t@t.com"],
+            cwd=repo_dir,
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "config", "user.name", "T"], cwd=repo_dir, capture_output=True
+        )
 
         # Add a remote
         bare = str(tmp_path / "remote.git")
         subprocess.run(["git", "init", "--bare", bare], capture_output=True, check=True)
-        subprocess.run(["git", "remote", "add", "origin", bare], cwd=repo_dir, capture_output=True)
+        subprocess.run(
+            ["git", "remote", "add", "origin", bare], cwd=repo_dir, capture_output=True
+        )
 
         # Initial commit so repo is valid
         with open(os.path.join(repo_dir, "README.md"), "w") as f:
             f.write("# Test\n")
         subprocess.run(["git", "add", "."], cwd=repo_dir, capture_output=True)
-        subprocess.run(["git", "commit", "-m", "init"], cwd=repo_dir, capture_output=True)
+        subprocess.run(
+            ["git", "commit", "-m", "init"], cwd=repo_dir, capture_output=True
+        )
 
         manager = StubRepositoryManager(local_path=repo_dir)
-        args = StubArgs(repository="owner/repo", list=True, add=None, remove=None, prune=None)
+        args = StubArgs(
+            repository="owner/repo", list=True, add=None, remove=None, prune=None
+        )
         # cmd_remote should not crash
         cmd_remote(manager, args)

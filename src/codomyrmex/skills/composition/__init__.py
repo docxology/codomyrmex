@@ -11,6 +11,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -40,12 +41,12 @@ class ComposedSkill:
             for skill in self.skills[1:]:
                 result = skill.execute(input=result)
             return result
-        elif self.mode == "parallel":
+        if self.mode == "parallel":
             results = {}
             with ThreadPoolExecutor() as executor:
                 futures = {
                     executor.submit(s.execute, **kwargs): getattr(
-                        getattr(s, 'metadata', None), 'name', str(i)
+                        getattr(s, "metadata", None), "name", str(i)
                     )
                     for i, s in enumerate(self.skills)
                 }
@@ -53,8 +54,7 @@ class ComposedSkill:
                     name = futures[future]
                     results[name] = future.result()
             return results
-        else:
-            raise ValueError(f"Unknown composition mode: {self.mode}")
+        raise ValueError(f"Unknown composition mode: {self.mode}")
 
 
 class ConditionalSkill:
@@ -77,7 +77,7 @@ class ConditionalSkill:
         """Execute the appropriate branch based on condition."""
         if self.condition(**kwargs):
             return self.if_skill.execute(**kwargs)
-        elif self.else_skill is not None:
+        if self.else_skill is not None:
             return self.else_skill.execute(**kwargs)
         return None
 
@@ -98,7 +98,7 @@ class SkillComposer:
             A ComposedSkill that executes skills sequentially
         """
         names = [
-            getattr(getattr(s, 'metadata', None), 'name', f'skill_{i}')
+            getattr(getattr(s, "metadata", None), "name", f"skill_{i}")
             for i, s in enumerate(skills)
         ]
         return ComposedSkill(
@@ -120,7 +120,7 @@ class SkillComposer:
             A ComposedSkill that executes skills concurrently
         """
         names = [
-            getattr(getattr(s, 'metadata', None), 'name', f'skill_{i}')
+            getattr(getattr(s, "metadata", None), "name", f"skill_{i}")
             for i, s in enumerate(skills)
         ]
         return ComposedSkill(
@@ -129,7 +129,9 @@ class SkillComposer:
             mode="parallel",
         )
 
-    def conditional(self, condition: Callable[..., bool], if_skill, else_skill=None) -> ConditionalSkill:
+    def conditional(
+        self, condition: Callable[..., bool], if_skill, else_skill=None
+    ) -> ConditionalSkill:
         """
         Create a conditional skill that branches based on a condition.
 
@@ -144,4 +146,4 @@ class SkillComposer:
         return ConditionalSkill(condition, if_skill, else_skill)
 
 
-__all__ = ["SkillComposer", "ComposedSkill", "ConditionalSkill"]
+__all__ = ["ComposedSkill", "ConditionalSkill", "SkillComposer"]

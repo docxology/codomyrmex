@@ -13,9 +13,11 @@ from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
@@ -84,7 +86,7 @@ class DocumentationOpenAPIGenerator:
             }
 
             # Add request body if present
-            if "requestBody" in endpoint_dict and endpoint_dict["requestBody"]:
+            if endpoint_dict.get("requestBody"):
                 spec["paths"][path][method]["requestBody"] = endpoint_dict[
                     "requestBody"
                 ]
@@ -297,8 +299,8 @@ class DocumentationOpenAPIGenerator:
     <div class="endpoint">
         <span class="method {method_upper}">{method_upper}</span>
         <strong>{path}</strong>
-        <p>{operation.get('summary', '')}</p>
-        <p>{operation.get('description', '')}</p>
+        <p>{operation.get("summary", "")}</p>
+        <p>{operation.get("description", "")}</p>
 """
 
                 # Parameters

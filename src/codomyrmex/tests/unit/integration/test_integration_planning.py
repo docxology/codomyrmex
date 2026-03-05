@@ -18,6 +18,7 @@ from codomyrmex.orchestrator.module_connector import ModuleConnector
 
 class TestIntegrationBus:
     """Test suite for IntegrationBus."""
+
     def test_emit_and_subscribe(self) -> None:
         bus = IntegrationBus()
         received: list[IntegrationEvent] = []
@@ -58,6 +59,7 @@ class TestIntegrationBus:
 
 class TestModuleConnector:
     """Test suite for ModuleConnector."""
+
     def test_register_and_resolve(self) -> None:
         mc = ModuleConnector()
         mc.register("db", lambda: {"engine": "sqlite"})
@@ -100,6 +102,7 @@ class TestModuleConnector:
 
 class TestPlanEngine:
     """Test suite for PlanEngine."""
+
     def test_decompose_build(self) -> None:
         engine = PlanEngine()
         plan = engine.decompose("Build a REST API")
@@ -136,6 +139,7 @@ class TestPlanEngine:
 
 class TestPlanExecutor:
     """Test suite for PlanExecutor."""
+
     def test_execute_all_succeed(self) -> None:
         engine = PlanEngine()
         plan = engine.decompose("Build app", max_depth=0)
@@ -148,18 +152,24 @@ class TestPlanExecutor:
         plan = Plan(goal="test", tasks=[PlanTask("step1"), PlanTask("step2")])
         results: list[str] = []
         executor = PlanExecutor()
-        result = executor.execute(plan, actions={
-            "step1": lambda t: results.append(t.name),
-        })
+        result = executor.execute(
+            plan,
+            actions={
+                "step1": lambda t: results.append(t.name),
+            },
+        )
         assert result.success
         assert "step1" in results
 
     def test_execute_with_failure(self) -> None:
         plan = Plan(goal="test", tasks=[PlanTask("fail_step")])
         executor = PlanExecutor()
-        result = executor.execute(plan, actions={
-            "fail_step": lambda t: (_ for _ in ()).throw(RuntimeError("boom")),
-        })
+        result = executor.execute(
+            plan,
+            actions={
+                "fail_step": lambda t: (_ for _ in ()).throw(RuntimeError("boom")),
+            },
+        )
         assert not result.success
         assert result.failed_tasks == 1
 

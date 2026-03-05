@@ -14,7 +14,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-__all__ = ["LogLevel", "LogContext", "FormatterConfig", "StructuredLogEntry", "StructuredFormatter"]
+__all__ = [
+    "FormatterConfig",
+    "LogContext",
+    "LogLevel",
+    "StructuredFormatter",
+    "StructuredLogEntry",
+]
 
 
 class LogLevel(Enum):
@@ -105,9 +111,11 @@ class StructuredFormatter:
 
     Example::
 
-        formatter = StructuredFormatter(config=FormatterConfig(
-            static_fields={"service": "codomyrmex", "env": "dev"},
-        ))
+        formatter = StructuredFormatter(
+            config=FormatterConfig(
+                static_fields={"service": "codomyrmex", "env": "dev"},
+            )
+        )
         ctx = LogContext(correlation_id="req-123", module="agents")
         entry = StructuredLogEntry(
             level=LogLevel.INFO,

@@ -106,14 +106,16 @@ class SecretScanner:
                     # Redact the middle of the match
                     redacted = self._redact(matched_text)
 
-                    findings.append(SecretFinding(
-                        file_path=file_path,
-                        line_number=i,
-                        secret_type=pat["name"],
-                        snippet=redacted,
-                        confidence=pat["confidence"],
-                        entropy=entropy,
-                    ))
+                    findings.append(
+                        SecretFinding(
+                            file_path=file_path,
+                            line_number=i,
+                            secret_type=pat["name"],
+                            snippet=redacted,
+                            confidence=pat["confidence"],
+                            entropy=entropy,
+                        )
+                    )
 
         return findings
 

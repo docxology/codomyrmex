@@ -52,9 +52,9 @@ def validate_timeout(timeout: int | None) -> int:
     Example:
         >>> validate_timeout(None)  # Returns DEFAULT_TIMEOUT (30)
         30
-        >>> validate_timeout(500)   # Clamped to MAX_TIMEOUT (300)
+        >>> validate_timeout(500)  # Clamped to MAX_TIMEOUT (300)
         300
-        >>> validate_timeout(0)     # Clamped to MIN_TIMEOUT (1)
+        >>> validate_timeout(0)  # Clamped to MIN_TIMEOUT (1)
         1
     """
     if timeout is None:
@@ -107,7 +107,9 @@ def execute_code(
         >>> print(result["stdout"])  # "45"
         >>> print(result["exit_code"])  # 0
         >>>
-        >>> result = execute_code("python", "x = input(); print(f'Got: {x}')", stdin="hello")
+        >>> result = execute_code(
+        ...     "python", "x = input(); print(f'Got: {x}')", stdin="hello"
+        ... )
         >>> print(result["stdout"])  # "Got: hello"
     """
     logger.info(f"Executing {language} code (session_id: {session_id or 'none'})")
@@ -168,18 +170,17 @@ def execute_code(
         return result
 
     except Exception as e:
-        logger.error(f"Unexpected error executing code: {str(e)}", exc_info=True)
+        logger.error(f"Unexpected error executing code: {e!s}", exc_info=True)
         return {
             "stdout": "",
-            "stderr": f"Internal error: {str(e)}",
+            "stderr": f"Internal error: {e!s}",
             "exit_code": -1,
             "execution_time": 0,
             "status": "setup_error",
-            "error_message": f"Sandbox execution failed: {str(e)}",
+            "error_message": f"Sandbox execution failed: {e!s}",
         }
 
     finally:
         # Clean up temporary files
         if temp_dir and os.path.exists(temp_dir):
             cleanup_temp_files(temp_dir)
-

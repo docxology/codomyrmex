@@ -47,7 +47,7 @@ def create_line_plot(
 
     if isinstance(y_data[0], list):  # Multiple lines
         if not line_labels or len(line_labels) != len(y_data):
-            line_labels = [f"Line {i+1}" for i in range(len(y_data))]
+            line_labels = [f"Line {i + 1}" for i in range(len(y_data))]
             logger.debug(
                 "Line labels not provided or mismatch length; auto-generating labels."
             )
@@ -101,7 +101,7 @@ class LinePlot:
         y_label: str = "Y-axis",
         line_labels: list = None,
         markers: bool = False,
-        figure_size: tuple = None
+        figure_size: tuple = None,
     ):
         """
         Initialize a line plot.
@@ -143,7 +143,7 @@ class LinePlot:
             show_plot=show_plot,
             line_labels=self.line_labels,
             markers=self.markers,
-            figure_size=self.figure_size
+            figure_size=self.figure_size,
         )
 
     def save(self, output_path: str):

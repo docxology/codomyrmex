@@ -1,6 +1,6 @@
 # test_project - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -203,6 +203,126 @@ result = pipeline.execute(target_path=Path("src"))
 - `config/settings.yaml`: Core project settings
 - `config/modules.yaml`: Module configuration
 - `config/workflows.yaml`: Workflow definitions
+
+### FR-6: Agent Brain (agents + agentic_memory)
+
+**Description**: Demonstrate agent registry and persistent typed memory.
+
+**Capabilities**:
+
+- List available agent providers (Claude, Codex, Gemini)
+- Store content with MemoryType and MemoryImportance
+- Recall memories by semantic query
+- Summarize agent configuration
+
+**Interface**:
+
+```python
+brain = AgentBrain()
+mem = brain.remember("Python uses GIL", memory_type="knowledge", importance="high")
+results = brain.recall("GIL", k=5)
+# Returns: List[RetrievalResult]
+```
+
+### FR-7: Git Workflow (git_operations + git_analysis)
+
+**Description**: Repository inspection and commit history analysis.
+
+**Capabilities**:
+
+- Detect git repository, get status, branch, diff
+- List local branches
+- Analyze commit history with GitHistoryAnalyzer
+- Extract contributor stats and high-churn files
+
+**Interface**:
+
+```python
+wf = GitWorkflow()
+info = wf.inspect_repo("/path/to/repo")
+history = wf.analyze_history("/path/to/repo", max_commits=20)
+# Returns: {"commit_count": int, "contributors": list, "churn_files": list}
+```
+
+### FR-8: Knowledge Search (search + scrape + formal_verification)
+
+**Description**: Full-text indexing, fuzzy matching, and constraint verification.
+
+**Capabilities**:
+
+- Build TF-IDF InMemoryIndex from document list
+- Full-text search via quick_search
+- Fuzzy matching via FuzzyMatcher
+- Constraint solving via ConstraintSolver (Z3 optional)
+
+**Interface**:
+
+```python
+ks = KnowledgeSearch()
+results = ks.full_text_search("Python", docs)
+matches = ks.fuzzy_match("pythn", candidates)
+verified = ks.verify_constraints(["x > 0", "x < 10"])
+```
+
+### FR-9: Security Audit (security + crypto + maintenance + system_discovery)
+
+**Description**: Security scanning, cryptographic hashing, and system health.
+
+**Capabilities**:
+
+- SHA-256/512 hashing and hash verification via crypto.graphy.hashing
+- Vulnerability scanning and secret detection (when digital backend available)
+- System module discovery via SystemDiscovery + CapabilityScanner
+- Project structure and dependency analysis via maintenance
+
+**Interface**:
+
+```python
+auditor = SecurityAudit()
+result = auditor.hash_and_verify(b"data", algorithm="sha256")
+health = auditor.system_health()
+deps = auditor.project_deps("/path/to/project")
+```
+
+### FR-10: MCP Explorer (model_context_protocol + skills + plugin_system)
+
+**Description**: Discover MCP tools, skills, and plugins across the platform.
+
+**Capabilities**:
+
+- MCPDiscovery tool enumeration and ToolCategory taxonomy
+- SkillRegistry listing and runnable skill enumeration
+- PluginRegistry scanning for loaded/enabled plugins
+- Module capability summary
+
+**Interface**:
+
+```python
+explorer = MCPExplorer()
+tools = explorer.list_tools()    # {"categories": [...], "tool_count": int}
+skills = explorer.discover_skills()
+plugins = explorer.scan_plugins()
+```
+
+### FR-11: LLM Inference (llm + collaboration)
+
+**Description**: LLM configuration and multi-agent swarm task coordination.
+
+**Capabilities**:
+
+- LLMConfig and LLMConfigPresets introspection
+- OllamaManager model listing (graceful skip if Ollama absent)
+- SwarmManager + TaskDecomposer task submission
+- AgentPool and MessageBus status
+
+**Interface**:
+
+```python
+inference = LLMInference()
+models = inference.list_models()      # graceful if Ollama not running
+task = inference.swarm_task("Analyze codebase")
+pool = inference.agent_pool_status()
+```
 
 ## Quality Standards
 

@@ -77,18 +77,22 @@ class TestModuleExports:
 
     def test_claude_client_exported(self):
         from codomyrmex.agents.claude import ClaudeClient
+
         assert ClaudeClient is not None
 
     def test_integration_adapter_exported(self):
         from codomyrmex.agents.claude import ClaudeIntegrationAdapter
+
         assert ClaudeIntegrationAdapter is not None
 
     def test_pricing_exported(self):
         from codomyrmex.agents.claude import CLAUDE_PRICING
+
         assert CLAUDE_PRICING is not None
 
     def test_version_string(self):
         import codomyrmex.agents.claude as m
+
         assert hasattr(m, "__version__")
         assert isinstance(m.__version__, str)
 
@@ -114,11 +118,13 @@ class TestClaudeClientInstantiation:
         assert AgentCapabilities.TEXT_COMPLETION in caps
 
     def test_custom_model_config(self):
-        client = ClaudeClient(config={
-            "claude_api_key": "sk-ant-test-key",
-            "claude_model": "claude-3-5-haiku-20241022",
-            "claude_temperature": 0.5,
-        })
+        client = ClaudeClient(
+            config={
+                "claude_api_key": "sk-ant-test-key",
+                "claude_model": "claude-3-5-haiku-20241022",
+                "claude_temperature": 0.5,
+            }
+        )
         assert client.model == "claude-3-5-haiku-20241022"
         assert client.temperature == 0.5
 
@@ -127,10 +133,12 @@ class TestClaudeClientInstantiation:
         assert client.initial_retry_delay == ClaudeClient.DEFAULT_INITIAL_DELAY
 
     def test_custom_retry_settings(self):
-        client = ClaudeClient(config={
-            "claude_api_key": "sk-ant-test-key",
-            "initial_retry_delay": 2.0,
-        })
+        client = ClaudeClient(
+            config={
+                "claude_api_key": "sk-ant-test-key",
+                "initial_retry_delay": 2.0,
+            }
+        )
         assert client.initial_retry_delay == 2.0
 
 
@@ -142,7 +150,7 @@ class TestClaudeClientInstantiation:
 class TestClaudeToolRegistration:
     """Test tool registration and retrieval."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def client(self):
         return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
 
@@ -181,6 +189,7 @@ class TestClaudeToolRegistration:
 
     def test_execute_unregistered_tool_raises(self, client):
         from codomyrmex.agents.core.exceptions import AgentError
+
         with pytest.raises((AgentError, Exception)):
             client.execute_tool_call("nonexistent_tool", {})
 
@@ -193,7 +202,7 @@ class TestClaudeToolRegistration:
 class TestClaudeSessionManagement:
     """Test session creation and management."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def client(self):
         return ClaudeClient(
             config={"claude_api_key": "sk-ant-test-key"},
@@ -223,7 +232,7 @@ class TestClaudeSessionManagement:
 class TestClaudeCostCalculation:
     """Test the internal cost calculation method."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def client(self):
         return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
 
@@ -272,7 +281,7 @@ class TestClaudeIntegrationAdapter:
 class TestClaudeLiveAPI:
     """Integration tests that call the real Claude API."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def client(self):
         return ClaudeClient()
 

@@ -26,8 +26,7 @@ class QuotaManager:
     def check_all(self, key: str, cost: int = 1) -> dict[str, RateLimitResult]:
         """Check all limiters."""
         return {
-            name: limiter.check(key, cost)
-            for name, limiter in self._limiters.items()
+            name: limiter.check(key, cost) for name, limiter in self._limiters.items()
         }
 
     def acquire_all(self, key: str, cost: int = 1) -> dict[str, RateLimitResult]:
@@ -43,8 +42,7 @@ class QuotaManager:
 
         # Then acquire from all
         return {
-            name: limiter.acquire(key, cost)
-            for name, limiter in self._limiters.items()
+            name: limiter.acquire(key, cost) for name, limiter in self._limiters.items()
         }
 
 
@@ -57,13 +55,12 @@ def create_limiter(
     """Create a rate limiter."""
     if algorithm == "fixed_window":
         return FixedWindowLimiter(limit, window_seconds)
-    elif algorithm == "sliding_window":
+    if algorithm == "sliding_window":
         return SlidingWindowLimiter(limit, window_seconds)
-    elif algorithm == "token_bucket":
+    if algorithm == "token_bucket":
         return TokenBucketLimiter(
             capacity=limit,
             refill_rate=kwargs.get("refill_rate", limit / window_seconds),
             refill_interval=kwargs.get("refill_interval", 1.0),
         )
-    else:
-        raise ValueError(f"Unknown algorithm: {algorithm}")
+    raise ValueError(f"Unknown algorithm: {algorithm}")

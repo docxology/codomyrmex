@@ -206,18 +206,17 @@ Examples:
                 print(f"Errors: {', '.join(result.errors)}")
             print(f"{'=' * 60}")
             return 0 if result.status.value == "completed" else 1
-        else:
-            results = run_analysis(target, args.config)
-            summary = results.get("summary", {})
-            print(f"\n{'=' * 60}")
-            print(f"Analysis Results for: {results.get('target', 'Unknown')}")
-            print(f"{'=' * 60}")
-            print(f"Files Analyzed:   {summary.get('total_files', 0)}")
-            print(f"Total Lines:      {summary.get('total_lines', 0)}")
-            print(f"Total Functions:  {summary.get('total_functions', 0)}")
-            print(f"Total Classes:    {summary.get('total_classes', 0)}")
-            print(f"{'=' * 60}")
-            return 0
+        results = run_analysis(target, args.config)
+        summary = results.get("summary", {})
+        print(f"\n{'=' * 60}")
+        print(f"Analysis Results for: {results.get('target', 'Unknown')}")
+        print(f"{'=' * 60}")
+        print(f"Files Analyzed:   {summary.get('total_files', 0)}")
+        print(f"Total Lines:      {summary.get('total_lines', 0)}")
+        print(f"Total Functions:  {summary.get('total_functions', 0)}")
+        print(f"Total Classes:    {summary.get('total_classes', 0)}")
+        print(f"{'=' * 60}")
+        return 0
 
     except Exception as e:
         logger.error(f"Error: {e}")

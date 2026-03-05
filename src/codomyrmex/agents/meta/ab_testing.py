@@ -61,8 +61,10 @@ class ABTestEngine:
 
         engine = ABTestEngine()
         result = engine.compare_scores(
-            "fast", [0.8, 0.7, 0.9],
-            "thorough", [0.9, 0.85, 0.95],
+            "fast",
+            [0.8, 0.7, 0.9],
+            "thorough",
+            [0.9, 0.85, 0.95],
         )
         print(f"Winner: {result.winner}")
     """

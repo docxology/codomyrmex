@@ -4,11 +4,10 @@ Unit tests for Infomaniak exceptions.
 Zero ``unittest.mock`` — uses ``Stub`` from ``conftest.py``.
 """
 
-
-
 from _stubs import Stub
 
 # =========================================================================
+
 
 class TestInfomaniakExceptionHierarchy:
     """Tests for Infomaniak exception hierarchy and attributes."""
@@ -85,80 +84,116 @@ class TestInfomaniakExceptionHierarchy:
 
 # =========================================================================
 
+
 class TestClassifyOpenstackError:
     """Tests for classify_openstack_error() string-based classification."""
 
     def _classify(self, msg, **kwargs):
         from codomyrmex.cloud.infomaniak.exceptions import classify_openstack_error
+
         return classify_openstack_error(Exception(msg), **kwargs)
 
     def test_401_returns_auth_error(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+
         assert isinstance(self._classify("HTTP 401 Unauthorized"), InfomaniakAuthError)
 
     def test_403_returns_auth_error(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+
         assert isinstance(self._classify("403 Forbidden"), InfomaniakAuthError)
 
     def test_authentication_keyword_returns_auth_error(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
-        assert isinstance(self._classify("Authentication required"), InfomaniakAuthError)
+
+        assert isinstance(
+            self._classify("Authentication required"), InfomaniakAuthError
+        )
 
     def test_404_returns_not_found(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakNotFoundError
+
         assert isinstance(self._classify("HTTP 404"), InfomaniakNotFoundError)
 
     def test_not_found_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakNotFoundError
+
         assert isinstance(self._classify("Resource not found"), InfomaniakNotFoundError)
 
     def test_409_returns_conflict(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConflictError
+
         assert isinstance(self._classify("HTTP 409"), InfomaniakConflictError)
 
     def test_conflict_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConflictError
-        assert isinstance(self._classify("State conflict detected"), InfomaniakConflictError)
+
+        assert isinstance(
+            self._classify("State conflict detected"), InfomaniakConflictError
+        )
 
     def test_413_returns_quota(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
-        assert isinstance(self._classify("HTTP 413 Request Entity Too Large"), InfomaniakQuotaExceededError)
+
+        assert isinstance(
+            self._classify("HTTP 413 Request Entity Too Large"),
+            InfomaniakQuotaExceededError,
+        )
 
     def test_quota_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
-        assert isinstance(self._classify("Quota exceeded"), InfomaniakQuotaExceededError)
+
+        assert isinstance(
+            self._classify("Quota exceeded"), InfomaniakQuotaExceededError
+        )
 
     def test_limit_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
-        assert isinstance(self._classify("Rate limit hit"), InfomaniakQuotaExceededError)
+
+        assert isinstance(
+            self._classify("Rate limit hit"), InfomaniakQuotaExceededError
+        )
 
     def test_timeout_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakTimeoutError
+
         assert isinstance(self._classify("Request timeout"), InfomaniakTimeoutError)
 
     def test_timed_out_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakTimeoutError
-        assert isinstance(self._classify("Connection timed out"), InfomaniakTimeoutError)
+
+        assert isinstance(
+            self._classify("Connection timed out"), InfomaniakTimeoutError
+        )
 
     def test_connection_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
-        assert isinstance(self._classify("Connection refused"), InfomaniakConnectionError)
+
+        assert isinstance(
+            self._classify("Connection refused"), InfomaniakConnectionError
+        )
 
     def test_refused_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
-        assert isinstance(self._classify("refused by server"), InfomaniakConnectionError)
+
+        assert isinstance(
+            self._classify("refused by server"), InfomaniakConnectionError
+        )
 
     def test_unreachable_keyword(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
+
         assert isinstance(self._classify("Host unreachable"), InfomaniakConnectionError)
 
     def test_generic_error_fallback(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakCloudError
+
         result = self._classify("Something unknown went wrong")
         assert type(result) is InfomaniakCloudError
 
     def test_case_insensitive(self):
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
+
         assert isinstance(self._classify("AUTHENTICATION FAILED"), InfomaniakAuthError)
 
     def test_kwargs_propagated(self):
@@ -181,12 +216,14 @@ class TestClassifyOpenstackError:
 
 # =========================================================================
 
+
 class TestClassifyHttpError:
     """Tests for classify_http_error() status-code-based classification."""
 
     def _make_http_error(self, status_code):
         """Create a requests-like HTTPError with a response object."""
         import requests
+
         resp = Stub()
         resp.status_code = status_code
         err = requests.exceptions.HTTPError(f"HTTP {status_code}")
@@ -201,6 +238,7 @@ class TestClassifyHttpError:
             InfomaniakConnectionError,
             classify_http_error,
         )
+
         err = requests.exceptions.ConnectionError("refused")
         result = classify_http_error(err, service="newsletter")
         assert isinstance(result, InfomaniakConnectionError)
@@ -214,6 +252,7 @@ class TestClassifyHttpError:
             InfomaniakTimeoutError,
             classify_http_error,
         )
+
         err = requests.exceptions.Timeout("timed out")
         result = classify_http_error(err, operation="GET credits")
         assert isinstance(result, InfomaniakTimeoutError)
@@ -224,6 +263,7 @@ class TestClassifyHttpError:
             InfomaniakAuthError,
             classify_http_error,
         )
+
         result = classify_http_error(self._make_http_error(401))
         assert isinstance(result, InfomaniakAuthError)
 
@@ -232,6 +272,7 @@ class TestClassifyHttpError:
             InfomaniakAuthError,
             classify_http_error,
         )
+
         result = classify_http_error(self._make_http_error(403))
         assert isinstance(result, InfomaniakAuthError)
 
@@ -240,6 +281,7 @@ class TestClassifyHttpError:
             InfomaniakNotFoundError,
             classify_http_error,
         )
+
         result = classify_http_error(self._make_http_error(404))
         assert isinstance(result, InfomaniakNotFoundError)
 
@@ -248,6 +290,7 @@ class TestClassifyHttpError:
             InfomaniakConflictError,
             classify_http_error,
         )
+
         result = classify_http_error(self._make_http_error(409))
         assert isinstance(result, InfomaniakConflictError)
 
@@ -256,6 +299,7 @@ class TestClassifyHttpError:
             InfomaniakQuotaExceededError,
             classify_http_error,
         )
+
         result = classify_http_error(self._make_http_error(413))
         assert isinstance(result, InfomaniakQuotaExceededError)
 
@@ -264,6 +308,7 @@ class TestClassifyHttpError:
             InfomaniakQuotaExceededError,
             classify_http_error,
         )
+
         result = classify_http_error(self._make_http_error(429))
         assert isinstance(result, InfomaniakQuotaExceededError)
 
@@ -273,6 +318,7 @@ class TestClassifyHttpError:
             InfomaniakCloudError,
             classify_http_error,
         )
+
         err = Exception("Something generic happened")
         result = classify_http_error(err)
         assert isinstance(result, InfomaniakCloudError)
@@ -280,6 +326,7 @@ class TestClassifyHttpError:
     def test_response_without_status_code(self):
         """Response without status_code falls back to string classification."""
         from codomyrmex.cloud.infomaniak.exceptions import classify_http_error
+
         err = Exception("weird error")
         err.response = Stub(spec=[])  # no status_code attr
         result = classify_http_error(err)
@@ -291,11 +338,13 @@ class TestClassifyHttpError:
             InfomaniakCloudError,
             classify_http_error,
         )
+
         result = classify_http_error(self._make_http_error(500))
         assert isinstance(result, InfomaniakCloudError)
 
     def test_kwargs_propagated(self):
         from codomyrmex.cloud.infomaniak.exceptions import classify_http_error
+
         result = classify_http_error(
             self._make_http_error(404),
             service="newsletter",
@@ -310,4 +359,3 @@ class TestClassifyHttpError:
 # =========================================================================
 # Test Base Classes (OpenStack, S3, REST)
 # =========================================================================
-

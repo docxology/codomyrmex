@@ -1,4 +1,5 @@
 """Scatter plot visualization."""
+
 from codomyrmex.data_visualization.engines._scatter import apply_scatter
 
 from ._base import BasePlot

@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class StepStatus(Enum):
     """Status of a workflow step."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"

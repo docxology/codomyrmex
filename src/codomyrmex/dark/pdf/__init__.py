@@ -23,8 +23,8 @@ except ImportError:
     FILTERS_AVAILABLE = False
 
 __all__ = [
+    "FILTERS_AVAILABLE",
+    "DarkPDF",
     "DarkPDFFilter",
     "apply_dark_mode",
-    "DarkPDF",
-    "FILTERS_AVAILABLE",
 ]

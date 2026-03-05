@@ -8,8 +8,8 @@ from .enforcer import InterfaceEnforcer
 from .plugin_validator import PluginValidator, ValidationResult, validate_plugin
 
 __all__ = [
+    "InterfaceEnforcer",
     "PluginValidator",
     "ValidationResult",
-    "InterfaceEnforcer",
     "validate_plugin",
 ]

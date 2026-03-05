@@ -61,5 +61,3 @@ class WebhookSignature:
         """
         expected = WebhookSignature.sign(payload, secret, algorithm)
         return hmac.compare_digest(expected, signature)
-
-

@@ -72,7 +72,9 @@ class TestSequentialThroughput:
 
         t0 = time.monotonic()
         for i in range(500):
-            call = MCPToolCall(tool_name="validated_tool", arguments={"x": i, "y": f"val_{i}"})
+            call = MCPToolCall(
+                tool_name="validated_tool", arguments={"x": i, "y": f"val_{i}"}
+            )
             result = reg.execute(call)
             assert result.status == "success"
         elapsed = time.monotonic() - t0

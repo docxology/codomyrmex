@@ -98,7 +98,9 @@ class TestPolicyEngine:
         """add_rule() attaches rule to named policy."""
         engine = PolicyEngine()
         engine.create_policy("security")
-        rule = PolicyRule("tls-required", lambda ctx: ctx.get("tls", False), "block-no-tls")
+        rule = PolicyRule(
+            "tls-required", lambda ctx: ctx.get("tls", False), "block-no-tls"
+        )
         engine.add_rule("security", rule)
         # Verify by evaluating
         result = engine.evaluate("security", {"tls": True})
@@ -153,8 +155,16 @@ class TestPolicyEngine:
         engine = PolicyEngine()
         engine.create_policy("p")
         order = []
-        engine.add_rule("p", PolicyRule("low", lambda ctx: (order.append("low") or True), "a", priority=1))
-        engine.add_rule("p", PolicyRule("high", lambda ctx: (order.append("high") or True), "b", priority=10))
+        engine.add_rule(
+            "p",
+            PolicyRule("low", lambda ctx: order.append("low") or True, "a", priority=1),
+        )
+        engine.add_rule(
+            "p",
+            PolicyRule(
+                "high", lambda ctx: order.append("high") or True, "b", priority=10
+            ),
+        )
         engine.evaluate("p", {})
         assert order[0] == "high"  # High priority evaluated first
 
@@ -229,18 +239,24 @@ class TestContractTerm:
 
     def test_create_obligation(self):
         """ContractTerm with type='obligation' is valid."""
-        term = ContractTerm(description="Deliver on time", type="obligation", party="alice")
+        term = ContractTerm(
+            description="Deliver on time", type="obligation", party="alice"
+        )
         assert term.type == "obligation"
         assert term.fulfilled is False
 
     def test_create_prohibition(self):
         """ContractTerm with type='prohibition' is valid."""
-        term = ContractTerm(description="Do not share data", type="prohibition", party="bob")
+        term = ContractTerm(
+            description="Do not share data", type="prohibition", party="bob"
+        )
         assert term.type == "prohibition"
 
     def test_create_permission(self):
         """ContractTerm with type='permission' is valid."""
-        term = ContractTerm(description="May audit logs", type="permission", party="auditor")
+        term = ContractTerm(
+            description="May audit logs", type="permission", party="auditor"
+        )
         assert term.type == "permission"
 
     def test_invalid_type_raises(self):
@@ -257,19 +273,25 @@ class TestContractTerm:
     def test_is_overdue_future_deadline(self):
         """is_overdue() returns False for future deadline."""
         future = datetime.now() + timedelta(days=30)
-        term = ContractTerm(description="Do Y", type="obligation", party="bob", deadline=future)
+        term = ContractTerm(
+            description="Do Y", type="obligation", party="bob", deadline=future
+        )
         assert term.is_overdue() is False
 
     def test_is_overdue_past_deadline(self):
         """is_overdue() returns True for past deadline when unfulfilled."""
         past = datetime.now() - timedelta(days=1)
-        term = ContractTerm(description="Do Z", type="obligation", party="carol", deadline=past)
+        term = ContractTerm(
+            description="Do Z", type="obligation", party="carol", deadline=past
+        )
         assert term.is_overdue() is True
 
     def test_is_overdue_fulfilled_despite_past_deadline(self):
         """is_overdue() returns False when fulfilled even past deadline."""
         past = datetime.now() - timedelta(days=1)
-        term = ContractTerm(description="Done", type="obligation", party="alice", deadline=past)
+        term = ContractTerm(
+            description="Done", type="obligation", party="alice", deadline=past
+        )
         term.fulfill()
         assert term.is_overdue() is False
 
@@ -449,7 +471,9 @@ class TestContract:
 class TestDisputeResolution:
     """Tests for governance/dispute_resolution.py DisputeResolver."""
 
-    def _make_dispute(self, dispute_id: str = "D001", contract_id: str = "C001") -> Dispute:
+    def _make_dispute(
+        self, dispute_id: str = "D001", contract_id: str = "C001"
+    ) -> Dispute:
         return Dispute(
             id=dispute_id,
             contract_id=contract_id,

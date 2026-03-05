@@ -232,7 +232,7 @@ class TestAiderConfig:
 class TestAiderRunnerBuildCmd:
     """Test AiderRunner._build_cmd() logic without running subprocesses."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def runner(self):
         """Create an AiderRunner with default settings."""
         return AiderRunner(model="test-model", timeout=60)

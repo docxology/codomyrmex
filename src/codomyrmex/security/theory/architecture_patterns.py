@@ -11,6 +11,7 @@ logger = get_logger(__name__)
 
 class PatternCategory(Enum):
     """Categories of security patterns."""
+
     ARCHITECTURE = "architecture"
     AUTHENTICATION = "authentication"
     AUTHORIZATION = "authorization"
@@ -49,27 +50,27 @@ PATTERNS = {
             "Access control",
             "Microservices architecture",
             "Cloud-native applications",
-            "Remote workforce"
+            "Remote workforce",
         ],
         implementation="Verify every request regardless of location, implement least privilege access, use micro-segmentation",
         benefits=[
             "Reduced attack surface",
             "Improved security posture",
             "Better visibility and control",
-            "Protection against insider threats"
+            "Protection against insider threats",
         ],
         trade_offs=[
             "Increased complexity",
             "Performance overhead",
-            "Requires comprehensive identity management"
+            "Requires comprehensive identity management",
         ],
         related_patterns=["defense_in_depth", "least_privilege"],
         examples=[
             "Google BeyondCorp",
             "Microsoft Zero Trust architecture",
-            "Cloud provider identity-based access"
+            "Cloud provider identity-based access",
         ],
-        anti_patterns=["Trust by default", "Network-based trust"]
+        anti_patterns=["Trust by default", "Network-based trust"],
     ),
     "defense_in_depth": SecurityPattern(
         name="Defense in Depth",
@@ -79,25 +80,25 @@ PATTERNS = {
             "System security",
             "Network security",
             "Application security",
-            "Data protection"
+            "Data protection",
         ],
         implementation="Layer multiple security controls: network, application, data, and physical layers",
         benefits=[
             "Redundancy in security",
             "Protection against single point of failure",
-            "Comprehensive coverage"
+            "Comprehensive coverage",
         ],
         trade_offs=[
             "Increased complexity",
             "Higher maintenance overhead",
-            "Potential performance impact"
+            "Potential performance impact",
         ],
         related_patterns=["zero_trust", "secure_by_default"],
         examples=[
             "Network firewall + WAF + Application security",
-            "Encryption + Access control + Monitoring"
+            "Encryption + Access control + Monitoring",
         ],
-        anti_patterns=["Single security layer", "Perimeter-only security"]
+        anti_patterns=["Single security layer", "Perimeter-only security"],
     ),
     "principle_of_least_privilege": SecurityPattern(
         name="Principle of Least Privilege",
@@ -108,25 +109,25 @@ PATTERNS = {
             "Service accounts",
             "API access",
             "Container security",
-            "Database access"
+            "Database access",
         ],
         implementation="Grant only required permissions, review and revoke unused permissions regularly",
         benefits=[
             "Reduced attack surface",
             "Limited damage from compromised accounts",
-            "Better compliance"
+            "Better compliance",
         ],
         trade_offs=[
             "More complex permission management",
-            "Potential operational overhead"
+            "Potential operational overhead",
         ],
         related_patterns=["need_to_know", "separation_of_duties"],
         examples=[
             "IAM roles with minimal permissions",
             "Service account scopes",
-            "Database user permissions"
+            "Database user permissions",
         ],
-        anti_patterns=["Administrative privileges for all", "Over-privileged accounts"]
+        anti_patterns=["Administrative privileges for all", "Over-privileged accounts"],
     ),
     "secure_by_default": SecurityPattern(
         name="Secure by Default",
@@ -136,25 +137,25 @@ PATTERNS = {
             "System configuration",
             "Application defaults",
             "Cloud services",
-            "Development frameworks"
+            "Development frameworks",
         ],
         implementation="Configure secure defaults, require explicit opt-out for less secure options",
         benefits=[
             "Prevents accidental misconfigurations",
             "Better security posture",
-            "Reduced human error"
+            "Reduced human error",
         ],
         trade_offs=[
             "May require more configuration for some use cases",
-            "Potential usability impact"
+            "Potential usability impact",
         ],
         related_patterns=["fail_secure", "defense_in_depth"],
         examples=[
             "HTTPS by default",
             "Encryption enabled by default",
-            "Strong password requirements"
+            "Strong password requirements",
         ],
-        anti_patterns=["Permissive defaults", "Opt-in security"]
+        anti_patterns=["Permissive defaults", "Opt-in security"],
     ),
     "fail_secure": SecurityPattern(
         name="Fail Secure",
@@ -164,25 +165,25 @@ PATTERNS = {
             "Authentication systems",
             "Access control",
             "Error handling",
-            "Network security"
+            "Network security",
         ],
         implementation="Configure systems to deny access on failure, implement secure error handling",
         benefits=[
             "Maintains security during failures",
             "Prevents unauthorized access",
-            "Better security posture"
+            "Better security posture",
         ],
         trade_offs=[
             "May impact availability",
-            "Requires careful error handling design"
+            "Requires careful error handling design",
         ],
         related_patterns=["secure_by_default", "defense_in_depth"],
         examples=[
             "Access denied on authentication failure",
             "Firewall default deny rules",
-            "Encryption on communication failure"
+            "Encryption on communication failure",
         ],
-        anti_patterns=["Fail open", "Permissive failure modes"]
+        anti_patterns=["Fail open", "Permissive failure modes"],
     ),
     "separation_of_concerns": SecurityPattern(
         name="Separation of Concerns",
@@ -191,25 +192,22 @@ PATTERNS = {
         use_cases=[
             "Microservices architecture",
             "Layered application design",
-            "Security boundaries"
+            "Security boundaries",
         ],
         implementation="Separate authentication, authorization, business logic, and data layers",
         benefits=[
             "Better security boundaries",
             "Easier to maintain and audit",
-            "Reduced attack surface"
+            "Reduced attack surface",
         ],
-        trade_offs=[
-            "Increased complexity",
-            "More components to manage"
-        ],
+        trade_offs=["Increased complexity", "More components to manage"],
         related_patterns=["defense_in_depth", "microservices_security"],
         examples=[
             "API gateway for authentication",
             "Separate authorization service",
-            "Isolated data layer"
+            "Isolated data layer",
         ],
-        anti_patterns=["Monolithic security", "Mixed concerns"]
+        anti_patterns=["Monolithic security", "Mixed concerns"],
     ),
     "microservices_security": SecurityPattern(
         name="Microservices Security",
@@ -218,26 +216,26 @@ PATTERNS = {
         use_cases=[
             "Microservices architecture",
             "Distributed systems",
-            "Cloud-native applications"
+            "Cloud-native applications",
         ],
         implementation="Service mesh, API gateway, service-to-service authentication, distributed tracing",
         benefits=[
             "Isolated security boundaries",
             "Scalable security",
-            "Independent deployment"
+            "Independent deployment",
         ],
         trade_offs=[
             "Increased complexity",
             "Network security challenges",
-            "Distributed security management"
+            "Distributed security management",
         ],
         related_patterns=["zero_trust", "separation_of_concerns"],
         examples=[
             "Istio service mesh",
             "Kubernetes network policies",
-            "Service-to-service mTLS"
+            "Service-to-service mTLS",
         ],
-        anti_patterns=["Monolithic security model", "Trust all services"]
+        anti_patterns=["Monolithic security model", "Trust all services"],
     ),
     "encryption_at_rest": SecurityPattern(
         name="Encryption at Rest",
@@ -247,25 +245,22 @@ PATTERNS = {
             "Database encryption",
             "File system encryption",
             "Backup encryption",
-            "Cloud storage"
+            "Cloud storage",
         ],
         implementation="Use encryption for stored data, manage encryption keys securely",
         benefits=[
             "Protection against data breaches",
             "Compliance requirements",
-            "Data confidentiality"
+            "Data confidentiality",
         ],
-        trade_offs=[
-            "Performance overhead",
-            "Key management complexity"
-        ],
+        trade_offs=["Performance overhead", "Key management complexity"],
         related_patterns=["encryption_in_transit", "key_management"],
         examples=[
             "Database transparent encryption",
             "File system encryption (LUKS, BitLocker)",
-            "Cloud storage encryption"
+            "Cloud storage encryption",
         ],
-        anti_patterns=["Unencrypted storage", "Weak encryption"]
+        anti_patterns=["Unencrypted storage", "Weak encryption"],
     ),
     "encryption_in_transit": SecurityPattern(
         name="Encryption in Transit",
@@ -275,25 +270,22 @@ PATTERNS = {
             "HTTPS/TLS",
             "API communications",
             "Database connections",
-            "Service-to-service communication"
+            "Service-to-service communication",
         ],
         implementation="Use TLS/SSL for all communications, enforce strong cipher suites",
         benefits=[
             "Protection against interception",
             "Data confidentiality",
-            "Man-in-the-middle prevention"
+            "Man-in-the-middle prevention",
         ],
-        trade_offs=[
-            "Performance overhead",
-            "Certificate management"
-        ],
+        trade_offs=["Performance overhead", "Certificate management"],
         related_patterns=["encryption_at_rest", "certificate_management"],
         examples=[
             "HTTPS for web traffic",
             "TLS for database connections",
-            "mTLS for service-to-service"
+            "mTLS for service-to-service",
         ],
-        anti_patterns=["Unencrypted communications", "Weak TLS configuration"]
+        anti_patterns=["Unencrypted communications", "Weak TLS configuration"],
     ),
     "rate_limiting": SecurityPattern(
         name="Rate Limiting",
@@ -303,25 +295,14 @@ PATTERNS = {
             "API protection",
             "DDoS mitigation",
             "Brute force prevention",
-            "Resource protection"
+            "Resource protection",
         ],
         implementation="Implement rate limiting at API gateway, application, or network level",
-        benefits=[
-            "DDoS protection",
-            "Resource protection",
-            "Brute force prevention"
-        ],
-        trade_offs=[
-            "May block legitimate users",
-            "Requires careful tuning"
-        ],
+        benefits=["DDoS protection", "Resource protection", "Brute force prevention"],
+        trade_offs=["May block legitimate users", "Requires careful tuning"],
         related_patterns=["throttling", "circuit_breaker"],
-        examples=[
-            "API rate limiting",
-            "Login attempt limiting",
-            "Request throttling"
-        ],
-        anti_patterns=["No rate limiting", "Unlimited requests"]
+        examples=["API rate limiting", "Login attempt limiting", "Request throttling"],
+        anti_patterns=["No rate limiting", "Unlimited requests"],
     ),
     "circuit_breaker": SecurityPattern(
         name="Circuit Breaker",
@@ -330,25 +311,22 @@ PATTERNS = {
         use_cases=[
             "Microservices resilience",
             "External service integration",
-            "Fault tolerance"
+            "Fault tolerance",
         ],
         implementation="Monitor service health, open circuit on failures, allow recovery attempts",
         benefits=[
             "Prevents cascading failures",
             "Faster failure detection",
-            "System resilience"
+            "System resilience",
         ],
-        trade_offs=[
-            "May impact availability",
-            "Requires careful configuration"
-        ],
+        trade_offs=["May impact availability", "Requires careful configuration"],
         related_patterns=["retry_pattern", "bulkhead"],
         examples=[
             "Service circuit breaker",
             "Database connection circuit breaker",
-            "External API circuit breaker"
+            "External API circuit breaker",
         ],
-        anti_patterns=["No failure handling", "Cascading failures"]
+        anti_patterns=["No failure handling", "Cascading failures"],
     ),
 }
 
@@ -385,7 +363,7 @@ def apply_pattern(pattern_name: str, context: dict[str, Any]) -> dict[str, Any]:
         return {
             "applied": False,
             "error": f"Unknown pattern: {pattern_name}",
-            "available_patterns": list(PATTERNS.keys())
+            "available_patterns": list(PATTERNS.keys()),
         }
 
     logger.info(f"Applying pattern '{pattern.name}' to context")
@@ -431,11 +409,13 @@ def apply_pattern(pattern_name: str, context: dict[str, Any]) -> dict[str, Any]:
         "implementation": pattern.implementation,
         "benefits": pattern.benefits,
         "trade_offs": pattern.trade_offs,
-        "related_patterns": pattern.related_patterns
+        "related_patterns": pattern.related_patterns,
     }
 
 
-def validate_pattern_application(pattern_name: str, context: dict[str, Any]) -> dict[str, Any]:
+def validate_pattern_application(
+    pattern_name: str, context: dict[str, Any]
+) -> dict[str, Any]:
     """
     Validate that a pattern is properly applied in a context.
 
@@ -448,35 +428,28 @@ def validate_pattern_application(pattern_name: str, context: dict[str, Any]) -> 
     """
     pattern = PATTERNS.get(pattern_name)
     if not pattern:
-        return {
-            "valid": False,
-            "error": f"Unknown pattern: {pattern_name}"
-        }
+        return {"valid": False, "error": f"Unknown pattern: {pattern_name}"}
 
     validation_checks = []
 
     if pattern_name == "zero_trust":
-        validation_checks.append({
-            "check": "Identity-based access control implemented",
-            "status": "unknown"
-        })
-        validation_checks.append({
-            "check": "Continuous verification in place",
-            "status": "unknown"
-        })
+        validation_checks.append(
+            {"check": "Identity-based access control implemented", "status": "unknown"}
+        )
+        validation_checks.append(
+            {"check": "Continuous verification in place", "status": "unknown"}
+        )
 
     elif pattern_name == "encryption_at_rest":
-        validation_checks.append({
-            "check": "Data encryption enabled",
-            "status": "unknown"
-        })
-        validation_checks.append({
-            "check": "Key management implemented",
-            "status": "unknown"
-        })
+        validation_checks.append(
+            {"check": "Data encryption enabled", "status": "unknown"}
+        )
+        validation_checks.append(
+            {"check": "Key management implemented", "status": "unknown"}
+        )
 
     return {
         "valid": True,
         "pattern": pattern_name,
-        "validation_checks": validation_checks
+        "validation_checks": validation_checks,
     }

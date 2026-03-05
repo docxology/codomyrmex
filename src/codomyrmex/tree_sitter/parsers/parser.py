@@ -11,6 +11,7 @@ _tree_sitter = importlib.import_module("tree_sitter")
 
 logger = get_logger(__name__)
 
+
 class TreeSitterParser:
     """Wrapper for tree-sitter Parser."""
 

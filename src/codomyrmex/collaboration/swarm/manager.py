@@ -60,12 +60,12 @@ class SwarmManager:
 
         # Subscribe manager to results from this agent
         self.bus.subscribe(
-            "manager",
-            f"results.agent.{agent.agent_id}",
-            self._handle_result
+            "manager", f"results.agent.{agent.agent_id}", self._handle_result
         )
 
-        logger.info(f"Agent {agent.agent_id} registered and results subscription established.")
+        logger.info(
+            f"Agent {agent.agent_id} registered and results subscription established."
+        )
 
     def _handle_result(self, message: SwarmMessage) -> None:
         """Handle incoming results from agents."""
@@ -77,10 +77,7 @@ class SwarmManager:
                 logger.debug(f"Received result for task {task_id}")
 
     async def execute_task(
-        self,
-        description: str,
-        role: AgentRole = AgentRole.CODER,
-        timeout: float = 30.0
+        self, description: str, role: AgentRole = AgentRole.CODER, timeout: float = 30.0
     ) -> dict[str, Any]:
         """Execute a single task using the agent pool.
 
@@ -113,8 +110,8 @@ class SwarmManager:
                     message_type=SwarmMessageType.TASK_ASSIGNMENT,
                     sender="manager",
                     recipient=agent.agent_id,
-                    payload=assignment.to_dict()
-                )
+                    payload=assignment.to_dict(),
+                ),
             )
 
             # Wait for result
@@ -151,15 +148,15 @@ class SwarmManager:
         results = []
         for st in order:
             res = await self.execute_task(st.description, st.role)
-            results.append({
-                "task_id": st.task_id,
-                "description": st.description,
-                "result": res
-            })
+            results.append(
+                {"task_id": st.task_id, "description": st.description, "result": res}
+            )
 
         return results
 
-    async def request_consensus(self, proposal: str, votes: list[SwarmVote], strategy: str = "majority") -> ConsensusResult:
+    async def request_consensus(
+        self, proposal: str, votes: list[SwarmVote], strategy: str = "majority"
+    ) -> ConsensusResult:
         """Request a consensus decision from the swarm.
 
         Args:
@@ -180,8 +177,8 @@ class SwarmManager:
             SwarmMessage(
                 message_type=SwarmMessageType.RESULT,
                 sender="manager",
-                payload={"proposal": proposal, "result": result.to_dict()}
-            )
+                payload={"proposal": proposal, "result": result.to_dict()},
+            ),
         )
 
         return result
@@ -193,7 +190,7 @@ class SwarmManager:
             "bus": {
                 "subscriptions": self.bus.subscription_count,
                 "history_size": self.bus.history_size,
-            }
+            },
         }
 
 

@@ -39,10 +39,9 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Generate a completion from messages."""
-        pass
 
     @abstractmethod
     def complete_stream(
@@ -51,10 +50,9 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> Iterator[str]:
         """Generate a streaming completion."""
-        pass
 
     @abstractmethod
     async def complete_async(
@@ -63,15 +61,13 @@ class LLMProvider(ABC):
         model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int | None = None,
-        **kwargs
+        **kwargs,
     ) -> CompletionResponse:
         """Generate a completion asynchronously."""
-        pass
 
     @abstractmethod
     def list_models(self) -> list[str]:
         """List available models for this provider."""
-        pass
 
     def get_model(self, model: str | None = None) -> str:
         """Get model name, using default if not specified."""
@@ -80,6 +76,3 @@ class LLMProvider(ABC):
     @abstractmethod
     def _default_model(self) -> str:
         """Get the default model for this provider."""
-        pass
-
-

@@ -24,6 +24,7 @@ from codomyrmex.orchestrator.workflows.workflow_templates import (
 
 class TestWorkflowStep:
     """Test suite for WorkflowStep."""
+
     def test_to_dict(self) -> None:
         s = WorkflowStep("build")
         d = s.to_dict()
@@ -33,10 +34,13 @@ class TestWorkflowStep:
 
 class TestWorkflowRunner:
     """Test suite for WorkflowRunner."""
+
     def test_linear_pipeline(self) -> None:
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a", action=lambda ctx: "done_a"))
-        runner.add_step(WorkflowStep("b", action=lambda ctx: "done_b", depends_on=["a"]))
+        runner.add_step(
+            WorkflowStep("b", action=lambda ctx: "done_b", depends_on=["a"])
+        )
         result = runner.run()
         assert result.success
         assert result.completed_count == 2
@@ -89,15 +93,18 @@ class TestWorkflowRunner:
 
 class TestWorkflowTemplates:
     """Test suite for WorkflowTemplates."""
+
     def test_ci_cd(self) -> None:
         t = ci_cd_template()
         assert len(t.steps) == 4
-        runner = t.instantiate({
-            "lint": lambda ctx: "ok",
-            "build": lambda ctx: "ok",
-            "test": lambda ctx: "ok",
-            "deploy": lambda ctx: "ok",
-        })
+        runner = t.instantiate(
+            {
+                "lint": lambda ctx: "ok",
+                "build": lambda ctx: "ok",
+                "test": lambda ctx: "ok",
+                "deploy": lambda ctx: "ok",
+            }
+        )
         assert runner.step_count == 4
         result = runner.run()
         assert result.success
@@ -117,6 +124,7 @@ class TestWorkflowTemplates:
 
 class TestMemoryStore:
     """Test suite for MemoryStore."""
+
     def test_put_get(self) -> None:
         store = MemoryStore()
         store.put("k", "v")
@@ -156,6 +164,7 @@ class TestMemoryStore:
 
 class TestConversationHistory:
     """Test suite for ConversationHistory."""
+
     def test_add_and_count(self) -> None:
         h = ConversationHistory()
         h.add("user", "hello")
@@ -194,6 +203,7 @@ class TestConversationHistory:
 
 class TestLearningJournal:
     """Test suite for LearningJournal."""
+
     def test_record(self) -> None:
         j = LearningJournal()
         j.record("python", "use generators")

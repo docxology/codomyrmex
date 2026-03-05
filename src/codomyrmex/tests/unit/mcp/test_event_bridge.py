@@ -44,12 +44,14 @@ class TestBasicSubscription:
         bridge = EventLoggingBridge(bus, event_types=[EventType.TASK_COMPLETED])
         bridge.start()
 
-        bus.publish(_make_event(
-            EventType.TASK_COMPLETED,
-            task_name="build",
-            execution_time=1.5,
-            attempts=2,
-        ))
+        bus.publish(
+            _make_event(
+                EventType.TASK_COMPLETED,
+                task_name="build",
+                execution_time=1.5,
+                attempts=2,
+            )
+        )
 
         assert bridge.capture_count == 1
         entry = bridge.events_captured[0]
@@ -57,11 +59,14 @@ class TestBasicSubscription:
 
     def test_captures_multiple_event_types(self) -> None:
         bus = EventBus()
-        bridge = EventLoggingBridge(bus, event_types=[
-            EventType.TASK_STARTED,
-            EventType.TASK_COMPLETED,
-            EventType.TASK_FAILED,
-        ])
+        bridge = EventLoggingBridge(
+            bus,
+            event_types=[
+                EventType.TASK_STARTED,
+                EventType.TASK_COMPLETED,
+                EventType.TASK_FAILED,
+            ],
+        )
         bridge.start()
 
         bus.publish(_make_event(EventType.TASK_STARTED, task="a"))
@@ -111,11 +116,13 @@ class TestCorrelationId:
         bridge = EventLoggingBridge(bus, event_types=[EventType.TASK_COMPLETED])
         bridge.start()
 
-        bus.publish(_make_event(
-            EventType.TASK_COMPLETED,
-            task="build",
-            correlation_id="req-abc-123",
-        ))
+        bus.publish(
+            _make_event(
+                EventType.TASK_COMPLETED,
+                task="build",
+                correlation_id="req-abc-123",
+            )
+        )
 
         entry = bridge.events_captured[0]
         assert entry["correlation_id"] == "req-abc-123"
@@ -142,17 +149,22 @@ class TestSchedulerEvents:
         bridge = EventLoggingBridge(bus, event_types=[EventType.JOB_SCHEDULED])
         bridge.start()
 
-        bus.publish(_make_event(EventType.JOB_SCHEDULED, job_id="j1", job_name="backup"))
+        bus.publish(
+            _make_event(EventType.JOB_SCHEDULED, job_id="j1", job_name="backup")
+        )
 
         assert bridge.capture_count == 1
         assert bridge.events_captured[0]["event_type"] == "job.scheduled"
 
     def test_captures_job_completed_and_failed(self) -> None:
         bus = EventBus()
-        bridge = EventLoggingBridge(bus, event_types=[
-            EventType.JOB_COMPLETED,
-            EventType.JOB_FAILED,
-        ])
+        bridge = EventLoggingBridge(
+            bus,
+            event_types=[
+                EventType.JOB_COMPLETED,
+                EventType.JOB_FAILED,
+            ],
+        )
         bridge.start()
 
         bus.publish(_make_event(EventType.JOB_COMPLETED, job_id="j1"))

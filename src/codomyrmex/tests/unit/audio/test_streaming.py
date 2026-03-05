@@ -210,8 +210,14 @@ class TestSynthesisResultSerialization:
         )
         data = result.to_dict()
         expected_keys = {
-            "format", "duration", "sample_rate", "voice_id",
-            "text", "provider", "processing_time", "size_bytes",
+            "format",
+            "duration",
+            "sample_rate",
+            "voice_id",
+            "text",
+            "provider",
+            "processing_time",
+            "size_bytes",
         }
         assert expected_keys == set(data.keys())
 
@@ -270,8 +276,15 @@ class TestVoiceInfoSerialization:
         voice = VoiceInfo(id="v1", name="Test Voice", language="en-US")
         data = voice.to_dict()
         expected_keys = {
-            "id", "name", "language", "gender", "is_neural",
-            "provider", "description", "sample_rate", "styles",
+            "id",
+            "name",
+            "language",
+            "gender",
+            "is_neural",
+            "provider",
+            "description",
+            "sample_rate",
+            "styles",
         }
         assert expected_keys == set(data.keys())
 
@@ -280,7 +293,9 @@ class TestVoiceInfoSerialization:
         from codomyrmex.audio.text_to_speech.models import VoiceGender, VoiceInfo
 
         voice = VoiceInfo(
-            id="v1", name="Voice", language="en",
+            id="v1",
+            name="Voice",
+            language="en",
             gender=VoiceGender.FEMALE,
         )
         data = voice.to_dict()

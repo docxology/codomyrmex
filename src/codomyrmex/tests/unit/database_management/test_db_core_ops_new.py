@@ -17,6 +17,7 @@ def db_manager():
     manager = manage_databases("sqlite:///:memory:")
     return manager
 
+
 @pytest.fixture
 def temp_db_file():
     """Provides a temporary file path for a SQLite database."""
@@ -26,11 +27,13 @@ def temp_db_file():
     if os.path.exists(path):
         os.remove(path)
 
+
 def test_database_manager_init():
     """Test DatabaseManager initialization."""
     manager = DatabaseManager()
     assert len(manager.list_connections()) == 0
     assert manager.default_connection_name is None
+
 
 def test_sqlite_in_memory_connection(db_manager):
     """Test connecting to and querying an in-memory SQLite database."""
@@ -52,6 +55,7 @@ def test_sqlite_in_memory_connection(db_manager):
     assert res.rows[0][1] == "Alice"
     assert "name" in res.columns
 
+
 def test_sqlite_file_connection(temp_db_file):
     """Test connecting to a file-based SQLite database."""
     url = f"sqlite:///{temp_db_file}"
@@ -67,6 +71,7 @@ def test_sqlite_file_connection(temp_db_file):
     res = manager2.execute("SELECT val FROM items")
     assert res.rows[0][0] == 42.0
 
+
 def test_query_result_to_dict_list(db_manager):
     """Test QueryResult.to_dict_list() method."""
     db_manager.execute("CREATE TABLE test (a INTEGER, b TEXT)")
@@ -79,6 +84,7 @@ def test_query_result_to_dict_list(db_manager):
     assert dicts[0] == {"a": 1, "b": "one"}
     assert dicts[1] == {"a": 2, "b": "two"}
 
+
 def test_transaction_commit(db_manager):
     """Test successful transaction commit."""
     db_manager.execute("CREATE TABLE account (id INTEGER PRIMARY KEY, balance REAL)")
@@ -90,6 +96,7 @@ def test_transaction_commit(db_manager):
 
     res = db_manager.execute("SELECT balance FROM account WHERE id = 1")
     assert res.rows[0][0] == 100.0
+
 
 def test_transaction_rollback(db_manager):
     """Test transaction rollback on error."""
@@ -107,10 +114,15 @@ def test_transaction_rollback(db_manager):
     # Balance should still be 100.0 due to rollback
     assert res.rows[0][0] == 100.0
 
+
 def test_get_tables_and_info(db_manager):
     """Test retrieving table list and column info."""
-    db_manager.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE)")
-    db_manager.execute("CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT, user_id INTEGER, FOREIGN KEY(user_id) REFERENCES users(id))")
+    db_manager.execute(
+        "CREATE TABLE users (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE)"
+    )
+    db_manager.execute(
+        "CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT, user_id INTEGER, FOREIGN KEY(user_id) REFERENCES users(id))"
+    )
 
     tables = db_manager.get_tables()
     assert "users" in tables
@@ -124,6 +136,7 @@ def test_get_tables_and_info(db_manager):
     email_col = next(c for c in info if c["name"] == "email")
     assert email_col["notnull"] is True
 
+
 def test_health_check(db_manager):
     """Test health check functionality."""
     health = db_manager.health_check_all()
@@ -131,12 +144,17 @@ def test_health_check(db_manager):
     conn_name = list(health.keys())[0]
     assert health[conn_name]["status"] == "healthy"
 
+
 def test_multiple_connections():
     """Test managing multiple connections simultaneously."""
     manager = DatabaseManager()
 
-    conn1 = DatabaseConnection(name="db1", db_type=DatabaseType.SQLITE, database=":memory:")
-    conn2 = DatabaseConnection(name="db2", db_type=DatabaseType.SQLITE, database=":memory:")
+    conn1 = DatabaseConnection(
+        name="db1", db_type=DatabaseType.SQLITE, database=":memory:"
+    )
+    conn2 = DatabaseConnection(
+        name="db2", db_type=DatabaseType.SQLITE, database=":memory:"
+    )
 
     manager.add_connection(conn1)
     manager.add_connection(conn2)
@@ -148,6 +166,7 @@ def test_multiple_connections():
     assert "t1" not in manager.get_tables("db2")
     assert "t2" in manager.get_tables("db2")
     assert "t2" not in manager.get_tables("db1")
+
 
 def test_error_handling(db_manager):
     """Test handling of invalid queries."""

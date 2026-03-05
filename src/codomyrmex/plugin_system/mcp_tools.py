@@ -24,6 +24,7 @@ def plugin_scan_entry_points(
     """
     try:
         from codomyrmex.plugin_system.discovery import PluginDiscovery
+
         discovery = PluginDiscovery(entry_point_group=entry_point_group)
         result = discovery.scan_entry_points()
         return {
@@ -56,12 +57,15 @@ def plugin_resolve_dependencies(
             DependencyNode,
             DependencyResolver,
         )
+
         resolver = DependencyResolver()
         for p in plugins:
-            resolver.add(DependencyNode(
-                name=p["name"],
-                dependencies=p.get("dependencies", []),
-            ))
+            resolver.add(
+                DependencyNode(
+                    name=p["name"],
+                    dependencies=p.get("dependencies", []),
+                )
+            )
         result = resolver.resolve()
         return {
             "status": "success",

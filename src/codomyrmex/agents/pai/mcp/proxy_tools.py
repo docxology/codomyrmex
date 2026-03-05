@@ -22,18 +22,23 @@ _TEST_TIMEOUT: int = int(os.getenv("CODOMYRMEX_TEST_TIMEOUT", "120"))
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[5]
 
+
 def get_package_version() -> str:
     try:
         from importlib.metadata import version
+
         return version("codomyrmex")
     except ImportError:
         return "unknown"
 
+
 def tool_list_modules(**_kwargs: Any) -> dict[str, Any]:
     """List all available Codomyrmex modules."""
     import codomyrmex
+
     modules = codomyrmex.list_modules()
     return {"modules": modules, "count": len(modules)}
+
 
 def tool_module_info(*, module_name: str) -> dict[str, Any]:
     """Get info about a specific Codomyrmex module (docstring, exports, path)."""
@@ -54,6 +59,7 @@ def tool_module_info(*, module_name: str) -> dict[str, Any]:
         "path": str(mod_path) if mod_path else None,
     }
 
+
 def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
     """List all public callable functions in a Codomyrmex module.
 
@@ -64,7 +70,9 @@ def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
     Returns:
         Dict with function names, signatures, and docstrings.
     """
-    full_path = f"codomyrmex.{module}" if not module.startswith("codomyrmex.") else module
+    full_path = (
+        f"codomyrmex.{module}" if not module.startswith("codomyrmex.") else module
+    )
     try:
         mod = importlib.import_module(full_path)
     except ImportError as e:
@@ -90,7 +98,11 @@ def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
         doc = inspect.getdoc(obj) or ""
         if len(doc) > 200:
             doc = doc[:200] + "..."
-        methods = [m for m in dir(obj) if not m.startswith("_") and callable(getattr(obj, m, None))]
+        methods = [
+            m
+            for m in dir(obj)
+            if not m.startswith("_") and callable(getattr(obj, m, None))
+        ]
         classes.append({"name": name, "docstring": doc, "public_methods": methods[:20]})
 
     return {
@@ -100,7 +112,10 @@ def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
         "total_callables": len(functions) + len(classes),
     }
 
-def tool_call_module_function(*, function: str = "", kwargs: dict | None = None) -> dict[str, Any]:
+
+def tool_call_module_function(
+    *, function: str = "", kwargs: dict | None = None
+) -> dict[str, Any]:
     """Call any public function from any Codomyrmex module.
 
     Args:
@@ -118,7 +133,9 @@ def tool_call_module_function(*, function: str = "", kwargs: dict | None = None)
 
     parts = function.rsplit(".", 1)
     if len(parts) != 2:
-        return {"error": f"Invalid function path: {function!r}. Expected 'module.function'."}
+        return {
+            "error": f"Invalid function path: {function!r}. Expected 'module.function'."
+        }
 
     module_path, func_name = parts
     if func_name.startswith("_"):
@@ -131,19 +148,28 @@ def tool_call_module_function(*, function: str = "", kwargs: dict | None = None)
 
     func = getattr(mod, func_name, None)
     if func is None or not callable(func):
-        available = [n for n in dir(mod) if not n.startswith("_") and callable(getattr(mod, n, None))]
-        return {"error": f"Function {func_name!r} not found in {module_path}.", "available": available[:30]}
+        available = [
+            n
+            for n in dir(mod)
+            if not n.startswith("_") and callable(getattr(mod, n, None))
+        ]
+        return {
+            "error": f"Function {func_name!r} not found in {module_path}.",
+            "available": available[:30],
+        }
 
     try:
         result = func(**kwargs)
         try:
             import json as _json
+
             _json.dumps(result)
         except (TypeError, ValueError):
             result = str(result)
         return {"result": result}
     except Exception as e:
         return {"error": f"{type(e).__name__}: {e}"}
+
 
 def tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
     """Read the README.md for a Codomyrmex module.
@@ -154,7 +180,9 @@ def tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
     Returns:
         Dict with README contents or error.
     """
-    full_path = f"codomyrmex.{module}" if not module.startswith("codomyrmex.") else module
+    full_path = (
+        f"codomyrmex.{module}" if not module.startswith("codomyrmex.") else module
+    )
     try:
         mod = importlib.import_module(full_path)
     except ImportError as e:
@@ -183,23 +211,30 @@ def tool_get_module_readme(*, module: str = "") -> dict[str, Any]:
         "full_length": full_length,
     }
 
+
 def tool_pai_status(**_kwargs: Any) -> dict[str, Any]:
     """Get PAI installation status via PAIBridge."""
     from codomyrmex.agents.pai import PAIBridge
+
     bridge = PAIBridge()
     return bridge.get_status()
+
 
 def tool_pai_awareness(**_kwargs: Any) -> dict[str, Any]:
     """Get full PAI awareness data (missions, projects, tasks, TELOS, memory)."""
     try:
         from codomyrmex.website.data_provider import DataProvider
+
         dp = DataProvider(root_dir=_PROJECT_ROOT)
         return dp.get_pai_awareness_data()
     except (ImportError, AttributeError, OSError) as exc:
         logger.warning("PAI awareness data unavailable: %s", exc)
         return {"error": str(exc)}
 
-def tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict[str, Any]:
+
+def tool_run_tests(
+    *, module: str | None = None, verbose: bool = False
+) -> dict[str, Any]:
     """Run pytest for a specific module or the whole project."""
     cmd = [sys.executable, "-m", "pytest"]
     if module:
@@ -231,6 +266,7 @@ def tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict[
         return {"error": f"Test execution timed out ({_TEST_TIMEOUT}s limit)"}
     except (subprocess.SubprocessError, OSError) as exc:
         return {"error": str(exc)}
+
 
 def tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
     """List available Claude Code workflows from .agent/workflows.
@@ -264,18 +300,19 @@ def tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
                     except yaml.YAMLError:
                         warnings.append(f"Invalid YAML frontmatter in {item.name}")
 
-            results.append({
-                "name": item.stem, # filename without .md
-                "description": description,
-                "filepath": str(item),
-                "size_bytes": item.stat().st_size,
-            })
+            results.append(
+                {
+                    "name": item.stem,  # filename without .md
+                    "description": description,
+                    "filepath": str(item),
+                    "size_bytes": item.stat().st_size,
+                }
+            )
         except OSError as e:
             warnings.append(f"Failed to read {item.name}: {e}")
 
     return {
         "workflows": sorted(results, key=lambda x: x["name"]),
         "count": len(results),
-        "warnings": warnings
+        "warnings": warnings,
     }
-

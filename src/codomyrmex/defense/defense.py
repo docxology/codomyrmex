@@ -51,7 +51,9 @@ class ThreatEvent:
     """A detected threat occurrence."""
 
     source: str
-    category: str  # "brute_force", "injection", "rate_limit", "anomaly", "cognitive_exploit"
+    category: (
+        str  # "brute_force", "injection", "rate_limit", "anomaly", "cognitive_exploit"
+    )
     severity: Severity
     description: str
     timestamp: float = field(default_factory=time.time)
@@ -134,13 +136,15 @@ class ThreatDetector:
     Example::
 
         detector = ThreatDetector()
-        detector.add_rule(DetectionRule(
-            name="sql_injection",
-            category="injection",
-            severity=Severity.HIGH,
-            check=lambda req: "DROP TABLE" in req.get("query", "").upper(),
-            response=ResponseAction.BLOCK,
-        ))
+        detector.add_rule(
+            DetectionRule(
+                name="sql_injection",
+                category="injection",
+                severity=Severity.HIGH,
+                check=lambda req: "DROP TABLE" in req.get("query", "").upper(),
+                response=ResponseAction.BLOCK,
+            )
+        )
     """
 
     def __init__(self) -> None:
@@ -150,7 +154,9 @@ class ThreatDetector:
         """Register a detection rule."""
         self._rules.append(rule)
 
-    def evaluate(self, request: dict[str, Any], source: str = "unknown") -> list[ThreatEvent]:
+    def evaluate(
+        self, request: dict[str, Any], source: str = "unknown"
+    ) -> list[ThreatEvent]:
         """Evaluate a request against all rules.
 
         Returns:
@@ -277,7 +283,9 @@ class Defense:
                 event = ThreatEvent(
                     source=source,
                     category="cognitive_exploit",
-                    severity=severity_map.get(exploit_result["threat_level"], Severity.MEDIUM),
+                    severity=severity_map.get(
+                        exploit_result["threat_level"], Severity.MEDIUM
+                    ),
                     description=f"Cognitive exploit detected: {exploit_result['patterns']}",
                     metadata=exploit_result,
                     response=ResponseAction.RABBITHOLE

@@ -16,9 +16,12 @@ try:
     from codomyrmex.api.api_surface import APISurface
     from codomyrmex.api.migration_engine import MigrationEngine
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ─── APIContract ──────────────────────────────────────────────────────
+
 
 class TestAPIContract:
     """Test suite for APIContract."""
@@ -52,6 +55,7 @@ class TestAPIContract:
 
 
 # ─── ContractValidator ───────────────────────────────────────────────
+
 
 class TestContractValidator:
     """Test suite for ContractValidator."""
@@ -94,6 +98,7 @@ class TestContractValidator:
 
 # ─── MigrationEngine ────────────────────────────────────────────────
 
+
 class TestMigrationEngine:
     """Test suite for MigrationEngine."""
 
@@ -127,6 +132,7 @@ class TestMigrationEngine:
 
 
 # ─── APISurface ──────────────────────────────────────────────────────
+
 
 class TestAPISurface:
     """Test suite for APISurface."""

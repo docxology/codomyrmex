@@ -153,9 +153,9 @@ class AgentSupervisor:
         """
         if self._strategy == RestartStrategy.ONE_FOR_ONE:
             return [crashed_agent_id]
-        elif self._strategy == RestartStrategy.ONE_FOR_ALL:
+        if self._strategy == RestartStrategy.ONE_FOR_ALL:
             return list(self._registered)
-        elif self._strategy == RestartStrategy.REST_FOR_ONE:
+        if self._strategy == RestartStrategy.REST_FOR_ONE:
             try:
                 idx = self._registered.index(crashed_agent_id)
                 return self._registered[idx:]
@@ -172,7 +172,7 @@ class AgentSupervisor:
                     CrashRecord(
                         agent_id=p_id,
                         error=f"Cascaded restart due to {crashed_id}",
-                        action_taken=SupervisorAction.RESTART
+                        action_taken=SupervisorAction.RESTART,
                     )
                 )
 

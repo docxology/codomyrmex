@@ -15,6 +15,7 @@ try:
         create_index,
         quick_search,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -26,6 +27,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestDocument:
     """Test suite for Document."""
+
     def test_create_document(self):
         doc = Document(id="doc-1", content="Hello world")
         assert doc.id == "doc-1"
@@ -44,6 +46,7 @@ class TestDocument:
 @pytest.mark.unit
 class TestSearchResult:
     """Test suite for SearchResult."""
+
     def test_create_result(self):
         doc = Document(id="doc-1", content="test")
         result = SearchResult(document=doc, score=0.95)
@@ -54,6 +57,7 @@ class TestSearchResult:
 @pytest.mark.unit
 class TestSimpleTokenizer:
     """Test suite for SimpleTokenizer."""
+
     def test_create_tokenizer(self):
         tokenizer = SimpleTokenizer()
         assert tokenizer is not None
@@ -70,6 +74,7 @@ class TestSimpleTokenizer:
 @pytest.mark.unit
 class TestInMemoryIndex:
     """Test suite for InMemoryIndex."""
+
     def test_create_index(self):
         index = InMemoryIndex()
         assert index is not None
@@ -83,6 +88,7 @@ class TestInMemoryIndex:
 @pytest.mark.unit
 class TestFuzzyMatcher:
     """Test suite for FuzzyMatcher."""
+
     def test_class_exists(self):
         assert FuzzyMatcher is not None
 
@@ -90,6 +96,7 @@ class TestFuzzyMatcher:
 @pytest.mark.unit
 class TestQueryParser:
     """Test suite for QueryParser."""
+
     def test_create_parser(self):
         parser = QueryParser()
         assert parser is not None
@@ -98,6 +105,7 @@ class TestQueryParser:
 @pytest.mark.unit
 class TestCreateIndex:
     """Test suite for CreateIndex."""
+
     def test_default_creates_memory_index(self):
         index = create_index()
         assert isinstance(index, InMemoryIndex)
@@ -110,6 +118,7 @@ class TestCreateIndex:
 @pytest.mark.unit
 class TestQuickSearch:
     """Test suite for QuickSearch."""
+
     def test_returns_results(self):
         docs = ["Hello world", "Python programming", "Search engine"]
         results = quick_search(docs, "hello")

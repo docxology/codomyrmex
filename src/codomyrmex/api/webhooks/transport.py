@@ -31,7 +31,6 @@ class WebhookTransport(ABC):
         Returns:
             A tuple of (status_code, response_body).
         """
-        pass
 
 
 # ---------------------------------------------------------------------------
@@ -53,9 +52,7 @@ class HTTPWebhookTransport(WebhookTransport):
 
     def __init__(
         self,
-        handler: Callable[
-            [str, str, dict[str, str], float], tuple[int, str]
-        ],
+        handler: Callable[[str, str, dict[str, str], float], tuple[int, str]],
     ) -> None:
         self._handler = handler
 
@@ -78,5 +75,3 @@ class HTTPWebhookTransport(WebhookTransport):
             A tuple of (status_code, response_body) as returned by the handler.
         """
         return self._handler(url, payload, headers, timeout)
-
-

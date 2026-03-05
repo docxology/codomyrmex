@@ -81,17 +81,14 @@ class Channel(ABC):
     @abstractmethod
     async def send(self, message: AgentMessage) -> None:
         """Send a message through the channel."""
-        pass
 
     @abstractmethod
     async def receive(self) -> AgentMessage:
         """Receive a message from the channel."""
-        pass
 
     @abstractmethod
     def get_info(self) -> ChannelInfo:
         """Get channel information."""
-        pass
 
     def close(self) -> None:
         """Close the channel."""
@@ -121,7 +118,9 @@ class MessageQueue:
     """
 
     def __init__(self, max_size: int = 0, message_ttl: float = 0):
-        self._queue: asyncio.Queue = asyncio.Queue(maxsize=max_size) if max_size > 0 else asyncio.Queue()
+        self._queue: asyncio.Queue = (
+            asyncio.Queue(maxsize=max_size) if max_size > 0 else asyncio.Queue()
+        )
         self._max_size = max_size
         self._message_ttl = message_ttl
         self._message_count = 0
@@ -160,8 +159,7 @@ class MessageQueue:
             self._message_count += 1
         except TimeoutError:
             raise ChannelError(
-                "message_queue",
-                f"Queue is full, timeout after {timeout}s"
+                "message_queue", f"Queue is full, timeout after {timeout}s"
             ) from None
 
     def put_nowait(self, message: AgentMessage) -> None:
@@ -200,8 +198,7 @@ class MessageQueue:
             return message
         except TimeoutError:
             raise ChannelError(
-                "message_queue",
-                f"No message available, timeout after {timeout}s"
+                "message_queue", f"No message available, timeout after {timeout}s"
             ) from None
 
     def get_nowait(self) -> AgentMessage | None:
@@ -278,10 +275,7 @@ class ChannelManager:
         self._channels: dict[str, Channel] = {}
 
     def create_channel(
-        self,
-        name: str,
-        channel_type: str = "queue",
-        **kwargs
+        self, name: str, channel_type: str = "queue", **kwargs
     ) -> Channel:
         """Create a new channel.
 
@@ -297,7 +291,9 @@ class ChannelManager:
         if channel_type == "queue":
             channel = QueueChannel(name=name, **kwargs)
         else:
-            raise ChannelError("channel_manager", f"Unknown channel type: {channel_type}")
+            raise ChannelError(
+                "channel_manager", f"Unknown channel type: {channel_type}"
+            )
 
         self._channels[channel.channel_id] = channel
         logger.info(f"Created channel: {name} ({channel.channel_id})")
@@ -334,10 +330,10 @@ class ChannelManager:
 
 
 __all__ = [
-    "ChannelState",
-    "ChannelInfo",
     "Channel",
+    "ChannelInfo",
+    "ChannelManager",
+    "ChannelState",
     "MessageQueue",
     "QueueChannel",
-    "ChannelManager",
 ]

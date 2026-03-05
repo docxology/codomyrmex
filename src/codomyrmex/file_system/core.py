@@ -29,7 +29,9 @@ class FileSystemManager:
         self.config = config or {}
         logger.info("FileSystemManager initialized")
 
-    def create_file(self, path: str | Path, content: str = "", overwrite: bool = True) -> Path:
+    def create_file(
+        self, path: str | Path, content: str = "", overwrite: bool = True
+    ) -> Path:
         """
         Create a file with the given content.
 
@@ -50,7 +52,7 @@ class FileSystemManager:
             raise FileExistsError(f"File exists: {path}")
 
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content, encoding='utf-8')
+        path.write_text(content, encoding="utf-8")
         logger.info(f"File created: {path}")
         return path
 
@@ -72,7 +74,7 @@ class FileSystemManager:
             logger.error(f"File not found: {path}")
             raise FileNotFoundError(f"File not found: {path}")
 
-        return path.read_text(encoding='utf-8')
+        return path.read_text(encoding="utf-8")
 
     def append_to_file(self, path: str | Path, content: str) -> Path:
         """
@@ -86,7 +88,7 @@ class FileSystemManager:
             The Path of the updated file.
         """
         path = Path(path)
-        with path.open("a", encoding='utf-8') as f:
+        with path.open("a", encoding="utf-8") as f:
             f.write(content)
         logger.debug(f"Appended to file: {path}")
         return path
@@ -257,10 +259,12 @@ class FileSystemManager:
             "total": usage.total,
             "used": usage.used,
             "free": usage.free,
-            "percent": (usage.used / usage.total) * 100 if usage.total > 0 else 0
+            "percent": (usage.used / usage.total) * 100 if usage.total > 0 else 0,
         }
 
 
-def create_file_system_manager(config: dict[str, Any] | None = None) -> FileSystemManager:
+def create_file_system_manager(
+    config: dict[str, Any] | None = None,
+) -> FileSystemManager:
     """Convenience function to create FileSystemManager."""
     return FileSystemManager(config)

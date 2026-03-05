@@ -26,16 +26,25 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.agents.pai import (
-    PAIBridge,
     ALGORITHM_PHASES,
     PAI_PRINCIPLES,
-    RESPONSE_DEPTH_LEVELS,
     PAI_UPSTREAM_URL,
+    RESPONSE_DEPTH_LEVELS,
+    PAIBridge,
 )
 
 SUBSYSTEMS = [
-    "discovery", "algorithm", "skills", "tools", "hooks",
-    "agents", "memory", "security", "telos", "settings", "mcp",
+    "discovery",
+    "algorithm",
+    "skills",
+    "tools",
+    "hooks",
+    "agents",
+    "memory",
+    "security",
+    "telos",
+    "settings",
+    "mcp",
 ]
 
 
@@ -44,12 +53,14 @@ def parse_args() -> argparse.Namespace:
         description="PAI Bridge example — demonstrate all PAI operations",
     )
     parser.add_argument(
-        "--subsystem", "-s",
+        "--subsystem",
+        "-s",
         choices=SUBSYSTEMS,
         help="Show only a specific subsystem (default: all)",
     )
     parser.add_argument(
-        "--json", "-j",
+        "--json",
+        "-j",
         action="store_true",
         dest="json_output",
         help="Output as JSON instead of human-readable text",
@@ -58,6 +69,7 @@ def parse_args() -> argparse.Namespace:
 
 
 # ── Printers ──────────────────────────────────────────────────────────
+
 
 def _header(title: str) -> None:
     print(f"\n{'─' * 60}")
@@ -241,6 +253,7 @@ def main() -> int:
 
     print()
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

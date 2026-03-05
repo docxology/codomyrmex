@@ -17,11 +17,7 @@ class TestCase:
 
     def test_create_case(self):
         """Test case creation."""
-        case = Case(
-            case_id="test_001",
-            features={"x": 1, "y": 2},
-            outcome="success"
-        )
+        case = Case(case_id="test_001", features={"x": 1, "y": 2}, outcome="success")
         assert case.case_id == "test_001"
         assert case.features == {"x": 1, "y": 2}
         assert case.outcome == "success"
@@ -44,11 +40,7 @@ class TestCase:
 
     def test_case_from_dict(self):
         """Test case deserialization."""
-        data = {
-            "case_id": "test",
-            "features": {"x": 1},
-            "outcome": "success"
-        }
+        data = {"case_id": "test", "features": {"x": 1}, "outcome": "success"}
         case = Case.from_dict(data)
         assert case.case_id == "test"
         assert case.features == {"x": 1}
@@ -133,5 +125,3 @@ class TestCaseRetriever:
         results = retriever.retrieve(query, k=2)
 
         assert len(results) == 2
-
-

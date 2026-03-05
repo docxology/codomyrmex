@@ -301,7 +301,9 @@ class TestAntProperties:
 
     def test_to_dict_contains_required_keys(self):
         """to_dict returns a dict with all expected fields."""
-        ant = Ant(id=7, state=AntState.FORAGING, energy=80.0, x=2, y=3, carrying=0.5, age=5)
+        ant = Ant(
+            id=7, state=AntState.FORAGING, energy=80.0, x=2, y=3, carrying=0.5, age=5
+        )
         d = ant.to_dict()
         assert d["id"] == 7
         assert d["state"] == "FORAGING"
@@ -529,7 +531,16 @@ class TestColonyStats:
         """stats() returns a dict with all expected keys."""
         colony = Colony(population_size=5)
         s = colony.stats()
-        required = {"tick", "alive", "dead", "food_collected", "food_remaining", "census", "avg_energy", "pheromone_cells"}
+        required = {
+            "tick",
+            "alive",
+            "dead",
+            "food_collected",
+            "food_remaining",
+            "census",
+            "avg_energy",
+            "pheromone_cells",
+        }
         assert required.issubset(s.keys())
 
     def test_stats_initial_values(self):

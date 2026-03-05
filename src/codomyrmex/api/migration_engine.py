@@ -91,57 +91,72 @@ class MigrationEngine:
         return len(self._steps)
 
     def add_rename(
-        self, old_name: str, new_name: str,
-        from_version: str = "", to_version: str = "",
+        self,
+        old_name: str,
+        new_name: str,
+        from_version: str = "",
+        to_version: str = "",
     ) -> None:
         """Record a rename migration."""
-        self._steps.append(MigrationStep(
-            action=MigrationAction.RENAME,
-            target=old_name,
-            old_value=old_name,
-            new_value=new_name,
-            description=f"Renamed '{old_name}' to '{new_name}'",
-            breaking=True,
-        ))
+        self._steps.append(
+            MigrationStep(
+                action=MigrationAction.RENAME,
+                target=old_name,
+                old_value=old_name,
+                new_value=new_name,
+                description=f"Renamed '{old_name}' to '{new_name}'",
+                breaking=True,
+            )
+        )
 
     def add_removal(self, name: str, from_version: str = "") -> None:
         """Record a removal."""
-        self._steps.append(MigrationStep(
-            action=MigrationAction.REMOVE,
-            target=name,
-            old_value=name,
-            description=f"Removed '{name}'",
-            breaking=True,
-        ))
+        self._steps.append(
+            MigrationStep(
+                action=MigrationAction.REMOVE,
+                target=name,
+                old_value=name,
+                description=f"Removed '{name}'",
+                breaking=True,
+            )
+        )
 
     def add_deprecation(
-        self, name: str, replacement: str = "",
+        self,
+        name: str,
+        replacement: str = "",
         from_version: str = "",
     ) -> None:
         """Record a deprecation."""
         desc = f"Deprecated '{name}'"
         if replacement:
             desc += f", use '{replacement}' instead"
-        self._steps.append(MigrationStep(
-            action=MigrationAction.DEPRECATE,
-            target=name,
-            new_value=replacement,
-            description=desc,
-            breaking=False,
-        ))
+        self._steps.append(
+            MigrationStep(
+                action=MigrationAction.DEPRECATE,
+                target=name,
+                new_value=replacement,
+                description=desc,
+                breaking=False,
+            )
+        )
 
     def add_replacement(
-        self, old_name: str, new_name: str,
+        self,
+        old_name: str,
+        new_name: str,
     ) -> None:
         """Record a full replacement."""
-        self._steps.append(MigrationStep(
-            action=MigrationAction.REPLACE,
-            target=old_name,
-            old_value=old_name,
-            new_value=new_name,
-            description=f"Replaced '{old_name}' with '{new_name}'",
-            breaking=True,
-        ))
+        self._steps.append(
+            MigrationStep(
+                action=MigrationAction.REPLACE,
+                target=old_name,
+                old_value=old_name,
+                new_value=new_name,
+                description=f"Replaced '{old_name}' with '{new_name}'",
+                breaking=True,
+            )
+        )
 
     def generate_plan(self, from_version: str, to_version: str) -> MigrationPlan:
         """Generate a migration plan."""
@@ -159,17 +174,18 @@ class MigrationEngine:
         lines = [
             f"# Migration Guide: {plan.from_version} → {plan.to_version}",
             "",
-            f"**Steps**: {plan.step_count} | "
-            f"**Breaking**: {plan.breaking_count}",
+            f"**Steps**: {plan.step_count} | **Breaking**: {plan.breaking_count}",
             "",
         ]
 
         if plan.breaking_count > 0:
-            lines.extend([
-                "> [!WARNING]",
-                f"> This migration contains {plan.breaking_count} breaking change(s).",
-                "",
-            ])
+            lines.extend(
+                [
+                    "> [!WARNING]",
+                    f"> This migration contains {plan.breaking_count} breaking change(s).",
+                    "",
+                ]
+            )
 
         for i, step in enumerate(plan.steps, 1):
             icon = "🔴" if step.breaking else "🟢"

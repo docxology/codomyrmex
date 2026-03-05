@@ -26,8 +26,16 @@ DEFAULT_CONFIG_PATH = Path("~/.codomyrmex/agents.yaml").expanduser()
 
 # All agent sections that may appear in the YAML
 _AGENT_SECTIONS = [
-    "claude", "codex", "o1", "deepseek", "qwen",
-    "jules", "opencode", "gemini", "mistral_vibe", "every_code",
+    "claude",
+    "codex",
+    "o1",
+    "deepseek",
+    "qwen",
+    "jules",
+    "opencode",
+    "gemini",
+    "mistral_vibe",
+    "every_code",
     "ollama",
 ]
 
@@ -36,6 +44,7 @@ def _ensure_yaml():
     """Import PyYAML, falling back gracefully."""
     try:
         import yaml
+
         return yaml
     except ImportError:
         raise ImportError(
@@ -94,7 +103,7 @@ def save_config(data: dict[str, Any], path: Path | str | None = None) -> Path:
         config_path.chmod(0o600)
     except OSError as e:
         logger.debug("chmod 0o600 failed (expected on some OS): %s", e)
-        pass  # Windows or other OS where chmod is limited
+        # Windows or other OS where chmod is limited
 
     logger.info("Config saved to %s", config_path)
     return config_path

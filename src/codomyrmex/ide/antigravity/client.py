@@ -93,7 +93,8 @@ class AntigravityClient(IDEClient):
 
         if self.artifact_dir.exists():
             conversations = [
-                d for d in self.artifact_dir.iterdir()
+                d
+                for d in self.artifact_dir.iterdir()
                 if d.is_dir() and not d.name.startswith(".")
             ]
             if conversations:
@@ -200,10 +201,12 @@ class AntigravityClient(IDEClient):
         try:
             cwd = Path.cwd()
             candidates = [
-                f for f in cwd.rglob("*")
+                f
+                for f in cwd.rglob("*")
                 if f.is_file()
                 and not any(part.startswith(".") for part in f.parts)
-                and f.suffix in {".py", ".md", ".txt", ".yaml", ".yml", ".toml", ".json"}
+                and f.suffix
+                in {".py", ".md", ".txt", ".yaml", ".yml", ".toml", ".json"}
             ]
             if candidates:
                 return str(max(candidates, key=lambda p: p.stat().st_mtime))
@@ -304,13 +307,15 @@ class AntigravityClient(IDEClient):
                 elif "walkthrough" in item.stem.lower():
                     artifact_type = "walkthrough"
 
-                artifacts.append(Artifact(
-                    name=item.stem,
-                    path=str(item),
-                    artifact_type=artifact_type,
-                    size=item.stat().st_size,
-                    modified=item.stat().st_mtime,
-                ))
+                artifacts.append(
+                    Artifact(
+                        name=item.stem,
+                        path=str(item),
+                        artifact_type=artifact_type,
+                        size=item.stat().st_size,
+                        modified=item.stat().st_mtime,
+                    )
+                )
 
         return artifacts
 
@@ -370,10 +375,7 @@ class AntigravityClient(IDEClient):
             return {"error": str(e)}
 
     def create_artifact(
-        self,
-        name: str,
-        content: str,
-        artifact_type: str = "other"
+        self, name: str, content: str, artifact_type: str = "other"
     ) -> dict[str, Any]:
         """Create a new artifact.
 
@@ -502,20 +504,23 @@ class AntigravityClient(IDEClient):
 
         conversations = []
         dirs = [
-            d for d in self.artifact_dir.iterdir()
+            d
+            for d in self.artifact_dir.iterdir()
             if d.is_dir() and not d.name.startswith(".")
         ]
         dirs.sort(key=lambda p: p.stat().st_mtime, reverse=True)
 
         for d in dirs[:limit]:
             artifacts = list(d.glob("*.md"))
-            conversations.append({
-                "id": d.name,
-                "path": str(d),
-                "artifact_count": len(artifacts),
-                "modified": d.stat().st_mtime,
-                "is_current": d.name == self._conversation_id,
-            })
+            conversations.append(
+                {
+                    "id": d.name,
+                    "path": str(d),
+                    "artifact_count": len(artifacts),
+                    "modified": d.stat().st_mtime,
+                    "is_current": d.name == self._conversation_id,
+                }
+            )
 
         return conversations
 
@@ -574,7 +579,7 @@ class AntigravityClient(IDEClient):
                 "description": "View the outline of a file",
                 "parameters": ["AbsolutePath", "ItemOffset"],
             },
-             "view_code_item": {
+            "view_code_item": {
                 "name": "view_code_item",
                 "description": "View specific code items",
                 "parameters": ["File", "NodePaths"],
@@ -602,9 +607,15 @@ class AntigravityClient(IDEClient):
             "replace_file_content": {
                 "name": "replace_file_content",
                 "description": "Replace content in a file",
-                "parameters": ["TargetFile", "StartLine", "EndLine", "TargetContent", "ReplacementContent"],
+                "parameters": [
+                    "TargetFile",
+                    "StartLine",
+                    "EndLine",
+                    "TargetContent",
+                    "ReplacementContent",
+                ],
             },
-             "multi_replace_file_content": {
+            "multi_replace_file_content": {
                 "name": "multi_replace_file_content",
                 "description": "Make multiple replacements in a file",
                 "parameters": ["TargetFile", "ReplacementChunks"],
@@ -613,8 +624,9 @@ class AntigravityClient(IDEClient):
 
         return tool_info.get(tool_name)
 
-
-    def send_chat_gui(self, message: str, app_name: str = "Antigravity") -> IDECommandResult:
+    def send_chat_gui(
+        self, message: str, app_name: str = "Antigravity"
+    ) -> IDECommandResult:
         """Send a message using GUI automation (AppleScript).
 
         This method bypasses the CLI and sends keystrokes directly to the
@@ -631,7 +643,7 @@ class AntigravityClient(IDEClient):
         # Escape double quotes for AppleScript
         safe_message = message.replace('"', '\\"')
 
-        apple_script = f'''
+        apple_script = f"""
         tell application "{app_name}"
             activate
         end tell
@@ -645,26 +657,33 @@ class AntigravityClient(IDEClient):
                 key code 36
             end tell
         end tell
-        '''
+        """
 
         try:
-            subprocess.run(["osascript", "-e", apple_script], check=True, capture_output=True, timeout=10)
+            subprocess.run(
+                ["osascript", "-e", apple_script],
+                check=True,
+                capture_output=True,
+                timeout=10,
+            )
             return IDECommandResult(
                 success=True,
                 command="osascript",
-                output={"message": message, "method": "gui", "app": app_name}
+                output={"message": message, "method": "gui", "app": app_name},
             )
         except subprocess.CalledProcessError as e:
             error_msg = e.stderr.decode() if e.stderr else str(e)
             return IDECommandResult(
                 success=False,
                 command="osascript",
-                error=f"GUI automation failed: {error_msg}"
+                error=f"GUI automation failed: {error_msg}",
             )
         except Exception as e:
             return IDECommandResult(success=False, command="osascript", error=str(e))
 
-    def invoke_tool(self, tool_name: str, parameters: dict[str, Any]) -> IDECommandResult:
+    def invoke_tool(
+        self, tool_name: str, parameters: dict[str, Any]
+    ) -> IDECommandResult:
         """Invoke an Antigravity tool.
 
         This is a higher-level method that uses execute_command_safe.
@@ -716,7 +735,12 @@ class AntigravityClient(IDEClient):
                 return IDECommandResult(
                     success=True,
                     command=f"{Path(cli).name} chat",
-                    output={"message": message, "method": "cli", "cli_path": cli, "mode": mode or "default"}
+                    output={
+                        "message": message,
+                        "method": "cli",
+                        "cli_path": cli,
+                        "mode": mode or "default",
+                    },
                 )
             except subprocess.CalledProcessError as e:
                 logger.warning("Antigravity CLI notification failed: %s", str(e))
@@ -728,14 +752,14 @@ class AntigravityClient(IDEClient):
             return IDECommandResult(
                 success=False,
                 command="notify_user",
-                error="Not connected to Antigravity session"
+                error="Not connected to Antigravity session",
             )
 
         params = {
             "Message": message,
             "BlockedOnUser": kwargs.get("BlockedOnUser", False),
             "PathsToReview": kwargs.get("PathsToReview", []),
-            "ShouldAutoProceed": kwargs.get("ShouldAutoProceed", False)
+            "ShouldAutoProceed": kwargs.get("ShouldAutoProceed", False),
         }
 
         return self.invoke_tool("notify_user", params)
@@ -752,7 +776,10 @@ class AntigravityClient(IDEClient):
             "artifact_count": len(self._context.artifacts) if self._context else 0,
             "commands_executed": len(self.command_history),
             "success_rate": self.get_success_rate(),
-            "last_command": self.get_last_command().to_dict() if self.get_last_command() else None,
+            "last_command": self.get_last_command().to_dict()
+            if self.get_last_command()
+            else None,
         }
+
 
 # ── Bridge Imports (lazy, optional dependencies) ──────────────────────

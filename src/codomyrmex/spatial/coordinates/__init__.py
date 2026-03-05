@@ -12,32 +12,35 @@ from typing import Optional, Union
 
 class CoordinateSystem(Enum):
     """Supported coordinate systems."""
+
     CARTESIAN = "cartesian"
     SPHERICAL = "spherical"
     CYLINDRICAL = "cylindrical"
     GEOGRAPHIC = "geographic"  # lat/lon
     UTM = "utm"
 
+
 @dataclass
 class Point3D:
     """A point in 3D space."""
+
     x: float = 0.0
     y: float = 0.0
     z: float = 0.0
 
-    def __add__(self, other: 'Point3D') -> 'Point3D':
+    def __add__(self, other: "Point3D") -> "Point3D":
         """Return sum with other."""
         return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other: 'Point3D') -> 'Point3D':
+    def __sub__(self, other: "Point3D") -> "Point3D":
         """Return difference from other."""
         return Point3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, scalar: float) -> 'Point3D':
+    def __mul__(self, scalar: float) -> "Point3D":
         """Return product with other."""
         return Point3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
-    def __truediv__(self, scalar: float) -> 'Point3D':
+    def __truediv__(self, scalar: float) -> "Point3D":
         """Return true division result."""
         return Point3D(self.x / scalar, self.y / scalar, self.z / scalar)
 
@@ -45,18 +48,18 @@ class Point3D:
         """Calculate the magnitude (length) of the vector."""
         return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
-    def normalize(self) -> 'Point3D':
+    def normalize(self) -> "Point3D":
         """Return a unit vector."""
         mag = self.magnitude()
         if mag == 0:
             return Point3D(0, 0, 0)
         return self / mag
 
-    def dot(self, other: 'Point3D') -> float:
+    def dot(self, other: "Point3D") -> float:
         """Dot product."""
         return self.x * other.x + self.y * other.y + self.z * other.z
 
-    def cross(self, other: 'Point3D') -> 'Point3D':
+    def cross(self, other: "Point3D") -> "Point3D":
         """Cross product."""
         return Point3D(
             self.y * other.z - self.z * other.y,
@@ -64,7 +67,7 @@ class Point3D:
             self.x * other.y - self.y * other.x,
         )
 
-    def distance_to(self, other: 'Point3D') -> float:
+    def distance_to(self, other: "Point3D") -> float:
         """Euclidean distance to another point."""
         return (self - other).magnitude()
 
@@ -73,16 +76,18 @@ class Point3D:
         return (self.x, self.y, self.z)
 
     @classmethod
-    def from_tuple(cls, t: tuple[float, float, float]) -> 'Point3D':
+    def from_tuple(cls, t: tuple[float, float, float]) -> "Point3D":
         """Create from tuple."""
         return cls(t[0], t[1], t[2])
+
 
 @dataclass
 class SphericalCoord:
     """Spherical coordinates (r, theta, phi)."""
-    r: float = 0.0      # radius
+
+    r: float = 0.0  # radius
     theta: float = 0.0  # azimuthal angle (0 to 2π)
-    phi: float = 0.0    # polar angle (0 to π)
+    phi: float = 0.0  # polar angle (0 to π)
 
     def to_cartesian(self) -> Point3D:
         """Convert to Cartesian coordinates."""
@@ -92,7 +97,7 @@ class SphericalCoord:
         return Point3D(x, y, z)
 
     @classmethod
-    def from_cartesian(cls, point: Point3D) -> 'SphericalCoord':
+    def from_cartesian(cls, point: Point3D) -> "SphericalCoord":
         """Create from Cartesian coordinates."""
         r = point.magnitude()
         if r == 0:
@@ -102,12 +107,14 @@ class SphericalCoord:
         phi = math.acos(point.z / r)
         return cls(r, theta, phi)
 
+
 @dataclass
 class CylindricalCoord:
     """Cylindrical coordinates (r, theta, z)."""
-    r: float = 0.0      # radius in xy-plane
+
+    r: float = 0.0  # radius in xy-plane
     theta: float = 0.0  # azimuthal angle
-    z: float = 0.0      # height
+    z: float = 0.0  # height
 
     def to_cartesian(self) -> Point3D:
         """Convert to Cartesian coordinates."""
@@ -116,18 +123,20 @@ class CylindricalCoord:
         return Point3D(x, y, self.z)
 
     @classmethod
-    def from_cartesian(cls, point: Point3D) -> 'CylindricalCoord':
+    def from_cartesian(cls, point: Point3D) -> "CylindricalCoord":
         """Create from Cartesian coordinates."""
         r = math.sqrt(point.x**2 + point.y**2)
         theta = math.atan2(point.y, point.x)
         return cls(r, theta, point.z)
 
+
 @dataclass
 class GeographicCoord:
     """Geographic coordinates (latitude, longitude, altitude)."""
-    lat: float = 0.0       # latitude in degrees (-90 to 90)
-    lon: float = 0.0       # longitude in degrees (-180 to 180)
-    alt: float = 0.0       # altitude in meters
+
+    lat: float = 0.0  # latitude in degrees (-90 to 90)
+    lon: float = 0.0  # longitude in degrees (-180 to 180)
+    alt: float = 0.0  # altitude in meters
 
     EARTH_RADIUS = 6371000  # meters
 
@@ -144,7 +153,7 @@ class GeographicCoord:
         return Point3D(x, y, z)
 
     @classmethod
-    def from_cartesian(cls, point: Point3D) -> 'GeographicCoord':
+    def from_cartesian(cls, point: Point3D) -> "GeographicCoord":
         """Create from ECEF Cartesian coordinates."""
         r = point.magnitude()
         if r == 0:
@@ -156,99 +165,118 @@ class GeographicCoord:
 
         return cls(lat, lon, alt)
 
-    def distance_to(self, other: 'GeographicCoord') -> float:
+    def distance_to(self, other: "GeographicCoord") -> float:
         """Calculate great circle distance using Haversine formula."""
         lat1 = math.radians(self.lat)
         lat2 = math.radians(other.lat)
         dlat = lat2 - lat1
         dlon = math.radians(other.lon - self.lon)
 
-        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+        a = (
+            math.sin(dlat / 2) ** 2
+            + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+        )
         c = 2 * math.asin(math.sqrt(a))
 
         return self.EARTH_RADIUS * c
 
-    def bearing_to(self, other: 'GeographicCoord') -> float:
+    def bearing_to(self, other: "GeographicCoord") -> float:
         """Calculate initial bearing to another point (in degrees)."""
         lat1 = math.radians(self.lat)
         lat2 = math.radians(other.lat)
         dlon = math.radians(other.lon - self.lon)
 
         x = math.sin(dlon) * math.cos(lat2)
-        y = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(dlon)
+        y = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(
+            lat2
+        ) * math.cos(dlon)
 
         bearing = math.degrees(math.atan2(x, y))
         return (bearing + 360) % 360
 
+
 @dataclass
 class Matrix4x4:
     """4x4 transformation matrix."""
-    data: list[list[float]] = field(default_factory=lambda: [
-        [1, 0, 0, 0],
-        [0, 1, 0, 0],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1],
-    ])
+
+    data: list[list[float]] = field(
+        default_factory=lambda: [
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
+        ]
+    )
 
     @classmethod
-    def identity(cls) -> 'Matrix4x4':
+    def identity(cls) -> "Matrix4x4":
         """Create identity matrix."""
         return cls()
 
     @classmethod
-    def translation(cls, tx: float, ty: float, tz: float) -> 'Matrix4x4':
+    def translation(cls, tx: float, ty: float, tz: float) -> "Matrix4x4":
         """Create translation matrix."""
-        return cls([
-            [1, 0, 0, tx],
-            [0, 1, 0, ty],
-            [0, 0, 1, tz],
-            [0, 0, 0, 1],
-        ])
+        return cls(
+            [
+                [1, 0, 0, tx],
+                [0, 1, 0, ty],
+                [0, 0, 1, tz],
+                [0, 0, 0, 1],
+            ]
+        )
 
     @classmethod
-    def scale(cls, sx: float, sy: float, sz: float) -> 'Matrix4x4':
+    def scale(cls, sx: float, sy: float, sz: float) -> "Matrix4x4":
         """Create scaling matrix."""
-        return cls([
-            [sx, 0, 0, 0],
-            [0, sy, 0, 0],
-            [0, 0, sz, 0],
-            [0, 0, 0, 1],
-        ])
+        return cls(
+            [
+                [sx, 0, 0, 0],
+                [0, sy, 0, 0],
+                [0, 0, sz, 0],
+                [0, 0, 0, 1],
+            ]
+        )
 
     @classmethod
-    def rotation_x(cls, angle: float) -> 'Matrix4x4':
+    def rotation_x(cls, angle: float) -> "Matrix4x4":
         """Create rotation matrix around X axis (angle in radians)."""
         c, s = math.cos(angle), math.sin(angle)
-        return cls([
-            [1, 0, 0, 0],
-            [0, c, -s, 0],
-            [0, s, c, 0],
-            [0, 0, 0, 1],
-        ])
+        return cls(
+            [
+                [1, 0, 0, 0],
+                [0, c, -s, 0],
+                [0, s, c, 0],
+                [0, 0, 0, 1],
+            ]
+        )
 
     @classmethod
-    def rotation_y(cls, angle: float) -> 'Matrix4x4':
+    def rotation_y(cls, angle: float) -> "Matrix4x4":
         """Create rotation matrix around Y axis."""
         c, s = math.cos(angle), math.sin(angle)
-        return cls([
-            [c, 0, s, 0],
-            [0, 1, 0, 0],
-            [-s, 0, c, 0],
-            [0, 0, 0, 1],
-        ])
+        return cls(
+            [
+                [c, 0, s, 0],
+                [0, 1, 0, 0],
+                [-s, 0, c, 0],
+                [0, 0, 0, 1],
+            ]
+        )
 
     @classmethod
-    def rotation_z(cls, angle: float) -> 'Matrix4x4':
+    def rotation_z(cls, angle: float) -> "Matrix4x4":
         """Create rotation matrix around Z axis."""
         c, s = math.cos(angle), math.sin(angle)
-        return cls([
-            [c, -s, 0, 0],
-            [s, c, 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1],
-        ])
+        return cls(
+            [
+                [c, -s, 0, 0],
+                [s, c, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1],
+            ]
+        )
 
-    def __mul__(self, other: 'Matrix4x4') -> 'Matrix4x4':
+    def __mul__(self, other: "Matrix4x4") -> "Matrix4x4":
         """Matrix multiplication."""
         result = [[0] * 4 for _ in range(4)]
 
@@ -261,14 +289,35 @@ class Matrix4x4:
 
     def transform_point(self, point: Point3D) -> Point3D:
         """Transform a 3D point."""
-        x = self.data[0][0]*point.x + self.data[0][1]*point.y + self.data[0][2]*point.z + self.data[0][3]
-        y = self.data[1][0]*point.x + self.data[1][1]*point.y + self.data[1][2]*point.z + self.data[1][3]
-        z = self.data[2][0]*point.x + self.data[2][1]*point.y + self.data[2][2]*point.z + self.data[2][3]
-        w = self.data[3][0]*point.x + self.data[3][1]*point.y + self.data[3][2]*point.z + self.data[3][3]
+        x = (
+            self.data[0][0] * point.x
+            + self.data[0][1] * point.y
+            + self.data[0][2] * point.z
+            + self.data[0][3]
+        )
+        y = (
+            self.data[1][0] * point.x
+            + self.data[1][1] * point.y
+            + self.data[1][2] * point.z
+            + self.data[1][3]
+        )
+        z = (
+            self.data[2][0] * point.x
+            + self.data[2][1] * point.y
+            + self.data[2][2] * point.z
+            + self.data[2][3]
+        )
+        w = (
+            self.data[3][0] * point.x
+            + self.data[3][1] * point.y
+            + self.data[3][2] * point.z
+            + self.data[3][3]
+        )
 
         if w != 0 and w != 1:
-            return Point3D(x/w, y/w, z/w)
+            return Point3D(x / w, y / w, z / w)
         return Point3D(x, y, z)
+
 
 class CoordinateTransformer:
     """Utility class for coordinate transformations."""
@@ -313,12 +362,13 @@ class CoordinateTransformer:
         """Convert radians to degrees."""
         return math.degrees(radians)
 
+
 __all__ = [
     "CoordinateSystem",
-    "Point3D",
-    "SphericalCoord",
+    "CoordinateTransformer",
     "CylindricalCoord",
     "GeographicCoord",
     "Matrix4x4",
-    "CoordinateTransformer",
+    "Point3D",
+    "SphericalCoord",
 ]

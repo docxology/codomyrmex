@@ -127,7 +127,6 @@ class DataTransformer(ABC):
     @abstractmethod
     def transform(self, data: Any) -> Any:
         """Transform data."""
-        pass
 
 
 class FieldRenameTransformer(DataTransformer):
@@ -161,7 +160,12 @@ class FieldTypeTransformer(DataTransformer):
                 try:
                     result[field_name] = target_type(result[field_name])
                 except (ValueError, TypeError) as e:
-                    logger.warning("Failed to convert field %r to %s: %s", field_name, target_type, e)
+                    logger.warning(
+                        "Failed to convert field %r to %s: %s",
+                        field_name,
+                        target_type,
+                        e,
+                    )
         return result
 
 

@@ -80,7 +80,9 @@ class FeatureManager:
             targeting_rules.append(TargetingRule("user_id", "in", kwargs["allowlist"]))
         if "denylist" in kwargs:
             targeting_rules = targeting_rules or []
-            targeting_rules.append(TargetingRule("user_id", "not_in", kwargs["denylist"]))
+            targeting_rules.append(
+                TargetingRule("user_id", "not_in", kwargs["denylist"])
+            )
 
         flag = FlagDefinition(
             name=name,
@@ -90,7 +92,7 @@ class FeatureManager:
             description=description,
             metadata=metadata or {},
         )
-        self._storage.set(name, flag.__dict__) # Simple serialization for now
+        self._storage.set(name, flag.__dict__)  # Simple serialization for now
         logger.info("Flag created/updated: %s", name)
         return flag
 
@@ -105,7 +107,9 @@ class FeatureManager:
             # Reconstruct FlagDefinition
             # Note: targeting_rules need special handling if they are dicts
             rules_data = data.get("targeting_rules", [])
-            rules = [TargetingRule(**r) if isinstance(r, dict) else r for r in rules_data]
+            rules = [
+                TargetingRule(**r) if isinstance(r, dict) else r for r in rules_data
+            ]
             return FlagDefinition(
                 name=data["name"],
                 enabled=data["enabled"],
@@ -118,11 +122,13 @@ class FeatureManager:
 
     def list_flags(self) -> list[FlagDefinition]:
         """List all registered flags."""
-        return [self.get_flag(name) for name in self._storage.list_all().keys()] # type: ignore
+        return [self.get_flag(name) for name in self._storage.list_all().keys()]  # type: ignore
 
     # ── Evaluation ──────────────────────────────────────────────────
 
-    def is_enabled(self, name: str, default: bool = False, **context_attrs: Any) -> bool:
+    def is_enabled(
+        self, name: str, default: bool = False, **context_attrs: Any
+    ) -> bool:
         """Evaluate whether a flag is enabled for the given context."""
         if name in self._overrides:
             return self._overrides[name]

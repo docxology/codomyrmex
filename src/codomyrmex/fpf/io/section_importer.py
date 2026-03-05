@@ -1,4 +1,3 @@
-
 """Section importer for merging FPF sections.
 
 
@@ -114,9 +113,7 @@ class SectionImporter:
             )
 
             # Merge relationships (avoid duplicates)
-            existing_rels = {
-                (r.source, r.target, r.type) for r in merged.relationships
-            }
+            existing_rels = {(r.source, r.target, r.type) for r in merged.relationships}
             merged.relationships.extend(
                 [
                     r
@@ -128,7 +125,10 @@ class SectionImporter:
         return merged
 
     def _merge_into_spec(
-        self, patterns: list[Pattern], concepts: list[Concept], relationships: list[Relationship]
+        self,
+        patterns: list[Pattern],
+        concepts: list[Concept],
+        relationships: list[Relationship],
     ) -> FPFSpec:
         """Merge data into base specification.
 
@@ -160,7 +160,11 @@ class SectionImporter:
         # Merge relationships
         existing_rels = {(r.source, r.target, r.type) for r in merged.relationships}
         merged.relationships.extend(
-            [r for r in relationships if (r.source, r.target, r.type) not in existing_rels]
+            [
+                r
+                for r in relationships
+                if (r.source, r.target, r.type) not in existing_rels
+            ]
         )
 
         return merged
@@ -203,4 +207,3 @@ class SectionImporter:
             description=data.get("description"),
             metadata=data.get("metadata", {}),
         )
-

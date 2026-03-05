@@ -46,7 +46,11 @@ class SupervisorAgent(CollaborativeAgent):
         super().__init__(
             agent_id,
             name,
-            [AgentCapability(name="supervision", description="Supervise and delegate tasks")]
+            [
+                AgentCapability(
+                    name="supervision", description="Supervise and delegate tasks"
+                )
+            ],
         )
         self._workers: dict[str, WorkerAgent] = {}
         self._delegation_strategy = delegation_strategy
@@ -91,7 +95,7 @@ class SupervisorAgent(CollaborativeAgent):
         if not capable_workers:
             raise CapabilityMismatchError(
                 task.required_capabilities,
-                [cap for w in self._workers.values() for cap in w.get_capabilities()]
+                [cap for w in self._workers.values() for cap in w.get_capabilities()],
             )
 
         if self._delegation_strategy == "round_robin":
@@ -99,20 +103,22 @@ class SupervisorAgent(CollaborativeAgent):
             self._round_robin_index += 1
             return worker
 
-        elif self._delegation_strategy == "least_busy":
+        if self._delegation_strategy == "least_busy":
             # Prefer idle workers
             idle_workers = [w for w in capable_workers if w.state == AgentState.IDLE]
             if idle_workers:
                 return idle_workers[0]
             return capable_workers[0]
 
-        else:  # capability (default)
-            # Select worker with most matching capabilities
-            best_worker = max(
-                capable_workers,
-                key=lambda w: len(set(w.get_capabilities()) & set(task.required_capabilities))
-            )
-            return best_worker
+        # capability (default)
+        # Select worker with most matching capabilities
+        best_worker = max(
+            capable_workers,
+            key=lambda w: len(
+                set(w.get_capabilities()) & set(task.required_capabilities)
+            ),
+        )
+        return best_worker
 
     async def delegate(self, task: Task) -> TaskResult:
         """Delegate a task to an appropriate worker.
@@ -165,23 +171,23 @@ class SupervisorAgent(CollaborativeAgent):
         """
         if parallel:
             results = await asyncio.gather(
-                *[self.delegate(task) for task in tasks],
-                return_exceptions=True
+                *[self.delegate(task) for task in tasks], return_exceptions=True
             )
             final_results = []
             for i, result in enumerate(results):
                 if isinstance(result, Exception):
-                    final_results.append(TaskResult(
-                        task_id=tasks[i].id,
-                        success=False,
-                        error=str(result),
-                        agent_id=self._agent_id,
-                    ))
+                    final_results.append(
+                        TaskResult(
+                            task_id=tasks[i].id,
+                            success=False,
+                            error=str(result),
+                            agent_id=self._agent_id,
+                        )
+                    )
                 else:
                     final_results.append(result)
             return final_results
-        else:
-            return [await self.delegate(task) for task in tasks]
+        return [await self.delegate(task) for task in tasks]
 
     async def execute_workflow(
         self,
@@ -211,7 +217,7 @@ class SupervisorAgent(CollaborativeAgent):
             if not ready:
                 raise TaskDependencyError(
                     pending[0].id,
-                    [d for d in pending[0].dependencies if d not in completed_ids]
+                    [d for d in pending[0].dependencies if d not in completed_ids],
                 )
 
             batch_results = await self.delegate_batch(ready)

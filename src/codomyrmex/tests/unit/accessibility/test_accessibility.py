@@ -33,6 +33,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestWCAGLevel:
     """Test suite for WCAGLevel."""
+
     def test_level_a(self):
         assert WCAGLevel.A is not None
 
@@ -46,6 +47,7 @@ class TestWCAGLevel:
 @pytest.mark.unit
 class TestIssueType:
     """Test suite for IssueType."""
+
     def test_error_type(self):
         assert IssueType.ERROR is not None
 
@@ -59,6 +61,7 @@ class TestIssueType:
 @pytest.mark.unit
 class TestAccessibilityIssue:
     """Test suite for AccessibilityIssue."""
+
     def test_create_issue(self):
         issue = AccessibilityIssue(code="img-alt", message="Missing alt text")
         assert issue.code == "img-alt"
@@ -89,6 +92,7 @@ class TestAccessibilityIssue:
 @pytest.mark.unit
 class TestAccessibilityReport:
     """Test suite for AccessibilityReport."""
+
     def test_create_report(self):
         report = AccessibilityReport()
         assert report.url == ""
@@ -101,6 +105,7 @@ class TestAccessibilityReport:
 @pytest.mark.unit
 class TestWCAGRule:
     """Test suite for WCAGRule."""
+
     def test_create_rule(self):
         rule = WCAGRule(
             code="img-alt",
@@ -127,6 +132,7 @@ class TestWCAGRule:
 @pytest.mark.unit
 class TestA11yChecker:
     """Test suite for A11yChecker."""
+
     def test_create_checker(self):
         checker = A11yChecker()
         assert checker is not None
@@ -139,6 +145,7 @@ class TestA11yChecker:
 @pytest.mark.unit
 class TestCalculateContrastRatio:
     """Test suite for CalculateContrastRatio."""
+
     def test_black_white_contrast(self):
         ratio = calculate_contrast_ratio("#000000", "#ffffff")
         assert ratio >= 21.0
@@ -156,6 +163,7 @@ class TestCalculateContrastRatio:
 @pytest.mark.unit
 class TestCheckHeadingHierarchy:
     """Test suite for CheckHeadingHierarchy."""
+
     def test_valid_hierarchy(self):
         issues = check_heading_hierarchy([1, 2, 3])
         assert isinstance(issues, list)
@@ -312,27 +320,21 @@ class TestA11yCheckerCheckElements:
     def test_form_input_missing_label_produces_error(self):
         """An input element without a label triggers form-label rule."""
         checker = A11yChecker(level=WCAGLevel.AA)
-        report = checker.check_elements(
-            [{"tag": "input", "selector": "#email"}]
-        )
+        report = checker.check_elements([{"tag": "input", "selector": "#email"}])
         codes = [i.code for i in report.issues]
         assert "form-label" in codes
 
     def test_form_select_missing_label(self):
         """A select element without a label triggers form-label rule."""
         checker = A11yChecker(level=WCAGLevel.AA)
-        report = checker.check_elements(
-            [{"tag": "select", "selector": "#country"}]
-        )
+        report = checker.check_elements([{"tag": "select", "selector": "#country"}])
         codes = [i.code for i in report.issues]
         assert "form-label" in codes
 
     def test_form_textarea_missing_label(self):
         """A textarea element without a label triggers form-label rule."""
         checker = A11yChecker(level=WCAGLevel.AA)
-        report = checker.check_elements(
-            [{"tag": "textarea", "selector": "#bio"}]
-        )
+        report = checker.check_elements([{"tag": "textarea", "selector": "#bio"}])
         codes = [i.code for i in report.issues]
         assert "form-label" in codes
 

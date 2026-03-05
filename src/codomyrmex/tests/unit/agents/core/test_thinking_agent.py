@@ -15,6 +15,7 @@ from codomyrmex.llm.models.reasoning import ThinkingDepth
 
 class TestThinkingAgentConfig:
     """Test suite for ThinkingAgentConfig."""
+
     def test_defaults(self) -> None:
         cfg = ThinkingAgentConfig()
         assert cfg.depth == ThinkingDepth.NORMAL
@@ -25,6 +26,7 @@ class TestThinkingAgentConfig:
 
 class TestThinkingAgent:
     """Test suite for ThinkingAgent."""
+
     def test_creation(self) -> None:
         agent = ThinkingAgent()
         assert agent is not None
@@ -115,6 +117,7 @@ class TestThinkingAgent:
 
     def test_observe(self) -> None:
         from codomyrmex.agents.core.base import AgentResponse
+
         agent = ThinkingAgent()
         obs = agent.observe(AgentResponse(content="Done"))
         assert "success" in obs

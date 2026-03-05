@@ -17,22 +17,27 @@ from typing import Any, Optional
 
 class ThreatLevel(Enum):
     """Threat severity levels."""
+
     NONE = "none"
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
 
+
 class GuardrailAction(Enum):
     """Actions to take when a guardrail is triggered."""
+
     ALLOW = "allow"
     WARN = "warn"
     BLOCK = "block"
     SANITIZE = "sanitize"
 
+
 @dataclass
 class GuardrailResult:
     """Result of a guardrail check."""
+
     passed: bool
     threat_level: ThreatLevel = ThreatLevel.NONE
     action: GuardrailAction = GuardrailAction.ALLOW
@@ -44,11 +49,16 @@ class GuardrailResult:
     @property
     def is_safe(self) -> bool:
         """Check if content is safe to proceed."""
-        return self.passed and self.action in [GuardrailAction.ALLOW, GuardrailAction.WARN]
+        return self.passed and self.action in [
+            GuardrailAction.ALLOW,
+            GuardrailAction.WARN,
+        ]
+
 
 @dataclass
 class GuardrailConfig:
     """Configuration for guardrail behavior."""
+
     block_on_high_threat: bool = True
     block_on_medium_threat: bool = False
     sanitize_pii: bool = True
@@ -56,6 +66,7 @@ class GuardrailConfig:
     max_output_length: int = 500000
     custom_blocked_patterns: list[str] = field(default_factory=list)
     custom_allowed_patterns: list[str] = field(default_factory=list)
+
 
 class PromptInjectionDetector:
     """Detects prompt injection attempts in user input."""
@@ -67,25 +78,21 @@ class PromptInjectionDetector:
         r"disregard\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
         r"forget\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
         r"override\s+(system|all)\s+(instructions?|prompts?|rules?)",
-
         # Role manipulation attempts
         r"you\s+are\s+now\s+(a|an|the)\s+",
         r"pretend\s+(to\s+be|you\s+are)\s+",
         r"act\s+as\s+(if\s+you\s+are|a|an)\s+",
         r"switch\s+to\s+.*\s+mode",
         r"enter\s+.*\s+mode",
-
         # System prompt extraction
         r"(show|reveal|display|print|output)\s+(your|the|system)\s+(prompt|instructions?)",
         r"what\s+(are|is)\s+(your|the)\s+(system\s+)?(prompt|instructions?)",
         r"repeat\s+(your|the)\s+(system\s+)?(prompt|instructions?)",
-
         # Delimiter exploitation
         r"```\s*(system|assistant|user)\s*\n",
         r"\[INST\]|\[/INST\]",
         r"<\|im_start\|>|<\|im_end\|>",
         r"<\|system\|>|<\|user\|>|<\|assistant\|>",
-
         # Jailbreak attempts
         r"DAN\s*mode|do\s+anything\s+now",
         r"developer\s+mode|god\s+mode",
@@ -98,10 +105,12 @@ class PromptInjectionDetector:
             re.compile(p, re.IGNORECASE) for p in self.INJECTION_PATTERNS
         ]
         if self.config.custom_blocked_patterns:
-            self._compiled_patterns.extend([
-                re.compile(p, re.IGNORECASE)
-                for p in self.config.custom_blocked_patterns
-            ])
+            self._compiled_patterns.extend(
+                [
+                    re.compile(p, re.IGNORECASE)
+                    for p in self.config.custom_blocked_patterns
+                ]
+            )
 
     def detect(self, text: str) -> GuardrailResult:
         """
@@ -134,10 +143,14 @@ class PromptInjectionDetector:
         else:
             threat_level = ThreatLevel.MEDIUM
 
-        action = GuardrailAction.BLOCK if (
-            self.config.block_on_high_threat and
-            threat_level in [ThreatLevel.HIGH, ThreatLevel.CRITICAL]
-        ) else GuardrailAction.WARN
+        action = (
+            GuardrailAction.BLOCK
+            if (
+                self.config.block_on_high_threat
+                and threat_level in [ThreatLevel.HIGH, ThreatLevel.CRITICAL]
+            )
+            else GuardrailAction.WARN
+        )
 
         return GuardrailResult(
             passed=False,
@@ -146,6 +159,7 @@ class PromptInjectionDetector:
             message=f"Detected {threat_count} potential prompt injection pattern(s)",
             threats_detected=threats_detected,
         )
+
 
 class PIIDetector:
     """Detects and optionally sanitizes Personally Identifiable Information."""
@@ -239,6 +253,7 @@ class PIIDetector:
 
         return sanitized, redacted_types
 
+
 class ContentFilter:
     """Filters content for safety and appropriateness."""
 
@@ -253,9 +268,7 @@ class ContentFilter:
         self.patterns = self.TOXIC_PATTERNS.copy()
         if custom_patterns:
             self.patterns.extend(custom_patterns)
-        self._compiled_patterns = [
-            re.compile(p, re.IGNORECASE) for p in self.patterns
-        ]
+        self._compiled_patterns = [re.compile(p, re.IGNORECASE) for p in self.patterns]
 
     def check(self, text: str) -> GuardrailResult:
         """
@@ -287,6 +300,7 @@ class ContentFilter:
             threats_detected=threats_detected,
         )
 
+
 class OutputValidator:
     """Validates LLM output for safety and format compliance."""
 
@@ -299,7 +313,7 @@ class OutputValidator:
         self,
         output: str,
         expected_format: str | None = None,
-        max_length: int | None = None
+        max_length: int | None = None,
     ) -> GuardrailResult:
         """
         Validate LLM output.
@@ -317,7 +331,9 @@ class OutputValidator:
 
         # Length check
         if len(output) > max_len:
-            threats_detected.append(f"Output exceeds max length ({len(output)} > {max_len})")
+            threats_detected.append(
+                f"Output exceeds max length ({len(output)} > {max_len})"
+            )
 
         # Format validation
         if expected_format == "json":
@@ -347,6 +363,7 @@ class OutputValidator:
             message=f"Output validation found {len(threats_detected)} issue(s)",
             threats_detected=threats_detected,
         )
+
 
 class Guardrail:
     """
@@ -429,10 +446,7 @@ class Guardrail:
         )
 
     def check_output(
-        self,
-        text: str,
-        sanitize: bool = True,
-        expected_format: str | None = None
+        self, text: str, sanitize: bool = True, expected_format: str | None = None
     ) -> GuardrailResult:
         """
         Run all output safety checks.
@@ -457,11 +471,13 @@ class Guardrail:
 
         return result
 
+
 # Convenience functions
 def check_prompt_injection(text: str) -> bool:
     """Quick check for prompt injection. Returns True if safe."""
     detector = PromptInjectionDetector()
     return detector.detect(text).passed
+
 
 def sanitize_pii(text: str) -> str:
     """Sanitize PII from text and return cleaned version."""
@@ -469,10 +485,12 @@ def sanitize_pii(text: str) -> str:
     sanitized, _ = detector.sanitize(text)
     return sanitized
 
+
 def validate_llm_output(output: str, expected_format: str | None = None) -> bool:
     """Quick validation of LLM output. Returns True if valid."""
     validator = OutputValidator()
     return validator.validate(output, expected_format).passed
+
 
 __all__ = [
     # Enums

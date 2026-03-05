@@ -6,8 +6,8 @@ Thin wrapper around codomyrmex.documentation.maintenance.update_root_docs.
 """
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Ensure src is in path
 PROJ_ROOT = Path(__file__).resolve().parent.parent
@@ -24,21 +24,30 @@ except ImportError as e:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "docs" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "docs"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/docs/config.yaml")
+            print("Loaded config from config/docs/config.yaml")
 
     parser = argparse.ArgumentParser(description="Update root documentation files.")
-    parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
+    parser.add_argument(
+        "--root", type=Path, default=PROJ_ROOT, help="Project root directory"
+    )
     args = parser.parse_args()
 
     src_dir = args.root / "src" / "codomyrmex"
-    
+
     if not src_dir.exists():
         print(f"Error: Source directory {src_dir} does not exist.")
         return

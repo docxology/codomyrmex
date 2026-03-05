@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 
 class AlertSeverity(Enum):
     """Alert severity levels."""
+
     INFO = "info"
     WARNING = "warning"
     CRITICAL = "critical"
@@ -25,6 +26,7 @@ class AlertSeverity(Enum):
 
 class AlertState(Enum):
     """Alert state."""
+
     OK = "ok"
     FIRING = "firing"
     RESOLVED = "resolved"
@@ -148,7 +150,9 @@ class AlertEngine:
                     try:
                         handler(alert)
                     except Exception as e:
-                        logger.warning("Alert handler failed for rule %s: %s", rule.name, e)
+                        logger.warning(
+                            "Alert handler failed for rule %s: %s", rule.name, e
+                        )
 
         return fired
 

@@ -37,7 +37,7 @@ class Vec3:
 
     def length(self) -> float:
         """Euclidean length of the vector."""
-        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
     def normalized(self) -> Vec3:
         """Return unit vector. Returns zero vector if length is ~0."""
@@ -105,7 +105,9 @@ class Transform3D:
 
     # ── Point/vector transformation ─────────────────────────────────
 
-    def transform_point(self, point: tuple[float, float, float]) -> tuple[float, float, float]:
+    def transform_point(
+        self, point: tuple[float, float, float]
+    ) -> tuple[float, float, float]:
         """Apply rotation then translation to a 3D point.
 
         Args:
@@ -127,7 +129,9 @@ class Transform3D:
             rz + self.translation.z,
         )
 
-    def transform_vector(self, vector: tuple[float, float, float]) -> tuple[float, float, float]:
+    def transform_vector(
+        self, vector: tuple[float, float, float]
+    ) -> tuple[float, float, float]:
         """Apply rotation (no translation) to a direction vector."""
         R = self._rotation_matrix()
         vx, vy, vz = vector
@@ -151,7 +155,10 @@ class Transform3D:
         # Compose rotations via matrix multiplication
         Ra = self._rotation_matrix()
         Rb = other._rotation_matrix()
-        Rc = [[sum(Ra[i][k] * Rb[k][j] for k in range(3)) for j in range(3)] for i in range(3)]
+        Rc = [
+            [sum(Ra[i][k] * Rb[k][j] for k in range(3)) for j in range(3)]
+            for i in range(3)
+        ]
 
         # Extract Euler angles from composed rotation matrix
         new_pitch = -math.asin(max(-1.0, min(1.0, Rc[2][0])))
@@ -238,7 +245,11 @@ class Transform3D:
         """Serialize to a JSON-compatible dict."""
         return {
             "translation": self.translation.to_dict(),
-            "rotation": {"roll": self.rotation[0], "pitch": self.rotation[1], "yaw": self.rotation[2]},
+            "rotation": {
+                "roll": self.rotation[0],
+                "pitch": self.rotation[1],
+                "yaw": self.rotation[2],
+            },
         }
 
     def __repr__(self) -> str:

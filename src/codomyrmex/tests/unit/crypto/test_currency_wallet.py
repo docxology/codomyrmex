@@ -78,7 +78,7 @@ class TestMnemonicToSeed:
 class TestHDWallet:
     """Tests for BIP-32 HD wallet key derivation."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def wallet(self):
         """Create a deterministic wallet from a known mnemonic."""
         mnemonic = generate_mnemonic(128)
@@ -130,7 +130,7 @@ class TestHDWallet:
 class TestAddressGeneration:
     """Tests for wallet address generation."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def wallet(self):
         mnemonic = generate_mnemonic(128)
         seed = mnemonic_to_seed(mnemonic)
@@ -138,7 +138,9 @@ class TestAddressGeneration:
 
     def test_bitcoin_address_starts_with_1(self, wallet):
         addr = wallet.get_address("bitcoin")
-        assert addr.startswith("1"), f"Bitcoin mainnet address should start with '1', got {addr}"
+        assert addr.startswith("1"), (
+            f"Bitcoin mainnet address should start with '1', got {addr}"
+        )
 
     def test_ethereum_address_starts_with_0x(self, wallet):
         addr = wallet.get_address("ethereum")
@@ -160,7 +162,7 @@ class TestAddressGeneration:
 class TestExtendedKeys:
     """Tests for xpub/xpriv serialization."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def wallet(self):
         mnemonic = generate_mnemonic(128)
         seed = mnemonic_to_seed(mnemonic)

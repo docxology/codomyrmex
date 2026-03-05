@@ -12,7 +12,6 @@ test_orchestration_session.py.
 Zero-mock policy: all tests use real objects only.
 """
 
-
 import pytest
 
 from codomyrmex.logistics.orchestration.project.orchestration_engine import (
@@ -66,7 +65,7 @@ class TestOrchestrationEngineInit:
 class TestOrchestrationEngineSessionManagement:
     """Tests for session create/get/close on a manually-wired engine."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         """Create an OrchestrationEngine with working subcomponents.
 
@@ -214,7 +213,7 @@ class TestOrchestrationEngineSessionManagement:
 class TestOrchestrationEngineEvents:
     """Tests for the event handler system."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -253,6 +252,7 @@ class TestOrchestrationEngineEvents:
     def test_register_event_handler(self, engine):
         def handler(event, data):
             return None
+
         engine.register_event_handler("test_event", handler)
         assert "test_event" in engine.event_handlers
         assert handler in engine.event_handlers["test_event"]
@@ -260,8 +260,10 @@ class TestOrchestrationEngineEvents:
     def test_register_multiple_handlers(self, engine):
         def h1(e, d):
             return None
+
         def h2(e, d):
             return None
+
         engine.register_event_handler("evt", h1)
         engine.register_event_handler("evt", h2)
         assert len(engine.event_handlers["evt"]) == 2
@@ -269,8 +271,10 @@ class TestOrchestrationEngineEvents:
     def test_register_handlers_different_events(self, engine):
         def h1(e, d):
             return None
+
         def h2(e, d):
             return None
+
         engine.register_event_handler("evt_a", h1)
         engine.register_event_handler("evt_b", h2)
         assert "evt_a" in engine.event_handlers
@@ -296,6 +300,7 @@ class TestOrchestrationEngineEvents:
 
     def test_emit_event_handler_exception_does_not_propagate(self, engine):
         """A failing handler should not crash emit_event."""
+
         def bad_handler(e, d):
             raise RuntimeError("handler exploded")
 
@@ -305,9 +310,7 @@ class TestOrchestrationEngineEvents:
 
     def test_session_created_event_fired(self, engine):
         events = []
-        engine.register_event_handler(
-            "session_created", lambda e, d: events.append(d)
-        )
+        engine.register_event_handler("session_created", lambda e, d: events.append(d))
         sid = engine.create_session(user_id="eve")
         assert len(events) == 1
         assert events[0]["session_id"] == sid
@@ -317,9 +320,7 @@ class TestOrchestrationEngineEvents:
         """close_session crashes on deallocate_resources before emitting
         the session_closed event. Documents this integration bug."""
         events = []
-        engine.register_event_handler(
-            "session_closed", lambda e, d: events.append(d)
-        )
+        engine.register_event_handler("session_closed", lambda e, d: events.append(d))
         sid = engine.create_session()
         with pytest.raises(AttributeError):
             engine.close_session(sid)
@@ -336,7 +337,7 @@ class TestOrchestrationEngineEvents:
 class TestOrchestrationEngineStatus:
     """Tests for status, health, and metrics methods."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -418,7 +419,7 @@ class TestOrchestrationEngineStatus:
 class TestOrchestrationEngineShutdown:
     """Tests for the shutdown method."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -489,7 +490,7 @@ class TestOrchestrationEngineShutdown:
 class TestOrchestrationEngineExecuteWorkflow:
     """Tests for execute_workflow error paths."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -547,7 +548,7 @@ class TestOrchestrationEngineExecuteWorkflow:
 class TestOrchestrationEngineExecuteTask:
     """Tests for execute_task method."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -586,7 +587,9 @@ class TestOrchestrationEngineExecuteTask:
     def test_execute_task_invalid_session(self, engine):
         from codomyrmex.logistics.orchestration.project.task_orchestrator import Task
 
-        task = Task(name="test", module="mod", action="echo", parameters={"message": "hi"})
+        task = Task(
+            name="test", module="mod", action="echo", parameters={"message": "hi"}
+        )
         result = engine.execute_task(task, session_id="bad-session")
         assert result["success"] is False
         assert "not found" in result["error"]
@@ -609,7 +612,7 @@ class TestOrchestrationEngineExecuteTask:
 class TestOrchestrationEngineProjectWorkflow:
     """Tests for execute_project_workflow."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -646,9 +649,7 @@ class TestOrchestrationEngineProjectWorkflow:
         eng.task_orchestrator.stop_execution()
 
     def test_execute_project_workflow_invalid_session(self, engine):
-        result = engine.execute_project_workflow(
-            "proj", "wf", session_id="bad-id"
-        )
+        result = engine.execute_project_workflow("proj", "wf", session_id="bad-id")
         assert result["success"] is False
         assert "not found" in result["error"]
 
@@ -668,7 +669,7 @@ class TestOrchestrationEngineProjectWorkflow:
 class TestOrchestrationEngineComplexWorkflow:
     """Tests for execute_complex_workflow."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -738,7 +739,7 @@ class TestOrchestrationEngineComplexWorkflow:
 class TestOrchestrationEngineCreateProjectFromWorkflow:
     """Tests for create_project_from_workflow."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def engine(self, tmp_path):
         import threading
 
@@ -820,7 +821,9 @@ class TestMCPTools:
         for tool_name, tool_def in tools.items():
             assert "name" in tool_def, f"Tool {tool_name} missing 'name'"
             assert "description" in tool_def, f"Tool {tool_name} missing 'description'"
-            assert "input_schema" in tool_def, f"Tool {tool_name} missing 'input_schema'"
+            assert "input_schema" in tool_def, (
+                f"Tool {tool_name} missing 'input_schema'"
+            )
 
     @pytest.mark.skipif(not MCP_AVAILABLE, reason="MCP module not available")
     def test_execute_workflow_tool_requires_workflow_name(self):

@@ -69,8 +69,11 @@ class LearningJournal:
     ) -> JournalEntry:
         """Record."""
         entry = JournalEntry(
-            topic=topic, insight=insight, source=source,
-            confidence=confidence, tags=tags or [],
+            topic=topic,
+            insight=insight,
+            source=source,
+            confidence=confidence,
+            tags=tags or [],
         )
         self._entries.append(entry)
         return entry
@@ -96,7 +99,8 @@ class LearningJournal:
             "total_entries": self.size,
             "avg_confidence": (
                 sum(e.confidence for e in self._entries) / self.size
-                if self.size > 0 else 0.0
+                if self.size > 0
+                else 0.0
             ),
         }
 

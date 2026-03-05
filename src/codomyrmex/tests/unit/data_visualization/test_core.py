@@ -12,15 +12,17 @@ def test_theme_generation():
     assert "--primary: red" in css
     assert "--bg: black" in css
 
+
 def test_grid_layout():
     """Verify grid layout behavior."""
     grid = Grid(columns=3)
     grid.add_section("Test Section", "Content")
     assert len(grid.sections) == 1
-    assert grid.sections[0].width == f"{100/3}%"
+    assert grid.sections[0].width == f"{100 / 3}%"
 
     grid.add_section("Full Width", "Content", full_width=True)
     assert grid.sections[1].width == "100%"
+
 
 def test_export_html(tmp_path):
     """Verify export html behavior."""

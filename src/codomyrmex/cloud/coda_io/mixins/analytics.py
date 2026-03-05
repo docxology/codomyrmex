@@ -6,6 +6,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class AnalyticsMixin:
     """AnalyticsMixin class."""
 
@@ -115,4 +116,3 @@ class AnalyticsMixin:
         }
         path = f"/analytics/docs/{self._encode_id(doc_id)}/pages"
         return self._get(path, params=params)
-

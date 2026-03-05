@@ -1,4 +1,3 @@
-
 import asyncio
 import json
 import os
@@ -38,6 +37,7 @@ from codomyrmex.agents.core import (
 # CONCRETE TEST IMPLEMENTATIONS (ZERO-MOCK COMPLIANCE)
 # =============================================================================
 
+
 class InMemoryLLMClient:
     """In-memory LLM client for test isolation.
 
@@ -75,7 +75,10 @@ class ConcreteAgent(BaseAgent):
         capabilities: list[AgentCapabilities] = None,
         config: dict[str, Any] = None,
     ):
-        caps = capabilities or [AgentCapabilities.CODE_GENERATION, AgentCapabilities.TEXT_COMPLETION]
+        caps = capabilities or [
+            AgentCapabilities.CODE_GENERATION,
+            AgentCapabilities.TEXT_COMPLETION,
+        ]
         super().__init__(name, caps, config)
         self._execute_called = False
         self._stream_called = False
@@ -120,7 +123,10 @@ class AsyncAgent(BaseAgent):
     """Agent with async capabilities for testing."""
 
     def __init__(self, delay: float = 0.1):
-        super().__init__("async_agent", [AgentCapabilities.TEXT_COMPLETION, AgentCapabilities.STREAMING])
+        super().__init__(
+            "async_agent",
+            [AgentCapabilities.TEXT_COMPLETION, AgentCapabilities.STREAMING],
+        )
         self._delay = delay
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
@@ -147,6 +153,7 @@ class AsyncAgent(BaseAgent):
 # =============================================================================
 # FIXTURES
 # =============================================================================
+
 
 @pytest.fixture
 def in_memory_llm_client():

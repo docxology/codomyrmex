@@ -18,7 +18,7 @@ def detect_format_from_path(file_path: Path) -> str:
     Returns:
         Format string (e.g., "markdown", "json", "pdf")
     """
-    suffix = file_path.suffix.lower().lstrip('.')
+    suffix = file_path.suffix.lower().lstrip(".")
 
     format_mapping = {
         "md": "markdown",

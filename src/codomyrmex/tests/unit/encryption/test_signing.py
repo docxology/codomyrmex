@@ -41,7 +41,9 @@ class TestSignatureAlgorithm:
 @pytest.mark.unit
 class TestSignatureResult:
     def test_signature_stored(self):
-        r = SignatureResult(signature="abc123", algorithm=SignatureAlgorithm.HMAC_SHA256)
+        r = SignatureResult(
+            signature="abc123", algorithm=SignatureAlgorithm.HMAC_SHA256
+        )
         assert r.signature == "abc123"
         assert r.algorithm == SignatureAlgorithm.HMAC_SHA256
 
@@ -251,6 +253,9 @@ class TestSignAndVerifyFile:
         path = self._write_tmp(b"data")
         try:
             sig = sign_file(path, self._KEY, SignatureAlgorithm.HMAC_SHA512)
-            assert verify_file(path, sig, self._KEY, SignatureAlgorithm.HMAC_SHA512) is True
+            assert (
+                verify_file(path, sig, self._KEY, SignatureAlgorithm.HMAC_SHA512)
+                is True
+            )
         finally:
             path.unlink()

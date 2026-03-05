@@ -116,10 +116,14 @@ class TransportMessage:
             key: Secret key for signing.
         """
         payload_bytes = json.dumps(
-            self.payload, sort_keys=True, separators=(",", ":"),
+            self.payload,
+            sort_keys=True,
+            separators=(",", ":"),
         ).encode("utf-8")
         self.signature = hmac.new(
-            key.encode("utf-8"), payload_bytes, hashlib.sha256,
+            key.encode("utf-8"),
+            payload_bytes,
+            hashlib.sha256,
         ).hexdigest()
 
     def verify(self, key: str) -> bool:
@@ -134,10 +138,14 @@ class TransportMessage:
         if not self.signature:
             return False
         payload_bytes = json.dumps(
-            self.payload, sort_keys=True, separators=(",", ":"),
+            self.payload,
+            sort_keys=True,
+            separators=(",", ":"),
         ).encode("utf-8")
         expected = hmac.new(
-            key.encode("utf-8"), payload_bytes, hashlib.sha256,
+            key.encode("utf-8"),
+            payload_bytes,
+            hashlib.sha256,
         ).hexdigest()
         return hmac.compare_digest(self.signature, expected)
 

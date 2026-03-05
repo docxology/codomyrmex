@@ -30,6 +30,7 @@ class TargetingRule:
         operator: Comparison operator (eq, neq, in, contains, gt, lt, gte, lte).
         value: The value to compare with.
     """
+
     attribute: str
     operator: str
     value: Any
@@ -68,11 +69,16 @@ class TargetingRule:
         try:
             return op_fn(actual, self.value)
         except (TypeError, ValueError) as e:
-            logger.warning("Targeting rule comparison failed for attribute %s: %s", self.attribute, e)
+            logger.warning(
+                "Targeting rule comparison failed for attribute %s: %s",
+                self.attribute,
+                e,
+            )
             return False
 
     def _regex_match(self, actual: Any, pattern: str) -> bool:
         import re
+
         try:
             return bool(re.search(pattern, str(actual)))
         except re.error:
@@ -91,6 +97,7 @@ class FlagDefinition:
         metadata: Arbitrary metadata for the flag.
         description: Description of the flag's purpose.
     """
+
     name: str
     enabled: bool = True
     percentage: float = 100.0

@@ -116,7 +116,9 @@ class PluginDiscovery:
         Returns:
             DiscoveryResult with plugins found via entry points.
         """
-        result = DiscoveryResult(scan_sources=[f"entry_point:{self._entry_point_group}"])
+        result = DiscoveryResult(
+            scan_sources=[f"entry_point:{self._entry_point_group}"]
+        )
 
         try:
             eps = importlib.metadata.entry_points()
@@ -127,7 +129,9 @@ class PluginDiscovery:
                 group_eps = eps.get(self._entry_point_group, [])
             else:
                 group_eps = [
-                    ep for ep in eps if getattr(ep, "group", "") == self._entry_point_group
+                    ep
+                    for ep in eps
+                    if getattr(ep, "group", "") == self._entry_point_group
                 ]
 
             for ep in group_eps:

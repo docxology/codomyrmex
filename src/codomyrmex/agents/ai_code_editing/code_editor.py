@@ -1,4 +1,5 @@
 """Code Editor Agent Implementation."""
+
 from collections.abc import Iterator
 from typing import Any
 
@@ -42,22 +43,28 @@ class CodeEditor(BaseAgent):
         """
         try:
             # Extract language from context, metadata or default to python
-            language = request.context.get("language") or request.metadata.get("language", "python")
+            language = request.context.get("language") or request.metadata.get(
+                "language", "python"
+            )
 
             # Simple dispatch based on prompt content keywords (naive routing)
             if "refactor" in request.prompt.lower():
                 # Naively assume the context has 'code'
                 code = request.context.get("code", "") if request.context else ""
-                result_dict = ai_code_helpers.refactor_code_snippet(code, request.prompt, language=language)
+                result_dict = ai_code_helpers.refactor_code_snippet(
+                    code, request.prompt, language=language
+                )
                 result = result_dict.get("refactored_code", str(result_dict))
             else:
                 context_str = str(request.context) if request.context else None
-                result_dict = ai_code_helpers.generate_code_snippet(request.prompt, language=language, context=context_str)
+                result_dict = ai_code_helpers.generate_code_snippet(
+                    request.prompt, language=language, context=context_str
+                )
                 result = result_dict.get("generated_code", str(result_dict))
 
             return AgentResponse(content=result, request_id=request.id)
         except Exception as e:
-            raise AgentError(f"CodeEditor failed: {str(e)}") from e
+            raise AgentError(f"CodeEditor failed: {e!s}") from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream not supported for this wrapper yet."""
@@ -66,7 +73,7 @@ class CodeEditor(BaseAgent):
     def setup(self) -> None:
         """Setup Code Editor."""
         # Could check if optional deps (anthropic, openai) are installed
-        return None  # Optional setup hook — subclass may override
+        return  # Optional setup hook — subclass may override
 
     def test_connection(self) -> bool:
         """Test if underlying helpers are working by calling a real helper function."""
@@ -75,6 +82,7 @@ class CodeEditor(BaseAgent):
             from codomyrmex.agents.ai_code_editing.ai_code_helpers.models import (
                 CodeLanguage,
             )
+
             _ = list(CodeLanguage)
             return True
         except Exception as e:
@@ -100,15 +108,19 @@ class CodeEditor(BaseAgent):
         Returns:
             Analysis results including lines, complexity hints, and suggestions
         """
-        lines = code.strip().split('\n')
+        lines = code.strip().split("\n")
 
         # Basic static analysis
         analysis = {
             "total_lines": len(lines),
             "blank_lines": sum(1 for line in lines if not line.strip()),
-            "comment_lines": sum(1 for line in lines if line.strip().startswith('#')),
+            "comment_lines": sum(1 for line in lines if line.strip().startswith("#")),
             "has_docstring": '"""' in code or "'''" in code,
-            "imports": [line.strip() for line in lines if line.strip().startswith(('import ', 'from '))],
+            "imports": [
+                line.strip()
+                for line in lines
+                if line.strip().startswith(("import ", "from "))
+            ],
             "functions": [],
             "classes": [],
         }
@@ -116,14 +128,16 @@ class CodeEditor(BaseAgent):
         # Find function and class definitions
         for i, line in enumerate(lines):
             stripped = line.strip()
-            if stripped.startswith('def '):
-                name = stripped.split('(')[0].replace('def ', '')
+            if stripped.startswith("def "):
+                name = stripped.split("(")[0].replace("def ", "")
                 analysis["functions"].append({"name": name, "line": i + 1})
-            elif stripped.startswith('class '):
-                name = stripped.split('(')[0].split(':')[0].replace('class ', '')
+            elif stripped.startswith("class "):
+                name = stripped.split("(")[0].split(":")[0].replace("class ", "")
                 analysis["classes"].append({"name": name, "line": i + 1})
 
-        logger.debug(f"Analyzed code: {analysis['total_lines']} lines, {len(analysis['functions'])} functions")
+        logger.debug(
+            f"Analyzed code: {analysis['total_lines']} lines, {len(analysis['functions'])} functions"
+        )
         return analysis
 
     def explain_code(self, code: str, detail_level: str = "summary") -> str:
@@ -142,21 +156,27 @@ class CodeEditor(BaseAgent):
         explanation = []
         explanation.append(f"This code has {analysis['total_lines']} lines.")
 
-        if analysis['classes']:
-            class_names = [c['name'] for c in analysis['classes']]
-            explanation.append(f"It defines {len(class_names)} class(es): {', '.join(class_names)}.")
+        if analysis["classes"]:
+            class_names = [c["name"] for c in analysis["classes"]]
+            explanation.append(
+                f"It defines {len(class_names)} class(es): {', '.join(class_names)}."
+            )
 
-        if analysis['functions']:
-            func_names = [f['name'] for f in analysis['functions']]
-            explanation.append(f"It defines {len(func_names)} function(s): {', '.join(func_names)}.")
+        if analysis["functions"]:
+            func_names = [f["name"] for f in analysis["functions"]]
+            explanation.append(
+                f"It defines {len(func_names)} function(s): {', '.join(func_names)}."
+            )
 
-        if analysis['imports']:
+        if analysis["imports"]:
             explanation.append(f"It imports from {len(analysis['imports'])} module(s).")
 
         if detail_level == "detailed":
-            if analysis['has_docstring']:
+            if analysis["has_docstring"]:
                 explanation.append("The code includes documentation strings.")
-            if analysis['comment_lines'] > 0:
-                explanation.append(f"There are {analysis['comment_lines']} comment lines.")
+            if analysis["comment_lines"] > 0:
+                explanation.append(
+                    f"There are {analysis['comment_lines']} comment lines."
+                )
 
         return " ".join(explanation)

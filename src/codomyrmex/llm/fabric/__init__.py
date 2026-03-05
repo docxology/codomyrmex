@@ -10,12 +10,6 @@ from .fabric_config_manager import FabricConfigManager
 from .fabric_manager import FabricManager
 from .fabric_orchestrator import FabricOrchestrator
 
-__all__ = [
-    'FabricManager',
-    'FabricOrchestrator',
-    'FabricConfigManager'
-]
+__all__ = ["FabricConfigManager", "FabricManager", "FabricOrchestrator"]
 
-__version__ = '1.0.0'
-
-
+__version__ = "1.0.0"

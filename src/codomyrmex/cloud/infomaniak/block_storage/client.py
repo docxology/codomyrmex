@@ -71,7 +71,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         availability_zone: str | None = None,
         snapshot_id: str | None = None,
         image_id: str | None = None,
-        **kwargs
+        **kwargs,
     ) -> dict[str, Any] | None:
         """
         Create a new block storage volume.
@@ -98,7 +98,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
                 availability_zone=availability_zone,
                 snapshot_id=snapshot_id,
                 image_id=image_id,
-                **kwargs
+                **kwargs,
             )
             logger.info(f"Created volume: {volume.id}")
             return self._volume_to_dict(volume)
@@ -145,10 +145,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             return False
 
     def attach_volume(
-        self,
-        volume_id: str,
-        instance_id: str,
-        device: str | None = None
+        self, volume_id: str, instance_id: str, device: str | None = None
     ) -> bool:
         """
         Attach a volume to an instance.
@@ -163,9 +160,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         """
         try:
             self._conn.compute.create_volume_attachment(
-                server=instance_id,
-                volume_id=volume_id,
-                device=device
+                server=instance_id, volume_id=volume_id, device=device
             )
             logger.info(f"Attached volume {volume_id} to {instance_id}")
             return True
@@ -190,8 +185,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             for attach in attachments:
                 if attach.volume_id == volume_id:
                     self._conn.compute.delete_volume_attachment(
-                        attach.id,
-                        server=instance_id
+                        attach.id, server=instance_id
                     )
                     logger.info(f"Detached volume {volume_id} from {instance_id}")
                     return True
@@ -235,7 +229,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         name: str,
         description: str | None = None,
         incremental: bool = False,
-        force: bool = False
+        force: bool = False,
     ) -> dict[str, Any] | None:
         """
         Create a backup of a volume.
@@ -256,7 +250,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
                 name=name,
                 description=description,
                 is_incremental=incremental,
-                force=force
+                force=force,
             )
             logger.info(f"Created backup: {backup.id}")
             return {
@@ -270,10 +264,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             return None
 
     def restore_backup(
-        self,
-        backup_id: str,
-        volume_id: str | None = None,
-        name: str | None = None
+        self, backup_id: str, volume_id: str | None = None, name: str | None = None
     ) -> dict[str, Any] | None:
         """
         Restore a backup to a new or existing volume.
@@ -288,9 +279,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         """
         try:
             result = self._conn.block_storage.restore_backup(
-                backup_id,
-                volume_id=volume_id,
-                name=name
+                backup_id, volume_id=volume_id, name=name
             )
             logger.info(f"Restored backup {backup_id}")
             return {"volume_id": result.volume_id}
@@ -345,15 +334,12 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         volume_id: str,
         name: str,
         description: str | None = None,
-        force: bool = False
+        force: bool = False,
     ) -> dict[str, Any] | None:
         """Create a volume snapshot."""
         try:
             snapshot = self._conn.block_storage.create_snapshot(
-                volume_id=volume_id,
-                name=name,
-                description=description,
-                force=force
+                volume_id=volume_id, name=name, description=description, force=force
             )
             logger.info(f"Created snapshot: {snapshot.id}")
             return {

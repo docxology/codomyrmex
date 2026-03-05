@@ -16,6 +16,7 @@ from codomyrmex.concurrency.tasks.task_worker import TaskResult
 # AggregateResult dataclass
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestAggregateResult:
     """Tests for AggregateResult dataclass."""
@@ -50,6 +51,7 @@ class TestAggregateResult:
 # ResultAggregator - basic operations
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestResultAggregatorBasic:
     """Tests for ResultAggregator add, count, clear."""
@@ -60,21 +62,33 @@ class TestResultAggregatorBasic:
 
     def test_add_single_result(self):
         agg = ResultAggregator()
-        result = TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=10.0)
+        result = TaskResult(
+            task_id="t1", worker_id="w1", success=True, duration_ms=10.0
+        )
         agg.add(result)
         assert agg.count == 1
 
     def test_add_multiple_results(self):
         agg = ResultAggregator()
         for i in range(5):
-            agg.add(TaskResult(task_id=f"t{i}", worker_id="w1", success=True, duration_ms=1.0))
+            agg.add(
+                TaskResult(
+                    task_id=f"t{i}", worker_id="w1", success=True, duration_ms=1.0
+                )
+            )
         assert agg.count == 5
 
     def test_add_batch(self):
         agg = ResultAggregator()
         batch = [
             TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=5.0),
-            TaskResult(task_id="t2", worker_id="w1", success=False, error="fail", duration_ms=3.0),
+            TaskResult(
+                task_id="t2",
+                worker_id="w1",
+                success=False,
+                error="fail",
+                duration_ms=3.0,
+            ),
             TaskResult(task_id="t3", worker_id="w2", success=True, duration_ms=7.0),
         ]
         agg.add_batch(batch)
@@ -98,6 +112,7 @@ class TestResultAggregatorBasic:
 # ResultAggregator - aggregate method
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestResultAggregatorAggregate:
     """Tests for ResultAggregator.aggregate()."""
@@ -115,12 +130,14 @@ class TestResultAggregatorAggregate:
     def test_aggregate_all_success(self):
         agg = ResultAggregator()
         for i in range(3):
-            agg.add(TaskResult(
-                task_id=f"t{i}",
-                worker_id="w1",
-                success=True,
-                duration_ms=10.0,
-            ))
+            agg.add(
+                TaskResult(
+                    task_id=f"t{i}",
+                    worker_id="w1",
+                    success=True,
+                    duration_ms=10.0,
+                )
+            )
         result = agg.aggregate()
         assert result.total_tasks == 3
         assert result.successful == 3
@@ -130,13 +147,15 @@ class TestResultAggregatorAggregate:
     def test_aggregate_all_failed(self):
         agg = ResultAggregator()
         for i in range(2):
-            agg.add(TaskResult(
-                task_id=f"t{i}",
-                worker_id="w1",
-                success=False,
-                error="boom",
-                duration_ms=5.0,
-            ))
+            agg.add(
+                TaskResult(
+                    task_id=f"t{i}",
+                    worker_id="w1",
+                    success=False,
+                    error="boom",
+                    duration_ms=5.0,
+                )
+            )
         result = agg.aggregate()
         assert result.total_tasks == 2
         assert result.successful == 0
@@ -144,9 +163,15 @@ class TestResultAggregatorAggregate:
 
     def test_aggregate_mixed(self):
         agg = ResultAggregator()
-        agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=10.0))
-        agg.add(TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=20.0))
-        agg.add(TaskResult(task_id="t3", worker_id="w2", success=True, duration_ms=30.0))
+        agg.add(
+            TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=10.0)
+        )
+        agg.add(
+            TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=20.0)
+        )
+        agg.add(
+            TaskResult(task_id="t3", worker_id="w2", success=True, duration_ms=30.0)
+        )
         result = agg.aggregate()
         assert result.total_tasks == 3
         assert result.successful == 2
@@ -156,7 +181,9 @@ class TestResultAggregatorAggregate:
     def test_aggregate_worker_stats(self):
         agg = ResultAggregator()
         agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=1.0))
-        agg.add(TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=1.0))
+        agg.add(
+            TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=1.0)
+        )
         agg.add(TaskResult(task_id="t3", worker_id="w2", success=True, duration_ms=1.0))
         agg.add(TaskResult(task_id="t4", worker_id="w2", success=True, duration_ms=1.0))
         result = agg.aggregate()
@@ -176,16 +203,24 @@ class TestResultAggregatorAggregate:
 
     def test_aggregate_mean_duration(self):
         agg = ResultAggregator()
-        agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=100.0))
-        agg.add(TaskResult(task_id="t2", worker_id="w1", success=True, duration_ms=200.0))
-        agg.add(TaskResult(task_id="t3", worker_id="w1", success=True, duration_ms=300.0))
+        agg.add(
+            TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=100.0)
+        )
+        agg.add(
+            TaskResult(task_id="t2", worker_id="w1", success=True, duration_ms=200.0)
+        )
+        agg.add(
+            TaskResult(task_id="t3", worker_id="w1", success=True, duration_ms=300.0)
+        )
         result = agg.aggregate()
         assert result.mean_duration_ms == 200.0
 
     def test_aggregate_success_rate(self):
         agg = ResultAggregator()
         agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=1.0))
-        agg.add(TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=1.0))
+        agg.add(
+            TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=1.0)
+        )
         result = agg.aggregate()
         assert result.success_rate == 0.5
 
@@ -208,6 +243,7 @@ class TestResultAggregatorAggregate:
 # ResultAggregator - edge cases
 # ===========================================================================
 
+
 @pytest.mark.unit
 class TestResultAggregatorEdgeCases:
     """Edge case tests for ResultAggregator."""
@@ -215,35 +251,44 @@ class TestResultAggregatorEdgeCases:
     def test_single_worker_many_tasks(self):
         agg = ResultAggregator()
         for i in range(100):
-            agg.add(TaskResult(
-                task_id=f"t{i}",
-                worker_id="w1",
-                success=i % 3 != 0,
-                duration_ms=float(i),
-            ))
+            agg.add(
+                TaskResult(
+                    task_id=f"t{i}",
+                    worker_id="w1",
+                    success=i % 3 != 0,
+                    duration_ms=float(i),
+                )
+            )
         result = agg.aggregate()
         assert result.total_tasks == 100
-        assert result.worker_stats["w1"]["success"] + result.worker_stats["w1"]["failed"] == 100
+        assert (
+            result.worker_stats["w1"]["success"] + result.worker_stats["w1"]["failed"]
+            == 100
+        )
 
     def test_many_workers(self):
         agg = ResultAggregator()
         for i in range(10):
-            agg.add(TaskResult(
-                task_id=f"t{i}",
-                worker_id=f"w{i}",
-                success=True,
-                duration_ms=1.0,
-            ))
+            agg.add(
+                TaskResult(
+                    task_id=f"t{i}",
+                    worker_id=f"w{i}",
+                    success=True,
+                    duration_ms=1.0,
+                )
+            )
         result = agg.aggregate()
         assert len(result.worker_stats) == 10
 
     def test_add_and_batch_combined(self):
         agg = ResultAggregator()
         agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=1.0))
-        agg.add_batch([
-            TaskResult(task_id="t2", worker_id="w1", success=True, duration_ms=2.0),
-            TaskResult(task_id="t3", worker_id="w1", success=True, duration_ms=3.0),
-        ])
+        agg.add_batch(
+            [
+                TaskResult(task_id="t2", worker_id="w1", success=True, duration_ms=2.0),
+                TaskResult(task_id="t3", worker_id="w1", success=True, duration_ms=3.0),
+            ]
+        )
         assert agg.count == 3
         result = agg.aggregate()
         assert result.total_tasks == 3

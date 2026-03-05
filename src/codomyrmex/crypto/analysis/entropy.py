@@ -48,7 +48,9 @@ def shannon_entropy(data: bytes | str) -> float:
             p = count / total
             entropy -= p * math.log2(p)
 
-    logger.debug("Shannon entropy calculated: %.4f bits over %d symbols", entropy, total)
+    logger.debug(
+        "Shannon entropy calculated: %.4f bits over %d symbols", entropy, total
+    )
     return entropy
 
 
@@ -123,34 +125,33 @@ def _incomplete_gamma_upper(a: float, x: float) -> float:
             return 1.0
         p = sum_val * math.exp(log_val)
         return max(0.0, min(1.0, 1.0 - p))
-    else:
-        # Use Lentz's continued fraction for Q(a, x)
-        # Q(a,x) = exp(-x + a*ln(x) - lgamma(a)) * CF
-        b = x + 1.0 - a
-        c = 1.0 / 1e-30
-        d = 1.0 / b
-        h = d
-        for i in range(1, 300):
-            an = -i * (i - a)
-            b += 2.0
-            d = an * d + b
-            if abs(d) < 1e-30:
-                d = 1e-30
-            c = b + an / c
-            if abs(c) < 1e-30:
-                c = 1e-30
-            d = 1.0 / d
-            delta = d * c
-            h *= delta
-            if abs(delta - 1.0) < 1e-12:
-                break
-        log_val = -x + a * math.log(x) - math.lgamma(a)
-        if log_val > 700:
-            return 1.0
-        if log_val < -700:
-            return 0.0
-        q = h * math.exp(log_val)
-        return max(0.0, min(1.0, q))
+    # Use Lentz's continued fraction for Q(a, x)
+    # Q(a,x) = exp(-x + a*ln(x) - lgamma(a)) * CF
+    b = x + 1.0 - a
+    c = 1.0 / 1e-30
+    d = 1.0 / b
+    h = d
+    for i in range(1, 300):
+        an = -i * (i - a)
+        b += 2.0
+        d = an * d + b
+        if abs(d) < 1e-30:
+            d = 1e-30
+        c = b + an / c
+        if abs(c) < 1e-30:
+            c = 1e-30
+        d = 1.0 / d
+        delta = d * c
+        h *= delta
+        if abs(delta - 1.0) < 1e-12:
+            break
+    log_val = -x + a * math.log(x) - math.lgamma(a)
+    if log_val > 700:
+        return 1.0
+    if log_val < -700:
+        return 0.0
+    q = h * math.exp(log_val)
+    return max(0.0, min(1.0, q))
 
 
 def chi_squared_test(data: bytes) -> ChiSquaredResult:
@@ -188,7 +189,9 @@ def chi_squared_test(data: bytes) -> ChiSquaredResult:
 
     logger.debug(
         "Chi-squared test: statistic=%.2f, p_value=%.6f, uniform=%s",
-        chi2, p_value, uniform,
+        chi2,
+        p_value,
+        uniform,
     )
     return ChiSquaredResult(statistic=chi2, p_value=p_value, uniform=uniform)
 

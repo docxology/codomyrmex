@@ -4,7 +4,6 @@ Follows Codomyrmex conventions for logging and structure.
 """
 
 import time
-from typing import List, Optional
 
 import uvicorn
 from fastapi import APIRouter, FastAPI, HTTPException, status
@@ -22,14 +21,12 @@ class ItemBase(BaseModel):
     """Base Item model."""
 
     name: str = Field(..., min_length=1, description="Name of the item")
-    description: Optional[str] = Field(None, description="Optional description")
+    description: str | None = Field(None, description="Optional description")
     price: float = Field(..., gt=0, description="Price of the item")
 
 
 class ItemCreate(ItemBase):
     """Model for creating a new item."""
-
-    pass
 
 
 class Item(ItemBase):
@@ -64,7 +61,7 @@ async def create_item(item: ItemCreate):
     return item_dict
 
 
-@router.get("/", response_model=List[Item])
+@router.get("/", response_model=list[Item])
 async def read_items(skip: int = 0, limit: int = 10):
     """Retrieve items with pagination."""
     return list(fake_items_db.values())[skip : skip + limit]

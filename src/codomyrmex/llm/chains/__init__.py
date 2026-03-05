@@ -12,10 +12,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Generic, Optional, TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class ChainType(Enum):
     """Types of chains."""
+
     SIMPLE = "simple"
     SEQUENTIAL = "sequential"
     PARALLEL = "parallel"
@@ -23,9 +25,11 @@ class ChainType(Enum):
     MAP_REDUCE = "map_reduce"
     ROUTER = "router"
 
+
 @dataclass
 class ChainStep:
     """A single step in a chain."""
+
     name: str
     prompt_template: str
     output_key: str = "output"
@@ -45,9 +49,11 @@ class ChainStep:
             return self.parser(output)
         return output
 
+
 @dataclass
 class ChainResult:
     """Result of running a chain."""
+
     success: bool
     output: Any
     steps: list[dict[str, Any]] = field(default_factory=list)
@@ -61,6 +67,7 @@ class ChainResult:
                 return step.get("output")
         return None
 
+
 class Chain(ABC):
     """Abstract base class for chains."""
 
@@ -71,14 +78,16 @@ class Chain(ABC):
         self.steps: list[ChainStep] = []
 
     @abstractmethod
-    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+    def run(
+        self, input_data: dict[str, Any], llm_func: Callable[[str], str]
+    ) -> ChainResult:
         """Run the chain with input data."""
-        pass
 
-    def add_step(self, step: ChainStep) -> 'Chain':
+    def add_step(self, step: ChainStep) -> "Chain":
         """Add a step to the chain."""
         self.steps.append(step)
         return self
+
 
 class SimpleChain(Chain):
     """A simple single-step chain."""
@@ -89,7 +98,9 @@ class SimpleChain(Chain):
         super().__init__(name)
         self.prompt_template = prompt_template
 
-    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+    def run(
+        self, input_data: dict[str, Any], llm_func: Callable[[str], str]
+    ) -> ChainResult:
         """Run the operation."""
         try:
             prompt = self.prompt_template
@@ -107,12 +118,15 @@ class SimpleChain(Chain):
         except Exception as e:
             return ChainResult(success=False, output=None, error=str(e))
 
+
 class SequentialChain(Chain):
     """A chain that runs steps sequentially, passing context between them."""
 
     chain_type = ChainType.SEQUENTIAL
 
-    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+    def run(
+        self, input_data: dict[str, Any], llm_func: Callable[[str], str]
+    ) -> ChainResult:
         """Run the operation."""
         context = dict(input_data)
         step_results = []
@@ -124,15 +138,19 @@ class SequentialChain(Chain):
                 parsed_output = step.parse_output(output)
 
                 context[step.output_key] = parsed_output
-                step_results.append({
-                    "name": step.name,
-                    "prompt": prompt,
-                    "output": parsed_output,
-                })
+                step_results.append(
+                    {
+                        "name": step.name,
+                        "prompt": prompt,
+                        "output": parsed_output,
+                    }
+                )
 
             return ChainResult(
                 success=True,
-                output=context.get(self.steps[-1].output_key if self.steps else "output"),
+                output=context.get(
+                    self.steps[-1].output_key if self.steps else "output"
+                ),
                 steps=step_results,
                 context=context,
             )
@@ -145,6 +163,7 @@ class SequentialChain(Chain):
                 error=str(e),
             )
 
+
 class ChainOfThought(SequentialChain):
     """A chain that implements chain-of-thought reasoning."""
 
@@ -152,9 +171,10 @@ class ChainOfThought(SequentialChain):
         super().__init__(name)
 
         # Add reasoning step
-        self.add_step(ChainStep(
-            name="reasoning",
-            prompt_template="""Think through this step-by-step:
+        self.add_step(
+            ChainStep(
+                name="reasoning",
+                prompt_template="""Think through this step-by-step:
 
 Question: {question}
 
@@ -164,20 +184,24 @@ Let's approach this systematically:
 3. Finally, I'll work through to the answer...
 
 Reasoning:""",
-            output_key="reasoning",
-        ))
+                output_key="reasoning",
+            )
+        )
 
         # Add answer extraction step
-        self.add_step(ChainStep(
-            name="answer",
-            prompt_template="""Based on this reasoning:
+        self.add_step(
+            ChainStep(
+                name="answer",
+                prompt_template="""Based on this reasoning:
 {reasoning}
 
 Now provide a clear, concise answer to: {question}
 
 Answer:""",
-            output_key="answer",
-        ))
+                output_key="answer",
+            )
+        )
+
 
 class ReActChain(Chain):
     """A chain implementing the ReAct (Reason + Act) pattern."""
@@ -188,13 +212,15 @@ class ReActChain(Chain):
         self,
         tools: dict[str, Callable[[str], str]],
         max_iterations: int = 5,
-        name: str = "react_chain"
+        name: str = "react_chain",
     ):
         super().__init__(name)
         self.tools = tools
         self.max_iterations = max_iterations
 
-    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+    def run(
+        self, input_data: dict[str, Any], llm_func: Callable[[str], str]
+    ) -> ChainResult:
         """Run the operation."""
         context = dict(input_data)
         step_results = []
@@ -224,14 +250,15 @@ Thought:"""
         try:
             for i in range(self.max_iterations):
                 prompt = base_prompt.format(
-                    question=context.get("question", ""),
-                    scratchpad=scratchpad
+                    question=context.get("question", ""), scratchpad=scratchpad
                 )
 
                 response = llm_func(prompt)
 
                 # Parse action
-                action_match = re.search(r'Action:\s*(\w+)\[(.*?)\]', response, re.DOTALL)
+                action_match = re.search(
+                    r"Action:\s*(\w+)\[(.*?)\]", response, re.DOTALL
+                )
                 if action_match:
                     tool_name = action_match.group(1)
                     tool_input = action_match.group(2).strip()
@@ -246,14 +273,18 @@ Thought:"""
 
                     if tool_name in self.tools:
                         observation = self.tools[tool_name](tool_input)
-                        scratchpad += f"\nThought: {response}\nObservation: {observation}"
-                        step_results.append({
-                            "name": f"step_{i}",
-                            "thought": response,
-                            "action": tool_name,
-                            "action_input": tool_input,
-                            "observation": observation,
-                        })
+                        scratchpad += (
+                            f"\nThought: {response}\nObservation: {observation}"
+                        )
+                        step_results.append(
+                            {
+                                "name": f"step_{i}",
+                                "thought": response,
+                                "action": tool_name,
+                                "action_input": tool_input,
+                                "observation": observation,
+                            }
+                        )
                     else:
                         scratchpad += f"\nThought: {response}\nObservation: Tool '{tool_name}' not found."
                 else:
@@ -274,6 +305,7 @@ Thought:"""
                 error=str(e),
             )
 
+
 def create_chain(chain_type: ChainType, **kwargs) -> Chain:
     """Factory function to create chains."""
     chains = {
@@ -287,35 +319,38 @@ def create_chain(chain_type: ChainType, **kwargs) -> Chain:
 
     return chain_class(**kwargs)
 
+
 # Output parsers
 def json_parser(output: str) -> dict:
     """Parse JSON from output."""
     # Try to extract JSON from markdown code blocks
-    json_match = re.search(r'```(?:json)?\s*([\s\S]*?)```', output)
+    json_match = re.search(r"```(?:json)?\s*([\s\S]*?)```", output)
     if json_match:
         return json.loads(json_match.group(1))
     return json.loads(output)
 
+
 def list_parser(output: str) -> list[str]:
     """Parse a numbered or bulleted list."""
-    lines = output.strip().split('\n')
+    lines = output.strip().split("\n")
     items = []
     for line in lines:
         # Remove numbering and bullets
-        cleaned = re.sub(r'^[\d\.\-\*\•]+\s*', '', line.strip())
+        cleaned = re.sub(r"^[\d\.\-\*\•]+\s*", "", line.strip())
         if cleaned:
             items.append(cleaned)
     return items
 
+
 __all__ = [
-    "ChainType",
-    "ChainStep",
-    "ChainResult",
     "Chain",
-    "SimpleChain",
-    "SequentialChain",
     "ChainOfThought",
+    "ChainResult",
+    "ChainStep",
+    "ChainType",
     "ReActChain",
+    "SequentialChain",
+    "SimpleChain",
     "create_chain",
     "json_parser",
     "list_parser",

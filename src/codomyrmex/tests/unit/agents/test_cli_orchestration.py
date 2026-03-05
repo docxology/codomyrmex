@@ -12,6 +12,7 @@ try:
         reset_config,
         set_config,
     )
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -64,7 +65,6 @@ class TestCLICommands:
         """Test handling of unknown commands."""
         # This would be tested by calling main() with unknown command
         # In practice, argparse would handle this
-        pass
 
     def test_cli_error_handling(self):
         """Test CLI error handling."""
@@ -124,7 +124,7 @@ class TestCLIOutputFormatting:
         config = AgentConfig(
             claude_api_key="secret-key",
             codex_api_key="another-secret",
-            opencode_api_key="opencode-secret"
+            opencode_api_key="opencode-secret",
         )
 
         config_dict = config.to_dict()
@@ -168,6 +168,7 @@ class TestCLIConfigurationIntegration:
 # ============================================================================
 # Agent Command Tests
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestJulesCommands:
@@ -299,7 +300,11 @@ class TestGeminiCommands:
         client = GeminiClient()
         # GeminiClient is API-based, not CLI-based, so test its is_available method
         # which checks if the client was initialized successfully
-        available = client.is_available if hasattr(client, 'is_available') else client.client is not None
+        available = (
+            client.is_available
+            if hasattr(client, "is_available")
+            else client.client is not None
+        )
 
         # Should return boolean
         assert isinstance(available, bool)
@@ -387,11 +392,7 @@ class TestOrchestratorCommands:
 
     def test_agent_request_creation(self):
         """Test agent request creation with context."""
-        request = AgentRequest(
-            prompt="test",
-            context={"key": "value"},
-            timeout=30
-        )
+        request = AgentRequest(prompt="test", context={"key": "value"}, timeout=30)
 
         assert request.prompt == "test"
         assert request.context == {"key": "value"}
@@ -399,11 +400,7 @@ class TestOrchestratorCommands:
 
     def test_agent_response_structure(self):
         """Test agent response structure."""
-        response = AgentResponse(
-            content="test content",
-            error=None,
-            execution_time=1.5
-        )
+        response = AgentResponse(content="test content", error=None, execution_time=1.5)
 
         assert response.content == "test content"
         assert response.is_success()
@@ -483,6 +480,7 @@ class TestCommonOperations:
 # Config Management Tests
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestConfigCommands:
     """Test config management commands."""
@@ -537,6 +535,7 @@ class TestConfigCommands:
 # Orchestrator Select Tests
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestOrchestratorSelect:
     """Test orchestrator select-by-capability command."""
@@ -547,6 +546,7 @@ class TestOrchestratorSelect:
 
         try:
             from codomyrmex.agents.jules import JulesClient
+
             agents = [JulesClient()]
             orchestrator = AgentOrchestrator(agents)
 
@@ -560,6 +560,7 @@ class TestOrchestratorSelect:
 # ============================================================================
 # Droid Enhancement Tests
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestDroidEnhancements:
@@ -578,7 +579,9 @@ class TestDroidEnhancements:
 
         try:
             config = DroidConfig()
-            with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", delete=False, suffix=".json"
+            ) as f:
                 temp_path = f.name
 
             save_config_to_file(config, temp_path)
@@ -601,7 +604,9 @@ class TestDroidEnhancements:
         from codomyrmex.agents.droid import TodoItem, TodoManager
 
         try:
-            with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", delete=False, suffix=".txt"
+            ) as f:
                 temp_path = f.name
                 f.write("[TODO]\ntask1 | description1 | outcomes1\n")
 
@@ -622,6 +627,7 @@ class TestDroidEnhancements:
 # ============================================================================
 # Task Planner Tests
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestTaskPlannerCommands:
@@ -675,6 +681,7 @@ class TestTaskPlannerCommands:
 # Message Bus Tests
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestMessageBusCommands:
     """Test message bus commands."""
@@ -688,9 +695,7 @@ class TestMessageBusCommands:
             assert bus is not None
 
             message = Message(
-                sender="test",
-                message_type="test_type",
-                content="test content"
+                sender="test", message_type="test_type", content="test content"
             )
             assert message.sender == "test"
             assert message.message_type == "test_type"
@@ -707,6 +712,7 @@ class TestMessageBusCommands:
 
             # Test subscribe
             handler_called = []
+
             def test_handler(msg):
                 handler_called.append(msg)
 
@@ -714,11 +720,8 @@ class TestMessageBusCommands:
 
             # Test publish
             from codomyrmex.agents.generic import Message
-            message = Message(
-                sender="test",
-                message_type="test_type",
-                content="test"
-            )
+
+            message = Message(sender="test", message_type="test_type", content="test")
             bus.publish(message)
 
             # Handler should have been called
@@ -730,4 +733,3 @@ class TestMessageBusCommands:
         except Exception:
             # May fail if dependencies not available
             pass
-

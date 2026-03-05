@@ -16,6 +16,7 @@ from . import coordinates, four_d, physics, rendering, three_d, world_models
 
 def cli_commands():
     """Return CLI commands for the spatial module."""
+
     def _list_coordinate_systems():
         """List coordinate systems."""
         print("Spatial Module - Coordinate Systems:")
@@ -42,12 +43,11 @@ def cli_commands():
 
 
 __all__ = [
-    "three_d",
-    "four_d",
-    "world_models",
-    "coordinates",
-    "rendering",
-    "physics",
     "cli_commands",
+    "coordinates",
+    "four_d",
+    "physics",
+    "rendering",
+    "three_d",
+    "world_models",
 ]
-

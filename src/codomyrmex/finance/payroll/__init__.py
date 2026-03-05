@@ -2,4 +2,4 @@
 
 from .processor import PayrollError, PayrollProcessor, PayStub
 
-__all__ = ["PayrollProcessor", "PayStub", "PayrollError"]
+__all__ = ["PayStub", "PayrollError", "PayrollProcessor"]

@@ -107,8 +107,7 @@ class TestUpdateReadmeMd:
             "# Project\n\n"
             "## Directory Contents\n\n"
             "Old content here.\n\n"
-            "## Next Section\n"
-            + extra_content
+            "## Next Section\n" + extra_content
         )
         return readme
 
@@ -146,10 +145,7 @@ class TestUpdateAgentsMdList:
     def _make_agents_md(self, path: Path) -> Path:
         agents = path / "AGENTS.md"
         agents.write_text(
-            "# AGENTS\n\n"
-            "## Active Components\n\n"
-            "Old entry.\n\n"
-            "## Other Section\n"
+            "# AGENTS\n\n## Active Components\n\nOld entry.\n\n## Other Section\n"
         )
         return agents
 
@@ -220,9 +216,7 @@ class TestUpdateRootDocs:
             "# AGENTS\n\n## Active Components\n\nOld.\n\n## More\n"
         )
         # __init__.py with markers
-        (src / "__init__.py").write_text(
-            '_submodules = ["old"]\n__all__ = ["old"]\n'
-        )
+        (src / "__init__.py").write_text('_submodules = ["old"]\n__all__ = ["old"]\n')
         # A real subpackage
         _make_package(src, "my_module")
         return src
@@ -254,7 +248,9 @@ class TestUpdateSpec:
         )
         return spec
 
-    def test_update_spec_with_no_modules_prints_nothing_missing(self, tmp_path: Path, capsys):
+    def test_update_spec_with_no_modules_prints_nothing_missing(
+        self, tmp_path: Path, capsys
+    ):
         self._make_spec(tmp_path)
         # No packages in tmp_path → no missing modules
         update_spec(tmp_path)
@@ -273,7 +269,9 @@ class TestUpdateSpec:
         content = (tmp_path / "SPEC.md").read_text()
         assert "brand_new_module" in content
 
-    def test_update_spec_missing_specialized_section_handled(self, tmp_path: Path, capsys):
+    def test_update_spec_missing_specialized_section_handled(
+        self, tmp_path: Path, capsys
+    ):
         spec = tmp_path / "SPEC.md"
         spec.write_text("# SPEC\n\nNo specialized layer here.\n")
         update_spec(tmp_path)

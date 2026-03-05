@@ -39,8 +39,7 @@ def identity_list_levels() -> dict[str, Any]:
         return {
             "status": "success",
             "levels": [
-                {"name": vl.name, "value": vl.value}
-                for vl in verification_level
+                {"name": vl.name, "value": vl.value} for vl in verification_level
             ],
         }
     except Exception as exc:

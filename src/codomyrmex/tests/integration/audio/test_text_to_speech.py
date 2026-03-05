@@ -15,7 +15,9 @@ from codomyrmex.audio.text_to_speech.providers import (
 from codomyrmex.audio.text_to_speech.synthesizer import Synthesizer
 
 # Constants for testing
-TEST_TEXT = "This is a zero mock functional test of the Codomyrmex text to speech system."
+TEST_TEXT = (
+    "This is a zero mock functional test of the Codomyrmex text to speech system."
+)
 
 
 @pytest.mark.integration

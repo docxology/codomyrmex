@@ -52,8 +52,11 @@ class TestLazyDependencies:
         import inspect
 
         from codomyrmex.data_visualization.themes import apply_theme
+
         source = inspect.getsource(apply_theme)
-        assert "import matplotlib" in source, "apply_theme should lazily import matplotlib"
+        assert "import matplotlib" in source, (
+            "apply_theme should lazily import matplotlib"
+        )
 
     def test_chromadb_not_eagerly_loaded(self) -> None:
         """chromadb should not be imported by the vector store module."""
@@ -92,7 +95,9 @@ class TestBenchmarkStartupUtilities:
 
     def test_measure_import_time_returns_dict(self) -> None:
         """measure_import_time should return a proper dict."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
+        sys.path.insert(
+            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
+        )
         try:
             from benchmark_startup import measure_import_time
 
@@ -106,7 +111,9 @@ class TestBenchmarkStartupUtilities:
 
     def test_measure_import_time_nonexistent_module(self) -> None:
         """Nonexistent module should return negative time."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
+        sys.path.insert(
+            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
+        )
         try:
             from benchmark_startup import measure_import_time
 
@@ -117,7 +124,9 @@ class TestBenchmarkStartupUtilities:
 
     def test_benchmark_cli_startup_returns_dict(self) -> None:
         """benchmark_cli_startup should return timing data."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
+        sys.path.insert(
+            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
+        )
         try:
             from benchmark_startup import benchmark_cli_startup
 
@@ -135,7 +144,9 @@ class TestBenchmarkStartupUtilities:
 
     def test_analyse_import_weights(self) -> None:
         """analyse_import_weights should return sorted list."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
+        sys.path.insert(
+            0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance"
+        )
         try:
             from benchmark_startup import analyse_import_weights
 
@@ -146,6 +157,9 @@ class TestBenchmarkStartupUtilities:
             assert isinstance(results, list)
             # Results should be sorted by import_time descending
             if len(results) >= 2:
-                assert results[0]["import_time_seconds"] >= results[-1]["import_time_seconds"]
+                assert (
+                    results[0]["import_time_seconds"]
+                    >= results[-1]["import_time_seconds"]
+                )
         finally:
             sys.path.pop(0)

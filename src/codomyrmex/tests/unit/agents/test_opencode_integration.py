@@ -14,6 +14,7 @@ try:
     from codomyrmex.agents.generic import AgentOrchestrator
     from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
     from codomyrmex.tests.unit.agents.helpers import OPENCODE_AVAILABLE
+
     _HAS_AGENTS = True
 except ImportError:
     _HAS_AGENTS = False
@@ -68,8 +69,7 @@ class TestOpenCodeClient:
         """Test execution with context parameters using real CLI."""
         client = OpenCodeClient()
         request = AgentRequest(
-            prompt="write unit tests",
-            context={"init": False, "language": "python"}
+            prompt="write unit tests", context={"init": False, "language": "python"}
         )
 
         try:
@@ -85,10 +85,7 @@ class TestOpenCodeClient:
     def test_opencode_client_execute_with_init(self):
         """Test execution with initialization context using real CLI."""
         client = OpenCodeClient()
-        request = AgentRequest(
-            prompt="init",
-            context={"init": True}
-        )
+        request = AgentRequest(prompt="init", context={"init": True})
 
         try:
             response = client.execute(request)
@@ -105,7 +102,9 @@ class TestOpenCodeClient:
     def test_opencode_client_execute_failure_invalid_command(self):
         """Test handling when command is not found."""
         # Use invalid command to trigger real FileNotFoundError
-        client = OpenCodeClient(config={"opencode_command": "nonexistent-opencode-command-xyz"})
+        client = OpenCodeClient(
+            config={"opencode_command": "nonexistent-opencode-command-xyz"}
+        )
         request = AgentRequest(prompt="invalid task")
         response = client.execute(request)
 
@@ -176,8 +175,7 @@ class TestOpenCodeIntegrationAdapter:
 
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="create a test function",
-                language="python"
+                prompt="create a test function", language="python"
             )
 
             # Test real result structure
@@ -195,8 +193,7 @@ class TestOpenCodeIntegrationAdapter:
         # Use invalid prompt that might fail
         try:
             code = adapter.adapt_for_ai_code_editing(
-                prompt="invalid prompt that should fail",
-                language="python"
+                prompt="invalid prompt that should fail", language="python"
             )
             # If it doesn't fail, that's also valid
             assert isinstance(code, str)
@@ -212,7 +209,7 @@ class TestOpenCodeIntegrationAdapter:
 
         messages = [
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there"}
+            {"role": "assistant", "content": "Hi there"},
         ]
 
         try:
@@ -236,8 +233,7 @@ class TestOpenCodeIntegrationAdapter:
 
         try:
             result = adapter.adapt_for_code_execution(
-                code="print('hello')",
-                language="python"
+                code="print('hello')", language="python"
             )
 
             # Test real result structure

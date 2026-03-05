@@ -53,19 +53,18 @@ def match_pattern(
                     for r in results
                 ],
             }
-        else:
-            from codomyrmex.coding.pattern_matching.code_patterns import (
-                PatternDetector,
-            )
+        from codomyrmex.coding.pattern_matching.code_patterns import (
+            PatternDetector,
+        )
 
-            detector = PatternDetector()
-            results = detector.detect_patterns(code)
-            return {
-                "status": "success",
-                "pattern": "all",
-                "match_count": len(results),
-                "matches": results,
-            }
+        detector = PatternDetector()
+        results = detector.detect_patterns(code)
+        return {
+            "status": "success",
+            "pattern": "all",
+            "match_count": len(results),
+            "matches": results,
+        }
     except NotImplementedError as exc:
         return {"status": "error", "message": f"not yet implemented: {exc}"}
     except SyntaxError as exc:
@@ -116,7 +115,9 @@ def list_patterns() -> dict[str, Any]:
             "design_patterns": design_patterns,
             "ast_patterns": ast_patterns,
             "anti_patterns": anti_patterns,
-            "total_count": len(design_patterns) + len(ast_patterns) + len(anti_patterns),
+            "total_count": len(design_patterns)
+            + len(ast_patterns)
+            + len(anti_patterns),
         }
     except NotImplementedError as exc:
         return {"status": "error", "message": f"not yet implemented: {exc}"}

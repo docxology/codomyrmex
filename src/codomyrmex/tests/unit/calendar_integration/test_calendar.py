@@ -70,6 +70,7 @@ class TestCalendarEvent:
 
     def test_event_with_timezone_aware_datetimes(self):
         from zoneinfo import ZoneInfo
+
         tz = ZoneInfo("America/Los_Angeles")
         start = datetime(2026, 3, 1, 10, 0, tzinfo=tz)
         end = datetime(2026, 3, 1, 11, 0, tzinfo=tz)
@@ -84,6 +85,7 @@ class TestCalendarEvent:
 
     def test_summary_is_required(self):
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             CalendarEvent(
                 start_time=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
@@ -92,6 +94,7 @@ class TestCalendarEvent:
 
     def test_start_time_is_required(self):
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             CalendarEvent(
                 summary="Test",
@@ -100,6 +103,7 @@ class TestCalendarEvent:
 
     def test_end_time_is_required(self):
         from pydantic import ValidationError
+
         with pytest.raises(ValidationError):
             CalendarEvent(
                 summary="Test",
@@ -123,6 +127,7 @@ class TestCalendarProviderAbstractInterface:
         class IncompleteProvider(CalendarProvider):
             def list_events(self, time_min, time_max):
                 return []
+
             # Missing: create_event, get_event, update_event, delete_event
 
         with pytest.raises(TypeError):
@@ -226,7 +231,12 @@ class TestCalendarExceptions:
             raise InvalidEventError("Missing timezone info")
 
     def test_all_exceptions_caught_by_base(self):
-        for exc_class in [CalendarAuthError, CalendarAPIError, EventNotFoundError, InvalidEventError]:
+        for exc_class in [
+            CalendarAuthError,
+            CalendarAPIError,
+            EventNotFoundError,
+            InvalidEventError,
+        ]:
             with pytest.raises(CalendarError):
                 raise exc_class("test")
 
@@ -244,8 +254,13 @@ class TestCalendarModuleExports:
         assert hasattr(cal_module, "CalendarProvider")
 
     def test_exceptions_exported(self):
-        for name in ["CalendarError", "CalendarAuthError", "CalendarAPIError",
-                     "EventNotFoundError", "InvalidEventError"]:
+        for name in [
+            "CalendarError",
+            "CalendarAuthError",
+            "CalendarAPIError",
+            "EventNotFoundError",
+            "InvalidEventError",
+        ]:
             assert hasattr(cal_module, name), f"Missing export: {name}"
 
     def test_cli_commands_exported(self):
@@ -264,7 +279,8 @@ class TestGoogleCalendarFromEnv:
     def test_from_env_exists(self):
         """GoogleCalendar.from_env() classmethod exists and is callable."""
         from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
-        assert hasattr(GoogleCalendar, 'from_env')
+
+        assert hasattr(GoogleCalendar, "from_env")
         assert callable(GoogleCalendar.from_env)
 
     def test_from_env_raises_auth_error_without_credentials(self):
@@ -281,10 +297,15 @@ class TestGoogleCalendarFromEnv:
             pytest.skip("Google Calendar SDK not installed")
 
         # Temporarily clear Google env vars to force the no-credentials path
-        saved = {k: os.environ.pop(k, None) for k in (
-            "GOOGLE_REFRESH_TOKEN", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET",
-            "GOOGLE_APPLICATION_CREDENTIALS",
-        )}
+        saved = {
+            k: os.environ.pop(k, None)
+            for k in (
+                "GOOGLE_REFRESH_TOKEN",
+                "GOOGLE_CLIENT_ID",
+                "GOOGLE_CLIENT_SECRET",
+                "GOOGLE_APPLICATION_CREDENTIALS",
+            )
+        }
         try:
             with pytest.raises((CalendarAuthError, Exception)):
                 GoogleCalendar.from_env()
@@ -301,6 +322,7 @@ class TestGoogleCalendarFromEnv:
         clause in from_env() raises ImportError.
         """
         import codomyrmex.calendar_integration.gcal.provider as gcal_mod
+
         original = gcal_mod.GCAL_AVAILABLE
         try:
             gcal_mod.GCAL_AVAILABLE = False
@@ -315,6 +337,7 @@ class TestGoogleCalendarFromEnv:
         Tests the constructor guard clause in addition to from_env().
         """
         import codomyrmex.calendar_integration.gcal.provider as gcal_mod
+
         original = gcal_mod.GCAL_AVAILABLE
         try:
             gcal_mod.GCAL_AVAILABLE = False
@@ -326,7 +349,7 @@ class TestGoogleCalendarFromEnv:
 
 @pytest.mark.skipif(
     not cal_module.CALENDAR_AVAILABLE,
-    reason="Google Calendar dependencies not installed (uv sync --extra calendar)"
+    reason="Google Calendar dependencies not installed (uv sync --extra calendar)",
 )
 class TestGoogleCalendarLive:
     """Live integration tests — only run when CALENDAR_AVAILABLE is True
@@ -335,4 +358,5 @@ class TestGoogleCalendarLive:
     @pytest.mark.network
     def test_google_calendar_provider_is_importable(self):
         from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
+
         assert GoogleCalendar is not None

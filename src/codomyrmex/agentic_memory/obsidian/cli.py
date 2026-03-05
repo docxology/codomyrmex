@@ -136,7 +136,7 @@ class ObsidianCLI:
         # Named parameters  key=value
         if params:
             for k, v in params.items():
-                argv.append(f'{k}={v}')
+                argv.append(f"{k}={v}")
 
         # Boolean flags — bare words or already prefixed
         for flag in flags:
@@ -188,9 +188,7 @@ class ObsidianCLI:
         """
         self._ensure_available()
 
-        argv = self._build_argv(
-            command, vault=vault, params=params, flags=flags
-        )
+        argv = self._build_argv(command, vault=vault, params=params, flags=flags)
 
         logger.debug("Running Obsidian CLI: %s", " ".join(argv))
 
@@ -206,11 +204,7 @@ class ObsidianCLI:
             stdout=proc.stdout,
             stderr=proc.stderr,
             returncode=proc.returncode,
-            lines=[
-                line
-                for line in proc.stdout.splitlines()
-                if line.strip()
-            ],
+            lines=[line for line in proc.stdout.splitlines() if line.strip()],
         )
 
         if parse_json and result.stdout.strip():

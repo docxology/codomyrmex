@@ -18,6 +18,7 @@ def setup_trust():
 
 # ── Tool not found ───────────────────────────────────────────────────
 
+
 def test_unknown_tool_raises_key_error():
     """call_tool raises KeyError for unknown tool names."""
     with pytest.raises(KeyError, match="Unknown tool"):
@@ -25,6 +26,7 @@ def test_unknown_tool_raises_key_error():
 
 
 # ── Validation errors ────────────────────────────────────────────────
+
 
 def test_validation_error_on_wrong_type():
     """Passing wrong argument types returns structured VALIDATION_ERROR."""
@@ -38,6 +40,7 @@ def test_validation_error_on_wrong_type():
 
 
 # ── Execution errors ─────────────────────────────────────────────────
+
 
 def test_execution_error_wrapped_structured():
     """Handler that raises gets wrapped in structured EXECUTION_ERROR."""
@@ -63,6 +66,7 @@ def test_handler_internal_error_preserved():
 
 # ── Successful execution ─────────────────────────────────────────────
 
+
 def test_list_modules_succeeds():
     """call_tool('codomyrmex.list_modules') returns module data."""
     result = call_tool("codomyrmex.list_modules")
@@ -78,6 +82,7 @@ def test_module_info_succeeds():
 
 
 # ── Error envelope structure ─────────────────────────────────────────
+
 
 def test_structured_error_envelope_has_required_fields():
     """When a handler raises, the structured envelope has code, message, correlation_id."""
@@ -95,6 +100,7 @@ def test_structured_error_envelope_has_required_fields():
 
 
 # ── Server-level integration ────────────────────────────────────────
+
 
 @pytest.mark.asyncio
 async def test_server_call_tool_validation_error():
@@ -130,9 +136,12 @@ async def test_server_call_tool_validation_error():
 
     # Parse the structured error
     import json
+
     parsed = json.loads(result["content"][0]["text"])
     assert parsed["code"] == "VALIDATION_ERROR"
-    assert "name" in parsed["message"].lower() or any("name" in str(e) for e in parsed.get("field_errors", []))
+    assert "name" in parsed["message"].lower() or any(
+        "name" in str(e) for e in parsed.get("field_errors", [])
+    )
 
 
 @pytest.mark.asyncio
@@ -182,10 +191,13 @@ async def test_server_call_tool_success():
         handler=add,
     )
 
-    result = await server._call_tool({"name": "test.add", "arguments": {"a": 3, "b": 4}})
+    result = await server._call_tool(
+        {"name": "test.add", "arguments": {"a": 3, "b": 4}}
+    )
     assert "isError" not in result or result.get("isError") is False
     assert result["content"][0]["type"] == "text"
     import json
+
     data = json.loads(result["content"][0]["text"])
     assert data["result"]["sum"] == 7
 
@@ -222,7 +234,9 @@ async def test_server_coerces_str_to_int():
         handler=multiply,
     )
 
-    result = await server._call_tool({"name": "test.mul", "arguments": {"x": "3", "y": "5"}})
+    result = await server._call_tool(
+        {"name": "test.mul", "arguments": {"x": "3", "y": "5"}}
+    )
     assert "isError" not in result
     data = json.loads(result["content"][0]["text"])
     assert data["result"]["product"] == 15

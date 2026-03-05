@@ -7,19 +7,21 @@ from codomyrmex.data_visualization.plots.violin import ViolinPlot
 def test_violin_plot_render():
     """Verify violin plot render behavior."""
     data = [[1, 2, 3], [2, 3, 4]]
-    plot = ViolinPlot("Test Violin", data, labels=['G1', 'G2'])
+    plot = ViolinPlot("Test Violin", data, labels=["G1", "G2"])
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test Violin"' in html
 
+
 def test_radar_chart_render():
     """Verify radar chart render behavior."""
-    categories = ['A', 'B', 'C']
+    categories = ["A", "B", "C"]
     values = [4, 5, 3]
     plot = RadarChart("Test Radar", categories, values)
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test Radar"' in html
+
 
 def test_candlestick_chart_render():
     """Verify candlestick chart render behavior."""
@@ -32,6 +34,7 @@ def test_candlestick_chart_render():
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test Candle"' in html
+
 
 def test_gantt_chart_render():
     """Verify gantt chart render behavior."""

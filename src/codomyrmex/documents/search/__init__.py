@@ -6,10 +6,10 @@ from .searcher import search_documents, search_index
 
 __all__ = [
     "InMemoryIndex",
-    "index_document",
-    "create_index",
-    "search_documents",
-    "search_index",
     "QueryBuilder",
     "build_query",
+    "create_index",
+    "index_document",
+    "search_documents",
+    "search_index",
 ]

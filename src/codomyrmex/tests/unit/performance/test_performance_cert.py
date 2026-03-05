@@ -11,6 +11,7 @@ from codomyrmex.performance.load_tester import LoadTester
 
 # ─── BenchmarkRunner ──────────────────────────────────────────────────
 
+
 class TestBenchmarkRunner:
     """Test suite for BenchmarkRunner."""
 
@@ -51,6 +52,7 @@ class TestBenchmarkRunner:
 
 # ─── LoadTester ───────────────────────────────────────────────────────
 
+
 class TestLoadTester:
     """Test suite for Loader."""
 
@@ -62,6 +64,7 @@ class TestLoadTester:
 
     def test_error_rate(self):
         call_count = {"n": 0}
+
         def sometimes_fail():
             call_count["n"] += 1
             if call_count["n"] % 5 == 0:
@@ -79,6 +82,7 @@ class TestLoadTester:
 
 
 # ─── MemoryProfiler ──────────────────────────────────────────────────
+
 
 class TestMemoryProfiler:
     """Test suite for MemoryProfiler."""

@@ -9,10 +9,10 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class GitHubAPIError(Exception):
     """Custom exception for GitHub API errors."""
 
-    pass
 
 def _get_github_headers(token: str) -> dict[str, str]:
     """Get GitHub API headers with authentication."""
@@ -21,6 +21,7 @@ def _get_github_headers(token: str) -> dict[str, str]:
         "Accept": "application/vnd.github.v3+json",
         "Content-Type": "application/json",
     }
+
 
 def _validate_github_token(token: str | None) -> str:
     """Validate and return GitHub token, raising error if invalid."""
@@ -33,6 +34,7 @@ def _validate_github_token(token: str | None) -> str:
         )
 
     return token
+
 
 async def _async_request(
     method: str,
@@ -77,4 +79,3 @@ async def _async_request(
                 return status, data
     except aiohttp.ClientError as e:
         raise GitHubAPIError(f"Network error: {e}") from None
-

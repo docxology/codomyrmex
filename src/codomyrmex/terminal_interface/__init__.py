@@ -6,7 +6,6 @@ exploring and interacting with the Codomyrmex ecosystem in engaging,
 accessible ways.
 """
 
-
 # Submodule exports - import first
 from codomyrmex.logging_monitoring import get_logger
 
@@ -71,11 +70,11 @@ def cli_commands():
 
 
 __all__ = [
-    "shells",
-    "commands",
-    "rendering",
-    "completions",
     "cli_commands",
+    "commands",
+    "completions",
+    "rendering",
+    "shells",
 ]
 
 if InteractiveShell:
@@ -84,4 +83,3 @@ if CommandRunner:
     __all__.extend(["CommandRunner", "TerminalFormatter"])
 
 __version__ = "0.1.0"
-

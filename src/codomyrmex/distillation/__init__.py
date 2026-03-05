@@ -2,4 +2,4 @@
 
 from .pipeline import DistillationLoss, distillation_loss, soft_labels
 
-__all__ = ["DistillationLoss", "soft_labels", "distillation_loss"]
+__all__ = ["DistillationLoss", "distillation_loss", "soft_labels"]

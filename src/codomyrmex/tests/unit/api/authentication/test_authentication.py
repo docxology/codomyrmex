@@ -18,7 +18,9 @@ try:
         create_authenticator,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 
 class TestAuthType:

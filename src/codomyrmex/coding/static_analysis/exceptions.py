@@ -23,7 +23,7 @@ class ParserError(StaticAnalysisError):
         file_path: str | None = None,
         line: int | None = None,
         column: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if file_path:
@@ -38,11 +38,7 @@ class LintError(StaticAnalysisError):
     """Raised when linting operations fail."""
 
     def __init__(
-        self,
-        message: str,
-        linter: str | None = None,
-        rule: str | None = None,
-        **kwargs
+        self, message: str, linter: str | None = None, rule: str | None = None, **kwargs
     ):
         super().__init__(message, **kwargs)
         if linter:
@@ -59,7 +55,7 @@ class TypeCheckError(StaticAnalysisError):
         message: str,
         expected_type: str | None = None,
         actual_type: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if expected_type:
@@ -77,7 +73,7 @@ class ComplexityError(StaticAnalysisError):
         metric: str | None = None,
         value: float | None = None,
         threshold: float | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if metric:
@@ -96,7 +92,7 @@ class DependencyAnalysisError(StaticAnalysisError):
         message: str,
         dependency: str | None = None,
         version: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if dependency:
@@ -114,7 +110,7 @@ class SecurityVulnerabilityError(StaticAnalysisError):
         vulnerability_type: str | None = None,
         severity: str | None = None,
         cwe_id: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(message, **kwargs)
         if vulnerability_type:
@@ -127,9 +123,7 @@ class SecurityVulnerabilityError(StaticAnalysisError):
 
 class ASTError(StaticAnalysisError):
     """Raised when AST operations fail."""
-    pass
 
 
 class MetricsError(StaticAnalysisError):
     """Raised when code metrics computation fails."""
-    pass

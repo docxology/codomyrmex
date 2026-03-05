@@ -13,10 +13,10 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class TemplatingError(CodomyrmexError):
     """Raised when templating operations fail."""
 
-    pass
 
 class Template:
     """Template object."""
@@ -33,12 +33,10 @@ class Template:
 
     def render(self, context: dict) -> str:
         """Render template with context."""
-        if self.engine == "jinja2":
+        if self.engine == "jinja2" or self.engine == "mako":
             return self.template_obj.render(**context)
-        elif self.engine == "mako":
-            return self.template_obj.render(**context)
-        else:
-            raise TemplatingError(f"Unknown engine: {self.engine}")
+        raise TemplatingError(f"Unknown engine: {self.engine}")
+
 
 class TemplateEngine:
     """Template engine interface."""
@@ -71,13 +69,12 @@ class TemplateEngine:
         try:
             if self.engine == "jinja2":
                 return self._render_jinja2(template, context)
-            elif self.engine == "mako":
+            if self.engine == "mako":
                 return self._render_mako(template, context)
-            else:
-                raise ValueError(f"Unknown engine: {self.engine}")
+            raise ValueError(f"Unknown engine: {self.engine}")
         except Exception as e:
             logger.error(f"Template rendering error: {e}")
-            raise TemplatingError(f"Failed to render template: {str(e)}") from e
+            raise TemplatingError(f"Failed to render template: {e!s}") from e
 
     def load_template(self, path: str) -> Template:
         """Load a template from a file.
@@ -108,7 +105,7 @@ class TemplateEngine:
             return template
         except Exception as e:
             logger.error(f"Template loading error: {e}")
-            raise TemplatingError(f"Failed to load template: {str(e)}") from e
+            raise TemplatingError(f"Failed to load template: {e!s}") from e
 
     def register_filter(self, name: str, func: Callable) -> None:
         """Register a custom template filter.
@@ -142,7 +139,9 @@ class TemplateEngine:
             template_obj = env.from_string(template)
             return template_obj.render(**context)
         except ImportError:
-            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2") from None
+            raise TemplatingError(
+                "jinja2 package not available. Install with: pip install jinja2"
+            ) from None
 
     def _load_jinja2(self, path: str) -> Any:
         """Load template using Jinja2."""
@@ -159,22 +158,25 @@ class TemplateEngine:
 
             return env.get_template(path_obj.name)
         except ImportError:
-            raise TemplatingError("jinja2 package not available. Install with: pip install jinja2") from None
+            raise TemplatingError(
+                "jinja2 package not available. Install with: pip install jinja2"
+            ) from None
 
     def _render_mako(self, template: str, context: dict) -> str:
         """Render using Mako."""
         try:
-
             template_obj = MakoTemplate(template)
             return template_obj.render(**context)
         except ImportError:
-            raise TemplatingError("mako package not available. Install with: pip install mako") from None
+            raise TemplatingError(
+                "mako package not available. Install with: pip install mako"
+            ) from None
 
     def _load_mako(self, path: str) -> Any:
         """Load template using Mako."""
         try:
-
             return MakoTemplate(filename=path)
         except ImportError:
-            raise TemplatingError("mako package not available. Install with: pip install mako") from None
-
+            raise TemplatingError(
+                "mako package not available. Install with: pip install mako"
+            ) from None

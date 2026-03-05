@@ -23,9 +23,7 @@ class DocumentationGenerator:
     def __init__(self, templates_dir: Path | None = None):
         """Initialize the documentation generator."""
         self.templates_dir = (
-            templates_dir
-            if templates_dir
-            else Path(__file__).parent / "templates" / "doc_templates"
+            templates_dir or Path(__file__).parent / "templates" / "doc_templates"
         )
         self.templates_dir.mkdir(parents=True, exist_ok=True)
 
@@ -109,7 +107,8 @@ class DocumentationGenerator:
         variables = {
             "project_name": project_name,
             "project_type": project_type,
-            "description": description or f"{project_type.replace('_', ' ').title()} project",
+            "description": description
+            or f"{project_type.replace('_', ' ').title()} project",
             "version": version,
             "author": author or "",
             "created_at": created_at,
@@ -150,13 +149,18 @@ class DocumentationGenerator:
         active_components = []
         for nested_dir in nested_dirs:
             dir_name = nested_dir.rstrip("/")
-            active_components.append(f'- `{dir_name}/` – {self._get_directory_purpose(dir_name, project_type)}')
+            active_components.append(
+                f"- `{dir_name}/` – {self._get_directory_purpose(dir_name, project_type)}"
+            )
 
         variables = {
             "project_name": project_name,
             "project_type": project_type,
-            "description": description or f"{project_type.replace('_', ' ').title()} project",
-            "active_components": "\n".join(active_components) if active_components else "No active components specified",
+            "description": description
+            or f"{project_type.replace('_', ' ').title()} project",
+            "active_components": "\n".join(active_components)
+            if active_components
+            else "No active components specified",
         }
 
         content = self._substitute_variables(template_content, variables)
@@ -182,7 +186,9 @@ class DocumentationGenerator:
         """Generate README.md for a nested directory."""
         template_content = None
         if template:
-            template_content = self._load_template(f"{template}_README.nested.template.md")
+            template_content = self._load_template(
+                f"{template}_README.nested.template.md"
+            )
 
         if not template_content:
             template_content = self._load_template("README.nested.template.md")
@@ -201,7 +207,9 @@ class DocumentationGenerator:
                 rel_path = "../" * depth_diff
             else:
                 rel_path = "../"
-            parent_link = f"\n- **Parent Directory**: [{parent_path.name}]({rel_path}README.md)"
+            parent_link = (
+                f"\n- **Parent Directory**: [{parent_path.name}]({rel_path}README.md)"
+            )
 
         variables = {
             "directory_name": dir_name,
@@ -235,7 +243,9 @@ class DocumentationGenerator:
         """Generate AGENTS.md for a nested directory."""
         template_content = None
         if template:
-            template_content = self._load_template(f"{template}_AGENTS.nested.template.md")
+            template_content = self._load_template(
+                f"{template}_AGENTS.nested.template.md"
+            )
 
         if not template_content:
             template_content = self._load_template("AGENTS.nested.template.md")
@@ -295,7 +305,14 @@ class DocumentationGenerator:
 
         # Generate root documentation
         success &= self.generate_root_readme(
-            project_path, project_name, project_type, description, version, author, created_at, template
+            project_path,
+            project_name,
+            project_type,
+            description,
+            version,
+            author,
+            created_at,
+            template,
         )
         success &= self.generate_root_agents(
             project_path, project_name, project_type, description, nested_dirs, template
@@ -309,10 +326,20 @@ class DocumentationGenerator:
 
                 if nested_path.exists() and nested_path.is_dir():
                     success &= self.generate_nested_readme(
-                        nested_path, dir_name, project_name, project_type, project_path, template
+                        nested_path,
+                        dir_name,
+                        project_name,
+                        project_type,
+                        project_path,
+                        template,
                     )
                     success &= self.generate_nested_agents(
-                        nested_path, dir_name, project_name, project_type, project_path, template
+                        nested_path,
+                        dir_name,
+                        project_name,
+                        project_type,
+                        project_path,
+                        template,
                     )
 
         return success

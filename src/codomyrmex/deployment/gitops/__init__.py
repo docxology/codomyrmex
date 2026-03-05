@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class SyncState(Enum):
     """Synchronisation states between desired and actual."""
+
     IN_SYNC = "in_sync"
     DRIFTED = "drifted"
     UNKNOWN = "unknown"
@@ -39,6 +40,7 @@ class SyncStatus:
         last_synced_at: When the last successful sync occurred.
         drift_details: Description of detected differences, if any.
     """
+
     state: SyncState
     desired_revision: str | None = None
     actual_revision: str | None = None
@@ -174,7 +176,11 @@ class GitOpsSynchronizer:
                 return result.stdout.strip()
             return None
         except (subprocess.SubprocessError, FileNotFoundError) as e:
-            logger.warning("Failed to resolve HEAD revision for branch %s: %s", self._target_branch, e)
+            logger.warning(
+                "Failed to resolve HEAD revision for branch %s: %s",
+                self._target_branch,
+                e,
+            )
             return None
 
     def _build_status(self, desired: str | None) -> SyncStatus:

@@ -11,6 +11,7 @@ logger = get_logger(__name__)
 
 T = TypeVar("T", bound=BaseModel)
 
+
 class TypeSafeParser:
     """Parses and validates data into Pydantic models."""
 

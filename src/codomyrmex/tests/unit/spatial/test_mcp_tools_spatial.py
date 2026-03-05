@@ -37,7 +37,9 @@ class TestSpatialGeographicDistance:
     def test_same_point(self):
         from codomyrmex.spatial.mcp_tools import spatial_geographic_distance
 
-        result = spatial_geographic_distance(lat1=40.0, lon1=-74.0, lat2=40.0, lon2=-74.0)
+        result = spatial_geographic_distance(
+            lat1=40.0, lon1=-74.0, lat2=40.0, lon2=-74.0
+        )
         assert result["status"] == "success"
         assert result["distance_meters"] < 1.0
 
@@ -46,8 +48,10 @@ class TestSpatialGeographicDistance:
         from codomyrmex.spatial.mcp_tools import spatial_geographic_distance
 
         result = spatial_geographic_distance(
-            lat1=40.7128, lon1=-74.0060,  # NYC
-            lat2=51.5074, lon2=-0.1278,   # London
+            lat1=40.7128,
+            lon1=-74.0060,  # NYC
+            lat2=51.5074,
+            lon2=-0.1278,  # London
         )
         assert result["status"] == "success"
         assert 5500 < result["distance_km"] < 5700

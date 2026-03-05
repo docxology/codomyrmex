@@ -23,10 +23,7 @@ class ImageGenerator:
         self.client = client or GeminiClient()
 
     def generate(
-        self,
-        prompt: str,
-        model: str = "imagen-4.0-generate-001",
-        **kwargs: Any
+        self, prompt: str, model: str = "imagen-4.0-generate-001", **kwargs: Any
     ) -> list[dict[str, Any]]:
         """
         Generate images from a text prompt.

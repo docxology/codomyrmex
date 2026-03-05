@@ -21,8 +21,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator import Workflow, RetryPolicy, TaskResult
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.orchestrator import RetryPolicy, TaskResult, Workflow
 
 logger = get_logger(__name__)
 
@@ -39,7 +39,9 @@ async def run_static_analysis(path: Path = None, _task_results: dict = None) -> 
         return {
             "success": True,
             "metrics": result,
-            "issues_count": len(result.get("issues", [])) if isinstance(result, dict) else 0
+            "issues_count": len(result.get("issues", []))
+            if isinstance(result, dict)
+            else 0,
         }
     except Exception as e:
         logger.error(f"Static analysis failed: {e}")
@@ -59,7 +61,7 @@ async def analyze_dependencies(_task_results: dict = None) -> dict:
             "success": True,
             "modules": len(result.get("modules", [])),
             "circular_dependencies": result.get("circular_dependencies", []),
-            "violations": result.get("violations", [])
+            "violations": result.get("violations", []),
         }
     except Exception as e:
         logger.error(f"Dependency analysis failed: {e}")
@@ -74,12 +76,19 @@ async def run_tests(_task_results: dict = None) -> dict:
 
     try:
         result = subprocess.run(
-            ["uv", "run", "pytest", "src/codomyrmex/tests/unit",
-             "--cov=src/codomyrmex", "-q", "--tb=no"],
+            [
+                "uv",
+                "run",
+                "pytest",
+                "src/codomyrmex/tests/unit",
+                "--cov=src/codomyrmex",
+                "-q",
+                "--tb=no",
+            ],
             capture_output=True,
             text=True,
             timeout=300,
-            cwd=project_root
+            cwd=project_root,
         )
 
         # Parse coverage from output
@@ -98,7 +107,9 @@ async def run_tests(_task_results: dict = None) -> dict:
             "success": result.returncode == 0,
             "returncode": result.returncode,
             "coverage_percent": coverage,
-            "output": result.stdout[-500:] if len(result.stdout) > 500 else result.stdout
+            "output": result.stdout[-500:]
+            if len(result.stdout) > 500
+            else result.stdout,
         }
     except Exception as e:
         logger.error(f"Tests failed: {e}")
@@ -113,8 +124,12 @@ async def generate_report(output_path: Path = None, _task_results: dict = None) 
     logger.info(f"Generating report to {output}")
 
     # Get results from previous tasks
-    static_result = _task_results.get("static_analysis", TaskResult(success=False)).value or {}
-    deps_result = _task_results.get("dependencies", TaskResult(success=False)).value or {}
+    static_result = (
+        _task_results.get("static_analysis", TaskResult(success=False)).value or {}
+    )
+    deps_result = (
+        _task_results.get("dependencies", TaskResult(success=False)).value or {}
+    )
     test_result = _task_results.get("tests", TaskResult(success=False)).value or {}
 
     # Generate HTML report
@@ -142,51 +157,51 @@ async def generate_report(output_path: Path = None, _task_results: dict = None) 
 
     <div class="card">
         <h2>📊 Static Analysis</h2>
-        <p class="{'success' if static_result.get('success') else 'error'}">
-            Status: {'✅ Passed' if static_result.get('success') else '❌ Failed'}
+        <p class="{"success" if static_result.get("success") else "error"}">
+            Status: {"✅ Passed" if static_result.get("success") else "❌ Failed"}
         </p>
         <div class="metric">
             <div>Issues Found</div>
-            <div class="metric-value">{static_result.get('issues_count', 'N/A')}</div>
+            <div class="metric-value">{static_result.get("issues_count", "N/A")}</div>
         </div>
     </div>
 
     <div class="card">
         <h2>🔗 Dependencies</h2>
-        <p class="{'success' if deps_result.get('success') else 'error'}">
-            Status: {'✅ Analyzed' if deps_result.get('success') else '❌ Failed'}
+        <p class="{"success" if deps_result.get("success") else "error"}">
+            Status: {"✅ Analyzed" if deps_result.get("success") else "❌ Failed"}
         </p>
         <div class="metric">
             <div>Modules</div>
-            <div class="metric-value">{deps_result.get('modules', 'N/A')}</div>
+            <div class="metric-value">{deps_result.get("modules", "N/A")}</div>
         </div>
         <div class="metric">
             <div>Circular Deps</div>
-            <div class="metric-value">{len(deps_result.get('circular_dependencies', []))}</div>
+            <div class="metric-value">{len(deps_result.get("circular_dependencies", []))}</div>
         </div>
         <div class="metric">
             <div>Violations</div>
-            <div class="metric-value">{len(deps_result.get('violations', []))}</div>
+            <div class="metric-value">{len(deps_result.get("violations", []))}</div>
         </div>
     </div>
 
     <div class="card">
         <h2>🧪 Tests</h2>
-        <p class="{'success' if test_result.get('success') else 'error'}">
-            Status: {'✅ Passed' if test_result.get('success') else '❌ Failed'}
+        <p class="{"success" if test_result.get("success") else "error"}">
+            Status: {"✅ Passed" if test_result.get("success") else "❌ Failed"}
         </p>
         <div class="metric">
             <div>Coverage</div>
-            <div class="metric-value">{test_result.get('coverage_percent', 0):.1f}%</div>
+            <div class="metric-value">{test_result.get("coverage_percent", 0):.1f}%</div>
         </div>
     </div>
 
     <div class="card">
         <h2>📋 Summary</h2>
         <ul>
-            <li>Static Analysis: {'✅' if static_result.get('success') else '❌'}</li>
-            <li>Dependencies: {'✅' if deps_result.get('success') else '❌'}</li>
-            <li>Tests: {'✅' if test_result.get('success') else '❌'}</li>
+            <li>Static Analysis: {"✅" if static_result.get("success") else "❌"}</li>
+            <li>Dependencies: {"✅" if deps_result.get("success") else "❌"}</li>
+            <li>Tests: {"✅" if test_result.get("success") else "❌"}</li>
         </ul>
     </div>
 </body>
@@ -199,7 +214,7 @@ async def generate_report(output_path: Path = None, _task_results: dict = None) 
     return {
         "success": True,
         "output_file": str(output),
-        "sections": ["static_analysis", "dependencies", "tests"]
+        "sections": ["static_analysis", "dependencies", "tests"],
     }
 
 
@@ -221,7 +236,7 @@ async def main() -> int:
         name="analyze_and_report",
         timeout=600,  # 10 minutes total
         fail_fast=False,  # Continue even if some tasks fail
-        progress_callback=on_progress
+        progress_callback=on_progress,
     )
 
     # Add tasks with retry for flaky operations
@@ -230,20 +245,16 @@ async def main() -> int:
         action=run_static_analysis,
         kwargs={"path": args.path},
         timeout=120,
-        retry_policy=RetryPolicy(max_attempts=2)
+        retry_policy=RetryPolicy(max_attempts=2),
     )
 
-    workflow.add_task(
-        name="dependencies",
-        action=analyze_dependencies,
-        timeout=60
-    )
+    workflow.add_task(name="dependencies", action=analyze_dependencies, timeout=60)
 
     workflow.add_task(
         name="tests",
         action=run_tests,
         timeout=300,
-        retry_policy=RetryPolicy(max_attempts=2)
+        retry_policy=RetryPolicy(max_attempts=2),
     )
 
     # Report depends on all analysis tasks
@@ -252,7 +263,7 @@ async def main() -> int:
         action=generate_report,
         dependencies=["static_analysis", "dependencies", "tests"],
         kwargs={"output_path": args.output},
-        timeout=30
+        timeout=30,
     )
 
     print("🔍 Running analysis workflow...")
@@ -264,7 +275,9 @@ async def main() -> int:
 
         print()
         print("=" * 50)
-        print(f"Workflow {'completed' if summary['success'] else 'completed with errors'}")
+        print(
+            f"Workflow {'completed' if summary['success'] else 'completed with errors'}"
+        )
         print(f"  Tasks: {summary['completed']}/{summary['total_tasks']} completed")
         print(f"  Time:  {summary['elapsed_time']:.1f}s")
 
@@ -282,6 +295,7 @@ async def main() -> int:
         print(f"❌ Workflow failed: {e}")
         logger.exception("Workflow error")
         return 1
+
 
 if __name__ == "__main__":
     sys.exit(asyncio.run(main()))

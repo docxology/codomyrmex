@@ -139,7 +139,7 @@ class TextToSQLEngine:
             ):
                 relevant.append(col)
 
-        return relevant if relevant else ["*"]
+        return relevant or ["*"]
 
     def generate(self, question: str) -> SQLResult:
         """

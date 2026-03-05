@@ -7,6 +7,7 @@ from codomyrmex.cli.utils import get_logger, print_error, print_success
 
 logger = get_logger(__name__)
 
+
 def handle_code_analysis(path: str, output_dir: str | None) -> bool:
     """Handle code analysis command."""
     try:
@@ -31,9 +32,16 @@ def handle_code_analysis(path: str, output_dir: str | None) -> bool:
         logger.warning("Static analysis module not available")
         print_error("Static analysis module not available")
         return False
-    except (ValueError, TypeError, AttributeError, RuntimeError, OSError, FileNotFoundError) as e:
+    except (
+        ValueError,
+        TypeError,
+        AttributeError,
+        RuntimeError,
+        OSError,
+        FileNotFoundError,
+    ) as e:
         logger.error(f"Error analyzing code: {e}", exc_info=True)
-        print_error(f"Error analyzing code: {str(e)}")
+        print_error(f"Error analyzing code: {e!s}")
         return False
 
 
@@ -50,9 +58,8 @@ def handle_git_analysis(repo_path: str) -> bool:
         if result:
             print_success("Git analysis complete. Check ./git_analysis/ for results.")
             return True
-        else:
-            print_error("Git analysis failed")
-            return False
+        print_error("Git analysis failed")
+        return False
 
     except ImportError:
         logger.warning("Git operations or data visualization modules not available")
@@ -60,7 +67,7 @@ def handle_git_analysis(repo_path: str) -> bool:
         return False
     except Exception as e:
         logger.error(f"Error analyzing git repository: {e}", exc_info=True)
-        print_error(f"Error analyzing git repository: {str(e)}")
+        print_error(f"Error analyzing git repository: {e!s}")
         return False
 
 
@@ -81,7 +88,9 @@ def handle_module_test(module_name: str) -> bool:
                 break
 
         if not test_path:
-            print_error(f"Tests not found for module '{module_name}'. Checked: {', '.join(str(loc) for loc in test_locations)}")
+            print_error(
+                f"Tests not found for module '{module_name}'. Checked: {', '.join(str(loc) for loc in test_locations)}"
+            )
             return False
 
         print(f"Running tests for module: {module_name} (at {test_path})...")
@@ -92,7 +101,7 @@ def handle_module_test(module_name: str) -> bool:
                 "pytest",
                 str(test_path),
                 "-v",
-                "--no-cov", # Disable coverage for quick runs
+                "--no-cov",  # Disable coverage for quick runs
             ],
             capture_output=True,
             text=True,
@@ -106,11 +115,13 @@ def handle_module_test(module_name: str) -> bool:
         if result.returncode == 0:
             print_success(f"Tests passed for module: {module_name}")
         else:
-            print_error(f"Tests failed for module: {module_name} (exit code: {result.returncode})")
+            print_error(
+                f"Tests failed for module: {module_name} (exit code: {result.returncode})"
+            )
 
         return result.returncode == 0
 
     except Exception as e:
         logger.error(f"Error testing module: {e}", exc_info=True)
-        print_error(f"Error testing module: {str(e)}")
+        print_error(f"Error testing module: {e!s}")
         return False

@@ -17,8 +17,10 @@ from uuid import uuid4
 # Enums
 # ------------------------------------------------------------------
 
+
 class MetricType(Enum):
     """Types of metrics."""
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
@@ -27,6 +29,7 @@ class MetricType(Enum):
 
 class AlertSeverity(Enum):
     """Alert severity levels."""
+
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
@@ -35,6 +38,7 @@ class AlertSeverity(Enum):
 
 class PanelType(Enum):
     """Dashboard panel types."""
+
     GRAPH = "graph"
     STAT = "stat"
     TABLE = "table"
@@ -47,9 +51,11 @@ class PanelType(Enum):
 # Data classes
 # ------------------------------------------------------------------
 
+
 @dataclass
 class MetricValue:
     """A single metric measurement."""
+
     name: str
     value: float
     labels: dict[str, str] = field(default_factory=dict)
@@ -69,6 +75,7 @@ class MetricValue:
 @dataclass
 class Alert:
     """An alert instance."""
+
     id: str
     name: str
     message: str
@@ -103,6 +110,7 @@ class Alert:
 @dataclass
 class Panel:
     """A dashboard panel."""
+
     id: str
     title: str
     panel_type: PanelType = PanelType.GRAPH
@@ -162,6 +170,7 @@ class Dashboard:
 # ------------------------------------------------------------------
 # Collectors and Managers
 # ------------------------------------------------------------------
+
 
 class MetricCollector:
     """Collects and stores metric values."""
@@ -340,9 +349,7 @@ class DashboardManager:
             return True
         return False
 
-    def get_panel_data(
-        self, dashboard_id: str, panel_id: str
-    ) -> list[MetricValue]:
+    def get_panel_data(self, dashboard_id: str, panel_id: str) -> list[MetricValue]:
         """Get metric data for a panel."""
         dashboard = self._dashboards.get(dashboard_id)
         if not dashboard:
@@ -357,14 +364,14 @@ class DashboardManager:
 
 
 __all__ = [
-    "MetricType",
-    "AlertSeverity",
-    "PanelType",
-    "MetricValue",
     "Alert",
-    "Panel",
-    "Dashboard",
-    "MetricCollector",
     "AlertManager",
+    "AlertSeverity",
+    "Dashboard",
     "DashboardManager",
+    "MetricCollector",
+    "MetricType",
+    "MetricValue",
+    "Panel",
+    "PanelType",
 ]

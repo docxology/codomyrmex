@@ -22,6 +22,7 @@ from codomyrmex.llm.models.reasoning import (
 
 class TestReasoningStep:
     """Test suite for ReasoningStep."""
+
     def test_create_basic(self) -> None:
         step = ReasoningStep(thought="Analyze the input")
         assert step.thought == "Analyze the input"
@@ -56,6 +57,7 @@ class TestReasoningStep:
 
 class TestConclusion:
     """Test suite for Conclusion."""
+
     def test_create_basic(self) -> None:
         c = Conclusion(action="Deploy", justification="All tests pass")
         assert c.action == "Deploy"
@@ -88,6 +90,7 @@ class TestConclusion:
 
 class TestReasoningTrace:
     """Test suite for ReasoningTrace."""
+
     def test_empty_trace(self) -> None:
         trace = ReasoningTrace(prompt="Test")
         assert trace.step_count == 0
@@ -137,6 +140,7 @@ class TestReasoningTrace:
 
 class TestThinkingDepth:
     """Test suite for ThinkingDepth."""
+
     def test_depth_mapping(self) -> None:
         assert DEPTH_TO_STEPS[ThinkingDepth.SHALLOW] == 1
         assert DEPTH_TO_STEPS[ThinkingDepth.NORMAL] == 3
@@ -149,6 +153,7 @@ class TestThinkingDepth:
 
 class TestStructuralStepGenerator:
     """Test suite for StructuralStepGenerator."""
+
     def test_shallow_produces_one_step(self) -> None:
         gen = StructuralStepGenerator()
         steps = gen.generate_steps("test", ThinkingDepth.SHALLOW)
@@ -181,6 +186,7 @@ class TestStructuralStepGenerator:
 
 class TestStructuralConclusionSynthesizer:
     """Test suite for StructuralConclusionSynthesizer."""
+
     def test_empty_steps(self) -> None:
         synth = StructuralConclusionSynthesizer()
         c = synth.synthesize([], "test")
@@ -203,13 +209,14 @@ class TestStructuralConclusionSynthesizer:
 
 class TestChainOfThought:
     """Test suite for ChainOfThought."""
+
     def test_basic_think(self) -> None:
         cot = ChainOfThought()
         trace = cot.think("How do I optimize this query?")
         assert trace.step_count == 3  # NORMAL depth
         assert trace.is_complete
-        assert hasattr(trace.conclusion, 'action')
-        assert hasattr(trace.conclusion, 'confidence')
+        assert hasattr(trace.conclusion, "action")
+        assert hasattr(trace.conclusion, "confidence")
         assert trace.duration_ms > 0
 
     def test_shallow_think(self) -> None:
@@ -232,7 +239,7 @@ class TestChainOfThought:
         cot = ChainOfThought()
         cot.think("One")
         last = cot.get_last_trace()
-        assert hasattr(last, 'prompt')
+        assert hasattr(last, "prompt")
         assert last.prompt == "One"
 
     def test_clear_traces(self) -> None:
@@ -246,9 +253,7 @@ class TestChainOfThought:
         trace = cot.think("Test", context={"key": "value"})
         assert trace.step_count > 0
         # Context should appear as evidence in the first step
-        assert any(
-            "key" in e for step in trace.steps for e in step.evidence
-        )
+        assert any("key" in e for step in trace.steps for e in step.evidence)
 
     def test_depth_property(self) -> None:
         cot = ChainOfThought()

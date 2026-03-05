@@ -6,16 +6,20 @@ logger = get_logger(__name__)
 
 try:
     import zstandard as zstd
+
     ZSTD_AVAILABLE = True
 except ImportError:
     ZSTD_AVAILABLE = False
+
 
 class ZstdCompressor:
     """Compressor using the Zstandard algorithm."""
 
     def __init__(self, level: int = 3):
         if not ZSTD_AVAILABLE:
-            raise ImportError("zstandard package not available. Install with: pip install zstandard")
+            raise ImportError(
+                "zstandard package not available. Install with: pip install zstandard"
+            )
         self.level = level
         self.cctx = zstd.ZstdCompressor(level=level)
         self.dctx = zstd.ZstdDecompressor()

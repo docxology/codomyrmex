@@ -32,8 +32,6 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     """Model for creating a new user (password would go here in a real app)."""
 
-    pass
-
 
 class UserResponse(UserBase):
     """Model for user response, including system-generated fields."""

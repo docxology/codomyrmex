@@ -5,11 +5,8 @@ from .metadata import DocumentMetadata, MetadataField
 
 __all__ = [
     "Document",
-    "DocumentType",
     "DocumentFormat",
     "DocumentMetadata",
+    "DocumentType",
     "MetadataField",
 ]
-
-
-

@@ -1,6 +1,5 @@
 """Tests for Obsidian vault search and filtering."""
 
-
 from codomyrmex.agentic_memory.obsidian.search import (
     filter_by_date,
     filter_by_frontmatter,
@@ -12,6 +11,7 @@ from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 class TestSearchVault:
     """Test suite for SearchVault."""
+
     def test_search_by_content(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         results = search_vault(vault, "simple note")
@@ -59,6 +59,7 @@ class TestSearchVault:
 
 class TestFilterByTag:
     """Test suite for FilterByTag."""
+
     def test_filter_exact(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         notes = filter_by_tag(vault, "testing")
@@ -90,6 +91,7 @@ class TestFilterByTag:
 
 class TestFilterByFrontmatter:
     """Test suite for FilterByFrontmatter."""
+
     def test_filter_key_exists(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         notes = filter_by_frontmatter(vault, "title")
@@ -109,6 +111,7 @@ class TestFilterByFrontmatter:
 
 class TestFilterByDate:
     """Test suite for FilterByDate."""
+
     def test_filter_after(self, tmp_vault):
         vault = ObsidianVault(tmp_vault)
         notes = filter_by_date(vault, after="2024-01-01", date_field="created")

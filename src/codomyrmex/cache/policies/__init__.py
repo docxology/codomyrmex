@@ -12,12 +12,14 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Generic, Optional, TypeVar
 
-K = TypeVar('K')
-V = TypeVar('V')
+K = TypeVar("K")
+V = TypeVar("V")
+
 
 @dataclass
 class CacheEntry(Generic[V]):
     """A single cache entry with metadata."""
+
     value: V
     created_at: datetime = field(default_factory=datetime.now)
     accessed_at: datetime = field(default_factory=datetime.now)
@@ -36,6 +38,7 @@ class CacheEntry(Generic[V]):
         self.accessed_at = datetime.now()
         self.access_count += 1
 
+
 class EvictionPolicy(ABC, Generic[K, V]):
     """Abstract base class for eviction policies."""
 
@@ -46,31 +49,27 @@ class EvictionPolicy(ABC, Generic[K, V]):
     @abstractmethod
     def get(self, key: K) -> V | None:
         """Get a value from the cache."""
-        pass
 
     @abstractmethod
     def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
         """Put a value in the cache."""
-        pass
 
     @abstractmethod
     def remove(self, key: K) -> V | None:
         """Remove a value from the cache."""
-        pass
 
     @abstractmethod
     def clear(self) -> None:
         """Clear the cache."""
-        pass
 
     @abstractmethod
     def size(self) -> int:
         """Get current cache size."""
-        pass
 
     def contains(self, key: K) -> bool:
         """Check if key exists in cache."""
         return self.get(key) is not None
+
 
 class LRUPolicy(EvictionPolicy[K, V]):
     """Least Recently Used eviction policy."""
@@ -123,6 +122,7 @@ class LRUPolicy(EvictionPolicy[K, V]):
     def size(self) -> int:
         """Size."""
         return len(self._cache)
+
 
 class LFUPolicy(EvictionPolicy[K, V]):
     """Least Frequently Used eviction policy."""
@@ -218,6 +218,7 @@ class LFUPolicy(EvictionPolicy[K, V]):
         """Size."""
         return len(self._cache)
 
+
 class TTLPolicy(EvictionPolicy[K, V]):
     """TTL-based eviction policy with lazy expiration."""
 
@@ -262,8 +263,9 @@ class TTLPolicy(EvictionPolicy[K, V]):
             if len(self._cache) >= self.max_size and key not in self._cache:
                 # Evict oldest entry
                 if self._cache:
-                    oldest_key = min(self._cache.keys(),
-                                    key=lambda k: self._cache[k].created_at)
+                    oldest_key = min(
+                        self._cache.keys(), key=lambda k: self._cache[k].created_at
+                    )
                     del self._cache[oldest_key]
 
             self._cache[key] = entry
@@ -288,6 +290,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
         """Size."""
         self._cleanup_expired()
         return len(self._cache)
+
 
 class FIFOPolicy(EvictionPolicy[K, V]):
     """First In First Out eviction policy."""
@@ -337,6 +340,7 @@ class FIFOPolicy(EvictionPolicy[K, V]):
         """Size."""
         return len(self._cache)
 
+
 def create_policy(policy_name: str, max_size: int, **kwargs) -> EvictionPolicy:
     """Factory function to create eviction policies."""
     policies = {
@@ -352,12 +356,13 @@ def create_policy(policy_name: str, max_size: int, **kwargs) -> EvictionPolicy:
 
     return policy_class(max_size, **kwargs)
 
+
 __all__ = [
     "CacheEntry",
     "EvictionPolicy",
-    "LRUPolicy",
-    "LFUPolicy",
-    "TTLPolicy",
     "FIFOPolicy",
+    "LFUPolicy",
+    "LRUPolicy",
+    "TTLPolicy",
     "create_policy",
 ]

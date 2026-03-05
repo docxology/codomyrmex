@@ -17,14 +17,14 @@ from .discovery_engine import ModuleInfo, SystemDiscovery
 from .health_checker import SystemHealthChecker
 
 __all__ = [
-    "SystemDiscovery",
-    "ModuleInfo",
     "CapabilityScanner",
-    "FunctionCapability",
     "ClassCapability",
-    "ModuleCapability",
-    "EngineModuleCapability",
     "DependencyAnalyzer",
+    "EngineModuleCapability",
+    "FunctionCapability",
+    "ModuleCapability",
+    "ModuleInfo",
+    "SystemDiscovery",
     "SystemHealthChecker",
     "get_system_context",
 ]

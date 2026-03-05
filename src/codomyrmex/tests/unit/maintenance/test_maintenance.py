@@ -33,11 +33,13 @@ class TestMaintenanceModuleImport:
     def test_maintenance_module_import(self):
         """Test that maintenance module can be imported."""
         from codomyrmex import maintenance
+
         assert maintenance is not None
 
     def test_maintenance_module_has_path(self):
         """Test maintenance module has __path__ attribute."""
         from codomyrmex import maintenance
+
         assert hasattr(maintenance, "__path__")
 
 
@@ -50,7 +52,7 @@ class TestDependencyAnalyzerInit:
 
     def test_initialization_with_path(self):
         """Test initializing with a path."""
-        repo_root = Path(".")
+        repo_root = Path()
         analyzer = DependencyAnalyzer(repo_root)
 
         assert analyzer is not None
@@ -150,7 +152,9 @@ from pathlib import Path
     def test_extract_imports_import_from_statement(self, tmp_path):
         """Test extracting 'from X import Y' statements."""
         test_file = tmp_path / "test.py"
-        test_file.write_text("from codomyrmex.encryption.core.encryptor import Encryptor")
+        test_file.write_text(
+            "from codomyrmex.encryption.core.encryptor import Encryptor"
+        )
 
         analyzer = DependencyAnalyzer(tmp_path)
         imports = analyzer.extract_imports(test_file)
@@ -542,7 +546,9 @@ class TestAnalyzeDependencies:
         result = analyze_dependencies()
 
         assert "total_count" in result
-        expected_total = len(result["main_dependencies"]) + len(result["dev_dependencies"])
+        expected_total = len(result["main_dependencies"]) + len(
+            result["dev_dependencies"]
+        )
         assert result["total_count"] == expected_total
 
     def test_main_dependencies_are_strings(self):
@@ -638,7 +644,11 @@ class TestGenerateReport:
     def test_report_contains_sections(self):
         """Test report contains expected sections."""
         structure = {"directories": {}, "file_types": {".py": []}, "total_size": 1000}
-        deps = {"main_dependencies": ["pytest"], "dev_dependencies": [], "total_count": 1}
+        deps = {
+            "main_dependencies": ["pytest"],
+            "dev_dependencies": [],
+            "total_count": 1,
+        }
         quality = {
             "total_python_files": 10,
             "test_files": 2,
@@ -674,7 +684,11 @@ class TestGenerateReport:
     def test_report_no_recommendations_when_complete(self):
         """Test report when all features present."""
         structure = {"directories": {}, "file_types": {".py": []}, "total_size": 1000}
-        deps = {"main_dependencies": ["pytest"], "dev_dependencies": [], "total_count": 1}
+        deps = {
+            "main_dependencies": ["pytest"],
+            "dev_dependencies": [],
+            "total_count": 1,
+        }
         quality = {
             "total_python_files": 10,
             "test_files": 2,
@@ -908,7 +922,9 @@ class TestAllowedDependencies:
         """Test analysis layer allowed dependencies."""
         analyzer = DependencyAnalyzer(".")
 
-        static_analysis_deps = analyzer.allowed_dependencies.get("static_analysis", set())
+        static_analysis_deps = analyzer.allowed_dependencies.get(
+            "static_analysis", set()
+        )
         assert "logging_monitoring" in static_analysis_deps
 
     def test_build_layer_deps(self):
@@ -995,6 +1011,7 @@ class TestMaintenanceScheduler:
             ScheduleConfig,
             TaskStatus,
         )
+
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
             name="test_task",
@@ -1013,6 +1030,7 @@ class TestMaintenanceScheduler:
             MaintenanceTask,
             ScheduleConfig,
         )
+
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
             name="due_task",
@@ -1031,7 +1049,9 @@ class TestMaintenanceScheduler:
             ScheduleConfig,
             TaskStatus,
         )
+
         call_count = 0
+
         def failing_action():
             nonlocal call_count
             call_count += 1
@@ -1060,12 +1080,15 @@ class TestHealthChecker:
             HealthChecker,
             HealthStatus,
         )
+
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="test",
-            description="Always healthy",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="test",
+                description="Always healthy",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
         report = checker.run_all()
         assert report.overall_status == HealthStatus.HEALTHY
         assert report.healthy_count == 1
@@ -1076,13 +1099,16 @@ class TestHealthChecker:
             HealthChecker,
             HealthStatus,
         )
+
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="bad",
-            description="Always fails",
-            check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
-            critical=True,
-        ))
+        checker.register(
+            HealthCheck(
+                name="bad",
+                description="Always fails",
+                check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
+                critical=True,
+            )
+        )
         report = checker.run_all()
         assert report.overall_status == HealthStatus.UNHEALTHY
 
@@ -1092,15 +1118,18 @@ class TestHealthChecker:
             HealthChecker,
             HealthStatus,
         )
+
         def exploding():
             raise RuntimeError("boom")
 
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="explode",
-            description="Raises",
-            check_fn=exploding,
-        ))
+        checker.register(
+            HealthCheck(
+                name="explode",
+                description="Raises",
+                check_fn=exploding,
+            )
+        )
         result = checker.run("explode")
         assert result.status == HealthStatus.UNHEALTHY
         assert "boom" in result.message

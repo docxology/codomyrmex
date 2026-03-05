@@ -3,6 +3,7 @@
 Contains the logic for handling CLI commands for the agents module.
 Intended to be called by the thin orchestrator script.
 """
+
 import json
 from pathlib import Path
 from typing import Any
@@ -41,7 +42,9 @@ def handle_info(args):
         info = {
             "module": "agents",
             "description": "Agent framework integrations",
-            "config": config.to_dict() if hasattr(config, 'to_dict') else config.__dict__,
+            "config": config.to_dict()
+            if hasattr(config, "to_dict")
+            else config.__dict__,
         }
 
         print_section("Agents Module Information")
@@ -56,7 +59,6 @@ def handle_info(args):
         logger.exception("Unexpected error retrieving information")
         print_error("Unexpected error retrieving information", exception=e)
         return False
-
 
 
 def _parse_context(context_str: str | None) -> dict[str, Any]:
@@ -85,7 +87,9 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
     """Handle execute command for any agent."""
     try:
         if client_class is None:
-            print_error(f"{client_name} client not available", context="Module not imported")
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
             return False
 
         prompt = args.prompt
@@ -109,9 +113,8 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
                 output_path.write_text(response.content, encoding="utf-8")
                 print_info(f"Output saved to {output_path}")
             return True
-        else:
-            print_error(f"{client_name} execution failed", context=response.error)
-            return False
+        print_error(f"{client_name} execution failed", context=response.error)
+        return False
 
     except Exception as e:
         logger.exception("%s error", client_name)
@@ -123,7 +126,9 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
     """Handle stream command for any agent."""
     try:
         if client_class is None:
-            print_error(f"{client_name} client not available", context="Module not imported")
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
             return False
 
         prompt = args.prompt
@@ -159,8 +164,10 @@ def handle_agent_setup(client_class, client_name: str, args: Any) -> bool:
     """Generic handler for agent setup."""
     try:
         if client_class is None:
-             print_error(f"{client_name} client not available", context="Module not imported")
-             return False
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
+            return False
 
         client = client_class(config=get_config())
         print_section(f"Setting up {client_name}")
@@ -177,8 +184,10 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
     """Generic handler for agent connection test."""
     try:
         if client_class is None:
-             print_error(f"{client_name} client not available", context="Module not imported")
-             return False
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
+            return False
 
         client = client_class(config=get_config())
         print_section(f"Testing {client_name} Connection")
@@ -194,12 +203,13 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
         return False
 
 
-
 def _handle_cli_agent_check(client_class, client_name: str, args: Any) -> bool:
     """Generic check handler for CLI-based agents."""
     try:
         if client_class is None:
-            print_error(f"{client_name} client not available", context="Module not imported")
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
             return False
 
         client = client_class()
@@ -213,7 +223,10 @@ def _handle_cli_agent_check(client_class, client_name: str, args: Any) -> bool:
             if client.working_dir:
                 print_info(f"Working directory: {client.working_dir}")
         else:
-            print_warning(f"{client_name} CLI is not available", context="Command not found in PATH")
+            print_warning(
+                f"{client_name} CLI is not available",
+                context="Command not found in PATH",
+            )
             print_info(f"Make sure {client_name} is installed and in your PATH")
 
         return True
@@ -224,11 +237,15 @@ def _handle_cli_agent_check(client_class, client_name: str, args: Any) -> bool:
         return False
 
 
-def _handle_api_key_check(client_class, client_name: str, config_prefix: str, api_key_env: str, args: Any) -> bool:
+def _handle_api_key_check(
+    client_class, client_name: str, config_prefix: str, api_key_env: str, args: Any
+) -> bool:
     """Generic check handler for API-key-based agents."""
     try:
         if client_class is None:
-            print_error(f"{client_name} client not available", context="Module not imported")
+            print_error(
+                f"{client_name} client not available", context="Module not imported"
+            )
             return False
 
         config = get_config()
@@ -238,12 +255,21 @@ def _handle_api_key_check(client_class, client_name: str, config_prefix: str, ap
         if has_api_key:
             print_success(f"{client_name} API key is configured")
         else:
-            print_warning(f"{client_name} API key is not configured", context=f"Set {api_key_env} environment variable")
+            print_warning(
+                f"{client_name} API key is not configured",
+                context=f"Set {api_key_env} environment variable",
+            )
 
         print_info(f"Model: {getattr(config, f'{config_prefix}_model', 'unknown')}")
-        print_info(f"Timeout: {getattr(config, f'{config_prefix}_timeout', 'unknown')}s")
-        print_info(f"Max tokens: {getattr(config, f'{config_prefix}_max_tokens', 'unknown')}")
-        print_info(f"Temperature: {getattr(config, f'{config_prefix}_temperature', 'unknown')}")
+        print_info(
+            f"Timeout: {getattr(config, f'{config_prefix}_timeout', 'unknown')}s"
+        )
+        print_info(
+            f"Max tokens: {getattr(config, f'{config_prefix}_max_tokens', 'unknown')}"
+        )
+        print_info(
+            f"Temperature: {getattr(config, f'{config_prefix}_temperature', 'unknown')}"
+        )
 
         if not has_api_key:
             print_warning(f"{client_name} operations will fail without API key")
@@ -278,25 +304,27 @@ _API_KEY_AGENTS = [
 # The resulting names (handle_<agent>_execute, etc.) are identical to what
 # was previously written out by hand, so all importers see the same interface.
 for _name, _cls, _display in _CLI_AGENTS:
-    globals()[f"handle_{_name}_execute"] = (
-        lambda args, c=_cls, d=_display: _handle_agent_execute(c, d, args)
+    globals()[f"handle_{_name}_execute"] = lambda args, c=_cls, d=_display: (
+        _handle_agent_execute(c, d, args)
     )
-    globals()[f"handle_{_name}_stream"] = (
-        lambda args, c=_cls, d=_display: _handle_agent_stream(c, d, args)
+    globals()[f"handle_{_name}_stream"] = lambda args, c=_cls, d=_display: (
+        _handle_agent_stream(c, d, args)
     )
-    globals()[f"handle_{_name}_check"] = (
-        lambda args, c=_cls, d=_display: _handle_cli_agent_check(c, d, args)
+    globals()[f"handle_{_name}_check"] = lambda args, c=_cls, d=_display: (
+        _handle_cli_agent_check(c, d, args)
     )
 
 for _name, _cls, _display, _prefix, _env in _API_KEY_AGENTS:
-    globals()[f"handle_{_name}_execute"] = (
-        lambda args, c=_cls, d=_display: _handle_agent_execute(c, d, args)
+    globals()[f"handle_{_name}_execute"] = lambda args, c=_cls, d=_display: (
+        _handle_agent_execute(c, d, args)
     )
-    globals()[f"handle_{_name}_stream"] = (
-        lambda args, c=_cls, d=_display: _handle_agent_stream(c, d, args)
+    globals()[f"handle_{_name}_stream"] = lambda args, c=_cls, d=_display: (
+        _handle_agent_stream(c, d, args)
     )
     globals()[f"handle_{_name}_check"] = (
-        lambda args, c=_cls, d=_display, p=_prefix, e=_env: _handle_api_key_check(c, d, p, e, args)
+        lambda args, c=_cls, d=_display, p=_prefix, e=_env: _handle_api_key_check(
+            c, d, p, e, args
+        )
     )
 
 del _name, _cls, _display  # clean up loop variables from module namespace
@@ -315,7 +343,10 @@ def handle_jules_help(args):
         if help_info.get("available"):
             print(help_info.get("help_text", ""))
         else:
-            print_warning("Could not retrieve Jules help", context=help_info.get("error", "Unknown error"))
+            print_warning(
+                "Could not retrieve Jules help",
+                context=help_info.get("error", "Unknown error"),
+            )
 
         return help_info.get("available", False)
 
@@ -344,7 +375,9 @@ def handle_jules_command(args):
             print(result.get("output", ""))
             print_success("Jules command executed successfully")
         else:
-            print_error("Jules command failed", context=result.get("stderr", "Unknown error"))
+            print_error(
+                "Jules command failed", context=result.get("stderr", "Unknown error")
+            )
             if result.get("stdout"):
                 print("STDOUT:", result.get("stdout"))
 
@@ -356,9 +389,6 @@ def handle_jules_command(args):
         return False
 
 
-
-
-
 def handle_opencode_init(args):
     try:
         if OpenCodeClient is None:
@@ -368,7 +398,9 @@ def handle_opencode_init(args):
         client = OpenCodeClient()
         project_path = getattr(args, "path", None)
 
-        logger.debug(f"Initializing OpenCode for project: {project_path or 'current directory'}")
+        logger.debug(
+            f"Initializing OpenCode for project: {project_path or 'current directory'}"
+        )
 
         result = client.initialize_project(project_path)
 
@@ -378,7 +410,10 @@ def handle_opencode_init(args):
                 print(result.get("output"))
             print_success("OpenCode initialized successfully")
         else:
-            print_error("OpenCode initialization failed", context=result.get("error", "Unknown error"))
+            print_error(
+                "OpenCode initialization failed",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
@@ -402,7 +437,10 @@ def handle_opencode_version(args):
             print(version_info.get("version", "Unknown version"))
             print_success("OpenCode version retrieved")
         else:
-            print_warning("Could not retrieve OpenCode version", context=version_info.get("error", "Unknown error"))
+            print_warning(
+                "Could not retrieve OpenCode version",
+                context=version_info.get("error", "Unknown error"),
+            )
 
         return version_info.get("available", False)
 
@@ -410,7 +448,6 @@ def handle_opencode_version(args):
         logger.exception("Error getting OpenCode version")
         print_error("Error getting OpenCode version", exception=e)
         return False
-
 
 
 def handle_gemini_chat_save(args):
@@ -431,7 +468,10 @@ def handle_gemini_chat_save(args):
         if result.get("success"):
             print_success("Chat session saved successfully")
         else:
-            print_error("Failed to save chat session", context=result.get("error", "Unknown error"))
+            print_error(
+                "Failed to save chat session",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
@@ -460,7 +500,10 @@ def handle_gemini_chat_resume(args):
                 print(result.get("output"))
             print_success("Chat session resumed successfully")
         else:
-            print_error("Failed to resume chat session", context=result.get("error", "Unknown error"))
+            print_error(
+                "Failed to resume chat session",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
@@ -490,7 +533,10 @@ def handle_gemini_chat_list(args):
                 print_info("No chat sessions found")
             print_success("Chat sessions listed")
         else:
-            print_error("Failed to list chat sessions", context=result.get("error", "Unknown error"))
+            print_error(
+                "Failed to list chat sessions",
+                context=result.get("error", "Unknown error"),
+            )
 
         return result.get("success", False)
 
@@ -498,7 +544,6 @@ def handle_gemini_chat_list(args):
         logger.exception("Error listing Gemini chats")
         print_error("Error listing Gemini chats", exception=e)
         return False
-
 
 
 # Global droid controller instance (singleton pattern)

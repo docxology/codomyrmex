@@ -36,6 +36,7 @@ class MessageType(Enum):
     STATUS = "status"
     ERROR = "error"
 
+
 @dataclass
 class AgentMessage:
     """Message passed between agents."""
@@ -61,7 +62,7 @@ class AgentMessage:
             "reply_to": self.reply_to,
         }
 
-    def create_reply(self, content: Any, **metadata) -> 'AgentMessage':
+    def create_reply(self, content: Any, **metadata) -> "AgentMessage":
         """Create a reply to this message."""
         return AgentMessage(
             sender_id=self.receiver_id or "",
@@ -71,6 +72,7 @@ class AgentMessage:
             metadata=metadata,
             reply_to=self.id,
         )
+
 
 @dataclass
 class AgentCapability:
@@ -94,14 +96,15 @@ class AgentProtocol(ABC):
     """Abstract base class for agent coordination protocols."""
 
     @abstractmethod
-    async def execute(self, task: Any, agents: list['BaseAgent']) -> Any:
+    async def execute(self, task: Any, agents: list["BaseAgent"]) -> Any:
         """Execute the protocol with the given agents."""
-        pass
 
     @abstractmethod
-    def select_agents(self, task: Any, available_agents: list['BaseAgent']) -> list['BaseAgent']:
+    def select_agents(
+        self, task: Any, available_agents: list["BaseAgent"]
+    ) -> list["BaseAgent"]:
         """Select agents for a task."""
-        pass
+
 
 class BaseAgent(ABC):
     """Base class for collaborative agents."""
@@ -122,9 +125,10 @@ class BaseAgent(ABC):
     @abstractmethod
     async def process_task(self, task: Any) -> Any:
         """Process a task and return a result."""
-        pass
 
-    async def send_message(self, message: AgentMessage, coordinator: 'AgentCoordinator') -> None:
+    async def send_message(
+        self, message: AgentMessage, coordinator: "AgentCoordinator"
+    ) -> None:
         """Send a message through the coordinator."""
         message.sender_id = self.agent_id
         await coordinator.route_message(message)
@@ -152,6 +156,7 @@ class BaseAgent(ABC):
             "state": self.state.value,
             "capabilities": [c.to_dict() for c in self.capabilities],
         }
+
 
 class AgentCoordinator:
     """Coordinates communication and task distribution between agents."""
@@ -216,7 +221,9 @@ class RoundRobinProtocol(AgentProtocol):
         """Initialize RoundRobinProtocol."""
         self._current_index = 0
 
-    def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+    def select_agents(
+        self, task: Any, available_agents: list[BaseAgent]
+    ) -> list[BaseAgent]:
         """Select agents."""
         if not available_agents:
             return []
@@ -238,10 +245,13 @@ class RoundRobinProtocol(AgentProtocol):
         finally:
             agent.state = AgentState.IDLE
 
+
 class BroadcastProtocol(AgentProtocol):
     """Broadcasts task to all agents and collects results."""
 
-    def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+    def select_agents(
+        self, task: Any, available_agents: list[BaseAgent]
+    ) -> list[BaseAgent]:
         """Select agents."""
         return available_agents
 
@@ -259,6 +269,7 @@ class BroadcastProtocol(AgentProtocol):
             for agent in agents:
                 agent.state = AgentState.IDLE
 
+
 class CapabilityRoutingProtocol(AgentProtocol):
     """Routes tasks to agents based on required capabilities."""
 
@@ -266,14 +277,20 @@ class CapabilityRoutingProtocol(AgentProtocol):
         """Initialize CapabilityRoutingProtocol."""
         self.required_capability = required_capability
 
-    def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+    def select_agents(
+        self, task: Any, available_agents: list[BaseAgent]
+    ) -> list[BaseAgent]:
         """Select agents."""
-        return [a for a in available_agents if a.has_capability(self.required_capability)]
+        return [
+            a for a in available_agents if a.has_capability(self.required_capability)
+        ]
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
         """Execute task."""
         if not agents:
-            raise CollaborationError(f"No agents with capability: {self.required_capability}")
+            raise CollaborationError(
+                f"No agents with capability: {self.required_capability}"
+            )
 
         # Use first available agent
         agent = next((a for a in agents if a.state == AgentState.IDLE), agents[0])
@@ -284,6 +301,7 @@ class CapabilityRoutingProtocol(AgentProtocol):
         finally:
             agent.state = AgentState.IDLE
 
+
 class ConsensusProtocol(AgentProtocol):
     """Requires consensus among agents for task completion."""
 
@@ -291,7 +309,9 @@ class ConsensusProtocol(AgentProtocol):
         """Initialize ConsensusProtocol."""
         self.quorum = quorum  # Percentage of agents that must agree
 
-    def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+    def select_agents(
+        self, task: Any, available_agents: list[BaseAgent]
+    ) -> list[BaseAgent]:
         """Select agents."""
         return available_agents
 
@@ -322,16 +342,17 @@ class ConsensusProtocol(AgentProtocol):
 
         raise CollaborationError("Consensus not reached")
 
+
 __all__ = [
-    "AgentState",
-    "MessageType",
-    "AgentMessage",
     "AgentCapability",
-    "AgentProtocol",
-    "BaseAgent",
     "AgentCoordinator",
-    "RoundRobinProtocol",
+    "AgentMessage",
+    "AgentProtocol",
+    "AgentState",
+    "BaseAgent",
     "BroadcastProtocol",
     "CapabilityRoutingProtocol",
     "ConsensusProtocol",
+    "MessageType",
+    "RoundRobinProtocol",
 ]

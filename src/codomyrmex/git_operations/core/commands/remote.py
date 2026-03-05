@@ -8,6 +8,7 @@ _GIT_TIMEOUT = 120  # seconds
 
 logger = get_logger(__name__)
 
+
 @mcp_tool(name="git_fetch")
 def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
     """Fetch changes from a remote."""
@@ -22,7 +23,7 @@ def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -33,6 +34,7 @@ def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error fetching remote: {e}")
         raise
+
 
 @mcp_tool(name="git_prune_remote")
 def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
@@ -48,7 +50,7 @@ def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -60,10 +62,9 @@ def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
         logger.error(f"Unexpected error pruning remote: {e}")
         raise
 
+
 @mcp_tool(name="git_add_remote")
-def add_remote(
-    remote_name: str, url: str, repository_path: str = None
-) -> bool:
+def add_remote(remote_name: str, url: str, repository_path: str = None) -> bool:
     """Add a remote repository."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -77,7 +78,7 @@ def add_remote(
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Remote '{remote_name}' added successfully")
@@ -91,6 +92,7 @@ def add_remote(
     except Exception as e:
         logger.error(f"Unexpected error adding remote: {e}")
         raise
+
 
 @mcp_tool(name="git_remove_remote")
 def remove_remote(remote_name: str, repository_path: str = None) -> bool:
@@ -107,7 +109,7 @@ def remove_remote(remote_name: str, repository_path: str = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         logger.info(f"Remote '{remote_name}' removed successfully")
@@ -121,6 +123,7 @@ def remove_remote(remote_name: str, repository_path: str = None) -> bool:
     except Exception as e:
         logger.error(f"Unexpected error removing remote: {e}")
         raise
+
 
 @mcp_tool(name="git_list_remotes")
 def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
@@ -137,7 +140,7 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
             capture_output=True,
             text=True,
             check=True,
-        timeout=_GIT_TIMEOUT,
+            timeout=_GIT_TIMEOUT,
         )
 
         remotes = []
@@ -151,12 +154,14 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
                     fetch_or_push = parts[2] if len(parts) > 2 else "fetch"
 
                     if name not in seen_remotes:
-                        remotes.append({
-                            "name": name,
-                            "url": url,
-                            "fetch": url if fetch_or_push == "(fetch)" else None,
-                            "push": url if fetch_or_push == "(push)" else None,
-                        })
+                        remotes.append(
+                            {
+                                "name": name,
+                                "url": url,
+                                "fetch": url if fetch_or_push == "(fetch)" else None,
+                                "push": url if fetch_or_push == "(push)" else None,
+                            }
+                        )
                         seen_remotes.add(name)
                     else:
                         # Update existing remote with push URL if needed

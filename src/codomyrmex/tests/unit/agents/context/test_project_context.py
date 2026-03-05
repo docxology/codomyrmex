@@ -26,6 +26,7 @@ from codomyrmex.agents.context.project import (
 
 class TestFileInfo:
     """Test suite for FileInfo."""
+
     def test_auto_extension(self) -> None:
         fi = FileInfo(path="module.py")
         assert fi.extension == "py"
@@ -38,14 +39,19 @@ class TestFileInfo:
 
 class TestProjectContext:
     """Test suite for ProjectContext."""
+
     def test_file_count(self) -> None:
         ctx = ProjectContext(files=[FileInfo("a.py"), FileInfo("b.py")])
         assert ctx.file_count == 2
 
     def test_files_by_extension(self) -> None:
-        ctx = ProjectContext(files=[
-            FileInfo("a.py"), FileInfo("b.md"), FileInfo("c.py"),
-        ])
+        ctx = ProjectContext(
+            files=[
+                FileInfo("a.py"),
+                FileInfo("b.md"),
+                FileInfo("c.py"),
+            ]
+        )
         assert len(ctx.files_by_extension("py")) == 2
 
 
@@ -54,6 +60,7 @@ class TestProjectContext:
 
 class TestProjectScanner:
     """Test suite for ProjectScanner."""
+
     def test_scan_real_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "mod").mkdir()
@@ -75,6 +82,7 @@ class TestProjectScanner:
 
 class TestToolSelector:
     """Test suite for ToolSelector."""
+
     def test_python_review(self) -> None:
         ts = ToolSelector()
         tools = ts.select("py", "review")
@@ -96,6 +104,7 @@ class TestToolSelector:
 
 class TestSymbol:
     """Test suite for Symbol."""
+
     def test_to_dict(self) -> None:
         s = Symbol(name="foo", kind="function", line=42)
         d = s.to_dict()
@@ -105,11 +114,14 @@ class TestSymbol:
 
 class TestRepoIndex:
     """Test suite for RepoIndex."""
+
     def test_filter_by_kind(self) -> None:
-        idx = RepoIndex(symbols=[
-            Symbol("foo", "function"),
-            Symbol("Bar", "class"),
-        ])
+        idx = RepoIndex(
+            symbols=[
+                Symbol("foo", "function"),
+                Symbol("Bar", "class"),
+            ]
+        )
         assert len(idx.functions()) == 1
         assert len(idx.classes()) == 1
 
@@ -119,6 +131,7 @@ class TestRepoIndex:
 
 class TestRepoIndexer:
     """Test suite for RepoIndexer."""
+
     def test_index_file(self) -> None:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write('"""Module doc."""\n\nimport os\nfrom pathlib import Path\n\n')

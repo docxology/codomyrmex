@@ -5,4 +5,4 @@ Exposes the core Simulator class and configuration.
 
 from .simulator import SimulationConfig, Simulator
 
-__all__ = ["Simulator", "SimulationConfig"]
+__all__ = ["SimulationConfig", "Simulator"]

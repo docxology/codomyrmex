@@ -72,16 +72,16 @@ def cli_commands():
 
 
 __all__ = [
+    "APIKeyManager",
     "Authenticator",
+    "PermissionRegistry",
     "Token",
     "TokenManager",
-    "APIKeyManager",
-    "PermissionRegistry",
     "TokenValidator",
     "authenticate",
     "authorize",
-    "get_authenticator",
     "cli_commands",
+    "get_authenticator",
 ]
 
 __version__ = "1.1.0"

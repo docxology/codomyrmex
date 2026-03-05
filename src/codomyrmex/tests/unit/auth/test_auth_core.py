@@ -69,8 +69,13 @@ class TestTokenDataclass:
 
     def test_to_dict_fields(self):
         """to_dict includes all serializable fields."""
-        t = Token(token_id="t1", user_id="u1", permissions=["read"],
-                  expires_at=5000.0, created_at=1000.0)
+        t = Token(
+            token_id="t1",
+            user_id="u1",
+            permissions=["read"],
+            expires_at=5000.0,
+            created_at=1000.0,
+        )
         d = t.to_dict()
         assert d["token_id"] == "t1"
         assert d["user_id"] == "u1"
@@ -106,9 +111,11 @@ class TestTokenDataclass:
     def test_roundtrip(self):
         """to_dict -> from_dict preserves all serializable fields."""
         original = Token(
-            token_id="rt-1", user_id="u-1",
+            token_id="rt-1",
+            user_id="u-1",
             permissions=["read", "write"],
-            expires_at=12345.0, created_at=1000.0,
+            expires_at=12345.0,
+            created_at=1000.0,
         )
         restored = Token.from_dict(original.to_dict())
         assert restored.token_id == original.token_id
@@ -398,7 +405,9 @@ class TestAPIKeyDataclass:
 
     def test_is_expired_future(self):
         """Key expiring in the future is not expired."""
-        key = APIKey(key="k", user_id="u", permissions=[], expires_at=time.time() + 3600)
+        key = APIKey(
+            key="k", user_id="u", permissions=[], expires_at=time.time() + 3600
+        )
         assert not key.is_expired
 
     def test_is_expired_past(self):
@@ -561,7 +570,9 @@ class TestAPIKeyManagerUnit:
     def test_rotate_success(self):
         """Rotating a key revokes old and issues new with same permissions."""
         mgr = APIKeyManager()
-        old_key = mgr.generate(user_id="alice", permissions=["read", "write"], label="v1")
+        old_key = mgr.generate(
+            user_id="alice", permissions=["read", "write"], label="v1"
+        )
         new_key = mgr.rotate(old_key)
         assert new_key is not None
         assert new_key != old_key
@@ -671,8 +682,11 @@ class TestPermissionCheckDataclass:
     def test_basic_creation(self):
         """PermissionCheck stores all fields."""
         pc = PermissionCheck(
-            user_id="alice", role="editor",
-            permission="write", granted=True, resource="doc-1"
+            user_id="alice",
+            role="editor",
+            permission="write",
+            granted=True,
+            resource="doc-1",
         )
         assert pc.user_id == "alice"
         assert pc.role == "editor"
@@ -1070,7 +1084,9 @@ class TestAuthenticatorUnit:
     def test_authenticate_api_key(self):
         """Authenticate with valid API key returns token."""
         a = self._fresh_authenticator()
-        api_key = a.api_key_manager.generate(user_id="alice", permissions=["read", "write"])
+        api_key = a.api_key_manager.generate(
+            user_id="alice", permissions=["read", "write"]
+        )
         token = a.authenticate({"api_key": api_key})
         assert token is not None
         assert token.user_id == "alice"
@@ -1194,12 +1210,14 @@ class TestModuleLevelFunctions:
     def test_get_authenticator(self):
         """get_authenticator returns the Authenticator singleton."""
         from codomyrmex.auth import get_authenticator
+
         a = get_authenticator()
         assert isinstance(a, Authenticator)
 
     def test_authenticate_function(self):
         """Module-level authenticate() works."""
         from codomyrmex.auth import authenticate
+
         a = self._reset_authenticator()
         a.register_user("testfn", "pass")
         # Module-level authenticate uses the singleton
@@ -1209,6 +1227,7 @@ class TestModuleLevelFunctions:
     def test_authorize_function(self):
         """Module-level authorize() works."""
         from codomyrmex.auth import authorize
+
         a = self._reset_authenticator()
         token = a.token_manager.create_token("u", permissions=["read"])
         assert authorize(token, "r", "read") is True
@@ -1216,6 +1235,7 @@ class TestModuleLevelFunctions:
     def test_cli_commands_structure(self):
         """cli_commands returns dict with expected keys."""
         from codomyrmex.auth import cli_commands
+
         cmds = cli_commands()
         assert "providers" in cmds
         assert "status" in cmds
@@ -1237,16 +1257,25 @@ class TestAuthModuleMetadata:
     def test_all_exports(self):
         """__all__ contains expected public names."""
         import codomyrmex.auth as auth_mod
+
         expected = {
-            "Authenticator", "Token", "TokenManager", "APIKeyManager",
-            "PermissionRegistry", "TokenValidator",
-            "authenticate", "authorize", "get_authenticator", "cli_commands",
+            "Authenticator",
+            "Token",
+            "TokenManager",
+            "APIKeyManager",
+            "PermissionRegistry",
+            "TokenValidator",
+            "authenticate",
+            "authorize",
+            "get_authenticator",
+            "cli_commands",
         }
         assert set(auth_mod.__all__) == expected
 
     def test_version(self):
         """Module has a version string."""
         import codomyrmex.auth as auth_mod
+
         assert hasattr(auth_mod, "__version__")
         assert isinstance(auth_mod.__version__, str)
         assert len(auth_mod.__version__) > 0

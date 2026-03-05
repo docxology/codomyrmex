@@ -20,9 +20,9 @@ from .rabbithole import RabbitHole
 
 __all__ = [
     "ActiveDefense",
-    "RabbitHole",
     "Defense",
     "DetectionRule",
+    "RabbitHole",
     "ResponseAction",
     "Severity",
     "ThreatDetector",

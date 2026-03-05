@@ -10,6 +10,7 @@ from codomyrmex.telemetry.metrics import Metrics
 
 try:
     from codomyrmex.telemetry.metrics import PrometheusExporter
+
     HAS_PROMETHEUS = PrometheusExporter is not None
 except ImportError:
     HAS_PROMETHEUS = False
@@ -18,6 +19,7 @@ try:
     import statsd  # noqa: F401
 
     from codomyrmex.telemetry.metrics import StatsDClient
+
     HAS_STATSD = StatsDClient is not None
 except (ImportError, ModuleNotFoundError):
     HAS_STATSD = False
@@ -27,6 +29,7 @@ _HAS_STATSD_SERVER = False
 if HAS_STATSD:
     try:
         import socket
+
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.settimeout(0.1)
         s.sendto(b"test:1|c", ("localhost", 8125))
@@ -70,4 +73,7 @@ def test_existing_metrics_integration():
     assert c.value == 5
 
     prom_data = metrics.export_prometheus()
-    assert 'test_counter_total{env="prod"} 5.0' in prom_data or 'test_counter_total{env="prod"} 5' in prom_data
+    assert (
+        'test_counter_total{env="prod"} 5.0' in prom_data
+        or 'test_counter_total{env="prod"} 5' in prom_data
+    )

@@ -25,6 +25,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -42,6 +43,7 @@ def get_deprecated_tools() -> list[dict[str, Any]]:
 
     try:
         from codomyrmex.model_context_protocol import get_all_tools
+
         tools = get_all_tools()
     except ImportError:
         logger.warning("MCP get_all_tools not available")
@@ -51,12 +53,14 @@ def get_deprecated_tools() -> list[dict[str, Any]]:
         meta = getattr(tool, "metadata", {}) or {}
         dep_version = meta.get("deprecated_in")
         if dep_version:
-            deprecated.append({
-                "name": getattr(tool, "name", str(tool)),
-                "module": getattr(tool, "module", "unknown"),
-                "deprecated_in": dep_version,
-                "description": getattr(tool, "description", ""),
-            })
+            deprecated.append(
+                {
+                    "name": getattr(tool, "name", str(tool)),
+                    "module": getattr(tool, "module", "unknown"),
+                    "deprecated_in": dep_version,
+                    "description": getattr(tool, "description", ""),
+                }
+            )
 
     logger.info("Found %d deprecated MCP tools", len(deprecated))
     return deprecated
@@ -102,6 +106,6 @@ def get_deprecation_summary() -> dict[str, Any]:
 
 __all__ = [
     "get_deprecated_tools",
-    "get_deprecation_timeline",
     "get_deprecation_summary",
+    "get_deprecation_timeline",
 ]

@@ -4,6 +4,7 @@ import pytest
 
 try:
     import numpy as np
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
@@ -18,6 +19,7 @@ try:
         model_soup,
         slerp,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -212,6 +214,7 @@ class TestModelMergerMCPTools:
     def test_merge_models_slerp(self):
         """MCP merge_models with slerp returns success."""
         from codomyrmex.model_merger.mcp_tools import merge_models
+
         result = merge_models(
             params_a={"w": [1.0, 0.0]},
             params_b={"w": [0.0, 1.0]},
@@ -224,6 +227,7 @@ class TestModelMergerMCPTools:
     def test_create_model_soup(self):
         """MCP create_model_soup returns success."""
         from codomyrmex.model_merger.mcp_tools import create_model_soup
+
         result = create_model_soup(
             param_dicts=[
                 {"w": [0.0, 0.0]},

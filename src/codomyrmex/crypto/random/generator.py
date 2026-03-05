@@ -51,9 +51,7 @@ def secure_random_int(min_val: int, max_val: int) -> int:
         RandomError: If min_val > max_val or generation fails.
     """
     if min_val > max_val:
-        raise RandomError(
-            f"min_val ({min_val}) must be <= max_val ({max_val})"
-        )
+        raise RandomError(f"min_val ({min_val}) must be <= max_val ({max_val})")
     try:
         # secrets.randbelow gives [0, exclusive_upper)
         return min_val + secrets.randbelow(max_val - min_val + 1)

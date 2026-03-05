@@ -61,23 +61,23 @@ def cli_commands() -> dict[str, dict[str, str | Callable]]:
 
 
 __all__ = [
+    "APIKeyReport",
     "Conflict",
     "DependencyInfo",
     "DependencyResolver",
-    "install_dependencies",
-    "APIKeyReport",
     "DependencyStatus",
     "ValidationReport",
-    "check_api_keys",
     "check_and_setup_env_vars",
+    "check_api_keys",
     "check_dependencies",
+    "cli_commands",
     "ensure_dependencies_installed",
     "generate_environment_report",
     "get_uv_path",
+    "install_dependencies",
     "is_uv_available",
     "is_uv_environment",
     "validate_environment",
     "validate_environment_completeness",
     "validate_python_version",
-    "cli_commands",
 ]

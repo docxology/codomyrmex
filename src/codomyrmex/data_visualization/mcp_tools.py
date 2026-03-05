@@ -10,7 +10,7 @@ def generate_chart(
     chart_type: str,
     data: dict[str, Any],
     title: str = "Chart",
-    output_path: str | None = None
+    output_path: str | None = None,
 ) -> dict:
     """Generate a visualization chart and optionally save it.
 
@@ -31,7 +31,7 @@ def generate_chart(
         "line": dv.create_line_plot,
         "scatter": dv.create_scatter_plot,
         "area": dv.create_area_chart,
-        "histogram": dv.create_histogram
+        "histogram": dv.create_histogram,
     }
 
     if chart_type not in chart_factories:
@@ -53,6 +53,7 @@ def generate_chart(
 
         if output_path and result is not None:
             import os
+
             os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(str(result))
@@ -81,7 +82,7 @@ def export_dashboard(report_type: str = "general", output_dir: str = ".") -> dic
         return {
             "status": "success",
             "message": "Dashboard exported successfully",
-            "file_path": file_path
+            "file_path": file_path,
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}

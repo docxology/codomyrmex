@@ -23,10 +23,9 @@ def format_document(document: Document, style: str = "default") -> Document:
     try:
         if document.format.value == "json":
             return _format_json(document, style)
-        elif document.format.value == "yaml":
+        if document.format.value == "yaml":
             return _format_yaml(document, style)
-        else:
-            return document
+        return document
     except Exception as e:
         logger.warning(f"Formatting failed: {e}, returning original document")
         return document
@@ -42,7 +41,7 @@ def _format_json(document: Document, style: str) -> Document:
         data = json.loads(document.get_content_as_string())
 
     if style == "compact":
-        formatted_content = json.dumps(data, separators=(',', ':'))
+        formatted_content = json.dumps(data, separators=(",", ":"))
     elif style == "pretty":
         formatted_content = json.dumps(data, indent=2, ensure_ascii=False)
     else:
@@ -71,7 +70,9 @@ def _format_yaml(document: Document, style: str) -> Document:
     if style == "compact":
         formatted_content = yaml.dump(data, default_flow_style=True)
     else:
-        formatted_content = yaml.dump(data, default_flow_style=False, allow_unicode=True)
+        formatted_content = yaml.dump(
+            data, default_flow_style=False, allow_unicode=True
+        )
 
     formatted_doc = Document(
         content=formatted_content,
@@ -82,6 +83,3 @@ def _format_yaml(document: Document, style: str) -> Document:
     )
 
     return formatted_doc
-
-
-

@@ -66,7 +66,9 @@ class TestInfomaniakBlockStorage:
         assert result is not None
         assert result["id"] == "vol-bbb"
         assert result["status"] == "in-use"
-        mock_openstack_connection.block_storage.get_volume.assert_called_once_with("vol-bbb")
+        mock_openstack_connection.block_storage.get_volume.assert_called_once_with(
+            "vol-bbb"
+        )
 
     def test_get_volume_returns_none_when_not_found(self, mock_openstack_connection):
         """get_volume returns None when the OpenStack SDK returns None."""
@@ -79,7 +81,9 @@ class TestInfomaniakBlockStorage:
 
     def test_create_volume_success(self, mock_openstack_connection):
         """create_volume returns a dict on success with all parameters forwarded."""
-        vol = make_stub_volume(volume_id="vol-new", name="fresh-vol", status="creating", size=50)
+        vol = make_stub_volume(
+            volume_id="vol-new", name="fresh-vol", status="creating", size=50
+        )
         mock_openstack_connection.block_storage.create_volume.return_value = vol
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
@@ -143,7 +147,9 @@ class TestInfomaniakBlockStorage:
         mock_attach = Stub()
         mock_attach.id = "att-99"
         mock_attach.volume_id = "vol-det"
-        mock_openstack_connection.compute.volume_attachments.return_value = [mock_attach]
+        mock_openstack_connection.compute.volume_attachments.return_value = [
+            mock_attach
+        ]
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         result = client.detach_volume("vol-det", "srv-222")
@@ -158,7 +164,9 @@ class TestInfomaniakBlockStorage:
         other_attach = Stub()
         other_attach.id = "att-other"
         other_attach.volume_id = "vol-OTHER"
-        mock_openstack_connection.compute.volume_attachments.return_value = [other_attach]
+        mock_openstack_connection.compute.volume_attachments.return_value = [
+            other_attach
+        ]
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         result = client.detach_volume("vol-missing", "srv-333")
@@ -225,10 +233,14 @@ class TestInfomaniakBlockStorage:
         """restore_backup returns a dict with the restored volume_id."""
         mock_result = Stub()
         mock_result.volume_id = "vol-restored"
-        mock_openstack_connection.block_storage.restore_backup.return_value = mock_result
+        mock_openstack_connection.block_storage.restore_backup.return_value = (
+            mock_result
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
-        result = client.restore_backup("bkp-001", volume_id="vol-target", name="restored-vol")
+        result = client.restore_backup(
+            "bkp-001", volume_id="vol-target", name="restored-vol"
+        )
 
         assert result is not None
         assert result["volume_id"] == "vol-restored"
@@ -361,49 +373,63 @@ class TestInfomaniakBlockStorage:
 
     def test_list_volumes_error_returns_empty_list(self, mock_openstack_connection):
         """list_volumes returns [] when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.volumes.side_effect = Exception("conn refused")
+        mock_openstack_connection.block_storage.volumes.side_effect = Exception(
+            "conn refused"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.list_volumes() == []
 
     def test_get_volume_error_returns_none(self, mock_openstack_connection):
         """get_volume returns None when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.get_volume.side_effect = Exception("not found")
+        mock_openstack_connection.block_storage.get_volume.side_effect = Exception(
+            "not found"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.get_volume("vol-err") is None
 
     def test_create_volume_error_returns_none(self, mock_openstack_connection):
         """create_volume returns None when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.create_volume.side_effect = Exception("quota")
+        mock_openstack_connection.block_storage.create_volume.side_effect = Exception(
+            "quota"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.create_volume(size=100, name="fail-vol") is None
 
     def test_delete_volume_error_returns_false(self, mock_openstack_connection):
         """delete_volume returns False when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.delete_volume.side_effect = Exception("locked")
+        mock_openstack_connection.block_storage.delete_volume.side_effect = Exception(
+            "locked"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.delete_volume("vol-locked") is False
 
     def test_extend_volume_error_returns_false(self, mock_openstack_connection):
         """extend_volume returns False when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.extend_volume.side_effect = Exception("too small")
+        mock_openstack_connection.block_storage.extend_volume.side_effect = Exception(
+            "too small"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.extend_volume("vol-fail", 10) is False
 
     def test_attach_volume_error_returns_false(self, mock_openstack_connection):
         """attach_volume returns False when the SDK raises an exception."""
-        mock_openstack_connection.compute.create_volume_attachment.side_effect = Exception("busy")
+        mock_openstack_connection.compute.create_volume_attachment.side_effect = (
+            Exception("busy")
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.attach_volume("vol-err", "srv-err") is False
 
     def test_detach_volume_error_returns_false(self, mock_openstack_connection):
         """detach_volume returns False when volume_attachments raises an exception."""
-        mock_openstack_connection.compute.volume_attachments.side_effect = Exception("timeout")
+        mock_openstack_connection.compute.volume_attachments.side_effect = Exception(
+            "timeout"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.detach_volume("vol-err", "srv-err") is False
@@ -417,42 +443,54 @@ class TestInfomaniakBlockStorage:
 
     def test_create_backup_error_returns_none(self, mock_openstack_connection):
         """create_backup returns None when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.create_backup.side_effect = Exception("no space")
+        mock_openstack_connection.block_storage.create_backup.side_effect = Exception(
+            "no space"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.create_backup("vol-err", "fail-bkp") is None
 
     def test_restore_backup_error_returns_none(self, mock_openstack_connection):
         """restore_backup returns None when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.restore_backup.side_effect = Exception("corrupt")
+        mock_openstack_connection.block_storage.restore_backup.side_effect = Exception(
+            "corrupt"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.restore_backup("bkp-bad") is None
 
     def test_delete_backup_error_returns_false(self, mock_openstack_connection):
         """delete_backup returns False when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.delete_backup.side_effect = Exception("locked")
+        mock_openstack_connection.block_storage.delete_backup.side_effect = Exception(
+            "locked"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.delete_backup("bkp-locked") is False
 
     def test_list_snapshots_error_returns_empty_list(self, mock_openstack_connection):
         """list_snapshots returns [] when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.snapshots.side_effect = Exception("denied")
+        mock_openstack_connection.block_storage.snapshots.side_effect = Exception(
+            "denied"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.list_snapshots() == []
 
     def test_create_snapshot_error_returns_none(self, mock_openstack_connection):
         """create_snapshot returns None when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.create_snapshot.side_effect = Exception("quota")
+        mock_openstack_connection.block_storage.create_snapshot.side_effect = Exception(
+            "quota"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.create_snapshot("vol-err", "fail-snap") is None
 
     def test_delete_snapshot_error_returns_false(self, mock_openstack_connection):
         """delete_snapshot returns False when the SDK raises an exception."""
-        mock_openstack_connection.block_storage.delete_snapshot.side_effect = Exception("busy")
+        mock_openstack_connection.block_storage.delete_snapshot.side_effect = Exception(
+            "busy"
+        )
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.delete_snapshot("snap-busy") is False
@@ -460,21 +498,31 @@ class TestInfomaniakBlockStorage:
 
 # =========================================================================
 
+
 class TestInfomaniakVolumeClientExpanded:
     """Tests for InfomaniakVolumeClient untested methods."""
 
     def _make_client(self):
         from codomyrmex.cloud.infomaniak.block_storage import InfomaniakVolumeClient
+
         mock_conn = Stub()
         return InfomaniakVolumeClient(connection=mock_conn), mock_conn
 
     def test_get_volume(self):
         """get_volume returns dict via _volume_to_dict."""
         client, mc = self._make_client()
-        vol = Stub(id="v1", name="data", status="available", size=50,
-                        volume_type="SSD", availability_zone="dc3-a",
-                        is_bootable=False, is_encrypted=False,
-                        attachments=[], created_at=None)
+        vol = Stub(
+            id="v1",
+            name="data",
+            status="available",
+            size=50,
+            volume_type="SSD",
+            availability_zone="dc3-a",
+            is_bootable=False,
+            is_encrypted=False,
+            attachments=[],
+            created_at=None,
+        )
         mc.block_storage.get_volume.return_value = vol
         result = client.get_volume("v1")
         assert result["id"] == "v1"

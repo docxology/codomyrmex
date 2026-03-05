@@ -10,6 +10,7 @@ from typing import Any
 
 class DeploymentState(Enum):
     """Lifecycle states of a deployment."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -21,6 +22,7 @@ class DeploymentState(Enum):
 @dataclass
 class DeploymentTarget:
     """A target for deployment (server, pod, etc.)."""
+
     id: str
     name: str
     address: str
@@ -32,6 +34,7 @@ class DeploymentTarget:
 @dataclass
 class DeploymentResult:
     """Result of a deployment operation."""
+
     success: bool
     targets_updated: int
     targets_failed: int
@@ -55,6 +58,7 @@ class DeploymentResult:
 @dataclass
 class StrategyProgress:
     """Tracks the progress of a strategy execution."""
+
     service: str
     version: str
     strategy_name: str

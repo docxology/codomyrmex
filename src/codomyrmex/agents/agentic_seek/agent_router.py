@@ -19,44 +19,141 @@ from codomyrmex.agents.agentic_seek.agent_types import AgenticSeekAgentType
 # Keyword dictionaries
 # ---------------------------------------------------------------------------
 
-_CODER_KEYWORDS: frozenset[str] = frozenset({
-    "code", "script", "program", "function", "class", "debug", "compile",
-    "python", "java", "golang", "go lang", "bash", "shell", "c language",
-    "algorithm", "implement", "refactor", "unittest", "pytest", "coding",
-    "bug", "error", "exception", "traceback", "syntax", "variable",
-    "loop", "recursion", "api", "endpoint", "sdk", "library",
-})
+_CODER_KEYWORDS: frozenset[str] = frozenset(
+    {
+        "code",
+        "script",
+        "program",
+        "function",
+        "class",
+        "debug",
+        "compile",
+        "python",
+        "java",
+        "golang",
+        "go lang",
+        "bash",
+        "shell",
+        "c language",
+        "algorithm",
+        "implement",
+        "refactor",
+        "unittest",
+        "pytest",
+        "coding",
+        "bug",
+        "error",
+        "exception",
+        "traceback",
+        "syntax",
+        "variable",
+        "loop",
+        "recursion",
+        "api",
+        "endpoint",
+        "sdk",
+        "library",
+    }
+)
 
-_BROWSER_KEYWORDS: frozenset[str] = frozenset({
-    "search", "browse", "web", "website", "url", "link", "google",
-    "online", "internet", "download", "page", "navigate", "scrape",
-    "http", "html", "css", "find online", "look up", "research online",
-})
+_BROWSER_KEYWORDS: frozenset[str] = frozenset(
+    {
+        "search",
+        "browse",
+        "web",
+        "website",
+        "url",
+        "link",
+        "google",
+        "online",
+        "internet",
+        "download",
+        "page",
+        "navigate",
+        "scrape",
+        "http",
+        "html",
+        "css",
+        "find online",
+        "look up",
+        "research online",
+    }
+)
 
-_FILE_KEYWORDS: frozenset[str] = frozenset({
-    "file", "folder", "directory", "rename", "move", "copy", "delete",
-    "create file", "read file", "write file", "find file", "locate",
-    "path", "disk", "filesystem", "ls", "mkdir", "rm", "cp", "mv",
-})
+_FILE_KEYWORDS: frozenset[str] = frozenset(
+    {
+        "file",
+        "folder",
+        "directory",
+        "rename",
+        "move",
+        "copy",
+        "delete",
+        "create file",
+        "read file",
+        "write file",
+        "find file",
+        "locate",
+        "path",
+        "disk",
+        "filesystem",
+        "ls",
+        "mkdir",
+        "rm",
+        "cp",
+        "mv",
+    }
+)
 
-_PLANNER_KEYWORDS: frozenset[str] = frozenset({
-    "plan", "step by step", "break down", "organise", "organize",
-    "project", "workflow", "pipeline", "schedule", "roadmap",
-    "multi-step", "complex task", "divide", "strategy",
-})
+_PLANNER_KEYWORDS: frozenset[str] = frozenset(
+    {
+        "plan",
+        "step by step",
+        "break down",
+        "organise",
+        "organize",
+        "project",
+        "workflow",
+        "pipeline",
+        "schedule",
+        "roadmap",
+        "multi-step",
+        "complex task",
+        "divide",
+        "strategy",
+    }
+)
 
 # Complexity indicators
-_HIGH_COMPLEXITY_INDICATORS: frozenset[str] = frozenset({
-    "then", "after that", "next", "finally", "step", "steps",
-    "first", "second", "third", "multiple", "complex",
-    "and also", "in addition", "furthermore", "combine",
-    "integrate", "pipeline", "workflow", "end to end",
-})
+_HIGH_COMPLEXITY_INDICATORS: frozenset[str] = frozenset(
+    {
+        "then",
+        "after that",
+        "next",
+        "finally",
+        "step",
+        "steps",
+        "first",
+        "second",
+        "third",
+        "multiple",
+        "complex",
+        "and also",
+        "in addition",
+        "furthermore",
+        "combine",
+        "integrate",
+        "pipeline",
+        "workflow",
+        "end to end",
+    }
+)
 
 
 # ---------------------------------------------------------------------------
 # Router
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class AgenticSeekRouter:
@@ -162,6 +259,7 @@ class AgenticSeekRouter:
 # ---------------------------------------------------------------------------
 # Scoring helper
 # ---------------------------------------------------------------------------
+
 
 def _score(text: str, keywords: frozenset[str]) -> int:
     """Count how many keywords from *keywords* appear in *text*."""

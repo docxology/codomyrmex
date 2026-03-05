@@ -110,26 +110,32 @@ class TestComplianceChecker:
     def test_add_control(self):
         """Should add control."""
         checker = ComplianceChecker(ComplianceFramework.SOC2)
-        checker.add_control(Control(
-            id="C1",
-            title="Test",
-            description="",
-            framework=ComplianceFramework.SOC2,
-        ))
+        checker.add_control(
+            Control(
+                id="C1",
+                title="Test",
+                description="",
+                framework=ComplianceFramework.SOC2,
+            )
+        )
 
         assert checker.get_control("C1") is not None
 
     def test_assess(self):
         """Should run assessment."""
         checker = ComplianceChecker(ComplianceFramework.SOC2)
-        checker.add_checker(PolicyChecker(
-            control_id="C1",
-            check_fn=lambda ctx: ctx.get("enabled"),
-        ))
-        checker.add_checker(PolicyChecker(
-            control_id="C2",
-            check_fn=lambda ctx: ctx.get("encrypted"),
-        ))
+        checker.add_checker(
+            PolicyChecker(
+                control_id="C1",
+                check_fn=lambda ctx: ctx.get("enabled"),
+            )
+        )
+        checker.add_checker(
+            PolicyChecker(
+                control_id="C2",
+                check_fn=lambda ctx: ctx.get("encrypted"),
+            )
+        )
 
         report = checker.assess({"enabled": True, "encrypted": False})
 
@@ -139,10 +145,12 @@ class TestComplianceChecker:
     def test_check_single(self):
         """Should check single control."""
         checker = ComplianceChecker(ComplianceFramework.GDPR)
-        checker.add_checker(PolicyChecker(
-            control_id="GDPR1",
-            check_fn=lambda ctx: True,
-        ))
+        checker.add_checker(
+            PolicyChecker(
+                control_id="GDPR1",
+                check_fn=lambda ctx: True,
+            )
+        )
 
         result = checker.check_control("GDPR1", {})
 

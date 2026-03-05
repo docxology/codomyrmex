@@ -15,6 +15,7 @@ from codomyrmex.agents.meta.strategies import Strategy, StrategyLibrary
 
 class TestOutcomeScorer:
     """Test suite for OutcomeScorer."""
+
     def test_perfect_score(self) -> None:
         scorer = OutcomeScorer()
         s = scorer.score(tests_passed=10, tests_total=10)
@@ -47,6 +48,7 @@ class TestOutcomeScorer:
 
 class TestStrategy:
     """Test suite for Strategy."""
+
     def test_record_outcome(self) -> None:
         s = Strategy("fast")
         s.record_outcome(True)
@@ -62,6 +64,7 @@ class TestStrategy:
 
 class TestStrategyLibrary:
     """Test suite for StrategyLibrary."""
+
     def test_add_and_get(self) -> None:
         lib = StrategyLibrary()
         lib.add(Strategy("fast"))
@@ -96,6 +99,7 @@ class TestStrategyLibrary:
 
 class TestABTestEngine:
     """Test suite for ABEngine."""
+
     def test_clear_winner(self) -> None:
         engine = ABTestEngine()
         result = engine.compare_scores("a", [0.9, 0.8, 0.85], "b", [0.5, 0.4, 0.3])
@@ -118,6 +122,7 @@ class TestABTestEngine:
 
 class TestMetaAgent:
     """Test suite for MetaAgent."""
+
     def test_run_basic(self) -> None:
         meta = MetaAgent()
         meta.library.add(Strategy("fast", "go fast"))

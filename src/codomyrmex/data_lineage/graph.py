@@ -153,7 +153,9 @@ class LineageGraph:
     def get_leaf_nodes(self) -> list[LineageNode]:
         """Get nodes with no downstream edges."""
         source_ids = {edge.source_id for edge in self._edges}
-        return [node for node_id, node in self._nodes.items() if node_id not in source_ids]
+        return [
+            node for node_id, node in self._nodes.items() if node_id not in source_ids
+        ]
 
     def export_to_dot(self) -> str:
         """Export graph to DOT format for visualization."""
@@ -167,11 +169,15 @@ class LineageGraph:
                 color = "lightgrey"
             elif node.node_type == NodeType.MODEL:
                 color = "lightgreen"
-            dot.append(f'  "{node_id}" [label="{node.name}\\n({node.node_type.value})", style=filled, fillcolor={color}];')
+            dot.append(
+                f'  "{node_id}" [label="{node.name}\\n({node.node_type.value})", style=filled, fillcolor={color}];'
+            )
 
         # Add edges
         for edge in self._edges:
-            dot.append(f'  "{edge.source_id}" -> "{edge.target_id}" [label="{edge.edge_type.value}"];')
+            dot.append(
+                f'  "{edge.source_id}" -> "{edge.target_id}" [label="{edge.edge_type.value}"];'
+            )
 
         dot.append("}")
         return "\n".join(dot)

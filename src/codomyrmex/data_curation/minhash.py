@@ -42,7 +42,7 @@ class MinHash:
             shingle = text[i : i + self.shingle_size]
             h = int(hashlib.md5(shingle.encode()).hexdigest(), 16) % self._p
             shingles.add(h)
-        return shingles if shingles else {0}  # Prevent empty set
+        return shingles or {0}  # Prevent empty set
 
     def signature(self, text: str) -> np.ndarray:
         """
@@ -58,8 +58,7 @@ class MinHash:
 
         # Compute all hash values: (n_hashes, n_shingles)
         hash_values = (
-            self._a[:, np.newaxis] * shingle_arr[np.newaxis, :]
-            + self._b[:, np.newaxis]
+            self._a[:, np.newaxis] * shingle_arr[np.newaxis, :] + self._b[:, np.newaxis]
         ) % self._p
 
         # MinHash: minimum over shingles for each hash function

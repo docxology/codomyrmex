@@ -23,7 +23,9 @@ try:
         create_mock_server,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ---------------------------------------------------------------------------
 # Enums
@@ -142,7 +144,7 @@ class TestMockRoute:
 class TestRequestMatcher:
     """Verify request matching across strategies and edge cases."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def matcher(self):
         return RequestMatcher()
 
@@ -150,24 +152,32 @@ class TestRequestMatcher:
 
     def test_exact_match_success(self, matcher):
         incoming = {"method": "GET", "path": "/users"}
-        spec = MockRequest(method="GET", path="/users", match_strategy=MatchStrategy.EXACT)
+        spec = MockRequest(
+            method="GET", path="/users", match_strategy=MatchStrategy.EXACT
+        )
         assert matcher.match(incoming, spec) is True
 
     def test_exact_match_failure(self, matcher):
         incoming = {"method": "GET", "path": "/users/1"}
-        spec = MockRequest(method="GET", path="/users", match_strategy=MatchStrategy.EXACT)
+        spec = MockRequest(
+            method="GET", path="/users", match_strategy=MatchStrategy.EXACT
+        )
         assert matcher.match(incoming, spec) is False
 
     # -- Prefix match ------------------------------------------------------
 
     def test_prefix_match_success(self, matcher):
         incoming = {"method": "GET", "path": "/api/v1/users"}
-        spec = MockRequest(method="GET", path="/api/v1", match_strategy=MatchStrategy.PREFIX)
+        spec = MockRequest(
+            method="GET", path="/api/v1", match_strategy=MatchStrategy.PREFIX
+        )
         assert matcher.match(incoming, spec) is True
 
     def test_prefix_match_exact_path(self, matcher):
         incoming = {"method": "GET", "path": "/api"}
-        spec = MockRequest(method="GET", path="/api", match_strategy=MatchStrategy.PREFIX)
+        spec = MockRequest(
+            method="GET", path="/api", match_strategy=MatchStrategy.PREFIX
+        )
         assert matcher.match(incoming, spec) is True
 
     # -- Regex match -------------------------------------------------------
@@ -228,11 +238,11 @@ class TestRequestMatcher:
 class TestMockAPIServer:
     """Verify route management, request handling, logging, and assertions."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def server(self):
         return MockAPIServer()
 
-    @pytest.fixture()
+    @pytest.fixture
     def route_200(self):
         return MockRoute(
             request=MockRequest(method="GET", path="/ok"),
@@ -311,7 +321,9 @@ class TestMockAPIServer:
             mode=MockResponseMode.RANDOM,
         )
         server.add_route("rand", route)
-        seen_codes = {server.handle_request("GET", "/rand").status_code for _ in range(20)}
+        seen_codes = {
+            server.handle_request("GET", "/rand").status_code for _ in range(20)
+        }
         assert seen_codes.issubset({200, 201})
 
     def test_no_responses_returns_204(self, server):
@@ -402,7 +414,7 @@ class TestMockAPIServer:
 class TestResponseFixture:
     """Verify convenience response factory methods."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def fixture(self):
         return ResponseFixture()
 

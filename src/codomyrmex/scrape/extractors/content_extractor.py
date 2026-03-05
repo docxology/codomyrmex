@@ -11,7 +11,7 @@ import re
 from dataclasses import dataclass, field
 from urllib.parse import urljoin
 
-__all__ = ["ExtractedContent", "ContentExtractor", "text_similarity"]
+__all__ = ["ContentExtractor", "ExtractedContent", "text_similarity"]
 
 
 @dataclass
@@ -91,7 +91,9 @@ class ContentExtractor:
     def _extract_headings(self, html: str) -> list[tuple[int, str]]:
         """Extract all heading elements (h1-h6)."""
         headings = []
-        for match in re.finditer(r"<h([1-6])[^>]*>(.*?)</h\1>", html, re.IGNORECASE | re.DOTALL):
+        for match in re.finditer(
+            r"<h([1-6])[^>]*>(.*?)</h\1>", html, re.IGNORECASE | re.DOTALL
+        ):
             level = int(match.group(1))
             text = self._strip_tags(match.group(2)).strip()
             if text:
@@ -110,7 +112,11 @@ class ContentExtractor:
     def _extract_links(self, html: str, base_url: str) -> list[tuple[str, str]]:
         """Extract links as (url, anchor_text) tuples."""
         links = []
-        for match in re.finditer(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>', html, re.IGNORECASE | re.DOTALL):
+        for match in re.finditer(
+            r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+            html,
+            re.IGNORECASE | re.DOTALL,
+        ):
             href = match.group(1)
             text = self._strip_tags(match.group(2)).strip()
             if base_url:
@@ -121,9 +127,13 @@ class ContentExtractor:
     def _extract_images(self, html: str, base_url: str) -> list[tuple[str, str]]:
         """Extract images as (src, alt) tuples."""
         images = []
-        for match in re.finditer(r'<img[^>]+src=["\']([^"\']+)["\']', html, re.IGNORECASE):
+        for match in re.finditer(
+            r'<img[^>]+src=["\']([^"\']+)["\']', html, re.IGNORECASE
+        ):
             src = match.group(1)
-            alt_match = re.search(r'alt=["\']([^"\']*)["\']', match.group(0), re.IGNORECASE)
+            alt_match = re.search(
+                r'alt=["\']([^"\']*)["\']', match.group(0), re.IGNORECASE
+            )
             alt = alt_match.group(1) if alt_match else ""
             if base_url:
                 src = urljoin(base_url, src)
@@ -135,7 +145,8 @@ class ContentExtractor:
         meta = {}
         for match in re.finditer(
             r'<meta[^>]+name=["\']([^"\']+)["\'][^>]+content=["\']([^"\']*)["\']',
-            html, re.IGNORECASE,
+            html,
+            re.IGNORECASE,
         ):
             meta[match.group(1).lower()] = match.group(2)
         return meta

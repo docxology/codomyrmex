@@ -44,16 +44,27 @@ def git_repo(tmp_path):
     repo = str(tmp_path / "repo")
     os.makedirs(repo)
     subprocess.run(["git", "init"], cwd=repo, capture_output=True, check=True)
-    subprocess.run(["git", "config", "user.email", "test@test.com"], cwd=repo, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Tester"], cwd=repo, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@test.com"], cwd=repo, capture_output=True
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Tester"], cwd=repo, capture_output=True
+    )
 
     # Initial commit so HEAD exists
     readme = os.path.join(repo, "README.md")
     with open(readme, "w") as f:
         f.write("# Test\n")
     subprocess.run(["git", "add", "."], cwd=repo, capture_output=True, check=True)
-    subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=repo, capture_output=True, check=True)
-    subprocess.run(["git", "branch", "-m", "main"], cwd=repo, capture_output=True, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Initial commit"],
+        cwd=repo,
+        capture_output=True,
+        check=True,
+    )
+    subprocess.run(
+        ["git", "branch", "-m", "main"], cwd=repo, capture_output=True, check=True
+    )
     return repo
 
 
@@ -68,6 +79,7 @@ def bare_remote(tmp_path):
 # ---------------------------------------------------------------------------
 # Remote tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_add_remote(git_repo, bare_remote):
@@ -109,6 +121,7 @@ def test_fetch_remote(git_repo, bare_remote):
 # Reset / Revert / Clean
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_reset_changes(git_repo):
     """Verify reset changes behavior."""
@@ -132,9 +145,13 @@ def test_revert_commit(git_repo):
     with open(f, "w") as fh:
         fh.write("bye")
     subprocess.run(["git", "add", "."], cwd=git_repo, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "to-revert"], cwd=git_repo, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "to-revert"], cwd=git_repo, capture_output=True
+    )
 
-    sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=git_repo, capture_output=True, text=True).stdout.strip()
+    sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=git_repo, capture_output=True, text=True
+    ).stdout.strip()
     result = revert_commit(sha, git_repo)
     assert result is True
 
@@ -156,6 +173,7 @@ def test_clean_repository(git_repo):
 # Diff / Commit details
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_get_diff(git_repo):
     """Verify get diff behavior."""
@@ -166,7 +184,9 @@ def test_get_diff(git_repo):
 @pytest.mark.unit
 def test_get_commit_details(git_repo):
     """Verify get commit details behavior."""
-    sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=git_repo, capture_output=True, text=True).stdout.strip()
+    sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=git_repo, capture_output=True, text=True
+    ).stdout.strip()
     details = get_commit_details(sha, git_repo)
     assert details["hash"] == sha
     assert details["author"] == "Tester"
@@ -175,6 +195,7 @@ def test_get_commit_details(git_repo):
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_config_ops(git_repo):
@@ -187,18 +208,25 @@ def test_config_ops(git_repo):
 # Cherry-pick
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 def test_cherry_pick(git_repo):
     """Verify cherry pick behavior."""
     # Create branch with a commit, then cherry-pick it to main
-    subprocess.run(["git", "checkout", "-b", "feature"], cwd=git_repo, capture_output=True)
+    subprocess.run(
+        ["git", "checkout", "-b", "feature"], cwd=git_repo, capture_output=True
+    )
     f = os.path.join(git_repo, "feature.txt")
     with open(f, "w") as fh:
         fh.write("feature")
     subprocess.run(["git", "add", "."], cwd=git_repo, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "feature commit"], cwd=git_repo, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "feature commit"], cwd=git_repo, capture_output=True
+    )
 
-    sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=git_repo, capture_output=True, text=True).stdout.strip()
+    sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=git_repo, capture_output=True, text=True
+    ).stdout.strip()
 
     subprocess.run(["git", "checkout", "main"], cwd=git_repo, capture_output=True)
     result = cherry_pick(sha, git_repo)
@@ -208,6 +236,7 @@ def test_cherry_pick(git_repo):
 # ---------------------------------------------------------------------------
 # Submodules (no-op on a repo without submodules, should succeed or be benign)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 def test_submodules(git_repo):

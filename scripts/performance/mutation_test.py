@@ -217,16 +217,18 @@ def apply_mutation(
         return None
 
 
-def run_tests(
-    source_file: Path, mutated_source: str, test_files: list[str]
-) -> bool:
+def run_tests(source_file: Path, mutated_source: str, test_files: list[str]) -> bool:
     """Run tests against mutated source. Returns True if mutant was killed."""
     original = source_file.read_text()
     try:
         source_file.write_text(mutated_source)
         cmd = [
-            sys.executable, "-m", "pytest",
-            "--no-header", "-x", "-q",
+            sys.executable,
+            "-m",
+            "pytest",
+            "--no-header",
+            "-x",
+            "-q",
             "--tb=no",
             "--override-ini=addopts=",
         ] + test_files
@@ -299,13 +301,19 @@ def main() -> int:
     print("\n📋 Verifying baseline tests pass...")
     all_test_files = []
     for t in TARGETS:
-        all_test_files.extend(
-            f for f in t.test_files if Path(ROOT / f).exists()
-        )
+        all_test_files.extend(f for f in t.test_files if Path(ROOT / f).exists())
 
     if all_test_files:
         baseline = subprocess.run(
-            [sys.executable, "-m", "pytest", "--no-header", "-q", "--override-ini=addopts=", "--tb=short"]
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                "--no-header",
+                "-q",
+                "--override-ini=addopts=",
+                "--tb=short",
+            ]
             + all_test_files,
             capture_output=True,
             text=True,
@@ -313,7 +321,11 @@ def main() -> int:
         )
         if baseline.returncode != 0:
             print("❌ Baseline tests fail — fix tests before mutation testing")
-            print(baseline.stdout[-500:] if len(baseline.stdout) > 500 else baseline.stdout)
+            print(
+                baseline.stdout[-500:]
+                if len(baseline.stdout) > 500
+                else baseline.stdout
+            )
             return 1
 
     print("✅ Baseline tests pass\n")
@@ -331,7 +343,7 @@ def main() -> int:
                 f"({r.kill_ratio * 100:.0f}%)"
             )
             if r.details:
-                print(f"  Survivors:")
+                print("  Survivors:")
                 for d in r.details[:10]:
                     print(f"    {d}")
 
@@ -344,7 +356,9 @@ def main() -> int:
     print(f"📊 OVERALL: {killed}/{total} mutants killed ({ratio:.0f}%)")
     for r in results:
         mark = "✅" if r.kill_ratio >= 0.80 else "❌"
-        print(f"  {mark} {r.label}: {r.killed}/{r.total_mutants} ({r.kill_ratio * 100:.0f}%)")
+        print(
+            f"  {mark} {r.label}: {r.killed}/{r.total_mutants} ({r.kill_ratio * 100:.0f}%)"
+        )
     print(f"{'=' * 60}")
 
     gate = ratio >= 80.0
@@ -354,6 +368,7 @@ def main() -> int:
         print("❌ v0.2.1 gate: ≥80% mutation kill ratio NOT MET")
 
     return 0 if gate else 1
+
 
 if __name__ == "__main__":
     sys.exit(main())

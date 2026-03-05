@@ -17,7 +17,10 @@ _HAS_GITHUB_TOKEN = bool(os.environ.get("GITHUB_TOKEN"))
 
 pytestmark = [
     pytest.mark.unit,
-    pytest.mark.skipif(not _HAS_GITHUB_TOKEN, reason="GITHUB_TOKEN not set — skip live GitHub API tests"),
+    pytest.mark.skipif(
+        not _HAS_GITHUB_TOKEN,
+        reason="GITHUB_TOKEN not set — skip live GitHub API tests",
+    ),
 ]
 
 
@@ -40,6 +43,8 @@ class TestGitHubIssues:
         if not test_owner or not test_repo:
             pytest.skip("GITHUB_TEST_OWNER/GITHUB_TEST_REPO not set")
 
-        result = create_issue(test_owner, test_repo, "CI Test Issue", "Automated test", ["test"])
+        result = create_issue(
+            test_owner, test_repo, "CI Test Issue", "Automated test", ["test"]
+        )
         assert isinstance(result, dict)
         assert "number" in result

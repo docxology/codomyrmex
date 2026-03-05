@@ -27,9 +27,11 @@ except ImportError:
         "Kubernetes client not available. Install with: pip install kubernetes"
     )
 
+
 @dataclass
 class KubernetesDeployment:
     """Kubernetes deployment configuration."""
+
     name: str
     image: str
     namespace: str = "default"
@@ -46,9 +48,11 @@ class KubernetesDeployment:
     resources: dict[str, dict[str, str]] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
 
+
 @dataclass
 class KubernetesService:
     """Kubernetes service configuration."""
+
     name: str
     namespace: str = "default"
     type: str = "ClusterIP"  # ClusterIP, NodePort, LoadBalancer
@@ -58,14 +62,11 @@ class KubernetesService:
     selector: dict[str, str] = field(default_factory=dict)
     labels: dict[str, str] = field(default_factory=dict)
 
+
 class KubernetesOrchestrator:
     """Kubernetes orchestration and deployment management system."""
 
-    def __init__(
-        self,
-        kubeconfig_path: str | None = None,
-        in_cluster: bool = False
-    ):
+    def __init__(self, kubeconfig_path: str | None = None, in_cluster: bool = False):
         """Initialize Kubernetes orchestrator.
 
         Args:
@@ -83,7 +84,9 @@ class KubernetesOrchestrator:
     def _initialize_client(self):
         """Initialize Kubernetes client."""
         if not KUBERNETES_AVAILABLE:
-            logger.warning("Kubernetes client not available - operations will be simulated")
+            logger.warning(
+                "Kubernetes client not available - operations will be simulated"
+            )
             return
 
         try:
@@ -142,15 +145,15 @@ class KubernetesOrchestrator:
         if deployment.resources:
             resources = client.V1ResourceRequirements(
                 limits=deployment.resources.get("limits"),
-                requests=deployment.resources.get("requests")
+                requests=deployment.resources.get("requests"),
             )
 
         container = client.V1Container(
             name=deployment.name,
             image=deployment.image,
             ports=[client.V1ContainerPort(container_port=deployment.container_port)],
-            env=env_vars if env_vars else None,
-            resources=resources
+            env=env_vars or None,
+            resources=resources,
         )
 
         # Build labels
@@ -160,17 +163,16 @@ class KubernetesOrchestrator:
         # Build pod template
         template = client.V1PodTemplateSpec(
             metadata=client.V1ObjectMeta(
-                labels=labels,
-                annotations=deployment.annotations or None
+                labels=labels, annotations=deployment.annotations or None
             ),
-            spec=client.V1PodSpec(containers=[container])
+            spec=client.V1PodSpec(containers=[container]),
         )
 
         # Build deployment spec
         spec = client.V1DeploymentSpec(
             replicas=deployment.replicas,
             selector=client.V1LabelSelector(match_labels={"app": deployment.name}),
-            template=template
+            template=template,
         )
 
         # Build deployment
@@ -181,15 +183,14 @@ class KubernetesOrchestrator:
                 name=deployment.name,
                 namespace=deployment.namespace,
                 labels=labels,
-                annotations=deployment.annotations or None
+                annotations=deployment.annotations or None,
             ),
-            spec=spec
+            spec=spec,
         )
 
         try:
             self._apps_api.create_namespaced_deployment(
-                namespace=deployment.namespace,
-                body=deployment_manifest
+                namespace=deployment.namespace, body=deployment_manifest
             )
             logger.info(f"Created Kubernetes deployment: {deployment.name}")
             return deployment.name
@@ -220,7 +221,7 @@ class KubernetesOrchestrator:
         port = client.V1ServicePort(
             port=service.port,
             target_port=service.target_port,
-            node_port=service.node_port if service.type == "NodePort" else None
+            node_port=service.node_port if service.type == "NodePort" else None,
         )
 
         # Build labels
@@ -235,21 +236,16 @@ class KubernetesOrchestrator:
             api_version="v1",
             kind="Service",
             metadata=client.V1ObjectMeta(
-                name=service.name,
-                namespace=service.namespace,
-                labels=labels
+                name=service.name, namespace=service.namespace, labels=labels
             ),
             spec=client.V1ServiceSpec(
-                type=service.type,
-                ports=[port],
-                selector=selector
-            )
+                type=service.type, ports=[port], selector=selector
+            ),
         )
 
         try:
             self._core_api.create_namespaced_service(
-                namespace=service.namespace,
-                body=service_manifest
+                namespace=service.namespace, body=service_manifest
             )
             logger.info(f"Created Kubernetes service: {service.name}")
             return service.name
@@ -261,10 +257,7 @@ class KubernetesOrchestrator:
             raise CodomyrmexError(f"Failed to create service: {e}") from e
 
     def scale_deployment(
-        self,
-        deployment_name: str,
-        replicas: int,
-        namespace: str = "default"
+        self, deployment_name: str, replicas: int, namespace: str = "default"
     ) -> bool:
         """Scale a Kubernetes deployment.
 
@@ -283,17 +276,14 @@ class KubernetesOrchestrator:
         try:
             # Get current deployment
             deployment = self._apps_api.read_namespaced_deployment(
-                name=deployment_name,
-                namespace=namespace
+                name=deployment_name, namespace=namespace
             )
 
             # Update replicas
             deployment.spec.replicas = replicas
 
             self._apps_api.patch_namespaced_deployment(
-                name=deployment_name,
-                namespace=namespace,
-                body=deployment
+                name=deployment_name, namespace=namespace, body=deployment
             )
 
             logger.info(f"Scaled deployment {deployment_name} to {replicas} replicas")
@@ -304,9 +294,7 @@ class KubernetesOrchestrator:
             return False
 
     def get_deployment_status(
-        self,
-        deployment_name: str,
-        namespace: str = "default"
+        self, deployment_name: str, namespace: str = "default"
     ) -> dict[str, Any] | None:
         """Get deployment status.
 
@@ -324,13 +312,12 @@ class KubernetesOrchestrator:
                 "status": "simulated",
                 "replicas": 0,
                 "available_replicas": 0,
-                "ready": False
+                "ready": False,
             }
 
         try:
             deployment = self._apps_api.read_namespaced_deployment(
-                name=deployment_name,
-                namespace=namespace
+                name=deployment_name, namespace=namespace
             )
 
             status = deployment.status
@@ -349,11 +336,11 @@ class KubernetesOrchestrator:
                         "type": c.type,
                         "status": c.status,
                         "reason": c.reason,
-                        "message": c.message
+                        "message": c.message,
                     }
                     for c in (status.conditions or [])
                 ],
-                "ready": status.available_replicas == spec.replicas
+                "ready": status.available_replicas == spec.replicas,
             }
 
         except ApiException as e:
@@ -383,8 +370,12 @@ class KubernetesOrchestrator:
                     "namespace": d.metadata.namespace,
                     "replicas": d.spec.replicas,
                     "available_replicas": d.status.available_replicas or 0,
-                    "image": d.spec.template.spec.containers[0].image if d.spec.template.spec.containers else None,
-                    "created_at": d.metadata.creation_timestamp.isoformat() if d.metadata.creation_timestamp else None
+                    "image": d.spec.template.spec.containers[0].image
+                    if d.spec.template.spec.containers
+                    else None,
+                    "created_at": d.metadata.creation_timestamp.isoformat()
+                    if d.metadata.creation_timestamp
+                    else None,
                 }
                 for d in deployments.items
             ]
@@ -394,9 +385,7 @@ class KubernetesOrchestrator:
             return []
 
     def delete_deployment(
-        self,
-        deployment_name: str,
-        namespace: str = "default"
+        self, deployment_name: str, namespace: str = "default"
     ) -> bool:
         """Delete a Kubernetes deployment.
 
@@ -413,8 +402,7 @@ class KubernetesOrchestrator:
 
         try:
             self._apps_api.delete_namespaced_deployment(
-                name=deployment_name,
-                namespace=namespace
+                name=deployment_name, namespace=namespace
             )
             logger.info(f"Deleted deployment: {deployment_name}")
             return True
@@ -426,11 +414,7 @@ class KubernetesOrchestrator:
             logger.error(f"Failed to delete deployment: {e}")
             return False
 
-    def delete_service(
-        self,
-        service_name: str,
-        namespace: str = "default"
-    ) -> bool:
+    def delete_service(self, service_name: str, namespace: str = "default") -> bool:
         """Delete a Kubernetes service.
 
         Args:
@@ -446,8 +430,7 @@ class KubernetesOrchestrator:
 
         try:
             self._core_api.delete_namespaced_service(
-                name=service_name,
-                namespace=namespace
+                name=service_name, namespace=namespace
             )
             logger.info(f"Deleted service: {service_name}")
             return True
@@ -464,7 +447,7 @@ class KubernetesOrchestrator:
         pod_name: str,
         namespace: str = "default",
         container: str | None = None,
-        tail_lines: int = 100
+        tail_lines: int = 100,
     ) -> str:
         """Get logs from a pod.
 
@@ -485,7 +468,7 @@ class KubernetesOrchestrator:
                 name=pod_name,
                 namespace=namespace,
                 container=container,
-                tail_lines=tail_lines
+                tail_lines=tail_lines,
             )
             return logs
 
@@ -494,9 +477,7 @@ class KubernetesOrchestrator:
             return f"Error retrieving logs: {e}"
 
     def list_pods(
-        self,
-        namespace: str = "default",
-        label_selector: str | None = None
+        self, namespace: str = "default", label_selector: str | None = None
     ) -> list[dict[str, Any]]:
         """List pods in a namespace.
 
@@ -512,8 +493,7 @@ class KubernetesOrchestrator:
 
         try:
             pods = self._core_api.list_namespaced_pod(
-                namespace=namespace,
-                label_selector=label_selector
+                namespace=namespace, label_selector=label_selector
             )
 
             return [
@@ -524,7 +504,9 @@ class KubernetesOrchestrator:
                     "ip": p.status.pod_ip,
                     "node": p.spec.node_name,
                     "containers": [c.name for c in p.spec.containers],
-                    "created_at": p.metadata.creation_timestamp.isoformat() if p.metadata.creation_timestamp else None
+                    "created_at": p.metadata.creation_timestamp.isoformat()
+                    if p.metadata.creation_timestamp
+                    else None,
                 }
                 for p in pods.items
             ]
@@ -534,9 +516,7 @@ class KubernetesOrchestrator:
             return []
 
     def apply_manifest(
-        self,
-        manifest: dict[str, Any],
-        namespace: str = "default"
+        self, manifest: dict[str, Any], namespace: str = "default"
     ) -> dict[str, Any]:
         """Apply a Kubernetes manifest.
 
@@ -575,7 +555,9 @@ class KubernetesOrchestrator:
                 return {"status": "exists", "kind": kind, "name": name, "namespace": ns}
             raise CodomyrmexError(f"Failed to apply manifest: {e}") from e
 
-    def apply_yaml_file(self, yaml_path: str, namespace: str = "default") -> list[dict[str, Any]]:
+    def apply_yaml_file(
+        self, yaml_path: str, namespace: str = "default"
+    ) -> list[dict[str, Any]]:
         """Apply manifests from a YAML file.
 
         Args:
@@ -601,9 +583,9 @@ class KubernetesOrchestrator:
 
         return results
 
+
 def orchestrate_kubernetes(
-    deployment_config: dict[str, Any],
-    kubeconfig_path: str | None = None
+    deployment_config: dict[str, Any], kubeconfig_path: str | None = None
 ) -> dict[str, Any]:
     """Orchestrate Kubernetes deployment.
 
@@ -626,7 +608,7 @@ def orchestrate_kubernetes(
         container_port=deployment_config.get("container_port", 80),
         environment_variables=deployment_config.get("environment_variables", {}),
         labels=deployment_config.get("labels", {}),
-        resources=deployment_config.get("resources", {})
+        resources=deployment_config.get("resources", {}),
     )
 
     deployment_name = orchestrator.create_deployment(deployment)
@@ -639,7 +621,7 @@ def orchestrate_kubernetes(
             type=deployment_config.get("service_type", "ClusterIP"),
             port=deployment.port,
             target_port=deployment.container_port,
-            selector={"app": deployment.name}
+            selector={"app": deployment.name},
         )
         orchestrator.create_service(service)
 
@@ -648,5 +630,5 @@ def orchestrate_kubernetes(
         "status": "created",
         "namespace": deployment.namespace,
         "available": orchestrator.is_available(),
-        "message": f"Kubernetes deployment {deployment.name} created successfully"
+        "message": f"Kubernetes deployment {deployment.name} created successfully",
     }

@@ -8,12 +8,13 @@ def test_treemap_render():
     data = [
         {"label": "A", "value": 10},
         {"label": "B", "value": 20},
-        {"label": "C", "value": 5}
+        {"label": "C", "value": 5},
     ]
     plot = TreeMap("Test Tree", data)
     html = plot.to_html()
     assert "data:image/png;base64" in html
     assert 'alt="Test Tree"' in html
+
 
 def test_network_graph_render():
     """Verify network graph render behavior."""
@@ -24,13 +25,11 @@ def test_network_graph_render():
     assert "data:image/png;base64" in html
     assert 'alt="Test Net"' in html
 
+
 def test_heatmap_table_component():
     """Verify heatmap table component behavior."""
     headers = ["Col A", "Col B"]
-    rows = [
-        [10, 20],
-        [5, 40]
-    ]
+    rows = [[10, 20], [5, 40]]
     table = HeatmapTable(headers=headers, rows=rows, title="Test Heatmap")
     html = str(table)
     assert "Test Heatmap" in html

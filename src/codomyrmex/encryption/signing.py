@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 
 class SignatureAlgorithm(Enum):
     """Supported signature algorithms."""
+
     HMAC_SHA256 = "hmac-sha256"
     HMAC_SHA512 = "hmac-sha512"
 
@@ -28,6 +29,7 @@ class SignatureAlgorithm(Enum):
 @dataclass
 class SignatureResult:
     """Result of a signing operation."""
+
     signature: str
     algorithm: SignatureAlgorithm
     timestamp: float = field(default_factory=time.time)
@@ -49,15 +51,20 @@ class Signer:
     Useful for ensuring message integrity and authenticity with symmetric keys.
     """
 
-    def __init__(self, secret_key: str | bytes,
-                 algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256) -> None:
+    def __init__(
+        self,
+        secret_key: str | bytes,
+        algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256,
+    ) -> None:
         """Initialize signer.
 
         Args:
             secret_key: Shared secret key for HMAC.
             algorithm: HMAC algorithm to use.
         """
-        self._key = secret_key.encode("utf-8") if isinstance(secret_key, str) else secret_key
+        self._key = (
+            secret_key.encode("utf-8") if isinstance(secret_key, str) else secret_key
+        )
         self._algorithm = algorithm
 
     def _get_hash_func(self) -> str:
@@ -140,8 +147,11 @@ class Signer:
         return self.verify(canonical, signature)
 
 
-def sign_file(path: str | Path, secret_key: str | bytes,
-              algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256) -> str:
+def sign_file(
+    path: str | Path,
+    secret_key: str | bytes,
+    algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256,
+) -> str:
     """Sign a file and return its hex signature string.
 
     Args:
@@ -157,8 +167,12 @@ def sign_file(path: str | Path, secret_key: str | bytes,
     return signer.sign(data).signature
 
 
-def verify_file(path: str | Path, signature: str, secret_key: str | bytes,
-                algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256) -> bool:
+def verify_file(
+    path: str | Path,
+    signature: str,
+    secret_key: str | bytes,
+    algorithm: SignatureAlgorithm = SignatureAlgorithm.HMAC_SHA256,
+) -> bool:
     """Verify a file's signature.
 
     Args:

@@ -7,12 +7,8 @@ use cases, plus batch processing support.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 from .filters import DarkPDFFilter
-
-if TYPE_CHECKING:
-    pass
 
 # Preset configurations matching common use cases
 _PRESETS: dict[str, dict[str, float]] = {
@@ -136,6 +132,7 @@ class DarkPDF:
     def page_count(self) -> int:
         """Return the number of pages in the input PDF."""
         import fitz
+
         doc = fitz.open(str(self.input_path))
         count = len(doc)
         doc.close()

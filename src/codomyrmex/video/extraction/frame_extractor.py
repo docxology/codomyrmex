@@ -19,6 +19,7 @@ from codomyrmex.video.models import ExtractionResult
 # Check for PIL availability
 try:
     from PIL import Image
+
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
@@ -28,6 +29,7 @@ except ImportError:
 try:
     import cv2
     import numpy as np
+
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
@@ -37,6 +39,7 @@ except ImportError:
 # Check for moviepy availability
 try:
     from moviepy.editor import VideoFileClip
+
     MOVIEPY_AVAILABLE = True
 except ImportError:
     MOVIEPY_AVAILABLE = False
@@ -137,17 +140,20 @@ class FrameExtractor:
 
         if OPENCV_AVAILABLE:
             return self._extract_frame_opencv(path, timestamp)
-        elif MOVIEPY_AVAILABLE:
+        if MOVIEPY_AVAILABLE:
             return self._extract_frame_moviepy(path, timestamp)
-        else:
-            raise FrameExtractionError("No video backend available")
+        raise FrameExtractionError("No video backend available")
 
-    def _extract_frame_opencv(self, video_path: Path, timestamp: float) -> "Image.Image":
+    def _extract_frame_opencv(
+        self, video_path: Path, timestamp: float
+    ) -> "Image.Image":
         """Extract frame using OpenCV."""
         cap = cv2.VideoCapture(str(video_path))
 
         if not cap.isOpened():
-            raise VideoReadError(f"Cannot open video: {video_path}", video_path=video_path)
+            raise VideoReadError(
+                f"Cannot open video: {video_path}", video_path=video_path
+            )
 
         try:
             fps = cap.get(cv2.CAP_PROP_FPS)
@@ -170,7 +176,9 @@ class FrameExtractor:
         finally:
             cap.release()
 
-    def _extract_frame_moviepy(self, video_path: Path, timestamp: float) -> "Image.Image":
+    def _extract_frame_moviepy(
+        self, video_path: Path, timestamp: float
+    ) -> "Image.Image":
         """Extract frame using moviepy."""
         try:
             with VideoFileClip(str(video_path)) as clip:
@@ -420,4 +428,4 @@ class FrameExtractor:
         return saved_paths
 
 
-__all__ = ["FrameExtractor", "OPENCV_AVAILABLE", "MOVIEPY_AVAILABLE", "PIL_AVAILABLE"]
+__all__ = ["MOVIEPY_AVAILABLE", "OPENCV_AVAILABLE", "PIL_AVAILABLE", "FrameExtractor"]

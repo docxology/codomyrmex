@@ -10,6 +10,7 @@ import pytest
 
 try:
     from codomyrmex.networking import PortScanner, SSHClient, TCPClient, UDPClient
+
     NETWORKING_AVAILABLE = True
 except ImportError:
     NETWORKING_AVAILABLE = False
@@ -40,6 +41,7 @@ def test_ssh_client_logic():
     """Test SSHClient command execution with a real SSH connection."""
     # Skip if no proper credentials (this requires key-based auth)
     import os
+
     key_path = os.path.expanduser("~/.ssh/id_rsa")
     if not os.path.exists(key_path):
         pytest.skip("No SSH key found at ~/.ssh/id_rsa")

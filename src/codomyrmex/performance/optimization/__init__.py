@@ -14,7 +14,7 @@ from .lazy_loader import (
 
 __all__ = [
     "LazyLoader",
-    "lazy_import",
     "get_lazy_loader",
     "lazy_function",
+    "lazy_import",
 ]

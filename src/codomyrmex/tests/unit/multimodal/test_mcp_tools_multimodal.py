@@ -55,6 +55,8 @@ class TestMultimodalGenerateImage:
     @pytest.mark.skipif(not _HAS_GOOGLE_KEY, reason="GOOGLE_API_KEY not set")
     def test_generate_with_key(self):
         """Actual generation when key is available."""
-        result = multimodal_generate_image(prompt="A simple red circle on white background")
+        result = multimodal_generate_image(
+            prompt="A simple red circle on white background"
+        )
         assert result["status"] == "success"
         assert isinstance(result["images"], list)

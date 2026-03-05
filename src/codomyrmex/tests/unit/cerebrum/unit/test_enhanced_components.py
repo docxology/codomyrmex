@@ -81,6 +81,7 @@ class TestCognitiveComponents:
         assert res.success
         assert res.steps[0].result == "done"
 
+
 @pytest.mark.unit
 class TestReasoningEngineEnhanced:
     """Test ReasoningEngine with enhanced functionality."""

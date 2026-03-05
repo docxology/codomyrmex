@@ -41,14 +41,17 @@ from codomyrmex.validation.schemas import Result, ResultStatus
 
 class IDEStatus(Enum):
     """Status of an IDE session."""
+
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
     ERROR = "error"
 
+
 @dataclass
 class IDECommand:
     """Represents an IDE command to be executed."""
+
     name: str
     args: dict[str, Any] = field(default_factory=dict)
     timeout: float = 30.0
@@ -57,9 +60,11 @@ class IDECommand:
         """Return a dictionary representation of this command."""
         return {"name": self.name, "args": self.args, "timeout": self.timeout}
 
+
 @dataclass
 class IDECommandResult:
     """Result of an IDE command execution."""
+
     success: bool
     command: str
     output: Any = None
@@ -76,9 +81,11 @@ class IDECommandResult:
             "execution_time": self.execution_time,
         }
 
+
 @dataclass
 class FileInfo:
     """Information about a file in the IDE."""
+
     path: str
     name: str
     is_modified: bool = False
@@ -94,6 +101,7 @@ class FileInfo:
             "language": self.language,
             "line_count": self.line_count,
         }
+
 
 class IDEClient(ABC):
     """Abstract base class for IDE integrations.
@@ -121,63 +129,49 @@ class IDEClient(ABC):
     @abstractmethod
     def connect(self) -> bool:
         """Establish connection to the IDE."""
-        pass
 
     @abstractmethod
     def disconnect(self) -> None:
         """Disconnect from the IDE."""
-        pass
 
     @abstractmethod
     def is_connected(self) -> bool:
         """Check if currently connected to the IDE."""
-        pass
 
     @abstractmethod
     def get_capabilities(self) -> dict[str, Any]:
         """Get the capabilities of this IDE integration."""
-        pass
 
     @abstractmethod
     def execute_command(self, command: str, args: dict | None = None) -> Any:
         """Execute an IDE command."""
-        pass
 
     @abstractmethod
     def get_active_file(self) -> str | None:
         """Get the path of the currently active file."""
-        pass
 
     @abstractmethod
     def open_file(self, path: str) -> bool:
         """Open a file in the IDE."""
-        pass
 
     @abstractmethod
     def close_file(self, path: str) -> bool:
         """Close a file in the IDE."""
-        pass
 
     @abstractmethod
     def get_open_files(self) -> list[str]:
         """Get list of currently open files."""
-        pass
 
     @abstractmethod
     def save_file(self, path: str) -> bool:
         """Save a file in the IDE."""
-        pass
 
     @abstractmethod
     def save_all(self) -> bool:
         """Save all open files in the IDE."""
-        pass
 
     def execute_command_safe(
-        self,
-        command: str,
-        args: dict | None = None,
-        timeout: float = 30.0
+        self, command: str, args: dict | None = None, timeout: float = 30.0
     ) -> IDECommandResult:
         """Execute a command with error handling and timing."""
         start_time = time.time()
@@ -203,9 +197,7 @@ class IDEClient(ABC):
         return cmd_result
 
     def execute_batch(
-        self,
-        commands: list[IDECommand],
-        stop_on_error: bool = True
+        self, commands: list[IDECommand], stop_on_error: bool = True
     ) -> list[IDECommandResult]:
         """Execute multiple commands in sequence."""
         results = []
@@ -223,13 +215,27 @@ class IDEClient(ABC):
             return None
 
         ext_to_lang = {
-            ".py": "python", ".js": "javascript", ".ts": "typescript",
-            ".jsx": "javascript", ".tsx": "typescript",
-            ".java": "java", ".go": "go", ".rs": "rust",
-            ".c": "c", ".cpp": "cpp", ".h": "c", ".hpp": "cpp",
-            ".md": "markdown", ".json": "json", ".yaml": "yaml",
-            ".yml": "yaml", ".toml": "toml", ".sh": "shell",
-            ".bash": "shell", ".zsh": "shell", ".sql": "sql",
+            ".py": "python",
+            ".js": "javascript",
+            ".ts": "typescript",
+            ".jsx": "javascript",
+            ".tsx": "typescript",
+            ".java": "java",
+            ".go": "go",
+            ".rs": "rust",
+            ".c": "c",
+            ".cpp": "cpp",
+            ".h": "c",
+            ".hpp": "cpp",
+            ".md": "markdown",
+            ".json": "json",
+            ".yaml": "yaml",
+            ".yml": "yaml",
+            ".toml": "toml",
+            ".sh": "shell",
+            ".bash": "shell",
+            ".zsh": "shell",
+            ".sql": "sql",
         }
 
         language = ext_to_lang.get(file_path.suffix.lower())
@@ -261,7 +267,9 @@ class IDEClient(ABC):
                 try:
                     handler(data)
                 except Exception as e:
-                    get_logger(__name__).warning("Event handler failed for %r: %s", event, e)
+                    get_logger(__name__).warning(
+                        "Event handler failed for %r: %s", event, e
+                    )
 
     def clear_command_history(self) -> None:
         """Clear the command execution history."""
@@ -281,7 +289,6 @@ class IDEClient(ABC):
         return successes / len(self._command_history)
 
 
-
 # CursorClient must be imported after IDEClient is defined to avoid circular import
 # (ide.cursor.__init__ imports IDEClient from ide)
 from codomyrmex.ide.antigravity import AntigravityClient  # noqa: E402
@@ -291,6 +298,7 @@ from codomyrmex.ide.vscode import VSCodeClient  # noqa: E402
 
 def cli_commands():
     """Return CLI commands for the IDE module."""
+
     def _list_extensions():
         """List IDE extensions."""
         print("IDE Integration Extensions:")
@@ -309,6 +317,7 @@ def cli_commands():
         "extensions": _list_extensions,
         "status": _ide_status,
     }
+
 
 __all__ = [
     "IDEClient",

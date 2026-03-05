@@ -46,6 +46,7 @@ def ec_keypair() -> KeyPair:
 @pytest.mark.unit
 class TestRSAKeypair:
     """Test suite for RSAKeypair."""
+
     def test_generate(self, rsa_keypair: KeyPair) -> None:
         assert isinstance(rsa_keypair.private_key, rsa.RSAPrivateKey)
         assert isinstance(rsa_keypair.public_key, rsa.RSAPublicKey)
@@ -77,6 +78,7 @@ class TestRSAKeypair:
 @pytest.mark.unit
 class TestEd25519Keypair:
     """Test suite for Ed25519Keypair."""
+
     def test_generate(self, ed25519_keypair: KeyPair) -> None:
         assert isinstance(ed25519_keypair.private_key, ed25519.Ed25519PrivateKey)
         assert isinstance(ed25519_keypair.public_key, ed25519.Ed25519PublicKey)
@@ -86,6 +88,7 @@ class TestEd25519Keypair:
 @pytest.mark.unit
 class TestX25519Keypair:
     """Test suite for X25519Keypair."""
+
     def test_generate(self, x25519_keypair: KeyPair) -> None:
         assert isinstance(x25519_keypair.private_key, x25519.X25519PrivateKey)
         assert isinstance(x25519_keypair.public_key, x25519.X25519PublicKey)
@@ -103,6 +106,7 @@ class TestX25519Keypair:
 @pytest.mark.unit
 class TestECKeypair:
     """Test suite for ECKeypair."""
+
     def test_generate_secp256r1(self, ec_keypair: KeyPair) -> None:
         assert isinstance(ec_keypair.private_key, ec.EllipticCurvePrivateKey)
         assert isinstance(ec_keypair.public_key, ec.EllipticCurvePublicKey)
@@ -120,6 +124,7 @@ class TestECKeypair:
 @pytest.mark.unit
 class TestKeySerialization:
     """Test suite for KeySerialization."""
+
     def test_public_key_pem_roundtrip(self, rsa_keypair: KeyPair) -> None:
         pem = serialize_public_key(rsa_keypair.public_key, encoding="pem")
         assert pem.startswith(b"-----BEGIN PUBLIC KEY-----")

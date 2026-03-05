@@ -45,8 +45,12 @@ def quantize_tensor(
             "method": "int8",
             "scheme": scheme,
             "quantized_values": qt.data.tolist(),
-            "scale": float(qt.scale) if not isinstance(qt.scale, np.ndarray) else qt.scale.tolist(),
-            "zero_point": int(qt.zero_point) if not isinstance(qt.zero_point, np.ndarray) else qt.zero_point.tolist(),
+            "scale": float(qt.scale)
+            if not isinstance(qt.scale, np.ndarray)
+            else qt.scale.tolist(),
+            "zero_point": int(qt.zero_point)
+            if not isinstance(qt.zero_point, np.ndarray)
+            else qt.zero_point.tolist(),
             "reconstructed": reconstructed.tolist(),
             "error": error,
         }

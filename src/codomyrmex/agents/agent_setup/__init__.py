@@ -18,6 +18,6 @@ __all__ = [
     "AgentRegistry",
     "ProbeResult",
     "load_config",
-    "save_config",
     "merge_with_env",
+    "save_config",
 ]

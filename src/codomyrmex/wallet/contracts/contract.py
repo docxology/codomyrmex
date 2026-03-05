@@ -8,7 +8,9 @@ from .models import Address, ContractFunction, Transaction
 class Contract:
     """A smart contract."""
 
-    def __init__(self, address: Address, abi: list[dict[str, Any]] = None, name: str = ""):
+    def __init__(
+        self, address: Address, abi: list[dict[str, Any]] = None, name: str = ""
+    ):
         self.address = address
         self.abi = abi or []
         self.name = name
@@ -58,7 +60,6 @@ class Contract:
             "functions": self.list_functions(),
             "function_count": self.function_count,
         }
-
 
 
 class ContractCall:

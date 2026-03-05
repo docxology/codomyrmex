@@ -38,6 +38,7 @@ class TestPipelineBuilder:
 
         assert pipeline.variables["STAGE_deploy_BRANCH"] == "main"
 
+
 @pytest.mark.unit
 class TestWorkflowGenerator:
     def test_github_workflow_generation(self):
@@ -81,6 +82,7 @@ class TestWorkflowGenerator:
         with open(wf_path) as f:
             data = yaml.safe_load(f)
         assert data["name"] == "save-p"
+
 
 @pytest.mark.unit
 class TestArtifactManager:

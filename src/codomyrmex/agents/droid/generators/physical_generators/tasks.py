@@ -34,11 +34,16 @@ def create_physical_management_module(*, prompt: str, description: str) -> str:
     current_dir = os.path.dirname(os.path.abspath(__file__))
     if current_dir not in sys.path:
         pass
-#         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
+    #         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
 
     # Define the physical management module structure
     module_name = "physical_management"
-    module_path = Path(__file__).parent.parent.parent.parent.parent / "src" / "codomyrmex" / module_name
+    module_path = (
+        Path(__file__).parent.parent.parent.parent.parent
+        / "src"
+        / "codomyrmex"
+        / module_name
+    )
 
     # Create module directory structure
     module_path.mkdir(exist_ok=True)
@@ -99,7 +104,10 @@ def create_physical_management_module(*, prompt: str, description: str) -> str:
     (module_path / "docs" / "architecture.md").write_text(docs_content)
     files_created.append("docs/architecture.md")
 
-    logger.info(f"Physical management module created at {module_path}", extra={"description": description})
+    logger.info(
+        f"Physical management module created at {module_path}",
+        extra={"description": description},
+    )
     return f"Physical management module created with {len(files_created)} files"
 
 
@@ -122,7 +130,7 @@ def test_statistics_display(*, prompt: str, description: str) -> str:
         duration = time.time() - start_time
         task_times.append(duration)
 
-        print(f"Task {i+1} completed in {duration:.3f}s")
+        print(f"Task {i + 1} completed in {duration:.3f}s")
 
     # Calculate statistics
     avg_time = sum(task_times) / len(task_times)
@@ -134,7 +142,10 @@ def test_statistics_display(*, prompt: str, description: str) -> str:
     print(f"   Fastest task: {min_time:.3f}s")
     print(f"   Slowest task: {max_time:.3f}s")
 
-    logger.info(f"Statistics test completed: avg={avg_time:.3f}s", extra={"description": description})
+    logger.info(
+        f"Statistics test completed: avg={avg_time:.3f}s",
+        extra={"description": description},
+    )
     return f"Statistics test completed: {len(task_times)} tasks processed"
 
 
@@ -142,14 +153,20 @@ def refactor_todo_processing(*, prompt: str, description: str) -> str:
     """Refactor the TODO processing system to improve structure and modularity."""
     # For now, acknowledge the refactoring task
     # This is a placeholder that would be expanded in a full implementation
-    logger.info("Droid refactoring task acknowledged", extra={"description": description})
+    logger.info(
+        "Droid refactoring task acknowledged", extra={"description": description}
+    )
 
-    return "Droid system refactoring task acknowledged - structure improvements documented"
+    return (
+        "Droid system refactoring task acknowledged - structure improvements documented"
+    )
 
 
 def testing_and_docs(*, prompt: str, description: str) -> str:
     """Test and improve all droid methods with comprehensive testing and documentation."""
-    logger.info("Droid testing/docs task acknowledged", extra={"description": description})
+    logger.info(
+        "Droid testing/docs task acknowledged", extra={"description": description}
+    )
     return "Droid testing and documentation task acknowledged"
 
 
@@ -168,27 +185,27 @@ def prompt_engineering(*, prompt: str, description: str) -> str:
     # Minimal, real, useful artifacts
     (ai_dir / "prompt_composition.py").write_text(
         '"""Utilities for composing system, task, and context prompts."""\n\n'
-        'from typing import Optional\n\n'
-        'def compose_prompt(system: Optional[str], task: Optional[str], context: Optional[str]) -> str:\n'
+        "from typing import Optional\n\n"
+        "def compose_prompt(system: Optional[str], task: Optional[str], context: Optional[str]) -> str:\n"
         '    parts = [p.strip() for p in ((system or ""), (task or ""), (context or "")) if p and p.strip()]\n'
         '    return "\\n\\n".join(parts)\n',
         encoding="utf-8",
     )
     (templates_dir / "system_template.md").write_text(
-        '# System Prompt\n\nFollow project rules. Be precise, safe, and testable.',
+        "# System Prompt\n\nFollow project rules. Be precise, safe, and testable.",
         encoding="utf-8",
     )
     (templates_dir / "task_template.md").write_text(
-        '# Task Prompt\n\nDescribe the goal, constraints, and success criteria.',
+        "# Task Prompt\n\nDescribe the goal, constraints, and success criteria.",
         encoding="utf-8",
     )
     (templates_dir / "context_template.md").write_text(
-        '# Context\n\nInclude relevant files, interfaces, and environment details.',
+        "# Context\n\nInclude relevant files, interfaces, and environment details.",
         encoding="utf-8",
     )
 
     (ai_dir / "PROMPT_ENGINEERING.md").write_text(
-        '# Prompt Engineering\n\n- Real utilities live in `prompt_composition.py`.\n- Templates live in `prompt_templates/`.\n- Handlers must be real and executable.\n',
+        "# Prompt Engineering\n\n- Real utilities live in `prompt_composition.py`.\n- Templates live in `prompt_templates/`.\n- Handlers must be real and executable.\n",
         encoding="utf-8",
     )
 
@@ -206,27 +223,28 @@ def ollama_module(*, prompt: str, description: str) -> str:
 
     (ai_dir / "ollama_client.py").write_text(
         '"""Minimal Ollama client interface (placeholder without network I/O)."""\n\n'
-        'class OllamaClient:\n'
+        "class OllamaClient:\n"
         "    def __init__(self, model: str = 'llama3.1'):\n"
-        '        self.model = model\n'
-        '    def generate(self, prompt: str) -> str:\n'
+        "        self.model = model\n"
+        "    def generate(self, prompt: str) -> str:\n"
         "        return f'[ollama:{self.model}] {prompt[:80]}'\n",
         encoding="utf-8",
     )
     (ai_dir / "ollama_integration.py").write_text(
-        'from .ollama_client import OllamaClient\n\n'
+        "from .ollama_client import OllamaClient\n\n"
         "def generate_with_ollama(prompt: str, model: str = 'llama3.1') -> str:\n"
-        '    return OllamaClient(model).generate(prompt)\n',
+        "    return OllamaClient(model).generate(prompt)\n",
         encoding="utf-8",
     )
     (tests_dir / "test_ollama_integration.py").write_text(
-        'from codomyrmex.llm import generate_with_ollama\n\n'
-        'def test_generate_with_ollama():\n'
+        "from codomyrmex.llm import generate_with_ollama\n\n"
+        "def test_generate_with_ollama():\n"
         "    out = generate_with_ollama('hello')\n"
         "    assert 'hello' in out\n",
         encoding="utf-8",
     )
 
-    logger.info("Ollama integration scaffold written", extra={"description": description})
+    logger.info(
+        "Ollama integration scaffold written", extra={"description": description}
+    )
     return "Ollama integration scaffold created"
-

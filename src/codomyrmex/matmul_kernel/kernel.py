@@ -4,10 +4,7 @@ import numpy as np
 
 
 def tiled_matmul(
-    A: np.ndarray,
-    B: np.ndarray,
-    tile_size: int = 64,
-    out: np.ndarray | None = None
+    A: np.ndarray, B: np.ndarray, tile_size: int = 64, out: np.ndarray | None = None
 ) -> np.ndarray:
     """
     Tiled matrix multiplication C = A @ B using cache-blocking.

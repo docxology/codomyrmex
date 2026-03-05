@@ -10,6 +10,7 @@ try:
         HybridSearchIndex,
         SemanticSearchResult,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -22,9 +23,11 @@ if not HAS_MODULE:
 # SemanticSearchResult
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestSemanticSearchResult:
     """Test suite for SemanticSearchResult."""
+
     def test_create(self):
         doc = Document(id="1", content="test document")
         result = SemanticSearchResult(
@@ -55,9 +58,11 @@ class TestSemanticSearchResult:
 # HybridSearchIndex (keyword-only mode, no embedding function)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestHybridSearchIndex:
     """Test suite for HybridSearchIndex."""
+
     def test_create_default(self):
         index = HybridSearchIndex()
         assert index.count() == 0
@@ -136,9 +141,11 @@ class TestHybridSearchIndex:
 # BM25Index
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestBM25Index:
     """Test suite for BM25Index."""
+
     def test_create_defaults(self):
         index = BM25Index()
         assert index.k1 == 1.5
@@ -203,7 +210,9 @@ class TestBM25Index:
     def test_avg_doc_length_updated(self):
         index = BM25Index()
         index.index(Document(id="1", content="short"))
-        index.index(Document(id="2", content="this is a much longer document with many words"))
+        index.index(
+            Document(id="2", content="this is a much longer document with many words")
+        )
         assert index._avg_doc_length > 0
         assert index._doc_count == 2
 
@@ -212,9 +221,11 @@ class TestBM25Index:
 # AutoCompleteIndex
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestAutoCompleteIndex:
     """Test suite for AutoCompleteIndex."""
+
     def test_create_default(self):
         index = AutoCompleteIndex()
         assert index._max_suggestions == 10

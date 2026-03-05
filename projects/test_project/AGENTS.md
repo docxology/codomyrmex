@@ -1,6 +1,6 @@
 # Codomyrmex Agents — projects/test_project
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -15,9 +15,15 @@ Authoritative "Mega-Seed" reference implementation demonstrating maximal, real (
 | `src/visualizer.py` | Visualization | Dashboard generation via `data_visualization` |
 | `src/reporter.py` | Reporting | Multi-format output (HTML, JSON, Markdown) via `serialization` |
 | `src/pipeline.py` | Orchestration | DAG-based workflow with `performance` profiling and structured `exceptions` |
+| `src/agent_brain.py` | Agents | `agents` + `agentic_memory` — registry, memory store, recall |
+| `src/git_workflow.py` | Version control | `git_operations` + `git_analysis` — repo inspection, history, churn |
+| `src/knowledge_search.py` | Search | `search` + `scrape` + `formal_verification` — TF-IDF, fuzzy, Z3 |
+| `src/security_audit.py` | Security | `security` + `crypto` + `maintenance` + `system_discovery` |
+| `src/mcp_explorer.py` | MCP | `model_context_protocol` + `skills` + `plugin_system` — discovery |
+| `src/llm_inference.py` | LLM | `llm` + `collaboration` — OllamaManager, SwarmManager, AgentPool |
 | `config/` | Configuration | YAML settings, modules, workflows |
-| `tests/` | Test suite | Unit tests + zero-mock integration tests |
-| `run_demo.py` | Demo | Single-entrypoint full demonstration |
+| `tests/` | Test suite | Unit tests + zero-mock integration tests (13 original + 6 new suites) |
+| `run_demo.py` | Demo | Single-entrypoint full demonstration (10 demos) |
 
 ## Integrated Codomyrmex Modules
 
@@ -45,7 +51,15 @@ Authoritative "Mega-Seed" reference implementation demonstrating maximal, real (
 - `serialization` — JSON/YAML data encoding
 - `events` — Pub/Sub event bus
 - `exceptions` — Structured error hierarchy
-- `llm` — LLM provider integration (tested)
+
+### Extended Modules (Sprint: module expansion)
+
+- `agents` + `agentic_memory` — Agent registry, typed memory, recall (`src/agent_brain.py`)
+- `git_operations` + `git_analysis` — Repo state, commit history, churn detection (`src/git_workflow.py`)
+- `search` + `scrape` + `formal_verification` — TF-IDF index, fuzzy match, Z3 constraints (`src/knowledge_search.py`)
+- `security` + `crypto` + `maintenance` + `system_discovery` — Vulnerability scan, hash/verify, project deps, module health (`src/security_audit.py`)
+- `model_context_protocol` + `skills` + `plugin_system` — MCP tool taxonomy, skill registry, plugin discovery (`src/mcp_explorer.py`)
+- `llm` + `collaboration` — OllamaManager, SwarmManager, AgentPool, TaskDecomposer (`src/llm_inference.py`)
 
 ## Operating Contracts
 

@@ -149,13 +149,19 @@ class MCPClient:
                     delay = self.config.retry_delay * (2 ** (attempt - 1))
                     logger.warning(
                         "MCP request %s attempt %d/%d failed (%s), retrying in %.1fs",
-                        method, attempt, self.config.max_retries, exc, delay,
+                        method,
+                        attempt,
+                        self.config.max_retries,
+                        exc,
+                        delay,
                     )
                     await asyncio.sleep(delay)
                 else:
                     logger.error(
                         "MCP request %s failed after %d attempts: %s",
-                        method, self.config.max_retries, exc,
+                        method,
+                        self.config.max_retries,
+                        exc,
                     )
         raise MCPClientError(
             f"Request {method} failed after {self.config.max_retries} retries: {last_exc}"
@@ -177,11 +183,17 @@ class MCPClient:
 
     async def initialize(self) -> dict[str, Any]:
         """Perform the MCP initialize handshake."""
-        result = await self._send("initialize", {
-            "protocolVersion": self.config.protocol_version,
-            "clientInfo": {"name": self.config.name, "version": self.config.version},
-            "capabilities": {},
-        })
+        result = await self._send(
+            "initialize",
+            {
+                "protocolVersion": self.config.protocol_version,
+                "clientInfo": {
+                    "name": self.config.name,
+                    "version": self.config.version,
+                },
+                "capabilities": {},
+            },
+        )
         self._server_info = result
         self._initialized = True
         await self._notify("notifications/initialized")
@@ -215,13 +227,21 @@ class MCPClient:
         try:
             await self._send("ping", timeout=5.0)
             latency = (time.monotonic() - t0) * 1000
-            return {"ok": True, "latency_ms": round(latency, 2), "server": self._server_info}
+            return {
+                "ok": True,
+                "latency_ms": round(latency, 2),
+                "server": self._server_info,
+            }
         except MCPClientError:
             # Many servers don't implement ping — fall back to tools/list
             try:
                 await self._send("tools/list", timeout=5.0)
                 latency = (time.monotonic() - t0) * 1000
-                return {"ok": True, "latency_ms": round(latency, 2), "server": self._server_info}
+                return {
+                    "ok": True,
+                    "latency_ms": round(latency, 2),
+                    "server": self._server_info,
+                }
             except Exception as exc:
                 latency = (time.monotonic() - t0) * 1000
                 return {"ok": False, "latency_ms": round(latency, 2), "error": str(exc)}
@@ -261,13 +281,14 @@ class MCPClient:
                 from codomyrmex.model_context_protocol.errors import (
                     MCPToolError as _MCPToolError,
                 )
+
                 content_text = result.get("content", [{}])[0].get("text", "")
                 parsed = _MCPToolError.from_json(content_text)
                 if parsed:
                     result["_error"] = parsed
             except Exception as e:
                 logger.debug("Failed to parse structured MCPToolError: %s", e)
-                pass  # leave unstructured
+                # leave unstructured
 
         return result
 
@@ -290,10 +311,13 @@ class MCPClient:
         self, name: str, arguments: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """Get a rendered prompt by name."""
-        result = await self._send("prompts/get", {
-            "name": name,
-            "arguments": arguments or {},
-        })
+        result = await self._send(
+            "prompts/get",
+            {
+                "name": name,
+                "arguments": arguments or {},
+            },
+        )
         return result
 
     async def close(self) -> None:
@@ -317,7 +341,9 @@ class _Transport(ABC):
     """Abstract transport."""
 
     @abstractmethod
-    async def send(self, message: dict[str, Any], *, timeout: float = 30.0) -> dict[str, Any]:
+    async def send(
+        self, message: dict[str, Any], *, timeout: float = 30.0
+    ) -> dict[str, Any]:
         raise NotImplementedError  # ABC: intentional
 
     @abstractmethod
@@ -335,7 +361,9 @@ class _StdioTransport(_Transport):
     def __init__(self, process: asyncio.subprocess.Process) -> None:
         self._process = process
 
-    async def send(self, message: dict[str, Any], *, timeout: float = 30.0) -> dict[str, Any]:
+    async def send(
+        self, message: dict[str, Any], *, timeout: float = 30.0
+    ) -> dict[str, Any]:
         line = json.dumps(message) + "\n"
         self._process.stdin.write(line.encode())  # type: ignore[union-attr]
         await self._process.stdin.drain()  # type: ignore[union-attr]
@@ -383,7 +411,9 @@ class _HTTPTransport(_Transport):
                 ) from None
         return self._session
 
-    async def send(self, message: dict[str, Any], *, timeout: float = 30.0) -> dict[str, Any]:
+    async def send(
+        self, message: dict[str, Any], *, timeout: float = 30.0
+    ) -> dict[str, Any]:
         session = await self._get_session()
         import aiohttp
 
@@ -437,7 +467,7 @@ class _StdioContextManager:
         self._client = client
         return client
 
-    async def __aexit__(self, *exc: Any) -> None:
+    async def __aexit__(self, *exc: object) -> None:
         if self._client:
             await self._client.close()
 
@@ -461,6 +491,6 @@ class _HTTPContextManager:
         self._client = client
         return client
 
-    async def __aexit__(self, *exc: Any) -> None:
+    async def __aexit__(self, *exc: object) -> None:
         if self._client:
             await self._client.close()

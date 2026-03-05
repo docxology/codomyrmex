@@ -52,8 +52,9 @@ class EdgeTTSProvider(TTSProvider):
     Example:
         ```python
         provider = EdgeTTSProvider()
-        result = await provider.synthesize_async("Hello world!",
-            TTSConfig(voice="en-US-AriaNeural"))
+        result = await provider.synthesize_async(
+            "Hello world!", TTSConfig(voice="en-US-AriaNeural")
+        )
         result.save("hello.mp3")
         ```
 
@@ -391,4 +392,4 @@ POPULAR_VOICES = {
 }
 
 
-__all__ = ["EdgeTTSProvider", "EDGE_TTS_AVAILABLE", "POPULAR_VOICES"]
+__all__ = ["EDGE_TTS_AVAILABLE", "POPULAR_VOICES", "EdgeTTSProvider"]

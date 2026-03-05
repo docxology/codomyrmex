@@ -25,7 +25,7 @@ from codomyrmex.model_context_protocol.discovery import (
 # ── Fixtures ──────────────────────────────────────────────────────────
 
 
-@pytest.fixture()
+@pytest.fixture
 def engine() -> MCPDiscovery:
     """Fresh discovery engine instance."""
     return MCPDiscovery()
@@ -36,6 +36,7 @@ def engine() -> MCPDiscovery:
 
 class TestMCPDiscoveryInstantiation:
     """Test suite for MCPDiscoveryInstantiation."""
+
     def test_creates_with_empty_state(self, engine: MCPDiscovery) -> None:
         assert engine.tool_count == 0
         assert engine.list_tools() == []
@@ -49,6 +50,7 @@ class TestMCPDiscoveryInstantiation:
 
 class TestErrorIsolatedScanning:
     """Test suite for ErrorIsolatedScanning."""
+
     def test_scan_nonexistent_package_returns_failed_module(
         self, engine: MCPDiscovery
     ) -> None:
@@ -62,16 +64,12 @@ class TestErrorIsolatedScanning:
         assert "nonexistent" in fm.error.lower() or "No module" in fm.error
         assert fm.error_type in ("ModuleNotFoundError", "ImportError")
 
-    def test_scan_nonexistent_records_timing(
-        self, engine: MCPDiscovery
-    ) -> None:
+    def test_scan_nonexistent_records_timing(self, engine: MCPDiscovery) -> None:
         """Verify scan nonexistent records timing behavior."""
         report = engine.scan_package("totally.nonexistent.package.xyz")
         assert report.scan_duration_ms >= 0
 
-    def test_scan_real_package_returns_report(
-        self, engine: MCPDiscovery
-    ) -> None:
+    def test_scan_real_package_returns_report(self, engine: MCPDiscovery) -> None:
         """Scan the discovery package itself — it is always importable."""
         report = engine.scan_package("codomyrmex.model_context_protocol.discovery")
         assert isinstance(report, DiscoveryReport)
@@ -79,16 +77,12 @@ class TestErrorIsolatedScanning:
         assert report.modules_scanned >= 0
         assert report.scan_duration_ms >= 0
 
-    def test_scan_package_populates_engine(
-        self, engine: MCPDiscovery
-    ) -> None:
+    def test_scan_package_populates_engine(self, engine: MCPDiscovery) -> None:
         """After scanning a package, engine.tool_count should reflect found tools."""
         report = engine.scan_package("codomyrmex.model_context_protocol.discovery")
         assert engine.tool_count == len(report.tools)
 
-    def test_broken_submodule_does_not_crash_scan(
-        self, engine: MCPDiscovery
-    ) -> None:
+    def test_broken_submodule_does_not_crash_scan(self, engine: MCPDiscovery) -> None:
         """Inject a broken module into sys.modules and verify scan survives."""
         # Create a fake package with a broken sub-module
         fake_pkg_name = "_test_fake_pkg_stream3"
@@ -112,6 +106,7 @@ class TestErrorIsolatedScanning:
 
 class TestIncrementalScanning:
     """Test suite for IncrementalScanning."""
+
     def test_scan_single_module(self, engine: MCPDiscovery) -> None:
         report = engine.scan_module("codomyrmex.model_context_protocol.discovery")
         assert isinstance(report, DiscoveryReport)
@@ -125,18 +120,14 @@ class TestIncrementalScanning:
         assert report.tools == []
         assert report.modules_scanned == 1
 
-    def test_incremental_scan_merges_tools(
-        self, engine: MCPDiscovery
-    ) -> None:
+    def test_incremental_scan_merges_tools(self, engine: MCPDiscovery) -> None:
         """Scanning two different modules should accumulate tools."""
         engine.scan_module("codomyrmex.model_context_protocol.discovery")
         engine.scan_module("codomyrmex.model_context_protocol.discovery")
         # Same module → same tools, count shouldn't decrease
         assert engine.tool_count >= 0
 
-    def test_scan_module_records_timing(
-        self, engine: MCPDiscovery
-    ) -> None:
+    def test_scan_module_records_timing(self, engine: MCPDiscovery) -> None:
         """Verify scan module records timing behavior."""
         report = engine.scan_module("codomyrmex.model_context_protocol.discovery")
         assert report.scan_duration_ms >= 0
@@ -147,6 +138,7 @@ class TestIncrementalScanning:
 
 class TestDiscoveryMetrics:
     """Test suite for DiscoveryMetrics."""
+
     def test_initial_metrics_are_zeroed(self, engine: MCPDiscovery) -> None:
         m = engine.get_metrics()
         assert isinstance(m, DiscoveryMetrics)
@@ -184,6 +176,7 @@ class TestDiscoveryMetrics:
 
 class TestDiscoveryReportStructure:
     """Test suite for DiscoveryReportStructure."""
+
     def test_default_factory(self) -> None:
         report = DiscoveryReport()
         assert report.tools == []

@@ -16,11 +16,13 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class TemplateContext:
     """Context for template rendering."""
+
     data: dict[str, Any] = field(default_factory=dict)
-    parent: Optional['TemplateContext'] = None
+    parent: Optional["TemplateContext"] = None
 
     def get(self, key: str, default: Any = None) -> Any:
         """Get a value from context, checking parent if not found."""
@@ -34,7 +36,7 @@ class TemplateContext:
         """Set a value in the context."""
         self.data[key] = value
 
-    def child(self, **kwargs) -> 'TemplateContext':
+    def child(self, **kwargs) -> "TemplateContext":
         """Create a child context."""
         return TemplateContext(data=kwargs, parent=self)
 
@@ -46,18 +48,18 @@ class TemplateContext:
         """Set item at the given key."""
         self.set(key, value)
 
+
 class TemplateEngine(ABC):
     """Abstract base class for template engines."""
 
     @abstractmethod
     def render(self, template: str, context: dict[str, Any]) -> str:
         """Render a template with the given context."""
-        pass
 
     @abstractmethod
     def render_file(self, path: str, context: dict[str, Any]) -> str:
         """Render a template file."""
-        pass
+
 
 class SimpleTemplateEngine(TemplateEngine):
     """Simple string interpolation template engine."""
@@ -71,12 +73,12 @@ class SimpleTemplateEngine(TemplateEngine):
         self.right_delim = delimiters[1]
         self.escape_html = escape_html
         self._pattern = re.compile(
-            re.escape(self.left_delim) + r'\s*(.+?)\s*' + re.escape(self.right_delim)
+            re.escape(self.left_delim) + r"\s*(.+?)\s*" + re.escape(self.right_delim)
         )
 
     def _resolve_path(self, path: str, context: dict[str, Any]) -> Any:
         """Resolve a dotted path in the context."""
-        parts = path.split('.')
+        parts = path.split(".")
         value = context
 
         for part in parts:
@@ -94,6 +96,7 @@ class SimpleTemplateEngine(TemplateEngine):
 
     def render(self, template: str, context: dict[str, Any]) -> str:
         """Render."""
+
         def replace(match):
             """Replace."""
             path = match.group(1).strip()
@@ -115,6 +118,7 @@ class SimpleTemplateEngine(TemplateEngine):
             template = f.read()
         return self.render(template, context)
 
+
 class Jinja2LikeEngine(TemplateEngine):
     """Enhanced template engine with control structures."""
 
@@ -128,19 +132,19 @@ class Jinja2LikeEngine(TemplateEngine):
 
         # Default filters
         self._default_filters = {
-            'upper': str.upper,
-            'lower': str.lower,
-            'title': str.title,
-            'strip': str.strip,
-            'length': len,
-            'default': lambda x, d='': x if x else d,
-            'safe': lambda x: x,
-            'escape': html.escape,
-            'join': lambda lst, sep=', ': sep.join(str(x) for x in lst),
-            'first': lambda lst: lst[0] if lst else None,
-            'last': lambda lst: lst[-1] if lst else None,
-            'reverse': lambda x: list(reversed(x)),
-            'sort': sorted,
+            "upper": str.upper,
+            "lower": str.lower,
+            "title": str.title,
+            "strip": str.strip,
+            "length": len,
+            "default": lambda x, d="": x or d,
+            "safe": lambda x: x,
+            "escape": html.escape,
+            "join": lambda lst, sep=", ": sep.join(str(x) for x in lst),
+            "first": lambda lst: lst[0] if lst else None,
+            "last": lambda lst: lst[-1] if lst else None,
+            "reverse": lambda x: list(reversed(x)),
+            "sort": sorted,
         }
         self._default_filters.update(self.filters)
 
@@ -149,18 +153,22 @@ class Jinja2LikeEngine(TemplateEngine):
         expr = expr.strip()
 
         # Handle filters
-        if '|' in expr:
-            parts = expr.split('|')
+        if "|" in expr:
+            parts = expr.split("|")
             value = self._parse_expression(parts[0], context)
 
             for filter_expr in parts[1:]:
                 filter_expr = filter_expr.strip()
 
                 # Parse filter with arguments
-                if '(' in filter_expr:
-                    fname = filter_expr[:filter_expr.index('(')]
-                    args_str = filter_expr[filter_expr.index('(')+1:filter_expr.rindex(')')]
-                    args = [a.strip().strip('"\'') for a in args_str.split(',') if a.strip()]
+                if "(" in filter_expr:
+                    fname = filter_expr[: filter_expr.index("(")]
+                    args_str = filter_expr[
+                        filter_expr.index("(") + 1 : filter_expr.rindex(")")
+                    ]
+                    args = [
+                        a.strip().strip("\"'") for a in args_str.split(",") if a.strip()
+                    ]
                 else:
                     fname = filter_expr
                     args = []
@@ -181,23 +189,24 @@ class Jinja2LikeEngine(TemplateEngine):
         path = path.strip()
 
         # Handle string literals
-        if (path.startswith('"') and path.endswith('"')) or \
-           (path.startswith("'") and path.endswith("'")):
+        if (path.startswith('"') and path.endswith('"')) or (
+            path.startswith("'") and path.endswith("'")
+        ):
             return path[1:-1]
 
         # Handle numeric literals
         if path.isdigit():
             return int(path)
-        if path.replace('.', '', 1).isdigit():
+        if path.replace(".", "", 1).isdigit():
             return float(path)
 
         # Handle boolean
-        if path.lower() == 'true':
+        if path.lower() == "true":
             return True
-        if path.lower() == 'false':
+        if path.lower() == "false":
             return False
 
-        parts = re.split(r'\.|\[|\]', path)
+        parts = re.split(r"\.|\[|\]", path)
         parts = [p for p in parts if p]
 
         value = context
@@ -230,7 +239,7 @@ class Jinja2LikeEngine(TemplateEngine):
 
     def _process_variables(self, template: str, context: dict[str, Any]) -> str:
         """Process {{ variable }} expressions."""
-        pattern = re.compile(r'\{\{\s*(.+?)\s*\}\}')
+        pattern = re.compile(r"\{\{\s*(.+?)\s*\}\}")
 
         def replace(match):
             """Replace."""
@@ -238,7 +247,7 @@ class Jinja2LikeEngine(TemplateEngine):
             value = self._parse_expression(expr, context)
 
             if value is None:
-                return ''
+                return ""
 
             result = str(value)
             if self.autoescape:
@@ -251,8 +260,7 @@ class Jinja2LikeEngine(TemplateEngine):
     def _process_for_loops(self, template: str, context: dict[str, Any]) -> str:
         """Process {% for item in items %} blocks."""
         pattern = re.compile(
-            r'\{%\s*for\s+(\w+)\s+in\s+(.+?)\s*%\}(.+?)\{%\s*endfor\s*%\}',
-            re.DOTALL
+            r"\{%\s*for\s+(\w+)\s+in\s+(.+?)\s*%\}(.+?)\{%\s*endfor\s*%\}", re.DOTALL
         )
 
         def replace(match):
@@ -263,24 +271,24 @@ class Jinja2LikeEngine(TemplateEngine):
 
             iterable = self._parse_expression(iterable_expr, context)
             if not iterable:
-                return ''
+                return ""
 
             result = []
             for i, item in enumerate(iterable):
                 loop_context = dict(context)
                 loop_context[var_name] = item
-                loop_context['loop'] = {
-                    'index': i + 1,
-                    'index0': i,
-                    'first': i == 0,
-                    'last': i == len(iterable) - 1,
-                    'length': len(iterable),
+                loop_context["loop"] = {
+                    "index": i + 1,
+                    "index0": i,
+                    "first": i == 0,
+                    "last": i == len(iterable) - 1,
+                    "length": len(iterable),
                 }
 
                 rendered = self.render(body, loop_context)
                 result.append(rendered)
 
-            return ''.join(result)
+            return "".join(result)
 
         # Process nested loops from inside out
         while pattern.search(template):
@@ -292,22 +300,21 @@ class Jinja2LikeEngine(TemplateEngine):
         """Process {% if condition %} blocks."""
         # Simple if/endif pattern
         pattern = re.compile(
-            r'\{%\s*if\s+(.+?)\s*%\}(.+?)(?:\{%\s*else\s*%\}(.+?))?\{%\s*endif\s*%\}',
-            re.DOTALL
+            r"\{%\s*if\s+(.+?)\s*%\}(.+?)(?:\{%\s*else\s*%\}(.+?))?\{%\s*endif\s*%\}",
+            re.DOTALL,
         )
 
         def replace(match):
             """Replace."""
             condition = match.group(1)
             true_block = match.group(2)
-            false_block = match.group(3) or ''
+            false_block = match.group(3) or ""
 
             value = self._evaluate_condition(condition, context)
 
             if value:
                 return self.render(true_block, context)
-            else:
-                return self.render(false_block, context)
+            return self.render(false_block, context)
 
         while pattern.search(template):
             template = pattern.sub(replace, template)
@@ -320,13 +327,13 @@ class Jinja2LikeEngine(TemplateEngine):
 
         # Handle comparison operators
         for op, func in [
-            (' == ', lambda a, b: a == b),
-            (' != ', lambda a, b: a != b),
-            (' >= ', lambda a, b: a >= b),
-            (' <= ', lambda a, b: a <= b),
-            (' > ', lambda a, b: a > b),
-            (' < ', lambda a, b: a < b),
-            (' in ', lambda a, b: a in b),
+            (" == ", lambda a, b: a == b),
+            (" != ", lambda a, b: a != b),
+            (" >= ", lambda a, b: a >= b),
+            (" <= ", lambda a, b: a <= b),
+            (" > ", lambda a, b: a > b),
+            (" < ", lambda a, b: a < b),
+            (" in ", lambda a, b: a in b),
         ]:
             if op in condition:
                 left, right = condition.split(op, 1)
@@ -335,16 +342,16 @@ class Jinja2LikeEngine(TemplateEngine):
                 return func(left_val, right_val)
 
         # Handle 'not' prefix
-        if condition.startswith('not '):
+        if condition.startswith("not "):
             return not self._evaluate_condition(condition[4:], context)
 
         # Handle 'and' / 'or'
-        if ' and ' in condition:
-            parts = condition.split(' and ')
+        if " and " in condition:
+            parts = condition.split(" and ")
             return all(self._evaluate_condition(p, context) for p in parts)
 
-        if ' or ' in condition:
-            parts = condition.split(' or ')
+        if " or " in condition:
+            parts = condition.split(" or ")
             return any(self._evaluate_condition(p, context) for p in parts)
 
         # Simple truthiness check
@@ -356,11 +363,12 @@ class Jinja2LikeEngine(TemplateEngine):
             template = f.read()
         return self.render(template, context)
 
+
 class MustacheEngine(TemplateEngine):
     """Mustache-style logic-less templates."""
 
     def __init__(self):
-        self._var_pattern = re.compile(r'\{\{([#^/]?)(.+?)\}\}')
+        self._var_pattern = re.compile(r"\{\{([#^/]?)(.+?)\}\}")
 
     def render(self, template: str, context: dict[str, Any]) -> str:
         """Render."""
@@ -377,10 +385,7 @@ class MustacheEngine(TemplateEngine):
 
     def _process_sections(self, template: str, context: dict[str, Any]) -> str:
         """Process {{#section}} and {{^section}} blocks."""
-        section_pattern = re.compile(
-            r'\{\{([#^])(.+?)\}\}(.*?)\{\{/\2\}\}',
-            re.DOTALL
-        )
+        section_pattern = re.compile(r"\{\{([#^])(.+?)\}\}(.*?)\{\{/\2\}\}", re.DOTALL)
 
         def replace(match):
             """Replace."""
@@ -390,10 +395,10 @@ class MustacheEngine(TemplateEngine):
 
             value = self._resolve_path(name, context)
 
-            if section_type == '#':
+            if section_type == "#":
                 # Truthy section
                 if not value:
-                    return ''
+                    return ""
 
                 if isinstance(value, list):
                     result = []
@@ -401,19 +406,18 @@ class MustacheEngine(TemplateEngine):
                         if isinstance(item, dict):
                             new_context = {**context, **item}
                         else:
-                            new_context = {**context, '.': item}
+                            new_context = {**context, ".": item}
                         result.append(self._render_internal(content, new_context))
-                    return ''.join(result)
-                elif isinstance(value, dict):
+                    return "".join(result)
+                if isinstance(value, dict):
                     new_context = {**context, **value}
                     return self._render_internal(content, new_context)
-                else:
-                    return self._render_internal(content, context)
-
-            else:  # Inverted section
-                if value:
-                    return ''
                 return self._render_internal(content, context)
+
+            # Inverted section
+            if value:
+                return ""
+            return self._render_internal(content, context)
 
         while section_pattern.search(template):
             template = section_pattern.sub(replace, template)
@@ -422,37 +426,37 @@ class MustacheEngine(TemplateEngine):
 
     def _process_variables(self, template: str, context: dict[str, Any]) -> str:
         """Process {{variable}} expressions."""
-        pattern = re.compile(r'\{\{([^#^/].+?)\}\}')
+        pattern = re.compile(r"\{\{([^#^/].+?)\}\}")
 
         def replace(match):
             """Replace."""
             name = match.group(1).strip()
 
             # Triple mustache for unescaped
-            if name.startswith('{') and name.endswith('}'):
+            if name.startswith("{") and name.endswith("}"):
                 name = name[1:-1]
                 value = self._resolve_path(name, context)
-                return str(value) if value is not None else ''
+                return str(value) if value is not None else ""
 
             # Ampersand for unescaped
-            if name.startswith('&'):
+            if name.startswith("&"):
                 name = name[1:].strip()
                 value = self._resolve_path(name, context)
-                return str(value) if value is not None else ''
+                return str(value) if value is not None else ""
 
             value = self._resolve_path(name, context)
             if value is None:
-                return ''
+                return ""
             return html.escape(str(value))
 
         return pattern.sub(replace, template)
 
     def _resolve_path(self, path: str, context: dict[str, Any]) -> Any:
         """Resolve a dotted path."""
-        if path == '.':
-            return context.get('.')
+        if path == ".":
+            return context.get(".")
 
-        parts = path.split('.')
+        parts = path.split(".")
         value = context
 
         for part in parts:
@@ -470,10 +474,8 @@ class MustacheEngine(TemplateEngine):
             template = f.read()
         return self.render(template, context)
 
-def create_engine(
-    engine_type: str = "simple",
-    **kwargs
-) -> TemplateEngine:
+
+def create_engine(engine_type: str = "simple", **kwargs) -> TemplateEngine:
     """Factory function to create template engines."""
     engines = {
         "simple": SimpleTemplateEngine,
@@ -487,11 +489,12 @@ def create_engine(
 
     return engine_class(**kwargs)
 
+
 __all__ = [
-    "TemplateContext",
-    "TemplateEngine",
-    "SimpleTemplateEngine",
     "Jinja2LikeEngine",
     "MustacheEngine",
+    "SimpleTemplateEngine",
+    "TemplateContext",
+    "TemplateEngine",
     "create_engine",
 ]

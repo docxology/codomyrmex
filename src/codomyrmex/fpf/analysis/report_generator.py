@@ -1,4 +1,3 @@
-
 """Report generator for FPF specifications.
 
 
@@ -75,11 +74,13 @@ class ReportGenerator:
         # Terms section
         html_lines.extend(self._generate_terms_section(term_frequency, shared_terms))
 
-        html_lines.extend([
-            "</div>",
-            "</body>",
-            "</html>",
-        ])
+        html_lines.extend(
+            [
+                "</div>",
+                "</body>",
+                "</html>",
+            ]
+        )
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text("\n".join(html_lines), encoding="utf-8")
@@ -256,7 +257,9 @@ class ReportGenerator:
         return lines
 
     def _generate_terms_section(
-        self, term_frequency: dict[str, int], shared_terms: list[tuple[str, int, list[str]]]
+        self,
+        term_frequency: dict[str, int],
+        shared_terms: list[tuple[str, int, list[str]]],
     ) -> list[str]:
         """Generate terms section."""
         lines = [
@@ -270,13 +273,8 @@ class ReportGenerator:
             if len(pattern_ids) > 5:
                 patterns_str += f" (+{len(pattern_ids) - 5} more)"
             lines.append(
-                f"<tr>"
-                f"<td>{term}</td>"
-                f"<td>{count}</td>"
-                f"<td>{patterns_str}</td>"
-                f"</tr>"
+                f"<tr><td>{term}</td><td>{count}</td><td>{patterns_str}</td></tr>"
             )
 
         lines.append("</table>")
         return lines
-

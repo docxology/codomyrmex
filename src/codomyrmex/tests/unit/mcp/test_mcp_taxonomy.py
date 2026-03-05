@@ -24,56 +24,71 @@ class TestToolCategory:
         expected = {"analysis", "generation", "execution", "query", "mutation"}
         assert {c.value for c in ToolCategory} == expected
 
-    @pytest.mark.parametrize("tool,expected", [
-        ("codomyrmex.analyze_file", ToolCategory.ANALYSIS),
-        ("codomyrmex.analyze_project", ToolCategory.ANALYSIS),
-        ("codomyrmex.code_review_file", ToolCategory.ANALYSIS),
-        ("codomyrmex.checksum_file", ToolCategory.ANALYSIS),
-        ("codomyrmex.obsidian_vault_stats", ToolCategory.ANALYSIS),
-    ])
+    @pytest.mark.parametrize(
+        "tool,expected",
+        [
+            ("codomyrmex.analyze_file", ToolCategory.ANALYSIS),
+            ("codomyrmex.analyze_project", ToolCategory.ANALYSIS),
+            ("codomyrmex.code_review_file", ToolCategory.ANALYSIS),
+            ("codomyrmex.checksum_file", ToolCategory.ANALYSIS),
+            ("codomyrmex.obsidian_vault_stats", ToolCategory.ANALYSIS),
+        ],
+    )
     def test_analysis_tools(self, tool, expected):
         assert categorize_tool(tool) == expected
 
-    @pytest.mark.parametrize("tool,expected", [
-        ("codomyrmex.create_bar_chart", ToolCategory.GENERATION),
-        ("codomyrmex.create_line_plot", ToolCategory.GENERATION),
-        ("codomyrmex.create_git_branch_diagram", ToolCategory.GENERATION),
-        ("codomyrmex.generate_documentation", ToolCategory.GENERATION),
-        ("codomyrmex.create_ascii_art", ToolCategory.GENERATION),
-    ])
+    @pytest.mark.parametrize(
+        "tool,expected",
+        [
+            ("codomyrmex.create_bar_chart", ToolCategory.GENERATION),
+            ("codomyrmex.create_line_plot", ToolCategory.GENERATION),
+            ("codomyrmex.create_git_branch_diagram", ToolCategory.GENERATION),
+            ("codomyrmex.generate_documentation", ToolCategory.GENERATION),
+            ("codomyrmex.create_ascii_art", ToolCategory.GENERATION),
+        ],
+    )
     def test_generation_tools(self, tool, expected):
         assert categorize_tool(tool) == expected
 
-    @pytest.mark.parametrize("tool,expected", [
-        ("codomyrmex.execute_code", ToolCategory.EXECUTION),
-        ("codomyrmex.code_execute", ToolCategory.EXECUTION),
-        ("codomyrmex.run_command", ToolCategory.EXECUTION),
-        ("codomyrmex.run_tests", ToolCategory.EXECUTION),
-        ("codomyrmex.call_module_function", ToolCategory.EXECUTION),
-    ])
+    @pytest.mark.parametrize(
+        "tool,expected",
+        [
+            ("codomyrmex.execute_code", ToolCategory.EXECUTION),
+            ("codomyrmex.code_execute", ToolCategory.EXECUTION),
+            ("codomyrmex.run_command", ToolCategory.EXECUTION),
+            ("codomyrmex.run_tests", ToolCategory.EXECUTION),
+            ("codomyrmex.call_module_function", ToolCategory.EXECUTION),
+        ],
+    )
     def test_execution_tools(self, tool, expected):
         assert categorize_tool(tool) == expected
 
-    @pytest.mark.parametrize("tool,expected", [
-        ("codomyrmex.list_modules", ToolCategory.QUERY),
-        ("codomyrmex.get_status", ToolCategory.QUERY),
-        ("codomyrmex.search_codebase", ToolCategory.QUERY),
-        ("codomyrmex.read_file", ToolCategory.QUERY),
-        ("codomyrmex.pai_status", ToolCategory.QUERY),
-        ("codomyrmex.git_diff", ToolCategory.QUERY),
-        ("codomyrmex.obsidian_read_note", ToolCategory.QUERY),
-    ])
+    @pytest.mark.parametrize(
+        "tool,expected",
+        [
+            ("codomyrmex.list_modules", ToolCategory.QUERY),
+            ("codomyrmex.get_status", ToolCategory.QUERY),
+            ("codomyrmex.search_codebase", ToolCategory.QUERY),
+            ("codomyrmex.read_file", ToolCategory.QUERY),
+            ("codomyrmex.pai_status", ToolCategory.QUERY),
+            ("codomyrmex.git_diff", ToolCategory.QUERY),
+            ("codomyrmex.obsidian_read_note", ToolCategory.QUERY),
+        ],
+    )
     def test_query_tools(self, tool, expected):
         assert categorize_tool(tool) == expected
 
-    @pytest.mark.parametrize("tool,expected", [
-        ("codomyrmex.git_commit", ToolCategory.MUTATION),
-        ("codomyrmex.git_push", ToolCategory.MUTATION),
-        ("codomyrmex.write_file", ToolCategory.MUTATION),
-        ("codomyrmex.obsidian_create_note", ToolCategory.MUTATION),
-        ("codomyrmex.obsidian_delete_note", ToolCategory.MUTATION),
-        ("codomyrmex.invalidate_cache", ToolCategory.MUTATION),
-    ])
+    @pytest.mark.parametrize(
+        "tool,expected",
+        [
+            ("codomyrmex.git_commit", ToolCategory.MUTATION),
+            ("codomyrmex.git_push", ToolCategory.MUTATION),
+            ("codomyrmex.write_file", ToolCategory.MUTATION),
+            ("codomyrmex.obsidian_create_note", ToolCategory.MUTATION),
+            ("codomyrmex.obsidian_delete_note", ToolCategory.MUTATION),
+            ("codomyrmex.invalidate_cache", ToolCategory.MUTATION),
+        ],
+    )
     def test_mutation_tools(self, tool, expected):
         assert categorize_tool(tool) == expected
 

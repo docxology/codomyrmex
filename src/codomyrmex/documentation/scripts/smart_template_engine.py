@@ -21,15 +21,18 @@ try:
         get_logger,
         setup_logging,
     )
+
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+
 @dataclass
 class APIFunction:
     """Represents an API function."""
+
     name: str
     signature: str
     docstring: str
@@ -42,6 +45,7 @@ class APIFunction:
 @dataclass
 class ModuleAnalysis:
     """Analysis results for a module."""
+
     module_path: str
     module_name: str
     docstring: str
@@ -58,7 +62,7 @@ class SmartTemplateEngine:
     def __init__(self, repo_root: Path):
         """Initialize template engine."""
         self.repo_root = repo_root.resolve()
-        self.src_path = repo_root / 'src'
+        self.src_path = repo_root / "src"
 
         # Add src to Python path
         if str(self.src_path) not in sys.path:
@@ -70,7 +74,7 @@ class SmartTemplateEngine:
 
         try:
             # Read module content
-            content = module_path.read_text(encoding='utf-8', errors='ignore')
+            content = module_path.read_text(encoding="utf-8", errors="ignore")
 
             # Parse AST
             tree = ast.parse(content)
@@ -105,7 +109,7 @@ class SmartTemplateEngine:
                 public_classes=public_classes,
                 imports=imports,
                 relationships=relationships,
-                architecture_diagram=architecture_diagram
+                architecture_diagram=architecture_diagram,
             )
 
         except Exception as e:
@@ -118,17 +122,19 @@ class SmartTemplateEngine:
                 public_classes=[],
                 imports=[],
                 relationships=[],
-                architecture_diagram=""
+                architecture_diagram="",
             )
 
-    def extract_api_functions(self, tree: ast.AST, content: str, module_path: Path) -> list[APIFunction]:
+    def extract_api_functions(
+        self, tree: ast.AST, content: str, module_path: Path
+    ) -> list[APIFunction]:
         """Extract public API functions from AST."""
         functions = []
 
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 # Skip private functions
-                if node.name.startswith('_') and not node.name.startswith('__'):
+                if node.name.startswith("_") and not node.name.startswith("__"):
                     continue
 
                 # Extract function information
@@ -164,15 +170,17 @@ class SmartTemplateEngine:
                 # Generate example
                 example = self.generate_code_example(func_name, args, docstring)
 
-                functions.append(APIFunction(
-                    name=func_name,
-                    signature=signature,
-                    docstring=docstring,
-                    parameters=parameters,
-                    returns=returns,
-                    example=example,
-                    line_number=node.lineno
-                ))
+                functions.append(
+                    APIFunction(
+                        name=func_name,
+                        signature=signature,
+                        docstring=docstring,
+                        parameters=parameters,
+                        returns=returns,
+                        example=example,
+                        line_number=node.lineno,
+                    )
+                )
 
         return functions
 
@@ -182,7 +190,7 @@ class SmartTemplateEngine:
 
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
-                if not node.name.startswith('_'):
+                if not node.name.startswith("_"):
                     classes.append(node.name)
 
         return classes
@@ -206,23 +214,25 @@ class SmartTemplateEngine:
         parameters = []
 
         # Look for Google-style docstring parameters
-        lines = docstring.split('\n')
+        lines = docstring.split("\n")
         in_args = False
 
         for line in lines:
             stripped = line.strip()
 
-            if stripped.lower().startswith('args:') or stripped.lower().startswith('parameters:'):
+            if stripped.lower().startswith("args:") or stripped.lower().startswith(
+                "parameters:"
+            ):
                 in_args = True
                 continue
 
             if in_args:
-                if stripped.startswith('Returns:') or stripped.startswith('Raises:'):
+                if stripped.startswith("Returns:") or stripped.startswith("Raises:"):
                     break
 
                 # Parse parameter line: "param_name (type): description"
-                if ':' in stripped:
-                    parts = stripped.split(':', 1)
+                if ":" in stripped:
+                    parts = stripped.split(":", 1)
                     param_part = parts[0].strip()
                     description = parts[1].strip() if len(parts) > 1 else ""
 
@@ -230,43 +240,57 @@ class SmartTemplateEngine:
                     param_name = param_part
                     param_type = "Any"
 
-                    if '(' in param_part and ')' in param_part:
-                        param_name = param_part[:param_part.index('(')].strip()
-                        param_type = param_part[param_part.index('(')+1:param_part.index(')')].strip()
+                    if "(" in param_part and ")" in param_part:
+                        param_name = param_part[: param_part.index("(")].strip()
+                        param_type = param_part[
+                            param_part.index("(") + 1 : param_part.index(")")
+                        ].strip()
 
                     if param_name:
-                        parameters.append({
-                            'name': param_name,
-                            'type': param_type,
-                            'description': description
-                        })
+                        parameters.append(
+                            {
+                                "name": param_name,
+                                "type": param_type,
+                                "description": description,
+                            }
+                        )
 
         return parameters
 
-    def generate_code_example(self, func_name: str, args: list[str], docstring: str) -> str:
+    def generate_code_example(
+        self, func_name: str, args: list[str], docstring: str
+    ) -> str:
         """Generate a code example for a function."""
         # Extract actual argument names (without types)
         arg_names = []
         for arg in args:
-            if ':' in arg:
-                arg_names.append(arg.split(':')[0].strip())
+            if ":" in arg:
+                arg_names.append(arg.split(":")[0].strip())
             else:
                 arg_names.append(arg)
 
         # Filter out 'self' and 'cls'
-        arg_names = [a for a in arg_names if a not in ['self', 'cls']]
+        arg_names = [a for a in arg_names if a not in ["self", "cls"]]
 
         # Generate example call
         if arg_names:
             # Generate placeholder values based on arg names
             example_args = []
             for arg in arg_names:
-                if 'path' in arg.lower() or 'file' in arg.lower():
+                if "path" in arg.lower() or "file" in arg.lower():
                     example_args.append(f'"{arg}_value"')
-                elif 'count' in arg.lower() or 'number' in arg.lower() or 'size' in arg.lower():
-                    example_args.append('10')
-                elif 'flag' in arg.lower() or 'enable' in arg.lower() or 'is_' in arg.lower():
-                    example_args.append('True')
+                elif (
+                    "count" in arg.lower()
+                    or "number" in arg.lower()
+                    or "size" in arg.lower()
+                ):
+                    example_args.append("10")
+                elif (
+                    "flag" in arg.lower()
+                    or "enable" in arg.lower()
+                    or "is_" in arg.lower()
+                ):
+                    example_args.append("True")
                 else:
                     example_args.append(f'"{arg}_value"')
 
@@ -276,26 +300,28 @@ class SmartTemplateEngine:
 
         return example
 
-    def infer_relationships(self, imports: list[str], module_path: Path) -> list[dict[str, str]]:
+    def infer_relationships(
+        self, imports: list[str], module_path: Path
+    ) -> list[dict[str, str]]:
         """Infer module relationships from imports."""
         relationships = []
 
         for imp in imports:
             # Check if it's a codomyrmex module
-            if 'codomyrmex' in imp:
-                module_name = imp.split('.')[-1]
+            if "codomyrmex" in imp:
+                module_name = imp.split(".")[-1]
                 relationship = {
-                    'name': module_name.replace('_', ' ').title(),
-                    'path': imp.replace('.', '/'),
-                    'relationship': 'imports from'
+                    "name": module_name.replace("_", " ").title(),
+                    "path": imp.replace(".", "/"),
+                    "relationship": "imports from",
                 }
                 relationships.append(relationship)
 
         return relationships
 
-    def create_architecture_diagram(self, module_path: Path,
-                                   functions: list[APIFunction],
-                                   classes: list[str]) -> str:
+    def create_architecture_diagram(
+        self, module_path: Path, functions: list[APIFunction], classes: list[str]
+    ) -> str:
         """Create a mermaid architecture diagram."""
         module_name = module_path.stem
 
@@ -337,12 +363,14 @@ class SmartTemplateEngine:
     def generate_readme_content(self, analysis: ModuleAnalysis) -> dict[str, Any]:
         """Generate README content from module analysis."""
         content = {
-            'project_name': analysis.module_name.replace('_', ' ').title(),
-            'module_name': analysis.module_name,
-            'description': analysis.docstring.split('\n')[0] if analysis.docstring else f"The {analysis.module_name} module",
-            'version': '0.1.0',
-            'status': 'Active',
-            'language': 'python'
+            "project_name": analysis.module_name.replace("_", " ").title(),
+            "module_name": analysis.module_name,
+            "description": analysis.docstring.split("\n")[0]
+            if analysis.docstring
+            else f"The {analysis.module_name} module",
+            "version": "0.1.0",
+            "status": "Active",
+            "language": "python",
         }
 
         # Add API functions
@@ -350,73 +378,84 @@ class SmartTemplateEngine:
             func_docs = []
             for func in analysis.public_functions:
                 func_doc = {
-                    'name': func.name,
-                    'signature': func.signature,
-                    'description': func.docstring.split('\n')[0] if func.docstring else f"Execute {func.name} operation",
-                    'parameters': func.parameters,
-                    'returns': func.returns,
-                    'example': f"result = {func.example}"
+                    "name": func.name,
+                    "signature": func.signature,
+                    "description": func.docstring.split("\n")[0]
+                    if func.docstring
+                    else f"Execute {func.name} operation",
+                    "parameters": func.parameters,
+                    "returns": func.returns,
+                    "example": f"result = {func.example}",
                 }
                 func_docs.append(func_doc)
-            content['api_functions'] = func_docs
+            content["api_functions"] = func_docs
 
         # Add quick start example
         if analysis.public_functions:
             first_func = analysis.public_functions[0]
-            content['quick_start_example'] = f"""from codomyrmex.{analysis.module_name} import {first_func.name}
+            content[
+                "quick_start_example"
+            ] = f"""from codomyrmex.{analysis.module_name} import {first_func.name}
 
 # Example usage
 {first_func.example}
 """
 
         # Add architecture diagram
-        content['architecture_diagram'] = analysis.architecture_diagram
+        content["architecture_diagram"] = analysis.architecture_diagram
 
         return content
 
-    def generate_agents_content(self, module_path: Path, analysis: ModuleAnalysis) -> dict[str, Any]:
+    def generate_agents_content(
+        self, module_path: Path, analysis: ModuleAnalysis
+    ) -> dict[str, Any]:
         """Generate AGENTS.md content from module analysis."""
         relative_path = module_path.parent.relative_to(self.repo_root)
 
         content = {
-            'relative_path': str(relative_path).replace('\\', '/'),
-            'purpose_description': analysis.docstring.split('\n\n')[0] if analysis.docstring else f"Coordination and orchestration for the {analysis.module_name} module",
-            'components': []
+            "relative_path": str(relative_path).replace("\\", "/"),
+            "purpose_description": analysis.docstring.split("\n\n")[0]
+            if analysis.docstring
+            else f"Coordination and orchestration for the {analysis.module_name} module",
+            "components": [],
         }
 
         # Add functions as components
         for func in analysis.public_functions[:5]:  # Limit to top 5
-            content['components'].append({
-                'name': func.name,
-                'description': func.docstring.split('\n')[0] if func.docstring else f"Provides {func.name} functionality"
-            })
+            content["components"].append(
+                {
+                    "name": func.name,
+                    "description": func.docstring.split("\n")[0]
+                    if func.docstring
+                    else f"Provides {func.name} functionality",
+                }
+            )
 
         # Add classes as components
         for cls in analysis.public_classes[:5]:
-            content['components'].append({
-                'name': cls,
-                'description': f"Core {cls} implementation"
-            })
+            content["components"].append(
+                {"name": cls, "description": f"Core {cls} implementation"}
+            )
 
         # Add related modules
-        content['related_modules'] = analysis.relationships
+        content["related_modules"] = analysis.relationships
 
         # Add navigation links
-        content['nav_links'] = [
+        content["nav_links"] = [
             {
-                'icon': '📚',
-                'label': 'Module README',
-                'title': 'Module Documentation',
-                'path': 'README.md',
-                'description': 'Complete module documentation'
+                "icon": "📚",
+                "label": "Module README",
+                "title": "Module Documentation",
+                "path": "README.md",
+                "description": "Complete module documentation",
             },
             {
-                'icon': '🏠',
-                'label': 'Project Root',
-                'title': 'Main Project',
-                'path': '../../README.md',
-                'description': 'Main project README'
-            }
+                "icon": "🏠",
+                "label": "Project Root",
+                "title": "Main Project",
+                "path": "../../README.md",
+                "description": "Main project README",
+            },
         ]
 
         return content
@@ -439,14 +478,21 @@ def main():
     """Main entry point."""
 
     parser = argparse.ArgumentParser(description="Smart documentation template engine")
-    parser.add_argument('--repo-root', type=Path, default=Path.cwd(),
-                       help='Repository root directory')
-    parser.add_argument('--module', type=Path, required=True,
-                       help='Module file to analyze')
-    parser.add_argument('--output', type=Path, default=Path('output'),
-                       help='Output directory for analysis')
-    parser.add_argument('--export-json', action='store_true',
-                       help='Export analysis as JSON')
+    parser.add_argument(
+        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
+    )
+    parser.add_argument(
+        "--module", type=Path, required=True, help="Module file to analyze"
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("output"),
+        help="Output directory for analysis",
+    )
+    parser.add_argument(
+        "--export-json", action="store_true", help="Export analysis as JSON"
+    )
 
     args = parser.parse_args()
 
@@ -458,9 +504,9 @@ def main():
     analysis = engine.analyze_module(args.module)
 
     # Print summary
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("MODULE ANALYSIS")
-    print("="*80)
+    print("=" * 80)
     print(f"Module: {analysis.module_name}")
     print(f"Path: {analysis.module_path}")
     print(f"Public functions: {len(analysis.public_functions)}")
@@ -477,10 +523,10 @@ def main():
         output_file = engine.export_analysis(analysis, args.output)
         print(f"\n✅ Analysis exported to: {output_file}")
 
-    print("="*80)
+    print("=" * 80)
 
     sys.exit(0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

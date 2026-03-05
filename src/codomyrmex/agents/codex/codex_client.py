@@ -186,7 +186,7 @@ class CodexClient(APIAgentBase):
                     "error": str(e),
                 },
             )
-            yield f"Error: Codex API error: {str(e)}"
+            yield f"Error: Codex API error: {e!s}"
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(
                 "Unexpected error in Codex API stream",
@@ -197,7 +197,7 @@ class CodexClient(APIAgentBase):
                     "error": str(e),
                 },
             )
-            yield f"Error: {str(e)}"
+            yield f"Error: {e!s}"
 
     def _build_prompt(self, request: AgentRequest) -> str:
         """
@@ -213,9 +213,7 @@ class CodexClient(APIAgentBase):
 
         # Add context if provided
         if request.context:
-            context_str = "\\n".join(
-                f"{k}: {v}" for k, v in request.context.items()
-            )
+            context_str = "\\n".join(f"{k}: {v}" for k, v in request.context.items())
             prompt = f"{context_str}\\n\\n{prompt}"
 
         return prompt

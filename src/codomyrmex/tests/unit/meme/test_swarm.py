@@ -304,8 +304,7 @@ class TestQuorumSensing:
     def test_distant_agents_have_low_density(self) -> None:
         """Agents far apart with small radius have zero density."""
         agents = [
-            SwarmAgent(position=np.array([float(i * 100), 0.0, 0.0]))
-            for i in range(5)
+            SwarmAgent(position=np.array([float(i * 100), 0.0, 0.0])) for i in range(5)
         ]
         density = quorum_sensing(agents, radius=1.0)
         assert density == 0.0
@@ -313,8 +312,7 @@ class TestQuorumSensing:
     def test_density_increases_with_radius(self) -> None:
         """Larger radius captures more neighbors, increasing density."""
         agents = [
-            SwarmAgent(position=np.array([float(i * 5), 0.0, 0.0]))
-            for i in range(5)
+            SwarmAgent(position=np.array([float(i * 5), 0.0, 0.0])) for i in range(5)
         ]
         small_density = quorum_sensing(agents, radius=1.0)
         large_density = quorum_sensing(agents, radius=20.0)

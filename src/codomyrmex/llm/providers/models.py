@@ -24,6 +24,7 @@ class ProviderType(Enum):
         COHERE - Cohere API
         MISTRAL - Mistral AI API
     """
+
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     OPENROUTER = "openrouter"
@@ -37,6 +38,7 @@ class ProviderType(Enum):
 @dataclass
 class Message:
     """A chat message."""
+
     role: str  # "system", "user", "assistant", "tool"
     content: str
     name: str | None = None
@@ -58,6 +60,7 @@ class Message:
 @dataclass
 class CompletionResponse:
     """Response from a completion request."""
+
     content: str
     model: str
     provider: ProviderType
@@ -77,6 +80,7 @@ class CompletionResponse:
 @dataclass
 class ProviderConfig:
     """Configuration for an LLM provider."""
+
     api_key: str | None = None
     base_url: str | None = None
     organization: str | None = None
@@ -84,5 +88,3 @@ class ProviderConfig:
     max_retries: int = 3
     default_model: str | None = None
     extra_headers: dict[str, str] = field(default_factory=dict)
-
-

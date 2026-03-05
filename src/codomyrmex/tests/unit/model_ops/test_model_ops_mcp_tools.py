@@ -60,7 +60,9 @@ def test_score_output_contains_hit() -> None:
     """contains scorer returns 1.0 when reference is a substring of output."""
     from codomyrmex.model_ops.mcp_tools import model_ops_score_output
 
-    result = model_ops_score_output("the quick brown fox", "quick", scorers=["contains"])
+    result = model_ops_score_output(
+        "the quick brown fox", "quick", scorers=["contains"]
+    )
     assert result["scores"]["contains"] == 1.0
 
 
@@ -69,7 +71,7 @@ def test_sanitize_dataset_filters_short_entries() -> None:
     from codomyrmex.model_ops.mcp_tools import model_ops_sanitize_dataset
 
     data = [
-        {"prompt": "hi", "completion": ""},          # length=2, too short
+        {"prompt": "hi", "completion": ""},  # length=2, too short
         {"prompt": "hello world", "completion": "!"},  # length=12, ok
     ]
     result = model_ops_sanitize_dataset(data, min_length=5, max_length=100)
@@ -93,5 +95,9 @@ def test_mcp_tool_meta_attached() -> None:
         model_ops_score_output,
     )
 
-    for fn in (model_ops_score_output, model_ops_sanitize_dataset, model_ops_list_scorers):
+    for fn in (
+        model_ops_score_output,
+        model_ops_sanitize_dataset,
+        model_ops_list_scorers,
+    ):
         assert hasattr(fn, "_mcp_tool_meta"), f"{fn.__name__} missing _mcp_tool_meta"

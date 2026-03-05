@@ -101,5 +101,3 @@ def test_create_pattern_card():
     assert isinstance(card, str)
     assert "A.1" in card
     assert "Test Pattern" in card
-
-

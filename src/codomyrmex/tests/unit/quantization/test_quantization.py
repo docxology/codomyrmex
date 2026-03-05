@@ -161,9 +161,7 @@ class TestFP4Quantization:
 
     @pytest.mark.unit
     def test_fp4_roundtrip_shape_preserved(self):
-        x = np.array(
-            [0.1, 0.5, -0.3, 1.0, -1.0, 0.0, 0.25, -0.125], dtype=np.float32
-        )
+        x = np.array([0.1, 0.5, -0.3, 1.0, -1.0, 0.0, 0.25, -0.125], dtype=np.float32)
         ft = quantize_fp4(x)
         reconstructed = dequantize_fp4(ft)
         assert reconstructed.shape == x.shape

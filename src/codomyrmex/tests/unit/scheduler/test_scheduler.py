@@ -16,6 +16,7 @@ try:
         cron,
         every,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
@@ -27,6 +28,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestJobStatus:
     """Test suite for JobStatus."""
+
     def test_pending_status(self):
         assert JobStatus.PENDING is not None
 
@@ -40,6 +42,7 @@ class TestJobStatus:
 @pytest.mark.unit
 class TestTriggerType:
     """Test suite for TriggerType."""
+
     def test_once_type(self):
         assert TriggerType.ONCE is not None
 
@@ -53,6 +56,7 @@ class TestTriggerType:
 @pytest.mark.unit
 class TestOnceTrigger:
     """Test suite for OnceTrigger."""
+
     def test_create_trigger(self):
         trigger = OnceTrigger(run_at=datetime.now() + timedelta(hours=1))
         assert trigger is not None
@@ -71,6 +75,7 @@ class TestOnceTrigger:
 @pytest.mark.unit
 class TestIntervalTrigger:
     """Test suite for IntervalTrigger."""
+
     def test_create_trigger(self):
         trigger = IntervalTrigger(seconds=30)
         assert trigger is not None
@@ -88,6 +93,7 @@ class TestIntervalTrigger:
 @pytest.mark.unit
 class TestCronTrigger:
     """Test suite for CronTrigger."""
+
     def test_create_trigger(self):
         trigger = CronTrigger(minute="*", hour="*")
         assert trigger is not None
@@ -102,6 +108,7 @@ class TestCronTrigger:
 @pytest.mark.unit
 class TestJob:
     """Test suite for Job."""
+
     def test_create_job(self):
         job = Job(
             id="test-1",
@@ -125,6 +132,7 @@ class TestJob:
 @pytest.mark.unit
 class TestScheduler:
     """Test suite for Scheduler."""
+
     def test_create_scheduler(self):
         scheduler = Scheduler()
         assert scheduler is not None
@@ -164,6 +172,7 @@ class TestScheduler:
 @pytest.mark.unit
 class TestConvenienceFunctions:
     """Test suite for ConvenienceFunctions."""
+
     def test_every_creates_trigger(self):
         trigger = every(seconds=30)
         assert isinstance(trigger, IntervalTrigger)

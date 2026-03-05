@@ -7,10 +7,7 @@ from .splitter import split_document
 
 __all__ = [
     "convert_document",
+    "format_document",
     "merge_documents",
     "split_document",
-    "format_document",
 ]
-
-
-

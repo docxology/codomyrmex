@@ -11,6 +11,7 @@ from codomyrmex.llm.context_manager import (
 
 class TestContextMessage:
     """Test suite for ContextMessage."""
+
     def test_auto_token_count(self) -> None:
         msg = ContextMessage(role="user", content="Hello world testing")
         assert msg.token_count > 0
@@ -30,6 +31,7 @@ class TestContextMessage:
 
 class TestContextManager:
     """Test suite for ContextManager."""
+
     def test_add_message(self) -> None:
         ctx = ContextManager(max_tokens=4096)
         msg = ctx.add_message("user", "Hello")
@@ -65,7 +67,9 @@ class TestContextManager:
     def test_low_importance_evicted_first(self) -> None:
         ctx = ContextManager(max_tokens=100, reserve_tokens=10)
         ctx.add_message("user", "Low importance " * 3, importance=MessageImportance.LOW)
-        ctx.add_message("tool", "High importance " * 3, importance=MessageImportance.HIGH)
+        ctx.add_message(
+            "tool", "High importance " * 3, importance=MessageImportance.HIGH
+        )
         # Fill to trigger eviction
         for i in range(10):
             ctx.add_message("user", f"Fill {i} " * 3)

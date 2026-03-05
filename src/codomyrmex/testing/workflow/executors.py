@@ -17,7 +17,6 @@ class StepExecutor(ABC):
     @abstractmethod
     def execute(self, step: WorkflowStep, context: dict[str, Any]) -> StepResult:
         """Execute a step."""
-        pass
 
 
 class AssertionExecutor(StepExecutor):
@@ -31,7 +30,9 @@ class AssertionExecutor(StepExecutor):
             assertion_type = step.config.get("type", "equals")
             expected = step.config.get("expected")
             actual_key = step.config.get("actual_key")
-            actual = context.get(actual_key) if actual_key else step.config.get("actual")
+            actual = (
+                context.get(actual_key) if actual_key else step.config.get("actual")
+            )
 
             passed = False
             if assertion_type == "equals":

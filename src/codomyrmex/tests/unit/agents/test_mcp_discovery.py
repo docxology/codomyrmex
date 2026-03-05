@@ -188,7 +188,7 @@ class TestDiscoverDynamicToolsCacheTTL:
         import os
 
         expected = float(os.environ.get("CODOMYRMEX_MCP_CACHE_TTL", "300"))
-        assert _DEFAULT_CACHE_TTL == expected
+        assert expected == _DEFAULT_CACHE_TTL
 
     def test_cache_lock_is_threading_lock(self):
         """Cache lock should be a threading Lock for thread safety."""
@@ -255,7 +255,9 @@ class TestToolDefinitions:
     def test_each_entry_is_4_tuple(self):
         for entry in TOOL_DEFINITIONS:
             assert isinstance(entry, tuple), f"Expected tuple, got {type(entry)}"
-            assert len(entry) == 4, f"Expected 4-tuple, got {len(entry)}-tuple: {entry[0] if entry else '?'}"
+            assert len(entry) == 4, (
+                f"Expected 4-tuple, got {len(entry)}-tuple: {entry[0] if entry else '?'}"
+            )
 
     def test_each_entry_structure(self):
         """Each tool: (name:str, description:str, handler:callable, schema:dict)."""
@@ -378,9 +380,13 @@ class TestPromptDefinitions:
         """Each prompt: (name:str, description:str, args:list, template:str)."""
         for name, description, args, template in PROMPT_DEFINITIONS:
             assert isinstance(name, str), "Prompt name should be str"
-            assert isinstance(description, str), f"Prompt description should be str for {name}"
+            assert isinstance(description, str), (
+                f"Prompt description should be str for {name}"
+            )
             assert isinstance(args, list), f"Prompt args should be list for {name}"
-            assert isinstance(template, str), f"Prompt template should be str for {name}"
+            assert isinstance(template, str), (
+                f"Prompt template should be str for {name}"
+            )
 
     def test_prompt_args_are_dicts(self):
         for name, _, args, _ in PROMPT_DEFINITIONS:
@@ -499,9 +505,7 @@ class TestProxyToolCallModuleFunction:
     def test_nonexistent_function(self):
         from codomyrmex.agents.pai.mcp.proxy_tools import tool_call_module_function
 
-        result = tool_call_module_function(
-            function="concurrency.nonexistent_fn_xyz"
-        )
+        result = tool_call_module_function(function="concurrency.nonexistent_fn_xyz")
         assert "error" in result
         assert "available" in result  # Should suggest available functions
 

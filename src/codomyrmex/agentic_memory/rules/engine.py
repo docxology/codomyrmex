@@ -159,12 +159,12 @@ class RuleEngine:
         for level, names in groups.items():
             count = len(names)
             label = f"{level} ({count} rules)"
-            lines.append(f"    {level}[\"{label}\"]")
+            lines.append(f'    {level}["{label}"]')
 
         # Sub-nodes for each rule
         for level, names in groups.items():
             for name in sorted(names):
                 node_id = f"{level}_{name.replace('.', '_').replace('-', '_')}"
-                lines.append(f"    {level} --- {node_id}[\"{name}\"]")
+                lines.append(f'    {level} --- {node_id}["{name}"]')
 
         return "\n".join(lines)

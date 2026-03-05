@@ -12,6 +12,7 @@ from typing import Any, Optional, Union
 
 class DiagramType(Enum):
     """Types of Mermaid diagrams."""
+
     FLOWCHART = "flowchart"
     SEQUENCE = "sequenceDiagram"
     CLASS = "classDiagram"
@@ -23,16 +24,20 @@ class DiagramType(Enum):
     TIMELINE = "timeline"
     JOURNEY = "journey"
 
+
 class FlowDirection(Enum):
     """Direction for flowcharts."""
+
     TOP_DOWN = "TD"
     TOP_BOTTOM = "TB"
     BOTTOM_TOP = "BT"
     LEFT_RIGHT = "LR"
     RIGHT_LEFT = "RL"
 
+
 class NodeShape(Enum):
     """Flowchart node shapes."""
+
     RECTANGLE = "rect"
     ROUND = "round"
     STADIUM = "stadium"
@@ -45,9 +50,11 @@ class NodeShape(Enum):
     PARALLELOGRAM = "parallelogram"
     TRAPEZOID = "trapezoid"
 
+
 @dataclass
 class Node:
     """A node in a flowchart."""
+
     id: str
     label: str
     shape: NodeShape = NodeShape.RECTANGLE
@@ -73,16 +80,20 @@ class Node:
 
         return shape_formats.get(self.shape, f'{self.id}["{label}"]')
 
+
 class LinkStyle(Enum):
     """Styles for links between nodes."""
+
     SOLID = "-->"
     DOTTED = "-.->"
     THICK = "==>"
     INVISIBLE = "~~~"
 
+
 @dataclass
 class Link:
     """A link between nodes in a flowchart."""
+
     source: str
     target: str
     label: str | None = None
@@ -96,6 +107,7 @@ class Link:
             return f"{self.source} {style_str} {self.target}"
         return f"{self.source} {self.style.value} {self.target}"
 
+
 class MermaidDiagram:
     """Base class for Mermaid diagrams."""
 
@@ -104,12 +116,12 @@ class MermaidDiagram:
         self._content: list[str] = []
         self._config: dict[str, Any] = {}
 
-    def add_directive(self, directive: str) -> 'MermaidDiagram':
+    def add_directive(self, directive: str) -> "MermaidDiagram":
         """Add a directive."""
         self._content.insert(0, f"%%{{{directive}}}%%")
         return self
 
-    def set_config(self, config: dict[str, Any]) -> 'MermaidDiagram':
+    def set_config(self, config: dict[str, Any]) -> "MermaidDiagram":
         """Set Mermaid configuration."""
         self._config = config
         return self
@@ -130,6 +142,7 @@ class MermaidDiagram:
         """Render as a Markdown code block."""
         return f"```mermaid\n{self.render()}\n```"
 
+
 class Flowchart(MermaidDiagram):
     """Flowchart diagram builder."""
 
@@ -146,7 +159,7 @@ class Flowchart(MermaidDiagram):
         label: str,
         shape: NodeShape = NodeShape.RECTANGLE,
         style: str | None = None,
-    ) -> 'Flowchart':
+    ) -> "Flowchart":
         """Add a node to the flowchart."""
         self._nodes[node_id] = Node(node_id, label, shape, style)
         return self
@@ -157,7 +170,7 @@ class Flowchart(MermaidDiagram):
         target: str,
         label: str | None = None,
         style: LinkStyle = LinkStyle.SOLID,
-    ) -> 'Flowchart':
+    ) -> "Flowchart":
         """Add a link between nodes."""
         self._links.append(Link(source, target, label, style))
         return self
@@ -167,13 +180,15 @@ class Flowchart(MermaidDiagram):
         subgraph_id: str,
         title: str,
         node_ids: list[str],
-    ) -> 'Flowchart':
+    ) -> "Flowchart":
         """Add a subgraph containing nodes."""
-        self._subgraphs.append({
-            "id": subgraph_id,
-            "title": title,
-            "nodes": node_ids,
-        })
+        self._subgraphs.append(
+            {
+                "id": subgraph_id,
+                "title": title,
+                "nodes": node_ids,
+            }
+        )
         return self
 
     def render(self) -> str:
@@ -191,7 +206,7 @@ class Flowchart(MermaidDiagram):
 
         # Render subgraphs
         for subgraph in self._subgraphs:
-            lines.append(f"    subgraph {subgraph['id']}[\"{subgraph['title']}\"]")
+            lines.append(f'    subgraph {subgraph["id"]}["{subgraph["title"]}"]')
             for node_id in subgraph["nodes"]:
                 if node_id in self._nodes:
                     lines.append(f"        {self._nodes[node_id].render()}")
@@ -202,6 +217,7 @@ class Flowchart(MermaidDiagram):
             lines.append(f"    {link.render()}")
 
         return "\n".join(lines)
+
 
 class SequenceDiagram(MermaidDiagram):
     """Sequence diagram builder."""
@@ -216,20 +232,24 @@ class SequenceDiagram(MermaidDiagram):
         alias: str,
         label: str | None = None,
         actor: bool = False,
-    ) -> 'SequenceDiagram':
+    ) -> "SequenceDiagram":
         """Add a participant."""
         participant_type = "actor" if actor else "participant"
         if label:
-            self._participants.append({
-                "type": participant_type,
-                "alias": alias,
-                "label": label,
-            })
+            self._participants.append(
+                {
+                    "type": participant_type,
+                    "alias": alias,
+                    "label": label,
+                }
+            )
         else:
-            self._participants.append({
-                "type": participant_type,
-                "alias": alias,
-            })
+            self._participants.append(
+                {
+                    "type": participant_type,
+                    "alias": alias,
+                }
+            )
         return self
 
     def add_message(
@@ -237,8 +257,8 @@ class SequenceDiagram(MermaidDiagram):
         sender: str,
         receiver: str,
         message: str,
-        arrow_type: str = "->>"  # ->>, -->, ->>+, -x, etc.
-    ) -> 'SequenceDiagram':
+        arrow_type: str = "->>",  # ->>, -->, ->>+, -x, etc.
+    ) -> "SequenceDiagram":
         """Add a message between participants."""
         self._messages.append(f"{sender}{arrow_type}{receiver}: {message}")
         return self
@@ -248,7 +268,7 @@ class SequenceDiagram(MermaidDiagram):
         text: str,
         position: str = "right of",  # right of, left of, over
         participant: str = "",
-    ) -> 'SequenceDiagram':
+    ) -> "SequenceDiagram":
         """Add a note."""
         self._messages.append(f"Note {position} {participant}: {text}")
         return self
@@ -257,7 +277,7 @@ class SequenceDiagram(MermaidDiagram):
         self,
         label: str,
         messages: list[tuple],
-    ) -> 'SequenceDiagram':
+    ) -> "SequenceDiagram":
         """Add a loop block."""
         self._messages.append(f"loop {label}")
         for sender, receiver, message in messages:
@@ -276,7 +296,9 @@ class SequenceDiagram(MermaidDiagram):
 
         for participant in self._participants:
             if "label" in participant:
-                lines.append(f"    {participant['type']} {participant['alias']} as {participant['label']}")
+                lines.append(
+                    f"    {participant['type']} {participant['alias']} as {participant['label']}"
+                )
             else:
                 lines.append(f"    {participant['type']} {participant['alias']}")
 
@@ -284,6 +306,7 @@ class SequenceDiagram(MermaidDiagram):
             lines.append(f"    {message}")
 
         return "\n".join(lines)
+
 
 class ClassDiagram(MermaidDiagram):
     """Class diagram builder."""
@@ -298,7 +321,7 @@ class ClassDiagram(MermaidDiagram):
         name: str,
         attributes: list[str] | None = None,
         methods: list[str] | None = None,
-    ) -> 'ClassDiagram':
+    ) -> "ClassDiagram":
         """Add a class to the diagram."""
         self._classes[name] = {
             "attributes": attributes or [],
@@ -312,7 +335,7 @@ class ClassDiagram(MermaidDiagram):
         class2: str,
         relationship: str = "-->",  # <|-- inheritance, *-- composition, o-- aggregation
         label: str | None = None,
-    ) -> 'ClassDiagram':
+    ) -> "ClassDiagram":
         """Add a relationship between classes."""
         rel = f"{class1} {relationship} {class2}"
         if label:
@@ -337,32 +360,34 @@ class ClassDiagram(MermaidDiagram):
 
         return "\n".join(lines)
 
-def create_flowchart(
-    direction: FlowDirection = FlowDirection.TOP_DOWN
-) -> Flowchart:
+
+def create_flowchart(direction: FlowDirection = FlowDirection.TOP_DOWN) -> Flowchart:
     """Create a new flowchart."""
     return Flowchart(direction)
+
 
 def create_sequence_diagram() -> SequenceDiagram:
     """Create a new sequence diagram."""
     return SequenceDiagram()
 
+
 def create_class_diagram() -> ClassDiagram:
     """Create a new class diagram."""
     return ClassDiagram()
 
+
 __all__ = [
+    "ClassDiagram",
     "DiagramType",
     "FlowDirection",
-    "NodeShape",
-    "Node",
-    "LinkStyle",
-    "Link",
-    "MermaidDiagram",
     "Flowchart",
+    "Link",
+    "LinkStyle",
+    "MermaidDiagram",
+    "Node",
+    "NodeShape",
     "SequenceDiagram",
-    "ClassDiagram",
+    "create_class_diagram",
     "create_flowchart",
     "create_sequence_diagram",
-    "create_class_diagram",
 ]

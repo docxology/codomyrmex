@@ -7,6 +7,7 @@ from typing import Any
 
 class MessageRole(Enum):
     """Standard conversation roles."""
+
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
@@ -17,6 +18,7 @@ class MessageRole(Enum):
 @dataclass
 class HistoryMessage:
     """A message in conversation history."""
+
     role: MessageRole
     content: str
     timestamp: datetime = field(default_factory=datetime.now)
@@ -60,6 +62,7 @@ class HistoryMessage:
 @dataclass
 class Conversation:
     """A conversation with metadata."""
+
     conversation_id: str
     title: str = ""
     messages: list[HistoryMessage] = field(default_factory=list)
@@ -67,12 +70,7 @@ class Conversation:
     updated_at: datetime = field(default_factory=datetime.now)
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def add_message(
-        self,
-        role: MessageRole,
-        content: str,
-        **kwargs
-    ) -> HistoryMessage:
+    def add_message(self, role: MessageRole, content: str, **kwargs) -> HistoryMessage:
         """Add a message to the conversation."""
         msg = HistoryMessage(role=role, content=content, **kwargs)
         self.messages.append(msg)
@@ -93,10 +91,12 @@ class Conversation:
         for msg in self.messages:
             if not include_system and msg.role == MessageRole.SYSTEM:
                 continue
-            result.append({
-                "role": msg.role.value,
-                "content": msg.content,
-            })
+            result.append(
+                {
+                    "role": msg.role.value,
+                    "content": msg.content,
+                }
+            )
         return result
 
     @property
@@ -120,7 +120,7 @@ class Conversation:
         if len(other_msgs) <= max_messages:
             return []
 
-        to_remove = other_msgs[:len(other_msgs) - max_messages]
+        to_remove = other_msgs[: len(other_msgs) - max_messages]
         self.messages = system_msgs + other_msgs[-max_messages:]
         self.updated_at = datetime.now()
         return to_remove
@@ -147,5 +147,3 @@ class Conversation:
             updated_at=datetime.fromisoformat(data["updated_at"]),
             metadata=data.get("metadata", {}),
         )
-
-

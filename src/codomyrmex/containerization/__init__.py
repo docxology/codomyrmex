@@ -24,6 +24,7 @@ try:
         ContainerRegistry,
         manage_container_registry,
     )
+
     HAS_REGISTRY = True
 except ImportError:
     HAS_REGISTRY = False
@@ -36,6 +37,7 @@ try:
         build_containers,
         manage_containers,
     )
+
     HAS_DOCKER_MANAGER = True
 except ImportError:
     HAS_DOCKER_MANAGER = False
@@ -48,6 +50,7 @@ try:
         KubernetesOrchestrator,
         orchestrate_kubernetes,
     )
+
     HAS_K8S = True
 except ImportError:
     HAS_K8S = False
@@ -59,6 +62,7 @@ try:
         ContainerOptimizer,
         optimize_containers,
     )
+
     HAS_OPTIMIZER = True
 except ImportError:
     HAS_OPTIMIZER = False
@@ -69,6 +73,7 @@ try:
         SecurityScanResult,
         scan_container_security,
     )
+
     HAS_SCANNER = True
 except ImportError:
     HAS_SCANNER = False
@@ -83,9 +88,11 @@ try:
         RegistryError,
         VolumeError,
     )
+
     HAS_EXCEPTIONS = True
 except ImportError:
     HAS_EXCEPTIONS = False
+
 
 def cli_commands():
     """Return CLI commands for the containerization module."""
@@ -95,7 +102,9 @@ def cli_commands():
             "handler": lambda **kwargs: print(
                 "Container Images:\n"
                 + (
-                    "\n".join(f"  - {img}" for img in ["codomyrmex:latest", "codomyrmex:dev"])
+                    "\n".join(
+                        f"  - {img}" for img in ["codomyrmex:latest", "codomyrmex:dev"]
+                    )
                     if HAS_DOCKER_MANAGER
                     else "  (no Docker manager available)"
                 )
@@ -123,16 +132,31 @@ __all__ = [
 ]
 
 if HAS_DOCKER_MANAGER:
-    __all__.extend(["DockerManager", "ContainerConfig", "build_containers", "manage_containers"])
+    __all__.extend(
+        ["ContainerConfig", "DockerManager", "build_containers", "manage_containers"]
+    )
 if HAS_REGISTRY:
     __all__.extend(["ContainerRegistry", "manage_container_registry"])
 if HAS_K8S:
-    __all__.extend(["KubernetesOrchestrator", "KubernetesDeployment", "orchestrate_kubernetes"])
+    __all__.extend(
+        ["KubernetesDeployment", "KubernetesOrchestrator", "orchestrate_kubernetes"]
+    )
 if HAS_SCANNER:
-    __all__.extend(["ContainerSecurityScanner", "SecurityScanResult", "scan_container_security"])
+    __all__.extend(
+        ["ContainerSecurityScanner", "SecurityScanResult", "scan_container_security"]
+    )
 if HAS_OPTIMIZER:
-    __all__.extend(["ContainerOptimizer", "ContainerMetrics", "optimize_containers"])
+    __all__.extend(["ContainerMetrics", "ContainerOptimizer", "optimize_containers"])
 if HAS_EXCEPTIONS:
-    __all__.extend(["ContainerError", "ImageBuildError", "NetworkError", "VolumeError", "RegistryError", "KubernetesError"])
+    __all__.extend(
+        [
+            "ContainerError",
+            "ImageBuildError",
+            "KubernetesError",
+            "NetworkError",
+            "RegistryError",
+            "VolumeError",
+        ]
+    )
 
 __version__ = "0.1.0"

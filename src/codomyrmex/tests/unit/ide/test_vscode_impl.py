@@ -1,4 +1,5 @@
 """Zero-mock tests for VSCodeClient implementation."""
+
 import tempfile
 from pathlib import Path
 

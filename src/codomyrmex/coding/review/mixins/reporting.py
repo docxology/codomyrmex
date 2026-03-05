@@ -11,8 +11,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-
-
 class ReportingMixin:
     """ReportingMixin functionality."""
 
@@ -21,13 +19,12 @@ class ReportingMixin:
         try:
             if format.lower() == "html":
                 return self._generate_html_report(output_path)
-            elif format.lower() == "json":
+            if format.lower() == "json":
                 return self._generate_json_report(output_path)
-            elif format.lower() == "markdown":
+            if format.lower() == "markdown":
                 return self._generate_markdown_report(output_path)
-            else:
-                logger.error(f"Unsupported report format: {format}")
-                return False
+            logger.error(f"Unsupported report format: {format}")
+            return False
 
         except Exception as e:
             logger.error(f"Error generating report: {e}")
@@ -112,7 +109,7 @@ class ReportingMixin:
                     "confidence": result.confidence,
                 }
                 for result in self.results
-            ]
+            ],
         }
 
         with open(output_path, "w") as f:
@@ -127,13 +124,17 @@ class ReportingMixin:
         # Summary
         md_content += "## Summary\n\n"
         md_content += f"- **Total Issues**: {len(self.results)}\n"
-        md_content += f"- **Files Analyzed**: {len({r.file_path for r in self.results})}\n"
+        md_content += (
+            f"- **Files Analyzed**: {len({r.file_path for r in self.results})}\n"
+        )
         md_content += "- **Analysis Time**: N/A\n\n"
 
         # Issues by severity
         severity_counts = {}
         for result in self.results:
-            severity_counts[result.severity] = severity_counts.get(result.severity, 0) + 1
+            severity_counts[result.severity] = (
+                severity_counts.get(result.severity, 0) + 1
+            )
 
         md_content += "## Issues by Severity\n\n"
         for severity, count in severity_counts.items():
@@ -158,7 +159,9 @@ class ReportingMixin:
         return True
 
     @monitor_performance("generate_comprehensive_report")
-    def generate_comprehensive_report(self, output_path: str = "comprehensive_report.html") -> bool:
+    def generate_comprehensive_report(
+        self, output_path: str = "comprehensive_report.html"
+    ) -> bool:
         """Generate a comprehensive quality report including dashboard and all analysis."""
         try:
             # Generate quality dashboard
@@ -167,7 +170,7 @@ class ReportingMixin:
             # Generate HTML report with dashboard data
             html_content = self._generate_dashboard_html(dashboard)
 
-            with open(output_path, 'w', encoding='utf-8') as f:
+            with open(output_path, "w", encoding="utf-8") as f:
                 f.write(html_content)
 
             logger.info(f"Comprehensive report generated: {output_path}")
@@ -245,8 +248,8 @@ class ReportingMixin:
             priority_class = f"priority-{action['priority']}"
             html += f"""
                 <div class="issue-item {priority_class}">
-                    <strong>{action['type'].replace('_', ' ').title()}</strong><br>
-                    {action['description']}
+                    <strong>{action["type"].replace("_", " ").title()}</strong><br>
+                    {action["description"]}
                 </div>
 """
 
@@ -262,8 +265,8 @@ class ReportingMixin:
         for win in dashboard.quick_wins[:3]:  # Top 3
             html += f"""
                 <div class="issue-item">
-                    <strong>{win['type'].replace('_', ' ').title()}</strong><br>
-                    {win['description']} (Effort: {win['effort']}, Impact: {win['impact']})
+                    <strong>{win["type"].replace("_", " ").title()}</strong><br>
+                    {win["description"]} (Effort: {win["effort"]}, Impact: {win["impact"]})
                 </div>
 """
 
@@ -279,8 +282,8 @@ class ReportingMixin:
         for improvement in dashboard.long_term_improvements[:3]:  # Top 3
             html += f"""
                 <div class="issue-item">
-                    <strong>{improvement['type'].replace('_', ' ').title()}</strong><br>
-                    {improvement['description']} (Effort: {improvement['effort']}, Impact: {improvement['impact']})
+                    <strong>{improvement["type"].replace("_", " ").title()}</strong><br>
+                    {improvement["description"]} (Effort: {improvement["effort"]}, Impact: {improvement["impact"]})
                 </div>
 """
 

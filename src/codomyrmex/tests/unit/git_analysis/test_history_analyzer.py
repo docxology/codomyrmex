@@ -35,8 +35,16 @@ def test_get_commit_history_returns_list(analyzer: GitHistoryAnalyzer) -> None:
 def test_get_commit_history_required_keys(analyzer: GitHistoryAnalyzer) -> None:
     """Each commit dict contains the required metadata keys."""
     commits = analyzer.get_commit_history(max_count=5)
-    required_keys = {"sha", "author", "email", "date", "message",
-                     "insertions", "deletions", "files_changed"}
+    required_keys = {
+        "sha",
+        "author",
+        "email",
+        "date",
+        "message",
+        "insertions",
+        "deletions",
+        "files_changed",
+    }
     for commit in commits:
         assert required_keys.issubset(commit.keys()), (
             f"Missing keys: {required_keys - set(commit.keys())}"
@@ -62,8 +70,14 @@ def test_contributor_stats_returns_list(analyzer: GitHistoryAnalyzer) -> None:
 def test_contributor_stats_has_required_fields(analyzer: GitHistoryAnalyzer) -> None:
     """Each contributor entry has the required aggregate fields."""
     stats = analyzer.get_contributor_stats()
-    required = {"author", "commits", "insertions", "deletions",
-                "first_commit", "last_commit"}
+    required = {
+        "author",
+        "commits",
+        "insertions",
+        "deletions",
+        "first_commit",
+        "last_commit",
+    }
     for entry in stats:
         assert required.issubset(entry.keys()), (
             f"Missing keys: {required - set(entry.keys())}"
@@ -177,7 +191,9 @@ def test_get_commit_history_filtered_returns_list(analyzer: GitHistoryAnalyzer) 
 
 
 @pytest.mark.unit
-def test_get_commit_history_filtered_respects_max_count(analyzer: GitHistoryAnalyzer) -> None:
+def test_get_commit_history_filtered_respects_max_count(
+    analyzer: GitHistoryAnalyzer,
+) -> None:
     """max_count limits filtered history results."""
     commits = analyzer.get_commit_history_filtered(max_count=3)
     assert len(commits) <= 3

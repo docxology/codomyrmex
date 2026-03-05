@@ -89,7 +89,9 @@ def test_get_version_info(tmp_path):
     info = fetcher.get_version_info("ailev/FPF")
     assert "sha" in info
     assert isinstance(info["sha"], str)
-    assert len(info["sha"]) > 0  # non-empty string (may be "unknown" if API rate-limited)
+    assert (
+        len(info["sha"]) > 0
+    )  # non-empty string (may be "unknown" if API rate-limited)
 
 
 @pytest.mark.unit

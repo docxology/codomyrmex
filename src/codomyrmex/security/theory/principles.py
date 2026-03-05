@@ -11,6 +11,7 @@ logger = get_logger(__name__)
 
 class PrincipleCategory(Enum):
     """Categories of security principles."""
+
     ARCHITECTURE = "architecture"
     ACCESS_CONTROL = "access_control"
     GOVERNANCE = "governance"
@@ -50,10 +51,10 @@ PRINCIPLES = {
             "Application security",
             "Data encryption",
             "Access controls",
-            "Monitoring and logging"
+            "Monitoring and logging",
         ],
         rationale="A single security control may fail; multiple layers provide redundancy",
-        related_principles=["fail_secure", "secure_by_default"]
+        related_principles=["fail_secure", "secure_by_default"],
     ),
     "least_privilege": SecurityPrinciple(
         name="Least Privilege",
@@ -64,10 +65,10 @@ PRINCIPLES = {
             "Service accounts",
             "API access tokens",
             "Database permissions",
-            "File system access"
+            "File system access",
         ],
         rationale="Limiting access reduces the attack surface and potential damage",
-        related_principles=["separation_of_duties", "need_to_know"]
+        related_principles=["separation_of_duties", "need_to_know"],
     ),
     "separation_of_duties": SecurityPrinciple(
         name="Separation of Duties",
@@ -77,10 +78,10 @@ PRINCIPLES = {
             "Development and deployment separation",
             "Approval processes requiring multiple signers",
             "Code review by different developers",
-            "Financial transaction approvals"
+            "Financial transaction approvals",
         ],
         rationale="Prevents single points of failure and reduces insider threat risk",
-        related_principles=["least_privilege", "principle_of_least_privilege"]
+        related_principles=["least_privilege", "principle_of_least_privilege"],
     ),
     "fail_secure": SecurityPrinciple(
         name="Fail Secure",
@@ -90,10 +91,10 @@ PRINCIPLES = {
             "Access denied on authentication failure",
             "Encryption on communication failure",
             "Lockout after failed login attempts",
-            "Default deny firewall rules"
+            "Default deny firewall rules",
         ],
         rationale="Security should not be compromised when systems fail",
-        related_principles=["secure_by_default", "defense_in_depth"]
+        related_principles=["secure_by_default", "defense_in_depth"],
     ),
     "secure_by_default": SecurityPrinciple(
         name="Secure by Default",
@@ -104,10 +105,10 @@ PRINCIPLES = {
             "Strong password requirements",
             "Encryption enabled by default",
             "Minimal exposed services",
-            "Strict access controls"
+            "Strict access controls",
         ],
         rationale="Prevents accidental security misconfigurations",
-        related_principles=["fail_secure", "defense_in_depth"]
+        related_principles=["fail_secure", "defense_in_depth"],
     ),
     "need_to_know": SecurityPrinciple(
         name="Need to Know",
@@ -117,10 +118,10 @@ PRINCIPLES = {
             "Classified information access",
             "Customer data access",
             "Financial records access",
-            "Source code access"
+            "Source code access",
         ],
         rationale="Minimizes exposure of sensitive information",
-        related_principles=["least_privilege", "separation_of_duties"]
+        related_principles=["least_privilege", "separation_of_duties"],
     ),
     "confidentiality": SecurityPrinciple(
         name="Confidentiality",
@@ -130,10 +131,10 @@ PRINCIPLES = {
             "Data encryption",
             "Access controls",
             "Non-disclosure agreements",
-            "Secure communication channels"
+            "Secure communication channels",
         ],
         rationale="Ensures sensitive information remains private",
-        related_principles=["need_to_know", "least_privilege"]
+        related_principles=["need_to_know", "least_privilege"],
     ),
     "integrity": SecurityPrinciple(
         name="Integrity",
@@ -143,10 +144,10 @@ PRINCIPLES = {
             "Digital signatures",
             "Checksums and hashes",
             "Version control",
-            "Audit logs"
+            "Audit logs",
         ],
         rationale="Maintains trust in data accuracy and authenticity",
-        related_principles=["non_repudiation", "defense_in_depth"]
+        related_principles=["non_repudiation", "defense_in_depth"],
     ),
     "availability": SecurityPrinciple(
         name="Availability",
@@ -156,10 +157,10 @@ PRINCIPLES = {
             "Redundancy and failover",
             "Backup systems",
             "Load balancing",
-            "Disaster recovery plans"
+            "Disaster recovery plans",
         ],
         rationale="Maintains business continuity and service reliability",
-        related_principles=["defense_in_depth", "fail_secure"]
+        related_principles=["defense_in_depth", "fail_secure"],
     ),
     "non_repudiation": SecurityPrinciple(
         name="Non-Repudiation",
@@ -169,10 +170,10 @@ PRINCIPLES = {
             "Digital signatures",
             "Audit trails",
             "Transaction logs",
-            "Timestamped records"
+            "Timestamped records",
         ],
         rationale="Provides accountability and legal proof of actions",
-        related_principles=["integrity", "audit"]
+        related_principles=["integrity", "audit"],
     ),
     "principle_of_least_privilege": SecurityPrinciple(
         name="Principle of Least Privilege",
@@ -182,10 +183,10 @@ PRINCIPLES = {
             "User account permissions",
             "Service account scopes",
             "API token permissions",
-            "Container security contexts"
+            "Container security contexts",
         ],
         rationale="Reduces attack surface and potential damage from compromised accounts",
-        related_principles=["least_privilege", "need_to_know"]
+        related_principles=["least_privilege", "need_to_know"],
     ),
     "audit": SecurityPrinciple(
         name="Audit",
@@ -195,10 +196,10 @@ PRINCIPLES = {
             "Access logs",
             "Authentication logs",
             "Change logs",
-            "Security event logs"
+            "Security event logs",
         ],
         rationale="Enables detection, investigation, and compliance verification",
-        related_principles=["non_repudiation", "integrity"]
+        related_principles=["non_repudiation", "integrity"],
     ),
 }
 
@@ -235,7 +236,7 @@ def apply_principle(principle_name: str, context: dict[str, Any]) -> dict[str, A
         return {
             "applied": False,
             "error": f"Unknown principle: {principle_name}",
-            "available_principles": list(PRINCIPLES.keys())
+            "available_principles": list(PRINCIPLES.keys()),
         }
 
     logger.info(f"Applying principle '{principle.name}' to context")
@@ -247,7 +248,9 @@ def apply_principle(principle_name: str, context: dict[str, Any]) -> dict[str, A
         if "user_permissions" in context:
             recommendations.append("Review and minimize user permissions")
         if "service_accounts" in context:
-            recommendations.append("Ensure service accounts have minimal required permissions")
+            recommendations.append(
+                "Ensure service accounts have minimal required permissions"
+            )
 
     elif principle_name == "defense_in_depth":
         recommendations.append("Implement multiple security layers")
@@ -272,11 +275,13 @@ def apply_principle(principle_name: str, context: dict[str, Any]) -> dict[str, A
         "principle_name": principle.name,
         "context": context,
         "recommendations": recommendations,
-        "related_principles": principle.related_principles
+        "related_principles": principle.related_principles,
     }
 
 
-def validate_principle_application(principle_name: str, context: dict[str, Any]) -> dict[str, Any]:
+def validate_principle_application(
+    principle_name: str, context: dict[str, Any]
+) -> dict[str, Any]:
     """
     Validate that a principle is properly applied in a context.
 
@@ -289,28 +294,23 @@ def validate_principle_application(principle_name: str, context: dict[str, Any])
     """
     principle = PRINCIPLES.get(principle_name)
     if not principle:
-        return {
-            "valid": False,
-            "error": f"Unknown principle: {principle_name}"
-        }
+        return {"valid": False, "error": f"Unknown principle: {principle_name}"}
 
     # Basic validation logic
     compliance_checks = []
 
     if principle_name == "least_privilege":
-        compliance_checks.append({
-            "check": "User permissions reviewed",
-            "status": "unknown"
-        })
+        compliance_checks.append(
+            {"check": "User permissions reviewed", "status": "unknown"}
+        )
 
     elif principle_name == "defense_in_depth":
-        compliance_checks.append({
-            "check": "Multiple security layers present",
-            "status": "unknown"
-        })
+        compliance_checks.append(
+            {"check": "Multiple security layers present", "status": "unknown"}
+        )
 
     return {
         "valid": True,
         "principle": principle_name,
-        "compliance_checks": compliance_checks
+        "compliance_checks": compliance_checks,
     }

@@ -16,14 +16,13 @@ validates their syntax, and checks if they match actual API signatures.
 """
 
 
-
-
-
 logger = get_logger(__name__)
+
 
 @dataclass
 class CodeExample:
     """Represents a code example from documentation."""
+
     file_path: str
     line_number: int
     language: str
@@ -44,22 +43,22 @@ def extract_code_blocks(content: str, file_path: Path) -> list[CodeExample]:
     examples = []
 
     # Pattern for code blocks: ```language\ncode\n```
-    pattern = re.compile(r'```(\w+)?\n(.*?)```', re.DOTALL)
+    pattern = re.compile(r"```(\w+)?\n(.*?)```", re.DOTALL)
 
-    content.split('\n')
+    content.split("\n")
     for match in pattern.finditer(content):
-        language = match.group(1) or 'text'
+        language = match.group(1) or "text"
         code = match.group(2).strip()
 
         # Find line number of the code block start
-        line_num = content[:match.start()].count('\n') + 1
+        line_num = content[: match.start()].count("\n") + 1
 
-        if language in ['python', 'py']:
+        if language in ["python", "py"]:
             example = CodeExample(
                 file_path=str(file_path.relative_to(Path.cwd())),
                 line_number=line_num,
-                language='python',
-                code=code
+                language="python",
+                code=code,
             )
             examples.append(example)
 
@@ -76,7 +75,7 @@ def validate_python_syntax(code: str) -> tuple[bool, list[str]]:
         errors.append(f"Syntax error at line {e.lineno}: {e.msg}")
         return False, errors
     except Exception as e:
-        errors.append(f"Parse error: {str(e)}")
+        errors.append(f"Parse error: {e!s}")
         return False, errors
 
 
@@ -91,13 +90,13 @@ def check_imports(code: str) -> list[str]:
                 for alias in node.names:
                     module = alias.name
                     # Check for codomyrmex imports
-                    if module.startswith('codomyrmex'):
+                    if module.startswith("codomyrmex"):
                         # This would require checking actual module structure
                         # For now, we just note it
                         pass
             elif isinstance(node, ast.ImportFrom):
-                module = node.module or ''
-                if module.startswith('codomyrmex'):
+                module = node.module or ""
+                if module.startswith("codomyrmex"):
                     # Note: Would need to check actual module structure
                     pass
     except SyntaxError as e:
@@ -109,7 +108,7 @@ def check_imports(code: str) -> list[str]:
 
 def validate_code_example(example: CodeExample) -> CodeExample:
     """Validate a code example."""
-    if example.language == 'python':
+    if example.language == "python":
         syntax_valid, syntax_errors = validate_python_syntax(example.code)
         example.syntax_valid = syntax_valid
         example.import_errors = check_imports(example.code)
@@ -121,9 +120,9 @@ def find_all_documentation_files(docs_dir: Path) -> list[Path]:
     """Find all markdown documentation files."""
     markdown_files = []
     for root, dirs, files in os.walk(docs_dir):
-        dirs[:] = [d for d in dirs if not d.startswith('.')]
+        dirs[:] = [d for d in dirs if not d.startswith(".")]
         for file in files:
-            if file.endswith('.md'):
+            if file.endswith(".md"):
                 markdown_files.append(Path(root) / file)
     return sorted(markdown_files)
 
@@ -133,7 +132,7 @@ def main():
 
     script_dir = Path(__file__).parent
     project_root = script_dir.parent.parent
-    docs_dir = project_root / 'docs'
+    docs_dir = project_root / "docs"
     output_dir = project_root / "@output"
     output_dir.mkdir(exist_ok=True)
 
@@ -145,7 +144,7 @@ def main():
 
     for doc_file in docs_files:
         try:
-            content = doc_file.read_text(encoding='utf-8')
+            content = doc_file.read_text(encoding="utf-8")
             examples = extract_code_blocks(content, doc_file)
             for example in examples:
                 validated = validate_code_example(example)
@@ -164,14 +163,14 @@ def main():
 
     # Save report
     report = {
-        'total_examples': len(all_examples),
-        'valid_syntax': valid_count,
-        'invalid_syntax': invalid_count,
-        'examples': [asdict(e) for e in all_examples]
+        "total_examples": len(all_examples),
+        "valid_syntax": valid_count,
+        "invalid_syntax": invalid_count,
+        "examples": [asdict(e) for e in all_examples],
     }
 
     json_path = output_dir / "code_examples_validation_report.json"
-    with open(json_path, 'w') as f:
+    with open(json_path, "w") as f:
         json.dump(report, f, indent=2, default=str)
     print(f"\nReport saved to: {json_path}")
 
@@ -188,5 +187,5 @@ def main():
     return 0 if invalid_count == 0 else 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

@@ -15,6 +15,7 @@ T = TypeVar("T")
 @dataclass(frozen=True)
 class Node(Generic[T]):
     """Represents a node in the graph."""
+
     id: str
     data: T | None = None
 
@@ -32,6 +33,7 @@ class Node(Generic[T]):
 @dataclass(frozen=True)
 class Edge:
     """Represents an edge between two nodes."""
+
     source: Node
     target: Node
     weight: float = 1.0
@@ -62,7 +64,9 @@ class NetworkGraph(Generic[T]):
             self._adj[node_id] = []
         return self._nodes[node_id]
 
-    def add_edge(self, source_id: str, target_id: str, weight: float = 1.0, **kwargs) -> Edge:
+    def add_edge(
+        self, source_id: str, target_id: str, weight: float = 1.0, **kwargs
+    ) -> Edge:
         """Add an edge between two nodes.
 
         If nodes do not exist, they are created.
@@ -96,7 +100,10 @@ class NetworkGraph(Generic[T]):
             return []
         return [edge.target for edge in self._adj[node_id]]
 
-    @mcp_tool(name="NetworkGraph.shortest_path", description="Find the shortest path between two nodes using Dijkstra's algorithm")
+    @mcp_tool(
+        name="NetworkGraph.shortest_path",
+        description="Find the shortest path between two nodes using Dijkstra's algorithm",
+    )
     def shortest_path(self, start_id: str, end_id: str) -> list[Node[T]] | None:
         """Find the shortest path between two nodes using Dijkstra's algorithm.
 
@@ -112,7 +119,7 @@ class NetworkGraph(Generic[T]):
 
         # Priority queue: (distance, node_id)
         queue = [(0.0, start_id)]
-        distances = {node_id: float('inf') for node_id in self._nodes}
+        distances = {node_id: float("inf") for node_id in self._nodes}
         distances[start_id] = 0.0
         previous = dict.fromkeys(self._nodes)
 

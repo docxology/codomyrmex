@@ -5,6 +5,7 @@ PieChart, BoxPlot, AreaPlot, ViolinPlot, RadarChart, CandlestickChart,
 GanttChart, FunnelChart, SankeyDiagram, WordCloud, ConfusionMatrix,
 TreeMap, NetworkGraph, BarChart, LinePlot.
 """
+
 from ._base import BasePlot
 from .area import AreaPlot
 from .bar_chart import BarChart
@@ -27,9 +28,9 @@ from .violin import ViolinPlot
 from .wordcloud import WordCloud
 
 __all__ = [
-    "BasePlot",
     "AreaPlot",
     "BarChart",
+    "BasePlot",
     "BoxPlot",
     "CandlestickChart",
     "ConfusionMatrix",

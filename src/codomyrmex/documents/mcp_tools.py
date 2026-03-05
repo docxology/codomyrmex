@@ -36,10 +36,17 @@ def document_read(
 
         ext = os.path.splitext(path)[1].lower()
         format_map = {
-            ".md": "markdown", ".markdown": "markdown",
-            ".json": "json", ".yaml": "yaml", ".yml": "yaml",
-            ".txt": "text", ".html": "html", ".xml": "xml",
-            ".csv": "csv", ".py": "python", ".toml": "toml",
+            ".md": "markdown",
+            ".markdown": "markdown",
+            ".json": "json",
+            ".yaml": "yaml",
+            ".yml": "yaml",
+            ".txt": "text",
+            ".html": "html",
+            ".xml": "xml",
+            ".csv": "csv",
+            ".py": "python",
+            ".toml": "toml",
         }
         fmt = format_map.get(ext, "text")
 
@@ -88,23 +95,27 @@ def document_list(
                 for fname in fnames:
                     if os.path.splitext(fname)[1].lower() in exts:
                         full = os.path.join(root, fname)
-                        files.append({
-                            "path": full,
-                            "name": fname,
-                            "size": os.path.getsize(full),
-                            "format": os.path.splitext(fname)[1].lstrip("."),
-                        })
+                        files.append(
+                            {
+                                "path": full,
+                                "name": fname,
+                                "size": os.path.getsize(full),
+                                "format": os.path.splitext(fname)[1].lstrip("."),
+                            }
+                        )
         else:
             for fname in os.listdir(directory):
                 if os.path.splitext(fname)[1].lower() in exts:
                     full = os.path.join(directory, fname)
                     if os.path.isfile(full):
-                        files.append({
-                            "path": full,
-                            "name": fname,
-                            "size": os.path.getsize(full),
-                            "format": os.path.splitext(fname)[1].lstrip("."),
-                        })
+                        files.append(
+                            {
+                                "path": full,
+                                "name": fname,
+                                "size": os.path.getsize(full),
+                                "format": os.path.splitext(fname)[1].lstrip("."),
+                            }
+                        )
 
         files.sort(key=lambda x: x["name"])
         return {
@@ -158,14 +169,15 @@ def document_search(
                         if hits:
                             lines = content.split("\n")
                             excerpts = [
-                                line.strip() for line in lines
-                                if pattern.search(line)
+                                line.strip() for line in lines if pattern.search(line)
                             ][:3]
-                            matches.append({
-                                "path": entry.path,
-                                "match_count": len(hits),
-                                "excerpts": excerpts,
-                            })
+                            matches.append(
+                                {
+                                    "path": entry.path,
+                                    "match_count": len(hits),
+                                    "excerpts": excerpts,
+                                }
+                            )
                     except OSError:
                         pass
                 elif recursive and entry.is_dir() and not entry.name.startswith("."):

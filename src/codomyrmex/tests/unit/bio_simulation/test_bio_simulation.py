@@ -31,10 +31,12 @@ from codomyrmex.bio_simulation import (
 # Basic tests (Colony, Ant, Environment)
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_module_import():
     """bio_simulation module is importable."""
     from codomyrmex import bio_simulation
+
     assert bio_simulation is not None
 
 
@@ -100,6 +102,7 @@ def test_colony_stats():
 # Detailed Ant tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_ant_move_updates_position():
     """Moving an ant changes its position based on direction."""
@@ -145,6 +148,7 @@ def test_ant_drop_food():
 # ======================================================================
 # Environment tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_environment_construction():
@@ -225,6 +229,7 @@ def test_environment_get_neighbors_excludes_obstacles():
 # Genome tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_genome_random():
     """Genome.random creates a genome with traits."""
@@ -254,6 +259,7 @@ def test_genome_mutate():
 # Population tests
 # ======================================================================
 
+
 @pytest.mark.unit
 def test_population_creation():
     """Population is initialized with size."""
@@ -282,6 +288,7 @@ def test_population_trait_distribution():
 # ======================================================================
 # Death Tracking Fix Tests
 # ======================================================================
+
 
 @pytest.mark.unit
 def test_colony_death_tracking():

@@ -8,6 +8,7 @@ Coverage targets: handle_config_get, handle_config_save,
 handle_docs_get, handle_execute, handle_tests_run,
 handle_pai_action, handle_agent_dispatch, handle_agent_dispatch_status.
 """
+
 import io
 import json
 
@@ -54,8 +55,9 @@ class _FakeDataProvider:
 class FakeAPIHandler(APIHandler):
     """Concrete host class providing the interface APIHandler expects."""
 
-    def __init__(self, *, path="", content_length=0, body=b"", data_provider=None,
-                 root_dir=None):
+    def __init__(
+        self, *, path="", content_length=0, body=b"", data_provider=None, root_dir=None
+    ):
         self.path = path
         self.headers = {"Content-Length": str(content_length)}
         self.rfile = io.BytesIO(body)
@@ -65,6 +67,7 @@ class FakeAPIHandler(APIHandler):
         self.errors: list[tuple] = []
         # Thread-safety locks referenced in handle_tests_run / handle_agent_dispatch
         import threading
+
         self._test_lock = threading.Lock()
         self._test_running = False
         self._dispatch_lock = threading.Lock()
@@ -141,10 +144,12 @@ class TestHandleConfigSave:
         assert h.errors[0][0] == 400
 
     def test_path_traversal_save_returns_403(self):
-        body = json.dumps({
-            "filename": "../../etc/passwd",
-            "content": "evil",
-        }).encode()
+        body = json.dumps(
+            {
+                "filename": "../../etc/passwd",
+                "content": "evil",
+            }
+        ).encode()
         h = FakeAPIHandler(
             path="/api/config/../../etc/passwd",
             content_length=len(body),
@@ -251,6 +256,7 @@ class TestHandleTestsRun:
 
         # Temporarily give APIHandler the class attributes WebsiteServer would have
         import threading
+
         APIHandler._test_running = False
         APIHandler._test_lock = threading.Lock()
         try:
@@ -271,6 +277,7 @@ class TestHandleTestsRun:
             data_provider=None,
         )
         import threading
+
         APIHandler._test_running = False
         APIHandler._test_lock = threading.Lock()
         try:

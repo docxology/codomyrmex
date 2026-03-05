@@ -37,7 +37,7 @@ from .process.subprocess import (
     run_command_async,
     split_command,
 )
-from .process.subprocess_advanced import run_with_retry, stream_command  # noqa: F401
+from .process.subprocess_advanced import run_with_retry, stream_command
 from .refined import RefinedUtilities
 
 logger = get_logger(__name__)
@@ -134,6 +134,7 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
     Adds execution_time_ms to function result if it's a dict,
     otherwise logs the time.
     """
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         """Wrapper."""
@@ -145,6 +146,7 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
             result["execution_time_ms"] = round(elapsed, 2)
 
         return result
+
     return wrapper
 
 
@@ -165,8 +167,10 @@ def retry(
     Returns:
         Decorator function
     """
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
@@ -185,7 +189,9 @@ def retry(
             if last_exception is not None:
                 raise last_exception
             raise RuntimeError("Retry exhausted without capturing an exception")
+
         return wrapper
+
     return decorator
 
 
@@ -214,7 +220,7 @@ def truncate_string(s: str, max_length: int = 100, suffix: str = "...") -> str:
     """
     if len(s) <= max_length:
         return s
-    return s[:max_length - len(suffix)] + suffix
+    return s[: max_length - len(suffix)] + suffix
 
 
 def get_env(key: str, default: str | None = None, required: bool = False) -> str | None:
@@ -298,7 +304,7 @@ except ImportError as e:
 # Script base utilities
 from . import (  # noqa: E402
     i18n,
-    process,  # noqa: F401
+    process,
 )
 from .process.script_base import (  # noqa: E402
     ConfigurableScript,

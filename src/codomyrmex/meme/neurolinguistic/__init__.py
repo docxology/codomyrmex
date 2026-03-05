@@ -15,14 +15,14 @@ from codomyrmex.meme.neurolinguistic.patterns import (
 )
 
 __all__ = [
+    "BiasInstance",
     "CognitiveFrame",
     "LinguisticPattern",
-    "PersuasionAttempt",
-    "BiasInstance",
     "NeurolinguisticEngine",
+    "PersuasionAttempt",
     "analyze_frames",
-    "reframe",
-    "milton_model_patterns",
-    "meta_model_patterns",
     "detect_patterns",
+    "meta_model_patterns",
+    "milton_model_patterns",
+    "reframe",
 ]

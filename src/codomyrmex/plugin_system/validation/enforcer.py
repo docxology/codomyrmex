@@ -44,6 +44,7 @@ class InterfaceEnforcer:
             def process(self, data: str) -> str: ...
             def cleanup(self) -> None: ...
 
+
         enforcer = InterfaceEnforcer()
         result = enforcer.enforce_detailed(MyPlugin(), MyInterface)
         assert result.passed
@@ -61,19 +62,23 @@ class InterfaceEnforcer:
             True if all required methods are present.
         """
         required_methods = [
-            m for m in dir(interface_class)
+            m
+            for m in dir(interface_class)
             if not m.startswith("_") and callable(getattr(interface_class, m, None))
         ]
 
         missing = []
         for method in required_methods:
-            if not hasattr(plugin_obj, method) or not callable(getattr(plugin_obj, method)):
+            if not hasattr(plugin_obj, method) or not callable(
+                getattr(plugin_obj, method)
+            ):
                 missing.append(method)
 
         if missing:
             logger.error(
                 "Plugin %s is missing required methods: %s",
-                type(plugin_obj).__name__, missing,
+                type(plugin_obj).__name__,
+                missing,
             )
             return False
         return True

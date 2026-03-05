@@ -16,6 +16,7 @@ from uuid import uuid4
 
 class AccountType(Enum):
     """Primary account types in double-entry bookkeeping."""
+
     ASSET = auto()
     LIABILITY = auto()
     EQUITY = auto()

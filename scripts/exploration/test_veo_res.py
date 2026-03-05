@@ -1,6 +1,7 @@
 import os
-from google import genai
 import sys
+
+from google import genai
 
 api_key = os.environ.get("GEMINI_API_KEY")
 if not api_key:
@@ -15,6 +16,7 @@ try:
         prompt="A minimalist animation of a loading circle, 2 seconds",
     )
     import time
+
     while not operation.done:
         print(".", end="", flush=True)
         time.sleep(5)
@@ -28,6 +30,8 @@ try:
         if hasattr(result, "generated_videos"):
             print(f"Generated {len(result.generated_videos)} videos.")
             if len(result.generated_videos) > 0:
-                print(f"Video bytes length: {len(result.generated_videos[0].video.video_bytes)}")
+                print(
+                    f"Video bytes length: {len(result.generated_videos[0].video.video_bytes)}"
+                )
 except Exception as e:
     print(f"Exception: {e}")

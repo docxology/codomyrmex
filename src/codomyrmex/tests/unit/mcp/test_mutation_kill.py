@@ -242,54 +242,74 @@ class TestGenerateSchemaFromFunc:
     """Kill surviving ComparisonMutator in _generate_schema_from_func."""
 
     def test_str_annotation(self) -> None:
-        def f(x: str) -> None: pass
+        def f(x: str) -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "string"
 
     def test_int_annotation(self) -> None:
-        def f(x: int) -> None: pass
+        def f(x: int) -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "integer"
 
     def test_float_annotation(self) -> None:
-        def f(x: float) -> None: pass
+        def f(x: float) -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "number"
 
     def test_bool_annotation(self) -> None:
-        def f(x: bool) -> None: pass
+        def f(x: bool) -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "boolean"
 
     def test_list_annotation(self) -> None:
-        def f(x: list) -> None: pass
+        def f(x: list) -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "array"
 
     def test_dict_annotation(self) -> None:
-        def f(x: dict) -> None: pass
+        def f(x: dict) -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "object"
 
     def test_no_annotation_defaults_string(self) -> None:
-        def f(x): pass
+        def f(x):
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "string"
 
     def test_complex_type_defaults_string(self) -> None:
-        def f(x: Any) -> None: pass
+        def f(x: Any) -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert schema["properties"]["x"]["type"] == "string"
 
     def test_required_vs_optional(self) -> None:
-        def f(x: str, y: str = "default") -> None: pass
+        def f(x: str, y: str = "default") -> None:
+            pass
+
         schema = _generate_schema_from_func(f)
         assert "x" in schema["required"]
         assert "y" not in schema["required"]
 
     def test_self_cls_excluded(self) -> None:
         class C:
-            def m(self, x: int) -> None: pass
+            def m(self, x: int) -> None:
+                pass
+
         schema = _generate_schema_from_func(C.m)
         assert "self" not in schema["properties"]
         assert "x" in schema["properties"]
@@ -305,7 +325,11 @@ class TestMCPToolRegistryMutationKill:
         reg = MCPToolRegistry()
         reg.register(
             tool_name="t1",
-            schema={"name": "t1", "description": "test", "inputSchema": {"type": "object"}},
+            schema={
+                "name": "t1",
+                "description": "test",
+                "inputSchema": {"type": "object"},
+            },
             handler=lambda: None,
         )
         tool = reg.get("t1")
@@ -326,7 +350,11 @@ class TestMCPToolRegistryMutationKill:
         for i in range(3):
             reg.register(
                 tool_name=f"t{i}",
-                schema={"name": f"t{i}", "description": f"Test {i}", "inputSchema": {"type": "object"}},
+                schema={
+                    "name": f"t{i}",
+                    "description": f"Test {i}",
+                    "inputSchema": {"type": "object"},
+                },
                 handler=lambda: None,
             )
         tools = reg.list_tools()
@@ -336,7 +364,11 @@ class TestMCPToolRegistryMutationKill:
         reg = MCPToolRegistry()
         reg.register(
             tool_name="t1",
-            schema={"name": "t1", "description": "test", "inputSchema": {"type": "object"}},
+            schema={
+                "name": "t1",
+                "description": "test",
+                "inputSchema": {"type": "object"},
+            },
             handler=lambda: None,
         )
         assert reg.has("t1") is True if hasattr(reg, "has") else True
@@ -347,7 +379,11 @@ class TestMCPToolRegistryMutationKill:
         assert len(reg.list_tools()) == 0
         reg.register(
             tool_name="t1",
-            schema={"name": "t1", "description": "test", "inputSchema": {"type": "object"}},
+            schema={
+                "name": "t1",
+                "description": "test",
+                "inputSchema": {"type": "object"},
+            },
             handler=lambda: None,
         )
         assert len(reg.list_tools()) == 1
@@ -368,7 +404,9 @@ class TestMCPToolCallResult:
         assert result.error is None
 
     def test_tool_result_with_explanation(self) -> None:
-        result = MCPToolResult(status="no_change_needed", explanation="Already up to date")
+        result = MCPToolResult(
+            status="no_change_needed", explanation="Already up to date"
+        )
         assert result.status == "no_change_needed"
         assert result.explanation == "Already up to date"
         assert result.error is None

@@ -5,10 +5,12 @@ from codomyrmex.cli.utils import get_logger, print_error, print_success
 
 logger = get_logger(__name__)
 
+
 def handle_fpf_fetch(repo: str, branch: str, output: str | None) -> bool:
     """Handle FPF fetch command."""
     try:
         from codomyrmex.fpf import FPFFetcher
+
         fetcher = FPFFetcher()
 
         print(f"Fetching FPF specification from {repo} ({branch})...")
@@ -23,7 +25,7 @@ def handle_fpf_fetch(repo: str, branch: str, output: str | None) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error fetching FPF specification: {e}", exc_info=True)
-        print_error(f"Error fetching FPF specification: {str(e)}")
+        print_error(f"Error fetching FPF specification: {e!s}")
         return False
 
 
@@ -31,10 +33,13 @@ def handle_fpf_parse(file: str, output: str | None) -> bool:
     """Handle FPF parse command."""
     try:
         from codomyrmex.fpf import FPFClient
+
         client = FPFClient()
         spec = client.load_from_file(file)
 
-        print_success(f"Parsed FPF specification: {len(spec.patterns)} patterns, {len(spec.concepts)} concepts")
+        print_success(
+            f"Parsed FPF specification: {len(spec.patterns)} patterns, {len(spec.concepts)} concepts"
+        )
 
         if output:
             client.export_json(output)
@@ -43,7 +48,7 @@ def handle_fpf_parse(file: str, output: str | None) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error parsing FPF specification: {e}", exc_info=True)
-        print_error(f"Error parsing FPF specification: {str(e)}")
+        print_error(f"Error parsing FPF specification: {e!s}")
         return False
 
 
@@ -51,6 +56,7 @@ def handle_fpf_export(file: str, output: str, format: str) -> bool:
     """Handle FPF export command."""
     try:
         from codomyrmex.fpf import FPFClient
+
         client = FPFClient()
         client.load_from_file(file)
         client.export_json(output)
@@ -59,7 +65,7 @@ def handle_fpf_export(file: str, output: str, format: str) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error exporting FPF specification: {e}", exc_info=True)
-        print_error(f"Error exporting FPF specification: {str(e)}")
+        print_error(f"Error exporting FPF specification: {e!s}")
         return False
 
 
@@ -76,6 +82,7 @@ def handle_fpf_search(query: str, file: str | None, filters: dict) -> bool:
                 return False
 
         from codomyrmex.fpf import FPFClient
+
         client = FPFClient()
         client.load_from_file(file)
         results = client.search(query, filters)
@@ -87,11 +94,13 @@ def handle_fpf_search(query: str, file: str | None, filters: dict) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error searching FPF: {e}", exc_info=True)
-        print_error(f"Error searching FPF: {str(e)}")
+        print_error(f"Error searching FPF: {e!s}")
         return False
 
 
-def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, layout: str, chart_type: str) -> bool:
+def handle_fpf_visualize(
+    file: str, viz_type: str, output: str, format: str, layout: str, chart_type: str
+) -> bool:
     """Handle FPF visualize command."""
     try:
         from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
@@ -110,16 +119,24 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
             if viz_type == "shared-terms":
                 png_visualizer.visualize_shared_terms_network(client.spec, output_path)
             elif viz_type == "dependencies":
-                png_visualizer.visualize_pattern_dependencies(client.spec, output_path, layout=layout)
+                png_visualizer.visualize_pattern_dependencies(
+                    client.spec, output_path, layout=layout
+                )
             elif viz_type == "concept-map":
-                png_visualizer.visualize_concept_map(client.spec, output_path, layout=layout)
+                png_visualizer.visualize_concept_map(
+                    client.spec, output_path, layout=layout
+                )
             elif viz_type == "part-hierarchy":
                 png_visualizer.visualize_part_hierarchy(client.spec, output_path)
             elif viz_type == "status-distribution":
-                png_visualizer.visualize_status_distribution(client.spec, output_path, chart_type=chart_type)
+                png_visualizer.visualize_status_distribution(
+                    client.spec, output_path, chart_type=chart_type
+                )
             else:
                 # Default to hierarchy
-                png_visualizer.visualize_pattern_dependencies(client.spec, output_path, layout="hierarchical")
+                png_visualizer.visualize_pattern_dependencies(
+                    client.spec, output_path, layout="hierarchical"
+                )
 
             print_success(f"PNG visualization saved to {output}")
         else:
@@ -136,14 +153,17 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
         return True
     except Exception as e:
         logger.error(f"Error generating visualization: {e}", exc_info=True)
-        print_error(f"Error generating visualization: {str(e)}")
+        print_error(f"Error generating visualization: {e!s}")
         return False
 
 
-def handle_fpf_context(file: str, pattern: str | None, output: str | None, depth: int) -> bool:
+def handle_fpf_context(
+    file: str, pattern: str | None, output: str | None, depth: int
+) -> bool:
     """Handle FPF context command."""
     try:
         from codomyrmex.fpf import FPFClient
+
         client = FPFClient()
         client.load_from_file(file)
 
@@ -162,11 +182,17 @@ def handle_fpf_context(file: str, pattern: str | None, output: str | None, depth
         return True
     except Exception as e:
         logger.error(f"Error building context: {e}", exc_info=True)
-        print_error(f"Error building context: {str(e)}")
+        print_error(f"Error building context: {e!s}")
         return False
 
 
-def handle_fpf_export_section(file: str, part: str | None, pattern: str | None, output: str, include_dependencies: bool) -> bool:
+def handle_fpf_export_section(
+    file: str,
+    part: str | None,
+    pattern: str | None,
+    output: str,
+    include_dependencies: bool,
+) -> bool:
     """Handle FPF export-section command."""
     try:
         from codomyrmex.fpf.section_exporter import SectionExporter
@@ -184,7 +210,9 @@ def handle_fpf_export_section(file: str, part: str | None, pattern: str | None, 
             exporter.export_part(part, Path(output))
             print_success(f"Part {part} exported to {output}")
         elif pattern:
-            exporter.export_single_pattern(pattern, Path(output), include_related=include_dependencies)
+            exporter.export_single_pattern(
+                pattern, Path(output), include_related=include_dependencies
+            )
             print_success(f"Pattern {pattern} exported to {output}")
         else:
             print_error("Must specify either --part or --pattern")
@@ -193,7 +221,7 @@ def handle_fpf_export_section(file: str, part: str | None, pattern: str | None, 
         return True
     except Exception as e:
         logger.error(f"Error exporting section: {e}", exc_info=True)
-        print_error(f"Error exporting section: {str(e)}")
+        print_error(f"Error exporting section: {e!s}")
         return False
 
 
@@ -220,7 +248,7 @@ def handle_fpf_analyze(file: str, output: str | None) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error analyzing FPF: {e}", exc_info=True)
-        print_error(f"Error analyzing FPF: {str(e)}")
+        print_error(f"Error analyzing FPF: {e!s}")
         return False
 
 
@@ -242,5 +270,5 @@ def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
         return True
     except Exception as e:
         logger.error(f"Error generating report: {e}", exc_info=True)
-        print_error(f"Error generating report: {str(e)}")
+        print_error(f"Error generating report: {e!s}")
         return False

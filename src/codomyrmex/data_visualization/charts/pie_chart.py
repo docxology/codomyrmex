@@ -5,7 +5,6 @@ Generates pie charts.
 - Recommend calling environment_setup.env_checker.ensure_dependencies_installed() at app startup.
 """
 
-
 import matplotlib.pyplot as plt
 
 from codomyrmex.data_visualization.utils import (
@@ -35,9 +34,13 @@ def create_pie_chart(
     Uses logging_monitoring for logging.
     """
     if not labels or not sizes:
-        raise ValueError('Empty data for labels or sizes in pie chart. No plot generated.')
+        raise ValueError(
+            "Empty data for labels or sizes in pie chart. No plot generated."
+        )
     if len(labels) != len(sizes):
-        raise ValueError(f"Length mismatch for pie chart: labels ({len(labels)}) vs sizes ({len(sizes)}). Plot not generated.")
+        raise ValueError(
+            f"Length mismatch for pie chart: labels ({len(labels)}) vs sizes ({len(sizes)}). Plot not generated."
+        )
     if explode and len(explode) != len(labels):
         logger.warning(
             f"Length mismatch for pie chart explode: labels ({len(labels)}) vs explode ({len(explode)}). Ignoring explode."
@@ -94,7 +97,7 @@ class PieChart:
         title: str = "Pie Chart",
         autopct: str = "%1.1f%%",
         startangle: int = 90,
-        explode: list = None
+        explode: list = None,
     ):
         """
         Initialize a pie chart.
@@ -130,7 +133,7 @@ class PieChart:
             show_plot=show_plot,
             autopct=self.autopct,
             startangle=self.startangle,
-            explode=self.explode
+            explode=self.explode,
         )
 
     def save(self, output_path: str):

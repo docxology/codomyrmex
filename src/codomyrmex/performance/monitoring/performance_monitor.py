@@ -1,4 +1,3 @@
-
 import functools
 import json
 import time
@@ -15,6 +14,7 @@ logger = get_logger(__name__)
 
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     psutil = None
@@ -32,9 +32,11 @@ class PerformanceMetrics:
     timestamp: float = field(default_factory=time.time)
     metadata: dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class SystemMetrics:
     """Point-in-time snapshot of system resource utilization (CPU, memory, disk, network)."""
+
     cpu_percent: float
     memory_percent: float
     memory_used_mb: float
@@ -45,8 +47,10 @@ class SystemMetrics:
     network_bytes_recv: int
     timestamp: float = field(default_factory=time.time)
 
+
 class SystemMonitor:
     """Background monitor that samples system metrics at a fixed polling interval via psutil."""
+
     def __init__(self, interval: float = 1.0):
         self.interval = interval
         self._process = psutil.Process() if HAS_PSUTIL else None
@@ -60,6 +64,7 @@ class SystemMonitor:
 
         self._monitoring = True
         import threading
+
         self._monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self._monitor_thread.start()
 
@@ -77,10 +82,10 @@ class SystemMonitor:
 
     def get_current_metrics(self) -> SystemMetrics:
         if not HAS_PSUTIL:
-            return SystemMetrics(0,0,0,0,0,0,0,0)
+            return SystemMetrics(0, 0, 0, 0, 0, 0, 0, 0)
 
         mem = psutil.virtual_memory()
-        disk = psutil.disk_usage('/')
+        disk = psutil.disk_usage("/")
         net = psutil.net_io_counters()
 
         return SystemMetrics(
@@ -91,8 +96,9 @@ class SystemMonitor:
             disk_usage_percent=disk.percent,
             disk_free_gb=disk.free / 1024 / 1024 / 1024,
             network_bytes_sent=net.bytes_sent,
-            network_bytes_recv=net.bytes_recv
+            network_bytes_recv=net.bytes_recv,
         )
+
 
 class PerformanceMonitor:
     """
@@ -276,6 +282,7 @@ def monitor_performance(
 
     def decorator(func: Callable) -> Callable:
         """Decorator."""
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Wrapper."""
@@ -288,10 +295,13 @@ def monitor_performance(
                 execution_time = time.time() - start_time
                 current_monitor.record_metrics(
                     function_name=function_name or func.__name__,
-                    execution_time=execution_time
+                    execution_time=execution_time,
                 )
+
         return wrapper
+
     return decorator
+
 
 profile_function = monitor_performance
 
@@ -306,6 +316,7 @@ def profile_memory_usage(func: Callable) -> Callable:
     Returns:
         Decorated function that tracks memory usage
     """
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         """Wrapper."""
@@ -356,7 +367,7 @@ def get_system_metrics() -> dict[str, Any]:
         "disk_free_gb": metrics.disk_free_gb,
         "network_bytes_sent": metrics.network_bytes_sent,
         "network_bytes_recv": metrics.network_bytes_recv,
-        "timestamp": metrics.timestamp
+        "timestamp": metrics.timestamp,
     }
 
 
@@ -433,4 +444,3 @@ def performance_context(operation: str):
             function_name=operation,
             execution_time=execution_time,
         )
-

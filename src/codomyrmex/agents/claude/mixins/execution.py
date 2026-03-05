@@ -24,6 +24,7 @@ CLAUDE_PRICING = {
     "claude-3-7-sonnet-20250219": {"input": 3.00, "output": 15.00},
 }
 
+
 class ExecutionMixin:
     """ExecutionMixin class."""
 
@@ -231,11 +232,13 @@ class ExecutionMixin:
                 if hasattr(block, "text"):
                     content += block.text
                 elif block.type == "tool_use":
-                    tool_calls.append({
-                        "id": block.id,
-                        "name": block.name,
-                        "input": block.input,
-                    })
+                    tool_calls.append(
+                        {
+                            "id": block.id,
+                            "name": block.name,
+                            "input": block.input,
+                        }
+                    )
 
         return content, tool_calls
 
@@ -301,7 +304,7 @@ class ExecutionMixin:
                     "error": str(e),
                 },
             )
-            yield f"Error: Claude API error: {str(e)}"
+            yield f"Error: Claude API error: {e!s}"
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(
                 "Unexpected error in Claude API stream",
@@ -312,7 +315,7 @@ class ExecutionMixin:
                     "error": str(e),
                 },
             )
-            yield f"Error: {str(e)}"
+            yield f"Error: {e!s}"
 
     def _build_messages_with_system(
         self, request: AgentRequest
@@ -349,10 +352,12 @@ class ExecutionMixin:
             # Check for conversation history in context
             if "messages" in request.context:
                 for msg in request.context["messages"]:
-                    messages.append({
-                        "role": msg.get("role", "user"),
-                        "content": msg.get("content", ""),
-                    })
+                    messages.append(
+                        {
+                            "role": msg.get("role", "user"),
+                            "content": msg.get("content", ""),
+                        }
+                    )
 
         # Add main prompt (with optional image support)
         if request.context and "images" in request.context:
@@ -363,14 +368,16 @@ class ExecutionMixin:
                     content.append(image)
                 elif isinstance(image, str):
                     # Assume base64 encoded image
-                    content.append({
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": "image/png",
-                            "data": image,
-                        },
-                    })
+                    content.append(
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/png",
+                                "data": image,
+                            },
+                        }
+                    )
             messages.append({"role": "user", "content": content})
         else:
             messages.append({"role": "user", "content": request.prompt})
@@ -396,4 +403,3 @@ class ExecutionMixin:
             output_tokens / 1_000_000 * pricing["output"]
         )
         return round(cost, 6)
-

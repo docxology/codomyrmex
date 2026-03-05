@@ -62,6 +62,7 @@ class TestProviderTypeEnum:
 
     def test_is_enum_member(self):
         from enum import Enum
+
         assert isinstance(ProviderType.OPENAI, ProviderType)
         assert isinstance(ProviderType.OPENAI, Enum)
 

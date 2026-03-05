@@ -84,16 +84,16 @@ class OpenClawClient(CLIAgentBase):
             )
         except AgentTimeoutError as e:
             raise OpenClawError(
-                f"OpenClaw command timed out: {str(e)}", command=self.command
+                f"OpenClaw command timed out: {e!s}", command=self.command
             ) from e
         except AgentError as e:
             raise OpenClawError(
-                f"OpenClaw command failed: {str(e)}", command=self.command
+                f"OpenClaw command failed: {e!s}", command=self.command
             ) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"OpenClaw execution failed: {e}", exc_info=True)
             raise OpenClawError(
-                f"OpenClaw command failed: {str(e)}", command=self.command
+                f"OpenClaw command failed: {e!s}", command=self.command
             ) from e
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
@@ -103,9 +103,7 @@ class OpenClawClient(CLIAgentBase):
         openclaw_args = self._build_openclaw_args(prompt, context)
         yield from self._stream_command(args=openclaw_args)
 
-    def _build_openclaw_args(
-        self, prompt: str, context: dict[str, Any]
-    ) -> list[str]:
+    def _build_openclaw_args(self, prompt: str, context: dict[str, Any]) -> list[str]:
         """Build openclaw command arguments from prompt and context.
 
         Supports subcommands:
@@ -125,11 +123,11 @@ class OpenClawClient(CLIAgentBase):
             if command == "doctor":
                 args.append("doctor")
                 return args
-            elif command == "gateway":
+            if command == "gateway":
                 action = context.get("gateway_action", "status")
                 args.extend(["gateway", action])
                 return args
-            elif command == "message_send":
+            if command == "message_send":
                 target = context.get("to", "")
                 message = context.get("message", prompt)
                 args.extend(["message", "send", "--to", target, "--message", message])
@@ -172,9 +170,7 @@ class OpenClawClient(CLIAgentBase):
             self.logger.error(f"OpenClaw doctor failed: {e}", exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
-    def send_message(
-        self, target: str, message: str
-    ) -> dict[str, Any]:
+    def send_message(self, target: str, message: str) -> dict[str, Any]:
         """Send a message via OpenClaw channel routing.
 
         Args:
@@ -213,9 +209,7 @@ class OpenClawClient(CLIAgentBase):
     def get_gateway_status(self) -> dict[str, Any]:
         """Check Gateway status."""
         try:
-            result = self._execute_command(
-                args=["gateway", "status"], timeout=10
-            )
+            result = self._execute_command(args=["gateway", "status"], timeout=10)
             return {
                 "success": result.get("success", False),
                 "output": result.get("stdout", ""),

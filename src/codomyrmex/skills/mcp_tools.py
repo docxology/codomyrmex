@@ -168,11 +168,11 @@ def skills_get_upstream_status() -> dict[str, Any]:
 
 
 __all__ = [
-    "skills_list",
-    "skills_get",
-    "skills_search",
-    "skills_sync",
     "skills_add_custom",
+    "skills_get",
     "skills_get_categories",
     "skills_get_upstream_status",
+    "skills_list",
+    "skills_search",
+    "skills_sync",
 ]

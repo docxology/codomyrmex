@@ -17,6 +17,7 @@ from codomyrmex.plugin_system.core.plugin_registry import (
 # Test Plugin Loader
 # ============================================================================
 
+
 @pytest.mark.unit
 class TestPluginLoader:
     """Test cases for PluginLoader functionality."""
@@ -49,14 +50,14 @@ class TestPluginLoader:
                 "description": "Test plugin",
                 "author": "Test",
                 "plugin_type": "utility",
-                "entry_point": "test_plugin.py"
+                "entry_point": "test_plugin.py",
             }
 
-            with open(os.path.join(plugin_dir, "plugin.json"), 'w') as f:
+            with open(os.path.join(plugin_dir, "plugin.json"), "w") as f:
                 json.dump(plugin_json, f)
 
             # Create plugin file
-            with open(os.path.join(plugin_dir, "test_plugin.py"), 'w') as f:
+            with open(os.path.join(plugin_dir, "test_plugin.py"), "w") as f:
                 f.write("""
 from codomyrmex.plugin_system import Plugin
 
@@ -86,13 +87,13 @@ class TestPlugin(Plugin):
                     "description": f"Plugin {i}",
                     "author": "Test",
                     "plugin_type": "utility",
-                    "entry_point": f"plugin_{i}.py"
+                    "entry_point": f"plugin_{i}.py",
                 }
 
-                with open(os.path.join(plugin_dir, "plugin.json"), 'w') as f:
+                with open(os.path.join(plugin_dir, "plugin.json"), "w") as f:
                     json.dump(plugin_json, f)
 
-                with open(os.path.join(plugin_dir, f"plugin_{i}.py"), 'w') as f:
+                with open(os.path.join(plugin_dir, f"plugin_{i}.py"), "w") as f:
                     f.write("class Plugin: pass")
 
             loader = PluginLoader([temp_dir])
@@ -129,9 +130,9 @@ class TestPlugin:
             "description": "Test",
             "author": "Test",
             "plugin_type": "utility",
-            "entry_point": "test_plugin.py"
+            "entry_point": "test_plugin.py",
         }
-        with open(plugin_json_file, 'w') as f:
+        with open(plugin_json_file, "w") as f:
             json.dump(plugin_json, f)
 
         loader = PluginLoader([str(tmp_path)])
@@ -142,14 +143,14 @@ class TestPlugin:
             description="Test",
             author="Test",
             plugin_type=PluginType.UTILITY,
-            entry_point=str(plugin_file)
+            entry_point=str(plugin_file),
         )
 
         # Try to load the plugin
         result = loader.load_plugin(info)
 
         # Should either succeed or fail gracefully
-        assert hasattr(result, 'success')
+        assert hasattr(result, "success")
         assert isinstance(result.success, bool)
 
     def test_load_already_loaded_plugin(self, tmp_path):
@@ -162,7 +163,7 @@ class TestPlugin:
             description="Test",
             author="Test",
             plugin_type=PluginType.UTILITY,
-            entry_point="test.py"
+            entry_point="test.py",
         )
 
         # Manually add to loaded plugins
@@ -185,7 +186,7 @@ class TestPlugin:
             description="Test",
             author="Test",
             plugin_type=PluginType.UTILITY,
-            entry_point="test.py"
+            entry_point="test.py",
         )
 
         mock_plugin = Plugin(info)
@@ -210,7 +211,9 @@ class TestPlugin:
 
         # Add some mock plugins
         for i in range(3):
-            info = PluginInfo(f"plugin_{i}", "1.0.0", "", "", PluginType.UTILITY, "t.py")
+            info = PluginInfo(
+                f"plugin_{i}", "1.0.0", "", "", PluginType.UTILITY, "t.py"
+            )
             loader.loaded_plugins[f"plugin_{i}"] = Plugin(info)
 
         loaded = loader.get_loaded_plugins()
@@ -231,7 +234,7 @@ class TestPlugin:
             author="Test",
             plugin_type=PluginType.UTILITY,
             entry_point="test.py",
-            dependencies=["nonexistent_package_xyz"]
+            dependencies=["nonexistent_package_xyz"],
         )
 
         missing = loader.validate_plugin_dependencies(info)
@@ -242,10 +245,7 @@ class TestPlugin:
     def test_load_result_dataclass(self):
         """Test LoadResult dataclass."""
         result = LoadResult(
-            plugin_name="test",
-            success=True,
-            error_message=None,
-            warnings=["warning1"]
+            plugin_name="test", success=True, error_message=None, warnings=["warning1"]
         )
 
         assert result.plugin_name == "test"
@@ -260,6 +260,7 @@ class TestPlugin:
 # ============================================================================
 # Test YAML Plugin Metadata
 # ============================================================================
+
 
 @pytest.mark.unit
 class TestYAMLMetadata:
@@ -281,13 +282,13 @@ class TestYAMLMetadata:
             "description": "Plugin with YAML metadata",
             "author": "Test",
             "plugin_type": "utility",
-            "entry_point": "yaml_plugin.py"
+            "entry_point": "yaml_plugin.py",
         }
 
-        with open(plugin_dir / "plugin.yaml", 'w') as f:
+        with open(plugin_dir / "plugin.yaml", "w") as f:
             yaml.dump(plugin_yaml, f)
 
-        with open(plugin_dir / "yaml_plugin.py", 'w') as f:
+        with open(plugin_dir / "yaml_plugin.py", "w") as f:
             f.write("class YamlPlugin: pass")
 
         loader = PluginLoader([str(tmp_path)])
@@ -301,11 +302,13 @@ class TestYAMLMetadata:
 # Test Plugin Discovery (from test_tier3_promotions.py)
 # ============================================================================
 
+
 class TestPluginDiscovery:
     """Tests for PluginDiscovery."""
 
     def test_scan_entry_points_runs(self):
         from codomyrmex.plugin_system.discovery import PluginDiscovery
+
         discovery = PluginDiscovery(entry_point_group="codomyrmex.test.nonexistent")
         result = discovery.scan_entry_points()
         assert isinstance(result.plugins, list)  # may be empty
@@ -313,6 +316,7 @@ class TestPluginDiscovery:
 
     def test_scan_invalid_directory(self):
         from codomyrmex.plugin_system.discovery import PluginDiscovery
+
         discovery = PluginDiscovery()
         result = discovery.scan_directory("/nonexistent/path")
         assert len(result.errors) == 1

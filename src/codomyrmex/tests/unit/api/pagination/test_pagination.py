@@ -19,11 +19,14 @@ try:
         create_paginator,
     )
 except ImportError:
-    pytest.skip("api extra not installed; run: uv sync --extra api", allow_module_level=True)
+    pytest.skip(
+        "api extra not installed; run: uv sync --extra api", allow_module_level=True
+    )
 
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def sample_items():
@@ -40,6 +43,7 @@ def dict_items():
 # ---------------------------------------------------------------------------
 # PageInfo
 # ---------------------------------------------------------------------------
+
 
 class TestPageInfo:
     """Tests for the PageInfo dataclass."""
@@ -108,6 +112,7 @@ class TestPageInfo:
 # PaginatedResponse
 # ---------------------------------------------------------------------------
 
+
 class TestPaginatedResponse:
     """Tests for the PaginatedResponse dataclass."""
 
@@ -131,6 +136,7 @@ class TestPaginatedResponse:
 # PaginationRequest
 # ---------------------------------------------------------------------------
 
+
 class TestPaginationRequest:
     """Tests for the PaginationRequest dataclass defaults."""
 
@@ -147,6 +153,7 @@ class TestPaginationRequest:
 # ---------------------------------------------------------------------------
 # OffsetPaginator
 # ---------------------------------------------------------------------------
+
 
 class TestOffsetPaginator:
     """Tests for OffsetPaginator (page-number based, 1-indexed)."""
@@ -219,6 +226,7 @@ class TestOffsetPaginator:
 # CursorPaginator
 # ---------------------------------------------------------------------------
 
+
 class TestCursorPaginator:
     """Tests for CursorPaginator (base64 opaque cursors)."""
 
@@ -234,6 +242,7 @@ class TestCursorPaginator:
 
     def test_decode_wrong_format_raises(self):
         import base64
+
         bad = base64.urlsafe_b64encode(b"wrong:42").decode("ascii")
         with pytest.raises(ValueError, match="Invalid cursor format"):
             CursorPaginator.decode_cursor(bad)
@@ -292,6 +301,7 @@ class TestCursorPaginator:
 # KeysetPaginator
 # ---------------------------------------------------------------------------
 
+
 class TestKeysetPaginator:
     """Tests for KeysetPaginator using dict items and sort_field='id'."""
 
@@ -347,6 +357,7 @@ class TestKeysetPaginator:
 # ---------------------------------------------------------------------------
 # create_paginator factory
 # ---------------------------------------------------------------------------
+
 
 class TestCreatePaginator:
     """Tests for the create_paginator factory function."""

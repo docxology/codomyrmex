@@ -579,7 +579,6 @@ class TestAnalyzeObject:
 
         class SampleClass:
             """A sample class."""
-            pass
 
         sd = SystemDiscovery()
         cap = sd._analyze_object("SampleClass", SampleClass, Path("/m"))
@@ -796,21 +795,39 @@ class TestDisplayCapabilitySummary:
         )
 
         cap1 = ModuleCapability(
-            name="f", module_path="/m", type="function", signature="f()",
-            docstring="", file_path="/m/f.py", line_number=1,
-            is_public=True, dependencies=[],
+            name="f",
+            module_path="/m",
+            type="function",
+            signature="f()",
+            docstring="",
+            file_path="/m/f.py",
+            line_number=1,
+            is_public=True,
+            dependencies=[],
         )
         cap2 = ModuleCapability(
-            name="C", module_path="/m", type="class", signature="class C",
-            docstring="", file_path="/m/c.py", line_number=1,
-            is_public=True, dependencies=[],
+            name="C",
+            module_path="/m",
+            type="class",
+            signature="class C",
+            docstring="",
+            file_path="/m/c.py",
+            line_number=1,
+            is_public=True,
+            dependencies=[],
         )
         sd = SystemDiscovery(project_root=tmp_path)
         sd.modules = {
             "mod": ModuleInfo(
-                name="mod", path="/p", description="", version="",
-                capabilities=[cap1, cap2], dependencies=[],
-                is_importable=True, has_tests=False, has_docs=False,
+                name="mod",
+                path="/p",
+                description="",
+                version="",
+                capabilities=[cap1, cap2],
+                dependencies=[],
+                is_importable=True,
+                has_tests=False,
+                has_docs=False,
                 last_modified="",
             ),
         }
@@ -927,8 +944,7 @@ class TestAnalyzeModule:
         mod_dir.mkdir()
         (mod_dir / "__init__.py").write_text("")
         (mod_dir / "api.py").write_text(
-            "def public_api():\n    pass\n\n"
-            "class PublicService:\n    pass\n"
+            "def public_api():\n    pass\n\nclass PublicService:\n    pass\n"
         )
         sd = SystemDiscovery(project_root=tmp_path)
         info = sd._analyze_module("nonexistent_module_xyz", mod_dir)

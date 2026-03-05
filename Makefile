@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help install setup test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast
+.PHONY: help dev install setup test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast
 
 # Default target
 help:
@@ -9,6 +9,7 @@ help:
 	@echo "=============================="
 	@echo ""
 	@echo "Available targets:"
+	@echo "  dev          - Install all dependency groups"
 	@echo "  install      - Install dependencies using uv"
 	@echo "  setup        - Set up complete development environment"
 	@echo "  test         - Run all tests"
@@ -18,9 +19,9 @@ help:
 	@echo "  test-coverage-html - Open HTML coverage report in browser"
 	@echo "  test-obsidian - Run Obsidian module tests only"
 	@echo "  test-fast    - Run tests without coverage overhead"
-	@echo "  lint         - Run code linting"
-	@echo "  format       - Format code with black and isort"
-	@echo "  type-check   - Run type checking with mypy"
+	@echo "  lint         - Run code linting with ruff"
+	@echo "  format       - Format code with ruff"
+	@echo "  type-check   - Run type checking with ty"
 	@echo "  security     - Run security scanning"
 	@echo "  docs         - Generate and check documentation"
 	@echo "  serve-docs   - Serve documentation locally"
@@ -28,9 +29,7 @@ help:
 	@echo "  analyze      - Run project analysis"
 	@echo "  check-deps   - Check and validate dependencies"
 	@echo "  check-dependencies - Check module dependency hierarchy"
-	@echo "  pre-commit   - Run pre-commit hooks"
 	@echo "  ci           - Run full CI pipeline"
-	@echo "  dev          - Start development server"
 	@echo ""
 
 # Installation and setup
@@ -38,13 +37,12 @@ install:
 	@echo "Installing Codomyrmex with uv..."
 	uv sync
 
+dev:
+	@echo "Installing all dependency groups..."
+	uv sync --all-groups
+
 setup: install
 	@echo "Setting up development environment..."
-	@echo "Creating virtual environment..."
-	uv venv
-	@echo "Installing pre-commit hooks..."
-	pre-commit install
-	@echo "Setting up git hooks..."
 	@echo "Development environment ready!"
 
 # Testing
@@ -84,22 +82,16 @@ test-coverage-html:
 
 # Code quality
 lint:
-	@echo "Running linting..."
-	uv run python -m flake8 src/codomyrmex/ src/codomyrmex/tests/
+	@echo "Running linting with ruff..."
+	uv run ruff check .
 
 format:
-	@echo "Formatting code..."
-	uv run python -m black src/codomyrmex/ src/codomyrmex/tests/
-	uv run python -m isort --profile=black src/codomyrmex/ src/codomyrmex/tests/
+	@echo "Formatting code with ruff..."
+	uv run ruff format .
 
 type-check:
-	@echo "Running type checking..."
-	@echo "=== logging_monitoring (strict, must pass) ==="
-	uv run python -m mypy --strict --namespace-packages --explicit-package-bases -p codomyrmex.logging_monitoring
-	@echo "=== model_context_protocol (must pass) ==="
-	uv run python -m mypy --namespace-packages --explicit-package-bases -p codomyrmex.model_context_protocol
-	@echo "=== agents (baseline) ==="
-	uv run python -m mypy --namespace-packages --explicit-package-bases -p codomyrmex.agents || true
+	@echo "Running type checking with ty..."
+	uv run ty check src/
 
 security:
 	@echo "Running security scanning..."
@@ -147,11 +139,6 @@ check-dependencies:
 	@echo "Checking module dependency hierarchy..."
 	uv run python -m codomyrmex.tools.dependency_analyzer
 
-# Pre-commit and CI
-pre-commit:
-	@echo "Running pre-commit hooks..."
-	pre-commit run --all-files
-
 ci: lint type-check security test docs-check
 	@echo "CI pipeline completed successfully!"
 
@@ -172,6 +159,7 @@ clean:
 	rm -rf .pytest_cache/
 	rm -rf .mypy_cache/
 	rm -rf .ruff_cache/
+	rm -rf .ty/
 	find . -type d -name __pycache__ -delete
 	find . -type f -name "*.pyc" -delete
 	@echo "Cleanup complete!"
@@ -215,22 +203,7 @@ update: install clean
 	@echo "Updating all dependencies and cleaning cache..."
 	uv sync --upgrade
 
-# Help for specific tools
-help-flake8:
-	@echo "Flake8 help:"
-	uv run python -m flake8 --help
 
-help-black:
-	@echo "Black help:"
-	uv run python -m black --help
-
-help-mypy:
-	@echo "MyPy help:"
-	uv run python -m mypy --help
-
-help-bandit:
-	@echo "Bandit help:"
-	uv run python -m bandit --help
 
 # Docker targets (if needed)
 docker-build:
@@ -243,7 +216,8 @@ docker-run:
 
 # Git workflow helpers
 git-status:
-	uv run pre-commit run --all-files
+	@echo "Running ruff on all files..."
+	uv run ruff check .
 
 git-clean:
 	git clean -fd

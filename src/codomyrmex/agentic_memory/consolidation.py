@@ -64,7 +64,9 @@ class MemoryConsolidator:
                 )
                 if list(rules.resolved()):
                     # If rules apply, treat it as at least MEDIUM importance to avoid getting filtered
-                    effective_importance = max(mem.importance.value, MemoryImportance.MEDIUM.value)
+                    effective_importance = max(
+                        mem.importance.value, MemoryImportance.MEDIUM.value
+                    )
                 else:
                     effective_importance = mem.importance.value
             else:

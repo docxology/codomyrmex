@@ -26,8 +26,6 @@ DEFAULT_S3_ENDPOINT = "https://s3.pub1.infomaniak.cloud/"
 DEFAULT_S3_REGION = "us-east-1"  # S3-compatible default region
 
 
-
-
 @dataclass
 class InfomaniakCredentials:
     """
@@ -43,6 +41,7 @@ class InfomaniakCredentials:
         project_id: Optional project ID for scoped operations
         region: Region name (default: dc3-a)
     """
+
     application_credential_id: str
     application_credential_secret: str
     auth_url: str = DEFAULT_AUTH_URL
@@ -108,6 +107,7 @@ class InfomaniakS3Credentials:
         endpoint_url: S3 endpoint URL
         region: S3 region (default: us-east-1 for compatibility)
     """
+
     access_key: str
     secret_key: str
     endpoint_url: str = DEFAULT_S3_ENDPOINT
@@ -148,8 +148,7 @@ class InfomaniakS3Credentials:
 
 
 def create_openstack_connection(
-    credentials: InfomaniakCredentials | None = None,
-    **kwargs
+    credentials: InfomaniakCredentials | None = None, **kwargs
 ) -> Any:
     """
     Create an OpenStack SDK connection to Infomaniak.
@@ -183,7 +182,7 @@ def create_openstack_connection(
             application_credential_id=credentials.application_credential_id,
             application_credential_secret=credentials.application_credential_secret,
             region_name=credentials.region,
-            **kwargs
+            **kwargs,
         )
         logger.info(f"Connected to Infomaniak cloud at {credentials.auth_url}")
         return conn
@@ -193,8 +192,7 @@ def create_openstack_connection(
 
 
 def create_s3_client(
-    credentials: InfomaniakS3Credentials | None = None,
-    **kwargs
+    credentials: InfomaniakS3Credentials | None = None, **kwargs
 ) -> Any:
     """
     Create a boto3 S3 client for Infomaniak Object Storage.
@@ -227,7 +225,7 @@ def create_s3_client(
         aws_access_key_id=credentials.access_key,
         aws_secret_access_key=credentials.secret_key,
         region_name=credentials.region,
-        **kwargs
+        **kwargs,
     )
     logger.info(f"Created S3 client for {credentials.endpoint_url}")
     return client

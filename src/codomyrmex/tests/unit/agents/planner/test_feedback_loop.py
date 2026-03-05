@@ -19,6 +19,7 @@ from codomyrmex.orchestrator.workflows.workflow_engine import (
 
 # ─── FeedbackConfig ──────────────────────────────────────────────────
 
+
 class TestFeedbackConfig:
     """Tests for FeedbackConfig defaults."""
 
@@ -27,8 +28,16 @@ class TestFeedbackConfig:
         assert cfg.max_iterations == 3
         assert cfg.quality_floor == 0.6
         assert cfg.weight_success_rate == 0.4
-        assert abs(cfg.weight_success_rate + cfg.weight_time_efficiency
-                    + cfg.weight_retry_ratio + cfg.weight_memory_hits - 1.0) < 0.001
+        assert (
+            abs(
+                cfg.weight_success_rate
+                + cfg.weight_time_efficiency
+                + cfg.weight_retry_ratio
+                + cfg.weight_memory_hits
+                - 1.0
+            )
+            < 0.001
+        )
 
     def test_custom_config(self):
         cfg = FeedbackConfig(max_iterations=5, quality_floor=0.9)
@@ -37,6 +46,7 @@ class TestFeedbackConfig:
 
 
 # ─── PlanEvaluator ────────────────────────────────────────────────────
+
 
 class TestPlanEvaluator:
     """Tests for PlanEvaluator scoring."""
@@ -102,6 +112,7 @@ class TestPlanEvaluator:
 
 # ─── FeedbackLoop ─────────────────────────────────────────────────────
 
+
 class TestFeedbackLoop:
     """Tests for the full FeedbackLoop."""
 
@@ -159,6 +170,7 @@ class TestFeedbackLoop:
                     raise RuntimeError("step failed")
                 task.state = TaskState.COMPLETED
                 return {"task": task.name}
+
             return executor
 
         config = FeedbackConfig(
@@ -189,9 +201,11 @@ class TestFeedbackLoop:
 
     def test_no_retry_on_partial_failure(self):
         """retry_on_partial_failure=False stops after first failure."""
+
         def always_fail(task):
             def executor(ctx):
                 raise RuntimeError("nope")
+
             return executor
 
         config = FeedbackConfig(

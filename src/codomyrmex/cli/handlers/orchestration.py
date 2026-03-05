@@ -12,6 +12,7 @@ from codomyrmex.cli.utils import (
 
 logger = get_logger(__name__)
 
+
 def handle_project_build(config_file: str | None) -> bool:
     """Handle project build command."""
     try:
@@ -28,9 +29,8 @@ def handle_project_build(config_file: str | None) -> bool:
         if result.get("success"):
             print_success("Build completed successfully")
             return True
-        else:
-            print_error(f"Build failed: {result.get('error', 'Unknown error')}")
-            return False
+        print_error(f"Build failed: {result.get('error', 'Unknown error')}")
+        return False
 
     except ImportError:
         logger.warning("Build synthesis module not available")
@@ -38,7 +38,7 @@ def handle_project_build(config_file: str | None) -> bool:
         return False
     except Exception as e:
         logger.error(f"Error building project: {e}", exc_info=True)
-        print_error(f"Error building project: {str(e)}")
+        print_error(f"Error building project: {e!s}")
         return False
 
 
@@ -49,6 +49,7 @@ def handle_workflow_create(name: str, template: str | None = None) -> bool:
             WorkflowStep,
             get_workflow_manager,
         )
+
         manager = get_workflow_manager()
 
         # Create a simple workflow based on template
@@ -110,9 +111,8 @@ def handle_workflow_create(name: str, template: str | None = None) -> bool:
         if success:
             print_success(f"Created workflow '{name}' with {len(steps)} steps")
             return True
-        else:
-            print_error(f"Failed to create workflow '{name}'")
-            return False
+        print_error(f"Failed to create workflow '{name}'")
+        return False
 
     except ImportError:
         logger.warning("Project orchestration module not available")
@@ -120,7 +120,7 @@ def handle_workflow_create(name: str, template: str | None = None) -> bool:
         return False
     except Exception as e:
         logger.error(f"Error creating workflow: {e}", exc_info=True)
-        print_error(f"Error creating workflow: {str(e)}")
+        print_error(f"Error creating workflow: {e!s}")
         return False
 
 
@@ -128,6 +128,7 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
     """Handle project creation command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_project_manager
+
         manager = get_project_manager()
 
         project = manager.create_project(name=name, template_name=template, **kwargs)
@@ -145,7 +146,7 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
         return False
     except Exception as e:
         logger.error(f"Error creating project: {e}", exc_info=True)
-        print_error(f"Error creating project: {str(e)}")
+        print_error(f"Error creating project: {e!s}")
         return False
 
 
@@ -153,6 +154,7 @@ def handle_project_list() -> bool:
     """Handle project listing command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_project_manager
+
         manager = get_project_manager()
         projects = manager.list_projects()
 
@@ -192,7 +194,7 @@ def handle_project_list() -> bool:
         return False
     except Exception as e:
         logger.error(f"Error listing projects: {e}", exc_info=True)
-        print_error(f"Error listing projects: {str(e)}")
+        print_error(f"Error listing projects: {e!s}")
         return False
 
 
@@ -200,6 +202,7 @@ def handle_orchestration_status() -> bool:
     """Handle orchestration status command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
         engine = get_orchestration_engine()
         status = engine.get_system_status()
 
@@ -237,7 +240,7 @@ def handle_orchestration_status() -> bool:
         return False
     except Exception as e:
         logger.error(f"Error getting orchestration status: {e}", exc_info=True)
-        print_error(f"Error getting orchestration status: {str(e)}")
+        print_error(f"Error getting orchestration status: {e!s}")
         return False
 
 
@@ -245,6 +248,7 @@ def handle_orchestration_health() -> bool:
     """Handle orchestration health check command."""
     try:
         from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
         engine = get_orchestration_engine()
         health = engine.health_check()
 
@@ -254,7 +258,9 @@ def handle_orchestration_health() -> bool:
         status_color = (
             "BRIGHT_GREEN"
             if overall_status == "healthy"
-            else "YELLOW" if overall_status == "degraded" else "RED"
+            else "YELLOW"
+            if overall_status == "degraded"
+            else "RED"
         )
 
         print_header("🏥 Orchestration Health Check")
@@ -272,7 +278,9 @@ def handle_orchestration_health() -> bool:
             comp_color = (
                 "BRIGHT_GREEN"
                 if comp_status == "healthy"
-                else "YELLOW" if comp_status == "degraded" else "RED"
+                else "YELLOW"
+                if comp_status == "degraded"
+                else "RED"
             )
 
             if formatter:
@@ -286,6 +294,7 @@ def handle_orchestration_health() -> bool:
             print(f"\nIssues Found ({len(issues)}):")
             for issue in issues:
                 from codomyrmex.cli.utils import print_warning
+
                 print_warning(issue)
 
         return overall_status in ["healthy", "degraded"]
@@ -296,7 +305,7 @@ def handle_orchestration_health() -> bool:
         return False
     except Exception as e:
         logger.error(f"Error checking orchestration health: {e}", exc_info=True)
-        print_error(f"Error checking orchestration health: {str(e)}")
+        print_error(f"Error checking orchestration health: {e!s}")
         return False
 
 
@@ -304,6 +313,7 @@ def list_workflows() -> bool:
     """List available workflows and orchestration templates."""
     try:
         from codomyrmex.logistics.orchestration.project import get_workflow_manager
+
         manager = get_workflow_manager()
         workflows = manager.list_workflows()
 
@@ -338,7 +348,7 @@ def list_workflows() -> bool:
         return False
     except (AttributeError, KeyError, TypeError, ValueError) as e:
         logger.error(f"Error listing workflows: {e}", exc_info=True)
-        print_error(f"Error listing workflows: {str(e)}")
+        print_error(f"Error listing workflows: {e!s}")
         return False
 
 
@@ -346,6 +356,7 @@ def run_workflow(workflow_name: str, **kwargs) -> bool:
     """Run a specific workflow."""
     try:
         from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
         engine = get_orchestration_engine()
 
         print(f"🏃 Executing workflow: {workflow_name}...")
@@ -354,7 +365,9 @@ def run_workflow(workflow_name: str, **kwargs) -> bool:
         if result["success"]:
             print_success(f"Workflow '{workflow_name}' completed successfully")
         else:
-            print_error(f"Workflow '{workflow_name}' failed: {result.get('error', 'Unknown error')}")
+            print_error(
+                f"Workflow '{workflow_name}' failed: {result.get('error', 'Unknown error')}"
+            )
 
         return result["success"]
 
@@ -364,5 +377,5 @@ def run_workflow(workflow_name: str, **kwargs) -> bool:
         return False
     except (AttributeError, KeyError, TypeError, ValueError, RuntimeError) as e:
         logger.error(f"Error running workflow: {e}", exc_info=True)
-        print_error(f"Error running workflow: {str(e)}")
+        print_error(f"Error running workflow: {e!s}")
         return False

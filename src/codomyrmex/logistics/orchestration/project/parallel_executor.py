@@ -14,14 +14,17 @@ from typing import Any
 # Import logging
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 
 class ExecutionStatus(Enum):
     """Status of task execution."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -33,6 +36,7 @@ class ExecutionStatus(Enum):
 @dataclass
 class ExecutionResult:
     """Result of a task execution."""
+
     task_name: str
     status: ExecutionStatus
     result: Any = None
@@ -50,7 +54,7 @@ class ExecutionResult:
             "error": self.error,
             "start_time": self.start_time,
             "end_time": self.end_time,
-            "duration": self.duration
+            "duration": self.duration,
         }
 
 
@@ -76,14 +80,16 @@ class ParallelExecutor:
         """
         self.max_workers = max_workers
         self.default_timeout = timeout
-        self.executor = ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="workflow_executor")
+        self.executor = ThreadPoolExecutor(
+            max_workers=max_workers, thread_name_prefix="workflow_executor"
+        )
         self._shutdown = False
 
     def execute_tasks(
         self,
         tasks: list[dict[str, Any]],
         dependencies: dict[str, list[str]],
-        timeout: float | None = None
+        timeout: float | None = None,
     ) -> dict[str, ExecutionResult]:
         """
         Execute tasks with dependency management.
@@ -106,8 +112,7 @@ class ParallelExecutor:
         results = {}
         for task_name in task_dict:
             results[task_name] = ExecutionResult(
-                task_name=task_name,
-                status=ExecutionStatus.PENDING
+                task_name=task_name, status=ExecutionStatus.PENDING
             )
 
         # Track completed tasks
@@ -147,12 +152,18 @@ class ParallelExecutor:
                             results[task_name] = result
 
                             if result.status == ExecutionStatus.COMPLETED:
-                                logger.info(f"Task '{task_name}' completed successfully")
+                                logger.info(
+                                    f"Task '{task_name}' completed successfully"
+                                )
                             else:
-                                logger.error(f"Task '{task_name}' failed: {result.error}")
+                                logger.error(
+                                    f"Task '{task_name}' failed: {result.error}"
+                                )
 
                         except Exception as e:
-                            logger.error(f"Error getting result for task '{task_name}': {e}")
+                            logger.error(
+                                f"Error getting result for task '{task_name}': {e}"
+                            )
                             results[task_name].status = ExecutionStatus.FAILED
                             results[task_name].error = str(e)
                             results[task_name].end_time = time.time()
@@ -165,7 +176,9 @@ class ParallelExecutor:
 
             # Handle timeout
             if len(completed) < len(tasks):
-                logger.warning(f"Execution timed out. Completed {len(completed)}/{len(tasks)} tasks")
+                logger.warning(
+                    f"Execution timed out. Completed {len(completed)}/{len(tasks)} tasks"
+                )
                 for task_name in task_dict:
                     if task_name not in completed:
                         results[task_name].status = ExecutionStatus.TIMEOUT
@@ -175,14 +188,19 @@ class ParallelExecutor:
             logger.error(f"Error during parallel execution: {e}")
             # Mark remaining tasks as failed
             for task_name in task_dict:
-                if results[task_name].status in [ExecutionStatus.PENDING, ExecutionStatus.RUNNING]:
+                if results[task_name].status in [
+                    ExecutionStatus.PENDING,
+                    ExecutionStatus.RUNNING,
+                ]:
                     results[task_name].status = ExecutionStatus.FAILED
                     results[task_name].error = f"Execution failed: {e}"
                     results[task_name].end_time = time.time()
 
         return results
 
-    def execute_task_group(self, tasks: list[dict[str, Any]], timeout: float | None = None) -> list[ExecutionResult]:
+    def execute_task_group(
+        self, tasks: list[dict[str, Any]], timeout: float | None = None
+    ) -> list[ExecutionResult]:
         """
         Execute a group of independent tasks in parallel.
 
@@ -219,7 +237,7 @@ class ParallelExecutor:
                             status=ExecutionStatus.FAILED,
                             error=str(e),
                             start_time=time.time(),
-                            end_time=time.time()
+                            end_time=time.time(),
                         )
                         results.append(result)
 
@@ -235,7 +253,7 @@ class ParallelExecutor:
                 status=ExecutionStatus.TIMEOUT,
                 error="Task timed out",
                 start_time=time.time(),
-                end_time=time.time()
+                end_time=time.time(),
             )
             results.append(result)
 
@@ -255,8 +273,12 @@ class ParallelExecutor:
         dependencies = task.get("dependencies", [])
         return all(dep in completed for dep in dependencies)
 
-    def _get_ready_tasks(self, tasks: list[dict[str, Any]], completed: set[str],
-                        dependencies: dict[str, list[str]]) -> list[dict[str, Any]]:
+    def _get_ready_tasks(
+        self,
+        tasks: list[dict[str, Any]],
+        completed: set[str],
+        dependencies: dict[str, list[str]],
+    ) -> list[dict[str, Any]]:
         """
         Get tasks that are ready to execute (all dependencies completed).
 
@@ -315,7 +337,7 @@ class ParallelExecutor:
                 result=result,
                 start_time=start_time,
                 end_time=end_time,
-                duration=duration
+                duration=duration,
             )
 
         except Exception as e:
@@ -330,7 +352,7 @@ class ParallelExecutor:
                 error=str(e),
                 start_time=start_time,
                 end_time=end_time,
-                duration=duration
+                duration=duration,
             )
 
     def _simulate_task_execution(self, task: dict[str, Any]) -> Any:
@@ -352,15 +374,14 @@ class ParallelExecutor:
         if "analysis" in task_name.lower():
             time.sleep(0.5)  # Simulate analysis task
             return {"analysis_result": "completed", "findings": 5}
-        elif "build" in task_name.lower():
+        if "build" in task_name.lower():
             time.sleep(0.8)  # Simulate build task
             return {"build_status": "success", "artifacts": ["app.jar"]}
-        elif "test" in task_name.lower():
+        if "test" in task_name.lower():
             time.sleep(0.3)  # Simulate test task
             return {"tests_passed": 95, "total_tests": 100}
-        else:
-            time.sleep(0.2)  # Default simulation
-            return {"status": "completed", "message": f"Task {task_name} executed"}
+        time.sleep(0.2)  # Default simulation
+        return {"status": "completed", "message": f"Task {task_name} executed"}
 
     def shutdown(self, wait: bool = True) -> None:
         """
@@ -383,6 +404,7 @@ class ParallelExecutor:
 
 
 # Utility functions for workflow management
+
 
 def validate_workflow_dependencies(tasks: list[dict[str, Any]]) -> list[str]:
     """
@@ -433,7 +455,7 @@ def get_workflow_execution_order(tasks: list[dict[str, Any]]) -> list[list[str]]
             "name": task["name"],
             "module": task.get("module", ""),
             "action": task.get("action", ""),
-            "dependencies": task.get("dependencies", [])
+            "dependencies": task.get("dependencies", []),
         }
         dag_tasks.append(dag_task)
 

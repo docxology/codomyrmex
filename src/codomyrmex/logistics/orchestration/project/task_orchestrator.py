@@ -23,6 +23,7 @@ logger = get_logger(__name__)
 
 class TaskStatus(Enum):
     """Status of a task."""
+
     PENDING = "pending"
     READY = "ready"
     RUNNING = "running"
@@ -34,6 +35,7 @@ class TaskStatus(Enum):
 
 class TaskPriority(Enum):
     """Priority levels for tasks."""
+
     CRITICAL = 0
     HIGH = 1
     NORMAL = 2
@@ -44,6 +46,7 @@ class TaskPriority(Enum):
 @dataclass
 class TaskResource:
     """Resource requirement for a task."""
+
     resource_type: str
     amount: float = 1.0
     resource_id: str | None = None  # Specific resource ID if needed
@@ -52,6 +55,7 @@ class TaskResource:
 @dataclass
 class TaskResult:
     """Result of a task execution."""
+
     task_id: str
     status: TaskStatus
     result: Any = None
@@ -65,6 +69,7 @@ class TaskResult:
 @dataclass
 class Task:
     """Task definition."""
+
     name: str
     module: str
     action: str
@@ -106,9 +111,7 @@ class TaskOrchestrator:
         self.resource_manager = get_resource_manager()
 
         # Queues for different priorities
-        self.queues: dict[TaskPriority, deque[str]] = {
-            p: deque() for p in TaskPriority
-        }
+        self.queues: dict[TaskPriority, deque[str]] = {p: deque() for p in TaskPriority}
 
         self.running_tasks: dict[str, Future] = {}
         self.task_results: dict[str, TaskResult] = {}
@@ -161,13 +164,15 @@ class TaskOrchestrator:
         self.submit_task(task)
 
         # Wait for completion
-        while task.status not in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
+        while task.status not in [
+            TaskStatus.COMPLETED,
+            TaskStatus.FAILED,
+            TaskStatus.CANCELLED,
+        ]:
             time.sleep(0.1)
 
         return self.task_results.get(task.id) or TaskResult(
-            task_id=task.id,
-            status=TaskStatus.FAILED,
-            error="Result not found"
+            task_id=task.id, status=TaskStatus.FAILED, error="Result not found"
         )
 
     def _process_queue(self):
@@ -247,12 +252,11 @@ class TaskOrchestrator:
             duration = task.parameters.get("duration", 1)
             time.sleep(duration)
             return f"Slept for {duration} seconds"
-        elif task.action == "echo":
+        if task.action == "echo":
             return task.parameters.get("message", "")
-        else:
-            # Try to dispatch to registered handlers or assume success
-            time.sleep(0.1)
-            return {"status": "executed", "action": task.action}
+        # Try to dispatch to registered handlers or assume success
+        time.sleep(0.1)
+        return {"status": "executed", "action": task.action}
 
     def _on_task_complete(self, task_id: str, future: Future):
         """Handle task completion."""
@@ -273,7 +277,7 @@ class TaskOrchestrator:
                     result=result,
                     start_time=task.started_at,
                     end_time=task.completed_at,
-                    duration=task.execution_time
+                    duration=task.execution_time,
                 )
             except Exception as e:
                 task.status = TaskStatus.FAILED
@@ -284,7 +288,7 @@ class TaskOrchestrator:
                     error=str(e),
                     start_time=task.started_at,
                     end_time=task.completed_at,
-                    duration=task.execution_time
+                    duration=task.execution_time,
                 )
                 logger.error(f"Task {task.name} failed: {e}")
 
@@ -307,7 +311,11 @@ class TaskOrchestrator:
             if not task:
                 return False
 
-            if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
+            if task.status in [
+                TaskStatus.COMPLETED,
+                TaskStatus.FAILED,
+                TaskStatus.CANCELLED,
+            ]:
                 return False
 
             task.status = TaskStatus.CANCELLED

@@ -101,15 +101,14 @@ class WebhookDispatcher:
                     status_code=status_code,
                     attempt=attempt,
                 )
-            else:
-                return DeliveryResult(
-                    webhook_id=webhook_id,
-                    event_id=event.event_id,
-                    status=WebhookStatus.FAILED,
-                    status_code=status_code,
-                    attempt=attempt,
-                    error=f"Non-success status code: {status_code}",
-                )
+            return DeliveryResult(
+                webhook_id=webhook_id,
+                event_id=event.event_id,
+                status=WebhookStatus.FAILED,
+                status_code=status_code,
+                attempt=attempt,
+                error=f"Non-success status code: {status_code}",
+            )
         except Exception as exc:
             return DeliveryResult(
                 webhook_id=webhook_id,
@@ -170,9 +169,7 @@ class WebhookDispatcher:
             last_result: DeliveryResult | None = None
 
             for attempt in range(1, retries + 2):  # attempts = retries + 1
-                result = self._deliver(
-                    webhook_id, event, config, attempt=attempt
-                )
+                result = self._deliver(webhook_id, event, config, attempt=attempt)
 
                 if result.status == WebhookStatus.DELIVERED:
                     last_result = result
@@ -189,5 +186,3 @@ class WebhookDispatcher:
                 results.append(last_result)
 
         return results
-
-

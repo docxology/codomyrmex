@@ -66,6 +66,7 @@ class APISchema:
 @dataclass
 class OpenAPISpecification:
     """OpenAPI specification container."""
+
     spec: dict[str, Any] = field(default_factory=dict)
     version: str = "3.0.3"
 
@@ -81,6 +82,7 @@ class OpenAPISpecification:
         """Get the specification as YAML."""
         try:
             import yaml
+
             return yaml.dump(self.spec, default_flow_style=False)
         except ImportError:
             raise ImportError("PyYAML is required for YAML output") from None
@@ -94,10 +96,10 @@ class OpenAPISpecification:
             format: File format ('json' or 'yaml')
         """
         if format.lower() == "json":
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 f.write(self.to_json())
         elif format.lower() == "yaml":
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 f.write(self.to_yaml())
         else:
             raise ValueError(f"Unsupported format: {format}")
@@ -113,6 +115,7 @@ def __getattr__(name: str):
     # importing it eagerly would create a circular dependency.
     if name == "StandardizationOpenAPIGenerator":
         from .openapi_standardization_generator import StandardizationOpenAPIGenerator
+
         return StandardizationOpenAPIGenerator
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
@@ -156,20 +159,25 @@ def validate_openapi_spec(spec: dict[str, Any]) -> list[str]:
 
 
 # Convenience functions for standardization module
-def create_openapi_generator(title: str = "Codomyrmex API", version: str = "1.0.0",
-                             description: str = "API for Codomyrmex") -> Any:
+def create_openapi_generator(
+    title: str = "Codomyrmex API",
+    version: str = "1.0.0",
+    description: str = "API for Codomyrmex",
+) -> Any:
     """Create a new OpenAPI generator for standardization."""
     from .openapi_standardization_generator import StandardizationOpenAPIGenerator
-    return StandardizationOpenAPIGenerator(title=title, version=version, description=description)
+
+    return StandardizationOpenAPIGenerator(
+        title=title, version=version, description=description
+    )
 
 
 def create_openapi_from_rest_api(api: "RESTAPI") -> OpenAPISpecification:
     """Create OpenAPI spec from a REST API."""
     from .openapi_standardization_generator import StandardizationOpenAPIGenerator
+
     generator = StandardizationOpenAPIGenerator(
-        title=api.title,
-        version=api.version,
-        description=api.description
+        title=api.title, version=api.version, description=api.description
     )
     generator.add_rest_api(api)
     return generator.generate_spec()
@@ -178,10 +186,9 @@ def create_openapi_from_rest_api(api: "RESTAPI") -> OpenAPISpecification:
 def create_openapi_from_graphql_api(api: "GraphQLAPI") -> OpenAPISpecification:
     """Create OpenAPI spec from a GraphQL API."""
     from .openapi_standardization_generator import StandardizationOpenAPIGenerator
+
     generator = StandardizationOpenAPIGenerator(
-        title="GraphQL API",
-        version="1.0.0",
-        description="GraphQL API endpoint"
+        title="GraphQL API", version="1.0.0", description="GraphQL API endpoint"
     )
     generator.add_graphql_api(api)
     return generator.generate_spec()

@@ -62,10 +62,7 @@ class TestComprehensiveImprovements:
         """Test that exception context works properly."""
         context = {"operation": "test", "file_path": "/test/path"}
 
-        error = CodomyrmexError(
-            "Test error with context",
-            context=context
-        )
+        error = CodomyrmexError("Test error with context", context=context)
 
         assert error.context == context
         assert "operation=test" in str(error)
@@ -74,9 +71,7 @@ class TestComprehensiveImprovements:
     def test_exception_serialization(self):
         """Test that exceptions can be serialized to dict."""
         error = CodomyrmexError(
-            "Serialization test",
-            context={"key": "value"},
-            error_code="TEST_ERROR"
+            "Serialization test", context={"key": "value"}, error_code="TEST_ERROR"
         )
 
         error_dict = error.to_dict()

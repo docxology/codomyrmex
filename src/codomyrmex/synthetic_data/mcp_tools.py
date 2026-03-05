@@ -80,6 +80,7 @@ def synth_generate_classification(
         )
 
         from collections import Counter
+
         dist = dict(Counter(labels))
 
         return {

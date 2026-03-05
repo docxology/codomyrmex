@@ -45,7 +45,10 @@ class TestImageDetectFormat:
         """Error for non-existent file."""
         result = image_detect_format("/nonexistent/path/foo.png")
         assert result["status"] == "error"
-        assert "not found" in result["message"].lower() or "File not found" in result["message"]
+        assert (
+            "not found" in result["message"].lower()
+            or "File not found" in result["message"]
+        )
 
     def test_detect_gif(self, tmp_path):
         """Detect a GIF89a header."""

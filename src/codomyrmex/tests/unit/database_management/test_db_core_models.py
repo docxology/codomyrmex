@@ -28,6 +28,7 @@ from codomyrmex.exceptions import CodomyrmexError
 # Column SQL Generation Tests
 # =============================================================================
 
+
 class TestColumnTypeMappingSQLite:
     """Test Column.to_sql() produces correct SQLite DDL fragments."""
 
@@ -114,14 +115,18 @@ class TestColumnConstraints:
     @pytest.mark.unit
     def test_primary_key_autoincrement_sqlite(self):
         """AUTOINCREMENT appears for SQLite primary key with auto_increment."""
-        col = Column(name="id", data_type="integer", primary_key=True, auto_increment=True)
+        col = Column(
+            name="id", data_type="integer", primary_key=True, auto_increment=True
+        )
         sql = col.to_sql("sqlite")
         assert "AUTOINCREMENT" in sql
 
     @pytest.mark.unit
     def test_primary_key_auto_increment_mysql(self):
         """AUTO_INCREMENT appears for MySQL primary key with auto_increment."""
-        col = Column(name="id", data_type="integer", primary_key=True, auto_increment=True)
+        col = Column(
+            name="id", data_type="integer", primary_key=True, auto_increment=True
+        )
         sql = col.to_sql("mysql")
         assert "AUTO_INCREMENT" in sql
 
@@ -201,6 +206,7 @@ class TestColumnConstraints:
 # Index SQL Generation Tests
 # =============================================================================
 
+
 class TestIndexGeneration:
     """Test Index.to_sql() produces correct CREATE INDEX statements."""
 
@@ -228,21 +234,27 @@ class TestIndexGeneration:
     @pytest.mark.unit
     def test_partial_index_sqlite(self):
         """Partial index with WHERE condition on SQLite."""
-        idx = Index(name="idx_active", columns=["status"], condition="status = 'active'")
+        idx = Index(
+            name="idx_active", columns=["status"], condition="status = 'active'"
+        )
         sql = idx.to_sql("users", "sqlite")
         assert "WHERE status = 'active'" in sql
 
     @pytest.mark.unit
     def test_partial_index_postgresql(self):
         """Partial index with WHERE condition on PostgreSQL."""
-        idx = Index(name="idx_active", columns=["status"], condition="status = 'active'")
+        idx = Index(
+            name="idx_active", columns=["status"], condition="status = 'active'"
+        )
         sql = idx.to_sql("users", "postgresql")
         assert "WHERE status = 'active'" in sql
 
     @pytest.mark.unit
     def test_partial_index_mysql_no_condition(self):
         """MySQL does not support partial indexes -- condition is omitted."""
-        idx = Index(name="idx_active", columns=["status"], condition="status = 'active'")
+        idx = Index(
+            name="idx_active", columns=["status"], condition="status = 'active'"
+        )
         sql = idx.to_sql("users", "mysql")
         assert "WHERE" not in sql
 
@@ -250,6 +262,7 @@ class TestIndexGeneration:
 # =============================================================================
 # SchemaTable CREATE TABLE Tests
 # =============================================================================
+
 
 class TestSchemaTableDDL:
     """Test SchemaTable.to_sql() produces well-formed CREATE TABLE."""
@@ -304,7 +317,13 @@ class TestSchemaTableDDL:
             name="t",
             columns=[
                 Column(name="id", data_type="integer", primary_key=True),
-                Column(name="val", data_type="string", nullable=False, unique=True, default="x"),
+                Column(
+                    name="val",
+                    data_type="string",
+                    nullable=False,
+                    unique=True,
+                    default="x",
+                ),
             ],
             indexes=[Index(name="idx_val", columns=["val"], unique=True)],
             constraints=["CHECK (id > 0)"],
@@ -323,6 +342,7 @@ class TestSchemaTableDDL:
 # =============================================================================
 # SchemaDefinition Full Schema Tests
 # =============================================================================
+
 
 class TestSchemaDefinitionSQL:
     """Test SchemaDefinition.to_sql() produces a full schema."""
@@ -361,6 +381,7 @@ class TestSchemaDefinitionSQL:
 # =============================================================================
 # SchemaGenerator Tests
 # =============================================================================
+
 
 class TestSchemaGenerator:
     """Test SchemaGenerator operations with tmp_path for filesystem isolation."""
@@ -418,14 +439,18 @@ class TestSchemaGenerator:
     def test_generate_schema_sql(self, tmp_path):
         """generate_schema_sql produces SQL for all registered tables."""
         gen = SchemaGenerator(workspace_dir=str(tmp_path), dialect="sqlite")
-        gen.create_table(SchemaTable(
-            name="a",
-            columns=[Column(name="id", data_type="integer", primary_key=True)],
-        ))
-        gen.create_table(SchemaTable(
-            name="b",
-            columns=[Column(name="id", data_type="integer", primary_key=True)],
-        ))
+        gen.create_table(
+            SchemaTable(
+                name="a",
+                columns=[Column(name="id", data_type="integer", primary_key=True)],
+            )
+        )
+        gen.create_table(
+            SchemaTable(
+                name="b",
+                columns=[Column(name="id", data_type="integer", primary_key=True)],
+            )
+        )
         sql = gen.generate_schema_sql("test_schema", "1.0.0")
         assert "CREATE TABLE IF NOT EXISTS a" in sql
         assert "CREATE TABLE IF NOT EXISTS b" in sql
@@ -434,10 +459,12 @@ class TestSchemaGenerator:
     def test_export_schema_sql(self, tmp_path):
         """export_schema writes SQL file."""
         gen = SchemaGenerator(workspace_dir=str(tmp_path))
-        gen.create_table(SchemaTable(
-            name="t",
-            columns=[Column(name="id", data_type="integer", primary_key=True)],
-        ))
+        gen.create_table(
+            SchemaTable(
+                name="t",
+                columns=[Column(name="id", data_type="integer", primary_key=True)],
+            )
+        )
         out = tmp_path / "output.sql"
         result = gen.export_schema(str(out), format="sql")
         assert Path(result).exists()
@@ -448,10 +475,12 @@ class TestSchemaGenerator:
     def test_export_schema_json(self, tmp_path):
         """export_schema writes JSON file."""
         gen = SchemaGenerator(workspace_dir=str(tmp_path))
-        gen.create_table(SchemaTable(
-            name="t",
-            columns=[Column(name="id", data_type="integer", primary_key=True)],
-        ))
+        gen.create_table(
+            SchemaTable(
+                name="t",
+                columns=[Column(name="id", data_type="integer", primary_key=True)],
+            )
+        )
         out = tmp_path / "output.json"
         gen.export_schema(str(out), format="json")
         data = json.loads(out.read_text())
@@ -475,6 +504,7 @@ class TestSchemaGenerator:
 # =============================================================================
 # generate_schema_from_models Tests
 # =============================================================================
+
 
 class TestGenerateSchemaFromModels:
     """Test the module-level generate_schema_from_models function."""
@@ -506,6 +536,7 @@ class TestGenerateSchemaFromModels:
 # =============================================================================
 # SchemaMigration Dataclass Tests
 # =============================================================================
+
 
 class TestSchemaMigrationDataclass:
     """Test the SchemaMigration dataclass from schema_generator."""
@@ -552,6 +583,7 @@ class TestSchemaMigrationDataclass:
 # TYPE_MAPPINGS Coverage
 # =============================================================================
 
+
 class TestTypeMappings:
     """Verify TYPE_MAPPINGS contains all expected dialects and types."""
 
@@ -567,7 +599,15 @@ class TestTypeMappings:
     def test_all_base_types_mapped(self, dialect):
         """All 10 base types are mapped for each dialect."""
         expected_types = {
-            "string", "text", "integer", "float", "boolean",
-            "datetime", "date", "binary", "json", "uuid",
+            "string",
+            "text",
+            "integer",
+            "float",
+            "boolean",
+            "datetime",
+            "date",
+            "binary",
+            "json",
+            "uuid",
         }
         assert expected_types.issubset(set(TYPE_MAPPINGS[dialect].keys()))

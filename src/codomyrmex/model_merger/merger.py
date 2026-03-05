@@ -1,6 +1,5 @@
 """Model merging utilities: SLERP, linear interpolation, and model soups."""
 
-
 import numpy as np
 
 
@@ -139,7 +138,6 @@ class ModelMerger:
                 else:
                     merged[key] = params_a[key].copy()
             return merged
-        elif self.method == "linear":
+        if self.method == "linear":
             return linear_interpolate(params_a, params_b, alpha)
-        else:
-            raise ValueError(f"Unknown merge method: {self.method}")
+        raise ValueError(f"Unknown merge method: {self.method}")

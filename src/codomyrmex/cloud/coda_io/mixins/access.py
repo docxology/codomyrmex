@@ -12,6 +12,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class AccessMixin:
     """AccessMixin class."""
 
@@ -115,7 +116,7 @@ class AccessMixin:
         """
         params = {"query": query} if query else {}
         path = f"/docs/{self._encode_id(doc_id)}/acl/principals/search"
-        return self._get(path, params=params if params else None)
+        return self._get(path, params=params or None)
 
     def get_acl_settings(self, doc_id: str) -> ACLSettings:
         """
@@ -152,7 +153,9 @@ class AccessMixin:
         """
         body = {}
         if allow_editors_to_change_permissions is not None:
-            body["allowEditorsToChangePermissions"] = allow_editors_to_change_permissions
+            body["allowEditorsToChangePermissions"] = (
+                allow_editors_to_change_permissions
+            )
         if allow_copying is not None:
             body["allowCopying"] = allow_copying
         if allow_viewers_to_request_editing is not None:
@@ -221,4 +224,3 @@ class AccessMixin:
         """
         path = f"/docs/{self._encode_id(doc_id)}/publish"
         return self._delete(path)
-

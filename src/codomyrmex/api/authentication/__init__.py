@@ -20,6 +20,7 @@ from typing import Any, Optional
 
 class AuthType(Enum):
     """Types of authentication."""
+
     API_KEY = "api_key"
     BEARER_TOKEN = "bearer_token"
     BASIC_AUTH = "basic_auth"
@@ -27,17 +28,21 @@ class AuthType(Enum):
     HMAC = "hmac"
     JWT = "jwt"
 
+
 @dataclass
 class AuthCredentials:
     """Authentication credentials."""
+
     auth_type: AuthType
     identifier: str  # username, client_id, api_key_id
-    secret: str      # password, client_secret, api_key
+    secret: str  # password, client_secret, api_key
     metadata: dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class AuthResult:
     """Result of authentication attempt."""
+
     authenticated: bool
     identity: str | None = None
     roles: list[str] = field(default_factory=list)
@@ -56,6 +61,7 @@ class AuthResult:
             "error": self.error,
         }
 
+
 class Authenticator(ABC):
     """Abstract base class for authenticators."""
 
@@ -64,7 +70,7 @@ class Authenticator(ABC):
     @abstractmethod
     def authenticate(self, request: dict[str, Any]) -> AuthResult:
         """Authenticate a request."""
-        pass
+
 
 class APIKeyAuthenticator(Authenticator):
     """API key based authentication."""
@@ -145,6 +151,7 @@ class APIKeyAuthenticator(Authenticator):
         random_part = secrets.token_hex(24)
         return f"{prefix}_{random_part}"
 
+
 class BearerTokenAuthenticator(Authenticator):
     """Bearer token authentication."""
 
@@ -217,6 +224,7 @@ class BearerTokenAuthenticator(Authenticator):
             expires_at=token_data["expires_at"],
         )
 
+
 class BasicAuthenticator(Authenticator):
     """HTTP Basic authentication."""
 
@@ -256,8 +264,8 @@ class BasicAuthenticator(Authenticator):
 
         try:
             encoded = auth_header[6:]  # Remove "Basic " prefix
-            decoded = base64.b64decode(encoded).decode('utf-8')
-            username, password = decoded.split(':', 1)
+            decoded = base64.b64decode(encoded).decode("utf-8")
+            username, password = decoded.split(":", 1)
         except Exception:
             return AuthResult(
                 authenticated=False,
@@ -286,6 +294,7 @@ class BasicAuthenticator(Authenticator):
             identity=username,
             roles=user.get("roles", []),
         )
+
 
 class HMACAuthenticator(Authenticator):
     """HMAC signature authentication."""
@@ -330,9 +339,7 @@ class HMACAuthenticator(Authenticator):
         message = f"{ts}:{body}"
 
         signature = hmac.new(
-            client["secret"].encode(),
-            message.encode(),
-            hashlib.sha256
+            client["secret"].encode(), message.encode(), hashlib.sha256
         ).hexdigest()
 
         return signature
@@ -388,10 +395,8 @@ class HMACAuthenticator(Authenticator):
             scopes=client.get("scopes", []),
         )
 
-def create_authenticator(
-    auth_type: AuthType,
-    **kwargs
-) -> Authenticator:
+
+def create_authenticator(auth_type: AuthType, **kwargs) -> Authenticator:
     """Factory function for authenticators."""
     authenticators = {
         AuthType.API_KEY: APIKeyAuthenticator,
@@ -406,14 +411,15 @@ def create_authenticator(
 
     return auth_class(**kwargs)
 
+
 __all__ = [
-    "AuthType",
+    "APIKeyAuthenticator",
     "AuthCredentials",
     "AuthResult",
+    "AuthType",
     "Authenticator",
-    "APIKeyAuthenticator",
-    "BearerTokenAuthenticator",
     "BasicAuthenticator",
+    "BearerTokenAuthenticator",
     "HMACAuthenticator",
     "create_authenticator",
 ]

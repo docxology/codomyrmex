@@ -10,11 +10,11 @@ from codomyrmex.meme.cybernetic.models import (
 )
 
 __all__ = [
-    "FeedbackLoop",
     "ControlSystem",
-    "SystemState",
-    "Homeostat",
     "CyberneticEngine",
+    "FeedbackLoop",
+    "Homeostat",
     "PIDController",
+    "SystemState",
     "apply_control",
 ]

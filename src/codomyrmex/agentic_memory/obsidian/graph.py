@@ -192,12 +192,10 @@ def get_link_stats(vault: Any) -> dict[str, Any]:
 
     # Orphans and dead ends count
     orphan_count = sum(
-        1 for n in g.nodes()
-        if g.in_degree(n) == 0 and g.out_degree(n) == 0
+        1 for n in g.nodes() if g.in_degree(n) == 0 and g.out_degree(n) == 0
     )
     dead_end_count = sum(
-        1 for n in g.nodes()
-        if g.out_degree(n) == 0 and g.in_degree(n) > 0
+        1 for n in g.nodes() if g.out_degree(n) == 0 and g.in_degree(n) > 0
     )
 
     return {

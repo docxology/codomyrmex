@@ -25,7 +25,11 @@ class _ToolRegistry:
         self._tools: dict[str, dict[str, Any]] = {}
 
     def register(self, *, tool_name: str, schema: dict[str, Any], handler: Any) -> None:
-        self._tools[tool_name] = {"schema": schema, "handler": handler, "name": tool_name}
+        self._tools[tool_name] = {
+            "schema": schema,
+            "handler": handler,
+            "name": tool_name,
+        }
 
     def list_tools(self) -> list[str]:
         return sorted(self._tools)
@@ -40,13 +44,21 @@ def _build_registry() -> "_ToolRegistry":
     for name, description, handler, input_schema in TOOL_DEFINITIONS:
         registry.register(
             tool_name=name,
-            schema={"name": name, "description": description, "inputSchema": input_schema},
+            schema={
+                "name": name,
+                "description": description,
+                "inputSchema": input_schema,
+            },
             handler=handler,
         )
     for name, description, handler, input_schema in discover_dynamic_tools():
         registry.register(
             tool_name=name,
-            schema={"name": name, "description": description, "inputSchema": input_schema},
+            schema={
+                "name": name,
+                "description": description,
+                "inputSchema": input_schema,
+            },
             handler=handler,
         )
     return registry
@@ -80,9 +92,11 @@ def invalidate_tool_registry() -> None:
     global _REGISTRY_EXPIRY
     _REGISTRY_EXPIRY = 0.0
 
+
 def _modules_provider() -> str:
     """Provide JSON list of all Codomyrmex modules."""
     import codomyrmex
+
     return json.dumps({"modules": codomyrmex.list_modules()})
 
 
@@ -109,6 +123,7 @@ def create_codomyrmex_mcp_server(
         MCPServer,
         MCPServerConfig,
     )
+
     config = MCPServerConfig(name=name, transport=transport)
     server = MCPServer(config=config)
 
@@ -162,18 +177,21 @@ def create_codomyrmex_mcp_server(
     # ── Register discovery metrics resource ────────────────────────
     def _discovery_metrics_provider() -> str:
         from codomyrmex.agents.pai.mcp.discovery import get_discovery_metrics
+
         metrics = get_discovery_metrics()
         if metrics is None:
             return json.dumps({"error": "Discovery engine not yet initialized"})
         last_scan = metrics.get("last_scan_time")
-        return json.dumps({
-            "total_tools": metrics.get("total_tools", 0),
-            "scan_duration_ms": metrics.get("scan_duration_ms", 0.0),
-            "failed_modules": metrics.get("failed_modules", []),
-            "modules_scanned": metrics.get("modules_scanned", 0),
-            "cache_hits": metrics.get("cache_hits", 0),
-            "last_scan_time": last_scan.isoformat() if last_scan else None,
-        })
+        return json.dumps(
+            {
+                "total_tools": metrics.get("total_tools", 0),
+                "scan_duration_ms": metrics.get("scan_duration_ms", 0.0),
+                "failed_modules": metrics.get("failed_modules", []),
+                "modules_scanned": metrics.get("modules_scanned", 0),
+                "cache_hits": metrics.get("cache_hits", 0),
+                "last_scan_time": last_scan.isoformat() if last_scan else None,
+            }
+        )
 
     server.register_resource(
         uri="codomyrmex://discovery/metrics",
@@ -190,6 +208,7 @@ def create_codomyrmex_mcp_server(
         server.prompt_count,
     )
     return server
+
 
 def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     """Call a Codomyrmex MCP tool directly (no MCP protocol overhead).
@@ -226,35 +245,38 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
             return trusted_call_tool(name, **kwargs)
         except KeyError:
             all_static = sorted(t[0] for t in TOOL_DEFINITIONS)
-            return {"error": MCPToolError(
-                code=MCPErrorCode.NOT_FOUND,
-                message=f"Unknown tool: {name!r}. Available (static): {all_static}",
-                tool_name=name,
-            ).to_dict()}
+            return {
+                "error": MCPToolError(
+                    code=MCPErrorCode.NOT_FOUND,
+                    message=f"Unknown tool: {name!r}. Available (static): {all_static}",
+                    tool_name=name,
+                ).to_dict()
+            }
         except SecurityError as exc:
-            return {"error": MCPToolError(
-                code=MCPErrorCode.ACCESS_DENIED,
-                message=str(exc),
-                tool_name=name
-            ).to_dict()}
+            return {
+                "error": MCPToolError(
+                    code=MCPErrorCode.ACCESS_DENIED, message=str(exc), tool_name=name
+                ).to_dict()
+            }
         except ValueError as exc:
             from codomyrmex.model_context_protocol.errors import validation_error
-            return {"error": validation_error(
-                tool_name=name,
-                message=str(exc)
-            ).to_dict()}
+
+            return {
+                "error": validation_error(tool_name=name, message=str(exc)).to_dict()
+            }
         except TimeoutError as exc:
-            return {"error": MCPToolError(
-                code=MCPErrorCode.TIMEOUT,
-                message=str(exc),
-                tool_name=name,
-            ).to_dict()}
+            return {
+                "error": MCPToolError(
+                    code=MCPErrorCode.TIMEOUT,
+                    message=str(exc),
+                    tool_name=name,
+                ).to_dict()
+            }
         except Exception as exc:
             # Wrap other execution errors
             module_hint = name.split(".")[1] if "." in name else name
-            return {"error": execution_error(
-                name, exc, module=module_hint
-            ).to_dict()}
+            return {"error": execution_error(name, exc, module=module_hint).to_dict()}
+
 
 def get_skill_manifest() -> dict[str, Any]:
     """Return a PAI-compatible skill manifest for Codomyrmex.
@@ -288,12 +310,14 @@ def get_skill_manifest() -> dict[str, Any]:
         if category == "general" and "." in name:
             # Fallback: derive from dotted tool name prefix
             category = name.split(".")[1]
-        dynamic_tools.append({
-            "name": name,
-            "description": description,
-            "category": category,
-            "input_schema": input_schema,
-        })
+        dynamic_tools.append(
+            {
+                "name": name,
+                "description": description,
+                "category": category,
+                "input_schema": input_schema,
+            }
+        )
 
     # Deduplicate: dynamic tools override static when names collide
     seen: dict[str, dict[str, Any]] = {}
@@ -317,10 +341,7 @@ def get_skill_manifest() -> dict[str, Any]:
             {"uri": r[0], "name": r[1], "description": r[2]}
             for r in RESOURCE_DEFINITIONS
         ],
-        "prompts": [
-            {"name": p[0], "description": p[1]}
-            for p in PROMPT_DEFINITIONS
-        ],
+        "prompts": [{"name": p[0], "description": p[1]} for p in PROMPT_DEFINITIONS],
         "workflows": [
             {
                 "name": "codomyrmexVerify",
@@ -368,67 +389,151 @@ def get_skill_manifest() -> dict[str, Any]:
             },
         ],
         "algorithm_mapping": {
-            "OBSERVE": ["codomyrmex.list_modules", "codomyrmex.module_info", "codomyrmex.list_directory"],
+            "OBSERVE": [
+                "codomyrmex.list_modules",
+                "codomyrmex.module_info",
+                "codomyrmex.list_directory",
+            ],
             "THINK": ["codomyrmex.analyze_python", "codomyrmex.search_codebase"],
             "PLAN": ["codomyrmex.read_file", "codomyrmex.json_query"],
             "BUILD": ["codomyrmex.write_file"],
             "EXECUTE": ["codomyrmex.run_command", "codomyrmex.run_tests"],
-            "VERIFY": ["codomyrmex.git_status", "codomyrmex.git_diff", "codomyrmex.checksum_file"],
+            "VERIFY": [
+                "codomyrmex.git_status",
+                "codomyrmex.git_diff",
+                "codomyrmex.checksum_file",
+            ],
             "LEARN": ["codomyrmex.pai_awareness", "codomyrmex.pai_status"],
         },
         "knowledge_scope": {
             "core_infrastructure": [
-                "logging_monitoring", "config_management", "environment_setup",
-                "events", "exceptions", "utils", "schemas", "concurrency",
-                "compression", "serialization", "streaming",
+                "logging_monitoring",
+                "config_management",
+                "environment_setup",
+                "events",
+                "exceptions",
+                "utils",
+                "schemas",
+                "concurrency",
+                "compression",
+                "serialization",
+                "streaming",
             ],
             "ai_and_agents": [
-                "agents", "llm", "model_context_protocol", "orchestrator",
-                "prompt_engineering", "cerebrum", "agentic_memory",
-                "inference_optimization", "model_ops", "model_registry",
-                "model_evaluation", "prompt_testing",
+                "agents",
+                "llm",
+                "model_context_protocol",
+                "orchestrator",
+                "prompt_engineering",
+                "cerebrum",
+                "agentic_memory",
+                "inference_optimization",
+                "model_ops",
+                "model_registry",
+                "model_evaluation",
+                "prompt_testing",
             ],
             "code_and_analysis": [
-                "coding", "static_analysis", "tree_sitter", "documentation",
-                "git_operations", "build_synthesis", "testing", "validation",
-                "pattern_matching", "dependency_injection",
+                "coding",
+                "static_analysis",
+                "tree_sitter",
+                "documentation",
+                "git_operations",
+                "build_synthesis",
+                "testing",
+                "validation",
+                "pattern_matching",
+                "dependency_injection",
             ],
             "data_and_processing": [
-                "database_management", "vector_store", "cache", "data_lineage",
-                "data_visualization", "graph_rag", "feature_store",
-                "feature_flags", "search", "documents", "fpf", "scrape",
+                "database_management",
+                "vector_store",
+                "cache",
+                "data_lineage",
+                "data_visualization",
+                "graph_rag",
+                "feature_store",
+                "feature_flags",
+                "search",
+                "documents",
+                "fpf",
+                "scrape",
             ],
             "security_and_identity": [
-                "security", "auth", "encryption", "privacy", "defense",
-                "identity", "wallet", "governance",
+                "security",
+                "auth",
+                "encryption",
+                "privacy",
+                "defense",
+                "identity",
+                "wallet",
+                "governance",
             ],
             "infrastructure_and_ops": [
-                "cloud", "containerization", "deployment", "ci_cd_automation",
-                "networking", "telemetry", "performance", "metrics",
-                "edge_computing", "service_mesh", "scheduler", "rate_limiting",
-                "cost_management", "chaos_engineering", "migration",
+                "cloud",
+                "containerization",
+                "deployment",
+                "ci_cd_automation",
+                "networking",
+                "telemetry",
+                "performance",
+                "metrics",
+                "edge_computing",
+                "service_mesh",
+                "scheduler",
+                "rate_limiting",
+                "cost_management",
+                "chaos_engineering",
+                "migration",
                 "observability_dashboard",
             ],
             "ui_and_interface": [
-                "cli", "website", "terminal_interface", "ide", "visualization",
-                "video", "audio", "multimodal", "accessibility", "i18n",
-                "templating", "notification",
+                "cli",
+                "website",
+                "terminal_interface",
+                "ide",
+                "visualization",
+                "video",
+                "audio",
+                "multimodal",
+                "accessibility",
+                "i18n",
+                "templating",
+                "notification",
             ],
             "domain_and_simulation": [
-                "bio_simulation", "finance", "logistics", "spatial", "education",
-                "meme", "embodiment", "evolutionary_ai", "quantum",
-                "smart_contracts", "market", "dark", "physical_management",
-                "relations", "collaboration",
+                "bio_simulation",
+                "finance",
+                "logistics",
+                "spatial",
+                "education",
+                "meme",
+                "embodiment",
+                "evolutionary_ai",
+                "quantum",
+                "smart_contracts",
+                "market",
+                "dark",
+                "physical_management",
+                "relations",
+                "collaboration",
             ],
             "system_and_meta": [
-                "system_discovery", "plugin_system", "skills", "tool_use",
-                "tools", "module_template", "examples", "tests",
-                "workflow_testing", "api",
+                "system_discovery",
+                "plugin_system",
+                "skills",
+                "tool_use",
+                "tools",
+                "module_template",
+                "examples",
+                "tests",
+                "workflow_testing",
+                "api",
             ],
         },
     }
 
+
 def get_total_tool_count() -> int:
     """Get the total number of registered tools (static + dynamic)."""
     return len(get_tool_registry().list_tools())
-

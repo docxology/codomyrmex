@@ -44,7 +44,9 @@ def test_generate_string_data() -> None:
     """testing_generate_data returns a list of strings for strategy_type='string'."""
     from codomyrmex.testing.mcp_tools import testing_generate_data
 
-    results = testing_generate_data("string", count=4, config={"min_length": 3, "max_length": 10})
+    results = testing_generate_data(
+        "string", count=4, config={"min_length": 3, "max_length": 10}
+    )
     assert isinstance(results, list)
     assert len(results) == 4
     assert all(isinstance(v, str) for v in results)

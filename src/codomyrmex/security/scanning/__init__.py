@@ -19,14 +19,17 @@ from typing import Any, Optional
 
 class Severity(Enum):
     """Severity levels for findings."""
+
     CRITICAL = "critical"
     HIGH = "high"
     MEDIUM = "medium"
     LOW = "low"
     INFO = "info"
 
+
 class FindingType(Enum):
     """Types of security findings."""
+
     SQL_INJECTION = "sql_injection"
     XSS = "xss"
     PATH_TRAVERSAL = "path_traversal"
@@ -38,9 +41,11 @@ class FindingType(Enum):
     INSECURE_DESERIALIZATION = "insecure_deserialization"
     OPEN_REDIRECT = "open_redirect"
 
+
 @dataclass
 class SecurityFinding:
     """A security vulnerability finding."""
+
     id: str
     finding_type: FindingType
     severity: Severity
@@ -66,9 +71,11 @@ class SecurityFinding:
             "remediation": self.remediation,
         }
 
+
 @dataclass
 class ScanResult:
     """Result of a security scan."""
+
     scan_id: str
     started_at: datetime = field(default_factory=datetime.now)
     completed_at: datetime | None = None
@@ -110,6 +117,7 @@ class ScanResult:
             "high": self.high_count,
         }
 
+
 class SecurityRule(ABC):
     """Base class for security rules."""
 
@@ -117,18 +125,16 @@ class SecurityRule(ABC):
     @abstractmethod
     def id(self) -> str:
         """Get rule ID."""
-        pass
 
     @property
     @abstractmethod
     def finding_type(self) -> FindingType:
         """Get finding type."""
-        pass
 
     @abstractmethod
     def check(self, content: str, file_path: str) -> list[SecurityFinding]:
         """Check content for vulnerabilities."""
-        pass
+
 
 class PatternRule(SecurityRule):
     """Rule based on regex patterns."""
@@ -164,24 +170,27 @@ class PatternRule(SecurityRule):
     def check(self, content: str, file_path: str) -> list[SecurityFinding]:
         """Check the condition and return the result."""
         findings = []
-        lines = content.split('\n')
+        lines = content.split("\n")
 
         for i, line in enumerate(lines, 1):
             if self._pattern.search(line):
                 self._counter += 1
-                findings.append(SecurityFinding(
-                    id=f"{self._id}_{self._counter}",
-                    finding_type=self._finding_type,
-                    severity=self._severity,
-                    title=self._title,
-                    description=self._description,
-                    file_path=file_path,
-                    line_number=i,
-                    code_snippet=line.strip()[:100],
-                    remediation=self._remediation,
-                ))
+                findings.append(
+                    SecurityFinding(
+                        id=f"{self._id}_{self._counter}",
+                        finding_type=self._finding_type,
+                        severity=self._severity,
+                        title=self._title,
+                        description=self._description,
+                        file_path=file_path,
+                        line_number=i,
+                        code_snippet=line.strip()[:100],
+                        remediation=self._remediation,
+                    )
+                )
 
         return findings
+
 
 class SQLInjectionRule(PatternRule):
     """Detects potential SQL injection vulnerabilities."""
@@ -197,6 +206,7 @@ class SQLInjectionRule(PatternRule):
             remediation="Use parameterized queries or prepared statements",
         )
 
+
 class HardcodedSecretRule(PatternRule):
     """Detects hardcoded secrets."""
 
@@ -211,6 +221,7 @@ class HardcodedSecretRule(PatternRule):
             remediation="Use environment variables or a secrets manager",
         )
 
+
 class CommandInjectionRule(PatternRule):
     """Detects potential command injection."""
 
@@ -218,12 +229,13 @@ class CommandInjectionRule(PatternRule):
         super().__init__(
             rule_id="CMD001",
             finding_type=FindingType.COMMAND_INJECTION,
-            pattern=r'(os\.system|subprocess\.call|subprocess\.run)\s*\([^)]*\+',
+            pattern=r"(os\.system|subprocess\.call|subprocess\.run)\s*\([^)]*\+",
             severity=Severity.CRITICAL,
             title="Potential Command Injection",
             description="User input may be used in shell command",
             remediation="Use subprocess with shell=False and pass args as list",
         )
+
 
 class InsecureRandomRule(PatternRule):
     """Detects use of insecure random."""
@@ -232,12 +244,13 @@ class InsecureRandomRule(PatternRule):
         super().__init__(
             rule_id="RND001",
             finding_type=FindingType.INSECURE_RANDOM,
-            pattern=r'random\.(random|randint|choice)\s*\(',
+            pattern=r"random\.(random|randint|choice)\s*\(",
             severity=Severity.MEDIUM,
             title="Insecure Random Number Generator",
             description="Using random module for security-sensitive operation",
             remediation="Use secrets module for cryptographic randomness",
         )
+
 
 class SecurityScanner:
     """
@@ -266,12 +279,14 @@ class SecurityScanner:
 
     def _register_default_rules(self) -> None:
         """Register default security rules."""
-        self._rules.extend([
-            SQLInjectionRule(),
-            HardcodedSecretRule(),
-            CommandInjectionRule(),
-            InsecureRandomRule(),
-        ])
+        self._rules.extend(
+            [
+                SQLInjectionRule(),
+                HardcodedSecretRule(),
+                CommandInjectionRule(),
+                InsecureRandomRule(),
+            ]
+        )
 
     def add_rule(self, rule: SecurityRule) -> "SecurityScanner":
         """Add a security rule."""
@@ -284,7 +299,9 @@ class SecurityScanner:
             self._counter += 1
             return f"scan_{self._counter}"
 
-    def scan_content(self, content: str, file_path: str = "<string>") -> list[SecurityFinding]:
+    def scan_content(
+        self, content: str, file_path: str = "<string>"
+    ) -> list[SecurityFinding]:
         """Scan content for vulnerabilities."""
         findings = []
         for rule in self._rules:
@@ -310,7 +327,7 @@ class SecurityScanner:
                 result.completed_at = datetime.now()
                 return result
 
-            content = path.read_text(encoding='utf-8', errors='ignore')
+            content = path.read_text(encoding="utf-8", errors="ignore")
             result.findings = self.scan_content(content, file_path)
             result.files_scanned = 1
 
@@ -338,8 +355,8 @@ class SecurityScanner:
             ScanResult with findings
         """
         result = ScanResult(scan_id=self._get_scan_id())
-        extensions = extensions or ['.py']
-        exclude_dirs = exclude_dirs or ['venv', '.venv', 'node_modules', '__pycache__']
+        extensions = extensions or [".py"]
+        exclude_dirs = exclude_dirs or ["venv", ".venv", "node_modules", "__pycache__"]
 
         try:
             path = Path(dir_path)
@@ -348,7 +365,7 @@ class SecurityScanner:
                 result.completed_at = datetime.now()
                 return result
 
-            for file_path in path.rglob('*'):
+            for file_path in path.rglob("*"):
                 # Skip excluded directories
                 if any(excl in file_path.parts for excl in exclude_dirs):
                     continue
@@ -361,7 +378,7 @@ class SecurityScanner:
                     continue
 
                 try:
-                    content = file_path.read_text(encoding='utf-8', errors='ignore')
+                    content = file_path.read_text(encoding="utf-8", errors="ignore")
                     findings = self.scan_content(content, str(file_path))
                     result.findings.extend(findings)
                     result.files_scanned += 1
@@ -373,6 +390,7 @@ class SecurityScanner:
 
         result.completed_at = datetime.now()
         return result
+
 
 __all__ = [
     # Enums
@@ -392,4 +410,4 @@ __all__ = [
     "SecurityScanner",
 ]
 
-from .vulnerability_scanner import *  # noqa: E402, F401, F403
+from .vulnerability_scanner import *  # noqa: E402

@@ -11,17 +11,21 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 @dataclass
 class Bid:
     """A provider's submitted bid in a marketplace auction, with price, details, and timestamp."""
+
     provider_id: str
     amount: float
     details: str
     timestamp: datetime = field(default_factory=datetime.now)
 
+
 @dataclass
 class AuctionRequest:
     """An open request to auction a service item, collecting provider bids until settled."""
+
     id: str
     requester_persona_id: str  # Anonymous ID
     item_description: str
@@ -29,26 +33,31 @@ class AuctionRequest:
     bids: list[Bid] = field(default_factory=list)
     status: str = "OPEN"
 
+
 class ReverseAuction:
     """Manages anonymous reverse auctions."""
 
     def __init__(self):
         self._auctions: dict[str, AuctionRequest] = {}
 
-    def create_request(self, persona_id: str, description: str, max_price: float) -> str:
+    def create_request(
+        self, persona_id: str, description: str, max_price: float
+    ) -> str:
         """Create a new auction request."""
         auction_id = str(uuid.uuid4())
         request = AuctionRequest(
             id=auction_id,
             requester_persona_id=persona_id,
             item_description=description,
-            max_price=max_price
+            max_price=max_price,
         )
         self._auctions[auction_id] = request
         logger.info(f"Created auction {auction_id} for persona {persona_id}")
         return auction_id
 
-    def place_bid(self, auction_id: str, provider_id: str, amount: float, details: str) -> bool:
+    def place_bid(
+        self, auction_id: str, provider_id: str, amount: float, details: str
+    ) -> bool:
         """Place a bid on an active auction."""
         if auction_id not in self._auctions:
             return False
@@ -83,7 +92,7 @@ class ReverseAuction:
             return False
         auction = self._auctions[auction_id]
         if auction.requester_persona_id != requester_id:
-            return False # Not the owner
+            return False  # Not the owner
 
         auction.status = "CLOSED"
         return True
@@ -105,6 +114,5 @@ class ReverseAuction:
     def get_history(self, persona_id: str) -> list[AuctionRequest]:
         """Get auction history for a persona."""
         return [
-            a for a in self._auctions.values()
-            if a.requester_persona_id == persona_id
+            a for a in self._auctions.values() if a.requester_persona_id == persona_id
         ]

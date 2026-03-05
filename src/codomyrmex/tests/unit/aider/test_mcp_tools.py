@@ -246,9 +246,9 @@ class TestMCPMetadata:
         tools = [aider_check, aider_edit, aider_ask, aider_architect, aider_config]
         for tool in tools:
             meta = getattr(tool, "_mcp_tool_meta", {})
-            assert (
-                meta.get("category") == "aider"
-            ), f"{tool.__name__} has category={meta.get('category')}"
+            assert meta.get("category") == "aider", (
+                f"{tool.__name__} has category={meta.get('category')}"
+            )
 
     def test_all_tools_have_description(self):
         """All aider MCP tools must have a non-empty description."""
@@ -262,6 +262,6 @@ class TestMCPMetadata:
         tools = [aider_check, aider_edit, aider_ask, aider_architect, aider_config]
         for tool in tools:
             meta = getattr(tool, "_mcp_tool_meta", {})
-            assert meta["name"].startswith(
-                "codomyrmex."
-            ), f"{tool.__name__} name={meta['name']} missing codomyrmex. prefix"
+            assert meta["name"].startswith("codomyrmex."), (
+                f"{tool.__name__} name={meta['name']} missing codomyrmex. prefix"
+            )

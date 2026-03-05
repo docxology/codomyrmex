@@ -1,4 +1,5 @@
 """Mermaid diagram wrapper."""
+
 from dataclasses import dataclass
 
 from ._base import BasePlot
@@ -7,6 +8,7 @@ from ._base import BasePlot
 @dataclass
 class MermaidDiagram(BasePlot):
     """Mermaid diagram wrapper — renders as an inline ``<div class="mermaid">`` block."""
+
     definition: str = ""
 
     def to_html(self) -> str:

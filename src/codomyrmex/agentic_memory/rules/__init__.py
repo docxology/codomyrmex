@@ -12,7 +12,9 @@ Quick usage::
     from codomyrmex.agentic_memory.rules import RuleEngine
 
     engine = RuleEngine()
-    rule_set = engine.get_applicable_rules(file_path="memory.py", module_name="agentic_memory")
+    rule_set = engine.get_applicable_rules(
+        file_path="memory.py", module_name="agentic_memory"
+    )
     for rule in rule_set.resolved():
         print(rule.priority.name, rule.name)
 

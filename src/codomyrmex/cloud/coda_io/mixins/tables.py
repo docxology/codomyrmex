@@ -16,6 +16,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class TablesMixin:
     """TablesMixin class."""
 
@@ -73,7 +74,7 @@ class TablesMixin:
             params["useUpdatedTableLayouts"] = True
 
         path = f"/docs/{self._encode_id(doc_id)}/tables/{self._encode_id(table_id_or_name)}"
-        data = self._get(path, params=params if params else None)
+        data = self._get(path, params=params or None)
         return Table.from_dict(data)
 
     def list_columns(
@@ -167,9 +168,9 @@ class TablesMixin:
         params = {
             "query": query,
             "sortBy": sort_by,
-            "useColumnNames": use_column_names if use_column_names else None,
+            "useColumnNames": use_column_names or None,
             "valueFormat": value_format,
-            "visibleOnly": visible_only if visible_only else None,
+            "visibleOnly": visible_only or None,
             "limit": limit,
             "pageToken": page_token,
             "syncToken": sync_token,
@@ -220,7 +221,7 @@ class TablesMixin:
             params["disableParsing"] = True
 
         path = f"/docs/{self._encode_id(doc_id)}/tables/{self._encode_id(table_id_or_name)}/rows"
-        data = self._post(path, json_data=body, params=params if params else None)
+        data = self._post(path, json_data=body, params=params or None)
         return InsertRowsResult.from_dict(data)
 
     def get_row(
@@ -293,7 +294,7 @@ class TablesMixin:
             f"/tables/{self._encode_id(table_id_or_name)}"
             f"/rows/{self._encode_id(row_id_or_name)}"
         )
-        return self._put(path, json_data={"row": row_dict}, params=params if params else None)
+        return self._put(path, json_data={"row": row_dict}, params=params or None)
 
     def delete_row(
         self,
@@ -338,4 +339,3 @@ class TablesMixin:
         """
         path = f"/docs/{self._encode_id(doc_id)}/tables/{self._encode_id(table_id_or_name)}/rows"
         return self._delete(path, json_data={"rowIds": row_ids})
-

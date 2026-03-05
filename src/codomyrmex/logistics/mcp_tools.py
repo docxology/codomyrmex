@@ -86,7 +86,9 @@ def logistics_status() -> dict[str, Any]:
         import codomyrmex.logistics as lg
 
         components = [
-            name for name in lg.__all__ if not name.startswith("_") and name != "cli_commands"
+            name
+            for name in lg.__all__
+            if not name.startswith("_") and name != "cli_commands"
         ]
         return {
             "status": "success",

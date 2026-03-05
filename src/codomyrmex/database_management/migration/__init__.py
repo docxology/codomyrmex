@@ -6,7 +6,7 @@ Data migration with versioned steps, rollbacks, and transformers.
 # Import migration_manager names first (wildcard) so that explicit
 # imports from .models take precedence and don't get overwritten.
 from .executor import DataMigrator, MigrationRunner
-from .migration_manager import *  # noqa: E402, F401, F403
+from .migration_manager import *
 from .models import (
     CompositeTransformer,
     DataTransformer,
@@ -32,7 +32,9 @@ def cli_commands():
     return {
         "pending": lambda: print(
             "Pending Migrations\n"
-            "  Migration statuses: " + ", ".join(ms.value for ms in MigrationStatus) + "\n"
+            "  Migration statuses: "
+            + ", ".join(ms.value for ms in MigrationStatus)
+            + "\n"
             "  Directions: " + ", ".join(md.value for md in MigrationDirection) + "\n"
             "  Use MigrationRunner to check for and list pending migrations."
         ),

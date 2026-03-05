@@ -35,7 +35,9 @@ def cli_commands():
         "services": lambda: print(
             "Service Mesh Components\n"
             "  CircuitBreaker - Fault isolation with configurable thresholds\n"
-            "  LoadBalancer   - Strategies: " + ", ".join(s.value for s in LoadBalancerStrategy) + "\n"
+            "  LoadBalancer   - Strategies: "
+            + ", ".join(s.value for s in LoadBalancerStrategy)
+            + "\n"
             "  RetryPolicy    - Configurable retry with backoff\n"
             "  ServiceProxy   - Unified proxy with resilience patterns"
         ),

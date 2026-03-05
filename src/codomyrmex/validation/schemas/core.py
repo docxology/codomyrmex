@@ -11,6 +11,7 @@ from typing import Any
 
 class ResultStatus(Enum):
     """Status of an operation result."""
+
     SUCCESS = "success"
     FAILURE = "failure"
     PARTIAL = "partial"
@@ -20,6 +21,7 @@ class ResultStatus(Enum):
 
 class TaskStatus(Enum):
     """Status of a task."""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -35,6 +37,7 @@ class Result:
     Every module operation should return a Result to enable
     consistent error handling and status checking.
     """
+
     status: ResultStatus
     data: Any = None
     message: str = ""
@@ -66,6 +69,7 @@ class Task:
     Used by orchestrator, agents, and workflow systems to represent
     units of work.
     """
+
     id: str
     name: str
     status: TaskStatus = TaskStatus.PENDING
@@ -93,6 +97,7 @@ class Task:
 @dataclass
 class Config:
     """Standard configuration type for modules."""
+
     name: str
     values: dict[str, Any] = field(default_factory=dict)
     version: str = "1.0.0"
@@ -110,6 +115,7 @@ class Config:
 @dataclass
 class ModuleInfo:
     """Information about a codomyrmex module."""
+
     name: str
     version: str = "0.1.0"
     layer: str = ""  # foundation, core, service, application
@@ -123,6 +129,7 @@ class ModuleInfo:
 @dataclass
 class ToolDefinition:
     """Definition of a tool exposed via MCP or CLI."""
+
     name: str
     description: str
     module: str
@@ -134,6 +141,7 @@ class ToolDefinition:
 @dataclass
 class Notification:
     """Standard notification type."""
+
     title: str
     message: str
     level: str = "info"  # info, warning, error, critical
@@ -142,12 +150,12 @@ class Notification:
 
 
 __all__ = [
+    "Config",
+    "ModuleInfo",
+    "Notification",
     "Result",
     "ResultStatus",
     "Task",
     "TaskStatus",
-    "Config",
-    "ModuleInfo",
     "ToolDefinition",
-    "Notification",
 ]

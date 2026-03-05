@@ -97,12 +97,11 @@ class DatabaseConnection:
 
         if self.db_type == DatabaseType.SQLITE:
             return f"sqlite:///{self.database}"
-        elif self.db_type == DatabaseType.POSTGRESQL:
+        if self.db_type == DatabaseType.POSTGRESQL:
             return f"postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}"
-        elif self.db_type == DatabaseType.MYSQL:
+        if self.db_type == DatabaseType.MYSQL:
             return f"mysql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}"
-        else:
-            raise ValueError(f"Unsupported database type: {self.db_type}")
+        raise ValueError(f"Unsupported database type: {self.db_type}")
 
     def connect(self):
         """Establish connection."""
@@ -116,7 +115,9 @@ class DatabaseConnection:
         elif self.db_type in [DatabaseType.POSTGRESQL, DatabaseType.MYSQL]:
             # In a real implementation, we would use psycopg2 or pymysql here.
             # For this thin orchestrator, we'll keep it simple or raise if not available.
-            raise NotImplementedError(f"Connection for {self.db_type.value} not fully implemented in this version")
+            raise NotImplementedError(
+                f"Connection for {self.db_type.value} not fully implemented in this version"
+            )
         else:
             raise ValueError(f"Unsupported database type: {self.db_type}")
 
@@ -131,7 +132,9 @@ class DatabaseConnection:
         """Check if connected."""
         return self._connection is not None
 
-    def execute(self, query: str, params: tuple | None = None, commit: bool = True) -> QueryResult:
+    def execute(
+        self, query: str, params: tuple | None = None, commit: bool = True
+    ) -> QueryResult:
         """Execute a query and return QueryResult.
 
         Args:
@@ -170,7 +173,7 @@ class DatabaseConnection:
                 rows=rows,
                 columns=columns,
                 row_count=row_count,
-                execution_time=execution_time
+                execution_time=execution_time,
             )
         except Exception as e:
             execution_time = time.time() - start_time
@@ -181,7 +184,7 @@ class DatabaseConnection:
                 columns=[],
                 row_count=0,
                 execution_time=execution_time,
-                error_message=str(e)
+                error_message=str(e),
             )
 
     @contextmanager
@@ -222,7 +225,9 @@ class DatabaseManager:
             self.connections[name].disconnect()
             del self.connections[name]
             if self.default_connection_name == name:
-                self.default_connection_name = next(iter(self.connections.keys())) if self.connections else None
+                self.default_connection_name = (
+                    next(iter(self.connections.keys())) if self.connections else None
+                )
 
     def get_connection(self, name: str | None = None) -> DatabaseConnection | None:
         """Get a database connection."""
@@ -255,16 +260,18 @@ class DatabaseManager:
             # Simple parsing for other types if needed, but primarily supporting SQLite for now
             raise CodomyrmexError(f"Unsupported database URL: {database_url}")
 
-        conn = DatabaseConnection(
-            name=name,
-            db_type=db_type,
-            database=db_path
-        )
+        conn = DatabaseConnection(name=name, db_type=db_type, database=db_path)
         conn.connect()
         self.add_connection(conn)
         return conn
 
-    def execute(self, query: str, params: tuple | None = None, connection_name: str | None = None, commit: bool = True) -> QueryResult:
+    def execute(
+        self,
+        query: str,
+        params: tuple | None = None,
+        connection_name: str | None = None,
+        commit: bool = True,
+    ) -> QueryResult:
         """Execute a query on the specified or default connection."""
         conn = self.get_connection(connection_name)
         if not conn:
@@ -282,13 +289,13 @@ class DatabaseManager:
                     conn.execute("SELECT 1")
                 health[name] = {
                     "status": "healthy",
-                    "response_time": time.time() - start
+                    "response_time": time.time() - start,
                 }
             except Exception as e:
                 health[name] = {
                     "status": "unhealthy",
                     "error": str(e),
-                    "response_time": time.time() - start
+                    "response_time": time.time() - start,
                 }
         return health
 
@@ -296,15 +303,19 @@ class DatabaseManager:
         """Get overall database statistics."""
         return {
             "total_connections": len(self.connections),
-            "active_connections": sum(1 for c in self.connections.values() if c.is_connected()),
+            "active_connections": sum(
+                1 for c in self.connections.values() if c.is_connected()
+            ),
             "databases_by_type": {
                 t.value: sum(1 for c in self.connections.values() if c.db_type == t)
                 for t in DatabaseType
-            }
+            },
         }
 
     @contextmanager
-    def transaction(self, connection_name: str | None = None) -> Generator[DatabaseConnection, None, None]:
+    def transaction(
+        self, connection_name: str | None = None
+    ) -> Generator[DatabaseConnection, None, None]:
         """Context manager for transactions."""
         conn = self.get_connection(connection_name)
         if not conn:
@@ -324,7 +335,9 @@ class DatabaseManager:
             return [row[0] for row in result.rows if not row[0].startswith("sqlite_")]
         return []
 
-    def get_table_info(self, table_name: str, connection_name: str | None = None) -> list[dict[str, Any]]:
+    def get_table_info(
+        self, table_name: str, connection_name: str | None = None
+    ) -> list[dict[str, Any]]:
         """Get column information for a table."""
         conn = self.get_connection(connection_name)
         if not conn:
@@ -334,14 +347,16 @@ class DatabaseManager:
             result = conn.execute(f"PRAGMA table_info({table_name})")
             columns = []
             for row in result.rows:
-                columns.append({
-                    "cid": row[0],
-                    "name": row[1],
-                    "type": row[2],
-                    "notnull": bool(row[3]),
-                    "default": row[4],
-                    "pk": bool(row[5])
-                })
+                columns.append(
+                    {
+                        "cid": row[0],
+                        "name": row[1],
+                        "type": row[2],
+                        "notnull": bool(row[3]),
+                        "default": row[4],
+                        "pk": bool(row[5]),
+                    }
+                )
             return columns
         return []
 
@@ -351,11 +366,15 @@ def connect_database(database_url: str) -> DatabaseManager:
     """Connect to a database."""
     return DatabaseManager(database_url)
 
+
 def manage_databases(database_url: str | None = None) -> DatabaseManager:
     """Create and return a DatabaseManager instance."""
     return DatabaseManager(database_url)
 
-def execute_query(database_url: str, query: str, params: tuple | None = None) -> QueryResult:
+
+def execute_query(
+    database_url: str, query: str, params: tuple | None = None
+) -> QueryResult:
     """Execute a single query on a database."""
     manager = DatabaseManager(database_url)
     try:

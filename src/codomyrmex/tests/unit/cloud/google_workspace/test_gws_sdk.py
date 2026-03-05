@@ -58,7 +58,9 @@ class TestGoogleWorkspaceExceptions:
     def test_api_error_attrs(self):
         from codomyrmex.cloud.google_workspace.exceptions import GoogleWorkspaceAPIError
 
-        exc = GoogleWorkspaceAPIError("bad request", status_code=400, reason="Bad Request")
+        exc = GoogleWorkspaceAPIError(
+            "bad request", status_code=400, reason="Bad Request"
+        )
         assert exc.status_code == 400
         assert exc.reason == "Bad Request"
         assert str(exc) == "bad request"
@@ -200,7 +202,9 @@ class TestGoogleCredentialsInit:
     def test_build_service_raises_without_sdk(self):
         """Raises ImportError when google-api-python-client not installed."""
         if _SDK_INSTALLED:
-            pytest.skip("google-api-python-client is installed — ImportError path not reachable")
+            pytest.skip(
+                "google-api-python-client is installed — ImportError path not reachable"
+            )
         from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
 
         creds = GoogleCredentials(credentials_file="/nonexistent.json")
@@ -282,7 +286,9 @@ class TestGoogleWorkspaceBaseInit:
         creds = GoogleCredentials(credentials_file="/fake.json")
         client = GoogleWorkspaceBase(creds)
 
-        result = client._safe_call(lambda: (_ for _ in ()).throw(ValueError("oops")), "get", "item")
+        result = client._safe_call(
+            lambda: (_ for _ in ()).throw(ValueError("oops")), "get", "item"
+        )
         assert result is None
 
     def test_credentials_stored(self):
@@ -465,7 +471,9 @@ class TestLiveSDKClients:
     """Live API tests — only run when SDK is installed and creds are configured."""
 
     @pytest.mark.slow
-    @pytest.mark.skipif(not _SDK_INSTALLED, reason="google-api-python-client not installed")
+    @pytest.mark.skipif(
+        not _SDK_INSTALLED, reason="google-api-python-client not installed"
+    )
     @pytest.mark.skipif(not _GWS_CREDS_SET, reason="GWS credentials not configured")
     def test_drive_list_files_returns_list(self):
         from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
@@ -475,7 +483,9 @@ class TestLiveSDKClients:
         assert isinstance(files, list)
 
     @pytest.mark.slow
-    @pytest.mark.skipif(not _SDK_INSTALLED, reason="google-api-python-client not installed")
+    @pytest.mark.skipif(
+        not _SDK_INSTALLED, reason="google-api-python-client not installed"
+    )
     @pytest.mark.skipif(not _GWS_CREDS_SET, reason="GWS credentials not configured")
     def test_gmail_list_messages_returns_list(self):
         from codomyrmex.cloud.google_workspace.gmail import GoogleGmailClient
@@ -483,3 +493,247 @@ class TestLiveSDKClients:
         client = GoogleGmailClient.from_env()
         messages = client.list_messages(max_results=5)
         assert isinstance(messages, list)
+
+
+class TestGoogleCalendarClientMethods:
+    """Test GoogleCalendarClient methods via _safe_call fallback (no SDK/creds needed)."""
+
+    def test_list_events_returns_list(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.calendar import GoogleCalendarClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleCalendarClient(creds)
+        result = client.list_events()
+        assert isinstance(result, list)
+
+    def test_list_events_with_date_range_returns_list(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.calendar import GoogleCalendarClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleCalendarClient(creds)
+        result = client.list_events(
+            time_min="2026-03-01T00:00:00Z",
+            time_max="2026-03-31T23:59:59Z",
+        )
+        assert isinstance(result, list)
+
+    def test_create_event_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.calendar import GoogleCalendarClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleCalendarClient(creds)
+        result = client.create_event(
+            summary="Test Meeting",
+            start="2026-03-05T10:00:00Z",
+            end="2026-03-05T11:00:00Z",
+        )
+        assert isinstance(result, dict)
+
+    def test_create_event_with_attendees_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.calendar import GoogleCalendarClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleCalendarClient(creds)
+        result = client.create_event(
+            summary="Team Sync",
+            start="2026-03-06T14:00:00Z",
+            end="2026-03-06T15:00:00Z",
+            description="Weekly sync",
+            attendees=["teammate@example.com"],
+        )
+        assert isinstance(result, dict)
+
+
+class TestGoogleSheetsClientMethods:
+    """Test GoogleSheetsClient methods via _safe_call fallback."""
+
+    def test_get_values_returns_list(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.sheets import GoogleSheetsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleSheetsClient(creds)
+        result = client.get_values("spreadsheet-id", "Sheet1!A1:D10")
+        assert isinstance(result, list)
+
+    def test_get_values_empty_range_returns_list(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.sheets import GoogleSheetsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleSheetsClient(creds)
+        result = client.get_values("sid", "A1")
+        assert isinstance(result, list)
+
+    def test_update_values_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.sheets import GoogleSheetsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleSheetsClient(creds)
+        result = client.update_values(
+            "spreadsheet-id", "Sheet1!A1:B2", [[1, 2], [3, 4]]
+        )
+        assert isinstance(result, dict)
+
+    def test_update_values_raw_option_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.sheets import GoogleSheetsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleSheetsClient(creds)
+        result = client.update_values(
+            "sid", "A1:A1", [["value"]], value_input_option="RAW"
+        )
+        assert isinstance(result, dict)
+
+
+class TestGoogleDocsClientMethods:
+    """Test GoogleDocsClient methods via _safe_call fallback."""
+
+    def test_get_document_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.docs import GoogleDocsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleDocsClient(creds)
+        result = client.get_document("document-id")
+        assert isinstance(result, dict)
+
+    def test_get_document_empty_id_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.docs import GoogleDocsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleDocsClient(creds)
+        result = client.get_document("")
+        assert isinstance(result, dict)
+
+    def test_append_text_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.docs import GoogleDocsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleDocsClient(creds)
+        result = client.append_text("document-id", "Hello, World!")
+        assert isinstance(result, dict)
+
+    def test_append_text_multiline_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.docs import GoogleDocsClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleDocsClient(creds)
+        result = client.append_text("doc-id", "Line 1\nLine 2\nLine 3")
+        assert isinstance(result, dict)
+
+
+class TestGoogleChatClientMethods:
+    """Test GoogleChatClient methods via _safe_call fallback."""
+
+    def test_send_message_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.chat import GoogleChatClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleChatClient(creds)
+        result = client.send_message("spaces/XXXXXX", "Hello, team!")
+        assert isinstance(result, dict)
+
+    def test_send_message_empty_text_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.chat import GoogleChatClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleChatClient(creds)
+        result = client.send_message("spaces/YYYYYY", "")
+        assert isinstance(result, dict)
+
+
+class TestGoogleGmailExtraMethods:
+    """Test untested GoogleGmailClient methods (get_message, send_message)."""
+
+    def test_get_message_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.gmail import GoogleGmailClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleGmailClient(creds)
+        result = client.get_message("message-id-123")
+        assert isinstance(result, dict)
+
+    def test_get_message_with_format_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.gmail import GoogleGmailClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleGmailClient(creds)
+        result = client.get_message("message-id", format_="full")
+        assert isinstance(result, dict)
+
+    def test_send_message_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.gmail import GoogleGmailClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleGmailClient(creds)
+        result = client.send_message(
+            to="recipient@example.com",
+            subject="Test Subject",
+            body="Test body content.",
+        )
+        assert isinstance(result, dict)
+
+    def test_send_message_html_returns_dict(self):
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.gmail import GoogleGmailClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleGmailClient(creds)
+        result = client.send_message(
+            to="user@example.com",
+            subject="HTML Email",
+            body="<p>Hello</p>",
+            html=True,
+        )
+        assert isinstance(result, dict)
+
+
+class TestGoogleDriveUploadFile:
+    """Test GoogleDriveClient.upload_file() — requires SDK (imports before _safe_call)."""
+
+    @pytest.mark.skipif(
+        not _SDK_INSTALLED, reason="google-api-python-client not installed"
+    )
+    def test_upload_file_returns_dict(self):
+        import tempfile
+
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleDriveClient(creds)
+        with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as tmp:
+            tmp.write(b"test upload content")
+            tmp.flush()
+            tmp_path = tmp.name
+        result = client.upload_file(tmp_path, "test.txt")
+        import os
+
+        os.unlink(tmp_path)
+        assert isinstance(result, dict)
+
+    def test_upload_file_raises_import_error_without_sdk(self):
+        if _SDK_INSTALLED:
+            pytest.skip("googleapiclient is installed — ImportError path not reachable")
+        from codomyrmex.cloud.google_workspace.auth import GoogleCredentials
+        from codomyrmex.cloud.google_workspace.drive import GoogleDriveClient
+
+        creds = GoogleCredentials(credentials_file="/nonexistent.json")
+        client = GoogleDriveClient(creds)
+        with pytest.raises(ImportError, match="google-api-python-client"):
+            client.upload_file("/any/path.txt", "name.txt")

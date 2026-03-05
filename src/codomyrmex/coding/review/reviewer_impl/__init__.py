@@ -7,9 +7,9 @@ from .performance import PerformanceOptMixin
 from .reporting import ReportingMixin
 
 __all__ = [
-    "LintToolsMixin",
     "AnalysisPatternsMixin",
-    "PerformanceOptMixin",
     "DashboardMixin",
+    "LintToolsMixin",
+    "PerformanceOptMixin",
     "ReportingMixin",
 ]

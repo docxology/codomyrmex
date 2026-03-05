@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except Exception:
     logger = logging.getLogger(__name__)
@@ -31,6 +32,7 @@ try:
     from google.oauth2.credentials import Credentials
     from googleapiclient.discovery import Resource, build
     from googleapiclient.errors import HttpError
+
     GMAIL_AVAILABLE = True
 except ImportError:
     Credentials = None
@@ -49,7 +51,9 @@ _GMAIL_SCOPES = [
 class GmailProvider(EmailProvider):
     """Google Mail provider implementation."""
 
-    def __init__(self, credentials: Credentials | None = None, service: Resource | None = None):
+    def __init__(
+        self, credentials: Credentials | None = None, service: Resource | None = None
+    ):
         """
         Initialize the Gmail provider.
 
@@ -64,10 +68,12 @@ class GmailProvider(EmailProvider):
             )
 
         if not credentials and not service:
-            raise EmailAuthError("Either credentials or a built service object must be provided.")
+            raise EmailAuthError(
+                "Either credentials or a built service object must be provided."
+            )
 
         try:
-            self.service = service or build('gmail', 'v1', credentials=credentials)
+            self.service = service or build("gmail", "v1", credentials=credentials)
         except Exception as e:
             logger.error(f"Failed to initialize Gmail API service: {e}")
             raise EmailAuthError(f"Failed to initialize Gmail API service: {e}") from e
@@ -87,8 +93,7 @@ class GmailProvider(EmailProvider):
         """
         if not GMAIL_AVAILABLE:
             raise ImportError(
-                "Gmail dependencies are not installed. "
-                "Run: uv sync --extra email"
+                "Gmail dependencies are not installed. Run: uv sync --extra email"
             )
 
         # Option 1: Explicit OAuth2 env vars
@@ -127,12 +132,16 @@ class GmailProvider(EmailProvider):
                     )
                     return cls(credentials=creds)
             except (json.JSONDecodeError, OSError) as e:
-                logger.debug("Service account credentials unavailable, falling through to ADC: %s", e)
-                pass  # fall through to ADC
+                logger.debug(
+                    "Service account credentials unavailable, falling through to ADC: %s",
+                    e,
+                )
+                # fall through to ADC
 
         # Option 2: Application Default Credentials
         try:
             import google.auth  # noqa: PLC0415 — conditional import
+
             creds, _ = google.auth.default(scopes=_GMAIL_SCOPES)
             return cls(credentials=creds)
         except Exception as e:
@@ -148,28 +157,38 @@ class GmailProvider(EmailProvider):
         if not raw_header:
             return []
         import email.utils
+
         addresses = []
         for name, addr in email.utils.getaddresses([raw_header]):
             if addr:
-                addresses.append(EmailAddress(name=name if name else None, email=addr))
+                addresses.append(EmailAddress(name=name or None, email=addr))
         return addresses
 
     def _gmail_dict_to_message(self, payload: dict) -> EmailMessage:
         """Convert a Gmail API message dictionary to an EmailMessage."""
         try:
-            headers_list = payload.get('payload', {}).get('headers', [])
-            headers = {h['name'].lower(): h['value'] for h in headers_list}
+            headers_list = payload.get("payload", {}).get("headers", [])
+            headers = {h["name"].lower(): h["value"] for h in headers_list}
 
-            sender_addrs = self._parse_email_address(headers.get('from', ''))
-            sender = sender_addrs[0] if sender_addrs else EmailAddress(email="unknown@example.com")
+            sender_addrs = self._parse_email_address(headers.get("from", ""))
+            sender = (
+                sender_addrs[0]
+                if sender_addrs
+                else EmailAddress(email="unknown@example.com")
+            )
 
-            to_addrs = self._parse_email_address(headers.get('to', ''))
-            cc_addrs = self._parse_email_address(headers.get('cc', ''))
-            bcc_addrs = self._parse_email_address(headers.get('bcc', ''))
+            to_addrs = self._parse_email_address(headers.get("to", ""))
+            cc_addrs = self._parse_email_address(headers.get("cc", ""))
+            bcc_addrs = self._parse_email_address(headers.get("bcc", ""))
 
-            date_str = headers.get('date', '')
+            date_str = headers.get("date", "")
             import email.utils
-            parsed_date = email.utils.parsedate_to_datetime(date_str) if date_str else datetime.now(UTC)
+
+            parsed_date = (
+                email.utils.parsedate_to_datetime(date_str)
+                if date_str
+                else datetime.now(UTC)
+            )
 
             body_text = ""
             body_html = ""
@@ -177,45 +196,51 @@ class GmailProvider(EmailProvider):
             def extract_parts(parts):
                 nonlocal body_text, body_html
                 for part in parts:
-                    mime_type = part.get('mimeType')
-                    body_data = part.get('body', {}).get('data', '')
+                    mime_type = part.get("mimeType")
+                    body_data = part.get("body", {}).get("data", "")
                     if body_data:
                         try:
-                            decoded_data = base64.urlsafe_b64decode(body_data).decode('utf-8', errors='replace')
-                            if mime_type == 'text/plain':
+                            decoded_data = base64.urlsafe_b64decode(body_data).decode(
+                                "utf-8", errors="replace"
+                            )
+                            if mime_type == "text/plain":
                                 body_text += decoded_data
-                            elif mime_type == 'text/html':
+                            elif mime_type == "text/html":
                                 body_html += decoded_data
                         except Exception as e:
                             logger.warning(f"Failed to decode part: {e}")
-                    if 'parts' in part:
-                        extract_parts(part['parts'])
+                    if "parts" in part:
+                        extract_parts(part["parts"])
 
-            payload_part = payload.get('payload', {})
-            mime_type = payload_part.get('mimeType')
-            if mime_type == 'text/plain':
-                 body_data = payload_part.get('body', {}).get('data', '')
-                 if body_data:
-                     body_text = base64.urlsafe_b64decode(body_data).decode('utf-8', errors='replace')
-            elif mime_type == 'text/html':
-                body_data = payload_part.get('body', {}).get('data', '')
+            payload_part = payload.get("payload", {})
+            mime_type = payload_part.get("mimeType")
+            if mime_type == "text/plain":
+                body_data = payload_part.get("body", {}).get("data", "")
                 if body_data:
-                    body_html = base64.urlsafe_b64decode(body_data).decode('utf-8', errors='replace')
+                    body_text = base64.urlsafe_b64decode(body_data).decode(
+                        "utf-8", errors="replace"
+                    )
+            elif mime_type == "text/html":
+                body_data = payload_part.get("body", {}).get("data", "")
+                if body_data:
+                    body_html = base64.urlsafe_b64decode(body_data).decode(
+                        "utf-8", errors="replace"
+                    )
             else:
-                 extract_parts(payload_part.get('parts', []))
+                extract_parts(payload_part.get("parts", []))
 
             return EmailMessage(
-                id=payload.get('id'),
-                thread_id=payload.get('threadId'),
-                subject=headers.get('subject', '(No Subject)'),
+                id=payload.get("id"),
+                thread_id=payload.get("threadId"),
+                subject=headers.get("subject", "(No Subject)"),
                 sender=sender,
                 to=to_addrs,
                 cc=cc_addrs,
                 bcc=bcc_addrs,
-                body_text=body_text if body_text else None,
-                body_html=body_html if body_html else None,
+                body_text=body_text or None,
+                body_html=body_html or None,
                 date=parsed_date,
-                labels=payload.get('labelIds', [])
+                labels=payload.get("labelIds", []),
             )
         except Exception as e:
             logger.error(f"Failed to parse Gmail message data: {e}")
@@ -224,118 +249,132 @@ class GmailProvider(EmailProvider):
     def _create_raw_message(self, draft: EmailDraft) -> dict:
         """Create a raw base64 string dictionary for Gmail insertion."""
         msg = PyEmailMessage()
-        msg['Subject'] = draft.subject
-        msg['To'] = ", ".join(draft.to)
+        msg["Subject"] = draft.subject
+        msg["To"] = ", ".join(draft.to)
         if draft.cc:
-             msg['Cc'] = ", ".join(draft.cc)
+            msg["Cc"] = ", ".join(draft.cc)
         if draft.bcc:
-             msg['Bcc'] = ", ".join(draft.bcc)
+            msg["Bcc"] = ", ".join(draft.bcc)
 
         if draft.body_html:
             msg.set_content(draft.body_text or "")
-            msg.add_alternative(draft.body_html, subtype='html')
+            msg.add_alternative(draft.body_html, subtype="html")
         else:
             msg.set_content(draft.body_text or "")
 
         raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
-        return {'raw': raw}
+        return {"raw": raw}
 
-    def list_messages(self, query: str = "", max_results: int = 100, user_id: str = 'me') -> list[EmailMessage]:
+    def list_messages(
+        self, query: str = "", max_results: int = 100, user_id: str = "me"
+    ) -> list[EmailMessage]:
         """List messages matching the generic query."""
         try:
-            results = self.service.users().messages().list(
-                userId=user_id,
-                q=query,
-                maxResults=max_results
-            ).execute()
-            messages_meta = results.get('messages', [])
+            results = (
+                self.service.users()
+                .messages()
+                .list(userId=user_id, q=query, maxResults=max_results)
+                .execute()
+            )
+            messages_meta = results.get("messages", [])
 
             # We fetch messages individually.
             full_messages = []
             for msg_meta in messages_meta:
-                 full_messages.append(self.get_message(msg_meta['id'], user_id))
+                full_messages.append(self.get_message(msg_meta["id"], user_id))
             return full_messages
         except HttpError as e:
             logger.error(f"Failed to list Gmail messages: {e}")
             raise EmailAPIError(f"Failed to list messages: {e}") from e
 
-    def get_message(self, message_id: str, user_id: str = 'me') -> EmailMessage:
+    def get_message(self, message_id: str, user_id: str = "me") -> EmailMessage:
         """Fetch a specific message by its ID."""
         try:
-            message = self.service.users().messages().get(
-                userId=user_id,
-                id=message_id,
-                format='full'
-            ).execute()
+            message = (
+                self.service.users()
+                .messages()
+                .get(userId=user_id, id=message_id, format="full")
+                .execute()
+            )
             return self._gmail_dict_to_message(message)
         except HttpError as e:
             if e.resp.status == 404:
-                raise MessageNotFoundError(f"Message with ID {message_id} not found.") from e
+                raise MessageNotFoundError(
+                    f"Message with ID {message_id} not found."
+                ) from e
             logger.error(f"Failed to fetch Gmail message {message_id}: {e}")
             raise EmailAPIError(f"Failed to fetch message: {e}") from e
 
-    def send_message(self, draft: EmailDraft, user_id: str = 'me') -> EmailMessage:
+    def send_message(self, draft: EmailDraft, user_id: str = "me") -> EmailMessage:
         """Send a new email immediately."""
         try:
             raw_msg = self._create_raw_message(draft)
-            sent_message = self.service.users().messages().send(
-                userId=user_id,
-                body=raw_msg
-            ).execute()
-            return self.get_message(sent_message['id'], user_id)
+            sent_message = (
+                self.service.users()
+                .messages()
+                .send(userId=user_id, body=raw_msg)
+                .execute()
+            )
+            return self.get_message(sent_message["id"], user_id)
         except HttpError as e:
             logger.error(f"Failed to send Gmail message: {e}")
             raise EmailAPIError(f"Failed to send email: {e}") from e
 
-    def create_draft(self, draft: EmailDraft, user_id: str = 'me') -> str:
+    def create_draft(self, draft: EmailDraft, user_id: str = "me") -> str:
         """Create a new draft and return its ID."""
         try:
             raw_msg = self._create_raw_message(draft)
-            created_draft = self.service.users().drafts().create(
-                userId=user_id,
-                body={'message': raw_msg}
-            ).execute()
-            return created_draft['id']
+            created_draft = (
+                self.service.users()
+                .drafts()
+                .create(userId=user_id, body={"message": raw_msg})
+                .execute()
+            )
+            return created_draft["id"]
         except HttpError as e:
             logger.error(f"Failed to create Gmail draft: {e}")
             raise EmailAPIError(f"Failed to create draft: {e}") from e
 
-    def delete_message(self, message_id: str, user_id: str = 'me') -> None:
+    def delete_message(self, message_id: str, user_id: str = "me") -> None:
         """Delete an email message (moves it to trash)."""
         try:
             self.service.users().messages().trash(
-                userId=user_id,
-                id=message_id
+                userId=user_id, id=message_id
             ).execute()
         except HttpError as e:
             if e.resp.status == 404:
-                raise MessageNotFoundError(f"Message with ID {message_id} not found for deletion.") from e
+                raise MessageNotFoundError(
+                    f"Message with ID {message_id} not found for deletion."
+                ) from e
             logger.error(f"Failed to delete Gmail message {message_id}: {e}")
             raise EmailAPIError(f"Failed to delete message: {e}") from e
 
-    def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str], user_id: str = 'me') -> None:
+    def modify_labels(
+        self,
+        message_id: str,
+        add_labels: list[str],
+        remove_labels: list[str],
+        user_id: str = "me",
+    ) -> None:
         """Add or remove labels from a message."""
         try:
-            body = {
-                'addLabelIds': add_labels,
-                'removeLabelIds': remove_labels
-            }
+            body = {"addLabelIds": add_labels, "removeLabelIds": remove_labels}
             self.service.users().messages().modify(
-                userId=user_id,
-                id=message_id,
-                body=body
+                userId=user_id, id=message_id, body=body
             ).execute()
         except HttpError as e:
             if e.resp.status == 404:
-                raise MessageNotFoundError(f"Message with ID {message_id} not found for label modification.") from e
+                raise MessageNotFoundError(
+                    f"Message with ID {message_id} not found for label modification."
+                ) from e
             logger.error(f"Failed to modify Gmail labels on {message_id}: {e}")
             raise EmailAPIError(f"Failed to modify message labels: {e}") from e
 
-    def list_labels(self, user_id: str = 'me') -> list[dict[str, str]]:
+    def list_labels(self, user_id: str = "me") -> list[dict[str, str]]:
         """List all available labels for the user."""
         try:
             results = self.service.users().labels().list(userId=user_id).execute()
-            return results.get('labels', [])
+            return results.get("labels", [])
         except HttpError as e:
             logger.error(f"Failed to list Gmail labels: {e}")
             raise EmailAPIError(f"Failed to list labels: {e}") from e

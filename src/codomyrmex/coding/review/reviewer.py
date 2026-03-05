@@ -86,19 +86,16 @@ class CodeReviewer(
             "quality_gates": {
                 "max_complexity": 15,
                 "max_clone_similarity": 0.8,
-                "max_issues_per_file": 50
+                "max_issues_per_file": 50,
             },
-            "pyscn": {
-                "enabled": True,
-                "auto_lsh": True,
-                "lsh_threshold": 500
-            }
+            "pyscn": {"enabled": True, "auto_lsh": True, "lsh_threshold": 500},
         }
 
         # Try to load from .pyscn.toml or pyproject.toml
         if self.config_path and os.path.exists(self.config_path):
             try:
                 import tomllib
+
                 with open(self.config_path, "rb") as f:
                     file_config = tomllib.load(f)
 
@@ -109,7 +106,12 @@ class CodeReviewer(
                     config.update(file_config["pyscn"])
 
             except (OSError, tomllib.TOMLDecodeError, KeyError) as e:
-                logger.warning("Error loading config from %s: %s", self.config_path, e, exc_info=True)
+                logger.warning(
+                    "Error loading config from %s: %s",
+                    self.config_path,
+                    e,
+                    exc_info=True,
+                )
 
         return config
 
@@ -175,8 +177,19 @@ class CodeReviewer(
     def _should_analyze_file(self, file_path: str) -> bool:
         """Determine if a file should be analyzed."""
         supported_extensions = {
-            ".py", ".js", ".ts", ".tsx", ".jsx", ".java",
-            ".cpp", ".cc", ".cs", ".go", ".rs", ".php", ".rb"
+            ".py",
+            ".js",
+            ".ts",
+            ".tsx",
+            ".jsx",
+            ".java",
+            ".cpp",
+            ".cc",
+            ".cs",
+            ".go",
+            ".rs",
+            ".php",
+            ".rb",
         }
         return Path(file_path).suffix.lower() in supported_extensions
 
@@ -241,7 +254,12 @@ class CodeReviewer(
             else:
                 for root, dirs, files in os.walk(target_path):
                     # Skip common directories
-                    dirs[:] = [d for d in dirs if d not in {".git", "__pycache__", "node_modules", ".venv", "venv"}]
+                    dirs[:] = [
+                        d
+                        for d in dirs
+                        if d
+                        not in {".git", "__pycache__", "node_modules", ".venv", "venv"}
+                    ]
 
                     for file in files:
                         file_path = os.path.join(root, file)
@@ -264,7 +282,12 @@ class CodeReviewer(
 
         return summary
 
-    def _generate_summary(self, files_analyzed: int, analysis_time: float, files_errored: list[str] | None = None) -> AnalysisSummary:
+    def _generate_summary(
+        self,
+        files_analyzed: int,
+        analysis_time: float,
+        files_errored: list[str] | None = None,
+    ) -> AnalysisSummary:
         """Generate analysis summary."""
         summary = AnalysisSummary(
             total_issues=len(self.results),
@@ -285,7 +308,9 @@ class CodeReviewer(
 
         return summary
 
-    def check_quality_gates(self, thresholds: dict[str, int] = None) -> QualityGateResult:
+    def check_quality_gates(
+        self, thresholds: dict[str, int] = None
+    ) -> QualityGateResult:
         """Check if code meets quality standards."""
         if thresholds is None:
             thresholds = self.config["quality_gates"]
@@ -299,12 +324,14 @@ class CodeReviewer(
         max_complexity = thresholds.get("max_complexity", 15)
         complexity_issues = [r for r in self.results if r.rule_id == "PYSCN_COMPLEXITY"]
         if len(complexity_issues) > 0:
-            failures.append({
-                "gate": "max_complexity",
-                "threshold": max_complexity,
-                "actual": len(complexity_issues),
-                "message": f"Found {len(complexity_issues)} high complexity issues"
-            })
+            failures.append(
+                {
+                    "gate": "max_complexity",
+                    "threshold": max_complexity,
+                    "actual": len(complexity_issues),
+                    "message": f"Found {len(complexity_issues)} high complexity issues",
+                }
+            )
         else:
             passed_checks += 1
 
@@ -319,14 +346,18 @@ class CodeReviewer(
                 files_with_too_many_issues[file_path] = 0
             files_with_too_many_issues[file_path] += 1
 
-        problematic_files = {f: c for f, c in files_with_too_many_issues.items() if c > max_issues}
+        problematic_files = {
+            f: c for f, c in files_with_too_many_issues.items() if c > max_issues
+        }
         if problematic_files:
-            failures.append({
-                "gate": "max_issues_per_file",
-                "threshold": max_issues,
-                "actual": problematic_files,
-                "message": f"Found {len(problematic_files)} files with too many issues"
-            })
+            failures.append(
+                {
+                    "gate": "max_issues_per_file",
+                    "threshold": max_issues,
+                    "actual": problematic_files,
+                    "message": f"Found {len(problematic_files)} files with too many issues",
+                }
+            )
         else:
             passed_checks += 1
 
@@ -335,11 +366,10 @@ class CodeReviewer(
             total_checks=total_checks,
             passed_checks=passed_checks,
             failed_checks=len(failures),
-            failures=failures
+            failures=failures,
         )
 
     def clear_results(self):
         """Clear all analysis results."""
         self.results.clear()
         self.metrics.clear()
-

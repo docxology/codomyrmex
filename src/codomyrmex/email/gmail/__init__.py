@@ -5,4 +5,4 @@ This submodule provides the `GmailProvider` class.
 
 from .provider import GMAIL_AVAILABLE, GmailProvider
 
-__all__ = ["GmailProvider", "GMAIL_AVAILABLE"]
+__all__ = ["GMAIL_AVAILABLE", "GmailProvider"]

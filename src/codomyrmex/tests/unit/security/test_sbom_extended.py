@@ -45,7 +45,16 @@ class TestComponentDataclass:
         """to_dict() includes all expected keys."""
         comp = Component(name="requests", version="2.31.0")
         d = comp.to_dict()
-        for key in ("name", "version", "purl", "license", "supplier", "checksum", "dependencies", "vulnerabilities"):
+        for key in (
+            "name",
+            "version",
+            "purl",
+            "license",
+            "supplier",
+            "checksum",
+            "dependencies",
+            "vulnerabilities",
+        ):
             assert key in d
 
     def test_to_dict_license_is_string(self):
@@ -70,7 +79,14 @@ class TestSBOMDataclass:
         """to_dict() has all top-level keys."""
         sbom = SBOM(name="app", version="2.0")
         d = sbom.to_dict()
-        for key in ("name", "version", "format", "created_at", "components", "metadata"):
+        for key in (
+            "name",
+            "version",
+            "format",
+            "created_at",
+            "components",
+            "metadata",
+        ):
             assert key in d
 
     def test_to_dict_components_serialized(self):
@@ -180,12 +196,16 @@ class TestSBOMGeneratorFromPackageJson:
     def test_parse_dependencies(self, tmp_path):
         """Parses dependencies section from package.json."""
         pkg = tmp_path / "package.json"
-        pkg.write_text(json.dumps({
-            "dependencies": {
-                "react": "^18.0.0",
-                "axios": "~1.4.0",
-            }
-        }))
+        pkg.write_text(
+            json.dumps(
+                {
+                    "dependencies": {
+                        "react": "^18.0.0",
+                        "axios": "~1.4.0",
+                    }
+                }
+            )
+        )
         gen = SBOMGenerator()
         components = gen.from_package_json(str(pkg))
         assert len(components) == 2
@@ -196,9 +216,7 @@ class TestSBOMGeneratorFromPackageJson:
     def test_parse_dev_dependencies(self, tmp_path):
         """Parses devDependencies section."""
         pkg = tmp_path / "package.json"
-        pkg.write_text(json.dumps({
-            "devDependencies": {"jest": "^29.0.0"}
-        }))
+        pkg.write_text(json.dumps({"devDependencies": {"jest": "^29.0.0"}}))
         gen = SBOMGenerator()
         components = gen.from_package_json(str(pkg))
         assert len(components) == 1

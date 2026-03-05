@@ -12,6 +12,7 @@ from .distributed_lock import BaseLock
 
 logger = get_logger(__name__)
 
+
 class RedisLock(BaseLock):
     """Distributed lock using Redis SETNX and TTL."""
 
@@ -72,9 +73,12 @@ class RedisLock(BaseLock):
             try:
                 self.redis.eval(script, 1, self.key, self.owner_id)
             except redis.ResponseError:
-                 # Minimal fallback: check then delete (non-atomic)
-                 if self.redis.get(self.key) == self.owner_id.encode() or self.redis.get(self.key) == self.owner_id:
-                     self.redis.delete(self.key)
+                # Minimal fallback: check then delete (non-atomic)
+                if (
+                    self.redis.get(self.key) == self.owner_id.encode()
+                    or self.redis.get(self.key) == self.owner_id
+                ):
+                    self.redis.delete(self.key)
         except redis.RedisError as e:
             logger.error(f"Error releasing Redis lock '{self.name}': {e}")
         finally:
@@ -102,13 +106,18 @@ class RedisLock(BaseLock):
         """
         try:
             try:
-                result = self.redis.eval(script, 1, self.key, self.owner_id, additional_ttl)
+                result = self.redis.eval(
+                    script, 1, self.key, self.owner_id, additional_ttl
+                )
                 return bool(result)
             except redis.ResponseError:
                 # Minimal fallback: check then expire (non-atomic)
-                 if self.redis.get(self.key) == self.owner_id.encode() or self.redis.get(self.key) == self.owner_id:
-                     return bool(self.redis.expire(self.key, additional_ttl))
-                 return False
+                if (
+                    self.redis.get(self.key) == self.owner_id.encode()
+                    or self.redis.get(self.key) == self.owner_id
+                ):
+                    return bool(self.redis.expire(self.key, additional_ttl))
+                return False
         except redis.RedisError as e:
             logger.error(f"Error extending Redis lock '{self.name}': {e}")
             return False

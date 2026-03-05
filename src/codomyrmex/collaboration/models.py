@@ -86,7 +86,9 @@ class Task:
             priority=data.get("priority", 5),
             dependencies=data.get("dependencies", []),
             metadata=data.get("metadata", {}),
-            created_at=datetime.fromisoformat(data["created_at"]) if "created_at" in data else datetime.now(),
+            created_at=datetime.fromisoformat(data["created_at"])
+            if "created_at" in data
+            else datetime.now(),
             status=TaskStatus(data.get("status", "pending")),
             assigned_agent_id=data.get("assigned_agent_id"),
         )
@@ -141,7 +143,9 @@ class TaskResult:
             error=data.get("error"),
             duration=data.get("duration", 0.0),
             agent_id=data.get("agent_id", ""),
-            completed_at=datetime.fromisoformat(data["completed_at"]) if "completed_at" in data else datetime.now(),
+            completed_at=datetime.fromisoformat(data["completed_at"])
+            if "completed_at" in data
+            else datetime.now(),
         )
 
 
@@ -233,15 +237,17 @@ class AgentStatus:
             capabilities=data.get("capabilities", []),
             tasks_completed=data.get("tasks_completed", 0),
             tasks_failed=data.get("tasks_failed", 0),
-            last_heartbeat=datetime.fromisoformat(data["last_heartbeat"]) if "last_heartbeat" in data else datetime.now(),
+            last_heartbeat=datetime.fromisoformat(data["last_heartbeat"])
+            if "last_heartbeat" in data
+            else datetime.now(),
         )
 
 
 __all__ = [
-    "TaskPriority",
-    "TaskStatus",
-    "Task",
-    "TaskResult",
-    "SwarmStatus",
     "AgentStatus",
+    "SwarmStatus",
+    "Task",
+    "TaskPriority",
+    "TaskResult",
+    "TaskStatus",
 ]

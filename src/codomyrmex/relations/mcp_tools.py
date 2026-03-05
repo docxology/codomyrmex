@@ -24,16 +24,16 @@ from codomyrmex.relations.social_media.mcp_tools import social_media_analyze_sen
 from codomyrmex.relations.uor.mcp_tools import uor_add_entity, uor_find_path
 
 __all__ = [
-    "relations_score_strength",
     "crm_add_contact",
-    "crm_search_contacts",
     "crm_add_interaction",
+    "crm_search_contacts",
     "network_analysis_add_edge",
     "network_analysis_calculate_centrality",
     "network_analysis_find_communities",
+    "relations_score_strength",
+    "social_media_analyze_sentiment",
     "uor_add_entity",
     "uor_find_path",
-    "social_media_analyze_sentiment",
 ]
 
 

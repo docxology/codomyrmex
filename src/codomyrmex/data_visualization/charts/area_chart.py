@@ -68,14 +68,16 @@ def create_area_chart(
     if y_data and isinstance(y_data[0], list):
         series_list = y_data
         if not labels:
-            labels = [f"Series {i+1}" for i in range(len(series_list))]
+            labels = [f"Series {i + 1}" for i in range(len(series_list))]
 
         if stacked:
             ax.stackplot(x_data, *series_list, labels=labels, alpha=alpha)
         else:
             for i, series in enumerate(series_list):
                 color = colors[i % len(colors)]
-                ax.fill_between(x_data, series, alpha=alpha, color=color, label=labels[i])
+                ax.fill_between(
+                    x_data, series, alpha=alpha, color=color, label=labels[i]
+                )
                 ax.plot(x_data, series, color=color)
         ax.legend()
     else:

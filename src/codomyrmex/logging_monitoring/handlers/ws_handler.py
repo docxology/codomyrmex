@@ -74,8 +74,9 @@ class WebSocketLogHandler(logging.Handler):
         try:
             self._clients.remove(client_queue)
         except ValueError as e:
-            print(f"Warning: remove_client called for unknown queue: {e}", file=sys.stderr)
-            pass
+            print(
+                f"Warning: remove_client called for unknown queue: {e}", file=sys.stderr
+            )
 
     @property
     def client_count(self) -> int:
@@ -141,12 +142,12 @@ class WebSocketLogHandler(logging.Handler):
                 self._queue.get_nowait()
             except asyncio.QueueEmpty as e:
                 print(f"Warning: queue empty during drop-oldest: {e}", file=sys.stderr)
-                pass
             try:
                 self._queue.put_nowait(entry)
             except asyncio.QueueFull as e:
-                print(f"Warning: queue still full after drop-oldest: {e}", file=sys.stderr)
-                pass
+                print(
+                    f"Warning: queue still full after drop-oldest: {e}", file=sys.stderr
+                )
             self._dropped += 1
 
         # Broadcast to all clients
@@ -158,13 +159,17 @@ class WebSocketLogHandler(logging.Handler):
                 try:
                     client_queue.get_nowait()
                 except asyncio.QueueEmpty as e:
-                    print(f"Warning: client queue empty during drop-oldest: {e}", file=sys.stderr)
-                    pass
+                    print(
+                        f"Warning: client queue empty during drop-oldest: {e}",
+                        file=sys.stderr,
+                    )
                 try:
                     client_queue.put_nowait(entry)
                 except asyncio.QueueFull as e:
-                    print(f"Warning: client queue still full after drop-oldest: {e}", file=sys.stderr)
-                    pass
+                    print(
+                        f"Warning: client queue still full after drop-oldest: {e}",
+                        file=sys.stderr,
+                    )
                 self._dropped += 1
 
 

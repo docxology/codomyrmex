@@ -1,4 +1,5 @@
 """Unit tests for multimodal module."""
+
 import base64
 
 import pytest
@@ -11,11 +12,13 @@ class TestMultimodalImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.llm import multimodal
+
         assert multimodal is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
         from codomyrmex.llm.multimodal import __all__
+
         expected_exports = [
             "MediaType",
             "ImageFormat",
@@ -126,7 +129,7 @@ class TestMediaContent:
         from codomyrmex.llm.multimodal import MediaContent, MediaType
 
         original = b"test content"
-        b64 = base64.b64encode(original).decode('utf-8')
+        b64 = base64.b64encode(original).decode("utf-8")
 
         content = MediaContent.from_base64(b64, MediaType.IMAGE, format="png")
 
@@ -178,7 +181,7 @@ class TestImageContent:
             media_type=MediaType.IMAGE,
         )
 
-        assert abs(image.aspect_ratio - 16/9) < 0.01
+        assert abs(image.aspect_ratio - 16 / 9) < 0.01
 
 
 @pytest.mark.unit
@@ -401,11 +404,7 @@ class TestMultimodalMessageBuilder:
         """Verify basic builder usage."""
         from codomyrmex.llm.multimodal import MultimodalMessageBuilder
 
-        message = (
-            MultimodalMessageBuilder("msg_1")
-            .text("What is this?")
-            .build()
-        )
+        message = MultimodalMessageBuilder("msg_1").text("What is this?").build()
 
         assert message.id == "msg_1"
         assert message.text == "What is this?"
@@ -443,7 +442,7 @@ class TestMultimodalMessageBuilder:
 
         from codomyrmex.llm.multimodal import MultimodalMessageBuilder
 
-        b64_data = base64.b64encode(b"image bytes").decode('utf-8')
+        b64_data = base64.b64encode(b"image bytes").decode("utf-8")
 
         message = (
             MultimodalMessageBuilder("msg_1")

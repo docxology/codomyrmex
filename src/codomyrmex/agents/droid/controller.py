@@ -3,6 +3,7 @@
 This module provides thread-safe droid controller with configuration management,
 metrics tracking, and task execution capabilities.
 """
+
 from __future__ import annotations
 
 import json
@@ -68,8 +69,7 @@ class DroidConfig:
     blocked_operations: Iterable[str] | None = None
 
     def validate(self) -> None:
-        """Validate.
-        """
+        """Validate."""
         if self.max_parallel_tasks < 1:
             raise ValueError("max_parallel_tasks must be at least 1")
         if self.max_retry_attempts < 0:
@@ -101,10 +101,10 @@ class DroidConfig:
     def from_dict(cls, data: dict[str, Any]) -> DroidConfig:
         """From Dict.
 
-            Args:        cls: Parameter for the operation.        data: Data to process.
+        Args:        cls: Parameter for the operation.        data: Data to process.
 
-            Returns:        The result of the operation.
-            """
+        Returns:        The result of the operation.
+        """
         payload = dict(data)
         mode = payload.get("mode")
         if isinstance(mode, str):
@@ -128,10 +128,10 @@ class DroidConfig:
     def from_env(cls, prefix: str = "DROID_") -> DroidConfig:
         """From Env.
 
-            Args:        cls: Parameter for the operation.        prefix: Parameter for the operation.
+        Args:        cls: Parameter for the operation.        prefix: Parameter for the operation.
 
-            Returns:        The result of the operation.
-            """
+        Returns:        The result of the operation.
+        """
         mapping: dict[str, Any] = {}
 
         def set_if_present(name: str, transform: Callable[[str], Any]) -> None:
@@ -184,8 +184,7 @@ class DroidMetrics:
         return asdict(self)
 
     def reset(self) -> None:
-        """Reset.
-            """
+        """Reset."""
         self.sessions_started = 0
         self.sessions_completed = 0
         self.tasks_executed = 0
@@ -199,10 +198,10 @@ class DroidController:
     """Thread-safe controller coordinating droid operations."""
 
     def __init__(self, config: DroidConfig):
-        """  Init  .
+        """Init  .
 
-            Args:        config: Configuration settings.
-            """
+        Args:        config: Configuration settings.
+        """
         config.validate()
         self._config = config
         self._status = DroidStatus.STOPPED
@@ -351,8 +350,8 @@ class DroidController:
 def create_default_controller(**overrides: Any) -> DroidController:
     """Create Default Controller.
 
-        Returns:        The result of the operation.
-        """
+    Returns:        The result of the operation.
+    """
     config = DroidConfig().with_overrides(**overrides) if overrides else DroidConfig()
     controller = DroidController(config)
     controller.start()
@@ -362,8 +361,8 @@ def create_default_controller(**overrides: Any) -> DroidController:
 def save_config_to_file(config: DroidConfig, path: str | os.PathLike[str]) -> None:
     """Save Config To File.
 
-        Args:        config: Configuration settings.        path: Path to the file or directory.
-        """
+    Args:        config: Configuration settings.        path: Path to the file or directory.
+    """
     data = json.dumps(config.to_dict(), indent=2)
     Path(path).write_text(data, encoding="utf-8")
     logger.info("droid config saved", extra={"path": str(path)})
@@ -375,12 +374,12 @@ def load_config_from_file(path: str | os.PathLike[str]) -> DroidConfig:
 
 
 __all__ = [
+    "DroidConfig",
+    "DroidController",
+    "DroidMetrics",
     "DroidMode",
     "DroidStatus",
-    "DroidConfig",
-    "DroidMetrics",
-    "DroidController",
     "create_default_controller",
-    "save_config_to_file",
     "load_config_from_file",
+    "save_config_to_file",
 ]

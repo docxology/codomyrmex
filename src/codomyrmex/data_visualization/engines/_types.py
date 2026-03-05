@@ -25,6 +25,7 @@ class PlotType(Enum):
     DASHBOARD = "dashboard"
     INTERACTIVE = "interactive"
 
+
 class ChartStyle(Enum):
     """Chart styling options."""
 
@@ -35,6 +36,7 @@ class ChartStyle(Enum):
     TICKS = "ticks"
     DARKGRID = "darkgrid"
     WHITEGRID = "whitegrid"
+
 
 class ColorPalette(Enum):
     """Color palette options."""
@@ -49,6 +51,7 @@ class ColorPalette(Enum):
     PASTEL = "pastel"
     DARK = "dark"
     BRIGHT = "bright"
+
 
 @dataclass
 class PlotConfig:
@@ -70,6 +73,7 @@ class PlotConfig:
     transparent: bool = False
     bbox_inches: str = "tight"
 
+
 @dataclass
 class DataPoint:
     """Individual data point for plotting."""
@@ -80,6 +84,7 @@ class DataPoint:
     color: str | None = None
     size: float | None = None
     alpha: float = 1.0
+
 
 @dataclass
 class Dataset:
@@ -108,9 +113,7 @@ _STYLE_MAP: dict[ChartStyle, str] = {
 
 # Mapping from ColorPalette enum to seaborn palette name
 _PALETTE_MAP: dict[ColorPalette, str] = {
-    p: p.value
-    for p in ColorPalette
-    if p != ColorPalette.DEFAULT
+    p: p.value for p in ColorPalette if p != ColorPalette.DEFAULT
 }
 _PALETTE_MAP[ColorPalette.DEFAULT] = "husl"
 
@@ -118,6 +121,7 @@ _PALETTE_MAP[ColorPalette.DEFAULT] = "husl"
 def resolve_sns_style(style: ChartStyle) -> str:
     """Map a ChartStyle enum to its seaborn style name."""
     return _STYLE_MAP.get(style, "whitegrid")
+
 
 def resolve_sns_palette(palette: ColorPalette) -> str:
     """Map a ColorPalette enum to its seaborn palette name."""
@@ -128,9 +132,11 @@ def get_available_styles() -> list[ChartStyle]:
     """Get list of available chart styles."""
     return list(ChartStyle)
 
+
 def get_available_palettes() -> list[ColorPalette]:
     """Get list of available color palettes."""
     return list(ColorPalette)
+
 
 def get_available_plot_types() -> list[PlotType]:
     """Get list of available plot types."""

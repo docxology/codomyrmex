@@ -29,14 +29,14 @@ __version__ = "1.0.0"
 HAS_BUN: bool = shutil.which("bun") is not None
 
 __all__ = [
+    "HAS_BUN",
     "PaiPmConfig",
+    "PaiPmConnectionError",
     "PaiPmError",
     "PaiPmNotInstalledError",
     "PaiPmServerError",
-    "PaiPmTimeoutError",
-    "PaiPmConnectionError",
     "PaiPmServerManager",
-    "HAS_BUN",
+    "PaiPmTimeoutError",
     "get_bun_version",
     "get_config",
 ]

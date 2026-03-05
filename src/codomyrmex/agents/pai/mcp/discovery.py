@@ -11,6 +11,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 def tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
     """Invalidate the dynamic tool discovery cache.
 
@@ -20,7 +21,7 @@ def tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
     """
     if module:
         if _DISCOVERY_ENGINE is None:
-             return {"error": "Discovery engine not initialized"}
+            return {"error": "Discovery engine not initialized"}
 
         report = _DISCOVERY_ENGINE.scan_module(module)
 
@@ -33,15 +34,15 @@ def tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
             "tools_found": len(report.tools),
             "failed": bool(report.failed_modules),
         }
-    else:
-        invalidate_tool_cache()
-        # Rescan happens lazily on next access; no stats available yet.
-        return {
-            "cleared": True,
-            "rescanned_module": None,
-            "tools_found": None,
-            "failed": False,
-        }
+    invalidate_tool_cache()
+    # Rescan happens lazily on next access; no stats available yet.
+    return {
+        "cleared": True,
+        "rescanned_module": None,
+        "tools_found": None,
+        "failed": False,
+    }
+
 
 _DYNAMIC_TOOLS_CACHE: list[tuple[str, str, Any, dict[str, Any]]] | None = None
 
@@ -61,6 +62,7 @@ except ValueError:
 
 _DISCOVERY_ENGINE: Any | None = None
 
+
 def invalidate_tool_cache() -> None:
     """Clear the dynamic tool discovery cache and its TTL."""
     global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY
@@ -68,6 +70,7 @@ def invalidate_tool_cache() -> None:
         _DYNAMIC_TOOLS_CACHE = None
         _CACHE_EXPIRY = None
     logger.info("Dynamic tool cache invalidated")
+
 
 _FALLBACK_SCAN_TARGETS = [
     "codomyrmex.data_visualization",
@@ -79,6 +82,7 @@ _FALLBACK_SCAN_TARGETS = [
     "codomyrmex.documentation",
     "codomyrmex.email",
 ]
+
 
 def _find_mcp_modules() -> list[str]:
     """Auto-discover all codomyrmex sub-packages that contain an ``mcp_tools`` module.
@@ -114,6 +118,7 @@ def _find_mcp_modules() -> list[str]:
         logger.exception("_find_mcp_modules failed (%s); using fallback targets", exc)
         return list(_FALLBACK_SCAN_TARGETS)
 
+
 def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     """Scan modules for @mcp_tool definitions using MCPDiscovery engine.
 
@@ -122,7 +127,11 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY, _DISCOVERY_ENGINE
     now = time.monotonic()
     # Fast path: check cache without holding the lock
-    if _DYNAMIC_TOOLS_CACHE is not None and _CACHE_EXPIRY is not None and now < _CACHE_EXPIRY:
+    if (
+        _DYNAMIC_TOOLS_CACHE is not None
+        and _CACHE_EXPIRY is not None
+        and now < _CACHE_EXPIRY
+    ):
         logger.debug("Discovery cache hit (expires in %.1fs)", _CACHE_EXPIRY - now)
         if _DISCOVERY_ENGINE:
             _DISCOVERY_ENGINE.record_cache_hit()
@@ -130,6 +139,7 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
 
     if _DISCOVERY_ENGINE is None:
         from codomyrmex.model_context_protocol.discovery import MCPDiscovery
+
         _DISCOVERY_ENGINE = MCPDiscovery()
 
     t0 = time.monotonic()
@@ -138,9 +148,9 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
 
     for target in scan_targets:
         try:
-             _DISCOVERY_ENGINE.scan_package(target)
+            _DISCOVERY_ENGINE.scan_package(target)
         except (ImportError, AttributeError, SyntaxError, TypeError) as e:
-             logger.warning("Failed to scan package %s: %s", target, e)
+            logger.warning("Failed to scan package %s: %s", target, e)
 
     tools: list[tuple[str, str, Any, dict[str, Any]]] = []
 
@@ -151,13 +161,18 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     elapsed_ms = (time.monotonic() - t0) * 1000
     logger.info(
         "Dynamic tools discovered: %d in %.0fms",
-        len(tools), elapsed_ms,
+        len(tools),
+        elapsed_ms,
     )
 
     with _DYNAMIC_TOOLS_CACHE_LOCK:
         # Double-check: another thread may have populated the cache while we scanned
         now2 = time.monotonic()
-        if _DYNAMIC_TOOLS_CACHE is not None and _CACHE_EXPIRY is not None and now2 < _CACHE_EXPIRY:
+        if (
+            _DYNAMIC_TOOLS_CACHE is not None
+            and _CACHE_EXPIRY is not None
+            and now2 < _CACHE_EXPIRY
+        ):
             return _DYNAMIC_TOOLS_CACHE
         _DYNAMIC_TOOLS_CACHE = tools
         _CACHE_EXPIRY = now2 + _DEFAULT_CACHE_TTL

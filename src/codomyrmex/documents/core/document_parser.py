@@ -47,21 +47,26 @@ class DocumentParser:
 
         except Exception as e:
             logger.error(f"Error parsing document: {e}")
-            raise DocumentParseError(f"Failed to parse document: {str(e)}") from e
+            raise DocumentParseError(f"Failed to parse document: {e!s}") from e
 
     def _parse_content(self, content: str, format: DocumentFormat) -> Any:
         """Parse content based on format."""
         if format == DocumentFormat.JSON:
             import json
+
             return json.loads(content)
-        elif format == DocumentFormat.YAML:
+        if format == DocumentFormat.YAML:
             import yaml
+
             return yaml.safe_load(content)
-        elif format in [DocumentFormat.MARKDOWN, DocumentFormat.TEXT, DocumentFormat.HTML]:
+        if format in [
+            DocumentFormat.MARKDOWN,
+            DocumentFormat.TEXT,
+            DocumentFormat.HTML,
+        ]:
             return content
-        else:
-            # For other formats, return as string for now
-            return content
+        # For other formats, return as string for now
+        return content
 
 
 def parse_document(
@@ -84,6 +89,3 @@ def parse_document(
     """
     parser = DocumentParser()
     return parser.parse(content, format, file_path)
-
-
-

@@ -80,8 +80,7 @@ class SensorManager:
     """Manages sensor data collection and device integration."""
 
     def __init__(self):
-        """  Init  .
-            """
+        """Init  ."""
         self.devices: dict[str, DeviceInterface] = {}
         self.readings: list[SensorReading] = []
         self._callbacks: dict[str, list[Callable]] = {}
@@ -155,7 +154,9 @@ class SensorManager:
             try:
                 self._callbacks[sensor_key].remove(callback)
             except ValueError as e:
-                logger.debug("Callback not found during unsubscribe for %s: %s", sensor_key, e)
+                logger.debug(
+                    "Callback not found during unsubscribe for %s: %s", sensor_key, e
+                )
 
     def get_device_status(self, device_id: str) -> DeviceStatus | None:
         """Get device connection status."""
@@ -434,12 +435,12 @@ class CoordinateSystem:
 
 
 __all__ = [
-    "SensorType",
-    "DeviceStatus",
-    "SensorReading",
-    "DeviceInterface",
-    "SensorManager",
-    "PhysicalConstants",
-    "UnitConverter",
     "CoordinateSystem",
+    "DeviceInterface",
+    "DeviceStatus",
+    "PhysicalConstants",
+    "SensorManager",
+    "SensorReading",
+    "SensorType",
+    "UnitConverter",
 ]

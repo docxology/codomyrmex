@@ -19,6 +19,7 @@ from codomyrmex.ide.antigravity.models import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _connected_client(tmp_path: Path) -> tuple["AntigravityClient", Path]:
     """Create a connected AntigravityClient with a conversation directory."""
     conv_dir = tmp_path / "test_conv"
@@ -31,6 +32,7 @@ def _connected_client(tmp_path: Path) -> tuple["AntigravityClient", Path]:
 # ---------------------------------------------------------------------------
 # Construction and defaults
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestClientConstruction:
@@ -77,6 +79,7 @@ class TestClientConstruction:
 # Connection lifecycle
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestClientConnection:
     """connect() / disconnect() lifecycle tests."""
@@ -109,6 +112,7 @@ class TestClientConnection:
     def test_connect_picks_most_recent(self, tmp_path):
         """connect() picks the directory with the most recent mtime."""
         import time
+
         (tmp_path / "old").mkdir()
         time.sleep(0.05)
         (tmp_path / "new").mkdir()
@@ -139,6 +143,7 @@ class TestClientConnection:
 # ---------------------------------------------------------------------------
 # Capabilities
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestClientCapabilities:
@@ -206,6 +211,7 @@ class TestClientCapabilities:
 # execute_command
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestClientExecuteCommand:
     """execute_command() behavior."""
@@ -213,6 +219,7 @@ class TestClientExecuteCommand:
     def test_execute_command_when_not_connected_raises(self):
         """execute_command raises CommandExecutionError when disconnected."""
         from codomyrmex.ide import CommandExecutionError
+
         client = AntigravityClient()
         with pytest.raises(CommandExecutionError, match="Not connected"):
             client.execute_command("view_file")
@@ -220,6 +227,7 @@ class TestClientExecuteCommand:
     def test_execute_command_unknown_raises(self, tmp_path):
         """execute_command raises CommandExecutionError for unknown command."""
         from codomyrmex.ide import CommandExecutionError
+
         client, _ = _connected_client(tmp_path)
         with pytest.raises(CommandExecutionError, match="Unknown command"):
             client.execute_command("totally_unknown_cmd_xyz")
@@ -243,6 +251,7 @@ class TestClientExecuteCommand:
 # ---------------------------------------------------------------------------
 # File methods (open_file, get_open_files, get_active_file)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestClientFileMethods:
@@ -274,6 +283,7 @@ class TestClientFileMethods:
 # ---------------------------------------------------------------------------
 # Artifact CRUD
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestClientArtifactCRUD:
@@ -378,6 +388,7 @@ class TestClientArtifactCRUD:
 # Conversations
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestClientConversations:
     """list_conversations() and switch_conversation() tests."""
@@ -453,6 +464,7 @@ class TestClientConversations:
 # Session statistics
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestClientSessionStats:
     """get_session_stats() tests."""
@@ -461,8 +473,14 @@ class TestClientSessionStats:
         """get_session_stats returns dict with expected keys."""
         stats = AntigravityClient().get_session_stats()
         assert isinstance(stats, dict)
-        for key in ("connected", "conversation_id", "artifact_count",
-                    "commands_executed", "success_rate", "last_command"):
+        for key in (
+            "connected",
+            "conversation_id",
+            "artifact_count",
+            "commands_executed",
+            "success_rate",
+            "last_command",
+        ):
             assert key in stats
 
     def test_session_stats_disconnected_defaults(self):
@@ -495,6 +513,7 @@ class TestClientSessionStats:
 # invoke_tool
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestClientInvokeTool:
     """invoke_tool() tests."""
@@ -519,6 +538,7 @@ class TestClientInvokeTool:
 # ---------------------------------------------------------------------------
 # Artifact type classification (_scan_artifacts)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestClientArtifactClassification:

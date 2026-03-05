@@ -42,7 +42,9 @@ class TestSecurityPrinciples:
 
     def test_apply_principle(self):
         """Test applying a security principle."""
-        result = apply_principle("least_privilege", {"user": "admin", "resource": "database"})
+        result = apply_principle(
+            "least_privilege", {"user": "admin", "resource": "database"}
+        )
         assert isinstance(result, dict)
         assert "applied" in result
 
@@ -97,7 +99,7 @@ class TestThreatModeling:
         threat_model = create_threat_model(
             system_name="web_application",
             assets=["user_data", "payment_info"],
-            attack_surface=["web_interface", "api_endpoints"]
+            attack_surface=["web_interface", "api_endpoints"],
         )
         assert threat_model is not None
         assert isinstance(threat_model, ThreatModel)
@@ -108,9 +110,7 @@ class TestThreatModeling:
     def test_analyze_threats(self):
         """Test analyzing threats in a threat model."""
         threat_model = create_threat_model(
-            system_name="test_system",
-            assets=["asset1"],
-            attack_surface=["surface1"]
+            system_name="test_system", assets=["asset1"], attack_surface=["surface1"]
         )
         analysis = analyze_threats(threat_model)
         assert isinstance(analysis, dict)
@@ -137,7 +137,7 @@ class TestRiskAssessment:
         """Test performing risk assessment."""
         context = {
             "system": "payment_processor",
-            "threats": ["data_breach", "unauthorized_access"]
+            "threats": ["data_breach", "unauthorized_access"],
         }
         assessment = assess_risk(context)
         assert assessment is not None
@@ -195,4 +195,3 @@ class TestBestPractices:
         assert isinstance(compliance, dict)
         assert "total_practices" in compliance
         assert "compliant" in compliance
-

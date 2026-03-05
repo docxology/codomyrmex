@@ -223,7 +223,9 @@ class TestGenerateTerrain:
 
     def test_feature_at_center_creates_peak(self) -> None:
         """A feature at origin (0, 0) creates a peak near the center."""
-        feature = MapFeature(name="center", position=np.array([0.0, 0.0]), magnitude=10.0)
+        feature = MapFeature(
+            name="center", position=np.array([0.0, 0.0]), magnitude=10.0
+        )
         terrain = generate_terrain([feature], resolution=100)
         # The center of the map should have the highest value
         center = 50

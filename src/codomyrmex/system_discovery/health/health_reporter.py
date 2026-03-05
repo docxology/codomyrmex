@@ -13,9 +13,11 @@ from typing import Any
 # Import logging
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 # Import health checker
@@ -57,11 +59,13 @@ class HealthReport:
             "degraded_modules": self.degraded_modules,
             "unhealthy_modules": self.unhealthy_modules,
             "unknown_modules": self.unknown_modules,
-            "module_results": {name: result.to_dict() for name, result in self.module_results.items()},
+            "module_results": {
+                name: result.to_dict() for name, result in self.module_results.items()
+            },
             "system_metrics": self.system_metrics,
             "recommendations": self.recommendations,
             "critical_issues": self.critical_issues,
-            "summary": self._generate_summary()
+            "summary": self._generate_summary(),
         }
 
     def _generate_summary(self) -> dict[str, Any]:
@@ -69,8 +73,8 @@ class HealthReport:
         health_score = 0.0
         if self.total_modules > 0:
             health_score = (
-                (self.healthy_modules * 1.0 +
-                 self.degraded_modules * 0.5) / self.total_modules
+                (self.healthy_modules * 1.0 + self.degraded_modules * 0.5)
+                / self.total_modules
             ) * 100
 
         overall_status = "unknown"
@@ -85,9 +89,8 @@ class HealthReport:
             "health_score_percentage": round(health_score, 1),
             "overall_status": overall_status,
             "modules_checked": self.total_modules,
-            "issues_count": len(self.critical_issues) + sum(
-                len(result.issues) for result in self.module_results.values()
-            )
+            "issues_count": len(self.critical_issues)
+            + sum(len(result.issues) for result in self.module_results.values()),
         }
 
 
@@ -103,7 +106,9 @@ class HealthReporter:
         """Initialize the health reporter."""
         self.checker = HealthChecker() if HealthChecker else None
 
-    def generate_health_report(self, modules: list[str], include_system_metrics: bool = True) -> HealthReport:
+    def generate_health_report(
+        self, modules: list[str], include_system_metrics: bool = True
+    ) -> HealthReport:
         """
         Generate a health report for specified modules.
 
@@ -148,10 +153,9 @@ class HealthReporter:
                 logger.error(f"Failed to check module {module_name}: {e}")
                 # Create a failed result
                 failed_result = HealthCheckResult(
-                    module_name=module_name,
-                    status=HealthStatus.UNKNOWN
+                    module_name=module_name, status=HealthStatus.UNKNOWN
                 )
-                failed_result.add_issue(f"Health check failed: {str(e)}")
+                failed_result.add_issue(f"Health check failed: {e!s}")
                 report.module_results[module_name] = failed_result
                 report.unknown_modules += 1
 
@@ -161,6 +165,7 @@ class HealthReporter:
                 from codomyrmex.performance.monitoring.performance_monitor import (
                     get_system_metrics,
                 )
+
                 report.system_metrics = get_system_metrics()
             except Exception as e:
                 logger.warning(f"Failed to collect system metrics: {e}")
@@ -179,7 +184,9 @@ class HealthReporter:
         """Create an empty report for error cases."""
         report = HealthReport()
         report.critical_issues.append("HealthChecker not available")
-        report.recommendations.append("Install required dependencies for health checking")
+        report.recommendations.append(
+            "Install required dependencies for health checking"
+        )
         return report
 
     def _generate_overall_recommendations(self, report: HealthReport) -> None:
@@ -201,9 +208,13 @@ class HealthReporter:
             memory_percent = report.system_metrics.get("memory_percent", 0)
 
             if cpu_percent > 80:
-                report.recommendations.append("High CPU usage detected - consider resource optimization")
+                report.recommendations.append(
+                    "High CPU usage detected - consider resource optimization"
+                )
             if memory_percent > 80:
-                report.recommendations.append("High memory usage detected - check for memory leaks")
+                report.recommendations.append(
+                    "High memory usage detected - check for memory leaks"
+                )
 
         # Module-specific recommendations
         for module_name, result in report.module_results.items():
@@ -230,11 +241,11 @@ class HealthReporter:
         if format == "json":
             return json.dumps(report.to_dict(), indent=2)
 
-        elif format == "markdown":
+        if format == "markdown":
             return self._format_markdown_report(report)
 
-        else:  # text format
-            return self._format_text_report(report)
+        # text format
+        return self._format_text_report(report)
 
     def _format_text_report(self, report: HealthReport) -> str:
         """Format report as plain text."""
@@ -248,7 +259,9 @@ class HealthReporter:
 
         # Summary
         summary = report._generate_summary()
-        lines.append(f"Generated: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(report.timestamp))}")
+        lines.append(
+            f"Generated: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(report.timestamp))}"
+        )
         lines.append(f"Duration: {report.duration_seconds:.2f}s")
         lines.append("")
         lines.append(f"Overall Status: {summary['overall_status'].upper()}")
@@ -299,7 +312,9 @@ class HealthReporter:
         lines.append("")
 
         summary = report._generate_summary()
-        lines.append(f"**Generated:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(report.timestamp))}")
+        lines.append(
+            f"**Generated:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(report.timestamp))}"
+        )
         lines.append(f"**Duration:** {report.duration_seconds:.2f}s")
         lines.append(f"**Overall Status:** {summary['overall_status'].upper()}")
         lines.append(f"**Health Score:** {summary['health_score_percentage']}%")
@@ -350,7 +365,9 @@ class HealthReporter:
 
         return "\n".join(lines)
 
-    def export_health_report(self, report: HealthReport, filepath: str, format: str | None = None) -> None:
+    def export_health_report(
+        self, report: HealthReport, filepath: str, format: str | None = None
+    ) -> None:
         """
         Export a health report to a file.
 
@@ -359,17 +376,17 @@ class HealthReporter:
             format: Export format (inferred from extension if None)
         """
         if format is None:
-            if filepath.endswith('.json'):
-                format = 'json'
-            elif filepath.endswith('.md'):
-                format = 'markdown'
+            if filepath.endswith(".json"):
+                format = "json"
+            elif filepath.endswith(".md"):
+                format = "markdown"
             else:
-                format = 'text'
+                format = "text"
 
         formatted_report = self.format_health_report(report, format)
 
         try:
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, "w", encoding="utf-8") as f:
                 f.write(formatted_report)
 
             logger.info(f"Health report exported to {filepath}")
@@ -378,7 +395,9 @@ class HealthReporter:
             logger.error(f"Failed to export health report to {filepath}: {e}")
             raise
 
-    def compare_health_reports(self, current: HealthReport, previous: HealthReport) -> dict[str, Any]:
+    def compare_health_reports(
+        self, current: HealthReport, previous: HealthReport
+    ) -> dict[str, Any]:
         """
         Compare two health reports to identify changes.
 
@@ -398,14 +417,15 @@ class HealthReporter:
             "new_issues": [],
             "resolved_issues": [],
             "new_modules": [],
-            "removed_modules": []
+            "removed_modules": [],
         }
 
         # Calculate health score change
         current_summary = current._generate_summary()
         previous_summary = previous._generate_summary()
         comparison["health_score_change"] = (
-            current_summary["health_score_percentage"] - previous_summary["health_score_percentage"]
+            current_summary["health_score_percentage"]
+            - previous_summary["health_score_percentage"]
         )
 
         # Compare module statuses
@@ -427,7 +447,7 @@ class HealthReporter:
             if current_status != previous_status:
                 comparison["status_changes"][module] = {
                     "from": previous_status.value,
-                    "to": current_status.value
+                    "to": current_status.value,
                 }
 
         # Compare issues

@@ -11,17 +11,21 @@ try:
         SLOTracker,
         SLOViolation,
     )
+
     HAS_MODULE = True
 except ImportError:
     HAS_MODULE = False
 
 if not HAS_MODULE:
-    pytest.skip("observability_dashboard.slo module not available", allow_module_level=True)
+    pytest.skip(
+        "observability_dashboard.slo module not available", allow_module_level=True
+    )
 
 
 @pytest.mark.unit
 class TestSLIType:
     """Test suite for SLIType."""
+
     def test_availability(self):
         assert SLIType.AVAILABILITY is not None
 
@@ -41,6 +45,7 @@ class TestSLIType:
 @pytest.mark.unit
 class TestSLI:
     """Test suite for SLI."""
+
     def test_create_sli(self):
         sli = SLI(name="availability", sli_type=SLIType.AVAILABILITY)
         assert sli.name == "availability"
@@ -69,6 +74,7 @@ class TestSLI:
 @pytest.mark.unit
 class TestSLO:
     """Test suite for SLO."""
+
     def test_create_slo(self):
         sli = SLI(name="avail", sli_type=SLIType.AVAILABILITY)
         slo = SLO(id="slo-1", name="API Availability", sli=sli, target=0.999)
@@ -86,6 +92,7 @@ class TestSLO:
 @pytest.mark.unit
 class TestSLOViolation:
     """Test suite for SLOViolation."""
+
     def test_create_violation(self):
         violation = SLOViolation(
             slo_id="slo-1",
@@ -101,6 +108,7 @@ class TestSLOViolation:
 @pytest.mark.unit
 class TestSLOTracker:
     """Test suite for SLOTracker."""
+
     def test_create_tracker(self):
         tracker = SLOTracker()
         assert tracker is not None
@@ -140,6 +148,7 @@ class TestSLOTracker:
 @pytest.mark.unit
 class TestErrorBudgetPolicy:
     """Test suite for ErrorBudgetPolicy."""
+
     def test_create_policy(self):
         tracker = SLOTracker()
         policy = ErrorBudgetPolicy(tracker=tracker)

@@ -20,7 +20,6 @@ class CostStore(ABC):
     @abstractmethod
     def save_entry(self, entry: CostEntry) -> None:
         """Save a cost entry."""
-        pass
 
     @abstractmethod
     def get_entries(
@@ -31,7 +30,6 @@ class CostStore(ABC):
         tags_filter: dict[str, str] | None = None,
     ) -> list[CostEntry]:
         """Get entries in date range with optional filtering."""
-        pass
 
 
 class InMemoryCostStore(CostStore):

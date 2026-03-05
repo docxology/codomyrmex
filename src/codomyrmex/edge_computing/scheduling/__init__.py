@@ -7,6 +7,6 @@ from .scheduler import EdgeScheduler, ScheduledJob, ScheduleType
 
 __all__ = [
     "EdgeScheduler",
-    "ScheduledJob",
     "ScheduleType",
+    "ScheduledJob",
 ]

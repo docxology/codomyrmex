@@ -16,11 +16,11 @@ from codomyrmex.plugin_system.core.plugin_registry import Plugin, PluginInfo
 @dataclass
 class ValidationResult:
     """Represents the results of a plugin validation."""
+
     valid: bool = True
     issues: list[dict[str, Any]] = field(default_factory=list)
     warnings: list[dict[str, Any]] = field(default_factory=list)
     security_score: float = 100.0
-
 
 
 class PluginValidator:
@@ -31,46 +31,70 @@ class PluginValidator:
     def __init__(self):
         """Initialize the validator."""
         self.rules = []
-        self.risky_imports = ['os', 'subprocess', 'shutil', 'socket', 'requests', 'urllib']
+        self.risky_imports = [
+            "os",
+            "subprocess",
+            "shutil",
+            "socket",
+            "requests",
+            "urllib",
+        ]
         self.suspicious_patterns = [
-            (r'os\.system\(', 'Direct shell command execution'),
-            (r'subprocess\.', 'Subprocess execution'),
-            (r'eval\(', 'Code evaluation'),
-            (r'exec\(', 'Explicit code execution'),
-            (r'open\(.*w', 'Write access to filesystem'),
-            (r'rm\s+-rf', 'Recursive deletion command'),
-            (r'chmod', 'Permission modification'),
-            (r'sk-[a-zA-Z0-9]{32}', 'Possible hardcoded API key')
+            (r"os\.system\(", "Direct shell command execution"),
+            (r"subprocess\.", "Subprocess execution"),
+            (r"eval\(", "Code evaluation"),
+            (r"exec\(", "Explicit code execution"),
+            (r"open\(.*w", "Write access to filesystem"),
+            (r"rm\s+-rf", "Recursive deletion command"),
+            (r"chmod", "Permission modification"),
+            (r"sk-[a-zA-Z0-9]{32}", "Possible hardcoded API key"),
         ]
         self.safe_dependencies = {"requests", "click", "pyyaml", "pytest"}
-        self.risky_dependencies = {"cryptography", "paramiko", "docker", "os", "subprocess"}
+        self.risky_dependencies = {
+            "cryptography",
+            "paramiko",
+            "docker",
+            "os",
+            "subprocess",
+        }
 
     def validate(self, plugin: Plugin) -> ValidationResult:
         """Validate a plugin instance."""
         result = ValidationResult()
-        required_methods = ['initialize', 'shutdown']
+        required_methods = ["initialize", "shutdown"]
         for method in required_methods:
             if not hasattr(plugin, method):
                 result.valid = False
-                result.issues.append({
-                    'type': 'compatibility',
-                    'message': f"Plugin missing required method: {method}",
-                    'severity': 'error'
-                })
+                result.issues.append(
+                    {
+                        "type": "compatibility",
+                        "message": f"Plugin missing required method: {method}",
+                        "severity": "error",
+                    }
+                )
         return result
 
     def validate_plugin_metadata(self, metadata: dict[str, Any]) -> ValidationResult:
         """Validate plugin metadata dictionary."""
         result = ValidationResult()
-        required_fields = ['name', 'version']
+        required_fields = ["name", "version"]
         for field_name in required_fields:
             if field_name not in metadata:
                 result.valid = False
-                result.issues.append({'type': 'metadata', 'message': f"Missing field: {field_name}", 'severity': 'error'})
+                result.issues.append(
+                    {
+                        "type": "metadata",
+                        "message": f"Missing field: {field_name}",
+                        "severity": "error",
+                    }
+                )
         return result
 
-    def check_plugin_dependencies(self, dependencies_or_info: PluginInfo | list[str],
-                                 available_plugins: list[str] | None = None) -> ValidationResult:
+    def check_plugin_dependencies(
+        self,
+        dependencies_or_info: PluginInfo | list[str],
+        available_plugins: list[str] | None = None,
+    ) -> ValidationResult:
         """Check if plugin dependencies are satisfied."""
         result = ValidationResult()
         deps = []
@@ -84,30 +108,58 @@ class PluginValidator:
             if available_plugins is not None:
                 if dep not in available_plugins:
                     result.valid = False
-                    result.issues.append({'type': 'dependency', 'message': f"Missing dependency: {dep}", 'severity': 'error'})
-            else:
-                # If not provided, check against risky/safe lists
-                if dep in self.risky_dependencies:
-                    result.warnings.append({'type': 'dependency', 'message': f"Risky dependency: {dep}", 'severity': 'warning'})
-                elif dep in self.safe_dependencies:
-                    pass # Explicitly safe
+                    result.issues.append(
+                        {
+                            "type": "dependency",
+                            "message": f"Missing dependency: {dep}",
+                            "severity": "error",
+                        }
+                    )
+            # If not provided, check against risky/safe lists
+            elif dep in self.risky_dependencies:
+                result.warnings.append(
+                    {
+                        "type": "dependency",
+                        "message": f"Risky dependency: {dep}",
+                        "severity": "warning",
+                    }
+                )
+            elif dep in self.safe_dependencies:
+                pass  # Explicitly safe
 
         return result
-
 
     def validate_dockerfile(self, content: str) -> ValidationResult:
         """Validate a plugin Dockerfile."""
         result = ValidationResult()
         if "FROM" not in content:
             result.valid = False
-            result.issues.append({'type': 'docker', 'message': "Missing FROM instruction", 'severity': 'error'})
+            result.issues.append(
+                {
+                    "type": "docker",
+                    "message": "Missing FROM instruction",
+                    "severity": "error",
+                }
+            )
 
         # Security checks
         if "chmod 777" in content:
             result.valid = False
-            result.issues.append({'type': 'security', 'message': "Broad permissions detected", 'severity': 'error'})
+            result.issues.append(
+                {
+                    "type": "security",
+                    "message": "Broad permissions detected",
+                    "severity": "error",
+                }
+            )
         if "USER root" in content:
-            result.warnings.append({'type': 'security', 'message': "Running as root is discouraged", 'severity': 'warning'})
+            result.warnings.append(
+                {
+                    "type": "security",
+                    "message": "Running as root is discouraged",
+                    "severity": "warning",
+                }
+            )
 
         return result
 
@@ -117,32 +169,49 @@ class PluginValidator:
         """
         if isinstance(target, str) and os.path.exists(target):
             return self._scan_file_security(target)
-        elif hasattr(target, 'info'):
+        if hasattr(target, "info"):
             return self.validate(target)
-        else:
-            return ValidationResult()
+        return ValidationResult()
 
     def _scan_file_security(self, file_path: str) -> ValidationResult:
         """Perform security scan on a plugin file."""
         result = ValidationResult()
         try:
-            with open(file_path, encoding='utf-8', errors='ignore') as f:
+            with open(file_path, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
             issues_found = 0
             for imp in self.risky_imports:
-                if re.search(fr'\bimport\s+{imp}\b|\bfrom\s+{imp}\s+import\b', content):
-                    result.warnings.append({'type': 'security', 'message': f"Risky import detected: {imp}", 'severity': 'warning'})
+                if re.search(rf"\bimport\s+{imp}\b|\bfrom\s+{imp}\s+import\b", content):
+                    result.warnings.append(
+                        {
+                            "type": "security",
+                            "message": f"Risky import detected: {imp}",
+                            "severity": "warning",
+                        }
+                    )
                     issues_found += 1
             for pattern, description in self.suspicious_patterns:
                 if re.search(pattern, content):
-                    result.issues.append({'type': 'security', 'message': f"Dangerous pattern found: {description}", 'severity': 'error'})
+                    result.issues.append(
+                        {
+                            "type": "security",
+                            "message": f"Dangerous pattern found: {description}",
+                            "severity": "error",
+                        }
+                    )
                     issues_found += 1
             result.security_score = max(0, 100 - (issues_found * 20))
             if issues_found > 0:
                 result.valid = False
         except Exception as e:
             result.valid = False
-            result.issues.append({'type': 'security', 'message': f"Error scanning file: {e}", 'severity': 'error'})
+            result.issues.append(
+                {
+                    "type": "security",
+                    "message": f"Error scanning file: {e}",
+                    "severity": "error",
+                }
+            )
         return result
 
 

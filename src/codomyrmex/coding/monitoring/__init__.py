@@ -9,8 +9,7 @@ from .metrics_collector import MetricsCollector
 from .resource_tracker import ResourceMonitor
 
 __all__ = [
-    "ResourceMonitor",
     "ExecutionMonitor",
     "MetricsCollector",
+    "ResourceMonitor",
 ]
-

@@ -73,10 +73,7 @@ class RuleRegistry:
         cross_dir = self._root / "cross-module"
         if not cross_dir.is_dir():
             return []
-        return [
-            self._load(f)
-            for f in sorted(cross_dir.glob("*.cursorrules"))
-        ]
+        return [self._load(f) for f in sorted(cross_dir.glob("*.cursorrules"))]
 
     def get_file_rule(self, file_path: str | Path) -> Rule | None:
         """Infer and return the file-specific rule for *file_path*, or None.
@@ -96,8 +93,7 @@ class RuleRegistry:
         if not modules_dir.is_dir():
             return []
         return sorted(
-            f.name[: -len(".cursorrules")]
-            for f in modules_dir.glob("*.cursorrules")
+            f.name[: -len(".cursorrules")] for f in modules_dir.glob("*.cursorrules")
         )
 
     def list_cross_module_names(self) -> list[str]:
@@ -106,8 +102,7 @@ class RuleRegistry:
         if not cross_dir.is_dir():
             return []
         return sorted(
-            f.name[: -len(".cursorrules")]
-            for f in cross_dir.glob("*.cursorrules")
+            f.name[: -len(".cursorrules")] for f in cross_dir.glob("*.cursorrules")
         )
 
     def list_file_rule_names(self) -> list[str]:
@@ -116,8 +111,7 @@ class RuleRegistry:
         if not fs_dir.is_dir():
             return []
         return sorted(
-            f.name[: -len(".cursorrules")]
-            for f in fs_dir.glob("*.cursorrules")
+            f.name[: -len(".cursorrules")] for f in fs_dir.glob("*.cursorrules")
         )
 
     def list_all_rules(self) -> list[Rule]:
@@ -137,7 +131,9 @@ class RuleRegistry:
             if rule is not None:
                 all_rules.append(rule)
         for name in self.list_file_rule_names():
-            rule = self._load_if_exists(self._root / "file-specific" / f"{name}.cursorrules")
+            rule = self._load_if_exists(
+                self._root / "file-specific" / f"{name}.cursorrules"
+            )
             if rule is not None:
                 all_rules.append(rule)
         return sorted(all_rules, key=lambda r: r.priority.value)

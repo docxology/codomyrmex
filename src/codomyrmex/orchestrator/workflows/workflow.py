@@ -1,4 +1,3 @@
-
 """Workflow Orchestration Module.
 
 This module provides support for defining and executing Directed Acyclic Graphs (DAGs)
@@ -24,11 +23,24 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-__all__ = ["TaskStatus", "RetryPolicy", "TaskResult", "Task", "WorkflowError", "CycleError", "TaskFailedError", "Workflow", "chain", "parallel", "fan_out_fan_in"]
+__all__ = [
+    "CycleError",
+    "RetryPolicy",
+    "Task",
+    "TaskFailedError",
+    "TaskResult",
+    "TaskStatus",
+    "Workflow",
+    "WorkflowError",
+    "chain",
+    "fan_out_fan_in",
+    "parallel",
+]
 
 
 class TaskStatus(Enum):
     """Task execution status."""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -40,6 +52,7 @@ class TaskStatus(Enum):
 @dataclass
 class RetryPolicy:
     """Retry configuration for tasks."""
+
     max_attempts: int = 3
     initial_delay: float = 1.0
     max_delay: float = 60.0
@@ -55,6 +68,7 @@ class RetryPolicy:
 @dataclass
 class TaskResult:
     """Result of a task execution."""
+
     success: bool
     value: Any = None
     error: str | None = None
@@ -65,6 +79,7 @@ class TaskResult:
 @dataclass
 class Task:
     """Represents a single unit of work in a workflow."""
+
     name: str
     action: Callable[..., Any]
     args: list[Any] = field(default_factory=list)
@@ -116,22 +131,20 @@ class Task:
             value=self.result,
             error=str(self.error) if self.error else None,
             execution_time=self.execution_time,
-            attempts=self.attempts
+            attempts=self.attempts,
         )
+
 
 class WorkflowError(Exception):
     """Base exception for workflow errors."""
-    pass
 
 
 class CycleError(WorkflowError):
     """Raised when a circular dependency is detected."""
-    pass
 
 
 class TaskFailedError(WorkflowError):
     """Raised when a required task fails."""
-    pass
 
 
 ProgressCallback = Callable[[str, str, dict[str, Any]], None]
@@ -197,8 +210,8 @@ class Workflow:
         condition: Callable[[dict[str, TaskResult]], bool] | None = None,
         transform_result: Callable[[Any], Any] | None = None,
         tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None
-    ) -> 'Workflow':
+        metadata: dict[str, Any] | None = None,
+    ) -> "Workflow":
         """Add a task to the workflow.
 
         Args:
@@ -233,7 +246,7 @@ class Workflow:
             condition=condition,
             transform_result=transform_result,
             tags=set(tags) if tags else set(),
-            metadata=metadata or {}
+            metadata=metadata or {},
         )
         self.tasks[name] = task
         return self
@@ -243,7 +256,9 @@ class Workflow:
         self._cancelled = True
         self.logger.info(f"Workflow '{self.name}' cancellation requested")
 
-    def _emit_progress(self, task_name: str, status: str, details: dict[str, Any] = None):
+    def _emit_progress(
+        self, task_name: str, status: str, details: dict[str, Any] = None
+    ):
         """Emit progress update if callback is registered."""
         if self.progress_callback:
             try:
@@ -257,7 +272,9 @@ class Workflow:
         for name, task in self.tasks.items():
             for dep in task.dependencies:
                 if dep not in self.tasks:
-                    raise WorkflowError(f"Task '{name}' depends on unknown task '{dep}'")
+                    raise WorkflowError(
+                        f"Task '{name}' depends on unknown task '{dep}'"
+                    )
 
         # 2. Check for cycles
         visited = set()
@@ -269,7 +286,9 @@ class Workflow:
 
             for dep in self.tasks[task_name].dependencies:
                 if dep in path:
-                    raise CycleError(f"Circular dependency detected: {task_name} -> {dep}")
+                    raise CycleError(
+                        f"Circular dependency detected: {task_name} -> {dep}"
+                    )
                 if dep not in visited:
                     check_cycle(dep)
 
@@ -294,16 +313,18 @@ class Workflow:
         self._cancelled = False
         self.task_results.clear()
 
-        self.logger.info(f"Starting workflow '{self.name}' with {len(self.tasks)} tasks.")
+        self.logger.info(
+            f"Starting workflow '{self.name}' with {len(self.tasks)} tasks."
+        )
         self._emit_progress("workflow", "started", {"total_tasks": len(self.tasks)})
 
         # Emit typed event
         try:
             from .observability.orchestrator_events import workflow_started as _ws
+
             self._publish_event(_ws(self.name, len(self.tasks)))
         except ImportError as e:
             self.logger.debug("Observability events not available: %s", e)
-            pass
 
         # Reset task states
         for task in self.tasks.values():
@@ -318,7 +339,9 @@ class Workflow:
         failed_tasks = set()
         skipped_tasks = set()
 
-        while len(completed_tasks) + len(failed_tasks) + len(skipped_tasks) < len(self.tasks):
+        while len(completed_tasks) + len(failed_tasks) + len(skipped_tasks) < len(
+            self.tasks
+        ):
             # Check cancellation
             if self._cancelled:
                 self.logger.info("Workflow cancelled")
@@ -341,20 +364,29 @@ class Workflow:
                             task.status = TaskStatus.SKIPPED
                             skipped_tasks.add(name)
                             self.task_results[name] = task.get_result()
-                            self._emit_progress(name, "skipped", {"reason": "condition"})
+                            self._emit_progress(
+                                name, "skipped", {"reason": "condition"}
+                            )
 
             # Handle blocked tasks
-            if not runnable and (len(completed_tasks) + len(failed_tasks) + len(skipped_tasks) < len(self.tasks)):
+            if not runnable and (
+                len(completed_tasks) + len(failed_tasks) + len(skipped_tasks)
+                < len(self.tasks)
+            ):
                 blocked = False
                 for name, task in self.tasks.items():
                     if task.status == TaskStatus.PENDING:
                         if not task.dependencies.isdisjoint(failed_tasks):
-                            self.logger.warning(f"Task '{name}' skipped due to failed dependencies.")
+                            self.logger.warning(
+                                f"Task '{name}' skipped due to failed dependencies."
+                            )
                             task.status = TaskStatus.SKIPPED
                             task.error = Exception("Dependency failed")
                             skipped_tasks.add(name)
                             self.task_results[name] = task.get_result()
-                            self._emit_progress(name, "skipped", {"reason": "dependency_failed"})
+                            self._emit_progress(
+                                name, "skipped", {"reason": "dependency_failed"}
+                            )
                             blocked = True
 
                 if blocked:
@@ -374,10 +406,10 @@ class Workflow:
                 self._emit_progress(task.name, "running", {})
                 try:
                     from .observability.orchestrator_events import task_started as _ts
+
                     self._publish_event(_ts(self.name, task.name))
                 except ImportError as e:
                     self.logger.debug("Observability events not available: %s", e)
-                    pass
                 coroutines.append(self._execute_task_with_retry(task))
 
             results = await asyncio.gather(*coroutines, return_exceptions=True)
@@ -394,10 +426,10 @@ class Workflow:
                         from .observability.orchestrator_events import (
                             task_failed as _tf,
                         )
+
                         self._publish_event(_tf(self.name, task.name, str(result)))
                     except ImportError as e:
                         self.logger.debug("Observability events not available: %s", e)
-                        pass
 
                     if self.fail_fast:
                         self.logger.info("Fail-fast: stopping workflow")
@@ -408,56 +440,73 @@ class Workflow:
                         try:
                             result = task.transform_result(result)
                         except Exception as e:
-                            self.logger.warning(f"Result transform failed for {task.name}: {e}")
+                            self.logger.warning(
+                                f"Result transform failed for {task.name}: {e}"
+                            )
 
                     task.status = TaskStatus.COMPLETED
                     task.result = result
                     completed_tasks.add(task.name)
                     self.task_results[task.name] = task.get_result()
-                    self.logger.info(f"Task '{task.name}' completed in {task.execution_time:.2f}s")
-                    self._emit_progress(task.name, "completed", {
-                        "execution_time": task.execution_time,
-                        "attempts": task.attempts
-                    })
+                    self.logger.info(
+                        f"Task '{task.name}' completed in {task.execution_time:.2f}s"
+                    )
+                    self._emit_progress(
+                        task.name,
+                        "completed",
+                        {
+                            "execution_time": task.execution_time,
+                            "attempts": task.attempts,
+                        },
+                    )
                     try:
                         from .observability.orchestrator_events import (
                             task_completed as _tc,
                         )
-                        self._publish_event(_tc(
-                            self.name, task.name,
-                            execution_time=task.execution_time,
-                            attempts=task.attempts,
-                        ))
+
+                        self._publish_event(
+                            _tc(
+                                self.name,
+                                task.name,
+                                execution_time=task.execution_time,
+                                attempts=task.attempts,
+                            )
+                        )
                     except ImportError as e:
                         self.logger.debug("Observability events not available: %s", e)
-                        pass
 
         # Summary
         elapsed = time.time() - self._start_time
-        self._emit_progress("workflow", "completed", {
-            "completed": len(completed_tasks),
-            "failed": len(failed_tasks),
-            "skipped": len(skipped_tasks),
-            "elapsed": elapsed
-        })
+        self._emit_progress(
+            "workflow",
+            "completed",
+            {
+                "completed": len(completed_tasks),
+                "failed": len(failed_tasks),
+                "skipped": len(skipped_tasks),
+                "elapsed": elapsed,
+            },
+        )
 
         # Emit typed workflow completed/failed event
         try:
             from .observability.orchestrator_events import workflow_completed as _wc
             from .observability.orchestrator_events import workflow_failed as _wf
+
             if failed_tasks:
                 self._publish_event(_wf(self.name, f"{len(failed_tasks)} tasks failed"))
             else:
-                self._publish_event(_wc(
-                    self.name,
-                    completed=len(completed_tasks),
-                    failed=len(failed_tasks),
-                    skipped=len(skipped_tasks),
-                    elapsed=elapsed,
-                ))
+                self._publish_event(
+                    _wc(
+                        self.name,
+                        completed=len(completed_tasks),
+                        failed=len(failed_tasks),
+                        skipped=len(skipped_tasks),
+                        elapsed=elapsed,
+                    )
+                )
         except ImportError as e:
             self.logger.debug("Observability events not available: %s", e)
-            pass
 
         results = {name: task.result for name, task in self.tasks.items()}
         return results
@@ -486,11 +535,11 @@ class Workflow:
                         f"retrying in {delay:.1f}s: {e}"
                     )
                     task.status = TaskStatus.RETRYING
-                    self._emit_progress(task.name, "retrying", {
-                        "attempt": attempt,
-                        "delay": delay,
-                        "error": str(e)
-                    })
+                    self._emit_progress(
+                        task.name,
+                        "retrying",
+                        {"attempt": attempt, "delay": delay, "error": str(e)},
+                    )
                     await asyncio.sleep(delay)
                 else:
                     self.logger.error(
@@ -515,28 +564,27 @@ class Workflow:
             if asyncio.iscoroutinefunction(task.action):
                 if task.timeout:
                     return await asyncio.wait_for(
-                        task.action(*task.args, **kwargs),
-                        timeout=task.timeout
+                        task.action(*task.args, **kwargs), timeout=task.timeout
                     )
-                else:
-                    return await task.action(*task.args, **kwargs)
-            else:
-                # Run sync functions in thread pool to avoid blocking
-                loop = asyncio.get_running_loop()
-                # Remove injected results for sync functions that might not expect them
-                if "_task_results" in kwargs and "_task_results" not in task.kwargs:
-                    del kwargs["_task_results"]
-                def func():
-                    return task.action(*task.args, **kwargs)
-                if task.timeout:
-                    return await asyncio.wait_for(
-                        loop.run_in_executor(None, func),
-                        timeout=task.timeout
-                    )
-                else:
-                    return await loop.run_in_executor(None, func)
+                return await task.action(*task.args, **kwargs)
+            # Run sync functions in thread pool to avoid blocking
+            loop = asyncio.get_running_loop()
+            # Remove injected results for sync functions that might not expect them
+            if "_task_results" in kwargs and "_task_results" not in task.kwargs:
+                del kwargs["_task_results"]
+
+            def func():
+                return task.action(*task.args, **kwargs)
+
+            if task.timeout:
+                return await asyncio.wait_for(
+                    loop.run_in_executor(None, func), timeout=task.timeout
+                )
+            return await loop.run_in_executor(None, func)
         except TimeoutError:
-            raise TimeoutError(f"Task '{task.name}' timed out after {task.timeout}s") from None
+            raise TimeoutError(
+                f"Task '{task.name}' timed out after {task.timeout}s"
+            ) from None
 
     def get_task_result(self, task_name: str) -> TaskResult | None:
         """Get result of a specific task."""
@@ -544,7 +592,9 @@ class Workflow:
 
     def get_summary(self) -> dict[str, Any]:
         """Get workflow execution summary."""
-        completed = sum(1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED)
+        completed = sum(
+            1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED
+        )
         failed = sum(1 for t in self.tasks.values() if t.status == TaskStatus.FAILED)
         skipped = sum(1 for t in self.tasks.values() if t.status == TaskStatus.SKIPPED)
         pending = sum(1 for t in self.tasks.values() if t.status == TaskStatus.PENDING)
@@ -567,10 +617,10 @@ class Workflow:
                     "status": task.status.value,
                     "execution_time": task.execution_time,
                     "attempts": task.attempts,
-                    "error": str(task.error) if task.error else None
+                    "error": str(task.error) if task.error else None,
                 }
                 for name, task in self.tasks.items()
-            }
+            },
         }
 
 
@@ -591,7 +641,11 @@ def chain(*actions: Callable, names: list[str] | None = None) -> Workflow:
     prev_name = None
 
     for i, action in enumerate(actions):
-        name = names[i] if names and i < len(names) else getattr(action, "__name__", f"task_{i}")
+        name = (
+            names[i]
+            if names and i < len(names)
+            else getattr(action, "__name__", f"task_{i}")
+        )
         deps = [prev_name] if prev_name else None
         workflow.add_task(name=name, action=action, dependencies=deps)
         prev_name = name
@@ -612,7 +666,11 @@ def parallel(*actions: Callable, names: list[str] | None = None) -> Workflow:
     workflow = Workflow(name="parallel")
 
     for i, action in enumerate(actions):
-        name = names[i] if names and i < len(names) else getattr(action, "__name__", f"task_{i}")
+        name = (
+            names[i]
+            if names and i < len(names)
+            else getattr(action, "__name__", f"task_{i}")
+        )
         workflow.add_task(name=name, action=action)
 
     return workflow
@@ -623,7 +681,7 @@ def fan_out_fan_in(
     parallel_tasks: list[Callable],
     final: Callable,
     initial_name: str = "initial",
-    final_name: str = "final"
+    final_name: str = "final",
 ) -> Workflow:
     """Create a fan-out/fan-in workflow pattern.
 
@@ -653,4 +711,3 @@ def fan_out_fan_in(
     workflow.add_task(name=final_name, action=final, dependencies=parallel_names)
 
     return workflow
-

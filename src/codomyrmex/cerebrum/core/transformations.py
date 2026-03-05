@@ -36,13 +36,14 @@ class ModelTransformer(ABC):
         Returns:
             Transformed model
         """
-        pass
 
 
 class AdaptationTransformer(ModelTransformer):
     """Adapts models based on new cases."""
 
-    def __init__(self, adaptation_rate: float = 0.1, config: dict[str, Any] | None = None):
+    def __init__(
+        self, adaptation_rate: float = 0.1, config: dict[str, Any] | None = None
+    ):
         """Initialize adaptation transformer.
 
         Args:
@@ -68,10 +69,9 @@ class AdaptationTransformer(ModelTransformer):
             if not case:
                 raise TransformationError("Case required for case-based adaptation")
             return self.adapt_to_case(model, case)
-        elif transformation_type == "update_parameters":
+        if transformation_type == "update_parameters":
             return self.update_parameters(model, kwargs.get("updates", {}))
-        else:
-            raise TransformationError(f"Unknown transformation type: {transformation_type}")
+        raise TransformationError(f"Unknown transformation type: {transformation_type}")
 
     def adapt_to_case(self, model: Model, case: Case) -> Model:
         """Adapt model to a new case.
@@ -100,10 +100,13 @@ class AdaptationTransformer(ModelTransformer):
                 if param_key in adapted.parameters:
                     current = adapted.parameters[param_key]
                     adapted.parameters[param_key] = (
-                        current * (1 - self.adaptation_rate) + value * self.adaptation_rate
+                        current * (1 - self.adaptation_rate)
+                        + value * self.adaptation_rate
                     )
 
-        adapted.metadata["adaptation_history"] = adapted.metadata.get("adaptation_history", [])
+        adapted.metadata["adaptation_history"] = adapted.metadata.get(
+            "adaptation_history", []
+        )
         adapted.metadata["adaptation_history"].append(
             {"case_id": case.case_id, "adaptation_rate": self.adaptation_rate}
         )
@@ -135,7 +138,9 @@ class AdaptationTransformer(ModelTransformer):
 class LearningTransformer(ModelTransformer):
     """Updates models through learning from feedback."""
 
-    def __init__(self, learning_rate: float = 0.01, config: dict[str, Any] | None = None):
+    def __init__(
+        self, learning_rate: float = 0.01, config: dict[str, Any] | None = None
+    ):
         """Initialize learning transformer.
 
         Args:
@@ -161,11 +166,10 @@ class LearningTransformer(ModelTransformer):
             if not feedback:
                 raise TransformationError("Feedback required for learning")
             return self.learn_from_feedback(model, feedback)
-        elif transformation_type == "gradient_update":
+        if transformation_type == "gradient_update":
             gradient = kwargs.get("gradient", {})
             return self.gradient_update(model, gradient)
-        else:
-            raise TransformationError(f"Unknown transformation type: {transformation_type}")
+        raise TransformationError(f"Unknown transformation type: {transformation_type}")
 
     def learn_from_feedback(self, model: Model, feedback: dict[str, Any]) -> Model:
         """Learn from feedback.
@@ -193,7 +197,9 @@ class LearningTransformer(ModelTransformer):
                 if isinstance(learned.parameters[param_key], (int, float)):
                     learned.parameters[param_key] += self.learning_rate * error
 
-        learned.metadata["learning_history"] = learned.metadata.get("learning_history", [])
+        learned.metadata["learning_history"] = learned.metadata.get(
+            "learning_history", []
+        )
         learned.metadata["learning_history"].append(
             {"feedback": feedback, "learning_rate": self.learning_rate}
         )
@@ -221,9 +227,9 @@ class LearningTransformer(ModelTransformer):
         # Apply gradient updates
         for param_key, grad_value in gradient.items():
             if param_key in updated.parameters:
-                if isinstance(updated.parameters[param_key], (int, float)) and isinstance(
-                    grad_value, (int, float)
-                ):
+                if isinstance(
+                    updated.parameters[param_key], (int, float)
+                ) and isinstance(grad_value, (int, float)):
                     updated.parameters[param_key] -= self.learning_rate * grad_value
 
         self.logger.debug(f"Applied gradient update to model {model.name}")
@@ -249,7 +255,11 @@ class TransformationManager:
         self.logger.debug(f"Registered transformer: {name}")
 
     def transform(
-        self, model: Model, transformation_type: str, transformer_name: str | None = None, **kwargs
+        self,
+        model: Model,
+        transformation_type: str,
+        transformer_name: str | None = None,
+        **kwargs,
     ) -> Model:
         """Transform a model.
 
@@ -266,14 +276,14 @@ class TransformationManager:
             if transformer_name not in self.transformers:
                 raise TransformationError(f"Transformer {transformer_name} not found")
             transformer = self.transformers[transformer_name]
+        # Select appropriate transformer based on transformation type
+        elif transformation_type.startswith("adapt"):
+            transformer = self.transformers.get("adaptation", AdaptationTransformer())
+        elif transformation_type.startswith("learn"):
+            transformer = self.transformers.get("learning", LearningTransformer())
         else:
-            # Select appropriate transformer based on transformation type
-            if transformation_type.startswith("adapt"):
-                transformer = self.transformers.get("adaptation", AdaptationTransformer())
-            elif transformation_type.startswith("learn"):
-                transformer = self.transformers.get("learning", LearningTransformer())
-            else:
-                raise TransformationError(f"No transformer found for type: {transformation_type}")
+            raise TransformationError(
+                f"No transformer found for type: {transformation_type}"
+            )
 
         return transformer.transform(model, transformation_type, **kwargs)
-

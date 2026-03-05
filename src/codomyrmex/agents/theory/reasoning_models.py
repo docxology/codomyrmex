@@ -46,7 +46,6 @@ class ReasoningModel(ABC):
         Returns:
             Reasoning result
         """
-        pass
 
     @abstractmethod
     def explain(self, result: dict[str, Any]) -> str:
@@ -59,7 +58,6 @@ class ReasoningModel(ABC):
         Returns:
             Explanation string
         """
-        pass
 
 
 class SymbolicReasoningModel(ReasoningModel):
@@ -134,13 +132,13 @@ class SymbolicReasoningModel(ReasoningModel):
 
             fact_value = knowledge[fact]
 
-            if operator == "==" and fact_value != value:
+            if (operator == "==" and fact_value != value) or (
+                operator == "!=" and fact_value == value
+            ):
                 return False
-            elif operator == "!=" and fact_value == value:
-                return False
-            elif operator == ">" and fact_value <= value:
-                return False
-            elif operator == "<" and fact_value >= value:
+            if (operator == ">" and fact_value <= value) or (
+                operator == "<" and fact_value >= value
+            ):
                 return False
 
         return True
@@ -281,5 +279,3 @@ class HybridReasoningModel(ReasoningModel):
         neural_explanation = self.neural.explain(result.get("neural", {}))
 
         return f"Symbolic Reasoning:\n{symbolic_explanation}\n\nNeural Reasoning:\n{neural_explanation}"
-
-

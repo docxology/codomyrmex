@@ -19,6 +19,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class CursorClient(IDEClient):
     """Client for interacting with Cursor IDE.
 
@@ -65,13 +66,20 @@ class CursorClient(IDEClient):
             "name": "Cursor",
             "version": "latest",
             "features": [
-                "composer", "chat", "inline_edit",
-                "code_generation", "code_explanation",
-                "rules_management", "model_selection",
+                "composer",
+                "chat",
+                "inline_edit",
+                "code_generation",
+                "code_explanation",
+                "rules_management",
+                "model_selection",
             ],
             "models": [
-                "gpt-4", "gpt-4-turbo", "gpt-3.5-turbo",
-                "claude-3-opus", "claude-3-sonnet",
+                "gpt-4",
+                "gpt-4-turbo",
+                "gpt-3.5-turbo",
+                "claude-3-opus",
+                "claude-3-sonnet",
             ],
             "connected": self._connected,
             "workspace": str(self.workspace_path),
@@ -99,11 +107,42 @@ class CursorClient(IDEClient):
 
         # Scan workspace for source files, return the most recently modified
         source_extensions = {
-            ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".go", ".rs",
-            ".c", ".cpp", ".h", ".hpp", ".md", ".json", ".yaml", ".yml",
-            ".toml", ".cfg", ".ini", ".sh", ".bash", ".zsh", ".rb",
-            ".swift", ".kt", ".scala", ".html", ".css", ".scss", ".vue",
-            ".svelte", ".sql", ".graphql", ".proto", ".tf", ".dockerfile",
+            ".py",
+            ".js",
+            ".ts",
+            ".jsx",
+            ".tsx",
+            ".java",
+            ".go",
+            ".rs",
+            ".c",
+            ".cpp",
+            ".h",
+            ".hpp",
+            ".md",
+            ".json",
+            ".yaml",
+            ".yml",
+            ".toml",
+            ".cfg",
+            ".ini",
+            ".sh",
+            ".bash",
+            ".zsh",
+            ".rb",
+            ".swift",
+            ".kt",
+            ".scala",
+            ".html",
+            ".css",
+            ".scss",
+            ".vue",
+            ".svelte",
+            ".sql",
+            ".graphql",
+            ".proto",
+            ".tf",
+            ".dockerfile",
         }
 
         best_file: Path | None = None
@@ -143,7 +182,7 @@ class CursorClient(IDEClient):
         for p in self.workspace_path.glob("**/*"):
             if p.is_file() and p.suffix in {".py", ".ts", ".js", ".md"}:
                 files.append(str(p.absolute()))
-                if len(files) >= 5: # Limit for simulation
+                if len(files) >= 5:  # Limit for simulation
                     break
         return files
 
@@ -189,5 +228,6 @@ class CursorClient(IDEClient):
     def set_model(self, model: str) -> bool:
         """Set the active AI model."""
         return model in self.get_models()
+
 
 __all__ = ["CursorClient"]

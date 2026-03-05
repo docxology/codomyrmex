@@ -189,7 +189,9 @@ class TestMCPClientPrompts:
     def test_get_prompt(self, client):
         async def _test():
             await client.initialize()
-            result = await client.get_prompt("greet", {"greeting": "hi", "name": "Alice"})
+            result = await client.get_prompt(
+                "greet", {"greeting": "hi", "name": "Alice"}
+            )
             return result
 
         result = asyncio.run(_test())

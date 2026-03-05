@@ -44,17 +44,31 @@ from .types import (
 
 __all__ = [
     # Enums
-    "VaultSpace", "KernelLayer", "PipelineStage", "ConfigDimension",
-    "HealthStatus", "SkillType",
+    "VaultSpace",
+    "KernelLayer",
+    "PipelineStage",
+    "ConfigDimension",
+    "HealthStatus",
+    "SkillType",
     # Dataclasses
-    "KernelPrimitive", "ResearchClaim", "DimensionSignal", "StageResult",
-    "VaultHealthReport", "KernelConfig", "VaultConfig",
+    "KernelPrimitive",
+    "ResearchClaim",
+    "DimensionSignal",
+    "StageResult",
+    "VaultHealthReport",
+    "KernelConfig",
+    "VaultConfig",
     # Exceptions
-    "ArsContextaError", "VaultNotFoundError",
-    "PrimitiveValidationError", "PipelineError",
+    "ArsContextaError",
+    "VaultNotFoundError",
+    "PrimitiveValidationError",
+    "PipelineError",
     # Services
-    "KernelPrimitiveRegistry", "ProcessingPipeline",
-    "DerivationEngine", "MethodologyGraph", "VaultHealthChecker",
+    "KernelPrimitiveRegistry",
+    "ProcessingPipeline",
+    "DerivationEngine",
+    "MethodologyGraph",
+    "VaultHealthChecker",
     # Core
     "ArsContextaManager",
 ]

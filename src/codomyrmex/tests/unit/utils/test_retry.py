@@ -7,7 +7,6 @@ non-retryable exception, preserves return value), async_retry decorator.
 Uses base_delay=0.0 to avoid real sleeps in tests.
 """
 
-
 import pytest
 
 from codomyrmex.utils.retry import RetryConfig, _compute_delay, async_retry, retry
@@ -39,37 +38,49 @@ class TestRetryConfig:
 @pytest.mark.unit
 class TestComputeDelay:
     def test_no_jitter_attempt_zero(self):
-        c = RetryConfig(base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=60.0)
+        c = RetryConfig(
+            base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=60.0
+        )
         delay = _compute_delay(0, c)
         # 1.0 * 2^0 = 1.0
         assert delay == pytest.approx(1.0)
 
     def test_no_jitter_attempt_one(self):
-        c = RetryConfig(base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=60.0)
+        c = RetryConfig(
+            base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=60.0
+        )
         delay = _compute_delay(1, c)
         # 1.0 * 2^1 = 2.0
         assert delay == pytest.approx(2.0)
 
     def test_no_jitter_attempt_three(self):
-        c = RetryConfig(base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=60.0)
+        c = RetryConfig(
+            base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=60.0
+        )
         delay = _compute_delay(3, c)
         # 1.0 * 2^3 = 8.0
         assert delay == pytest.approx(8.0)
 
     def test_max_delay_capped(self):
-        c = RetryConfig(base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=5.0)
+        c = RetryConfig(
+            base_delay=1.0, exponential_base=2.0, jitter=False, max_delay=5.0
+        )
         delay = _compute_delay(10, c)
         assert delay == pytest.approx(5.0)
 
     def test_jitter_produces_value_in_range(self):
-        c = RetryConfig(base_delay=1.0, exponential_base=2.0, jitter=True, max_delay=60.0)
+        c = RetryConfig(
+            base_delay=1.0, exponential_base=2.0, jitter=True, max_delay=60.0
+        )
         # With jitter, delay = 1.0 * uniform(0.5, 1.5) → [0.5, 1.5]
         for _ in range(20):
             delay = _compute_delay(0, c)
             assert 0.5 <= delay <= 1.5
 
     def test_zero_base_delay(self):
-        c = RetryConfig(base_delay=0.0, exponential_base=2.0, jitter=False, max_delay=60.0)
+        c = RetryConfig(
+            base_delay=0.0, exponential_base=2.0, jitter=False, max_delay=60.0
+        )
         delay = _compute_delay(5, c)
         assert delay == pytest.approx(0.0)
 
@@ -120,7 +131,12 @@ class TestRetryDecorator:
     def test_non_retryable_exception_propagates_immediately(self):
         call_count = [0]
 
-        @retry(max_attempts=3, base_delay=0.0, jitter=False, retryable_exceptions=(ValueError,))
+        @retry(
+            max_attempts=3,
+            base_delay=0.0,
+            jitter=False,
+            retryable_exceptions=(ValueError,),
+        )
         def wrong_exception():
             call_count[0] += 1
             raise TypeError("not retryable")
@@ -166,7 +182,12 @@ class TestRetryDecorator:
     def test_specific_retryable_exception(self):
         call_count = [0]
 
-        @retry(max_attempts=3, base_delay=0.0, jitter=False, retryable_exceptions=(OSError,))
+        @retry(
+            max_attempts=3,
+            base_delay=0.0,
+            jitter=False,
+            retryable_exceptions=(OSError,),
+        )
         def os_error():
             call_count[0] += 1
             raise OSError("io error")
@@ -238,7 +259,12 @@ class TestAsyncRetryDecorator:
     async def test_async_non_retryable_propagates(self):
         call_count = [0]
 
-        @async_retry(max_attempts=3, base_delay=0.0, jitter=False, retryable_exceptions=(OSError,))
+        @async_retry(
+            max_attempts=3,
+            base_delay=0.0,
+            jitter=False,
+            retryable_exceptions=(OSError,),
+        )
         async def async_type_error():
             call_count[0] += 1
             raise TypeError("not retryable async")

@@ -51,6 +51,7 @@ class GoogleDriveClient(GoogleWorkspaceBase):
         Returns:
             File metadata dict, or empty dict on error.
         """
+
         def _call():
             return self._get_service().files().get(fileId=file_id).execute()
 
@@ -130,6 +131,7 @@ class GoogleDriveClient(GoogleWorkspaceBase):
         Returns:
             True on success, False on error.
         """
+
         def _call():
             self._get_service().files().delete(fileId=file_id).execute()
             return True

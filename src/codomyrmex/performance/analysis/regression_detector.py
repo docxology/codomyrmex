@@ -10,7 +10,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-__all__ = ["RegressionSeverity", "BenchmarkResult", "Baseline", "RegressionReport", "RegressionDetector"]
+__all__ = [
+    "Baseline",
+    "BenchmarkResult",
+    "RegressionDetector",
+    "RegressionReport",
+    "RegressionSeverity",
+]
 
 
 class RegressionSeverity(Enum):
@@ -57,7 +63,7 @@ class Baseline:
     mean: float
     stddev: float = 0.0
     sample_count: int = 1
-    warning_threshold: float = 0.10   # 10% regression
+    warning_threshold: float = 0.10  # 10% regression
     critical_threshold: float = 0.25  # 25% regression
 
 
@@ -159,7 +165,7 @@ class RegressionDetector:
         message = (
             f"{result.name}: {result.value:.2f}{result.unit} "
             f"(baseline {baseline.mean:.2f}{result.unit}, "
-            f"{abs(deviation)*100:.1f}% {direction}) "
+            f"{abs(deviation) * 100:.1f}% {direction}) "
             f"[{severity.value}]"
         )
 
@@ -190,7 +196,9 @@ class RegressionDetector:
                 reports.append(self.check(r))
         return reports
 
-    def regressions_only(self, reports: list[RegressionReport]) -> list[RegressionReport]:
+    def regressions_only(
+        self, reports: list[RegressionReport]
+    ) -> list[RegressionReport]:
         """Filter reports to include only actual regressions."""
         return [r for r in reports if r.is_regression]
 
@@ -204,7 +212,9 @@ class RegressionDetector:
             Multi-line summary string.
         """
         regressions = self.regressions_only(reports)
-        lines = [f"Performance Report: {len(reports)} benchmarks, {len(regressions)} regressions"]
+        lines = [
+            f"Performance Report: {len(reports)} benchmarks, {len(regressions)} regressions"
+        ]
         for r in reports:
             flag = "⚠" if r.is_regression else "✓"
             lines.append(f"  {flag} {r.message}")

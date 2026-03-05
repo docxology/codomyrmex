@@ -21,7 +21,7 @@ Example:
     ...     source_code="x = undefined_var",
     ...     stdout="",
     ...     stderr="NameError: name 'undefined_var' is not defined",
-    ...     exit_code=1
+    ...     exit_code=1,
     ... )
 """
 
@@ -34,8 +34,8 @@ __all__ = [
     "Debugger",
     "ErrorAnalyzer",
     "ErrorDiagnosis",
-    "PatchGenerator",
-    "Patch",
     "FixVerifier",
+    "Patch",
+    "PatchGenerator",
     "VerificationResult",
 ]

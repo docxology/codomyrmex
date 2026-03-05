@@ -23,6 +23,7 @@ logger = get_logger(__name__)
 # Enums
 # ---------------------------------------------------------------------------
 
+
 class PaginationStrategy(Enum):
     """Supported pagination strategies."""
 
@@ -30,15 +31,18 @@ class PaginationStrategy(Enum):
     CURSOR = "cursor"
     KEYSET = "keyset"
 
+
 class SortDirection(Enum):
     """Sort ordering direction."""
 
     ASC = "asc"
     DESC = "desc"
 
+
 # ---------------------------------------------------------------------------
 # Dataclasses
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class PageInfo:
@@ -116,6 +120,7 @@ class PageInfo:
 
         return headers
 
+
 @dataclass
 class PaginatedResponse:
     """
@@ -139,6 +144,7 @@ class PaginatedResponse:
             "page_info": self.page_info.to_dict(),
         }
 
+
 @dataclass
 class PaginationRequest:
     """
@@ -159,9 +165,11 @@ class PaginationRequest:
     sort_field: str | None = None
     sort_direction: SortDirection = SortDirection.ASC
 
+
 # ---------------------------------------------------------------------------
 # Abstract base class
 # ---------------------------------------------------------------------------
+
 
 class Paginator(ABC):
     """Abstract base class for pagination strategies.
@@ -187,11 +195,12 @@ class Paginator(ABC):
             A :class:`PaginatedResponse` containing the requested page and
             metadata.
         """
-        pass
+
 
 # ---------------------------------------------------------------------------
 # Concrete implementations
 # ---------------------------------------------------------------------------
+
 
 class OffsetPaginator(Paginator):
     """Standard offset / page-number based pagination.
@@ -244,6 +253,7 @@ class OffsetPaginator(Paginator):
         )
 
         return PaginatedResponse(items=page_items, page_info=page_info)
+
 
 class CursorPaginator(Paginator):
     """Opaque cursor-based pagination using base64-encoded indices.
@@ -302,7 +312,7 @@ class CursorPaginator(Paginator):
             raise ValueError(f"Invalid cursor format: {cursor}")
 
         try:
-            return int(decoded[len("cursor:"):])
+            return int(decoded[len("cursor:") :])
         except ValueError as exc:
             raise ValueError(f"Invalid cursor index in: {cursor}") from exc
 
@@ -356,6 +366,7 @@ class CursorPaginator(Paginator):
         )
 
         return PaginatedResponse(items=page_items, page_info=page_info)
+
 
 class KeysetPaginator(Paginator):
     """Keyset (seek) pagination based on a sort field value.
@@ -483,9 +494,11 @@ class KeysetPaginator(Paginator):
 
         return PaginatedResponse(items=page_items, page_info=page_info)
 
+
 # ---------------------------------------------------------------------------
 # Factory
 # ---------------------------------------------------------------------------
+
 
 def create_paginator(
     strategy: PaginationStrategy = PaginationStrategy.OFFSET,
@@ -527,6 +540,7 @@ def create_paginator(
         )
 
     return paginator_class(**kwargs)
+
 
 # ---------------------------------------------------------------------------
 # Public API

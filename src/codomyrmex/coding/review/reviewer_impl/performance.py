@@ -18,7 +18,7 @@ class PerformanceOptMixin:
             "memory_optimizations": [],
             "cpu_optimizations": [],
             "io_optimizations": [],
-            "caching_opportunities": []
+            "caching_opportunities": [],
         }
 
         try:
@@ -39,7 +39,7 @@ class PerformanceOptMixin:
             "Use generators instead of lists for large datasets",
             "Implement object pooling for frequently created objects",
             "Use slots in classes to reduce memory overhead",
-            "Consider lazy loading for expensive resources"
+            "Consider lazy loading for expensive resources",
         ]
         return suggestions
 
@@ -49,7 +49,7 @@ class PerformanceOptMixin:
             "Cache expensive computations",
             "Use sets for membership tests instead of lists",
             "Avoid repeated string concatenations",
-            "Use list comprehensions instead of loops where appropriate"
+            "Use list comprehensions instead of loops where appropriate",
         ]
         return suggestions
 
@@ -59,7 +59,7 @@ class PerformanceOptMixin:
             "Batch file operations",
             "Use buffered I/O for large files",
             "Consider asynchronous I/O for network operations",
-            "Use compression for large data transfers"
+            "Use compression for large data transfers",
         ]
         return suggestions
 
@@ -69,7 +69,6 @@ class PerformanceOptMixin:
             "Cache parsed configuration files",
             "Cache expensive database queries",
             "Cache computed results with TTL",
-            "Use Redis/Memcached for distributed caching"
+            "Use Redis/Memcached for distributed caching",
         ]
         return suggestions
-

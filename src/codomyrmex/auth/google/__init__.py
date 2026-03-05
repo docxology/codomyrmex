@@ -6,4 +6,4 @@ for downstream integrations like Calendar and Gmail.
 
 from .authenticator import AUTH_AVAILABLE, DEFAULT_SCOPES, GoogleAuthenticator
 
-__all__ = ["GoogleAuthenticator", "DEFAULT_SCOPES", "AUTH_AVAILABLE"]
+__all__ = ["AUTH_AVAILABLE", "DEFAULT_SCOPES", "GoogleAuthenticator"]

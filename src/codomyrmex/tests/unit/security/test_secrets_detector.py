@@ -1,6 +1,5 @@
 """Tests for security/digital/secrets_detector.py — SecretsDetector."""
 
-
 import pytest
 
 from codomyrmex.security.digital.secrets_detector import (
@@ -39,7 +38,14 @@ class TestSecretFindingDataclass:
             description="Potential api key",
         )
         d = f.to_dict()
-        for key in ("file_path", "line_number", "secret_type", "confidence", "description", "snippet"):
+        for key in (
+            "file_path",
+            "line_number",
+            "secret_type",
+            "confidence",
+            "description",
+            "snippet",
+        ):
             assert key in d
 
     def test_to_dict_snippet_truncated(self):
@@ -72,7 +78,9 @@ class TestSecretsDetectorPatterns:
     def test_detect_private_key_header(self, tmp_path):
         """Detector finds RSA private key header."""
         f = tmp_path / "key.pem"
-        f.write_text("-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n-----END RSA PRIVATE KEY-----\n")
+        f.write_text(
+            "-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n-----END RSA PRIVATE KEY-----\n"
+        )
         detector = SecretsDetector()
         findings = detector.scan_file(str(f))
         types = {ff.secret_type for ff in findings}
@@ -95,7 +103,9 @@ class TestSecretsDetectorPatterns:
         f.write_text('password = "supersecretpassword"\n')
         detector = SecretsDetector()
         findings = detector.scan_file(str(f))
-        password_findings = [ff for ff in findings if ff.secret_type == "password_generic"]
+        password_findings = [
+            ff for ff in findings if ff.secret_type == "password_generic"
+        ]
         assert len(password_findings) >= 1
         assert password_findings[0].confidence == "MEDIUM"
 
@@ -208,8 +218,10 @@ class TestSecretsDetectorDirectory:
 
     def test_scan_directory_multiple_files(self, tmp_path):
         """scan_directory() returns findings from all scanned files."""
-        (tmp_path / "file1.py").write_text('aws_key = AKIAIOSFODNN7EXAMPLE\n')
-        (tmp_path / "file2.py").write_text('token: ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghi\n')
+        (tmp_path / "file1.py").write_text("aws_key = AKIAIOSFODNN7EXAMPLE\n")
+        (tmp_path / "file2.py").write_text(
+            "token: ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghi\n"
+        )
         detector = SecretsDetector()
         findings = detector.scan_directory(str(tmp_path))
         assert len(findings) >= 2

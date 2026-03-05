@@ -16,6 +16,7 @@ from codomyrmex.config_management.core.config_loader import (
 # ConfigurationManager -- file loading tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerFileLoading:
     """Tests for ConfigurationManager loading from files."""
@@ -97,6 +98,7 @@ class TestConfigurationManagerFileLoading:
 # ConfigurationManager -- environment variable override tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerEnvVars:
     """Tests for environment variable loading and override."""
@@ -170,6 +172,7 @@ class TestConfigurationManagerEnvVars:
 # ConfigurationManager -- merge / override / multi-source tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerMerge:
     """Tests for multi-source merging and override behavior."""
@@ -223,6 +226,7 @@ class TestConfigurationManagerMerge:
 # ConfigurationManager -- config_dir permission error fallback (lines 204-208)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestConfigurationManagerDirFallback:
     """Tests for config_dir creation fallback when directory is not writable."""
@@ -242,6 +246,7 @@ class TestConfigurationManagerDirFallback:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- URL source loading (lines 303, 328-340)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestConfigurationManagerUrlSource:
@@ -299,6 +304,7 @@ class TestConfigurationManagerUrlSource:
 # ConfigurationManager -- _load_file error paths
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLoadFileErrors:
     """Tests for _load_file error handling."""
@@ -326,6 +332,7 @@ class TestLoadFileErrors:
 # ---------------------------------------------------------------------------
 # ConfigurationManager -- _load_schema error and YAML paths
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestLoadSchemaEdgeCases:
@@ -379,6 +386,7 @@ class TestLoadSchemaEdgeCases:
 # ConfigurationManager -- _load_environment_variables edge cases
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.unit
 class TestLoadEnvironmentVariables:
     """Tests for _load_environment_variables edge cases."""
@@ -408,6 +416,7 @@ class TestLoadEnvironmentVariables:
 # ---------------------------------------------------------------------------
 # Convenience function -- load_configuration (lines 757-758)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.unit
 class TestLoadConfigurationConvenience:

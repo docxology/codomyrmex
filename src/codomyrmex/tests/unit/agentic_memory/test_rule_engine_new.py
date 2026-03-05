@@ -27,13 +27,13 @@ _RULES_ROOT = Path(__file__).resolve().parents[3] / "agentic_memory" / "rules"
 # ---------------------------------------------------------------------------
 
 
-@pytest.fixture()
+@pytest.fixture
 def rules_root():
     """Return the real rules root directory."""
     return _RULES_ROOT
 
 
-@pytest.fixture()
+@pytest.fixture
 def tmp_rules(tmp_path):
     """Create a temporary rules hierarchy for isolated tests."""
     (tmp_path / "general.cursorrules").write_text(

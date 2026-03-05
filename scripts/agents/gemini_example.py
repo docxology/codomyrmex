@@ -5,6 +5,7 @@ Gemini Agent Example
 Demonstrates basic usage of GeminiClient for Google API-based code generation.
 This script handles gracefully when Gemini API is not configured.
 """
+
 import sys
 from pathlib import Path
 
@@ -14,9 +15,20 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import GeminiClient, AgentRequest
-from codomyrmex.agents.exceptions import AgentConfigurationError, AgentError, GeminiError
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_error, print_info, print_warning
+from codomyrmex.agents.exceptions import (
+    AgentConfigurationError,
+    AgentError,
+    GeminiError,
+)
+
+from codomyrmex.agents import AgentRequest, GeminiClient
+from codomyrmex.utils.cli_helpers import (
+    print_error,
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
+)
 
 
 def is_config_error(error_msg: str) -> bool:
@@ -28,14 +40,21 @@ def is_config_error(error_msg: str) -> bool:
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
+
+    import yaml
+
+    config_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "config"
+        / "agents"
+        / "config.yaml"
+    )
     config_data = {}
     if config_path.exists():
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
+            print("Loaded config from config/agents/config.yaml")
 
     setup_logging()
     print_info("Initializing Gemini Agent...")
@@ -47,7 +66,7 @@ def main():
         print_warning(f"Gemini not configured: {e}")
         print_info("To configure: set GEMINI_API_KEY environment variable")
         return 0  # Exit gracefully - this is expected for demo scripts
-    
+
     # Test connection - wrap in try/except for safety
     try:
         if not client.test_connection():
@@ -72,22 +91,20 @@ def main():
             print_warning(f"Gemini not configured: {e}")
             print_info("To configure: set GEMINI_API_KEY environment variable")
             return 0
-        else:
-            print_error(f"Gemini Error: {e}")
-            return 1
+        print_error(f"Gemini Error: {e}")
+        return 1
 
     if response.is_success():
         print_success("Gemini Response:")
         print(response.content)
+    # Check if error is configuration-related
+    elif is_config_error(response.error):
+        print_warning(f"Gemini not configured: {response.error}")
+        print_info("To configure: set GEMINI_API_KEY environment variable")
+        return 0
     else:
-        # Check if error is configuration-related
-        if is_config_error(response.error):
-            print_warning(f"Gemini not configured: {response.error}")
-            print_info("To configure: set GEMINI_API_KEY environment variable")
-            return 0
-        else:
-            print_error(f"Gemini Error: {response.error}")
-            return 1
+        print_error(f"Gemini Error: {response.error}")
+        return 1
 
     return 0
 

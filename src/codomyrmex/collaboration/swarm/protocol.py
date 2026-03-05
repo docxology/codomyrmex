@@ -118,7 +118,9 @@ class SwarmAgent:
     @property
     def load(self) -> float:
         """Load of the agent (0.0 to 1.0)."""
-        return self.active_tasks / self.max_concurrent if self.max_concurrent > 0 else 1.0
+        return (
+            self.active_tasks / self.max_concurrent if self.max_concurrent > 0 else 1.0
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -175,9 +177,9 @@ class TaskAssignment:
 
 __all__ = [
     "AgentRole",
-    "SwarmMessageType",
     "SwarmAgent",
     "SwarmMessage",
+    "SwarmMessageType",
     "TaskAssignment",
     "TaskStatus",
 ]

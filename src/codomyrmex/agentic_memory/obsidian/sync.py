@@ -98,12 +98,14 @@ def sync_history(
     entries: list[SyncHistoryEntry] = []
     for line in result.lines:
         parts = line.split("\t")
-        entries.append(SyncHistoryEntry(
-            file=parts[0].strip() if len(parts) > 0 else "",
-            action=parts[1].strip() if len(parts) > 1 else "",
-            timestamp=parts[2].strip() if len(parts) > 2 else "",
-            raw=line,
-        ))
+        entries.append(
+            SyncHistoryEntry(
+                file=parts[0].strip() if len(parts) > 0 else "",
+                action=parts[1].strip() if len(parts) > 1 else "",
+                timestamp=parts[2].strip() if len(parts) > 2 else "",
+                raw=line,
+            )
+        )
     return entries
 
 
@@ -119,6 +121,7 @@ def sync_read(
     Maps to ``obsidian sync:read [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("sync:read", vault=vault, params=params or None).stdout
 
@@ -136,6 +139,7 @@ def sync_restore(
     Maps to ``obsidian sync:restore [file=|path=] [version=<id>]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     if version:
         params["version"] = version
@@ -154,6 +158,7 @@ def sync_open(
     Maps to ``obsidian sync:open [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("sync:open", vault=vault, params=params or None)
 
@@ -229,6 +234,7 @@ def publish_add(
     Maps to ``obsidian publish:add [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("publish:add", vault=vault, params=params or None)
 
@@ -245,6 +251,7 @@ def publish_remove(
     Maps to ``obsidian publish:remove [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("publish:remove", vault=vault, params=params or None)
 
@@ -261,5 +268,6 @@ def publish_open(
     Maps to ``obsidian publish:open [file=|path=]``.
     """
     from codomyrmex.agentic_memory.obsidian.cli import _file_or_path
+
     params = _file_or_path(file, path)
     return cli.run("publish:open", vault=vault, params=params or None)

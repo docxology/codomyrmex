@@ -62,8 +62,13 @@ class StandardizationOpenAPIGenerator:
     Used primarily by the standardization submodule.
     """
 
-    def __init__(self, title: str = "Codomyrmex API", version: str = "1.0.0",
-                 description: str = "API for Codomyrmex", base_url: str = "/api"):
+    def __init__(
+        self,
+        title: str = "Codomyrmex API",
+        version: str = "1.0.0",
+        description: str = "API for Codomyrmex",
+        base_url: str = "/api",
+    ):
         """
         Initialize the OpenAPI generator.
 
@@ -76,24 +81,16 @@ class StandardizationOpenAPIGenerator:
         self.title = title
         self.version = version
         self.description = description
-        self.base_url = base_url.rstrip('/')
+        self.base_url = base_url.rstrip("/")
         self.spec = OpenAPISpecification()
 
         # Initialize basic OpenAPI structure
         self.spec.spec = {
             "openapi": self.spec.version,
-            "info": {
-                "title": title,
-                "version": version,
-                "description": description
-            },
+            "info": {"title": title, "version": version, "description": description},
             "paths": {},
-            "components": {
-                "schemas": {},
-                "responses": {},
-                "parameters": {}
-            },
-            "tags": []
+            "components": {"schemas": {}, "responses": {}, "parameters": {}},
+            "tags": [],
         }
 
         logger.info(f"OpenAPI Generator initialized: {title} v{version}")
@@ -111,22 +108,24 @@ class StandardizationOpenAPIGenerator:
         if _restapi_class is None:
             try:
                 from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
+
                 _restapi_class = _RESTAPI
             except ImportError:
-                raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.") from None
+                raise ImportError(
+                    "RESTAPI class not available. Ensure standardization module is properly imported."
+                ) from None
 
         # Verify the api object has required methods (don't check isinstance to avoid import issues)
-        if not hasattr(api, 'get_endpoints'):
+        if not hasattr(api, "get_endpoints"):
             raise TypeError("API object must have get_endpoints method")
 
         for endpoint in api.get_endpoints():
             self._add_rest_endpoint(endpoint)
 
         # Add server information
-        self.spec.spec["servers"] = [{
-            "url": self.base_url,
-            "description": f"{api.title} v{api.version}"
-        }]
+        self.spec.spec["servers"] = [
+            {"url": self.base_url, "description": f"{api.title} v{api.version}"}
+        ]
 
         logger.debug(f"Added REST API with {len(api.get_endpoints())} endpoints")
 
@@ -144,9 +143,12 @@ class StandardizationOpenAPIGenerator:
                 from codomyrmex.api.standardization.graphql_api import (
                     GraphQLAPI as _GQL,
                 )
+
                 _GraphQLAPI = _GQL
             except ImportError:
-                raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.") from None
+                raise ImportError(
+                    "GraphQLAPI class not available. Ensure standardization module is properly imported."
+                ) from None
 
         # Add GraphQL endpoint
         graphql_path = "/graphql"
@@ -158,11 +160,9 @@ class StandardizationOpenAPIGenerator:
                     "required": True,
                     "content": {
                         "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/GraphQLRequest"
-                            }
+                            "schema": {"$ref": "#/components/schemas/GraphQLRequest"}
                         }
-                    }
+                    },
                 },
                 "responses": {
                     "200": {
@@ -173,10 +173,10 @@ class StandardizationOpenAPIGenerator:
                                     "$ref": "#/components/schemas/GraphQLResponse"
                                 }
                             }
-                        }
+                        },
                     }
                 },
-                "tags": ["graphql"]
+                "tags": ["graphql"],
             }
         }
 
@@ -192,16 +192,10 @@ class StandardizationOpenAPIGenerator:
                 "responses": {
                     "200": {
                         "description": "GraphQL Playground HTML",
-                        "content": {
-                            "text/html": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
+                        "content": {"text/html": {"schema": {"type": "string"}}},
                     }
                 },
-                "tags": ["graphql"]
+                "tags": ["graphql"],
             }
         }
 
@@ -220,9 +214,12 @@ class StandardizationOpenAPIGenerator:
                 from codomyrmex.api.standardization.api_versioning import (
                     APIVersionManager as _AVM2,
                 )
+
                 _AVM = _AVM2
             except ImportError:
-                raise ImportError("APIVersionManager class not available. Ensure standardization module is properly imported.") from None
+                raise ImportError(
+                    "APIVersionManager class not available. Ensure standardization module is properly imported."
+                ) from None
 
         # Add version parameter
         self.spec.spec["components"]["parameters"]["ApiVersion"] = {
@@ -233,15 +230,17 @@ class StandardizationOpenAPIGenerator:
             "schema": {
                 "type": "string",
                 "enum": list(version_manager.versions.keys()),
-                "default": version_manager.default_version
-            }
+                "default": version_manager.default_version,
+            },
         }
 
         # Add version information to info
         version_info = version_manager.get_version_info()
         self.spec.spec["info"]["x-api-versions"] = version_info
 
-        logger.debug(f"Added version information for {len(version_manager.versions)} versions")
+        logger.debug(
+            f"Added version information for {len(version_manager.versions)} versions"
+        )
 
     def _add_rest_endpoint(self, endpoint: StandardizationAPIEndpoint) -> None:
         """
@@ -259,7 +258,7 @@ class StandardizationOpenAPIGenerator:
         operation = {
             "summary": endpoint.summary or f"{method.upper()} {path}",
             "description": endpoint.description or "",
-            "responses": {}
+            "responses": {},
         }
 
         # Add parameters
@@ -275,15 +274,9 @@ class StandardizationOpenAPIGenerator:
             operation["responses"] = endpoint.responses
         else:
             # Default responses
-            operation["responses"]["200"] = {
-                "description": "Successful response"
-            }
-            operation["responses"]["400"] = {
-                "description": "Bad request"
-            }
-            operation["responses"]["500"] = {
-                "description": "Internal server error"
-            }
+            operation["responses"]["200"] = {"description": "Successful response"}
+            operation["responses"]["400"] = {"description": "Bad request"}
+            operation["responses"]["500"] = {"description": "Internal server error"}
 
         # Add tags
         if endpoint.tags:
@@ -304,21 +297,15 @@ class StandardizationOpenAPIGenerator:
         components["schemas"]["GraphQLRequest"] = {
             "type": "object",
             "properties": {
-                "query": {
-                    "type": "string",
-                    "description": "GraphQL query string"
-                },
+                "query": {"type": "string", "description": "GraphQL query string"},
                 "variables": {
                     "type": "object",
                     "description": "Query variables",
-                    "additionalProperties": True
+                    "additionalProperties": True,
                 },
-                "operationName": {
-                    "type": "string",
-                    "description": "Operation name"
-                }
+                "operationName": {"type": "string", "description": "Operation name"},
             },
-            "required": ["query"]
+            "required": ["query"],
         }
 
         components["schemas"]["GraphQLResponse"] = {
@@ -327,52 +314,39 @@ class StandardizationOpenAPIGenerator:
                 "data": {
                     "type": "object",
                     "description": "Query result data",
-                    "additionalProperties": True
+                    "additionalProperties": True,
                 },
                 "errors": {
                     "type": "array",
-                    "items": {
-                        "$ref": "#/components/schemas/GraphQLError"
-                    }
-                }
-            }
+                    "items": {"$ref": "#/components/schemas/GraphQLError"},
+                },
+            },
         }
 
         components["schemas"]["GraphQLError"] = {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string",
-                    "description": "Error message"
-                },
+                "message": {"type": "string", "description": "Error message"},
                 "locations": {
                     "type": "array",
-                    "items": {
-                        "$ref": "#/components/schemas/GraphQLLocation"
-                    }
+                    "items": {"$ref": "#/components/schemas/GraphQLLocation"},
                 },
-                "path": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
+                "path": {"type": "array", "items": {"type": "string"}},
+            },
         }
 
         components["schemas"]["GraphQLLocation"] = {
             "type": "object",
-            "properties": {
-                "line": {"type": "integer"},
-                "column": {"type": "integer"}
-            }
+            "properties": {"line": {"type": "integer"}, "column": {"type": "integer"}},
         }
 
         # Add GraphQL type schemas
         for type_name, type_def in schema.types.items():
             self._convert_graphql_type_to_openapi(type_name, type_def)
 
-    def _convert_graphql_type_to_openapi(self, name: str, graphql_type: GraphQLObjectType) -> None:
+    def _convert_graphql_type_to_openapi(
+        self, name: str, graphql_type: GraphQLObjectType
+    ) -> None:
         """
         Convert a GraphQL type to OpenAPI schema.
 
@@ -380,10 +354,7 @@ class StandardizationOpenAPIGenerator:
             name: Type name
             graphql_type: GraphQL type definition
         """
-        schema = {
-            "type": "object",
-            "properties": {}
-        }
+        schema = {"type": "object", "properties": {}}
 
         if graphql_type.description:
             schema["description"] = graphql_type.description
@@ -411,7 +382,7 @@ class StandardizationOpenAPIGenerator:
                 "Int": {"type": "integer"},
                 "Float": {"type": "number"},
                 "Boolean": {"type": "boolean"},
-                "ID": {"type": "string"}
+                "ID": {"type": "string"},
             }
 
             schema = type_mapping.get(field.type, {"type": "string"})
@@ -458,7 +429,9 @@ class StandardizationOpenAPIGenerator:
         """
         self.spec.spec["tags"].extend(tags)
 
-    def set_external_docs(self, url: str, description: str = "Find out more about this API") -> None:
+    def set_external_docs(
+        self, url: str, description: str = "Find out more about this API"
+    ) -> None:
         """
         Set external documentation.
 
@@ -466,10 +439,7 @@ class StandardizationOpenAPIGenerator:
             url: Documentation URL
             description: Documentation description
         """
-        self.spec.spec["externalDocs"] = {
-            "description": description,
-            "url": url
-        }
+        self.spec.spec["externalDocs"] = {"description": description, "url": url}
 
     def validate_spec(self) -> list[str]:
         """
@@ -500,7 +470,15 @@ class StandardizationOpenAPIGenerator:
                     continue
 
                 for method, operation in methods.items():
-                    if method not in ["get", "post", "put", "delete", "patch", "options", "head"]:
+                    if method not in [
+                        "get",
+                        "post",
+                        "put",
+                        "delete",
+                        "patch",
+                        "options",
+                        "head",
+                    ]:
                         errors.append(f"Invalid HTTP method: {method} for path {path}")
 
                     if "responses" not in operation:

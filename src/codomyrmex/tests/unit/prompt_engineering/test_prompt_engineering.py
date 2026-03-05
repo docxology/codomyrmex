@@ -36,6 +36,7 @@ if not HAS_MODULE:
 @pytest.mark.unit
 class TestPromptTemplate:
     """Test suite for PromptTemplate."""
+
     def test_create_template(self):
         t = PromptTemplate(name="greet", template_str="Hello, {name}!")
         assert t.name == "greet"
@@ -96,6 +97,7 @@ class TestPromptTemplate:
 @pytest.mark.unit
 class TestTemplateRegistry:
     """Test suite for TemplateRegistry."""
+
     def _make_template(self, name="t1"):
         return PromptTemplate(name=name, template_str=f"Template {name}: {{var}}")
 
@@ -173,6 +175,7 @@ class TestTemplateRegistry:
 @pytest.mark.unit
 class TestVersionManager:
     """Test suite for VersionManager."""
+
     def test_create_first_version(self):
         vm = VersionManager()
         t = PromptTemplate(name="qa", template_str="Q: {question}")
@@ -272,6 +275,7 @@ class TestVersionManager:
 @pytest.mark.unit
 class TestPromptOptimizer:
     """Test suite for PromptOptimizer."""
+
     def test_concise_optimization(self):
         optimizer = PromptOptimizer()
         t = PromptTemplate(
@@ -297,10 +301,12 @@ class TestPromptOptimizer:
 
     def test_few_shot_optimization(self):
         optimizer = PromptOptimizer()
-        optimizer.set_few_shot_examples([
-            {"input": "2+2", "output": "4"},
-            {"input": "3*3", "output": "9"},
-        ])
+        optimizer.set_few_shot_examples(
+            [
+                {"input": "2+2", "output": "4"},
+                {"input": "3*3", "output": "9"},
+            ]
+        )
         t = PromptTemplate(name="math", template_str="Calculate {expression}")
         result = optimizer.optimize(t, OptimizationStrategy.FEW_SHOT)
         assert "Example" in result.optimized.template_str
@@ -340,6 +346,7 @@ class TestPromptOptimizer:
 @pytest.mark.unit
 class TestScorerFunctions:
     """Test suite for ScorerFunctions."""
+
     def test_score_response_length_short(self):
         score = score_response_length("prompt", "short")
         assert 0.0 <= score <= 1.0
@@ -351,7 +358,9 @@ class TestScorerFunctions:
 
     def test_score_relevance_with_overlap(self):
         prompt = "Explain machine learning algorithms"
-        response = "Machine learning algorithms include decision trees and neural networks."
+        response = (
+            "Machine learning algorithms include decision trees and neural networks."
+        )
         score = score_relevance(prompt, response)
         assert score > 0.0
 
@@ -367,7 +376,7 @@ class TestScorerFunctions:
     def test_score_completeness_with_question(self):
         score = score_completeness(
             "What is Python?",
-            "Python is a high-level programming language known for readability and versatility."
+            "Python is a high-level programming language known for readability and versatility.",
         )
         assert score > 0.5
 
@@ -380,12 +389,13 @@ class TestScorerFunctions:
 @pytest.mark.unit
 class TestPromptEvaluator:
     """Test suite for PromptEvaluator."""
+
     def test_evaluate_returns_result(self):
         evaluator = PromptEvaluator()
         result = evaluator.evaluate(
             prompt="Explain testing",
             response="Testing is the process of verifying software correctness. "
-                     "It includes unit tests, integration tests, and end-to-end tests.",
+            "It includes unit tests, integration tests, and end-to-end tests.",
         )
         assert isinstance(result, EvaluationResult)
         assert 0.0 <= result.weighted_score <= 1.0

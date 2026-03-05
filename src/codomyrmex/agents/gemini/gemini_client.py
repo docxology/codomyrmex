@@ -326,6 +326,7 @@ class GeminiClient(BaseAgent):
             # Veo 2.0 returns a LongRunning Operation that requires polling
             if hasattr(operation, "done"):
                 import time
+
                 while not operation.done:
                     time.sleep(5)
                     operation = self.client.operations.get(operation=operation)
@@ -339,12 +340,15 @@ class GeminiClient(BaseAgent):
             # Bypass Pydantic dump crash
             outputs = []
             for video in getattr(result, "videos", []):
-                v_bytes = getattr(video, "video_bytes", None) or getattr(video, "video", None)
+                v_bytes = getattr(video, "video_bytes", None) or getattr(
+                    video, "video", None
+                )
                 v_uri = getattr(video, "uri", None)
                 if v_bytes:
                     outputs.append({"video_bytes": v_bytes})
                 elif v_uri:
                     import urllib.request
+
                     try:
                         req = urllib.request.urlopen(v_uri)
                         outputs.append({"video_bytes": req.read()})

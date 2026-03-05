@@ -14,6 +14,7 @@ try:
     from google.auth.transport.requests import Request
     from google.oauth2.credentials import Credentials
     from google_auth_oauthlib.flow import InstalledAppFlow
+
     AUTH_AVAILABLE = True
 except ImportError:
     AUTH_AVAILABLE = False
@@ -23,15 +24,20 @@ except ImportError:
 
 # Default scopes required for full bidirectional Email and Calendar functionality.
 DEFAULT_SCOPES = [
-    'https://www.googleapis.com/auth/calendar',
-    'https://www.googleapis.com/auth/gmail.modify'
+    "https://www.googleapis.com/auth/calendar",
+    "https://www.googleapis.com/auth/gmail.modify",
 ]
 
 
 class GoogleAuthenticator:
     """Handles Google OAuth2 authentication and token management."""
 
-    def __init__(self, client_secrets_file: str, token_cache_file: str | None = None, scopes: list | None = None):
+    def __init__(
+        self,
+        client_secrets_file: str,
+        token_cache_file: str | None = None,
+        scopes: list | None = None,
+    ):
         """
         Initialize the authenticator.
 
@@ -56,7 +62,7 @@ class GoogleAuthenticator:
 
         os.makedirs(os.path.dirname(self.token_file), exist_ok=True)
 
-    def get_credentials(self) -> "Credentials": # type: ignore
+    def get_credentials(self) -> "Credentials":  # type: ignore
         """
         Acquire valid credentials. Retrieves from cache if found and valid.
         Refreshes if expired. Otherwise, initiates an interactive browser flow.
@@ -69,10 +75,16 @@ class GoogleAuthenticator:
         # Load existing token if available
         if os.path.exists(self.token_file):
             try:
-                creds = Credentials.from_authorized_user_file(self.token_file, self.scopes)
+                creds = Credentials.from_authorized_user_file(
+                    self.token_file, self.scopes
+                )
             except Exception as e:
                 # If the cache file is malformed, simply ignore it and re-auth
-                logger.warning("Malformed token cache file %s, will re-auth: %s", self.token_file, e)
+                logger.warning(
+                    "Malformed token cache file %s, will re-auth: %s",
+                    self.token_file,
+                    e,
+                )
 
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
@@ -80,22 +92,26 @@ class GoogleAuthenticator:
                 try:
                     creds.refresh(Request())
                 except Exception as e:
-                    logger.warning("OAuth token refresh failed: %s — running interactive flow", e)
+                    logger.warning(
+                        "OAuth token refresh failed: %s — running interactive flow", e
+                    )
                     creds = self._run_interactive_flow()
             else:
                 creds = self._run_interactive_flow()
 
             # Save the credentials for the next run (owner-readable only)
-            with open(self.token_file, 'w') as token:
+            with open(self.token_file, "w") as token:
                 token.write(creds.to_json())
             os.chmod(self.token_file, 0o600)
 
         return creds
 
-    def _run_interactive_flow(self) -> "Credentials": # type: ignore
+    def _run_interactive_flow(self) -> "Credentials":  # type: ignore
         """Run the local server flow to get user authorization."""
         if not os.path.exists(self.client_secrets_file):
-            raise FileNotFoundError(f"Client secrets file not found at {self.client_secrets_file}")
+            raise FileNotFoundError(
+                f"Client secrets file not found at {self.client_secrets_file}"
+            )
 
         flow = InstalledAppFlow.from_client_secrets_file(
             self.client_secrets_file, self.scopes

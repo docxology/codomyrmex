@@ -30,10 +30,12 @@ class AgentPool:
         pool = AgentPool()
         pool.register(SwarmAgent("alice", AgentRole.CODER, {"python"}))
         pool.register(SwarmAgent("bob", AgentRole.REVIEWER, {"python", "security"}))
-        agent = pool.assign(TaskAssignment(
-            description="fix bug",
-            required_role=AgentRole.CODER,
-        ))
+        agent = pool.assign(
+            TaskAssignment(
+                description="fix bug",
+                required_role=AgentRole.CODER,
+            )
+        )
     """
 
     def __init__(self) -> None:
@@ -43,7 +45,10 @@ class AgentPool:
     def register(self, agent: SwarmAgent) -> None:
         """Register an agent in the pool."""
         self._agents[agent.agent_id] = agent
-        logger.info("Agent registered", extra={"agent": agent.agent_id, "role": agent.role.value})
+        logger.info(
+            "Agent registered",
+            extra={"agent": agent.agent_id, "role": agent.role.value},
+        )
 
     def unregister(self, agent_id: str) -> bool:
         """Remove an agent from the pool."""
@@ -93,7 +98,8 @@ class AgentPool:
         # Filter by capabilities
         if task.required_capabilities:
             candidates = [
-                a for a in candidates
+                a
+                for a in candidates
                 if task.required_capabilities.issubset(a.capabilities)
             ]
 
@@ -136,7 +142,7 @@ class AgentPool:
                 for role in AgentRole
                 if self.agents_by_role(role)
             },
-            "agents": [a.to_dict() for a in self._agents.values()]
+            "agents": [a.to_dict() for a in self._agents.values()],
         }
 
 

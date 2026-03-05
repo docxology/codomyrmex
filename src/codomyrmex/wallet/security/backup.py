@@ -122,7 +122,9 @@ class BackupManager:
         """
         backup_file = self.backup_dir / f"backup_{user_id}_{backup_id}.json"
         if not backup_file.exists():
-            raise WalletNotFoundError(f"Backup {backup_id} not found for user {user_id}")
+            raise WalletNotFoundError(
+                f"Backup {backup_id} not found for user {user_id}"
+            )
 
         record = json.loads(backup_file.read_text())
         stored_hash = record.get("key_hash")

@@ -17,6 +17,7 @@ logger = get_logger(__name__)
 
 class HealthStatus(Enum):
     """Health check status."""
+
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
@@ -121,17 +122,26 @@ class HealthChecker:
                     components.append(result)
                     if result.status == HealthStatus.UNHEALTHY:
                         overall = HealthStatus.UNHEALTHY
-                    elif result.status == HealthStatus.DEGRADED and overall != HealthStatus.UNHEALTHY:
+                    elif (
+                        result.status == HealthStatus.DEGRADED
+                        and overall != HealthStatus.UNHEALTHY
+                    ):
                         overall = HealthStatus.DEGRADED
                 else:
-                    components.append(ComponentHealth(name=name, latency_ms=(time.time() - start) * 1000))
+                    components.append(
+                        ComponentHealth(
+                            name=name, latency_ms=(time.time() - start) * 1000
+                        )
+                    )
             except Exception as exc:
-                components.append(ComponentHealth(
-                    name=name,
-                    status=HealthStatus.UNHEALTHY,
-                    message=str(exc),
-                    latency_ms=(time.time() - start) * 1000,
-                ))
+                components.append(
+                    ComponentHealth(
+                        name=name,
+                        status=HealthStatus.UNHEALTHY,
+                        message=str(exc),
+                        latency_ms=(time.time() - start) * 1000,
+                    )
+                )
                 overall = HealthStatus.UNHEALTHY
 
         return HealthReport(

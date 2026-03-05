@@ -126,7 +126,11 @@ def feature_store_validate_value(
         return {"status": "error", "message": str(exc)}
 
     if value is None:
-        return {"status": "success", "valid": True, "reason": "null values are always valid"}
+        return {
+            "status": "success",
+            "valid": True,
+            "reason": "null values are always valid",
+        }
 
     expected_type = _VALUE_TYPE_MAP.get(value_type.lower())
     if expected_type is None:
@@ -136,7 +140,9 @@ def feature_store_validate_value(
     return {
         "status": "success",
         "valid": is_valid,
-        "reason": None if is_valid else f"Expected {expected_type.__name__}, got {type(value).__name__}",
+        "reason": None
+        if is_valid
+        else f"Expected {expected_type.__name__}, got {type(value).__name__}",
     }
 
 

@@ -309,8 +309,7 @@ class PipelineManager:
                         logger.warning(f"Job {job.name} failed, retrying...")
                         job.retry_count -= 1
                         continue
-                    else:
-                        raise Exception(f"Command failed: {resolved_cmd}")
+                    raise Exception(f"Command failed: {resolved_cmd}")
 
             job.status = JobStatus.SUCCESS
 
@@ -436,11 +435,16 @@ class PipelineManager:
                 valid_triggers = ["push", "pull_request", "manual", "schedule"]
                 for trigger in config["triggers"]:
                     if trigger not in valid_triggers:
-                        errors.append(f"Invalid trigger: {trigger}. Must be one of {valid_triggers}")
+                        errors.append(
+                            f"Invalid trigger: {trigger}. Must be one of {valid_triggers}"
+                        )
 
         # Validate timeout if present
         if "timeout" in config:
-            if not isinstance(config["timeout"], (int, float)) or config["timeout"] <= 0:
+            if (
+                not isinstance(config["timeout"], (int, float))
+                or config["timeout"] <= 0
+            ):
                 errors.append("Timeout must be a positive number")
 
         return len(errors) == 0, errors
@@ -473,7 +477,9 @@ class PipelineManager:
 
         return errors
 
-    def _validate_job_config(self, job: dict, stage_index: int, job_index: int) -> list[str]:
+    def _validate_job_config(
+        self, job: dict, stage_index: int, job_index: int
+    ) -> list[str]:
         """Validate a single job configuration."""
         errors = []
         prefix = f"Stage {stage_index}, Job {job_index}"
@@ -492,10 +498,14 @@ class PipelineManager:
             errors.append(f"{prefix}: Commands list cannot be empty")
 
         # Validate optional fields
-        if "timeout" in job and (not isinstance(job["timeout"], (int, float)) or job["timeout"] <= 0):
+        if "timeout" in job and (
+            not isinstance(job["timeout"], (int, float)) or job["timeout"] <= 0
+        ):
             errors.append(f"{prefix}: Timeout must be a positive number")
 
-        if "retry_count" in job and (not isinstance(job["retry_count"], int) or job["retry_count"] < 0):
+        if "retry_count" in job and (
+            not isinstance(job["retry_count"], int) or job["retry_count"] < 0
+        ):
             errors.append(f"{prefix}: Retry count must be a non-negative integer")
 
         return errors
@@ -520,7 +530,7 @@ class PipelineManager:
             stage_id = f"stage_{stage.name.replace(' ', '_')}"
 
             # Add stage node
-            lines.append(f"    {stage_id}[\"{stage.name}\"]")
+            lines.append(f'    {stage_id}["{stage.name}"]')
             nodes.add(stage_id)
 
             # Add job nodes within stage
@@ -528,7 +538,7 @@ class PipelineManager:
                 job_id = f"job_{job.name.replace(' ', '_')}"
 
                 # Add job node
-                lines.append(f"    {job_id}[\"{job.name}\"]")
+                lines.append(f'    {job_id}["{job.name}"]')
                 nodes.add(job_id)
 
                 # Connect stage to job
@@ -604,7 +614,10 @@ class PipelineManager:
                                     results[stage_name] = result
                                     completed.add(stage_name)
                                 except Exception as e:
-                                    results[stage_name] = {"error": str(e), "status": "failed"}
+                                    results[stage_name] = {
+                                        "error": str(e),
+                                        "status": "failed",
+                                    }
                                     completed.add(stage_name)
                                 del futures[stage_name]
                     else:
@@ -621,8 +634,14 @@ class PipelineManager:
         summary = {
             "total_stages": len(stages),
             "completed_stages": len(completed),
-            "failed_stages": len([r for r in results.values() if isinstance(r, dict) and r.get("status") == "failed"]),
-            "stage_results": results
+            "failed_stages": len(
+                [
+                    r
+                    for r in results.values()
+                    if isinstance(r, dict) and r.get("status") == "failed"
+                ]
+            ),
+            "stage_results": results,
         }
 
         return summary
@@ -647,26 +666,20 @@ class PipelineManager:
             for job in jobs:
                 # Simulate job execution
                 time.sleep(0.05)
-                job_results.append({
-                    "name": job["name"],
-                    "status": "completed",
-                    "duration": 0.05
-                })
+                job_results.append(
+                    {"name": job["name"], "status": "completed", "duration": 0.05}
+                )
 
             return {
                 "stage_name": stage["name"],
                 "status": "completed",
                 "job_count": len(jobs),
                 "jobs": job_results,
-                "duration": 0.1 + (len(jobs) * 0.05)
+                "duration": 0.1 + (len(jobs) * 0.05),
             }
 
         except Exception as e:
-            return {
-                "stage_name": stage["name"],
-                "status": "failed",
-                "error": str(e)
-            }
+            return {"stage_name": stage["name"], "status": "failed", "error": str(e)}
 
     def conditional_stage_execution(self, stage: dict, conditions: dict) -> bool:
         """
@@ -753,8 +766,10 @@ class PipelineManager:
             "parallel_stages": len(independent_stages),
             "sequential_chains": len(sequential_stages),
             "execution_levels": execution_levels,
-            "estimated_parallelism": len(execution_levels[0]) if execution_levels else 0,
-            "optimization_suggestions": []
+            "estimated_parallelism": len(execution_levels[0])
+            if execution_levels
+            else 0,
+            "optimization_suggestions": [],
         }
 
         # Add optimization suggestions
@@ -763,7 +778,9 @@ class PipelineManager:
                 f"Consider running {len(independent_stages)} independent stages in parallel"
             )
 
-        max_level_size = max(len(level) for level in execution_levels) if execution_levels else 0
+        max_level_size = (
+            max(len(level) for level in execution_levels) if execution_levels else 0
+        )
         if max_level_size > 1:
             optimization["optimization_suggestions"].append(
                 f"Maximum parallelism: {max_level_size} stages can run concurrently"
@@ -771,7 +788,9 @@ class PipelineManager:
 
         return optimization
 
-    def _calculate_execution_levels(self, stages: list, dependencies: dict) -> list[list[str]]:
+    def _calculate_execution_levels(
+        self, stages: list, dependencies: dict
+    ) -> list[list[str]]:
         """Calculate execution levels for optimal parallelism."""
         # Kahn's algorithm for topological levels
         in_degree = {stage.name: len(stage.dependencies) for stage in stages}
@@ -834,7 +853,9 @@ class PipelineManager:
         for stage_name, deps in dependencies.items():
             for dep in deps:
                 if dep not in stage_names:
-                    errors.append(f"Stage '{stage_name}' depends on missing stage '{dep}'")
+                    errors.append(
+                        f"Stage '{stage_name}' depends on missing stage '{dep}'"
+                    )
 
         # Check for self-dependencies
         for stage_name, deps in dependencies.items():

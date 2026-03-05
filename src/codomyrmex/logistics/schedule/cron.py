@@ -122,5 +122,3 @@ class CronScheduler:
         if now is None:
             now = self.timezone_manager.now()
         return cron.matches(now)
-
-

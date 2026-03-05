@@ -53,6 +53,7 @@ except ImportError:
             logger.warning("Failed to pull changes via fallback: %s", e)
             return False
 
+
 logger = get_logger(__name__)
 
 
@@ -92,7 +93,9 @@ class SkillSync:
         """
         if self.upstream_dir.exists():
             if force:
-                logger.info(f"Removing existing upstream directory: {self.upstream_dir}")
+                logger.info(
+                    f"Removing existing upstream directory: {self.upstream_dir}"
+                )
 
                 shutil.rmtree(self.upstream_dir)
             else:
@@ -218,7 +221,9 @@ class SkillSync:
         Returns:
             Commit hash or None if unavailable
         """
-        if not self.upstream_dir.exists() or not is_git_repository(str(self.upstream_dir)):
+        if not self.upstream_dir.exists() or not is_git_repository(
+            str(self.upstream_dir)
+        ):
             return None
 
         try:

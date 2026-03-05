@@ -22,6 +22,7 @@ from codomyrmex.exceptions import CodomyrmexError
 # Connection Management Tests
 # ==============================================================================
 
+
 @pytest.mark.database
 class TestConnectionManagement:
     """Tests for database connection management."""
@@ -35,7 +36,7 @@ class TestConnectionManagement:
             port=5432,
             database="test_db",
             username="user",
-            password="pass"
+            password="pass",
         )
 
         assert connection.name == "test_db"
@@ -52,7 +53,7 @@ class TestConnectionManagement:
             name="test",
             db_type=DatabaseType.POSTGRESQL,
             host="localhost",
-            database="test"
+            database="test",
         )
 
         assert connection.port == 5432
@@ -65,10 +66,7 @@ class TestConnectionManagement:
     def test_mysql_connection_defaults(self):
         """Test MySQL connection has correct default port and username."""
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.MYSQL,
-            host="localhost",
-            database="test"
+            name="test", db_type=DatabaseType.MYSQL, host="localhost", database="test"
         )
 
         assert connection.port == 3306
@@ -77,9 +75,7 @@ class TestConnectionManagement:
     def test_database_connection_auto_timestamp(self):
         """Test DatabaseConnection automatic timestamp."""
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database="test.db"
+            name="test", db_type=DatabaseType.SQLITE, database="test.db"
         )
 
         assert connection.created_at is not None
@@ -88,9 +84,7 @@ class TestConnectionManagement:
     def test_connection_string_sqlite(self):
         """Test connection string generation for SQLite."""
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database="test.db"
+            name="test", db_type=DatabaseType.SQLITE, database="test.db"
         )
 
         assert connection.get_connection_string() == "sqlite:///test.db"
@@ -104,7 +98,7 @@ class TestConnectionManagement:
             port=5432,
             database="test_db",
             username="user",
-            password="pass"
+            password="pass",
         )
 
         expected = "postgresql://user:pass@localhost:5432/test_db"
@@ -119,7 +113,7 @@ class TestConnectionManagement:
             port=3306,
             database="test_db",
             username="user",
-            password="pass"
+            password="pass",
         )
 
         expected = "mysql://user:pass@localhost:3306/test_db"
@@ -132,7 +126,7 @@ class TestConnectionManagement:
             name="test",
             db_type=DatabaseType.SQLITE,
             database="test.db",
-            connection_string=custom_string
+            connection_string=custom_string,
         )
 
         assert connection.get_connection_string() == custom_string
@@ -140,9 +134,7 @@ class TestConnectionManagement:
     def test_unsupported_database_type_connection_string(self):
         """Test connection string for unsupported database type raises error."""
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.MONGODB,
-            database="test"
+            name="test", db_type=DatabaseType.MONGODB, database="test"
         )
 
         with pytest.raises(ValueError, match="Unsupported database type"):
@@ -152,9 +144,7 @@ class TestConnectionManagement:
         """Test SQLite connection and disconnection."""
         db_path = str(tmp_path / "test.db")
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database=db_path
+            name="test", db_type=DatabaseType.SQLITE, database=db_path
         )
 
         connection.connect()
@@ -168,9 +158,7 @@ class TestConnectionManagement:
     def test_disconnect_when_not_connected(self):
         """Test disconnection when no connection exists is safe."""
         connection = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database="test.db"
+            name="test", db_type=DatabaseType.SQLITE, database="test.db"
         )
 
         # Should not raise error
@@ -181,6 +169,7 @@ class TestConnectionManagement:
 # ==============================================================================
 # Connection Pooling Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestConnectionPooling:
@@ -194,14 +183,10 @@ class TestConnectionPooling:
         db2_path = str(tmp_path / "db2.db")
 
         conn1 = DatabaseConnection(
-            name="db1",
-            db_type=DatabaseType.SQLITE,
-            database=db1_path
+            name="db1", db_type=DatabaseType.SQLITE, database=db1_path
         )
         conn2 = DatabaseConnection(
-            name="db2",
-            db_type=DatabaseType.SQLITE,
-            database=db2_path
+            name="db2", db_type=DatabaseType.SQLITE, database=db2_path
         )
 
         manager.add_connection(conn1)
@@ -217,14 +202,10 @@ class TestConnectionPooling:
         db2_path = str(tmp_path / "db2.db")
 
         conn1 = DatabaseConnection(
-            name="db1",
-            db_type=DatabaseType.SQLITE,
-            database=db1_path
+            name="db1", db_type=DatabaseType.SQLITE, database=db1_path
         )
         conn2 = DatabaseConnection(
-            name="db2",
-            db_type=DatabaseType.SQLITE,
-            database=db2_path
+            name="db2", db_type=DatabaseType.SQLITE, database=db2_path
         )
 
         manager.add_connection(conn1)
@@ -244,9 +225,7 @@ class TestConnectionPooling:
 
         db_path = str(tmp_path / "test.db")
         conn = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database=db_path
+            name="test", db_type=DatabaseType.SQLITE, database=db_path
         )
         conn.connect()
         manager.add_connection(conn)
@@ -262,9 +241,7 @@ class TestConnectionPooling:
 
         db_path = str(tmp_path / "test.db")
         conn = DatabaseConnection(
-            name="test",
-            db_type=DatabaseType.SQLITE,
-            database=db_path
+            name="test", db_type=DatabaseType.SQLITE, database=db_path
         )
         conn.connect()
         manager.add_connection(conn)
@@ -280,7 +257,7 @@ class TestConnectionPooling:
             name="test",
             db_type=DatabaseType.POSTGRESQL,
             database="test",
-            connection_pool_size=20
+            connection_pool_size=20,
         )
 
         assert connection.connection_pool_size == 20
@@ -289,6 +266,7 @@ class TestConnectionPooling:
 # ==============================================================================
 # Database Connector Tests
 # ==============================================================================
+
 
 @pytest.mark.database
 class TestDatabaseConnector:
@@ -354,14 +332,18 @@ class TestDatabaseConnector:
 # DatabaseManager Tests (from test_coverage_boost_r7.py)
 # ==============================================================================
 
+
 @pytest.mark.database
 class TestDatabaseManager:
     def test_database_type_enum(self):
         from codomyrmex.database_management.db_manager import DatabaseType
+
         assert DatabaseType.SQLITE.value == "sqlite" or hasattr(DatabaseType, "SQLITE")
 
     def test_query_result(self):
-        r = QueryResult(success=True, rows=[], columns=[], row_count=0, execution_time=0.01)
+        r = QueryResult(
+            success=True, rows=[], columns=[], row_count=0, execution_time=0.01
+        )
         assert r.success
 
     def test_database_connection(self):
@@ -369,10 +351,14 @@ class TestDatabaseManager:
             DatabaseConnection,
             DatabaseType,
         )
-        conn = DatabaseConnection(name="test", db_type=DatabaseType.SQLITE, database="test.db")
+
+        conn = DatabaseConnection(
+            name="test", db_type=DatabaseType.SQLITE, database="test.db"
+        )
         assert conn.database == "test.db"
 
     def test_db_manager_init(self, tmp_path):
         from codomyrmex.database_management.db_manager import DatabaseManager
+
         mgr = DatabaseManager()
         assert mgr is not None

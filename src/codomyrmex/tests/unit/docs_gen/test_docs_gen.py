@@ -3,7 +3,6 @@
 Covers APIDocExtractor, SearchIndex, and SiteGenerator.
 """
 
-
 from codomyrmex.docs_gen.api_doc_extractor import APIDocExtractor
 from codomyrmex.docs_gen.search_index import SearchIndex
 from codomyrmex.docs_gen.site_generator import SiteGenerator
@@ -27,6 +26,7 @@ def standalone(x: int) -> int:
 
 
 # ─── APIDocExtractor ──────────────────────────────────────────────────
+
 
 class TestAPIDocExtractor:
     """Test suite for APIDocExtractor."""
@@ -69,6 +69,7 @@ class TestAPIDocExtractor:
 
 # ─── SearchIndex ──────────────────────────────────────────────────────
 
+
 class TestSearchIndex:
     """Test suite for SearchIndex."""
 
@@ -99,6 +100,7 @@ class TestSearchIndex:
 
 
 # ─── SiteGenerator ──────────────────────────────────────────────────
+
 
 class TestSiteGenerator:
     """Test suite for SiteGenerator."""

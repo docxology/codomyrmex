@@ -1,4 +1,5 @@
 """Core neural network layers: LayerNorm, FeedForward, PositionalEncoding, Embedding."""
+
 import numpy as np
 
 

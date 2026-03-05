@@ -400,7 +400,9 @@ class GitVisualizer:
             )
             return False
 
-    def _get_repo_data(self, repository_path: str, repo_data: dict[str, Any]) -> dict[str, Any]:
+    def _get_repo_data(
+        self, repository_path: str, repo_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """Get repository data from path or use provided data."""
         if repository_path and GIT_OPERATIONS_AVAILABLE:
             repo_status = get_status(repository_path)
@@ -413,16 +415,15 @@ class GitVisualizer:
                 "current_branch": current_branch,
                 "total_commits": len(commit_history),
             }
-        elif repo_data:
+        if repo_data:
             return repo_data
-        else:
-            # Use sample data
-            return {
-                "status": {"clean": True, "modified": [], "untracked": []},
-                "commits": self._generate_sample_commits(),
-                "current_branch": "main",
-                "total_commits": 50,
-            }
+        # Use sample data
+        return {
+            "status": {"clean": True, "modified": [], "untracked": []},
+            "commits": self._generate_sample_commits(),
+            "current_branch": "main",
+            "total_commits": 50,
+        }
 
     def _plot_repository_status(self, ax, repo_data: dict[str, Any]):
         """Plot repository status pie chart."""
@@ -505,7 +506,9 @@ class GitVisualizer:
                     commit_words[word] = commit_words.get(word, 0) + 1
 
         if commit_words:
-            top_words = sorted(commit_words.items(), key=lambda x: x[1], reverse=True)[:10]
+            top_words = sorted(commit_words.items(), key=lambda x: x[1], reverse=True)[
+                :10
+            ]
             words, counts = zip(*top_words, strict=False)
             ax.barh(words, counts, color=self.colors["develop"])
             ax.set_title("Common Commit Words")
@@ -721,16 +724,15 @@ class GitVisualizer:
         branch_lower = branch_name.lower()
         if "main" in branch_lower or "master" in branch_lower:
             return self.colors["main"]
-        elif "develop" in branch_lower:
+        if "develop" in branch_lower:
             return self.colors["develop"]
-        elif "feature" in branch_lower:
+        if "feature" in branch_lower:
             return self.colors["feature"]
-        elif "hotfix" in branch_lower:
+        if "hotfix" in branch_lower:
             return self.colors["hotfix"]
-        elif "release" in branch_lower:
+        if "release" in branch_lower:
             return self.colors["release"]
-        else:
-            return self.colors["commit"]
+        return self.colors["commit"]
 
     def _generate_sample_commits(self, days_back: int = 30) -> list[dict[str, Any]]:
         """Generate sample commit data for testing."""
@@ -742,7 +744,7 @@ class GitVisualizer:
             commits.append(
                 {
                     "hash": f"a{i:02d}b{i:02d}c{i:02d}",
-                    "message": f"Sample commit {i+1}",
+                    "message": f"Sample commit {i + 1}",
                     "author_name": "Developer" if i % 2 == 0 else "Contributor",
                     "author_email": "dev@example.com",
                     "date": date.isoformat(),

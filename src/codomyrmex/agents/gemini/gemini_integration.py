@@ -4,6 +4,7 @@ from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 
 """Gemini integration adapters for Codomyrmex modules."""
 
+
 class GeminiIntegrationAdapter(AgentIntegrationAdapter):
     """Integration adapter for Gemini with Codomyrmex modules."""
 
@@ -67,9 +68,7 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
 
         return response.content
 
-    def adapt_for_llm(
-        self, messages: list[dict], model: str = None, **kwargs
-    ) -> dict:
+    def adapt_for_llm(self, messages: list[dict], model: str = None, **kwargs) -> dict:
         """
         Adapt Gemini for LLM module.
 

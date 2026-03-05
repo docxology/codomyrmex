@@ -11,6 +11,7 @@ from typing import Any
 
 try:
     from codomyrmex.logging_monitoring import get_logger
+
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
@@ -104,4 +105,4 @@ def list_runnable_skills(registry: SkillRegistry) -> list[dict[str, Any]]:
     ]
 
 
-__all__ = ["run_skill", "run_skill_by_name", "list_runnable_skills"]
+__all__ = ["list_runnable_skills", "run_skill", "run_skill_by_name"]

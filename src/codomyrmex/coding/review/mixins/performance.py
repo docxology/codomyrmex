@@ -8,8 +8,6 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
-
-
 class PerformanceMixin:
     """PerformanceMixin functionality."""
 
@@ -20,7 +18,7 @@ class PerformanceMixin:
             "memory_optimizations": [],
             "cpu_optimizations": [],
             "io_optimizations": [],
-            "caching_opportunities": []
+            "caching_opportunities": [],
         }
 
         try:
@@ -41,7 +39,7 @@ class PerformanceMixin:
             "Use generators instead of lists for large datasets",
             "Implement object pooling for frequently created objects",
             "Use slots in classes to reduce memory overhead",
-            "Consider lazy loading for expensive resources"
+            "Consider lazy loading for expensive resources",
         ]
         return suggestions
 
@@ -51,7 +49,7 @@ class PerformanceMixin:
             "Cache expensive computations",
             "Use sets for membership tests instead of lists",
             "Avoid repeated string concatenations",
-            "Use list comprehensions instead of loops where appropriate"
+            "Use list comprehensions instead of loops where appropriate",
         ]
         return suggestions
 
@@ -61,7 +59,7 @@ class PerformanceMixin:
             "Batch file operations",
             "Use buffered I/O for large files",
             "Consider asynchronous I/O for network operations",
-            "Use compression for large data transfers"
+            "Use compression for large data transfers",
         ]
         return suggestions
 
@@ -71,7 +69,7 @@ class PerformanceMixin:
             "Cache parsed configuration files",
             "Cache expensive database queries",
             "Cache computed results with TTL",
-            "Use Redis/Memcached for distributed caching"
+            "Use Redis/Memcached for distributed caching",
         ]
         return suggestions
 
@@ -79,40 +77,53 @@ class PerformanceMixin:
         """Calculate performance score based on complexity and code patterns."""
         try:
             # Get complexity data
-            complexity_results = self.pyscn_analyzer.analyze_complexity(self.project_root)
+            complexity_results = self.pyscn_analyzer.analyze_complexity(
+                self.project_root
+            )
 
             if not complexity_results:
                 return 80.0  # Default if no data
 
             # Calculate complexity metrics
             complexities = [r.get("complexity", 0) for r in complexity_results]
-            avg_complexity = sum(complexities) / len(complexities) if complexities else 0
+            avg_complexity = (
+                sum(complexities) / len(complexities) if complexities else 0
+            )
             max_complexity = max(complexities) if complexities else 0
 
             # Performance anti-patterns to check
             performance_patterns = {
-                'for.*for.*for': 5,  # Triple nested loops
-                r'\.append\(.*for.*in': 2,  # Appending in loop (should use list comp)
-                'time.sleep': 1,  # Blocking sleep
-                'global ': 2,  # Global state
+                "for.*for.*for": 5,  # Triple nested loops
+                r"\.append\(.*for.*in": 2,  # Appending in loop (should use list comp)
+                "time.sleep": 1,  # Blocking sleep
+                "global ": 2,  # Global state
             }
 
             pattern_penalty = 0.0
             try:
                 for root, _dirs, files in os.walk(self.project_root):
                     for f in files:
-                        if f.endswith('.py'):
+                        if f.endswith(".py"):
                             filepath = os.path.join(root, f)
                             try:
-                                with open(filepath, encoding='utf-8', errors='ignore') as fh:
+                                with open(
+                                    filepath, encoding="utf-8", errors="ignore"
+                                ) as fh:
                                     content = fh.read()
 
-                                    for pattern, penalty in performance_patterns.items():
+                                    for (
+                                        pattern,
+                                        penalty,
+                                    ) in performance_patterns.items():
                                         matches = re.findall(pattern, content)
                                         pattern_penalty += len(matches) * penalty
                             except OSError:
                                 continue
-                    if len(root.split(os.sep)) - len(str(self.project_root).split(os.sep)) > 3:
+                    if (
+                        len(root.split(os.sep))
+                        - len(str(self.project_root).split(os.sep))
+                        > 3
+                    ):
                         break
             except Exception as e:
                 logger.warning("Error during performance pattern scan: %s", e)
@@ -120,10 +131,18 @@ class PerformanceMixin:
             # Performance score calculation
             base_score = 100.0
             complexity_penalty = min(avg_complexity * 1.5, 25.0)
-            max_complexity_penalty = min(max_complexity * 0.5, 15.0) if max_complexity > 20 else 0
+            max_complexity_penalty = (
+                min(max_complexity * 0.5, 15.0) if max_complexity > 20 else 0
+            )
             pattern_penalty = min(pattern_penalty, 25.0)
 
-            score = max(0.0, base_score - complexity_penalty - max_complexity_penalty - pattern_penalty)
+            score = max(
+                0.0,
+                base_score
+                - complexity_penalty
+                - max_complexity_penalty
+                - pattern_penalty,
+            )
             return round(score, 1)
 
         except Exception as e:

@@ -188,7 +188,7 @@ if SECRET_MANAGEMENT_AVAILABLE:
     __all__.extend(
         [
             "SecretManager",
-            "manage_secrets",
             "encrypt_configuration",
+            "manage_secrets",
         ]
     )

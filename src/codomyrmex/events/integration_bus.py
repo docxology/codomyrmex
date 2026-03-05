@@ -52,14 +52,20 @@ class IntegrationBus:
     """
 
     def __init__(self) -> None:
-        self._handlers: dict[str, list[Callable[[IntegrationEvent], None]]] = defaultdict(list)
+        self._handlers: dict[str, list[Callable[[IntegrationEvent], None]]] = (
+            defaultdict(list)
+        )
         self._history: list[IntegrationEvent] = []
 
-    def subscribe(self, topic: str, handler: Callable[[IntegrationEvent], None]) -> None:
+    def subscribe(
+        self, topic: str, handler: Callable[[IntegrationEvent], None]
+    ) -> None:
         """Subscribe to the specified event or channel."""
         self._handlers[topic].append(handler)
 
-    def emit(self, topic: str, source: str = "", payload: dict[str, Any] | None = None) -> IntegrationEvent:
+    def emit(
+        self, topic: str, source: str = "", payload: dict[str, Any] | None = None
+    ) -> IntegrationEvent:
         """Emit an event to registered listeners."""
         event = IntegrationEvent(topic=topic, source=source, payload=payload or {})
         self._history.append(event)
@@ -68,7 +74,9 @@ class IntegrationBus:
             try:
                 handler(event)
             except Exception as exc:
-                logger.warning("Handler error", extra={"topic": topic, "error": str(exc)[:80]})
+                logger.warning(
+                    "Handler error", extra={"topic": topic, "error": str(exc)[:80]}
+                )
 
         # Wildcard subscribers
         for handler in self._handlers.get("*", []):

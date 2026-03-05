@@ -134,8 +134,7 @@ class DependencyAnalyzer:
             latest_time = 0
             for py_file in module_path.glob("**/*.py"):
                 mtime = py_file.stat().st_mtime
-                if mtime > latest_time:
-                    latest_time = mtime
+                latest_time = max(latest_time, mtime)
 
             if latest_time > 0:
                 return datetime.datetime.fromtimestamp(latest_time).strftime(
@@ -174,7 +173,9 @@ class DependencyAnalyzer:
                                     name=node.name,
                                     module_path=str(module_path),
                                     type="function",
-                                    signature=self.get_function_signature_from_ast(node),
+                                    signature=self.get_function_signature_from_ast(
+                                        node
+                                    ),
                                     docstring=ast.get_docstring(node) or "No docstring",
                                     file_path=str(py_file),
                                     line_number=node.lineno,

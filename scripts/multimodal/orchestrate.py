@@ -37,6 +37,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+from codomyrmex.multimodal.image_generation import ImageGenerator
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -44,7 +45,6 @@ from codomyrmex.utils.cli_helpers import (
     print_success,
     setup_logging,
 )
-from codomyrmex.multimodal.image_generation import ImageGenerator
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _CONFIG_PATH = _PROJECT_ROOT / "config" / "multimodal" / "config.yaml"
@@ -81,7 +81,9 @@ def run_image_generation(
         prompts = [prompt_override]
     number_of_images = images_override or gen_cfg.get("number_of_images", 1)
     aspect_ratio = aspect_ratio_override or gen_cfg.get("aspect_ratio", "1:1")
-    output_dir_str = config.get("output_dir_override") or gen_cfg.get("output_dir", "output")
+    output_dir_str = config.get("output_dir_override") or gen_cfg.get(
+        "output_dir", "output"
+    )
     output_dir = _PROJECT_ROOT / output_dir_str
     save_format = gen_cfg.get("save_format", "png")
 
@@ -96,7 +98,9 @@ def run_image_generation(
     saved = 0
 
     for p_idx, act_prompt in enumerate(prompts):
-        print_info(f"  [{p_idx+1}/{len(prompts)}] Generating for: {act_prompt[:60]}...")
+        print_info(
+            f"  [{p_idx + 1}/{len(prompts)}] Generating for: {act_prompt[:60]}..."
+        )
         try:
             results = generator.generate(
                 prompt=act_prompt,
@@ -115,7 +119,7 @@ def run_image_generation(
                 else:
                     print_info(f"    Result keys: {list(img.keys())}")
         except Exception as e:
-            print_error(f"  Generation failed for prompt {p_idx+1}: {e}")
+            print_error(f"  Generation failed for prompt {p_idx + 1}: {e}")
 
     if saved:
         print_success(f"  {saved} total file(s) written to {output_dir_str}")
@@ -129,8 +133,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--prompt", help="Override default prompt from config")
     parser.add_argument("--model", help="Override default model from config")
-    parser.add_argument("--aspect-ratio", choices=["1:1", "16:9", "9:16", "4:3", "3:4"], help="Override aspect ratio")
-    parser.add_argument("--images", type=int, help="Override number of images to generate")
+    parser.add_argument(
+        "--aspect-ratio",
+        choices=["1:1", "16:9", "9:16", "4:3", "3:4"],
+        help="Override aspect ratio",
+    )
+    parser.add_argument(
+        "--images", type=int, help="Override number of images to generate"
+    )
     parser.add_argument("--output-dir", help="Override output directory")
     return parser.parse_args()
 
@@ -154,9 +164,8 @@ def main() -> int:
     if ok:
         print_section("Orchestration Complete")
         return 0
-    else:
-        print_error("Orchestration failed.")
-        return 1
+    print_error("Orchestration failed.")
+    return 1
 
 
 if __name__ == "__main__":

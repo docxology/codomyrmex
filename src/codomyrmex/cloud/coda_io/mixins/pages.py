@@ -10,6 +10,7 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
 class PagesMixin:
     """PagesMixin class."""
 
@@ -88,7 +89,9 @@ class PagesMixin:
         Returns:
             Page details
         """
-        path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
+        path = (
+            f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
+        )
         data = self._get(path)
         return Page.from_dict(data)
 
@@ -133,7 +136,9 @@ class PagesMixin:
         if content_update is not None:
             body["contentUpdate"] = content_update
 
-        path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
+        path = (
+            f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
+        )
         return self._put(path, json_data=body)
 
     def delete_page(self, doc_id: str, page_id_or_name: str) -> dict[str, Any]:
@@ -147,7 +152,9 @@ class PagesMixin:
         Returns:
             Deletion result
         """
-        path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
+        path = (
+            f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}"
+        )
         return self._delete(path)
 
     def list_page_content(
@@ -212,4 +219,3 @@ class PagesMixin:
         """
         path = f"/docs/{self._encode_id(doc_id)}/pages/{self._encode_id(page_id_or_name)}/export/{request_id}"
         return self._get(path)
-

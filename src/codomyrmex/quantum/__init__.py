@@ -53,15 +53,15 @@ def cli_commands() -> dict[str, Callable[[], None]]:
 
 
 __all__ = [
-    "QuantumCircuit",
-    "QuantumSimulator",
     "Gate",
     "GateType",
+    "QuantumCircuit",
+    "QuantumSimulator",
     "Qubit",
     "bell_state",
+    "circuit_stats",
+    "circuit_to_ascii",
+    "cli_commands",
     "ghz_state",
     "qft",
-    "circuit_to_ascii",
-    "circuit_stats",
-    "cli_commands",
 ]

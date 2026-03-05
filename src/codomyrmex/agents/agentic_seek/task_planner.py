@@ -26,6 +26,7 @@ logger = get_logger(__name__)
 # Task-name extraction (mirrors PlannerAgent.get_task_names)
 # ---------------------------------------------------------------------------
 
+
 def extract_task_names(text: str) -> list[str]:
     """Extract task headings from a planner's textual output.
 
@@ -94,10 +95,10 @@ def parse_plan_json(text: str) -> list[AgenticSeekTaskStep]:
     Example JSON::
 
         {
-          "plan": [
-            {"agent": "coder", "id": 1, "task": "Write script"},
-            {"agent": "web",   "id": 2, "task": "Search docs", "need": [1]}
-          ]
+            "plan": [
+                {"agent": "coder", "id": 1, "task": "Write script"},
+                {"agent": "web", "id": 2, "task": "Search docs", "need": [1]},
+            ]
         }
 
     Args:
@@ -121,8 +122,7 @@ def parse_plan_json(text: str) -> list[AgenticSeekTaskStep]:
             missing = [k for k in ("agent", "id", "task") if k not in item]
             if missing:
                 raise ValueError(
-                    f"Plan step missing required fields: {missing}. "
-                    f"Got: {item}"
+                    f"Plan step missing required fields: {missing}. Got: {item}"
                 )
 
             # Map "web" → BROWSER (upstream convention)
@@ -134,8 +134,7 @@ def parse_plan_json(text: str) -> list[AgenticSeekTaskStep]:
                 agent_type = AgenticSeekAgentType.from_string(agent_str)
             except ValueError:
                 raise ValueError(
-                    f"Unknown agent type {item['agent']!r} in plan step "
-                    f"{item['id']}."
+                    f"Unknown agent type {item['agent']!r} in plan step {item['id']}."
                 ) from None
 
             deps = item.get("need", [])
@@ -157,6 +156,7 @@ def parse_plan_json(text: str) -> list[AgenticSeekTaskStep]:
 # ---------------------------------------------------------------------------
 # Plan validation
 # ---------------------------------------------------------------------------
+
 
 def validate_plan(
     steps: list[AgenticSeekTaskStep],
@@ -200,8 +200,7 @@ def validate_plan(
         for dep_id in step.dependencies:
             if dep_id not in step_ids:
                 errors.append(
-                    f"Step {step.task_id}: dependency {dep_id} "
-                    f"does not exist."
+                    f"Step {step.task_id}: dependency {dep_id} does not exist."
                 )
 
     # Circular dependency detection (Kahn's algorithm)
@@ -223,9 +222,7 @@ def _detect_cycles(steps: list[AgenticSeekTaskStep]) -> list[str]:
                 adjacency[dep_id].append(step.task_id)
                 in_degree[step.task_id] += 1
 
-    queue: deque[int] = deque(
-        tid for tid, deg in in_degree.items() if deg == 0
-    )
+    queue: deque[int] = deque(tid for tid, deg in in_degree.items() if deg == 0)
     visited = 0
     while queue:
         node = queue.popleft()
@@ -243,6 +240,7 @@ def _detect_cycles(steps: list[AgenticSeekTaskStep]) -> list[str]:
 # ---------------------------------------------------------------------------
 # Execution ordering
 # ---------------------------------------------------------------------------
+
 
 def get_execution_order(
     steps: list[AgenticSeekTaskStep],
@@ -271,9 +269,7 @@ def get_execution_order(
                 adjacency[dep_id].append(step.task_id)
                 in_degree[step.task_id] += 1
 
-    queue: deque[int] = deque(
-        tid for tid, deg in in_degree.items() if deg == 0
-    )
+    queue: deque[int] = deque(tid for tid, deg in in_degree.items() if deg == 0)
     ordered: list[AgenticSeekTaskStep] = []
 
     while queue:
@@ -285,7 +281,9 @@ def get_execution_order(
                 queue.append(neighbour)
 
     if len(ordered) != len(steps):
-        raise ValueError("Circular dependency detected—cannot determine execution order.")
+        raise ValueError(
+            "Circular dependency detected—cannot determine execution order."
+        )
 
     return ordered
 
@@ -293,6 +291,7 @@ def get_execution_order(
 # ---------------------------------------------------------------------------
 # Convenience facade
 # ---------------------------------------------------------------------------
+
 
 class AgenticSeekTaskPlanner:
     """High-level facade for plan parsing, validation, and ordering.
