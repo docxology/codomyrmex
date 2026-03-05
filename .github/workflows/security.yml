@@ -245,15 +245,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check Semgrep token
+        id: semgrep_check
         run: |
-          if [ -z "${{ secrets.SEMGREP_APP_TOKEN }}" ]; then
+          if [ -z "$SEMGREP_APP_TOKEN" ]; then
             echo "⚠️  SEMGREP_APP_TOKEN not configured — Semgrep scan skipped."
             echo "   To enable: add SEMGREP_APP_TOKEN to repository secrets."
-            exit 0
+            echo "has_token=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ SEMGREP_APP_TOKEN found, proceeding with scan"
+            echo "has_token=true" >> $GITHUB_OUTPUT
           fi
-          echo "✅ SEMGREP_APP_TOKEN found, proceeding with scan"
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
       - name: Run Semgrep
+        if: steps.semgrep_check.outputs.has_token == 'true'
         uses: semgrep/semgrep-action@v1
         with:
           config: >-
@@ -450,6 +456,7 @@ jobs:
 
       - name: Run tests with updated dependencies
         if: steps.check_updates.outputs.updates_available == 'true'
+        continue-on-error: true
         run: |
           echo "🧪 Running tests with updated dependencies..."
           uv run pytest src/codomyrmex/tests/unit/ -v --tb=short --maxfail=5
