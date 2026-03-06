@@ -60,6 +60,8 @@ dependencies = [
     "diff-match-patch>=20230430.0",
     # For syntax highlighting (often a dependency for other tools)
     "Pygments>=2.15.0",
+    # For rich terminal output
+    "rich>=13.0.0",
     # For YAML parsing (used in skills, config_management, documents)
     "pyyaml>=6.0.2",
     # For progress bars
@@ -78,6 +80,8 @@ dependencies = [
     # paramiko               → uv sync --extra deployment
     # fastavro, msgpack      → uv sync --extra serialization
     # mnemonic               → uv sync --extra crypto
+    "psutil>=6.0.0",
+    "email-validator>=2.3.0",
 ]
 
 [project.optional-dependencies]

@@ -1,6 +1,6 @@
 # 📚 Codomyrmex Documentation
 
-> **Version**: v1.1.4 | **Modules**: 127 | **Tests**: 779 pass | **Ruff**: 0 violations
+> **Version**: v1.1.6 | **Modules**: 127 | **Tests**: 21,000+ collected | **Ruff**: 0 violations
 
 This directory contains all documentation for the Codomyrmex ecosystem — a modular, extensible Python workspace for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.
 
@@ -69,17 +69,19 @@ This directory contains all documentation for the Codomyrmex ecosystem — a mod
 
 ---
 
-## Quality Metrics (v1.1.4)
+## Quality Metrics (v1.1.6)
 
 | Metric | Value |
 |--------|-------|
 | Python modules | **127** auto-discovered |
-| MCP tools | **407** dynamic |
-| Test suite | **779 pass** (21k+ collected) |
-| Ruff violations | **0** (from 119,498) |
-| Coverage | ~32% (target: 42%) |
+| MCP tools | **545** `@mcp_tool` decorators |
+| Test suite | **21,000+** collected |
+| Ruff violations | **0** (triaged from 119k) |
+| ty diagnostics | **971** (target < 1,000 met) |
+| Coverage | ~35% (`fail_under=35`) |
 | Documentation pages | **1,029+** |
 | Zero-Mock compliance | **100%** |
+| Build backend | **uv_build** (PEP 517) |
 
 ---
 
@@ -89,11 +91,15 @@ This directory contains all documentation for the Codomyrmex ecosystem — a mod
 # Install docs dependencies
 uv sync --extra docs
 
-# Serve locally
+# Serve locally (with live reload)
 uv run mkdocs serve
 
-# Build static site
-uv run mkdocs build
+# Build static site (strict mode catches broken refs)
+uv run mkdocs build --strict
+
+# Or use justfile
+just docs-serve
+just docs-build
 ```
 
 ---

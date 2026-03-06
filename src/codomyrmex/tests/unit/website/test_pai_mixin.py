@@ -258,7 +258,7 @@ class TestBuildPaiMermaidGraph:
     def test_safe_mermaid_fallback(self, provider: DataProvider) -> None:
         """_safe_mermaid_graph never raises, even with bad data."""
         result = provider._safe_mermaid_graph(
-            [{"id": None}],  # type: ignore
+            [{"id": None}],
             [],
         )
         assert isinstance(result, str)

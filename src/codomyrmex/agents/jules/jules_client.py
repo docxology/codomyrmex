@@ -137,7 +137,13 @@ class JulesClient(CLIAgentBase):
                 raise JulesError(
                     f"Jules command failed: {e}", command=self.command
                 ) from e
-        return None
+
+        # This should theoretically not be reached due to retries and exceptions
+        return AgentResponse(
+            content="",
+            error="Jules execution failed after multiple attempts",
+            request_id=request.id,
+        )
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream Jules command output."""

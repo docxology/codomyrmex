@@ -42,6 +42,7 @@ class LogRotationManager:
         max_bytes: int = 10 * 1024 * 1024,
         backup_count: int = 5,
         level: int = logging.DEBUG,
+        formatter: logging.Formatter | None = None,
     ) -> RotatingFileHandler:
         """Attach a RotatingFileHandler to a logger.
 
@@ -51,6 +52,7 @@ class LogRotationManager:
             max_bytes: Max file size before rotation (default 10 MB).
             backup_count: Number of backup files to keep.
             level: Logging level for the handler.
+            formatter: Optional logging formatter. Defaults to standard text format.
 
         Returns:
             The configured handler.
@@ -63,7 +65,8 @@ class LogRotationManager:
         )
         handler.setLevel(level)
         handler.setFormatter(
-            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+            formatter
+            or logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         )
         logger.addHandler(handler)
         self._handlers[f"{logger_name}:{filename}"] = handler

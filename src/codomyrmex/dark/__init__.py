@@ -36,7 +36,7 @@ try:
 
     PDF_AVAILABLE = True
 except ImportError:
-    pdf = None  # type: ignore
+    pdf = None
     PDF_AVAILABLE = False
 
 # Shared schemas for cross-module interop

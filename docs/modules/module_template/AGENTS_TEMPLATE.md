@@ -10,7 +10,7 @@
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: [Date]
+**Version**: v1.1.6 | **Status**: Active | **Last Updated**: [Date]
 
 ## Purpose
 

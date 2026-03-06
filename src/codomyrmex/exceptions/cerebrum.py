@@ -11,7 +11,12 @@ from .base import CodomyrmexError
 
 
 class CerebrumError(CodomyrmexError):
-    """Base exception class for all CEREBRUM-related errors."""
+    """Base exception class for all CEREBRUM-related errors.
+
+    Attributes:
+        message (str): The error message.
+        system_component (str | None): The CEREBRUM system component that failed.
+    """
 
     def __init__(
         self,
@@ -25,7 +30,12 @@ class CerebrumError(CodomyrmexError):
 
 
 class CaseError(CerebrumError):
-    """Exception raised for case-related errors."""
+    """Exception raised for case-related errors.
+
+    Attributes:
+        message (str): The error message.
+        case_id (str | None): The ID of the case that caused the error.
+    """
 
     def __init__(
         self,
@@ -39,7 +49,12 @@ class CaseError(CerebrumError):
 
 
 class BayesianInferenceError(CerebrumError):
-    """Exception raised for Bayesian inference errors."""
+    """Exception raised for Bayesian inference errors.
+
+    Attributes:
+        message (str): The error message.
+        model_name (str | None): The name of the Bayesian model.
+    """
 
     def __init__(
         self,
@@ -53,7 +68,12 @@ class BayesianInferenceError(CerebrumError):
 
 
 class ActiveInferenceError(CerebrumError):
-    """Exception raised for active inference errors."""
+    """Exception raised for active inference errors.
+
+    Attributes:
+        message (str): The error message.
+        agent_id (str | None): The ID of the agent that caused the error.
+    """
 
     def __init__(
         self,
@@ -67,7 +87,12 @@ class ActiveInferenceError(CerebrumError):
 
 
 class ModelError(CerebrumError):
-    """Exception raised for model-related errors."""
+    """Exception raised for model-related errors.
+
+    Attributes:
+        message (str): The error message.
+        model_type (str | None): The type of the model.
+    """
 
     def __init__(
         self,
@@ -81,7 +106,13 @@ class ModelError(CerebrumError):
 
 
 class TransformationError(CerebrumError):
-    """Exception raised for model transformation errors."""
+    """Exception raised for model transformation errors.
+
+    Attributes:
+        message (str): The error message.
+        source_format (str | None): The source format of the model.
+        target_format (str | None): The target format of the model.
+    """
 
     def __init__(
         self,
@@ -102,7 +133,12 @@ class CaseNotFoundError(CaseError):
 
 
 class InvalidCaseError(CaseError):
-    """Exception raised when a case is invalid."""
+    """Exception raised when a case is invalid.
+
+    Attributes:
+        message (str): The error message.
+        validation_error (str | None): The validation error details.
+    """
 
     def __init__(
         self,
@@ -116,7 +152,12 @@ class InvalidCaseError(CaseError):
 
 
 class InferenceError(BayesianInferenceError):
-    """Exception raised when inference fails."""
+    """Exception raised when inference fails.
+
+    Attributes:
+        message (str): The error message.
+        inference_engine (str | None): The name of the inference engine.
+    """
 
     def __init__(
         self,
@@ -130,7 +171,12 @@ class InferenceError(BayesianInferenceError):
 
 
 class NetworkStructureError(BayesianInferenceError):
-    """Exception raised when Bayesian network structure is invalid."""
+    """Exception raised when Bayesian network structure is invalid.
+
+    Attributes:
+        message (str): The error message.
+        missing_nodes (list[str] | None): List of missing nodes in the network.
+    """
 
     def __init__(
         self,
@@ -141,3 +187,8 @@ class NetworkStructureError(BayesianInferenceError):
         super().__init__(message, **kwargs)
         if missing_nodes:
             self.context["missing_nodes"] = missing_nodes
+
+
+class VisualizationError(CerebrumError):
+    """Exception raised for visualization errors."""
+

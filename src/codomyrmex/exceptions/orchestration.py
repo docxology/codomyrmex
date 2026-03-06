@@ -11,7 +11,13 @@ from .base import CodomyrmexError
 
 
 class OrchestrationError(CodomyrmexError):
-    """Raised when orchestration operations fail."""
+    """Raised when orchestration operations fail.
+
+    Attributes:
+        message (str): The error message.
+        orchestrator_id (str | None): Unique identifier for the orchestrator.
+        strategy (str | None): The orchestration strategy being used.
+    """
 
     def __init__(
         self,
@@ -28,7 +34,13 @@ class OrchestrationError(CodomyrmexError):
 
 
 class WorkflowError(CodomyrmexError):
-    """Raised when workflow execution fails."""
+    """Raised when workflow execution fails.
+
+    Attributes:
+        message (str): The error message.
+        workflow_name (str | None): Name of the workflow.
+        step_name (str | None): The specific step that failed.
+    """
 
     def __init__(
         self,
@@ -45,7 +57,13 @@ class WorkflowError(CodomyrmexError):
 
 
 class ProjectManagementError(CodomyrmexError):
-    """Raised when project management operations fail."""
+    """Raised when project management operations fail.
+
+    Attributes:
+        message (str): The error message.
+        project_name (str | None): Name of the project.
+        operation (str | None): The operation that failed.
+    """
 
     def __init__(
         self,
@@ -62,7 +80,13 @@ class ProjectManagementError(CodomyrmexError):
 
 
 class TaskExecutionError(CodomyrmexError):
-    """Raised when task execution fails."""
+    """Raised when task execution fails.
+
+    Attributes:
+        message (str): The error message.
+        task_id (str | None): Unique identifier for the task.
+        executor (str | None): The executor that ran the task.
+    """
 
     def __init__(
         self,

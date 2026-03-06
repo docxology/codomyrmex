@@ -62,7 +62,7 @@ class GoogleAuthenticator:
 
         os.makedirs(os.path.dirname(self.token_file), exist_ok=True)
 
-    def get_credentials(self) -> "Credentials":  # type: ignore
+    def get_credentials(self) -> "Credentials":
         """
         Acquire valid credentials. Retrieves from cache if found and valid.
         Refreshes if expired. Otherwise, initiates an interactive browser flow.
@@ -106,7 +106,7 @@ class GoogleAuthenticator:
 
         return creds
 
-    def _run_interactive_flow(self) -> "Credentials":  # type: ignore
+    def _run_interactive_flow(self) -> "Credentials":
         """Run the local server flow to get user authorization."""
         if not os.path.exists(self.client_secrets_file):
             raise FileNotFoundError(

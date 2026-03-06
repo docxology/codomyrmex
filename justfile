@@ -102,6 +102,45 @@ release-patch:
     echo "Current version: $VERSION"
     echo "Run 'git tag -a v$VERSION -m \"Release v$VERSION\"' to tag"
 
+# ─── Security ────────────────────────────────────────────────────
+# Run security scanning (bandit + pip-audit)
+security:
+    @echo "Running security scanning..."
+    uv run python -m bandit -r src/codomyrmex/
+    @echo "Checking for vulnerabilities..."
+    uv run python -m pip_audit
+
+# Dependency audit via pip-audit
+audit:
+    @echo "Running dependency audit..."
+    uv run python -m pip_audit
+    @echo "Audit complete."
+
+# ─── Documentation ───────────────────────────────────────────────
+# Check documentation status
+docs-check:
+    @echo "Checking documentation status..."
+    uv run python scripts/documentation/check_docs_status.py
+
+# Generate missing documentation
+docs-generate:
+    @echo "Generating missing documentation..."
+    uv run python scripts/documentation/generate_missing_readmes.py
+
+# Full docs pipeline: check + generate + build
+docs: docs-check docs-generate docs-build
+
+# ─── Benchmarks ──────────────────────────────────────────────────
+# Run MCP performance benchmarks
+benchmark-mcp:
+    @echo "Running MCP performance benchmarks..."
+    uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_load.py -v --no-cov --no-header
+    uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_performance.py -v --no-cov --no-header
+
+# Run all benchmarks
+benchmark: benchmark-mcp
+    @echo "All benchmarks completed."
+
 # ─── Utilities ───────────────────────────────────────────────────
 # Show project info
 info:
@@ -114,3 +153,34 @@ info:
 # Verify all parse errors are fixed
 verify-parse:
     @python3 -c "import ast, glob; errors=[f for f in glob.glob('**/*.py', recursive=True) if not (lambda p: (ast.parse(open(p).read()), True)[-1])(f)]; print(f'Parse errors: {len(errors)}')" 2>/dev/null || echo "Parse check done"
+
+# Show environment info
+env-info:
+    @echo "Python version: $(python --version)"
+    @echo "Python path: $(which python)"
+    @echo "UV available: $(which uv || echo 'No')"
+    @echo "Git available: $(which git || echo 'No')"
+    @echo "Docker available: $(which docker || echo 'No')"
+
+# Update dependencies and clean
+update: install clean
+    @echo "Updating all dependencies..."
+    uv sync --upgrade
+
+# ─── Docker ──────────────────────────────────────────────────────
+# Build Docker image
+docker-build:
+    docker build -t codomyrmex:latest .
+
+# Run in Docker
+docker-run:
+    docker run -p 8000:8000 codomyrmex:latest
+
+# ─── Development Workflows ──────────────────────────────────────
+# Quick pre-commit: format + lint + type-check + fast tests
+dev-workflow: format lint type-check test-fast
+    @echo "✅ Development workflow passed"
+
+# Production workflow: full CI + security + audit
+prod-workflow: ci security audit
+    @echo "✅ Production workflow passed"

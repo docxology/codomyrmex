@@ -45,29 +45,49 @@ class MetricAggregator:
         self._gauges: dict[str, float] = {}
         self._histograms: dict[str, list[float]] = defaultdict(list)
 
-    def increment(self, name: str, value: float = 1.0) -> None:
+    def _get_key(self, name: str, labels: dict[str, str] | None = None) -> str:
+        if not labels:
+            return name
+        label_str = ",".join(f"{k}={v}" for k, v in sorted(labels.items()))
+        return f"{name}{{{label_str}}}"
+
+    def increment(
+        self, name: str, value: float = 1.0, labels: dict[str, str] | None = None
+    ) -> None:
         """Increment a counter."""
-        self._counters[name] += value
+        key = self._get_key(name, labels)
+        self._counters[key] += value
 
-    def decrement(self, name: str, value: float = 1.0) -> None:
+    def decrement(
+        self, name: str, value: float = 1.0, labels: dict[str, str] | None = None
+    ) -> None:
         """Decrement a counter."""
-        self._counters[name] -= value
+        key = self._get_key(name, labels)
+        self._counters[key] -= value
 
-    def gauge(self, name: str, value: float) -> None:
+    def gauge(
+        self, name: str, value: float, labels: dict[str, str] | None = None
+    ) -> None:
         """Set a gauge value."""
-        self._gauges[name] = value
+        key = self._get_key(name, labels)
+        self._gauges[key] = value
 
-    def observe(self, name: str, value: float) -> None:
+    def observe(
+        self, name: str, value: float, labels: dict[str, str] | None = None
+    ) -> None:
         """Record an observation in a histogram."""
-        self._histograms[name].append(value)
+        key = self._get_key(name, labels)
+        self._histograms[key].append(value)
 
-    def counter_value(self, name: str) -> float:
+    def counter_value(self, name: str, labels: dict[str, str] | None = None) -> float:
         """Get current counter value."""
-        return self._counters.get(name, 0.0)
+        return self._counters.get(self._get_key(name, labels), 0.0)
 
-    def gauge_value(self, name: str) -> float | None:
+    def gauge_value(
+        self, name: str, labels: dict[str, str] | None = None
+    ) -> float | None:
         """Get current gauge value."""
-        return self._gauges.get(name)
+        return self._gauges.get(self._get_key(name, labels))
 
     def histogram_stats(self, name: str) -> dict[str, float]:
         """Get histogram statistics.

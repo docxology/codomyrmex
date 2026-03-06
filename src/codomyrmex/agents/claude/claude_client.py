@@ -13,6 +13,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+if TYPE_CHECKING:
+    import anthropic
+
 from codomyrmex.agents.core import (
     AgentCapabilities,
 )
@@ -34,8 +37,9 @@ try:
     import anthropic
     from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
 except ImportError:
-    anthropic = None
-    MessageCreateParamsNonStreaming = dict
+    if not TYPE_CHECKING:
+        anthropic = None
+    MessageCreateParamsNonStreaming = Any  # type: ignore
 
 logger = get_logger(__name__)
 
@@ -118,7 +122,11 @@ class ClaudeClient(
             max_tokens_config_key="claude_max_tokens",
             temperature_config_key="claude_temperature",
             client_class=anthropic,
-            client_init_func=lambda api_key: anthropic.Anthropic(api_key=api_key),
+            client_init_func=lambda api_key: anthropic.Anthropic(
+                api_key=api_key,
+                max_retries=(config or {}).get("max_retries", self.DEFAULT_MAX_RETRIES),
+                timeout=(config or {}).get("claude_timeout", 30.0),
+            ),
             error_class=ClaudeError,
             config=config,
         )

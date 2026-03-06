@@ -176,7 +176,7 @@ class APIAgentBase(BaseAgent):
         self,
         error: Exception,
         execution_time: float,
-        api_error_class: type | None = None,
+        api_error_class: type | Any | None = None,
     ) -> None:
         """
         Handle API errors with standardized error conversion.
@@ -192,6 +192,15 @@ class APIAgentBase(BaseAgent):
         status_code = getattr(error, "status_code", None)
         api_error_str = str(error)
 
+        # Handle SDK-specific status codes/error details if available
+        if not status_code:
+            # Check for common SDK error attributes
+            for attr in ["status", "code", "http_status"]:
+                val = getattr(error, attr, None)
+                if isinstance(val, int):
+                    status_code = val
+                    break
+
         self.logger.error(
             f"{self.name} API error",
             extra={
@@ -203,6 +212,7 @@ class APIAgentBase(BaseAgent):
             },
         )
 
+        # Re-raise as agent-specific error if it's a known API error class
         if api_error_class and isinstance(error, api_error_class):
             raise self._error_class(
                 f"{self.name} API error: {api_error_str}",
@@ -210,9 +220,18 @@ class APIAgentBase(BaseAgent):
                 status_code=status_code,
             ) from error
 
-        # Generic error
+        # Fallback for SDKs that might not use the provided api_error_class consistently
+        # but are clearly API-related errors.
+        if "api" in error.__class__.__name__.lower() or "error" in error.__class__.__name__.lower():
+            raise self._error_class(
+                f"{self.name} API error: {api_error_str}",
+                api_error=api_error_str,
+                status_code=status_code,
+            ) from error
+
+        # Generic fallback
         raise self._error_class(
-            f"Unexpected error: {api_error_str}",
+            f"Unexpected error in {self.name}: {api_error_str}",
             api_error=api_error_str,
         ) from error
 

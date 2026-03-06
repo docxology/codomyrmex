@@ -16,7 +16,7 @@ try:
 
     WHISPER_AVAILABLE = True
 except ImportError:
-    WhisperProvider = None  # type: ignore
+    WhisperProvider = None
     WHISPER_LANGUAGES = []
     SUPPORTED_FORMATS = set()
     WHISPER_AVAILABLE = False

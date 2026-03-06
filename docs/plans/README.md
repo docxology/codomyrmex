@@ -1,6 +1,6 @@
 # Release Plans & Roadmaps
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.6 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -16,11 +16,11 @@ Release planning documents, architectural roadmaps, and integration plans for th
 
 | Version | Codename | Key Changes |
 |---------|----------|-------------|
-| v1.1.4 | Ruff Zero | 0 violations (from 119k), 155 documented ignores |
+| v1.1.6 | Ruff Zero | 0 violations (from 119k), 155 documented ignores |
 | v1.1.3 | Quality Ratchet | Ruff 794, ty baseline 1,442 |
 | v1.1.2 | Developer Experience | justfile, devcontainer, Hypothesis tests |
 | v1.1.1 | Polish & Hardening | Ruff 9.7k, 46 parse errors fixed |
-| v1.1.4 | Modular Architecture | 127 modules, MCP tools, PAI bridge |
+| v1.1.6 | Modular Architecture | 127 modules, MCP tools, PAI bridge |
 
 ## Upcoming
 

@@ -36,7 +36,14 @@ class DeadLetterQueue:
     """
 
     def __init__(self, path: str | Path = "/tmp/codomyrmex-dlq.jsonl"):
-        """Initialize the dead letter queue."""
+        """Initialize the dead letter queue.
+
+        Args:
+            path: File system path for the JSONL storage.
+
+        Example:
+            >>> dlq = DeadLetterQueue("/tmp/my-dlq.jsonl")
+        """
         self._path = Path(path)
         self._lock = threading.Lock()
         self._path.parent.mkdir(parents=True, exist_ok=True)
@@ -60,6 +67,9 @@ class DeadLetterQueue:
         Returns:
             Entry ID (UUID).
 
+        Example:
+            >>> dlq.add(operation="sync", error="Connection reset")
+            '550e8400-e29b-41d4-a716-446655440000'
         """
         entry_id = str(uuid.uuid4())
         entry = {
@@ -92,6 +102,9 @@ class DeadLetterQueue:
         Returns:
             List of entry dicts.
 
+        Example:
+            >>> dlq.list_entries(operation="sync")
+            [...]
         """
         entries: list[dict[str, Any]] = []
         with self._lock:
@@ -127,8 +140,11 @@ class DeadLetterQueue:
             callback: Function(operation, args) -> result.
 
         Returns:
-            Dict with replay outcome.
+            Dict with replay outcome (success, result, error).
 
+        Example:
+            >>> dlq.replay("uuid-123", my_handler)
+            {'success': True, 'result': ...}
         """
         entries = self.list_entries(include_replayed=True)
         target = next((e for e in entries if e["id"] == entry_id), None)
@@ -143,7 +159,11 @@ class DeadLetterQueue:
             return {"success": False, "error": str(exc)}
 
     def _mark_replayed(self, entry_id: str) -> None:
-        """Mark an entry as replayed by rewriting the file."""
+        """Mark an entry as replayed by rewriting the file.
+
+        Args:
+            entry_id: ID of the entry to mark.
+        """
         with self._lock:
             if not self._path.exists():
                 return
@@ -171,6 +191,9 @@ class DeadLetterQueue:
         Returns:
             Number of entries removed.
 
+        Example:
+            >>> dlq.purge()
+            10
         """
         with self._lock:
             if not self._path.exists():

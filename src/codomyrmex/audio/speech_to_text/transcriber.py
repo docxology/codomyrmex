@@ -114,7 +114,7 @@ class Transcriber:
             task=task,
             word_timestamps=word_timestamps,
             vad_filter=vad_filter,
-            **kwargs,  # type: ignore
+            **kwargs,
         )
 
         return self._provider.transcribe(audio_path, config)
@@ -147,7 +147,7 @@ class Transcriber:
             task=task,
             word_timestamps=word_timestamps,
             vad_filter=vad_filter,
-            **kwargs,  # type: ignore
+            **kwargs,
         )
 
         return await self._provider.transcribe_async(audio_path, config)
@@ -171,7 +171,7 @@ class Transcriber:
         """
         config = TranscriptionConfig(
             language=language,
-            **kwargs,  # type: ignore
+            **kwargs,
         )
 
         async for result in self._provider.transcribe_stream(audio_path, config):

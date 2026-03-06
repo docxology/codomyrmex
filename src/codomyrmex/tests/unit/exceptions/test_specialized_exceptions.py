@@ -135,7 +135,7 @@ class TestPluginError:
         assert "plugin_version" not in e.context
 
 
-# ── CircuitOpenError / BulkheadFullError (plain Exception) ───────────
+# ── CircuitOpenError / BulkheadFullError ────────────────────────────
 
 
 @pytest.mark.unit
@@ -162,17 +162,26 @@ class TestCircuitAndBulkheadErrors:
         with pytest.raises(BulkheadFullError):
             raise BulkheadFullError("full")
 
-    def test_circuit_not_codomyrmex_error(self):
+    def test_circuit_is_codomyrmex_error(self):
         from codomyrmex.exceptions.base import CodomyrmexError
 
         e = CircuitOpenError("err")
-        assert not isinstance(e, CodomyrmexError)
+        assert isinstance(e, CodomyrmexError)
 
-    def test_bulkhead_not_codomyrmex_error(self):
+    def test_bulkhead_is_codomyrmex_error(self):
         from codomyrmex.exceptions.base import CodomyrmexError
 
         e = BulkheadFullError("err")
-        assert not isinstance(e, CodomyrmexError)
+        assert isinstance(e, CodomyrmexError)
+
+    def test_circuit_name_in_context(self):
+        e = CircuitOpenError("err", circuit_name="api-breaker")
+        assert e.context.get("circuit_name") == "api-breaker"
+
+    def test_bulkhead_fields_in_context(self):
+        e = BulkheadFullError("err", bulkhead_name="db-pool", max_concurrency=10)
+        assert e.context.get("bulkhead_name") == "db-pool"
+        assert e.context.get("max_concurrency") == 10
 
 
 # ── IDEError hierarchy ────────────────────────────────────────────────

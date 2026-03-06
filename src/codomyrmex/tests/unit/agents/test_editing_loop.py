@@ -335,7 +335,7 @@ class TestParsePlanEdits:
         """Helper to call _parse_plan_edits without an orchestrator instance."""
         # The method only uses re; it needs no instance state.
         # Call it as an unbound function.
-        return EditingOrchestrator._parse_plan_edits(None, plan)  # type: ignore[arg-type]
+        return EditingOrchestrator._parse_plan_edits(None, plan)
 
     def test_single_find_replace(self):
         plan = textwrap.dedent("""\

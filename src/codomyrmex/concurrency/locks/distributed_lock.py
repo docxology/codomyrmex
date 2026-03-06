@@ -15,7 +15,14 @@ class BaseLock(ABC):
     """Abstract base class for all lock implementations."""
 
     def __init__(self, name: str):
-        """Initialize the base lock."""
+        """Initialize the base lock.
+
+        Args:
+            name: Unique identifier for the lock.
+
+        Example:
+            >>> lock = LocalLock("resource-1")
+        """
         self.name = name
         self.is_held = False
 
@@ -30,20 +37,53 @@ class BaseLock(ABC):
         Returns:
             True if acquired, False otherwise.
 
+        Raises:
+            RuntimeError: If there is an internal failure during acquisition.
+
+        Example:
+            >>> lock.acquire(timeout=5.0)
+            True
         """
 
     @abstractmethod
     def release(self) -> None:
-        """Release the lock."""
+        """Release the lock.
+
+        Raises:
+            RuntimeError: If the lock cannot be released safely.
+
+        Example:
+            >>> lock.release()
+        """
 
     def __enter__(self):
-        """Enter the context manager."""
+        """Enter the context manager.
+
+        Returns:
+            The lock instance.
+
+        Raises:
+            TimeoutError: If the lock could not be acquired within the default timeout.
+
+        Example:
+            >>> with LocalLock("resource-1") as lock:
+            ...     pass
+        """
         if not self.acquire():
             raise TimeoutError(f"Could not acquire lock: {self.name}")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Exit the context manager and clean up."""
+        """Exit the context manager and clean up.
+
+        Args:
+            exc_type: Exception type if an exception occurred.
+            exc_val: Exception value.
+            exc_tb: Exception traceback.
+
+        Example:
+            >>> lock.__exit__(None, None, None)
+        """
         self.release()
 
 
@@ -54,7 +94,15 @@ class LocalLock(BaseLock):
     """
 
     def __init__(self, name: str, lock_dir: str = "/tmp/codomyrmex/locks"):
-        """Initialize a local file-based lock."""
+        """Initialize a local file-based lock.
+
+        Args:
+            name: Unique identifier for the lock.
+            lock_dir: Directory where lock files will be stored.
+
+        Example:
+            >>> lock = LocalLock("my-resource", lock_dir="/tmp/locks")
+        """
         super().__init__(name)
         self.lock_path = os.path.join(lock_dir, f"{name}.lock")
         self._lock_dir = lock_dir
@@ -64,7 +112,20 @@ class LocalLock(BaseLock):
         self._nesting_level = 0
 
     def acquire(self, timeout: float = 10.0, retry_interval: float = 0.1) -> bool:
-        """Acquire the lock with retry logic and thread safety."""
+        """Acquire the lock with retry logic and thread safety.
+
+        Args:
+            timeout: Maximum time to wait for the lock in seconds.
+            retry_interval: Time between acquisition attempts.
+
+        Returns:
+            True if acquired, False otherwise.
+
+        Example:
+            >>> lock = LocalLock("test")
+            >>> lock.acquire(timeout=1.0)
+            True
+        """
         start_time = time.time()
 
         # First acquire the thread-level lock
@@ -97,7 +158,11 @@ class LocalLock(BaseLock):
             time.sleep(retry_interval)
 
     def release(self) -> None:
-        """Release the lock and clean up."""
+        """Release the lock and clean up.
+
+        Example:
+            >>> lock.release()
+        """
         with self._thread_lock:
             if not self.is_held:
                 return

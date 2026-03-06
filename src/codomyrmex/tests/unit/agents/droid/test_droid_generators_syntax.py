@@ -8,9 +8,8 @@ paths referenced inside the generated code resolve against the installed package
 
 import ast
 import importlib.util
-import re
-
 import importlib.util as _importlib_util
+import re
 from pathlib import Path as _Path
 
 import pytest
@@ -27,8 +26,8 @@ _GENERATORS_PATH = (
 _spec = _importlib_util.spec_from_file_location(
     "codomyrmex.agents.droid.generators.documentation", _GENERATORS_PATH
 )
-_mod = _importlib_util.module_from_spec(_spec)  # type: ignore[arg-type]
-_spec.loader.exec_module(_mod)  # type: ignore[union-attr]
+_mod = _importlib_util.module_from_spec(_spec)
+_spec.loader.exec_module(_mod)
 
 generate_quality_tests = _mod.generate_quality_tests
 generate_documentation_quality_module = _mod.generate_documentation_quality_module

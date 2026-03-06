@@ -1,4 +1,4 @@
-from codomyrmex.cli.utils import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 # Lazy imports for demos to avoid hard dependencies
 logger = get_logger(__name__)

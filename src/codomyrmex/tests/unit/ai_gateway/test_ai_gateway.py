@@ -325,7 +325,7 @@ class TestAIGatewayMCPTools:
         from codomyrmex.ai_gateway.mcp_tools import gateway_complete
 
         # Pass an invalid type to trigger an exception in the tool's try/except block.
-        result = gateway_complete(prompt="hello", providers=[None])  # type: ignore
+        result = gateway_complete(prompt="hello", providers=[None])
         assert result["status"] == "error"
 
     def test_gateway_health_no_providers(self):

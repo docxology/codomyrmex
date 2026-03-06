@@ -373,7 +373,7 @@ class TestRaiseForApiError:
         from codomyrmex.email.exceptions import EmailAuthError
 
         exc = Exception("unauthorized")
-        exc.status_code = 401  # type: ignore[attr-defined]
+        exc.status_code = 401
         with pytest.raises(EmailAuthError, match="authentication failed"):
             _raise_for_api_error(exc, "test_context")
 
@@ -382,7 +382,7 @@ class TestRaiseForApiError:
         from codomyrmex.email.exceptions import EmailAuthError
 
         exc = Exception("forbidden")
-        exc.status_code = 403  # type: ignore[attr-defined]
+        exc.status_code = 403
         with pytest.raises(EmailAuthError, match="authentication failed"):
             _raise_for_api_error(exc, "test_context")
 
@@ -391,7 +391,7 @@ class TestRaiseForApiError:
         from codomyrmex.email.exceptions import MessageNotFoundError
 
         exc = Exception("not found")
-        exc.status_code = 404  # type: ignore[attr-defined]
+        exc.status_code = 404
         with pytest.raises(MessageNotFoundError, match="not found"):
             _raise_for_api_error(exc, "test_context")
 
@@ -400,7 +400,7 @@ class TestRaiseForApiError:
         from codomyrmex.email.exceptions import EmailAPIError
 
         exc = Exception("server error")
-        exc.status_code = 500  # type: ignore[attr-defined]
+        exc.status_code = 500
         with pytest.raises(EmailAPIError, match="API error"):
             _raise_for_api_error(exc, "test_context")
 

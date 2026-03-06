@@ -94,7 +94,7 @@ try:
 
     PROCESSING_AVAILABLE = MOVIEPY_AVAILABLE or OPENCV_AVAILABLE
 except ImportError:
-    VideoProcessor = None  # type: ignore
+    VideoProcessor = None
     MOVIEPY_AVAILABLE = False
     OPENCV_AVAILABLE = False
     PROCESSING_AVAILABLE = False
@@ -105,7 +105,7 @@ try:
 
     EXTRACTION_AVAILABLE = True
 except ImportError:
-    FrameExtractor = None  # type: ignore
+    FrameExtractor = None
     EXTRACTION_AVAILABLE = False
 
 # Import analysis
@@ -114,7 +114,7 @@ try:
 
     ANALYSIS_AVAILABLE = True
 except ImportError:
-    VideoAnalyzer = None  # type: ignore
+    VideoAnalyzer = None
     ANALYSIS_AVAILABLE = False
 
 # Import generation

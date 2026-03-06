@@ -23,7 +23,7 @@ class TestQuantumRunCircuit:
         assert isinstance(result, dict)
         assert sum(result.values()) == 100
         # H gate should produce 0 and 1
-        for k in result.keys():
+        for k in result:
             assert k in ("0", "1")
 
     def test_invalid_gate_type(self):
@@ -82,7 +82,7 @@ class TestQuantumBellStateDemo:
 
         counts = result["counts"]
         assert sum(counts.values()) == 50
-        for k in counts.keys():
+        for k in counts:
             assert k in ("00", "11")
 
         assert result["stats"]["num_qubits"] == 2

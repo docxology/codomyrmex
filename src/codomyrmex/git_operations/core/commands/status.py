@@ -162,9 +162,17 @@ def clean_repository(
 
 @mcp_tool(name="git_diff")
 def get_diff(
-    target: str = "HEAD", repository_path: str | None = None, cached: bool = False
+    target: str | None = None, repository_path: str | None = None, cached: bool = False
 ) -> str:
-    """Get the diff of current changes against a target."""
+    """Get the diff of current changes.
+
+    Args:
+        target: Optional target to diff against (e.g. 'HEAD', 'main', or a commit SHA).
+                If None and cached=False, diffs working tree against index.
+                If None and cached=True, diffs index against HEAD.
+        repository_path: Path to repository.
+        cached: If True, show staged changes (equivalent to --cached/--staged).
+    """
     if repository_path is None:
         repository_path = os.getcwd()
 
@@ -172,7 +180,8 @@ def get_diff(
         cmd = ["git", "diff"]
         if cached:
             cmd.append("--cached")
-        cmd.append(target)
+        if target:
+            cmd.append(target)
 
         result = subprocess.run(
             cmd,

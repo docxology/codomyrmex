@@ -34,6 +34,20 @@ class TestDocument:
         assert isinstance(doc.content_hash, str)
         assert len(doc.content_hash) == 32  # MD5 hex
 
+    def test_from_file(self, tmp_path):
+        """Should load from file."""
+        d = tmp_path / "test_subdir"
+        d.mkdir()
+        p = d / "test.md"
+        p.write_text("# Hello\nWorld", encoding="utf-8")
+
+        doc = Document.from_file(str(p))
+        assert doc.id == "test"
+        assert doc.content == "# Hello\nWorld"
+        assert doc.doc_type == DocumentType.MARKDOWN
+        assert doc.source == str(p)
+        assert doc.metadata["filename"] == "test.md"
+
 
 class TestRecursiveTextSplitter:
     """Tests for RecursiveTextSplitter."""
@@ -56,6 +70,17 @@ class TestRecursiveTextSplitter:
         assert chunks[0].document_id == "doc1"
         assert chunks[0].sequence == 0
 
+    def test_split_character_fallback(self):
+        """Should fallback to character split if no separators work."""
+        # Force character split by using an empty list of separators or separators that don't exist
+        splitter = RecursiveTextSplitter(chunk_size=5, chunk_overlap=0, separators=[""])
+        doc = Document.from_text("1234567890")
+
+        chunks = splitter.split(doc)
+        assert len(chunks) == 2
+        assert chunks[0].content == "12345"
+        assert chunks[1].content == "67890"
+
 
 class TestSentenceSplitter:
     """Tests for SentenceSplitter."""
@@ -71,6 +96,22 @@ class TestSentenceSplitter:
 
 class TestInMemoryVectorStore:
     """Tests for InMemoryVectorStore."""
+
+    def test_cosine_similarity_zero_magnitude(self):
+        """Should handle zero magnitude vectors gracefully."""
+        store = InMemoryVectorStore()
+        chunk = Chunk(
+            id="c1",
+            content="a",
+            document_id="d1",
+            sequence=0,
+            start_char=0,
+            end_char=1,
+            embedding=[0.0, 0.0],
+        )
+        store.add([chunk])
+        results = store.search([1.0, 1.0])
+        assert len(results) == 0
 
     def test_add_and_search(self):
         """Should add and search chunks."""
@@ -146,6 +187,23 @@ class TestContextFormatter:
 
         assert "Test content" in context
         assert "Source 1" in context
+
+    def test_format_with_metadata(self):
+        """Should include metadata if configured."""
+        formatter = ContextFormatter(include_metadata=True)
+        chunk = Chunk(
+            id="c1",
+            content="Content",
+            document_id="d1",
+            sequence=0,
+            start_char=0,
+            end_char=7,
+            metadata={"key": "val"},
+        )
+        results = [RetrievalResult(chunk=chunk, score=0.9)]
+        context = formatter.format(results)
+        assert "key" in context
+        assert "val" in context
 
     def test_max_length(self):
         """Should respect max length."""
@@ -224,6 +282,18 @@ class TestRAGPipeline:
 
         assert pipeline.delete_document("to_delete") is True
         assert pipeline.document_count == 0
+        assert pipeline.delete_document("non_existent") is False
+
+    def test_index_multiple_documents(self, mock_embed_fn):
+        """Should index multiple documents."""
+        pipeline = RAGPipeline(embedding_fn=mock_embed_fn)
+        docs = [
+            Document.from_text("Doc 1", doc_id="d1"),
+            Document.from_text("Doc 2", doc_id="d2"),
+        ]
+        total_chunks = pipeline.index_documents(docs)
+        assert total_chunks >= 2
+        assert pipeline.document_count == 2
 
 
 class TestRAGPrompt:

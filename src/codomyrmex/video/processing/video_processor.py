@@ -29,7 +29,7 @@ try:
     MOVIEPY_AVAILABLE = True
 except ImportError:
     MOVIEPY_AVAILABLE = False
-    VideoFileClip = None  # type: ignore
+    VideoFileClip = None
 
 # Check for OpenCV availability
 try:
@@ -39,8 +39,8 @@ try:
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
-    cv2 = None  # type: ignore
-    np = None  # type: ignore
+    cv2 = None
+    np = None
 
 
 SUPPORTED_INPUT_FORMATS = {

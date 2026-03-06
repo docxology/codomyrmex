@@ -14,12 +14,12 @@ import os
 from typing import Any
 
 try:
-    from soul import Agent as _SoulAgent  # type: ignore[import-untyped]
+    from soul import Agent as _SoulAgent
 
     HAS_SOUL: bool = True
 except ImportError:
     HAS_SOUL = False
-    _SoulAgent = None  # type: ignore[assignment]
+    _SoulAgent = None
 
 from .exceptions import SoulError, SoulImportError, SoulMemoryError, SoulProviderError
 
@@ -99,7 +99,7 @@ class SoulAgent:
             SoulProviderError: When the underlying LLM call fails.
         """
         try:
-            return self._agent.ask(question, remember=remember)  # type: ignore[no-any-return]
+            return self._agent.ask(question, remember=remember)
         except Exception as exc:
             raise SoulProviderError(f"Agent query failed: {exc}") from exc
 

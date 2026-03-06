@@ -1,6 +1,6 @@
 # Concurrency Module - Agent Guidelines
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
@@ -15,6 +15,8 @@ The `concurrency` module provides thread-safe and process-safe synchronization p
 - **`LocalSemaphore`** — Limit concurrent access to resources.
 - **`AsyncLocalSemaphore`** — Asyncio-compatible semaphore with sync bridge.
 - **`AsyncWorkerPool`** — Managed pool for bounded async task execution.
+- **`Channel`** — Go-style async communication channels for inter-task coordination.
+- **`TaskQueue`** — Priority-based task queue with deduplication and dead-letter support.
 
 ## Agent Instructions
 
@@ -26,6 +28,8 @@ The `concurrency` module provides thread-safe and process-safe synchronization p
    - Use `RedisLock` for distributed systems.
    - Use `ReadWriteLock` for data structures that are frequently read but rarely updated.
    - Use `AsyncWorkerPool` for limiting concurrency of async tasks (e.g., API calls).
+   - Use `Channel` for message passing between async tasks.
+   - Use `TaskQueue` for managing work that requires priority, deduplication, or retries.
 
 ## Common Patterns
 
@@ -57,6 +61,25 @@ async def process_data(item):
 async with AsyncWorkerPool(max_workers=5) as pool:
     results = await pool.map(process_data, range(20))
     # results is a list of TaskResult objects
+```
+
+### Async Channels (CSP Pattern)
+```python
+import asyncio
+from codomyrmex.concurrency import Channel
+
+async def producer(ch: Channel):
+    for i in range(5):
+        await ch.send(f"msg-{i}")
+    ch.close()
+
+async def consumer(ch: Channel):
+    async for msg in ch:
+        print(f"Received: {msg}")
+
+async def main():
+    ch = Channel(capacity=2)
+    await asyncio.gather(producer(ch), consumer(ch))
 ```
 
 ### Redis Distributed Locking

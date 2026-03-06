@@ -48,7 +48,18 @@ class GeminiClient(BaseAgent):
             logger.warning("No GEMINI_API_KEY found. Some operations will fail.")
         else:
             try:
-                self.client = genai.Client(api_key=self.api_key)
+                from google.genai import types
+                # Use http_options with retry configuration if available in the SDK
+                # Some versions might use different parameters, so we handle it gracefully
+                client_kwargs = {"api_key": self.api_key}
+                max_retries = (config or {}).get("max_retries", 3)
+                
+                # google-genai SDK 0.x uses HttpOptions for retry config
+                client_kwargs["http_options"] = types.HttpOptions(
+                    retry=max_retries  # type: ignore
+                )
+                
+                self.client = genai.Client(**client_kwargs)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.error(f"Failed to initialize Gemini Client: {e}")
                 raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
@@ -57,7 +68,16 @@ class GeminiClient(BaseAgent):
             "gemini_model", default="gemini-3.1-pro-preview", config=config
         )
 
+        # Retry configuration
+        self.max_retries = (config or {}).get("max_retries", 3)
+        self.initial_retry_delay = (config or {}).get("initial_retry_delay", 1.0)
+        self.max_retry_delay = (config or {}).get("max_retry_delay", 60.0)
+        self.backoff_factor = (config or {}).get("backoff_factor", 2.0)
+
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+        """Execute Gemini API request."""
+        import time
+
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
 
@@ -101,6 +121,7 @@ class GeminiClient(BaseAgent):
 
         contents = self._build_contents(prompt, context)
 
+        start_time = time.time()
         try:
             response = self.client.models.generate_content(
                 model=model,
@@ -110,8 +131,45 @@ class GeminiClient(BaseAgent):
                 else None,
             )
             return self._build_response_from_api_result(response, request)
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            raise GeminiError(f"Gemini API execution failed: {e}") from e
+        except Exception as e:
+            import time
+            execution_time = time.time() - start_time
+            # For Gemini google-genai SDK, we use a generic Exception check
+            # or could use google.api_core.exceptions if we had it imported.
+            # Base class _handle_api_error will wrap it in GeminiError.
+            return self._handle_gemini_error(e, execution_time, request.id)
+
+    def _handle_gemini_error(
+        self, error: Exception, execution_time: float, request_id: str | None = None
+    ) -> AgentResponse:
+        """Handle Gemini-specific API errors."""
+        api_error_str = str(error)
+        status_code = getattr(error, "code", None)
+
+        self.logger.error(
+            "Gemini API error",
+            extra={
+                "agent": "gemini",
+                "error": api_error_str,
+                "status_code": status_code,
+                "execution_time": execution_time,
+            },
+        )
+
+        try:
+            raise GeminiError(
+                f"Gemini API error: {api_error_str}",
+                api_error=api_error_str,
+                status_code=status_code,
+            ) from error
+        except GeminiError as e:
+            return AgentResponse(
+                content="",
+                error=str(e),
+                metadata={"error_type": type(e).__name__},
+                request_id=request_id,
+                execution_time=execution_time,
+            )
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         if not self.client:
@@ -231,9 +289,8 @@ class GeminiClient(BaseAgent):
             raise GeminiError("Gemini Client not initialized")
         try:
             model_name = model or self.default_model
-            return self.client.models.count_tokens(
-                model=model_name, contents=content
-            ).total_tokens
+            resp = self.client.models.count_tokens(model=model_name, contents=content)
+            return int(resp.total_tokens) if resp.total_tokens is not None else 0
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Failed to count tokens: {e}")
             raise GeminiError(f"Failed to count tokens: {e}") from e
@@ -245,10 +302,10 @@ class GeminiClient(BaseAgent):
             raise GeminiError("Gemini Client not initialized")
         try:
             resp = self.client.models.embed_content(model=model, contents=content)
-            if hasattr(resp, "embedding"):
-                return [resp.embedding.values]
-            if hasattr(resp, "embeddings"):
-                return [e.values for e in resp.embeddings]
+            if hasattr(resp, "embedding") and resp.embedding:
+                return [list(resp.embedding.values or [])]
+            if hasattr(resp, "embeddings") and resp.embeddings:
+                return [list(e.values or []) for e in resp.embeddings]
             return []
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Failed to embed content: {e}")
@@ -274,7 +331,11 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to generate images: {e}") from e
 
     def upscale_image(
-        self, image: Any, model: str = "imagen-latest", **kwargs: Any
+        self,
+        image: Any,
+        upscale_factor: str = "x4",
+        model: str = "imagen-latest",
+        **kwargs: Any,
     ) -> list[dict[str, Any]]:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
@@ -284,7 +345,10 @@ class GeminiClient(BaseAgent):
                 config = kwargs
 
             result = self.client.models.upscale_image(
-                model=model, image=image, config=config
+                model=model,
+                image=image,
+                upscale_factor=upscale_factor,
+                config=config,
             )
             return [img.model_dump() for img in result.images]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -292,7 +356,12 @@ class GeminiClient(BaseAgent):
             raise GeminiError(f"Failed to upscale image: {e}") from e
 
     def edit_image(
-        self, prompt: str, image: Any, model: str = "imagen-latest", **kwargs: Any
+        self,
+        prompt: str,
+        image: Any,
+        reference_images: list[Any] | None = None,
+        model: str = "imagen-latest",
+        **kwargs: Any,
     ) -> list[dict[str, Any]]:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
@@ -301,8 +370,17 @@ class GeminiClient(BaseAgent):
             if config is None and kwargs:
                 config = kwargs
 
+            # The SDK might expect reference_images instead of a single image
+            # Or both. If image is provided, we use it or wrap it.
+            ref_images = reference_images or []
+            if image and not ref_images:
+                ref_images = [image]
+
             result = self.client.models.edit_image(
-                model=model, prompt=prompt, image=image, config=config
+                model=model,
+                prompt=prompt,
+                reference_images=ref_images,
+                config=config,
             )
             return [img.model_dump() for img in result.images]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -413,9 +491,11 @@ class GeminiClient(BaseAgent):
             raise GeminiError("Gemini Client not initialized")
         try:
             config = types.CreateCachedContentConfig(
-                model=model, contents=contents, ttl=ttl, display_name=display_name
+                contents=contents, ttl=ttl, display_name=display_name
             )
-            return self.client.caches.create(config=config).model_dump()
+            return self.client.caches.create(
+                model=model, config=config
+            ).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Failed to create cached content: {e}")
             raise GeminiError(f"Failed to create cached content: {e}") from e
@@ -518,7 +598,8 @@ class GeminiClient(BaseAgent):
             raise GeminiError("Gemini Client not initialized")
         try:
             return self.client.batches.create(
-                requests=requests, model=model or self.default_model
+                model=model or self.default_model,
+                src=requests,
             ).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Failed to create batch: {e}")

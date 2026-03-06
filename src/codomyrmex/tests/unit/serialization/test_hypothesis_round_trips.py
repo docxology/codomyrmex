@@ -18,7 +18,7 @@ from hypothesis import strategies as st
 _serializer_path = pathlib.Path(__file__).resolve().parents[4] / "codomyrmex" / "serialization" / "serializer.py"
 _spec = importlib.util.spec_from_file_location("serializer_direct", _serializer_path)
 _mod = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_mod)  # type: ignore[union-attr]
+_spec.loader.exec_module(_mod)
 SerializationFormat = _mod.SerializationFormat
 Serializer = _mod.Serializer
 

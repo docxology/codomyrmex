@@ -287,10 +287,10 @@ class APIVersionManager:
         """
         if not self.versions:
             # Handle empty versions case
-            return None  # type: ignore
+            return None
 
         versions = list(self.versions.values())
-        return max(versions, key=lambda v: v.version)  # type: ignore
+        return max(versions, key=lambda v: v.version)
 
     def parse_version_from_request(
         self, headers: dict[str, str], query_params: dict[str, list[str]]
@@ -314,7 +314,7 @@ class APIVersionManager:
         # Check query parameters
         version = query_params.get("version", [None])[0]
         if version:
-            return version  # type: ignore
+            return version
 
         # Check Accept header for versioned content types
         accept = headers.get("accept", "")

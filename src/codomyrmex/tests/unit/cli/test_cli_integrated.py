@@ -116,8 +116,18 @@ class TestCLIIntegrated:
         assert "Python" in output
         assert "virtual environment" in output
 
-    def test_cli_test_handler_real_module(self):
+    def test_cli_test_handler_real_module(self, monkeypatch):
         """Test the test handler with a real module."""
+        import subprocess
+        
+        def mock_run(*args, **kwargs):
+            # Verify the command is mostly correct
+            assert "pytest" in args[0]
+            return subprocess.CompletedProcess(
+                args=args[0], returncode=0, stdout="Mocked tests passed\n", stderr=""
+            )
+            
+        monkeypatch.setattr(subprocess, "run", mock_run)
         cli = Cli()
 
         captured = io.StringIO()

@@ -37,7 +37,7 @@ def _create_server_with_tools(n_tools: int = 10) -> MCPServer:
                     "properties": {"x": {"type": "integer"}},
                 },
             },
-            handler=lambda x: {"result": x * 2},  # type: ignore[arg-type]
+            handler=lambda x: {"result": x * 2},
         )
     return server
 

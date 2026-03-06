@@ -5,8 +5,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import io
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.terminal_interface.rendering import RichRenderer
 
 #!/usr/bin/env python3
 
@@ -56,13 +58,29 @@ class TerminalFormatter:
         "STRIKETHROUGH": "\033[9m",
     }
 
-    def __init__(self, use_colors: bool | None = None):
+    def __init__(self, use_colors: bool | None = None, use_rich: bool = True):
         """Initialize formatter with color support detection."""
         if use_colors is None:
             # Auto-detect color support
             self.use_colors = self._supports_color()
         else:
             self.use_colors = use_colors
+
+        self.rich = None
+        self._capture_console = None
+        if use_rich:
+            try:
+                from rich.console import Console
+                # Dedicated console for string capture
+                self._capture_console = Console(
+                    force_terminal=self.use_colors,
+                    width=80,
+                    file=io.StringIO(),
+                    highlight=False
+                )
+                self.rich = RichRenderer(force_terminal=self.use_colors)
+            except Exception as e:
+                logger.warning(f"Failed to initialize Rich: {e}")
 
     def _supports_color(self) -> bool:
         """Check if terminal supports color output."""
@@ -100,22 +118,43 @@ class TerminalFormatter:
 
     def success(self, text: str) -> str:
         """Format success message."""
+        if self._capture_console:
+            self._capture_console.file = io.StringIO()
+            self._capture_console.print(f"✅ {text}", style="bold green", end="")
+            return self._capture_console.file.getvalue()
         return self.color(f"✅ {text}", "BRIGHT_GREEN")
 
     def error(self, text: str) -> str:
         """Format error message."""
+        if self._capture_console:
+            self._capture_console.file = io.StringIO()
+            self._capture_console.print(f"❌ {text}", style="bold red", end="")
+            return self._capture_console.file.getvalue()
         return self.color(f"❌ {text}", "BRIGHT_RED")
 
     def warning(self, text: str) -> str:
         """Format warning message."""
+        if self._capture_console:
+            self._capture_console.file = io.StringIO()
+            self._capture_console.print(f"⚠️  {text}", style="bold yellow", end="")
+            return self._capture_console.file.getvalue()
         return self.color(f"⚠️  {text}", "BRIGHT_YELLOW")
 
     def info(self, text: str) -> str:
         """Format info message."""
+        if self._capture_console:
+            self._capture_console.file = io.StringIO()
+            self._capture_console.print(f"ℹ️  {text}", style="bold blue", end="")
+            return self._capture_console.file.getvalue()
         return self.color(f"ℹ️  {text}", "BRIGHT_BLUE")
 
     def header(self, text: str, char: str = "=", width: int = 60) -> str:
         """Create a formatted header."""
+        if self._capture_console:
+            self._capture_console.file = io.StringIO()
+            self._capture_console.rule(f"[bold cyan]{text}[/bold cyan]")
+            return self._capture_console.file.getvalue().rstrip()
+
         header_line = char * width
         centered_text = text.center(width)
 
@@ -134,6 +173,13 @@ class TerminalFormatter:
         suffix: str = "",
     ) -> str:
         """Create a progress bar."""
+        if self.rich:
+            # Note: This is a static snapshot for compatibility with the return-string API
+            percent = 100 if total == 0 else min(100, current / total * 100)
+            filled = int(width * current // total) if total > 0 else width
+            bar = "█" * filled + "░" * (width - filled)
+            return f"{prefix} |{bar}| {percent:5.1f}% {suffix}"
+
         percent = 100 if total == 0 else min(100, current / total * 100)
 
         filled = int(width * current // total) if total > 0 else width
@@ -149,6 +195,17 @@ class TerminalFormatter:
         """Create a formatted table."""
         if not headers or not rows:
             return ""
+
+        if self._capture_console:
+            from rich.table import Table
+            self._capture_console.file = io.StringIO()
+            table = Table()
+            for header in headers:
+                table.add_column(header)
+            for row in rows:
+                table.add_row(*[str(item) for item in row])
+            self._capture_console.print(table)
+            return self._capture_console.file.getvalue().rstrip()
 
         # Calculate column widths
         col_widths = []

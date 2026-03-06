@@ -266,7 +266,6 @@ jobs:
             p/security-audit
             p/secrets
             p/python
-          generateSarif: "1"
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 

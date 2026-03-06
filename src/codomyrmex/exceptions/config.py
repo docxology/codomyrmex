@@ -14,7 +14,13 @@ if TYPE_CHECKING:
 
 
 class ConfigurationError(CodomyrmexError):
-    """Raised when there's an issue with configuration settings."""
+    """Raised when there's an issue with configuration settings.
+
+    Attributes:
+        message (str): The error message.
+        config_key (str | None): The configuration key that caused the error.
+        config_file (str | None): Path to the configuration file.
+    """
 
     def __init__(
         self,
@@ -31,7 +37,13 @@ class ConfigurationError(CodomyrmexError):
 
 
 class EnvironmentError(CodomyrmexError):
-    """Raised when the environment is not properly set up."""
+    """Raised when the environment is not properly set up.
+
+    Attributes:
+        message (str): The error message.
+        variable_name (str | None): Name of the missing or invalid environment variable.
+        expected_value (str | None): The expected value of the variable.
+    """
 
     def __init__(
         self,
@@ -48,7 +60,14 @@ class EnvironmentError(CodomyrmexError):
 
 
 class DependencyError(CodomyrmexError):
-    """Raised when a required dependency is missing or incompatible."""
+    """Raised when a required dependency is missing or incompatible.
+
+    Attributes:
+        message (str): The error message.
+        dependency_name (str | None): Name of the dependency.
+        required_version (str | None): The required version of the dependency.
+        installed_version (str | None): The currently installed version.
+    """
 
     def __init__(
         self,

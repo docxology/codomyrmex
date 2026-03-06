@@ -31,7 +31,15 @@ R = TypeVar("R")
 
 @dataclass
 class TaskResult:
-    """Result from a pool task execution."""
+    """Result from a pool task execution.
+
+    Attributes:
+        task_id: Unique identifier for the task.
+        success: Whether the task completed successfully.
+        result: The return value of the task.
+        error: Error message if the task failed.
+        elapsed_ms: Time taken to execute the task in milliseconds.
+    """
 
     task_id: str
     success: bool
@@ -42,7 +50,14 @@ class TaskResult:
 
 @dataclass
 class PoolStats:
-    """Aggregate pool statistics."""
+    """Aggregate pool statistics.
+
+    Attributes:
+        submitted: Total tasks submitted to the pool.
+        completed: Total tasks successfully completed.
+        failed: Total tasks that failed.
+        total_elapsed_ms: Sum of execution times for all tasks.
+    """
 
     submitted: int = 0
     completed: int = 0
@@ -60,7 +75,15 @@ class AsyncWorkerPool:
     """
 
     def __init__(self, max_workers: int = 4, *, name: str = "pool"):
-        """Initialize worker pool."""
+        """Initialize worker pool.
+
+        Args:
+            max_workers: Maximum number of concurrent async tasks.
+            name: Descriptive name for the pool.
+
+        Example:
+            >>> pool = AsyncWorkerPool(max_workers=10)
+        """
         self._max_workers = max_workers
         self._name = name
         self._semaphore = asyncio.Semaphore(max_workers)
@@ -69,11 +92,26 @@ class AsyncWorkerPool:
         self._closed = False
 
     async def __aenter__(self) -> Self:
-        """Enter async context."""
+        """Enter async context.
+
+        Returns:
+            The pool instance.
+
+        Example:
+            >>> async with AsyncWorkerPool() as pool:
+            ...     pass
+        """
         return self
 
     async def __aexit__(self, *exc: object) -> None:
-        """Exit async context."""
+        """Exit async context and shut down the pool.
+
+        Args:
+            *exc: Exception details.
+
+        Example:
+            >>> await pool.__aexit__(None, None, None)
+        """
         await self.shutdown()
 
     async def submit(
@@ -87,13 +125,18 @@ class AsyncWorkerPool:
 
         Args:
             coro_fn: Async callable to execute.
-            *args: Positional arguments.
+            *args: Positional arguments for coro_fn.
             task_id: Optional identifier for tracking.
-            **kwargs: Keyword arguments.
+            **kwargs: Keyword arguments for coro_fn.
 
         Returns:
             TaskResult with success/error details.
 
+        Raises:
+            RuntimeError: If the pool is already shut down.
+
+        Example:
+            >>> result = await pool.submit(my_coro, 1, 2, task_id="task-1")
         """
         if self._closed:
             raise RuntimeError(f"Pool {self._name!r} is shut down")
@@ -134,6 +177,8 @@ class AsyncWorkerPool:
         Returns:
             List of TaskResults in input order.
 
+        Example:
+            >>> results = await pool.map(fetch_url, ["url1", "url2"])
         """
         tasks = [
             self.submit(coro_fn, item, task_id=f"{self._name}-{i}")
@@ -142,7 +187,11 @@ class AsyncWorkerPool:
         return list(await asyncio.gather(*tasks))
 
     async def shutdown(self) -> None:
-        """Wait for all pending tasks and prevent new submissions."""
+        """Wait for all pending tasks and prevent new submissions.
+
+        Example:
+            >>> await pool.shutdown()
+        """
         self._closed = True
         if self._tasks:
             await asyncio.gather(*self._tasks, return_exceptions=True)
@@ -150,5 +199,12 @@ class AsyncWorkerPool:
 
     @property
     def stats(self) -> PoolStats:
-        """Current pool statistics."""
+        """Current pool statistics.
+
+        Returns:
+            PoolStats object.
+
+        Example:
+            >>> print(pool.stats.completed)
+        """
         return self._stats

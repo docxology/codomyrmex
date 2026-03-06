@@ -16,8 +16,8 @@ import pytest
 # Load dashboard.py via importlib to avoid pytest path conflicts
 _SCRIPT = Path(__file__).resolve().parents[5] / "scripts" / "pai" / "dashboard.py"
 _spec = importlib.util.spec_from_file_location("pai_dashboard", _SCRIPT)
-_mod = importlib.util.module_from_spec(_spec)  # type: ignore[arg-type]
-_spec.loader.exec_module(_mod)  # type: ignore[union-attr]
+_mod = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_mod)
 _pids_on_port = _mod._pids_on_port
 _port_is_live = _mod._port_is_live
 parse_args = _mod.parse_args

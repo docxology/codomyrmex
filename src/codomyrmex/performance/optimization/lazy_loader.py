@@ -1,4 +1,5 @@
 import importlib
+import threading
 from collections.abc import Callable
 from functools import wraps
 from typing import Any
@@ -35,18 +36,21 @@ class LazyLoader:
         self.module_name = module_name
         self.package = package
         self._module: Any | None = None
-        self._loading = False
+        self._lock = threading.Lock()
 
     def __getattr__(self, name: str) -> Any:
         """Load the module and return the requested attribute."""
-        if self._module is None and not self._loading:
-            self._loading = True
-            try:
-                self._module = importlib.import_module(self.module_name, self.package)
-            except ImportError as e:
-                raise ImportError(f"Could not import {self.module_name}: {e}") from e
-            finally:
-                self._loading = False
+        if self._module is None:
+            with self._lock:
+                if self._module is None:
+                    try:
+                        self._module = importlib.import_module(
+                            self.module_name, self.package
+                        )
+                    except ImportError as e:
+                        raise ImportError(
+                            f"Could not import {self.module_name}: {e}"
+                        ) from e
 
         if self._module is None:
             raise ImportError(f"Failed to load module {self.module_name}")

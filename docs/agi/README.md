@@ -1,6 +1,6 @@
 # AGI Perspectives on Codomyrmex
 
-**Series**: Documentation Perspectives | **Version**: v1.1.4 | **Last Updated**: March 2026
+**Series**: Documentation Perspectives | **Version**: v1.1.6 | **Last Updated**: March 2026
 
 ## Thesis
 

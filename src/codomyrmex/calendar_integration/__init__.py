@@ -31,7 +31,7 @@ try:
 except ImportError:
     GCAL_AVAILABLE = False
     CALENDAR_AVAILABLE = False
-    GoogleCalendar = None  # type: ignore
+    GoogleCalendar = None
 
 
 def cli_commands():

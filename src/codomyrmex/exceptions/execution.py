@@ -11,7 +11,14 @@ from .base import CodomyrmexError
 
 
 class CodeExecutionError(CodomyrmexError):
-    """Raised when code execution fails."""
+    """Raised when code execution fails.
+
+    Attributes:
+        message (str): The error message.
+        exit_code (int | None): The process exit code.
+        stdout (str | None): Standard output from the process.
+        stderr (str | None): Standard error from the process.
+    """
 
     def __init__(
         self,
@@ -31,7 +38,13 @@ class CodeExecutionError(CodomyrmexError):
 
 
 class SandboxError(CodomyrmexError):
-    """Raised when sandbox operations fail."""
+    """Raised when sandbox operations fail.
+
+    Attributes:
+        message (str): The error message.
+        sandbox_id (str | None): Unique identifier for the sandbox.
+        runtime (str | None): The runtime environment (e.g., 'python', 'nodejs').
+    """
 
     def __init__(
         self,
@@ -48,7 +61,13 @@ class SandboxError(CodomyrmexError):
 
 
 class ContainerError(CodomyrmexError):
-    """Raised when container operations fail."""
+    """Raised when container operations fail.
+
+    Attributes:
+        message (str): The error message.
+        container_id (str | None): Unique identifier for the container.
+        image_name (str | None): Name of the container image.
+    """
 
     def __init__(
         self,
@@ -65,7 +84,13 @@ class ContainerError(CodomyrmexError):
 
 
 class BuildError(CodomyrmexError):
-    """Raised when build operations fail."""
+    """Raised when build operations fail.
+
+    Attributes:
+        message (str): The error message.
+        build_tool (str | None): Name of the build tool (e.g., 'make', 'cmake').
+        target (str | None): The build target that failed.
+    """
 
     def __init__(
         self,
@@ -82,7 +107,13 @@ class BuildError(CodomyrmexError):
 
 
 class SynthesisError(CodomyrmexError):
-    """Raised when code synthesis operations fail."""
+    """Raised when code synthesis operations fail.
+
+    Attributes:
+        message (str): The error message.
+        component (str | None): The system component being synthesized.
+        synthesis_mode (str | None): The mode of synthesis.
+    """
 
     def __init__(
         self,

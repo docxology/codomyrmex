@@ -31,7 +31,6 @@ class WorkerInfo:
         capabilities: Task types this worker can handle.
         max_concurrent: Maximum concurrent tasks.
         current_load: Tasks currently assigned.
-
     """
 
     worker_id: str
@@ -53,7 +52,14 @@ class TaskScheduler:
     def __init__(
         self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN
     ) -> None:
-        """Initialize the task scheduler."""
+        """Initialize the task scheduler.
+
+        Args:
+            strategy: Routing strategy to use.
+
+        Example:
+            >>> scheduler = TaskScheduler(SchedulingStrategy.ROUND_ROBIN)
+        """
         self._strategy = strategy
         self._workers: dict[str, WorkerInfo] = {}
         self._round_robin_index = 0
@@ -61,12 +67,28 @@ class TaskScheduler:
 
     @property
     def worker_count(self) -> int:
-        """Return the number of registered workers."""
+        """Return the number of registered workers.
+
+        Returns:
+            Worker count.
+
+        Example:
+            >>> scheduler.worker_count
+            5
+        """
         return len(self._workers)
 
     @property
     def strategy(self) -> SchedulingStrategy:
-        """Strategy."""
+        """Get current strategy.
+
+        Returns:
+            Current SchedulingStrategy.
+
+        Example:
+            >>> scheduler.strategy
+            SchedulingStrategy.ROUND_ROBIN
+        """
         return self._strategy
 
     def register_worker(
@@ -82,6 +104,8 @@ class TaskScheduler:
             capabilities: Task types this worker handles.
             max_concurrent: Max concurrent tasks.
 
+        Example:
+            >>> scheduler.register_worker("w-1", capabilities=["ocr", "search"])
         """
         self._workers[worker_id] = WorkerInfo(
             worker_id=worker_id,
@@ -90,7 +114,18 @@ class TaskScheduler:
         )
 
     def unregister_worker(self, worker_id: str) -> bool:
-        """Remove a worker. Returns True if found."""
+        """Remove a worker.
+
+        Args:
+            worker_id: Worker to remove.
+
+        Returns:
+            True if found and removed, False otherwise.
+
+        Example:
+            >>> scheduler.unregister_worker("w-1")
+            True
+        """
         return self._workers.pop(worker_id, None) is not None
 
     def set_affinity(self, task_type: str, worker_id: str) -> None:
@@ -100,6 +135,8 @@ class TaskScheduler:
             task_type: Task type to route.
             worker_id: Preferred worker.
 
+        Example:
+            >>> scheduler.set_affinity("high-cpu", "worker-9")
         """
         self._affinity_map[task_type] = worker_id
 
@@ -112,6 +149,8 @@ class TaskScheduler:
         Returns:
             Worker ID, or empty string if no worker available.
 
+        Example:
+            >>> worker_id = scheduler.assign(my_task)
         """
         if not self._workers:
             return ""
@@ -135,6 +174,8 @@ class TaskScheduler:
         Args:
             worker_id: Worker that completed.
 
+        Example:
+            >>> scheduler.report_completion("w-1")
         """
         info = self._workers.get(worker_id)
         if info and info.current_load > 0:
@@ -146,6 +187,9 @@ class TaskScheduler:
         Returns:
             List of (from_worker, to_worker) reassignment suggestions.
 
+        Example:
+            >>> scheduler.rebalance()
+            [('worker-high-load', 'worker-low-load')]
         """
         if len(self._workers) < 2:
             return []
@@ -161,7 +205,14 @@ class TaskScheduler:
         return suggestions
 
     def _eligible_workers(self, task: Task) -> list[WorkerInfo]:
-        """Find workers that can handle a task."""
+        """Find workers that can handle a task.
+
+        Args:
+            task: Task to find workers for.
+
+        Returns:
+            List of eligible WorkerInfo objects.
+        """
         eligible = []
         for w in self._workers.values():
             if w.current_load >= w.max_concurrent:
@@ -176,6 +227,14 @@ class TaskScheduler:
         return eligible
 
     def _round_robin(self, workers: list[WorkerInfo]) -> str:
+        """Internal round-robin selection.
+
+        Args:
+            workers: List of eligible workers.
+
+        Returns:
+            Selected worker ID.
+        """
         idx = self._round_robin_index % len(workers)
         self._round_robin_index += 1
         selected = workers[idx]
@@ -183,12 +242,28 @@ class TaskScheduler:
         return selected.worker_id
 
     def _least_loaded(self, workers: list[WorkerInfo]) -> str:
+        """Internal least-loaded selection.
+
+        Args:
+            workers: List of eligible workers.
+
+        Returns:
+            Selected worker ID.
+        """
         selected = min(workers, key=lambda w: w.current_load)
         selected.current_load += 1
         return selected.worker_id
 
     def _affinity(self, task: Task, workers: list[WorkerInfo]) -> str:
-        """Affinity."""
+        """Internal affinity selection.
+
+        Args:
+            task: Task to assign.
+            workers: List of eligible workers.
+
+        Returns:
+            Selected worker ID.
+        """
         preferred = self._affinity_map.get(task.task_type)
         if preferred:
             for w in workers:

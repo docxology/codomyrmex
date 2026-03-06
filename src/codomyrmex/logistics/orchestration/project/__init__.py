@@ -35,6 +35,7 @@ from .orchestration_engine import (
     OrchestrationEngine,
     OrchestrationSession,
     SessionStatus,
+    get_orchestration_engine,
 )
 from .project_manager import (
     Project,
@@ -42,6 +43,7 @@ from .project_manager import (
     ProjectStatus,
     ProjectTemplate,
     ProjectType,
+    get_project_manager,
 )
 from .resource_manager import (
     Resource,
@@ -50,6 +52,7 @@ from .resource_manager import (
     ResourceStatus,
     ResourceType,
     ResourceUsage,
+    get_resource_manager,
 )
 from .task_orchestrator import (
     Task,
@@ -58,12 +61,14 @@ from .task_orchestrator import (
     TaskResource,
     TaskResult,
     TaskStatus,
+    get_task_orchestrator,
 )
 from .workflow_manager import (
     WorkflowExecution,
     WorkflowManager,
     WorkflowStatus,
     WorkflowStep,
+    get_workflow_manager,
 )
 
 __version__ = "0.1.0"
@@ -103,6 +108,12 @@ __all__ = [
     "get_mcp_tool_definitions",
     # MCP tools
     "get_mcp_tools",
+    # Managers
+    "get_orchestration_engine",
+    "get_project_manager",
+    "get_resource_manager",
+    "get_task_orchestrator",
+    "get_workflow_manager",
 ]
 
 
@@ -125,52 +136,7 @@ def create_project(
     return Project(name=name, description=description, template=template)
 
 
-# Initialize default managers (lazy initialization)
-_workflow_manager = None
-_task_orchestrator = None
-_project_manager = None
-_resource_manager = None
-_orchestration_engine = None
 
-
-def get_workflow_manager() -> WorkflowManager:
-    """Get the default workflow manager instance."""
-    global _workflow_manager
-    if _workflow_manager is None:
-        _workflow_manager = WorkflowManager()
-    return _workflow_manager
-
-
-def get_task_orchestrator() -> TaskOrchestrator:
-    """Get the default task orchestrator instance."""
-    global _task_orchestrator
-    if _task_orchestrator is None:
-        _task_orchestrator = TaskOrchestrator()
-    return _task_orchestrator
-
-
-def get_project_manager() -> ProjectManager:
-    """Get the default project manager instance."""
-    global _project_manager
-    if _project_manager is None:
-        _project_manager = ProjectManager()
-    return _project_manager
-
-
-def get_resource_manager() -> ResourceManager:
-    """Get the default resource manager instance."""
-    global _resource_manager
-    if _resource_manager is None:
-        _resource_manager = ResourceManager()
-    return _resource_manager
-
-
-def get_orchestration_engine() -> OrchestrationEngine:
-    """Get the default orchestration engine instance."""
-    global _orchestration_engine
-    if _orchestration_engine is None:
-        _orchestration_engine = OrchestrationEngine()
-    return _orchestration_engine
 
 
 # Quick workflow execution function

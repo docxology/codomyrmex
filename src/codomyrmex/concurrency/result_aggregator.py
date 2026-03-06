@@ -24,7 +24,6 @@ class AggregateResult:
         results: Individual task results.
         mean_duration_ms: Average processing time.
         worker_stats: Per-worker statistics.
-
     """
 
     total_tasks: int = 0
@@ -36,7 +35,15 @@ class AggregateResult:
 
     @property
     def success_rate(self) -> float:
-        """Return the overall success rate."""
+        """Return the overall success rate.
+
+        Returns:
+            Ratio of successful tasks to total tasks.
+
+        Example:
+            >>> agg.success_rate
+            0.95
+        """
         return self.successful / self.total_tasks if self.total_tasks > 0 else 0.0
 
 
@@ -52,20 +59,46 @@ class ResultAggregator:
     """
 
     def __init__(self) -> None:
-        """Initialize the task result aggregator."""
+        """Initialize the task result aggregator.
+
+        Example:
+            >>> agg = ResultAggregator()
+        """
         self._results: list[TaskResult] = []
 
     @property
     def count(self) -> int:
-        """Count."""
+        """Count of results.
+
+        Returns:
+            Number of results currently stored.
+
+        Example:
+            >>> agg.count
+            5
+        """
         return len(self._results)
 
     def add(self, result: TaskResult) -> None:
-        """Add a task result."""
+        """Add a task result.
+
+        Args:
+            result: TaskResult to add.
+
+        Example:
+            >>> agg.add(task_result)
+        """
         self._results.append(result)
 
     def add_batch(self, results: list[TaskResult]) -> None:
-        """Add multiple results at once."""
+        """Add multiple results at once.
+
+        Args:
+            results: List of TaskResults.
+
+        Example:
+            >>> agg.add_batch([res1, res2])
+        """
         self._results.extend(results)
 
     def aggregate(self) -> AggregateResult:
@@ -74,6 +107,9 @@ class ResultAggregator:
         Returns:
             AggregateResult with summary metrics.
 
+        Example:
+            >>> summary = agg.aggregate()
+            >>> print(summary.total_tasks)
         """
         total = len(self._results)
         successful = sum(1 for r in self._results if r.success)
@@ -101,7 +137,11 @@ class ResultAggregator:
         )
 
     def clear(self) -> None:
-        """Clear all collected results."""
+        """Clear all collected results.
+
+        Example:
+            >>> agg.clear()
+        """
         self._results.clear()
 
 

@@ -36,6 +36,16 @@ theme:
 
 plugins:
   - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_heading: true
+            show_category_heading: true
+            docstring_style: google
+            merge_init_into_class: true
+            show_if_no_docstring: false
 
 markdown_extensions:
   - admonition

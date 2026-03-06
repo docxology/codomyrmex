@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
 """
 Orchestrator for documentation.
 Utilizes the documentation module's API to perform a full audit and quality report generation.

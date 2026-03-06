@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = Any  # type: ignore
-    ResultStatus = Any  # type: ignore
+    Result = Any
+    ResultStatus = Any
 
 
 @dataclass

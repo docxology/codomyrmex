@@ -4,6 +4,7 @@ import sys
 import fire
 
 import codomyrmex.performance
+from codomyrmex.logging_monitoring import get_logger
 
 # Import all handlers
 from .handlers import (
@@ -50,7 +51,6 @@ from .handlers import (
 )
 from .utils import (
     PERFORMANCE_MONITORING_AVAILABLE,
-    get_logger,
 )
 
 logger = get_logger(__name__)

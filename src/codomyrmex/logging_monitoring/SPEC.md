@@ -128,11 +128,44 @@ graph TD
 
 ### Public API
 
-- `setup_logging()` - Initialize logging system with support for "TEXT" and "JSON" outputs.
-- `get_logger(name)` - Get logger instance.
-- `JSONFormatter` - Standardized JSON log formatter (legacy `JsonFormatter` alias removed).
-- `log_with_context()` - Log with structured context.
-- `LogContext` - Context manager for correlation IDs.
+#### Core Logging
+- `setup_logging(force=True)` - Initialize the logging system with support for "TEXT" and "JSON" outputs via environment variables.
+- `get_logger(name)` - Get a named logger instance configured with the system defaults.
+- `enable_structured_json(logger_name=None)` - Switch a specific logger (or root) to structured JSON output.
+- `configure_all_structured()` - Apply JSON formatting to all `codomyrmex.*` loggers.
+
+#### Context & Correlation
+- `LogContext(correlation_id=None, additional_context=None)` - Context manager for correlation ID and contextual logging.
+- `log_with_context(level, message, context)` - Log a message with additional context data and automatic correlation ID inclusion.
+- `new_correlation_id()` - Generate and store a new correlation ID in the current context.
+- `get_correlation_id()` - Retrieve the current correlation ID.
+- `set_correlation_id(cid)` - Explicitly set the correlation ID.
+- `clear_correlation_id()` - Clear the current correlation ID.
+- `with_correlation(cid=None)` - Context manager that sets and clears a correlation ID.
+- `CorrelationFilter()` - Logging filter that injects `correlation_id` into log records.
+
+#### Audit & Security
+- `AuditLogger(name="codomyrmex.audit", max_records=10000)` - Specialized logger for recording immutable security and audit events (in `audit/`).
+- `AuditLogger.log_event(event_type, user_id, ...)` - Record a structured audit event.
+
+#### Performance & Monitoring
+- `PerformanceLogger(logger_name="performance")` - Logger for timing operations and tracking performance metrics (in `handlers/`).
+- `PerformanceLogger.time_operation(operation, ...)` - Context manager for timing a code block.
+- `PerformanceLogger.log_metric(name, value, ...)` - Log a performance metric.
+
+#### Log Management
+- `LogRotationManager(log_dir="logs")` - Manages rotating file handlers, disk usage, and log cleanup (in `handlers/`).
+- `LogRotationManager.attach_rotating_handler(logger_name, filename, ...)` - Attach a `RotatingFileHandler` to a logger.
+
+#### Formatters
+- `JSONFormatter` - Standardized JSON log formatter for `logging.Handler`.
+- `StructuredFormatter(config=None)` - High-performance structured log formatter for pipeline ingestion (in `formatters/`).
+- `PrettyJSONFormatter` - Indented JSON formatter for development use.
+- `RedactedJSONFormatter(patterns=None, ...)` - JSON formatter that automatically redacts sensitive fields.
+
+#### Integration Utilities
+- `enrich_event_data(data)` - Add the current correlation ID to an event data dictionary.
+- `create_mcp_correlation_header()` - Generate MCP metadata headers with the current correlation ID.
 
 ### Configuration Interface
 

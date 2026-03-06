@@ -720,27 +720,42 @@
         });
     }
 
-    // Auto-refresh metrics every 60s
-    setInterval(async () => {
-        try {
-            const resp = await fetch('/api/awareness');
-            const data = await resp.json();
-            const m = data.metrics;
-            const ids = {
-                'aw-mission-count': m.mission_count,
-                'aw-project-count': m.project_count,
-                'aw-total-tasks': m.total_tasks,
-                'aw-completed-tasks': m.completed_tasks,
-                'aw-telos-files': m.telos_files,
-                'aw-completion': m.overall_completion + '%'
-            };
-            for (const [id, val] of Object.entries(ids)) {
-                const el = document.getElementById(id);
-                if (el) el.textContent = val;
-            }
-        } catch (e) {
-            // Silently ignore refresh failures
+    function updateMetrics(m) {
+        if (!m) return;
+        const ids = {
+            'aw-mission-count': m.mission_count,
+            'aw-project-count': m.project_count,
+            'aw-total-tasks': m.total_tasks,
+            'aw-completed-tasks': m.completed_tasks,
+            'aw-telos-files': m.telos_files,
+            'aw-completion': m.overall_completion + '%'
+        };
+        for (const [id, val] of Object.entries(ids)) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
         }
-    }, 60000);
+    }
+
+    function initWebSocket() {
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(wsProtocol + '//' + window.location.hostname + ':8890');
+
+        ws.onmessage = function (event) {
+            try {
+                const payload = JSON.parse(event.data);
+                if (payload.type === 'update' && payload.awareness && payload.awareness.metrics) {
+                    updateMetrics(payload.awareness.metrics);
+                }
+            } catch (e) {
+                console.error("WS format error:", e);
+            }
+        };
+
+        ws.onclose = function () {
+            setTimeout(initWebSocket, 5000);
+        };
+    }
+
+    initWebSocket();
 </script>
 {% endblock %}

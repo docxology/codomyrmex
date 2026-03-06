@@ -14,7 +14,13 @@ if TYPE_CHECKING:
 
 
 class FileOperationError(CodomyrmexError):
-    """Raised when file operations fail."""
+    """Raised when file operations fail.
+
+    Attributes:
+        message (str): The error message.
+        file_path (str | None): Path to the file.
+        operation (str | None): The operation that failed (e.g., 'read', 'write').
+    """
 
     def __init__(
         self,
@@ -31,7 +37,13 @@ class FileOperationError(CodomyrmexError):
 
 
 class DirectoryError(CodomyrmexError):
-    """Raised when directory operations fail."""
+    """Raised when directory operations fail.
+
+    Attributes:
+        message (str): The error message.
+        directory_path (str | None): Path to the directory.
+        operation (str | None): The operation that failed.
+    """
 
     def __init__(
         self,

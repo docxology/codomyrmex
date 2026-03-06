@@ -81,11 +81,23 @@ class EventListener:
         if handler_name is None:
             handler_name = f"{self.listener_id}_once_{len(self.handlers)}"
 
-        def one_time_wrapper(event: Event):
-            try:
-                handler(event)
-            finally:
-                self.off(handler_name)
+        is_async = inspect.iscoroutinefunction(handler)
+
+        if is_async:
+
+            async def one_time_wrapper(event: Event):
+                try:
+                    await handler(event)
+                finally:
+                    self.off(handler_name)
+
+        else:
+
+            def one_time_wrapper(event: Event):
+                try:
+                    handler(event)
+                finally:
+                    self.off(handler_name)
 
         return self.on(
             event_types, one_time_wrapper, handler_name, filter_func, priority

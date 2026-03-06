@@ -1,8 +1,4 @@
-"""
-LLM Provider abstractions for unified API access.
-
-Provides a common interface for interacting with different LLM providers.
-"""
+"""LLM provider data models — messages, responses, and configuration."""
 
 from dataclasses import dataclass, field
 from enum import Enum
@@ -10,20 +6,7 @@ from typing import Any
 
 
 class ProviderType(Enum):
-    """Supported LLM providers.
-
-    Implemented:
-        OPENAI - OpenAI API (GPT models)
-        ANTHROPIC - Anthropic API (Claude models)
-        OPENROUTER - OpenRouter API (multi-model access, includes free models)
-        GOOGLE - Google AI (Gemini models, Ultra subscription tier)
-
-    Planned:
-        OLLAMA - Local Ollama server
-        AZURE_OPENAI - Azure OpenAI Service
-        COHERE - Cohere API
-        MISTRAL - Mistral AI API
-    """
+    """Supported LLM providers."""
 
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
@@ -46,8 +29,7 @@ class Message:
     tool_call_id: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary format."""
-        result = {"role": self.role, "content": self.content}
+        result: dict[str, Any] = {"role": self.role, "content": self.content}
         if self.name:
             result["name"] = self.name
         if self.tool_calls:
@@ -71,7 +53,6 @@ class CompletionResponse:
 
     @property
     def total_tokens(self) -> int:
-        """Get total tokens used."""
         if self.usage:
             return self.usage.get("total_tokens", 0)
         return 0

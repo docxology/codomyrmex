@@ -1,0 +1,69 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --extra physical_management
+          uv pip install mkdocs-material mkdocstrings[python]
+
+      - name: Build docs
+        run: uv run mkdocs build --strict
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: .github/lighthouse-ci.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          urls: |
+            file://${{ github.workspace }}/site/index.html
+
+      - name: Comment results on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
+            const lhr = JSON.parse(fs.readFileSync(results[0].jsonPath, 'utf8'));
+            const perf = Math.round(lhr.categories.performance.score * 100);
+            const a11y = Math.round(lhr.categories.accessibility.score * 100);
+            const bp = Math.round(lhr.categories['best-practices'].score * 100);
+            const seo = Math.round(lhr.categories.seo.score * 100);
+            const body = `## 🏠 Lighthouse Results\n\n| Metric | Score |\n|--------|-------|\n| Performance | ${perf} |\n| Accessibility | ${a11y} |\n| Best Practices | ${bp} |\n| SEO | ${seo} |`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });

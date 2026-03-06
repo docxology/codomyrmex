@@ -11,7 +11,13 @@ from .base import CodomyrmexError
 
 
 class StaticAnalysisError(CodomyrmexError):
-    """Raised when static analysis operations fail."""
+    """Raised when static analysis operations fail.
+
+    Attributes:
+        message (str): The error message.
+        analyzer_name (str | None): Name of the analyzer that failed.
+        file_path (str | None): Path to the file being analyzed.
+    """
 
     def __init__(
         self,
@@ -28,7 +34,13 @@ class StaticAnalysisError(CodomyrmexError):
 
 
 class PatternMatchingError(CodomyrmexError):
-    """Raised when pattern matching operations fail."""
+    """Raised when pattern matching operations fail.
+
+    Attributes:
+        message (str): The error message.
+        pattern (str | None): The pattern that failed to match.
+        subject_preview (str | None): A preview of the subject being matched.
+    """
 
     def __init__(
         self,
@@ -45,7 +57,13 @@ class PatternMatchingError(CodomyrmexError):
 
 
 class SecurityAuditError(CodomyrmexError):
-    """Raised when security audit operations fail."""
+    """Raised when security audit operations fail.
+
+    Attributes:
+        message (str): The error message.
+        vulnerability_type (str | None): The type of vulnerability found.
+        severity (str | None): The severity of the vulnerability.
+    """
 
     def __init__(
         self,

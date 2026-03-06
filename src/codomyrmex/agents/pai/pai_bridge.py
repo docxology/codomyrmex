@@ -761,7 +761,7 @@ class PAIBridge:
         if not cfg_path.is_file():
             return None
         try:
-            return json.loads(cfg_path.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
+            return json.loads(cfg_path.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError) as exc:
             logger.warning("Failed to read MCP config: %s", exc)
             return None
@@ -798,7 +798,7 @@ class PAIBridge:
         ):
             if candidate.is_file():
                 try:
-                    return json.loads(candidate.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
+                    return json.loads(candidate.read_text(encoding="utf-8"))
                 except (json.JSONDecodeError, OSError) as exc:
                     logger.warning("Failed to read settings %s: %s", candidate, exc)
         return None
@@ -808,7 +808,7 @@ class PAIBridge:
         if not path.is_file():
             return None
         try:
-            return json.loads(path.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
+            return json.loads(path.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError) as e:
             logger.warning("Failed to read JSON file %s: %s", path, e)
             return None

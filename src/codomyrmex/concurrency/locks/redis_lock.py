@@ -24,6 +24,10 @@ class RedisLock(BaseLock):
             redis_client: A redis.Redis instance.
             ttl: Time-to-live for the lock in seconds.
 
+        Example:
+            >>> from redis import Redis
+            >>> client = Redis()
+            >>> lock = RedisLock("global-task", client, ttl=60)
         """
         super().__init__(name)
         self.redis = redis_client
@@ -41,6 +45,9 @@ class RedisLock(BaseLock):
         Returns:
             True if acquired, False otherwise.
 
+        Example:
+            >>> lock.acquire(timeout=5.0)
+            True
         """
         start_time = time.time()
         while True:
@@ -56,7 +63,11 @@ class RedisLock(BaseLock):
             time.sleep(retry_interval)
 
     def release(self) -> None:
-        """Release the lock safely."""
+        """Release the lock safely.
+
+        Example:
+            >>> lock.release()
+        """
         if not self.is_held:
             return
 
@@ -93,6 +104,9 @@ class RedisLock(BaseLock):
         Returns:
             True if extension succeeded, False otherwise.
 
+        Example:
+            >>> lock.extend(30)
+            True
         """
         if not self.is_held:
             return False
@@ -123,5 +137,13 @@ class RedisLock(BaseLock):
             return False
 
     def is_locked_externally(self) -> bool:
-        """Check if the lock is held by anyone (self or other)."""
+        """Check if the lock is held by anyone (self or other).
+
+        Returns:
+            True if the key exists in Redis, False otherwise.
+
+        Example:
+            >>> lock.is_locked_externally()
+            False
+        """
         return bool(self.redis.exists(self.key))

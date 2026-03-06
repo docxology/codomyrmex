@@ -8,7 +8,7 @@ when no Ollama server is reachable.
 import pytest
 
 try:
-    from codomyrmex.agents.llm_client import AgentRequest, OllamaClient, _OllamaResponse
+    from codomyrmex.agents.llm_client import AgentRequest, OllamaClient, AgentResponse
 
     LLM_CLIENT_AVAILABLE = True
 except ImportError:
@@ -59,40 +59,36 @@ class TestAgentRequest:
 
 
 # ---------------------------------------------------------------------------
-# _OllamaResponse
+# AgentResponse
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.skipif(not LLM_CLIENT_AVAILABLE, reason="agents.llm_client not importable")
-class TestOllamaResponse:
-    """Tests for the _OllamaResponse dataclass."""
+class TestAgentResponse:
+    """Tests for the AgentResponse dataclass."""
 
     def test_default_construction(self):
-        resp = _OllamaResponse()
+        resp = AgentResponse(content="")
         assert resp.content == ""
-        assert resp.tokens_used == 0
-        assert resp.execution_time == 0.0
+        assert resp.tokens_used is None
+        assert resp.execution_time is None
 
     def test_is_success_returns_true(self):
-        resp = _OllamaResponse(content="ok", tokens_used=5, execution_time=0.1)
+        resp = AgentResponse(content="ok", tokens_used=5, execution_time=0.1)
         assert resp.is_success() is True
 
-    def test_is_success_with_empty_content(self):
-        resp = _OllamaResponse()
-        assert resp.is_success() is False  # empty content is not a success
+    def test_is_success_with_error(self):
+        resp = AgentResponse(content="", error="Failed")
+        assert resp.is_success() is False
 
     def test_with_content(self):
-        resp = _OllamaResponse(content="hello world")
+        resp = AgentResponse(content="hello world")
         assert resp.content == "hello world"
 
     def test_custom_tokens_and_time(self):
-        resp = _OllamaResponse(content="x", tokens_used=42, execution_time=1.5)
+        resp = AgentResponse(content="x", tokens_used=42, execution_time=1.5)
         assert resp.tokens_used == 42
         assert resp.execution_time == 1.5
-
-    def test_execution_time_zero_by_default(self):
-        resp = _OllamaResponse(content="y")
-        assert resp.execution_time == 0.0
 
 
 # ---------------------------------------------------------------------------

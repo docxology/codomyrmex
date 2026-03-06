@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 try:
     from agentmail.core import ApiError
 except ImportError:
-    ApiError = Exception  # type: ignore
+    ApiError = Exception
 
 
 def _raise_for_api_error(exc: Exception, context: str):

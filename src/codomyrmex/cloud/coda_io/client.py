@@ -27,7 +27,7 @@ from .mixins.utils import UtilsMixin
 try:
     import requests
 except ImportError:
-    requests = None  # type: ignore
+    requests = None
 
 logger = get_logger(__name__)
 

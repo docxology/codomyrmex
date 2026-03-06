@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
 """Fix duplicate entries in API tables and enrich thin README files."""
 import ast
 import os

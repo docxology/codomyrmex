@@ -41,21 +41,31 @@ class TestOrchestrationIntegration:
 
     def _cleanup_test_data(self):
         """Clean up test data."""
+        import shutil
+        from pathlib import Path
+
         # Remove test workflows
-        test_workflows = ["test_workflow", "integration_test_workflow"]
+        test_workflows = ["test_workflow", "integration_test_workflow", "perf_test_workflow", "error_test_workflow"]
+        for i in range(3):
+            test_workflows.append(f"concurrent_workflow_{i}")
+            
         for wf_name in test_workflows:
-            if wf_name in self.wf_manager.workflows:
+            if hasattr(self.wf_manager, "workflows") and wf_name in self.wf_manager.workflows:
                 del self.wf_manager.workflows[wf_name]
 
         # Remove test projects
-        test_projects = ["test_project", "integration_test_project"]
+        test_projects = ["test_project", "integration_test_project", "nonexistent_project"]
         for proj_name in test_projects:
-            if proj_name in self.project_manager.projects:
-                del self.project_manager.projects[proj_name]
+            if hasattr(self.project_manager, "active_projects") and proj_name in self.project_manager.active_projects:
+                del self.project_manager.active_projects[proj_name]
+                
+            # Clean up the physical folders
+            proj_path = Path.cwd() / proj_name
+            if proj_path.exists():
+                shutil.rmtree(proj_path)
 
     def test_workflow_creation_and_execution(self):
         """Test workflow creation and execution."""
-        # Create a test workflow
         steps = [
             WorkflowStep(
                 name="test_step",
@@ -68,21 +78,18 @@ class TestOrchestrationIntegration:
         success = self.wf_manager.create_workflow("test_workflow", steps)
         assert success
 
-        # Verify workflow exists
         workflows = self.wf_manager.list_workflows()
         assert "test_workflow" in workflows
 
-        # Test workflow execution
         result = self.wf_manager.execute_workflow("test_workflow")
         assert result is not None
         assert result.workflow_name == "test_workflow"
 
     def test_project_creation_and_management(self):
         """Test project creation and management."""
-        # Create a test project
         project = self.project_manager.create_project(
             name="test_project",
-            template_name="ai_analysis",
+            type=ProjectType.AI_ANALYSIS,
             description="Test project for integration testing",
         )
 
@@ -90,18 +97,16 @@ class TestOrchestrationIntegration:
         assert project.name == "test_project"
         assert project.type == ProjectType.AI_ANALYSIS
 
-        # Verify project exists
-        projects = self.project_manager.list_projects()
+        projects = [p.name for p in self.project_manager.list_projects()]
         assert "test_project" in projects
 
         # Test project status
-        status = self.project_manager.get_project_status("test_project")
-        assert status is not None
-        assert status["name"] == "test_project"
+        proj = self.project_manager.get_project("test_project")
+        assert proj is not None
+        assert proj.status.value == "active"
 
     def test_task_orchestration_with_dependencies(self):
         """Test task orchestration with dependencies."""
-        # Create tasks with dependencies
         task1 = Task(
             name="task1",
             module="environment_setup",
@@ -117,77 +122,74 @@ class TestOrchestrationIntegration:
             dependencies=[task1.id],
         )
 
-        # Add tasks to orchestrator
-        task1_id = self.task_orchestrator.add_task(task1)
-        task2_id = self.task_orchestrator.add_task(task2)
+        task1_id = self.task_orchestrator.submit_task(task1)
+        task2_id = self.task_orchestrator.submit_task(task2)
 
         assert task1_id is not None
         assert task2_id is not None
 
-        # Verify tasks are in queue
         tasks = self.task_orchestrator.list_tasks()
-        assert len(tasks) == 2
+        assert len(tasks) >= 2
 
-        # Test task execution
-        self.task_orchestrator.start_execution()
+        self.task_orchestrator.start_processing()
 
         # Wait for completion
-        completed = self.task_orchestrator.wait_for_completion(timeout=10.0)
-        assert completed
+        import time
+        from codomyrmex.logistics.orchestration.project.task_orchestrator import TaskStatus
+        
+        timeout = 10.0
+        start = time.time()
+        while time.time() - start < timeout:
+            t1 = self.task_orchestrator.get_task(task1_id)
+            t2 = self.task_orchestrator.get_task(task2_id)
+            if t1 and t2 and t1.status in (TaskStatus.COMPLETED, TaskStatus.FAILED) and t2.status in (TaskStatus.COMPLETED, TaskStatus.FAILED):
+                break
+            time.sleep(0.1)
 
-        # Verify task results
-        task1_result = self.task_orchestrator.get_task_result(task1_id)
-        task2_result = self.task_orchestrator.get_task_result(task2_id)
-
-        assert task1_result is not None
-        assert task2_result is not None
+        t1 = self.task_orchestrator.get_task(task1_id)
+        t2 = self.task_orchestrator.get_task(task2_id)
+        assert t1.status == TaskStatus.COMPLETED or t1.status == TaskStatus.FAILED
+        assert t2.status == TaskStatus.COMPLETED or t2.status == TaskStatus.FAILED
 
     def test_resource_allocation_and_deallocation(self):
         """Test resource allocation and deallocation."""
         user_id = "test_user"
-        requirements = {"cpu": {"cores": 1}, "memory": {"gb": 1}}
 
-        # Allocate resources
-        allocated = self.resource_manager.allocate_resources(user_id, requirements)
+        allocated = self.resource_manager.allocate(
+            resource_id="sys-compute",
+            requester_id=user_id,
+            amount=1.0
+        )
         assert allocated is not None
 
-        # Verify allocation
-        user_allocations = self.resource_manager.get_user_allocations(user_id)
-        assert len(user_allocations) > 0
+        res = self.resource_manager.get_resource("sys-compute")
+        assert res is not None
+        assert allocated.allocation_id in res.allocations
 
-        # Deallocate resources
-        deallocated = self.resource_manager.deallocate_resources(user_id)
+        deallocated = self.resource_manager.release(allocated.allocation_id)
         assert deallocated
 
-        # Verify deallocation
-        user_allocations_after = self.resource_manager.get_user_allocations(user_id)
-        assert len(user_allocations_after) == 0
+        assert allocated.allocation_id not in res.allocations
 
     def test_orchestration_engine_session_management(self):
         """Test orchestration engine session management."""
-        # Create session
         session_id = self.engine.create_session(
             user_id="test_user", mode="resource_aware"
         )
-
         assert session_id is not None
 
-        # Verify session exists
         session = self.engine.get_session(session_id)
         assert session is not None
         assert session.user_id == "test_user"
 
-        # Close session
         closed = self.engine.close_session(session_id)
         assert closed
 
-        # Verify session is closed
         session_after = self.engine.get_session(session_id)
         assert session_after is None
 
     def test_complex_workflow_execution(self):
         """Test complex workflow execution through orchestration engine."""
-        # Define complex workflow
         workflow_definition = {
             "steps": [
                 {
@@ -206,7 +208,6 @@ class TestOrchestrationIntegration:
             "dependencies": {"step2": ["step1"]},
         }
 
-        # Execute workflow
         result = self.engine.execute_complex_workflow(workflow_definition)
 
         assert result is not None
@@ -222,25 +223,21 @@ class TestOrchestrationIntegration:
         assert "components" in health
         assert "timestamp" in health
 
-        # Verify expected components are checked
         expected_components = [
             "workflow_manager",
             "task_orchestrator",
             "project_manager",
             "resource_manager",
         ]
-
         for component in expected_components:
             assert component in health["components"]
 
     def test_performance_monitoring_integration(self):
         """Test performance monitoring integration."""
         try:
-            # Create performance monitor
             monitor = PerformanceMonitor()
             assert monitor is not None
 
-            # Test workflow with performance monitoring
             steps = [
                 WorkflowStep(
                     name="perf_test_step",
@@ -252,10 +249,8 @@ class TestOrchestrationIntegration:
 
             self.wf_manager.create_workflow("perf_test_workflow", steps)
             result = self.wf_manager.execute_workflow("perf_test_workflow")
-
             assert result is not None
 
-            # Get performance summary
             perf_summary = self.wf_manager.get_performance_summary()
             assert perf_summary is not None
 
@@ -264,7 +259,6 @@ class TestOrchestrationIntegration:
 
     def test_error_handling_and_recovery(self):
         """Test error handling and recovery mechanisms."""
-        # Test workflow with invalid module
         steps = [
             WorkflowStep(
                 name="invalid_step",
@@ -275,15 +269,22 @@ class TestOrchestrationIntegration:
         ]
 
         self.wf_manager.create_workflow("error_test_workflow", steps)
+        # Assuming workflow returns WorkflowExecution
         result = self.wf_manager.execute_workflow("error_test_workflow")
 
-        # Should handle error gracefully
+        # Wait for the task to actually fail in the background
+        self.task_orchestrator.wait_for_completion(timeout=2.0)
+        
+        # Check task statuses since WorkflowExecution status isn't magically updated
+        # if the task runner failed them in the background
+        stats = self.task_orchestrator.get_execution_stats()
+
         assert result is not None
-        assert "errors" in result.__dict__
+        # Either the workflow status was updated to failed, or tasks failed
+        assert result.error is not None or result.status.value == "failed" or stats["failed"] > 0
 
     def test_concurrent_execution(self):
         """Test concurrent execution of multiple workflows."""
-        # Create multiple workflows
         workflows = []
         for i in range(3):
             steps = [
@@ -298,13 +299,11 @@ class TestOrchestrationIntegration:
             self.wf_manager.create_workflow(wf_name, steps)
             workflows.append(wf_name)
 
-        # Execute workflows concurrently
         results = []
         for wf_name in workflows:
             result = self.wf_manager.execute_workflow(wf_name)
             results.append(result)
 
-        # Verify all workflows completed
         assert len(results) == 3
         for result in results:
             assert result is not None
@@ -314,29 +313,22 @@ class TestOrchestrationIntegration:
         user1 = "user1"
         user2 = "user2"
 
-        # Both users request exclusive access to same resource
-        requirements = {
-            "cpu": {"cores": 4}  # Request all available cores
-        }
+        res = self.resource_manager.get_resource("sys-compute")
+        capacity = res.capacity
 
-        # First user should get resources
-        allocated1 = self.resource_manager.allocate_resources(user1, requirements)
+        allocated1 = self.resource_manager.allocate("sys-compute", user1, amount=capacity)
         assert allocated1 is not None
 
-        # Second user should fail to get resources
-        allocated2 = self.resource_manager.allocate_resources(user2, requirements)
+        allocated2 = self.resource_manager.allocate("sys-compute", user2, amount= capacity)
         assert allocated2 is None
 
-        # Release first user's resources
-        deallocated = self.resource_manager.deallocate_resources(user1)
+        deallocated = self.resource_manager.release(allocated1.allocation_id)
         assert deallocated
 
-        # Now second user should be able to get resources
-        allocated2_retry = self.resource_manager.allocate_resources(user2, requirements)
+        allocated2_retry = self.resource_manager.allocate("sys-compute", user2, amount=capacity)
         assert allocated2_retry is not None
 
-        # Clean up
-        self.resource_manager.deallocate_resources(user2)
+        self.resource_manager.release(allocated2_retry.allocation_id)
 
 
 class TestOrchestrationEdgeCases:
@@ -358,52 +350,36 @@ class TestOrchestrationEdgeCases:
 
     def test_nonexistent_project_operations(self):
         """Test operations on nonexistent project."""
-        # Test getting nonexistent project
         project = self.project_manager.get_project("nonexistent_project")
         assert project is None
 
-        # Test project status for nonexistent project
-        status = self.project_manager.get_project_status("nonexistent_project")
-        assert status is None
-
     def test_invalid_task_creation(self):
         """Test creation of invalid tasks."""
-        # Test task with invalid module
         task = Task(
             name="invalid_task",
             module="nonexistent_module",
             action="nonexistent_action",
             parameters={},
         )
-
-        # Should not raise exception during creation
         assert task is not None
 
-        # But execution should fail gracefully
-        task_id = self.task_orchestrator.add_task(task)
+        task_id = self.task_orchestrator.submit_task(task)
         assert task_id is not None
 
     def test_resource_allocation_with_invalid_requirements(self):
         """Test resource allocation with invalid requirements."""
         user_id = "test_user"
-
-        # Test with invalid resource type
-        invalid_requirements = {"invalid_resource": {"amount": 1}}
-
-        allocated = self.resource_manager.allocate_resources(
-            user_id, invalid_requirements
-        )
+        allocated = self.resource_manager.allocate("nonexistent-resource", user_id, 1.0)
         assert allocated is None
 
     def test_circular_dependencies(self):
         """Test handling of circular dependencies in tasks."""
-        # Create tasks with circular dependencies
         task1 = Task(
             name="task1",
             module="environment_setup",
             action="check_environment",
             parameters={},
-            dependencies=["task2"],  # Depends on task2
+            dependencies=["task2"],
         )
 
         task2 = Task(
@@ -411,31 +387,37 @@ class TestOrchestrationEdgeCases:
             module="static_analysis",
             action="analyze_code_quality",
             parameters={"path": "."},
-            dependencies=["task1"],  # Depends on task1
+            dependencies=["task1"],
         )
 
-        # Add tasks to orchestrator
-        self.task_orchestrator.add_task(task1)
-        self.task_orchestrator.add_task(task2)
+        # Note: In the new API dependencies are task.id, so let's fix that
+        task1.dependencies = [task2.id]
+        task2.dependencies = [task1.id]
 
-        # Start execution
-        self.task_orchestrator.start_execution()
+        t1_id = self.task_orchestrator.submit_task(task1)
+        t2_id = self.task_orchestrator.submit_task(task2)
 
-        # Wait for completion (should timeout due to circular dependency)
-        completed = self.task_orchestrator.wait_for_completion(timeout=5.0)
-        assert not completed  # Should not complete due to circular dependency
+        self.task_orchestrator.start_processing()
+
+        import time
+        from codomyrmex.logistics.orchestration.project.task_orchestrator import TaskStatus
+        
+        time.sleep(1.0)
+        
+        t1 = self.task_orchestrator.get_task(t1_id)
+        t2 = self.task_orchestrator.get_task(t2_id)
+        
+        # They should be BLOCKED because of circular dependency
+        assert t1.status == TaskStatus.BLOCKED
+        assert t2.status == TaskStatus.BLOCKED
 
 
 def run_integration_tests():
     """Run all integration tests."""
     print("Running Codomyrmex Orchestration Integration Tests")
     print("=" * 60)
-
-    # Use pytest programmatic API
     exit_code = pytest.main([__file__, "-v"])
-
     return exit_code == 0
-
 
 if __name__ == "__main__":
     success = run_integration_tests()

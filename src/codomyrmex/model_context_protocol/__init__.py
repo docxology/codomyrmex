@@ -72,8 +72,8 @@ from .transport.server import MCPServer, MCPServerConfig
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None  # type: ignore[assignment,misc]
-    ResultStatus = None  # type: ignore[assignment,misc]
+    Result = None
+    ResultStatus = None
 
 
 def cli_commands():

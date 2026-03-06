@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
 """Enrich docs/modules AGENTS.md and README.md files.
 
 1. Add testing sections to AGENTS.md (84 missing)

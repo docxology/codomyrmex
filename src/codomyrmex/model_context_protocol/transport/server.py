@@ -73,7 +73,7 @@ class MCPServer:
         # When provided, _call_tool dispatches to the injected function
         # instead of the default registry-based execution path.
         if call_tool_fn is not None:
-            self._call_tool = call_tool_fn  # type: ignore[assignment]
+            self._call_tool = call_tool_fn
 
         # Rate limiter
         from codomyrmex.model_context_protocol.reliability.rate_limiter import (

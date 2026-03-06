@@ -129,7 +129,7 @@ class SequentialChain(Chain):
     ) -> ChainResult:
         """Run the operation."""
         context = dict(input_data)
-        step_results = []
+        step_results: list[dict[str, Any]] = []
 
         try:
             for step in self.steps:
@@ -223,7 +223,7 @@ class ReActChain(Chain):
     ) -> ChainResult:
         """Run the operation."""
         context = dict(input_data)
-        step_results = []
+        step_results: list[dict[str, Any]] = []
         scratchpad = ""
 
         tool_descriptions = "\n".join(

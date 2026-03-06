@@ -118,7 +118,7 @@ class TestContainerRegistration:
 
     def test_register_raises_type_error_for_non_class(self, container: Container):
         with pytest.raises(TypeError, match="Expected a class"):
-            container.register(IService, "not_a_class")  # type: ignore[arg-type]
+            container.register(IService, "not_a_class")
 
     def test_register_raises_value_error_for_invalid_scope(self, container: Container):
         with pytest.raises(ValueError, match="Invalid scope"):
@@ -143,7 +143,7 @@ class TestContainerRegisterInstance:
 
     def test_register_instance_raises_on_none(self, container: Container):
         with pytest.raises(TypeError, match="Cannot register None"):
-            container.register_instance(IService, None)  # type: ignore[arg-type]
+            container.register_instance(IService, None)
 
     def test_register_instance_descriptor_is_instance_registration(
         self, container: Container

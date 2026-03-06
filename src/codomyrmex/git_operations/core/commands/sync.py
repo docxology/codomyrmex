@@ -46,10 +46,10 @@ def push_changes(
         logger.error(f"Failed to push changes: {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        raise
+        return False
     except Exception as e:
         logger.error(f"Unexpected error pushing changes: {e}")
-        raise
+        return False
 
 
 @mcp_tool(name="git_pull")
@@ -87,10 +87,10 @@ def pull_changes(
         logger.error(f"Failed to pull changes: {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        raise
+        return False
     except Exception as e:
         logger.error(f"Unexpected error pulling changes: {e}")
-        raise
+        return False
 
 
 @mcp_tool(name="git_fetch_changes")
@@ -130,7 +130,7 @@ def fetch_changes(
         logger.error(f"Failed to fetch changes from {remote}: {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        raise
+        return False
     except Exception as e:
         logger.error(f"Unexpected error fetching changes: {e}")
-        raise
+        return False

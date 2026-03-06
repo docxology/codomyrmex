@@ -1,6 +1,6 @@
 # Graph RAG Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.6 | **Status**: Active | **Last Updated**: February 2026
 
 Knowledge graph-enhanced RAG with entity relationships.
 

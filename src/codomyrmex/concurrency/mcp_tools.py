@@ -13,6 +13,9 @@ def concurrency_pool_status() -> dict:
     Returns:
         Dictionary with pool size, capacity, and availability.
 
+    Example:
+        >>> status = concurrency_pool_status()
+        >>> print(status["status"])
     """
     try:
         from codomyrmex.concurrency import AsyncWorkerPool
@@ -42,6 +45,9 @@ def concurrency_list_locks() -> dict:
     Returns:
         Dictionary with a list of lock names and their count.
 
+    Example:
+        >>> locks = concurrency_list_locks()
+        >>> print(locks["count"])
     """
     try:
         from codomyrmex.concurrency import LockManager

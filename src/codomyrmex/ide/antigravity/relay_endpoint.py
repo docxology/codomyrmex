@@ -46,8 +46,8 @@ try:
         SchedulerConfig,
     )
 except ImportError:  # pragma: no cover
-    MessageScheduler = None  # type: ignore[assignment,misc]
-    SchedulerConfig = None  # type: ignore[assignment,misc]
+    MessageScheduler = None
+    SchedulerConfig = None
 
 
 # =====================================================================

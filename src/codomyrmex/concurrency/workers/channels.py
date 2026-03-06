@@ -26,7 +26,14 @@ class Channel(Generic[T]):
     """
 
     def __init__(self, capacity: int = 0) -> None:
-        """Initialize channel."""
+        """Initialize channel.
+
+        Args:
+            capacity: Buffer size. 0 means unbuffered.
+
+        Example:
+            >>> ch = Channel(capacity=5)
+        """
         self._capacity = max(0, capacity)
         self._queue: asyncio.Queue[T] = asyncio.Queue(maxsize=max(1, self._capacity))
         self._closed = False
@@ -34,28 +41,74 @@ class Channel(Generic[T]):
 
     @property
     def closed(self) -> bool:
-        """Closed."""
+        """Whether the channel is closed.
+
+        Returns:
+            True if closed.
+
+        Example:
+            >>> ch.closed
+            False
+        """
         return self._closed
 
     async def send(self, item: T, timeout: float | None = None) -> None:
-        """Send an item into the channel."""
+        """Send an item into the channel.
+
+        Args:
+            item: The value to send.
+            timeout: Maximum time to wait in seconds.
+
+        Raises:
+            ChannelClosed: If the channel is closed.
+            TimeoutError: If send times out.
+
+        Example:
+            >>> await ch.send("message", timeout=1.0)
+        """
         if self._closed:
             raise ChannelClosed("Cannot send to a closed channel")
         await asyncio.wait_for(self._queue.put(item), timeout=timeout)
 
     async def receive(self, timeout: float | None = None) -> T:
-        """Receive an item from the channel."""
+        """Receive an item from the channel.
+
+        Args:
+            timeout: Maximum time to wait in seconds.
+
+        Returns:
+            The received item.
+
+        Raises:
+            ChannelClosed: If the channel is closed and empty.
+            TimeoutError: If receive times out.
+
+        Example:
+            >>> msg = await ch.receive(timeout=1.0)
+        """
         if self._closed and self._queue.empty():
             raise ChannelClosed("Channel is closed and empty")
         return await asyncio.wait_for(self._queue.get(), timeout=timeout)
 
     def close(self) -> None:
-        """Close the channel. No more items can be sent."""
+        """Close the channel. No more items can be sent.
+
+        Example:
+            >>> ch.close()
+        """
         self._closed = True
         self._close_event.set()
 
     async def __aiter__(self):
-        """Iterate over channel items until closed."""
+        """Iterate over channel items until closed.
+
+        Yields:
+            Items from the channel.
+
+        Example:
+            >>> async for msg in ch:
+            ...     print(msg)
+        """
         while True:
             try:
                 yield await self.receive(timeout=0.1)
@@ -67,7 +120,18 @@ class Channel(Generic[T]):
 async def select(*channels: Channel, timeout: float | None = None) -> tuple[int, Any]:
     """Wait for the first available item from multiple channels.
 
-    Returns (channel_index, item) tuple.
+    Args:
+        *channels: Channels to monitor.
+        timeout: Maximum time to wait in seconds.
+
+    Returns:
+        A tuple of (channel_index, item).
+
+    Raises:
+        TimeoutError: If no channel is ready within the timeout.
+
+    Example:
+        >>> idx, msg = await select(ch1, ch2, timeout=2.0)
     """
     tasks = [asyncio.create_task(ch.receive(timeout=timeout)) for ch in channels]
     done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)

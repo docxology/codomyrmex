@@ -14,7 +14,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 _store: Any = None
 
 
-def _get_store():  # type: ignore[return]
+def _get_store():
     """Return the shared InMemoryVectorStore, creating it on first call."""
     global _store
     if _store is None:

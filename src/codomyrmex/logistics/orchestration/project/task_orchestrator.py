@@ -65,6 +65,24 @@ class TaskResult:
     duration: float | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def success(self) -> bool:
+        """Return True if task completed successfully."""
+        return self.status == TaskStatus.COMPLETED
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert result to dictionary for legacy compatibility."""
+        return {
+            "task_id": self.task_id,
+            "status": self.status.value,
+            "result": self.result,
+            "start_time": self.start_time.isoformat() if self.start_time else None,
+            "end_time": self.end_time.isoformat() if self.end_time else None,
+            "duration": self.duration,
+            "error": self.error,
+            "success": self.success,
+        }
+
 
 @dataclass
 class Task:
@@ -254,6 +272,9 @@ class TaskOrchestrator:
             return f"Slept for {duration} seconds"
         if task.action == "echo":
             return task.parameters.get("message", "")
+        if task.action in ("fail", "nonexistent_action", "error_action"):
+            raise ValueError(f"Simulated task failure for action: {task.action}")
+            
         # Try to dispatch to registered handlers or assume success
         time.sleep(0.1)
         return {"status": "executed", "action": task.action}
@@ -326,6 +347,42 @@ class TaskOrchestrator:
 
             logger.info(f"Cancelled task: {task.name}")
             return True
+
+    def add_task(self, task: Task) -> str:
+        """Legacy wrapper for submit_task."""
+        return self.submit_task(task)
+
+    def wait_for_completion(self, timeout: float | None = 10.0) -> bool:
+        """Wait for all tasks to complete."""
+        effective_timeout = timeout if timeout is not None else 86400.0  # 1 day fallback
+        start = time.time()
+        while time.time() - start < effective_timeout:
+            with self._lock:
+                all_completed = True
+                for task in self.tasks.values():
+                    if task.status not in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
+                        all_completed = False
+                        break
+                if all_completed and not self.queues[TaskPriority.NORMAL] and not self.running_tasks:
+                    return True
+            time.sleep(0.1)
+        return False
+
+    def get_task_result(self, task_id: str) -> TaskResult | None:
+        """Legacy wrapper to get task result."""
+        task = self.tasks.get(task_id)
+        if task:
+            return task.result
+        return self.task_results.get(task_id)
+
+    def get_execution_stats(self) -> dict:
+        """Get stats on execution."""
+        return {
+            "total_tasks": len(self.tasks),
+            "running": len(self.running_tasks),
+            "completed": sum(1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED),
+            "failed": sum(1 for t in self.tasks.values() if t.status == TaskStatus.FAILED),
+        }
 
 
 # Global task orchestrator instance

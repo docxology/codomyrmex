@@ -11,7 +11,13 @@ from .base import CodomyrmexError
 
 
 class AIProviderError(CodomyrmexError):
-    """Raised when AI provider operations fail."""
+    """Raised when AI provider operations fail.
+
+    Attributes:
+        message (str): The error message.
+        provider_name (str | None): Name of the AI provider.
+        model_name (str | None): Name of the model being used.
+    """
 
     def __init__(
         self,
@@ -28,7 +34,13 @@ class AIProviderError(CodomyrmexError):
 
 
 class CodeGenerationError(CodomyrmexError):
-    """Raised when code generation fails."""
+    """Raised when code generation fails.
+
+    Attributes:
+        message (str): The error message.
+        language (str | None): The target programming language.
+        prompt_preview (str | None): A preview of the prompt used.
+    """
 
     def __init__(
         self,
@@ -45,7 +57,13 @@ class CodeGenerationError(CodomyrmexError):
 
 
 class CodeEditingError(CodomyrmexError):
-    """Raised when code editing operations fail."""
+    """Raised when code editing operations fail.
+
+    Attributes:
+        message (str): The error message.
+        file_path (str | None): Path to the file being edited.
+        edit_type (str | None): The type of edit being performed.
+    """
 
     def __init__(
         self,
@@ -62,7 +80,13 @@ class CodeEditingError(CodomyrmexError):
 
 
 class ModelContextError(CodomyrmexError):
-    """Raised when model context protocol operations fail."""
+    """Raised when model context protocol operations fail.
+
+    Attributes:
+        message (str): The error message.
+        protocol_version (str | None): The version of the protocol.
+        operation (str | None): The operation that failed.
+    """
 
     def __init__(
         self,

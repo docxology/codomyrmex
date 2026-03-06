@@ -69,22 +69,31 @@ class StatusReporter:
             Dict with keys: version, version_string, executable,
             virtual_env (bool), path (first 5 sys.path entries), platform.
         """
+        from codomyrmex.system_discovery.reporting.profilers import EnvironmentProfiler
+
+        env_info = EnvironmentProfiler.get_environment_info()
+        py_info = env_info["python"]
+
         status = {
             "version": sys.version_info,
-            "version_string": sys.version.split()[0],
-            "executable": sys.executable,
-            "virtual_env": self._in_virtual_env(),
-            "path": sys.path[:5],  # First 5 path entries
+            "version_string": py_info["version"].split()[0],
+            "executable": py_info["executable"],
+            "virtual_env": env_info["is_venv"],
+            "path": py_info["path"],
             "platform": sys.platform,
+            "env_type": env_info["type"],
         }
 
         return status
 
     def _in_virtual_env(self) -> bool:
-        """Check if running in virtual environment."""
-        return hasattr(sys, "real_prefix") or (
-            hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
-        )
+        """Check if running in virtual environment.
+        
+        Deprecated: use check_python_environment()['virtual_env'] instead.
+        Keep for backward compatibility with existing tests.
+        """
+        from codomyrmex.system_discovery.reporting.profilers import EnvironmentProfiler
+        return EnvironmentProfiler.is_virtual_env()
 
     def check_project_structure(self) -> dict[str, Any]:
         """Verify expected project directory structure exists.
@@ -328,8 +337,10 @@ class StatusReporter:
 
         Returns:
             Dict with keys: timestamp, python_environment, project_structure,
-            dependencies, git_status, external_tools.
+            dependencies, git_status, external_tools, hardware.
         """
+        from codomyrmex.system_discovery.reporting.profilers import HardwareProfiler
+
         report = {
             "timestamp": datetime.now().isoformat(),
             "python_environment": self.check_python_environment(),
@@ -337,6 +348,7 @@ class StatusReporter:
             "dependencies": self.check_dependencies(),
             "git_status": self.check_git_status(),
             "external_tools": self.check_external_tools(),
+            "hardware": HardwareProfiler.get_hardware_info(),
         }
 
         return report
@@ -345,7 +357,7 @@ class StatusReporter:
         """Print a formatted system status report to the terminal.
 
         Calls generate_comprehensive_report and renders each section
-        (Python env, project structure, dependencies, git, external tools)
+        (Python env, project structure, dependencies, git, external tools, hardware)
         with color formatting and a summary health score.
         """
         report = self.generate_comprehensive_report()
@@ -353,6 +365,9 @@ class StatusReporter:
         print("\n" + "=" * 70)
         print("  CODOMYRMEX SYSTEM STATUS REPORT")
         print("=" * 70)
+
+        # Hardware
+        self._display_hardware_status(report["hardware"])
 
         # Python Environment
         self._display_python_status(report["python_environment"])
@@ -371,6 +386,25 @@ class StatusReporter:
 
         # Summary
         self._display_summary(report)
+
+    def _display_hardware_status(self, hw: dict[str, Any]) -> None:
+        """Display hardware information."""
+        print("\n💻 Hardware:")
+        print(f"   OS: {hw['os']} {hw['os_release']}")
+        print(f"   Architecture: {hw['architecture']}")
+        print(f"   CPU: {hw['cpu_count']} cores ({hw['cpu_threads']} threads)")
+        print(f"   RAM: {hw['total_ram_gb']} GB total ({hw['available_ram_gb']} GB available)")
+
+        gpu = hw.get("gpu", {})
+        if gpu.get("available"):
+            print(self.format_message("   GPU: Detected", "success"))
+            for detail in gpu.get("details", []):
+                vendor = detail.get("vendor", "Unknown")
+                model = detail.get("model", "Unknown")
+                mem = detail.get("memory_mb", "N/A")
+                print(f"      • {vendor} {model} ({mem} MB)")
+        else:
+            print("   GPU: Not detected or not supported")
 
     def _display_python_status(self, env_status: dict[str, Any]) -> None:
         """Display Python environment status."""

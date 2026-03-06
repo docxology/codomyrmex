@@ -73,13 +73,13 @@ try:
 
     STT_AVAILABLE = True
 except ImportError:
-    Transcriber = None  # type: ignore
-    TranscriptionResult = None  # type: ignore
-    TranscriptionConfig = None  # type: ignore
-    Segment = None  # type: ignore
-    Word = None  # type: ignore
-    WhisperModelSize = None  # type: ignore
-    STTProvider = None  # type: ignore
+    Transcriber = None
+    TranscriptionResult = None
+    TranscriptionConfig = None
+    Segment = None
+    Word = None
+    WhisperModelSize = None
+    STTProvider = None
     WHISPER_AVAILABLE = False
     STT_AVAILABLE = False
 
@@ -99,13 +99,13 @@ try:
 
     TTS_AVAILABLE = True
 except ImportError:
-    Synthesizer = None  # type: ignore
-    SynthesisResult = None  # type: ignore
-    TTSConfig = None  # type: ignore
-    AudioFormat = None  # type: ignore
-    VoiceInfo = None  # type: ignore
-    VoiceGender = None  # type: ignore
-    TTSProvider = None  # type: ignore
+    Synthesizer = None
+    SynthesisResult = None
+    TTSConfig = None
+    AudioFormat = None
+    VoiceInfo = None
+    VoiceGender = None
+    TTSProvider = None
     PYTTSX3_AVAILABLE = False
     EDGE_TTS_AVAILABLE = False
     TTS_AVAILABLE = False

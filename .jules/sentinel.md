@@ -1,0 +1,4 @@
+## 2025-03-05 - [Critical] SQL Injection in SQLite PRAGMA table_info via Unescaped Identifier
+**Vulnerability:** Found an unescaped identifier (`table_name`) formatted directly into a `PRAGMA table_info` query (`f"PRAGMA table_info({table_name})"`) in `db_manager.py`'s `get_table_info` function.
+**Learning:** SQLite's `PRAGMA` statements do not support standard prepared statement query parameterization. This often leads to developers falling back to string formatting, which introduces SQL injection vulnerabilities if the identifier is attacker-controlled.
+**Prevention:** Since parameterized identifiers are not supported in `PRAGMA`, dynamically constructed queries using identifiers must be escaped manually. This is done by doubling interior double quotes (e.g. `"` -> `""`) and wrapping the entire identifier in double quotes (e.g., `f'"{table_name.replace('"', '""')}"'`) to ensure it's safely treated as a schema identifier and not executable SQL.

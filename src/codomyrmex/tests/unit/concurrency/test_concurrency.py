@@ -218,7 +218,7 @@ class TestBaseLockAbstract:
 
     def test_cannot_instantiate(self):
         with pytest.raises(TypeError):
-            BaseLock("abstract-lock")  # type: ignore
+            BaseLock("abstract-lock")
 
 
 # ============================================================================
@@ -308,7 +308,7 @@ class TestBaseSemaphoreAbstract:
 
     def test_cannot_instantiate(self):
         with pytest.raises(TypeError):
-            BaseSemaphore(value=1)  # type: ignore
+            BaseSemaphore(value=1)
 
 
 # ============================================================================

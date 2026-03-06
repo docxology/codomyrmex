@@ -27,11 +27,11 @@ try:
     _HAS_DISCOVERY = True
 except ImportError:
     _HAS_DISCOVERY = False
-    DEFAULT_REGISTRY = None  # type: ignore[assignment]
-    FunctionSkill = None  # type: ignore[assignment,misc]
-    ParameterSchema = None  # type: ignore[assignment,misc]
-    SkillCategory = None  # type: ignore[assignment,misc]
-    SkillMetadata = None  # type: ignore[assignment,misc]
+    DEFAULT_REGISTRY = None
+    FunctionSkill = None
+    ParameterSchema = None
+    SkillCategory = None
+    SkillMetadata = None
 
 from .core import _DEFAULT_PRIMITIVES, _DIMENSION_KEYWORDS, ArsContextaManager
 from .models import VaultSpace

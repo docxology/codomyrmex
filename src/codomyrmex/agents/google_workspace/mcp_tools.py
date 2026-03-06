@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from codomyrmex.agents.google_workspace.core import GoogleWorkspaceRunner
 
 
-def _get_runner(account: str = "", timeout: int = 60) -> GoogleWorkspaceRunner:  # type: ignore[name-defined]
+def _get_runner(account: str = "", timeout: int = 60) -> GoogleWorkspaceRunner:
     """Lazy import of GoogleWorkspaceRunner."""
     from codomyrmex.agents.google_workspace.core import GoogleWorkspaceRunner
 

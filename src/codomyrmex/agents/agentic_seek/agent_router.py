@@ -234,7 +234,7 @@ class AgenticSeekRouter:
             AgenticSeekAgentType.FILE: _score(lower, _FILE_KEYWORDS),
             AgenticSeekAgentType.PLANNER: _score(lower, _PLANNER_KEYWORDS),
         }
-        best_type = max(scores, key=scores.get)  # type: ignore[arg-type]
+        best_type = max(scores, key=scores.get)
         if scores[best_type] == 0:
             return None
         return best_type

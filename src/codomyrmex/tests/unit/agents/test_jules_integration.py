@@ -124,6 +124,7 @@ class TestJulesClient:
             # Expected if authentication fails or CLI error
             pytest.skip("Jules CLI authentication or execution failed")
 
+    @pytest.mark.skipif(not JULES_AVAILABLE, reason="jules CLI not installed")
     def test_jules_client_get_help(self):
         """Test getting Jules help information."""
         client = JulesClient()

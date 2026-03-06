@@ -461,7 +461,7 @@ class TestCheckGitStatus:
         )
 
         # Use the actual codomyrmex project root which is a git repo
-        repo_root = Path("/Users/mini/Documents/GitHub/codomyrmex")
+        repo_root = Path.cwd()
         reporter = StatusReporter(project_root=repo_root)
         git = reporter.check_git_status()
         assert git["git_available"] is True

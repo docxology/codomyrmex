@@ -52,15 +52,15 @@ from .versioning import (
 try:
     from codomyrmex.validation.schemas import Config, Result, ResultStatus
 except ImportError:
-    Result = Any  # type: ignore
-    ResultStatus = Any  # type: ignore
-    Config = Any  # type: ignore
+    Result = Any
+    ResultStatus = Any
+    Config = Any
 
 # Try to import base exception for module error class
 try:
     from codomyrmex.exceptions import CodomyrmexError
 except ImportError:
-    CodomyrmexError = Exception  # type: ignore
+    CodomyrmexError = Exception
 
 
 class PromptEngineeringError(CodomyrmexError):

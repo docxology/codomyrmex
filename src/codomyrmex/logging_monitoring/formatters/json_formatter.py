@@ -8,10 +8,37 @@ Provides:
 
 from __future__ import annotations
 
+import datetime
 import json
 import logging
 import re
 from typing import Any
+
+# Standard LogRecord attributes to exclude from JSON 'extra' fields
+_RESERVED_ATTRS: set[str] = {
+    "args",
+    "asctime",
+    "created",
+    "exc_info",
+    "exc_text",
+    "filename",
+    "funcName",
+    "levelname",
+    "levelno",
+    "lineno",
+    "module",
+    "msecs",
+    "message",
+    "msg",
+    "name",
+    "pathname",
+    "process",
+    "processName",
+    "relativeCreated",
+    "stack_info",
+    "thread",
+    "threadName",
+}
 
 # Sensitive field patterns for automatic redaction
 _SENSITIVE_PATTERNS = re.compile(
@@ -48,20 +75,39 @@ class JSONFormatter(logging.Formatter):
 
     def _build_entry(self, record: logging.LogRecord) -> dict[str, Any]:
         """Build the base log entry dict."""
+        # Use ISO format for timestamp if no datefmt is provided
+        if self.datefmt:
+            timestamp = self.formatTime(record, self.datefmt)
+        else:
+            timestamp = datetime.datetime.fromtimestamp(
+                record.created, tz=datetime.UTC
+            ).isoformat()
+
         log_entry: dict[str, Any] = {
-            "timestamp": self.formatTime(record, self.datefmt),
+            "timestamp": timestamp,
             "level": record.levelname,
             "name": record.name,
             "message": record.getMessage(),
             "module": record.module,
+            "function": record.funcName,
             "line": record.lineno,
         }
 
         if record.exc_info:
             log_entry["exception"] = self.formatException(record.exc_info)
 
-        if hasattr(record, "extra"):
-            log_entry.update(record.extra)
+        # Inject correlation_id if present (common in this codebase)
+        if hasattr(record, "correlation_id"):
+            log_entry["correlation_id"] = record.correlation_id
+
+        # Inject context if present
+        if hasattr(record, "context"):
+            log_entry["context"] = record.context
+
+        # Add any extra fields attached to the record
+        for key, value in record.__dict__.items():
+            if key not in _RESERVED_ATTRS and key not in log_entry:
+                log_entry[key] = value
 
         # Apply include/exclude filters
         if self._include:

@@ -35,10 +35,22 @@ from .workers.pool import AsyncWorkerPool, PoolStats, TaskResult
 
 
 def cli_commands():
-    """Return CLI commands for the concurrency module."""
+    """Return CLI commands for the concurrency module.
+
+    Returns:
+        Dictionary mapping command names to their handler functions and help text.
+
+    Example:
+        >>> commands = cli_commands()
+        >>> commands["stats"]["handler"]()
+    """
 
     def _pools(**kwargs):
-        """List thread/process pools."""
+        """List thread/process pools.
+
+        Args:
+            **kwargs: Additional arguments from CLI.
+        """
         mgr = LockManager()
         print("=== Concurrency Pools ===")
         print(
@@ -50,7 +62,11 @@ def cli_commands():
         print(f"  Active locks: {len(active)}")
 
     def _stats(**kwargs):
-        """Show concurrency statistics."""
+        """Show concurrency statistics.
+
+        Args:
+            **kwargs: Additional arguments from CLI.
+        """
         mgr = LockManager()
         print("=== Concurrency Stats ===")
         stats = mgr.stats

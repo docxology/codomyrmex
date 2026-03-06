@@ -49,14 +49,16 @@ def start_span(
     Args:
         name: Name of the span.
         attributes: Initial attributes for the span.
-        parent: Optional parent span for nesting.
+        parent: Optional parent span for nesting. If not provided,
+                the current active span from the context is used.
 
     Returns:
         The started span.
     """
     tracer = TraceContext.get_tracer()
 
-    # If a parent is provided, we use it as the context for the new span
+    # If a parent is provided, we use it as the context for the new span.
+    # Otherwise, OpenTelemetry's tracer.start_span will use the current context.
     if parent:
         context = trace.set_span_in_context(parent)
         return tracer.start_span(name, attributes=attributes, context=context)
@@ -75,7 +77,11 @@ def record_exception(span: Span, exception: Exception, escaped: bool = True) -> 
     span.set_status(Status(StatusCode.ERROR, str(exception)))
 
 
-def traced(name: str | None = None, attributes: dict[str, Any] | None = None):
+def traced(
+    name: str | None = None,
+    attributes: dict[str, Any] | None = None,
+    record_exceptions: bool = True,
+):
     """Decorator to automatically wrap a function in a span."""
 
     def decorator(func):
@@ -90,7 +96,8 @@ def traced(name: str | None = None, attributes: dict[str, Any] | None = None):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    record_exception(span, e)
+                    if record_exceptions:
+                        record_exception(span, e)
                     raise
 
         return wrapper

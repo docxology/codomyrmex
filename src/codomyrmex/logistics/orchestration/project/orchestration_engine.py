@@ -468,15 +468,19 @@ class OrchestrationEngine:
             # Create tasks from steps
             tasks = {}
             for step in steps:
+                step_name = step["name"]
+                dep_names = dependencies.get(step_name, [])
+                task_deps = [tasks.get(dep) for dep in dep_names if dep in tasks]
+
                 task = Task(
-                    name=step["name"],
+                    name=step_name,
                     module=step["module"],
                     action=step["action"],
                     parameters=step.get("parameters", {}),
-                    dependencies=dependencies.get(step["name"], []),
+                    dependencies=task_deps,
                 )
                 task_id = self.task_orchestrator.add_task(task)
-                tasks[step["name"]] = task_id
+                tasks[step_name] = task_id
 
             # Wait for all tasks to complete
             completed = self.task_orchestrator.wait_for_completion(

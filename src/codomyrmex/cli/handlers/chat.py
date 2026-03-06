@@ -4,7 +4,8 @@ import traceback
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.cli.utils import get_logger, print_error, print_header, print_success
+from codomyrmex.cli.utils import print_error, print_header, print_success
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

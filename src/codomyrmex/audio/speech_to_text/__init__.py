@@ -42,7 +42,7 @@ from .transcriber import Transcriber
 try:
     from .providers import WhisperProvider
 except ImportError:
-    WhisperProvider = None  # type: ignore
+    WhisperProvider = None
 
 
 __all__ = [

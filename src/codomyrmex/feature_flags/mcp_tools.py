@@ -12,7 +12,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 _flags: dict[str, object] = {}
 
 
-def _get_evaluator():  # type: ignore[return]
+def _get_evaluator():
     """Return a shared FlagEvaluator instance."""
     from codomyrmex.feature_flags.evaluation import FlagEvaluator
 
@@ -71,7 +71,7 @@ def flag_is_enabled(key: str, user_id: str = "") -> bool:
     if flag is None:
         return False
     context = EvaluationContext(user_id=user_id or None)
-    result = _get_evaluator().evaluate(flag, context)  # type: ignore[arg-type]
+    result = _get_evaluator().evaluate(flag, context)
     return result.enabled
 
 
@@ -89,6 +89,6 @@ def flag_list() -> list[dict]:
         List of dicts with ``key``, ``enabled``, and ``percentage`` keys.
     """
     return [
-        {"key": f.name, "enabled": f.enabled, "percentage": f.percentage}  # type: ignore[union-attr]
+        {"key": f.name, "enabled": f.enabled, "percentage": f.percentage}
         for f in _flags.values()
     ]

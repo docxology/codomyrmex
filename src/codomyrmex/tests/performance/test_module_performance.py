@@ -20,7 +20,7 @@ try:
 
     HAS_PSUTIL = True
 except ImportError:
-    psutil = None  # type: ignore[assignment]
+    psutil = None
     HAS_PSUTIL = False
 
 # Import modules for performance testing

@@ -83,6 +83,7 @@ class BenchmarkRunner:
         fn: Callable[[], Any],
         iterations: int = 100,
         threshold_ms: float = 0.0,
+        warmup_iterations: int = 0,
     ) -> None:
         """Register a benchmark.
 
@@ -91,6 +92,7 @@ class BenchmarkRunner:
             fn: Function to benchmark.
             iterations: Number of iterations.
             threshold_ms: Max allowable mean (0 = no limit).
+            warmup_iterations: Number of warm-up iterations.
         """
         self._benchmarks.append(
             {
@@ -98,6 +100,7 @@ class BenchmarkRunner:
                 "fn": fn,
                 "iterations": iterations,
                 "threshold_ms": threshold_ms,
+                "warmup_iterations": warmup_iterations,
             }
         )
 
@@ -130,6 +133,10 @@ class BenchmarkRunner:
         fn = bench["fn"]
         iterations = bench["iterations"]
         threshold = bench["threshold_ms"]
+        warmup = bench.get("warmup_iterations", 0)
+
+        for _ in range(warmup):
+            fn()
 
         timings: list[float] = []
         for _ in range(iterations):

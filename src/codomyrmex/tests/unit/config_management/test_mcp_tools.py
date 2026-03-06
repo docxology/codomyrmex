@@ -65,7 +65,7 @@ def test_get_config_not_found(mock_config_manager):
 def test_get_config_error(mock_config_manager):
     """Test get_config handles errors properly without mocking."""
     # We pass an integer where a string is expected to cause an AttributeError in split()
-    result = get_config(123)  # type: ignore
+    result = get_config(123)
     assert result["status"] == "error"
     assert "attribute 'split'" in result["message"].lower()
 
@@ -89,7 +89,7 @@ def test_set_config_success(mock_config_manager):
 def test_set_config_error(mock_config_manager):
     """Test set_config handles errors properly without mocking."""
     # Passing a non-string key will cause a split() error
-    result = set_config(123, "value")  # type: ignore
+    result = set_config(123, "value")
     assert result["status"] == "error"
     assert "attribute 'split'" in result["message"].lower()
 
@@ -113,5 +113,5 @@ def test_validate_config_error(mock_config_manager, monkeypatch):
     # But we can monkeypatch os variables or paths. Instead of mocking the manager, let's pass a bad namespace type.
 
     # Passing an integer namespace causes string formatting errors during save/load
-    result = validate_config(namespace=123)  # type: ignore
+    result = validate_config(namespace=123)
     assert result["status"] == "error"

@@ -1,6 +1,6 @@
 # tutorials - Documentation Specification
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.6 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 This directory contains **Tutorials** documentation. It serves to educate users and developers about specific aspects of the system.

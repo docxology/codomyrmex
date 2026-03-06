@@ -4,6 +4,7 @@ import json
 import pickle
 import tempfile
 import time
+from collections import OrderedDict
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -51,11 +52,8 @@ class CacheManager:
         self.max_memory_items = max_memory_items
         self.default_ttl = default_ttl
 
-        # In-memory cache: {key: (value, timestamp)}
-        self._memory_cache: dict[str, tuple] = {}
-
-        # Access tracking for LRU eviction
-        self._access_times: dict[str, float] = {}
+        # In-memory cache: {key: (value, timestamp, ttl)}
+        self._memory_cache: OrderedDict[str, tuple] = OrderedDict()
 
     def _generate_key(self, func_name: str, args: tuple, kwargs: dict) -> str:
         """Generate a cache key from function name and arguments."""
@@ -73,15 +71,11 @@ class CacheManager:
 
     def _evict_oldest(self):
         """Evict the oldest item from the memory cache."""
-        if not self._access_times:
+        if not self._memory_cache:
             return
 
-        # Find the item with the oldest access time
-        oldest_key = min(self._access_times.keys(), key=lambda k: self._access_times[k])
-
-        # Remove from both caches
-        self._memory_cache.pop(oldest_key, None)
-        self._access_times.pop(oldest_key, None)
+        # Pop the first item (least recently used)
+        self._memory_cache.popitem(last=False)
 
     def get(self, key: str) -> Any | None:
         """Get a value from the cache."""
@@ -97,12 +91,11 @@ class CacheManager:
                 ttl = self.default_ttl
 
             if not self._is_expired(timestamp, ttl):
-                # Update access time for LRU
-                self._access_times[key] = time.time()
+                # Update access order for LRU
+                self._memory_cache.move_to_end(key)
                 return value
             # Remove expired entry
             self._memory_cache.pop(key, None)
-            self._access_times.pop(key, None)
 
         # Check disk cache
         cache_file = self.cache_dir / f"{key}.pkl"
@@ -119,9 +112,14 @@ class CacheManager:
                     ttl = self.default_ttl
 
                 if not self._is_expired(timestamp, ttl):
-                    # Load into memory cache
+                    # Load into memory cache and preserve original timestamp
                     self._memory_cache[key] = (value, timestamp, ttl)
-                    self._access_times[key] = time.time()
+                    self._memory_cache.move_to_end(key)
+
+                    # Evict if we exceed the memory limit
+                    while len(self._memory_cache) > self.max_memory_items:
+                        self._evict_oldest()
+
                     return value
                 # Remove expired file
                 cache_file.unlink(missing_ok=True)
@@ -137,8 +135,9 @@ class CacheManager:
         timestamp = time.time()
 
         # Store in memory cache (value, timestamp, ttl)
+        if key in self._memory_cache:
+            self._memory_cache.move_to_end(key)
         self._memory_cache[key] = (value, timestamp, ttl)
-        self._access_times[key] = time.time()
 
         # Evict if we exceed the memory limit
         while len(self._memory_cache) > self.max_memory_items:
@@ -156,7 +155,6 @@ class CacheManager:
     def clear(self) -> None:
         """Clear all caches."""
         self._memory_cache.clear()
-        self._access_times.clear()
 
         # Clear disk cache
         for cache_file in self.cache_dir.glob("*.pkl"):
@@ -213,12 +211,13 @@ def cached_function(
 
             Returns:        The result of the operation.
             """
+            mgr = cache_manager or _cache_manager
             # Generate cache key
             prefix = cache_key_prefix or func.__name__
-            key = _cache_manager._generate_key(prefix, args, kwargs)
+            key = mgr._generate_key(prefix, args, kwargs)
 
             # Try to get from cache
-            cached_result = _cache_manager.get(key)
+            cached_result = mgr.get(key)
             if cached_result is not None:
                 return cached_result
 
@@ -226,13 +225,14 @@ def cached_function(
             result = func(*args, **kwargs)
 
             # Store in cache
-            _cache_manager.set(key, result, ttl)
+            mgr.set(key, result, ttl)
 
             return result
 
         # Add cache management methods to the wrapper
-        wrapper.cache_clear = _cache_manager.clear
-        wrapper.cache_stats = _cache_manager.get_stats
+        mgr = cache_manager or _cache_manager
+        wrapper.cache_clear = mgr.clear
+        wrapper.cache_stats = mgr.get_stats
 
         return wrapper
 

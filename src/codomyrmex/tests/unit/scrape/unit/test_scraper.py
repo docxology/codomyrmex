@@ -120,14 +120,14 @@ class TestScraper:
             scraper.scrape("")
 
         with pytest.raises(ScrapeValidationError):
-            scraper.scrape(None)  # type: ignore
+            scraper.scrape(None)
 
     def test_scrape_non_string_url(self):
         """Test scraping with non-string URL."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         with pytest.raises(ScrapeValidationError):
-            scraper.scrape(123)  # type: ignore
+            scraper.scrape(123)
 
     def test_crawl_success(self):
         """Test successful crawling with real data."""
@@ -210,7 +210,7 @@ class TestScraper:
             scraper.search("")
 
         with pytest.raises(ScrapeValidationError):
-            scraper.search(None)  # type: ignore
+            scraper.search(None)
 
     def test_extract_success(self):
         """Test successful extraction with real data."""
@@ -255,7 +255,7 @@ class TestScraper:
             scraper.extract([])
 
         with pytest.raises(ScrapeValidationError):
-            scraper.extract(None)  # type: ignore
+            scraper.extract(None)
 
     def test_extract_invalid_url_in_list(self):
         """Test extraction with invalid URL in list."""
@@ -265,14 +265,14 @@ class TestScraper:
             scraper.extract([""])
 
         with pytest.raises(ScrapeValidationError):
-            scraper.extract([None])  # type: ignore
+            scraper.extract([None])
 
     def test_extract_non_string_url(self):
         """Test extraction with non-string URL in list."""
         adapter = TestAdapter()
         scraper = Scraper(adapter=adapter)
         with pytest.raises(ScrapeValidationError):
-            scraper.extract([123])  # type: ignore
+            scraper.extract([123])
 
     def test_error_handling(self):
         """Test error handling in scraper with real error propagation."""

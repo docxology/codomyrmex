@@ -82,7 +82,7 @@ def mcp_tool(
             return func(*args, **kwargs)
 
         # Copy metadata onto wrapper so scanners find it via dir()
-        wrapper._mcp_tool_meta = tool_meta  # type: ignore[attr-defined]
+        wrapper._mcp_tool_meta = tool_meta
 
         return wrapper
 

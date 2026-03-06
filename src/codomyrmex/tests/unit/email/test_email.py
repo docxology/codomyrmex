@@ -187,7 +187,7 @@ class TestEmailProviderAbstractInterface:
 
     def test_cannot_instantiate_abstract_provider(self):
         with pytest.raises(TypeError):
-            EmailProvider()  # type: ignore
+            EmailProvider()
 
     def test_concrete_subclass_must_implement_all_methods(self):
         """A subclass missing any abstract method should also raise TypeError."""
@@ -199,7 +199,7 @@ class TestEmailProviderAbstractInterface:
             # Missing: get_message, send_message, create_draft, delete_message, modify_labels
 
         with pytest.raises(TypeError):
-            IncompleteProvider()  # type: ignore
+            IncompleteProvider()
 
     def test_complete_subclass_can_be_instantiated(self):
         """A subclass implementing all abstract methods instantiates successfully."""

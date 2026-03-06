@@ -8,7 +8,7 @@ import pickle
 from pathlib import Path
 
 try:
-    import yaml  # type: ignore[import-untyped]
+    import yaml
 
     YAML_AVAILABLE = True
 except ImportError:
@@ -104,7 +104,7 @@ class Serializer:
             raise SerializationError("PyYAML not installed")
         return yaml.dump(self._to_jsonable(obj), default_flow_style=False).encode(
             "utf-8"
-        )  # type: ignore
+        )
 
     def _deserialize_yaml(self, data: bytes, target_type: type[T] | None) -> Any:
         """Deserialize from YAML bytes."""

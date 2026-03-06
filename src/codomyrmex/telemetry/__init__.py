@@ -17,7 +17,7 @@ except ImportError:
 from codomyrmex.logging_monitoring import get_logger
 
 # Submodule exports - import first
-from . import dashboard, exporters, metrics, spans
+from . import agent_hooks, dashboard, exporters, metrics, spans
 
 # Try optional submodules
 try:
@@ -107,6 +107,7 @@ def cli_commands():
 
 
 __all__ = [
+    "agent_hooks",
     "alerting",
     "cli_commands",
     "dashboard",

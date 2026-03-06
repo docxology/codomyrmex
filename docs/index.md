@@ -1,6 +1,6 @@
 # Codomyrmex
 
-**A Modular, Extensible Coding Workspace** — v1.1.4
+**A Modular, Extensible Coding Workspace** — v1.1.6
 
 Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **127 deeply integrated modules**.
 
@@ -17,17 +17,24 @@ uv run pytest src/codomyrmex/tests/ -x -q
 
 # Check code quality
 uv run ruff check .              # ✅ 0 violations
-uv run ty check src/             # 1,442 diagnostics (tracked)
+uv run ty check src/             # 971 diagnostics (< 1,000 target met)
 uv build                         # ✅ builds clean
+
+# Or use justfile
+just test
+just check
+just build
 ```
 
 ## Key Features
 
 - **127 auto-discovered modules** covering AI agents, code analysis, security, cloud, and more
-- **407 dynamic MCP tools** for AI agent integration
-- **Zero-Mock testing** policy — all tests use real functional verification (779 pass)
-- **PAI integration** — Personal AI bridge with 15-tab SPA dashboard
+- **545 dynamic MCP tools** for AI agent integration
+- **Zero-Mock testing** policy — all tests use real functional verification (21,000+ collected)
+- **PAI integration** — Personal AI bridge with 15-tab SPA dashboard + WebSocket push
 - **Ruff Zero** — 119,498 → 0 violations with 155 documented rule ignores
+- **ty diagnostics** — 1,446 → 971, target < 1,000 met
+- **Coverage gate** — `fail_under=35`, actual ~35%
 
 ## Documentation Sections
 

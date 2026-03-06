@@ -9,6 +9,7 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.system_discovery.health.health_checker import HealthChecker
+from codomyrmex.system_discovery.reporting.profilers import EnvironmentProfiler, HardwareProfiler
 
 from .discovery_engine import SystemDiscovery
 
@@ -23,30 +24,40 @@ def get_system_context(root_dir: str = ".") -> dict[str, Any]:
         root_dir: Root directory of the system
 
     Returns:
-        Dictionary containing system context (structure, health, etc.)
+        Dictionary containing system context (structure, health, hardware, etc.)
     """
     try:
-        SystemDiscovery(Path(root_dir))
-        HealthChecker()
+        engine = SystemDiscovery(Path(root_dir))
 
-        # Determine basic structure
-        # This is a lightweight context, not a full index
+        # Gather information from various components
+        hw_info = HardwareProfiler.get_hardware_info()
+        env_info = EnvironmentProfiler.get_environment_info()
+
+        # Get module list
+        # We perform a quick discovery or use an existing one if possible
+        inventory = engine.scan_system()
 
         context = {
-            "system_root": root_dir,
-            "modules": [],  # List of available modules
+            "system_root": str(Path(root_dir).absolute()),
+            "platform": hw_info["os"],
+            "os": hw_info,
+            "environment": env_info,
+            "modules": list(inventory["modules"].keys()),
+            "stats": inventory["stats"],
+            "capabilities": [
+                "python",
+                "git" if "git_operations" in inventory["modules"] else None,
+            ],
             "health_status": "unknown",
         }
 
-        # Get module list (simplified)
-        # engine.discover() might be expensive, so maybe just list top level?
-        # For now, let's just return what we know is statically available or quick to check.
+        # Add specific capabilities if tools are found on path
+        import shutil
+        if shutil.which("docker"):
+            context["capabilities"].append("docker")
 
-        # Assuming engine has a quick scan method or we use it lightly
-        # Lightweight implementation to avoid heavy computation on every context call.
-
-        context["platform"] = "codomyrmex"
-        context["capabilities"] = ["python", "git", "cli"]
+        # Filter None from capabilities
+        context["capabilities"] = [c for c in context["capabilities"] if c is not None]
 
         return context
 

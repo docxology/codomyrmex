@@ -17,15 +17,15 @@ Example:
     >>> logger.info("Application started")
 """
 
-import json
 import logging
 import os
 import sys
 import threading
 import uuid
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Self
+
+from codomyrmex.logging_monitoring.formatters.json_formatter import JSONFormatter
 
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -33,82 +33,6 @@ DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 DETAILED_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"
 
 _logging_configured = False
-
-
-class JSONFormatter(logging.Formatter):
-    """JSON formatter for structured logging output.
-
-    Formats log records as JSON objects containing timestamp, level, logger name,
-    message, module info, and any additional context or correlation IDs.
-
-    Attributes:
-        None specific; inherits from logging.Formatter.
-
-    Example:
-        >>> formatter = JSONFormatter()
-        >>> handler = logging.StreamHandler()
-        >>> handler.setFormatter(formatter)
-        >>> # Logs will output as: {"timestamp": "...", "level": "INFO", ...}
-    """
-
-    def format(self, record: logging.LogRecord) -> str:
-        """Format a log record as a JSON string.
-
-        Args:
-            record: The log record to format.
-
-        Returns:
-            A JSON-formatted string containing the log data with fields:
-            timestamp, level, name, message, module, function, line,
-            and optionally exception, context, and correlation_id.
-        """
-        log_data = {
-            "timestamp": datetime.fromtimestamp(record.created).isoformat(),
-            "level": record.levelname,
-            "name": record.name,  # Use "name" instead of "logger" for test compliance
-            "message": record.getMessage(),
-            "module": record.module,
-            "function": record.funcName,
-            "line": record.lineno,
-        }
-
-        if record.exc_info:
-            log_data["exception"] = self.formatException(record.exc_info)
-
-        if hasattr(record, "context"):
-            log_data["context"] = record.context
-        if hasattr(record, "correlation_id"):
-            log_data["correlation_id"] = record.correlation_id
-
-        for key, value in record.__dict__.items():
-            if key not in [
-                "name",
-                "msg",
-                "args",
-                "created",
-                "filename",
-                "funcName",
-                "levelname",
-                "levelno",
-                "lineno",
-                "module",
-                "msecs",
-                "pathname",
-                "process",
-                "processName",
-                "relativeCreated",
-                "stack_info",
-                "exc_info",
-                "exc_text",
-                "thread",
-                "threadName",
-                "message",
-                "context",
-                "correlation_id",
-            ]:
-                log_data[key] = value
-
-        return json.dumps(log_data)
 
 
 def setup_logging(force: bool = True) -> None:

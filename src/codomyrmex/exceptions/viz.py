@@ -12,7 +12,12 @@ from .base import CodomyrmexError
 
 # Visualization Errors
 class VisualizationError(CodomyrmexError):
-    """Raised when data visualization operations fail."""
+    """Raised when data visualization operations fail.
+
+    Attributes:
+        message (str): The error message.
+        tool_name (str | None): Name of the visualization tool.
+    """
 
     def __init__(
         self,
@@ -26,7 +31,12 @@ class VisualizationError(CodomyrmexError):
 
 
 class PlottingError(VisualizationError):
-    """Raised when plotting operations fail."""
+    """Raised when plotting operations fail.
+
+    Attributes:
+        message (str): The error message.
+        plot_type (str | None): The type of plot being generated.
+    """
 
     def __init__(
         self,
@@ -41,7 +51,12 @@ class PlottingError(VisualizationError):
 
 # Documentation Errors
 class DocumentationError(CodomyrmexError):
-    """Raised when documentation operations fail."""
+    """Raised when documentation operations fail.
+
+    Attributes:
+        message (str): The error message.
+        doc_type (str | None): The type of documentation being generated.
+    """
 
     def __init__(
         self,
@@ -55,7 +70,12 @@ class DocumentationError(CodomyrmexError):
 
 
 class APIDocumentationError(DocumentationError):
-    """Raised when API documentation generation fails."""
+    """Raised when API documentation generation fails.
+
+    Attributes:
+        message (str): The error message.
+        target_path (str | None): Path where documentation was supposed to be generated.
+    """
 
     def __init__(
         self,

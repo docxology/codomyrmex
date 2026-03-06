@@ -42,7 +42,7 @@ try:
     PYTTSX3_AVAILABLE = True
 except ImportError:
     PYTTSX3_AVAILABLE = False
-    pyttsx3 = None  # type: ignore
+    pyttsx3 = None
 
 
 class Pyttsx3Provider(TTSProvider):

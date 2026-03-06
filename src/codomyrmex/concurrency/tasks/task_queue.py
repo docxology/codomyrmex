@@ -61,7 +61,6 @@ class Task:
         retry_count: Current retry count.
         status: Current status.
         created_at: Creation timestamp.
-
     """
 
     task_id: str = ""
@@ -92,7 +91,14 @@ class TaskQueue:
     """
 
     def __init__(self, max_retries: int = 3) -> None:
-        """Initialize the task queue."""
+        """Initialize the task queue.
+
+        Args:
+            max_retries: Global maximum retry limit for tasks.
+
+        Example:
+            >>> queue = TaskQueue(max_retries=5)
+        """
         self._heap: list[QueueEntry] = []
         self._sequence = 0
         self._in_flight: dict[str, Task] = {}
@@ -102,17 +108,41 @@ class TaskQueue:
 
     @property
     def pending_count(self) -> int:
-        """Number of tasks waiting in the queue."""
+        """Number of tasks waiting in the queue.
+
+        Returns:
+            Pending task count.
+
+        Example:
+            >>> queue.pending_count
+            3
+        """
         return len(self._heap)
 
     @property
     def in_flight_count(self) -> int:
-        """Number of tasks currently being processed."""
+        """Number of tasks currently being processed.
+
+        Returns:
+            In-flight task count.
+
+        Example:
+            >>> queue.in_flight_count
+            1
+        """
         return len(self._in_flight)
 
     @property
     def dead_letter_count(self) -> int:
-        """Number of tasks in the dead-letter queue."""
+        """Number of tasks in the dead-letter queue.
+
+        Returns:
+            Dead-letter task count.
+
+        Example:
+            >>> queue.dead_letter_count
+            0
+        """
         return len(self._dead_letters)
 
     def enqueue(self, task: Task) -> bool:
@@ -126,6 +156,9 @@ class TaskQueue:
         Returns:
             True if enqueued, False if duplicate.
 
+        Example:
+            >>> queue.enqueue(Task(task_type="work"))
+            True
         """
         if task.task_id in self._seen_ids:
             return False
@@ -148,6 +181,8 @@ class TaskQueue:
         Returns:
             Next task, or None if queue is empty.
 
+        Example:
+            >>> task = queue.dequeue()
         """
         while self._heap:
             entry = heapq.heappop(self._heap)
@@ -174,6 +209,9 @@ class TaskQueue:
         Returns:
             True if acknowledged.
 
+        Example:
+            >>> queue.ack("task-123")
+            True
         """
         task = self._in_flight.pop(task_id, None)
         if task is not None:
@@ -190,6 +228,9 @@ class TaskQueue:
         Returns:
             True if requeued, False if dead-lettered.
 
+        Example:
+            >>> queue.nack("task-456")
+            False
         """
         task = self._in_flight.pop(task_id, None)
         if task is None:
@@ -213,6 +254,9 @@ class TaskQueue:
         Returns:
             Number of tasks requeued.
 
+        Example:
+            >>> queue.requeue_dead_letters()
+            2
         """
         count = 0
         for task in self._dead_letters:

@@ -85,5 +85,5 @@ def test_db_generate_schema_empty_models():
 def test_db_generate_schema_invalid_models():
     """Test db_generate_schema edge case: invalid models data type."""
     with tempfile.TemporaryDirectory() as temp_dir:
-        result = db_generate_schema(models="invalid_data_type", output_dir=temp_dir)  # type: ignore
+        result = db_generate_schema(models="invalid_data_type", output_dir=temp_dir)
         assert isinstance(result, dict)

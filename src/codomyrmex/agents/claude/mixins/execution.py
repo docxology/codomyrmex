@@ -29,26 +29,10 @@ class ExecutionMixin:
     """ExecutionMixin class."""
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
-        """Execute Claude API request with retry logic.
+        """Execute Claude API request.
 
         Args:
             request: Agent request
-
-        Returns:
-            Agent response
-        """
-        return self._execute_with_retry(request)
-
-    def _execute_with_retry(
-        self,
-        request: AgentRequest,
-        attempt: int = 0,
-    ) -> AgentResponse:
-        """Execute request with exponential backoff retry.
-
-        Args:
-            request: Agent request
-            attempt: Current attempt number
 
         Returns:
             Agent response
@@ -68,7 +52,6 @@ class ExecutionMixin:
                     "prompt_length": len(request.prompt),
                     "has_system": bool(system_message),
                     "has_tools": bool(self._tools),
-                    "attempt": attempt + 1,
                 },
             )
 
@@ -141,77 +124,12 @@ class ExecutionMixin:
                 execution_time=execution_time,
             )
 
-        except anthropic.RateLimitError as e:
-            return self._handle_retryable_error(e, request, attempt, start_time)
-        except anthropic.APIStatusError as e:
-            if e.status_code in (500, 502, 503, 529):
-                return self._handle_retryable_error(e, request, attempt, start_time)
-            execution_time = time.time() - start_time
-            self._handle_api_error(e, execution_time, anthropic.APIError)
         except anthropic.APIError as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time, anthropic.APIError)
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time)
-
-    def _handle_retryable_error(
-        self,
-        error: Exception,
-        request: AgentRequest,
-        attempt: int,
-        start_time: float,
-    ) -> AgentResponse:
-        """Handle retryable errors with exponential backoff.
-
-        Args:
-            error: The error that occurred
-            request: Original request
-            attempt: Current attempt number
-            start_time: When the request started
-
-        Returns:
-            Agent response from retry, or raises if max retries exceeded
-        """
-        if attempt >= self.max_retries:
-            execution_time = time.time() - start_time
-            self.logger.error(
-                f"Max retries ({self.max_retries}) exceeded",
-                extra={
-                    "agent": "claude",
-                    "model": self.model,
-                    "error": str(error),
-                    "attempts": attempt + 1,
-                },
-            )
-            self._handle_api_error(error, execution_time, anthropic.APIError)
-
-        # Calculate delay with jitter
-        delay = min(
-            self.initial_retry_delay * (self.backoff_factor**attempt),
-            self.max_retry_delay,
-        )
-        # Add jitter (±25%)
-        delay = delay * (0.75 + random.random() * 0.5)
-
-        # Check for Retry-After header
-        retry_after = getattr(error, "retry_after", None)
-        if retry_after:
-            delay = max(delay, float(retry_after))
-
-        self.logger.warning(
-            f"Retryable error, attempt {attempt + 1}/{self.max_retries + 1}, "
-            f"retrying in {delay:.1f}s",
-            extra={
-                "agent": "claude",
-                "model": self.model,
-                "error": str(error),
-                "delay": delay,
-            },
-        )
-
-        time.sleep(delay)
-        return self._execute_with_retry(request, attempt + 1)
 
     def _extract_response_content(
         self, response: Any

@@ -1,6 +1,7 @@
+<!-- markdownlint-disable MD060 -->
 # Codomyrmex — TODO
 
-**Version**: v1.1.5 | **Date**: 2026-03-05 | **Modules**: 127 | **Sprint**: 25
+**Version**: v1.1.7 | **Date**: 2026-03-05 | **Modules**: 127 | **Sprint**: 27
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -33,56 +34,7 @@ This is the authoritative project backlog. Updated after each sprint.
 
 ---
 
-## 🟡 v1.1.5 — "Type Safety & Coverage Ratchet"
-
-Incremental release focused on eliminating remaining type errors and tightening the coverage gate.
-
-### `ty` Diagnostic Reduction (1,446 → 971) ✅
-
-| Rule | Est. Count | Action | Focus |
-| :--- | :--- | :--- | :--- |
-| `invalid-assignment` | **~600** | Fix return types in top offenders (`website/`, `agents/`, `orchestrator/`); add proper annotations | ✅ Core Modules |
-| `invalid-return-type` | **~400** | Explicitly handle or type the return values of asynchronous functions and factory methods | ✅ Async/Factory |
-| `invalid-parameter-default` | **~300** | Auto-fix via ruff `RUF013` applied previously; verify all instances of `def f(x: str = None)` are resolved | ✅ Verification |
-| `possibly-unresolved-reference` | **~140** | Add `TYPE_CHECKING` guards around conditional imports to satisfy the type checker without circular dependencies | ✅ Manual Fix |
-
-**Technical details**: Focus on the `src/codomyrmex/` library files. Run `uv run ty check src/ 2>&1 | grep -c "invalid-return-type"` to track diagnostic reductions. Add hard-fail on `ci.yml` when diagnostics drop below 1,000.
-
-### Codebase Quality & Testing (Coverage 32% → 35%)
-
-| Item | Scope | Technical Detail |
-| :--- | :--- | :--- |
-| **Coverage gate ratchet** | `pyproject.toml` | Bump `fail_under` to 35. Add tests for `embodiment/`, `quantum/`, and `dark/` to reach threshold |
-| **`noqa` / `type: ignore` Audit** | Repo-wide | Audit existing 178 `type: ignore` and 233 `noqa` flags; remove state suppressions as `ty` and `ruff` accurately capture truth |
-| **Broken symlink cleanup** | `.cursorrules` | Fix broken symlinks in module directories (`src/*/.cursor/`) causing warnings during `uv build` |
-| **Dashboard WebSocket** | `website/` | Replace 15s polling in `pai_mixin.py` with WebSocket push via `websockets` library |
-
----
-
-## 🟢 v1.1.6 — "Tooling & Developer Experience"
-
-Focused on making the project easier to contribute to, operate, and extend efficiently.
-
-### Infrastructure & Pipeline
-
-| Item | Scope | Technical Detail |
-| :--- | :--- | :--- |
-| **Dependency audit** | `uv.lock` | Run `uv pip audit`; resolve any identified CVEs; pin dependencies for security |
-| **SBOM generation** | `.github/workflows/`| Add CycloneDX SBOM generation to `sbom.yml`; attach output `sbom.json` to GitHub release assets |
-| **PEP 723 script metadata** | `scripts/` | Add `# /// script` inline metadata to top 10 most-used scripts enabling standalone execution (e.g. `uv run script.py`) |
-| **`justfile` Migration** | Root | Create a `justfile` mirroring the `Makefile` with targets (`just lint`, `just test`, `just build`); preserve `Makefile` |
-
-### Documentation Site Tuning
-
-| Item | Scope | Technical Detail |
-| :--- | :--- | :--- |
-| **Strict MkDocs CI** | `mkdocs.yml` | Run `mkdocs build --strict` to fix broken cross-references (1,029+ docs); enforce in `docs-deploy.yml` |
-| **API reference generation** | `docs/reference/` | Install `mkdocstrings[python]` and auto-generate from `src/codomyrmex/` top-level `__init__.py` files |
-| **Lighthouse CI** | `.github/workflows/`| Enforce performance budgets (LCP < 2.5s, CLS < 0.1) for the documentation site on PR merges |
-
----
-
-## 🟣 v1.1.7 — "Advanced Verification & Ecosystem Integration"
+## 🟡 v1.1.7 — "Advanced Verification & Ecosystem Hardening"
 
 Targeted feature additions and aggressive testing protocols to guarantee industrial-grade stability.
 
@@ -95,37 +47,69 @@ Targeted feature additions and aggressive testing protocols to guarantee industr
 | **Mutation testing scale-up** | `pyproject.toml` | Expand `[tool.mutmut]` from 6 to 12 targets (e.g., `cache/core.py`, `concurrency/core.py`, `events/core.py`) |
 | **Flaky testing tracking** | `pyproject.toml` | Apply `@pytest.mark.flaky(reruns=2)` using `pytest-rerunfailures` to explicitly track and document CI flakes |
 
+### Infrastructure Hardening
+
+| Item | Scope | Technical Detail |
+| :--- | :--- | :--- |
+| **Agent telemetry** | `telemetry/` | Add granular performance tracking to `agent` execution flows for exact latency visibility |
+| **Cross-platform distribution** | Root | Setup initial steps for Homebrew formula and Nix flake, `pipx` compatibility |
+
+---
+
+## 🟣 v1.1.8 — "Core Systems Maturation: Memory & Knowledge"
+
+Maturing the knowledge graph and agentic memory models to persistent forms.
+
+### Memory Systems
+
+| Item | Scope | Technical Detail |
+| :--- | :--- | :--- |
+| **Agentic memory backend** | `agentic_memory/` | Deploy SQLite backend for the `MemoryStore` enabling cross-session retrieval, TTL expiry, and tag indexing |
+| **Cost management** | `llm/providers` | Introduce basic API spend tracking on per-call basis via custom telemetry |
+| **Obsidian integration** | `agentic_memory/` | Bi-directional synchronization mapping Obsidian vault states securely to `agentic_memory` |
+
 ### Ecosystem Features
 
 | Item | Scope | Technical Detail |
 | :--- | :--- | :--- |
 | **Graph RAG pipeline** | `graph_rag`, `llm/rag` | Connect the knowledge graph to `llm/rag/` for retrieval-augmented generation with structured entity relationships |
-| **Agentic memory backend** | `agentic_memory/` | Deploy SQLite backend for the `MemoryStore` enabling cross-session retrieval, TTL expiry, and tag indexing |
-| **Optional integrations** | `cloud/`, `audio/` | Implement concrete provider implementations (`boto3`, `faster-whisper`, `edge-tts`) gated via optional dependencies |
+| **Formal verification basis** | `coding/` | Initial spike to wire `z3-solver` into `coding/` for automated invariant checking |
 
 ---
 
-## 🔵 v1.2.0 — "Ecosystem Maturation"
+## 🔵 v1.1.9 — "UI Maturation & Multimodal Prep"
 
-Larger features requiring cross-module coordination.
+Gearing towards a richer visual presence and extended AI capabilities ahead of the major 1.2.0 milestone.
 
-### Core Features
-
-| Feature | Depends On | Technical Detail |
-| :--- | :--- | :--- |
-| **Graph RAG pipeline** | `graph_rag`, `llm/rag`, `agentic_memory/obsidian` | Connect knowledge graph to `llm/rag/` for retrieval-augmented generation with structured entity relationships; implement `GraphRetriever.query()` → LLM context injection |
-| **Agentic memory persistence** | `database_management`, `serialization` | SQLite backend for `MemoryStore` with TTL-based expiry, tag indexing, cross-session retrieval; Redis optional via `cache/` integration; migration: `alembic` schema |
-| **Dashboard v2** | `telemetry`, `performance`, `data_visualization` | WebSocket streaming, test-run history timeline, module health heatmap, per-module sparklines; frontend: vanilla JS + D3.js |
-| **Cost management** | `llm/providers`, `events/notification` | Real API spend tracking using provider usage APIs (OpenRouter `/api/v1/usage`, Gemini quota API); budget alerting via `events/notification` |
-
-### Infrastructure
+### Visual Evolution
 
 | Feature | Depends On | Technical Detail |
 | :--- | :--- | :--- |
-| **Infomaniak cloud provider** | `cloud/common/` ABC layer | Storage (Swift-compat), compute (Nova-compat), DNS management via Infomaniak API v1; implement `InfomaniakProvider(CloudProvider)` |
-| **Formal verification** | `coding/static_analysis` | Wire `z3-solver` into `coding/` for automated invariant checking; implement `InvariantChecker.verify(ast_node)` → SAT/UNSAT |
-| **Multimodal agent pipeline** | `agents`, `llm`, `audio`, `video` | Voice-in/voice-out agent interaction: Whisper STT → LLM reasoning → Edge TTS response; implement `MultimodalAgent(BaseAgent)` |
-| **Self-improving CI** | `agents/specialized/improvement_pipeline` | `ImprovementPipeline` → GitHub Actions for agent-driven quality PRs; implement `AutoPR.create()` with safety limits (max 3 files changed, requires human review) |
+| **Dashboard v2 Framework**| `website/` | Implement Vue/React scaffold to eventually replace the legacy Vanilla JS framework, providing better reactivity |
+| **Data visualization UX** | `data_visualization` | Add test-run history timeline, module health heatmap, and per-module sparklines logic |
+
+### Advanced AI Integrations
+
+| Feature | Depends On | Technical Detail |
+| :--- | :--- | :--- |
+| **Concrete Provider Integrations** | `cloud/`, `audio/` | Implement standard provider models (`boto3`, `faster-whisper`, `edge-tts`) gated via extras |
+| **Multimodal STT base** | `audio/` | Establish the base structure for Whisper STT into generic standard LLM interactions |
+
+---
+
+## 🔵 v1.2.0 — "Ecosystem Integration"
+
+Larger features requiring cross-module coordination and the convergence of previous feature sets.
+
+### Integration Features
+
+| Feature | Depends On | Technical Detail |
+| :--- | :--- | :--- |
+| **Dashboard v2 Finalization**| `telemetry`, `website` | Wire D3.js and the new React/Vue scaffolding with full WebSocket streaming capability |
+| **Memory scaling** | `database_management` | Alembic schema migrations and potential Redis integration |
+| **Budget alerting** | `events/notification` | Active budget alerting threshold events mapped over the v1.1.8 provider usage tracking |
+| **Infomaniak cloud provider** | `cloud/schema` | Storage (Swift-compat), compute (Nova-compat), DNS management via Infomaniak API v1 |
+| **Agentic CI pipeline** | `specialized/agents` | `AutoPR.create()` with safety limits (max 3 files changed, requires human review) for autonomous system tuning |
 
 ---
 
@@ -142,7 +126,6 @@ Architectural extensions and research directions.
 | **Plugin marketplace** | `plugin_system/` | Plugin discovery (entry points + PyPI search), sandboxed installation, version management |
 | **Multi-agent swarm protocols** | `collaboration/` | Raft consensus, hierarchical task decomposition, emergent behavior monitoring |
 | **Secure cognitive agent hardening** | `security/`, `agents/` | STRIDE threat modeling, penetration testing, key management audit |
-| **Cross-platform distribution** | Root | Homebrew formula, Nix flake, multi-arch Docker image, `pipx install codomyrmex` |
 
 ---
 
@@ -171,4 +154,4 @@ Architectural extensions and research directions.
 
 ---
 
-*Last updated: 2026-03-05 — Sprint 25. v1.1.1 released. v1.1.2 & v1.1.3 deeply scoped with data-driven targets (ruff 9.7k→<5k→<2k, ty 1.8k→<500, coverage 32%→38%→42%).*
+*Last updated: 2026-03-05 — Sprint 27. v1.1.6 released.*

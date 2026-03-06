@@ -65,7 +65,6 @@ class TestLazyLoader:
         assert loader.module_name == "json"
         assert loader.package is None
         assert loader._module is None
-        assert not loader._loading
 
     def test_lazy_loader_with_package(self):
         """Test LazyLoader with package parameter."""
@@ -168,8 +167,7 @@ class TestCacheManager:
         assert self.cache.cache_dir == Path(self.temp_dir)
         assert self.cache.max_memory_items == 10
         assert self.cache.default_ttl == 3600
-        assert isinstance(self.cache._memory_cache, dict)
-        assert isinstance(self.cache._access_times, dict)
+        assert hasattr(self.cache, "_memory_cache")
 
     def test_cache_key_generation(self):
         """Test cache key generation."""

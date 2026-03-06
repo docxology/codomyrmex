@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import jsonschema
+from codomyrmex.validation.rules import is_email, is_url, is_alphanumeric, is_in_range
 from pydantic import ValidationError as PydanticValidationError
 
 from codomyrmex.exceptions import CodomyrmexError
@@ -254,6 +255,7 @@ class Validator:
             "required" in schema
             and isinstance(schema.get("type"), str)
             and schema["type"] == "object"
+            and isinstance(data, dict)
         ):
             for field_name in schema["required"]:
                 if field_name not in data:
@@ -264,6 +266,22 @@ class Validator:
                             code="required_field_missing",
                         )
                     )
+
+        # Custom format validation (like email, url)
+        if "format" in schema and isinstance(data, str):
+            fmt = schema["format"]
+            if fmt == "email" and not is_email(data):
+                errors.append(ValidationError(f"Invalid email format: {data}", code="format_error"))
+            elif fmt == "url" and not is_url(data):
+                errors.append(ValidationError(f"Invalid URL format: {data}", code="format_error"))
+            elif fmt == "alphanumeric" and not is_alphanumeric(data):
+                errors.append(ValidationError(f"Expected alphanumeric string, got {data}", code="format_error"))
+
+        # Range check for numbers
+        if "minimum" in schema or "maximum" in schema:
+            if isinstance(data, (int, float)):
+                if not is_in_range(data, min_val=schema.get("minimum"), max_val=schema.get("maximum")):
+                    errors.append(ValidationError(f"Value {data} out of range", code="range_error"))
 
         return ValidationResult(is_valid=len(errors) == 0, errors=errors)
 

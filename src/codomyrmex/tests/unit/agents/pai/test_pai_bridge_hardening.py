@@ -295,7 +295,7 @@ def test_discovery_availability_missing_dep():
     # for our sentinel package name.
     sentinel = "_codomyrmex_test_missing_dep_xyz"
     original = sys.modules.get(sentinel, "NOT_SET")
-    sys.modules[sentinel] = None  # type: ignore[assignment]
+    sys.modules[sentinel] = None
 
     try:
 
@@ -303,11 +303,11 @@ def test_discovery_availability_missing_dep():
             __name__ = "_test_discovery_module"
 
             @mcp_tool(requires=[sentinel])
-            def broken_tool():  # type: ignore[misc]
+            def broken_tool():
                 """A tool that requires a missing dep."""
 
             @mcp_tool(requires=["os"])
-            def working_tool():  # type: ignore[misc]
+            def working_tool():
                 """A tool that requires a stdlib module."""
 
         discovery = MCPDiscovery()

@@ -12,7 +12,7 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
-from codomyrmex.agents.core.base import AgentRequest
+from codomyrmex.agents.core.base import AgentRequest, AgentResponse
 from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
 
@@ -24,22 +24,6 @@ _OLLAMA_ALLOWED_PREFIXES = (
     "https://localhost:",
     "https://127.0.0.1:",
 )
-
-
-@dataclass
-class _OllamaResponse:
-    """Response from an Ollama API call.
-
-    A real, structured response object — no mocking.
-    """
-
-    content: str = ""
-    tokens_used: int = 0
-    execution_time: float = 0.0
-
-    def is_success(self) -> bool:
-        """Return True if the response contains content."""
-        return len(self.content) > 0
 
 
 class OllamaClient:
@@ -61,9 +45,13 @@ class OllamaClient:
     def create_session(self, session_id: str) -> None:
         raise NotImplementedError("LLM session management not implemented")
 
+    def execute(self, request: AgentRequest) -> AgentResponse:
+        """Execute request using Ollama."""
+        return self.execute_with_session(request)
+
     def execute_with_session(
         self, request: AgentRequest, session: Any = None, session_id: Any = None
-    ) -> Any:
+    ) -> AgentResponse:
         """Execute request using Ollama /api/chat for real conversation."""
         url = f"{self.base_url}/api/chat"
 
@@ -78,6 +66,7 @@ class OllamaClient:
 
         start_time = time.monotonic()
         content = ""
+        error = None
         try:
             req = urllib.request.Request(
                 url,
@@ -90,7 +79,7 @@ class OllamaClient:
                     msg = data.get("message", {})
                     content = msg.get("content", "")
                 else:
-                    raise RuntimeError(f"Ollama returned {response.status}")
+                    error = f"Ollama returned {response.status}"
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             # Propagate error with context
             try:
@@ -112,14 +101,16 @@ class OllamaClient:
                 logger.debug(
                     "Failed to list available Ollama models for debug: %s", debug_err
                 )
-            raise RuntimeError(f"Real Ollama Connection Failed: {e}") from e
+            error = f"Real Ollama Connection Failed: {e}"
 
         elapsed = time.monotonic() - start_time
 
-        return _OllamaResponse(
+        return AgentResponse(
             content=content,
+            error=error,
             tokens_used=0,
             execution_time=elapsed,
+            metadata={"model": self.model, "provider": "ollama"},
         )
 
 
@@ -128,21 +119,54 @@ def get_llm_client(identity: str = "agent") -> Any:
 
     Priority:
     1. ClaudeClient (if ANTHROPIC_API_KEY set)
-    2. OllamaClient (if reachable)
+    2. GeminiClient (if GEMINI_API_KEY set)
+    3. O1Client (if OPENAI_API_KEY set)
+    4. DeepSeekClient (if DEEPSEEK_API_KEY set)
+    5. OllamaClient (if reachable)
 
     Raises RuntimeError if no real client is available.
     """
     # 1. Check Claude
-    try:
-        from codomyrmex.agents.claude.claude_client import ClaudeClient
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        try:
+            from codomyrmex.agents.claude.claude_client import ClaudeClient
 
-        if os.environ.get("ANTHROPIC_API_KEY"):
             logger.info(f"[{identity}] Using real ClaudeClient (API Key found)")
             return ClaudeClient()
-    except ImportError as e:
-        logger.warning("[%s] ClaudeClient import failed: %s", identity, e)
+        except ImportError as e:
+            logger.warning("[%s] ClaudeClient import failed: %s", identity, e)
 
-    # 2. Check Ollama
+    # 2. Check Gemini
+    if os.environ.get("GEMINI_API_KEY"):
+        try:
+            from codomyrmex.agents.gemini.gemini_client import GeminiClient
+
+            logger.info(f"[{identity}] Using real GeminiClient (API Key found)")
+            return GeminiClient()
+        except ImportError as e:
+            logger.warning("[%s] GeminiClient import failed: %s", identity, e)
+
+    # 3. Check O1
+    if os.environ.get("OPENAI_API_KEY"):
+        try:
+            from codomyrmex.agents.o1.o1_client import O1Client
+
+            logger.info(f"[{identity}] Using real O1Client (API Key found)")
+            return O1Client()
+        except ImportError as e:
+            logger.warning("[%s] O1Client import failed: %s", identity, e)
+
+    # 4. Check DeepSeek
+    if os.environ.get("DEEPSEEK_API_KEY"):
+        try:
+            from codomyrmex.agents.deepseek.deepseek_client import DeepSeekClient
+
+            logger.info(f"[{identity}] Using real DeepSeekClient (API Key found)")
+            return DeepSeekClient()
+        except ImportError as e:
+            logger.warning("[%s] DeepSeekClient import failed: %s", identity, e)
+
+    # 5. Check Ollama
     try:
         # Quick health check
         base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
@@ -160,6 +184,9 @@ def get_llm_client(identity: str = "agent") -> Any:
     raise RuntimeError(
         f"[{identity}] CRITICAL: No Real LLM Available.\n"
         "Please set ANTHROPIC_API_KEY for Claude,\n"
+        "OR GEMINI_API_KEY for Gemini,\n"
+        "OR OPENAI_API_KEY for O1,\n"
+        "OR DEEPSEEK_API_KEY for DeepSeek,\n"
         "OR ensure Ollama is running at http://localhost:11434.\n"
         "Mocks are strictly forbidden."
     )
@@ -167,7 +194,7 @@ def get_llm_client(identity: str = "agent") -> Any:
 
 __all__ = [
     "AgentRequest",
+    "AgentResponse",
     "OllamaClient",
-    "_OllamaResponse",
     "get_llm_client",
 ]

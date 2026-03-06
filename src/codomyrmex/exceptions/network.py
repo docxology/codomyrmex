@@ -11,7 +11,13 @@ from .base import CodomyrmexError
 
 
 class NetworkError(CodomyrmexError):
-    """Raised when network operations fail."""
+    """Raised when network operations fail.
+
+    Attributes:
+        message (str): The error message.
+        url (str | None): The URL involved in the network operation.
+        status_code (int | None): The HTTP status code if available.
+    """
 
     def __init__(
         self,
@@ -28,7 +34,13 @@ class NetworkError(CodomyrmexError):
 
 
 class APIError(CodomyrmexError):
-    """Raised when API operations fail."""
+    """Raised when API operations fail.
+
+    Attributes:
+        message (str): The error message.
+        endpoint (str | None): The API endpoint that failed.
+        method (str | None): The HTTP method used.
+    """
 
     def __init__(
         self,
@@ -45,7 +57,13 @@ class APIError(CodomyrmexError):
 
 
 class ValidationError(CodomyrmexError):
-    """Raised when data validation fails."""
+    """Raised when data validation fails.
+
+    Attributes:
+        message (str): The error message.
+        field_name (str | None): Name of the field that failed validation.
+        validation_rule (str | None): The rule that was violated.
+    """
 
     def __init__(
         self,
@@ -62,7 +80,13 @@ class ValidationError(CodomyrmexError):
 
 
 class SchemaError(CodomyrmexError):
-    """Raised when schema validation fails."""
+    """Raised when schema validation fails.
+
+    Attributes:
+        message (str): The error message.
+        schema_name (str | None): Name of the schema.
+        data_preview (str | None): A preview of the data that failed schema validation.
+    """
 
     def __init__(
         self,
@@ -79,7 +103,12 @@ class SchemaError(CodomyrmexError):
 
 
 class TimeoutError(CodomyrmexError):
-    """Raised when operations timeout."""
+    """Raised when operations timeout.
+
+    Attributes:
+        message (str): The error message.
+        timeout_seconds (float | None): The timeout duration in seconds.
+    """
 
     def __init__(
         self, message: str, timeout_seconds: float | None = None, **kwargs: Any

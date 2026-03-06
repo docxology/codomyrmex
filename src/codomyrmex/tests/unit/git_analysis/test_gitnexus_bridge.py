@@ -95,7 +95,7 @@ def test_list_repos_handles_list_response() -> None:
     fake_list = [{"name": "test2"}]
     result = (
         fake_list.get("repos", fake_list) if isinstance(fake_list, dict) else fake_list
-    )  # type: ignore[union-attr]
+    )
     assert result == fake_list
 
 

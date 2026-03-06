@@ -81,7 +81,7 @@ class TestCorrelationFilter:
         set_correlation_id("log-trace-1")
         filt.filter(record)
 
-        assert record.correlation_id == "log-trace-1"  # type: ignore[attr-defined]
+        assert record.correlation_id == "log-trace-1"
         clear_correlation_id()
 
     def test_filter_empty_when_unset(self):
@@ -91,7 +91,7 @@ class TestCorrelationFilter:
 
         filt.filter(record)
 
-        assert record.correlation_id == ""  # type: ignore[attr-defined]
+        assert record.correlation_id == ""
 
     def test_filter_always_returns_true(self):
         filt = CorrelationFilter()

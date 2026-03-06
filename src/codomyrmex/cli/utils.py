@@ -6,7 +6,7 @@ try:
     TERMINAL_INTERFACE_AVAILABLE = True
 except ImportError:
     TERMINAL_INTERFACE_AVAILABLE = False
-    TerminalFormatter = None  # type: ignore[assignment,misc]
+    TerminalFormatter = None
 
 try:
     from codomyrmex.performance.monitoring.performance_monitor import (

@@ -271,3 +271,35 @@ def split_on_pattern(text: str, pattern: str) -> list[str]:
             result.append(chunk)
 
     return result
+
+
+def parse_xml_tag(text: str, tag: str) -> str | None:
+    """
+    Extract content from an XML-like tag.
+
+    Args:
+        text: Text to parse
+        tag: Tag name (e.g., "thought", "action")
+
+    Returns:
+        Content inside the tag or None
+    """
+    pattern = rf"<{tag}>(.*?)</{tag}>"
+    match = re.search(pattern, text, re.DOTALL)
+    return match.group(1).strip() if match else None
+
+
+def parse_all_xml_tags(text: str, tag: str) -> list[str]:
+    """
+    Extract all contents from an XML-like tag.
+
+    Args:
+        text: Text to parse
+        tag: Tag name
+
+    Returns:
+        List of contents inside the tags
+    """
+    pattern = rf"<{tag}>(.*?)</{tag}>"
+    matches = re.findall(pattern, text, re.DOTALL)
+    return [m.strip() for m in matches]

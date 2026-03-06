@@ -23,7 +23,7 @@ try:
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
-    cv2 = None  # type: ignore
+    cv2 = None
 
 # Check for moviepy availability
 try:
@@ -32,7 +32,7 @@ try:
     MOVIEPY_AVAILABLE = True
 except ImportError:
     MOVIEPY_AVAILABLE = False
-    VideoFileClip = None  # type: ignore
+    VideoFileClip = None
 
 
 SUPPORTED_FORMATS = {".mp4", ".avi", ".mov", ".mkv", ".webm", ".wmv", ".flv", ".m4v"}

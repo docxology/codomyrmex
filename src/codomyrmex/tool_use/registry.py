@@ -330,7 +330,7 @@ def tool(
             """Wrapper."""
             return fn(*args, **kwargs)
 
-        wrapper.tool_entry = entry  # type: ignore[attr-defined]
+        wrapper.tool_entry = entry
 
         if registry is not None:
             registry.register(entry)

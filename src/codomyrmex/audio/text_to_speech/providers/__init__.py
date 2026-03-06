@@ -11,7 +11,7 @@ from .base import TTSProvider
 try:
     from .pyttsx3_provider import PYTTSX3_AVAILABLE, Pyttsx3Provider
 except ImportError:
-    Pyttsx3Provider = None  # type: ignore
+    Pyttsx3Provider = None
     PYTTSX3_AVAILABLE = False
 
 try:
@@ -21,7 +21,7 @@ try:
         EdgeTTSProvider,
     )
 except ImportError:
-    EdgeTTSProvider = None  # type: ignore
+    EdgeTTSProvider = None
     EDGE_TTS_AVAILABLE = False
     POPULAR_VOICES = {}
 

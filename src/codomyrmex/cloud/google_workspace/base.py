@@ -22,7 +22,7 @@ class GoogleWorkspaceBase:
     _api_name: str = ""
     _api_version: str = "v3"
 
-    def __init__(self, credentials: GoogleCredentials) -> None:  # type: ignore[name-defined]
+    def __init__(self, credentials: GoogleCredentials) -> None:
         self._credentials = credentials
         self._service = None
 

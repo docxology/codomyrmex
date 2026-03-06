@@ -112,7 +112,7 @@ class EventBus:
 
     def subscribe(
         self,
-        event_patterns: list[Any],
+        event_patterns: list[Any] | Any,
         handler: Callable[[Event], Any],
         subscriber_id: str | None = None,
         filter_func: Callable[[Event], bool] | None = None,
@@ -121,6 +121,9 @@ class EventBus:
         """Subscribe to events."""
         if not event_patterns:
             raise EventSubscriptionError("Event patterns cannot be empty")
+
+        if not isinstance(event_patterns, (list, set, tuple)):
+            event_patterns = [event_patterns]
 
         if subscriber_id is None:
             with self._lock:
@@ -268,12 +271,19 @@ class EventBus:
 
     def _run_async_handler(self, handler, event):
         try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
             try:
-                loop.run_until_complete(handler(event))
-            finally:
-                loop.close()
+                loop = asyncio.get_running_loop()
+                # Use call_soon_threadsafe if we are in a different thread
+                # though usually _run_async_handler is called from executor
+                loop.call_soon_threadsafe(lambda: asyncio.create_task(handler(event)))
+            except RuntimeError:
+                # No running loop in this thread
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    loop.run_until_complete(handler(event))
+                finally:
+                    loop.close()
         except Exception as e:
             logger.error(f"Error in async event handler: {e}")
             self.events_failed += 1

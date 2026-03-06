@@ -325,7 +325,7 @@ if BaseAgent is not None:
 
 else:
     # Stub when agents.core is not available
-    class AntigravityAgent:  # type: ignore[no-redef]
+    class AntigravityAgent:
         """Stub for when agents.core is not installed."""
 
         def __init__(self, *args: Any, **kwargs: Any) -> None:

@@ -289,7 +289,7 @@ class TestJSONFormatter:
     def test_extra_field_included(self):
         fmt = JSONFormatter()
         record = _make_record("hello")
-        record.extra = {"request_id": "req-123"}
+        record.request_id = "req-123"
         parsed = json.loads(fmt.format(record))
         assert parsed["request_id"] == "req-123"
 
@@ -362,35 +362,35 @@ class TestRedactedJSONFormatter:
     def test_sensitive_field_redacted(self):
         fmt = RedactedJSONFormatter()
         record = _make_record("hello")
-        record.extra = {"password": "supersecret"}
+        record.password = "supersecret"
         parsed = json.loads(fmt.format(record))
         assert parsed["password"] == "[REDACTED]"
 
     def test_token_field_redacted(self):
         fmt = RedactedJSONFormatter()
         record = _make_record("hello")
-        record.extra = {"token": "abcdef123"}
+        record.token = "abcdef123"
         parsed = json.loads(fmt.format(record))
         assert parsed["token"] == "[REDACTED]"
 
     def test_safe_field_not_redacted(self):
         fmt = RedactedJSONFormatter()
         record = _make_record("hello")
-        record.extra = {"user_id": "alice"}
+        record.user_id = "alice"
         parsed = json.loads(fmt.format(record))
         assert parsed["user_id"] == "alice"
 
     def test_custom_replacement(self):
         fmt = RedactedJSONFormatter(replacement="***")
         record = _make_record("hello")
-        record.extra = {"password": "secret"}
+        record.password = "secret"
         parsed = json.loads(fmt.format(record))
         assert parsed["password"] == "***"
 
     def test_custom_patterns(self):
         fmt = RedactedJSONFormatter(patterns=["phone"])
         record = _make_record("hello")
-        record.extra = {"phone": "555-1234"}
+        record.phone = "555-1234"
         parsed = json.loads(fmt.format(record))
         assert parsed["phone"] == "[REDACTED]"
 
@@ -398,7 +398,7 @@ class TestRedactedJSONFormatter:
         fmt = RedactedJSONFormatter()
         record = _make_record("hello")
         # Use a non-sensitive outer key so nested traversal is exercised
-        record.extra = {"config": {"api_key": "key123", "username": "bob"}}
+        record.config = {"api_key": "key123", "username": "bob"}
         parsed = json.loads(fmt.format(record))
         assert parsed["config"]["api_key"] == "[REDACTED]"
         assert parsed["config"]["username"] == "bob"

@@ -14,7 +14,13 @@ if TYPE_CHECKING:
 
 
 class GitOperationError(CodomyrmexError):
-    """Raised when git operations fail."""
+    """Raised when git operations fail.
+
+    Attributes:
+        message (str): The error message.
+        git_command (str | None): The git command that failed.
+        repository_path (str | None): Path to the repository.
+    """
 
     def __init__(
         self,
@@ -31,7 +37,13 @@ class GitOperationError(CodomyrmexError):
 
 
 class RepositoryError(CodomyrmexError):
-    """Raised when repository operations fail."""
+    """Raised when repository operations fail.
+
+    Attributes:
+        message (str): The error message.
+        repository_path (str | None): Path to the repository.
+        remote_url (str | None): Remote URL of the repository.
+    """
 
     def __init__(
         self,

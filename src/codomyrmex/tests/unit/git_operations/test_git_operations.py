@@ -406,7 +406,8 @@ class TestGitOperationsComprehensive:
         nonexistent_path = "/path/that/does/not/exist"
 
         assert not is_git_repository(nonexistent_path)
-        assert get_current_branch(nonexistent_path) is None
+        # Updated to expect empty string instead of None based on standardized error handling
+        assert get_current_branch(nonexistent_path) == ""
         assert not create_branch("test", nonexistent_path)
         assert not switch_branch("test", nonexistent_path)
         assert not add_files(["test.txt"], nonexistent_path)
@@ -612,7 +613,7 @@ class TestGitCoreDeep:
         from codomyrmex.git_operations.core.git import get_current_branch
 
         branch = get_current_branch(repository_path=str(tmp_path))
-        assert isinstance(branch, (str, type(None)))
+        assert isinstance(branch, str)
 
     def test_create_branch(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
@@ -636,10 +637,11 @@ class TestGitCoreDeep:
         subprocess.run(
             ["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True
         )
-        from codomyrmex.git_operations.core.git import list_tags
+        from codomyrmex.git_operations.core.git import list_branches
 
-        tags = list_tags(repository_path=str(tmp_path))
-        assert isinstance(tags, (list, str))
+        branches = list_branches(repository_path=str(tmp_path))
+        assert isinstance(branches, list)
+        assert len(branches) > 0
 
     def test_commit_changes(self, tmp_path):
         subprocess.run(["git", "init", str(tmp_path)], capture_output=True)

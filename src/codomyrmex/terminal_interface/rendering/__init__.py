@@ -1,7 +1,9 @@
 """
 Output rendering submodule.
 
-ANSI, tables, progress
+ANSI, tables, progress, and rich formatting.
 """
 
-__all__ = []
+from .rich_renderer import RichRenderer
+
+__all__ = ["RichRenderer"]

@@ -191,7 +191,7 @@ def _make_isolated_registry(levels: dict) -> "TrustRegistry":
     reg._ledger_path = Path("/nonexistent_test_trust_ledger_path.json")
     reg._levels = dict(levels)
     # Prevent writes to disk during tests
-    reg._save = lambda: None  # type: ignore[method-assign]
+    reg._save = lambda: None
     return reg
 
 

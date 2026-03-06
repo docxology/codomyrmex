@@ -173,4 +173,4 @@ class TestBaseScraper:
     def test_is_abstract(self):
         """Test that BaseScraper cannot be instantiated."""
         with pytest.raises(TypeError):
-            BaseScraper()  # type: ignore
+            BaseScraper()

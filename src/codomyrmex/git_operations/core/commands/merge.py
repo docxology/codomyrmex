@@ -31,8 +31,10 @@ def merge_branch(
             f"Merging branch '{source_branch}' into '{target_branch}' in {repository_path}"
         )
 
-        # Switch to target branch first; CalledProcessError propagates to outer except
-        switch_branch(target_branch, repository_path)
+        # Switch to target branch first
+        if not switch_branch(target_branch, repository_path):
+            logger.error(f"Could not switch to target branch '{target_branch}'")
+            return False
 
         # Prepare merge command
         cmd = ["git", "merge", "--no-edit"]
@@ -51,10 +53,10 @@ def merge_branch(
         logger.error(f"Failed to merge branch '{source_branch}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        raise
+        return False
     except Exception as e:
         logger.error(f"Unexpected error merging branch: {e}")
-        raise
+        return False
 
 
 @mcp_tool(name="git_rebase")
@@ -87,7 +89,7 @@ def rebase_branch(
         logger.error(f"Failed to rebase onto '{target_branch}': {e}")
         if e.stderr:
             logger.error(f"Git error: {e.stderr}")
-        raise
+        return False
     except Exception as e:
         logger.error(f"Unexpected error rebasing branch: {e}")
-        raise
+        return False

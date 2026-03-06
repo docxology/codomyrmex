@@ -12,7 +12,10 @@ import json
 import os
 import time
 from collections.abc import Iterator
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    import openai
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
@@ -25,7 +28,8 @@ from codomyrmex.agents.generic.api_agent_base import APIAgentBase
 try:
     import openai
 except ImportError:
-    openai = None
+    if not TYPE_CHECKING:
+        openai = None
 
 
 # --- Model Registry ---
@@ -102,10 +106,17 @@ class QwenClient(APIAgentBase):
             client_init_func=lambda api_key: openai.OpenAI(
                 api_key=api_key or api_key_env,
                 base_url=self._base_url,
+                max_retries=(config or {}).get("max_retries", 3),
             ),
             error_class=AgentError,
             config=config,
         )
+
+        # Retry configuration
+        self.max_retries = (config or {}).get("max_retries", 3)
+        self.initial_retry_delay = (config or {}).get("initial_retry_delay", 1.0)
+        self.max_retry_delay = (config or {}).get("max_retry_delay", 60.0)
+        self.backoff_factor = (config or {}).get("backoff_factor", 2.0)
 
     # --- Core chat completion ---
 
@@ -172,9 +183,33 @@ class QwenClient(APIAgentBase):
                 execution_time=execution_time,
             )
 
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except Exception as e:
             execution_time = time.time() - start_time
-            self._handle_api_error(e, execution_time)
+            # For Qwen (using OpenAI SDK), we pass openai.APIError to the handler
+            return self._handle_api_error_response(
+                e, execution_time, request.id, getattr(openai, "APIError", None)
+            )
+
+    def _handle_api_error_response(
+        self,
+        error: Exception,
+        execution_time: float,
+        request_id: str | None = None,
+        api_error_class: Any | None = None,
+    ) -> AgentResponse:
+        """Handle API error and return AgentResponse."""
+        try:
+            self._handle_api_error(error, execution_time, api_error_class)
+        except Exception as e:
+            return AgentResponse(
+                content="",
+                error=str(e),
+                metadata={"error_type": type(e).__name__},
+                request_id=request_id,
+                execution_time=execution_time,
+            )
+        # Should not be reached as _handle_api_error raises
+        return AgentResponse(content="", error=str(error), request_id=request_id)
 
     # --- Streaming ---
 

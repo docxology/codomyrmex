@@ -10,8 +10,8 @@ Centralized structured logging infrastructure for all Codomyrmex modules and PAI
 
 | File | Purpose |
 |------|---------|
-| `__init__.py` | Exports `setup_logging`, `get_logger` |
-| `core/` | `LogContext`, `log_with_context`, `create_correlation_id` |
+| `__init__.py` | Exports `setup_logging`, `get_logger`, `LogContext`, `log_with_context`, `new_correlation_id` |
+| `core/` | `LogContext`, `log_with_context`, `correlation` management |
 | `formatters/structured_formatter.py` | `StructuredFormatter`, `LogLevel`, `LogContext`, `StructuredLogEntry` |
 | `handlers/` | `LogRotationManager`, `PerformanceLogger` |
 | `audit/` | `AuditLogger` for immutable security/audit events |
@@ -35,25 +35,30 @@ Centralized structured logging infrastructure for all Codomyrmex modules and PAI
 
 ```python
 from codomyrmex.logging_monitoring import (
-    get_logger, configure_logging, AuditLogger
+    get_logger, setup_logging, LogContext
 )
+from codomyrmex.logging_monitoring.audit import AuditLogger
 
-# Configure logging
-configure_logging({
-    "level": "INFO",
-    "format": "json",
-    "output": ["console", "file"]
-})
+# Configure logging at app startup
+# Levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
+# Set via environment variables: CODOMYRMEX_LOG_LEVEL, CODOMYRMEX_LOG_OUTPUT_TYPE=JSON
+setup_logging()
 
 # Get module logger
-log = get_logger("my_module")
-log.info("Processing started", extra={"request_id": req_id})
-log.error("Failed to process", extra={"error": str(e)})
+log = get_logger(__name__)
 
-# Audit logging
-audit = AuditLogger("auth")
-audit.log_event("login", user_id=user.id, success=True)
-audit.log_event("access_denied", user_id=user.id, resource="admin")
+# Structured logging with context
+with LogContext(correlation_id="req-123", additional_context={"user_id": "u42"}):
+    log.info("Processing started")
+    try:
+        # ... logic ...
+        pass
+    except Exception as e:
+        log.error("Failed to process", exc_info=True)
+
+# Audit logging for security events
+audit = AuditLogger()
+audit.log_event("login", user_id="u42", status="success", category="auth")
 ```
 
 ## Testing Patterns
@@ -76,15 +81,16 @@ assert json.loads(output)  # Valid JSON
 ## Operating Contracts
 
 **DO:**
-- Call `setup_logging()` once at application start before any other logging
-- Include `correlation_id` in every log emitted within a request or workflow boundary
-- Use `AuditLogger` for all security-sensitive events (auth, data access, config changes)
-- Use `logging_format_structured` MCP tool to emit logs from agent workflows
+- Call `setup_logging()` once at application start before any other logging.
+- Use `LogContext` or `with_correlation` to ensure `correlation_id` is propagated.
+- Use `AuditLogger` for all security-sensitive events (auth, data access, config changes).
+- Use `logging_format_structured` MCP tool to emit logs from agent workflows.
+- Use `PerformanceLogger` to track duration of critical operations.
 
 **DO NOT:**
-- Log secrets, API keys, passwords, or PII in any field
-- Create module-level loggers before `setup_logging()` is called
-- Use Python's built-in `print()` for any operational output — use `get_logger()` instead
+- Log secrets, API keys, passwords, or PII in any field. Use `RedactedJSONFormatter` if possible.
+- Create module-level loggers before `setup_logging()` is called.
+- Use Python's built-in `print()` for any operational output — use `get_logger()` instead.
 
 ## PAI Agent Role Access Matrix
 

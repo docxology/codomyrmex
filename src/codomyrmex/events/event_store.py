@@ -173,4 +173,18 @@ class EventStore:
             self._topic_index.clear()
 
 
-__all__ = ["EventStore", "StreamEvent"]
+_event_store = None
+_store_lock = threading.Lock()
+
+
+def get_event_store() -> EventStore:
+    """Return the module-level singleton EventStore, creating it on first call."""
+    global _event_store
+    if _event_store is None:
+        with _store_lock:
+            if _event_store is None:
+                _event_store = EventStore()
+    return _event_store
+
+
+__all__ = ["EventStore", "StreamEvent", "get_event_store"]

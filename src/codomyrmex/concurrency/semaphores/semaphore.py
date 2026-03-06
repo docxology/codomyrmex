@@ -14,27 +14,67 @@ class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
 
     def __init__(self, value: int = 1):
-        """Initialize base semaphore."""
+        """Initialize base semaphore.
+
+        Args:
+            value: Initial number of available units.
+
+        Raises:
+            ValueError: If value is negative.
+
+        Example:
+            >>> sem = LocalSemaphore(value=5)
+        """
         if value < 0:
             raise ValueError("Semaphore value must be >= 0")
         self.initial_value = value
 
     @abstractmethod
     def acquire(self, timeout: float = 10.0) -> bool:
-        """Acquire a semaphore unit."""
+        """Acquire a semaphore unit.
+
+        Args:
+            timeout: Maximum time to wait in seconds.
+
+        Returns:
+            True if acquired, False otherwise.
+
+        Example:
+            >>> sem.acquire(timeout=2.0)
+            True
+        """
 
     @abstractmethod
     def release(self) -> None:
-        """Release a semaphore unit."""
+        """Release a semaphore unit.
+
+        Example:
+            >>> sem.release()
+        """
 
     def __enter__(self):
-        """Enter the context manager."""
+        """Enter the context manager.
+
+        Returns:
+            The semaphore instance.
+
+        Raises:
+            TimeoutError: If the semaphore could not be acquired.
+
+        Example:
+            >>> with LocalSemaphore(2) as sem:
+            ...     pass
+        """
         if not self.acquire():
             raise TimeoutError("Could not acquire semaphore")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Exit the context manager and clean up."""
+        """Exit the context manager and clean up.
+
+        Example:
+            >>> sem.__exit__(None, None, None)
+        """
         self.release()
 
 
@@ -42,16 +82,38 @@ class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
 
     def __init__(self, value: int = 1):
-        """Initialize a local thread-safe semaphore."""
+        """Initialize a local thread-safe semaphore.
+
+        Args:
+            value: Initial number of available units.
+
+        Example:
+            >>> sem = LocalSemaphore(value=3)
+        """
         super().__init__(value)
         self._semaphore = threading.Semaphore(value)
 
     def acquire(self, timeout: float = 10.0) -> bool:
-        """Acquire a semaphore unit with timeout."""
+        """Acquire a semaphore unit with timeout.
+
+        Args:
+            timeout: Maximum time to wait in seconds.
+
+        Returns:
+            True if acquired, False otherwise.
+
+        Example:
+            >>> sem.acquire(timeout=5.0)
+            True
+        """
         return self._semaphore.acquire(timeout=timeout)
 
     def release(self) -> None:
-        """Release a semaphore unit."""
+        """Release a semaphore unit.
+
+        Example:
+            >>> sem.release()
+        """
         self._semaphore.release()
 
 
@@ -59,14 +121,32 @@ class AsyncLocalSemaphore(BaseSemaphore):
     """Asyncio-compatible local semaphore."""
 
     def __init__(self, value: int = 1):
-        """Initialize a local asyncio-compatible semaphore."""
+        """Initialize a local asyncio-compatible semaphore.
+
+        Args:
+            value: Initial number of available units.
+
+        Example:
+            >>> sem = AsyncLocalSemaphore(value=10)
+        """
         super().__init__(value)
         self._semaphore = asyncio.Semaphore(value)
         self._sync_lock = threading.Lock()
         self._sync_count = value
 
     async def acquire_async(self, timeout: float | None = None) -> bool:
-        """Acquire a semaphore unit asynchronously."""
+        """Acquire a semaphore unit asynchronously.
+
+        Args:
+            timeout: Maximum time to wait in seconds.
+
+        Returns:
+            True if acquired, False otherwise.
+
+        Example:
+            >>> await sem.acquire_async(timeout=1.0)
+            True
+        """
         try:
             if timeout is not None:
                 await asyncio.wait_for(self._semaphore.acquire(), timeout=timeout)
@@ -76,21 +156,40 @@ class AsyncLocalSemaphore(BaseSemaphore):
             with self._sync_lock:
                 self._sync_count -= 1
             return True
-        except TimeoutError:
+        except (asyncio.TimeoutError, TimeoutError):
             return False
 
     async def __aenter__(self):
-        """Enter the async context manager."""
+        """Enter the async context manager.
+
+        Returns:
+            The semaphore instance.
+
+        Raises:
+            TimeoutError: If acquisition fails.
+
+        Example:
+            >>> async with AsyncLocalSemaphore(1) as sem:
+            ...     pass
+        """
         if not await self.acquire_async():
             raise TimeoutError("Could not acquire semaphore")
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        """Exit the async context manager and clean up."""
+        """Exit the async context manager and clean up.
+
+        Example:
+            >>> await sem.__aexit__(None, None, None)
+        """
         self.release()
 
     def release(self) -> None:
-        """Release a unit back to the semaphore."""
+        """Release a unit back to the semaphore.
+
+        Example:
+            >>> sem.release()
+        """
         try:
             self._semaphore.release()
         except ValueError:
@@ -106,6 +205,16 @@ class AsyncLocalSemaphore(BaseSemaphore):
 
         If in an event loop, uses a fallback synchronous counter to avoid blocking.
         If no loop is running, creates a temporary one to execute the acquisition.
+
+        Args:
+            timeout: Maximum time to wait in seconds.
+
+        Returns:
+            True if acquired, False otherwise.
+
+        Example:
+            >>> sem.acquire(timeout=5.0)
+            True
         """
         try:
             # Check if there's a running event loop

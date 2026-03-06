@@ -365,18 +365,18 @@ class _StdioTransport(_Transport):
         self, message: dict[str, Any], *, timeout: float = 30.0
     ) -> dict[str, Any]:
         line = json.dumps(message) + "\n"
-        self._process.stdin.write(line.encode())  # type: ignore[union-attr]
-        await self._process.stdin.drain()  # type: ignore[union-attr]
+        self._process.stdin.write(line.encode())
+        await self._process.stdin.drain()
         raw = await asyncio.wait_for(
-            self._process.stdout.readline(),  # type: ignore[union-attr]
+            self._process.stdout.readline(),
             timeout=timeout,
         )
         return json.loads(raw.decode().strip())
 
     async def send_notification(self, message: dict[str, Any]) -> None:
         line = json.dumps(message) + "\n"
-        self._process.stdin.write(line.encode())  # type: ignore[union-attr]
-        await self._process.stdin.drain()  # type: ignore[union-attr]
+        self._process.stdin.write(line.encode())
+        await self._process.stdin.drain()
 
     async def close(self) -> None:
         if self._process.returncode is None:

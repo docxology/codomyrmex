@@ -226,7 +226,7 @@ class TestConfigSchemaErrorPaths:
         """A schema that triggers a generic exception is caught (lines 107-108)."""
         # Pass something that is not a valid JSON schema structure at all
         schema = ConfigSchema(
-            schema=None,  # type: ignore[arg-type]
+            schema=None,
         )
         errors = schema.validate({"anything": True})
         assert len(errors) >= 1

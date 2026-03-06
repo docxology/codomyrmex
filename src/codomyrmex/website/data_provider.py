@@ -43,6 +43,8 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
     def __init__(self, root_dir: Path):
         self.root_dir = root_dir
         self._start_time = time.time()
+        if not os.environ.get("PYTEST_CURRENT_TEST"):
+            self.start_websocket_push()
 
     def get_system_summary(self) -> dict[str, Any]:
         """Returns high-level system metrics."""

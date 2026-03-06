@@ -309,6 +309,13 @@ class WorkflowManager:
         """Get the status of a workflow execution."""
         return self.executions.get(execution_id)
 
+    def get_performance_summary(self) -> dict[str, Any]:
+        """Legacy wrapper to get performance summary."""
+        return {
+            "total_executions": len(self.executions),
+            "average_duration": sum(e.duration or 0 for e in self.executions.values()) / max(1, len(self.executions)),
+        }
+
 
 # Global workflow manager instance
 _workflow_manager = None

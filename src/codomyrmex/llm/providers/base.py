@@ -1,35 +1,31 @@
-from abc import ABC, abstractmethod
-from collections.abc import Iterator
+"""Abstract LLM provider base class."""
 
-from .models import CompletionResponse, Message, ProviderConfig, ProviderType
+from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator, Iterator
+
+from .models import CompletionResponse, Message, ProviderConfig
 
 
 class LLMProvider(ABC):
     """Abstract base class for LLM providers.
 
-    Supports context manager protocol for clean resource management:
-
+    Supports context manager protocol:
         with get_provider(ProviderType.OPENAI, api_key="...") as provider:
             response = provider.complete(messages)
     """
 
-    provider_type: ProviderType
-
-    def __init__(self, config: ProviderConfig):
+    def __init__(self, config: ProviderConfig) -> None:
         self.config = config
         self._client = None
 
     def __enter__(self):
-        """Enter context manager."""
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Exit context manager and cleanup resources."""
         self.cleanup()
         return False
 
-    def cleanup(self):
-        """Clean up provider resources. Override in subclasses if needed."""
+    def cleanup(self) -> None:
         self._client = None
 
     @abstractmethod
@@ -70,7 +66,6 @@ class LLMProvider(ABC):
         """List available models for this provider."""
 
     def get_model(self, model: str | None = None) -> str:
-        """Get model name, using default if not specified."""
         return model or self.config.default_model or self._default_model()
 
     @abstractmethod

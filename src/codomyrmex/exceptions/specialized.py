@@ -14,7 +14,13 @@ from .base import CodomyrmexError
 
 # Performance and Monitoring
 class PerformanceError(CodomyrmexError):
-    """Raised when performance monitoring operations fail."""
+    """Raised when performance monitoring operations fail.
+
+    Attributes:
+        message (str): The error message.
+        metric_name (str | None): Name of the performance metric.
+        threshold (float | None): The threshold that was exceeded.
+    """
 
     def __init__(
         self,
@@ -31,7 +37,13 @@ class PerformanceError(CodomyrmexError):
 
 
 class LoggingError(CodomyrmexError):
-    """Raised when logging operations fail."""
+    """Raised when logging operations fail.
+
+    Attributes:
+        message (str): The error message.
+        logger_name (str | None): Name of the logger.
+        level (str | None): The logging level.
+    """
 
     def __init__(
         self,
@@ -49,7 +61,12 @@ class LoggingError(CodomyrmexError):
 
 # System Discovery
 class SystemDiscoveryError(CodomyrmexError):
-    """Raised when system discovery operations fail."""
+    """Raised when system discovery operations fail.
+
+    Attributes:
+        message (str): The error message.
+        discovery_scope (str | None): The scope of the discovery operation.
+    """
 
     def __init__(
         self,
@@ -63,7 +80,12 @@ class SystemDiscoveryError(CodomyrmexError):
 
 
 class CapabilityScanError(CodomyrmexError):
-    """Raised when capability scanning fails."""
+    """Raised when capability scanning fails.
+
+    Attributes:
+        message (str): The error message.
+        capability_name (str | None): Name of the capability being scanned.
+    """
 
     def __init__(
         self,
@@ -78,7 +100,12 @@ class CapabilityScanError(CodomyrmexError):
 
 # 3D Modeling and Physical Management
 class Modeling3DError(CodomyrmexError):
-    """Raised when 3D modeling operations fail."""
+    """Raised when 3D modeling operations fail.
+
+    Attributes:
+        message (str): The error message.
+        model_format (str | None): The 3D model format.
+    """
 
     def __init__(
         self,
@@ -92,7 +119,12 @@ class Modeling3DError(CodomyrmexError):
 
 
 class PhysicalManagementError(CodomyrmexError):
-    """Raised when physical management operations fail."""
+    """Raised when physical management operations fail.
+
+    Attributes:
+        message (str): The error message.
+        device_id (str | None): Unique identifier for the device.
+    """
 
     def __init__(
         self,
@@ -106,7 +138,13 @@ class PhysicalManagementError(CodomyrmexError):
 
 
 class SimulationError(CodomyrmexError):
-    """Raised when simulation operations fail."""
+    """Raised when simulation operations fail.
+
+    Attributes:
+        message (str): The error message.
+        simulation_id (str | None): Unique identifier for the simulation.
+        engine (str | None): The simulation engine being used.
+    """
 
     def __init__(
         self,
@@ -124,7 +162,12 @@ class SimulationError(CodomyrmexError):
 
 # Terminal and Interface
 class TerminalError(CodomyrmexError):
-    """Raised when terminal interface operations fail."""
+    """Raised when terminal interface operations fail.
+
+    Attributes:
+        message (str): The error message.
+        terminal_type (str | None): The type of terminal.
+    """
 
     def __init__(
         self,
@@ -138,7 +181,12 @@ class TerminalError(CodomyrmexError):
 
 
 class InteractiveShellError(TerminalError):
-    """Raised when interactive shell operations fail."""
+    """Raised when interactive shell operations fail.
+
+    Attributes:
+        message (str): The error message.
+        shell_name (str | None): Name of the shell.
+    """
 
     def __init__(
         self,
@@ -153,7 +201,13 @@ class InteractiveShellError(TerminalError):
 
 # Database
 class DatabaseError(CodomyrmexError):
-    """Raised when database operations fail."""
+    """Raised when database operations fail.
+
+    Attributes:
+        message (str): The error message.
+        db_name (str | None): Name of the database.
+        query (str | None): The query that failed.
+    """
 
     def __init__(
         self,
@@ -171,7 +225,13 @@ class DatabaseError(CodomyrmexError):
 
 # CI/CD
 class CICDError(CodomyrmexError):
-    """Raised when CI/CD operations fail."""
+    """Raised when CI/CD operations fail.
+
+    Attributes:
+        message (str): The error message.
+        pipeline_id (str | None): Unique identifier for the pipeline.
+        stage (str | None): The pipeline stage that failed.
+    """
 
     def __init__(
         self,
@@ -188,7 +248,13 @@ class CICDError(CodomyrmexError):
 
 
 class DeploymentError(CodomyrmexError):
-    """Raised when deployment operations fail."""
+    """Raised when deployment operations fail.
+
+    Attributes:
+        message (str): The error message.
+        environment (str | None): The deployment environment.
+        version (str | None): The version being deployed.
+    """
 
     def __init__(
         self,
@@ -206,7 +272,13 @@ class DeploymentError(CodomyrmexError):
 
 # Resource
 class ResourceError(CodomyrmexError):
-    """Raised when resource operations fail."""
+    """Raised when resource operations fail.
+
+    Attributes:
+        message (str): The error message.
+        resource_id (str | None): Unique identifier for the resource.
+        resource_type (str | None): The type of resource.
+    """
 
     def __init__(
         self,
@@ -223,7 +295,13 @@ class ResourceError(CodomyrmexError):
 
 
 class MemoryError(ResourceError):
-    """Raised when memory-related errors occur."""
+    """Raised when memory-related errors occur.
+
+    Attributes:
+        message (str): The error message.
+        memory_usage (int | None): The amount of memory used.
+        limit (int | None): The memory limit.
+    """
 
     def __init__(
         self,
@@ -241,7 +319,12 @@ class MemoryError(ResourceError):
 
 # Spatial
 class SpatialError(CodomyrmexError):
-    """Raised when spatial operations fail."""
+    """Raised when spatial operations fail.
+
+    Attributes:
+        message (str): The error message.
+        coordinate_system (str | None): The coordinate system being used.
+    """
 
     def __init__(
         self,
@@ -256,7 +339,13 @@ class SpatialError(CodomyrmexError):
 
 # Events
 class EventError(CodomyrmexError):
-    """Raised when event processing fails."""
+    """Raised when event processing fails.
+
+    Attributes:
+        message (str): The error message.
+        event_type (str | None): The type of event.
+        event_id (str | None): Unique identifier for the event.
+    """
 
     def __init__(
         self,
@@ -274,7 +363,12 @@ class EventError(CodomyrmexError):
 
 # Skills
 class SkillError(CodomyrmexError):
-    """Raised when skill execution fails."""
+    """Raised when skill execution fails.
+
+    Attributes:
+        message (str): The error message.
+        skill_name (str | None): Name of the skill.
+    """
 
     def __init__(
         self,
@@ -289,7 +383,12 @@ class SkillError(CodomyrmexError):
 
 # Templates
 class TemplateError(CodomyrmexError):
-    """Raised when template operations fail."""
+    """Raised when template operations fail.
+
+    Attributes:
+        message (str): The error message.
+        template_name (str | None): Name of the template.
+    """
 
     def __init__(
         self,
@@ -304,7 +403,13 @@ class TemplateError(CodomyrmexError):
 
 # Plugins
 class PluginError(CodomyrmexError):
-    """Raised when plugin operations fail."""
+    """Raised when plugin operations fail.
+
+    Attributes:
+        message (str): The error message.
+        plugin_name (str | None): Name of the plugin.
+        plugin_version (str | None): The version of the plugin.
+    """
 
     def __init__(
         self,
@@ -322,7 +427,13 @@ class PluginError(CodomyrmexError):
 
 # Auth
 class AuthenticationError(CodomyrmexError):
-    """Raised when authentication fails."""
+    """Raised when authentication fails.
+
+    Attributes:
+        message (str): The error message.
+        identity (str | None): The identity being authenticated.
+        mechanism (str | None): The authentication mechanism used.
+    """
 
     def __init__(
         self,
@@ -338,18 +449,57 @@ class AuthenticationError(CodomyrmexError):
             self.context["mechanism"] = mechanism
 
 
-# Circuit Breaker / Bulkhead (non-CodomyrmexError)
-class CircuitOpenError(Exception):
-    """Raised when the circuit breaker is open."""
+# Circuit Breaker / Bulkhead
+class CircuitOpenError(CodomyrmexError):
+    """Raised when the circuit breaker is open.
+
+    Attributes:
+        message (str): The error message.
+        circuit_name (str | None): Name of the circuit breaker.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        circuit_name: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if circuit_name:
+            self.context["circuit_name"] = circuit_name
 
 
-class BulkheadFullError(Exception):
-    """Raised when the bulkhead semaphore is exhausted."""
+class BulkheadFullError(CodomyrmexError):
+    """Raised when the bulkhead semaphore is exhausted.
+
+    Attributes:
+        message (str): The error message.
+        bulkhead_name (str | None): Name of the bulkhead.
+        max_concurrency (int | None): The maximum allowed concurrency.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        bulkhead_name: str | None = None,
+        max_concurrency: int | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if bulkhead_name:
+            self.context["bulkhead_name"] = bulkhead_name
+        if max_concurrency is not None:
+            self.context["max_concurrency"] = max_concurrency
 
 
 # Compression
 class CompressionError(CodomyrmexError):
-    """Raised when compression operations fail."""
+    """Raised when compression operations fail.
+
+    Attributes:
+        message (str): The error message.
+        algorithm (str | None): The compression algorithm used.
+    """
 
     def __init__(
         self,
@@ -364,7 +514,13 @@ class CompressionError(CodomyrmexError):
 
 # Encryption
 class EncryptionError(CodomyrmexError):
-    """Raised when encryption operations fail."""
+    """Raised when encryption operations fail.
+
+    Attributes:
+        message (str): The error message.
+        algorithm (str | None): The encryption algorithm used.
+        key_id (str | None): Unique identifier for the encryption key.
+    """
 
     def __init__(
         self,
@@ -382,7 +538,12 @@ class EncryptionError(CodomyrmexError):
 
 # IDE
 class IDEError(CodomyrmexError):
-    """Base exception for IDE-related errors."""
+    """Base exception for IDE-related errors.
+
+    Attributes:
+        message (str): The error message.
+        ide_name (str | None): Name of the IDE.
+    """
 
     def __init__(
         self,
@@ -396,7 +557,13 @@ class IDEError(CodomyrmexError):
 
 
 class IDEConnectionError(IDEError):
-    """Raised when IDE connection fails."""
+    """Raised when IDE connection fails.
+
+    Attributes:
+        message (str): The error message.
+        host (str | None): The host of the IDE.
+        port (int | None): The port of the IDE.
+    """
 
     def __init__(
         self,
@@ -413,7 +580,12 @@ class IDEConnectionError(IDEError):
 
 
 class CommandExecutionError(IDEError):
-    """Raised when an IDE command fails to execute."""
+    """Raised when an IDE command fails to execute.
+
+    Attributes:
+        message (str): The error message.
+        command_name (str | None): Name of the command that failed.
+    """
 
     def __init__(
         self,
@@ -427,7 +599,12 @@ class CommandExecutionError(IDEError):
 
 
 class SessionError(IDEError):
-    """Raised when there's a session-related error."""
+    """Raised when there's a session-related error.
+
+    Attributes:
+        message (str): The error message.
+        session_id (str | None): Unique identifier for the session.
+    """
 
     def __init__(
         self,
@@ -441,7 +618,12 @@ class SessionError(IDEError):
 
 
 class ArtifactError(IDEError):
-    """Raised when artifact operations fail."""
+    """Raised when artifact operations fail.
+
+    Attributes:
+        message (str): The error message.
+        artifact_id (str | None): Unique identifier for the artifact.
+    """
 
     def __init__(
         self,
@@ -456,7 +638,13 @@ class ArtifactError(IDEError):
 
 # Cache
 class CacheError(CodomyrmexError):
-    """Raised when cache operations fail."""
+    """Raised when cache operations fail.
+
+    Attributes:
+        message (str): The error message.
+        cache_key (str | None): The key that failed in the cache.
+        backend (str | None): The cache backend being used.
+    """
 
     def __init__(
         self,
@@ -474,7 +662,13 @@ class CacheError(CodomyrmexError):
 
 # Serialization
 class SerializationError(CodomyrmexError):
-    """Raised when serialization/deserialization operations fail."""
+    """Raised when serialization/deserialization operations fail.
+
+    Attributes:
+        message (str): The error message.
+        format_type (str | None): The serialization format (e.g., 'json', 'yaml').
+        data_type (str | None): The type of data being serialized.
+    """
 
     def __init__(
         self,

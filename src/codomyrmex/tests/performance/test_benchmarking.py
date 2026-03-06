@@ -407,15 +407,13 @@ class TestBenchmarkingIntegration:
             benchmark = run_benchmark(func, iterations=5)
             results[name] = benchmark["average_time"]
 
-        # Create visualization of results
-        chart_data = {
-            "categories": list(results.keys()),
-            "values": list(results.values()),
-        }
-
         from codomyrmex.data_visualization import create_bar_chart
 
-        chart = create_bar_chart(chart_data, "Function Performance Comparison")
+        chart = create_bar_chart(
+            categories=list(results.keys()),
+            values=list(results.values()),
+            title="Function Performance Comparison"
+        )
 
         assert chart is not None
         # assert "Function Performance Comparison" in chart or "bar" in chart.lower()

@@ -123,11 +123,11 @@ class RuleBasedAgent(Agent):
             action_type: Action type string to emit.
             params: Optional parameters to include in the Action.
         """
-        self._rules.append((condition, action_type, params or {}))  # type: ignore[arg-type]
+        self._rules.append((condition, action_type, params or {}))
 
     def act(self, observation: dict[str, Any]) -> Action:
         """Act."""
-        for condition, action_type, params in self._rules:  # type: ignore[misc]
+        for condition, action_type, params in self._rules:
             try:
                 if condition(observation):
                     return Action(type=action_type, parameters=params)
@@ -197,7 +197,7 @@ class QLearningAgent(Agent):
             action_type = random.choice(self.action_types)
         else:
             q_values = self._q_table[state]
-            action_type = max(q_values, key=q_values.get)  # type: ignore[arg-type]
+            action_type = max(q_values, key=q_values.get)
 
         self._last_action_type = action_type
         return Action(type=action_type)

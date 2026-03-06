@@ -16,8 +16,8 @@ from typing import Any
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = Any  # type: ignore
-    ResultStatus = Any  # type: ignore
+    Result = Any
+    ResultStatus = Any
 
 from .templates import PromptTemplate
 

@@ -110,7 +110,7 @@ class TestAgenticSeekConfig:
     def test_frozen(self):
         cfg = AgenticSeekConfig()
         with pytest.raises(AttributeError):
-            cfg.provider_name = "lm-studio"  # type: ignore[misc]
+            cfg.provider_name = "lm-studio"
 
     def test_to_ini_dict_has_sections(self):
         cfg = AgenticSeekConfig()

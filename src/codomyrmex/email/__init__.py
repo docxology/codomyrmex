@@ -32,13 +32,13 @@ try:
 except ImportError:
     GMAIL_AVAILABLE = False
     EMAIL_AVAILABLE = False
-    GmailProvider = None  # type: ignore
+    GmailProvider = None
 
 try:
     from .agentmail import AGENTMAIL_AVAILABLE, AgentMailProvider
 except ImportError:
     AGENTMAIL_AVAILABLE = False
-    AgentMailProvider = None  # type: ignore
+    AgentMailProvider = None
 
 
 def cli_commands():

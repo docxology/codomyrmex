@@ -25,7 +25,7 @@ class TestBaseLock:
     def test_base_lock_is_abstract(self):
         """BaseLock cannot be instantiated directly."""
         with pytest.raises(TypeError):
-            BaseLock("my-lock")  # type: ignore
+            BaseLock("my-lock")
 
 
 @pytest.mark.unit
@@ -116,7 +116,7 @@ class TestLocalLockContextManager:
         lock1.acquire()
         try:
             with pytest.raises(TimeoutError):
-                lock2.acquire = lambda timeout=10.0, retry_interval=0.1: False  # type: ignore
+                lock2.acquire = lambda timeout=10.0, retry_interval=0.1: False
                 with lock2:
                     pass
         finally:

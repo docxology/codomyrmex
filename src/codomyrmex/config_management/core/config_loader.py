@@ -4,8 +4,10 @@ Configuration Loader for Codomyrmex Configuration Management Module.
 Provides comprehensive configuration loading, validation, and management.
 """
 
+import copy
 import json
 import os
+import re
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
@@ -63,6 +65,68 @@ except ImportError:
 
         def create_error_context(**kwargs):
             return dict(kwargs)
+
+
+def deep_merge(base: dict[str, Any], extension: dict[str, Any]) -> dict[str, Any]:
+    """
+    Deeply merge two dictionaries.
+
+    Values from extension override values from base. Nested dictionaries
+    are merged recursively.
+
+    Args:
+        base: The base dictionary to merge into.
+        extension: The dictionary with overrides.
+
+    Returns:
+        The merged dictionary (modified in-place if possible, but returns it).
+    """
+    for key, value in extension.items():
+        if (
+            key in base
+            and isinstance(base[key], dict)
+            and isinstance(value, dict)
+        ):
+            deep_merge(base[key], value)
+        else:
+            base[key] = value
+    return base
+
+
+def resolve_env_vars(data: Any) -> Any:
+    """
+    Recursively resolve environment variables in a configuration structure.
+
+    Supports ${VAR} and ${VAR:-default} syntax.
+
+    Args:
+        data: The configuration data structure (dict, list, or scalar).
+
+    Returns:
+        The data structure with resolved environment variables.
+    """
+    if isinstance(data, dict):
+        return {k: resolve_env_vars(v) for k, v in data.items()}
+    if isinstance(data, list):
+        return [resolve_env_vars(item) for item in data]
+    if isinstance(data, str):
+        # Match ${VAR} or ${VAR:-default}
+        # Variable name must be alphanumeric or underscore
+        pattern = re.compile(r"\$\{(?P<var>[A-Z0-9_]+)(?::-(?P<default>[^}]*))?\}")
+
+        def replace(match):
+            var_name = match.group("var")
+            default_value = match.group("default")
+            # If variable not found, use default if provided, otherwise leave as is
+            val = os.getenv(var_name)
+            if val is not None:
+                return val
+            if default_value is not None:
+                return default_value
+            return match.group(0)
+
+        return pattern.sub(replace, data)
+    return data
 
 
 @dataclass
@@ -212,6 +276,7 @@ class ConfigurationManager:
         name: str,
         sources: list[str] | None = None,
         schema_path: str | None = None,
+        defaults: dict[str, Any] | None = None,
     ) -> Configuration:
         """
         Load configuration from multiple sources.
@@ -220,6 +285,7 @@ class ConfigurationManager:
             name: Configuration name
             sources: List of configuration sources (files, env vars, etc.)
             schema_path: Path to JSON schema for validation
+            defaults: Optional default values (lowest precedence)
 
         Returns:
             Configuration: Loaded and merged configuration
@@ -242,24 +308,28 @@ class ConfigurationManager:
                 f"environments/{self.environment}/{name}.json",
             ]
 
-        # Load and merge configurations
-        merged_config = {}
-        source_list = []
+        # Start with defaults
+        merged_config = copy.deepcopy(defaults) if defaults else {}
+        source_list = ["defaults"] if defaults else []
 
+        # Load and merge configurations from sources
         for source in sources:
             config_data = self._load_source(source)
             if config_data:
-                merged_config.update(config_data)
+                deep_merge(merged_config, config_data)
                 source_list.append(source)
 
         # Load environment variables
         env_config = self._load_environment_variables(name)
         if env_config:
-            merged_config.update(env_config)
+            deep_merge(merged_config, env_config)
             source_list.append("environment")
 
+        # Resolve environment variable substitutions
+        merged_config = resolve_env_vars(merged_config)
+
         # Check if any configuration was found
-        if not merged_config and not env_config:
+        if not merged_config:
             # No configuration found - raise error if specific sources were requested
             if (
                 sources
@@ -341,14 +411,30 @@ class ConfigurationManager:
             return None
 
     def _load_environment_variables(self, config_name: str) -> dict[str, Any]:
-        """Load configuration from environment variables."""
+        """
+        Load configuration from environment variables.
+
+        Supports nested keys using double underscore:
+        APP_DATABASE__HOST -> {"database": {"host": ...}}
+        """
         env_config = {}
         prefix = f"{config_name.upper()}_"
 
         for key, value in os.environ.items():
             if key.startswith(prefix):
                 config_key = key[len(prefix) :].lower()
-                env_config[config_key] = value
+
+                # Handle nesting with double underscores
+                if "__" in config_key:
+                    parts = config_key.split("__")
+                    current = env_config
+                    for part in parts[:-1]:
+                        if part not in current or not isinstance(current[part], dict):
+                            current[part] = {}
+                        current = current[part]
+                    current[parts[-1]] = value
+                else:
+                    env_config[config_key] = value
 
         return env_config
 
@@ -746,7 +832,10 @@ class ConfigurationManager:
 
 # Convenience functions
 def load_configuration(
-    name: str, sources: list[str] | None = None, schema_path: str | None = None
+    name: str,
+    sources: list[str] | None = None,
+    schema_path: str | None = None,
+    defaults: dict[str, Any] | None = None,
 ) -> Configuration:
     """
     Convenience function to load configuration.
@@ -755,12 +844,15 @@ def load_configuration(
         name: Configuration name
         sources: List of configuration sources
         schema_path: Path to JSON schema for validation
+        defaults: Optional default values
 
     Returns:
         Configuration: Loaded configuration
     """
     manager = ConfigurationManager()
-    return manager.load_configuration(name, sources, schema_path)
+    return manager.load_configuration(
+        name, sources, schema_path, defaults=defaults
+    )
 
 
 def validate_configuration(config: Configuration) -> list[str]:
