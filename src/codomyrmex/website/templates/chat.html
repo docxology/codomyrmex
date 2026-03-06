@@ -20,7 +20,7 @@
         </div>
         <label for="chat-input" class="sr-only">Message</label>
         <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." autocomplete="off">
-        <button type="submit" class="btn btn-primary">Send</button>
+        <button id="chat-submit-btn" type="submit" class="btn btn-primary">Send</button>
     </form>
 </div>
 
@@ -77,6 +77,12 @@
         input.value = '';
         input.disabled = true;
 
+        const btn = document.getElementById('chat-submit-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loader" aria-hidden="true"></span> Sending...';
+        }
+
         const thinking = document.createElement('div');
         thinking.className = 'message assistant thinking';
         thinking.setAttribute('aria-busy', 'true');
@@ -101,6 +107,10 @@
             appendMessage('assistant', 'Connection error: ' + err.message);
         } finally {
             input.disabled = false;
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Send';
+            }
             input.focus();
         }
     });
