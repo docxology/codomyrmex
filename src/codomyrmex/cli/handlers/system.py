@@ -6,8 +6,8 @@ from codomyrmex.cli.utils import (
     PERFORMANCE_MONITORING_AVAILABLE,
     TERMINAL_INTERFACE_AVAILABLE,
     TerminalFormatter,
-    get_logger,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
