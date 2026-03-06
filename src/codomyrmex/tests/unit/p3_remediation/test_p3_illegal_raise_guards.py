@@ -149,7 +149,7 @@ class TestUtilsInitRetryIllegalRaiseGuard:
         """Utils retry re-raises the captured exception on exhaustion."""
         attempt = [0]
 
-        @_utils_retry_func(
+        @_utils_retry_func(  # type: ignore
             max_attempts=2, delay=0.001, backoff=1.0, exceptions=(RuntimeError,)
         )
         def utils_always_fails():

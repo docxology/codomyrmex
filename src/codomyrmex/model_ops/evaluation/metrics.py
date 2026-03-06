@@ -223,7 +223,7 @@ class AUCROCMetric(Metric):
         """Name."""
         return "auc_roc"
 
-    def compute(self, y_true: list, y_scores: list) -> float:
+    def compute(self, y_true: list, y_scores: list) -> float:  # type: ignore
         """Compute."""
         positives = [(s, t) for s, t in zip(y_scores, y_true, strict=False) if t == 1]
         negatives = [(s, t) for s, t in zip(y_scores, y_true, strict=False) if t == 0]

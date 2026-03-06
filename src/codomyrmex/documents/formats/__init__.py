@@ -6,8 +6,6 @@ try:
 
     MARKDOWN_AVAILABLE = True
 except ImportError:
-    read_markdown = None
-    write_markdown = None
     MARKDOWN_AVAILABLE = False
 
 try:
@@ -15,8 +13,6 @@ try:
 
     JSON_AVAILABLE = True
 except ImportError:
-    read_json = None
-    write_json = None
     JSON_AVAILABLE = False
 
 try:
@@ -24,8 +20,6 @@ try:
 
     YAML_AVAILABLE = True
 except ImportError:
-    read_yaml = None
-    write_yaml = None
     YAML_AVAILABLE = False
 
 try:
@@ -33,8 +27,6 @@ try:
 
     TEXT_AVAILABLE = True
 except ImportError:
-    read_text = None
-    write_text = None
     TEXT_AVAILABLE = False
 
 try:
@@ -42,9 +34,6 @@ try:
 
     PDF_AVAILABLE = True
 except ImportError:
-    read_pdf = None
-    write_pdf = None
-    PDFDocument = None
     PDF_AVAILABLE = False
 
 try:
@@ -52,9 +41,6 @@ try:
 
     HTML_AVAILABLE = True
 except ImportError:
-    read_html = None
-    write_html = None
-    strip_html_tags = None
     HTML_AVAILABLE = False
 
 try:
@@ -62,8 +48,6 @@ try:
 
     XML_AVAILABLE = True
 except ImportError:
-    read_xml = None
-    write_xml = None
     XML_AVAILABLE = False
 
 try:
@@ -71,8 +55,6 @@ try:
 
     CSV_AVAILABLE = True
 except ImportError:
-    read_csv = None
-    write_csv = None
     CSV_AVAILABLE = False
 
 __all__ = []

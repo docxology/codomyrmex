@@ -3,7 +3,7 @@
 import pytest
 
 from codomyrmex.events.core.event_bus import get_event_bus
-from codomyrmex.events.core.event_schema import Event, EventType
+from codomyrmex.events.core.event_schema import EventType
 from codomyrmex.events.event_store import StreamEvent, get_event_store
 from codomyrmex.events.handlers.event_logger import get_event_logger
 from codomyrmex.events.mcp_tools import (

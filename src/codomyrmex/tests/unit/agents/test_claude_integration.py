@@ -132,7 +132,7 @@ class TestAdaptForAiCodeEditing:
     ):
         adapter.adapt_for_ai_code_editing(prompt="test", language="go")
         ctx = stub_agent.last_request.context
-        assert "system" in ctx
+        assert "system" in ctx  # type: ignore
         assert "go" in ctx["system"].lower()
 
     def test_context_code_prepended(

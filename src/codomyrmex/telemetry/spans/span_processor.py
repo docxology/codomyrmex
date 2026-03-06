@@ -18,4 +18,4 @@ def add_span_processor(processor: SpanProcessor) -> None:
     """Add a span processor to the global tracer provider."""
     provider = trace.get_tracer_provider()
     if hasattr(provider, "add_span_processor"):
-        provider.add_span_processor(processor)
+        provider.add_span_processor(processor)  # type: ignore

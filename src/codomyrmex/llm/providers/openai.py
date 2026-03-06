@@ -40,7 +40,7 @@ class OpenAIProvider(LLMProvider):
         if not self._client:
             raise RuntimeError("OpenAI client not initialized. Install openai package.")
 
-        response = self._client.chat.completions.create(
+        response = self._client.chat.completions.create(  # type: ignore
             model=self.get_model(model),
             messages=[m.to_dict() for m in messages],
             temperature=temperature,
@@ -78,7 +78,7 @@ class OpenAIProvider(LLMProvider):
         if not self._client:
             raise RuntimeError("OpenAI client not initialized.")
 
-        stream = self._client.chat.completions.create(
+        stream = self._client.chat.completions.create(  # type: ignore
             model=self.get_model(model),
             messages=[m.to_dict() for m in messages],
             temperature=temperature,
@@ -106,7 +106,7 @@ class OpenAIProvider(LLMProvider):
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
             )
-            response = await async_client.chat.completions.create(
+            response = await async_client.chat.completions.create(  # type: ignore
                 model=self.get_model(model),
                 messages=[m.to_dict() for m in messages],
                 temperature=temperature,

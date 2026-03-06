@@ -74,7 +74,7 @@ def save_plot(
     """
     try:
         # Ensure output directory exists
-        output_path = Path(output_path)
+        output_path = Path(output_path)  # type: ignore
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Detect format from extension

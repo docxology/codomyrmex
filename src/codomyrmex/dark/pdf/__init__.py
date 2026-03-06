@@ -17,9 +17,6 @@ try:
 
     FILTERS_AVAILABLE = True
 except ImportError:
-    DarkPDFFilter = None
-    apply_dark_mode = None
-    DarkPDF = None
     FILTERS_AVAILABLE = False
 
 __all__ = [

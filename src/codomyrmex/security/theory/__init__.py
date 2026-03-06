@@ -19,13 +19,6 @@ try:
 
     PRINCIPLES_AVAILABLE = True
 except ImportError:
-    SecurityPrinciple = None
-    PrincipleCategory = None
-    get_security_principles = None
-    get_principle = None
-    get_principles_by_category = None
-    apply_principle = None
-    validate_principle_application = None
     PRINCIPLES_AVAILABLE = False
 
 try:
@@ -42,14 +35,6 @@ try:
 
     FRAMEWORKS_AVAILABLE = True
 except ImportError:
-    SecurityFramework = None
-    FrameworkStandard = None
-    FrameworkCategory = None
-    get_framework = None
-    get_all_frameworks = None
-    get_frameworks_by_category = None
-    apply_framework = None
-    check_framework_compliance = None
     FRAMEWORKS_AVAILABLE = False
 
 try:
@@ -66,14 +51,6 @@ try:
 
     THREAT_MODELING_AVAILABLE = True
 except ImportError:
-    Threat = None
-    ThreatModel = None
-    ThreatSeverity = None
-    ThreatCategory = None
-    ThreatModelBuilder = None
-    create_threat_model = None
-    analyze_threats = None
-    prioritize_threats = None
     THREAT_MODELING_AVAILABLE = False
 
 try:
@@ -92,16 +69,6 @@ try:
 
     RISK_ASSESSMENT_AVAILABLE = True
 except ImportError:
-    Risk = None
-    RiskAssessment = None
-    RiskLevel = None
-    LikelihoodLevel = None
-    ImpactLevel = None
-    RiskAssessor = None
-    assess_risk = None
-    calculate_risk_score = None
-    prioritize_risks = None
-    calculate_aggregate_risk = None
     RISK_ASSESSMENT_AVAILABLE = False
 
 try:
@@ -117,13 +84,6 @@ try:
 
     ARCHITECTURE_PATTERNS_AVAILABLE = True
 except ImportError:
-    SecurityPattern = None
-    PatternCategory = None
-    get_security_patterns = None
-    get_pattern = None
-    get_patterns_by_category = None
-    apply_pattern = None
-    validate_pattern_application = None
     ARCHITECTURE_PATTERNS_AVAILABLE = False
 
 try:
@@ -141,15 +101,6 @@ try:
 
     BEST_PRACTICES_AVAILABLE = True
 except ImportError:
-    SecurityBestPractice = None
-    PracticeCategory = None
-    PracticePriority = None
-    get_best_practices = None
-    get_practice = None
-    get_practices_by_priority = None
-    get_practices_for_category = None
-    check_compliance_with_practices = None
-    prioritize_practices = None
     BEST_PRACTICES_AVAILABLE = False
 
 __all__ = []

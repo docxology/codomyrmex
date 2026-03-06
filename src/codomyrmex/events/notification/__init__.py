@@ -10,8 +10,7 @@ __version__ = "0.1.0"
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .models import (
     Notification,
@@ -55,9 +54,12 @@ def cli_commands():
             print("Usage: notification send --message 'Your message here'")
             return
         provider = ConsoleProvider()
+        import uuid
         notification = Notification(
+            id=str(uuid.uuid4()),
+            subject="CLI Notification",
+            body=message,
             channel=NotificationChannel("console"),
-            message=message,
             priority=NotificationPriority("normal")
             if callable(NotificationPriority)
             else NotificationPriority.NORMAL,

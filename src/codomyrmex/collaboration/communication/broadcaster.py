@@ -261,7 +261,7 @@ class Broadcaster:
 
     def list_topics(self) -> list[TopicInfo]:
         """List all topics."""
-        return [self.get_topic_info(t) for t in self._topics if self.get_topic_info(t)]
+        return [self.get_topic_info(t) for t in self._topics if self.get_topic_info(t)]  # type: ignore
 
     def get_subscriber_topics(self, subscriber_id: str) -> list[str]:
         """Get all topics a subscriber is subscribed to."""

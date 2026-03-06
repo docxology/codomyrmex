@@ -73,7 +73,7 @@ class MCPServer:
         # When provided, _call_tool dispatches to the injected function
         # instead of the default registry-based execution path.
         if call_tool_fn is not None:
-            self._call_tool = call_tool_fn
+            self._call_tool = call_tool_fn  # type: ignore
 
         # Rate limiter
         from codomyrmex.model_context_protocol.reliability.rate_limiter import (
@@ -329,7 +329,7 @@ class MCPServer:
         if not handler:
             raise ValueError(f"Unknown method: {method}")
 
-        return await handler(params)
+        return await handler(params)  # type: ignore
 
     async def _initialize(self, params: dict[str, Any]) -> dict[str, Any]:
         """Handle initialize."""
@@ -660,7 +660,7 @@ class MCPServer:
             cid = request.headers.get("x-correlation-id") or request.headers.get(
                 "X-Correlation-ID"
             )
-            result = await server._call_tool(
+            result = await server._call_tool(  # type: ignore
                 {
                     "name": tool_name,
                     "arguments": body,

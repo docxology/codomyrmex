@@ -52,8 +52,7 @@ __version__ = "0.1.0"
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Import exceptions
 # Import configuration
@@ -94,7 +93,6 @@ try:
 
     PROCESSING_AVAILABLE = MOVIEPY_AVAILABLE or OPENCV_AVAILABLE
 except ImportError:
-    VideoProcessor = None
     MOVIEPY_AVAILABLE = False
     OPENCV_AVAILABLE = False
     PROCESSING_AVAILABLE = False
@@ -105,7 +103,6 @@ try:
 
     EXTRACTION_AVAILABLE = True
 except ImportError:
-    FrameExtractor = None
     EXTRACTION_AVAILABLE = False
 
 # Import analysis
@@ -114,7 +111,6 @@ try:
 
     ANALYSIS_AVAILABLE = True
 except ImportError:
-    VideoAnalyzer = None
     ANALYSIS_AVAILABLE = False
 
 # Import generation

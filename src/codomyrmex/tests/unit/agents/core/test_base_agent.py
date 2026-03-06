@@ -99,7 +99,7 @@ class TestAgentRequest:
             id="req-001",
         )
         assert req.context == {"lang": "python"}
-        assert AgentCapabilities.CODE_ANALYSIS in req.capabilities
+        assert req.capabilities and AgentCapabilities.CODE_ANALYSIS in req.capabilities
         assert req.timeout == 30
         assert req.id == "req-001"
 
@@ -107,8 +107,8 @@ class TestAgentRequest:
         """Two AgentRequests with default context do not share the same dict."""
         r1 = AgentRequest(prompt="a")
         r2 = AgentRequest(prompt="b")
-        r1.context["key"] = "val"
-        assert "key" not in r2.context
+        r1.context["key"] = "val"  # type: ignore
+        assert "key" not in r2.context  # type: ignore
 
 
 # ---------------------------------------------------------------------------
@@ -167,7 +167,7 @@ class TestBaseAgentExecute:
         """execute() catches exceptions from _execute_impl and returns AgentResponse with error."""
         resp = self.raiser.execute(AgentRequest(prompt="crash"))
         assert resp.is_success() is False
-        assert "intentional test failure" in resp.error
+        assert "intentional test failure" in (resp.error or "")
         assert resp.content == ""
 
     def test_execute_error_metadata_has_error_type(self):
@@ -179,7 +179,7 @@ class TestBaseAgentExecute:
         """execute() raises ValueError for empty prompt, which is caught and returned as error."""
         resp = self.echo.execute(AgentRequest(prompt=""))
         assert resp.is_success() is False
-        assert "Prompt" in resp.error or "prompt" in resp.error.lower()
+        assert "Prompt" in (resp.error or "") or "prompt" in (resp.error or "").lower()
 
     def test_execute_preserves_request_id(self):
         """execute() passes request.id through to the response."""

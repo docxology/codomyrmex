@@ -3,9 +3,6 @@
 import shutil
 import tempfile
 import time
-from pathlib import Path
-
-import pytest
 
 from codomyrmex.logistics.orchestration.project.resource_manager import (
     Resource,

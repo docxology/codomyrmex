@@ -128,7 +128,7 @@ class SerializationManager:
         if format is None:
             serializer = Serializer()
             fmt_enum = (
-                serializer.detect_format(data)
+                serializer.detect_format(data)  # type: ignore
                 if hasattr(serializer, "detect_format")
                 else None
             )

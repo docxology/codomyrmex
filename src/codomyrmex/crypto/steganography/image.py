@@ -126,7 +126,7 @@ def embed_in_image(image_path: str, message: str, output_path: str) -> bool:
             if bit_idx >= total_bits:
                 break
 
-            r, g, b = pixels[x, y]
+            r, g, b = pixels[x, y]  # type: ignore
 
             if bit_idx < total_bits:
                 r = (r & 0xFE) | payload_bits[bit_idx]
@@ -138,7 +138,7 @@ def embed_in_image(image_path: str, message: str, output_path: str) -> bool:
                 b = (b & 0xFE) | payload_bits[bit_idx]
                 bit_idx += 1
 
-            pixels[x, y] = (r, g, b)
+            pixels[x, y] = (r, g, b)  # type: ignore
 
         if bit_idx >= total_bits:
             break
@@ -187,7 +187,7 @@ def extract_from_image(image_path: str) -> str:
     bits: list[int] = []
     for y in range(height):
         for x in range(width):
-            r, g, b = pixels[x, y]
+            r, g, b = pixels[x, y]  # type: ignore
             bits.append(r & 1)
             bits.append(g & 1)
             bits.append(b & 1)

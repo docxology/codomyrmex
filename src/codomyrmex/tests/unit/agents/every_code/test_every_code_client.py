@@ -145,7 +145,7 @@ class TestEveryCodeClient:
 
         # Test that request structure is correct
         assert request.prompt == "Analyze this code"
-        assert "files" in request.context
+        assert "files" in request.context  # type: ignore
         assert request.context["files"] == ["src/main.py"]
 
     def test_every_code_client_config_override(self):
@@ -168,7 +168,7 @@ class TestEveryCodeClient:
         empty_request = AgentRequest(prompt="")
         response = client.execute(empty_request)
         assert not response.is_success()
-        assert "Prompt is required" in response.error
+        assert "Prompt is required" in (response.error or "")
 
     def test_every_code_client_special_commands(self):
         """Test special command handling."""

@@ -8,6 +8,7 @@ from __future__ import annotations
 import importlib
 import importlib.util
 import pathlib
+from dataclasses import dataclass
 
 import pytest
 from hypothesis import given, settings
@@ -29,10 +30,10 @@ def serialize(obj, format="json"):
     return Serializer(default_format=fmt).serialize(obj)
 
 
-def deserialize(data, format="json"):
+def deserialize(data, format="json", target_type=None):
     """Thin wrapper using Serializer directly (avoids binary_formats import)."""
     fmt = SerializationFormat(format) if isinstance(format, str) else format
-    return Serializer(default_format=fmt).deserialize(data)
+    return Serializer(default_format=fmt).deserialize(data, target_type=target_type)
 
 # --- Strategies ---
 
@@ -105,6 +106,36 @@ class TestSerializationRoundTrips:
         """Any JSON-compatible value survives a Pickle round-trip."""
         serialized = serialize(data, format="pickle")
         assert isinstance(serialized, bytes)
+        result = deserialize(serialized, format="pickle")
+        assert result == data
+
+@dataclass
+class DummyDataClass:
+    name: str
+    value: int
+    flag: bool
+
+dummy_dataclass_strategy = st.builds(
+    DummyDataClass,
+    name=st.text(max_size=50),
+    value=st.integers(min_value=-1000, max_value=1000),
+    flag=st.booleans()
+)
+
+class TestDataclassRoundTrips:
+    @given(data=dummy_dataclass_strategy)
+    @settings(max_examples=50, deadline=2000)
+    def test_json_dataclass_round_trip(self, data):
+        """Dataclasses can round-trip through JSON if target_type is provided."""
+        serialized = serialize(data, format="json")
+        result = deserialize(serialized, format="json", target_type=DummyDataClass)
+        assert result == data
+
+    @given(data=dummy_dataclass_strategy)
+    @settings(max_examples=50, deadline=2000)
+    def test_pickle_dataclass_round_trip(self, data):
+        """Dataclasses natively round-trip through Pickle."""
+        serialized = serialize(data, format="pickle")
         result = deserialize(serialized, format="pickle")
         assert result == data
 

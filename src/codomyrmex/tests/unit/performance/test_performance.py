@@ -47,12 +47,6 @@ try:
 
     PERFORMANCE_MONITOR_AVAILABLE = True
 except ImportError:
-    PerformanceMonitor = None
-    PerformanceMetrics = None
-    monitor_performance = None
-    performance_context = None
-    get_performance_stats = None
-    clear_performance_metrics = None
     PERFORMANCE_MONITOR_AVAILABLE = False
 
 

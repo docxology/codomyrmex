@@ -20,7 +20,7 @@ class HistogramMixin:
 
     config: PlotConfig
     current_axes: plt.Axes | None
-    create_figure: callable
+    create_figure: callable  # type: ignore
 
     @monitor_performance("plot_histogram")
     def plot_histogram(
@@ -113,7 +113,7 @@ class HistogramMixin:
             labels = labels or [""]
 
         box_plot = axes.boxplot(
-            data_list, labels=labels, notch=notch, patch_artist=patch_artist, **kwargs
+            data_list, tick_labels=labels, notch=notch, patch_artist=patch_artist, **kwargs
         )
 
         if color and patch_artist:
@@ -194,7 +194,7 @@ def create_advanced_histogram(
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
-    config: PlotConfig = None,
+    config: PlotConfig = None,  # type: ignore
     **kwargs,
 ):
     """Create an advanced histogram."""

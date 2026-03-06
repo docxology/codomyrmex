@@ -17,9 +17,9 @@ if TYPE_CHECKING:
 try:
     from codomyrmex.validation.schemas import Config, Result, ResultStatus
 except ImportError:
-    Config = Any
-    Result = Any
-    ResultStatus = Any
+    Config = Any  # type: ignore
+    Result = Any  # type: ignore
+    ResultStatus = Any  # type: ignore
 
 
 @dataclass

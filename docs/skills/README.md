@@ -24,7 +24,7 @@ graph TD
 ## Available Skills
 
 | Skill | Description | Source |
-|-------|-------------|--------|
+| --- | --- | --- |
 | Modern Python | uv, ruff, ty best practices | Trail of Bits |
 | Property Testing | Hypothesis-based property tests | Trail of Bits |
 | Security Audit | Security audit methodology | Trail of Bits |
@@ -33,10 +33,11 @@ graph TD
 | Coverage Push | Zero-mock coverage improvement | Internal |
 | Desloppify | Code health scanner | Internal |
 | GitNexus | Git repo analysis | Internal |
+| qmd | Quick Markdown Search | External |
 
 ## Skill File Structure
 
-```
+```text
 skills/
 ├── skill_name/
 │   ├── SKILL.md          # Main instructions (required)
@@ -48,7 +49,7 @@ skills/
 ## Contents
 
 | File | Description |
-|------|-------------|
+| --- | --- |
 | [AGENTS.md](AGENTS.md) | Agent coordination for skills |
 | [SPEC.md](SPEC.md) | Skills functional specification |
 | [PAI.md](PAI.md) | PAI integration for skills |

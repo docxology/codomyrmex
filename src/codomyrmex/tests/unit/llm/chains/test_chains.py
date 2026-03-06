@@ -3,13 +3,11 @@ Tests for LLM Chain implementations.
 """
 
 import json
-from typing import Any
 
 import pytest
 
 from codomyrmex.llm.chains import (
     ChainOfThought,
-    ChainResult,
     ChainStep,
     ChainType,
     ReActChain,
@@ -68,7 +66,7 @@ class TestSimpleChain:
 
         result = chain.run({}, failing_llm)
         assert result.success is False
-        assert "LLM error" in result.error
+        assert "LLM error" in (result.error or "")
 
 class TestSequentialChain:
     """Tests for SequentialChain."""
@@ -161,7 +159,7 @@ class TestReActChain:
 
         result = chain.run({"question": "test"}, infinite_llm)
         assert result.success is False
-        assert "Max iterations reached" in result.error
+        assert "Max iterations reached" in (result.error or "")
 
 class TestFactory:
     """Tests for create_chain factory."""

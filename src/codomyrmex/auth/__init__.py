@@ -19,8 +19,7 @@ from .tokens.validator import TokenValidator
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def authenticate(credentials: dict[str, Any]) -> Token | None:

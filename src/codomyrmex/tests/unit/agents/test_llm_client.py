@@ -33,7 +33,7 @@ class TestAgentRequest:
 
     def test_prompt_required(self):
         with pytest.raises(TypeError):
-            AgentRequest()  # prompt is required (no default)
+            AgentRequest()  # prompt is required (no default)  # type: ignore
 
     def test_with_metadata(self):
         meta = {"source": "cli", "version": 1}

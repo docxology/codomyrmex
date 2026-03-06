@@ -140,7 +140,7 @@ class TestCertificateChainValidation:
     def test_empty_chain(self) -> None:
         result = validate_certificate_chain([])
         assert result.valid is False
-        assert "Empty certificate chain" in result.errors[0]
+        assert "Empty certificate chain" in (result.errors or [])[0]
         assert result.chain_length == 0
 
     def test_two_cert_chain(self) -> None:
@@ -184,4 +184,4 @@ class TestCertificateChainValidation:
 
         result = validate_certificate_chain([cert1, cert2])
         assert result.valid is False
-        assert any("issuer does not match" in e for e in result.errors)
+        assert any("issuer does not match" in e for e in (result.errors or []))

@@ -55,7 +55,7 @@ class TemplateManager:
     def add_template(self, name: str, template: str | Template) -> None:
         """Add a template."""
         if isinstance(template, Template):
-            self._templates[name] = (
+            self._templates[name] = (  # type: ignore
                 template.source if hasattr(template, "source") else str(template)
             )
         else:

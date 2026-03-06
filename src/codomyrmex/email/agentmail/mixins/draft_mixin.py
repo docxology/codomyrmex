@@ -6,7 +6,7 @@ update, send, and delete drafts.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, NoReturn
 
 from codomyrmex.email.agentmail.models import (
     AgentMailDraft,
@@ -21,10 +21,10 @@ if TYPE_CHECKING:
 try:
     from agentmail.core import ApiError
 except ImportError:
-    ApiError = Exception
+    ApiError = Exception  # type: ignore
 
 
-def _raise_for_api_error(exc: Exception, context: str):
+def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
     """Import and delegate to the module-level error raiser."""
     from codomyrmex.email.agentmail.provider import _raise_for_api_error as _raise
 

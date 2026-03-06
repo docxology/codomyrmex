@@ -132,7 +132,7 @@ class EventLoggingBridge:
             if hasattr(event.event_type, "value")
             else str(event.event_type),
             "source": event.source,
-            "timestamp": event.timestamp.isoformat()
+            "timestamp": event.timestamp.isoformat()  # type: ignore
             if hasattr(event.timestamp, "isoformat")
             else str(event.timestamp),
             "data": event.data or {},

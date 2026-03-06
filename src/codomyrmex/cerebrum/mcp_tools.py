@@ -28,9 +28,9 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
         for case, score in results:
             formatted_results.append(
                 {
-                    "id": case.id,
+                    "id": case.case_id,
                     "features": case.features,
-                    "solution": case.solution,
+                    "solution": case.metadata.get("solution"),
                     "similarity_score": score,
                 }
             )
@@ -55,17 +55,20 @@ def add_case_reference(concept: str, solution: str) -> dict:
     Returns:
         Confirmation of case storage.
     """
+    import uuid
+
     from codomyrmex.cerebrum import Case, CaseBase
 
     try:
         base = CaseBase()
-        case = Case(features={"concept": concept}, solution=solution)
+        case_id = str(uuid.uuid4())
+        case = Case(case_id=case_id, features={"concept": concept}, metadata={"solution": solution})
         base.add_case(case)
 
         return {
             "status": "success",
             "message": "Case stored successfully",
-            "case_id": case.id,
+            "case_id": case.case_id,
         }
     except Exception as e:
         return {"status": "error", "message": f"Failed to store case: {e}"}

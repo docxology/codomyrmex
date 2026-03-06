@@ -34,7 +34,7 @@ class AlertManager:
 
     def __init__(self):
         self._alerts: dict[str, Alert] = {}
-        self._rules: dict[str, dict[str, any]] = {}
+        self._rules: dict[str, dict[str, any]] = {}  # type: ignore
         self._counter = 0
         self._lock = threading.Lock()
 

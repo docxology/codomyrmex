@@ -5,7 +5,7 @@ import asyncio
 import pytest
 
 from codomyrmex.embodiment.actuators.base import ActuatorCommand, ActuatorStatus
-from codomyrmex.embodiment.ros.ros_bridge import Message, ROS2Bridge
+from codomyrmex.embodiment.ros.ros_bridge import ROS2Bridge
 from codomyrmex.embodiment.sensors.base import SensorData
 
 

@@ -371,7 +371,7 @@ class TestMCPToolRegistryMutationKill:
             },
             handler=lambda: None,
         )
-        assert reg.has("t1") is True if hasattr(reg, "has") else True
+        assert reg.has("t1") is True if hasattr(reg, "has") else True  # type: ignore
         assert reg.get("t1") is not None
 
     def test_tool_count(self) -> None:

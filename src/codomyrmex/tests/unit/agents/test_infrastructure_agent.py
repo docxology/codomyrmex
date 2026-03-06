@@ -205,7 +205,7 @@ class TestInfrastructureAgentExecute:
         request = AgentRequest(prompt=json.dumps({"action": "list"}))
         response = agent.execute(request)
         assert not response.is_success()
-        assert "service" in response.error.lower()
+        assert "service" in (response.error or "").lower()
 
     def test_missing_action_key(self):
         """Missing 'action' key returns error."""
@@ -213,7 +213,7 @@ class TestInfrastructureAgentExecute:
         request = AgentRequest(prompt=json.dumps({"service": "compute"}))
         response = agent.execute(request)
         assert not response.is_success()
-        assert "action" in response.error.lower()
+        assert "action" in (response.error or "").lower()
 
     def test_unknown_service(self):
         """Unknown service returns error with available list."""
@@ -228,8 +228,8 @@ class TestInfrastructureAgentExecute:
         )
         response = agent.execute(request)
         assert not response.is_success()
-        assert "unknown" in response.error.lower()
-        assert "compute" in response.error.lower()
+        assert "unknown" in (response.error or "").lower()
+        assert "compute" in (response.error or "").lower()
 
     def test_unknown_action(self):
         """Unknown action returns error."""
@@ -246,7 +246,7 @@ class TestInfrastructureAgentExecute:
         )
         response = agent.execute(request)
         assert not response.is_success()
-        assert "nonexistent_method" in response.error
+        assert "nonexistent_method" in (response.error or "")
 
     def test_invalid_json(self):
         """Invalid JSON returns error."""
@@ -254,7 +254,7 @@ class TestInfrastructureAgentExecute:
         request = AgentRequest(prompt="{invalid json}")
         response = agent.execute(request)
         assert not response.is_success()
-        assert "json" in response.error.lower()
+        assert "json" in (response.error or "").lower()
 
     def test_non_json_prompt(self):
         """Non-JSON prompt returns error."""
@@ -302,7 +302,7 @@ class TestInfrastructureAgentExecute:
         )
         response = agent.execute(request)
         assert not response.is_success()
-        assert "exploit" in response.error.lower()
+        assert "exploit" in (response.error or "").lower()
         assert response.metadata.get("security_blocked") is True
 
     def test_response_metadata_contains_service_and_action(self):
@@ -369,7 +369,7 @@ class TestInfrastructureAgentToolRegistry:
 
         tool_name = "infomaniak_compute_list_instances"
         if tool_name in registry:
-            registry[tool_name].handler()
+            registry[tool_name].handler()  # type: ignore
             assert len(compute._calls.get("list_instances", [])) > 0
 
     def test_stream_yields_execute_result(self):

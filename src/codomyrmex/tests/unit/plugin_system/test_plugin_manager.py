@@ -296,7 +296,7 @@ class TestPlugin:
         result = manager.load_plugin("definitely_not_a_real_plugin")
 
         assert result.success is False
-        assert "not found" in result.error_message.lower()
+        assert "not found" in (result.error_message or "").lower()
 
     def test_cleanup(self):
         """Test manager cleanup."""

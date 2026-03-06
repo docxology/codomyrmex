@@ -7,6 +7,6 @@ Provides mechanisms for agents to improve via reflection and skill acquisition.
 try:
     from .skills import Skill
 except ImportError:
-    Skill = None
+    pass
 
 __all__ = ["Skill"]

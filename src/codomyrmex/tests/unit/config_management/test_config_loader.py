@@ -770,7 +770,7 @@ class TestMigrateConfigurationExceptionHandler:
 
         # Replace data with a non-dict after construction to bypass the dataclass
         # config.data is just a regular attribute — we can overwrite it
-        config.data = "this_is_not_a_dict"
+        config.data = "this_is_not_a_dict"  # type: ignore
 
         result = manager.migrate_configuration("bad_migrate", "2.0.0")
 

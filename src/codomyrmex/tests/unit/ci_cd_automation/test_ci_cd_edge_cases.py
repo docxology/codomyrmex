@@ -115,7 +115,7 @@ class TestPipelineCancellation:
                 self.cancelled_called = True
 
         task = _CancellableTask()
-        self.sync_manager.active_executions["running_pipeline"] = task
+        self.sync_manager.active_executions["running_pipeline"] = task  # type: ignore
 
         result = self.sync_manager.cancel_pipeline("running_pipeline")
 

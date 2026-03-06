@@ -88,16 +88,7 @@ try:
 
     from . import codomyrmex
 except (ImportError, ModuleNotFoundError):
-    get_module_path = None
-    list_modules = None
-    get_codomyrmex_version = None
-    CodeExecutionError = None
-    CodeGenerationError = None
-    CodomyrmexError = None
-    ConfigurationError = None
-    EnvironmentError = None
-    StaticAnalysisError = None
-    codomyrmex = None
+    pass
 
 
 def get_source_version() -> str:

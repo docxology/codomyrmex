@@ -33,63 +33,62 @@ Available submodules:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 try:
     from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
 except ImportError:
-    CodeEditor = None
+    pass
 
 try:
     from codomyrmex.agents.claude import ClaudeClient
 except ImportError:
-    ClaudeClient = None
+    pass
 
 try:
     from codomyrmex.agents.codex import CodexClient
 except ImportError:
-    CodexClient = None
+    pass
 
 try:
     from codomyrmex.agents.droid import DroidController
 except ImportError:
-    DroidController = None
+    pass
 
 try:
     from codomyrmex.agents.every_code import EveryCodeClient
 except ImportError:
-    EveryCodeClient = None
+    pass
 
 try:
     from codomyrmex.agents.gemini import GeminiClient
 except ImportError:
-    GeminiClient = None
+    pass
 
 try:
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
 except ImportError:
-    AgentOrchestrator = None
+    pass
 
 try:
     from codomyrmex.agents.jules import JulesClient
 except ImportError:
-    JulesClient = None
+    pass
 
 try:
     from codomyrmex.agents.mistral_vibe import MistralVibeClient
 except ImportError:
-    MistralVibeClient = None
+    pass
 
 try:
     from codomyrmex.agents.openclaw import OpenClawClient
 except ImportError:
-    OpenClawClient = None
+    pass
 
 try:
     from codomyrmex.agents.opencode import OpenCodeClient
 except ImportError:
-    OpenCodeClient = None
+    pass
 
 try:
     from codomyrmex.agents.theory.agent_architectures import (
@@ -99,10 +98,7 @@ try:
         ReactiveArchitecture,
     )
 except ImportError:
-    DeliberativeArchitecture = None
-    HybridArchitecture = None
-    KnowledgeBase = None
-    ReactiveArchitecture = None
+    pass
 
 from .core import (
     AgentCapabilities,
@@ -131,42 +127,42 @@ from .core import (
 try:
     from .o1 import O1Client
 except ImportError:
-    O1Client = None
+    pass
 
 try:
     from .deepseek import DeepSeekClient
 except ImportError:
-    DeepSeekClient = None
+    pass
 
 try:
     from .qwen import QwenClient
 except ImportError:
-    QwenClient = None
+    pass
 
 try:
     from .pooling import AgentPool
 except ImportError:
-    AgentPool = None
+    pass
 
 try:
     from .evaluation import AgentEvaluator
 except ImportError:
-    AgentEvaluator = None
+    pass
 
 try:
     from .history import ConversationHistory
 except ImportError:
-    ConversationHistory = None
+    pass
 
 try:
     from .infrastructure import InfrastructureAgent
 except ImportError:
-    InfrastructureAgent = None
+    pass
 
 try:
     from .agent_setup import AgentRegistry
 except ImportError:
-    AgentRegistry = None
+    pass
 
 try:
     from .core.exceptions import (
@@ -179,29 +175,22 @@ try:
         ToolError,
     )
 except ImportError:
-    AgentConfigurationError = None
-    AgentError = None
-    AgentTimeoutError = None
-    ContextError = None
-    ExecutionError = None
-    SessionError = None
-    ToolError = None
+    pass
 
 try:
     from .generic import APIAgentBase, CLIAgentBase
 except ImportError:
-    APIAgentBase = None
-    CLIAgentBase = None
+    pass
 
 try:
     from .git_agent import GitAgent
 except ImportError:
-    GitAgent = None
+    pass
 
 try:
     from .agentic_seek import AgenticSeekClient
 except ImportError:
-    AgenticSeekClient = None
+    pass
 
 
 def cli_commands():

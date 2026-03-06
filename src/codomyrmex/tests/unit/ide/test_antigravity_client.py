@@ -524,7 +524,7 @@ class TestClientInvokeTool:
         result = client.invoke_tool("unknown_tool_xyz", {})
         assert isinstance(result, IDECommandResult)
         assert result.success is False
-        assert "Unknown tool" in result.error
+        assert "Unknown tool" in (result.error or "")
 
     def test_invoke_tool_known_tool_disconnected(self, tmp_path):
         """invoke_tool for known tool on disconnected client attempts execution."""

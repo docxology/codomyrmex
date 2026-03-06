@@ -15,8 +15,7 @@ from .translator import MessageBundle, Translator
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Convenience
 _default_translator: Translator | None = None

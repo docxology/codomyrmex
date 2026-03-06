@@ -13,7 +13,7 @@ from typing import Any
 try:
     import yaml
 except ImportError:
-    yaml = None
+    pass
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.utils.cli_helpers import (

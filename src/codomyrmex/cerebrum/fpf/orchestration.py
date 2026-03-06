@@ -38,7 +38,6 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
-    plt = None
 
 logger = get_logger(__name__)
 

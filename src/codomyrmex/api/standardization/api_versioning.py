@@ -287,7 +287,7 @@ class APIVersionManager:
         """
         if not self.versions:
             # Handle empty versions case
-            return None
+            return None  # type: ignore
 
         versions = list(self.versions.values())
         return max(versions, key=lambda v: v.version)

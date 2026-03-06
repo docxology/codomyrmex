@@ -454,7 +454,7 @@ class TestNotificationService:
         result = service.send_from_template("nonexistent", id="test")
 
         assert result.status == NotificationStatus.FAILED
-        assert "not found" in result.error
+        assert "not found" in (result.error or "")
 
     def test_service_broadcast(self):
         """Verify broadcast to multiple channels."""

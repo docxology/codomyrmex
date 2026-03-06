@@ -93,7 +93,7 @@ class PhysicsSimulator:
         self.constraints.append(constraint)
 
     def register_object(
-        self, object_id: str, mass: float, position: Vector3D, velocity: Vector3D = None
+        self, object_id: str, mass: float, position: Vector3D, velocity: Vector3D = None  # type: ignore
     ) -> None:
         """Register an object for physics simulation."""
         if velocity is None:

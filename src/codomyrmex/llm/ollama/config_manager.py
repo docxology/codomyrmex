@@ -46,10 +46,10 @@ class OllamaConfig:
 
     # Model preferences
     default_model: str = "llama3.1:latest"  # Default model to use
-    preferred_models: list[str] = None  # List of preferred models (fallback order)
+    preferred_models: list[str] = None  # List of preferred models (fallback order)  # type: ignore
 
     # Execution defaults
-    default_options: ExecutionOptions = None  # Default execution options
+    default_options: ExecutionOptions = None  # Default execution options  # type: ignore
 
     # Integration settings
     enable_logging: bool = True  # Enable logging integration

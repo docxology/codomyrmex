@@ -3,9 +3,7 @@ Zero-mock unit tests for core Git operations.
 These tests use real temporary Git repositories to verify functionality.
 """
 
-import os
 import subprocess
-from pathlib import Path
 
 import pytest
 

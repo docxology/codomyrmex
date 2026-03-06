@@ -8,16 +8,6 @@ except ImportError:
     TERMINAL_INTERFACE_AVAILABLE = False
     TerminalFormatter = None
 
-try:
-    from codomyrmex.performance.monitoring.performance_monitor import (
-        PerformanceMonitor,
-        monitor_performance,
-    )
-
-    PERFORMANCE_MONITORING_AVAILABLE = True
-except ImportError:
-    PERFORMANCE_MONITORING_AVAILABLE = False
-
 
 def get_formatter() -> Any | None:
     """Get TerminalFormatter if available."""

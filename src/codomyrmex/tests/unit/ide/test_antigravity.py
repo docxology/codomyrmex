@@ -332,7 +332,7 @@ class TestAntigravitySessionStats:
         result = client.invoke_tool("nonexistent_tool", {})
         assert isinstance(result, IDECommandResult)
         assert result.success is False
-        assert "Unknown tool" in result.error
+        assert "Unknown tool" in (result.error or "")
 
     def test_open_file_checks_real_path(self, tmp_path):
         """open_file should return True for existing file, False otherwise."""

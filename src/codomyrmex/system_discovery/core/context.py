@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.system_discovery.health.health_checker import HealthChecker
 from codomyrmex.system_discovery.reporting.profilers import (
     EnvironmentProfiler,
     HardwareProfiler,

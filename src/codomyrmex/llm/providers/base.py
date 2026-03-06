@@ -1,7 +1,7 @@
 """Abstract LLM provider base class."""
 
 from abc import ABC, abstractmethod
-from collections.abc import AsyncIterator, Iterator
+from collections.abc import Iterator
 
 from .models import CompletionResponse, Message, ProviderConfig
 

@@ -26,7 +26,7 @@ def clean_image(tmp_path):
             r = int((x / 100) * 255)
             g = int((y / 100) * 255)
             b = int(((x + y) / 200) * 255)
-            pixels[x, y] = (r, g, b)
+            pixels[x, y] = (r, g, b)  # type: ignore
     path = str(tmp_path / "clean.png")
     img.save(path, "PNG")
     return path

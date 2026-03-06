@@ -295,7 +295,7 @@ def test_discovery_availability_missing_dep():
     # for our sentinel package name.
     sentinel = "_codomyrmex_test_missing_dep_xyz"
     original = sys.modules.get(sentinel, "NOT_SET")
-    sys.modules[sentinel] = None
+    sys.modules[sentinel] = None  # type: ignore
 
     try:
 
@@ -317,8 +317,8 @@ def test_discovery_availability_missing_dep():
 
         broken = next(t for t in tools if t.callable_name == "broken_tool")
         assert broken.available is False
-        assert "Missing dependencies" in broken.unavailable_reason
-        assert sentinel in broken.unavailable_reason
+        assert "Missing dependencies" in broken.unavailable_reason  # type: ignore
+        assert sentinel in broken.unavailable_reason  # type: ignore
 
         working = next(t for t in tools if t.callable_name == "working_tool")
         assert working.available is True

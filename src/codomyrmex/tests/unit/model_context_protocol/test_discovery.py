@@ -243,7 +243,7 @@ class TestMCPDiscoveryEngine:
         assert len(tools) == 1
         assert tools[0].available is False
         assert (
-            "this_package_definitely_does_not_exist_xyzzy"
+            "this_package_definitely_does_not_exist_xyzzy"  # type: ignore
             in tools[0].unavailable_reason
         )
 

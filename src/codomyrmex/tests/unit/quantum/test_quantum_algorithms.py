@@ -1,6 +1,5 @@
 """Tests for quantum algorithms."""
 
-import math
 
 import pytest
 
@@ -13,7 +12,6 @@ from codomyrmex.quantum.algorithms import (
     w_state,
 )
 from codomyrmex.quantum.circuit import QuantumCircuit
-from codomyrmex.quantum.models import GateType
 
 
 @pytest.mark.unit

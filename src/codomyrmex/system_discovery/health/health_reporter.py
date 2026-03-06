@@ -28,9 +28,7 @@ try:
         HealthStatus,
     )
 except ImportError:
-    HealthChecker = None
-    HealthStatus = None
-    HealthCheckResult = None
+    pass
 
 
 @dataclass

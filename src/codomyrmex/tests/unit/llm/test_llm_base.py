@@ -526,7 +526,7 @@ class TestConfigManagerValidation:
         from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
         mgr = ConfigManager()
-        mgr.config.default_options = ExecutionOptions(temperature=5.0)
+        mgr.config.default_options = ExecutionOptions(temperature=5.0)  # type: ignore
         result = mgr.validate_config()
         assert any("temperature" in e.lower() for e in result["errors"])
 
@@ -536,7 +536,7 @@ class TestConfigManagerValidation:
         from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
         mgr = ConfigManager()
-        mgr.config.default_options = ExecutionOptions(top_p=2.0)
+        mgr.config.default_options = ExecutionOptions(top_p=2.0)  # type: ignore
         result = mgr.validate_config()
         assert any("top_p" in e.lower() for e in result["errors"])
 
@@ -546,7 +546,7 @@ class TestConfigManagerValidation:
         from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
         mgr = ConfigManager()
-        mgr.config.default_options = ExecutionOptions(max_tokens=0)
+        mgr.config.default_options = ExecutionOptions(max_tokens=0)  # type: ignore
         result = mgr.validate_config()
         assert any("max_tokens" in e.lower() for e in result["errors"])
 
@@ -556,7 +556,7 @@ class TestConfigManagerValidation:
         from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
         mgr = ConfigManager()
-        mgr.config.default_options = ExecutionOptions(timeout=0)
+        mgr.config.default_options = ExecutionOptions(timeout=0)  # type: ignore
         result = mgr.validate_config()
         assert any("timeout" in e.lower() for e in result["errors"])
 
@@ -565,7 +565,7 @@ class TestConfigManagerValidation:
         from codomyrmex.llm.ollama.config_manager import ConfigManager
 
         mgr = ConfigManager()
-        mgr.config.preferred_models = ["llama3.1:latest", ""]
+        mgr.config.preferred_models = ["llama3.1:latest", ""]  # type: ignore
         result = mgr.validate_config()
         assert any("preferred_models" in e.lower() for e in result["errors"])
 
@@ -630,7 +630,7 @@ class TestConfigManagerPersistence:
 
         config_file = str(Path(self.temp_dir) / "cfg.json")
         mgr = ConfigManager(config_file=config_file)
-        mgr.config.default_model = "custom:v2"
+        mgr.config.default_model = "custom:v2"  # type: ignore
         assert mgr.save_config() is True
 
         # Reload
@@ -644,7 +644,7 @@ class TestConfigManagerPersistence:
         export_file = str(Path(self.temp_dir) / "export.json")
 
         mgr = ConfigManager(config_file=config_file)
-        mgr.config.default_model = "exported:v1"
+        mgr.config.default_model = "exported:v1"  # type: ignore
         assert mgr.export_config(export_file) is True
         assert Path(export_file).exists()
 

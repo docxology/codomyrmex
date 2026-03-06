@@ -36,8 +36,7 @@ from .visualization.visualizer_png import FPFVisualizerPNG
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def cli_commands():
@@ -115,7 +114,7 @@ class FPFClient:
         self.fetcher = FPFFetcher()
         self.exporter = FPFExporter()
         self.visualizer = FPFVisualizer()
-        self.spec: FPFSpec = None
+        self.spec: FPFSpec = None  # type: ignore
         self.spec_path = spec_path
 
     def load_from_file(self, file_path: str) -> FPFSpec:

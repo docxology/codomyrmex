@@ -131,7 +131,7 @@ class TestMCPLoadConcurrent:
                 response = await server.handle_request(request)
                 elapsed_ms = (time.perf_counter() - start) * 1000
                 latencies.append(elapsed_ms)
-                if "error" in response:
+                if "error" in response:  # type: ignore
                     errors.append(f"Tool {tool_name}: {response['error']}")
             except Exception as e:
                 elapsed_ms = (time.perf_counter() - start) * 1000
@@ -169,7 +169,7 @@ class TestMCPLoadConcurrent:
             response = await server.handle_request(request)
             elapsed_ms = (time.perf_counter() - start) * 1000
             latencies.append(elapsed_ms)
-            assert "result" in response
+            assert "result" in response  # type: ignore
 
         p95 = _percentile(latencies, 95)
         assert p95 < 100.0, f"tools/list P95 {p95:.1f}ms exceeds 100ms limit"

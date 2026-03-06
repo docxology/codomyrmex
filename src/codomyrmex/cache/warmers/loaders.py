@@ -48,4 +48,4 @@ class BatchValueLoader(ValueLoader[K, V]):
         if key in self._cache:
             return self._cache[key]
         result = self._batch_func([key])
-        return result.get(key)
+        return result.get(key)  # type: ignore

@@ -261,7 +261,7 @@ def with_retry(
                     raise last_exc
                 raise RuntimeError("Retry exhausted without capturing an exception")
 
-            return async_wrapper
+            return async_wrapper  # type: ignore
 
         @functools.wraps(func)
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -293,7 +293,7 @@ def with_retry(
                 raise last_exc
             raise RuntimeError("Retry exhausted without capturing an exception")
 
-        return sync_wrapper
+        return sync_wrapper  # type: ignore
 
     return decorator
 

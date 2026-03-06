@@ -111,7 +111,7 @@ class TestConstraintSolver:
         result = solver.solve()
         assert result.status == SolverStatus.SAT
         assert result.is_sat
-        assert "x" in result.model
+        assert "x" in result.model  # type: ignore
 
     @skip_no_z3
     def test_solve_unsat(self):

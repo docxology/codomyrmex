@@ -30,8 +30,7 @@ Submodules:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Import from coda_io submodule
 from .coda_io import (
@@ -79,17 +78,17 @@ from .coda_io import (
 try:
     from .aws import S3Client
 except ImportError:
-    S3Client = None  # boto3 not installed
+    pass
 
 try:
     from .gcp import GCSClient
 except ImportError:
-    GCSClient = None  # google-cloud-storage not installed
+    pass
 
 try:
     from .azure import AzureBlobClient
 except ImportError:
-    AzureBlobClient = None  # azure-storage-blob not installed
+    pass
 
 # Infomaniak clients (requires openstacksdk and/or boto3)
 try:
@@ -111,20 +110,7 @@ try:
     )
 except ImportError:
     # openstacksdk not installed
-    InfomaniakComputeClient = None
-    InfomaniakVolumeClient = None
-    InfomaniakNetworkClient = None
-    InfomaniakObjectStorageClient = None
-    InfomaniakS3Client = None
-    InfomaniakIdentityClient = None
-    InfomaniakDNSClient = None
-    InfomaniakHeatClient = None
-    InfomaniakMeteringClient = None
-    InfomaniakNewsletterClient = None
-    InfomaniakCredentials = None
-    InfomaniakS3Credentials = None
-    create_openstack_connection = None
-    create_s3_client = None
+    pass
 
 # New submodule exports
 from . import common

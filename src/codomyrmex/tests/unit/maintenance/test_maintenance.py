@@ -969,7 +969,7 @@ class TestMaintenanceEdgeCases:
 try:
     from codomyrmex.cache import Cache
 except ImportError:
-    Cache = None
+    pass
 """)
 
         analyzer = DependencyAnalyzer(tmp_path)

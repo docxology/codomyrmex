@@ -35,10 +35,7 @@ try:
 
     GMAIL_AVAILABLE = True
 except ImportError:
-    Credentials = None
-    Resource = None
-    HttpError = Exception
-    build = None
+    HttpError = Exception  # type: ignore
     GMAIL_AVAILABLE = False
 
 _GMAIL_SCOPES = [

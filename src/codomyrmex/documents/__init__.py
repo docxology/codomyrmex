@@ -25,8 +25,7 @@ __version__ = "0.1.0"
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Import core document operations
 try:
@@ -41,15 +40,6 @@ try:
 
     CORE_AVAILABLE = True
 except ImportError:
-    DocumentReader = None
-    DocumentWriter = None
-    DocumentParser = None
-    DocumentValidator = None
-    ValidationResult = None
-    read_document = None
-    write_document = None
-    parse_document = None
-    validate_document = None
     CORE_AVAILABLE = False
 
 # Import format handlers
@@ -61,14 +51,6 @@ try:
 
     FORMATS_AVAILABLE = True
 except ImportError:
-    read_markdown = None
-    write_markdown = None
-    read_json = None
-    write_json = None
-    read_yaml = None
-    write_yaml = None
-    read_text = None
-    write_text = None
     FORMATS_AVAILABLE = False
 
 # Import PDF handler (optional)
@@ -77,9 +59,6 @@ try:
 
     PDF_AVAILABLE = True
 except ImportError:
-    read_pdf = None
-    write_pdf = None
-    PDFDocument = None
     PDF_AVAILABLE = False
 
 # Import new format handlers
@@ -88,8 +67,6 @@ try:
 
     HTML_AVAILABLE = True
 except ImportError:
-    read_html = None
-    write_html = None
     HTML_AVAILABLE = False
 
 try:
@@ -97,8 +74,6 @@ try:
 
     XML_AVAILABLE = True
 except ImportError:
-    read_xml = None
-    write_xml = None
     XML_AVAILABLE = False
 
 try:
@@ -106,8 +81,6 @@ try:
 
     CSV_AVAILABLE = True
 except ImportError:
-    read_csv = None
-    write_csv = None
     CSV_AVAILABLE = False
 
 # Import transformation capabilities
@@ -119,10 +92,6 @@ try:
 
     TRANSFORMATION_AVAILABLE = True
 except ImportError:
-    convert_document = None
-    merge_documents = None
-    split_document = None
-    format_document = None
     TRANSFORMATION_AVAILABLE = False
 
 # Import metadata operations
@@ -133,9 +102,6 @@ try:
 
     METADATA_AVAILABLE = True
 except ImportError:
-    extract_metadata = None
-    update_metadata = None
-    get_document_version = None
     METADATA_AVAILABLE = False
 
 # Import search capabilities
@@ -146,13 +112,6 @@ try:
 
     SEARCH_AVAILABLE = True
 except ImportError:
-    InMemoryIndex = None
-    index_document = None
-    create_index = None
-    search_documents = None
-    search_index = None
-    QueryBuilder = None
-    build_query = None
     SEARCH_AVAILABLE = False
 
 # Import models
@@ -162,11 +121,6 @@ try:
 
     MODELS_AVAILABLE = True
 except ImportError:
-    Document = None
-    DocumentFormat = None
-    DocumentType = None
-    DocumentMetadata = None
-    MetadataField = None
     MODELS_AVAILABLE = False
 
 # Import config
@@ -175,9 +129,6 @@ try:
 
     CONFIG_AVAILABLE = True
 except ImportError:
-    DocumentsConfig = None
-    get_config = None
-    set_config = None
     CONFIG_AVAILABLE = False
 
 

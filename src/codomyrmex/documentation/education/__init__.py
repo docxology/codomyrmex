@@ -10,14 +10,12 @@ from .curriculum import Curriculum, Difficulty, Lesson
 try:
     from .tutoring import Tutor, TutoringSession
 except ImportError:
-    Tutor = None
-    TutoringSession = None
+    pass
 
 try:
     from .certification import Assessment, Certificate
 except ImportError:
-    Assessment = None
-    Certificate = None
+    pass
 
 __all__ = [
     "Assessment",

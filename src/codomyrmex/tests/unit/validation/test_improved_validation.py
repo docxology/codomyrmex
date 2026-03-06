@@ -14,7 +14,7 @@ from codomyrmex.validation.sanitizers import (
     to_uppercase,
 )
 from codomyrmex.validation.summary import ValidationSummary
-from codomyrmex.validation.validator import ValidationError, Validator
+from codomyrmex.validation.validator import Validator
 
 
 @pytest.mark.unit

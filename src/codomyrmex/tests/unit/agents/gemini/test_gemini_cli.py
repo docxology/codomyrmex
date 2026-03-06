@@ -45,12 +45,12 @@ def test_gemini_cli_execute_basic():
         assert isinstance(response, AgentResponse)
         if response.is_success():
             assert "PONG" in response.content.upper()
-            assert "model" in response.metadata
+            assert "model" in response.metadata  # type: ignore
         else:
             # We accept a handled error from the CLI (e.g. ModelNotFoundError or 400 thinking error)
             assert (
                 "error" in response.__dict__
-                or "error" in response.metadata
+                or "error" in response.metadata  # type: ignore
                 or "GeminiError" in str(response.error)
             )
     except Exception as e:

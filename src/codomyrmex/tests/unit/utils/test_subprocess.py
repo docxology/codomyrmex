@@ -276,7 +276,7 @@ class TestPrepareEnvironment:
         result = _prepare_environment(env={"A": "1"}, inherit_env=False)
         assert result == {"A": "1"}
         # Should NOT have inherited PATH
-        assert "HOME" not in result
+        assert "HOME" not in result  # type: ignore
 
 
 @pytest.mark.unit

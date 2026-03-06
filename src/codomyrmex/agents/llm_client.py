@@ -9,7 +9,6 @@ import os
 import time
 import urllib.error
 import urllib.request
-from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.agents.core.base import AgentRequest, AgentResponse

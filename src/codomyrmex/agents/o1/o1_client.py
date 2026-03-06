@@ -15,7 +15,7 @@ from codomyrmex.agents.generic.api_agent_base import APIAgentBase
 try:
     import openai
 except ImportError:
-    openai = None
+    pass
 
 
 class O1Client(APIAgentBase):
@@ -52,7 +52,7 @@ class O1Client(APIAgentBase):
             config=config,
         )
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest) -> AgentResponse:  # type: ignore
         """Execute O1 API request."""
         start_time = time.time()
 

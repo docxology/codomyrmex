@@ -8,8 +8,7 @@ Full-text search with TF-IDF scoring, fuzzy matching, and query parsing.
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .engine import InMemoryIndex, SearchIndex, create_index, quick_search
 from .models import (

@@ -13,6 +13,14 @@ import random
 import shlex
 import subprocess
 from pathlib import Path
+from typing import TypedDict
+
+
+class SessionData(TypedDict):
+    commands_run: int
+    modules_explored: set[str]
+    discoveries_made: list[str]
+    demos_run: int
 
 # NOTE: Core-layer imports (coding, data_visualization) are loaded lazily
 # inside the methods that need them to respect the Foundation → Core layer
@@ -59,7 +67,7 @@ Type 'explore' to begin your foraging adventure!
         self._module_names: list[str] = []
 
         # Track session data
-        self.session_data = {
+        self.session_data: SessionData = {
             "commands_run": 0,
             "modules_explored": set(),
             "discoveries_made": [],

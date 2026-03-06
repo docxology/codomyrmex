@@ -96,7 +96,7 @@ class FirecrawlClient:
         try:
             result = self._client.scrape(url, formats=formats)
             logger.debug(f"Successfully scraped {url}")
-            return result
+            return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
             if "timeout" in error_msg or "timed out" in error_msg:
@@ -162,7 +162,7 @@ class FirecrawlClient:
                 scrape_options=scrape_options or {},
             )
             logger.debug(f"Crawl job started for {url}")
-            return result
+            return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
@@ -211,7 +211,7 @@ class FirecrawlClient:
                 else self._client.map(url)
             )
             logger.debug(f"Successfully mapped {url}")
-            return result
+            return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
@@ -259,10 +259,10 @@ class FirecrawlClient:
         try:
             # Note: Adjust method name based on actual Firecrawl SDK API
             result = self._client.search(
-                query, limit=limit, scrapeOptions=scrape_options
+                query, limit=limit, scrape_options=scrape_options
             )
             logger.debug(f"Search completed for: {query}")
-            return result
+            return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:

@@ -2,7 +2,6 @@
 MCP Tool definitions for the Languages module.
 """
 
-import json
 from typing import Any
 
 # We will lazily import the managers to avoid slow startup or dependency issues

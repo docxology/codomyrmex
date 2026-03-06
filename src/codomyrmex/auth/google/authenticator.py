@@ -18,9 +18,6 @@ try:
     AUTH_AVAILABLE = True
 except ImportError:
     AUTH_AVAILABLE = False
-    Request = None
-    Credentials = None
-    InstalledAppFlow = None
 
 # Default scopes required for full bidirectional Email and Calendar functionality.
 DEFAULT_SCOPES = [

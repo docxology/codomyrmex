@@ -20,18 +20,7 @@ from codomyrmex.physical_management import (
 try:
     pass
 except ImportError:
-    EventType = None
-    ForceField = None
-    MaterialType = None
-    ObjectType = None
-    PhysicalObjectManager = None
-    PhysicsSimulator = None
-    PredictiveAnalytics = None
-    SensorManager = None
-    SensorReading = None
-    SensorType = None
-    StreamingAnalytics = None
-    Vector3D = None
+    pass
 
 
 def example_smart_factory_monitoring():
@@ -298,8 +287,8 @@ def example_physics_simulation_network():
     energy_metrics = energy_stream.get_current_metrics()
     if energy_metrics:
         print("Energy analysis:")
-        print(f"  Average total energy: {energy_metrics.get('mean', 0):.2f}")
-        print(f"  Energy variation (std): {energy_metrics.get('std_dev', 0):.2f}")
+        print(f"  Average total energy: {energy_metrics.get('mean', 0):.2f}")  # type: ignore
+        print(f"  Energy variation (std): {energy_metrics.get('std_dev', 0):.2f}")  # type: ignore
 
     # Analyze network after simulation
     final_network_metrics = manager.registry.analyze_network_metrics()
@@ -479,7 +468,7 @@ def example_autonomous_vehicle_fleet():
     # Connect vehicles to nearby waypoints
     for vehicle in vehicles:
         nearest_waypoint = manager.registry.find_nearest_object(
-            *vehicle.location, ObjectType.STRUCTURE
+            *vehicle.location, ObjectType.STRUCTURE  # type: ignore
         )
         if nearest_waypoint and nearest_waypoint.has_tag("navigation"):
             vehicle.connect_to(nearest_waypoint.id)
@@ -494,7 +483,7 @@ def example_autonomous_vehicle_fleet():
     for vehicle in low_charge_vehicles:
         # Find nearest charging station
         nearest_station = manager.registry.find_nearest_object(
-            *vehicle.location, ObjectType.STRUCTURE
+            *vehicle.location, ObjectType.STRUCTURE  # type: ignore
         )
 
         if nearest_station and nearest_station.has_tag("charging"):

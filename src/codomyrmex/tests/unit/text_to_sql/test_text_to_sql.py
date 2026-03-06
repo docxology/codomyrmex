@@ -60,55 +60,55 @@ class TestSQLValidator:
     def test_dangerous_drop_blocked(self):
         valid, error = SQLValidator.validate("DROP TABLE users;")
         assert valid is False
-        assert "DROP" in error
+        assert error and "DROP" in error
 
     @pytest.mark.unit
     def test_dangerous_delete_blocked(self):
         valid, error = SQLValidator.validate("DELETE FROM users WHERE id = 1;")
         assert valid is False
-        assert "DELETE" in error
+        assert error and "DELETE" in error
 
     @pytest.mark.unit
     def test_dangerous_update_blocked(self):
         valid, error = SQLValidator.validate("UPDATE users SET name = 'x';")
         assert valid is False
-        assert "UPDATE" in error
+        assert error and "UPDATE" in error
 
     @pytest.mark.unit
     def test_dangerous_insert_blocked(self):
         valid, error = SQLValidator.validate("INSERT INTO users VALUES (1, 'test');")
         assert valid is False
-        assert "INSERT" in error
+        assert error and "INSERT" in error
 
     @pytest.mark.unit
     def test_dangerous_truncate_blocked(self):
         valid, error = SQLValidator.validate("TRUNCATE TABLE users;")
         assert valid is False
-        assert "TRUNCATE" in error
+        assert error and "TRUNCATE" in error
 
     @pytest.mark.unit
     def test_dangerous_alter_blocked(self):
         valid, error = SQLValidator.validate("ALTER TABLE users ADD COLUMN foo;")
         assert valid is False
-        assert "ALTER" in error
+        assert error and "ALTER" in error
 
     @pytest.mark.unit
     def test_dangerous_create_blocked(self):
         valid, error = SQLValidator.validate("CREATE TABLE evil (id INT);")
         assert valid is False
-        assert "CREATE" in error
+        assert error and "CREATE" in error
 
     @pytest.mark.unit
     def test_missing_select(self):
         valid, error = SQLValidator.validate("FROM users;")
         assert valid is False
-        assert "SELECT" in error
+        assert error and "SELECT" in error
 
     @pytest.mark.unit
     def test_missing_from(self):
         valid, error = SQLValidator.validate("SELECT *;")
         assert valid is False
-        assert "FROM" in error
+        assert error and "FROM" in error
 
     @pytest.mark.unit
     def test_dangerous_keywords_blocked(self):
@@ -217,7 +217,7 @@ class TestSchemaMatching:
         eng = TextToSQLEngine(schema)
         result = eng.generate("how many things")
         assert result.valid is False
-        assert "No matching table" in result.error
+        assert "No matching table" in (result.error or "")
 
     @pytest.mark.unit
     def test_single_table_fallback(self):

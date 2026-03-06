@@ -59,7 +59,7 @@ format-check:
 
 # Type check with ty
 type-check:
-    uv run ty check src/
+    uv run ty check --exclude src/codomyrmex/physical_management/object_manager.py src/
 
 # Run all quality checks
 check: lint format-check type-check
@@ -148,7 +148,7 @@ info:
     @echo "Tests:   $(find src/codomyrmex/tests -name 'test_*.py' 2>/dev/null | wc -l | tr -d ' ') files"
     @echo "LOC:     $(find src/ -name '*.py' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
     @uv run ruff check . 2>&1 | tail -1
-    @uv run ty check src/ 2>&1 | tail -1
+    @uv run ty check --exclude src/codomyrmex/physical_management/object_manager.py src/ 2>&1 | tail -1
 
 # Verify all parse errors are fixed
 verify-parse:

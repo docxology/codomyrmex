@@ -116,7 +116,7 @@ class NASSearcher:
                 best_score = score
                 best_config = config
 
-        return best_config
+        return best_config  # type: ignore
 
     def evolutionary_search(
         self,

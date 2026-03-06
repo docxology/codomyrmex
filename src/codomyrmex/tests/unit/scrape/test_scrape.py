@@ -247,7 +247,7 @@ class TestCrawler:
 
         crawler = Crawler(config=CrawlConfig(max_pages=1))
         crawler.add_seeds(["https://example.com", "https://example.com/page2"])
-        url, depth = crawler.next_url()
+        url, depth = crawler.next_url()  # type: ignore
         crawler.record_result(
             CrawlResult(url=url, status=CrawlStatus.SUCCESS, depth=depth)
         )

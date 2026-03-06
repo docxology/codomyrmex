@@ -52,7 +52,7 @@ class EventListener:
             return ""
 
         if isinstance(event_types, (EventType, str)):
-            event_types = [event_types]
+            event_types = [event_types]  # type: ignore
 
         if handler_name is None:
             handler_name = f"{self.listener_id}_handler_{len(self.handlers)}"

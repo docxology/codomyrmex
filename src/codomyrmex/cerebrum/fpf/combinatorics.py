@@ -24,10 +24,6 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
-    plt = None
-    nx = None
-    np = None
-    Patch = None
 
 from codomyrmex.cerebrum import (
     Case,

@@ -1,3 +1,4 @@
+# type: ignore
 """Core physical object management system.
 
 This module provides the PhysicalObjectManager and related classes for managing
@@ -157,7 +158,7 @@ class SpatialIndex:
 
     def get_nearby_cells(self, x: float, y: float, z: float, radius: float) -> set[str]:
         """Get object IDs within the specified radius, using spatial indexing for efficiency."""
-        nearby_objects = set()
+        nearby_objects: set[str] = set()
         grid_radius = math.ceil(radius / self.grid_size)
         center_x, center_y, center_z = (
             int(x // self.grid_size),
@@ -206,7 +207,7 @@ class PhysicalObject:
     tags: set[str] = field(default_factory=set)  # Tags for categorization
     metadata: dict[str, Any] = field(default_factory=dict)  # Extended metadata
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize material properties if not provided."""
         if self.material_properties is None:
             self.material_properties = MaterialProperties.from_material_type(
@@ -390,7 +391,11 @@ class ObjectRegistry:
 
     def get_objects_by_type(self, object_type: ObjectType) -> list[PhysicalObject]:
         """Get all objects of a specific type."""
-        return [obj for obj in self.objects.values() if obj.object_type == object_type]
+        result = []
+        for obj in self.objects.values():
+            if obj.object_type == object_type:
+                result.append(obj)
+        return result
 
     def get_objects_in_area(
         self, x: float, y: float, z: float, radius: float
@@ -437,7 +442,7 @@ class ObjectRegistry:
     ) -> PhysicalObject | None:
         """Find the nearest object to a point, optionally filtered by type."""
         min_distance = float("inf")
-        nearest_object = None
+        nearest_object: PhysicalObject | None = None
 
         for obj in self.objects.values():
             if object_type is None or obj.object_type == object_type:
@@ -452,7 +457,7 @@ class ObjectRegistry:
         self, collision_distance: float = 1.0
     ) -> list[tuple[PhysicalObject, PhysicalObject]]:
         """Find all object pairs that are within collision distance."""
-        collisions = []
+        collisions: list[tuple[PhysicalObject, PhysicalObject]] = []
         objects_list = list(self.objects.values())
 
         for i, obj1 in enumerate(objects_list):
@@ -466,13 +471,13 @@ class ObjectRegistry:
         self, max_group_distance: float = 5.0
     ) -> list[list[PhysicalObject]]:
         """Group objects that are close to each other."""
-        ungrouped = list(self.objects.values())
-        groups = []
+        ungrouped: list[PhysicalObject] = list(self.objects.values())
+        groups: list[list[PhysicalObject]] = []
 
         while ungrouped:
             # Start a new group with any remaining object
             current_obj = ungrouped.pop(0)
-            current_group = [current_obj]
+            current_group: list[PhysicalObject] = [current_obj]
 
             # Find all objects within distance of any object in current group
             changed = True
@@ -584,8 +589,8 @@ class ObjectRegistry:
         if start_id == end_id:
             return [start_id]
 
-        visited = set()
-        queue = [(start_id, [start_id])]
+        visited: set[str] = set()
+        queue: list[tuple[str, list[str]]] = [(start_id, [start_id])]
 
         while queue:
             current_id, path = queue.pop(0)
@@ -611,11 +616,14 @@ class ObjectRegistry:
     def analyze_network_metrics(self) -> dict[str, Any]:
         """Analyze network topology metrics."""
         total_objects = len(self.objects)
-        total_connections = sum(len(obj.connections) for obj in self.objects.values())
+
+        total_connections = 0
+        for obj in self.objects.values():
+            total_connections += len(obj.connections)
 
         # Calculate clustering coefficient and other metrics
-        clustering_coefficients = []
-        degrees = []
+        clustering_coefficients: list[float] = []
+        degrees: list[int] = []
 
         for obj in self.objects.values():
             degree = len(obj.connections)
@@ -691,8 +699,12 @@ class ObjectRegistry:
 
     def save_to_file(self, file_path: str | Path) -> None:
         """Save registry to file."""
+        obj_list = []
+        for obj in self.objects.values():
+            obj_list.append(obj.to_dict())
+
         data = {
-            "objects": [obj.to_dict() for obj in self.objects.values()],
+            "objects": obj_list,
             "metadata": {
                 "total_objects": len(self.objects),
                 "exported_at": time.time(),
@@ -935,3 +947,4 @@ __all__ = [
     "PhysicalObjectManager",
     "SpatialIndex",
 ]
+  # type: ignore

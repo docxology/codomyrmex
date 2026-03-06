@@ -42,7 +42,6 @@ except ImportError:
         "psutil is not installed; performance monitoring is disabled. "
         "Enable it with: uv sync --extra performance"
     )
-    PerformanceMonitor = None
     PERFORMANCE_MONITOR_AVAILABLE = False
 
 

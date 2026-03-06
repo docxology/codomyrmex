@@ -1,4 +1,3 @@
-import pytest
 
 from codomyrmex.languages.swift.manager import SwiftManager
 

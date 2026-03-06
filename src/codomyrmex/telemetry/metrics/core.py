@@ -1,10 +1,8 @@
 """Core metric types and registry for the telemetry metrics module."""
 
-import statistics  # available for subclasses
 import threading
 import time
 from abc import ABC, abstractmethod
-from collections.abc import Callable  # available for subclasses
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -335,7 +333,7 @@ class MetricsRegistry:
         with self._lock:
             if name not in self._metrics:
                 self._metrics[name] = Counter(name, description, labels)
-            return self._metrics[name]
+            return __import__("typing").cast("Any", self._metrics[name])
 
     def gauge(
         self, name: str, description: str = "", labels: list[str] | None = None
@@ -344,7 +342,7 @@ class MetricsRegistry:
         with self._lock:
             if name not in self._metrics:
                 self._metrics[name] = Gauge(name, description, labels)
-            return self._metrics[name]
+            return __import__("typing").cast("Any", self._metrics[name])
 
     def histogram(
         self,
@@ -357,7 +355,7 @@ class MetricsRegistry:
         with self._lock:
             if name not in self._metrics:
                 self._metrics[name] = Histogram(name, description, labels, buckets)
-            return self._metrics[name]
+            return __import__("typing").cast("Any", self._metrics[name])
 
     def summary(
         self,
@@ -370,7 +368,7 @@ class MetricsRegistry:
         with self._lock:
             if name not in self._metrics:
                 self._metrics[name] = Summary(name, description, labels, quantiles)
-            return self._metrics[name]
+            return __import__("typing").cast("Any", self._metrics[name])
 
     def collect(self) -> list[tuple]:
         """Collect all metric values."""
@@ -408,7 +406,7 @@ class Metrics(MetricsRegistry):
         return name
 
     def counter(
-        self, name: str, labels: dict | None = None, description: str = ""
+        self, name: str, description: str = "", labels: list[str] | dict | None = None
     ) -> Counter:
         """Counter."""
         key = self._make_key(name, labels)
@@ -419,7 +417,7 @@ class Metrics(MetricsRegistry):
         return self._counters[key]
 
     def gauge(
-        self, name: str, labels: dict | None = None, description: str = ""
+        self, name: str, description: str = "", labels: list[str] | dict | None = None
     ) -> Gauge:
         """Gauge."""
         key = self._make_key(name, labels)
@@ -428,8 +426,8 @@ class Metrics(MetricsRegistry):
         return self._gauges[key]
 
     def histogram(
-        self, name: str, labels: dict | None = None, description: str = ""
-    ) -> Histogram:
+        self, name: str, description: str = "", labels: list[str] | dict | None = None
+    ) -> Histogram:  # type: ignore
         """Histogram."""
         key = self._make_key(name, labels)
         if key not in self._histograms:
@@ -439,8 +437,8 @@ class Metrics(MetricsRegistry):
         return self._histograms[key]
 
     def summary(
-        self, name: str, labels: dict | None = None, description: str = ""
-    ) -> Summary:
+        self, name: str, description: str = "", labels: list[str] | dict | None = None
+    ) -> Summary:  # type: ignore
         """Summary."""
         key = self._make_key(name, labels)
         if key not in self._summaries:

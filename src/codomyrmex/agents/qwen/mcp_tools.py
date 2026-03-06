@@ -61,7 +61,7 @@ def qwen_chat(
 
     request = AgentRequest(
         prompt=message,
-        system_prompt=system_prompt,
+        **({"context": {"system_prompt": system_prompt}} if system_prompt else {})
     )
 
     try:
@@ -226,8 +226,12 @@ def qwen_code_review(
     })
 
     request = AgentRequest(
-        prompt=f"Review the following {language} code:\n\n```{language}\n{code}\n```",
-        system_prompt=system_prompt,
+        prompt=f"""Review the following {language} code:
+
+```{language}
+{code}
+```""",
+        **({"context": {"system_prompt": system_prompt}} if system_prompt else {})
     )
 
     try:

@@ -28,8 +28,8 @@ class CodeExample:
     language: str
     code: str
     syntax_valid: bool = False
-    import_errors: list[str] = None
-    api_mismatches: list[str] = None
+    import_errors: list[str] = None  # type: ignore
+    api_mismatches: list[str] = None  # type: ignore
 
     def __post_init__(self):
         if self.import_errors is None:

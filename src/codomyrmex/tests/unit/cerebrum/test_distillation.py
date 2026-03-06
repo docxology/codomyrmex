@@ -72,8 +72,8 @@ class TestDistillationPipeline:
         pipeline = DistillationPipeline()
         traces = [_make_complete_trace()]
         cases = pipeline.distill(traces)
-        assert "action" in cases[0].outcome
-        assert "justification" in cases[0].outcome
+        assert "action" in cases[0].outcome  # type: ignore
+        assert "justification" in cases[0].outcome  # type: ignore
 
     def test_distill_context(self) -> None:
         pipeline = DistillationPipeline()

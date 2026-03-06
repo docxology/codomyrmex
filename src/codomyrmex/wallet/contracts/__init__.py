@@ -23,8 +23,7 @@ from .utils import ether_to_wei, gwei_to_wei, wei_to_ether
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def cli_commands():

@@ -83,7 +83,7 @@ class FPFFetcher:
             logger.debug("FPF update check failed, assuming updates available: %s", e)
             return True
 
-    def get_version_info(self, repo: str = "ailev/FPF") -> dict[str, any]:
+    def get_version_info(self, repo: str = "ailev/FPF") -> dict[str, any]:  # type: ignore
         """Get version information from GitHub.
 
         Args:

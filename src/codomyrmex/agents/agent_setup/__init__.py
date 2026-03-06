@@ -12,11 +12,13 @@ Quick start::
 
 from .config_file import load_config, merge_with_env, save_config
 from .registry import AgentDescriptor, AgentRegistry, ProbeResult
+from .setup_wizard import generate_env_template
 
 __all__ = [
     "AgentDescriptor",
     "AgentRegistry",
     "ProbeResult",
+    "generate_env_template",
     "load_config",
     "merge_with_env",
     "save_config",

@@ -23,7 +23,6 @@ class AnthropicProvider(LLMProvider):
             self._client = None
 
     def _split_messages(self, messages: list[Message]) -> tuple[str | None, list[dict]]:
-        system = None
         chat_messages = []
         for m in messages:
             if m.role == "system":
@@ -37,7 +36,7 @@ class AnthropicProvider(LLMProvider):
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
         system, chat_messages = self._split_messages(messages)
-        response = self._client.messages.create(
+        response = self._client.messages.create(  # type: ignore
             model=self.get_model(model),
             messages=chat_messages,
             system=system,
@@ -79,7 +78,7 @@ class AnthropicProvider(LLMProvider):
             from anthropic import AsyncAnthropic
             async_client = AsyncAnthropic(api_key=self.config.api_key)
             system, chat_messages = self._split_messages(messages)
-            response = await async_client.messages.create(
+            response = await async_client.messages.create(  # type: ignore
                 model=self.get_model(model),
                 messages=chat_messages,
                 system=system,

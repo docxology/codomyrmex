@@ -16,8 +16,7 @@ from .visualization import circuit_stats, circuit_to_ascii
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 from collections.abc import Callable

@@ -170,7 +170,7 @@ class TestSupportedLanguagesStructure:
             assert "timeout_factor" in config, (
                 f"Language {lang} missing 'timeout_factor'"
             )
-            assert config["timeout_factor"] >= 1.0
+            assert config["timeout_factor"] >= 1.0  # type: ignore
 
     def test_python_extension_is_py(self):
         assert SUPPORTED_LANGUAGES["python"]["extension"] == "py"
@@ -203,7 +203,7 @@ class TestSupportedLanguagesStructure:
         interpreted_max = max(
             SUPPORTED_LANGUAGES[lang]["timeout_factor"] for lang in interpreted
         )
-        assert compiled_min >= interpreted_max
+        assert compiled_min >= interpreted_max  # type: ignore
 
 
 @pytest.mark.unit

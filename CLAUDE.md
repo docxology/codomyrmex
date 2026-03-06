@@ -226,7 +226,7 @@ git worktree prune && git branch --list 'worktree-agent-*' | xargs git branch -D
 See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed workflow.
 
 <!-- gitnexus:start -->
-# GitNexus MCP
+## GitNexus MCP
 
 This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 relationships, 300 execution flows).
 
@@ -241,7 +241,7 @@ This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 rel
 ## Skills
 
 | Task | Read this skill file |
-|------|---------------------|
+| --- | --- |
 | Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
 | Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
 | Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
@@ -251,7 +251,15 @@ This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 rel
 
 <!-- gitnexus:end -->
 
-# === COGNILAYER (auto-generated, do not delete) ===
+## qmd Skill
+
+This project is configured with the `qmd` skill for local hybrid search of Markdown notes and docs.
+
+| Task | Read this skill file |
+| --- | --- |
+| Search notes, docs, or knowledge base | `.claude/skills/qmd/SKILL.md` |
+
+## === COGNILAYER (auto-generated, do not delete) ===
 
 ## CogniLayer v3 Active
 Persistent memory is ON.
@@ -312,6 +320,6 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: ~/.claude/Plans/fancy-painting-treehouse.md (create)
+No changes or facts in this session.
 
 # === END COGNILAYER ===

@@ -1,6 +1,5 @@
 """ExecutionMixin functionality."""
 
-import random
 import time
 from collections.abc import Iterator
 from typing import Any
@@ -28,7 +27,7 @@ CLAUDE_PRICING = {
 class ExecutionMixin:
     """ExecutionMixin class."""
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest) -> AgentResponse:  # type: ignore
         """Execute Claude API request.
 
         Args:

@@ -15,7 +15,7 @@ from typing import Any
 try:
     import z3
 except ImportError:
-    z3 = None
+    pass
 
 from codomyrmex.formal_verification.exceptions import (
     BackendNotAvailableError,

@@ -42,9 +42,9 @@ class ColorPalette:
     """Colorblind-safe color palette for academic visualizations."""
 
     # Primary colors (colorblind-safe)
-    primary: list[str] = None
-    secondary: list[str] = None
-    accent: list[str] = None
+    primary: list[str] = None  # type: ignore
+    secondary: list[str] = None  # type: ignore
+    accent: list[str] = None  # type: ignore
 
     # Status colors (semantic)
     stable: str = "#2ecc71"  # Green

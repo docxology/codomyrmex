@@ -75,9 +75,9 @@ class ReactiveArchitecture(AgentArchitecture):
     def __init__(self, name: str = "reactive"):
         """Initialize reactive architecture."""
         super().__init__(name, ArchitectureType.REACTIVE)
-        self.rules: list[tuple[callable, callable]] = []
+        self.rules: list[tuple[callable, callable]] = []  # type: ignore
 
-    def add_rule(self, condition: callable, action: callable) -> None:
+    def add_rule(self, condition: callable, action: callable) -> None:  # type: ignore
         """
         Add a condition-action rule.
 
@@ -130,7 +130,7 @@ class KnowledgeBase:
 
     def __init__(self):
         self.facts: dict[str, Any] = {}
-        self.rules: list[callable] = []
+        self.rules: list[callable] = []  # type: ignore
 
     def add_fact(self, key: str, value: Any) -> None:
         """Add or update a fact in the knowledge base."""
@@ -163,7 +163,7 @@ class KnowledgeBase:
         """List all fact keys."""
         return list(self.facts.keys())
 
-    def query(self, query_func: callable) -> Any:
+    def query(self, query_func: callable) -> Any:  # type: ignore
         """Query facts using a custom function."""
         return query_func(self.facts)
 

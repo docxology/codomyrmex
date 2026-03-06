@@ -12,14 +12,12 @@ try:
 
     YAML_AVAILABLE = True
 except ImportError:
-    yaml = None
     YAML_AVAILABLE = False
 
 try:
     from codomyrmex.logging_monitoring import get_logger, setup_logging
 except ImportError:
-    get_logger = None
-    setup_logging = None
+    pass
 
 
 def pytest_configure(config):

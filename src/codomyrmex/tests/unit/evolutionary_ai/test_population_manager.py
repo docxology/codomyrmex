@@ -49,7 +49,7 @@ class TestPopulation:
         assert len(pop.history) == 1
 
         pop.evaluate(lambda ind: sum(ind.genes))
-        assert pop.get_best().fitness >= initial_best
+        assert pop.get_best().fitness >= initial_best  # type: ignore
 
     def test_evolve_custom_operators(self):
         pop = Population.random_genome_population(size=10, genome_length=5)

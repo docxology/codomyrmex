@@ -514,7 +514,6 @@ class Workflow:
     async def _execute_task_with_retry(self, task: Task) -> Any:
         """Execute a task with retry logic."""
         policy = task.retry_policy or RetryPolicy(max_attempts=1)
-        last_error = None
 
         for attempt in range(1, policy.max_attempts + 1):
             task.attempts = attempt

@@ -5,10 +5,9 @@ Provides high-level wrappers for the 'rich' library to create
 engaging terminal interfaces with colors, tables, and progress.
 """
 
-from collections.abc import Iterable
 from typing import Any, Optional, TypeVar
 
-from rich.console import Console, Group
+from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
 from rich.progress import (
@@ -120,14 +119,14 @@ class RichRenderer:
         stream: Optional[Any] = None,
     ) -> str:
         """Prompt the user for input."""
-        return Prompt.ask(
+        return __import__("typing").cast(str, Prompt.ask(
             message,
             console=self.console,
             default=default,
             choices=choices,
             password=password,
             stream=stream,
-        )
+        ))
 
     def confirm(self, message: str, default: bool = False, stream: Optional[Any] = None) -> bool:
         """Ask the user for a yes/no confirmation."""

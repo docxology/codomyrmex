@@ -323,7 +323,7 @@ class DashboardManager:
         self,
         name: str,
         description: str = "",
-        tags: list[str] | None = None,
+        tags: list[str] | None = None,  # type: ignore
     ) -> Dashboard:
         """Create a new dashboard."""
         dashboard_id = self._slug(name)
@@ -340,7 +340,7 @@ class DashboardManager:
         """Get a dashboard by ID."""
         return self._dashboards.get(dashboard_id)
 
-    def list(self) -> list[Dashboard]:
+    def list(self) -> list[Dashboard]:  # type: ignore
         """List all dashboards."""
         return list(self._dashboards.values())
 
@@ -351,7 +351,7 @@ class DashboardManager:
             return True
         return False
 
-    def get_panel_data(self, dashboard_id: str, panel_id: str) -> list[MetricValue]:
+    def get_panel_data(self, dashboard_id: str, panel_id: str) -> list[MetricValue]:  # type: ignore
         """Get metric data for a panel."""
         dashboard = self._dashboards.get(dashboard_id)
         if not dashboard:

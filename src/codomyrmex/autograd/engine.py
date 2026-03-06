@@ -197,7 +197,7 @@ class Tensor:
         _op: str = "",
     ) -> None:
         if isinstance(data, np.ndarray):
-            self.data = data.astype(np.float64)
+            self.data = data.astype(np.float64)  # type: ignore
         else:
             self.data = np.array(data, dtype=np.float64)
         self.requires_grad = requires_grad
@@ -294,8 +294,8 @@ class Tensor:
             else:
                 grad = out.grad
                 if not keepdims and axis is not None:
-                    grad = np.expand_dims(grad, axis=axis)
-                self.grad += np.broadcast_to(grad, self.data.shape).copy()
+                    grad = np.expand_dims(grad, axis=axis)  # type: ignore
+                self.grad += np.broadcast_to(grad, self.data.shape).copy()  # type: ignore
 
         out._backward = _backward
         return out
@@ -314,8 +314,8 @@ class Tensor:
             else:
                 grad = out.grad
                 if not keepdims and axis is not None:
-                    grad = np.expand_dims(grad, axis=axis)
-                self.grad += np.broadcast_to(grad / n, self.data.shape).copy()
+                    grad = np.expand_dims(grad, axis=axis)  # type: ignore
+                self.grad += np.broadcast_to(grad / n, self.data.shape).copy()  # type: ignore
 
         out._backward = _backward
         return out

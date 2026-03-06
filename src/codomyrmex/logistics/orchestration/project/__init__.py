@@ -133,7 +133,7 @@ def create_project(
     name: str, description: str = "", template: str | None = None
 ) -> Project:
     """Create a new project instance."""
-    return Project(name=name, description=description, template=template)
+    return Project(name=name, description=description, **({"template": template} if template else {}))
 
 
 

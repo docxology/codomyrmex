@@ -13,7 +13,7 @@ from codomyrmex.agents.generic.api_agent_base import APIAgentBase
 try:
     import openai
 except ImportError:
-    openai = None
+    pass
 
 
 class CodexClient(APIAgentBase):
@@ -46,7 +46,7 @@ class CodexClient(APIAgentBase):
             config=config,
         )
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest) -> AgentResponse:  # type: ignore
         """
         Execute Codex API request.
 

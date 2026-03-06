@@ -8,8 +8,7 @@ Multi-modal content handling for images, audio, and text.
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .builder import MultimodalMessageBuilder
 from .models import (

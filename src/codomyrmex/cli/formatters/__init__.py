@@ -235,7 +235,7 @@ class TableFormatter(OutputFormatter):
         # Top border
         top = (
             b["tl"]
-            + b["mt"].join(b["h"] * (col.width + 2) for col in columns)
+            + b["mt"].join(b["h"] * ((col.width or 0) + 2) for col in columns)
             + b["tr"]
         )
         lines.append(top)
@@ -244,7 +244,7 @@ class TableFormatter(OutputFormatter):
         if self.show_header:
             header = (
                 b["v"]
-                + b["v"].join(f" {col.name.ljust(col.width)} " for col in columns)
+                + b["v"].join(f" {col.name.ljust(col.width or 0)} " for col in columns)
                 + b["v"]
             )
             lines.append(header)
@@ -252,7 +252,7 @@ class TableFormatter(OutputFormatter):
             # Header separator
             sep = (
                 b["ml"]
-                + b["c"].join(b["h"] * (col.width + 2) for col in columns)
+                + b["c"].join(b["h"] * ((col.width or 0) + 2) for col in columns)
                 + b["mr"]
             )
             lines.append(sep)
@@ -271,7 +271,7 @@ class TableFormatter(OutputFormatter):
             if self.row_separator and i < len(data) - 1:
                 sep = (
                     b["ml"]
-                    + b["c"].join(b["h"] * (col.width + 2) for col in columns)
+                    + b["c"].join(b["h"] * ((col.width or 0) + 2) for col in columns)
                     + b["mr"]
                 )
                 lines.append(sep)
@@ -279,7 +279,7 @@ class TableFormatter(OutputFormatter):
         # Bottom border
         bottom = (
             b["bl"]
-            + b["mb"].join(b["h"] * (col.width + 2) for col in columns)
+            + b["mb"].join(b["h"] * ((col.width or 0) + 2) for col in columns)
             + b["br"]
         )
         lines.append(bottom)

@@ -131,7 +131,7 @@ async def test_server_call_tool_validation_error():
     )
 
     # Call with missing required field
-    result = await server._call_tool({"name": "test.greet", "arguments": {}})
+    result = await server._call_tool({"name": "test.greet", "arguments": {}})  # type: ignore
     assert result["isError"] is True
 
     # Parse the structured error
@@ -155,7 +155,7 @@ async def test_server_call_tool_not_found():
     )
 
     server = MCPServer(config=MCPServerConfig())
-    result = await server._call_tool({"name": "nonexistent.tool", "arguments": {}})
+    result = await server._call_tool({"name": "nonexistent.tool", "arguments": {}})  # type: ignore
     assert result["isError"] is True
     parsed = json.loads(result["content"][0]["text"])
     assert parsed["code"] == "NOT_FOUND"
@@ -191,7 +191,7 @@ async def test_server_call_tool_success():
         handler=add,
     )
 
-    result = await server._call_tool(
+    result = await server._call_tool(  # type: ignore
         {"name": "test.add", "arguments": {"a": 3, "b": 4}}
     )
     assert "isError" not in result or result.get("isError") is False
@@ -234,7 +234,7 @@ async def test_server_coerces_str_to_int():
         handler=multiply,
     )
 
-    result = await server._call_tool(
+    result = await server._call_tool(  # type: ignore
         {"name": "test.mul", "arguments": {"x": "3", "y": "5"}}
     )
     assert "isError" not in result

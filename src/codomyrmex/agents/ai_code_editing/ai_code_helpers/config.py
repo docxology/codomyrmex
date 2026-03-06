@@ -6,20 +6,19 @@ from typing import Any
 try:
     from openai import OpenAI
 except ImportError:
-    OpenAI = None
+    pass
 try:
     from anthropic import Anthropic
 except ImportError:
-    Anthropic = None
+    pass
 try:
     from google import genai
 except ImportError:
-    genai = None
+    pass
 
 try:
     from codomyrmex.llm.providers.ollama_manager import OLLAMA_AVAILABLE, OllamaManager
 except ImportError:
-    OllamaManager = None
     OLLAMA_AVAILABLE = False
 
 try:

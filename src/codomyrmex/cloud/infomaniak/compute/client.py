@@ -65,7 +65,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             logger.error(f"Failed to get instance {instance_id}: {e}")
             return None
 
-    def create_instance(
+    def create_instance(  # type: ignore
         self,
         name: str,
         flavor: str,

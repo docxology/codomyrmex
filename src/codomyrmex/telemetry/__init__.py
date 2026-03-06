@@ -11,8 +11,7 @@ Submodules:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -42,7 +41,6 @@ try:
     HAS_TRACE_CONTEXT = True
 except ImportError:
     HAS_TRACE_CONTEXT = False
-    TraceContext = None
 
 try:
     from .spans.span_processor import (
@@ -60,7 +58,6 @@ try:
     HAS_OTLP_EXPORTER = True
 except ImportError:
     HAS_OTLP_EXPORTER = False
-    OTLPExporter = None
 
 from . import alerting, sampling, tracing
 

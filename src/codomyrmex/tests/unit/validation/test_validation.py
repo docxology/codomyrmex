@@ -459,7 +459,7 @@ class TestBasicValidation:
         result = validator._basic_validation(data, schema)
 
         assert result.is_valid is False
-        assert any("email" in str(e) for e in result.errors)
+        assert any("email" in str(e) for e in (result.errors or []))
 
     def test_basic_validation_all_required_fields_present(self):
         """Test basic validation passes when all required fields present."""

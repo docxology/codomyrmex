@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "codomyrmex"
-version = "1.1.4"
+version = "1.1.8"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -363,7 +363,7 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 35
+fail_under = 40
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -393,7 +393,7 @@ addopts = [
     "--cov-report=term-missing",
     "--cov-report=html:htmlcov",
     "--cov-report=json:coverage.json",
-    "--cov-fail-under=31",
+    "--cov-fail-under=40",
     "--timeout=300",
     "--timeout-method=thread",
 ]
@@ -691,16 +691,18 @@ paths_to_mutate = [
     "src/codomyrmex/model_context_protocol/schemas/mcp_schemas.py",
     "src/codomyrmex/security/digital/secrets_detector.py",
     "src/codomyrmex/orchestrator/core.py",
-    "src/codomyrmex/events/core/event_bus.py",
+    "src/codomyrmex/events/",
+    "src/codomyrmex/cache/",
+    "src/codomyrmex/concurrency/",
 ]
-tests_dir = ["../src/codomyrmex/tests/unit/mcp/", "../src/codomyrmex/tests/unit/agents/", "../src/codomyrmex/tests/unit/validation/", "../src/codomyrmex/tests/unit/security/", "../src/codomyrmex/tests/unit/orchestrator/", "../src/codomyrmex/tests/unit/events/"]
+tests_dir = ["../src/codomyrmex/tests/unit/mcp/", "../src/codomyrmex/tests/unit/agents/", "../src/codomyrmex/tests/unit/validation/", "../src/codomyrmex/tests/unit/security/", "../src/codomyrmex/tests/unit/orchestrator/", "../src/codomyrmex/tests/unit/events/", "../src/codomyrmex/tests/unit/cache/", "../src/codomyrmex/tests/unit/concurrency/"]
 do_not_mutate = [
     "*/vendor/*",
     "*/htmlcov/*",
     "*/__pycache__/*",
     "*/tests/*",
 ]
-also_copy = ["src/codomyrmex/tests/unit/mcp/", "src/codomyrmex/tests/unit/agents/", "src/codomyrmex/tests/unit/validation/", "src/codomyrmex/tests/unit/security/", "src/codomyrmex/tests/unit/orchestrator/", "src/codomyrmex/tests/unit/events/", "conftest.py"]
+also_copy = ["src/codomyrmex/tests/unit/mcp/", "src/codomyrmex/tests/unit/agents/", "src/codomyrmex/tests/unit/validation/", "src/codomyrmex/tests/unit/security/", "src/codomyrmex/tests/unit/orchestrator/", "src/codomyrmex/tests/unit/events/", "src/codomyrmex/tests/unit/cache/", "src/codomyrmex/tests/unit/concurrency/", "conftest.py"]
 pytest_add_cli_args = ["--no-cov", "-p", "no:timeout", "-p", "no:benchmark", "--override-ini=addopts=", "--rootdir=.."]
 debug = false
 

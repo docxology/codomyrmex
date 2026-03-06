@@ -27,7 +27,6 @@ except ImportError:
 try:
     HAS_PSUTIL = True
 except ImportError:
-    psutil = None
     HAS_PSUTIL = False
 
 

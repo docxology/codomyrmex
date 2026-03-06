@@ -290,7 +290,7 @@ class TestValidateInputObjectConstraints:
         }
         result = validate_input({}, schema)
         assert result.valid is False
-        assert any("required" in e for e in result.errors)
+        assert any("required" in e for e in (result.errors or []))
 
     def test_property_type_violation(self):
         schema = {
@@ -308,7 +308,7 @@ class TestValidateInputObjectConstraints:
         }
         result = validate_input({"name": "Alice", "extra": "field"}, schema)
         assert result.valid is False
-        assert any("additional" in e for e in result.errors)
+        assert any("additional" in e for e in (result.errors or []))
 
     def test_additional_properties_not_set_allows_extra(self):
         schema = {

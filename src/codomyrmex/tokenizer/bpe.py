@@ -75,7 +75,7 @@ class BPETokenizer:
                 break
 
             # Find best pair
-            best_pair = max(pair_freqs, key=pair_freqs.get)
+            best_pair = max(pair_freqs, key=pair_freqs.get)  # type: ignore
 
             # Merge best pair everywhere
             word_splits = self._merge_pair(best_pair, word_splits)

@@ -108,7 +108,7 @@ class TestEmailMessage:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            EmailMessage(
+            EmailMessage(  # type: ignore
                 sender=EmailAddress(email="a@b.com"),
                 date=datetime.now(UTC),
             )
@@ -117,7 +117,7 @@ class TestEmailMessage:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            EmailMessage(
+            EmailMessage(  # type: ignore
                 subject="Test",
                 date=datetime.now(UTC),
             )
@@ -126,7 +126,7 @@ class TestEmailMessage:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            EmailMessage(
+            EmailMessage(  # type: ignore
                 subject="Test",
                 sender=EmailAddress(email="a@b.com"),
             )
@@ -170,13 +170,13 @@ class TestEmailDraft:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            EmailDraft(body_text="no subject")
+            EmailDraft(body_text="no subject")  # type: ignore
 
     def test_body_text_is_required(self):
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            EmailDraft(subject="no body")
+            EmailDraft(subject="no body")  # type: ignore
 
 
 # ── EmailProvider ─────────────────────────────────────────────────────

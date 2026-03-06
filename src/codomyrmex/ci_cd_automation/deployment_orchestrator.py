@@ -20,24 +20,24 @@ from typing import Any
 try:
     import docker
 except ImportError:
-    docker = None
+    pass
 
 try:
     import kubernetes
     import kubernetes.client
     import kubernetes.config
 except ImportError:
-    kubernetes = None
+    pass
 
 try:
     import requests
 except ImportError:
-    requests = None
+    pass
 
 try:
     import yaml
 except ImportError:
-    yaml = None
+    pass
 
 from codomyrmex.logging_monitoring import get_logger
 

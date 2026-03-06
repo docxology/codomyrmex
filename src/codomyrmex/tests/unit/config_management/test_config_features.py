@@ -9,7 +9,6 @@ import yaml
 from codomyrmex.config_management.core.config_loader import (
     ConfigurationManager,
     deep_merge,
-    load_configuration,
     resolve_env_vars,
 )
 

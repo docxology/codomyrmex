@@ -90,7 +90,7 @@ class DocumentationScanner:
                 if config_path.exists():
                     config_files.append(config_path)
 
-        self.results["phase1"]["files_found"]["config_files"] = [
+        self.results["phase1"]["files_found"]["config_files"] = [  # type: ignore
             str(f.relative_to(self.repo_root)) for f in config_files
         ]
         print(f"  ✓ Found {len(config_files)} configuration files")

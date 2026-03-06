@@ -15,8 +15,7 @@ from typing import TYPE_CHECKING, Any
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .scorers import ExactMatchScorer, Scorer
 

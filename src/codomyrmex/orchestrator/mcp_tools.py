@@ -48,7 +48,7 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
     Returns:
         Validation result indicating if the workflow is a valid DAG.
     """
-    from codomyrmex.orchestrator import CycleError, Task, Workflow
+    from codomyrmex.orchestrator import CycleError, Workflow
 
     try:
         workflow = Workflow(name="analysis_workflow")
@@ -56,8 +56,8 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
             task_id = t.get("id")
             if not task_id:
                 continue
-            task = Task(id=task_id, func=lambda: None)
-            workflow.add_task(task)
+            task = __import__("codomyrmex.logistics.orchestration.project.task_orchestrator").logistics.orchestration.project.task_orchestrator.Task(name=task_id, action="", module="")
+            workflow.add_task(task)  # type: ignore
 
         # Add dependencies in a second pass
         for t in tasks:

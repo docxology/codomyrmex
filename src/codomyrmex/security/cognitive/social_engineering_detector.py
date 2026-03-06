@@ -89,7 +89,7 @@ class SocialEngineeringDetector:
 
 def detect_social_engineering(
     communication: str,
-    detector: SocialEngineeringDetector = None,
+    detector: SocialEngineeringDetector = None,  # type: ignore
 ) -> list[SocialEngineeringIndicator]:
     """Detect social engineering."""
     if detector is None:
@@ -99,7 +99,7 @@ def detect_social_engineering(
 
 def analyze_communication(
     communication: str,
-    detector: SocialEngineeringDetector = None,
+    detector: SocialEngineeringDetector = None,  # type: ignore
 ) -> dict:
     """Analyze communication."""
     if detector is None:

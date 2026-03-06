@@ -136,7 +136,7 @@ class _LiveServer:
             try:
                 return resp.status, json.loads(body)
             except json.JSONDecodeError:
-                return resp.status, body
+                return resp.status, body  # type: ignore
         finally:
             conn.close()
 

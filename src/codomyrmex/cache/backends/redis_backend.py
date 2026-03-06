@@ -119,7 +119,7 @@ class RedisCache(Cache):
             self._stats.hits = info.get("keyspace_hits", 0)
             self._stats.misses = info.get("keyspace_misses", 0)
             self._stats.total_requests = self._stats.hits + self._stats.misses
-            self._stats.size = self.client.dbsize()
+            self._stats.size = self.client.dbsize()  # type: ignore
         except Exception as e:
             logger.warning("Failed to retrieve Redis cache stats: %s", e)
         return self._stats

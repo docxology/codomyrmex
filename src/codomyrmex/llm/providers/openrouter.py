@@ -95,7 +95,7 @@ class OpenRouterProvider(LLMProvider):
                 "OpenRouter client not initialized. Install openai package."
             )
 
-        response = self._client.chat.completions.create(
+        response = self._client.chat.completions.create(  # type: ignore
             model=self.get_model(model),
             messages=[m.to_dict() for m in messages],
             temperature=temperature,
@@ -133,7 +133,7 @@ class OpenRouterProvider(LLMProvider):
         if not self._client:
             raise RuntimeError("OpenRouter client not initialized.")
 
-        stream = self._client.chat.completions.create(
+        stream = self._client.chat.completions.create(  # type: ignore
             model=self.get_model(model),
             messages=[m.to_dict() for m in messages],
             temperature=temperature,
@@ -162,7 +162,7 @@ class OpenRouterProvider(LLMProvider):
                 base_url=self.config.base_url,
                 default_headers=self.config.extra_headers,
             )
-            response = await async_client.chat.completions.create(
+            response = await async_client.chat.completions.create(  # type: ignore
                 model=self.get_model(model),
                 messages=[m.to_dict() for m in messages],
                 temperature=temperature,

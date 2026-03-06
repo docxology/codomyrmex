@@ -341,7 +341,7 @@ def build_controller(config_path: str | None) -> DroidController:
     try:
         return create_default_controller()
     except NameError:
-        return DroidController()
+        return DroidController()  # type: ignore
 
 
 def _list_todos(todo_items: list[TodoItem], completed_items: list[TodoItem]) -> None:

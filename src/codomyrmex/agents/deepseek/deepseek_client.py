@@ -16,7 +16,7 @@ from codomyrmex.agents.generic.api_agent_base import APIAgentBase
 try:
     import openai
 except ImportError:
-    openai = None
+    pass
 
 
 class DeepSeekClient(APIAgentBase):
@@ -56,7 +56,7 @@ class DeepSeekClient(APIAgentBase):
             config=config,
         )
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(self, request: AgentRequest) -> AgentResponse:  # type: ignore
         """Execute DeepSeek API request."""
         start_time = time.time()
 

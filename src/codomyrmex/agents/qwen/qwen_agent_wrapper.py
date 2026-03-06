@@ -17,17 +17,12 @@ logger = get_logger(__name__)
 try:
     from qwen_agent.agents import Assistant
 except ImportError:
-    Assistant = None
+    pass
 
 try:
     from qwen_agent.gui import WebUI
 except ImportError:
-    WebUI = None
-
-try:
-    from qwen_agent.utils.output_beautify import typewriter_print
-except ImportError:
-    typewriter_print = None
+    pass
 
 
 # --- Built-in tools ---

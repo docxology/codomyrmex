@@ -29,18 +29,14 @@ try:
     MOVIEPY_AVAILABLE = True
 except ImportError:
     MOVIEPY_AVAILABLE = False
-    VideoFileClip = None
 
 # Check for OpenCV availability
 try:
     import cv2
-    import numpy as np
 
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
-    cv2 = None
-    np = None
 
 
 SUPPORTED_INPUT_FORMATS = {

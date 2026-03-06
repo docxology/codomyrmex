@@ -18,7 +18,6 @@ except ImportError:
     class _DummyPSUtil:
         """No-op psutil stub used when psutil is not installed; all metrics return zero."""
 
-        Process = None
 
         def cpu_percent(*args, **kwargs):
             return 0.0
@@ -26,7 +25,7 @@ except ImportError:
         def virtual_memory():
             return type("obj", (object,), {"used": 0, "total": 0})()
 
-    psutil = _DummyPSUtil()
+    psutil = _DummyPSUtil()  # type: ignore
 
 from codomyrmex.logging_monitoring import get_logger
 

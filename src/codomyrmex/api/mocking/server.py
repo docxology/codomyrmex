@@ -5,8 +5,6 @@ from datetime import datetime
 from typing import Any
 
 from .models import (
-    MatchStrategy,
-    MockRequest,
     MockResponse,
     MockResponseMode,
     MockRoute,

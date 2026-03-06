@@ -771,7 +771,7 @@ class TestEdgeCases:
         data = {"level": 1}
         current = data
         for i in range(2, 51):
-            current["nested"] = {"level": i}
+            current["nested"] = {"level": i}  # type: ignore
             current = current["nested"]
 
         serialized = serializer.serialize(data)

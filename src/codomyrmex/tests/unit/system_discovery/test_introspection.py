@@ -1,9 +1,5 @@
-import os
 import platform
 import sys
-from pathlib import Path
-
-import pytest
 
 from codomyrmex.system_discovery.core.context import get_system_context
 from codomyrmex.system_discovery.reporting.profilers import (

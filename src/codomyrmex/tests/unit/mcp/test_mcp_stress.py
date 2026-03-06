@@ -135,7 +135,7 @@ class TestMalformedInput:
         """_call_tool with missing 'name' → structured error."""
         config = MCPServerConfig(warm_up=False)
         server = MCPServer(config=config)
-        result = await server._call_tool({"arguments": {}})
+        result = await server._call_tool({"arguments": {}})  # type: ignore
         # Should return error, not crash
         assert isinstance(result, dict)
 
@@ -144,7 +144,7 @@ class TestMalformedInput:
         """_call_tool with empty params → structured error."""
         config = MCPServerConfig(warm_up=False)
         server = MCPServer(config=config)
-        result = await server._call_tool({})
+        result = await server._call_tool({})  # type: ignore
         assert isinstance(result, dict)
 
     @pytest.mark.asyncio
@@ -156,7 +156,7 @@ class TestMalformedInput:
         # None arguments cause validate_tool_arguments to raise TypeError
         # because dict(None) is invalid — this is expected behavior.
         # The server wraps this in an execution error response.
-        result = await server._call_tool({"name": "noop", "arguments": None})
+        result = await server._call_tool({"name": "noop", "arguments": None})  # type: ignore
         # Should produce an error envelope, not a bare exception
         assert isinstance(result, dict)
 

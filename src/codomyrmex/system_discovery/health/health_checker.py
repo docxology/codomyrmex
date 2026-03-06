@@ -22,7 +22,6 @@ try:
     HAS_DOCKER = True
 except ImportError:
     HAS_DOCKER = False
-    docker = None
 
 from codomyrmex.logging_monitoring import (
     get_logger,
@@ -242,7 +241,7 @@ class HealthChecker:
                 os.path.join(os.path.dirname(__file__), "..", "..")
             )
 
-            is_complete, report = validate_environment_completeness(project_root)
+            is_complete, report = validate_environment_completeness(project_root)  # type: ignore
 
             result.add_metric("environment_complete", is_complete)
             result.add_metric(
@@ -341,7 +340,7 @@ class HealthChecker:
             def test_func():
                 return sum(range(100))
 
-            test_func()
+            test_func()  # type: ignore
             result.add_metric("profiling_working", True)
 
             metrics = get_system_metrics()

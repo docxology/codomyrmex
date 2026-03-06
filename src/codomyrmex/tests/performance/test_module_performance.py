@@ -20,7 +20,6 @@ try:
 
     HAS_PSUTIL = True
 except ImportError:
-    psutil = None
     HAS_PSUTIL = False
 
 # Import modules for performance testing
@@ -97,7 +96,7 @@ class PerformanceBaseline:
     baseline_time: float  # seconds
     baseline_memory: float  # MB
     tolerance_percent: float = 200.0  # Allow 3x baseline before flagging (CI-friendly)
-    measurements: list[float] = None
+    measurements: list[float] = None  # type: ignore
 
     def __post_init__(self):
         if self.measurements is None:
@@ -114,7 +113,7 @@ class PerformanceResult:
     cpu_usage: float = 0.0
     status: str = "success"  # "success", "failed", "timeout"
     regression_detected: bool = False
-    baseline_comparison: dict[str, Any] = None
+    baseline_comparison: dict[str, Any] = None  # type: ignore
 
 
 class PerformanceBaselineManager:
@@ -197,7 +196,7 @@ class PerformanceBaselineManager:
 class PerformanceTestSuite:
     """Suite of performance tests for module benchmarking."""
 
-    def __init__(self, baseline_manager: PerformanceBaselineManager = None):
+    def __init__(self, baseline_manager: PerformanceBaselineManager = None):  # type: ignore
         self.baseline_manager = baseline_manager or PerformanceBaselineManager()
         self.results: list[PerformanceResult] = []
 

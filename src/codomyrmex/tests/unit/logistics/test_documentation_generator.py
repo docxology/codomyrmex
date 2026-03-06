@@ -88,8 +88,8 @@ class TestLoadTemplate:
             "Caf\u00e9 \u2014 \u2603", encoding="utf-8"
         )
         result = gen._load_template("utf8.md")
-        assert "\u00e9" in result
-        assert "\u2603" in result
+        assert "\u00e9" in result  # type: ignore
+        assert "\u2603" in result  # type: ignore
 
 
 @pytest.mark.unit

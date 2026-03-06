@@ -422,7 +422,7 @@ class TestFieldError:
     def test_field_error_is_frozen(self):
         fe = FieldError(field="f", constraint="c")
         with pytest.raises(AttributeError):
-            fe.field = "new"
+            fe.field = "new"  # type: ignore
 
 
 @pytest.mark.unit

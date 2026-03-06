@@ -11,8 +11,7 @@ __version__ = "0.1.0"
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -41,7 +40,7 @@ def cli_commands():
         """List scheduled jobs."""
         try:
             scheduler = Scheduler()
-            jobs = scheduler.get_jobs() if hasattr(scheduler, "get_jobs") else []
+            jobs = scheduler.get_jobs() if hasattr(scheduler, "get_jobs") else []  # type: ignore
             if jobs:
                 for job in jobs:
                     print(f"  {job}")

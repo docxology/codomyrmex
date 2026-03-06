@@ -34,7 +34,7 @@ class LoadResult:
     success: bool
     plugin_instance: Plugin | None = None
     error_message: str | None = None
-    warnings: list[str] = None
+    warnings: list[str] = None  # type: ignore
 
     def __post_init__(self):
 
@@ -281,7 +281,6 @@ class PluginLoader:
         # Handle different entry point formats
         if entry_point.endswith(".py"):
             # Direct file path
-            plugin_path = None
 
             # Search in plugin directories
             for directory in self.plugin_directories:

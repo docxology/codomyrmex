@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 try:
     import yaml
 except ImportError:  # pragma: no cover – yaml is an optional dep
-    yaml = None
+    pass
 
 from codomyrmex.agentic_memory.obsidian.models import (
     Callout,

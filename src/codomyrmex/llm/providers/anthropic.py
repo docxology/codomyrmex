@@ -34,7 +34,6 @@ class AnthropicProvider(LLMProvider):
             raise RuntimeError("Anthropic client not initialized.")
 
         # Extract system message
-        system = None
         chat_messages = []
         for m in messages:
             if m.role == "system":
@@ -76,7 +75,6 @@ class AnthropicProvider(LLMProvider):
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
 
-        system = None
         chat_messages = []
         for m in messages:
             if m.role == "system":
@@ -107,7 +105,6 @@ class AnthropicProvider(LLMProvider):
 
             async_client = AsyncAnthropic(api_key=self.config.api_key)
 
-            system = None
             chat_messages = []
             for m in messages:
                 if m.role == "system":

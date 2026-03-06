@@ -369,8 +369,8 @@ class TestTensorBackward:
         c = a + b
         s = c.sum()
         s.backward()
-        np.testing.assert_allclose(a.grad, [1.0, 1.0])
-        np.testing.assert_allclose(b.grad, [1.0, 1.0])
+        np.testing.assert_allclose(a.grad, [1.0, 1.0])  # type: ignore
+        np.testing.assert_allclose(b.grad, [1.0, 1.0])  # type: ignore
 
     @pytest.mark.unit
     def test_mul_backward(self):
@@ -380,8 +380,8 @@ class TestTensorBackward:
         s = c.sum()
         s.backward()
         # ds/da_i = b_i
-        np.testing.assert_allclose(a.grad, [4.0, 5.0])
-        np.testing.assert_allclose(b.grad, [2.0, 3.0])
+        np.testing.assert_allclose(a.grad, [4.0, 5.0])  # type: ignore
+        np.testing.assert_allclose(b.grad, [2.0, 3.0])  # type: ignore
 
     @pytest.mark.unit
     def test_matmul_backward(self):
@@ -391,21 +391,21 @@ class TestTensorBackward:
         s = c.sum()
         s.backward()
         # d(sum(A@I))/dA = ones @ I^T = ones
-        np.testing.assert_allclose(a.grad, np.ones((2, 2)))
+        np.testing.assert_allclose(a.grad, np.ones((2, 2)))  # type: ignore
 
     @pytest.mark.unit
     def test_sum_backward(self):
         a = Tensor([1.0, 2.0, 3.0])
         s = a.sum()
         s.backward()
-        np.testing.assert_allclose(a.grad, [1.0, 1.0, 1.0])
+        np.testing.assert_allclose(a.grad, [1.0, 1.0, 1.0])  # type: ignore
 
     @pytest.mark.unit
     def test_mean_backward(self):
         a = Tensor([2.0, 4.0, 6.0])
         m = a.mean()
         m.backward()
-        np.testing.assert_allclose(a.grad, [1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0])
+        np.testing.assert_allclose(a.grad, [1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0])  # type: ignore
 
     @pytest.mark.unit
     def test_reshape_backward(self):
@@ -413,7 +413,7 @@ class TestTensorBackward:
         b = a.reshape(4)
         s = b.sum()
         s.backward()
-        np.testing.assert_allclose(a.grad, np.ones((2, 2)))
+        np.testing.assert_allclose(a.grad, np.ones((2, 2)))  # type: ignore
 
     @pytest.mark.unit
     def test_chain_tensor(self):
@@ -422,7 +422,7 @@ class TestTensorBackward:
         f = (a * 2.0 + 1.0).sum()
         f.backward()
         # df/da_i = 2
-        np.testing.assert_allclose(a.grad, [2.0, 2.0, 2.0])
+        np.testing.assert_allclose(a.grad, [2.0, 2.0, 2.0])  # type: ignore
 
 
 class TestActivationsTensor:
@@ -435,7 +435,7 @@ class TestActivationsTensor:
         np.testing.assert_allclose(b.data, [0.0, 0.0, 1.0, 2.0])
         s = b.sum()
         s.backward()
-        np.testing.assert_allclose(a.grad, [0.0, 0.0, 1.0, 1.0])
+        np.testing.assert_allclose(a.grad, [0.0, 0.0, 1.0, 1.0])  # type: ignore
 
     @pytest.mark.unit
     def test_tanh_tensor(self):
@@ -444,7 +444,7 @@ class TestActivationsTensor:
         np.testing.assert_allclose(b.data, [0.0], atol=1e-9)
         s = b.sum()
         s.backward()
-        np.testing.assert_allclose(a.grad, [1.0], atol=1e-6)
+        np.testing.assert_allclose(a.grad, [1.0], atol=1e-6)  # type: ignore
 
     @pytest.mark.unit
     def test_sigmoid_tensor(self):
@@ -453,7 +453,7 @@ class TestActivationsTensor:
         np.testing.assert_allclose(b.data, [0.5], atol=1e-9)
         s = b.sum()
         s.backward()
-        np.testing.assert_allclose(a.grad, [0.25], atol=1e-6)
+        np.testing.assert_allclose(a.grad, [0.25], atol=1e-6)  # type: ignore
 
     @pytest.mark.unit
     def test_softmax_forward(self):
@@ -481,7 +481,7 @@ class TestActivationsTensor:
         loss = probs.sum()
         loss.backward()
         # Sum of softmax is always 1, so gradient of sum w.r.t. logits is 0
-        np.testing.assert_allclose(logits.grad, np.zeros(3), atol=1e-9)
+        np.testing.assert_allclose(logits.grad, np.zeros(3), atol=1e-9)  # type: ignore
 
     @pytest.mark.unit
     def test_softmax_rejects_value(self):

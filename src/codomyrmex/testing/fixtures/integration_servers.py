@@ -52,7 +52,7 @@ class TestServerManager:
             await original_startup(*args, **kwargs)
             self._startup_event.set()
 
-        self.server.startup = hooked_startup
+        self.server.startup = hooked_startup  # type: ignore
         self.server.run()
 
     def start(self):

@@ -71,7 +71,7 @@ class TestJulesClient:
 
             # Test real response structure
             assert isinstance(response, AgentResponse)
-            assert "command" in response.metadata
+            assert "command" in response.metadata  # type: ignore
         except Exception:
             # Expected if authentication fails or CLI error
             pytest.skip("Jules CLI authentication or execution failed")

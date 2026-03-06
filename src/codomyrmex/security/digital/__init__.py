@@ -22,9 +22,6 @@ try:
 
     CERTIFICATE_VALIDATION_AVAILABLE = True
 except ImportError:
-    CertificateValidator = None
-    SSLValidationResult = None
-    validate_ssl_certificates = None
     CERTIFICATE_VALIDATION_AVAILABLE = False
 
 try:
@@ -36,9 +33,6 @@ try:
 
     ENCRYPTION_AVAILABLE = True
 except ImportError:
-    EncryptionManager = None
-    decrypt_sensitive_data = None
-    encrypt_sensitive_data = None
     ENCRYPTION_AVAILABLE = False
 
 try:
@@ -51,10 +45,6 @@ try:
 
     SECURITY_MONITORING_AVAILABLE = True
 except ImportError:
-    SecurityEvent = None
-    SecurityMonitor = None
-    audit_access_logs = None
-    monitor_security_events = None
     SECURITY_MONITORING_AVAILABLE = False
 
 try:
@@ -65,8 +55,6 @@ try:
 
     SECURITY_REPORTING_AVAILABLE = True
 except ImportError:
-    SecurityReportGenerator = None
-    generate_security_report = None
     SECURITY_REPORTING_AVAILABLE = False
 
 try:
@@ -82,13 +70,6 @@ try:
 
     VULNERABILITY_SCANNING_AVAILABLE = True
 except ImportError:
-    ComplianceCheck = None
-    SecurityScanResult = None
-    VulnerabilityReport = None
-    VulnerabilityScanner = None
-    audit_code_security = None
-    check_compliance = None
-    scan_vulnerabilities = None
     VULNERABILITY_SCANNING_AVAILABLE = False
 
 try:
@@ -101,10 +82,6 @@ try:
 
     SECRETS_DETECTION_AVAILABLE = True
 except ImportError:
-    SecretsDetector = None
-    audit_secrets_exposure = None
-    scan_file_for_secrets = None
-    scan_directory_for_secrets = None
     SECRETS_DETECTION_AVAILABLE = False
 
 try:
@@ -118,11 +95,6 @@ try:
 
     SECURITY_ANALYSIS_AVAILABLE = True
 except ImportError:
-    SecurityAnalyzer = None
-    SecurityFinding = None
-    SecurityIssue = None
-    analyze_file_security = None
-    analyze_directory_security = None
     SECURITY_ANALYSIS_AVAILABLE = False
 
 try:
@@ -138,11 +110,6 @@ try:
 
     COMPLIANCE_CHECKING_AVAILABLE = True
 except ImportError:
-    ComplianceChecker = None
-    ComplianceCheckResult = None
-    ComplianceRequirement = None
-    ComplianceStandard = None
-    check_compliance_new = None
     COMPLIANCE_CHECKING_AVAILABLE = False
 
 # Build __all__ dynamically based on available components

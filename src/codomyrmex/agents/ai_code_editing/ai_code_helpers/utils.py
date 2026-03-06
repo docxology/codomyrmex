@@ -14,7 +14,7 @@ from .models import CodeLanguage
 try:
     from environment_setup.env_checker import check_and_setup_env_vars
 except ImportError:
-    check_and_setup_env_vars = None
+    pass
 
 logger = get_logger(__name__)
 

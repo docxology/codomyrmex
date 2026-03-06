@@ -213,7 +213,7 @@ class TestAsyncConcurrentServer:
         )
 
         async def _call(n: int) -> dict:
-            return await server._call_tool(
+            return await server._call_tool(  # type: ignore
                 {"name": "async_echo", "arguments": {"n": n}}
             )
 
@@ -229,7 +229,7 @@ class TestAsyncConcurrentServer:
         server = MCPServer(config=config)
 
         async def _call(n: int) -> dict:
-            return await server._call_tool({"name": f"missing_{n}", "arguments": {}})
+            return await server._call_tool({"name": f"missing_{n}", "arguments": {}})  # type: ignore
 
         results = await asyncio.gather(*[_call(i) for i in range(10)])
         for r in results:

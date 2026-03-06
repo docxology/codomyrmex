@@ -10,7 +10,7 @@ from typing import Any
 try:
     import yaml
 except ImportError:
-    yaml = None
+    pass
 
 try:
     from codomyrmex.logging_monitoring import get_logger

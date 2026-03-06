@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 try:
     from google.genai import types
 except ImportError:
-    types = None
+    pass
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:

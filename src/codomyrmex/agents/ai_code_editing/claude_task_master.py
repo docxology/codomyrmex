@@ -194,7 +194,7 @@ class ClaudeTaskMaster:
 
         for attempt in range(self.max_retries + 1):
             try:
-                response = client.messages.create(
+                response = client.messages.create(  # type: ignore
                     model=self.model,
                     max_tokens=max_tokens,
                     temperature=temperature,

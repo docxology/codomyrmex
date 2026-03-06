@@ -10,12 +10,11 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from PIL import Image
+    import PIL
 
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
-    Image = None
 
 
 class FilterType(Enum):

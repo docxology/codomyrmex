@@ -19,8 +19,7 @@ from typing import Any, Optional
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Submodule exports
 from . import evaluation, optimization, registry, training
@@ -74,12 +73,12 @@ from .evaluation import (
 try:
     from . import datasets
 except ImportError:
-    datasets = None
+    pass
 
 try:
     from . import fine_tuning
 except ImportError:
-    fine_tuning = None
+    pass
 
 
 class Dataset:
@@ -210,7 +209,7 @@ class FineTuningJob:
     def __init__(
         self,
         base_model: str = "gpt-3.5-turbo",
-        dataset: Dataset = None,
+        dataset: Dataset = None,  # type: ignore
     ):
         """
         Initialize a fine-tuning job.

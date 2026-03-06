@@ -13,7 +13,6 @@ try:
 
     CRYPTOGRAPHY_AVAILABLE = True
 except ImportError:
-    Fernet = None
     CRYPTOGRAPHY_AVAILABLE = False
 
 # Skip all tests if cryptography is not available

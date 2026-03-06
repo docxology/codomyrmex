@@ -9,8 +9,7 @@ documentation templates, and dynamic content.
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Submodule exports - import first to make available
 from codomyrmex.logging_monitoring import get_logger
@@ -29,18 +28,17 @@ except ImportError as e:
 try:
     from codomyrmex.exceptions import CodomyrmexError
 except ImportError:
-    CodomyrmexError = Exception
+    CodomyrmexError = Exception  # type: ignore
 
 try:
     from .engines.template_engine import Template, TemplateEngine
 except ImportError:
-    Template = None
-    TemplateEngine = None
+    pass
 
 try:
     from .loaders.template_manager import TemplateManager
 except ImportError:
-    TemplateManager = None
+    pass
 
 # Default engine instance for convenience functions
 _default_engine = None

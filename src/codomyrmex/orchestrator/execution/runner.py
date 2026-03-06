@@ -217,7 +217,7 @@ def _target_wrapper(q, f, a, k, memory_limit_mb):
 
 
 def run_function(
-    func: callable,
+    func: callable,  # type: ignore
     args: tuple = (),
     kwargs: dict | None = None,
     timeout: int = 60,

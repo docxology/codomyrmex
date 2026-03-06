@@ -185,7 +185,7 @@ def generate_pyproject_additions(
             optional_deps_section += f'    "{dep}",\n'
         optional_deps_section += "]\n"
 
-    return optional_deps_section, {
+    return optional_deps_section, {  # type: ignore
         module: list(module_deps[module]) for module in module_deps
     }
 

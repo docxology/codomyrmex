@@ -311,7 +311,7 @@ class TestCurriculumLearningPath:
         c.add_module("basic")  # default BEGINNER
         c.add_module("hard")
         # Manually set difficulty on the hard module
-        c.get_module("hard").difficulty = Difficulty.EXPERT
+        c.get_module("hard").difficulty = Difficulty.EXPERT  # type: ignore
         path = c.generate_learning_path(student_level="expert")
         # Only expert-level or above survives
         assert "hard" in path

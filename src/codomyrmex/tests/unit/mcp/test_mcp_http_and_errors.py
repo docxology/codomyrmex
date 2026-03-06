@@ -238,7 +238,7 @@ class TestMCPClientErrorHandling:
     def test_rpc_error_raises_mcp_client_error(self):
         """Client should raise MCPClientError on JSON-RPC error response."""
         client = MCPClient(MCPClientConfig(name="err-client"))
-        client._transport = _ErrorTransport(
+        client._transport = _ErrorTransport(  # type: ignore
             error_code=-32601, error_message="Method not found"
         )
 
@@ -248,7 +248,7 @@ class TestMCPClientErrorHandling:
     def test_rpc_error_contains_method_name(self):
         """Error message should include the RPC method name."""
         client = MCPClient(MCPClientConfig(name="err-client"))
-        client._transport = _ErrorTransport(error_message="Kaboom")
+        client._transport = _ErrorTransport(error_message="Kaboom")  # type: ignore
 
         with pytest.raises(MCPClientError, match="initialize") as exc_info:
             asyncio.run(client.initialize())
@@ -259,7 +259,7 @@ class TestMCPClientErrorHandling:
 
         async def _test():
             client = MCPClient(MCPClientConfig(name="err-client"))
-            client._transport = _ErrorTransport(error_message="Tool not found")
+            client._transport = _ErrorTransport(error_message="Tool not found")  # type: ignore
             client._initialized = True  # Skip init
             with pytest.raises(MCPClientError, match="Tool not found"):
                 await client.call_tool("nonexistent", {})
@@ -275,7 +275,7 @@ class TestMCPClientErrorHandling:
                 retry_delay=0.01,
             )
         )
-        client._transport = _ServerExplodingTransport(ConnectionError("refused"))
+        client._transport = _ServerExplodingTransport(ConnectionError("refused"))  # type: ignore
 
         with pytest.raises(MCPClientError, match="failed after 1 retries"):
             asyncio.run(client.initialize())
@@ -291,7 +291,7 @@ class TestMCPClientErrorHandling:
 
         async def _test():
             client = MCPClient()
-            client._transport = _ErrorTransport()  # Will fail, but let's pretend
+            client._transport = _ErrorTransport()  # type: ignore  # Will fail, but let's pretend
             client._initialized = True
             await client.close()
             assert client._initialized is False
@@ -313,7 +313,7 @@ class TestMCPClientTimeout:
             retry_delay=0.01,
         )
         client = MCPClient(config)
-        client._transport = _TimeoutTransport()
+        client._transport = _TimeoutTransport()  # type: ignore
 
         with pytest.raises(MCPClientError, match="failed after 1 retries"):
             asyncio.run(client.initialize())
@@ -329,7 +329,7 @@ class TestMCPClientTimeout:
                 retry_delay=0.01,
             )
             client = MCPClient(config)
-            client._transport = _TimeoutTransport()
+            client._transport = _TimeoutTransport()  # type: ignore
             client._initialized = True
             with pytest.raises(MCPClientError, match="failed after 1 retries"):
                 await client.call_tool("echo", {"text": "hello"})
@@ -347,7 +347,7 @@ class TestMCPClientTimeout:
                 retry_delay=0.01,
             )
             client = MCPClient(config)
-            client._transport = _TimeoutTransport()
+            client._transport = _TimeoutTransport()  # type: ignore
             client._initialized = True
             with pytest.raises(MCPClientError, match="failed after 1 retries"):
                 await client.list_tools()
@@ -366,7 +366,7 @@ class TestMCPClientTimeout:
             )
             client = MCPClient(config)
             transport = _TimeoutTransport()
-            client._transport = transport
+            client._transport = transport  # type: ignore
             client._initialized = True
             with pytest.raises(MCPClientError):
                 await client.call_tool("echo", {})
@@ -444,7 +444,7 @@ class TestMCPClientConcurrency:
         async def _test():
             transport = _CountingTransport()
             client = MCPClient(MCPClientConfig(name="concurrency-client"))
-            client._transport = transport
+            client._transport = transport  # type: ignore
             client._initialized = True
 
             tasks = [client.call_tool("echo", {"text": f"msg-{i}"}) for i in range(10)]

@@ -251,7 +251,7 @@ class TestScriptBaseParser:
         s = SuccessScript(name="my_script", description="My description")
         parser = s.create_parser()
         assert parser.prog == "my_script"
-        assert "My description" in parser.description
+        assert "My description" in parser.description  # type: ignore
 
     def test_standard_args_defaults(self):
         s = SuccessScript(name="t", description="d")

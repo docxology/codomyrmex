@@ -1,6 +1,5 @@
 """Pagination data models: enums, dataclasses, and abstract base class."""
 
-import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum

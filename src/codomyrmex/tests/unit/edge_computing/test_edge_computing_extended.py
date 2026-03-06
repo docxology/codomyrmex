@@ -125,7 +125,7 @@ class TestEdgeSchedulerExecution:
         assert count == 1
         job = scheduler.get_job("j1")
         assert job.run_count == 1
-        assert job.next_run > datetime.now(UTC)
+        assert job.next_run > datetime.now(UTC)  # type: ignore
 
         # Second tick immediately after shouldn't execute because of interval
         count = scheduler.execute_tick(cluster)

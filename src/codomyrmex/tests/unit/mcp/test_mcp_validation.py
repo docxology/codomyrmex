@@ -97,7 +97,7 @@ def test_missing_required_field_rejected():
     """Verify missing required field rejected behavior."""
     result = validate_tool_arguments(TOOL, {"count": 5}, SCHEMA_SIMPLE)
     assert not result.valid
-    assert any("name" in e for e in result.errors)
+    assert any("name" in e for e in (result.errors or []))
 
 
 def test_invalid_type_rejected():
@@ -106,7 +106,7 @@ def test_invalid_type_rejected():
         TOOL, {"name": "hello", "count": "not_a_number"}, SCHEMA_SIMPLE, coerce=False
     )
     assert not result.valid
-    assert any("count" in e or "type" in e for e in result.errors)
+    assert any("count" in e or "type" in e for e in (result.errors or []))
 
 
 def test_extra_field_ignored():
@@ -158,7 +158,7 @@ def test_enum_invalid():
     """Verify enum invalid behavior."""
     result = validate_tool_arguments(TOOL, {"level": "extreme"}, SCHEMA_ENUM)
     assert not result.valid
-    assert any("level" in e for e in result.errors)
+    assert any("level" in e for e in (result.errors or []))
 
 
 # ── Numeric range ────────────────────────────────────────────────────
@@ -168,14 +168,14 @@ def test_minimum_violated():
     """Verify minimum violated behavior."""
     result = validate_tool_arguments(TOOL, {"value": -1}, SCHEMA_NUMERIC)
     assert not result.valid
-    assert any("minimum" in e.lower() or "value" in e for e in result.errors)
+    assert any("minimum" in e.lower() or "value" in e for e in (result.errors or []))
 
 
 def test_maximum_violated():
     """Verify maximum violated behavior."""
     result = validate_tool_arguments(TOOL, {"value": 101}, SCHEMA_NUMERIC)
     assert not result.valid
-    assert any("maximum" in e.lower() or "value" in e for e in result.errors)
+    assert any("maximum" in e.lower() or "value" in e for e in (result.errors or []))
 
 
 def test_in_range_passes():
@@ -197,7 +197,7 @@ def test_pattern_mismatch():
     """Verify pattern mismatch behavior."""
     result = validate_tool_arguments(TOOL, {"email": "not-an-email"}, SCHEMA_PATTERN)
     assert not result.valid
-    assert any("pattern" in e.lower() or "email" in e for e in result.errors)
+    assert any("pattern" in e.lower() or "email" in e for e in (result.errors or []))
 
 
 # ── Nested / array schemas ──────────────────────────────────────────

@@ -36,8 +36,7 @@ from .scheduling import EdgeScheduler, ScheduledJob, ScheduleType
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def cli_commands():
@@ -62,7 +61,7 @@ def cli_commands():
         cluster = EdgeCluster()
         nodes = cluster.list_nodes()
         print(f"  Target nodes: {len(nodes)}")
-        print(f"  Sync states: {[s.value for s in SyncState]}")
+        print(f"  Sync states: {[s.value for s in SyncState]}")  # type: ignore
 
     return {
         "nodes": _nodes,

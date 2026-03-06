@@ -16,18 +16,17 @@ logger = get_logger(__name__)
 try:
     from codomyrmex.security.ai_safety import ActiveDefense
 except ImportError:
-    ActiveDefense = None
+    pass
 
 try:
     from codomyrmex.identity import IdentityManager, VerificationLevel
 except ImportError:
-    IdentityManager = None
-    VerificationLevel = None
+    pass
 
 try:
     from codomyrmex.privacy import CrumbCleaner
 except ImportError:
-    CrumbCleaner = None
+    pass
 
 
 class OperationRisk(Enum):

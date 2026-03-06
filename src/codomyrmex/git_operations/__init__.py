@@ -13,8 +13,7 @@ Integration:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from codomyrmex.exceptions import CodomyrmexError
 

@@ -38,7 +38,7 @@ class AssertionExecutor(StepExecutor):
             if assertion_type == "equals":
                 passed = actual == expected
             elif assertion_type == "contains":
-                passed = expected in str(actual)
+                passed = expected in str(actual)  # type: ignore
             elif assertion_type == "not_null":
                 passed = actual is not None
             elif assertion_type == "greater_than":

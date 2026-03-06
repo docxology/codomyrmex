@@ -11,8 +11,7 @@ from typing import Optional
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # New submodule exports
 from . import (
@@ -39,7 +38,7 @@ def cli_commands():
     def _list_skills():
         """List available skills."""
         try:
-            registry = SkillRegistry()
+            registry = SkillRegistry()  # type: ignore
             skills = registry.list_skills()
             for skill in skills:
                 print(f"  {skill}")
@@ -49,7 +48,7 @@ def cli_commands():
     def _info_skill():
         """Show skill info."""
         try:
-            registry = SkillRegistry()
+            registry = SkillRegistry()  # type: ignore
             print(f"Skills registry: {registry}")
             print(f"Upstream: {DEFAULT_UPSTREAM_REPO}")
             print(f"Branch: {DEFAULT_UPSTREAM_BRANCH}")

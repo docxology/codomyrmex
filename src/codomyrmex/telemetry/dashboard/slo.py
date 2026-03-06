@@ -182,7 +182,7 @@ class SLOTracker:
     def get_all_status(self) -> list[dict[str, Any]]:
         """Get status for all SLOs."""
         return [
-            self.get_status(slo_id)
+            __import__("typing").cast(dict[str, Any], self.get_status(slo_id))
             for slo_id in self._slos
             if self.get_status(slo_id) is not None
         ]

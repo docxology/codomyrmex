@@ -22,15 +22,6 @@ try:
     OLLAMA_AVAILABLE = True
 except ImportError:
     OLLAMA_AVAILABLE = False
-    OllamaManager = None
-    ModelRunner = None
-    OllamaAttributes = None
-    OllamaModel = None
-    OllamaResponse = None
-    OllamaRunner = None
-    ExecutionOptions = None
-    OutputManager = None
-    ConfigManager = None
 
 """
 Test Utilities and Helpers for Ollama Integration Tests

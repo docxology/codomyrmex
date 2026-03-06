@@ -436,7 +436,7 @@ class TestOllamaManager:
         )
 
         assert result.success is False
-        assert "not available" in result.error_message.lower()
+        assert "not available" in (result.error_message or "").lower()
 
     def test_get_model_stats_structure(self):
         """Test get_model_stats returns proper structure."""
@@ -680,7 +680,7 @@ class TestConfigManager:
         manager = ConfigManager(str(config_file))
 
         # Change config
-        manager.config.default_model = "changed-model"
+        manager.config.default_model = "changed-model"  # type: ignore
 
         # Reset
         manager.reset_to_defaults()

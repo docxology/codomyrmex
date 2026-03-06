@@ -10,8 +10,7 @@ __version__ = "0.1.0"
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .batcher import RequestBatcher
 from .cache import InferenceCache

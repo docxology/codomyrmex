@@ -1,4 +1,3 @@
-import pytest
 
 from codomyrmex.languages.php.manager import PhpManager
 

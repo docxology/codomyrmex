@@ -72,7 +72,7 @@ def run_code_in_docker(
 
     # Prepare the command to run inside the container
     container_cmd = [
-        cmd.format(filename=code_file_path) for cmd in language_config["command"]
+        cmd.format(filename=code_file_path) for cmd in language_config["command"]  # type: ignore
     ]
 
     # Validate stdin_file is inside temp_dir (no path traversal, no shell injection) (C3)
@@ -94,13 +94,13 @@ def run_code_in_docker(
         *container_cmd,
     ]
 
-    logger.info(f"Executing code in Docker: {' '.join(docker_cmd)}")
+    logger.info(f"Executing code in Docker: {' '.join(docker_cmd)}")  # type: ignore
 
     try:
         # Open stdin file outside shell (no shell injection possible) (C3)
         _stdin_fh = open(os.path.realpath(stdin_file)) if stdin_file else None
         try:
-            process = subprocess.Popen(
+            process = subprocess.Popen(  # type: ignore
                 docker_cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,

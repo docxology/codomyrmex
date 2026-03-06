@@ -18,7 +18,7 @@ class DashboardMixin:
     """Mixin providing dashboard creation methods for AdvancedPlotter."""
 
     config: PlotConfig
-    create_figure: callable
+    create_figure: callable  # type: ignore
 
     @monitor_performance("create_dashboard")
     def create_dashboard(
@@ -108,7 +108,7 @@ def create_advanced_dashboard(
     datasets: list[Dataset],
     title: str = "Dashboard",
     layout: tuple[int, int] = (2, 2),
-    config: PlotConfig = None,
+    config: PlotConfig = None,  # type: ignore
     **kwargs,
 ):
     """Create an advanced dashboard."""

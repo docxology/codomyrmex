@@ -9,7 +9,6 @@ try:
     DOCKER_AVAILABLE = True
 except ImportError:
     DOCKER_AVAILABLE = False
-    docker = None
 
 
 def check_docker_available():

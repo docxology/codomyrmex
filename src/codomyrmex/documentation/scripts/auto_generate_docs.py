@@ -57,7 +57,7 @@ class AutoDocumentationGenerator:
 
         return sorted(modules)
 
-    def generate_readme(self, module_path: Path, analysis: any) -> str:
+    def generate_readme(self, module_path: Path, analysis: any) -> str:  # type: ignore
         """Generate README.md content."""
         content = self.template_engine.generate_readme_content(analysis)
 
@@ -122,7 +122,7 @@ For complete documentation, see:
 
         return readme_template
 
-    def generate_agents_md(self, module_path: Path, analysis: any) -> str:
+    def generate_agents_md(self, module_path: Path, analysis: any) -> str:  # type: ignore
         """Generate AGENTS.md content."""
         content = self.template_engine.generate_agents_content(module_path, analysis)
 

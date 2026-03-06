@@ -89,7 +89,7 @@ class AIGateway:
     - Request/response logging and metrics
     """
 
-    def __init__(self, providers: list[Provider], config: GatewayConfig = None):
+    def __init__(self, providers: list[Provider], config: GatewayConfig = None):  # type: ignore
         """Initialize the AI Gateway."""
         self.providers = providers
         self.config = config or GatewayConfig()

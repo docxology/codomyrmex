@@ -3,13 +3,12 @@ Comprehensive zero-mock tests for the Codomyrmex Event System to verify improvem
 """
 
 import asyncio
-import time
 
 import pytest
 
 from codomyrmex.events import Event, EventBus, EventPriority, EventType
 from codomyrmex.events.handlers.event_listener import EventListener
-from codomyrmex.events.integration_bus import IntegrationBus, IntegrationEvent
+from codomyrmex.events.integration_bus import IntegrationBus
 
 
 @pytest.fixture

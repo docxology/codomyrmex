@@ -83,7 +83,7 @@ class DependencyAnalyzer:
                                         isinstance(target, ast.Name)
                                         and target.id == "__version__"
                                     ) and isinstance(node.value, ast.Constant):
-                                        return node.value.value
+                                        return node.value.value  # type: ignore
             except Exception as e:
                 logger.debug(f"Could not get version from {init_path}: {e}")
 

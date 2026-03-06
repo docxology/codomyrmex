@@ -170,7 +170,7 @@ class SectionExporter:
 
         return exported_paths
 
-    def _pattern_to_dict(self, pattern: Pattern) -> dict[str, any]:
+    def _pattern_to_dict(self, pattern: Pattern) -> dict[str, any]:  # type: ignore
         """Convert Pattern to dictionary."""
         return {
             "id": pattern.id,
@@ -186,7 +186,7 @@ class SectionExporter:
             "cluster": pattern.cluster,
         }
 
-    def _concept_to_dict(self, concept: Concept) -> dict[str, any]:
+    def _concept_to_dict(self, concept: Concept) -> dict[str, any]:  # type: ignore
         """Convert Concept to dictionary."""
         return {
             "name": concept.name,
@@ -198,7 +198,7 @@ class SectionExporter:
             "metadata": concept.metadata,
         }
 
-    def _relationship_to_dict(self, relationship: Relationship) -> dict[str, any]:
+    def _relationship_to_dict(self, relationship: Relationship) -> dict[str, any]:  # type: ignore
         """Convert Relationship to dictionary."""
         return {
             "source": relationship.source,

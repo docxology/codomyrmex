@@ -37,7 +37,7 @@ def temp_git_repo(temp_dir: str) -> Generator[str, None, None]:
         ["git", "branch", "-m", "main"], cwd=repo_path, capture_output=True, check=False
     )
 
-    return repo_path
+    return repo_path  # type: ignore
 
     # Cleanup is handled by temp_dir fixture
 
@@ -51,7 +51,7 @@ def temp_git_repo_no_commit(temp_dir: str) -> Generator[str, None, None]:
     # Initialize Git repository without initial commit
     initialize_git_repository(repo_path, initial_commit=False)
 
-    return repo_path
+    return repo_path  # type: ignore
 
     # Cleanup is handled by temp_dir fixture
 
@@ -63,4 +63,4 @@ def sample_file(temp_git_repo: str) -> Generator[str, None, None]:
     with open(file_path, "w") as f:
         f.write("Test content\n")
 
-    return file_path
+    return file_path  # type: ignore

@@ -43,8 +43,8 @@ except ImportError:
             "MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed."
         )
 
-    MCPToolResult = __raise_mcp_error
-    MCPErrorDetail = __raise_mcp_error
+    MCPToolResult = __raise_mcp_error  # type: ignore
+    MCPErrorDetail = __raise_mcp_error  # type: ignore
 
 
 from .orchestration_engine import get_orchestration_engine
@@ -281,15 +281,7 @@ class OrchestrationMCPTools:
     def execute_tool(self, tool_name: str, arguments: dict[str, Any]) -> MCPToolResult:
         """Execute an MCP tool."""
         if not MCP_AVAILABLE:
-            return MCPToolResult(
-                success=False,
-                error="MCP not available",
-                error_details=[
-                    MCPErrorDetail(
-                        type="ImportError", message="MCP module not available"
-                    )
-                ],
-            )
+            return MCPToolResult(status="failure", error=MCPErrorDetail(error_type="ImportError", error_message="MCP module not available"))
 
         try:
             if tool_name == "execute_workflow":
@@ -312,22 +304,10 @@ class OrchestrationMCPTools:
                 return self._allocate_resources_tool(arguments)
             if tool_name == "create_complex_workflow":
                 return self._create_complex_workflow_tool(arguments)
-            return MCPToolResult(
-                success=False,
-                error=f"Unknown tool: {tool_name}",
-                error_details=[
-                    MCPErrorDetail(
-                        type="ValueError", message=f"Tool '{tool_name}' not found"
-                    )
-                ],
-            )
+            return MCPToolResult(status="failure", error=MCPErrorDetail(error_type="ValueError", error_message=f"Tool '{tool_name}' not found"))
         except Exception as e:
             logger.error(f"Error executing tool {tool_name}: {e}")
-            return MCPToolResult(
-                success=False,
-                error=str(e),
-                error_details=[MCPErrorDetail(type=type(e).__name__, message=str(e))],
-            )
+            return MCPToolResult(status="failure", error=MCPErrorDetail(error_type=type(e).__name__, error_message=str(e)))
 
     def _execute_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Execute workflow tool."""
@@ -337,15 +317,11 @@ class OrchestrationMCPTools:
 
         result = self.engine.execute_workflow(workflow_name, session_id, **parameters)
 
-        return MCPToolResult(
-            success=result.get("success", False),
-            data=result,
-            metadata={
+        return MCPToolResult(status="success" if result.get("success", False) else "failure", data={"data": result, "metadata": {
                 "workflow_name": workflow_name,
                 "session_id": session_id,
                 "timestamp": datetime.now(UTC).isoformat(),
-            },
-        )
+            }})
 
     def _create_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Create workflow tool."""
@@ -368,25 +344,17 @@ class OrchestrationMCPTools:
 
         success = self.wf_manager.create_workflow(name, steps)
 
-        return MCPToolResult(
-            success=success,
-            data={
+        return MCPToolResult(status="success" if success else "failure", data={"data": {
                 "workflow_name": name,
                 "steps_count": len(steps),
                 "description": description,
-            },
-            metadata={"timestamp": datetime.now(UTC).isoformat()},
-        )
+            }, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
 
     def _list_workflows_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """List workflows tool."""
         workflows = self.wf_manager.list_workflows()
 
-        return MCPToolResult(
-            success=True,
-            data={"workflows": workflows, "count": len(workflows)},
-            metadata={"timestamp": datetime.now(UTC).isoformat()},
-        )
+        return MCPToolResult(status="success" if True else "failure", data={"data": {"workflows": workflows, "count": len(workflows)}, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
 
     def _create_project_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Create project tool."""
@@ -397,26 +365,18 @@ class OrchestrationMCPTools:
 
         try:
             project = self.project_manager.create_project(
-                name=name, template_name=template, description=description, path=path
+                name=name, type=__import__("codomyrmex.logistics.orchestration.project.models").logistics.orchestration.project.models.ProjectType.CUSTOM, description=description
             )
 
-            return MCPToolResult(
-                success=True,
-                data={
+            return MCPToolResult(status="success", data={"data": {
                     "project_name": project.name,
                     "project_type": project.type.value,
                     "project_path": project.path,
                     "template_used": template,
                     "workflows": project.workflows,
-                },
-                metadata={"timestamp": datetime.now(UTC).isoformat()},
-            )
+                }, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
         except Exception as e:
-            return MCPToolResult(
-                success=False,
-                error=str(e),
-                error_details=[MCPErrorDetail(type=type(e).__name__, message=str(e))],
-            )
+            return MCPToolResult(status="failure", error=MCPErrorDetail(error_type=type(e).__name__, error_message=str(e)))
 
     def _list_projects_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """List projects tool."""
@@ -436,11 +396,7 @@ class OrchestrationMCPTools:
                     }
                 )
 
-        return MCPToolResult(
-            success=True,
-            data={"projects": project_details, "count": len(project_details)},
-            metadata={"timestamp": datetime.now(UTC).isoformat()},
-        )
+        return MCPToolResult(status="success" if True else "failure", data={"data": {"projects": project_details, "count": len(project_details)}, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
 
     def _execute_task_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Execute task tool."""
@@ -470,36 +426,24 @@ class OrchestrationMCPTools:
 
         result = self.engine.execute_task(task)
 
-        return MCPToolResult(
-            success=result.get("success", False),
-            data=result,
-            metadata={
+        return MCPToolResult(status="success" if result.get("success", False) else "failure", data={"data": result, "metadata": {
                 "task_name": name,
                 "module": module,
                 "action": action,
                 "timestamp": datetime.now(UTC).isoformat(),
-            },
-        )
+            }})
 
     def _get_system_status_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Get system status tool."""
         status = self.engine.get_system_status()
 
-        return MCPToolResult(
-            success=True,
-            data=status,
-            metadata={"timestamp": datetime.now(UTC).isoformat()},
-        )
+        return MCPToolResult(status="success" if True else "failure", data={"data": status, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
 
     def _get_health_status_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Get health status tool."""
         health = self.engine.health_check()
 
-        return MCPToolResult(
-            success=True,
-            data=health,
-            metadata={"timestamp": datetime.now(UTC).isoformat()},
-        )
+        return MCPToolResult(status="success" if True else "failure", data={"data": health, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
 
     def _allocate_resources_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Allocate resources tool."""
@@ -508,15 +452,11 @@ class OrchestrationMCPTools:
 
         allocated = self.resource_manager.allocate_resources(user_id, requirements)
 
-        return MCPToolResult(
-            success=allocated is not None,
-            data={
+        return MCPToolResult(status="success" if allocated is not None else "failure", data={"data": {
                 "allocated": allocated,
                 "user_id": user_id,
                 "requirements": requirements,
-            },
-            metadata={"timestamp": datetime.now(UTC).isoformat()},
-        )
+            }, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
 
     def _create_complex_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """Create complex workflow tool."""
@@ -525,11 +465,7 @@ class OrchestrationMCPTools:
 
         result = self.engine.execute_complex_workflow(workflow_definition)
 
-        return MCPToolResult(
-            success=result.get("success", False),
-            data={"workflow_name": name, "execution_result": result},
-            metadata={"timestamp": datetime.now(UTC).isoformat()},
-        )
+        return MCPToolResult(status="success" if result.get("success", False) else "failure", data={"data": {"workflow_name": name, "execution_result": result}, "metadata": {"timestamp": datetime.now(UTC).isoformat()}})
 
 
 # Global MCP tools instance

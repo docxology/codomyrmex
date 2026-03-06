@@ -122,7 +122,7 @@ class FeatureManager:
 
     def list_flags(self) -> list[FlagDefinition]:
         """List all registered flags."""
-        return [self.get_flag(name) for name in self._storage.list_all()]
+        return [self.get_flag(name) for name in self._storage.list_all()]  # type: ignore
 
     # ── Evaluation ──────────────────────────────────────────────────
 

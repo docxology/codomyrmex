@@ -203,5 +203,29 @@ def run_setup_wizard(
         else:
             print(f"  {_DIM}Skipped saving.{_RESET}")
 
+    print(f"\n{_BOLD}Phase 4: Environment Template{_RESET}")
+    env_choice = input("  Generate standard .env template with all API variables/URLs? [y/N] ").strip().lower()
+    if env_choice in ("y", "yes"):
+        try:
+            target = generate_env_template()
+            print(f"  {_GREEN}Generated {target}{_RESET}")
+        except Exception as e:
+            print(f"  {_RED}Failed: {e}{_RESET}")
+
     print(f"\n{_BOLD}Setup complete.{_RESET}\n")
     return results
+
+
+def generate_env_template(target_path: Path | str | None = None) -> Path:
+    """Generate the standard .env template from the module's .env.example."""
+    import shutil
+    from pathlib import Path
+
+    source = Path(__file__).parent.parent / ".env.example"
+    target = Path(target_path) if target_path else Path(".env")
+
+    if not source.exists():
+        raise FileNotFoundError(f"Source template not found: {source}")
+
+    shutil.copy2(source, target)
+    return target.absolute()

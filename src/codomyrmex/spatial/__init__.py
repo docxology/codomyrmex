@@ -7,8 +7,7 @@ Provides submodules for 3D modeling, 4D modeling (Synergetics), and world models
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # New submodules
 from . import coordinates, four_d, physics, rendering, three_d, world_models

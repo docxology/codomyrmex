@@ -8,7 +8,7 @@ enabling precise error handling and classification.
 try:
     import requests as _requests
 except ImportError:
-    _requests = None
+    pass
 
 
 class InfomaniakCloudError(Exception):

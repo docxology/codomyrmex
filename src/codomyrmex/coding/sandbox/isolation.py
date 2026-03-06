@@ -29,7 +29,7 @@ except ImportError:
         class NoSuchProcess(Exception):
             pass
 
-    psutil = _DummyPSUtil()
+    psutil = _DummyPSUtil()  # type: ignore
 
 from codomyrmex.logging_monitoring import get_logger
 

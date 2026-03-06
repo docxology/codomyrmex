@@ -546,7 +546,7 @@ class OllamaManager:
         if self.use_http_api:
             try:
                 # Prepare request payload
-                payload = {"model": model_name, "prompt": prompt, "stream": False}
+                payload: dict[str, Any] = {"model": model_name, "prompt": prompt, "stream": False}
 
                 # Add options if provided
                 if options:
@@ -583,12 +583,12 @@ class OllamaManager:
                 )
 
                 execution_time = time.time() - start_time
+                error_msg = None
 
                 if response.status_code == 200:
                     data = response.json()
                     response_text = data.get("response", "").strip()
                     success = True
-                    error_msg = None
                     tokens_used = data.get("eval_count")  # Approximate token count
 
                     self.logger.info(
@@ -657,11 +657,11 @@ class OllamaManager:
             )
 
             execution_time = time.time() - start_time
+            error_msg = None
 
             if result.returncode == 0:
                 response = result.stdout.strip()
                 success = True
-                error_msg = None
 
                 self.logger.info(
                     f"Model {model_name} completed successfully in {execution_time:.2f}s"

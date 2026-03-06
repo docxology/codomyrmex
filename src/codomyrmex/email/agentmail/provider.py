@@ -44,8 +44,7 @@ try:
 
     AGENTMAIL_AVAILABLE = True
 except ImportError:
-    AgentMail = None
-    ApiError = Exception
+    ApiError = Exception  # type: ignore
     AGENTMAIL_AVAILABLE = False
 
 from datetime import UTC

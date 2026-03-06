@@ -236,7 +236,7 @@ class TestPyreflyRunnerAvailability:
         runner = PyreflyRunner()
         result = runner.analyze_file(str(py_file))
         assert result.success is False
-        assert "not installed" in result.error_message.lower()
+        assert "not installed" in (result.error_message or "").lower()
 
     @pytest.mark.skipif(PYREFLY_INSTALLED, reason="pyrefly IS installed")
     def test_analyze_directory_returns_failure_when_unavailable(self, tmp_path):
@@ -244,7 +244,7 @@ class TestPyreflyRunnerAvailability:
         runner = PyreflyRunner()
         result = runner.analyze_directory(str(tmp_path))
         assert result.success is False
-        assert "not installed" in result.error_message.lower()
+        assert "not installed" in (result.error_message or "").lower()
 
 
 # ===================================================================

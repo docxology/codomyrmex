@@ -20,14 +20,12 @@ try:
     HAS_FEATURE_MANAGER = True
 except ImportError:
     HAS_FEATURE_MANAGER = False
-    FeatureManager = None
 
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def cli_commands():

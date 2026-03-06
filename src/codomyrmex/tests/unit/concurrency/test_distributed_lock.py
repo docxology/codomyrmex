@@ -116,7 +116,7 @@ class TestLocalLockContextManager:
         lock1.acquire()
         try:
             with pytest.raises(TimeoutError):
-                lock2.acquire = lambda timeout=10.0, retry_interval=0.1: False
+                lock2.acquire = lambda timeout=10.0, retry_interval=0.1: False  # type: ignore
                 with lock2:
                     pass
         finally:

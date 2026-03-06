@@ -5,7 +5,7 @@ import time
 import pytest
 
 from codomyrmex.telemetry.agent_hooks import AgentTelemetryHooks
-from codomyrmex.telemetry.metrics import MetricsRegistry, get_metrics
+from codomyrmex.telemetry.metrics import MetricsRegistry
 from codomyrmex.telemetry.tracing import InMemoryExporter, SpanStatus, get_tracer
 
 

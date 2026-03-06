@@ -1,4 +1,3 @@
-import pytest
 
 from codomyrmex.languages.python.manager import PythonManager
 

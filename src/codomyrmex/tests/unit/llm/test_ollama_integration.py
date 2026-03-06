@@ -466,7 +466,7 @@ class TestOllamaIntegration:
         )
 
         assert result.success is False
-        assert "not available" in result.error_message.lower()
+        assert "not available" in (result.error_message or "").lower()
 
         # Test with empty prompt
         result = self.ollama_manager.run_model(self.test_model, "", save_output=False)

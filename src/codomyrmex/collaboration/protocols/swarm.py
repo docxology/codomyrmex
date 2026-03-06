@@ -82,7 +82,7 @@ class TaskDecomposer(NewTaskDecomposer):
     """Utilities for breaking down complex missions (Legacy Compatibility)."""
 
     @staticmethod
-    def decompose(mission: str) -> list[str]:
+    def decompose(mission: str) -> list[str]:  # type: ignore
         """Break down a mission into primitive tasks (Legacy)."""
         if " and " in mission:
             return mission.split(" and ")

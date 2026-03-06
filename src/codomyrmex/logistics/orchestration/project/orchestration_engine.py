@@ -40,12 +40,9 @@ except ImportError:
         return decorator
 
 
-try:
-    import codomyrmex.model_context_protocol
+import importlib.util as _ilu
 
-    MCP_AVAILABLE = True
-except ImportError:
-    MCP_AVAILABLE = False
+MCP_AVAILABLE = _ilu.find_spec("codomyrmex.model_context_protocol") is not None
 
 # Import orchestration components
 from .project_manager import ProjectManager
@@ -541,7 +538,7 @@ class OrchestrationEngine:
         try:
             # Create project
             self.project_manager.create_project(
-                name=project_name, template_name=template_name, **kwargs
+                name=project_name, type=__import__("codomyrmex.logistics.orchestration.project.models").logistics.orchestration.project.models.ProjectType.CUSTOM, **kwargs
             )
 
             # Execute workflow for project
@@ -588,7 +585,7 @@ class OrchestrationEngine:
 
                 if hasattr(component, "health_check"):
                     try:
-                        component_status = component.health_check()
+                        component_status = component.health_check()  # type: ignore
                         component_health["details"] = component_status
 
                         if component_status.get("overall_status") != "healthy":
@@ -641,7 +638,7 @@ class OrchestrationEngine:
 
         # Component metrics
         if hasattr(self.workflow_manager, "get_metrics"):
-            metrics["workflows"] = self.workflow_manager.get_metrics()
+            metrics["workflows"] = self.workflow_manager.get_metrics()  # type: ignore
 
         metrics["tasks"] = self.task_orchestrator.get_execution_stats()
         metrics["projects"] = self.project_manager.get_projects_summary()
@@ -672,7 +669,7 @@ class OrchestrationEngine:
 
         # Save state
         if hasattr(self.resource_manager, "save_resources"):
-            self.resource_manager.save_resources()
+            self.resource_manager.save_resources()  # type: ignore
 
         try:
             logger.info("OrchestrationEngine shutdown complete")

@@ -97,7 +97,7 @@ class TestMigrationSupport:
         result = migration_manager.apply_migration(migration.id, dry_run=True)
 
         assert result.success
-        assert "Dry run" in result.error_message
+        assert "Dry run" in (result.error_message or "")
 
     def test_list_migrations(self, migration_manager):
         """Test listing all migrations."""

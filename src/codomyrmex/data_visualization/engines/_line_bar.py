@@ -19,7 +19,7 @@ class LineBarMixin:
 
     config: PlotConfig
     current_axes: plt.Axes | None
-    create_figure: callable
+    create_figure: callable  # type: ignore
 
     @monitor_performance("plot_line")
     def plot_line(
@@ -144,7 +144,7 @@ def create_advanced_line_plot(
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
-    config: PlotConfig = None,
+    config: PlotConfig = None,  # type: ignore
     save_path: str | None = None,
     **kwargs,
 ):
@@ -162,7 +162,7 @@ def create_advanced_bar_chart(
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
-    config: PlotConfig = None,
+    config: PlotConfig = None,  # type: ignore
     save_path: str | None = None,
     **kwargs,
 ):

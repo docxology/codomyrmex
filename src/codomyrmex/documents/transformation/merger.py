@@ -8,7 +8,7 @@ logger = get_logger(__name__)
 
 
 def merge_documents(
-    documents: list[Document], target_format: DocumentFormat = None
+    documents: list[Document], target_format: DocumentFormat = None  # type: ignore
 ) -> Document:
     """
     Merge multiple documents into a single document.

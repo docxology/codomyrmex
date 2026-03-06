@@ -127,7 +127,7 @@ class RuleBasedAgent(Agent):
 
     def act(self, observation: dict[str, Any]) -> Action:
         """Act."""
-        for condition, action_type, params in self._rules:
+        for condition, action_type, params in self._rules:  # type: ignore
             try:
                 if condition(observation):
                     return Action(type=action_type, parameters=params)
@@ -197,7 +197,7 @@ class QLearningAgent(Agent):
             action_type = random.choice(self.action_types)
         else:
             q_values = self._q_table[state]
-            action_type = max(q_values, key=q_values.get)
+            action_type = max(q_values, key=q_values.get)  # type: ignore
 
         self._last_action_type = action_type
         return Action(type=action_type)

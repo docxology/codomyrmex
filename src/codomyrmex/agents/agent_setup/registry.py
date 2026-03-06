@@ -233,6 +233,15 @@ class AgentRegistry:
                 default_model="qwen-coder-plus",
                 probe=lambda: _probe_api_key_env("qwen", "DASHSCOPE_API_KEY"),
             ),
+            AgentDescriptor(
+                name="perplexity",
+                display_name="Perplexity API",
+                agent_type="api",
+                env_var="PERPLEXITY_API_KEY",
+                config_key="perplexity_api_key",
+                default_model="sonar",
+                probe=lambda: _probe_api_key_env("perplexity", "PERPLEXITY_API_KEY"),
+            ),
             # ── CLI agents ────────────────────────────────────────────
             AgentDescriptor(
                 name="jules",
@@ -269,6 +278,15 @@ class AgentRegistry:
                 config_key="mistral_vibe_command",
                 default_model="n/a",
                 probe=lambda: _probe_cli_binary("mistral_vibe", "vibe"),
+            ),
+            AgentDescriptor(
+                name="hermes",
+                display_name="Hermes Agent CLI (NousResearch)",
+                agent_type="cli",
+                env_var="HERMES_COMMAND",
+                config_key="hermes_command",
+                default_model="n/a",
+                probe=lambda: _probe_cli_binary("hermes", "hermes"),
             ),
             AgentDescriptor(
                 name="every_code",

@@ -94,7 +94,7 @@ class TestDeploymentManager:
 
         assert result.success is False
         assert result.state == DeploymentState.FAILED
-        assert "unhandled explosion" in result.errors[0]
+        assert "unhandled explosion" in (result.errors or [])[0]
         assert mgr.summary()["failed"] == 1
 
     def test_summary_accuracy(self):

@@ -37,7 +37,6 @@ try:
     FASTER_WHISPER_AVAILABLE = True
 except ImportError:
     FASTER_WHISPER_AVAILABLE = False
-    WhisperModel = None
 
 
 # Supported audio formats

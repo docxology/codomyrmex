@@ -90,7 +90,7 @@ class AgentOrchestrator:
                         metadata={"agent": str(agent)},
                     )
 
-        return responses
+        return responses  # type: ignore
 
     def execute_sequential(
         self,

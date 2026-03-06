@@ -65,7 +65,7 @@ def detect_lsb_steganography(image_path: str) -> DetectionResult:
 
     for y in range(height):
         for x in range(width):
-            r, g, b = pixels[x, y]
+            r, g, b = pixels[x, y]  # type: ignore
             lsb_values.extend([r & 1, g & 1, b & 1])
             bit1_values.extend([(r >> 1) & 1, (g >> 1) & 1, (b >> 1) & 1])
 

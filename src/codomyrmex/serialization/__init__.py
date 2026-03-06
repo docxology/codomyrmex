@@ -10,8 +10,7 @@ from typing import Any, Optional, Union
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from collections.abc import Callable
 

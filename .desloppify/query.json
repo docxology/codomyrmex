@@ -1,195 +1,938 @@
 {
-  "command": "show",
-  "query": "smells",
-  "status_filter": "open",
-  "total": 10,
-  "summary": {
-    "by_tier": {
-      "T2": 10
+  "command": "next",
+  "items": [
+    {
+      "id": "review::.::holistic::design_coherence::generator-functions-mixed-responsibilities::5384b7b8",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "review",
+      "file": ".",
+      "summary": "Generator functions in agents/droid/generators/ mix template string construction, feature flag checking, and output formatting",
+      "detail": {
+        "holistic": true,
+        "dimension": "design_coherence",
+        "related_files": [
+          "src/codomyrmex/agents/droid/generators/documentation.py",
+          "src/codomyrmex/agents/droid/generators/physical_generators/content_generators.py"
+        ],
+        "evidence": [
+          "Each generator function builds 200+ line Python source strings as triple-quoted templates while also checking feature flags, constructing imports, and managing indentation.",
+          "No separation between data-gathering, template-rendering, and validation phases.",
+          "Similar patterns repeated across 6+ generator files without a shared rendering abstraction."
+        ],
+        "suggestion": "Extract a template rendering layer. Each generator should call: gather_module_config() -> render_template(config) -> validate_output(code). The current single-function approach makes the generators untestable in isolation.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
     },
-    "by_detector": {
-      "smells": 10
+    {
+      "id": "review::.::holistic::low_level_elegance::god-functions-still-prevalent::f9c3f547",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "review",
+      "file": ".",
+      "summary": "458 functions exceed 60 lines; generator functions in agents/droid remain 200-250 lines each",
+      "detail": {
+        "holistic": true,
+        "dimension": "low_level_elegance",
+        "related_files": [
+          "src/codomyrmex/agents/pai/mcp/server.py",
+          "src/codomyrmex/agents/droid/generators/physical_generators/content_generators.py",
+          "src/codomyrmex/agents/droid/generators/documentation.py",
+          "src/codomyrmex/utils/process/subprocess.py",
+          "src/codomyrmex/orchestrator/workflows/workflow.py"
+        ],
+        "evidence": [
+          "AST analysis found 458 functions/methods exceeding 60 lines after current fixes.",
+          "Top offenders remain: content_generators.py functions 200-243 lines each mixing template rendering, conditional checks, and output formatting.",
+          "documentation.py generator functions 230+ lines each.",
+          "run_command in subprocess.py 213 lines mixing process spawning, buffering, timeout, and error formatting."
+        ],
+        "suggestion": "Decompose the top 20 functions over 150 lines into focused helpers. Code generator functions should delegate to render_header(), render_body(), render_footer() helpers.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
     },
-    "files": 6
-  },
-  "by_file": {
-    "projects/test_project/run_demo.py": [
-      {
-        "id": "smells::projects/test_project/run_demo.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            20
-          ]
-        }
+    {
+      "id": "review::.::holistic::abstraction_fitness::single-impl-abstract-patterns-remain::78f381d8",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "medium",
+      "detector": "review",
+      "file": ".",
+      "summary": "401 ABC/Protocol/abstractmethod uses across the codebase with many single-implementation abstract base classes",
+      "detail": {
+        "holistic": true,
+        "dimension": "abstraction_fitness",
+        "related_files": [
+          "src/codomyrmex/agents/",
+          "src/codomyrmex/coding/",
+          "src/codomyrmex/llm/"
+        ],
+        "evidence": [
+          "llm/providers/ correctly uses LLMProvider ABC with 4 concrete implementations (OpenAI, Anthropic, OpenRouter, Gemini) \u2014 justified abstraction.",
+          "api/webhooks/transport.py WebhookTransport ABC has 2 implementations (HTTPWebhookTransport + abstract) \u2014 borderline justified.",
+          "Many single-implementation ABCs in coding/ and agents/ add indirection without actual polymorphism in use.",
+          "401 occurrences is 3x what would be expected for a codebase with genuine polymorphism needs."
+        ],
+        "suggestion": "Audit ABCs with exactly 1 concrete implementation and no documented extension plan. Replace with concrete classes directly. The llm/providers/ pattern is correct; smaller utility ABCs are over-engineered.",
+        "reasoning": ""
       },
-      {
-        "id": "smells::projects/test_project/run_demo.py::swallowed_error",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "6x Catch block that only logs (swallowed error)",
-        "detail": {
-          "smell_id": "swallowed_error",
-          "severity": "high",
-          "count": 6,
-          "lines": [
-            164,
-            185,
-            218,
-            236,
-            258,
-            286
-          ]
-        }
-      }
-    ],
-    "scripts/agentic_memory/agentic_memory_demo.py": [
-      {
-        "id": "smells::scripts/agentic_memory/agentic_memory_demo.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            13
-          ]
-        }
-      },
-      {
-        "id": "smells::scripts/agentic_memory/agentic_memory_demo.py::sys_exit_in_library",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.exit() outside CLI entry point \u2014 use exceptions",
-        "detail": {
-          "smell_id": "sys_exit_in_library",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            42
-          ]
-        }
-      }
-    ],
-    "scripts/agents/advanced_workflow.py": [
-      {
-        "id": "smells::scripts/agents/advanced_workflow.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            16
-          ]
-        }
-      },
-      {
-        "id": "smells::scripts/agents/advanced_workflow.py::sys_exit_in_library",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.exit() outside CLI entry point \u2014 use exceptions",
-        "detail": {
-          "smell_id": "sys_exit_in_library",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            56
-          ]
-        }
-      }
-    ],
-    "scripts/agents/agent_comparison.py": [
-      {
-        "id": "smells::scripts/agents/agent_comparison.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            16
-          ]
-        }
-      },
-      {
-        "id": "smells::scripts/agents/agent_comparison.py::silent_except",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "3x Except handler silently suppresses error (pass/continue, no log)",
-        "detail": {
-          "smell_id": "silent_except",
-          "severity": "high",
-          "count": 3,
-          "lines": [
-            84,
-            91,
-            98
-          ]
-        }
-      }
-    ],
-    "projects/test_project/src/git_workflow.py": [
-      {
-        "id": "smells::projects/test_project/src/git_workflow.py::swallowed_error",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "7x Catch block that only logs (swallowed error)",
-        "detail": {
-          "smell_id": "swallowed_error",
-          "severity": "high",
-          "count": 7,
-          "lines": [
-            98,
-            106,
-            112,
-            118,
-            168,
-            174,
-            177
-          ]
-        }
-      }
-    ],
-    "projects/test_project/src/mcp_explorer.py": [
-      {
-        "id": "smells::projects/test_project/src/mcp_explorer.py::swallowed_error",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "3x Catch block that only logs (swallowed error)",
-        "detail": {
-          "smell_id": "swallowed_error",
-          "severity": "high",
-          "count": 3,
-          "lines": [
-            118,
-            124,
-            162
-          ]
-        }
-      }
-    ]
-  },
-  "total_matching": 1585,
-  "hidden": {
-    "by_detector": {
-      "smells": 1575
+      "status": "open",
+      "primary_command": "desloppify issues"
     },
-    "total": 1575
+    {
+      "id": "review::.::holistic::ai_generated_debt::mcp-wrappers-minimal-value-added::17395d02",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "medium",
+      "detector": "review",
+      "file": ".",
+      "summary": "MCP tool wrappers in many modules forward arguments to underlying implementations with minimal policy or validation added",
+      "detail": {
+        "holistic": true,
+        "dimension": "ai_generated_debt",
+        "related_files": [
+          "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "src/codomyrmex/model_context_protocol/decorators.py"
+        ],
+        "evidence": [
+          "407 dynamic MCP tools registered \u2014 most are thin @mcp_tool decorated functions that call one underlying implementation function.",
+          "Pattern: @mcp_tool decorator registers function, function calls same-named implementation with identical args.",
+          "Few wrappers add validation, auth checks, rate limiting, or error translation beyond what the underlying function provides.",
+          "Some mcp_tools.py files have restating docstrings that duplicate the function signature in prose."
+        ],
+        "suggestion": "Audit each MCP tool to confirm it adds at least one of: input validation, auth check, error translation, or logging. Remove wrappers that add nothing and expose underlying functions directly via @mcp_tool.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
+    },
+    {
+      "id": "review::.::holistic::dependency_health::optional-dep-groups-hard-to-discover::7f07b91d",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "medium",
+      "detector": "review",
+      "file": ".",
+      "summary": "126+ optional dependency groups in pyproject.toml lack documentation about which groups conflict with each other",
+      "detail": {
+        "holistic": true,
+        "dimension": "dependency_health",
+        "related_files": [
+          "pyproject.toml"
+        ],
+        "evidence": [
+          "pyproject.toml has 126+ [project.optional-dependencies] sections \u2014 one per module.",
+          "The aider module explicitly cannot coexist with in-project deps due to numpy/pyyaml pin conflicts.",
+          "No docs/DEPENDENCIES.md or compatibility matrix explaining which extras conflict.",
+          "Users doing 'uv sync --all-extras' may encounter silent conflicts."
+        ],
+        "suggestion": "Add a docs/DEPENDENCIES.md compatibility matrix. Document which extras conflict (e.g. aider must use 'uv tool install'). Add a CI check that validates the most common extras install cleanly together.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
+    },
+    {
+      "id": "review::.::holistic::error_consistency::mixed-strategies-across-module-boundaries::5cb36965",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "medium",
+      "detector": "review",
+      "file": ".",
+      "summary": "Shell utilities return dicts while agent methods raise exceptions; no documented convention per module type",
+      "detail": {
+        "holistic": true,
+        "dimension": "error_consistency",
+        "related_files": [
+          "src/codomyrmex/orchestrator/thin.py",
+          "src/codomyrmex/git_operations/",
+          "src/codomyrmex/coding/"
+        ],
+        "evidence": [
+          "orchestrator/thin.py schema drift fixed \u2014 timeout and error returns now match success schema keys.",
+          "468 return-None patterns mixed with raise patterns across the codebase.",
+          "Shell execution utilities consistently return dicts with success/returncode/stdout/stderr \u2014 this pattern is now consistent within that module.",
+          "Agent call methods consistently raise exceptions \u2014 also consistent within that module.",
+          "The inconsistency is cross-module-type rather than within a module type."
+        ],
+        "suggestion": "Document the convention: shell utilities return dicts (for subprocess interop), agent methods raise typed exceptions (for Python caller ergonomics). Apply consistently within each module category.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
+    },
+    {
+      "id": "review::.::holistic::high_level_elegance::module-grouping-lacks-domain-navigation::78dac2f0",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "medium",
+      "detector": "review",
+      "file": ".",
+      "summary": "128 top-level modules at codomyrmex root are navigable only by knowing module names \u2014 no domain-level wayfinding",
+      "detail": {
+        "holistic": true,
+        "dimension": "high_level_elegance",
+        "related_files": [
+          "src/codomyrmex/"
+        ],
+        "evidence": [
+          "128 directories directly under src/codomyrmex/ \u2014 a new engineer must read the README or CLAUDE.md to understand which modules relate to which domain.",
+          "api, api_documentation, api_standardization, api_testing, api_tester appear as siblings without clear boundary documentation between them.",
+          "CLAUDE.md documents 4 layers but 128 modules do not map cleanly \u2014 many are cross-cutting."
+        ],
+        "suggestion": "Add a MODULES.md index that groups the 128 modules into 10 domain clusters with one-line descriptions. This costs nothing architecturally but dramatically improves orientation for new contributors.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
+    },
+    {
+      "id": "review::.::holistic::package_organization::sibling-api-modules-lack-clear-boundaries::3d8d1bd4",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "medium",
+      "detector": "review",
+      "file": ".",
+      "summary": "api, api_documentation, api_standardization, api_testing, api_tester are sibling modules sharing domain concern without documented boundaries",
+      "detail": {
+        "holistic": true,
+        "dimension": "package_organization",
+        "related_files": [
+          "src/codomyrmex/api/",
+          "src/codomyrmex/api_documentation/",
+          "src/codomyrmex/api_standardization/",
+          "src/codomyrmex/api_testing/",
+          "src/codomyrmex/api_tester/"
+        ],
+        "evidence": [
+          "5 modules share 'api' in their name and likely share concern without clear stated boundaries between them.",
+          "No shared parent directory grouping them \u2014 they are siblings of logging_monitoring, orchestrator, etc.",
+          "Similar pattern: agents, agents/core, agents/history, agentic_memory live at different hierarchy levels."
+        ],
+        "suggestion": "Document in each module's README.md where that module ends and adjacent modules begin. The flat structure can work if each module clearly states its specific responsibility boundary.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
+    },
+    {
+      "id": "review::.::holistic::test_strategy::script-files-counted-as-untested::fb1a4d0a",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "medium",
+      "detector": "review",
+      "file": ".",
+      "summary": "Desloppify test health metric includes 1600+ standalone scripts as untested modules, distorting the production code coverage picture",
+      "detail": {
+        "holistic": true,
+        "dimension": "test_strategy",
+        "related_files": [
+          "scripts/",
+          "projects/"
+        ],
+        "evidence": [
+          "1629 open test_coverage findings before wontfix cleanup \u2014 vast majority were scripts/ and projects/ example code.",
+          "After marking scripts/* and projects/* as wontfix, production src/codomyrmex/ modules are the remaining coverage gap.",
+          "Trust gateway has 25 tests, MCP bridge has 49 tests \u2014 core high-risk paths have reasonable coverage.",
+          "agents/history module tests confirmed to exist at tests/unit/agents/test_history_*.py.",
+          "Production modules still untested: agentic_memory/obsidian/models.py, agents/evaluation/__init__.py, api/pagination/__init__.py, cache/warmers/__init__.py."
+        ],
+        "suggestion": "Add tests for the 10 highest-LOC untested production modules. Prioritize modules with multiple importers (high blast radius). Skip standalone scripts \u2014 they legitimately have no test harness.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
+    },
+    {
+      "id": "unused::src/codomyrmex/agents/evaluation/benchmark.py::dataclasses.field",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/agents/evaluation/benchmark.py",
+      "summary": "Unused imports: dataclasses.field",
+      "detail": {
+        "line": 7,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/agents/evaluation/benchmark.py::dataclasses.field\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/agents/pooling/models.py::time",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/agents/pooling/models.py",
+      "summary": "Unused imports: time",
+      "detail": {
+        "line": 3,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/agents/pooling/models.py::time\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/api/circuit_breaker/models.py::dataclasses.field",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/api/circuit_breaker/models.py",
+      "summary": "Unused imports: dataclasses.field",
+      "detail": {
+        "line": 4,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/api/circuit_breaker/models.py::dataclasses.field\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/api/mocking/models.py::random",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/api/mocking/models.py",
+      "summary": "Unused imports: random",
+      "detail": {
+        "line": 3,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/api/mocking/models.py::random\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/api/mocking/server.py::.models.MatchStrategy",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/api/mocking/server.py",
+      "summary": "Unused imports: .models.MatchStrategy",
+      "detail": {
+        "line": 8,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/api/mocking/server.py::.models.MatchStrategy\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/api/mocking/server.py::.models.MockRequest",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/api/mocking/server.py",
+      "summary": "Unused imports: .models.MockRequest",
+      "detail": {
+        "line": 9,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/api/mocking/server.py::.models.MockRequest\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/api/pagination/models.py::math",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/api/pagination/models.py",
+      "summary": "Unused imports: math",
+      "detail": {
+        "line": 3,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/api/pagination/models.py::math\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/audio/mcp_tools.py::edge_tts",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/audio/mcp_tools.py",
+      "summary": "Unused imports: edge_tts",
+      "detail": {
+        "line": 40,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/audio/mcp_tools.py::edge_tts\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/audio/mcp_tools.py::pyttsx3",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/audio/mcp_tools.py",
+      "summary": "Unused imports: pyttsx3",
+      "detail": {
+        "line": 33,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/audio/mcp_tools.py::pyttsx3\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/audio/mcp_tools.py::whisper",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/audio/mcp_tools.py",
+      "summary": "Unused imports: whisper",
+      "detail": {
+        "line": 26,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/audio/mcp_tools.py::whisper\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/cli/utils.py::codomyrmex.performance.monitoring.performance_monitor.PerformanceMonitor",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/cli/utils.py",
+      "summary": "Unused imports: codomyrmex.performance.monitoring.performance_monitor.PerformanceMonitor",
+      "detail": {
+        "line": 13,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/cli/utils.py::codomyrmex.performance.monitoring.performance_monitor.PerformanceMonitor\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/cli/utils.py::codomyrmex.performance.monitoring.performance_monitor.monitor_performance",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/cli/utils.py",
+      "summary": "Unused imports: codomyrmex.performance.monitoring.performance_monitor.monitor_performance",
+      "detail": {
+        "line": 14,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/cli/utils.py::codomyrmex.performance.monitoring.performance_monitor.monitor_performance\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/languages/mcp_tools.py::json",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/languages/mcp_tools.py",
+      "summary": "Unused imports: json",
+      "detail": {
+        "line": 5,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/languages/mcp_tools.py::json\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/logistics/orchestration/project/orchestration_engine.py::codomyrmex.model_context_protocol",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/logistics/orchestration/project/orchestration_engine.py",
+      "summary": "Unused imports: codomyrmex.model_context_protocol",
+      "detail": {
+        "line": 44,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/logistics/orchestration/project/orchestration_engine.py::codomyrmex.model_context_protocol\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/telemetry/metrics/core.py::collections.abc.Callable",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/telemetry/metrics/core.py",
+      "summary": "Unused imports: collections.abc.Callable",
+      "detail": {
+        "line": 7,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/telemetry/metrics/core.py::collections.abc.Callable\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/telemetry/metrics/core.py::statistics",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/telemetry/metrics/core.py",
+      "summary": "Unused imports: statistics",
+      "detail": {
+        "line": 3,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/telemetry/metrics/core.py::statistics\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.data_visualization.create_bar_chart",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py",
+      "summary": "Unused imports: codomyrmex.data_visualization.create_bar_chart",
+      "detail": {
+        "line": 23,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.data_visualization.create_bar_chart\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.data_visualization.create_line_plot",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py",
+      "summary": "Unused imports: codomyrmex.data_visualization.create_line_plot",
+      "detail": {
+        "line": 24,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.data_visualization.create_line_plot\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.performance.PerformanceProfiler",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py",
+      "summary": "Unused imports: codomyrmex.performance.PerformanceProfiler",
+      "detail": {
+        "line": 33,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.performance.PerformanceProfiler\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.performance.profile_function",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py",
+      "summary": "Unused imports: codomyrmex.performance.profile_function",
+      "detail": {
+        "line": 34,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.performance.profile_function\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.performance.run_benchmark",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py",
+      "summary": "Unused imports: codomyrmex.performance.run_benchmark",
+      "detail": {
+        "line": 35,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/data_visualization/test_visualization_performance.py::codomyrmex.performance.run_benchmark\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.ci_cd_automation.create_pipeline",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py",
+      "summary": "Unused imports: codomyrmex.ci_cd_automation.create_pipeline",
+      "detail": {
+        "line": 40,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.ci_cd_automation.create_pipeline\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.ci_cd_automation.validate_pipeline_config",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py",
+      "summary": "Unused imports: codomyrmex.ci_cd_automation.validate_pipeline_config",
+      "detail": {
+        "line": 41,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.ci_cd_automation.validate_pipeline_config\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.coding.static_analysis.analyze_file",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py",
+      "summary": "Unused imports: codomyrmex.coding.static_analysis.analyze_file",
+      "detail": {
+        "line": 19,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.coding.static_analysis.analyze_file\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.coding.static_analysis.analyze_project",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py",
+      "summary": "Unused imports: codomyrmex.coding.static_analysis.analyze_project",
+      "detail": {
+        "line": 20,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.coding.static_analysis.analyze_project\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.security.digital.analyze_file_security",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py",
+      "summary": "Unused imports: codomyrmex.security.digital.analyze_file_security",
+      "detail": {
+        "line": 29,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.security.digital.analyze_file_security\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.security.digital.check_compliance",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py",
+      "summary": "Unused imports: codomyrmex.security.digital.check_compliance",
+      "detail": {
+        "line": 30,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.security.digital.check_compliance\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.security.digital.scan_vulnerabilities",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py",
+      "summary": "Unused imports: codomyrmex.security.digital.scan_vulnerabilities",
+      "detail": {
+        "line": 31,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/security/test_analysis_security_cicd.py::codomyrmex.security.digital.scan_vulnerabilities\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.ci_cd_automation.create_pipeline",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.ci_cd_automation.create_pipeline",
+      "detail": {
+        "line": 72,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.ci_cd_automation.create_pipeline\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.coding.ExecutionLimits",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.coding.ExecutionLimits",
+      "detail": {
+        "line": 27,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.coding.ExecutionLimits\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.coding.execute_with_limits",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.coding.execute_with_limits",
+      "detail": {
+        "line": 29,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.coding.execute_with_limits\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.coding.static_analysis.analyze_file",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.coding.static_analysis.analyze_file",
+      "detail": {
+        "line": 41,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.coding.static_analysis.analyze_file\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.data_visualization.create_bar_chart",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.data_visualization.create_bar_chart",
+      "detail": {
+        "line": 58,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.data_visualization.create_bar_chart\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.performance.profile_function",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.performance.profile_function",
+      "detail": {
+        "line": 65,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.performance.profile_function\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.performance.run_benchmark",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.performance.run_benchmark",
+      "detail": {
+        "line": 65,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.performance.run_benchmark\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.security.digital.analyze_file_security",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.security.digital.analyze_file_security",
+      "detail": {
+        "line": 49,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.security.digital.analyze_file_security\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.security.digital.check_compliance",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/integration/test_cross_module_workflows.py",
+      "summary": "Unused imports: codomyrmex.security.digital.check_compliance",
+      "detail": {
+        "line": 50,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/integration/test_cross_module_workflows.py::codomyrmex.security.digital.check_compliance\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/languages/test_bash.py::pytest",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/languages/test_bash.py",
+      "summary": "Unused imports: pytest",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/languages/test_bash.py::pytest\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/languages/test_cpp.py::pytest",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/languages/test_cpp.py",
+      "summary": "Unused imports: pytest",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/languages/test_cpp.py::pytest\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/languages/test_csharp.py::pytest",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/languages/test_csharp.py",
+      "summary": "Unused imports: pytest",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/languages/test_csharp.py::pytest\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::src/codomyrmex/tests/languages/test_elixir.py::pytest",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "src/codomyrmex/tests/languages/test_elixir.py",
+      "summary": "Unused imports: pytest",
+      "detail": {
+        "line": 1,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::src/codomyrmex/tests/languages/test_elixir.py::pytest\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    }
+  ],
+  "queue": {
+    "tier_counts": {
+      "1": 126,
+      "2": 965,
+      "3": 4368,
+      "4": 40
+    },
+    "requested_tier": 1,
+    "selected_tier": 1,
+    "fallback_reason": null,
+    "available_tiers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "total": 126
   },
-  "noise_budget": 10,
-  "noise_global_budget": 0,
   "narrative": {
     "phase": "stagnation",
     "headline": "\u26a0 125 security findings \u2014 review before other cleanup. Score plateaued at 73.1 for 5 scans. Test health (21.3%) is where the breakthrough is. 54 wontfix items may also be worth revisiting. (9 review findings \u2014 run `desloppify issues`)",
@@ -620,6 +1363,322 @@
       "review_findings_pending": 3
     }
   },
+  "overall_score": 73.2,
+  "objective_score": 82.6,
+  "strict_score": 73.1,
+  "scorecard_dimensions": [
+    {
+      "name": "File health",
+      "score": 90.3,
+      "strict": 90.3,
+      "checks": 2443,
+      "issues": 367,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "AI generated debt",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 63.0,
+      "strict": 63.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Code quality",
+      "score": 93.5,
+      "strict": 93.5,
+      "checks": 18160,
+      "issues": 2065,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Convention drift",
+      "score": 80.0,
+      "strict": 80.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 77.0,
+      "strict": 77.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 76.0,
+      "strict": 76.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 59.0,
+      "strict": 59.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Duplication",
+      "score": 98.6,
+      "strict": 98.6,
+      "checks": 11556,
+      "issues": 181,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Elegance",
+      "score": 66.7,
+      "strict": 66.7,
+      "checks": 30,
+      "issues": 2,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 74.0,
+      "strict": 74.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Security",
+      "score": 98.8,
+      "strict": 98.8,
+      "checks": 4896,
+      "issues": 125,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Structure nav",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test health",
+      "score": 24.0,
+      "strict": 21.3,
+      "checks": 27141,
+      "issues": 1668,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Test strategy",
+      "score": 43.0,
+      "strict": 43.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
+  "subjective_measures": [
+    {
+      "name": "AI generated debt",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 63.0,
+      "strict": 63.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Convention drift",
+      "score": 80.0,
+      "strict": 80.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 77.0,
+      "strict": 77.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 76.0,
+      "strict": 76.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 59.0,
+      "strict": 59.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Elegance",
+      "score": 66.7,
+      "strict": 66.7,
+      "checks": 30,
+      "issues": 2,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 74.0,
+      "strict": 74.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Structure nav",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test strategy",
+      "score": 43.0,
+      "strict": 43.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
   "config": {
     "target_strict_score": 95,
     "review_max_age_days": 30,

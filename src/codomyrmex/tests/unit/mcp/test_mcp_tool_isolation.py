@@ -63,7 +63,7 @@ class TestExceptionIsolation:
         result = reg.execute(MCPToolCall(tool_name="bad", arguments={}))
         assert result.status == "failure"
         assert result.error is not None
-        assert "intentional failure" in result.error.error_message
+        assert "intentional failure" in (result.error or "").error_message
 
     def test_exception_does_not_affect_next_call(self) -> None:
         """After a tool raises, the next tool call succeeds normally."""
@@ -88,8 +88,8 @@ class TestExceptionIsolation:
         server.register_tool(name="bad", schema={}, handler=_raises)
         server.register_tool(name="good", schema={}, handler=_echo)
 
-        r1 = await server._call_tool({"name": "bad", "arguments": {}})
-        r2 = await server._call_tool({"name": "good", "arguments": {"val": 1}})
+        r1 = await server._call_tool({"name": "bad", "arguments": {}})  # type: ignore
+        r2 = await server._call_tool({"name": "good", "arguments": {"val": 1}})  # type: ignore
 
         # r1 should be an error response
         assert isinstance(r1, dict)
@@ -183,7 +183,7 @@ class TestTimeoutIsolation:
         server.register_tool(name="fast", schema={}, handler=_echo)
 
         # This should timeout
-        r1 = await server._call_tool({"name": "slow", "arguments": {}})
+        r1 = await server._call_tool({"name": "slow", "arguments": {}})  # type: ignore
         assert isinstance(r1, dict)
         # Check it was a timeout error
         content_str = str(r1)
@@ -191,7 +191,7 @@ class TestTimeoutIsolation:
 
         # This should succeed quickly
         t0 = time.monotonic()
-        r2 = await server._call_tool({"name": "fast", "arguments": {"x": 1}})
+        r2 = await server._call_tool({"name": "fast", "arguments": {"x": 1}})  # type: ignore
         elapsed = time.monotonic() - t0
         assert "content" in r2
         assert elapsed < 1.0  # Should not be blocked by the slow tool
@@ -208,10 +208,10 @@ class TestTimeoutIsolation:
         server.register_tool(name="fast", schema={}, handler=_echo)
 
         async def _call_slow() -> dict:
-            return await server._call_tool({"name": "slow", "arguments": {}})
+            return await server._call_tool({"name": "slow", "arguments": {}})  # type: ignore
 
         async def _call_fast(n: int) -> dict:
-            return await server._call_tool({"name": "fast", "arguments": {"n": n}})
+            return await server._call_tool({"name": "fast", "arguments": {"n": n}})  # type: ignore
 
         # Run one slow + 5 fast concurrently
         results = await asyncio.gather(
@@ -248,10 +248,10 @@ class TestTimeoutIsolation:
         )
 
         # patient_tool has 2s timeout, sleeping 0.1s → success
-        r1 = await server._call_tool({"name": "patient_tool", "arguments": {}})
+        r1 = await server._call_tool({"name": "patient_tool", "arguments": {}})  # type: ignore
         assert "content" in r1
 
         # impatient_tool has 0.05s timeout, sleeping 0.2s → timeout
-        r2 = await server._call_tool({"name": "impatient_tool", "arguments": {}})
+        r2 = await server._call_tool({"name": "impatient_tool", "arguments": {}})  # type: ignore
         content_str = str(r2)
         assert "timeout" in content_str.lower() or "isError" in content_str

@@ -21,8 +21,7 @@ Submodules:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # modular Ollama implementation
 # Submodule exports

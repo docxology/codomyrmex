@@ -7,8 +7,7 @@ This module provides distributed locks, semaphores, and other synchronization pr
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .locks.distributed_lock import (
     BaseLock,
@@ -24,7 +23,7 @@ try:
         RedisLock,
     )
 except ImportError:
-    RedisLock = None
+    pass
 from .dead_letter import DeadLetterQueue
 from .semaphores.semaphore import (
     AsyncLocalSemaphore,

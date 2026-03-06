@@ -266,9 +266,9 @@ class APIDocumentationGenerator:
     def _get_decorator_name(self, decorator: ast.Call) -> str:
         """Get decorator name from AST node."""
         if hasattr(decorator.func, "id"):
-            return decorator.func.id
+            return str(decorator.func.id)
         if hasattr(decorator.func, "attr"):
-            return decorator.func.attr
+            return str(decorator.func.attr)
         return ""
 
     def _parse_decorator_info(self, decorator: ast.Call) -> dict[str, Any]:

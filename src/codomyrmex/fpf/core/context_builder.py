@@ -115,7 +115,7 @@ class ContextBuilder:
 
         return "\n".join(context_lines)
 
-    def build_minimal_context(self, filters: dict[str, any] | None = None) -> str:
+    def build_minimal_context(self, filters: dict[str, any] | None = None) -> str:  # type: ignore
         """Build a minimal context with only essential information.
 
         Args:

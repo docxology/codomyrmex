@@ -282,7 +282,7 @@ class GitHistoryAnalyzer:
             for path in commit.stats.files:
                 file_count[path] += 1
                 if path not in file_last or commit_dt > file_last[path]:
-                    file_last[path] = commit_dt
+                    file_last[path] = commit_dt  # type: ignore
         results = []
         for path, count in file_count.items():
             last_dt = file_last.get(path, now)

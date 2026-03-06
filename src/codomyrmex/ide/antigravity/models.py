@@ -19,26 +19,18 @@ try:
         ArtifactError,
         CommandExecutionError,
         ConnectionError,
-        FileInfo,
         IDEClient,
-        IDECommand,
-        IDECommandResult,
         IDEError,
-        IDEStatus,
         SessionError,
     )
 except ImportError:
     # Fallback if ide module not available
-    IDEClient = object
-    IDEStatus = None
-    IDECommand = None
-    IDECommandResult = None
-    FileInfo = None
-    IDEError = Exception
-    ConnectionError = Exception
-    CommandExecutionError = Exception
-    SessionError = Exception
-    ArtifactError = Exception
+    IDEClient = object  # type: ignore
+    IDEError = Exception  # type: ignore
+    ConnectionError = Exception  # type: ignore
+    CommandExecutionError = Exception  # type: ignore
+    SessionError = Exception  # type: ignore
+    ArtifactError = Exception  # type: ignore
 
 
 @dataclass

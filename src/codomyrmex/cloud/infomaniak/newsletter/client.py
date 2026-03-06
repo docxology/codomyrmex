@@ -35,7 +35,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         self._newsletter_id = newsletter_id
 
     @classmethod
-    def from_env(cls) -> "InfomaniakNewsletterClient":
+    def from_env(cls) -> "InfomaniakNewsletterClient":  # type: ignore
         """Create client from environment variables.
 
         Requires:

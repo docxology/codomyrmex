@@ -114,7 +114,7 @@ class ReasoningEngine:
             case_base, weighting_strategy=self.config.case_weighting_strategy
         )
 
-        self.inference_engine: InferenceEngine | None = None
+        self.inference_engine: InferenceEngine | None = None  # type: ignore
         if bayesian_network:
             from codomyrmex.cerebrum.inference.bayesian import InferenceEngine
 

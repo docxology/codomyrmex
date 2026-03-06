@@ -93,7 +93,7 @@ class TestFieldError:
     def test_frozen_immutable(self):
         fe = FieldError(field="x", constraint="required")
         with pytest.raises((AttributeError, TypeError)):
-            fe.field = "y"
+            fe.field = "y"  # type: ignore
 
 
 # ── MCPToolError ───────────────────────────────────────────────────────

@@ -2,12 +2,10 @@ import http.server
 import json
 import socket
 import threading
-import time
-from typing import Any
 
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse
+from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.core.parsers import (
     parse_code_blocks,
     parse_json_response,
@@ -103,7 +101,7 @@ class TestAgentLifecycleZeroMock:
         response = client.execute(request)
 
         assert not response.is_success()
-        assert "500" in response.error
+        assert "500" in (response.error or "")
 
     def test_response_parsing_json(self, ollama_server):
         client = OllamaClient(base_url=ollama_server)
@@ -166,4 +164,4 @@ And the configuration:
         response = client.execute(request)
 
         assert not response.is_success()
-        assert "Connection Failed" in response.error
+        assert "Connection Failed" in (response.error or "")

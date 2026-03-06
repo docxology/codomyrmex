@@ -77,7 +77,7 @@ class AdvancedPlotter(
 ):
     """Advanced plotting class with comprehensive visualization capabilities."""
 
-    def __init__(self, config: PlotConfig = None):
+    def __init__(self, config: PlotConfig = None):  # type: ignore
         self.config = config or PlotConfig()
         self.figures = []
         self.current_figure = None
@@ -147,9 +147,9 @@ class AdvancedPlotter(
         """Yield individual axes from current_axes (single or multi-subplot)."""
         axes = self.current_axes
         if hasattr(axes, "flat"):
-            yield from axes.flat
+            yield from axes.flat  # type: ignore
         elif hasattr(axes, "__iter__"):
-            yield from axes
+            yield from axes  # type: ignore
         else:
             yield axes
 

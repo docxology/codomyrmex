@@ -26,10 +26,7 @@ try:
 
     GCAL_AVAILABLE = True
 except ImportError:
-    Credentials = None
-    Resource = None
-    HttpError = Exception
-    build = None
+    HttpError = Exception  # type: ignore
     GCAL_AVAILABLE = False
 
 _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]

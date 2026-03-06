@@ -52,7 +52,7 @@ class TimezoneManager:
         try:
             target_tz = pytz.timezone(timezone)
             if dt.tzinfo is None:
-                dt = pytz.UTC.localize(dt)
+                dt = pytz.UTC.localize(dt)  # type: ignore
             return dt.astimezone(target_tz)
         except pytz.exceptions.UnknownTimeZoneError:
             logger.warning(f"Unknown timezone {timezone}, returning original datetime")
@@ -68,5 +68,5 @@ class TimezoneManager:
             Localized datetime
         """
         if dt.tzinfo is None:
-            return self.timezone.localize(dt)
+            return self.timezone.localize(dt)  # type: ignore
         return dt.astimezone(self.timezone)

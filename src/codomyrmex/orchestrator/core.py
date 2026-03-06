@@ -360,7 +360,7 @@ def _report_results(results: list[dict], args: argparse.Namespace, run_id: str) 
                 if len(lines) > 1 and "Traceback" not in lines[-1]:
                     print(f"     {lines[-2]}")
 
-    return summary, 1 if summary["failed"] + summary["error"] + summary[
+    return summary, 1 if summary["failed"] + summary["error"] + summary[  # type: ignore
         "timeout"
     ] > 0 else 0
 
@@ -431,7 +431,7 @@ def main(argv=None):
         results = _execute_scripts(scripts, scripts_dir, args, config)
 
         # Generate summary report
-        summary, exit_code = _report_results(results, args, run_id)
+        summary, exit_code = _report_results(results, args, run_id)  # type: ignore
 
         # Log RUN_COMPLETED event
         perf_logger.end_timer("full_run")

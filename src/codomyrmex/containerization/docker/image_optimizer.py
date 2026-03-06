@@ -19,7 +19,6 @@ except ImportError:
 try:
     HAS_DOCKER = True
 except ImportError:
-    docker = None
     HAS_DOCKER = False
 
 

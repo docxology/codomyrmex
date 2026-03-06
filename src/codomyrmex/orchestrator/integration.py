@@ -177,13 +177,13 @@ class CICDBridge:
         """
         if isinstance(pipeline_config, dict):
             pipeline_config = PipelineConfig(
-                name=pipeline_config.get("name", "pipeline"),
+                name=pipeline_config.get("name", "pipeline"),  # type: ignore
                 stages=[
-                    StageConfig(**stage) for stage in pipeline_config.get("stages", [])
+                    StageConfig(**stage) for stage in pipeline_config.get("stages", [])  # type: ignore
                 ],
-                variables=pipeline_config.get("variables", {}),
-                timeout=pipeline_config.get("timeout", 3600),
-                fail_fast=pipeline_config.get("fail_fast", True),
+                variables=pipeline_config.get("variables", {}),  # type: ignore
+                timeout=pipeline_config.get("timeout", 3600),  # type: ignore
+                fail_fast=pipeline_config.get("fail_fast", True),  # type: ignore
             )
 
         wf = Workflow(
@@ -197,7 +197,6 @@ class CICDBridge:
             # Create task for each stage
             stage_action = self._create_stage_action(stage_config)
 
-            retry_policy = None
             if stage_config.retry > 0:
                 retry_policy = RetryPolicy(max_attempts=stage_config.retry + 1)
 

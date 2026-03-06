@@ -427,7 +427,7 @@ class PriorBuilder:
         self.logger = get_logger(__name__)
 
     def build_prior_from_cases(
-        self, cases: list[Any], variable: str, feature_extractor: callable
+        self, cases: list[Any], variable: str, feature_extractor: callable  # type: ignore
     ) -> Distribution:
         """Build prior distribution from case outcomes.
 

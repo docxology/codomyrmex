@@ -171,7 +171,7 @@ class PersistentScheduler(Scheduler):
         with open(self._state_path, "w") as f:
             json.dump(state, f, indent=2)
 
-    def schedule(
+    def schedule(  # type: ignore
         self,
         func: Callable[..., Any],
         function_name: str | None = None,

@@ -115,7 +115,7 @@ class FixVerifier:
         # Functional fallback: if a unified diff engine isn't present,
         # we check if patch has a full replacement content string
         if hasattr(patch, "content") and patch.content:
-            return patch.content
+            return patch.content  # type: ignore
         if hasattr(patch, "diff") and not patch.diff:
             return source
         return source

@@ -28,8 +28,7 @@ from codomyrmex.utils.cli_helpers import (
 try:
     from codomyrmex.agents.droid import DroidController, create_default_controller
 except ImportError:
-    DroidController = None
-    create_default_controller = None
+    pass
 
 logger = get_logger(__name__)
 

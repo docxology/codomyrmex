@@ -191,7 +191,7 @@ class TestSchemaGeneration:
     """Tests for _generate_schema_from_signature and related helpers."""
 
     def test_schema_for_typed_parameters(self):
-        def func(name: str, count: int, ratio: float, flag: bool) -> str:
+        def func(name: str, count: int, ratio: float, flag: bool) -> str:  # type: ignore
             pass
 
         schema = _generate_schema_from_signature(func)

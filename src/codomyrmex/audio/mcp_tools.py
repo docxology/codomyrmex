@@ -1,5 +1,6 @@
 """MCP tools for the audio module."""
 
+import importlib.util
 from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -22,26 +23,14 @@ def audio_get_capabilities() -> dict[str, Any]:
             "tts_providers": [],
         }
 
-        try:
-            import whisper
-
+        if importlib.util.find_spec("whisper") is not None:
             capabilities["stt_providers"].append("whisper")
-        except ImportError:
-            pass
 
-        try:
-            import pyttsx3
-
+        if importlib.util.find_spec("pyttsx3") is not None:
             capabilities["tts_providers"].append("pyttsx3")
-        except ImportError:
-            pass
 
-        try:
-            import edge_tts
-
+        if importlib.util.find_spec("edge_tts") is not None:
             capabilities["tts_providers"].append("edge-tts")
-        except ImportError:
-            pass
 
         return {
             "status": "success",

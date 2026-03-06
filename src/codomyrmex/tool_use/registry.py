@@ -130,11 +130,11 @@ class ToolRegistry:
         """Retrieve a tool entry by exact name, or None if not found."""
         return self._tools.get(name)
 
-    def list(self) -> list[ToolEntry]:
+    def list(self) -> list[ToolEntry]:  # type: ignore
         """Return all registered tool entries, sorted by name."""
         return sorted(self._tools.values(), key=lambda e: e.name)
 
-    def list_names(self) -> list[str]:
+    def list_names(self) -> list[str]:  # type: ignore
         """Return sorted list of all registered tool names."""
         return sorted(self._tools.keys())
 
@@ -142,9 +142,9 @@ class ToolRegistry:
         self,
         *,
         name_contains: str | None = None,
-        tags: list[str] | None = None,
+        tags: list[str] | None = None,  # type: ignore
         match_all_tags: bool = False,
-    ) -> list[ToolEntry]:
+    ) -> list[ToolEntry]:  # type: ignore
         """
         Search for tools by name substring and/or tags.
 

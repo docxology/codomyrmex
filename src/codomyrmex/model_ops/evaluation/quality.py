@@ -18,8 +18,7 @@ from typing import Any
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 class QualityDimension(Enum):

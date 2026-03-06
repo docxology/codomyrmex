@@ -338,7 +338,7 @@ class AuditLogger:
         """
         audit_record = {
             "audit_id": str(uuid.uuid4()),
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": datetime.now().isoformat(),  # type: ignore
             "actor": actor,
             "action": action,
             "resource": resource,

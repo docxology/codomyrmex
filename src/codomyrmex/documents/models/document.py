@@ -91,7 +91,7 @@ class Document:
     @property
     def type(self) -> DocumentType:
         """Shorthand for document_type."""
-        return self.document_type
+        return self.document_type  # type: ignore
 
     def get_content_as_string(self) -> str:
         """Return content as a string."""

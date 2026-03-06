@@ -15,8 +15,8 @@ class SQLSchema:
     """Database schema for context-aware SQL generation."""
 
     tables: dict[str, list[str]]  # {table_name: [column_name, ...]}
-    primary_keys: dict[str, str] = None  # {table_name: pk_column}
-    foreign_keys: list[tuple] = None  # [(table, col, ref_table, ref_col), ...]
+    primary_keys: dict[str, str] = None  # {table_name: pk_column}  # type: ignore
+    foreign_keys: list[tuple] = None  # [(table, col, ref_table, ref_col), ...]  # type: ignore
 
     def __post_init__(self):
         if self.primary_keys is None:

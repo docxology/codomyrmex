@@ -93,7 +93,7 @@ class TestTaskWorker:
         task = Task(task_id="t1")
         result = worker.process_one(task)
         assert result.success is False
-        assert "boom" in result.error
+        assert "boom" in (result.error or "")
         assert worker.tasks_failed == 1
 
     def test_lifecycle(self):

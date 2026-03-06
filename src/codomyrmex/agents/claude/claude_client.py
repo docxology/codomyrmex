@@ -38,8 +38,7 @@ try:
     from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
 except ImportError:
     if not TYPE_CHECKING:
-        anthropic = None
-    MessageCreateParamsNonStreaming = Any  # type: ignore
+        MessageCreateParamsNonStreaming = Any
 
 logger = get_logger(__name__)
 

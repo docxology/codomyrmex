@@ -74,7 +74,7 @@ class Workflow:
                 "script": [cmd for job in stage.jobs for cmd in job.commands],
             }
             if stage.dependencies:
-                gitlab_ci[job_name]["needs"] = [
+                gitlab_ci[job_name]["needs"] = [  # type: ignore
                     dep.replace(" ", "_") for dep in stage.dependencies
                 ]
 

@@ -318,7 +318,7 @@ class DependencyAnalyzer:
 
         return "\n".join(lines)
 
-    def analyze(self) -> dict[str, any]:
+    def analyze(self) -> dict[str, any]:  # type: ignore
         """Run complete dependency analysis."""
         logger.info("Scanning modules for dependencies...")
         self.scan_all_modules()

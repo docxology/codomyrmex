@@ -13,7 +13,6 @@ try:
 
     ACTIVE_DEFENSE_AVAILABLE = True
 except ImportError:
-    ActiveDefense = None
     ACTIVE_DEFENSE_AVAILABLE = False
 
 try:
@@ -21,7 +20,6 @@ try:
 
     RABBITHOLE_AVAILABLE = True
 except ImportError:
-    RabbitHole = None
     RABBITHOLE_AVAILABLE = False
 
 

@@ -25,26 +25,22 @@ try:
         write_markdown,
     )
 except ImportError:
-    read_markdown = None
-    write_markdown = None
+    pass
 
 try:
     from codomyrmex.documents.formats.json_handler import read_json, write_json
 except ImportError:
-    read_json = None
-    write_json = None
+    pass
 
 try:
     from codomyrmex.documents.formats.yaml_handler import read_yaml, write_yaml
 except ImportError:
-    read_yaml = None
-    write_yaml = None
+    pass
 
 try:
     from codomyrmex.documents.formats.text_handler import read_text, write_text
 except ImportError:
-    read_text = None
-    write_text = None
+    pass
 
 try:
     from codomyrmex.documents.formats.html_handler import (
@@ -53,21 +49,17 @@ try:
         write_html,
     )
 except ImportError:
-    read_html = None
-    write_html = None
-    strip_html_tags = None
+    pass
 
 try:
     from codomyrmex.documents.formats.xml_handler import read_xml, write_xml
 except ImportError:
-    read_xml = None
-    write_xml = None
+    pass
 
 try:
     from codomyrmex.documents.formats.csv_handler import read_csv, write_csv
 except ImportError:
-    read_csv = None
-    write_csv = None
+    pass
 
 from codomyrmex.documents.exceptions import (
     DocumentReadError,

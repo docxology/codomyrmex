@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 try:
     import yaml
 except ImportError:  # pragma: no cover
-    yaml = None
+    pass
 
 
 def _resolve_path(vault_path: Path, name: str) -> Path:

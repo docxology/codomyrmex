@@ -605,7 +605,7 @@ class TestAsyncWorkerPoolBasic:
         async with AsyncWorkerPool(max_workers=2) as pool:
             result = await pool.submit(fail, task_id="fail-1")
             assert result.success is False
-            assert "boom" in result.error
+            assert "boom" in (result.error or "")
 
     async def test_map_items(self):
         async def triple(x):

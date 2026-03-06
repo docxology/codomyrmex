@@ -334,7 +334,7 @@ class TestCollaborationExceptions:
 
     def test_consensus_error_stores_vote_counts(self):
         """ConsensusError stores vote counts and quorum."""
-        err = ConsensusError("upgrade-db", votes_for=2, votes_against=3, quorum=0.6)
+        err = ConsensusError("upgrade-db", votes_for=2, votes_against=3, quorum=0.6)  # type: ignore
         assert err.proposal == "upgrade-db"
         assert err.votes_for == 2
         assert err.votes_against == 3
@@ -380,7 +380,7 @@ class TestCollaborationExceptions:
             TaskExecutionError("x", "y"),
             TaskNotFoundError("x"),
             TaskDependencyError("x", []),
-            ConsensusError("x", 1, 1, 0.5),
+            ConsensusError("x", 1, 1, 0.5),  # type: ignore
             ChannelError("x", "y"),
             MessageDeliveryError("x", "s", "r", "y"),
             CoordinationError("x", "y"),

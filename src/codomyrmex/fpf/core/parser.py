@@ -60,7 +60,7 @@ class FPFParser:
             metadata={"total_patterns": len(patterns)},
         )
 
-    def extract_table_of_contents(self, content: str) -> dict[str, any]:
+    def extract_table_of_contents(self, content: str) -> dict[str, any]:  # type: ignore
         """Extract the table of contents from the FPF specification.
 
         Args:
@@ -132,7 +132,7 @@ class FPFParser:
                 # Save previous pattern if exists
                 if current_pattern:
                     current_pattern.content = "\n".join(current_content_lines)
-                    current_pattern.sections[current_section] = "\n".join(
+                    current_pattern.sections[current_section] = "\n".join(  # type: ignore
                         current_content_lines
                     )
                     patterns.append(current_pattern)

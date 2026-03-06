@@ -87,7 +87,7 @@ class TestQueryExecution:
         """Test query with non-existent table sets error in result."""
         result = db_connection.execute("SELECT * FROM invalid_table")
         assert not result.success
-        assert "no such table: invalid_table" in result.error_message
+        assert "no such table: invalid_table" in (result.error_message or "")
 
 
 # ==============================================================================

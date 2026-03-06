@@ -21,8 +21,7 @@ from .store import (
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def cli_commands():
@@ -33,14 +32,14 @@ def cli_commands():
         print("Vector Store Backends")
         print("  InMemoryVectorStore - In-process memory store")
         print("  NamespacedVectorStore - Namespace-partitioned store")
-        print(f"  Distance Metrics: {[dm.value for dm in DistanceMetric]}")
+        print(f"  Distance Metrics: {[dm.value for dm in DistanceMetric]}")  # type: ignore
 
     def _stats():
         """Show vector store statistics."""
         store = create_vector_store()
         print("Vector Store Statistics")
         print(f"  Backend: {store.__class__.__name__}")
-        print(f"  Distance Metrics: {[dm.value for dm in DistanceMetric]}")
+        print(f"  Distance Metrics: {[dm.value for dm in DistanceMetric]}")  # type: ignore
         count = len(store) if hasattr(store, "__len__") else "N/A"
         print(f"  Stored Vectors: {count}")
 

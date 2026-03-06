@@ -5,7 +5,7 @@ Provides thread operations: list, get, and delete threads.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, NoReturn
 
 from codomyrmex.email.agentmail.models import (
     AgentMailThread,
@@ -16,10 +16,10 @@ from codomyrmex.email.exceptions import EmailAPIError
 try:
     from agentmail.core import ApiError
 except ImportError:
-    ApiError = Exception
+    ApiError = Exception  # type: ignore
 
 
-def _raise_for_api_error(exc: Exception, context: str):
+def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
     """Import and delegate to the module-level error raiser."""
     from codomyrmex.email.agentmail.provider import _raise_for_api_error as _raise
 

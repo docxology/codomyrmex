@@ -62,48 +62,47 @@ from .exceptions import (
 try:
     from .compute import InfomaniakComputeClient
 except ImportError:
-    InfomaniakComputeClient = None
+    pass
 
 try:
     from .block_storage import InfomaniakVolumeClient
 except ImportError:
-    InfomaniakVolumeClient = None
+    pass
 
 try:
     from .network import InfomaniakNetworkClient
 except ImportError:
-    InfomaniakNetworkClient = None
+    pass
 
 try:
     from .object_storage import InfomaniakObjectStorageClient, InfomaniakS3Client
 except ImportError:
-    InfomaniakObjectStorageClient = None
-    InfomaniakS3Client = None
+    pass
 
 try:
     from .identity import InfomaniakIdentityClient
 except ImportError:
-    InfomaniakIdentityClient = None
+    pass
 
 try:
     from .dns import InfomaniakDNSClient
 except ImportError:
-    InfomaniakDNSClient = None
+    pass
 
 try:
     from .orchestration import InfomaniakHeatClient
 except ImportError:
-    InfomaniakHeatClient = None
+    pass
 
 try:
     from .metering import InfomaniakMeteringClient
 except ImportError:
-    InfomaniakMeteringClient = None
+    pass
 
 try:
     from .newsletter import InfomaniakNewsletterClient
 except ImportError:
-    InfomaniakNewsletterClient = None
+    pass
 
 
 __all__ = [

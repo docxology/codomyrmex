@@ -87,7 +87,7 @@ class TestCalendarEvent:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            CalendarEvent(
+            CalendarEvent(  # type: ignore
                 start_time=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
                 end_time=datetime(2026, 3, 1, 11, 0, tzinfo=UTC),
             )
@@ -96,7 +96,7 @@ class TestCalendarEvent:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            CalendarEvent(
+            CalendarEvent(  # type: ignore
                 summary="Test",
                 end_time=datetime(2026, 3, 1, 11, 0, tzinfo=UTC),
             )
@@ -105,7 +105,7 @@ class TestCalendarEvent:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            CalendarEvent(
+            CalendarEvent(  # type: ignore
                 summary="Test",
                 start_time=datetime(2026, 3, 1, 10, 0, tzinfo=UTC),
             )

@@ -47,7 +47,7 @@ class SLM:
     - Language model head (d_model -> vocab_size)
     """
 
-    def __init__(self, config: SLMConfig = None):
+    def __init__(self, config: SLMConfig = None):  # type: ignore
         self.config = config or SLMConfig()
         c = self.config
 
@@ -68,9 +68,9 @@ class SLM:
             from codomyrmex.neural.attention import MultiHeadAttention
             from codomyrmex.neural.layers import FeedForward, LayerNorm
         except ImportError:
-            MultiHeadAttention = _InlineMultiHeadAttention
-            FeedForward = _InlineFeedForward
-            LayerNorm = _InlineLayerNorm
+            MultiHeadAttention = _InlineMultiHeadAttention  # type: ignore
+            FeedForward = _InlineFeedForward  # type: ignore
+            LayerNorm = _InlineLayerNorm  # type: ignore
 
         # Transformer blocks
         self.blocks = []

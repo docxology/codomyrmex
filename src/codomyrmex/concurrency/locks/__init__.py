@@ -6,7 +6,7 @@ from .lock_manager import LockManager, LockStats, ReadWriteLock
 try:
     from .redis_lock import RedisLock
 except ImportError:
-    RedisLock = None
+    pass
 
 __all__ = [
     "BaseLock",

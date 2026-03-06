@@ -9,14 +9,13 @@ orchestration, and deployment capabilities for the Codomyrmex ecosystem.
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Submodule exports - import first
 try:
     from . import docker, kubernetes, registry, security
 except ImportError:
-    docker = kubernetes = registry = security = None
+    docker = kubernetes = registry = security = None  # type: ignore
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:
@@ -28,7 +27,6 @@ try:
     HAS_REGISTRY = True
 except ImportError:
     HAS_REGISTRY = False
-    ContainerRegistry = None
 
 try:
     from .docker.docker_manager import (
@@ -41,8 +39,6 @@ try:
     HAS_DOCKER_MANAGER = True
 except ImportError:
     HAS_DOCKER_MANAGER = False
-    DockerManager = None
-    ContainerConfig = None
 
 try:
     from .kubernetes.kubernetes_orchestrator import (
@@ -54,7 +50,6 @@ try:
     HAS_K8S = True
 except ImportError:
     HAS_K8S = False
-    KubernetesOrchestrator = None
 
 try:
     from .security.performance_optimizer import (
@@ -77,7 +72,6 @@ try:
     HAS_SCANNER = True
 except ImportError:
     HAS_SCANNER = False
-    SecurityScanResult = None
 
 try:
     from .exceptions import (

@@ -195,7 +195,7 @@ class TestAuthFunctions:
 
         # Temporarily hide openstack module
         saved = sys.modules.get("openstack")
-        sys.modules["openstack"] = None
+        sys.modules["openstack"] = None  # type: ignore
         try:
             with pytest.raises(ImportError, match="openstacksdk is required"):
                 create_openstack_connection(
@@ -218,7 +218,7 @@ class TestAuthFunctions:
 
         mock_openstack = Stub()
         mock_openstack.connect.side_effect = Exception("auth failed")
-        sys.modules["openstack"] = mock_openstack
+        sys.modules["openstack"] = mock_openstack  # type: ignore
         try:
             creds = InfomaniakCredentials(
                 application_credential_id="id",
@@ -240,7 +240,7 @@ class TestAuthFunctions:
         mock_conn = Stub()
         mock_openstack = Stub()
         mock_openstack.connect.return_value = mock_conn
-        sys.modules["openstack"] = mock_openstack
+        sys.modules["openstack"] = mock_openstack  # type: ignore
         try:
             creds = InfomaniakCredentials(
                 application_credential_id="id",
@@ -258,7 +258,7 @@ class TestAuthFunctions:
         from codomyrmex.cloud.infomaniak.auth import create_s3_client
 
         saved = sys.modules.get("boto3")
-        sys.modules["boto3"] = None
+        sys.modules["boto3"] = None  # type: ignore
         try:
             with pytest.raises(ImportError, match="boto3 is required"):
                 create_s3_client(Stub())
@@ -279,7 +279,7 @@ class TestAuthFunctions:
         mock_s3 = Stub()
         mock_boto3 = Stub()
         mock_boto3.client.return_value = mock_s3
-        sys.modules["boto3"] = mock_boto3
+        sys.modules["boto3"] = mock_boto3  # type: ignore
         try:
             creds = InfomaniakS3Credentials(
                 access_key="ak",

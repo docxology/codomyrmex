@@ -91,7 +91,7 @@ class EventBus:
         self.executor = ThreadPoolExecutor(
             max_workers=max_workers, thread_name_prefix="event_bus"
         )
-        self.event_queue: asyncio.Queue[Event] = (
+        self.event_queue: asyncio.Queue[Event] | None = (
             asyncio.Queue() if enable_async else None
         )
         self.processing_task: asyncio.Task | None = None
@@ -323,7 +323,7 @@ class EventBus:
         with self._lock:
             for sub in self.subscriptions.values():
                 all_patterns.update(sub.event_patterns)
-        return sorted(all_patterns, key=str)
+        return sorted(all_patterns, key=str)  # type: ignore
 
 
 _event_bus = None

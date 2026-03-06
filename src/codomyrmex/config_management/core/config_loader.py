@@ -772,7 +772,6 @@ class ConfigurationManager:
             )
 
             # Try different schemas based on configuration content
-            schema = None
             if "level" in config.data or "format" in config.data:
                 schema = get_logging_config_schema()
             elif "host" in config.data and "database" in config.data:

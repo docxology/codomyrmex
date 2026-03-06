@@ -27,32 +27,20 @@ if TYPE_CHECKING:
 else:
     # Runtime imports - try to import, but handle gracefully if circular import occurs
     try:
-        from codomyrmex.api.standardization.api_versioning import (
-            APIVersion,
-            APIVersionManager,
-        )
+        from codomyrmex.api.standardization.api_versioning import APIVersionManager
         from codomyrmex.api.standardization.graphql_api import (
             GraphQLAPI,
             GraphQLField,
             GraphQLObjectType,
             GraphQLSchema,
         )
-        from codomyrmex.api.standardization.rest_api import RESTAPI, HTTPMethod
+        from codomyrmex.api.standardization.rest_api import RESTAPI
         from codomyrmex.api.standardization.rest_api import (
             APIEndpoint as StandardizationAPIEndpoint,
         )
     except (ImportError, AttributeError):
         # Handle case where standardization module isn't available or circular import
-        RESTAPI = None
-        StandardizationAPIEndpoint = None
-        HTTPMethod = None
-        GraphQLAPI = None
-        GraphQLSchema = None
-        GraphQLObjectType = None
-        GraphQLField = None
-        APIVersionManager = None
-        APIVersion = None
-
+        pass
 
 class StandardizationOpenAPIGenerator:
     """

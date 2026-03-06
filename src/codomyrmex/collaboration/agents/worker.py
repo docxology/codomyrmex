@@ -42,7 +42,7 @@ class WorkerAgent(CollaborativeAgent):
         self._max_concurrent_tasks = max_concurrent_tasks
         self._active_tasks: dict[str, asyncio.Task] = {}
 
-    def register_handler(
+    def register_handler(  # type: ignore
         self,
         capability_name: str,
         handler: Callable[[Task], Any],

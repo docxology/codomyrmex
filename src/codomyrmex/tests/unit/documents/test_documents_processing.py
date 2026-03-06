@@ -18,32 +18,32 @@ from codomyrmex.documents.models.document import (
 try:
     from codomyrmex.documents.transformation.converter import convert_document
 except ImportError:
-    convert_document = None
+    pass
 
 try:
     from codomyrmex.documents.transformation.merger import merge_documents
 except ImportError:
-    merge_documents = None
+    pass
 
 try:
     from codomyrmex.documents.transformation.splitter import split_document
 except ImportError:
-    split_document = None
+    pass
 
 try:
     from codomyrmex.documents.transformation.formatter import format_document
 except ImportError:
-    format_document = None
+    pass
 
 try:
     from codomyrmex.documents.metadata.extractor import extract_metadata
 except ImportError:
-    extract_metadata = None
+    pass
 
 try:
     from codomyrmex.documents.metadata.manager import update_metadata
 except ImportError:
-    update_metadata = None
+    pass
 
 try:
     from codomyrmex.documents.metadata.versioning import (
@@ -51,8 +51,7 @@ try:
         set_document_version,
     )
 except ImportError:
-    get_document_version = None
-    set_document_version = None
+    pass
 
 try:
     from codomyrmex.documents.search.indexer import (
@@ -61,21 +60,17 @@ try:
         index_document,
     )
 except ImportError:
-    InMemoryIndex = None
-    index_document = None
-    create_index = None
+    pass
 
 try:
     from codomyrmex.documents.search.searcher import search_documents, search_index
 except ImportError:
-    search_documents = None
-    search_index = None
+    pass
 
 try:
     from codomyrmex.documents.search.query_builder import QueryBuilder, build_query
 except ImportError:
-    QueryBuilder = None
-    build_query = None
+    pass
 
 from codomyrmex.documents.exceptions import (
     DocumentConversionError,
@@ -147,7 +142,7 @@ class TestDocumentValidator:
         validator = DocumentValidator()
         result = validator.validate(doc)
         assert not result.is_valid
-        assert any("None" in e for e in result.errors)
+        assert any("None" in e for e in (result.errors or []))
 
     def test_validate_with_schema(self):
         """Test validating document with JSON schema."""

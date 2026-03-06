@@ -32,8 +32,7 @@ from . import rate_limiting
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Import from documentation submodule
 # Import from authentication submodule

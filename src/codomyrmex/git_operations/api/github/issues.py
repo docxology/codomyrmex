@@ -216,7 +216,7 @@ async def async_create_issue(
     if status == 201:
         issue = data
         logger.info(f"[ASYNC] Successfully created issue #{issue['number']}")
-        return issue
+        return issue  # type: ignore
     error_msg = f"Failed to create issue: {status}"
     if isinstance(data, dict):
         error_msg += f" - {data.get('message', str(data))}"
@@ -271,7 +271,7 @@ async def async_list_issues(
         # Filter out pull requests (GitHub API includes PRs in issues endpoint)
         issues = [item for item in all_items if "pull_request" not in item]
         logger.info(f"[ASYNC] Found {len(issues)} issues")
-        return issues
+        return issues  # type: ignore
     error_msg = f"Failed to list issues: {status}"
     if isinstance(data, dict):
         error_msg += f" - {data.get('message', str(data))}"
@@ -317,7 +317,7 @@ async def async_close_issue(
 
     if status == 200:
         logger.info(f"[ASYNC] Successfully closed issue #{issue_number}")
-        return data
+        return data  # type: ignore
     error_msg = f"Failed to close issue: {status}"
     if isinstance(data, dict):
         error_msg += f" - {data.get('message', str(data))}"
@@ -365,7 +365,7 @@ async def async_add_comment(
 
     if status == 201:
         logger.info(f"[ASYNC] Successfully added comment to #{issue_number}")
-        return data
+        return data  # type: ignore
     error_msg = f"Failed to add comment: {status}"
     if isinstance(data, dict):
         error_msg += f" - {data.get('message', str(data))}"

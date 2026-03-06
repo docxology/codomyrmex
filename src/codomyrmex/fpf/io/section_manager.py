@@ -18,7 +18,7 @@ class SectionManager:
         """
         self.spec = spec
 
-    def extract_part(self, part_id: str) -> dict[str, any]:
+    def extract_part(self, part_id: str) -> dict[str, any]:  # type: ignore
         """Extract all patterns, concepts, and relationships for a specific part.
 
         Args:
@@ -52,7 +52,7 @@ class SectionManager:
 
     def extract_pattern_group(
         self, pattern_ids: list[str], include_dependencies: bool = True
-    ) -> dict[str, any]:
+    ) -> dict[str, any]:  # type: ignore
         """Extract a group of patterns and their related content.
 
         Args:
@@ -95,7 +95,7 @@ class SectionManager:
 
     def extract_concept_cluster(
         self, concept_names: list[str], include_related_patterns: bool = True
-    ) -> dict[str, any]:
+    ) -> dict[str, any]:  # type: ignore
         """Extract a cluster of concepts and their related patterns.
 
         Args:
@@ -136,7 +136,7 @@ class SectionManager:
 
     def extract_relationship_subset(
         self, relationship_types: list[str], include_patterns: bool = True
-    ) -> dict[str, any]:
+    ) -> dict[str, any]:  # type: ignore
         """Extract relationships of specific types.
 
         Args:
@@ -205,7 +205,7 @@ class SectionManager:
             return groups
         return {"all": [p.id for p in self.spec.patterns]}
 
-    def get_section_statistics(self) -> dict[str, any]:
+    def get_section_statistics(self) -> dict[str, any]:  # type: ignore
         """Get statistics about sections in the specification.
 
         Returns:

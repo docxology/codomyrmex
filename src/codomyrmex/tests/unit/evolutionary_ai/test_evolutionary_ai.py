@@ -54,6 +54,6 @@ class TestEvolutionEndToEnd:
         final_best = pop.get_best().fitness
 
         # Should have improved (increased, since negative)
-        assert final_best >= initial_best
+        assert final_best >= initial_best  # type: ignore
         # Should be closer to zero
-        assert final_best > -5.0
+        assert final_best > -5.0  # type: ignore

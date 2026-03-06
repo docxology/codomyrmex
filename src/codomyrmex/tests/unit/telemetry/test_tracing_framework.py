@@ -3,7 +3,7 @@
 import pytest
 
 from codomyrmex.telemetry.metric_aggregator import MetricAggregator
-from codomyrmex.telemetry.otel import MetricCounter, Span, Tracer
+from codomyrmex.telemetry.otel import MetricCounter, Tracer
 
 
 @pytest.mark.unit

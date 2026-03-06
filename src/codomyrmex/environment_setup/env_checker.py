@@ -20,9 +20,6 @@ import dotenv
 
 from codomyrmex.logging_monitoring import get_logger
 
-if TYPE_CHECKING:
-    from pathlib import Path
-
 logger = get_logger(__name__)
 
 # Store the original script directory to correctly locate files relative to REPO_ROOT_PATH

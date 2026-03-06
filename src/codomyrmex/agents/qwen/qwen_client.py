@@ -29,8 +29,7 @@ try:
     import openai
 except ImportError:
     if not TYPE_CHECKING:
-        openai = None
-
+        pass
 
 # --- Model Registry ---
 

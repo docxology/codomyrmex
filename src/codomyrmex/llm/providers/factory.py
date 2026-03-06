@@ -24,4 +24,4 @@ def get_provider(
     if not provider_class:
         raise ValueError(f"Unsupported provider: {provider_type}")
 
-    return provider_class(config)
+    return provider_class(config)  # type: ignore

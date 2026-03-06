@@ -4,7 +4,7 @@ import json
 import statistics
 import time
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Generic, TypeVar
 
 from .models import BenchmarkResult, EvalResult, TestCase

@@ -73,8 +73,7 @@ from .swarm import (
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:  # pragma: no cover
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def cli_commands():  # pragma: no cover

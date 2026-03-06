@@ -15,9 +15,6 @@ try:
 
     SOCIAL_ENGINEERING_AVAILABLE = True
 except ImportError:
-    SocialEngineeringDetector = None
-    detect_social_engineering = None
-    analyze_communication = None
     SOCIAL_ENGINEERING_AVAILABLE = False
 
 try:
@@ -29,9 +26,6 @@ try:
 
     PHISHING_ANALYSIS_AVAILABLE = True
 except ImportError:
-    PhishingAnalyzer = None
-    analyze_email = None
-    detect_phishing_attempt = None
     PHISHING_ANALYSIS_AVAILABLE = False
 
 try:
@@ -43,9 +37,6 @@ try:
 
     AWARENESS_TRAINING_AVAILABLE = True
 except ImportError:
-    AwarenessTrainer = None
-    create_training_module = None
-    assess_training_effectiveness = None
     AWARENESS_TRAINING_AVAILABLE = False
 
 try:
@@ -57,9 +48,6 @@ try:
 
     COGNITIVE_THREAT_AVAILABLE = True
 except ImportError:
-    CognitiveThreatAssessor = None
-    assess_cognitive_threats = None
-    evaluate_human_factors = None
     COGNITIVE_THREAT_AVAILABLE = False
 
 try:
@@ -71,9 +59,6 @@ try:
 
     BEHAVIOR_ANALYSIS_AVAILABLE = True
 except ImportError:
-    BehaviorAnalyzer = None
-    analyze_user_behavior = None
-    detect_anomalous_behavior = None
     BEHAVIOR_ANALYSIS_AVAILABLE = False
 
 __all__ = []

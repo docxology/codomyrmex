@@ -43,12 +43,11 @@ from .synthesizer import Synthesizer
 try:
     from .providers import Pyttsx3Provider
 except ImportError:
-    Pyttsx3Provider = None
+    pass
 
 try:
     from .providers import POPULAR_VOICES, EdgeTTSProvider
 except ImportError:
-    EdgeTTSProvider = None
     POPULAR_VOICES = {}
 
 

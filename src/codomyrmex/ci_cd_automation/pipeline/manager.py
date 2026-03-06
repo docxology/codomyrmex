@@ -302,7 +302,7 @@ class PipelineManager:
 
                 job.output += result.get("stdout", "")
                 if result.get("stderr"):
-                    job.error += result.get("stderr")
+                    job.error += result.get("stderr")  # type: ignore
 
                 if result.get("returncode", 0) != 0:
                     if job.retry_count > 0:

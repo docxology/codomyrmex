@@ -40,7 +40,6 @@ try:
     EDGE_TTS_AVAILABLE = True
 except ImportError:
     EDGE_TTS_AVAILABLE = False
-    edge_tts = None
 
 
 class EdgeTTSProvider(TTSProvider):

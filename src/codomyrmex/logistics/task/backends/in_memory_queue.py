@@ -25,8 +25,8 @@ class InMemoryQueue:
     def enqueue(self, job: Job) -> str:
         """Add a job to the queue."""
         heapq.heappush(self._queue, (-job.priority, time.time(), job))
-        self._jobs[job.job_id] = job
-        return job.job_id
+        self._jobs[job.job_id] = job  # type: ignore
+        return str(job.job_id)
 
     def dequeue(self) -> Job | None:
         """Remove and return the next job from the queue."""
@@ -48,8 +48,8 @@ class InMemoryQueue:
         """Schedule a job for future execution."""
         self._scheduled.append((when, job))
         self._scheduled.sort(key=lambda x: x[0])
-        self._jobs[job.job_id] = job
-        return job.job_id
+        self._jobs[job.job_id] = job  # type: ignore
+        return str(job.job_id)
 
     def get_status(self, job_id: str) -> JobStatus:
         """Get the status of a job."""

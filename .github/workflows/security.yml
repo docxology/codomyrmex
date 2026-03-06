@@ -37,7 +37,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -122,7 +122,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -235,14 +235,14 @@ jobs:
     name: Static Security Analysis (Semgrep)
     runs-on: ubuntu-latest
     # Skip gracefully when no Semgrep token is configured
-    if: ${{ vars.SEMGREP_ENABLED != 'false' }}
+    if: vars['SEMGREP_ENABLED'] != 'false'
     continue-on-error: true
     permissions:
       security-events: write
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Check Semgrep token
         id: semgrep_check
@@ -256,7 +256,7 @@ jobs:
             echo "has_token=true" >> $GITHUB_OUTPUT
           fi
         env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_APP_TOKEN: "${{ secrets['SEMGREP_APP_TOKEN'] }}"
 
       - name: Run Semgrep
         if: steps.semgrep_check.outputs.has_token == 'true'
@@ -267,7 +267,7 @@ jobs:
             p/secrets
             p/python
         env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_APP_TOKEN: "${{ secrets['SEMGREP_APP_TOKEN'] }}"
 
   codeql-analysis:
     name: CodeQL Security Analysis
@@ -282,7 +282,7 @@ jobs:
         language: ['python']
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
@@ -312,7 +312,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -390,7 +390,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
@@ -411,7 +411,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 

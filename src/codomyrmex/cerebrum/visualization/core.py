@@ -21,14 +21,13 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
-    Figure = Any
-    Patch = Any
-    plt = None
+    Figure = Any  # type: ignore
+    Patch = Any  # type: ignore
 
 try:
     import networkx as nx
 except ImportError:
-    nx = None
+    pass
 
 logger = get_logger(__name__)
 

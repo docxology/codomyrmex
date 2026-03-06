@@ -67,7 +67,7 @@ class Channel(Generic[T]):
             >>> await ch.send("message", timeout=1.0)
         """
         if self._closed:
-            raise ChannelClosed("Cannot send to a closed channel")
+            raise ChannelClosed("Cannot send to a closed channel")  # type: ignore
         await asyncio.wait_for(self._queue.put(item), timeout=timeout)
 
     async def receive(self, timeout: float | None = None) -> T:
@@ -87,7 +87,7 @@ class Channel(Generic[T]):
             >>> msg = await ch.receive(timeout=1.0)
         """
         if self._closed and self._queue.empty():
-            raise ChannelClosed("Channel is closed and empty")
+            raise ChannelClosed("Channel is closed and empty")  # type: ignore
         return await asyncio.wait_for(self._queue.get(), timeout=timeout)
 
     def close(self) -> None:

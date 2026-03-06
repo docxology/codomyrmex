@@ -447,7 +447,7 @@ Before completing significant changes:
 - **[Contributing](docs/project/contributing.md)** - Contributing guidelines and workflow
 
 <!-- gitnexus:start -->
-# GitNexus MCP
+## GitNexus MCP
 
 This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 relationships, 300 execution flows).
 
@@ -462,7 +462,7 @@ This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 rel
 ## Skills
 
 | Task | Read this skill file |
-|------|---------------------|
+| --- | --- |
 | Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
 | Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
 | Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
@@ -471,3 +471,11 @@ This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 rel
 | Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->
+
+## qmd Skill
+
+This project is configured with the `qmd` skill for local hybrid search of Markdown notes and docs.
+
+| Task | Read this skill file |
+| --- | --- |
+| Search notes, docs, or knowledge base | `.claude/skills/qmd/SKILL.md` |

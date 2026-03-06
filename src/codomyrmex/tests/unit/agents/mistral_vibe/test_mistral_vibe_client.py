@@ -165,7 +165,7 @@ class TestMistralVibeClient:
 
         # Test that request structure is correct
         assert request.prompt == "Analyze this code"
-        assert "files" in request.context
+        assert "files" in request.context  # type: ignore
         assert request.context["files"] == ["src/main.py"]
 
     def test_mistral_vibe_client_config_override(self):
@@ -188,5 +188,5 @@ class TestMistralVibeClient:
         empty_request = AgentRequest(prompt="")
         response = client.execute(empty_request)
         assert not response.is_success()
-        assert "Prompt is required" in response.error
-        assert "empty" in response.error.lower()
+        assert "Prompt is required" in (response.error or "")
+        assert "empty" in (response.error or "").lower()

@@ -8,8 +8,7 @@ from .pai import validate_pai_integration
 try:
     from .schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 __all__ = [
     "Result",

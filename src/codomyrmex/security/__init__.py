@@ -28,7 +28,6 @@ try:
 
     AI_SAFETY_AVAILABLE = True
 except ImportError:
-    AISafetyMonitor = None
     AI_SAFETY_AVAILABLE = False
 
 __version__ = "0.1.0"
@@ -343,6 +342,6 @@ def security_audit_code(path: str) -> dict[str, Any]:
         return {"error": "Digital security module not available."}
 
     try:
-        return audit_code_security(path)
+        return audit_code_security(path)  # type: ignore
     except Exception as e:
         return {"error": str(e)}

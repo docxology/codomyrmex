@@ -26,6 +26,14 @@ print(json.dumps(report, indent=2, default=str))
 "
 ```
 
+// turbo
+
+1. Get CLI diagnostic (Git Worktrees, Agentic Memory, System Telemetry):
+
+```bash
+cd /Users/mini/Documents/GitHub/codomyrmex && uv run tools/sys_health.py
+```
+
 1. Sections:
    - **System Status**: MCP health, module counts, and bridge verification.
    - **PAI Awareness**: Active missions, projects, and TELOS alignment.

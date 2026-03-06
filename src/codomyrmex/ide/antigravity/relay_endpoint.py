@@ -41,13 +41,9 @@ if TYPE_CHECKING:
 
 # Optional scheduler support -- not yet available in all installations.
 try:
-    from codomyrmex.ide.antigravity.message_scheduler import (
-        MessageScheduler,
-        SchedulerConfig,
-    )
+    from codomyrmex.ide.antigravity.message_scheduler import MessageScheduler
 except ImportError:  # pragma: no cover
-    MessageScheduler = None
-    SchedulerConfig = None
+    pass
 
 
 # =====================================================================

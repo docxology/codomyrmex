@@ -384,7 +384,7 @@ class TestAntigravityAgentExecuteErrorHandling:
         response = agent.execute(request)
         assert isinstance(response, AgentResponse)
         assert response.error is not None
-        assert "required" in response.error.lower() or "Prompt" in response.error
+        assert "required" in (response.error or "").lower() or "Prompt" in (response.error or "")
 
     def test_execute_returns_agent_response_type(self):
         """Execute should always return an AgentResponse, even on error."""

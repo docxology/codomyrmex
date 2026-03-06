@@ -361,7 +361,7 @@ class TestMCPToolRegistry:
         call = MCPToolCall(tool_name="unknown", arguments={})
         valid, error = registry.validate_call(call)
         assert valid is False
-        assert "Unknown tool" in error
+        assert "Unknown tool" in error  # type: ignore
 
     def test_execute_with_handler(self):
         registry = MCPToolRegistry()
@@ -382,14 +382,14 @@ class TestMCPToolRegistry:
         result = registry.execute(call)
         assert result.status == "failure"
         assert result.error is not None
-        assert "NoHandler" in result.error.error_type
+        assert "NoHandler" in (result.error or "").error_type
 
     def test_execute_unknown_tool_returns_failure(self):
         registry = MCPToolRegistry()
         call = MCPToolCall(tool_name="ghost", arguments={})
         result = registry.execute(call)
         assert result.status == "failure"
-        assert "ToolNotFound" in result.error.error_type
+        assert "ToolNotFound" in (result.error or "").error_type
 
     def test_execute_handler_exception_returns_failure(self):
         registry = MCPToolRegistry()
@@ -402,7 +402,7 @@ class TestMCPToolRegistry:
         result = registry.execute(call)
         assert result.status == "failure"
         assert result.error.error_type == "ValueError"
-        assert "Something went wrong" in result.error.error_message
+        assert "Something went wrong" in (result.error or "").error_message
 
     def test_get_tool_alias_matches_get(self):
         registry = MCPToolRegistry()
@@ -436,6 +436,6 @@ class TestMCPMessageModel:
         assert restored.metadata["key"] == "value"
 
     def test_message_allows_extra_fields(self):
-        msg = MCPMessage(role="user", content="Hi", custom_field="extra")
+        msg = MCPMessage(role="user", content="Hi", custom_field="extra")  # type: ignore
         assert hasattr(msg, "custom_field")
         assert msg.custom_field == "extra"

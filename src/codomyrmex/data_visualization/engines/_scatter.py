@@ -19,7 +19,7 @@ class ScatterMixin:
 
     config: PlotConfig
     current_axes: plt.Axes | None
-    create_figure: callable
+    create_figure: callable  # type: ignore
 
     @monitor_performance("plot_scatter")
     def plot_scatter(
@@ -79,7 +79,7 @@ def create_advanced_scatter_plot(
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
-    config: PlotConfig = None,
+    config: PlotConfig = None,  # type: ignore
     **kwargs,
 ):
     """Create an advanced scatter plot."""

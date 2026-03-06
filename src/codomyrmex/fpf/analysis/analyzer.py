@@ -229,7 +229,7 @@ class FPFAnalyzer:
 
         return cohesion_scores
 
-    def get_analysis_summary(self) -> dict[str, any]:
+    def get_analysis_summary(self) -> dict[str, any]:  # type: ignore
         """Get comprehensive analysis summary.
 
         Returns:

@@ -29,7 +29,6 @@ try:
         AntigravityToolProvider,
     )
 except ImportError:
-    AntigravityToolProvider = None
     AG_SAFE_TOOLS = frozenset()
     AG_DESTRUCTIVE_TOOLS = frozenset()
     AG_CONTROL_TOOLS = frozenset()
@@ -37,7 +36,7 @@ except ImportError:
 try:
     from .agent_bridge import AntigravityAgent
 except ImportError:
-    AntigravityAgent = None
+    pass
 
 try:
     from .skill_adapter import (
@@ -45,19 +44,17 @@ try:
         AntigravityToolSkill,
     )
 except ImportError:
-    AntigravityToolSkill = None
-    AntigravitySkillFactory = None
+    pass
 
 try:
     from .history_bridge import ArtifactHistoryBridge
 except ImportError:
-    ArtifactHistoryBridge = None
+    pass
 
 try:
     from .agent_relay import AgentRelay, RelayMessage
 except ImportError:
-    AgentRelay = None
-    RelayMessage = None
+    pass
 
 try:
     from .live_bridge import (
@@ -65,8 +62,7 @@ try:
         LiveAgentBridge,
     )
 except ImportError:
-    LiveAgentBridge = None
-    ClaudeCodeEndpoint = None
+    pass
 
 try:
     from .message_scheduler import (
@@ -74,13 +70,12 @@ try:
         SchedulerConfig,
     )
 except ImportError:
-    MessageScheduler = None
-    SchedulerConfig = None
+    pass
 
 try:
     from .relay_endpoint import RelayEndpoint
 except ImportError:
-    RelayEndpoint = None
+    pass
 
 try:
     from .antigravity_dispatcher import (
@@ -88,8 +83,7 @@ try:
         DispatcherConfig,
     )
 except ImportError:
-    AntigravityDispatcher = None
-    DispatcherConfig = None
+    pass
 
 __all__ = [
     # Relay

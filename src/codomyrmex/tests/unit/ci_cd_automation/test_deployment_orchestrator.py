@@ -218,7 +218,7 @@ class TestDeploymentDataclass:
         before = datetime.now(UTC)
         dep = Deployment(name="a", version="1", environment=env, artifacts=[])
         after = datetime.now(UTC)
-        assert before <= dep.created_at <= after
+        assert before <= dep.created_at <= after  # type: ignore
 
     def test_explicit_created_at_preserved(self):
         env = _make_env()

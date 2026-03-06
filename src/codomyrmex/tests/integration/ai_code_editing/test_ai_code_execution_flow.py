@@ -18,8 +18,6 @@ try:
 
     AI_CODE_EDITING_AVAILABLE = True
 except ImportError:
-    setup_logging = None
-    get_logger = None
     AI_CODE_EDITING_AVAILABLE = False
 
 try:

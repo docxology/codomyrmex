@@ -301,7 +301,7 @@ class HealthProviderMixin:
                 ]
             )
 
-            return {
+            return {  # type: ignore
                 "branch": branch,
                 "last_commit": last_commit,
                 "commit_count": commit_count,

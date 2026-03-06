@@ -19,7 +19,6 @@ try:
     HAS_SOUL: bool = True
 except ImportError:
     HAS_SOUL = False
-    _SoulAgent = None
 
 from .exceptions import SoulError, SoulImportError, SoulMemoryError, SoulProviderError
 

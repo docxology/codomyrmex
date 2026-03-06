@@ -25,7 +25,7 @@ class TransformerBlock:
         self.ln1 = LayerNorm(d_model)
         self.ln2 = LayerNorm(d_model)
 
-    def forward(self, x: np.ndarray, mask: np.ndarray = None) -> np.ndarray:
+    def forward(self, x: np.ndarray, mask: np.ndarray = None) -> np.ndarray:  # type: ignore
         """Forward pass through one transformer block.
 
         Args:
@@ -73,7 +73,7 @@ class TransformerEncoder:
         ]
         self.ln = LayerNorm(d_model)
 
-    def forward(self, x: np.ndarray, mask: np.ndarray = None) -> np.ndarray:
+    def forward(self, x: np.ndarray, mask: np.ndarray = None) -> np.ndarray:  # type: ignore
         """Forward pass through the encoder stack.
 
         Args:

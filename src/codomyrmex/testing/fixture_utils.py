@@ -109,7 +109,7 @@ class TestDataFactory:
         return start + timedelta(seconds=random_seconds)
 
     @staticmethod
-    def json_object(depth: int = 2, breadth: int = 3) -> dict[str, Any]:
+    def json_object(depth: int = 2, breadth: int = 3) -> Any:
         """Generate random JSON-like object."""
         if depth == 0:
             return random.choice(

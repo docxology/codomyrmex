@@ -24,7 +24,7 @@ class LanguageManager:
         try:
             # Note: tree-sitter 0.20+ uses Language(library_path, lang_name)
             # This is a common wrapper pattern.
-            lang = _tree_sitter.Language(library_path, lang_name)
+            lang = _tree_sitter.Language(library_path, lang_name)  # type: ignore
             cls._languages[lang_name] = lang
             return True
         except Exception as e:

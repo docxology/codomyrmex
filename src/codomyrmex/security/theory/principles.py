@@ -32,7 +32,7 @@ class SecurityPrinciple:
     category: str  # confidentiality, integrity, availability, etc.
     examples: list[str]
     rationale: str | None = None
-    related_principles: list[str] = None
+    related_principles: list[str] = None  # type: ignore
 
     def __post_init__(self):
         """Initialize related principles if not provided."""

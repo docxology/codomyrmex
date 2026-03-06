@@ -141,7 +141,7 @@ def ppo_step(
     returns: np.ndarray,
     actor: Actor,
     critic: Critic,
-    config: PPOConfig = None,
+    config: PPOConfig = None,  # type: ignore
 ) -> dict:
     """Compute PPO loss components (no gradient update in NumPy version).
 
@@ -216,7 +216,7 @@ def ppo_step(
 class PPOTrainer:
     """Orchestrates PPO training loop."""
 
-    def __init__(self, d_state: int, d_action: int, config: PPOConfig = None):
+    def __init__(self, d_state: int, d_action: int, config: PPOConfig = None):  # type: ignore
         self.actor = Actor(d_state, d_action)
         self.critic = Critic(d_state)
         self.config = config or PPOConfig()

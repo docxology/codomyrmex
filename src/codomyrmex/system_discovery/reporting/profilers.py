@@ -11,7 +11,7 @@ from typing import Any
 try:
     import psutil
 except ImportError:
-    psutil = None
+    pass
 
 try:
     from codomyrmex.logging_monitoring import get_logger

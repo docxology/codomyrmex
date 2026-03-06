@@ -21,7 +21,7 @@ class HeatmapMixin:
 
     config: PlotConfig
     current_axes: plt.Axes | None
-    create_figure: callable
+    create_figure: callable  # type: ignore
 
     @monitor_performance("plot_heatmap")
     def plot_heatmap(
@@ -137,7 +137,7 @@ def create_advanced_heatmap(
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
-    config: PlotConfig = None,
+    config: PlotConfig = None,  # type: ignore
     **kwargs,
 ):
     """Create an advanced heatmap."""

@@ -65,7 +65,7 @@ class Scraper(BaseScraper):
             except ImportError as e:
                 raise ScrapeValidationError(
                     "No scraper adapter available. Install firecrawl-py: pip install firecrawl-py",
-                    context={"import_error": str(e)},
+                    context={"import_error": str(e)},  # type: ignore
                 ) from e
             except Exception as e:
                 raise ScrapeError(

@@ -27,8 +27,8 @@ class TreeSitterParser:
     def parse(self, source_code: str) -> "_tree_sitter.Tree":
         """Parse source code into a syntax tree."""
         if isinstance(source_code, str):
-            source_code = source_code.encode("utf8")
-        return self.parser.parse(source_code)
+            source_code = source_code.encode("utf8")  # type: ignore
+        return self.parser.parse(source_code)  # type: ignore
 
     def query(self, tree: "_tree_sitter.Tree", query_str: str) -> list:
         """Execute a query against the syntax tree."""

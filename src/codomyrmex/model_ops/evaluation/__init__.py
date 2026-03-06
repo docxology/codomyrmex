@@ -62,25 +62,10 @@ except ImportError as _exc:
     def _not_available(*args, **kwargs):
         raise ImportError(f"model_evaluation module is not available: {_import_error}")
 
-    Scorer = None
-    ExactMatchScorer = None
-    ContainsScorer = None
-    LengthScorer = None
-    RegexScorer = None
-    CompositeScorer = None
-    WeightedScorer = None
-    create_default_scorer = _not_available
+    create_default_scorer = _not_available  # type: ignore
 
-    BenchmarkCase = None
-    BenchmarkResult = None
-    BenchmarkSuite = None
-    SuiteResult = None
 
-    QualityDimension = None
-    DimensionScore = None
-    QualityReport = None
-    QualityAnalyzer = None
-    analyze_quality = _not_available
+    analyze_quality = _not_available  # type: ignore
 
 # Metrics module (classification/regression evaluation)
 from .metrics import (

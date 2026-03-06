@@ -11,8 +11,7 @@ Submodules:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Re-export base NetworkError from main exceptions module
 from codomyrmex.exceptions import NetworkError
@@ -35,7 +34,7 @@ from .raw_sockets import PortScanner, TCPClient, TCPServer, UDPClient
 try:
     from .ssh_sftp import SSHClient
 except ImportError:
-    SSHClient = None
+    pass
 from .websocket_client import WebSocketClient
 
 

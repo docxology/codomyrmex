@@ -74,7 +74,7 @@ class TestAPIResponse:
         response = APIResponse.error("Something went wrong")
 
         assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
-        assert "error" in response.body
+        assert "error" in response.body  # type: ignore
 
     def test_not_found_response(self):
         """Test creating not found response."""

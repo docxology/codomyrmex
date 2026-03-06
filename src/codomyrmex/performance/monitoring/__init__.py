@@ -31,7 +31,6 @@ try:
 
     PERFORMANCE_MONITOR_AVAILABLE = True
 except ImportError:
-    PerformanceMonitor = None
     PERFORMANCE_MONITOR_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):

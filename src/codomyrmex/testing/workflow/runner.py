@@ -118,4 +118,4 @@ class WorkflowRunner:
             if last_result.passed:
                 break
 
-        return last_result
+        return last_result  # type: ignore

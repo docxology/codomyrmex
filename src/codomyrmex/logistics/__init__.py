@@ -18,8 +18,7 @@ Submodules:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # New submodule exports
 from . import optimization, resources, routing, tracking

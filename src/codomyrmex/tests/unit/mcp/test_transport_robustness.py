@@ -283,9 +283,9 @@ async def test_server_rate_limit_rejects():
         handler=lambda _: {"ok": True},
     )
     # First call consumes the single token
-    await server._call_tool({"name": "dummy", "arguments": {}})
+    await server._call_tool({"name": "dummy", "arguments": {}})  # type: ignore
     # Second call should be rate-limited
-    result = await server._call_tool({"name": "dummy", "arguments": {}})
+    result = await server._call_tool({"name": "dummy", "arguments": {}})  # type: ignore
     assert result.get("isError") is True
     content = result["content"][0]["text"]
     assert "RATE_LIMITED" in content

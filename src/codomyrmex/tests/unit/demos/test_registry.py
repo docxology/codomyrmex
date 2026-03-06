@@ -74,4 +74,4 @@ def test_run_nonexistent_demo():
     registry = DemoRegistry()
     result = registry.run_demo("ghost")
     assert result.success is False
-    assert "not found" in result.error
+    assert "not found" in (result.error or "")

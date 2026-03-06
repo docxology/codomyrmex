@@ -107,11 +107,10 @@ class GeminiProvider(LLMProvider):
 
         content = ""
         if response.candidates and response.candidates[0].content:
-            for part in response.candidates[0].content.parts:
+            for part in response.candidates[0].content.parts:  # type: ignore
                 if part.text:
                     content += part.text
 
-        usage = None
         if response.usage_metadata:
             um = response.usage_metadata
             usage = {

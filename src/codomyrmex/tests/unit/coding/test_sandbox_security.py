@@ -187,7 +187,7 @@ class TestPrepareStdinFile:
         """Stdin file is named 'stdin.txt'."""
         with tempfile.TemporaryDirectory() as temp_dir:
             result = prepare_stdin_file("data", temp_dir)
-            assert os.path.basename(result) == "stdin.txt"
+            assert os.path.basename(result) == "stdin.txt"  # type: ignore
 
     def test_stdin_file_in_temp_dir(self):
         """Stdin file is located inside the provided temp directory."""

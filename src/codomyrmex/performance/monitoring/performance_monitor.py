@@ -17,7 +17,6 @@ try:
 
     HAS_PSUTIL = True
 except ImportError:
-    psutil = None
     HAS_PSUTIL = False
 
 
@@ -172,7 +171,7 @@ class PerformanceMonitor:
     def _log_metrics(self, metrics: PerformanceMetrics) -> None:
         """Log metrics to file."""
         try:
-            with open(self.log_file, "a") as f:
+            with open(self.log_file, "a") as f:  # type: ignore
                 json.dump(
                     {
                         "function_name": metrics.function_name,

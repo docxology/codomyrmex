@@ -61,7 +61,7 @@ def find_placeholders(content: str, file_path: Path) -> list[dict]:
 
 def verify_relative_path(
     link_url: str, from_file: Path, base_path: Path
-) -> tuple[bool, str, Path]:
+) -> tuple[bool, str, Path | None]:
     """Verify if a relative path is correct."""
     if link_url.startswith(("http://", "https://", "mailto:", "#")):
         return (True, "", None)  # External links and anchors are OK
@@ -145,7 +145,7 @@ def check_file_completeness(content: str, file_path: Path) -> list[str]:
     return issues
 
 
-def analyze_file(file_path: Path, base_path: Path) -> dict:
+def analyze_file(file_path: Path, base_path: Path) -> dict | None:
     """Comprehensively analyze a documentation file."""
     if not file_path.exists():
         return {

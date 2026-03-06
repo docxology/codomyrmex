@@ -97,7 +97,7 @@ class DockerClient:
             process = subprocess.Popen(
                 [self.docker_path, *args], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
             )
-            for line in process.stdout:
+            for line in process.stdout:  # type: ignore
                 yield line.rstrip()
         else:
             result = self._run_command(args)

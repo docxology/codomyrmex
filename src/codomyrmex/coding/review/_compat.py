@@ -7,7 +7,7 @@ from contextlib import nullcontext
 try:
     from codomyrmex.performance import monitor_performance, performance_context
 except ImportError:
-    performance_context = nullcontext
+    performance_context = nullcontext  # type: ignore
 
     def monitor_performance(*args, **kwargs):
         """No-op decorator used when codomyrmex.performance is not installed."""

@@ -30,6 +30,8 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
+    from codomyrmex.agents.core.registry import ToolRegistry
+
 try:
     from codomyrmex.agents.core import (
         AgentCapabilities,
@@ -37,13 +39,8 @@ try:
         AgentResponse,
         BaseAgent,
     )
-    from codomyrmex.agents.core.registry import ToolRegistry
 except ImportError:
-    BaseAgent = None
-    AgentCapabilities = None
-    AgentRequest = None
-    AgentResponse = None
-    ToolRegistry = None
+    pass
 
 try:
     from codomyrmex.logging_monitoring import get_logger

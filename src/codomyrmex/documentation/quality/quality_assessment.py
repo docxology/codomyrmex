@@ -29,7 +29,7 @@ class DocumentationQualityAnalyzer:
     def analyze_file(self, file_path: Path) -> dict[str, float]:
         """Analyze a single documentation file."""
         if not file_path.exists():
-            return {"error": "File not found"}
+            return {"error": "File not found"}  # type: ignore
 
         content = file_path.read_text(encoding="utf-8")
 

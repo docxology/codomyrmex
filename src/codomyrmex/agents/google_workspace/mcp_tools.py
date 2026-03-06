@@ -207,7 +207,7 @@ def gws_gmail_list_messages(
         params: dict[str, Any] = {"maxResults": max_results}
         if query:
             params["q"] = query
-        result = runner.run("gmail", "users", "messages", "list", params=params)
+        result = runner.run("gmail", "users", "messages", "list", params=params)  # type: ignore
         parsed = runner._parse_output(result["stdout"])
         messages = parsed.get("messages", []) if isinstance(parsed, dict) else []
         return {"status": "success", "messages": messages, "count": len(messages)}
@@ -285,7 +285,7 @@ def gws_sheets_get_values(
             "spreadsheetId": spreadsheet_id,
             "range": range_,
         }
-        result = runner.run("sheets", "spreadsheets", "values", "get", params=params)
+        result = runner.run("sheets", "spreadsheets", "values", "get", params=params)  # type: ignore
         parsed = runner._parse_output(result["stdout"])
         values = parsed.get("values", []) if isinstance(parsed, dict) else []
         rng = parsed.get("range", range_) if isinstance(parsed, dict) else range_

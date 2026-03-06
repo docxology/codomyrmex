@@ -460,8 +460,8 @@ class TestQwenAPIIntegration:
         client = QwenClient()
         request = AgentRequest(prompt="Echo test")
         response = client._execute_impl(request)
-        assert "usage" in response.metadata
-        assert "finish_reason" in response.metadata
+        assert "usage" in response.metadata  # type: ignore
+        assert "finish_reason" in response.metadata  # type: ignore
 
     def test_mcp_qwen_chat(self):
         from codomyrmex.agents.qwen.mcp_tools import qwen_chat

@@ -27,7 +27,6 @@ try:
 
     POSTGRESQL_AVAILABLE = True
 except ImportError:
-    psycopg2 = None
     POSTGRESQL_AVAILABLE = False
 
 try:
@@ -35,7 +34,6 @@ try:
 
     MYSQL_AVAILABLE = True
 except ImportError:
-    pymysql = None
     MYSQL_AVAILABLE = False
 
 __all__ = [

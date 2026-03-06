@@ -433,7 +433,7 @@ class SQLiteHistoryStore:
                 (limit, offset),
             ).fetchall()
 
-            return [self.load(row[0]) for row in rows if row]
+            return [self.load(row[0]) for row in rows if row]  # type: ignore
 
     def search(self, query: str) -> list[Conversation]:
         """Search conversations."""
@@ -453,7 +453,7 @@ class SQLiteHistoryStore:
             ).fetchall()
             conv_ids.update(r[0] for r in rows)
 
-            return [self.load(cid) for cid in conv_ids if cid]
+            return [self.load(cid) for cid in conv_ids if cid]  # type: ignore
 
 
 class ConversationManager:

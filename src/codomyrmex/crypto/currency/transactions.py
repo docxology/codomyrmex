@@ -219,7 +219,7 @@ def verify_transaction(
     """
     try:
         if public_key is None:
-            public_key = serialization.load_der_public_key(signed_tx.public_key)
+            public_key = serialization.load_der_public_key(signed_tx.public_key)  # type: ignore
 
         tx_bytes = serialize_transaction(signed_tx.transaction)
         tx_hash = hashlib.sha256(tx_bytes).digest()

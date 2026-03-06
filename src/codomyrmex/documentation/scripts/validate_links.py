@@ -26,7 +26,7 @@ def resolve_link(base_path: Path, link: str) -> Path:
     link = link.split("#", maxsplit=1)[0]
 
     if not link:
-        return None
+        return None  # type: ignore
 
     # Absolute links (starting with /)
     if link.startswith("/"):
@@ -44,7 +44,7 @@ def resolve_link(base_path: Path, link: str) -> Path:
         return resolved
     except ValueError as e:
         logger.warning("Failed to resolve link %s: %s", link, e)
-        return None
+        return None  # type: ignore
 
 
 def validate_file(filepath: Path) -> list[tuple[str, str]]:

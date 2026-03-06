@@ -133,7 +133,7 @@ def quantize_int8(
         # Reshape scale/zero_point for broadcasting
         shape = [1] * x.ndim
         shape[axis] = -1
-        scale_broad = scale.reshape(shape)
+        scale_broad = scale.reshape(shape)  # type: ignore
         zp_broad = zero_point.reshape(shape)
     else:
         scale_broad = scale

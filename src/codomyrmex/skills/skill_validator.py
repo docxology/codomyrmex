@@ -12,7 +12,6 @@ try:
 
     HAS_YAML = True
 except ImportError:
-    yaml = None
     HAS_YAML = False
 
 try:

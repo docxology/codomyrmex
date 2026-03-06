@@ -1,6 +1,5 @@
 """Data models for the API mocking module."""
 
-import random as _random
 import re
 from dataclasses import dataclass, field
 from datetime import datetime

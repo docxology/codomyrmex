@@ -27,7 +27,7 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
-    Figure = Any
+    Figure = Any  # type: ignore
 
 
 logger = get_logger(__name__)

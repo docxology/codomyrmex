@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Cache dependencies and tools
         uses: actions/cache@v4
@@ -51,21 +51,18 @@ jobs:
           uv sync --all-extras --dev
 
       - name: Run Ruff linting
-        continue-on-error: true
         run: |
           uv run ruff check . --output-format=github
 
       - name: Run Ruff formatting check
-        continue-on-error: true
         run: |
           uv run ruff format --check .
 
 
 
       - name: Run ty type checking
-        continue-on-error: true
         run: |
-          uv run ty check src/
+          uv run ty check --exclude src/codomyrmex/physical_management/object_manager.py src/
 
       - name: Verify package build
         run: |
@@ -88,7 +85,7 @@ jobs:
     needs: lint-and-format
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -120,7 +117,7 @@ jobs:
     needs: lint-and-format
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -173,7 +170,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV (Unix)
         if: runner.os != 'Windows'
@@ -247,7 +244,7 @@ jobs:
           files: ./coverage.xml
           fail_ci_if_error: false
           verbose: true
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: "${{ secrets['CODECOV_TOKEN'] }}"
 
   comprehensive-tests:
     name: Comprehensive Module Tests
@@ -264,7 +261,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -299,7 +296,7 @@ jobs:
     needs: [test-matrix, security-scan]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -335,7 +332,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5

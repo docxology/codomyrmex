@@ -32,8 +32,7 @@ Data structures:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from codomyrmex.config_monitoring import (
     ConfigAudit,
@@ -66,9 +65,6 @@ try:
     SECRET_MANAGEMENT_AVAILABLE = True
 except ImportError:
     # cryptography not available
-    SecretManager = None
-    encrypt_configuration = None
-    manage_secrets = None
     SECRET_MANAGEMENT_AVAILABLE = False
 
 

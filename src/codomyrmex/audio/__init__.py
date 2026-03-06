@@ -44,8 +44,7 @@ __version__ = "0.1.0"
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 # Import exceptions
 from .exceptions import (
@@ -73,13 +72,6 @@ try:
 
     STT_AVAILABLE = True
 except ImportError:
-    Transcriber = None
-    TranscriptionResult = None
-    TranscriptionConfig = None
-    Segment = None
-    Word = None
-    WhisperModelSize = None
-    STTProvider = None
     WHISPER_AVAILABLE = False
     STT_AVAILABLE = False
 
@@ -99,13 +91,6 @@ try:
 
     TTS_AVAILABLE = True
 except ImportError:
-    Synthesizer = None
-    SynthesisResult = None
-    TTSConfig = None
-    AudioFormat = None
-    VoiceInfo = None
-    VoiceGender = None
-    TTSProvider = None
     PYTTSX3_AVAILABLE = False
     EDGE_TTS_AVAILABLE = False
     TTS_AVAILABLE = False

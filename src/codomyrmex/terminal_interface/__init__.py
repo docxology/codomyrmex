@@ -23,20 +23,18 @@ except ImportError as e:
 try:
     from .shells.interactive_shell import InteractiveShell
 except ImportError:
-    InteractiveShell = None
+    pass
 
 try:
     from .utils.terminal_utils import CommandRunner, TerminalFormatter
 except ImportError:
-    CommandRunner = None
-    TerminalFormatter = None
+    pass
 
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 
 def cli_commands():

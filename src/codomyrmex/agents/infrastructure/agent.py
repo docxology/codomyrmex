@@ -23,7 +23,7 @@ logger = get_logger(__name__)
 try:
     from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
 except ImportError:
-    CloudSecurityPipeline = None
+    pass
 
 
 class InfrastructureAgent(BaseAgent):

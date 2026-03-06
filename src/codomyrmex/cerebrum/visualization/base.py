@@ -19,14 +19,13 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
-    Figure = Any
-    Axes = Any
-    plt = None
+    Figure = Any  # type: ignore
+    Axes = Any  # type: ignore
 
 try:
     import networkx as nx
 except ImportError:
-    nx = None
+    pass
 
 if TYPE_CHECKING:
     pass
@@ -531,4 +530,4 @@ class BaseHeatmapVisualizer(BaseVisualizer):
         cbar = plt.colorbar(im, ax=ax)
         cbar.ax.tick_params(labelsize=self.theme.font.tick_size)
 
-        return fig, ax
+        return fig, ax  # type: ignore

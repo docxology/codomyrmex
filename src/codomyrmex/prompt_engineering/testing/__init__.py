@@ -27,8 +27,8 @@ from .runner import ABTest, PromptTester, PromptTestSuite
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = Any
-    ResultStatus = Any
+    Result = Any  # type: ignore
+    ResultStatus = Any  # type: ignore
 
 
 def cli_commands() -> dict[str, Any]:

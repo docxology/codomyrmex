@@ -23,18 +23,14 @@ try:
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
-    Image = None
 
 # Check for OpenCV availability
 try:
     import cv2
-    import numpy as np
 
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
-    cv2 = None
-    np = None
 
 # Check for moviepy availability
 try:
@@ -43,7 +39,6 @@ try:
     MOVIEPY_AVAILABLE = True
 except ImportError:
     MOVIEPY_AVAILABLE = False
-    VideoFileClip = None
 
 
 SUPPORTED_FORMATS = {".mp4", ".avi", ".mov", ".mkv", ".webm", ".wmv", ".flv", ".m4v"}

@@ -8,8 +8,7 @@ Model versioning, lifecycle management, and artifact storage.
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .models import (
     ModelFramework,

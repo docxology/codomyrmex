@@ -377,7 +377,7 @@ class TestMigrationRunner:
 
         assert result.status == MigrationStatus.FAILED
         assert result.steps_completed == 1
-        assert "fail" in result.error
+        assert "fail" in (result.error or "")
 
     def test_runner_rollback(self):
         """Verify rollback execution."""

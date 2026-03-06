@@ -183,7 +183,7 @@ def hash_data(data: bytes, algorithm: str = "sha256") -> str:
         raise HashError(
             f"Unknown hash algorithm: {algorithm}. Supported: {', '.join(_DISPATCH)}"
         )
-    return func(data)
+    return func(data)  # type: ignore
 
 
 def verify_hash(data: bytes, expected_hash: str, algorithm: str = "sha256") -> bool:

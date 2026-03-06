@@ -48,7 +48,7 @@ class FabricManager:
             self.logger.warning("Fabric availability check failed: %s", e)
             return False
 
-    def list_patterns(self) -> list[str]:
+    def list_patterns(self) -> list[str]:  # type: ignore
         """
         Get list of available Fabric patterns.
 

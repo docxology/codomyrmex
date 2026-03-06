@@ -49,7 +49,7 @@ class TestConcurrentHTTPRequests:
         server = _make_server()
 
         async def _req(i: int) -> dict:
-            return await server._call_tool(
+            return await server._call_tool(  # type: ignore
                 {"name": "echo", "arguments": {"msg": f"request_{i}"}}
             )
 
@@ -64,12 +64,12 @@ class TestConcurrentHTTPRequests:
         server = _make_server()
 
         async def _valid(i: int) -> dict:
-            return await server._call_tool(
+            return await server._call_tool(  # type: ignore
                 {"name": "echo", "arguments": {"msg": f"ok_{i}"}}
             )
 
         async def _invalid(i: int) -> dict:
-            return await server._call_tool(
+            return await server._call_tool(  # type: ignore
                 {"name": f"nonexistent_{i}", "arguments": {}}
             )
 
@@ -104,7 +104,7 @@ class TestRapidMessageProcessing:
         server = _make_server()
         results = []
         for i in range(100):
-            r = await server._call_tool(
+            r = await server._call_tool(  # type: ignore
                 {"name": "echo", "arguments": {"msg": f"rapid_{i}"}}
             )
             results.append(r)
@@ -121,7 +121,7 @@ class TestRapidMessageProcessing:
         for i in range(50):
             name = f"rapid_tool_{i}"
             server.register_tool(name=name, schema={}, handler=_echo)
-            r = await server._call_tool({"name": name, "arguments": {"n": i}})
+            r = await server._call_tool({"name": name, "arguments": {"n": i}})  # type: ignore
             assert "content" in r
 
 
@@ -179,12 +179,12 @@ class TestServerStability:
         server.register_tool(name="bad", schema={}, handler=_bad_handler)
 
         # Call the bad tool
-        r1 = await server._call_tool({"name": "bad", "arguments": {}})
+        r1 = await server._call_tool({"name": "bad", "arguments": {}})  # type: ignore
         # Should get an error response
         assert isinstance(r1, dict)
 
         # Server still operational — call a good tool
-        r2 = await server._call_tool({"name": "echo", "arguments": {"msg": "ok"}})
+        r2 = await server._call_tool({"name": "echo", "arguments": {"msg": "ok"}})  # type: ignore
         assert "content" in r2
 
     @pytest.mark.asyncio
@@ -192,8 +192,8 @@ class TestServerStability:
         """100 error-producing calls followed by a valid call — server ok."""
         server = _make_server()
         for i in range(100):
-            await server._call_tool({"name": f"missing_{i}", "arguments": {}})
+            await server._call_tool({"name": f"missing_{i}", "arguments": {}})  # type: ignore
 
         # Server should still work
-        r = await server._call_tool({"name": "echo", "arguments": {"msg": "valid"}})
+        r = await server._call_tool({"name": "echo", "arguments": {"msg": "valid"}})  # type: ignore
         assert "content" in r

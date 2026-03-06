@@ -16,12 +16,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    Result = None
-    ResultStatus = None
-
 
 class Scorer(ABC):
     """Abstract base class for output scorers.

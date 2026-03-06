@@ -23,8 +23,7 @@ from typing import Any
 try:
     from codomyrmex.agents.core.registry import Tool, ToolRegistry
 except ImportError:
-    Tool = None
-    ToolRegistry = None
+    pass
 
 try:
     from codomyrmex.logging_monitoring import get_logger

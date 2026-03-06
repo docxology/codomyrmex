@@ -11,15 +11,7 @@ try:
         VRRenderer,
     )
 except ImportError:
-    ARSession = None
-    Camera3D = None
-    Light3D = None
-    Material3D = None
-    Object3D = None
-    RenderPipeline = None
-    Scene3D = None
-    Vector3D = None
-    VRRenderer = None
+    pass
 
 
 def basic_scene_example():

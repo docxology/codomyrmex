@@ -418,7 +418,7 @@ class TestAntigravityClient:
         client = AntigravityClient()
         result = client.invoke_tool("nonexistent", {})
         assert result.success is False
-        assert "Unknown tool" in result.error
+        assert "Unknown tool" in (result.error or "")
 
     def test_get_session_stats_disconnected(self):
         """get_session_stats should work when disconnected."""
@@ -687,7 +687,7 @@ class TestIDEClientHelperMethods:
         assert hasattr(info, "name")
         assert info.name == "test_ide.py"
         assert info.language == "python"
-        assert info.line_count > 0
+        assert info.line_count > 0  # type: ignore
 
     def test_get_file_info_nonexistent_file(self):
         """get_file_info should return None for nonexistent files."""

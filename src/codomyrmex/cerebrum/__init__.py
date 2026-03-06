@@ -33,8 +33,7 @@ Available functions:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    pass
 
 from .core import (
     ActiveInferenceError,
@@ -92,8 +91,6 @@ try:
     _HAS_FPF = True
 except ImportError:
     _HAS_FPF = False
-    FPFOrchestrator = None
-    FPFCombinatoricsAnalyzer = None
 
 
 def cli_commands():

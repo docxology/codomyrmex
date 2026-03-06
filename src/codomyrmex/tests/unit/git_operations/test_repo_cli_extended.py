@@ -394,7 +394,7 @@ class TestCmdStatus:
     def test_status_not_found(self, capsys):
         """cmd_status prints 'not found' when manager returns None."""
         manager = StubRepositoryManager()
-        manager.get_repository_status = lambda name, path=None: None
+        manager.get_repository_status = lambda name, path=None: None  # type: ignore
         args = StubArgs(repository="missing/repo")
         cmd_status(manager, args)
         captured = capsys.readouterr()
@@ -527,7 +527,7 @@ class TestCmdSyncExtended:
     def test_sync_failure_prints_failure(self, capsys):
         """cmd_sync prints failure message when manager returns False."""
         manager = StubRepositoryManager()
-        manager.sync_repository = lambda name, path=None: False
+        manager.sync_repository = lambda name, path=None: False  # type: ignore
         args = StubArgs(repository="owner/repo")
         cmd_sync(manager, args)
         captured = capsys.readouterr()
@@ -554,7 +554,7 @@ class TestCmdPruneExtended:
     def test_prune_failure_prints_failure(self, capsys):
         """cmd_prune prints failure when manager returns False."""
         manager = StubRepositoryManager()
-        manager.prune_repository = lambda name, path=None: False
+        manager.prune_repository = lambda name, path=None: False  # type: ignore
         args = StubArgs(repository="owner/repo")
         cmd_prune(manager, args)
         captured = capsys.readouterr()

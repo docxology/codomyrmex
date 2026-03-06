@@ -17,7 +17,7 @@ try:
     try:
         from codomyrmex.tests.utils.ephemeral_server import EphemeralServer
     except ImportError:
-        EphemeralServer = None
+        pass
 
     from codomyrmex.networking import (
         HTTPClient,

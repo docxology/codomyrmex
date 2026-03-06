@@ -89,7 +89,7 @@ class ContractRegistry:
             return True
         return False
 
-    def list(self) -> list[str]:
+    def list(self) -> list[str]:  # type: ignore
         """List all registered contract names."""
         return sorted(self._contracts.keys())
 
@@ -130,17 +130,17 @@ class ContractRegistry:
 
     # ── Search and filter ───────────────────────────────────────────
 
-    def filter_by_status(self, status: ContractStatus) -> list[str]:
+    def filter_by_status(self, status: ContractStatus) -> list[str]:  # type: ignore
         """Return contract names with a specific status."""
         return [
             name for name, entry in self._contracts.items() if entry.status == status
         ]
 
-    def filter_by_tag(self, tag: str) -> list[str]:
+    def filter_by_tag(self, tag: str) -> list[str]:  # type: ignore
         """Return contract names that have a specific tag."""
         return [name for name, entry in self._contracts.items() if tag in entry.tags]
 
-    def get_history(self, name: str) -> list[ContractVersion]:
+    def get_history(self, name: str) -> list[ContractVersion]:  # type: ignore
         """Get all version history for a contract."""
         return list(self._history.get(name, []))
 

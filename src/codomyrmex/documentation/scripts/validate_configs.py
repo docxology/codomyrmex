@@ -31,7 +31,6 @@ try:
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
-    yaml = None
 
 # Add src to path if needed
 project_root = Path(__file__).parent.parent.parent.parent.parent
@@ -54,7 +53,7 @@ class ConfigValidator:
         self.project_root = project_root
         # Path to config directory
         self.config_dir = project_root / "config"
-        self.validation_results = {
+        self.validation_results: dict[str, Any] = {
             "total_files": 0,
             "valid_files": 0,
             "invalid_files": 0,
@@ -290,7 +289,7 @@ class ConfigValidator:
     def save_report(self, results: dict[str, Any], output_file: str | None = None):
         """Save validation results to file."""
         if output_file is None:
-            output_file = (
+            output_file = (  # type: ignore
                 self.project_root
                 / "src"
                 / "codomyrmex"
@@ -300,7 +299,7 @@ class ConfigValidator:
 
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(output_file, "w", encoding="utf-8") as f:
+        with open(output_file, "w", encoding="utf-8") as f:  # type: ignore
             json.dump(results, f, indent=2, ensure_ascii=False)
 
         logger.info(f"Report saved to: {output_file}")

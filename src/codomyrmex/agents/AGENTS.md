@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Multi-provider agent framework with 12 provider integrations (5 API, 6 CLI, 1 local), session management, response parsing, multi-agent pooling, evaluation, conversation history, and an interactive setup wizard. Core layer for intelligent automation workflows.
+Multi-provider agent framework with 14 provider integrations (6 API, 7 CLI, 1 local), session management, response parsing, multi-agent pooling, evaluation, conversation history, and an interactive setup wizard. Core layer for intelligent automation workflows.
 
 ## Active Components
 
@@ -17,10 +17,12 @@ Multi-provider agent framework with 12 provider integrations (5 API, 6 CLI, 1 lo
 | `o1/` | API | `APIAgentBase` | `OPENAI_API_KEY` | Functional |
 | `deepseek/` | API | `APIAgentBase` | `DEEPSEEK_API_KEY` | Functional |
 | `qwen/` | API | `APIAgentBase` | `DASHSCOPE_API_KEY` | Functional |
+| `perplexity/` | API | `APIAgentBase` | `PERPLEXITY_API_KEY` | Functional |
 | `jules/` | CLI | `CLIAgentBase` | `jules` | Functional |
 | `opencode/` | CLI | `CLIAgentBase` | `opencode` | Functional |
 | `gemini/` | CLI | `CLIAgentBase` | `gemini` | Functional |
 | `mistral_vibe/` | CLI | `CLIAgentBase` | `vibe` | Functional |
+| `hermes/` | CLI | `CLIAgentBase` | `hermes` | Functional |
 | `every_code/` | CLI | `CLIAgentBase` | `code` | Functional |
 | Ollama (local) | Local | via `llm/ollama/` | `OLLAMA_BASE_URL` | Functional |
 
@@ -51,7 +53,7 @@ Multi-provider agent framework with 12 provider integrations (5 API, 6 CLI, 1 lo
 ## MCP Tools Available
 
 | Tool | Description | Trust Level |
-|------|-------------|-------------|
+| :--- | :--- | :--- |
 | `execute_agent` | Execute an agent conversation with a given prompt. Uses `AgentRegistry` to look up and instantiate the agent. | TRUSTED |
 | `list_agents` | Return a list of all available AI agents from `AgentRegistry`. | SAFE |
 | `get_agent_memory` | Retrieve interaction logs and memory for a specific agent session by session ID. | SAFE |
@@ -88,25 +90,29 @@ uv run python src/codomyrmex/examples/agent_orchestration_demo.py
 This section defines which PAI v4.0.1 agent types can access which agents submodules and at what trust level.
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `execute_agent`, `list_agents`, `get_agent_memory`; `CodeEditor`, `AgentOrchestrator`, all 12 provider clients | TRUSTED |
+| :--- | :--- | :--- | :--- |
+| **Engineer** | Full | `execute_agent`, `list_agents`, `get_agent_memory`; `CodeEditor`, `AgentOrchestrator`, all 14 provider clients | TRUSTED |
 | **Architect** | Read + Design | `list_agents`, `get_agent_memory`; architecture analysis, provider selection, pool strategy design | OBSERVED |
 | **QATester** | Validation | `list_agents`, `execute_agent` (test runs only); `AgentBenchmark`, all scorers (`ExactMatch`, `Contains`, `Composite`) | OBSERVED |
 | **Researcher** | Read-only | `list_agents`, `get_agent_memory`; session history retrieval, conversation context inspection | OBSERVED |
 
 ### Engineer Agent
+
 **Access**: Full — all provider clients, orchestration, code editing, session management
 **Use Cases**: Implementing new provider integrations, building multi-agent workflows, AI-assisted code editing automation, parallel agent pool configuration.
 
 ### Architect Agent
+
 **Access**: Read + Design — provider inventory, capability analysis, pool/circuit-breaker design
 **Use Cases**: Agent architecture design, provider comparison and selection, pool sizing strategy, evaluation framework design, theoretical architecture review (reactive/deliberative/hybrid).
 
 ### QATester Agent
+
 **Access**: Validation — benchmark runs, response validation, session persistence tests
 **Use Cases**: Agent benchmark execution, provider integration verification, response format validation, conversation history round-trip tests.
 
 ### Researcher Agent
+
 **Access**: Read-only — session history, agent capability discovery
 **Use Cases**: Querying agent memory for prior work context, listing available providers for capability awareness, inspecting conversation history for research continuity.
 
@@ -114,7 +120,6 @@ This section defines which PAI v4.0.1 agent types can access which agents submod
 
 - **📁 Parent Directory**: [codomyrmex](../README.md)
 - **🏠 Project Root**: [README.md](../../../README.md)
-
 
 ## Rule Reference
 

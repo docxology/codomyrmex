@@ -23,7 +23,7 @@ class TestAgentIntegrations:
             prompt="Test prompt", capabilities=[AgentCapabilities.CODE_GENERATION]
         )
         assert request.prompt == "Test prompt"
-        assert AgentCapabilities.CODE_GENERATION in request.capabilities
+        assert AgentCapabilities.CODE_GENERATION in request.capabilities  # type: ignore
 
     def test_agent_response_structure(self):
         """Test agent response structure."""

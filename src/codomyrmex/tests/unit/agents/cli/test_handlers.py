@@ -517,7 +517,7 @@ class TestGetDroidController:
         h._droid_controller = None
         try:
             original_fn = h.create_default_controller
-            h.create_default_controller = None
+            h.create_default_controller = None  # type: ignore
             result = h._get_droid_controller()
             assert result is None
             h.create_default_controller = original_fn

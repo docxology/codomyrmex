@@ -88,7 +88,7 @@ def test_react_execution_invalid_format():
 
     # So response.error should be set.
     if response.error:
-        assert "not found" in response.error
+        assert "not found" in (response.error or "")
     else:
         # If the parsing logic handled it differently
         pass

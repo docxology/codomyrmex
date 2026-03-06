@@ -101,20 +101,20 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
 
         if max_tokens is not None and hasattr(self.agent, "max_tokens"):
             original_max_tokens = self.agent.max_tokens
-            self.agent.max_tokens = max_tokens
+            self.agent.max_tokens = max_tokens  # type: ignore
 
         if temperature is not None and hasattr(self.agent, "temperature"):
             original_temperature = self.agent.temperature
-            self.agent.temperature = temperature
+            self.agent.temperature = temperature  # type: ignore
 
         try:
             response = self.agent.execute(request)
         finally:
             # Restore original parameters
             if original_max_tokens is not None:
-                self.agent.max_tokens = original_max_tokens
+                self.agent.max_tokens = original_max_tokens  # type: ignore
             if original_temperature is not None:
-                self.agent.temperature = original_temperature
+                self.agent.temperature = original_temperature  # type: ignore
 
         if not response.is_success():
             self.logger.error(

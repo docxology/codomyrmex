@@ -42,14 +42,14 @@ class PAIProviderMixin:
 
         This replaces frontend HTTP polling with a push model.
         """
-        try:
-            import asyncio
-            import threading
+        import importlib.util
 
-            import websockets
-        except ImportError:
+        if importlib.util.find_spec("websockets") is None:
             logger.warning("websockets library not available. WebSocket push disabled.")
             return
+
+        import asyncio
+        import threading
 
         self._ws_clients = set()
 
@@ -100,7 +100,6 @@ class PAIProviderMixin:
                 self._ws_clients.remove(websocket)
 
         async def serve():
-            import asyncio
 
             import websockets
             try:

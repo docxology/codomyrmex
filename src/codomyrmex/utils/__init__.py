@@ -143,7 +143,7 @@ def timing_decorator(func: Callable[..., T]) -> Callable[..., T]:
         elapsed = (time.perf_counter() - start) * 1000
 
         if isinstance(result, dict):
-            result["execution_time_ms"] = round(elapsed, 2)
+            result["execution_time_ms"] = round(elapsed, 2)  # type: ignore
 
         return result
 

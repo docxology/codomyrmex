@@ -152,7 +152,7 @@ def test_triadic_coordinate_frozen():
     """TriadicCoordinate is immutable."""
     t = TriadicCoordinate(datum=(42,), stratum=(3,), spectrum=((1, 3, 5),))
     with pytest.raises(AttributeError):
-        t.datum = (0,)
+        t.datum = (0,)  # type: ignore
 
 
 # ======================================================================
@@ -1103,7 +1103,7 @@ def test_derivation_record_frozen():
     """DerivationRecord is immutable after creation."""
     record = DerivationRecord(entity_id="e1", operation="create")
     with pytest.raises(AttributeError):
-        record.operation = "update"
+        record.operation = "update"  # type: ignore
 
 
 @pytest.mark.unit

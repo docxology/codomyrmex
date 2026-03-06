@@ -15,10 +15,6 @@ try:
 
     ACCESS_CONTROL_AVAILABLE = True
 except ImportError:
-    AccessControlSystem = None
-    check_access_permission = None
-    grant_access = None
-    revoke_access = None
     ACCESS_CONTROL_AVAILABLE = False
 
 try:
@@ -31,10 +27,6 @@ try:
 
     ASSET_INVENTORY_AVAILABLE = True
 except ImportError:
-    AssetInventory = None
-    register_asset = None
-    track_asset = None
-    get_asset_status = None
     ASSET_INVENTORY_AVAILABLE = False
 
 try:
@@ -46,9 +38,6 @@ try:
 
     SURVEILLANCE_AVAILABLE = True
 except ImportError:
-    SurveillanceMonitor = None
-    monitor_physical_access = None
-    log_physical_event = None
     SURVEILLANCE_AVAILABLE = False
 
 try:
@@ -60,9 +49,6 @@ try:
 
     PHYSICAL_VULNERABILITY_AVAILABLE = True
 except ImportError:
-    PhysicalVulnerabilityScanner = None
-    assess_physical_security = None
-    scan_physical_vulnerabilities = None
     PHYSICAL_VULNERABILITY_AVAILABLE = False
 
 try:
@@ -74,9 +60,6 @@ try:
 
     PERIMETER_MANAGEMENT_AVAILABLE = True
 except ImportError:
-    PerimeterManager = None
-    check_perimeter_security = None
-    manage_access_points = None
     PERIMETER_MANAGEMENT_AVAILABLE = False
 
 __all__ = []

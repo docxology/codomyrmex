@@ -81,7 +81,7 @@ def server():
 def client(server):
     """Create an MCPClient connected to the test server via in-memory transport."""
     c = MCPClient(MCPClientConfig(name="test-client", version="0.1.0"))
-    c._transport = _InMemoryTransport(server)
+    c._transport = _InMemoryTransport(server)  # type: ignore
     return c
 
 

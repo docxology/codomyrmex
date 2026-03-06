@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD060 -->
 # Codomyrmex — TODO
 
-**Version**: v1.1.7 | **Date**: 2026-03-06 | **Modules**: 127 | **Sprint**: 27
+**Version**: v1.1.8 | **Date**: 2026-03-06 | **Modules**: 127 | **Sprint**: 28
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -15,12 +15,12 @@ This is the authoritative project backlog. Updated after each sprint.
 | Source files (non-test) | ~1,800+ | `find -name "*.py" -not -path "*/tests/*"` |
 | Total LOC (incl. tests) | ~560,000 | `wc -l` across all `.py` |
 | Test files | **944** | `find -name "test_*.py"` |
-| Test suite | **21,000+** tests collected | `uv run pytest --collect-only` |
-| Ruff violations | **332** | `uv run ruff check .` 🔴 |
+| Test suite | **26,500+** tests collected | `uv run pytest --collect-only` |
+| Ruff violations | **0** | `uv run ruff check .` ✅ |
 | Ruff auto-fixed | **10,946+** applied | `uv run ruff check --fix .` |
 | Ruff formatted | **3,420+** files | `uv run ruff format --check .` |
 | Script parse errors | **0** (46 fixed in v1.1.1) | `python3 -c "import ast"` |
-| ty diagnostics | **1,451** (target <1,000) | `uv run ty check src/` 🔴 |
+| ty diagnostics | **0** errors (264 warnings) | `uv run ty check src/` ✅ |
 | Pass-only function stubs | **4** intentional no-ops | AST analysis |
 | Coverage gate | `fail_under=31`; actual ~32% ✅ | Gate ratcheted |
 | MCP `@mcp_tool` decorators | **545** | `grep -r '@mcp_tool'` |
@@ -38,112 +38,123 @@ This is the authoritative project backlog. Updated after each sprint.
 
 Addressing the immediate tech debt introduced by the massive Jules Mega-Swarm and locking down ecosystem stability.
 
-### Expanded Testing Methodologies & Stabilization
+### Comprehensive Testing & Security Hardening
 
 | Item | Scope | Technical Detail |
 | :--- | :--- | :--- |
-| **Lint & Type Burn-down** | Root | Burn down the 332 `ruff` violations and 1,451 `ty` diagnostics introduced by the swarm patches. |
-| **Coverage gate ratchet** | `pyproject.toml` | Bump `fail_under` to 38. Expand coverage onto `spatial/`, `cerebrum/`, and `graph_rag/`. |
-| **Property-based testing** | `serialization/` | Add `hypothesis` dev-dependency; write robust property tests (`@given`) for schema validators and data round-trips. |
-| **Mutation testing scale-up** | `pyproject.toml` | Expand `[tool.mutmut]` from 6 to 12 targets (e.g., `cache/core.py`, `concurrency/core.py`, `events/core.py`). |
-| **Flaky testing tracking** | `pyproject.toml` | Apply `@pytest.mark.flaky(reruns=2)` using `pytest-rerunfailures` to explicitly track and document CI flakes. |
+| **Zero-Diagnostic Purity** | Root | Sustain 0 `ruff` violations and 0 `ty` type checking errors. Enforce strict type checking in CI. |
+| **Coverage ratchet to >40%** | `pyproject.toml` | Aggressively increase `fail_under` to 40. Expand coverage onto `spatial/`, `cerebrum/`, and `graph_rag/` with Zero-Mock purity. |
+| **Property-based fuzzing** | `serialization/` | Add `hypothesis` dev-dependency; automate property schema validation across 127 modules. |
+| **Mutation testing scale-up** | `pyproject.toml` | Expand `[tool.mutmut]` suite to dynamically mutate core `cache/`, `concurrency/`, and `events/` modules. |
+| **AST Codebase De-sloppification** | `tools/` | Create a comprehensive `desloppify` technical debt analyzer that flags god classes, duplicated AST patterns, and missing docstrings. |
+| **Sys-health Status CLI**| `cli/` | Construct a `/codomyrmexStatus` tool enabling deep visual diagnostics of the multi-agent graph, active worktrees, and memory buffers. |
 
 ---
 
-## 🟣 v1.1.8 — "Agentic Memory & Knowledge Graph Foundation"
+## 🟣 v1.1.8 — "Agentic Memory & Knowledge Graph Integration"
 
-Maturing the knowledge graph and agentic memory models to persistent forms.
+Maturing the probabilistic knowledge graph and unifying agentic short/long-term memory.
 
-### Memory Systems
+### Next-Gen Cognitive Memory Systems
 
 | Item | Scope | Technical Detail |
 | :--- | :--- | :--- |
-| **Agentic memory backend** | `agentic_memory/` | Deploy SQLite backend for the `MemoryStore` enabling cross-session retrieval, TTL expiry, and tag indexing. |
-| **Obsidian integration** | `agentic_memory/` | Bi-directional synchronization mapping Obsidian vault states securely to `agentic_memory`. |
-| **Graph RAG pipeline** | `graph_rag`, `llm/rag` | Connect the knowledge graph to `llm/rag/` for retrieval-augmented generation with structured entity relationships. |
+| **Persistent memory backend** | `agentic_memory/` | Deploy SQLite backend for the `MemoryStore` enabling rich cross-session semantic search with FAISS/Chroma integration. |
+| **Obsidian vault bridging** | `agentic_memory/` | Bi-directional seamless synchronization mapping standard Markdown Obsidian states to probabilistic belief vectors. |
+| **Graph RAG multi-hop** | `graph_rag` | Implement retrieval-augmented generation capable of multi-hop inference across structured/unstructured entities. |
+| **Frisson/Surprise signals** | `cerebrum/` | Develop prediction-error "surprise" (Friston blanket active inference) routing to trigger dynamic swarm deployments. |
 
 ---
 
-## 🔵 v1.1.9 — "Multimodal STT & Concrete Cloud Providers"
+## 🔵 v1.1.9 — "Multimodal Perception & Sensory Cloud Subsystems"
 
-Establishing concrete providers for sensory and external infrastructure bridging.
+Establishing full sensorium bridging and external infrastructure provider integration.
 
-### Advanced AI Integrations
+### Modality Expansion
 
 | Feature | Depends On | Technical Detail |
 | :--- | :--- | :--- |
-| **Concrete Provider Integrations** | `cloud/`, `audio/` | Implement standard provider models (`boto3`, `faster-whisper`, `edge-tts`) gated via extras. |
-| **Multimodal STT base** | `audio/` | Establish the base structure for Whisper STT into generic standard LLM interactions. |
-| **Cost management** | `llm/providers` | Introduce basic API spend tracking on per-call basis via custom telemetry. |
+| **Concrete API Provider Matrix** | `cloud/`, `auth/` | Fully implement zero-mock `boto3`, `faster-whisper`, `edge-tts` with deterministic rate-limiting and rotating quotas. |
+| **Audio STT/TTS Streaming** | `audio/` | Implement streaming bi-directional WebSockets for ultra-low latency LLM voice interactions. |
+| **Vision/Image Parsing** | `vision/` | Wire VLMs (Qwen-VL, GPT-4o-vision) directly into the scraping pipelines for un-parsed PDF/HTML canvas interpretation. |
 
 ---
 
 ## 🟢 v1.1.10 — "Dashboard v2 & Telemetry UX"
 
-Gearing towards a richer visual presence ahead of the major 1.2.0 milestone.
+Gearing towards a richer visual presence ahead of the major 1.2.0 milestone, establishing a reactive telemetry nexus.
 
-### Visual Evolution
+### Visual & Telemetry Nexus
 
 | Feature | Depends On | Technical Detail |
 | :--- | :--- | :--- |
-| **Dashboard v2 Framework**| `website/` | Implement Vue/React scaffold to eventually replace the legacy Vanilla JS framework, providing better reactivity. |
-| **Data visualization UX** | `data_visualization` | Add test-run history timeline, module health heatmap, and per-module sparklines logic. |
-| **Agent telemetry** | `telemetry/` | Add granular performance tracking to `agent` execution flows for exact latency visibility. |
+| **Dashboard v2 Framework**| `website/` | Implement a modern solid-js/Vue scaffold replacing legacy Vanilla JS, utilizing Vite and strict-typing for maximum reactivity. |
+| **Data visualization UX** | `data_visualization` | Embed dynamic test-run timelines, live module-health heatmaps, and interactive per-module sparklines powered by D3/Recharts. |
+| **Granular Agent Telemetry** | `telemetry/` | Inject deep execution traces into `agent` flows for sub-millisecond latency visibility, token consumption metrics, and tool-call tracing. |
+| **Swarm Orchestration UI** | `website/` | Introduce a real-time 'Swarm Command Map' to track active node status, throughput, and error rates of 500+ concurrent Jules agents. |
 
 ---
 
 ## 🟠 v1.1.11 — "Advanced Orchestration & System Verification"
 
-Strengthening the system boundaries through verification paradigms and global availability hooks.
+Strengthening system boundaries and formalizing truth through advanced verification syntax and zero-trust orchestration.
 
-### Integration Features
+### Formalization & Advanced Distros
 
 | Feature | Depends On | Technical Detail |
 | :--- | :--- | :--- |
-| **Formal verification basis** | `coding/` | Initial spike to wire `z3-solver` into `coding/` for automated invariant checking. |
-| **Cross-platform distribution** | Root | Setup initial steps for Homebrew formula and Nix flake, `pipx` compatibility. |
-| **Memory scaling** | `database_management` | Alembic schema migrations and potential Redis integration. |
+| **Formal verification synthesis** | `coding/` | Wire `z3-solver` into core schemas for automated invariant checking, guaranteeing boundary logic across the type graph. |
+| **Cross-platform hermetic builds** | Root | Establish Homebrew taps, Nix flakes, and `pipx` deployment structures for totally hermetic binary-like distributions. |
+| **Distributed Memory scaling** | `database_management` | Implement Alembic declarative schema migrations and hook in an async Redis pub/sub layer for horizontal memory cache scaling. |
+| **Containerized Micro-nodes** | `containerization/` | Dockerize all active agent subroutines for K8s deployment, scaling the zero-mock inference graph dynamically across physical clusters. |
 
 ---
 
 ## 🔴 v1.1.12 — "Pre-1.2.0 Polish & Agentic CI"
 
-Final ecosystem integration and aggressive swarm-based CI tuning before the 1.2.0 cut.
+Final ecosystem integration and aggressive autonomous CI loop closing before the major 1.2.0 release window.
 
-### Ecosystem Integration
-
-| Feature | Depends On | Technical Detail |
-| :--- | :--- | :--- |
-| **Agentic CI pipeline** | `specialized/agents` | `AutoPR.create()` with safety limits (max 3 files changed, requires human review) for autonomous system tuning. |
-| **Budget alerting** | `events/notification` | Active budget alerting threshold events mapped over the v1.1.9 provider usage tracking. |
-| **Dashboard v2 Finalization**| `telemetry`, `website` | Wire D3.js and the new React/Vue scaffolding with full WebSocket streaming capability. |
-
----
-
-## 🔵 v1.2.0 — "Ecosystem Integration"
-
-The culmination of the 1.1.x architectural series bridging the PAI PM server, full zero-mock compliance, real-time sync, and agentic orchestration.
+### Autonomous Continuous Integration
 
 | Feature | Depends On | Technical Detail |
 | :--- | :--- | :--- |
-| **Infomaniak cloud provider** | `cloud/schema` | Storage (Swift-compat), compute (Nova-compat), DNS management via Infomaniak API v1. |
-| **1.2.0 Cut & Freeze** | `core/` | Final validation of all module APIs, schema locks, and stable PM system integration. |
+| **Agentic CI pipeline (AutoPR)** | `specialized/agents` | Deploy `AutoPR.create()` bots that autonomously patch test failures, resolve tech debt, and submit PRs with 100% Zero-Mock validation. |
+| **Dynamic Budget Subsystem** | `events/notification` | Activate hard boundary budget-alarms using live provider telemetry (cost-per-token/millisecond), automatically halting runaway swarms. |
+| **Dashboard WebSocket Stream**| `telemetry`, `website` | Finalize bidirectional WebSocket integration, streaming live 60fps telemetry graph updates directly to the web client without manual polling. |
+| **1.2.0 Release Candidate Audit** | Root | Comprehensive freeze of schemas, rigorous security audit, trailing dependency bump (uv lock), and documentation final-pass standard verification. |
 
 ---
 
-## 🔮 v1.3.0+ — Longer-Term Vision
+## 🔵 v1.2.0 — "Ecosystem Integration & Codomyrmex Prime"
 
-Architectural extensions and research directions.
+The culmination of the 1.1.x architectural series bridging the PAI PM server, full zero-mock compliance, real-time sync, and autonomous agentic orchestration into a unified enterprise-grade operating system.
+
+### The v1.2.0 Milestone Requirements
+
+| Feature | Depends On | Technical Detail |
+| :--- | :--- | :--- |
+| **Infomaniak Sovereign Cloud** | `cloud/schema` | Direct deployment of storage (Swift-compat), compute (Nova-compat), and DNS management via Infomaniak API v1, avoiding vendor lock-in. |
+| **Swarm CLI "Codomyrmex Prime"** | `cli/` | Ship a finalized cohesive CLI binary enabling `codomyrmex agent start`, `codomyrmex memory index`, and `codomyrmex dashboard serve` from a single standard entry point. |
+| **100% Zero-Mock Verification Gate** | `core/` | Hard execution block if any isolated test fails or coverage drops below 50%; gating release on a 30,000+ item passing test suite. |
+| **1.2.0 Cut & Freeze** | Root | Final validation of all 127 module APIs, serialization schema locks, stable bidirectional PM system integration, and global `ty` diagnostic purity check. |
+
+---
+
+## 🔮 v1.3.0+ — "Autonomous Evolution & Physical Embodiment"
+
+Architectural extensions pushing the boundaries of autonomous software synthesis, continuous learning, and cyber-physical bridging.
+
+### Long-Term Research & Engineering Vectors
 
 | Direction | Scope | Notes |
 | :--- | :--- | :--- |
-| **Spatial reasoning & Synergetics** | `spatial/` | Fuller-inspired geodesic transforms, 4D rotation matrices, icosahedral mesh generation |
-| **Embodiment & ROS2 bridge** | `embodiment/` | Full ROS2 bridge with `rclpy` bindings or archive deprecated module |
-| **Cerebrum cognitive architecture** | `cerebrum/` | Real probabilistic inference with `scipy.stats`, belief revision, uncertainty-aware planning |
-| **Inference optimization** | `quantization/`, `distillation/` | INT8/INT4 quantization wrappers, knowledge distillation, speculative decoding |
-| **Plugin marketplace** | `plugin_system/` | Plugin discovery (entry points + PyPI search), sandboxed installation, version management |
-| **Multi-agent swarm protocols** | `collaboration/` | Raft consensus, hierarchical task decomposition, emergent behavior monitoring |
-| **Secure cognitive agent hardening** | `security/`, `agents/` | STRIDE threat modeling, penetration testing, key management audit |
+| **Spatial reasoning & Synergetics** | `spatial/` | Fuller-inspired geodesic transforms, 4D rotation matrices, and icosahedral mesh generation for spatial coordinate navigation. |
+| **Physical Embodiment & ROS2** | `embodiment/` | Full `rclpy` binding integration into the `agents` module allowing LLMs native publisher/subscriber interactions with robotic chassis hardware. |
+| **Cerebrum Cognitive Architecture** | `cerebrum/` | Advanced probabilistic inference via active inference (Friston), continuous dynamic belief revision, and deep uncertainty-aware hierarchical planning. |
+| **Local Inference & Edge Distillation** | `quantization/` | Local INT8/INT4 MLX quantization wrappers for running SLMs (Qwen 1.5B/Llama 3 8B) entirely offline directly on standard mac nodes. |
+| **Secure Autonomous Decentralization**| `collaboration/` | Implement Raft consensus for multi-agent swarm task decomposition and deployment of cryptographically verifiable smart-contract task negotiations. |
+| **Open Plugin Marketplace** | `plugin_system/` | Autonomous plugin discovery, sandboxed WebAssembly execution environments, and zero-trust capability vetting. |
+| **Self-Modifying Architecture** | `security/` | Agentic rewrite mechanisms where the orchestrator safely rewrites its own core logic bounded by total specification adherence and Z3 formal verification gates. |
 
 ---
 
