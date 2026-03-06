@@ -2,7 +2,7 @@
 
 **Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
-A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **126 Python modules**, **~427 MCP tools**, **81 PAI skills**, and **15 Antigravity workflows**.
+A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **128 Python modules**, **~474 MCP tools**, **81 PAI skills**, and **15 Antigravity workflows**.
 
 ---
 
@@ -55,7 +55,7 @@ graph TB
         EVENTS["EventBus<br/>phase transitions"]
     end
 
-    subgraph MODULES["🐜 Codomyrmex (127 modules)"]
+    subgraph MODULES["🐜 Codomyrmex (128 modules)"]
         direction LR
         SKILLS_MOD["Skills<br/>81 installed"]
         MEMORY_MOD["Agentic Memory<br/>rules + obsidian"]
@@ -353,7 +353,7 @@ flowchart LR
 | **PAI Bridge** | `pai_bridge.py` | Discovery, validation — reads PAI's filesystem (read-only) |
 | **Trust Gateway** | `trust_gateway.py` | 3-tier security gating for tool execution |
 | **MCP Bridge** | `mcp_bridge.py` | JSON-RPC protocol for tool invocation |
-| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers 127 modules with `mcp_tools.py` |
+| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers 128 modules with `mcp_tools.py` |
 | **PAI Webhook** | `pai_webhook.py` | FastAPI router for bidirectional PAI ↔ Codomyrmex |
 | **PAI Client** | `pai_client.py` | HTTP client to push events to PAI |
 
@@ -382,7 +382,7 @@ stateDiagram-v2
 
     state TRUSTED {
         [*] --> FullAccess
-        FullAccess: 4 destructive tools enabled
+        FullAccess: 5 destructive tools enabled
         FullAccess: write_file
         FullAccess: run_command
         FullAccess: run_tests
@@ -422,7 +422,7 @@ sequenceDiagram
 
 ## 5. MCP Tool Integration
 
-Every module exposes functionality through `mcp_tools.py` files. **127 modules** provide **~427 dynamically-discovered tools** plus 20 static tools.
+Every module exposes functionality through `mcp_tools.py` files. **128 modules** provide **~474 dynamically-discovered tools** plus 20 static tools.
 
 ```mermaid
 pie title MCP Tool Distribution (~447 Total)

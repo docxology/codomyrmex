@@ -6,7 +6,7 @@
 
 Anderson's (1972) foundational essay "More Is Different" argues that complex systems exhibit properties at scale that cannot be predicted from their individual components — a claim that the reductive program of physics fails at each level of organizational complexity. In AGI research, Wei et al. (2022) documented "emergent abilities" of large language models — capabilities that appear as sharp phase transitions above certain scale thresholds, absent below them. Kauffman (1993) showed that random Boolean networks produce self-organized criticality at sufficient connectivity — order at the edge of chaos.
 
-But emergence is not magic. It has formal structure. This essay traces four emergent capabilities in the codomyrmex 127-module ecosystem, analyzing each through the lens of statistical mechanics, percolation theory, and information-theoretic complexity.
+But emergence is not magic. It has formal structure. This essay traces four emergent capabilities in the codomyrmex 128-module ecosystem, analyzing each through the lens of statistical mechanics, percolation theory, and information-theoretic complexity.
 
 ## The Percolation Model
 
@@ -95,7 +95,7 @@ Wei et al.'s (2022) emergent abilities framework predicts that capabilities appe
 | ~60 modules | Basic tool composition | Connected component size | Graph connectivity |
 | ~80 modules | Self-description | Fraction of self-modeling coverage | `system_discovery` completeness |
 | ~100 modules | Cross-domain transfer | Transfer entropy between domains | Embedding space overlap |
-| 127 modules | Self-healing loop | Mean time to recovery | All feedback path modules present |
+| 128 modules | Self-healing loop | Mean time to recovery | All feedback path modules present |
 
 These thresholds are *percolation thresholds* for specific subgraph structures. The self-healing loop requires a cycle in the dependency graph connecting `telemetry → defense → ci_cd_automation → deployment → telemetry`; this cycle cannot form below ~100 modules because the intermediate modules don't exist.
 
@@ -115,7 +115,7 @@ This fractal self-similarity is not coincidental — it reflects the autopoietic
 
 Anderson's deeper point is that at each level of complexity, **qualitatively new phenomena emerge** that cannot be predicted from the laws governing the level below. The relationship between levels is not ontological reduction but *broken symmetry*.
 
-Applied to codomyrmex's growth from 88 modules (v1.1.4) to 127 modules (v1.1.4):
+Applied to codomyrmex's growth from 88 modules (v1.1.4) to 128 modules (v1.1.4):
 
 | Module Count | Phase | Emergent Capability | Symmetry Broken |
 |:-------------|:------|:-------------------|:---------------|
@@ -141,7 +141,7 @@ Based on current trajectory:
 
 | Metric | Current (n=127) | Predicted Threshold | Predicted Effect |
 |:-------|:---------------|:-------------------|:----------------|
-| Tool count | 545 | ~1,000 | Tool selection becomes PSPACE-hard |
+| Tool count | 474 | ~1,000 | Tool selection becomes PSPACE-hard |
 | Memory entries | ~10K | ~100K | Consolidation becomes mandatory |
 | Cross-references | ~1,500 | ~10,000 | Binding problem becomes acute |
 

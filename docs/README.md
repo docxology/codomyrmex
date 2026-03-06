@@ -74,7 +74,7 @@ This directory contains all documentation for the Codomyrmex ecosystem — a mod
 | Metric | Value |
 |--------|-------|
 | Python modules | **127** auto-discovered |
-| MCP tools | **545** `@mcp_tool` decorators |
+| MCP tools | **474** `@mcp_tool` decorators |
 | Test suite | **21,000+** collected |
 | Ruff violations | **0** (triaged from 119k) |
 | ty diagnostics | **971** (target < 1,000 met) |

@@ -73,7 +73,7 @@ Started with: `uv run python scripts/pai/dashboard.py` or `bun run src/codomyrme
 | Category | Count | Notes |
 |----------|-------|-------|
 | Static proxy tools | 22 | File ops, git, shell, analysis, PAI, testing, workflows |
-| Dynamic auto-discovered | ~407 | From 121 modules with `mcp_tools.py` + `@mcp_tool` |
+| Dynamic auto-discovered | ~474 | From 141 modules with `mcp_tools.py` + `@mcp_tool` |
 | Destructive (trust-gated) | 4 | `write_file`, `run_command`, `run_tests`, `call_module_function` |
 | Resources | 3 | `codomyrmex://modules`, `codomyrmex://status`, discovery metrics |
 | Prompts | 10 | Analysis, review, and generation prompt templates |
@@ -82,7 +82,7 @@ Started with: `uv run python scripts/pai/dashboard.py` or `bun run src/codomyrme
 
 1. **Hierarchy**: Root PAI.md (bridge overview) → docs/pai/ (detailed reference) → src/ (implementation docs)
 2. **No duplication**: Each document has a unique scope — no verbatim copying from root PAI.md
-3. **Synchronized**: All counts (22 tools, 10 prompts, 3 resources, 4 destructive) match implementation
+3. **Synchronized**: All counts (22 tools, 10 prompts, 3 resources, 5 destructive) match implementation
 4. **Visual**: Interface screenshots embedded in context alongside the features they document
 5. **Modular**: PM server codebase split into routes/, services/, spa/ — not monolithic
 

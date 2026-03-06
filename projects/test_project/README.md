@@ -44,7 +44,7 @@ uv run pytest tests/ -v
 | MCP discovery + skills | `model_context_protocol`, `skills`, `plugin_system` | `src/mcp_explorer.py` |
 | LLM + swarm coordination | `llm`, `collaboration` | `src/llm_inference.py` |
 
-**Coverage**: ~28 modules across Foundation, Core, Service, and Extended layers (~23% of 121 auto-discovered modules).
+**Coverage**: ~28 modules across Foundation, Core, Service, and Extended layers (~23% of 141 auto-discovered modules).
 
 ## Directory Structure
 

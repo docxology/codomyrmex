@@ -1,6 +1,6 @@
 # Codomyrmex Module Index
 
-127 modules grouped by domain. Install extras with `uv sync --extra <group>`.
+128 modules grouped by domain. Install extras with `uv sync --extra <group>`.
 
 ## AI / ML Core
 

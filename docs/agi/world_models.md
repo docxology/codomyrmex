@@ -54,7 +54,7 @@ graph TB
 
 A world model must be grounded in observations. Codomyrmex's perception layer provides four information-theoretically distinct channels:
 
-- **Proprioception** (`system_discovery`) — The system's awareness of its own structure. `scan_all_modules()` returns a `ModuleHealthReport` for each of 127 modules — a typed self-state vector. This is the computational equivalent of the proprioceptive nervous system: awareness of limb position without looking.
+- **Proprioception** (`system_discovery`) — The system's awareness of its own structure. `scan_all_modules()` returns a `ModuleHealthReport` for each of 128 modules — a typed self-state vector. This is the computational equivalent of the proprioceptive nervous system: awareness of limb position without looking.
 
 - **Temporal perception** (`git_operations`) — Repository-state tracking: branches, commits, diffs. Each commit is a timestamped snapshot, enabling *temporal difference learning*: computing `Δstate = state(t) - state(t-1)`. The git graph provides a *causal history* that Pearl's (2009) do-calculus could potentially exploit for intervention reasoning.
 

@@ -2,7 +2,7 @@
 
 **Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
-> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 127-module Python toolbox (127 auto-discovered via MCP) it consumes via MCP. The PAI Command Center is a 15-tab SPA served from `src/codomyrmex/agents/pai/pm/`.
+> **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 128-module Python toolbox (128 auto-discovered via MCP) it consumes via MCP. The PAI Command Center is a 15-tab SPA served from `src/codomyrmex/agents/pai/pm/`.
 
 ## 🎬 Interface Tour
 
@@ -32,9 +32,9 @@ graph TB
 
     subgraph CDM["🐜 Codomyrmex (this repo)"]
         direction TB
-        MODULES["126 Python Modules (127 auto-discovered)"]
+        MODULES["128 Python Modules"]
         STATIC["20 Static Tools"]
-        DYNAMIC["~407 Dynamic Tools"]
+        DYNAMIC["~474 Dynamic Tools"]
         RESOURCES["2 Resources"]
         PROMPTS["10 Prompts"]
     end
@@ -115,7 +115,7 @@ stateDiagram-v2
 
     state VERIFIED {
         [*] --> SafeOps
-        SafeOps: 169 safe tools promoted
+        SafeOps: ~469 safe tools promoted
         SafeOps: read_file, list_directory
         SafeOps: analyze_python, git_status
         SafeOps: search_codebase, json_query
@@ -123,7 +123,7 @@ stateDiagram-v2
 
     state TRUSTED {
         [*] --> FullAccess
-        FullAccess: 4 destructive tools enabled
+        FullAccess: 5 destructive tools enabled
         FullAccess: write_file
         FullAccess: run_command
         FullAccess: run_tests

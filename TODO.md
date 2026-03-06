@@ -23,7 +23,7 @@ This is the authoritative project backlog. Updated after each sprint.
 | ty diagnostics | **0** errors (264 warnings) | `uv run ty check src/` ✅ |
 | Pass-only function stubs | **4** intentional no-ops | AST analysis |
 | Coverage gate | `fail_under=31`; actual ~32% ✅ | Gate ratcheted |
-| MCP `@mcp_tool` decorators | **545** | `grep -r '@mcp_tool'` |
+| MCP `@mcp_tool` decorators | **474** | `grep -r '@mcp_tool'` |
 | RASP documentation | 127/127 | Automated audit |
 | `py.typed` markers | **572** | PEP 561 ✅ |
 | Zero-Mock policy | Enforced via ruff | `pyproject.toml` |
@@ -44,7 +44,7 @@ Addressing the immediate tech debt introduced by the massive Jules Mega-Swarm an
 | :--- | :--- | :--- |
 | **Zero-Diagnostic Purity** | Root | Sustain 0 `ruff` violations and 0 `ty` type checking errors. Enforce strict type checking in CI. |
 | **Coverage ratchet to >40%** | `pyproject.toml` | Aggressively increase `fail_under` to 40. Expand coverage onto `spatial/`, `cerebrum/`, and `graph_rag/` with Zero-Mock purity. |
-| **Property-based fuzzing** | `serialization/` | Add `hypothesis` dev-dependency; automate property schema validation across 127 modules. |
+| **Property-based fuzzing** | `serialization/` | Add `hypothesis` dev-dependency; automate property schema validation across 128 modules. |
 | **Mutation testing scale-up** | `pyproject.toml` | Expand `[tool.mutmut]` suite to dynamically mutate core `cache/`, `concurrency/`, and `events/` modules. |
 | **AST Codebase De-sloppification** | `tools/` | Create a comprehensive `desloppify` technical debt analyzer that flags god classes, duplicated AST patterns, and missing docstrings. |
 | **Sys-health Status CLI**| `cli/` | Construct a `/codomyrmexStatus` tool enabling deep visual diagnostics of the multi-agent graph, active worktrees, and memory buffers. |
@@ -136,7 +136,7 @@ The culmination of the 1.1.x architectural series bridging the PAI PM server, fu
 | **Infomaniak Sovereign Cloud** | `cloud/schema` | Direct deployment of storage (Swift-compat), compute (Nova-compat), and DNS management via Infomaniak API v1, avoiding vendor lock-in. |
 | **Swarm CLI "Codomyrmex Prime"** | `cli/` | Ship a finalized cohesive CLI binary enabling `codomyrmex agent start`, `codomyrmex memory index`, and `codomyrmex dashboard serve` from a single standard entry point. |
 | **100% Zero-Mock Verification Gate** | `core/` | Hard execution block if any isolated test fails or coverage drops below 50%; gating release on a 30,000+ item passing test suite. |
-| **1.2.0 Cut & Freeze** | Root | Final validation of all 127 module APIs, serialization schema locks, stable bidirectional PM system integration, and global `ty` diagnostic purity check. |
+| **1.2.0 Cut & Freeze** | Root | Final validation of all 128 module APIs, serialization schema locks, stable bidirectional PM system integration, and global `ty` diagnostic purity check. |
 
 ---
 

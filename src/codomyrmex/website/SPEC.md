@@ -1,10 +1,10 @@
 # Website Module Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The Website module provides a template-based system for generating dashboards, a live development server with 22 REST API endpoints, and operational tooling for the Codomyrmex project.
+The Website module provides a template-based system for generating dashboards, a live development server with 27 REST API endpoints, and operational tooling for the Codomyrmex project.
 
 ## Architecture
 
@@ -13,7 +13,7 @@ The Website module provides a template-based system for generating dashboards, a
 1. **Generator** (`generator.py`): Renders Jinja2 templates with data from DataProvider.
 2. **Data Provider** (`data_provider.py`): Aggregates module, agent, script, config, pipeline, and PAI data.
 3. **Server** (`server.py`): HTTP request handler with REST API endpoints and CORS/CSRF validation.
-4. **Templates** (`templates/`): 12 Jinja2 HTML pages plus `base.html` layout.
+4. **Templates** (`templates/`): 14 Jinja2 HTML pages plus `base.html` layout.
 5. **Assets** (`assets/`): CSS and JS static files.
 
 ### Data Flow
@@ -99,6 +99,11 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 | `/api/tools` | GET | MCP tools, resources, prompts |
 | `/api/trust/status` | GET | Trust gateway counts and destructive tools |
 | `/api/pai/action` | POST | Execute PAI action (verify/trust/reset/status) |
+| `/api/agent/dispatch` | POST | Start an agent orchestrator run |
+| `/api/agent/dispatch/status` | GET | Poll orchestrator transcript |
+| `/api/agent/dispatch/stop` | POST | Stop orchestrator run |
+| `/api/telemetry` | GET | Telemetry metric series and dashboard registry |
+| `/api/security/posture` | GET | Security posture: risk score, compliance rate |
 
 ## Dependencies
 

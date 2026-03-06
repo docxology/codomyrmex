@@ -4,7 +4,7 @@
 
 ## Thesis
 
-Codomyrmex's 127-module architecture — with 545 `@mcp_tool`-decorated functions, a four-tier memory system, event-driven stigmergic coordination, and human-gated self-improvement — constitutes a *scaffold* for artificial general intelligence. Not AGI itself, but the architectural substrate upon which AGI-level capabilities could emerge from modular composition.
+Codomyrmex's 128-module architecture — with 474 `@mcp_tool`-decorated functions, a four-tier memory system, event-driven stigmergic coordination, and human-gated self-improvement — constitutes a *scaffold* for artificial general intelligence. Not AGI itself, but the architectural substrate upon which AGI-level capabilities could emerge from modular composition.
 
 This series of 10 technical essays examines this claim through the lenses of category theory, information theory, computational complexity, cognitive architecture, alignment research, and evolutionary biology.
 
@@ -21,7 +21,7 @@ graph TB
     end
 
     subgraph ARCH_LAYER["Codomyrmex Architecture Layer"]
-        MCP["MCP Protocol<br/><i>545 tools · typed morphisms</i>"]
+        MCP["MCP Protocol<br/><i>474 tools · typed morphisms</i>"]
         CEREB["cerebrum + llm<br/><i>CBR · active inference</i>"]
         TOOL["tool_use + agents<br/><i>sandboxed execution</i>"]
         AMEM["agentic_memory<br/><i>Obsidian · vector · graph</i>"]
@@ -29,7 +29,7 @@ graph TB
     end
 
     subgraph IMPL_LAYER["Implementation Layer"]
-        CODE["127 Python modules"]
+        CODE["128 Python modules"]
         TESTS["21,000+ tests"]
         RASP["RASP documentation"]
         EVENTS_L["EventBus · telemetry"]
@@ -76,7 +76,7 @@ graph TB
 | 7 | [memory_and_continuity.md](./memory_and_continuity.md) | Persistent knowledge foundations | ACT* proceduralisation, McClelland CLS, Ebbinghaus spacing, rational analysis | agentic_memory, vector_store, graph_rag, cache |
 | 8 | [emergence_and_scale.md](./emergence_and_scale.md) | Emergent capability from module composition | Percolation p_c = 1/⟨k⟩, renormalization group, transfer entropy, allostasis | events, telemetry, defense, logging_monitoring |
 | 9 | [formal_specification.md](./formal_specification.md) | Provable safety for self-modifying AI | Arithmetical hierarchy Σ₀⁰→Σ₂⁰, Löb's theorem, sheaf cohomology H¹(G,F), Hoare triples | formal_verification, static_analysis, validation |
-| 10 | [the_colony_thesis.md](./the_colony_thesis.md) | Distributed AGI as ant colony (capstone) | Response thresholds, Minsky K-lines, Hofstadter strange loops, hard problem analogue | All 127 modules composed via EventBus |
+| 10 | [the_colony_thesis.md](./the_colony_thesis.md) | Distributed AGI as ant colony (capstone) | Response thresholds, Minsky K-lines, Hofstadter strange loops, hard problem analogue | All 128 modules composed via EventBus |
 
 ## Suggested Reading Order
 

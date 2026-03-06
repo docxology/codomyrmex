@@ -33,7 +33,7 @@ graph TB
     subgraph EFFECTORS["Effectors: Motor Output"]
         AGENTS["agents/<br/><i>13 LLM providers</i>"]
         CODING["coding/<br/><i>code generation</i>"]
-        TOOLS["tool_use/<br/><i>545 MCP tools</i>"]
+        TOOLS["tool_use/<br/><i>474 MCP tools</i>"]
     end
 
     EXECUTIVE -->|"broadcast"| WORKSPACE

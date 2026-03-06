@@ -46,7 +46,7 @@ When PAI sub-agents (Engineer, Architect, QATester, etc.) use codomyrmex tools f
 ### Trust Protocol for Agents
 
 1. All agents start UNTRUSTED — read-only tools work immediately
-2. Before any write/execute operation: run `/codomyrmexVerify` (promotes ~403 safe tools to VERIFIED)
+2. Before any write/execute operation: run `/codomyrmexVerify` (promotes ~469 safe tools to VERIFIED)
 3. For destructive tools: run `/codomyrmexTrust` per tool name explicitly
 4. Trust persists to `~/.codomyrmex/trust_ledger.json` across the session
 5. If unsure of trust level: call `GET /api/trust/status` or `codomyrmex.pai_status`

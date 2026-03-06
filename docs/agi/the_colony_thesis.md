@@ -12,7 +12,7 @@ The intellectual lineage runs through three traditions:
 2. **Subsumption Architecture** (Brooks, 1991): Complex behavior from layered reactive agents without central planning. Intelligence is embodied and distributed — "intelligence without representation."
 3. **Comprehensive AI Services** (Drexler, 2019): AGI-level capabilities achieved via composition of narrow services, avoiding the creation of a unified superintelligent agent — making the system both more controllable and more incrementally deployable.
 
-The Colony Thesis synthesizes these: codomyrmex is a **society** of 127 modules (Minsky), organized in **subsumption layers** (Brooks), composed through a **service protocol** (Drexler/MCP), without any module — or combination of modules — constituting a general intelligence. The generality emerges from the colony's interaction dynamics, not from any component's individual capability.
+The Colony Thesis synthesizes these: codomyrmex is a **society** of 128 modules (Minsky), organized in **subsumption layers** (Brooks), composed through a **service protocol** (Drexler/MCP), without any module — or combination of modules — constituting a general intelligence. The generality emerges from the colony's interaction dynamics, not from any component's individual capability.
 
 ## The Colony Model
 

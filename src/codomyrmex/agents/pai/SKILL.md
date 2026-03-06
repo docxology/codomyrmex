@@ -28,7 +28,7 @@ result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 
 ## Tools (171)
 
-Auto-discovered from 33 modules via `pkgutil` scan of all `mcp_tools` submodules. 167 safe + 4 destructive.
+Auto-discovered from 33 modules via `pkgutil` scan of all `mcp_tools` submodules. 167 safe + 5 destructive.
 
 | Tool | Category | Description |
 |------|----------|-------------|

@@ -29,7 +29,7 @@ just build
 ## Key Features
 
 - **127 auto-discovered modules** covering AI agents, code analysis, security, cloud, and more
-- **545 dynamic MCP tools** for AI agent integration
+- **474 dynamic MCP tools** for AI agent integration
 - **Zero-Mock testing** policy — all tests use real functional verification (21,000+ collected)
 - **PAI integration** — Personal AI bridge with 15-tab SPA dashboard + WebSocket push
 - **Ruff Zero** — 119,498 → 0 violations with 155 documented rule ignores

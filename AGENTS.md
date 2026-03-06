@@ -403,8 +403,8 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.1.4** (March 2026) - Release: 127 modules, 545 `@mcp_tool` decorators, repo-wide version sync to v1.1.4, RASP doc compliance 127/127
-- **v1.1.4** (March 2026) - Repo-wide doc audit: module count updated to 126; MCP auto-discovered updated to 121 (Sprint 22); ~407 dynamic tools; all metric references reconciled
+- **v1.1.4** (March 2026) - Release: 128 modules, 474 `@mcp_tool` decorators, repo-wide version sync to v1.1.4, RASP doc compliance 128/128
+- **v1.1.4** (March 2026) - Repo-wide doc audit: module count updated to 128; MCP auto-discovered updated to 141 (Sprint 22); ~474 dynamic tools; all metric references reconciled
 - **v1.0.7** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
 - **v1.1.4** (March 2026) - Sprint 16 MCP coverage, ruff violations zeroed, circular imports resolved
 - **v1.1.4** (March 2026) - Documentation audit: experimental/stub labels added to non-MCP-exposed and stub-only modules; accuracy review across phantom module references

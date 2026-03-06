@@ -28,12 +28,12 @@ open http://localhost:8787/
 | Tab | URL | What It Shows |
 |-----|-----|---------------|
 | **Overview** | `/` | System status, module count, uptime, git branch, coverage |
-| **Modules** | `/modules` | All 127 modules with status (Active / ImportError / SyntaxError) |
+| **Modules** | `/modules` | All 128 modules with status (Active / ImportError / SyntaxError) |
 | **Agents** | `/agents` | AI agent integrations (Claude, Jules, Codex, Aider, etc.) |
 | **Scripts** | `/scripts` | Executable scripts in `scripts/`; run them with args from UI |
 | **Config** | `/config` | Read/edit `.json`, `.toml`, `.yaml` config files |
 | **Docs** | `/docs` | Browse `docs/` directory and module READMEs |
-| **Tools** | `/tools` | All ~407 MCP tools with trust classification (safe / destructive) |
+| **Tools** | `/tools` | All ~474 MCP tools with trust classification (safe / destructive) |
 | **Tests** | `/tests` | Run pytest async; poll for results; view JUnit XML summary |
 | **Chat** | `/chat` | Direct LLM chat via Ollama (requires Ollama running) |
 | **Health** | `/health` | Python version, architecture layers, git status, pipeline status |

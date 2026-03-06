@@ -434,7 +434,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover ~424 tools across 127 modules
+    MCP->>Tools: Discover ~424 tools across 128 modules
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -454,7 +454,7 @@ sequenceDiagram
 ```text
 codomyrmex/
 ├── .github/                  # 36 GitHub Actions workflows, templates, docs
-├── config/                   # 127 module-specific config.yaml files
+├── config/                   # 128 module-specific config.yaml files
 ├── docs/                     # 1,029+ documentation files across 18 directories
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
@@ -472,7 +472,7 @@ codomyrmex/
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
-├── src/codomyrmex/           # Main source (127 modules)
+├── src/codomyrmex/           # Main source (128 modules)
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
 │   ├── security/             # 47 files
@@ -593,7 +593,7 @@ uv run ty check src/         # type check
 
 ## 🗺️ Configuration Architecture
 
-> See [config/](config/) for all 127 module configurations.
+> See [config/](config/) for all 128 module configurations.
 
 ```mermaid
 graph TB
@@ -615,7 +615,7 @@ graph TB
         Src1["agents/"]
         Src2["llm/"]
         Src3["security/"]
-        SrcDots["... 127 modules"]
+        SrcDots["... 128 modules"]
     end
 
     C1 -.->|"YAML load"| S1
@@ -743,5 +743,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>127 modules · 3,000+ Python files · 905+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>128 modules · 3,000+ Python files · 905+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>

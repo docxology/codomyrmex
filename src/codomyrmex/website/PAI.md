@@ -10,7 +10,7 @@ The Website module is the **human interface layer** for the Codomyrmex ecosystem
 
 ### Live Dashboard (Command Center)
 
-The dashboard auto-refreshes from REST APIs every 15 seconds, providing real-time visibility into:
+The dashboard receives real-time updates via WebSocket push (ws://0.0.0.0:8890), providing live visibility into:
 
 - **System metrics**: module count, agent count, script count, uptime, status
 - **Git status**: branch, commits, dirty files, last commit
@@ -24,7 +24,7 @@ from codomyrmex.website import WebsiteGenerator, WebsiteServer, DataProvider
 
 # Generate static site from live data
 gen = WebsiteGenerator(output_dir="/tmp/codomyrmex-site")
-gen.generate()  # Renders all 10 pages from Jinja2 templates
+gen.generate()  # Renders all 14 pages from Jinja2 templates
 
 # Start the API server
 import socketserver
@@ -168,6 +168,7 @@ The dashboard probes the MCP server at `localhost:8080` and displays:
 ## MCP Tools
 
 This module does not expose MCP tools directly. Access its capabilities via:
+
 - Direct Python import: `from codomyrmex.website import ...`
 - CLI: `codomyrmex website <command>`
 
