@@ -4,6 +4,7 @@ Persistent Vector Store
 File-backed vector storage for persistence across restarts.
 """
 
+import collections
 import json
 import threading
 from collections.abc import Callable
@@ -186,20 +187,16 @@ class CachedVectorStore(VectorStore):
     ):
         self._backend = backend
         self._cache_size = cache_size
-        self._cache: dict[str, VectorEntry] = {}
-        self._access_order: list[str] = []
+        self._cache: collections.OrderedDict[str, VectorEntry] = collections.OrderedDict()
         self._lock = threading.Lock()
 
     def _update_cache(self, entry: VectorEntry) -> None:
         """Update cache with LRU eviction."""
         if entry.id in self._cache:
-            self._access_order.remove(entry.id)
-        elif len(self._cache) >= self._cache_size:
-            oldest = self._access_order.pop(0)
-            del self._cache[oldest]
-
+            self._cache.move_to_end(entry.id)
         self._cache[entry.id] = entry
-        self._access_order.append(entry.id)
+        if len(self._cache) > self._cache_size:
+            self._cache.popitem(last=False)
 
     def add(
         self,
@@ -217,8 +214,7 @@ class CachedVectorStore(VectorStore):
         """Get with cache."""
         with self._lock:
             if id in self._cache:
-                self._access_order.remove(id)
-                self._access_order.append(id)
+                self._cache.move_to_end(id)
                 return self._cache[id]
 
         entry = self._backend.get(id)
@@ -232,7 +228,6 @@ class CachedVectorStore(VectorStore):
         with self._lock:
             if id in self._cache:
                 del self._cache[id]
-                self._access_order.remove(id)
         return self._backend.delete(id)
 
     def search(
@@ -252,7 +247,6 @@ class CachedVectorStore(VectorStore):
         """Clear."""
         with self._lock:
             self._cache.clear()
-            self._access_order.clear()
         self._backend.clear()
 
     def cache_stats(self) -> dict[str, Any]:

@@ -1,0 +1,3 @@
+## 2025-05-15 - [VectorStore LRU Cache Optimization]
+**Learning:** Found a custom LRU cache implementation in `CachedVectorStore` inside `src/codomyrmex/vector_store/persistent.py` that manually managed a `list` for access order and a `dict` for fast lookup. It called `self._access_order.remove(id)` frequently, which is an O(n) operation that degrades performance on cache hits/updates, especially when `cache_size` scales up.
+**Action:** Replace `list`+`dict` custom LRU caches with Python's built-in `collections.OrderedDict`, leveraging `move_to_end()` and `popitem(last=False)` for true O(1) performance in LRU cache operations. Avoid reinventing LRU caches using lists in performance-critical paths.
