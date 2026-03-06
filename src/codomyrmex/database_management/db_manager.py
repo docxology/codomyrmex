@@ -344,7 +344,10 @@ class DatabaseManager:
             raise CodomyrmexError("No database connection available")
 
         if conn.db_type == DatabaseType.SQLITE:
-            result = conn.execute(f"PRAGMA table_info({table_name})")
+            # Escape the identifier by replacing " with "" and wrapping in double quotes
+            escaped_table_name = table_name.replace('"', '""')
+            safe_table_name = f'"{escaped_table_name}"'
+            result = conn.execute(f"PRAGMA table_info({safe_table_name})")
             columns = []
             for row in result.rows:
                 columns.append(
