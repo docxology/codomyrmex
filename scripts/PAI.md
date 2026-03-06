@@ -1,7 +1,7 @@
 # Personal AI Infrastructure — Scripts Context
 
 **Module**: scripts
-**Version**: v1.1.0
+**Version**: v1.1.4
 **Status**: Active
 
 ## Context

@@ -1,6 +1,6 @@
 # PEFT (Parameter-Efficient Fine-Tuning) Tests -- Agent Coordination
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 

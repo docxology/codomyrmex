@@ -1,6 +1,6 @@
 # Database Backup
 
-**Version**: v1.1.0 | **Updated**: March 2026
+**Version**: v1.1.4 | **Updated**: March 2026
 
 ## Overview
 

@@ -1,10 +1,10 @@
 # Personal AI Infrastructure — FPF Module
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-The FPF (Functional Programming Framework) module provides functional programming primitives and transformations — immutable data structures, monadic composition, currying, pipe/compose, and algebraic data types for building reliable, composable data pipelines.
+The FPF (Feed-Parse-Format Pipeline) module provides functional programming primitives and transformations — immutable data structures, monadic composition, currying, pipe/compose, and algebraic data types for building reliable, composable data pipelines.
 
 ## PAI Capabilities
 

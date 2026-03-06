@@ -6,7 +6,7 @@ Installation and development setup for Codomyrmex. For architecture and module r
 
 ### Prerequisites
 
-- Python ≥3.10
+- Python ≥3.11
 - [uv](https://github.com/astral-sh/uv) (recommended) or pip
 
 ### Installation Options

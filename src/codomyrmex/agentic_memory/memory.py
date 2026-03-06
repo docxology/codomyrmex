@@ -19,6 +19,12 @@ from codomyrmex.agentic_memory.models import (
     RetrievalResult,
 )
 from codomyrmex.agentic_memory.stores import InMemoryStore
+from codomyrmex.vector_store import VectorStore
+
+try:
+    from sentence_transformers import SentenceTransformer
+except ImportError:
+    SentenceTransformer = None  # type: ignore
 
 # ── helpers ──────────────────────────────────────────────────────────
 
@@ -163,23 +169,92 @@ class AgentMemory:
 
 
 class VectorStoreMemory:
-    """Memory with pluggable store backend and search."""
+    """Memory with pluggable store backend and semantic search."""
 
-    def __init__(self, store: InMemoryStore | None = None) -> None:
+    def __init__(
+        self,
+        store: Any = None,
+        vector_store: VectorStore | None = None,
+        embedding_model: str = "all-MiniLM-L6-v2",
+    ) -> None:
         self.store = store or InMemoryStore()
         self._agent = AgentMemory(self.store)
+        
+        self.vector_store = vector_store
+        self._embedder = None
+        if self.vector_store is not None:
+            if SentenceTransformer is None:
+                raise ImportError(
+                    "sentence-transformers is required to use VectorStoreMemory "
+                    "with a vector_store backend. Please install it."
+                )
+            self._embedder = SentenceTransformer(embedding_model)
+
+    def remember(
+        self,
+        content: str,
+        *,
+        memory_type: MemoryType = MemoryType.EPISODIC,
+        importance: MemoryImportance = MemoryImportance.MEDIUM,
+        metadata: dict[str, Any] | None = None,
+    ) -> Memory:
+        """Create and persist a new memory, including vector embeddings if configured."""
+        mem = self._agent.remember(
+            content,
+            memory_type=memory_type,
+            importance=importance,
+            metadata=metadata,
+        )
+        
+        if self.vector_store and self._embedder:
+            embedding = self._embedder.encode(content).tolist()
+            if isinstance(embedding, list):
+                # Ensure the embedding is indeed a list of floats
+                self.vector_store.add(
+                    id=mem.id,
+                    embedding=embedding,
+                    metadata={"importance": importance.value, "type": memory_type.value}
+                )
+        
+        return mem
 
     def add(
         self,
         content: str,
         importance: MemoryImportance = MemoryImportance.MEDIUM,
     ) -> Memory:
-        """Return sum with other."""
-        return self._agent.add(content, importance=importance)
+        """Convenience alias for :meth:`remember`."""
+        return self.remember(content, importance=importance)
 
     def search(self, query: str, k: int = 10) -> list[RetrievalResult]:
-        """Search."""
-        return self._agent.search(query, k=k)
+        """Search memory, using semantic vector similarity if a backend is configured."""
+        if not self.vector_store or not self._embedder:
+            return self._agent.search(query, k=k)
+            
+        if not query:
+            return self._agent.search(query, k=k)
+
+        query_embedding = self._embedder.encode(query).tolist()
+        v_results = self.vector_store.search(query_embedding, k=k * 2)
+        
+        results: list[RetrievalResult] = []
+        for result in v_results:
+            mem = self.store.get(result.id)
+            if mem:
+                rec = _recency_score(mem.created_at)
+                imp = mem.importance.value / 4.0
+                
+                results.append(
+                    RetrievalResult(
+                        memory=mem,
+                        relevance_score=result.score,
+                        recency_score=rec,
+                        importance_score=imp,
+                    )
+                )
+
+        results.sort(key=lambda r: r.combined_score, reverse=True)
+        return results[:k]
 
 
 # ── ConversationMemory ───────────────────────────────────────────────

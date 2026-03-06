@@ -1,6 +1,6 @@
 # Getting Started
 
-**Version**: v1.1.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 

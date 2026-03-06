@@ -1,6 +1,6 @@
 # Contributing to Codomyrmex
 
-**Version**: v1.1.0 | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Last Updated**: March 2026
 
 Welcome! Codomyrmex is an 88-module Python development platform. This guide covers how to set up your environment, follow our quality standards, and submit changes.
 
@@ -194,7 +194,7 @@ Every module must have four documentation files (**RASP** = README + AGENTS + SP
 All RASP files use this header format:
 
 ```markdown
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 ```
 
 ---

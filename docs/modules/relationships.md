@@ -1,6 +1,6 @@
 # 🔗 Codomyrmex Module Relationships & Interdependencies
 
-**Version**: v1.1.6 | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Last Updated**: March 2026
 
 This document provides a comprehensive overview of how Codomyrmex modules interact with each other, their dependencies, and data flow patterns.
 
@@ -44,7 +44,7 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 | **`agents`** | Agentic framework integrations, **benchmarks** | AI providers | logging_monitoring, llm | All modules |
 | **`ide`** | IDE integrations | IDE APIs | logging_monitoring, agents | Developers |
 | **`cerebrum`** | Case-based reasoning | numpy, scipy | logging_monitoring | AI modules |
-| **`fpf`** | Functional Programming Framework | None | logging_monitoring | All modules |
+| **`fpf`** | Feed-Parse-Format Pipeline | None | logging_monitoring | All modules |
 | **`skills`** | Skills framework | None | logging_monitoring, agents | All modules |
 | **`spatial`** | 3D/4D modeling and visualization | Open3D, Trimesh | logging_monitoring | Specialized use cases |
 | **`physical_management`** | Physical system simulation | Physics engines | logging_monitoring | Specialized use cases |
@@ -280,7 +280,7 @@ graph TD
   from codomyrmex.git_operations.git_wrapper import create_branch, commit_changes
 
   # Automated release workflow
-  create_branch("release/v1.1.6")
+  create_branch("release/v1.1.4")
   commit_changes("Release version 1.0.0")
   ```
 

@@ -32,7 +32,7 @@ children: []
 ## CONTEXT
 
 ### Problem Space
-The codomyrmex repo had accumulated significant documentation drift since the last major doc pass: stale module counts (84/86/89 used inconsistently for the same concept), stale version strings (v0.4.0 in docs/pai/ instead of v1.0.3-dev), wrong MCP tool/resource/skills counts, placeholder content in sub-module SPECs, and a broken link. A Deep-effort audit was needed to find and fix all instances.
+The codomyrmex repo had accumulated significant documentation drift since the last major doc pass: stale module counts (84/86/89 used inconsistently for the same concept), stale version strings (v0.4.0 in docs/pai/ instead of v1.1.4-dev), wrong MCP tool/resource/skills counts, placeholder content in sub-module SPECs, and a broken link. A Deep-effort audit was needed to find and fix all instances.
 
 ### Key Files
 - `README.md` — Root README with version/test/coverage badges
@@ -54,13 +54,13 @@ The codomyrmex repo had accumulated significant documentation drift since the la
 - Prompts: 10
 - PAI skills: 56 dirs in ~/.claude/skills/
 - Coverage gate: ≥67% (pytest.ini)
-- Version: v1.0.3-dev (pyproject.toml: 1.0.3.dev0)
+- Version: v1.1.4-dev (pyproject.toml: 1.0.3.dev0)
 - Tests: 15,179 collected (Sprint 9)
 - Coverage: ~68%
 
 ### Decisions Made
 - Settled on 86 as the canonical functional module count (not 84, 88, or 89)
-- docs/pai/ version string: v0.4.0 → v1.0.3-dev (not v1.0.4-dev)
+- docs/pai/ version string: v0.4.0 → v1.1.4-dev (not v1.0.4-dev)
 - validation/MCP_TOOL_SPECIFICATION.md was completely wrong ("No MCP Tools Defined") — rewrote with actual tool specs for validate_schema, validate_config, validation_summary
 
 ## PLAN
@@ -79,7 +79,7 @@ Single-agent sequential sweep:
 
 ### Accuracy
 - [x] ISC-C1: All module count references consistently show 86 | Verify: Grep: "89 modules" or "84 modules" across docs = 0
-- [x] ISC-C2: All version strings in docs show v1.0.3-dev not v0.4.0 | Verify: Grep: "v0.4.0" in docs/ = 0
+- [x] ISC-C2: All version strings in docs show v1.1.4-dev not v0.4.0 | Verify: Grep: "v0.4.0" in docs/ = 0
 - [x] ISC-C3: MCP tool counts (static/dynamic) accurate in all docs | Verify: Grep: "19 static" or "14 static" = 0
 - [x] ISC-C4: README badges show current version test count coverage | Verify: Read README.md badges section
 - [x] ISC-C5: PAI skills count (56) accurate in PAI.md | Verify: Read PAI.md skills line

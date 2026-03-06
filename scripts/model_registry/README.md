@@ -1,6 +1,6 @@
 # Model Registry Scripts
 
-**Version**: v1.1.0 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Placeholder | **Last Updated**: March 2026
 
 ## Overview
 

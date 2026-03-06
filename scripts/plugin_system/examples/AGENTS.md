@@ -1,6 +1,6 @@
 # Codomyrmex Agents — scripts/plugin_system/examples
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 Example implementations and demonstrations.

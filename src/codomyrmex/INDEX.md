@@ -106,7 +106,7 @@ Advanced features with flexible dependencies.
 | [feature_flags/](feature_flags/) | Feature flag management | 68 |
 | [finance/](finance/) | Financial modeling & analysis | 49 |
 | [formal_verification/](formal_verification/) | Formal verification tools | 2827 |
-| [fpf/](fpf/) | Functional Programming Framework | 117 |
+| [fpf/](fpf/) | Feed-Parse-Format Pipeline | 117 |
 | [graph_rag/](graph_rag/) | Graph-based RAG | 21 |
 | [ide/](ide/) | IDE integration (VSCode, Antigravity) | 55 |
 | [identity/](identity/) | Multi-persona management | 25 |

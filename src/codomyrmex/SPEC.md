@@ -1,6 +1,6 @@
 # codomyrmex - Functional Specification
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -221,7 +221,7 @@ graph TB
 
 - `spatial`: 3D/4D spatial modeling and visualization
 - `cerebrum`: Case-based reasoning and Bayesian inference
-- `fpf`: Functional Programming Framework
+- `fpf`: Feed-Parse-Format Pipeline
 - `agents`: AI agent integrations (CodeEditor, Claude, Codex, Jules, etc.)
 - `events`: Event system and pub/sub
 - `plugin_system`: Plugin architecture

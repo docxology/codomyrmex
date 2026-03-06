@@ -1,6 +1,6 @@
 # Encryption Module API Specification
 
-**Version**: v0.1.7 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 

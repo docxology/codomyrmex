@@ -1,6 +1,6 @@
 # Security Theory Submodule
 
-**Version**: v1.1.6 | **Source**: [`src/codomyrmex/security/theory/`](../../../../src/codomyrmex/security/theory/)
+**Version**: v1.1.4 | **Source**: [`src/codomyrmex/security/theory/`](../../../../src/codomyrmex/security/theory/)
 
 ## Overview
 

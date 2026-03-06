@@ -1,6 +1,6 @@
 # Skill Templates - Technical Specification
 
-> Codomyrmex v1.0.8 | March 2026
+> Codomyrmex v1.1.4 | March 2026
 
 ## Overview
 
@@ -73,7 +73,7 @@ Every template YAML file must contain:
 - Template files must be valid YAML parseable by `yaml.safe_load()`.
 - The `example` field in patterns and anti-patterns must contain syntactically valid Python code.
 - No template may reference external URLs or network resources at load time.
-- Templates are versioned with the codomyrmex release (currently v1.0.8).
+- Templates are versioned with the codomyrmex release (currently v1.1.4).
 
 ## Navigation
 

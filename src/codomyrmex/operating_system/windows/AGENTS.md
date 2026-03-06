@@ -1,6 +1,6 @@
 # Windows Provider - Agent Coordination
 
-> Codomyrmex v1.0.8 | March 2026
+> Codomyrmex v1.1.4 | March 2026
 
 ## Overview
 

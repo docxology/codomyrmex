@@ -1,6 +1,6 @@
 # 📚 Codomyrmex Documentation
 
-> **Version**: v1.1.6 | **Modules**: 127 | **Tests**: 21,000+ collected | **Ruff**: 0 violations
+> **Version**: v1.1.4 | **Modules**: 127 | **Tests**: 21,000+ collected | **Ruff**: 0 violations
 
 This directory contains all documentation for the Codomyrmex ecosystem — a modular, extensible Python workspace for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.
 
@@ -69,7 +69,7 @@ This directory contains all documentation for the Codomyrmex ecosystem — a mod
 
 ---
 
-## Quality Metrics (v1.1.6)
+## Quality Metrics (v1.1.4)
 
 | Metric | Value |
 |--------|-------|

@@ -1,6 +1,6 @@
 # Git Core Commands - Agent Coordination
 
-> **Codomyrmex v1.0.8** | Sub-module of `git_operations.core` | March 2026
+> **Codomyrmex v1.1.4** | Sub-module of `git_operations.core` | March 2026
 
 ## Overview
 

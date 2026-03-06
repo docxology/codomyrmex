@@ -1,6 +1,6 @@
 # Compliance Documentation
 
-**Version**: v1.1.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -30,7 +30,7 @@ Compliance documentation for the Codomyrmex project, including audit reports, po
 | Date | Audit | Result |
 |------|-------|--------|
 | Mar 2026 | Zero-Mock v1.0.7 | 227→2 pass-only stubs |
-| Mar 2026 | Ruff triage v1.1.6 | 119,498→0 violations |
+| Mar 2026 | Ruff triage v1.1.4 | 119,498→0 violations |
 | Mar 2026 | Security scan | CI passing (Bandit + CodeQL) |
 
 ## Related Documentation

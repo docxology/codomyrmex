@@ -1,6 +1,6 @@
 # Codomyrmex
 
-**A Modular, Extensible Coding Workspace** — v1.1.6
+**A Modular, Extensible Coding Workspace** — v1.1.4
 
 Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **127 deeply integrated modules**.
 

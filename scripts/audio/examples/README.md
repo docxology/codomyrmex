@@ -1,6 +1,6 @@
 # Audio Examples
 
-**Version**: v1.1.0 | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Last Updated**: March 2026
 
 ## Overview
 

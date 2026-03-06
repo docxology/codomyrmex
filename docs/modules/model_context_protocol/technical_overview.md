@@ -326,7 +326,7 @@ Tools must declare their version in their `MCP_TOOL_SPECIFICATION.md`:
 
 ### 5.3. Version Compatibility
 
-- **Protocol Compatibility**: Tools written for MCP v1.1.6 should work with MCP v1.x.x
+- **Protocol Compatibility**: Tools written for MCP v1.1.4 should work with MCP v1.x.x
 - **Tool Versioning**: Agents should be aware of tool versions and handle compatibility
 - **Migration Strategy**: Breaking changes should include migration guides
 

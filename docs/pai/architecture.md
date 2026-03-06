@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Architecture
 
-**Version**: v1.1.6 | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Last Updated**: March 2026
 
 ## System Overview
 

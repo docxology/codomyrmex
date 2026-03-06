@@ -1,6 +1,6 @@
 # Security AI Safety Submodule
 
-**Version**: v1.1.6 | **Source**: [`src/codomyrmex/security/ai_safety/`](../../../../src/codomyrmex/security/ai_safety/)
+**Version**: v1.1.4 | **Source**: [`src/codomyrmex/security/ai_safety/`](../../../../src/codomyrmex/security/ai_safety/)
 
 ## Overview
 

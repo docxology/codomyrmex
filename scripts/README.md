@@ -1,6 +1,6 @@
 # Codomyrmex Scripts — Thin Orchestrators
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 > [!IMPORTANT]
 > **`scripts/` is for thin orchestrators only.** All business logic, data models, and core functionality live in `src/codomyrmex/`. Scripts in this directory are entry-point wrappers that import from `src/codomyrmex/` modules and orchestrate their execution. No substantial logic should exist here.

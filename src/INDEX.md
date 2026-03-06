@@ -1,6 +1,6 @@
 # Source Directory Index
 
-**Project**: Codomyrmex | **Version**: v1.0.8 | **Last Updated**: March 2026
+**Project**: Codomyrmex | **Version**: v1.1.4 | **Last Updated**: March 2026
 
 > [!TIP]
 > This INDEX catalogs the `src/` directory structure for maximum discoverability.

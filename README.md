@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/docxology/codomyrmex/releases/tag/v1.1.4"><img src="https://img.shields.io/badge/release-v1.1.4-blueviolet?style=flat-square" alt="Release"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License: MIT"></a>
-  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-≥3.10-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-≥3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
   <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/tests-21%2C000%2B-brightgreen?style=flat-square" alt="Tests"></a>
@@ -156,7 +156,7 @@ uv run mutmut run                                # 6-file mutation suite
 | Ruff violations | **0** |
 | PAI skills | **81** installed |
 | RASP docs compliance | **127/127** |
-| Python compatibility | 3.10 – 3.14 |
+| Python compatibility | 3.11 – 3.14 |
 
 ## Contributing
 

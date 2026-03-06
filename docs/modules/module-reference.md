@@ -226,7 +226,7 @@ Advanced capabilities for specific domains:
 - **[plugin_system](../../src/codomyrmex/plugin_system/)** - Plugin architecture with extension loading, plugin management, and interfaces
 - **[tool_use](../../src/codomyrmex/tool_use/)** - Tool invocation, management, and orchestration
 - **[cerebrum](../../src/codomyrmex/cerebrum/)** - Advanced reasoning and inference engine
-- **[fpf](../../src/codomyrmex/fpf/)** - Functional Programming Framework *(Experimental — not yet MCP-exposed)*
+- **[fpf](../../src/codomyrmex/fpf/)** - Feed-Parse-Format Pipeline *(Experimental — not yet MCP-exposed)*
 - **[ide](../../src/codomyrmex/ide/)** - IDE integration and protocol support *(Experimental — not yet MCP-exposed)*
 - **[cloud](../../src/codomyrmex/cloud/)** - Cloud provider integrations (AWS, GCP)
 - **[networking](../../src/codomyrmex/networking/)** - Networking utilities
@@ -317,7 +317,7 @@ See **[executable examples](../../src/codomyrmex/examples/)** for working demons
 ```mermaid
 graph TD
     subgraph coreDeps ["Core Dependencies"]
-        CorePy["Python ≥3.10 Runtime Environment"]
+        CorePy["Python ≥3.11 Runtime Environment"]
         CoreUV["uv Package Manager"]
         CorePyTest["pytest Testing Framework"]
     end

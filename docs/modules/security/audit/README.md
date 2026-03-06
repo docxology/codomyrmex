@@ -1,6 +1,6 @@
 # Security Audit Submodule
 
-**Version**: v1.1.6 | **Source**: [`src/codomyrmex/security/audit/__init__.py`](../../../../src/codomyrmex/security/audit/__init__.py)
+**Version**: v1.1.4 | **Source**: [`src/codomyrmex/security/audit/__init__.py`](../../../../src/codomyrmex/security/audit/__init__.py)
 
 ## Overview
 

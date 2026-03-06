@@ -1,6 +1,6 @@
 # Examples
 
-**Version**: v1.0.8 | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Last Updated**: March 2026
 
 ## Overview
 

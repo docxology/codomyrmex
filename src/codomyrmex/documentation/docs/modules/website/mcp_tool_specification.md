@@ -1,6 +1,6 @@
 # Website - MCP Tool Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 This document specifies the Model Context Protocol (MCP) tools provided by the `website` module.

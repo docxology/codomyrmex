@@ -1,7 +1,7 @@
 """Memory stores — in-memory dict and JSON file-backed persistence.
 
 Both stores expose the same CRUD surface: ``save``, ``get``, ``delete``,
-``list_all``.  ``JSONFileStore`` is thread-safe via a ``threading.Lock``.
+``list_all``. ``JSONFileStore`` and ``SQLiteStore`` are thread-safe.
 """
 
 from __future__ import annotations
@@ -12,6 +12,9 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.agentic_memory.models import Memory
+from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
+
+__all__ = ["InMemoryStore", "JSONFileStore", "SQLiteStore"]
 
 
 class InMemoryStore:

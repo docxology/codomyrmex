@@ -188,7 +188,10 @@ def shell(
         return {
             "success": False,
             "command": command,
+            "returncode": None,
             "error": str(e),
+            "stdout": "",
+            "stderr": "",
             "execution_time": time.time() - start_time,
         }
 

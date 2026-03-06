@@ -1,6 +1,6 @@
 # Dashboard Setup Guide
 
-**Version**: v1.1.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 Two dashboards exist in the PAI-Codomyrmex ecosystem. They serve different purposes and run on different ports.
 

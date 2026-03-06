@@ -115,6 +115,44 @@ chore: maintenance tasks
 3. Add a clear PR description
 4. Request review from maintainers
 
+## Error Handling Convention
+
+Codomyrmex has two distinct error handling patterns depending on the module type:
+
+### Shell / subprocess utilities → return dict
+
+Functions that wrap shell commands or subprocesses **always return a dict** and
+**never raise** on process failure (unless an explicit `check=True` flag is provided).
+This allows orchestration pipelines to aggregate outcomes without try/except at
+every call site.
+
+```python
+# Shell utility — returns dict
+result = shell("my-command")
+if not result["success"]:
+    logger.error(result["error"])
+```
+
+Standard keys: `success` (bool), `returncode` (int|None), `stdout`, `stderr`,
+`execution_time` (float), and optionally `error` (str) for timeout/OS errors.
+
+### Agent / Python methods → raise typed exceptions
+
+Agent methods and Python-native APIs **raise typed exceptions** for caller
+ergonomics. The caller uses try/except and handles the specific error type.
+
+```python
+# Agent method — raises on failure
+try:
+    result = agent.execute(task)
+except AgentTimeoutError as e:
+    logger.error(f"Agent timed out: {e}")
+```
+
+**The rule of thumb:** if your function's primary use case is subprocess interop
+or orchestration pipelines, use the dict pattern. If it's a Python object method
+called from Python code, use exceptions.
+
 ## Related Documentation
 
 | Document | Purpose |

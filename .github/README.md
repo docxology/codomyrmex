@@ -97,7 +97,7 @@ graph TB
         Networking["Networking"]
     end
 
-    subgraph Data["�� Data & Storage"]
+    subgraph Data["💾 Data & Storage"]
         DB["Database Management"]
         Cache["Cache Layer"]
         DataLineage["Data Lineage"]
@@ -185,7 +185,7 @@ graph TB
 | [`bio_simulation`](src/codomyrmex/bio_simulation/) | 9 | 3 | [📖](docs/modules/bio_simulation/) | [⚙️](config/bio_simulation/config.yaml) | [📜](scripts/bio_simulation/) | Biological colony simulation and genomic population models |
 | [`simulation`](src/codomyrmex/simulation/) | 3 | 3 | [📖](docs/modules/simulation/) | [⚙️](config/simulation/config.yaml) | [📜](scripts/simulation/) | General-purpose simulation framework |
 | [`quantum`](src/codomyrmex/quantum/) | 6 | 1 | [📖](docs/modules/quantum/) | [⚙️](config/quantum/config.yaml) | [📜](scripts/quantum/) | Quantum computing abstractions and circuit simulation |
-| [`fpf`](src/codomyrmex/fpf/) | 26 | 11 | [📖](docs/modules/fpf/) | [⚙️](config/fpf/config.yaml) | [📜](scripts/fpf/) | Free-energy Principle Framework (Active Inference) |
+| [`fpf`](src/codomyrmex/fpf/) | 26 | 11 | [📖](docs/modules/fpf/) | [⚙️](config/fpf/config.yaml) | [📜](scripts/fpf/) | Feed-Parse-Format pipeline (fetch, parse, section export) |
 
 ### ☁️ Infrastructure & DevOps Modules
 
@@ -628,7 +628,7 @@ graph TB
 
 ---
 
-## �� Personal AI Dashboard
+## 🏠 Personal AI Dashboard
 
 > See [docs/pai/](docs/pai/) for the full PAI reference.
 
@@ -690,7 +690,7 @@ uv run python scripts/agents/mega_swarm_dispatcher.py
 
 ---
 
-## �� Documentation Standards
+## 📋 Documentation Standards
 
 Every module follows the **RASP** documentation pattern:
 

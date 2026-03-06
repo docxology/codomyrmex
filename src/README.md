@@ -1,10 +1,10 @@
 # src
 
-**Version**: v1.0.8 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Source code directory containing all Python packages and modules for the Codomyrmex platform. The main package `codomyrmex/` contains 124 specialized modules for AI-assisted development workflows.
+Source code directory containing all Python packages and modules for the Codomyrmex platform. The main package `codomyrmex/` contains 127 specialized modules for AI-assisted development workflows.
 
 ## Directory Contents
 

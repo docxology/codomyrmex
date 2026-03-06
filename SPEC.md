@@ -190,9 +190,9 @@ Tracked items by sprint target. Resolved items are kept for historical reference
 | Tool versioning: no deprecation scheme | **Resolved v1.0.2** | — | `version` + `deprecated_in` params added to `@mcp_tool` decorator |
 | Stale module/tool counts in docs | **Resolved v1.1.4** | — | Updated: 127 modules, 545 `@mcp_tool` decorators across auto-discovered modules |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
-| Shutdown logging on closed streams | **Resolved v1.0.3** | — | `OrchestrationEngine.__del__` and `shutdown()` guarded against `ValueError` on closed file handles |
-| Session status enum misuse | **Resolved v1.0.3** | — | `close_session()` now uses `SessionStatus.COMPLETED` instead of raw `"closed"` string |
-| Telemetry DRY violation in server.py | **Resolved v1.0.3** | — | Extracted `_ensure_telemetry()` classmethod; eliminated ~60 lines of duplicated init code |
+| Shutdown logging on closed streams | **Resolved v1.1.4** | — | `OrchestrationEngine.__del__` and `shutdown()` guarded against `ValueError` on closed file handles |
+| Session status enum misuse | **Resolved v1.1.4** | — | `close_session()` now uses `SessionStatus.COMPLETED` instead of raw `"closed"` string |
+| Telemetry DRY violation in server.py | **Resolved v1.1.4** | — | Extracted `_ensure_telemetry()` classmethod; eliminated ~60 lines of duplicated init code |
 | Bidirectional PAI↔codomyrmex comms | Open | Sprint 4 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
 | Tool versioning: no deprecation timeline UI | Open | Sprint 4 | `deprecated_in` metadata added but not surfaced in MCP tool list |
 

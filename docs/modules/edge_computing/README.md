@@ -1,6 +1,6 @@
 # Edge Computing Module
 
-**Version**: v1.1.6 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
 
 Edge deployment, IoT gateways, and latency-sensitive function execution.
 

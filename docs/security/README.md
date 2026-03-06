@@ -1,12 +1,12 @@
 # Security Documentation
 
-**Version**: v1.1.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
 Comprehensive security documentation covering the Codomyrmex platform's security posture, threat modeling, and defense mechanisms. The security framework spans digital, physical, cognitive, and AI safety domains.
 
-## Security Posture (v1.1.6)
+## Security Posture (v1.1.4)
 
 | Metric | Status |
 |--------|--------|

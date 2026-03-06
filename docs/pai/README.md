@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Integration
 
-**Version**: v1.1.6 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026 | **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
 > **PAI** (Personal AI Infrastructure) is a TypeScript/Bun system that runs [The Algorithm](https://github.com/danielmiessler/Personal_AI_Infrastructure) on every Claude Code prompt. **Codomyrmex** is a 127-module Python toolbox (127 auto-discovered via MCP) it consumes via MCP. The PAI Command Center is a 15-tab SPA served from `src/codomyrmex/agents/pai/pm/`.
 

@@ -23,6 +23,11 @@ try:
 except ImportError:
     pass
 
+try:
+    from .chroma import ChromaVectorStore
+except ImportError:
+    ChromaVectorStore = None  # type: ignore
+
 
 def cli_commands():
     """Return CLI commands for the vector_store module."""
@@ -56,6 +61,7 @@ __all__ = [
     "SearchResult",
     "VectorEntry",
     "VectorStore",
+    "ChromaVectorStore",
     "cli_commands",
     "create_vector_store",
     "normalize_embedding",

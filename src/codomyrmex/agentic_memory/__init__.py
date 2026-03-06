@@ -18,6 +18,7 @@ from codomyrmex.agentic_memory.models import (
     MemoryType,
     RetrievalResult,
 )
+from codomyrmex.agentic_memory.obsidian_bridge import ObsidianMemoryBridge
 from codomyrmex.agentic_memory.rules import (
     Rule,
     RuleEngine,
@@ -27,6 +28,7 @@ from codomyrmex.agentic_memory.rules import (
     RuleSection,
     RuleSet,
 )
+from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
 from codomyrmex.agentic_memory.stores import InMemoryStore, JSONFileStore
 from codomyrmex.agentic_memory.user_profile import UserProfile
 
@@ -39,6 +41,7 @@ __all__ = [
     "Memory",
     "MemoryImportance",
     "MemoryType",
+    "ObsidianMemoryBridge",
     "RetrievalResult",
     "Rule",
     "RuleEngine",
@@ -47,6 +50,7 @@ __all__ = [
     "RuleRegistry",
     "RuleSection",
     "RuleSet",
+    "SQLiteStore",
     "UserProfile",
     "VectorStoreMemory",
 ]

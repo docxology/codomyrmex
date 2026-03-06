@@ -1,6 +1,6 @@
 # Agents Module API Specification
 
-**Version**: v1.1.0 | **Status**: Stable | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Stable | **Last Updated**: March 2026
 
 ## 1. Overview
 

@@ -1,6 +1,6 @@
 # Cost Management
 
-**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 The `cost_management` module provides a comprehensive framework for tracking, aggregating, and managing costs within the Codomyrmex ecosystem. It supports multiple storage backends, flexible budgeting with period-based resets, and real-time alerting.

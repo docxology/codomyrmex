@@ -1,6 +1,6 @@
 # Networks - API Specification
 
-**Version**: v0.1.7 | **Status**: Alpha | **Last Updated**: February 2026
+**Version**: v1.1.4 | **Status**: Alpha | **Last Updated**: February 2026
 
 ## Overview
 

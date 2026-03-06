@@ -1,6 +1,6 @@
 # Image Module
 
-**Version**: v1.1.6 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v1.1.4 | **Status**: Placeholder | **Last Updated**: March 2026
 
 ## Overview
 

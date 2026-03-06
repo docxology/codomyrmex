@@ -1,6 +1,6 @@
 # Security Secrets Submodule
 
-**Version**: v1.1.6 | **Source**: [`src/codomyrmex/security/secrets/__init__.py`](../../../../src/codomyrmex/security/secrets/__init__.py)
+**Version**: v1.1.4 | **Source**: [`src/codomyrmex/security/secrets/__init__.py`](../../../../src/codomyrmex/security/secrets/__init__.py)
 
 ## Overview
 

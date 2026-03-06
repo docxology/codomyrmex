@@ -171,7 +171,7 @@ repos:
       - id: ruff
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.1.6
+    rev: v1.1.4
     hooks:
       - id: mypy
         additional_dependencies: [types-requests]
