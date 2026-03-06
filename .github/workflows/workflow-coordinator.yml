@@ -109,7 +109,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'ci.yml',
-              ref: context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main'
+              ref: context.ref.replace('refs/heads/', '') || 'main'
             });
 
   coordinate-security:
@@ -135,7 +135,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'security.yml',
-              ref: context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main'
+              ref: context.ref.replace('refs/heads/', '') || 'main'
             });
 
   coordinate-docs:
@@ -158,7 +158,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'documentation.yml',
-              ref: context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main'
+              ref: context.ref.replace('refs/heads/', '') || 'main'
             });
 
   coordinate-benchmarks:
@@ -182,7 +182,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'benchmarks.yml',
-              ref: context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main'
+              ref: context.ref.replace('refs/heads/', '') || 'main'
             });
 
   smart-testing:
