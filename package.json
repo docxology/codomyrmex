@@ -27,5 +27,8 @@
   "homepage": "https://github.com/docxology/codomyrmex#readme",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "playwright": "^1.58.2"
   }
 }

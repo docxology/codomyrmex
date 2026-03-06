@@ -442,222 +442,184 @@ export async function handleEmailRoutes(
 
     // ---- BIKE RIDE (Awaiting-reply threads + LLM summary + TTS) ----
 
-    if (path === "/api/bikeride/load" && method === "POST") {
-        const body = await parseBody(req);
-        const backend = String(body.backend || "ollama");
-        const model = String(body.model || "llama3.2");
+    // 1. LLM helper (used by load and improve)
+    async function runLlm(prompt: string, backend: string = "ollama", model: string = "llama3.2"): Promise<string> {
+        const tmpPath = `/tmp/pai_bikeride_${Date.now()}_${Math.random().toString(36).slice(2)}.txt`;
+        await Bun.write(tmpPath, prompt);
+        let responseText = "";
         try {
-            // 1. Fetch Gmail threads
-            const q = "in:inbox";
-            const threadList = await gmailFetch(`/users/me/threads?maxResults=30&q=${encodeURIComponent(q)}`);
-            const allThreads = threadList.threads || [];
-
-            const getHeader = (msg: any, name: string): string => {
-                const headers = msg?.payload?.headers || [];
-                const h = headers.find((h: any) => h.name.toLowerCase() === name.toLowerCase());
-                return h ? h.value : "";
-            };
-
-            const getBody = (msg: any): string => {
-                if (msg.snippet) return msg.snippet;
-                const payload = msg?.payload;
-                if (!payload) return "";
-                if (payload.body?.data) {
-                    try { return atob(payload.body.data.replace(/-/g, "+").replace(/_/g, "/")); } catch { return ""; }
-                }
-                const parts = payload.parts || [];
-                for (const p of parts) {
-                    if (p.mimeType === "text/plain" && p.body?.data) {
-                        try { return atob(p.body.data.replace(/-/g, "+").replace(/_/g, "/")); } catch { return ""; }
-                    }
-                }
-                return msg.snippet || "";
-            };
-
-            // 2. Filter for awaiting-reply threads
-            const awaitingReply: any[] = [];
-            for (const thread of allThreads) {
-                try {
-                    const threadDetail = await gmailFetch(`/users/me/threads/${encodeURIComponent(thread.id)}?format=full`);
-                    const msgs = threadDetail.messages || [];
-                    if (msgs.length < 2) continue;
-
-                    const parsedMsgs = msgs.map((m: any) => ({
-                        from: getHeader(m, "From"),
-                        subject: getHeader(m, "Subject"),
-                        date: getHeader(m, "Date"),
-                        snippet: m.snippet || "",
-                        body: getBody(m),
-                    }));
-
-                    const fbSent = parsedMsgs.some((m: any) => m.from.toLowerCase().includes("fristonblanket"));
-                    if (!fbSent) continue;
-                    const otherReplied = parsedMsgs.some((m: any) => !m.from.toLowerCase().includes("fristonblanket"));
-                    if (!otherReplied) continue;
-                    const lastMsg = parsedMsgs[parsedMsgs.length - 1];
-                    if (lastMsg.from.toLowerCase().includes("fristonblanket")) continue;
-
-                    awaitingReply.push({
-                        id: thread.id,
-                        subject: parsedMsgs[0].subject || "(no subject)",
-                        lastReplyFrom: lastMsg.from,
-                        lastReplyDate: lastMsg.date,
-                        messages: parsedMsgs,
+            if (backend === "ollama") {
+                const ollamaPath = Bun.which("ollama");
+                if (ollamaPath) {
+                    const proc = Bun.spawnSync(["sh", "-c", `cat "${tmpPath}" | ${ollamaPath} run ${model}`], {
+                        env: { ...process.env, NO_COLOR: "1", TERM: "dumb" }, timeout: 60_000,
                     });
-                } catch { continue; }
-            }
-
-            // 3. LLM helper
-            async function runLlm(prompt: string): Promise<string> {
-                const tmpPath = `/tmp/pai_bikeride_${Date.now()}_${Math.random().toString(36).slice(2)}.txt`;
-                await Bun.write(tmpPath, prompt);
-                let responseText = "";
-                try {
-                    if (backend === "ollama") {
-                        const ollamaPath = Bun.which("ollama");
-                        if (ollamaPath) {
-                            const proc = Bun.spawnSync(["sh", "-c", `cat "${tmpPath}" | ${ollamaPath} run ${model}`], {
-                                env: { ...process.env, NO_COLOR: "1", TERM: "dumb" }, timeout: 60_000,
-                            });
-                            responseText = stripAnsi(new TextDecoder().decode(proc.stdout));
-                        }
-                    } else if (backend === "gemini") {
-                        const geminiPath = Bun.which("gemini");
-                        if (geminiPath) {
-                            const proc = Bun.spawnSync(["sh", "-c", `cat "${tmpPath}" | ${geminiPath} -m gemini-2.5-flash --output-format text`], {
-                                env: { ...process.env }, timeout: 60_000,
-                            });
-                            responseText = new TextDecoder().decode(proc.stdout).trim();
-                        }
-                    } else if (backend === "claude") {
-                        const claudePath = Bun.which("claude");
-                        if (claudePath) {
-                            const proc = Bun.spawnSync([claudePath, "-p", "--output-format", "text", prompt.substring(0, 4000)], {
-                                env: { ...process.env, NO_COLOR: "1" }, timeout: 90_000,
-                            });
-                            responseText = new TextDecoder().decode(proc.stdout).trim();
-                        }
-                    }
-                } catch { }
-                try { require("fs").unlinkSync(tmpPath); } catch { }
-                return responseText || "";
-            }
-
-            // 4. Calendar availability for tomorrow (option C)
-            let calendarSlots = "";
-            try {
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const dayStart = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 8, 0);
-                const dayEnd = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 18, 0);
-                const calData = await gcalFetch(`/calendars/primary/events?timeMin=${encodeURIComponent(dayStart.toISOString())}&timeMax=${encodeURIComponent(dayEnd.toISOString())}&singleEvents=true&orderBy=startTime&maxResults=50`);
-                const busyEvents = (calData.items || []).filter((e: any) => e.start?.dateTime);
-                const freeSlots: string[] = [];
-                for (let hour = 8; hour < 18; hour++) {
-                    for (const min of [0, 30]) {
-                        const slotStart = new Date(dayStart);
-                        slotStart.setHours(hour, min, 0, 0);
-                        const slotEnd = new Date(slotStart);
-                        slotEnd.setMinutes(slotEnd.getMinutes() + 30);
-                        const isBusy = busyEvents.some((e: any) => {
-                            const eStart = new Date(e.start.dateTime);
-                            const eEnd = new Date(e.end?.dateTime || e.start.dateTime);
-                            return slotStart < eEnd && slotEnd > eStart;
-                        });
-                        if (!isBusy) freeSlots.push(slotStart.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }));
-                    }
+                    responseText = stripAnsi(new TextDecoder().decode(proc.stdout));
                 }
-                const dayLabel = tomorrow.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
-                if (freeSlots.length > 0) {
-                    const picks = freeSlots.length <= 3 ? freeSlots : [freeSlots[0], freeSlots[Math.floor(freeSlots.length / 2)], freeSlots[freeSlots.length - 1]];
-                    calendarSlots = `Available times on ${dayLabel}: ${picks.join(", ")}`;
-                } else {
-                    calendarSlots = `${dayLabel} appears fully booked — suggest the following day instead`;
+            } else if (backend === "gemini") {
+                const geminiPath = Bun.which("gemini");
+                if (geminiPath) {
+                    const proc = Bun.spawnSync(["sh", "-c", `cat "${tmpPath}" | ${geminiPath} -m gemini-2.5-flash --output-format text`], {
+                        env: { ...process.env }, timeout: 60_000,
+                    });
+                    responseText = new TextDecoder().decode(proc.stdout).trim();
                 }
-            } catch {
-                calendarSlots = "tomorrow (I'll check my calendar and follow up with specific times)";
-            }
-
-            // 5. Generate summary + A/B/C draft responses for each thread
-            for (const t of awaitingReply) {
-                try {
-                    const convoText = t.messages.map((m: any) =>
-                        `From: ${m.from || "unknown"}\nDate: ${m.date || ""}\nSubject: ${m.subject || ""}\n\n${m.body || m.snippet || ""}`
-                    ).join("\n---\n");
-                    const convoTruncated = convoText.substring(0, 3000);
-
-                    t.summary = await runLlm(
-                        `Summarize this email thread in 2-3 concise sentences for an audio briefing. Focus on: who wrote, what they want, and what action is needed from you. Be direct and conversational.\n\n${convoTruncated}`
-                    ) || "(summary unavailable)";
-
-                    const draftA = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (2-3 sentence) friendly acknowledgment/thank-you response. Be warm but brief. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`);
-                    const draftB = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (3-5 sentence) substantive response that directly addresses the points raised. Be helpful and actionable. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`);
-                    const draftC = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (3-4 sentence) response that acknowledges the email and suggests scheduling a meeting to discuss further. Use these REAL available calendar slots: ${calendarSlots}. Propose specific times from those slots. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`);
-
-                    t.drafts = [
-                        { label: "A", title: "Quick Reply", text: draftA || "Thanks for your email! I'll get back to you soon." },
-                        { label: "B", title: "Substantive Reply", text: draftB || "Thank you for the detailed email. I've reviewed the points and will follow up shortly." },
-                        { label: "C", title: "Schedule Meeting", text: draftC || `Thanks for reaching out. I'd love to discuss this further — would you be available for a quick call? ${calendarSlots}` },
-                    ];
-                    t.replyTo = t.messages[t.messages.length - 1].from;
-                    t.threadSubject = t.messages[0].subject || "(no subject)";
-                } catch {
-                    t.summary = t.summary || "(summary unavailable)";
-                    t.drafts = [
-                        { label: "A", title: "Quick Reply", text: "Thanks for your email! I appreciate you reaching out." },
-                        { label: "B", title: "Substantive Reply", text: "Thank you for the detailed email. I'll review and follow up shortly." },
-                        { label: "C", title: "Schedule Meeting", text: `I'd love to discuss this further. Are you free ${calendarSlots}?` },
-                    ];
+            } else if (backend === "claude") {
+                const claudePath = Bun.which("claude");
+                if (claudePath) {
+                    const proc = Bun.spawnSync([claudePath, "-p", "--output-format", "text", prompt.substring(0, 4000)], {
+                        env: { ...process.env, NO_COLOR: "1" }, timeout: 90_000,
+                    });
+                    responseText = new TextDecoder().decode(proc.stdout).trim();
                 }
-                delete t.messages;
             }
+        } catch { }
+        try { require("fs").unlinkSync(tmpPath); } catch { }
+        return responseText || "";
+    }
 
-            console.log(`[bikeride] Found ${awaitingReply.length} awaiting-reply Gmail threads (of ${allThreads.length} total)`);
-            return json({ success: true, threads: awaitingReply, calendarSlots });
-        } catch (e: any) {
-            console.error("[bikeride] load error:", e instanceof Error ? e.message : String(e));
-            return error(e.message, e.message?.includes("Not authenticated") ? 401 : 500);
+    if (path === "/api/bikeride/load" && method === "POST") {
+
+        // 4. Calendar availability for tomorrow (option C)
+        let calendarSlots = "";
+        try {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayStart = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 8, 0);
+            const dayEnd = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 18, 0);
+            const calData = await gcalFetch(`/calendars/primary/events?timeMin=${encodeURIComponent(dayStart.toISOString())}&timeMax=${encodeURIComponent(dayEnd.toISOString())}&singleEvents=true&orderBy=startTime&maxResults=50`);
+            const busyEvents = (calData.items || []).filter((e: any) => e.start?.dateTime);
+            const freeSlots: string[] = [];
+            for (let hour = 8; hour < 18; hour++) {
+                for (const min of [0, 30]) {
+                    const slotStart = new Date(dayStart);
+                    slotStart.setHours(hour, min, 0, 0);
+                    const slotEnd = new Date(slotStart);
+                    slotEnd.setMinutes(slotEnd.getMinutes() + 30);
+                    const isBusy = busyEvents.some((e: any) => {
+                        const eStart = new Date(e.start.dateTime);
+                        const eEnd = new Date(e.end?.dateTime || e.start.dateTime);
+                        return slotStart < eEnd && slotEnd > eStart;
+                    });
+                    if (!isBusy) freeSlots.push(slotStart.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }));
+                }
+            }
+            const dayLabel = tomorrow.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+            if (freeSlots.length > 0) {
+                const picks = freeSlots.length <= 3 ? freeSlots : [freeSlots[0], freeSlots[Math.floor(freeSlots.length / 2)], freeSlots[freeSlots.length - 1]];
+                calendarSlots = `Available times on ${dayLabel}: ${picks.join(", ")}`;
+            } else {
+                calendarSlots = `${dayLabel} appears fully booked — suggest the following day instead`;
+            }
+        } catch {
+            calendarSlots = "tomorrow (I'll check my calendar and follow up with specific times)";
         }
-    }
 
-    if (path === "/api/bikeride/send" && method === "POST") {
-        try {
-            const body = await parseBody(req);
-            const { threadId, to, subject, text } = body as any;
-            if (!to || !text) return error("Missing: to, text");
-            const replySubject = subject?.startsWith("Re:") ? subject : `Re: ${subject || ""}`;
-            const rawMsg = [`To: ${to}`, `Subject: ${replySubject}`, `In-Reply-To: ${threadId || ""}`, `References: ${threadId || ""}`, "MIME-Version: 1.0", "Content-Type: text/plain; charset=utf-8", "", text].join("\r\n");
-            const encoded = btoa(unescape(encodeURIComponent(rawMsg))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-            const sendPayload: any = { raw: encoded };
-            if (threadId) sendPayload.threadId = threadId;
-            const data = await gmailFetch("/users/me/messages/send", { method: "POST", body: JSON.stringify(sendPayload) });
-            return json({ success: true, id: data.id });
-        } catch (e: any) { return error(e.message, e.message?.includes("Not authenticated") ? 401 : 500); }
-    }
+        // 5. Generate summary + A/B/C draft responses for each thread
+        for (const t of awaitingReply) {
+            try {
+                const convoText = t.messages.map((m: any) =>
+                    `From: ${m.from || "unknown"}\nDate: ${m.date || ""}\nSubject: ${m.subject || ""}\n\n${m.body || m.snippet || ""}`
+                ).join("\n---\n");
+                const convoTruncated = convoText.substring(0, 3000);
 
-    if (path === "/api/bikeride/tts" && method === "POST") {
+                // Add raw text for improve endpoint
+                t.rawText = convoTruncated;
+
+                t.summary = await runLlm(
+                    `Summarize this email thread in 2-3 concise sentences for an audio briefing. Focus on: who wrote, what they want, and what action is needed from you. Be direct and conversational.\n\n${convoTruncated}`,
+                    backend, model
+                ) || "(summary unavailable)";
+
+                const draftA = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (2-3 sentence) friendly acknowledgment/thank-you response. Be warm but brief. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`, backend, model);
+                const draftB = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (3-5 sentence) substantive response that directly addresses the points raised. Be helpful and actionable. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`, backend, model);
+                const draftC = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (3-4 sentence) response that acknowledges the email and suggests scheduling a meeting to discuss further. Use these REAL available calendar slots: ${calendarSlots}. Propose specific times from those slots. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`, backend, model);
+
+                t.drafts = [
+                    { label: "A", title: "Quick Reply", text: draftA || "Thanks for your email! I'll get back to you soon." },
+                    { label: "B", title: "Substantive Reply", text: draftB || "Thank you for the detailed email. I've reviewed the points and will follow up shortly." },
+                    { label: "C", title: "Schedule Meeting", text: draftC || `Thanks for reaching out. I'd love to discuss this further — would you be available for a quick call? ${calendarSlots}` },
+                ];
+                t.replyTo = t.messages[t.messages.length - 1].from;
+                t.threadSubject = t.messages[0].subject || "(no subject)";
+            } catch {
+                t.summary = t.summary || "(summary unavailable)";
+                t.drafts = [
+                    { label: "A", title: "Quick Reply", text: "Thanks for your email! I appreciate you reaching out." },
+                    { label: "B", title: "Substantive Reply", text: "Thank you for the detailed email. I'll review and follow up shortly." },
+                    { label: "C", title: "Schedule Meeting", text: `I'd love to discuss this further. Are you free ${calendarSlots}?` },
+                ];
+            }
+            delete t.messages;
+        }
+
+        console.log(`[bikeride] Found ${awaitingReply.length} awaiting-reply Gmail threads (of ${allThreads.length} total)`);
+        return json({ success: true, threads: awaitingReply, calendarSlots });
+    } catch (e: any) {
+        console.error("[bikeride] load error:", e instanceof Error ? e.message : String(e));
+        return error(e.message, e.message?.includes("Not authenticated") ? 401 : 500);
+    }
+}
+
+if (path === "/api/bikeride/send" && method === "POST") {
+    try {
         const body = await parseBody(req);
-        const text = String(body.text || "").trim();
-        if (!text) return error("Missing: text");
-        try {
-            const ts = Date.now();
-            const aiffPath = `/tmp/pai_tts_${ts}.aiff`;
-            const wavPath = `/tmp/pai_tts_${ts}.wav`;
-            const sayPath = Bun.which("say");
-            if (!sayPath) return error("'say' not found (macOS only)", 500);
-            const sayProc = Bun.spawnSync([sayPath, "-o", aiffPath, "--", text.substring(0, 2000)], { timeout: 30_000 });
-            if (sayProc.exitCode !== 0) return error("TTS failed: exit code " + sayProc.exitCode, 500);
-            const afconvertPath = Bun.which("afconvert");
-            if (afconvertPath) Bun.spawnSync([afconvertPath, aiffPath, wavPath, "-d", "LEI16", "-f", "WAVE"], { timeout: 15_000 });
-            const audioFile = afconvertPath && require("fs").existsSync(wavPath) ? wavPath : aiffPath;
-            const audioData = require("fs").readFileSync(audioFile);
-            const base64 = Buffer.from(audioData).toString("base64");
-            const mimeType = audioFile.endsWith(".wav") ? "audio/wav" : "audio/aiff";
-            try { require("fs").unlinkSync(aiffPath); } catch { }
-            try { require("fs").unlinkSync(wavPath); } catch { }
-            return json({ success: true, audioUrl: `data:${mimeType};base64,${base64}` });
-        } catch (e: any) { return error(`TTS failed: ${e.message}`, 500); }
-    }
+        const { threadId, to, subject, text } = body as any;
+        if (!to || !text) return error("Missing: to, text");
+        const replySubject = subject?.startsWith("Re:") ? subject : `Re: ${subject || ""}`;
+        const rawMsg = [`To: ${to}`, `Subject: ${replySubject}`, `In-Reply-To: ${threadId || ""}`, `References: ${threadId || ""}`, "MIME-Version: 1.0", "Content-Type: text/plain; charset=utf-8", "", text].join("\r\n");
+        const encoded = btoa(unescape(encodeURIComponent(rawMsg))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        const sendPayload: any = { raw: encoded };
+        if (threadId) sendPayload.threadId = threadId;
+        const data = await gmailFetch("/users/me/messages/send", { method: "POST", body: JSON.stringify(sendPayload) });
+        return json({ success: true, id: data.id });
+    } catch (e: any) { return error(e.message, e.message?.includes("Not authenticated") ? 401 : 500); }
+}
 
-    return null;
+if (path === "/api/bikeride/tts" && method === "POST") {
+    const body = await parseBody(req);
+    const text = String(body.text || "").trim();
+    if (!text) return error("Missing: text");
+    try {
+        const ts = Date.now();
+        const aiffPath = `/tmp/pai_tts_${ts}.aiff`;
+        const wavPath = `/tmp/pai_tts_${ts}.wav`;
+        const sayPath = Bun.which("say");
+        if (!sayPath) return error("'say' not found (macOS only)", 500);
+        const sayProc = Bun.spawnSync([sayPath, "-o", aiffPath, "--", text.substring(0, 2000)], { timeout: 30_000 });
+        if (sayProc.exitCode !== 0) return error("TTS failed: exit code " + sayProc.exitCode, 500);
+        const afconvertPath = Bun.which("afconvert");
+        if (afconvertPath) Bun.spawnSync([afconvertPath, aiffPath, wavPath, "-d", "LEI16", "-f", "WAVE"], { timeout: 15_000 });
+        const audioFile = afconvertPath && require("fs").existsSync(wavPath) ? wavPath : aiffPath;
+        const audioData = require("fs").readFileSync(audioFile);
+        const base64 = Buffer.from(audioData).toString("base64");
+        const mimeType = audioFile.endsWith(".wav") ? "audio/wav" : "audio/aiff";
+        try { require("fs").unlinkSync(aiffPath); } catch { }
+        try { require("fs").unlinkSync(wavPath); } catch { }
+        return json({ success: true, audioUrl: `data:${mimeType};base64,${base64}` });
+    } catch (e: any) { return error(`TTS failed: ${e.message}`, 500); }
+}
+
+if (path === "/api/bikeride/improve" && method === "POST") {
+    try {
+        const body = await parseBody(req);
+        const { draft, threadContext, backend, model } = body as any;
+        if (!draft) return error("Missing: draft");
+
+        const prompt = `You are editing a draft email reply. Retain ALL original information and meaning from the draft. Only improve: spelling, grammar, formatting, flow, and clarity. Use the email thread context below for reference to ensure facts are correct. Output ONLY the improved email body text without any preamble, subject line, or headers.
+
+Draft:
+${draft}
+
+Thread context:
+${threadContext || "(no context provided)"}`;
+
+        const improved = await runLlm(prompt, backend || "ollama", model || "llama3.2");
+        return json({ success: true, improved: improved || draft });
+    } catch (e: any) {
+        return error(`Improve failed: ${e.message}`, 500);
+    }
+}
+
+return null;
 }
