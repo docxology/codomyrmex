@@ -379,23 +379,23 @@ class ResourceManager:
             # First map requirements to known resources
             # requirements format: {"cpu": {"cores": 1}, "memory": {"gb": 1}}
             # We map "cpu" -> "sys-compute", "memory" -> "sys-memory"
-            
+
             mapping = {"cpu": "sys-compute", "memory": "sys-memory"}
             for req_key, req_vals in requirements.items():
                 resource_id = mapping.get(req_key, req_key)
                 amount = float(req_vals.get("cores", req_vals.get("gb", req_vals.get("amount", 1.0))))
-                
+
                 allocated = self.allocate(resource_id, requester_id, amount, timeout)
                 if not allocated:
                     # Rollback all allocations if one fails
                     for alloc in allocations:
                         self.release(alloc.allocation_id)
                     return None
-                    
+
                 allocations.append(allocated)
-                
+
             return allocations
-            
+
     def deallocate_resources(self, requester_id: str) -> bool:
         """Legacy wrapper: release all resources allocated to a requester."""
         with self._lock:
@@ -405,11 +405,11 @@ class ResourceManager:
                 for alloc_id, alloc in resource.allocations.items():
                     if alloc.requester_id == requester_id:
                         allocs_to_release.append(alloc_id)
-                        
+
                 for alloc_id in allocs_to_release:
                     self.release(alloc_id)
                     released_any = True
-                    
+
             return released_any
 
 

@@ -1,3 +1,4 @@
+import io
 import os
 import shutil
 import subprocess
@@ -5,7 +6,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import io
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 from codomyrmex.terminal_interface.rendering import RichRenderer

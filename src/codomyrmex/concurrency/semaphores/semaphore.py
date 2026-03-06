@@ -156,7 +156,7 @@ class AsyncLocalSemaphore(BaseSemaphore):
             with self._sync_lock:
                 self._sync_count -= 1
             return True
-        except (asyncio.TimeoutError, TimeoutError):
+        except TimeoutError:
             return False
 
     async def __aenter__(self):

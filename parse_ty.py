@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-lines = open('ty_errors.txt').read().splitlines()
+lines = open("ty_errors.txt").read().splitlines()
 errors = []
 
 current_file = None
@@ -24,11 +24,11 @@ for i, line in enumerate(lines):
         file_line = None
         for j in range(i-1, i-5, -1):
             if j >= 0 and "-->" in lines[j]:
-                file_line = lines[j].strip().strip("-->").strip()
+                file_line = lines[j].strip().removeprefix("-->").strip()
                 break
-        
+
         if file_line:
-            parts = file_line.split(':')
+            parts = file_line.split(":")
             if len(parts) >= 2:
                 file_path = parts[0]
                 line_num = parts[1]

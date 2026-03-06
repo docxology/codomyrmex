@@ -24,7 +24,7 @@ class TestResourceManagerEnhanced:
     def test_resource_manager_lifecycle(self):
         """Test the full lifecycle of resource allocation and release."""
         mgr = ResourceManager()
-        
+
         # Initial state (default resources)
         compute = mgr.get_resource("sys-compute")
         assert compute is not None
@@ -71,9 +71,9 @@ class TestResourceManagerEnhanced:
             metadata={"memory": "16GB"}
         )
         mgr.add_resource(custom_res)
-        
+
         assert mgr.get_resource("gpu-0") == custom_res
-        
+
         alloc = mgr.allocate("gpu-0", "agent-1", amount=1.0)
         assert alloc is not None
         assert custom_res.status == ResourceStatus.BUSY
@@ -92,39 +92,39 @@ class TestCacheManagerEnhanced:
         """Test that the LRU eviction policy correctly removes the least recently used item."""
         # Max 2 items in memory
         cache = CacheManager(cache_dir=self.temp_dir, max_memory_items=2)
-        
+
         cache.set("a", 1)
         cache.set("b", 2)
-        
+
         # Access "a" to make it most recently used
         cache.get("a")
-        
+
         # Set "c", which should evict "b" (since "a" was accessed last)
         cache.set("c", 3)
-        
+
         assert "a" in cache._memory_cache
         assert "c" in cache._memory_cache
         assert "b" not in cache._memory_cache
-        
+
         # Verify persistence still has it though (disk cache is separate and doesn't have same limit in this implementation)
         # Actually CacheManager.set writes to disk too.
         # But _evict_oldest only removes from _memory_cache in my implementation.
-        
+
     def test_get_updates_lru_order(self):
         """Test that get() updates the LRU order in memory."""
         cache = CacheManager(cache_dir=self.temp_dir, max_memory_items=2)
-        
+
         cache.set("a", 1)
         cache.set("b", 2)
-        
+
         # Current order: a, b (b is newest)
         # Access a
         cache.get("a")
         # Now order: b, a (a is newest)
-        
+
         cache.set("c", 3)
         # Should evict b
-        
+
         assert "b" not in cache._memory_cache
         assert "a" in cache._memory_cache
         assert "c" in cache._memory_cache
@@ -146,10 +146,10 @@ class TestLazyLoaderEnhanced:
 
         loader = LazyLoader(module_name)
         assert loader._module is None
-        
+
         # Access an attribute
         _ = loader.month_name
-        
+
         assert loader._module is not None
         assert loader._module.__name__ == module_name
 
@@ -160,28 +160,28 @@ class TestBenchmarkTimingEnhanced:
     def test_warmup_iterations(self):
         """Test that warm-up iterations are executed."""
         runner = BenchmarkRunner()
-        
+
         count = 0
         def bench_fn():
             nonlocal count
             count += 1
-            
+
         runner.add("test", bench_fn, iterations=5, warmup_iterations=2)
         runner.run()
-        
+
         # Total calls should be iterations + warmup_iterations
         assert count == 7
 
     def test_timing_accuracy(self):
         """Test that timing is reasonably accurate for a sleep operation."""
         runner = BenchmarkRunner()
-        
+
         def slow_fn():
             time.sleep(0.05) # 50ms
-            
+
         runner.add("sleep_50ms", slow_fn, iterations=3)
         suite = runner.run()
-        
+
         result = suite.results[0]
         # Mean should be close to 50ms. Allow some overhead.
         assert 45 <= result.mean_ms <= 100

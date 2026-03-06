@@ -9,9 +9,9 @@ import pytest
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.core.parsers import (
+    parse_code_blocks,
     parse_json_response,
     parse_xml_tag,
-    parse_code_blocks,
 )
 from codomyrmex.agents.llm_client import OllamaClient
 

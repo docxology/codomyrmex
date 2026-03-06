@@ -274,7 +274,7 @@ class TaskOrchestrator:
             return task.parameters.get("message", "")
         if task.action in ("fail", "nonexistent_action", "error_action"):
             raise ValueError(f"Simulated task failure for action: {task.action}")
-            
+
         # Try to dispatch to registered handlers or assume success
         time.sleep(0.1)
         return {"status": "executed", "action": task.action}

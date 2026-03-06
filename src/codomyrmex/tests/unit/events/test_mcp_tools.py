@@ -1,14 +1,15 @@
 """Zero-mock tests for the events module MCP tools."""
 
 import pytest
+
 from codomyrmex.events.core.event_bus import get_event_bus
 from codomyrmex.events.core.event_schema import Event, EventType
-from codomyrmex.events.event_store import get_event_store, StreamEvent
+from codomyrmex.events.event_store import StreamEvent, get_event_store
 from codomyrmex.events.handlers.event_logger import get_event_logger
 from codomyrmex.events.mcp_tools import (
     emit_event,
-    list_event_types,
     get_event_history,
+    list_event_types,
     query_event_store,
     replay_events,
 )
@@ -32,7 +33,6 @@ def clean_system():
     store_mod._event_store = None
     store = get_event_store()
 
-    yield
 
 
 @pytest.mark.unit

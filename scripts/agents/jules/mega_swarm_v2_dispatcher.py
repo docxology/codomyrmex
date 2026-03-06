@@ -30,7 +30,7 @@ import re
 import subprocess
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
@@ -140,7 +140,7 @@ def save_dispatch_log(
         filepath: Path where the log JSON will be saved.
     """
     log = {
-        "dispatched_at": datetime.now(tz=timezone.utc).isoformat(),
+        "dispatched_at": datetime.now(tz=UTC).isoformat(),
         "total_agents": len(dispatched),
         "repo": REPO_NAME,
         "tasks": dispatched,
@@ -278,7 +278,7 @@ def main() -> None:
 
     # Summary
     print("\n" + "═" * 60)
-    print(f"✅ Mega Swarm v2 Dispatch Complete")
+    print("✅ Mega Swarm v2 Dispatch Complete")
     print(f"   Dispatched: {len(dispatched)}")
     print(f"   Failed:     {failed}")
     print(f"   Total:      {len(all_tasks)}")

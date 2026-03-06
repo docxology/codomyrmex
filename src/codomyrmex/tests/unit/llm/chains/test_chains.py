@@ -3,21 +3,23 @@ Tests for LLM Chain implementations.
 """
 
 import json
-import pytest
 from typing import Any
 
+import pytest
+
 from codomyrmex.llm.chains import (
+    ChainOfThought,
     ChainResult,
     ChainStep,
     ChainType,
-    SimpleChain,
-    SequentialChain,
-    ChainOfThought,
     ReActChain,
+    SequentialChain,
+    SimpleChain,
     create_chain,
     json_parser,
     list_parser,
 )
+
 
 class TestChainStep:
     """Tests for ChainStep."""
@@ -46,12 +48,12 @@ class TestSimpleChain:
     def test_run_success(self):
         """Should run single step successfully."""
         chain = SimpleChain(prompt_template="Echo: {input}", name="echo_chain")
-        
+
         def mock_llm(prompt):
             return f"LLM received: {prompt}"
-            
+
         result = chain.run({"input": "hello"}, mock_llm)
-        
+
         assert result.success is True
         assert result.output == "LLM received: Echo: hello"
         assert len(result.steps) == 1
@@ -60,10 +62,10 @@ class TestSimpleChain:
     def test_run_failure(self):
         """Should handle exceptions in llm_func."""
         chain = SimpleChain(prompt_template="test")
-        
+
         def failing_llm(prompt):
             raise ValueError("LLM error")
-            
+
         result = chain.run({}, failing_llm)
         assert result.success is False
         assert "LLM error" in result.error
@@ -115,7 +117,7 @@ class TestChainOfThought:
     def test_cot_run(self):
         """Should run CoT steps."""
         chain = ChainOfThought()
-        
+
         def mock_llm(prompt):
             if "Think through this step-by-step" in prompt:
                 return "Reasoning: 1+1 is 2"
@@ -140,11 +142,10 @@ class TestReActChain:
         def mock_llm(prompt):
             if "Observation" not in prompt:
                 return "Thought: I need to search.\nAction: search[python]"
-            else:
-                return "Thought: I have info.\nAction: Finish[Python is great]"
+            return "Thought: I have info.\nAction: Finish[Python is great]"
 
         result = chain.run({"question": "What is python?"}, mock_llm)
-        
+
         assert result.success is True
         assert result.output == "Python is great"
         assert len(result.steps) == 1
@@ -154,10 +155,10 @@ class TestReActChain:
     def test_react_max_iterations(self):
         """Should stop after max iterations."""
         chain = ReActChain(tools={}, max_iterations=2)
-        
+
         def infinite_llm(prompt):
             return "Thought: keep going.\nAction: unknown[test]"
-            
+
         result = chain.run({"question": "test"}, infinite_llm)
         assert result.success is False
         assert "Max iterations reached" in result.error

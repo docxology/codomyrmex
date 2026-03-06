@@ -6,7 +6,9 @@ to produce expected output formats.
 """
 
 import io
+
 import pytest
+
 from codomyrmex.terminal_interface.rendering import RichRenderer
 
 

@@ -1,8 +1,11 @@
 """Tests for embodiment transformation and Vec3 classes."""
 
 import math
+
 import pytest
+
 from codomyrmex.embodiment.transformation.transformation import Transform3D, Vec3
+
 
 @pytest.mark.unit
 class TestVec3:
@@ -39,7 +42,7 @@ class TestVec3:
         v = Vec3(3.0, 4.0, 0.0)
         n = v.normalized()
         assert n.to_tuple() == (0.6, 0.8, 0.0)
-        
+
         # zero vector case
         v0 = Vec3(0.0, 0.0, 0.0)
         n0 = v0.normalized()

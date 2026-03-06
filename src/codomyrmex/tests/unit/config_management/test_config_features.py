@@ -2,14 +2,17 @@
 
 import json
 import os
+
 import pytest
 import yaml
+
 from codomyrmex.config_management.core.config_loader import (
     ConfigurationManager,
-    load_configuration,
     deep_merge,
+    load_configuration,
     resolve_env_vars,
 )
+
 
 @pytest.mark.unit
 class TestConfigFeatures:
@@ -28,7 +31,7 @@ class TestConfigFeatures:
             "new": "val"
         }
         result = deep_merge(base, extension)
-        
+
         assert result["a"] == 1
         assert result["nested"]["b"] == 2
         assert result["nested"]["c"] == 30
@@ -40,7 +43,7 @@ class TestConfigFeatures:
         """Verify resolve_env_vars substitutes ${VAR} and ${VAR:-default}."""
         os.environ["TEST_VAR_1"] = "resolved_1"
         os.environ["TEST_VAR_2"] = "resolved_2"
-        
+
         data = {
             "k1": "${TEST_VAR_1}",
             "k2": "${TEST_VAR_2:-default_2}",
@@ -50,9 +53,9 @@ class TestConfigFeatures:
                 "list": ["prefix_${TEST_VAR_1}_suffix", 42]
             }
         }
-        
+
         resolved = resolve_env_vars(data)
-        
+
         assert resolved["k1"] == "resolved_1"
         assert resolved["k2"] == "resolved_2"
         assert resolved["k3"] == "default_3"
@@ -89,7 +92,7 @@ class TestConfigFeatures:
         # 3. Environment variable overrides (including nested via double underscore)
         os.environ["MYAPP_APP__DB__USER"] = "prod_user"
         os.environ["ENV_VAR_SUBST"] = "overridden_subst"
-        
+
         try:
             manager = ConfigurationManager(config_dir=str(tmp_path))
             config = manager.load_configuration(
@@ -115,23 +118,23 @@ class TestConfigFeatures:
         """Verify loading from both YAML and JSON files works as expected."""
         yaml_data = {"format": "yaml", "shared": "yaml_val"}
         json_data = {"format": "json", "shared": "json_val"}
-        
+
         yaml_file = tmp_path / "config.yaml"
         yaml_file.write_text(yaml.dump(yaml_data))
-        
+
         json_file = tmp_path / "config.json"
         json_file.write_text(json.dumps(json_data))
-        
+
         manager = ConfigurationManager(config_dir=str(tmp_path))
-        
+
         # Load YAML
         config_yaml = manager.load_configuration("config_yaml", sources=["config.yaml"])
         assert config_yaml.data["format"] == "yaml"
-        
+
         # Load JSON
         config_json = manager.load_configuration("config_json", sources=["config.json"])
         assert config_json.data["format"] == "json"
-        
+
         # Merge YAML then JSON
         config_merged = manager.load_configuration("config_merged", sources=["config.yaml", "config.json"])
         assert config_merged.data["shared"] == "json_val" # Later wins

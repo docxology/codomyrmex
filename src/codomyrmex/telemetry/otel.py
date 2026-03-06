@@ -12,14 +12,17 @@ from collections import defaultdict
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass, field
-from typing import Any, Generator, Optional
+from typing import TYPE_CHECKING, Any, Optional, Self
 
 from codomyrmex.logging_monitoring import get_logger
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 logger = get_logger(__name__)
 
 # Context variable to track the current active span
-_current_span: ContextVar[Optional["Span"]] = ContextVar("current_span", default=None)
+_current_span: ContextVar[Optional[Span]] = ContextVar("current_span", default=None)
 
 
 @dataclass
@@ -88,7 +91,7 @@ class Span:
             _current_span.reset(self._token)
             self._token = None
 
-    def __enter__(self) -> "Span":
+    def __enter__(self) -> Self:
         self._token = _current_span.set(self)
         return self
 

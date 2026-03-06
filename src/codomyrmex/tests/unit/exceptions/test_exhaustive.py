@@ -6,8 +6,84 @@ and exception chaining.
 """
 
 import pytest
-from codomyrmex.exceptions import *
+
+from codomyrmex.exceptions import (
+    ActiveInferenceError,
+    AIProviderError,
+    APIDocumentationError,
+    APIError,
+    ArtifactError,
+    AuthenticationError,
+    BayesianInferenceError,
+    BuildError,
+    BulkheadFullError,
+    CacheError,
+    CapabilityScanError,
+    CaseError,
+    CaseNotFoundError,
+    CerebrumError,
+    CICDError,
+    CircuitOpenError,
+    CodeEditingError,
+    CodeExecutionError,
+    CodeGenerationError,
+    CommandExecutionError,
+    CompressionError,
+    ConfigurationError,
+    ContainerError,
+    DatabaseError,
+    DependencyError,
+    DeploymentError,
+    DirectoryError,
+    DocumentationError,
+    EncryptionError,
+    EnvironmentError,
+    EventError,
+    FileOperationError,
+    GitOperationError,
+    IDEConnectionError,
+    IDEError,
+    InferenceError,
+    InteractiveShellError,
+    InvalidCaseError,
+    LoggingError,
+    MemoryError,
+    ModelContextError,
+    ModelError,
+    Modeling3DError,
+    NetworkError,
+    NetworkStructureError,
+    OrchestrationError,
+    PatternMatchingError,
+    PerformanceError,
+    PhysicalManagementError,
+    PlottingError,
+    PluginError,
+    ProjectManagementError,
+    RepositoryError,
+    ResourceError,
+    SandboxError,
+    SchemaError,
+    SecurityAuditError,
+    SerializationError,
+    SessionError,
+    SimulationError,
+    SkillError,
+    SpatialError,
+    StaticAnalysisError,
+    SynthesisError,
+    SystemDiscoveryError,
+    TaskExecutionError,
+    TemplateError,
+    TerminalError,
+    TimeoutError,
+    TransformationError,
+    ValidationError,
+    VisualizationError,
+    WorkflowError,
+)
 from codomyrmex.exceptions.base import format_exception_chain
+
 
 @pytest.mark.unit
 class TestExhaustiveExceptions:
@@ -19,7 +95,7 @@ class TestExhaustiveExceptions:
         assert err.context["model_name"] == "claude"
         assert "[AIProviderError] msg" in str(err)
         assert "provider_name=anthropic" in str(err)
-        
+
         # Chaining
         cause = ValueError("cause")
         err.__cause__ = cause

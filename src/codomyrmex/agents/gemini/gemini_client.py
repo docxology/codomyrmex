@@ -53,12 +53,12 @@ class GeminiClient(BaseAgent):
                 # Some versions might use different parameters, so we handle it gracefully
                 client_kwargs = {"api_key": self.api_key}
                 max_retries = (config or {}).get("max_retries", 3)
-                
+
                 # google-genai SDK 0.x uses HttpOptions for retry config
                 client_kwargs["http_options"] = types.HttpOptions(
                     retry=max_retries  # type: ignore
                 )
-                
+
                 self.client = genai.Client(**client_kwargs)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.error(f"Failed to initialize Gemini Client: {e}")

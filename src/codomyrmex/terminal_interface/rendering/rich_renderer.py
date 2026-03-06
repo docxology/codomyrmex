@@ -5,7 +5,8 @@ Provides high-level wrappers for the 'rich' library to create
 engaging terminal interfaces with colors, tables, and progress.
 """
 
-from typing import Any, Iterable, Optional, TypeVar
+from collections.abc import Iterable
+from typing import Any, Optional, TypeVar
 
 from rich.console import Console, Group
 from rich.live import Live

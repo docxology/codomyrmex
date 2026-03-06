@@ -2,18 +2,20 @@
 
 import pytest
 from pydantic import BaseModel
-from codomyrmex.validation.validator import Validator, ValidationError
-from codomyrmex.validation.rules import is_email, is_url, is_alphanumeric, is_in_range
+
+from codomyrmex.validation.contextual import ValidationIssue
+from codomyrmex.validation.parser import TypeSafeParser
+from codomyrmex.validation.rules import is_alphanumeric, is_email, is_in_range, is_url
 from codomyrmex.validation.sanitizers import (
+    remove_special_chars,
+    sanitize_numeric,
     strip_whitespace,
     to_lowercase,
     to_uppercase,
-    remove_special_chars,
-    sanitize_numeric,
 )
-from codomyrmex.validation.parser import TypeSafeParser
 from codomyrmex.validation.summary import ValidationSummary
-from codomyrmex.validation.contextual import ValidationIssue
+from codomyrmex.validation.validator import ValidationError, Validator
+
 
 @pytest.mark.unit
 class TestRules:
@@ -93,7 +95,7 @@ class TestTypeCoercion:
         class MyModel(BaseModel):
             name: str
             age: int
-        
+
         data = {"name": "John", "age": "30"}
         result = TypeSafeParser.coerce(data, MyModel)
         assert result is not None

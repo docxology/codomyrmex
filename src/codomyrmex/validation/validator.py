@@ -17,11 +17,11 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import jsonschema
-from codomyrmex.validation.rules import is_email, is_url, is_alphanumeric, is_in_range
 from pydantic import ValidationError as PydanticValidationError
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.validation.rules import is_alphanumeric, is_email, is_in_range, is_url
 
 logger = get_logger(__name__)
 

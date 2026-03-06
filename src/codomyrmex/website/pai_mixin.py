@@ -39,19 +39,20 @@ class PAIProviderMixin:
 
     def start_websocket_push(self, host: str = "0.0.0.0", port: int = 8890) -> None:
         """Start a background thread that pushes PAI awareness and health data over WebSockets every 15s.
-        
+
         This replaces frontend HTTP polling with a push model.
         """
         try:
             import asyncio
             import threading
+
             import websockets
         except ImportError:
             logger.warning("websockets library not available. WebSocket push disabled.")
             return
 
         self._ws_clients = set()
-        
+
         async def broadcast():
             while True:
                 await asyncio.sleep(15)
@@ -60,14 +61,14 @@ class PAIProviderMixin:
                         # Grab fresh data
                         awareness_data = self.get_pai_awareness_data()
                         # Health data if available on the same class
-                        health_data = getattr(self, "get_health_status", lambda: {})()
-                        
+                        health_data = getattr(self, "get_health_status", dict)()
+
                         message = _json.dumps({
                             "type": "update",
                             "awareness": awareness_data,
                             "health": health_data
                         })
-                        
+
                         # Gather all sends
                         coros = [client.send(message) for client in list(self._ws_clients)]
                         if coros:
@@ -81,13 +82,13 @@ class PAIProviderMixin:
             try:
                 # Send immediate initial state
                 awareness_data = self.get_pai_awareness_data()
-                health_data = getattr(self, "get_health_status", lambda: {})()
+                health_data = getattr(self, "get_health_status", dict)()
                 await websocket.send(_json.dumps({
                     "type": "update",
                     "awareness": awareness_data,
                     "health": health_data
                 }))
-                
+
                 # Keep connection alive
                 async for msg in websocket:
                     pass
@@ -99,8 +100,9 @@ class PAIProviderMixin:
                 self._ws_clients.remove(websocket)
 
         async def serve():
-            import websockets
             import asyncio
+
+            import websockets
             try:
                 async with websockets.serve(handler, host, port):
                     logger.info("WebSocket push server running on ws://%s:%s", host, port)
@@ -115,7 +117,7 @@ class PAIProviderMixin:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             loop.run_until_complete(serve())
-            
+
         thread = threading.Thread(target=run_loop, daemon=True, name="PAIWebSocketPush")
         thread.start()
 

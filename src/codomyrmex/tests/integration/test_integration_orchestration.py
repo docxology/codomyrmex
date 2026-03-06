@@ -48,7 +48,7 @@ class TestOrchestrationIntegration:
         test_workflows = ["test_workflow", "integration_test_workflow", "perf_test_workflow", "error_test_workflow"]
         for i in range(3):
             test_workflows.append(f"concurrent_workflow_{i}")
-            
+
         for wf_name in test_workflows:
             if hasattr(self.wf_manager, "workflows") and wf_name in self.wf_manager.workflows:
                 del self.wf_manager.workflows[wf_name]
@@ -58,7 +58,7 @@ class TestOrchestrationIntegration:
         for proj_name in test_projects:
             if hasattr(self.project_manager, "active_projects") and proj_name in self.project_manager.active_projects:
                 del self.project_manager.active_projects[proj_name]
-                
+
             # Clean up the physical folders
             proj_path = Path.cwd() / proj_name
             if proj_path.exists():
@@ -135,8 +135,11 @@ class TestOrchestrationIntegration:
 
         # Wait for completion
         import time
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import TaskStatus
-        
+
+        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
+            TaskStatus,
+        )
+
         timeout = 10.0
         start = time.time()
         while time.time() - start < timeout:
@@ -148,8 +151,8 @@ class TestOrchestrationIntegration:
 
         t1 = self.task_orchestrator.get_task(task1_id)
         t2 = self.task_orchestrator.get_task(task2_id)
-        assert t1.status == TaskStatus.COMPLETED or t1.status == TaskStatus.FAILED
-        assert t2.status == TaskStatus.COMPLETED or t2.status == TaskStatus.FAILED
+        assert t1.status in (TaskStatus.COMPLETED, TaskStatus.FAILED)
+        assert t2.status in (TaskStatus.COMPLETED, TaskStatus.FAILED)
 
     def test_resource_allocation_and_deallocation(self):
         """Test resource allocation and deallocation."""
@@ -274,7 +277,7 @@ class TestOrchestrationIntegration:
 
         # Wait for the task to actually fail in the background
         self.task_orchestrator.wait_for_completion(timeout=2.0)
-        
+
         # Check task statuses since WorkflowExecution status isn't magically updated
         # if the task runner failed them in the background
         stats = self.task_orchestrator.get_execution_stats()
@@ -400,13 +403,16 @@ class TestOrchestrationEdgeCases:
         self.task_orchestrator.start_processing()
 
         import time
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import TaskStatus
-        
+
+        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
+            TaskStatus,
+        )
+
         time.sleep(1.0)
-        
+
         t1 = self.task_orchestrator.get_task(t1_id)
         t2 = self.task_orchestrator.get_task(t2_id)
-        
+
         # They should be BLOCKED because of circular dependency
         assert t1.status == TaskStatus.BLOCKED
         assert t2.status == TaskStatus.BLOCKED

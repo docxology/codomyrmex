@@ -8,7 +8,7 @@ when no Ollama server is reachable.
 import pytest
 
 try:
-    from codomyrmex.agents.llm_client import AgentRequest, OllamaClient, AgentResponse
+    from codomyrmex.agents.llm_client import AgentRequest, AgentResponse, OllamaClient
 
     LLM_CLIENT_AVAILABLE = True
 except ImportError:

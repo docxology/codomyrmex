@@ -1,10 +1,13 @@
 """Tests for embodiment sensors, actuators, and ROS base classes."""
 
 import asyncio
+
 import pytest
+
 from codomyrmex.embodiment.actuators.base import ActuatorCommand, ActuatorStatus
+from codomyrmex.embodiment.ros.ros_bridge import Message, ROS2Bridge
 from codomyrmex.embodiment.sensors.base import SensorData
-from codomyrmex.embodiment.ros.ros_bridge import ROS2Bridge, Message
+
 
 @pytest.mark.unit
 class TestDataclasses:
@@ -36,7 +39,7 @@ class TestROS2BridgeAdvanced:
         await bridge.connect()
         for i in range(10):
             await bridge.publish("/topic", {"i": i})
-        
+
         hist = bridge.get_history("/topic")
         assert len(hist) == 5
         assert hist[0].payload["i"] == 5
@@ -61,7 +64,7 @@ class TestROS2BridgeAdvanced:
         received = []
         def handler(msg):
             received.append(msg)
-            
+
         await bridge.subscribe("/latched", handler, replay_latched=True)
         assert len(received) == 1
         assert received[0].payload["status"] == "ready"
@@ -81,22 +84,22 @@ class TestROS2BridgeAdvanced:
 
         assert bridge.total_messages == 2
         bridge.disconnect()
-        
+
     async def test_simulate_message_async(self):
         bridge = ROS2Bridge("test_sim")
         await bridge.connect()
-        
+
         received = []
         async def async_handler(msg):
             received.append(msg)
-            
+
         await bridge.subscribe("/sim", async_handler)
-        
+
         # simulated message is delivered without storing in history
         bridge.simulate_message("/sim", {"fake": True})
-        
+
         # let async task complete
         await asyncio.sleep(0.01)
-        
+
         assert len(received) == 1
         assert len(bridge.get_history("/sim")) == 0

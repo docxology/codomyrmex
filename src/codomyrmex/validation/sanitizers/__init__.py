@@ -14,9 +14,9 @@ from .core import (
 
 __version__ = "0.1.0"
 __all__ = [
+    "remove_special_chars",
+    "sanitize_numeric",
     "strip_whitespace",
     "to_lowercase",
     "to_uppercase",
-    "remove_special_chars",
-    "sanitize_numeric",
 ]

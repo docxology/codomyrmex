@@ -88,7 +88,7 @@ class StatusReporter:
 
     def _in_virtual_env(self) -> bool:
         """Check if running in virtual environment.
-        
+
         Deprecated: use check_python_environment()['virtual_env'] instead.
         Keep for backward compatibility with existing tests.
         """

@@ -1,8 +1,9 @@
 """Agent-specific telemetry hooks for granular performance tracking."""
 
 import time
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any, Generator, Optional
+from typing import Any, Optional
 
 from codomyrmex.telemetry.metrics import get_metrics
 from codomyrmex.telemetry.tracing import SpanKind, SpanStatus, get_tracer
