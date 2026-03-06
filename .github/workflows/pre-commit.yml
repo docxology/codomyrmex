@@ -132,6 +132,10 @@ jobs:
     name: File Changes Analysis
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -290,6 +294,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [pre-commit, commit-message-check, file-changes-check, size-check]
     if: always()
+    permissions:
+      contents: read
     steps:
       - name: Check quality gates
         run: |

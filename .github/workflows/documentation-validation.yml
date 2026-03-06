@@ -206,6 +206,12 @@ jobs:
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
+      pages: write
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -263,6 +269,10 @@ jobs:
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

@@ -30,14 +30,9 @@ jobs:
             ci
             chore
             revert
-          
+            ⚡ Bolt
           # Enforce proper casing
           requireScope: false
-          subjectPattern: ^(?![A-Z]).+$
-          subjectPatternError: |
-            The subject \"{subject}\" found in the pull request title \"{title}\"
-            didn't match the configured pattern. Please ensure that the subject
-            doesn't start with an uppercase character.
             
           # If the PR contains multiple commits, check the title 
           # otherwise check the single commit message
