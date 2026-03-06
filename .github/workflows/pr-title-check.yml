@@ -30,7 +30,7 @@ jobs:
             ci
             chore
             revert
-            ⚡ Bolt
+            ⚡
 
           # Enforce proper casing
           requireScope: false
