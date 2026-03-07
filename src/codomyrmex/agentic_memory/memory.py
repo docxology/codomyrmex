@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agentic_memory.models import (
     Memory,
@@ -19,7 +19,9 @@ from codomyrmex.agentic_memory.models import (
     RetrievalResult,
 )
 from codomyrmex.agentic_memory.stores import InMemoryStore
-from codomyrmex.vector_store import VectorStore
+
+if TYPE_CHECKING:
+    from codomyrmex.vector_store import VectorStore
 
 try:
     from sentence_transformers import SentenceTransformer
@@ -179,7 +181,7 @@ class VectorStoreMemory:
     ) -> None:
         self.store = store or InMemoryStore()
         self._agent = AgentMemory(self.store)
-        
+
         self.vector_store = vector_store
         self._embedder = None
         if self.vector_store is not None:
@@ -205,7 +207,7 @@ class VectorStoreMemory:
             importance=importance,
             metadata=metadata,
         )
-        
+
         if self.vector_store and self._embedder:
             embedding = self._embedder.encode(content).tolist()
             if isinstance(embedding, list):
@@ -215,7 +217,7 @@ class VectorStoreMemory:
                     embedding=embedding,
                     metadata={"importance": importance.value, "type": memory_type.value}
                 )
-        
+
         return mem
 
     def add(
@@ -230,20 +232,20 @@ class VectorStoreMemory:
         """Search memory, using semantic vector similarity if a backend is configured."""
         if not self.vector_store or not self._embedder:
             return self._agent.search(query, k=k)
-            
+
         if not query:
             return self._agent.search(query, k=k)
 
         query_embedding = self._embedder.encode(query).tolist()
         v_results = self.vector_store.search(query_embedding, k=k * 2)
-        
+
         results: list[RetrievalResult] = []
         for result in v_results:
             mem = self.store.get(result.id)
             if mem:
                 rec = _recency_score(mem.created_at)
                 imp = mem.importance.value / 4.0
-                
+
                 results.append(
                     RetrievalResult(
                         memory=mem,
