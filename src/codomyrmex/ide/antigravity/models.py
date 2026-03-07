@@ -16,11 +16,11 @@ from typing import Any
 
 try:
     from codomyrmex.ide import (
-        IDEError,
-        ConnectionError,
-        CommandExecutionError,
-        SessionError,
         ArtifactError,
+        CommandExecutionError,
+        ConnectionError,
+        IDEError,
+        SessionError,
     )
 except ImportError:
     IDEError = Exception  # type: ignore

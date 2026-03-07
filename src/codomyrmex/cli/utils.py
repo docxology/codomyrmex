@@ -38,3 +38,9 @@ def print_header(msg: str, char: str = "=", length: int = 60):
     else:
         print(msg)
         print(char * length)
+
+try:
+    from codomyrmex.performance.mcp_tools import performance_metrics
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    PERFORMANCE_MONITORING_AVAILABLE = False
