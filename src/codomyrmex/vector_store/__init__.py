@@ -55,13 +55,13 @@ def cli_commands():
 
 
 __all__ = [
+    "ChromaVectorStore",
     "DistanceMetric",
     "InMemoryVectorStore",
     "NamespacedVectorStore",
     "SearchResult",
     "VectorEntry",
     "VectorStore",
-    "ChromaVectorStore",
     "cli_commands",
     "create_vector_store",
     "normalize_embedding",
