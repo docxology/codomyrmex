@@ -8,6 +8,13 @@ except ImportError:
     TERMINAL_INTERFACE_AVAILABLE = False
     TerminalFormatter = None
 
+try:
+    import psutil  # type: ignore
+
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    PERFORMANCE_MONITORING_AVAILABLE = False
+
 
 def get_formatter() -> Any | None:
     """Get TerminalFormatter if available."""
