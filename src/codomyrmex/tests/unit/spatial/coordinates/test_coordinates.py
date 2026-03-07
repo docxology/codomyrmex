@@ -256,7 +256,9 @@ class TestCoordinateTransformer:
         assert math.isclose(p3.x, 1.0, abs_tol=1e-3)
 
         # Geographics
-        geo = CoordinateTransformer.cartesian_to_geographic(Point3D(GeographicCoord.EARTH_RADIUS, 0, 0))
+        geo = CoordinateTransformer.cartesian_to_geographic(
+            Point3D(GeographicCoord.EARTH_RADIUS, 0, 0)
+        )
         assert math.isclose(geo.lat, 0.0, abs_tol=1e-3)
 
         p4 = CoordinateTransformer.geographic_to_cartesian(geo)

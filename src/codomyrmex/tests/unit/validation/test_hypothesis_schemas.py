@@ -21,7 +21,12 @@ results = st.builds(
     Result,
     status=result_statuses,
     message=st.text(max_size=200),
-    data=st.one_of(st.none(), st.integers(), st.text(max_size=50), st.dictionaries(st.text(max_size=10), st.integers(), max_size=3)),
+    data=st.one_of(
+        st.none(),
+        st.integers(),
+        st.text(max_size=50),
+        st.dictionaries(st.text(max_size=10), st.integers(), max_size=3),
+    ),
     errors=st.lists(st.text(max_size=50), max_size=5),
 )
 

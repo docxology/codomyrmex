@@ -29,7 +29,9 @@ def is_alphanumeric(value: Any) -> bool:
     return value.isalnum()
 
 
-def is_in_range(value: Any, min_val: float | None = None, max_val: float | None = None) -> bool:
+def is_in_range(
+    value: Any, min_val: float | None = None, max_val: float | None = None
+) -> bool:
     """Check if a numeric value is within a specified range."""
     try:
         num = float(value)

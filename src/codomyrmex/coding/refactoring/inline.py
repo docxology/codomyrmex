@@ -32,7 +32,9 @@ class InlineRefactoring(Refactoring):
         count = len(re.findall(r"\b" + re.escape(self.symbol_name) + r"\b", content))
         warnings = []
         if count > 5:
-            warnings.append(f"Symbol has {count} usages, inlining may increase code size")
+            warnings.append(
+                f"Symbol has {count} usages, inlining may increase code size"
+            )
         return warnings
 
     def execute(self) -> RefactoringResult:
@@ -45,7 +47,8 @@ class InlineRefactoring(Refactoring):
             defn = self._find_definition(content)
             if defn is None:
                 return RefactoringResult(
-                    success=False, changes=[],
+                    success=False,
+                    changes=[],
                     description=f"Could not find definition of '{self.symbol_name}'",
                     errors=["Definition not found"],
                 )
@@ -65,12 +68,15 @@ class InlineRefactoring(Refactoring):
             ]
 
             return RefactoringResult(
-                success=True, changes=changes,
+                success=True,
+                changes=changes,
                 description=f"Inlined '{self.symbol_name}' with value '{value}'",
                 warnings=warnings,
             )
         except Exception as e:
-            return RefactoringResult(success=False, changes=[], description=str(e), errors=[str(e)])
+            return RefactoringResult(
+                success=False, changes=[], description=str(e), errors=[str(e)]
+            )
 
     def preview(self) -> str:
         result = self.execute()

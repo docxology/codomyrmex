@@ -58,11 +58,15 @@ class MockAPIServer:
             if self._matcher.match(incoming, route.request):
                 route.call_count += 1
                 response = self._select_response(route)
-                self._log_request(method, path, headers, body, route_name, response.status_code)
+                self._log_request(
+                    method, path, headers, body, route_name, response.status_code
+                )
                 return response
 
         self._log_request(method, path, headers, body, None, 404)
-        return MockResponse(status_code=404, body={"error": "No matching mock route found"})
+        return MockResponse(
+            status_code=404, body={"error": "No matching mock route found"}
+        )
 
     def _log_request(
         self,

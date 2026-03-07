@@ -18,6 +18,7 @@ class OpenAIProvider(LLMProvider):
     def _init_client(self) -> None:
         try:
             from openai import OpenAI
+
             self._client = OpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
@@ -39,14 +40,23 @@ class OpenAIProvider(LLMProvider):
                 "prompt_tokens": response.usage.prompt_tokens,
                 "completion_tokens": response.usage.completion_tokens,
                 "total_tokens": response.usage.total_tokens,
-            } if response.usage else None,
+            }
+            if response.usage
+            else None,
             tool_calls=[tc.model_dump() for tc in choice.message.tool_calls]
-            if choice.message.tool_calls else None,
+            if choice.message.tool_calls
+            else None,
             raw_response=response,
         )
 
-    def complete(self, messages: list[Message], model: str | None = None,
-                 temperature: float = 0.7, max_tokens: int | None = None, **kwargs) -> CompletionResponse:
+    def complete(
+        self,
+        messages: list[Message],
+        model: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+        **kwargs,
+    ) -> CompletionResponse:
         if not self._client:
             raise RuntimeError("OpenAI client not initialized. Install openai package.")
         response = self._client.chat.completions.create(  # type: ignore
@@ -58,8 +68,14 @@ class OpenAIProvider(LLMProvider):
         )
         return self._build_response(response)
 
-    def complete_stream(self, messages: list[Message], model: str | None = None,
-                        temperature: float = 0.7, max_tokens: int | None = None, **kwargs) -> Iterator[str]:
+    def complete_stream(
+        self,
+        messages: list[Message],
+        model: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+        **kwargs,
+    ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("OpenAI client not initialized.")
         stream = self._client.chat.completions.create(  # type: ignore
@@ -74,11 +90,20 @@ class OpenAIProvider(LLMProvider):
             if chunk.choices and chunk.choices[0].delta.content:
                 yield chunk.choices[0].delta.content
 
-    async def complete_async(self, messages: list[Message], model: str | None = None,
-                             temperature: float = 0.7, max_tokens: int | None = None, **kwargs) -> CompletionResponse:
+    async def complete_async(
+        self,
+        messages: list[Message],
+        model: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+        **kwargs,
+    ) -> CompletionResponse:
         try:
             from openai import AsyncOpenAI
-            async_client = AsyncOpenAI(api_key=self.config.api_key, base_url=self.config.base_url)
+
+            async_client = AsyncOpenAI(
+                api_key=self.config.api_key, base_url=self.config.base_url
+            )
             response = await async_client.chat.completions.create(  # type: ignore
                 model=self.get_model(model),
                 messages=[m.to_dict() for m in messages],

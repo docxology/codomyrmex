@@ -546,7 +546,11 @@ class OllamaManager:
         if self.use_http_api:
             try:
                 # Prepare request payload
-                payload: dict[str, Any] = {"model": model_name, "prompt": prompt, "stream": False}
+                payload: dict[str, Any] = {
+                    "model": model_name,
+                    "prompt": prompt,
+                    "stream": False,
+                }
 
                 # Add options if provided
                 if options:

@@ -47,7 +47,9 @@ class JavaScriptParser(Parser):
                         range=Range(Position(line_num, 0), Position(line_num + 5, 0)),
                         metadata={
                             "name": name,
-                            "parameters": [p.strip() for p in params.split(",") if p.strip()],
+                            "parameters": [
+                                p.strip() for p in params.split(",") if p.strip()
+                            ],
                         },
                     )
                 )
@@ -81,7 +83,9 @@ class JavaScriptParser(Parser):
                 ASTNode(
                     type="import_declaration",
                     text=match.group(0),
-                    range=Range(Position(line_num, 0), Position(line_num, len(match.group(0)))),
+                    range=Range(
+                        Position(line_num, 0), Position(line_num, len(match.group(0)))
+                    ),
                     metadata={"source": match.group(5)},
                 )
             )

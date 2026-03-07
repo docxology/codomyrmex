@@ -55,6 +55,7 @@ def cli_commands():
             return
         provider = ConsoleProvider()
         import uuid
+
         notification = Notification(
             id=str(uuid.uuid4()),
             subject="CLI Notification",

@@ -17,9 +17,11 @@ def event_bus():
     yield bus
     bus.shutdown()
 
+
 @pytest.fixture
 def integration_bus():
     return IntegrationBus()
+
 
 class TestEventBusReview:
     def test_priority_ordering(self, event_bus):
@@ -27,19 +29,13 @@ class TestEventBusReview:
         execution_order = []
 
         event_bus.subscribe(
-            [EventType.CUSTOM],
-            lambda e: execution_order.append("low"),
-            priority=0
+            [EventType.CUSTOM], lambda e: execution_order.append("low"), priority=0
         )
         event_bus.subscribe(
-            [EventType.CUSTOM],
-            lambda e: execution_order.append("high"),
-            priority=10
+            [EventType.CUSTOM], lambda e: execution_order.append("high"), priority=10
         )
         event_bus.subscribe(
-            [EventType.CUSTOM],
-            lambda e: execution_order.append("medium"),
-            priority=5
+            [EventType.CUSTOM], lambda e: execution_order.append("medium"), priority=5
         )
 
         event_bus.publish(Event(event_type=EventType.CUSTOM, source="test"))
@@ -86,6 +82,7 @@ class TestEventBusReview:
 
         # Create a proper Event
         from codomyrmex.events.core.event_schema import Event
+
         ev = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
 
         # Publish will use the executor for async handlers
@@ -116,11 +113,24 @@ class TestEventBusReview:
 
         event_bus.subscribe(["*"], received.append, filter_func=important_only)
 
-        event_bus.publish(Event(event_type=EventType.SYSTEM_STARTUP, source="test", priority=EventPriority.NORMAL))
-        event_bus.publish(Event(event_type=EventType.SYSTEM_ERROR, source="test", priority=EventPriority.CRITICAL))
+        event_bus.publish(
+            Event(
+                event_type=EventType.SYSTEM_STARTUP,
+                source="test",
+                priority=EventPriority.NORMAL,
+            )
+        )
+        event_bus.publish(
+            Event(
+                event_type=EventType.SYSTEM_ERROR,
+                source="test",
+                priority=EventPriority.CRITICAL,
+            )
+        )
 
         assert len(received) == 1
         assert received[0].priority == EventPriority.CRITICAL
+
 
 class TestIntegrationBusReview:
     def test_wildcard_subscriptions(self, integration_bus):
@@ -138,9 +148,15 @@ class TestIntegrationBusReview:
         """Verify priority ordering in IntegrationBus."""
         execution_order = []
 
-        integration_bus.subscribe("test", lambda e: execution_order.append("low"), priority=0)
-        integration_bus.subscribe("test", lambda e: execution_order.append("high"), priority=10)
-        integration_bus.subscribe("test", lambda e: execution_order.append("medium"), priority=5)
+        integration_bus.subscribe(
+            "test", lambda e: execution_order.append("low"), priority=0
+        )
+        integration_bus.subscribe(
+            "test", lambda e: execution_order.append("high"), priority=10
+        )
+        integration_bus.subscribe(
+            "test", lambda e: execution_order.append("medium"), priority=5
+        )
 
         integration_bus.emit("test", "test")
 
@@ -159,6 +175,7 @@ class TestIntegrationBusReview:
         integration_bus.emit("test", "test")
 
         assert len(received) == 1
+
 
 class TestEventEmitterEventListenerReview:
     def test_listener_once(self, event_bus):

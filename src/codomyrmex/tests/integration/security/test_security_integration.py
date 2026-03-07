@@ -20,6 +20,7 @@ try:
         # Digital security
         scan_vulnerabilities,
     )
+
     SECURITY_AVAILABLE = True
 except ImportError:
     SECURITY_AVAILABLE = False
@@ -32,7 +33,7 @@ except ImportError:
 
 pytestmark = [
     pytest.mark.integration,
-    pytest.mark.skipif(not SECURITY_AVAILABLE, reason="Security modules not available")
+    pytest.mark.skipif(not SECURITY_AVAILABLE, reason="Security modules not available"),
 ]
 
 

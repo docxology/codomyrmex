@@ -31,6 +31,7 @@ def temp_log_dir():
     yield tmpdir
     shutil.rmtree(tmpdir)
 
+
 @pytest.mark.unit
 class TestJSONLoggingIntegration:
     """Tests for JSON logging infrastructure."""
@@ -46,6 +47,7 @@ class TestJSONLoggingIntegration:
             def __init__(self):
                 super().__init__()
                 self.records = []
+
             def emit(self, record):
                 self.records.append(self.format(record))
 
@@ -81,6 +83,7 @@ class TestJSONLoggingIntegration:
             def __init__(self):
                 super().__init__()
                 self.records = []
+
             def emit(self, record):
                 self.records.append(record)
 
@@ -89,10 +92,10 @@ class TestJSONLoggingIntegration:
         logger.addHandler(handler)
 
         try:
-            logger.debug("Debug message")    # Filtered by logger level
-            logger.info("Info message")      # Filtered by handler level
-            logger.warning("Warning message") # Should pass
-            logger.error("Error message")     # Should pass
+            logger.debug("Debug message")  # Filtered by logger level
+            logger.info("Info message")  # Filtered by handler level
+            logger.warning("Warning message")  # Should pass
+            logger.error("Error message")  # Should pass
 
             assert len(handler.records) == 2
             assert handler.records[0].levelname == "WARNING"
@@ -112,7 +115,7 @@ class TestJSONLoggingIntegration:
             filename,
             max_bytes=100,
             backup_count=2,
-            formatter=JSONFormatter()
+            formatter=JSONFormatter(),
         )
 
         logger = logging.getLogger(logger_name)
@@ -122,7 +125,9 @@ class TestJSONLoggingIntegration:
             # Send enough logs to trigger rotation
             # Each JSON log entry will be > 100 bytes
             for i in range(10):
-                logger.info(f"Log message {i} with some extra padding to ensure rotation occurs quickly")
+                logger.info(
+                    f"Log message {i} with some extra padding to ensure rotation occurs quickly"
+                )
 
             log_path = Path(temp_log_dir)
             files = list(log_path.glob("rotation.log*"))
@@ -149,7 +154,7 @@ class TestJSONLoggingIntegration:
             lineno=1,
             msg="test msg",
             args=(),
-            exc_info=None
+            exc_info=None,
         )
         # Manually add context and other fields as it would happen in setup_logging or with extra
         record.context = {"user_id": 42}
@@ -175,7 +180,7 @@ class TestJSONLoggingIntegration:
             lineno=1,
             msg="test msg",
             args=(),
-            exc_info=None
+            exc_info=None,
         )
         record.password = "secret123"
         record.safe_field = "safe_value"

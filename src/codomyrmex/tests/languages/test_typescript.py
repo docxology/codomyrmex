@@ -1,4 +1,3 @@
-
 from codomyrmex.languages.typescript.manager import TypeScriptManager
 
 
@@ -14,6 +13,8 @@ def test_typescript_manager_operations():
     assert len(instructions) > 0
 
     if is_installed:
-        script = 'const msg: string = "Hello from TS zero-mock test";\nconsole.log(msg);\n'
+        script = (
+            'const msg: string = "Hello from TS zero-mock test";\nconsole.log(msg);\n'
+        )
         result = manager.use_script(script)
         assert "Hello from TS zero-mock test" in result

@@ -63,6 +63,7 @@ class TestVec3:
         v = Vec3(1.5, -2.5, 3.5)
         assert v.to_dict() == {"x": 1.5, "y": -2.5, "z": 3.5}
 
+
 @pytest.mark.unit
 class TestTransform3D:
     def test_identity(self):
@@ -93,7 +94,10 @@ class TestTransform3D:
         assert t3.translation.to_tuple() == (1.0, 2.0, 0.0)
 
     def test_inverse(self):
-        t = Transform3D(translation=(1.0, 2.0, 3.0), rotation=(math.pi/4, math.pi/6, math.pi/3))
+        t = Transform3D(
+            translation=(1.0, 2.0, 3.0),
+            rotation=(math.pi / 4, math.pi / 6, math.pi / 3),
+        )
         t_inv = t.inverse()
         t_ident = t.compose(t_inv)
         assert t_ident.translation.x == pytest.approx(0.0, abs=1e-9)

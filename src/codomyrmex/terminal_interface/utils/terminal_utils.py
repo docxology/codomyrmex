@@ -71,12 +71,13 @@ class TerminalFormatter:
         if use_rich:
             try:
                 from rich.console import Console
+
                 # Dedicated console for string capture
                 self._capture_console = Console(
                     force_terminal=self.use_colors,
                     width=80,
                     file=io.StringIO(),
-                    highlight=False
+                    highlight=False,
                 )
                 self.rich = RichRenderer(force_terminal=self.use_colors)
             except Exception as e:
@@ -198,6 +199,7 @@ class TerminalFormatter:
 
         if self._capture_console:
             from rich.table import Table
+
             self._capture_console.file = io.StringIO()
             table = Table()
             for header in headers:

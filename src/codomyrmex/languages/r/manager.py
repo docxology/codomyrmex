@@ -55,10 +55,7 @@ class RManager:
                 f.write(script_content)
 
             result = subprocess.run(
-                ["Rscript", "script.R"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["Rscript", "script.R"], cwd=dir_path, capture_output=True, text=True
             )
 
             try:
@@ -73,9 +70,7 @@ class RManager:
 
         try:
             result = subprocess.run(
-                ["Rscript", temp_path],
-                capture_output=True,
-                text=True
+                ["Rscript", temp_path], capture_output=True, text=True
             )
             return result.stdout + result.stderr
         finally:

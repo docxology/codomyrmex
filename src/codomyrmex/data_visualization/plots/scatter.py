@@ -18,5 +18,3 @@ class _ScatterPlot(BasePlot):
         apply_scatter(ax, x, y)
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
-
-

@@ -215,7 +215,10 @@ class VectorStoreMemory:
                 self.vector_store.add(
                     id=mem.id,
                     embedding=embedding,
-                    metadata={"importance": importance.value, "type": memory_type.value}
+                    metadata={
+                        "importance": importance.value,
+                        "type": memory_type.value,
+                    },
                 )
 
         return mem

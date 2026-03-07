@@ -53,9 +53,7 @@ class TestChromaVectorStore:
         chroma_store.add("2", [1.0, 0.0], {"color": "blue"})
 
         results = chroma_store.search(
-            [1.0, 0.0],
-            k=10,
-            filter_fn=lambda m: m.get("color") == "blue"
+            [1.0, 0.0], k=10, filter_fn=lambda m: m.get("color") == "blue"
         )
 
         assert len(results) == 1

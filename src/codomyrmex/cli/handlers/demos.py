@@ -22,9 +22,7 @@ def demo_data_visualization() -> bool:
         y = [i**2 for i in x]
 
         # Create visualizations
-        create_line_plot(
-            x, y, title="Demo: Quadratic Function"
-        )
+        create_line_plot(x, y, title="Demo: Quadratic Function")
         create_bar_chart(x, y, title="Demo: Bar Chart")
 
         print("✅ Data visualization demo complete. Check output/ directory.")

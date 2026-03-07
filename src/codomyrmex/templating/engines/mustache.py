@@ -46,7 +46,11 @@ class MustacheEngine(TemplateEngine):
         if isinstance(value, list):
             parts = []
             for item in value:
-                new_ctx = {**context, **item} if isinstance(item, dict) else {**context, ".": item}
+                new_ctx = (
+                    {**context, **item}
+                    if isinstance(item, dict)
+                    else {**context, ".": item}
+                )
                 parts.append(self._render_internal(content, new_ctx))
             return "".join(parts)
         if isinstance(value, dict):

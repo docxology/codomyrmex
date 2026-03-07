@@ -371,7 +371,10 @@ class ResourceManager:
         return cleaned_count
 
     def allocate_resources(
-        self, requester_id: str, requirements: dict[str, Any], timeout: float | None = None
+        self,
+        requester_id: str,
+        requirements: dict[str, Any],
+        timeout: float | None = None,
     ) -> list[ResourceAllocation] | None:
         """Legacy wrapper: allocate multiple resources from requirements dictionary."""
         allocations = []
@@ -383,7 +386,11 @@ class ResourceManager:
             mapping = {"cpu": "sys-compute", "memory": "sys-memory"}
             for req_key, req_vals in requirements.items():
                 resource_id = mapping.get(req_key, req_key)
-                amount = float(req_vals.get("cores", req_vals.get("gb", req_vals.get("amount", 1.0))))
+                amount = float(
+                    req_vals.get(
+                        "cores", req_vals.get("gb", req_vals.get("amount", 1.0))
+                    )
+                )
 
                 allocated = self.allocate(resource_id, requester_id, amount, timeout)
                 if not allocated:
@@ -411,7 +418,6 @@ class ResourceManager:
                     released_any = True
 
             return released_any
-
 
 
 # Global resource manager instance

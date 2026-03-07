@@ -131,7 +131,12 @@ def handle_project_create(name: str, template: str = "ai_analysis", **kwargs) ->
 
         manager = get_project_manager()
 
-        project = manager.create_project(name=name, type=__import__("codomyrmex.logistics.orchestration.project.models").logistics.orchestration.project.models.ProjectType.CUSTOM)
+        project = manager.create_project(
+            name=name,
+            type=__import__(
+                "codomyrmex.logistics.orchestration.project.models"
+            ).logistics.orchestration.project.models.ProjectType.CUSTOM,
+        )
 
         print_success(f"Created project '{name}' using template '{template}'")
         print(f"   Path: {project.path}")

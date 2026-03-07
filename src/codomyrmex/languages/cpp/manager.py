@@ -51,10 +51,18 @@ class CppManager:
         """Write, compile and execute a C++ file."""
         cmd = "g++"
         try:
-            subprocess.run(["g++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(
+                ["g++", "--version"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
         except FileNotFoundError:
             try:
-                subprocess.run(["clang++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.run(
+                    ["clang++", "--version"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
                 cmd = "clang++"
             except FileNotFoundError:
                 return "Error: Neither g++ nor clang++ found."
@@ -72,7 +80,7 @@ class CppManager:
                 [cmd, "main.cpp", "-o", "main_bin"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
             )
 
             if compile_result.returncode != 0:
@@ -81,10 +89,7 @@ class CppManager:
 
             # Run
             run_result = subprocess.run(
-                ["./main_bin"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["./main_bin"], cwd=dir_path, capture_output=True, text=True
             )
 
             self._cleanup([script_path, bin_path])

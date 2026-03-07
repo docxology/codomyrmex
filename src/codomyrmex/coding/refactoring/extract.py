@@ -33,7 +33,9 @@ class ExtractFunctionRefactoring(Refactoring):
         used -= set(keyword.kwlist) | set(dir(__builtins__))
         return list(used - defined), list(defined)
 
-    def _build_function_def(self, extracted_lines: list[str], returns: list[str]) -> str:
+    def _build_function_def(
+        self, extracted_lines: list[str], returns: list[str]
+    ) -> str:
         """Build the new function definition string."""
         first = extracted_lines[0]
         indent = len(first) - len(first.lstrip())
@@ -76,20 +78,25 @@ class ExtractFunctionRefactoring(Refactoring):
             else:
                 call = f"{orig_indent}{self.function_name}({params_str})\n"
 
-            changes = [Change(
-                location=Location(self.file_path, self.start_line),
-                old_text=code,
-                new_text=call,
-                description="Replace code with function call",
-            )]
+            changes = [
+                Change(
+                    location=Location(self.file_path, self.start_line),
+                    old_text=code,
+                    new_text=call,
+                    description="Replace code with function call",
+                )
+            ]
 
             return RefactoringResult(
-                success=True, changes=changes,
+                success=True,
+                changes=changes,
                 description=f"Extracted function '{self.function_name}'",
                 warnings=warnings,
             )
         except Exception as e:
-            return RefactoringResult(success=False, changes=[], description=str(e), errors=[str(e)])
+            return RefactoringResult(
+                success=False, changes=[], description=str(e), errors=[str(e)]
+            )
 
     def preview(self) -> str:
         self.execute()

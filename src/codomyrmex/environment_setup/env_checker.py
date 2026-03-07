@@ -222,7 +222,9 @@ def _check_version_satisfied(current: str, constraint: str) -> bool:
 
         return True
     except Exception as e:
-        logger.debug("Version comparison failed for %s vs %s: %s", current, constraint, e)
+        logger.debug(
+            "Version comparison failed for %s vs %s: %s", current, constraint, e
+        )
         return True  # Be lenient if parsing fails
 
 

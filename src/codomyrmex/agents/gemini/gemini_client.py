@@ -130,6 +130,7 @@ class GeminiClient(BaseAgent):
             return self._build_response_from_api_result(response, request)
         except Exception as e:
             import time
+
             execution_time = time.time() - start_time
             # For Gemini google-genai SDK, we use a generic Exception check
             # or could use google.api_core.exceptions if we had it imported.
@@ -490,9 +491,7 @@ class GeminiClient(BaseAgent):
             config = types.CreateCachedContentConfig(
                 contents=contents, ttl=ttl, display_name=display_name
             )
-            return self.client.caches.create(
-                model=model, config=config
-            ).model_dump()
+            return self.client.caches.create(model=model, config=config).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Failed to create cached content: {e}")
             raise GeminiError(f"Failed to create cached content: {e}") from e

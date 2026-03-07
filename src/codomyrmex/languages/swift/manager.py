@@ -60,10 +60,7 @@ class SwiftManager:
                 f.write(script_content)
 
             result = subprocess.run(
-                ["swift", "script.swift"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["swift", "script.swift"], cwd=dir_path, capture_output=True, text=True
             )
 
             try:
@@ -72,15 +69,15 @@ class SwiftManager:
                 pass
             return result.stdout + result.stderr
 
-        with tempfile.NamedTemporaryFile(suffix=".swift", mode="w", delete=False) as temp:
+        with tempfile.NamedTemporaryFile(
+            suffix=".swift", mode="w", delete=False
+        ) as temp:
             temp.write(script_content)
             temp_path = temp.name
 
         try:
             result = subprocess.run(
-                ["swift", temp_path],
-                capture_output=True,
-                text=True
+                ["swift", temp_path], capture_output=True, text=True
             )
             return result.stdout + result.stderr
         finally:

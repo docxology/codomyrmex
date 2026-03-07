@@ -38,6 +38,7 @@ generate_consistency_checker_module = _mod.generate_consistency_checker_module
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _extract_import_module_names(source: str) -> list[str]:
     """Return top-level module names from 'import X' and 'from X import ...' lines."""
     tree = ast.parse(source)
@@ -66,6 +67,7 @@ def _extract_codomyrmex_import_paths(source: str) -> list[str]:
 # ---------------------------------------------------------------------------
 # generate_quality_tests
 # ---------------------------------------------------------------------------
+
 
 class TestGenerateQualityTests:
     """Tests for generate_quality_tests() generator."""
@@ -115,6 +117,7 @@ class TestGenerateQualityTests:
 # generate_documentation_quality_module
 # ---------------------------------------------------------------------------
 
+
 class TestGenerateDocumentationQualityModule:
     """Tests for generate_documentation_quality_module() generator."""
 
@@ -150,7 +153,10 @@ class TestGenerateDocumentationQualityModule:
         tree = ast.parse(source)
         # Find the class node and check its methods
         for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef) and node.name == "DocumentationQualityAnalyzer":
+            if (
+                isinstance(node, ast.ClassDef)
+                and node.name == "DocumentationQualityAnalyzer"
+            ):
                 method_names = [
                     n.name for n in ast.walk(node) if isinstance(n, ast.FunctionDef)
                 ]
@@ -175,6 +181,7 @@ class TestGenerateDocumentationQualityModule:
 # ---------------------------------------------------------------------------
 # generate_consistency_checker_module
 # ---------------------------------------------------------------------------
+
 
 class TestGenerateConsistencyCheckerModule:
     """Tests for generate_consistency_checker_module() generator."""
@@ -210,10 +217,15 @@ class TestGenerateConsistencyCheckerModule:
         source = generate_consistency_checker_module()
         tree = ast.parse(source)
         for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef) and node.name == "DocumentationConsistencyChecker":
+            if (
+                isinstance(node, ast.ClassDef)
+                and node.name == "DocumentationConsistencyChecker"
+            ):
                 method_names = [
                     n.name for n in ast.walk(node) if isinstance(n, ast.FunctionDef)
                 ]
                 assert "check_project_consistency" in method_names
                 return
-        pytest.fail("DocumentationConsistencyChecker class not found in generated source")
+        pytest.fail(
+            "DocumentationConsistencyChecker class not found in generated source"
+        )

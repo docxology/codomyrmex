@@ -354,16 +354,26 @@ class TaskOrchestrator:
 
     def wait_for_completion(self, timeout: float | None = 10.0) -> bool:
         """Wait for all tasks to complete."""
-        effective_timeout = timeout if timeout is not None else 86400.0  # 1 day fallback
+        effective_timeout = (
+            timeout if timeout is not None else 86400.0
+        )  # 1 day fallback
         start = time.time()
         while time.time() - start < effective_timeout:
             with self._lock:
                 all_completed = True
                 for task in self.tasks.values():
-                    if task.status not in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
+                    if task.status not in [
+                        TaskStatus.COMPLETED,
+                        TaskStatus.FAILED,
+                        TaskStatus.CANCELLED,
+                    ]:
                         all_completed = False
                         break
-                if all_completed and not self.queues[TaskPriority.NORMAL] and not self.running_tasks:
+                if (
+                    all_completed
+                    and not self.queues[TaskPriority.NORMAL]
+                    and not self.running_tasks
+                ):
                     return True
             time.sleep(0.1)
         return False
@@ -380,8 +390,12 @@ class TaskOrchestrator:
         return {
             "total_tasks": len(self.tasks),
             "running": len(self.running_tasks),
-            "completed": sum(1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED),
-            "failed": sum(1 for t in self.tasks.values() if t.status == TaskStatus.FAILED),
+            "completed": sum(
+                1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED
+            ),
+            "failed": sum(
+                1 for t in self.tasks.values() if t.status == TaskStatus.FAILED
+            ),
         }
 
 

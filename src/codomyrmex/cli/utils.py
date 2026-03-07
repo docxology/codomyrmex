@@ -9,7 +9,7 @@ except ImportError:
     TerminalFormatter = None
 
 try:
-    import psutil  # noqa: F401
+    import psutil
 
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:

@@ -47,7 +47,9 @@ def container_build(
         if DockerManager is None:
             return {"status": "error", "message": "Docker manager not available"}
         mgr = DockerManager()
-        result = mgr.build_image(image_name, dockerfile_path, **({"tag": tag} if tag else {}))
+        result = mgr.build_image(
+            image_name, dockerfile_path, **({"tag": tag} if tag else {})
+        )
         return {"status": "success", "image": f"{image_name}:{tag}", "result": result}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

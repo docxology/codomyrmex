@@ -468,7 +468,8 @@ def example_autonomous_vehicle_fleet():
     # Connect vehicles to nearby waypoints
     for vehicle in vehicles:
         nearest_waypoint = manager.registry.find_nearest_object(
-            *vehicle.location, ObjectType.STRUCTURE  # type: ignore
+            *vehicle.location,
+            ObjectType.STRUCTURE,  # type: ignore
         )
         if nearest_waypoint and nearest_waypoint.has_tag("navigation"):
             vehicle.connect_to(nearest_waypoint.id)
@@ -483,7 +484,8 @@ def example_autonomous_vehicle_fleet():
     for vehicle in low_charge_vehicles:
         # Find nearest charging station
         nearest_station = manager.registry.find_nearest_object(
-            *vehicle.location, ObjectType.STRUCTURE  # type: ignore
+            *vehicle.location,
+            ObjectType.STRUCTURE,  # type: ignore
         )
 
         if nearest_station and nearest_station.has_tag("charging"):

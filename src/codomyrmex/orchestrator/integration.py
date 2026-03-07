@@ -179,7 +179,8 @@ class CICDBridge:
             pipeline_config = PipelineConfig(
                 name=pipeline_config.get("name", "pipeline"),  # type: ignore
                 stages=[
-                    StageConfig(**stage) for stage in pipeline_config.get("stages", [])  # type: ignore
+                    StageConfig(**stage)
+                    for stage in pipeline_config.get("stages", [])  # type: ignore
                 ],
                 variables=pipeline_config.get("variables", {}),  # type: ignore
                 timeout=pipeline_config.get("timeout", 3600),  # type: ignore

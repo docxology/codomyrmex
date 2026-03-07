@@ -15,6 +15,7 @@ def exporter():
     exporter = InMemoryExporter()
     return exporter
 
+
 @pytest.fixture
 def hooks(exporter):
     """Create agent telemetry hooks with a custom tracer and exporter."""
@@ -29,6 +30,7 @@ def hooks(exporter):
     # Use a fresh MetricsRegistry for tests
     hooks.metrics = MetricsRegistry()
     return hooks
+
 
 def test_track_phase_success(hooks, exporter):
     """Test tracking a successful phase."""
@@ -48,18 +50,25 @@ def test_track_phase_success(hooks, exporter):
 
     executions = metrics.get("agent_phase_executions_total")
     assert executions is not None
-    assert executions.get_value(labels={"agent": "test_agent", "phase": "test_phase"}) == 1
+    assert (
+        executions.get_value(labels={"agent": "test_agent", "phase": "test_phase"}) == 1
+    )
 
     errors = metrics.get("agent_phase_errors_total")
     # If no errors, it might not have been created or value is 0
     if errors:
-        assert errors.get_value(labels={"agent": "test_agent", "phase": "test_phase"}) == 0
+        assert (
+            errors.get_value(labels={"agent": "test_agent", "phase": "test_phase"}) == 0
+        )
 
     latency_metric = metrics.get("agent_phase_latency_seconds")
     assert latency_metric is not None
-    stats = latency_metric.get_value(labels={"agent": "test_agent", "phase": "test_phase"})
+    stats = latency_metric.get_value(
+        labels={"agent": "test_agent", "phase": "test_phase"}
+    )
     assert stats["count"] == 1
     assert stats["sum"] >= 0.01
+
 
 def test_track_phase_error(hooks, exporter):
     """Test tracking a phase that raises an error."""
@@ -77,10 +86,14 @@ def test_track_phase_error(hooks, exporter):
     # Check metrics
     metrics = hooks.metrics
     executions = metrics.get("agent_phase_executions_total")
-    assert executions.get_value(labels={"agent": "test_agent", "phase": "error_phase"}) == 1
+    assert (
+        executions.get_value(labels={"agent": "test_agent", "phase": "error_phase"})
+        == 1
+    )
 
     errors = metrics.get("agent_phase_errors_total")
     assert errors.get_value(labels={"agent": "test_agent", "phase": "error_phase"}) == 1
+
 
 def test_track_plan(hooks, exporter):
     """Test track_plan helper."""
@@ -96,6 +109,7 @@ def test_track_plan(hooks, exporter):
     executions = metrics.get("agent_phase_executions_total")
     assert executions.get_value(labels={"agent": "test_agent", "phase": "plan"}) == 1
 
+
 def test_track_act(hooks, exporter):
     """Test track_act helper."""
     with hooks.track_act("shell_command", command="ls"):
@@ -109,7 +123,17 @@ def test_track_act(hooks, exporter):
 
     metrics = hooks.metrics
     executions = metrics.get("agent_phase_executions_total")
-    assert executions.get_value(labels={"agent": "test_agent", "phase": "act", "action_type": "shell_command"}) == 1
+    assert (
+        executions.get_value(
+            labels={
+                "agent": "test_agent",
+                "phase": "act",
+                "action_type": "shell_command",
+            }
+        )
+        == 1
+    )
+
 
 def test_track_observe(hooks, exporter):
     """Test track_observe helper."""
@@ -125,6 +149,7 @@ def test_track_observe(hooks, exporter):
     executions = metrics.get("agent_phase_executions_total")
     assert executions.get_value(labels={"agent": "test_agent", "phase": "observe"}) == 1
 
+
 def test_track_task(hooks, exporter):
     """Test track_task helper."""
     with hooks.track_task("task-123"):
@@ -137,4 +162,9 @@ def test_track_task(hooks, exporter):
 
     metrics = hooks.metrics
     executions = metrics.get("agent_phase_executions_total")
-    assert executions.get_value(labels={"agent": "test_agent", "phase": "task", "task_id": "task-123"}) == 1
+    assert (
+        executions.get_value(
+            labels={"agent": "test_agent", "phase": "task", "task_id": "task-123"}
+        )
+        == 1
+    )

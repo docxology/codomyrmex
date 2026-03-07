@@ -58,7 +58,9 @@ class TestQwenModelRegistry:
         categories = {"flagship", "code", "general", "long", "vision", "lightweight"}
         for name, info in QWEN_MODELS.items():
             assert "category" in info, f"{name} missing category"
-            assert info["category"] in categories, f"{name} has unknown category {info['category']}"
+            assert info["category"] in categories, (
+                f"{name} has unknown category {info['category']}"
+            )
 
     def test_code_models_exist(self):
         code_models = QwenClient.get_code_models()
@@ -294,7 +296,10 @@ class TestQwenMCPToolsOffline:
         result = qwen_create_agent()
         if not HAS_QWEN_AGENT:
             assert result["status"] == "error"
-            assert "qwen-agent" in result["error"].lower() or "not installed" in result["error"].lower()
+            assert (
+                "qwen-agent" in result["error"].lower()
+                or "not installed" in result["error"].lower()
+            )
         else:
             assert result["status"] == "success"
 
@@ -308,8 +313,16 @@ class TestQwenMCPToolsOffline:
             qwen_list_models,
         )
 
-        for tool in [qwen_chat, qwen_chat_with_tools, qwen_list_models, qwen_create_agent, qwen_code_review]:
-            assert hasattr(tool, "_mcp_tool_name"), f"{tool.__name__} missing _mcp_tool_name"
+        for tool in [
+            qwen_chat,
+            qwen_chat_with_tools,
+            qwen_list_models,
+            qwen_create_agent,
+            qwen_code_review,
+        ]:
+            assert hasattr(tool, "_mcp_tool_name"), (
+                f"{tool.__name__} missing _mcp_tool_name"
+            )
             assert isinstance(tool._mcp_tool_name, str)
             assert len(tool._mcp_tool_name) > 0
 
@@ -323,7 +336,16 @@ class TestQwenMCPToolsOffline:
             qwen_list_models,
         )
 
-        names = [t._mcp_tool_name for t in [qwen_chat, qwen_chat_with_tools, qwen_list_models, qwen_create_agent, qwen_code_review]]
+        names = [
+            t._mcp_tool_name
+            for t in [
+                qwen_chat,
+                qwen_chat_with_tools,
+                qwen_list_models,
+                qwen_create_agent,
+                qwen_code_review,
+            ]
+        ]
         assert len(names) == len(set(names)), f"Duplicate MCP tool names: {names}"
 
     def test_all_mcp_tools_have_descriptions(self):
@@ -335,8 +357,16 @@ class TestQwenMCPToolsOffline:
             qwen_list_models,
         )
 
-        for tool in [qwen_chat, qwen_chat_with_tools, qwen_list_models, qwen_create_agent, qwen_code_review]:
-            assert hasattr(tool, "_mcp_tool_description"), f"{tool.__name__} missing description"
+        for tool in [
+            qwen_chat,
+            qwen_chat_with_tools,
+            qwen_list_models,
+            qwen_create_agent,
+            qwen_code_review,
+        ]:
+            assert hasattr(tool, "_mcp_tool_description"), (
+                f"{tool.__name__} missing description"
+            )
             assert len(tool._mcp_tool_description) > 10
 
 

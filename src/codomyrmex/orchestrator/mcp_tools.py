@@ -56,7 +56,11 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
             task_id = t.get("id")
             if not task_id:
                 continue
-            task = __import__("codomyrmex.logistics.orchestration.project.task_orchestrator").logistics.orchestration.project.task_orchestrator.Task(name=task_id, action="", module="")
+            task = __import__(
+                "codomyrmex.logistics.orchestration.project.task_orchestrator"
+            ).logistics.orchestration.project.task_orchestrator.Task(
+                name=task_id, action="", module=""
+            )
             workflow.add_task(task)  # type: ignore
 
         # Add dependencies in a second pass

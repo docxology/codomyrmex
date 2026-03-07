@@ -32,7 +32,9 @@ def bridge(temp_vault, memory):
 class TestObsidianMemoryBridge:
     def test_ingest_new_note(self, temp_vault, bridge, memory):
         # Create a new note unlinked to memory
-        create_note(temp_vault, "Note1", content="Agent task", frontmatter={"tags": ["ai"]})
+        create_note(
+            temp_vault, "Note1", content="Agent task", frontmatter={"tags": ["ai"]}
+        )
 
         stats = bridge.ingest_vault()
         assert stats["added"] == 1
@@ -58,7 +60,7 @@ class TestObsidianMemoryBridge:
             temp_vault,
             "Note2",
             content="New Content",
-            frontmatter={"agentic_id": mem.id}
+            frontmatter={"agentic_id": mem.id},
         )
 
         stats = bridge.ingest_vault()
