@@ -88,7 +88,7 @@
 <div class="panel" style="margin-top: 2rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <h2>Live Transcript</h2>
-        <span id="dispatch-status" class="status warning" aria-live="polite">Inactive</span>
+        <span id="dispatch-status" class="status warning">Inactive</span>
     </div>
     <div id="dispatch-transcript"
         style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; min-height: 400px; max-height: 600px; overflow-y: auto; font-family: 'Fira Code', monospace; font-size: 0.9em; white-space: pre-wrap;">
@@ -133,15 +133,11 @@
                         statusBadge.className = 'status success';
                         statusBadge.textContent = 'Running';
                         startBtn.disabled = true;
-                        if (!startBtn.innerHTML.includes('loader')) {
-                            startBtn.innerHTML = '<span class="loader" aria-hidden="true"></span> Running...';
-                        }
                         stopBtn.disabled = false;
                     } else {
                         statusBadge.className = 'status warning';
                         statusBadge.textContent = 'Completed / Inactive';
                         startBtn.disabled = false;
-                        startBtn.textContent = 'Start Dispatch Run';
                         stopBtn.disabled = true;
                         if (pollInterval) {
                             clearInterval(pollInterval);
@@ -159,7 +155,6 @@
 
         startBtn.addEventListener('click', async () => {
             startBtn.disabled = true;
-            startBtn.innerHTML = '<span class="loader" aria-hidden="true"></span> Starting...';
             statusBadge.className = 'status warning';
             statusBadge.textContent = 'Starting...';
             transcriptDiv.innerHTML = '<div style="color: var(--text-secondary); text-align: center; margin-top: 2rem;">Initializing Agents...</div>';
@@ -193,14 +188,12 @@
                     statusBadge.textContent = 'Error';
                     alert(data.error || "Failed to start");
                     startBtn.disabled = false;
-                    startBtn.textContent = 'Start Dispatch Run';
                 }
             } catch (e) {
                 statusBadge.className = 'status error';
                 statusBadge.textContent = 'Error';
                 alert(e.message);
                 startBtn.disabled = false;
-                startBtn.textContent = 'Start Dispatch Run';
             }
         });
 

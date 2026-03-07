@@ -1,3 +1,0 @@
-## 2025-03-07 - Add Loading State and aria-live to Agent Dispatch Button
-**Learning:** In dynamically updating UIs like the agent dispatcher where async operations can take a while, users need visual and screen reader feedback on the state of the system to know their action was registered. Adding `aria-live="polite"` to the status badge announces changes seamlessly.
-**Action:** Always check dynamically updated badges or regions for `aria-live` properties. Also ensure buttons initiating long operations provide internal visual loading states, such as a spinner, instead of just disabling themselves, to assure the user the operation has started.
