@@ -16,16 +16,13 @@ from typing import Any
 
 try:
     from codomyrmex.ide import (
-        ArtifactError,
-        CommandExecutionError,
-        ConnectionError,
-        IDEClient,
         IDEError,
+        ConnectionError,
+        CommandExecutionError,
         SessionError,
+        ArtifactError,
     )
 except ImportError:
-    # Fallback if ide module not available
-    IDEClient = object  # type: ignore
     IDEError = Exception  # type: ignore
     ConnectionError = Exception  # type: ignore
     CommandExecutionError = Exception  # type: ignore

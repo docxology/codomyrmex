@@ -11,10 +11,18 @@ from .models import (
     ArtifactError,
     CommandExecutionError,
     ConversationContext,
-    IDEClient,
-    IDECommandResult,
-    IDEStatus,
 )
+
+try:
+    from codomyrmex.ide import (
+        IDEClient,
+        IDECommandResult,
+        IDEStatus,
+    )
+except ImportError:
+    IDEClient = object  # type: ignore
+    IDECommandResult = object  # type: ignore
+    IDEStatus = object  # type: ignore
 
 logger = get_logger(__name__)
 
