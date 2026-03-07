@@ -24,6 +24,7 @@ class TestPerplexityClientExecution:
 
         try:
             from codomyrmex.agents.core.exceptions import AgentConfigurationError
+
             with pytest.raises(AgentConfigurationError) as exc_info:
                 PerplexityClient()
             assert "API key not configured" in str(exc_info.value)
@@ -54,9 +55,8 @@ class TestPerplexityClientExecution:
     )
     def test_perplexity_mcp_tool_live(self):
         """Test the MCP tool wrapper directly."""
-        result = perplexity_execute(prompt="Hello, are you there? Reply yes.", timeout=30)
+        result = perplexity_execute(
+            prompt="Hello, are you there? Reply yes.", timeout=30
+        )
         assert result["status"] == "success"
         assert result["content"]
-
-
-

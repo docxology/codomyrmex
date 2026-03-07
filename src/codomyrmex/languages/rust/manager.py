@@ -60,7 +60,7 @@ class RustManager:
                 ["rustc", "script.rs", "-o", "script_bin"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
             )
 
             if compile_result.returncode != 0:
@@ -69,10 +69,7 @@ class RustManager:
 
             # Run
             run_result = subprocess.run(
-                ["./script_bin"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["./script_bin"], cwd=dir_path, capture_output=True, text=True
             )
 
             self._cleanup([script_path, bin_path])

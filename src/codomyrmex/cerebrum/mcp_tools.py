@@ -62,7 +62,11 @@ def add_case_reference(concept: str, solution: str) -> dict:
     try:
         base = CaseBase()
         case_id = str(uuid.uuid4())
-        case = Case(case_id=case_id, features={"concept": concept}, metadata={"solution": solution})
+        case = Case(
+            case_id=case_id,
+            features={"concept": concept},
+            metadata={"solution": solution},
+        )
         base.add_case(case)
 
         return {

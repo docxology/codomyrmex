@@ -93,6 +93,9 @@ def hermes_skills_list() -> dict[str, Any]:
         result = client.list_skills()
         if result.get("success"):
             return {"status": "success", "output": result.get("output", "")}
-        return {"status": "error", "message": result.get("output", result.get("error", "Unknown erro"))}
+        return {
+            "status": "error",
+            "message": result.get("output", result.get("error", "Unknown erro")),
+        }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

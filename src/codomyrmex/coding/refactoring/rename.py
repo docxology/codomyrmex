@@ -10,7 +10,9 @@ class RenameRefactoring(Refactoring):
 
     refactoring_type = RefactoringType.RENAME
 
-    def __init__(self, file_path: str, old_name: str, new_name: str, scope: str = "file"):
+    def __init__(
+        self, file_path: str, old_name: str, new_name: str, scope: str = "file"
+    ):
         self.file_path = file_path
         self.old_name = old_name
         self.new_name = new_name
@@ -68,14 +70,22 @@ class RenameRefactoring(Refactoring):
                 warnings=warnings,
             )
         except Exception as e:
-            return RefactoringResult(success=False, changes=[], description=str(e), errors=[str(e)])
+            return RefactoringResult(
+                success=False, changes=[], description=str(e), errors=[str(e)]
+            )
 
     def preview(self) -> str:
         """Preview the rename changes (first 10 shown)."""
         result = self.execute()
-        lines = [f"Rename: {self.old_name} -> {self.new_name}", f"File: {self.file_path}", f"Changes: {len(result.changes)}"]
+        lines = [
+            f"Rename: {self.old_name} -> {self.new_name}",
+            f"File: {self.file_path}",
+            f"Changes: {len(result.changes)}",
+        ]
         for change in result.changes[:10]:
-            lines.append(f"  Line {change.location.line}: {change.old_text} -> {change.new_text}")
+            lines.append(
+                f"  Line {change.location.line}: {change.old_text} -> {change.new_text}"
+            )
         if len(result.changes) > 10:
             lines.append(f"  ... and {len(result.changes) - 10} more")
         return "\n".join(lines)

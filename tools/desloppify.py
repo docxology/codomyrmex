@@ -14,6 +14,7 @@ from pathlib import Path
 GOD_CLASS_METHOD_COUNT = 20
 GOD_CLASS_LINE_COUNT = 500
 
+
 class DesloppifyVisitor(ast.NodeVisitor):
     def __init__(self, filename: str):
         self.filename = filename
@@ -31,7 +32,11 @@ class DesloppifyVisitor(ast.NodeVisitor):
             self.missing_docstrings.append(f"Class '{node.name}' (line {node.lineno})")
 
         # Check God Class (Method Count)
-        methods = [n for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]
+        methods = [
+            n
+            for n in node.body
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+        ]
 
         # Line count approximation
         end_lineno = getattr(node, "end_lineno", node.lineno)
@@ -55,7 +60,9 @@ class DesloppifyVisitor(ast.NodeVisitor):
 
         # Check docstring
         if not node.name.startswith("__") and not ast.get_docstring(node):
-            self.missing_docstrings.append(f"Function/Method '{node.name}' (line {node.lineno})")
+            self.missing_docstrings.append(
+                f"Function/Method '{node.name}' (line {node.lineno})"
+            )
 
         # Extract AST structure (ignoring concrete names/values) to detect duplication
         pattern_hash = self._hash_ast(node)
@@ -70,10 +77,19 @@ class DesloppifyVisitor(ast.NodeVisitor):
         fields = []
         for field, value in ast.iter_fields(node):
             if isinstance(value, list):
-                fields.append(f"{field}:[" + ",".join(self._hash_ast(n, depth+1) for n in value if isinstance(n, ast.AST)) + "]")
+                fields.append(
+                    f"{field}:["
+                    + ",".join(
+                        self._hash_ast(n, depth + 1)
+                        for n in value
+                        if isinstance(n, ast.AST)
+                    )
+                    + "]"
+                )
             elif isinstance(value, ast.AST):
-                fields.append(f"{field}:" + self._hash_ast(value, depth+1))
+                fields.append(f"{field}:" + self._hash_ast(value, depth + 1))
         return type(node).__name__ + "(" + ",".join(fields) + ")"
+
 
 def analyze_file(filepath: Path) -> DesloppifyVisitor:
     try:
@@ -85,6 +101,7 @@ def analyze_file(filepath: Path) -> DesloppifyVisitor:
     except Exception as e:
         print(f"Error parsing {filepath}: {e}", file=sys.stderr)
         return DesloppifyVisitor(str(filepath))
+
 
 def main():
     target_dir = sys.argv[1] if len(sys.argv) > 1 else "src/codomyrmex"
@@ -125,7 +142,7 @@ def main():
 
             if visitor.missing_docstrings:
                 print("[!] Missing Docstrings:")
-                for md in visitor.missing_docstrings[:5]: # Limit output
+                for md in visitor.missing_docstrings[:5]:  # Limit output
                     print(f"    - {md}")
                 if len(visitor.missing_docstrings) > 5:
                     print(f"    ... and {len(visitor.missing_docstrings) - 5} more")
@@ -134,14 +151,16 @@ def main():
     print("\n--- Structural Duplication Analysis ---")
     duplicate_count = 0
     for pattern, locations in global_patterns.items():
-        if len(locations) > 2 and len(pattern) > 200: # Heuristic for non-trivial duplication
+        if (
+            len(locations) > 2 and len(pattern) > 200
+        ):  # Heuristic for non-trivial duplication
             print(f"[!] Structural AST clone detected in {len(locations)} locations:")
             for loc in locations[:3]:
                 print(f"    - {loc}")
             if len(locations) > 3:
                 print(f"    ... and {len(locations) - 3} more")
             duplicate_count += 1
-            if duplicate_count >= 5: # Limit output
+            if duplicate_count >= 5:  # Limit output
                 print("    ... more duplicates hidden")
                 break
 
@@ -149,6 +168,7 @@ def main():
     print(f"Files Scanned: {total_files}")
     print(f"God Classes: {total_god_classes}")
     print(f"Missing Docstrings: {total_missing_docs}")
+
 
 if __name__ == "__main__":
     main()

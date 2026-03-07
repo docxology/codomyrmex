@@ -51,7 +51,10 @@ class AgentPool(Generic[T]):
         """Register an agent with the pool."""
         with self._lock:
             self._agents[agent_id] = PooledAgent(
-                agent_id=agent_id, agent=agent, weight=weight, priority=priority,
+                agent_id=agent_id,
+                agent=agent,
+                weight=weight,
+                priority=priority,
                 metadata=metadata or {},
             )
             self._circuit_breakers[agent_id] = CircuitBreaker(
@@ -70,7 +73,8 @@ class AgentPool(Generic[T]):
     def get_available_agents(self) -> list[PooledAgent[T]]:
         with self._lock:
             return [
-                p for aid, p in self._agents.items()
+                p
+                for aid, p in self._agents.items()
                 if not self._circuit_breakers[aid].is_open and p.health.is_available
             ]
 

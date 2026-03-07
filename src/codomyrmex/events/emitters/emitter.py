@@ -30,13 +30,19 @@ class AsyncEventEmitter:
         await self.bus.publish_async(event)
 
     def emit_later(
-        self, event_type: EventType, data: dict[str, Any] | None = None, delay: float = 0.0
+        self,
+        event_type: EventType,
+        data: dict[str, Any] | None = None,
+        delay: float = 0.0,
     ):
         """Schedule an event to be emitted after a delay."""
         asyncio.create_task(self._emit_with_delay(event_type, data, delay))
 
     async def _emit_with_delay(
-        self, event_type: EventType, data: dict[str, Any] | None = None, delay: float = 0.0
+        self,
+        event_type: EventType,
+        data: dict[str, Any] | None = None,
+        delay: float = 0.0,
     ):
         if delay > 0:
             await asyncio.sleep(delay)

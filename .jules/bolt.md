@@ -1,0 +1,3 @@
+## 2024-05-24 - [ConsistentHash.remove_node O(n^2) Bottleneck]
+**Learning:** Calling `list.remove()` inside a loop that iterates over replicas in a consistent hashing ring creates a massive $O(N \cdot R^2)$ bottleneck because `list.remove()` itself is $O(N)$.
+**Action:** Always rebuild large lists using a list comprehension and a pre-computed $O(1)$ lookup set when removing multiple items, rather than modifying the list in-place repeatedly. This preserves sorted order and drops complexity to $O(N)$.

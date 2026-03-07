@@ -31,6 +31,7 @@ class TestDataclasses:
         assert ac.command_type == "move"
         assert ac.parameters == {"p": 1}
 
+
 @pytest.mark.asyncio
 @pytest.mark.unit
 class TestROS2BridgeAdvanced:
@@ -62,6 +63,7 @@ class TestROS2BridgeAdvanced:
         await bridge.publish("/latched", {"status": "ready"})
 
         received = []
+
         def handler(msg):
             received.append(msg)
 
@@ -90,6 +92,7 @@ class TestROS2BridgeAdvanced:
         await bridge.connect()
 
         received = []
+
         async def async_handler(msg):
             received.append(msg)
 

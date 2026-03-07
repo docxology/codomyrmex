@@ -36,7 +36,9 @@ class MockOllamaHandler(http.server.BaseHTTPRequestHandler):
             if "json" in user_msg.lower():
                 response_content = '{"result": "success", "data": 42}'
             elif "xml" in user_msg.lower():
-                response_content = "<thought>I should echo</thought><action>echo</action>Hello"
+                response_content = (
+                    "<thought>I should echo</thought><action>echo</action>Hello"
+                )
 
             response_data = {
                 "message": {"role": "assistant", "content": response_content},
@@ -49,9 +51,7 @@ class MockOllamaHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(response_data).encode("utf-8"))
 
         elif self.path == "/api/tags":
-            response_data = {
-                "models": [{"name": "llama3"}, {"name": "codellama"}]
-            }
+            response_data = {"models": [{"name": "llama3"}, {"name": "codellama"}]}
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
@@ -159,7 +159,9 @@ And the configuration:
 
     def test_ollama_unreachable(self):
         """Test handling of totally unreachable server (no port bound)."""
-        client = OllamaClient(base_url="http://127.0.0.1:1")  # Port 1 is unlikely to be open
+        client = OllamaClient(
+            base_url="http://127.0.0.1:1"
+        )  # Port 1 is unlikely to be open
         request = AgentRequest(prompt="Hello")
         response = client.execute(request)
 

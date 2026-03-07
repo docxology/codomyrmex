@@ -69,10 +69,7 @@ class ElixirManager:
                 f.write(script_content)
 
             result = subprocess.run(
-                ["elixir", "script.exs"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["elixir", "script.exs"], cwd=dir_path, capture_output=True, text=True
             )
 
             try:
@@ -87,9 +84,7 @@ class ElixirManager:
 
         try:
             result = subprocess.run(
-                ["elixir", temp_path],
-                capture_output=True,
-                text=True
+                ["elixir", temp_path], capture_output=True, text=True
             )
             return result.stdout + result.stderr
         finally:

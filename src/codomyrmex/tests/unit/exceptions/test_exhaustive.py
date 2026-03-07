@@ -190,7 +190,9 @@ class TestExhaustiveExceptions:
         assert err.context["expected_value"] == "val"
 
     def test_dependency_error(self):
-        err = DependencyError("msg", dependency_name="d1", required_version="1.0", installed_version="0.9")
+        err = DependencyError(
+            "msg", dependency_name="d1", required_version="1.0", installed_version="0.9"
+        )
         assert err.context["dependency_name"] == "d1"
         assert err.context["required_version"] == "1.0"
         assert err.context["installed_version"] == "0.9"

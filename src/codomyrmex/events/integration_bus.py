@@ -89,9 +89,7 @@ class IntegrationBus:
             return False
 
         original_len = len(self._handlers[topic])
-        self._handlers[topic] = [
-            h for h in self._handlers[topic] if h[0] != handler
-        ]
+        self._handlers[topic] = [h for h in self._handlers[topic] if h[0] != handler]
         return len(self._handlers[topic]) < original_len
 
     def emit(

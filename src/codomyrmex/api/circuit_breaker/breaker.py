@@ -59,7 +59,9 @@ class CircuitBreaker:
     def _should_attempt_reset(self) -> bool:
         if self._stats.last_failure_time is None:
             return True
-        return time.time() - self._stats.last_failure_time >= self.config.reset_timeout_s
+        return (
+            time.time() - self._stats.last_failure_time >= self.config.reset_timeout_s
+        )
 
     def _transition_to_open(self) -> None:
         self._state = CircuitState.OPEN
@@ -97,7 +99,9 @@ class CircuitBreaker:
         """Record a failed call, potentially opening the circuit."""
         with self._lock:
             self._stats.record_failure(latency_ms)
-            if self._state == CircuitState.HALF_OPEN or (self._state == CircuitState.CLOSED and self._check_should_open()):
+            if self._state == CircuitState.HALF_OPEN or (
+                self._state == CircuitState.CLOSED and self._check_should_open()
+            ):
                 self._transition_to_open()
 
     def allow_request(self) -> bool:

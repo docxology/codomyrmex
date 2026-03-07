@@ -72,7 +72,8 @@ def run_code_in_docker(
 
     # Prepare the command to run inside the container
     container_cmd = [
-        cmd.format(filename=code_file_path) for cmd in language_config["command"]  # type: ignore
+        cmd.format(filename=code_file_path)
+        for cmd in language_config["command"]  # type: ignore
     ]
 
     # Validate stdin_file is inside temp_dir (no path traversal, no shell injection) (C3)

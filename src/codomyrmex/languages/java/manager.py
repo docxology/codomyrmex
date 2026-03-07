@@ -68,10 +68,7 @@ class JavaManager:
 
             # Compile
             compile_result = subprocess.run(
-                ["javac", file_name],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["javac", file_name], cwd=dir_path, capture_output=True, text=True
             )
 
             if compile_result.returncode != 0:
@@ -80,10 +77,7 @@ class JavaManager:
 
             # Run
             run_result = subprocess.run(
-                ["java", class_name],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["java", class_name], cwd=dir_path, capture_output=True, text=True
             )
 
             self._cleanup([script_path, os.path.join(dir_path, f"{class_name}.class")])

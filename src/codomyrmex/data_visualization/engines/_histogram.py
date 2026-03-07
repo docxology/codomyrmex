@@ -113,7 +113,11 @@ class HistogramMixin:
             labels = labels or [""]
 
         box_plot = axes.boxplot(
-            data_list, tick_labels=labels, notch=notch, patch_artist=patch_artist, **kwargs
+            data_list,
+            tick_labels=labels,
+            notch=notch,
+            patch_artist=patch_artist,
+            **kwargs,
         )
 
         if color and patch_artist:

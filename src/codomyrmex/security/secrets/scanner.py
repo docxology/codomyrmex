@@ -31,7 +31,9 @@ class SecretScanner:
         r"package-lock\.json$",
     ]
 
-    def __init__(self, patterns: SecretPatterns | None = None, min_confidence: float = 0.5):
+    def __init__(
+        self, patterns: SecretPatterns | None = None, min_confidence: float = 0.5
+    ):
         self.patterns = patterns or SecretPatterns()
         self.min_confidence = min_confidence
         self._ignore_compiled = [re.compile(p) for p in self.IGNORE_PATTERNS]
@@ -46,7 +48,9 @@ class SecretScanner:
         """Get line number for a position in text."""
         return text[:position].count("\n") + 1
 
-    def _get_context(self, text: str, start: int, end: int, context_chars: int = 50) -> str:
+    def _get_context(
+        self, text: str, start: int, end: int, context_chars: int = 50
+    ) -> str:
         """Get context around a match."""
         ctx_start = max(0, start - context_chars)
         ctx_end = min(len(text), end + context_chars)
@@ -57,7 +61,9 @@ class SecretScanner:
         """Check if a path should be ignored."""
         return any(pattern.search(path) for pattern in self._ignore_compiled)
 
-    def _extract_secret(self, text: str, match: re.Match) -> tuple[str, tuple[int, int]]:
+    def _extract_secret(
+        self, text: str, match: re.Match
+    ) -> tuple[str, tuple[int, int]]:
         """Extract secret value and location from a regex match."""
         if match.groups():
             return match.group(1), (match.start(1), match.end(1))
@@ -104,7 +110,9 @@ class SecretScanner:
         except Exception:
             return ScanResult()
 
-    def scan_directory(self, directory: str, extensions: list[str] | None = None) -> ScanResult:
+    def scan_directory(
+        self, directory: str, extensions: list[str] | None = None
+    ) -> ScanResult:
         """Scan a directory for secrets."""
         start_time = time.time()
         all_secrets = []

@@ -21,7 +21,7 @@ except ImportError:
 
 class ChromaVectorStore(VectorStore):
     """Vector store backed by ChromaDB.
-    
+
     Provides true K-nearest-neighbor semantic search using
     an embedded or persistent Chroma client.
     """
@@ -30,14 +30,14 @@ class ChromaVectorStore(VectorStore):
         self,
         collection_name: str = "agentic_memory",
         persist_directory: str | None = None,
-        distance_metric: str = "cosine"
+        distance_metric: str = "cosine",
     ):
         if chromadb is None:
             raise ImportError(
                 "chromadb is not installed. Please install it using `uv pip install chromadb` "
                 "or add it to dependencies to use ChromaVectorStore."
             )
-            
+
         if persist_directory:
             self._client = chromadb.PersistentClient(path=persist_directory)
         else:
@@ -47,8 +47,7 @@ class ChromaVectorStore(VectorStore):
         # We default to cosine.
         metadata = {"hnsw:space": distance_metric}
         self._collection = self._client.get_or_create_collection(
-            name=collection_name, 
-            metadata=metadata
+            name=collection_name, metadata=metadata
         )
         self._distance_metric = distance_metric
 
@@ -60,24 +59,19 @@ class ChromaVectorStore(VectorStore):
     ) -> None:
         """Add a vector to Chroma."""
         self._collection.upsert(
-            ids=[id],
-            embeddings=[embedding],
-            metadatas=[metadata] if metadata else [{}]
+            ids=[id], embeddings=[embedding], metadatas=[metadata] if metadata else [{}]
         )
 
     def get(self, id: str) -> VectorEntry | None:
         """Get a vector by ID."""
-        result = self._collection.get(
-            ids=[id],
-            include=["embeddings", "metadatas"]
-        )
+        result = self._collection.get(ids=[id], include=["embeddings", "metadatas"])
         if not result["ids"]:
             return None
-            
+
         return VectorEntry(
             id=result["ids"][0],
             embedding=result["embeddings"][0],
-            metadata=result["metadatas"][0] if result["metadatas"] else {}
+            metadata=result["metadatas"][0] if result["metadatas"] else {},
         )
 
     def delete(self, id: str) -> bool:
@@ -101,28 +95,28 @@ class ChromaVectorStore(VectorStore):
         filter_fn: Callable[[dict[str, Any]], bool] | None = None,
     ) -> list[SearchResult]:
         """Search for similar vectors.
-        
-        Note: `filter_fn` requires pulling all metadata and discarding results 
+
+        Note: `filter_fn` requires pulling all metadata and discarding results
         if evaluated purely in Python. Chroma accepts a `where` dict for meta filtering,
-        but for compatibility with VectorStore ABC, we will over-fetch and filter in memory, 
+        but for compatibility with VectorStore ABC, we will over-fetch and filter in memory,
         or just apply it if small.
         """
         # If we have a filter_fn, we might need to fetch more than k.
         fetch_k = max(k * 5, 100) if filter_fn else k
-        
+
         # Determine total items to avoid querying more than what's available
         item_count = self.count()
         if item_count == 0:
             return []
-            
+
         fetch_k = min(fetch_k, item_count)
 
         results = self._collection.query(
             query_embeddings=[query],
             n_results=fetch_k,
-            include=["embeddings", "metadatas", "distances"]
+            include=["embeddings", "metadatas", "distances"],
         )
-        
+
         if not results["ids"] or not results["ids"][0]:
             return []
 
@@ -136,9 +130,13 @@ class ChromaVectorStore(VectorStore):
             meta = metadatas[i] if metadatas else {}
             if filter_fn and not filter_fn(meta):
                 continue
-                
+
             # Chroma returns distance, but our interface expects score (where higher = better for cosine)
-            score = 1.0 - distances[i] if self._distance_metric == "cosine" else distances[i]
+            score = (
+                1.0 - distances[i]
+                if self._distance_metric == "cosine"
+                else distances[i]
+            )
 
             search_results.append(
                 SearchResult(
@@ -162,6 +160,4 @@ class ChromaVectorStore(VectorStore):
         name = self._collection.name
         metadata = self._collection.metadata
         self._client.delete_collection(name)
-        self._collection = self._client.create_collection(
-            name=name, metadata=metadata
-        )
+        self._collection = self._client.create_collection(name=name, metadata=metadata)

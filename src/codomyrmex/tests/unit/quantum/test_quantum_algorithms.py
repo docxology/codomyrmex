@@ -1,6 +1,5 @@
 """Tests for quantum algorithms."""
 
-
 import pytest
 
 from codomyrmex.quantum.algorithms import (

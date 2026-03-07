@@ -84,10 +84,7 @@ class PythonManager:
 
             cmd = "python3" if self._has_cmd("python3") else "python"
             result = subprocess.run(
-                [cmd, "script.py"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                [cmd, "script.py"], cwd=dir_path, capture_output=True, text=True
             )
             # Clean up immediately after run
             try:
@@ -102,18 +99,16 @@ class PythonManager:
 
         try:
             cmd = "python3" if self._has_cmd("python3") else "python"
-            result = subprocess.run(
-                [cmd, temp_path],
-                capture_output=True,
-                text=True
-            )
+            result = subprocess.run([cmd, temp_path], capture_output=True, text=True)
             return result.stdout + result.stderr
         finally:
             os.remove(temp_path)
 
     def _has_cmd(self, cmd: str) -> bool:
         try:
-            subprocess.run([cmd, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(
+                [cmd, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
             return True
         except FileNotFoundError:
             return False

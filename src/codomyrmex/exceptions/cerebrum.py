@@ -191,4 +191,3 @@ class NetworkStructureError(BayesianInferenceError):
 
 class VisualizationError(CerebrumError):
     """Exception raised for visualization errors."""
-

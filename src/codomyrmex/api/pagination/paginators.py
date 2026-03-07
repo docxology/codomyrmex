@@ -124,7 +124,9 @@ class KeysetPaginator(Paginator):
             return item[field_name]
         return getattr(item, field_name)
 
-    def _sort_items(self, items: list[Any], sort_field: str, reverse: bool) -> list[Any]:
+    def _sort_items(
+        self, items: list[Any], sort_field: str, reverse: bool
+    ) -> list[Any]:
         """Sort items by field; falls back to original order on error."""
         try:
             return sorted(
@@ -135,7 +137,9 @@ class KeysetPaginator(Paginator):
         except (KeyError, AttributeError, TypeError):
             return list(items)
 
-    def _find_start(self, sorted_items: list[Any], after_key: Any, sort_field: str) -> int:
+    def _find_start(
+        self, sorted_items: list[Any], after_key: Any, sort_field: str
+    ) -> int:
         """Find the start index after the given key."""
         for i, item in enumerate(sorted_items):
             try:
@@ -159,7 +163,9 @@ class KeysetPaginator(Paginator):
             logger.debug("Failed to compute keyset cursors: %s", e)
             return None, None
 
-    def paginate(self, items: list[Any], request: PaginationRequest) -> PaginatedResponse:
+    def paginate(
+        self, items: list[Any], request: PaginationRequest
+    ) -> PaginatedResponse:
         """Paginate using keyset / seek strategy."""
         sort_field = request.sort_field or self._sort_field
         page_size = request.page_size
@@ -176,7 +182,9 @@ class KeysetPaginator(Paginator):
         end = min(start + page_size, total_items)
         page_items = sorted_items[start:end]
 
-        start_cursor, end_cursor = self._build_cursors(page_items, sort_field) if page_items else (None, None)
+        start_cursor, end_cursor = (
+            self._build_cursors(page_items, sort_field) if page_items else (None, None)
+        )
 
         return PaginatedResponse(
             items=page_items,

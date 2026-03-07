@@ -8,6 +8,13 @@ except ImportError:
     TERMINAL_INTERFACE_AVAILABLE = False
     TerminalFormatter = None
 
+try:
+    import psutil
+
+    PERFORMANCE_MONITORING_AVAILABLE = True
+except ImportError:
+    PERFORMANCE_MONITORING_AVAILABLE = False
+
 
 def get_formatter() -> Any | None:
     """Get TerminalFormatter if available."""
@@ -38,3 +45,14 @@ def print_header(msg: str, char: str = "=", length: int = 60):
     else:
         print(msg)
         print(char * length)
+
+
+__all__ = [
+    "PERFORMANCE_MONITORING_AVAILABLE",
+    "TERMINAL_INTERFACE_AVAILABLE",
+    "get_formatter",
+    "print_error",
+    "print_header",
+    "print_success",
+    "print_warning",
+]

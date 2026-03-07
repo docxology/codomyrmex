@@ -74,7 +74,9 @@ def parse_tasks(filepath: Path) -> list[dict[str, str]]:
                 stripped,
             )
             if wave_match:
-                current_wave = f"Wave {wave_match.group(1)}: {wave_match.group(2).strip()}"
+                current_wave = (
+                    f"Wave {wave_match.group(1)}: {wave_match.group(2).strip()}"
+                )
                 continue
 
             # Module marker: # --- module_name ---
@@ -215,7 +217,9 @@ def main() -> None:
     # Filter by start-from
     if args.start_from > 1:
         all_tasks = [t for t in all_tasks if t["id"] >= args.start_from]
-        print(f"⏩ Starting from task #{args.start_from}: {len(all_tasks)} tasks remaining")
+        print(
+            f"⏩ Starting from task #{args.start_from}: {len(all_tasks)} tasks remaining"
+        )
 
     # Apply limit
     if args.limit is not None:
@@ -243,7 +247,9 @@ def main() -> None:
         print("🔍 DRY RUN — Previewing tasks:\n")
         for task in all_tasks:
             print(f"  [{task['id']:3d}] [{task['wave']}]")
-            prompt_preview = task["prompt"][:120] + ("..." if len(task["prompt"]) > 120 else "")
+            prompt_preview = task["prompt"][:120] + (
+                "..." if len(task["prompt"]) > 120 else ""
+            )
             print(f"       {prompt_preview}")
             print()
         print(f"\n✅ Dry run complete. {len(all_tasks)} tasks would be dispatched.")
@@ -251,7 +257,9 @@ def main() -> None:
         return
 
     # Dispatch in batches
-    print(f"🚀 Dispatching {len(all_tasks)} Jules agents in batches of {args.batch_size}...")
+    print(
+        f"🚀 Dispatching {len(all_tasks)} Jules agents in batches of {args.batch_size}..."
+    )
     dispatched: list[dict[str, str]] = []
     failed = 0
 
@@ -269,7 +277,9 @@ def main() -> None:
                 print(f"  ✅ [{task['id']:3d}] {task['module'] or 'cross-cutting'}")
             else:
                 failed += 1
-                print(f"  ❌ [{task['id']:3d}] FAILED — {task['module'] or 'cross-cutting'}")
+                print(
+                    f"  ❌ [{task['id']:3d}] FAILED — {task['module'] or 'cross-cutting'}"
+                )
 
         # Wait between batches (not after the last one)
         if i + args.batch_size < len(all_tasks):

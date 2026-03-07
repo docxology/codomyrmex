@@ -74,10 +74,16 @@ class ConsistentHash:
 
     def remove_node(self, node: str) -> None:
         """Remove a node from the ring."""
+        # Optimization: Collect hashes and build a new list in O(N) time.
+        # Calling list.remove() inside the loop takes O(N^2) time overall.
+        hashes_to_remove = set()
         for i in range(self._replicas):
             h = self._hash(f"{node}:{i}")
-            self._ring.remove(h)
-            del self._node_map[h]
+            hashes_to_remove.add(h)
+            if h in self._node_map:
+                del self._node_map[h]
+        # List comprehension preserves the sorted order of self._ring
+        self._ring = [h for h in self._ring if h not in hashes_to_remove]
 
     def get_node(self, key: str) -> str:
         """Get the node responsible for a given key."""

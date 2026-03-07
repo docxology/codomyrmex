@@ -12,7 +12,7 @@ from codomyrmex.agentic_memory.models import Memory, MemoryImportance, MemoryTyp
 
 class SQLiteStore:
     """Thread-safe SQLite persistent memory store.
-    
+
     Provides the same CRUD API as InMemoryStore and JSONFileStore,
     but backs the data to a local SQLite database file.
     """
@@ -48,7 +48,9 @@ class SQLiteStore:
                     """
                 )
                 # Create indices for common query patterns
-                conn.execute("CREATE INDEX IF NOT EXISTS idx_meminfo ON memories(memory_type, importance)")
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_meminfo ON memories(memory_type, importance)"
+                )
 
     def save(self, memory: Memory) -> None:
         """Upsert a memory entry."""
@@ -86,11 +88,13 @@ class SQLiteStore:
         """Return a memory by id or ``None``."""
         with self._lock:
             with self._get_connection() as conn:
-                row = conn.execute("SELECT * FROM memories WHERE id = ?", (memory_id,)).fetchone()
-                
+                row = conn.execute(
+                    "SELECT * FROM memories WHERE id = ?", (memory_id,)
+                ).fetchone()
+
         if not row:
             return None
-            
+
         mem = Memory(
             id=row["id"],
             content=row["content"],
@@ -111,7 +115,7 @@ class SQLiteStore:
             with self._get_connection() as update_conn:
                 update_conn.execute(
                     "UPDATE memories SET access_count = ?, last_accessed = ? WHERE id = ?",
-                    (mem.access_count, mem.last_accessed, mem.id)
+                    (mem.access_count, mem.last_accessed, mem.id),
                 )
 
         return mem
@@ -128,8 +132,10 @@ class SQLiteStore:
         memories = []
         with self._lock:
             with self._get_connection() as conn:
-                rows = conn.execute("SELECT * FROM memories ORDER BY created_at ASC").fetchall()
-                
+                rows = conn.execute(
+                    "SELECT * FROM memories ORDER BY created_at ASC"
+                ).fetchall()
+
         for row in rows:
             memories.append(
                 Memory(

@@ -17,7 +17,9 @@ class Route:
 
     name: str
     utterances: list[str]  # Example phrases for this route
-    embeddings: np.ndarray = None  # Pre-computed embeddings (set during fit)  # type: ignore
+    embeddings: np.ndarray = (
+        None  # Pre-computed embeddings (set during fit)  # type: ignore
+    )
     threshold: float = 0.7  # Cosine similarity threshold
 
 

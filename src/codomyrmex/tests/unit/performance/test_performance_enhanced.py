@@ -65,7 +65,7 @@ class TestResourceManagerEnhanced:
             name="NVIDIA V100",
             type=ResourceType.CUSTOM,
             capacity=1.0,
-            metadata={"memory": "16GB"}
+            metadata={"memory": "16GB"},
         )
         mgr.add_resource(custom_res)
 
@@ -135,6 +135,7 @@ class TestLazyLoaderEnhanced:
         # Use a module that is definitely not imported yet in this test session
         # (or at least check it)
         import sys
+
         module_name = "calendar"
         if module_name in sys.modules:
             # If it's already there, we can't easily test deferral of the ACTUAL import
@@ -159,6 +160,7 @@ class TestBenchmarkTimingEnhanced:
         runner = BenchmarkRunner()
 
         count = 0
+
         def bench_fn():
             nonlocal count
             count += 1
@@ -174,7 +176,7 @@ class TestBenchmarkTimingEnhanced:
         runner = BenchmarkRunner()
 
         def slow_fn():
-            time.sleep(0.05) # 50ms
+            time.sleep(0.05)  # 50ms
 
         runner.add("sleep_50ms", slow_fn, iterations=3)
         suite = runner.run()

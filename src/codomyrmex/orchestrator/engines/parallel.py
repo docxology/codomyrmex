@@ -69,7 +69,9 @@ class ParallelEngine(ExecutionEngine):
         """Execute one parallelizable level. Returns a failure result or None on success."""
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             futures = {
-                executor.submit(self._execute_task, task, dict(context), task_results): task
+                executor.submit(
+                    self._execute_task, task, dict(context), task_results
+                ): task
                 for task in level
             }
             for future in as_completed(futures):

@@ -21,7 +21,9 @@ class WorkspaceManager:
             check=False,
         )
         if result.returncode != 0:
-            raise RuntimeError(f"Command failed with exit code {result.returncode}: {result.stderr.strip()}")
+            raise RuntimeError(
+                f"Command failed with exit code {result.returncode}: {result.stderr.strip()}"
+            )
         return result.stdout.strip()
 
     def init_workspace(self) -> None:
@@ -46,7 +48,10 @@ class WorkspaceManager:
             return worktree_path
 
         self.worktrees_dir.mkdir(parents=True, exist_ok=True)
-        self._run(["git", "worktree", "add", "-b", branch_name, str(worktree_path)], self.workspace_path)
+        self._run(
+            ["git", "worktree", "add", "-b", branch_name, str(worktree_path)],
+            self.workspace_path,
+        )
         return worktree_path
 
     def remove_worktree(self, task_id: str) -> None:
@@ -55,4 +60,7 @@ class WorkspaceManager:
         if not worktree_path.exists():
             return
 
-        self._run(["git", "worktree", "remove", str(worktree_path), "--force"], self.workspace_path)
+        self._run(
+            ["git", "worktree", "remove", str(worktree_path), "--force"],
+            self.workspace_path,
+        )

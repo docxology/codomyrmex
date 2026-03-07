@@ -100,7 +100,10 @@ class Span:
             self.status = "error"
             self.add_event(
                 "exception",
-                {"exception.type": exc_type.__name__, "exception.message": str(exc_val)},
+                {
+                    "exception.type": exc_type.__name__,
+                    "exception.message": str(exc_val),
+                },
             )
         self.finish(self.status)
 
@@ -131,7 +134,7 @@ class Tracer:
         with tracer.start_span("process_request") as span:
             # ... do work ...
             with tracer.start_span("sub_operation") as child:
-                 child.set_attribute("key", "value")
+                child.set_attribute("key", "value")
 
         print(tracer.export())  # All completed spans
     """

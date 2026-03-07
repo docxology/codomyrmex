@@ -389,7 +389,10 @@ class TestInfomaniakS3Client:
 
         client = InfomaniakS3Client(mock_s3_client)
         url = client.generate_presigned_url(
-            "bucket", "key.txt", expires_in=3600, http_method="GET"  # type: ignore
+            "bucket",
+            "key.txt",
+            expires_in=3600,
+            http_method="GET",  # type: ignore
         )
 
         assert url == "https://s3.example.com/signed"

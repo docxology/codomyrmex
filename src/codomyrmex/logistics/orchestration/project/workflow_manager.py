@@ -313,7 +313,8 @@ class WorkflowManager:
         """Legacy wrapper to get performance summary."""
         return {
             "total_executions": len(self.executions),
-            "average_duration": sum(e.duration or 0 for e in self.executions.values()) / max(1, len(self.executions)),
+            "average_duration": sum(e.duration or 0 for e in self.executions.values())
+            / max(1, len(self.executions)),
         }
 
 
