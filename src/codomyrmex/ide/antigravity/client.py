@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.ide import IDECommandResult, IDEStatus
 from codomyrmex.logging_monitoring import get_logger
 
 from .models import (
@@ -12,8 +13,6 @@ from .models import (
     CommandExecutionError,
     ConversationContext,
     IDEClient,
-    IDECommandResult,
-    IDEStatus,
 )
 
 logger = get_logger(__name__)
