@@ -1115,7 +1115,7 @@ requires-dist = [
     { name = "websockets", marker = "extra == 'physical-management'", specifier = ">=10.0" },
     { name = "z3-solver", marker = "extra == 'formal-verification'", specifier = ">=4.8.0" },
 ]
-provides-extras = ["scientific", "api", "deployment", "code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email", "llm-providers", "embedding", "containerization", "data-visualization", "cache", "soul", "pai-pm", "google-workspace"]
+provides-extras = ["scientific", "api", "deployment", "code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email", "llm-providers", "embedding", "containerization", "data-visualization", "cache", "soul", "openfang", "pai-pm", "google-workspace"]
 
 [package.metadata.requires-dev]
 dev = [

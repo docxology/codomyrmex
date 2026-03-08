@@ -3,7 +3,7 @@
 This module provides integration with 13 agentic frameworks:
 
 - **API-based**: Claude, Codex, O1, DeepSeek, Qwen (extend ``APIAgentBase``)
-- **CLI-based**: Jules, OpenCode, OpenClaw, Gemini, Mistral Vibe, Every Code, agenticSeek (extend ``CLIAgentBase``)
+- **CLI-based**: Jules, OpenCode, OpenClaw, OpenFang, Gemini, Mistral Vibe, Every Code, agenticSeek (extend ``CLIAgentBase``)
 - **Local**: Ollama (via ``llm/ollama/``)
 
 Integration:
@@ -23,7 +23,7 @@ Available submodules:
 - generic: Base agent classes (APIAgentBase, CLIAgentBase, AgentOrchestrator)
 - theory: Theoretical foundations for agentic systems
 - claude, codex, o1, deepseek, qwen: API-based agent clients
-- jules, opencode, gemini, mistral_vibe, every_code, openclaw, agentic_seek: CLI-based agent clients
+- jules, opencode, gemini, mistral_vibe, every_code, openclaw, openfang, agentic_seek: CLI-based agent clients
 - pooling: Multi-agent load balancing and failover
 - evaluation: Agent benchmarking and quality metrics
 - history: Conversation and context persistence
@@ -82,6 +82,11 @@ except ImportError:
 
 try:
     from codomyrmex.agents.openclaw import OpenClawClient
+except ImportError:
+    pass
+
+try:
+    from codomyrmex.agents.openfang import OpenFangClient
 except ImportError:
     pass
 

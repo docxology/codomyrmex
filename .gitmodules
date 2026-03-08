@@ -7,3 +7,7 @@
 [submodule "src/codomyrmex/skills/skills/upstream"]
 	path = src/codomyrmex/skills/skills/upstream
 	url = https://github.com/vibeforge1111/vibeship-spawner-skills
+[submodule "src/codomyrmex/agents/openfang/vendor/openfang"]
+	path = src/codomyrmex/agents/openfang/vendor/openfang
+	url = https://github.com/RightNow-AI/openfang
+	branch = main

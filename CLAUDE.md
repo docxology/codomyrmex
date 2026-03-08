@@ -374,7 +374,14 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: MEMORY/WORK/20260307-000000_security-wontfix-batch/patch_remaining_wontfix.py (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/PRD.md (edit), MEMORY/WORK/20260307-120000_agents-droid-zero-mock-tests/PRD.md (create), MEMORY/WORK/20260307-120000_data-visualization-tests/PRD.md (create), .desloppify/external_review_sessions/ext_20260308_003142_dbbd0d5c/review_result.json (create), src/codomyrmex/tests/unit/agents/test_droid_full.py (create), src/codomyrmex/tests/unit/email/test_email_provider_full.py (create), .desloppify/external_review_sessions/ext_20260308_003142_dbbd0d5c/review_result.json (edit), src/codomyrmex/tests/unit/data_visualization/test_plotter_wrapper_and_gaps.py (create), src/codomyrmex/tests/unit/email/test_email_provider_full.py (edit)
-  ... and 4 more
+Files: MEMORY/WORK/20260307-160000_agents-openfang-integration/PRD.md (create), src/codomyrmex/agents/openfang/exceptions.py (create), src/codomyrmex/agents/openfang/config.py (create), src/codomyrmex/agents/openfang/core.py (create), src/codomyrmex/agents/openfang/hands.py (create), src/codomyrmex/agents/openfang/update.py (create), src/codomyrmex/agents/openfang/__init__.py (create), src/codomyrmex/agents/openfang/py.typed (create), src/codomyrmex/tests/unit/agents/openfang/__init__.py (create), src/codomyrmex/agents/openfang/mcp_tools.py (create)
+  ... and 17 more
+
+## Crash Recovery
+Last session (2026-03-07T16:44:07.951471) was not properly closed (crash/kill).
+Recorded 31 file changes before crash.
+Last changed files: src/codomyrmex/agents/openfang/API_SPECIFICATION.md, src/codomyrmex/agents/openfang/MCP_TOOL_SPECIFICATION.md, src/codomyrmex/agents/openfang/PAI.md, src/codomyrmex/agents/openfang/SPEC.md, src/codomyrmex/agents/openfang/AGENTS.md
+Bridge from previous session is valid (above).
+For details use: memory_search("changes last session")
 
 # === END COGNILAYER ===

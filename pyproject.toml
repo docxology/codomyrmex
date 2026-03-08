@@ -283,6 +283,9 @@ soul = [
     "soul-agent>=0.1.4",  # Zero-database, file-based persistent agent memory
 ]
 
+# openfang — Agent OS integration — binary installed separately via curl or cargo
+openfang = []  # openfang binary installed separately; no Python deps
+
 pai_pm = []
 # NOTE: requires bun runtime (https://bun.sh) — no Python packages needed
 # After install: cd src/codomyrmex/pai_pm/server && bun install
@@ -411,6 +414,7 @@ markers = [
     "orchestrator: Orchestrator and workflow tests",
     "soul: soul module tests (persistent markdown-memory LLM agents)",
     "aider: Aider AI pair programming tests",
+    "openfang: openfang Agent OS integration tests",
     "pai_pm: PAI Project Manager module tests (requires bun for server tests)",
     "google_workspace: Google Workspace API and gws CLI tests",
 ]
