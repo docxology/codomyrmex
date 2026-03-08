@@ -162,7 +162,7 @@ if __name__ == "__main__":
         alpha=0.6,
     )
     logger.info(
-        f"Scatter plot example saved to {output_dir / 'basic_scatter_plot.png'}"
+        "Scatter plot example saved to %s", output_dir / "basic_scatter_plot.png"
     )
 
     logger.info("--- Example: Scatter Plot with Different Dot Size ---")
@@ -180,5 +180,5 @@ if __name__ == "__main__":
         dot_color="purple",
     )
     logger.info(
-        f"Scatter plot example saved to {output_dir / 'quadratic_scatter_plot.png'}"
+        "Scatter plot example saved to %s", output_dir / "quadratic_scatter_plot.png"
     )

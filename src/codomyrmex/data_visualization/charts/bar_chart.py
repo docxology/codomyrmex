@@ -164,7 +164,7 @@ if __name__ == "__main__":
         bar_color="lightcoral",
     )
     logger.info(
-        f"Vertical bar chart example saved to {output_dir / 'vertical_bar_chart.png'}"
+        "Vertical bar chart example saved to %s", output_dir / "vertical_bar_chart.png"
     )
 
     logger.info("--- Example: Horizontal Bar Chart ---")
@@ -180,7 +180,7 @@ if __name__ == "__main__":
         bar_color="mediumseagreen",
     )
     logger.info(
-        f"Horizontal bar chart example saved to {output_dir / 'horizontal_bar_chart.png'}"
+        "Horizontal bar chart example saved to %s", output_dir / "horizontal_bar_chart.png"
     )
 
     if not logging.getLogger("").hasHandlers():

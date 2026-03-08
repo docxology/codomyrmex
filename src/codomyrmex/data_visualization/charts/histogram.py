@@ -148,7 +148,7 @@ if __name__ == "__main__":
         hist_color="darkorange",
         edge_color="black",
     )
-    logger.info(f"Histogram example saved to {output_dir / 'basic_histogram.png'}")
+    logger.info("Histogram example saved to %s", output_dir / "basic_histogram.png")
 
     logger.info("--- Example: Histogram with Fewer Bins ---")
     sample_data_2 = [random.randint(1, 10) for _ in range(200)]
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         edge_color="#581845",  # Darker edge color
     )
     logger.info(
-        f"Histogram example saved to {output_dir / 'integer_histogram_fewer_bins.png'}"
+        "Histogram example saved to %s", output_dir / "integer_histogram_fewer_bins.png"
     )
 
     if not logging.getLogger("").hasHandlers():

@@ -76,94 +76,65 @@ class FabricManager:
             self.logger.warning("Fabric command timed out: %s", str(e))
             raise
 
+    def _make_error_result(self, pattern: str, error: str) -> dict[str, Any]:
+        """Build and record an error result dict."""
+        result = {
+            "success": False,
+            "error": error,
+            "output": "",
+            "pattern": pattern,
+            "timestamp": datetime.now().isoformat(),
+        }
+        self.results_history.append(result)
+        return result
+
+    def _run_subprocess(self, cmd: list[str], input_text: str, pattern: str) -> dict[str, Any]:
+        """Write input to temp file, run cmd, return result dict."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as tmp:
+            tmp.write(input_text)
+            tmp.flush()
+            with open(tmp.name) as input_file:
+                start_time = datetime.now()
+                proc = subprocess.run(
+                    cmd, stdin=input_file, capture_output=True, text=True, timeout=120
+                )
+                end_time = datetime.now()
+            os.unlink(tmp.name)
+
+        result_data = {
+            "success": proc.returncode == 0,
+            "output": proc.stdout,
+            "error": proc.stderr if proc.returncode != 0 else "",
+            "pattern": pattern,
+            "duration": (end_time - start_time).total_seconds(),
+            "timestamp": start_time.isoformat(),
+        }
+        self.results_history.append(result_data)
+        if result_data["success"]:
+            self.logger.info(
+                "Fabric pattern '%s' executed successfully in %.2fs",
+                pattern, result_data["duration"],
+            )
+        else:
+            self.logger.error(
+                "Fabric pattern '%s' failed: %s", pattern, result_data["error"]
+            )
+        return result_data
+
     def run_pattern(
         self, pattern: str, input_text: str, additional_args: list[str] | None = None
     ) -> dict[str, Any]:
-        """
-        Run a Fabric pattern with given input.
-
-        Args:
-            pattern: Name of the Fabric pattern to run
-            input_text: Input text to process
-            additional_args: Additional command-line arguments
-
-        Returns:
-            Dictionary with execution results
-        """
+        """Run a Fabric pattern with given input."""
         if not self.fabric_available:
-            return {
-                "success": False,
-                "error": "Fabric not available",
-                "output": "",
-                "pattern": pattern,
-            }
+            return {"success": False, "error": "Fabric not available", "output": "", "pattern": pattern}
 
-        cmd = [self.fabric_binary, "--pattern", pattern]
-        if additional_args:
-            cmd.extend(additional_args)
-
+        cmd = [self.fabric_binary, "--pattern", pattern, *(additional_args or [])]
         try:
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".txt", delete=False
-            ) as tmp:
-                tmp.write(input_text)
-                tmp.flush()
-
-                with open(tmp.name) as input_file:
-                    start_time = datetime.now()
-                    result = subprocess.run(
-                        cmd,
-                        stdin=input_file,
-                        capture_output=True,
-                        text=True,
-                        timeout=120,
-                    )
-                    end_time = datetime.now()
-
-                os.unlink(tmp.name)
-
-                result_data = {
-                    "success": result.returncode == 0,
-                    "output": result.stdout,
-                    "error": result.stderr if result.returncode != 0 else "",
-                    "pattern": pattern,
-                    "duration": (end_time - start_time).total_seconds(),
-                    "timestamp": start_time.isoformat(),
-                }
-
-                self.results_history.append(result_data)
-
-                if result_data["success"]:
-                    self.logger.info(
-                        f"Fabric pattern '{pattern}' executed successfully in {result_data['duration']:.2f}s"
-                    )
-                else:
-                    self.logger.error(
-                        f"Fabric pattern '{pattern}' failed: {result_data['error']}"
-                    )
-
-                return result_data
-
+            return self._run_subprocess(cmd, input_text, pattern)
         except subprocess.TimeoutExpired:
-            error_result = {
-                "success": False,
-                "error": "Pattern execution timeout",
-                "output": "",
-                "pattern": pattern,
-                "timestamp": datetime.now().isoformat(),
-            }
-            self.results_history.append(error_result)
-            return error_result
+            return self._make_error_result(pattern, "Pattern execution timeout")
         except Exception as e:
-            error_result = {
-                "success": False,
-                "error": f"Execution error: {e!s}",
-                "output": "",
-                "pattern": pattern,
-                "timestamp": datetime.now().isoformat(),
-            }
-            self.results_history.append(error_result)
-            return error_result
+            return self._make_error_result(pattern, f"Execution error: {e!s}")
 
     def is_available(self) -> bool:
         """Check if Fabric is available."""

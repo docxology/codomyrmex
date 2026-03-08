@@ -118,7 +118,7 @@ class FeatureService:
                 self.store.set_value(name, entity_id, value)
             except FeatureStoreError as e:
                 logger.error(
-                    f"Error ingesting feature '{name}' for entity '{entity_id}': {e}"
+                    "Error ingesting feature '%s' for entity '%s': %s", name, entity_id, e
                 )
                 raise
 
@@ -138,7 +138,7 @@ class FeatureService:
                     count += 1
                 except FeatureStoreError as e:
                     logger.warning(
-                        f"Skipping record for entity '{entity_id}' due to error: {e}"
+                        "Skipping record for entity '%s' due to error: %s", entity_id, e
                     )
             else:
                 logger.warning("Skipping record: missing '%s' field", entity_id_field)

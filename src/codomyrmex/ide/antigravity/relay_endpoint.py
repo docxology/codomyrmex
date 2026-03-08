@@ -137,7 +137,7 @@ class RelayEndpoint:
         )
         self._thread.start()
         logger.info(
-            f"RelayEndpoint started: {self.identity} on {self.relay.channel_id}"
+            "RelayEndpoint started: %s on %s", self.identity, self.relay.channel_id
         )
 
     def stop(self) -> None:
@@ -200,7 +200,7 @@ class RelayEndpoint:
 
     def _handle_chat(self, msg: RelayMessage) -> None:
         """Try custom handlers first, then auto-respond via LLM."""
-        logger.info(f"[{msg.sender}] {msg.content[:100]}")
+        logger.info("[%s] %s", msg.sender, msg.content[:100])
         for handler in self._on_message:
             try:
                 response = handler(msg)
