@@ -2,11 +2,14 @@
 Ruby Language Manager.
 """
 
+import logging
 import os
 import subprocess
 import tempfile
 
 from codomyrmex.languages.base import BaseLanguageManager
+
+logger = logging.getLogger(__name__)
 
 
 class RubyManager(BaseLanguageManager):
@@ -41,7 +44,7 @@ class RubyManager(BaseLanguageManager):
             return True
         except Exception as e:
             # Bundle might not be installed; fallback to simple dir creation
-            print(f"Warning on Ruby setup: {e}")
+            logger.warning("Warning on Ruby setup: %s", e)
             return True
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:

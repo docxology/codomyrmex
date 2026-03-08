@@ -2,11 +2,14 @@
 Go Language Manager.
 """
 
+import logging
 import os
 import subprocess
 import tempfile
 
 from codomyrmex.languages.base import BaseLanguageManager
+
+logger = logging.getLogger(__name__)
 
 
 class GoManager(BaseLanguageManager):
@@ -44,8 +47,8 @@ class GoManager(BaseLanguageManager):
                 capture_output=True,
             )
             return True
-        except Exception as e:
-            print(f"Failed to setup Go project: {e}")
+        except (OSError, subprocess.SubprocessError) as e:
+            logger.warning("Failed to setup Go project: %s", e)
             return False
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:

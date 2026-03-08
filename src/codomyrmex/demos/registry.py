@@ -100,8 +100,8 @@ class DemoRegistry:
                 if '"""' in content:
                     doc = content.split('"""')[1].strip()
                     description = doc.split("\n")[0]
-            except Exception as _exc:
-                pass
+            except (OSError, IndexError, ValueError) as _exc:
+                logger.debug("Could not parse docstring from %s: %s", script_path, _exc)
 
             self.register(
                 name=name,
@@ -110,62 +110,37 @@ class DemoRegistry:
                 category="script",
             )
 
+    def _execute_target(self, info: "DemoInfo", **kwargs: Any) -> tuple[bool, str, str | None]:
+        """Execute a demo target and return (success, output, error)."""
+        if isinstance(info.target, Path):
+            res = thin.run(info.target, **kwargs)
+            success = res.get("success") if "success" in res else (res.get("status") == "passed")
+            return success, res.get("stdout", ""), res.get("stderr") if not success else None
+        if inspect.iscoroutinefunction(info.target):
+            import asyncio
+            val = asyncio.run(info.target(**kwargs))
+        else:
+            val = info.target(**kwargs)
+        success = True if val is None else bool(val)
+        return success, str(val) if val is not None else "", None
+
     def run_demo(self, name: str, **kwargs: Any) -> DemoResult:
         """Run a registered demonstration."""
         info = self.get_demo(name)
         if not info:
-            return DemoResult(
-                name=name, success=False, error=f"Demo '{name}' not found."
-            )
+            return DemoResult(name=name, success=False, error=f"Demo '{name}' not found.")
 
         start_time = time.time()
         logger.info("Starting demo: %s", name)
-
         try:
-            if isinstance(info.target, Path):
-                # Run as script
-                res = thin.run(info.target, **kwargs)
-                # thin.run returns a result from run_script or shell
-                # For run_script, success is determined by exit code
-                success = (
-                    res.get("success")
-                    if "success" in res
-                    else (res.get("status") == "passed")
-                )
-                output = res.get("stdout", "")
-                error = res.get("stderr") if not success else None
-            else:
-                # Run as callable
-                if inspect.iscoroutinefunction(info.target):
-                    import asyncio
-
-                    val = asyncio.run(info.target(**kwargs))
-                else:
-                    val = info.target(**kwargs)
-
-                success = True if val is None else bool(val)
-                output = str(val) if val is not None else ""
-                error = None
-
-            execution_time = time.time() - start_time
-            logger.info(
-                f"Demo '{name}' finished in {execution_time:.2f}s (success={success})"
-            )
-
-            return DemoResult(
-                name=name,
-                success=success,
-                output=output,
-                error=error,
-                execution_time=execution_time,
-            )
-
+            success, output, error = self._execute_target(info, **kwargs)
+            elapsed = time.time() - start_time
+            logger.info("Demo '%s' finished in %.2fs (success=%s)", name, elapsed, success)
+            return DemoResult(name=name, success=success, output=output, error=error, execution_time=elapsed)
         except Exception as e:
-            execution_time = time.time() - start_time
-            logger.error(f"Demo '{name}' failed: {e}", exc_info=True)
-            return DemoResult(
-                name=name, success=False, error=str(e), execution_time=execution_time
-            )
+            elapsed = time.time() - start_time
+            logger.error("Demo '%s' failed: %s", name, e, exc_info=True)
+            return DemoResult(name=name, success=False, error=str(e), execution_time=elapsed)
 
     def run_all(self, **kwargs: Any) -> list[DemoResult]:
         """Run all registered demos."""

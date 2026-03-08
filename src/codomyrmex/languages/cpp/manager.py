@@ -2,11 +2,14 @@
 C++ Language Manager.
 """
 
+import logging
 import os
 import subprocess
 import tempfile
 
 from codomyrmex.languages.base import BaseLanguageManager
+
+logger = logging.getLogger(__name__)
 
 
 class CppManager(BaseLanguageManager):
@@ -45,8 +48,8 @@ class CppManager(BaseLanguageManager):
         try:
             os.makedirs(os.path.join(path, "src"), exist_ok=True)
             return True
-        except Exception as e:
-            print(f"Failed to setup C++ project: {e}")
+        except OSError as e:
+            logger.warning("Failed to setup C++ project: %s", e)
             return False
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
@@ -95,9 +98,3 @@ class CppManager(BaseLanguageManager):
         with tempfile.TemporaryDirectory() as temp_dir:
             return self.use_script(script_content, temp_dir)
 
-    def _cleanup(self, files: list[str]) -> None:
-        for file in files:
-            try:
-                os.remove(file)
-            except Exception as _exc:
-                pass
