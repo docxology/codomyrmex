@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — src/codomyrmex
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -32,9 +32,10 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 
 | Module | PAI Capability | Description |
 | :--- | :--- | :--- |
-| [cerebrum/](cerebrum/) | Reasoning Engine | Case-based reasoning (`query_knowledge_base`, `add_case_reference`) |
-| [agentic_memory/](agentic_memory/) | Memory Systems | Long-term memory for agents (`memory_put`, `memory_get`, `memory_search`) |
-| [search/](search/) | Document Search | Full-text, indexed, and fuzzy search (`search_documents`, `search_index_query`, `search_fuzzy`) |
+| [cerebrum/](cerebrum/) | Reasoning Engine | Case-based reasoning, active inference surprise signals |
+| [agentic_memory/](agentic_memory/) | Memory Systems | Persistent memory systems, Obsidian vault sync |
+| [graph_rag/](graph_rag/) | Knowledge Graph | Multi-hop Graph RAG retrieval |
+| [search/](search/) | Document Search | Full-text, indexed, and fuzzy search |
 
 ### Workflow Automation
 

@@ -254,3 +254,4 @@ src/codomyrmex/codomyrmex/codomyrmex.llm/
 cov_config.json
 codomyrmex_inventory.json
 /.desloppify
+/chroma_db

@@ -5,7 +5,6 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.vector_store import (
-    DistanceMetric,
     SearchResult,
     VectorEntry,
     VectorStore,
@@ -16,12 +15,12 @@ logger = get_logger(__name__)
 try:
     import chromadb
 except ImportError:
-    chromadb = None
+    chromadb = None  # type: ignore
 
 
 class ChromaVectorStore(VectorStore):
     """Vector store backed by ChromaDB.
-    
+
     Provides true K-nearest-neighbor semantic search using
     an embedded or persistent Chroma client.
     """
@@ -37,7 +36,7 @@ class ChromaVectorStore(VectorStore):
                 "chromadb is not installed. Please install it using `uv pip install chromadb` "
                 "or add it to dependencies to use ChromaVectorStore."
             )
-            
+
         if persist_directory:
             self._client = chromadb.PersistentClient(path=persist_directory)
         else:
@@ -47,7 +46,7 @@ class ChromaVectorStore(VectorStore):
         # We default to cosine.
         metadata = {"hnsw:space": distance_metric}
         self._collection = self._client.get_or_create_collection(
-            name=collection_name, 
+            name=collection_name,
             metadata=metadata
         )
         self._distance_metric = distance_metric
@@ -73,7 +72,7 @@ class ChromaVectorStore(VectorStore):
         )
         if not result["ids"]:
             return None
-            
+
         return VectorEntry(
             id=result["ids"][0],
             embedding=result["embeddings"][0],
@@ -101,20 +100,20 @@ class ChromaVectorStore(VectorStore):
         filter_fn: Callable[[dict[str, Any]], bool] | None = None,
     ) -> list[SearchResult]:
         """Search for similar vectors.
-        
-        Note: `filter_fn` requires pulling all metadata and discarding results 
+
+        Note: `filter_fn` requires pulling all metadata and discarding results
         if evaluated purely in Python. Chroma accepts a `where` dict for meta filtering,
-        but for compatibility with VectorStore ABC, we will over-fetch and filter in memory, 
+        but for compatibility with VectorStore ABC, we will over-fetch and filter in memory,
         or just apply it if small.
         """
         # If we have a filter_fn, we might need to fetch more than k.
         fetch_k = max(k * 5, 100) if filter_fn else k
-        
+
         # Determine total items to avoid querying more than what's available
         item_count = self.count()
         if item_count == 0:
             return []
-            
+
         fetch_k = min(fetch_k, item_count)
 
         results = self._collection.query(
@@ -122,7 +121,7 @@ class ChromaVectorStore(VectorStore):
             n_results=fetch_k,
             include=["embeddings", "metadatas", "distances"]
         )
-        
+
         if not results["ids"] or not results["ids"][0]:
             return []
 
@@ -136,7 +135,7 @@ class ChromaVectorStore(VectorStore):
             meta = metadatas[i] if metadatas else {}
             if filter_fn and not filter_fn(meta):
                 continue
-                
+
             # Chroma returns distance, but our interface expects score (where higher = better for cosine)
             score = 1.0 - distances[i] if self._distance_metric == "cosine" else distances[i]
 

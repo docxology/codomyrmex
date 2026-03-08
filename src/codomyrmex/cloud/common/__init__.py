@@ -299,6 +299,14 @@ class CloudConfig:
         return config
 
 
+from .rate_limiter import (
+    RateLimiterConfig,
+    TokenBucketLimiter,
+    get_provider_limiter,
+    rate_limited,
+    reset_all_limiters,
+)
+
 __all__ = [
     "CloudClient",
     "CloudConfig",
@@ -307,7 +315,12 @@ __all__ = [
     "CloudProvider",
     "CloudResource",
     "ComputeClient",
+    "RateLimiterConfig",
     "ResourceType",
     "ServerlessClient",
     "StorageClient",
+    "TokenBucketLimiter",
+    "get_provider_limiter",
+    "rate_limited",
+    "reset_all_limiters",
 ]

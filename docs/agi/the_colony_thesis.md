@@ -178,7 +178,7 @@ graph LR
         DEFENSE2["defense/<br/><i>prevent harmful actions</i>"]
         TRUST2["trust_gateway<br/><i>gate capability access</i>"]
         SEARCH2["search + system_discovery<br/><i>environmental sensing</i>"]
-        MODULES2["127 domain modules<br/><i>specialized processors</i>"]
+        MODULES2["128 domain modules<br/><i>specialized processors</i>"]
     end
 
     K_LINE --> AMEM2
@@ -226,7 +226,7 @@ The generality of the colony grows *monotonically* with module count — each ne
 
 There is an analogue to Chalmers' (1995) "hard problem of consciousness": even if we explain every causal mechanism in the colony — every tool invocation, every event, every trust-level transition — we have not explained *why the colony seems to understand software development*. The hard problem of colony intelligence:
 
-**Why does the interaction of 127 specialized modules, none of which understands software, produce a system that appears to understand software?**
+**Why does the interaction of 128 specialized modules, none of which understands software, produce a system that appears to understand software?**
 
 This is the emergence question from [emergence_and_scale.md](./emergence_and_scale.md) restated in the starkest terms. The Colony Thesis does not answer it — it simply observes that the same question applies to ant colonies, to brains, and to economies. In each case, the answer appears to be: *there is no understanding inside*. There is only interaction. The colony's "understanding" of software is the colony-level pattern of tool invocations over time — a pattern that an external observer interprets as understanding but that has no internal locus.
 

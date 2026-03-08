@@ -42,6 +42,8 @@ try:
 except ImportError:
     pass
 
+from codomyrmex.ide.antigravity.client import _AntigravityClientMixin
+
 try:
     from codomyrmex.logging_monitoring import get_logger
 
@@ -145,7 +147,7 @@ def _extract_context_args(request: AgentRequest) -> dict[str, Any]:
 
 if BaseAgent is not None:
 
-    class AntigravityAgent(BaseAgent):
+    class AntigravityAgent(_AntigravityClientMixin, BaseAgent):
         """Wraps AntigravityClient as a full AgentInterface participant.
 
         This adapter enables the ``AgentOrchestrator`` to include Antigravity
@@ -180,19 +182,6 @@ if BaseAgent is not None:
             )
             self._client = client
             self._tool_registry: ToolRegistry | None = None
-
-        @property
-        def client(self) -> Any:
-            """Lazy-initialize the AntigravityClient.
-
-            Returns:
-                The AntigravityClient instance.
-            """
-            if self._client is None:
-                from codomyrmex.ide.antigravity import AntigravityClient
-
-                self._client = AntigravityClient()
-            return self._client
 
         def connect(self) -> None:
             """Connect the underlying client."""

@@ -6,6 +6,7 @@
  */
 
 import { json, error, parseBody, broadcast } from "../helpers.ts";
+import { LLM_MODEL } from "../config.ts";
 
 export async function handleInterviewRoutes(
     path: string,
@@ -41,7 +42,7 @@ export async function handleInterviewRoutes(
         let questions: string[] = [];
         try {
             const ollamaPath = Bun.which("ollama") ?? "ollama";
-            const proc = Bun.spawn([ollamaPath, "run", "llama3.2:1b", prompt], {
+            const proc = Bun.spawn([ollamaPath, "run", LLM_MODEL, prompt], {
                 stdout: "pipe", stderr: "pipe", env: { ...process.env, NO_COLOR: "1" },
             });
             const output = await new Response(proc.stdout).text();
@@ -112,7 +113,7 @@ export async function handleInterviewRoutes(
 
             try {
                 const ollamaPath = Bun.which("ollama") ?? "ollama";
-                const proc = Bun.spawn([ollamaPath, "run", "llama3.2:1b", summaryPrompt], {
+                const proc = Bun.spawn([ollamaPath, "run", LLM_MODEL, summaryPrompt], {
                     stdout: "pipe", stderr: "pipe", env: { ...process.env, NO_COLOR: "1" },
                 });
                 session.summary = await new Response(proc.stdout).text();

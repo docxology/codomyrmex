@@ -70,10 +70,25 @@ def cli_commands():
     }
 
 
+from .rotation import (
+    AuditEvent,
+    CredentialEntry,
+    CredentialRotator,
+    CredentialStore,
+    InMemoryCredentialStore,
+    RotationPolicy,
+)
+
 __all__ = [
     "APIKeyManager",
+    "AuditEvent",
     "Authenticator",
+    "CredentialEntry",
+    "CredentialRotator",
+    "CredentialStore",
+    "InMemoryCredentialStore",
     "PermissionRegistry",
+    "RotationPolicy",
     "Token",
     "TokenManager",
     "TokenValidator",

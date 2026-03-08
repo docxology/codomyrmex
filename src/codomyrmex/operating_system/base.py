@@ -15,6 +15,22 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
+
+def _run(cmd: str, timeout: float = 10.0) -> str:
+    """Run a shell command and return stripped stdout."""
+    try:
+        result = subprocess.run(
+            cmd,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+        )
+        return result.stdout.strip()
+    except Exception:
+        return ""
+
+
 # ── Enums ───────────────────────────────────────────────────────────
 
 

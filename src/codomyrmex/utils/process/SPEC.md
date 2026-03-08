@@ -1,6 +1,6 @@
 # Process Utilities - Specification
 
-> **Codomyrmex v1.1.4** | Sub-module of `utils` | March 2026
+> **Codomyrmex v1.1.9** | Sub-module of `utils` | March 2026
 
 ## Overview
 

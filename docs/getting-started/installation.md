@@ -5,6 +5,7 @@
 **👉 New Location: [setup.md](setup.md)**
 
 This file now serves as a redirect to the complete setup guide that includes:
+
 - Installation instructions for all platforms
 - Configuration and environment setup
 - Troubleshooting and common issues
@@ -18,6 +19,7 @@ This file now serves as a redirect to the complete setup guide that includes:
 ## 🎯 Quick Start (Recommended)
 
 ### **Option 1: UV-Optimized Setup (Fastest & Most Reliable)**
+
 ```bash
 # Clone and setup everything automatically with uv
 git clone https://github.com/docxology/codomyrmex.git
@@ -26,6 +28,7 @@ cd codomyrmex
 ```
 
 ### **Option 2: Manual UV Setup**
+
 ```bash
 # 1. Install uv (if not already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -48,31 +51,43 @@ codomyrmex check
 Before installing Codomyrmex, ensure you have:
 
 ### **Required**
+
 - **Python 3.10+** (latest versions recommended for best package compatibility)
+
   ```bash
   python3 --version  # Should be 3.10 or higher
   ```
+
 - **uv** (package manager used across Codomyrmex)
+
   ```bash
   uv --version || curl -LsSf https://astral.sh/uv/install.sh | sh
   ```
+
 - **git** (version control)
+
   ```bash
   git --version
   ```
 
 ### **Optional (for specific modules)**
+
 - **Node.js 18+** (for documentation generation)
+
   ```bash
   node --version  # Should be 18.0 or higher
   npm --version
   ```
+
 - **Docker** (for code execution sandbox)
+
   ```bash
   docker --version
   docker run hello-world  # Test Docker installation
   ```
+
 - **Graphviz** (for dependency visualization)
+
   ```bash
   # macOS
   brew install graphviz
@@ -157,6 +172,7 @@ EOF
 Some modules may require additional setup:
 
 #### **Documentation Module**
+
 ```bash
 # Install Node.js dependencies for documentation generation
 cd src/codomyrmex/documentation
@@ -165,6 +181,7 @@ cd ../../..
 ```
 
 #### **Docker for Code Execution**
+
 ```bash
 # Test Docker setup
 docker run --rm python:3.11-slim python -c "print('Docker works!')"
@@ -173,6 +190,7 @@ docker run --rm python:3.11-slim python -c "print('Docker works!')"
 ## ✅ Verification & Testing
 
 ### **Step 1: Basic System Check**
+
 ```bash
 # Verify Codomyrmex is working correctly
 codomyrmex check
@@ -186,6 +204,7 @@ codomyrmex check
 ```
 
 ### **Step 2: Interactive Exploration**
+
 ```bash
 # Launch the interactive shell for hands-on exploration
 ./start_here.sh
@@ -199,6 +218,7 @@ InteractiveShell().run()
 ```
 
 **Try these commands in the interactive shell:**
+
 ```bash
 🐜 codomyrmex> explore                    # Overview of all modules
 🐜 codomyrmex> forage visualization       # Find visualization capabilities
@@ -239,6 +259,7 @@ print(f"✅ Sandbox test: {sandbox_result['success']}")
 ```
 
 ### **Step 4: Run Comprehensive Tests**
+
 ```bash
 # Run all tests with coverage reporting
 uv run pytest src/codomyrmex/tests/ --cov=src/codomyrmex --cov-report=html
@@ -254,6 +275,7 @@ open src/codomyrmex/tests/htmlcov/index.html  # View coverage report
 ```
 
 ### **Step 5: Code Quality Check**
+
 ```bash
 # Run linting on the main codebase
 uv run ruff check src/codomyrmex/
@@ -296,6 +318,7 @@ uv pip list | grep -E "(matplotlib|numpy|pytest|docker)"
 ### **🚨 Common Issues & Solutions**
 
 #### **❌ "Module not found" Errors**
+
 ```bash
 # Problem: ImportError when trying to use Codomyrmex
 # Solution: Ensure virtual environment is activated and installation is correct
@@ -317,6 +340,7 @@ uv run python -c "import codomyrmex; print('Success!')"
 ```
 
 #### **❌ Python Version Too Old**
+
 ```bash
 # Problem: Python 3.9 or older detected
 # Solution: Upgrade to Python 3.10+
@@ -334,6 +358,7 @@ sudo apt-get install python3.11 python3.11-venv
 ```
 
 #### **❌ Virtual Environment Problems**
+
 ```bash
 # Problem: Virtual environment not working properly
 # Solution: Recreate the environment
@@ -353,6 +378,7 @@ codomyrmex check
 ```
 
 #### **❌ Permission Errors**
+
 ```bash
 # Problem: Permission denied when installing packages
 # Solution: Don't use sudo in virtual environments
@@ -369,6 +395,7 @@ uv sync
 ```
 
 #### **❌ "No module named 'codomyrmex'" After Installation**
+
 ```bash
 # Problem: Module not found despite installation
 # Solution: Check installation and Python path
@@ -391,6 +418,7 @@ uv run python -c "import codomyrmex; print('Fixed!')"
 ### **🔧 Module-Specific Issues**
 
 #### **🤖 AI Features Not Working**
+
 ```bash
 # Problem: AI code generation fails
 # Solution: Check API keys and connectivity
@@ -415,6 +443,7 @@ print('API Keys:', validate_api_keys())
 ```
 
 #### **🐳 Docker/Code Execution Issues**
+
 ```bash
 # Problem: Code execution sandbox fails
 # Solution: Check Docker installation and permissions
@@ -436,6 +465,7 @@ print('Sandbox test:', result['success'])
 ```
 
 #### **📊 Visualization Issues**
+
 ```bash
 # Problem: Can't create plots or display images
 # Solution: Check matplotlib backend and dependencies
@@ -458,6 +488,7 @@ print('Plot test:', result is not None)
 ```
 
 #### **📚 Documentation Build Issues**
+
 ```bash
 # Problem: Documentation website build fails
 # Solution: Check Node.js and dependencies
@@ -480,6 +511,7 @@ npm install
 ### **🔍 Advanced Debugging**
 
 #### **Check System Dependencies**
+
 ```bash
 # Verify all required system packages
 uv run python -c "
@@ -494,7 +526,7 @@ for module in required_modules:
 "
 
 # Check optional dependencies
-optional_modules = ['openai', 'anthropic', 'google.generativeai']
+optional_modules = ['openai', 'anthropic', 'google.genai']
 for module in optional_modules:
     try:
         __import__(module)
@@ -505,6 +537,7 @@ for module in optional_modules:
 ```
 
 #### **Environment Variable Issues**
+
 ```bash
 # Check if .env file is being loaded
 uv run python -c "
@@ -532,11 +565,13 @@ else:
 If these solutions don't resolve your issue:
 
 1. **Check the logs**: Look for detailed error messages
+
    ```bash
    codomyrmex check --verbose
    ```
 
 2. **Review the documentation**: Check module-specific guides
+
    ```bash
    # See available documentation
    find docs/ -name "*.md" | head -10

@@ -45,7 +45,7 @@ uv sync --all-extras
 | `obsidian` | watchdog | File system watching |
 | `calendar` | google-api-python-client | Google Calendar |
 | `email` | google-api-python-client, agentmail | Email providers |
-| `llm_providers` | anthropic, openai, google-generativeai | LLM API clients |
+| `llm_providers` | anthropic, openai, google-genai | LLM API clients |
 | `embedding` | sentence-transformers | Text embeddings |
 | `containerization` | docker | Docker SDK |
 | `data_visualization` | matplotlib, plotly, dash | Chart generation |
@@ -61,6 +61,7 @@ uv sync --all-extras
 and is also incompatible with Python 3.13 (uses `audioop`, removed in 3.13).
 
 **Correct installation:**
+
 ```bash
 uv tool install aider-chat --python 3.12   # isolated tool, not project dep
 ```
@@ -78,6 +79,7 @@ vs. cloud orchestration workloads.
 
 `openai-whisper` transitively requires `audioop` (stdlib, removed in 3.13).
 Use Python 3.12 for the `audio` extra:
+
 ```bash
 uv sync --extra audio --python 3.12
 ```

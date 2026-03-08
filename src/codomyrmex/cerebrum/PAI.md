@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Cerebrum Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -228,7 +228,7 @@ active_inference:
 | Phase | Activity | Key Functions/Tools |
 |-------|----------|-------------------|
 | **OBSERVE** | Retrieve similar cases from the CaseBase; load prior reasoning context | `CaseRetriever.retrieve()`, `query_knowledge_base`, `CaseBase.load()` |
-| **THINK** | Bayesian inference over code quality; active inference to minimize uncertainty | `InferenceEngine.query()`, `ActiveInferenceAgent.select_policy()`, `VariationalFreeEnergy` |
+| **THINK** | Bayesian inference over code quality; active inference to minimize uncertainty; surprise/frisson signal evaluation | `InferenceEngine.query()`, `ActiveInferenceAgent.select_policy()`, `VariationalFreeEnergy`, `evaluate_surprise_signal` |
 | **PLAN** | Select reasoning strategy; configure similarity thresholds and planning horizon | `CerebrumConfig`, `PolicySelector`, `PriorBuilder` |
 | **BUILD** | Generate knowledge-augmented code context; construct Bayesian networks for analysis | `CerebrumEngine.retrieve_similar()`, `BayesianNetwork.add_node()`, `BayesianNetwork.add_edge()` |
 | **EXECUTE** | Run code review pipeline; detect anti-patterns and concept drift | `CodeReviewer`, `AntiPatternDetector`, `ConceptDriftTracker`, `AgentPromptSelector` |
@@ -241,6 +241,7 @@ active_inference:
 |------|-------------|-------------|
 | `query_knowledge_base` | Perform semantic retrieval from the CaseBase | SAFE |
 | `add_case_reference` | Store intelligence context directly into the CaseBase | SAFE |
+| `evaluate_surprise_signal` | Evaluate prediction-error surprise to trigger swarm deployment | SAFE |
 
 Both cerebrum MCP tools are classified as SAFE. Case storage via `add_case_reference` writes to the CaseBase data structure (not the filesystem) and does not require trust elevation.
 

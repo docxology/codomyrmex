@@ -1,6 +1,6 @@
 # Utils Module API Specification
 
-**Version**: v1.1.4 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `utils` module is a collection of common helpers for file operations, JSON handling, hashing, and execution timing.

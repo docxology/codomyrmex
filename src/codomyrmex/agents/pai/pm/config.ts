@@ -44,3 +44,17 @@ export const CODOMYRMEX_CONFIG_DIR = join(homedir(), ".codomyrmex");
 export const GCAL_TOKEN_PATH = join(CODOMYRMEX_CONFIG_DIR, "gcal_token.json");
 export const GCAL_LINKS_PATH = join(CODOMYRMEX_CONFIG_DIR, "gcal_links.json");
 export const GMAIL_TOKEN_PATH = join(CODOMYRMEX_CONFIG_DIR, "gmail_token.json");
+
+// ============================================================================
+// LLM Defaults (configurable via env)
+// ============================================================================
+
+/** Default LLM backend for bikeride/email features. */
+export const LLM_BACKEND = process.env.PAI_PM_LLM_BACKEND || "ollama";
+
+/** Default LLM model for bikeride/email features. */
+export const LLM_MODEL = process.env.PAI_PM_LLM_MODEL || "qwen3:4b";
+
+/** LLM subprocess timeout in milliseconds. */
+export const LLM_TIMEOUT = parseInt(process.env.PAI_PM_LLM_TIMEOUT || "60000");
+

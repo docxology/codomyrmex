@@ -3,7 +3,6 @@ This script demonstrates handling of an invalid prompt by raising an exception.
 It is designed to fail when the input prompt contains the word 'invalid'.
 """
 
-import sys
 
 
 def process_prompt(prompt: str) -> None:

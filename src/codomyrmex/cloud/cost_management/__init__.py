@@ -6,6 +6,13 @@ Spend tracking, budgeting, and cost optimization.
 
 __version__ = "0.1.0"
 
+from .hooks import (
+    AutoCostTracker,
+    CostHook,
+    ModelPrice,
+    ModelPricingTable,
+    cost_tracked,
+)
 from .models import (
     Budget,
     BudgetAlert,
@@ -41,6 +48,7 @@ def cli_commands():
 
 
 __all__ = [
+    "AutoCostTracker",
     "Budget",
     "BudgetAlert",
     "BudgetManager",
@@ -49,12 +57,16 @@ __all__ = [
     "CostCategory",
     # Data classes
     "CostEntry",
+    "CostHook",
     # Stores
     "CostStore",
     "CostSummary",
     # Core
     "CostTracker",
     "InMemoryCostStore",
+    "ModelPrice",
+    "ModelPricingTable",
     # CLI
     "cli_commands",
+    "cost_tracked",
 ]

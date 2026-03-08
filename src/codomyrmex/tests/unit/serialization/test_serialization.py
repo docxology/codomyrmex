@@ -852,7 +852,10 @@ class TestStreamCSV:
     """Tests for CSV streaming read/write."""
 
     def test_roundtrip(self, tmp_path):
-        from codomyrmex.serialization.streaming import stream_csv_read, stream_csv_write
+        from codomyrmex.serialization.streaming import (
+            stream_csv_read,
+            stream_csv_write,
+        )
 
         items = [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "25"}]
         path = tmp_path / "test.csv"

@@ -765,7 +765,7 @@ class TestDisplayHelpers:
                 "cased-kit": False,
                 "openai": False,
                 "anthropic": True,
-                "google-generativeai": False,
+                "google-genai": False,
                 "numpy": True,
                 "matplotlib": False,
                 "pandas": True,

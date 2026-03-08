@@ -216,4 +216,10 @@ def create_vector_store(backend: str = "memory", **kwargs) -> VectorStore:
         return InMemoryVectorStore(**kwargs)
     if backend == "namespaced":
         return NamespacedVectorStore(**kwargs)
+    if backend == "chroma":
+        try:
+            from .chroma import ChromaVectorStore
+            return ChromaVectorStore(**kwargs)
+        except ImportError:
+            raise ValueError("Chroma backend requires chromadb package")
     raise ValueError(f"Unknown backend: {backend}")

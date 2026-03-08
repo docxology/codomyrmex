@@ -1,17 +1,19 @@
 # Hermes Agent - Functional Specification
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v2.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
-To integrate the independent NousResearch `hermes-agent` CLI application within the Codomyrmex agent ecosystem, standardizing its response artifacts under `AgentResponse` and providing Model Context Protocol exposure.
+To integrate NousResearch Hermes capabilities within the Codomyrmex agent ecosystem via a dual-backend client supporting both the `hermes` CLI and Ollama-served Hermes 3 models.
 
 ## Architecture
 
 ```mermaid
 graph TD
     AC[Codomyrmex Agentic Clients] --> HC[HermesClient]
-    HC --> |subprocess| HCLI[hermes CLI]
+    HC --> |auto-detect| BD{Backend?}
+    BD --> |CLI available| HCLI[hermes CLI]
+    BD --> |Ollama fallback| OL[ollama run hermes3]
     HCLI --> |skills| HS[Hermes Skills]
     MCP[MCP Tools] --> HC
     HC -.-> Base[CLIAgentBase]
@@ -19,12 +21,23 @@ graph TD
 
 ## Requirements
 
-1. **Existence Parsing**: Fails gracefully with `HermesError` if `hermes` is not in `$PATH`.
-2. **Command Delegation**: Distinguishes single-turn completion prompts (`chat -q <prompt>`) from diagnostic/system queries (e.g. `status` or `skills`).
-3. **Execution Safety**: Relies on underlying Hermes containerization backend (e.g., Docker, Modal, Local) defined in `~/.hermes/config.yaml`.
-4. **Standard Subclassing**: Must inherit from generic `CLIAgentBase` to adhere to internal Codomyrmex standard interface compliance.
+1. **Dual-Backend**: Auto-detect CLI vs Ollama; configurable via `hermes_backend`.
+2. **Graceful Fallback**: If CLI not in `$PATH`, use Ollama with `hermes3` model.
+3. **Command Delegation**: CLI mode: `chat -q <prompt>` vs `status`/`skills`. Ollama mode: `ollama run <model> <prompt>`.
+4. **Standard Subclassing**: Inherits from `CLIAgentBase` per Codomyrmex standards.
+5. **Error Translation**: All failures wrapped in `HermesError` (extends `AgentError`).
+
+## Configuration
+
+| Key | Default | Description |
+| --- | --- | --- |
+| `hermes_backend` | `auto` | `auto` / `cli` / `ollama` |
+| `hermes_model` | `hermes3` | Ollama model name |
+| `hermes_command` | `hermes` | CLI binary path |
+| `hermes_timeout` | `120` | Subprocess timeout (s) |
 
 ## Integration Points
 
-- Plugs cleanly into `AgentRegistry`.
-- Exposes tools to Claude via `codomyrmex.model_context_protocol.decorators.mcp_tool`.
+- Plugs into `AgentRegistry` via standard `CLIAgentBase` interface.
+- Exposes tools via `codomyrmex.model_context_protocol.decorators.mcp_tool`.
+- MCP tools accept `backend` and `model` parameters for runtime override.

@@ -1,6 +1,6 @@
 # Plugin System API Specification
 
-**Version**: v1.1.4 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `plugin_system` module enables dynamic extension of Codomyrmex capabilities. It discovers, validates, and loads extensions at runtime.

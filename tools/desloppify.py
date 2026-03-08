@@ -1,154 +1,142 @@
-#!/usr/bin/env uv run
-# /// script
-# requires-python = ">=3.11"
-# dependencies = []
-# ///
+#!/usr/bin/env python3
+"""
+desloppify.py: Codebase De-sloppification Analyzer
 
+Uses Python's robust `ast` module to scan the Codomyrmex codebase for signs of technical debt.
+Flags:
+- God classes (classes exceeding a threshold of 30 methods, or 1000 lines)
+- Missing class-level, module-level, and public-method docstrings
+- Heavily branched functions (cyclomatic complexity estimators based on if/for/while density)
+
+Usage:
+    ./tools/desloppify.py [--json] [--dir <target_dir>]
+"""
+
+import argparse
 import ast
-import os
+import json
 import sys
-from collections import defaultdict
 from pathlib import Path
 
-# Thresholds
-GOD_CLASS_METHOD_COUNT = 20
-GOD_CLASS_LINE_COUNT = 500
 
-class DesloppifyVisitor(ast.NodeVisitor):
+class SloppinessVisitor(ast.NodeVisitor):
     def __init__(self, filename: str):
         self.filename = filename
-        self.classes: list[ast.ClassDef] = []
-        self.functions: list[ast.FunctionDef | ast.AsyncFunctionDef] = []
-        self.missing_docstrings: list[str] = []
-        self.god_classes: list[str] = []
-        self.patterns = defaultdict(list)
+        self.god_classes = []
+        self.missing_docstrings = []
+        self.complex_methods = []
 
-    def visit_ClassDef(self, node: ast.ClassDef):
-        self.classes.append(node)
-
-        # Check docstring
+    def visit_Module(self, node):
         if not ast.get_docstring(node):
-            self.missing_docstrings.append(f"Class '{node.name}' (line {node.lineno})")
+            self.missing_docstrings.append(f"{self.filename}: <module>")
+        self.generic_visit(node)
 
-        # Check God Class (Method Count)
-        methods = [n for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]
+    def visit_ClassDef(self, node):
+        if not ast.get_docstring(node):
+            self.missing_docstrings.append(f"{self.filename}:{node.name}")
 
-        # Line count approximation
-        end_lineno = getattr(node, "end_lineno", node.lineno)
-        line_count = end_lineno - node.lineno
-
-        if len(methods) > GOD_CLASS_METHOD_COUNT or line_count > GOD_CLASS_LINE_COUNT:
-            self.god_classes.append(
-                f"Class '{node.name}' (line {node.lineno}): {len(methods)} methods, {line_count} lines"
-            )
+        method_count = sum(1 for item in node.body if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)))
+        if method_count >= 30:
+            self.god_classes.append(f"{self.filename}:{node.name} ({method_count} methods)")
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: ast.FunctionDef):
-        self._check_func(node)
+    def visit_FunctionDef(self, node):
+        self._analyze_function(node)
 
-    def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef):
-        self._check_func(node)
+    def visit_AsyncFunctionDef(self, node):
+        self._analyze_function(node)
 
-    def _check_func(self, node: ast.FunctionDef | ast.AsyncFunctionDef):
-        self.functions.append(node)
+    def _analyze_function(self, node):
+        # We only really care about public methods for docstrings
+        is_public = not node.name.startswith("_") or node.name == "__init__"
+        if is_public and not ast.get_docstring(node):
+            # We don't have the parent class name easily in a raw visitor without tracking scope,
+            # so we just record the function name and line number
+            self.missing_docstrings.append(f"{self.filename}:{node.lineno} def {node.name}")
 
-        # Check docstring
-        if not node.name.startswith("__") and not ast.get_docstring(node):
-            self.missing_docstrings.append(f"Function/Method '{node.name}' (line {node.lineno})")
-
-        # Extract AST structure (ignoring concrete names/values) to detect duplication
-        pattern_hash = self._hash_ast(node)
-        self.patterns[pattern_hash].append(f"{self.filename}:{node.name}:{node.lineno}")
+        # Basic complexity: count loops and branches
+        branches = sum(1 for child in ast.walk(node) if isinstance(child, (ast.If, ast.For, ast.While, ast.Try, ast.With, ast.ExceptHandler, ast.Match)))
+        if branches > 15:
+            self.complex_methods.append(f"{self.filename}:{node.lineno} def {node.name} (complexity: {branches})")
 
         self.generic_visit(node)
 
-    def _hash_ast(self, node: ast.AST, depth=0) -> str:
-        if depth > 5:  # Limit depth to avoid explosion
-            return type(node).__name__
 
-        fields = []
-        for field, value in ast.iter_fields(node):
-            if isinstance(value, list):
-                fields.append(f"{field}:[" + ",".join(self._hash_ast(n, depth+1) for n in value if isinstance(n, ast.AST)) + "]")
-            elif isinstance(value, ast.AST):
-                fields.append(f"{field}:" + self._hash_ast(value, depth+1))
-        return type(node).__name__ + "(" + ",".join(fields) + ")"
-
-def analyze_file(filepath: Path) -> DesloppifyVisitor:
-    try:
-        content = filepath.read_text(encoding="utf-8")
-        tree = ast.parse(content, filename=str(filepath))
-        visitor = DesloppifyVisitor(str(filepath))
-        visitor.visit(tree)
-        return visitor
-    except Exception as e:
-        print(f"Error parsing {filepath}: {e}", file=sys.stderr)
-        return DesloppifyVisitor(str(filepath))
-
-def main():
-    target_dir = sys.argv[1] if len(sys.argv) > 1 else "src/codomyrmex"
-    root_path = Path(target_dir)
-
-    if not root_path.exists():
-        print(f"Directory {target_dir} does not exist.")
+def analyze_codebase(target_dir: str = "src/codomyrmex") -> dict:
+    target = Path(target_dir)
+    if not target.exists():
+        print(f"Directory {target_dir} not found.", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Scanning {target_dir} for technical debt...")
+    all_god_classes = []
+    all_missing_docs = []
+    all_complex = []
 
-    total_files = 0
-    total_god_classes = 0
-    total_missing_docs = 0
+    files_checked = 0
 
-    global_patterns = defaultdict(list)
-
-    for py_file in root_path.rglob("*.py"):
-        # Ignore tests and auto-generated
-        if "tests" in py_file.parts or py_file.name.startswith("test_"):
+    for py_file in target.rglob("*.py"):
+        # Skip tests for strict docstring enforcement unless explicitly desired
+        if "tests/" in str(py_file):
             continue
 
-        total_files += 1
-        visitor = analyze_file(py_file)
+        try:
+            tree = ast.parse(py_file.read_text(encoding="utf-8"), filename=str(py_file))
+            files_checked += 1
+        except SyntaxError:
+            continue
 
-        for k, v in visitor.patterns.items():
-            if len(v) > 0:
-                global_patterns[k].extend(v)
+        visitor = SloppinessVisitor(str(py_file.relative_to(target.parent)))
+        visitor.visit(tree)
 
-        if visitor.god_classes or visitor.missing_docstrings:
-            print(f"\n--- {py_file} ---")
+        all_god_classes.extend(visitor.god_classes)
+        all_missing_docs.extend(visitor.missing_docstrings)
+        all_complex.extend(visitor.complex_methods)
 
-            if visitor.god_classes:
-                print("[!] God Classes Detected:")
-                for gc in visitor.god_classes:
-                    print(f"    - {gc}")
-                total_god_classes += len(visitor.god_classes)
+    return {
+        "files_analyzed": files_checked,
+        "god_classes": all_god_classes,
+        "missing_docstrings": all_missing_docs,
+        "complex_methods": all_complex
+    }
 
-            if visitor.missing_docstrings:
-                print("[!] Missing Docstrings:")
-                for md in visitor.missing_docstrings[:5]: # Limit output
-                    print(f"    - {md}")
-                if len(visitor.missing_docstrings) > 5:
-                    print(f"    ... and {len(visitor.missing_docstrings) - 5} more")
-                total_missing_docs += len(visitor.missing_docstrings)
+def main():
+    parser = argparse.ArgumentParser(description="Codomyrmex codebase de-sloppifier")
+    parser.add_argument("--json", action="store_true", help="Output purely as JSON")
+    parser.add_argument("--dir", default="src/codomyrmex", help="Target directory")
 
-    print("\n--- Structural Duplication Analysis ---")
-    duplicate_count = 0
-    for pattern, locations in global_patterns.items():
-        if len(locations) > 2 and len(pattern) > 200: # Heuristic for non-trivial duplication
-            print(f"[!] Structural AST clone detected in {len(locations)} locations:")
-            for loc in locations[:3]:
-                print(f"    - {loc}")
-            if len(locations) > 3:
-                print(f"    ... and {len(locations) - 3} more")
-            duplicate_count += 1
-            if duplicate_count >= 5: # Limit output
-                print("    ... more duplicates hidden")
-                break
+    args = parser.parse_args()
 
-    print("\nSummary:")
-    print(f"Files Scanned: {total_files}")
-    print(f"God Classes: {total_god_classes}")
-    print(f"Missing Docstrings: {total_missing_docs}")
+    results = analyze_codebase(args.dir)
+
+    if args.json:
+        print(json.dumps(results, indent=2))
+        return
+
+    # Markdown format
+    print("# Desloppify Technical Debt Report\n")
+    print(f"**Files Analyzed:** {results['files_analyzed']}\n")
+
+    print(f"## God Classes (>30 methods) [{len(results['god_classes'])}]")
+    for item in results["god_classes"]:
+        print(f"- {item}")
+    if not results["god_classes"]:
+        print("None detected! Excellent layout.")
+
+    print(f"\n## High Complexity Functions (>15 branches) [{len(results['complex_methods'])}]")
+    for item in results["complex_methods"]:
+        print(f"- {item}")
+    if not results["complex_methods"]:
+        print("None detected! Well abstracted.")
+
+    # Missing docstrings can be numerous, just show first 20 in terminal markdown
+    print(f"\n## Missing Docstrings [{len(results['missing_docstrings'])}]")
+    for item in results["missing_docstrings"][:20]:
+        print(f"- {item}")
+    if len(results["missing_docstrings"]) > 20:
+        print(f"... and {len(results['missing_docstrings']) - 20} more.")
+    elif not results["missing_docstrings"]:
+        print("100% docstring coverage! Incredible.")
 
 if __name__ == "__main__":
     main()

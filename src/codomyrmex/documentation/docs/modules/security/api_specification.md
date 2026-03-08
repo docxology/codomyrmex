@@ -1,6 +1,6 @@
 # Security Module API Specification
 
-**Version**: v1.1.4 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `security` module is a comprehensive suite for digital, physical, and cognitive security operations. It integrates vulnerability scanning, secrets detection, access control, and compliance checking into a single unified API.

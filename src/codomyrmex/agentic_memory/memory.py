@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agentic_memory.models import (
     Memory,
@@ -18,8 +18,11 @@ from codomyrmex.agentic_memory.models import (
     MemoryType,
     RetrievalResult,
 )
-from codomyrmex.agentic_memory.stores import InMemoryStore
-from codomyrmex.vector_store import VectorStore
+from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
+
+if TYPE_CHECKING:
+    from codomyrmex.agentic_memory.stores import InMemoryStore
+    from codomyrmex.vector_store import VectorStore
 
 try:
     from sentence_transformers import SentenceTransformer
@@ -55,8 +58,8 @@ def _recency_score(created_at: float, half_life: float = 3600.0) -> float:
 class AgentMemory:
     """Agent-level memory with remember / recall / forget / search."""
 
-    def __init__(self, store: InMemoryStore | None = None) -> None:
-        self.store = store or InMemoryStore()
+    def __init__(self, store: Any = None) -> None:
+        self.store = store or SQLiteStore()
 
     @property
     def memory_count(self) -> int:
@@ -177,10 +180,17 @@ class VectorStoreMemory:
         vector_store: VectorStore | None = None,
         embedding_model: str = "all-MiniLM-L6-v2",
     ) -> None:
-        self.store = store or InMemoryStore()
+        self.store = store or SQLiteStore()
         self._agent = AgentMemory(self.store)
-        
+
         self.vector_store = vector_store
+        if self.vector_store is None:
+            from codomyrmex.vector_store import create_vector_store
+            try:
+                self.vector_store = create_vector_store(backend="chroma", persist_directory="chroma_db")
+            except (ValueError, ImportError):
+                self.vector_store = create_vector_store(backend="namespaced")
+
         self._embedder = None
         if self.vector_store is not None:
             if SentenceTransformer is None:
@@ -205,7 +215,7 @@ class VectorStoreMemory:
             importance=importance,
             metadata=metadata,
         )
-        
+
         if self.vector_store and self._embedder:
             embedding = self._embedder.encode(content).tolist()
             if isinstance(embedding, list):
@@ -215,7 +225,7 @@ class VectorStoreMemory:
                     embedding=embedding,
                     metadata={"importance": importance.value, "type": memory_type.value}
                 )
-        
+
         return mem
 
     def add(
@@ -230,20 +240,20 @@ class VectorStoreMemory:
         """Search memory, using semantic vector similarity if a backend is configured."""
         if not self.vector_store or not self._embedder:
             return self._agent.search(query, k=k)
-            
+
         if not query:
             return self._agent.search(query, k=k)
 
         query_embedding = self._embedder.encode(query).tolist()
         v_results = self.vector_store.search(query_embedding, k=k * 2)
-        
+
         results: list[RetrievalResult] = []
         for result in v_results:
             mem = self.store.get(result.id)
             if mem:
                 rec = _recency_score(mem.created_at)
                 imp = mem.importance.value / 4.0
-                
+
                 results.append(
                     RetrievalResult(
                         memory=mem,

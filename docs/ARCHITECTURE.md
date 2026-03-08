@@ -1,10 +1,10 @@
 # Codomyrmex System Architecture
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-This document visualizes the full dependency graph across all 127 Codomyrmex modules, auto-generated from static import analysis. Modules are organized into four architectural layers:
+This document visualizes the full dependency graph across all 128 Codomyrmex modules, auto-generated from static import analysis. Modules are organized into four architectural layers:
 
 - **Foundation** — Essential infrastructure (logging, config, environment, MCP, telemetry, terminal)
 - **Core** — Primary development capabilities (coding, search, encryption, data visualization, LLM, etc.)
@@ -113,6 +113,7 @@ graph TD
     git_analysis
     release
     tree_sitter
+    vision
   end
 
   agentic_memory --> model_context_protocol

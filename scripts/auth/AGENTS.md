@@ -1,6 +1,6 @@
 # Codomyrmex Agents — scripts/auth
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 Automation and utility scripts.

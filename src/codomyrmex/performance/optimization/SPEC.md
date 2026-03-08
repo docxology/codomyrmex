@@ -28,7 +28,7 @@ Constructor: `LazyLoader(module_name: str, package: str | None = None)`
 
 ## Pre-configured Loaders
 
-Module-level lazy loaders for common heavy dependencies: `matplotlib.pyplot`, `numpy`, `pandas`, `seaborn`, `plotly.graph_objects`, `openai`, `anthropic`, `google.generativeai`, `docker`, `git`.
+Module-level lazy loaders for common heavy dependencies: `matplotlib.pyplot`, `numpy`, `pandas`, `seaborn`, `plotly.graph_objects`, `openai`, `anthropic`, `google.genai`, `docker`, `git`.
 
 ## Dependencies
 

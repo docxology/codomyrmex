@@ -17,8 +17,12 @@ logger = get_logger(__name__)
 def _agent_memory():
     """Lazy import AgentMemory to avoid circular imports."""
     from codomyrmex.agentic_memory.memory import AgentMemory
-
     return AgentMemory
+
+def _vector_memory():
+    """Lazy import VectorStoreMemory to avoid circular imports."""
+    from codomyrmex.agentic_memory.memory import VectorStoreMemory
+    return VectorStoreMemory
 
 
 @mcp_tool(
@@ -32,6 +36,17 @@ def memory_put(
 ) -> dict[str, Any]:
     """Save a memory. Returns the created memory as a dict."""
     from codomyrmex.agentic_memory.models import MemoryImportance, MemoryType
+
+    if not content or not content.strip():
+        raise ValueError("content must be a non-empty string")
+
+    valid_types = {e.value for e in MemoryType}
+    if memory_type not in valid_types:
+        raise ValueError(f"memory_type must be one of {sorted(valid_types)!r}, got {memory_type!r}")
+
+    valid_importance = {e.name.lower() for e in MemoryImportance}
+    if importance.lower() not in valid_importance:
+        raise ValueError(f"importance must be one of {sorted(valid_importance)!r}, got {importance!r}")
 
     agent = _agent_memory()()
     mem = agent.remember(
@@ -48,17 +63,13 @@ def memory_put(
 )
 def memory_get(memory_id: str) -> dict[str, Any] | None:
     """Fetch a single memory. Returns None if not found."""
-    from codomyrmex.agentic_memory.stores import InMemoryStore
+    if not memory_id or not memory_id.strip():
+        raise ValueError("memory_id must be a non-empty string")
+    agent = _agent_memory()()
+    mem = agent.store.get(memory_id)
+    return mem.to_dict() if hasattr(mem, "to_dict") else mem  # type: ignore
 
-    store = InMemoryStore()
-    mem = store.get(memory_id)
-    return mem.to_dict() if mem else None
 
-
-@mcp_tool(
-    category="agentic_memory",
-    description="Search memories by a text query. Returns ranked results.",
-)
 def memory_search(
     query: str,
     k: int = 5,
@@ -72,8 +83,8 @@ def memory_search(
         context_rules: Optional file_path or module_name context. If provided,
                        applicable rules will be prepended to the results.
     """
-    agent = _agent_memory()()
-    results = agent.search(query, k=k)
+    memory = _vector_memory()()
+    results = memory.search(query, k=k)
 
     formatted_results = [
         {
@@ -124,3 +135,24 @@ def memory_search(
             logger.warning("Rule injection failed during memory_search", exc_info=True)
 
     return formatted_results
+
+
+@mcp_tool(
+    category="agentic_memory",
+    description="Synchronize an Obsidian vault with agentic memory.",
+)
+def obsidian_sync(vault_path: str, export_folder: str = "Memories") -> dict[str, Any]:
+    """Sync Obsidian vault.
+
+    Args:
+        vault_path: Absolute path to the Obsidian vault.
+        export_folder: Path within the vault for exported memories.
+    """
+    from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
+    from codomyrmex.agentic_memory.obsidian_bridge import ObsidianMemoryBridge
+
+    vault = ObsidianVault(vault_path)
+    memory = _vector_memory()()
+    bridge = ObsidianMemoryBridge(vault, memory, export_folder=export_folder)
+
+    return bridge.sync()

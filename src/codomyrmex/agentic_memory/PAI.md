@@ -1,6 +1,6 @@
 # Personal AI Infrastructure -- Agentic Memory Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -121,9 +121,10 @@ profile = UserProfile()
 
 | Tool | Description | Trust Level |
 |------|-------------|-------------|
-| `memory_put` | Store a new memory entry with content, optional type (episodic/semantic/procedural), and importance level | Safe |
-| `memory_get` | Retrieve a specific memory by its unique ID | Safe |
-| `memory_search` | Search memories by text query; returns top-k results ranked by combined relevance/recency/importance score | Safe |
+| `memory_put` | Store a new memory entry with content, optional type, and importance | Safe |
+| `memory_get` | Retrieve a specific memory by its unique ID (persistent) | Safe |
+| `memory_search` | Persistent semantic search across stored memories | Safe |
+| `obsidian_sync` | Bidirectional sync between Obsidian vault and memory store | Safe |
 | `rules_list_modules` | List all Codomyrmex module names that have a defined coding rule | Safe |
 | `rules_get_module_rule` | Get the full coding rule (sections, raw content) for a specific module | Safe |
 | `rules_get_applicable` | Get all applicable coding rules for a file path and/or module, ordered FILE_SPECIFIC → GENERAL | Safe |

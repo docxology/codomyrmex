@@ -291,6 +291,37 @@ def _validate_working_directory(cwd: str | None) -> str | None:
     return os.path.abspath(cwd)
 
 
+def _handle_error(
+    check: bool,
+    error_msg: str,
+    error_type: CommandErrorType,
+    command: str | list[str],
+    duration: float,
+    exc: Exception,
+    stdout: str = "",
+    stderr: str = "",
+) -> SubprocessResult:
+    """Raise CommandError if check=True, otherwise return an error SubprocessResult."""
+    if check:
+        raise CommandError(
+            message=error_msg,
+            error_type=error_type,
+            command=command,
+            return_code=-1,
+            stdout=stdout,
+            stderr=stderr,
+            original_exception=exc,
+        ) from exc
+    return SubprocessResult(
+        return_code=-1,
+        duration=duration,
+        command=command,
+        error_message=error_msg,
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+
 def run_command(
     command: str | list[str],
     *,
@@ -346,10 +377,7 @@ def run_command(
     start_time = time.perf_counter()
 
     try:
-        # Validate working directory
         cwd = _validate_working_directory(cwd)
-
-        # Prepare command and environment
         prepared_command = _prepare_command(command, shell)
         prepared_env = _prepare_environment(env, inherit_env)
 
@@ -357,7 +385,6 @@ def run_command(
             f"Running command: {prepared_command if isinstance(prepared_command, str) else ' '.join(prepared_command)}"
         )
 
-        # Execute the command
         process_result = subprocess.run(
             prepared_command,
             cwd=cwd,
@@ -372,7 +399,6 @@ def run_command(
         )
 
         duration = time.perf_counter() - start_time
-
         result = SubprocessResult(
             stdout=process_result.stdout or "",
             stderr=process_result.stderr or "",
@@ -384,127 +410,60 @@ def run_command(
             if process_result.returncode == 0
             else f"Command exited with code {process_result.returncode}",
         )
-
         logger.debug(
             f"Command completed with return code {result.return_code} in {duration:.3f}s"
         )
-
         if check:
             result.raise_on_error()
-
         return result
 
     except subprocess.TimeoutExpired as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Command timed out after {timeout}s"
         logger.warning(error_msg)
-
-        result = SubprocessResult(
-            stdout=e.stdout.decode(encoding, errors=errors) if e.stdout else "",
-            stderr=e.stderr.decode(encoding, errors=errors) if e.stderr else "",
-            return_code=-1,
-            duration=duration,
-            command=command,
-            timed_out=True,
-            error_message=error_msg,
-        )
-
+        stdout = e.stdout.decode(encoding, errors=errors) if e.stdout else ""
+        stderr = e.stderr.decode(encoding, errors=errors) if e.stderr else ""
         if check:
             raise CommandError(
                 message=error_msg,
                 error_type=CommandErrorType.TIMEOUT,
                 command=command,
                 return_code=-1,
-                stdout=result.stdout,
-                stderr=result.stderr,
+                stdout=stdout,
+                stderr=stderr,
                 original_exception=e,
             ) from e
-
-        return result
+        return SubprocessResult(
+            stdout=stdout, stderr=stderr, return_code=-1, duration=duration,
+            command=command, timed_out=True, error_message=error_msg,
+        )
 
     except FileNotFoundError as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Command not found: {e.filename or command}"
         logger.error(error_msg)
-
-        if check:
-            raise CommandError(
-                message=error_msg,
-                error_type=CommandErrorType.FILE_NOT_FOUND,
-                command=command,
-                original_exception=e,
-            ) from e
-
-        return SubprocessResult(
-            return_code=-1,
-            duration=duration,
-            command=command,
-            error_message=error_msg,
-        )
+        return _handle_error(check, error_msg, CommandErrorType.FILE_NOT_FOUND, command, duration, e)
 
     except PermissionError as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Permission denied: {e}"
         logger.error(error_msg)
-
-        if check:
-            raise CommandError(
-                message=error_msg,
-                error_type=CommandErrorType.PERMISSION_DENIED,
-                command=command,
-                original_exception=e,
-            ) from e
-
-        return SubprocessResult(
-            return_code=-1,
-            duration=duration,
-            command=command,
-            error_message=error_msg,
-        )
+        return _handle_error(check, error_msg, CommandErrorType.PERMISSION_DENIED, command, duration, e)
 
     except subprocess.SubprocessError as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Subprocess error: {e}"
         logger.error(error_msg)
-
-        if check:
-            raise CommandError(
-                message=error_msg,
-                error_type=CommandErrorType.SUBPROCESS_ERROR,
-                command=command,
-                original_exception=e,
-            ) from e
-
-        return SubprocessResult(
-            return_code=-1,
-            duration=duration,
-            command=command,
-            error_message=error_msg,
-        )
+        return _handle_error(check, error_msg, CommandErrorType.SUBPROCESS_ERROR, command, duration, e)
 
     except CommandError:
-        # Re-raise CommandError (from raise_on_error) without wrapping
-        raise
+        raise  # Re-raise without wrapping (from raise_on_error)
 
     except Exception as e:
         duration = time.perf_counter() - start_time
         error_msg = f"Unexpected error executing command: {e}"
         logger.error(error_msg, exc_info=True)
-
-        if check:
-            raise CommandError(
-                message=error_msg,
-                error_type=CommandErrorType.UNKNOWN,
-                command=command,
-                original_exception=e,
-            ) from e
-
-        return SubprocessResult(
-            return_code=-1,
-            duration=duration,
-            command=command,
-            error_message=error_msg,
-        )
+        return _handle_error(check, error_msg, CommandErrorType.UNKNOWN, command, duration, e)
 
 
 async def run_command_async(

@@ -538,7 +538,7 @@ In docs/pai/, review and improve all PAI documentation. Ensure the architecture 
 In docs/security/, review and improve all security documentation. Ensure STRIDE threat model, penetration testing guides, and key management audit docs are current and accurate.
 In docs/deployment/, review and improve deployment documentation. Ensure cloud deployment guides, Docker workflows, and CI/CD pipeline docs are accurate and contain working examples.
 In docs/reference/, review and improve all API reference documentation. Ensure every public module has an entry. Cross-reference with the actual module SPEC.md files for accuracy.
-In docs/modules/, systematically verify that every one of the 127 source modules has a corresponding documentation page. Identify gaps and create stub entries for any missing module documentation.
+In docs/modules/, systematically verify that every one of the 128 source modules has a corresponding documentation page. Identify gaps and create stub entries for any missing module documentation.
 In docs/integration/, review and improve all integration guides. Ensure third-party integration docs (MCP servers, LLM providers, Git services) are accurate and tested.
 In docs/cognitive/, review and improve cognitive architecture documentation. Ensure the Cerebrum, defense, and identity module docs accurately reflect the current implementation.
 In docs/development/, review and improve development workflow documentation. Ensure contribution guidelines, testing standards, and code review processes are documented and current.
@@ -696,7 +696,7 @@ Review src/codomyrmex/INDEX.md for accuracy. Ensure the module index is complete
 Review src/codomyrmex/README.md for accuracy. Ensure it provides a clear overview of the package, installation instructions, and quick-start examples that work with the current API.
 Review src/codomyrmex/AGENTS.md for accuracy. Ensure it provides comprehensive guidance for AI agents on how to interact with the package, including available MCP tools, testing commands, and coding standards.
 In src/codomyrmex/pai_pm/, review and improve the PAI PM server module. Add zero-mock tests for API endpoint handlers, WebSocket management, and data aggregation. Use 'uv run pytest' to verify.
-In src/codomyrmex/skills/, audit the skills module structure. Ensure all 127+ module skill files are present, properly formatted, and map to the correct Skill Domains. Report any gaps.
+In src/codomyrmex/skills/, audit the skills module structure. Ensure all 128+ module skill files are present, properly formatted, and map to the correct Skill Domains. Report any gaps.
 
 # ============================================================================
 

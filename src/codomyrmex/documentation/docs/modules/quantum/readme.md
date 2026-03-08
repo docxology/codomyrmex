@@ -1,6 +1,6 @@
 # Quantum Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 Quantum algorithm primitives, circuit simulation, and gate operations.
 

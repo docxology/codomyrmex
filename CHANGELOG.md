@@ -27,6 +27,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.9] - 2026-03-07 — "Multimodal & Streaming"
+
+Adds streaming audio pipeline, vision module, and Hermes agent hardening.
+
+### Added
+
+- **audio/streaming**: Full WebSocket streaming audio pipeline — `AudioStreamServer`, `AudioStreamClient`, `CodecNegotiator`, energy-based `VAD`, Pydantic models
+- **vision**: Local-first VLM module — `VLMClient` (Ollama), `PDFExtractor` (text + VLM fallback), `AnnotationExtractor` (structured JSON from images), typed models
+- **agents/hermes/templates**: `TemplateLibrary` with `get`, `register`, `list_templates`, `has` for prompt template management
+- **agents/hermes/session**: `HermesSession` with SQLite persistence for conversation history
+- **tests**: 9 new test files (146 passed, 1 skipped, 0 failures) covering streaming, vision, Hermes templates, and session persistence
+- **RASP docs**: README.md, SPEC.md, AGENTS.md for `vision/`, `audio/streaming/`, and `agents/hermes/templates/`
+
+### Changed
+
+- **Version bump**: `__init__.py` → 1.1.9, `pyproject.toml` → 1.1.9
+- **docs/ARCHITECTURE.md**: Added `vision` to Specialized subgraph (128 modules)
+- **Repo-wide version sync**: All root docs, docs/ directory, config/ RASP files updated from stale v1.1.4 to v1.1.9
+
+---
+
+## [1.1.8] - 2026-03-06 — "Memory & Reasoning"
+
+Persistent memory, Obsidian sync, multi-hop Graph RAG, and active inference.
+
+### Added
+
+- **agentic_memory**: Persistent vector memory with SQLite backend, semantic search, recall ranking
+- **agentic_memory/obsidian**: Bidirectional Obsidian vault synchronization (19-module dual-mode integration)
+- **graph_rag**: Multi-hop Graph RAG — knowledge graph traversal with configurable hop depth and relevance scoring
+- **cerebrum**: Active inference surprise signals — Bayesian surprise computation for anomaly detection in reasoning traces
+
+### Changed
+
+- **PAI docs synchronization**: Updated module-specific PAI.md files across `agentic_memory`, `cerebrum`, and `graph_rag`
+
+---
+
+## [1.1.7] - 2026-03-06 — "Documentation Overhaul"
+
+Repository-wide documentation audit and consistency sweep.
+
+### Changed
+
+- **Version references**: Corrected version drift across 30+ config/ RASP files and docs/ directory
+- **Module count**: Reconciled 127 → 128 across all documentation
+- **Coverage gate**: Standardized `fail_under` references to 40% across all docs
+
+### Fixed
+
+- **docs/DEPENDENCIES.md**: Corrected stale dependency references
+- **docs/PAI_DASHBOARD.md**: Updated dashboard component counts
+- **CI workflow warnings**: Resolved `CODECOV_TOKEN`, `SEMGREP_ENABLED`, and `SEMGREP_APP_TOKEN` context access warnings in `.github/workflows/ci.yml` and `.github/workflows/security.yml`
+
+---
+
+## [1.1.6] - 2026-03-06 — "Execution & Hardening"
+
+Documentation overhaul, Hermes dual-backend, and Gemini package migration.
+
+### Added
+
+- **agents/hermes**: Dual-backend `HermesClient` supporting both Hermes CLI and Ollama (`hermes3` model)
+- **agents/hermes**: `run_hermes.py` script for standalone agent execution
+
+### Changed
+
+- **llm**: Migrated from deprecated `google.generativeai` to `google.genai` package
+- **pyproject.toml**: Replaced `google-generativeai` dependency with `google-genai`
+
+### Fixed
+
+- **Stale version references**: v1.1.5 documentation overhaul (116 PAI.md module bridges verified)
+- **Pydantic forward-reference bugs**: Resolved in email generics module (994+ tests passing post-fix)
+
+---
+
 ## [1.1.5] - 2026-03-05 — "Type Safety & Coverage Ratchet"
 
 Incremental release focused on eliminating remaining type errors and tightening the coverage gate.

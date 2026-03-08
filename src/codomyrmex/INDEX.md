@@ -14,7 +14,7 @@
 | [AGENTS.md](AGENTS.md) | Agent coordination & module listing |
 | [SPEC.md](SPEC.md) | Functional specification & architecture |
 | [PAI.md](PAI.md) | Personal AI Infrastructure mapping |
-| [**init**.py](__init__.py) | Canonical Python exports (88 modules) |
+| [**init**.py](__init__.py) | Canonical Python exports (128 modules) |
 
 ---
 

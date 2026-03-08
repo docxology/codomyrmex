@@ -1,10 +1,10 @@
 # Agent Guidelines - Config Management
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Module Overview
 
-Hierarchical configuration management supporting YAML/JSON loading, namespace-scoped key access, schema validation, and environment-variable merging. Three MCP tools (`get_config`, `set_config`, `validate_config`) expose the full config lifecycle to PAI agents. Default values are centralized here and consumed by all 88 modules to avoid hard-coded strings.
+Hierarchical configuration management supporting YAML/JSON loading, namespace-scoped key access, schema validation, and environment-variable merging. Three MCP tools (`get_config`, `set_config`, `validate_config`) expose the full config lifecycle to PAI agents. Default values are centralized here and consumed by all 128 modules to avoid hard-coded strings.
 
 ## Key Files
 

@@ -1,12 +1,12 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 127 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 128 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -112,9 +112,9 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 **Core Layer**:
 
 - `agents/` - Agentic framework integrations
-  - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `AgentOrchestrator`
+  - Key Classes: `AgentInterface`, `BaseAgent`, `JulesClient`, `ClaudeClient`, `CodexClient`, `HermesClient`, `AgentOrchestrator`
   - Key Functions: `execute(request: AgentRequest) -> AgentResponse`
-  - Key Submodules: `ai_code_editing/`, `droid/` (task management), `claude/`, `codex/`
+  - Key Submodules: `ai_code_editing/`, `droid/` (task management), `claude/`, `codex/`, `hermes/` (dual-backend: CLI + Ollama, session persistence, prompt templates)
 - `static_analysis/` - Code quality analysis
   - Key Classes: `CodeAnalyzer`, `LintRunner`, `ComplexityCalculator`
   - Key Functions: `analyze_file(filepath: str) -> dict`, `calculate_complexity(code: str) -> float`
@@ -249,8 +249,12 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `AgentMemory`, `VectorStoreMemory`
   - Key Submodule: `obsidian/` — 19-module dual-mode Obsidian integration (filesystem + CLI)
   - Key Functions: `ObsidianVault(path)`, `search_vault()`, `create_note()`, `build_link_graph()`, `parse_canvas()`
-- `audio/` - Audio processing and transcription *(Stub — exceptions only, not yet implemented)*
+- `audio/` - Audio processing, transcription, and streaming
   - Key Classes: `AudioProcessor`, `Transcriber`
+  - Key Submodule: `streaming/` — WebSocket streaming pipeline with `AudioStreamServer`, `AudioStreamClient`, `CodecNegotiator`, energy-based `VAD`
+- `vision/` - Local-first visual understanding (VLM via Ollama)
+  - Key Classes: `VLMClient`, `PDFExtractor`, `AnnotationExtractor`
+  - Key Functions: `analyze_image(path) -> VLMResponse`, `extract_text(pdf_path) -> str`
 - `bio_simulation/` - Biological simulation
   - Key Classes: `BioSimulator`
 - `crypto/` - Cryptographic utilities
@@ -403,14 +407,15 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.1.4** (March 2026) - Release: 128 modules, 474 `@mcp_tool` decorators, repo-wide version sync to v1.1.4, RASP doc compliance 128/128
-- **v1.1.4** (March 2026) - Repo-wide doc audit: module count updated to 128; MCP auto-discovered updated to 141 (Sprint 22); ~474 dynamic tools; all metric references reconciled
-- **v1.0.7** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
-- **v1.1.4** (March 2026) - Sprint 16 MCP coverage, ruff violations zeroed, circular imports resolved
-- **v1.1.4** (March 2026) - Documentation audit: experimental/stub labels added to non-MCP-exposed and stub-only modules; accuracy review across phantom module references
-- **v1.1.4** (February 2026) - Module count corrected to 86, version synchronized, missing modules added to discovery
-- **v0.1.6** (February 2026) - Agent & memory foundations, event orchestration
-- **v0.1.0** (February 2026) - Initial repository structure and agent coordination framework
+- **v1.1.9** (March 2026) — Streaming audio pipeline, vision module, Hermes agent hardening, repo-wide version sync
+- **v1.1.8** (March 2026) — Persistent memory, Obsidian sync, multi-hop Graph RAG, active inference
+- **v1.1.7** (March 2026) — Repository-wide documentation audit and consistency sweep
+- **v1.1.6** (March 2026) — Hermes dual-backend, Gemini package migration
+- **v1.1.5** (March 2026) — Type safety diagnostics, coverage gate ratcheted to 35%
+- **v1.1.4** (March 2026) — Ruff zero, 128 modules, 474 `@mcp_tool` decorators, RASP doc compliance 128/128
+- **v1.1.0** (March 2026) — Production readiness, zero-mock hardening
+- **v1.0.7** (March 2026) — MCP expansion: 74 auto-discovered modules, ~367 tools
+- **v0.1.0** (February 2026) — Initial repository structure and agent coordination framework
 
 ## Related Documentation
 
@@ -418,28 +423,82 @@ Before completing significant changes:
 - **[Contributing](docs/project/contributing.md)** - Contributing guidelines and workflow
 
 <!-- gitnexus:start -->
-## GitNexus MCP
+# GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (67732 symbols, 161511 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (74720 symbols, 171781 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
-## Always Start Here
+> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
-1. **Read `gitnexus://repo/{name}/context`** — codebase overview + check index freshness
-2. **Match your task to a skill below** and **read that skill file**
-3. **Follow the skill's workflow and checklist**
+## Always Do
 
-> If step 1 warns the index is stale, run `npx gitnexus analyze` in the terminal first.
+- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
+- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
+- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
+- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
+- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
 
-## Skills
+## When Debugging
 
-| Task | Read this skill file |
-| --- | --- |
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
+1. `gitnexus_query({query: "<error or symptom>"})` — find execution flows related to the issue
+2. `gitnexus_context({name: "<suspect function>"})` — see all callers, callees, and process participation
+3. `READ gitnexus://repo/codomyrmex/process/{processName}` — trace the full execution flow step by step
+4. For regressions: `gitnexus_detect_changes({scope: "compare", base_ref: "main"})` — see what your branch changed
+
+## When Refactoring
+
+- **Renaming**: MUST use `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` first. Review the preview — graph edits are safe, text_search edits need manual review. Then run with `dry_run: false`.
+- **Extracting/Splitting**: MUST run `gitnexus_context({name: "target"})` to see all incoming/outgoing refs, then `gitnexus_impact({target: "target", direction: "upstream"})` to find all external callers before moving code.
+- After any refactor: run `gitnexus_detect_changes({scope: "all"})` to verify only expected files changed.
+
+## Never Do
+
+- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
+- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
+- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
+- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
+
+## Tools Quick Reference
+
+| Tool | When to use | Command |
+|------|-------------|---------|
+| `query` | Find code by concept | `gitnexus_query({query: "auth validation"})` |
+| `context` | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})` |
+| `impact` | Blast radius before editing | `gitnexus_impact({target: "X", direction: "upstream"})` |
+| `detect_changes` | Pre-commit scope check | `gitnexus_detect_changes({scope: "staged"})` |
+| `rename` | Safe multi-file rename | `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` |
+| `cypher` | Custom graph queries | `gitnexus_cypher({query: "MATCH ..."})` |
+
+## Impact Risk Levels
+
+| Depth | Meaning | Action |
+|-------|---------|--------|
+| d=1 | WILL BREAK — direct callers/importers | MUST update these |
+| d=2 | LIKELY AFFECTED — indirect deps | Should test |
+| d=3 | MAY NEED TESTING — transitive | Test if critical path |
+
+## Resources
+
+| Resource | Use for |
+|----------|---------|
+| `gitnexus://repo/codomyrmex/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/codomyrmex/clusters` | All functional areas |
+| `gitnexus://repo/codomyrmex/processes` | All execution flows |
+| `gitnexus://repo/codomyrmex/process/{name}` | Step-by-step execution trace |
+
+## Self-Check Before Finishing
+
+Before completing any code modification task, verify:
+
+1. `gitnexus_impact` was run for all modified symbols
+2. No HIGH/CRITICAL risk warnings were ignored
+3. `gitnexus_detect_changes()` confirms changes match expected scope
+4. All d=1 (WILL BREAK) dependents were updated
+
+## CLI
+
+- Re-index: `npx gitnexus analyze`
+- Check freshness: `npx gitnexus status`
+- Generate docs: `npx gitnexus wiki`
 
 <!-- gitnexus:end -->
 

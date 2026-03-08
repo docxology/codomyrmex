@@ -42,7 +42,7 @@ graph LR
     style EMERGENT fill:#533483,stroke:#e94560,color:#e8e8e8
 ```
 
-**Measurement**: With 127 objects and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
+**Measurement**: With 128 objects and 440+ directed edges in the dependency graph, the number of distinct paths of length ≤5 exceeds 10⁶ — a combinatorial surface far larger than any individual module's design scope.
 
 ### Precondition 2: Self-Description — Autopoietic Closure
 

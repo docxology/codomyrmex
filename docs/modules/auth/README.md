@@ -1,6 +1,6 @@
 # Auth Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
 
 Authentication with API keys, tokens, OAuth, and access control.
 

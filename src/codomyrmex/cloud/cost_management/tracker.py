@@ -119,6 +119,7 @@ class CostTracker:
             entry_count=len(entries),
             period_start=start,
             period_end=end,
+            entries=list(entries),
         )
 
         for entry in entries:

@@ -385,7 +385,7 @@ uv run pytest src/codomyrmex/tests/unit/test_new_module.py
 
 ```bash
 # Install AI dependencies
-uv pip install openai anthropic google-generativeai
+uv pip install openai anthropic google-genai
 
 # Test AI features
 uv run python -c "from codomyrmex.agents import generate_code_snippet"

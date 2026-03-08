@@ -68,7 +68,6 @@ def check_environment() -> bool:
     ai_deps = [
         ("openai", "OpenAI integration"),
         ("anthropic", "Anthropic Claude integration"),
-        ("google.generativeai", "Google AI integration (legacy)"),
         ("google.genai", "Google GenAI integration"),
     ]
 

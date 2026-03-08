@@ -1,6 +1,6 @@
 # Codomyrmex Modules -- Agent Integration Overview
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 

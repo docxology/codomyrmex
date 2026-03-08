@@ -8,7 +8,7 @@ empty-file edge cases).
 
 import tempfile
 import threading
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -191,7 +191,7 @@ class TestDeadLetterQueueListEntries:
         dlq, path = _tmp_dlq()
         try:
             dlq.add(operation="op", error="err")
-            future = datetime.utcnow() + timedelta(days=1)
+            future = datetime.now(UTC) + timedelta(days=1)
             entries = dlq.list_entries(since=future)
             assert entries == []
         finally:
@@ -201,7 +201,7 @@ class TestDeadLetterQueueListEntries:
         dlq, path = _tmp_dlq()
         try:
             dlq.add(operation="op", error="err")
-            past = datetime.utcnow() - timedelta(days=1)
+            past = datetime.now(UTC) - timedelta(days=1)
             entries = dlq.list_entries(since=past)
             assert len(entries) == 1
         finally:
@@ -332,7 +332,7 @@ class TestDeadLetterQueuePurge:
         dlq, path = _tmp_dlq()
         try:
             dlq.add(operation="op", error="err")
-            future = datetime.utcnow() + timedelta(days=1)
+            future = datetime.now(UTC) + timedelta(days=1)
             count = dlq.purge(before=future)
             assert count == 1
             assert dlq.list_entries() == []
@@ -343,7 +343,7 @@ class TestDeadLetterQueuePurge:
         dlq, path = _tmp_dlq()
         try:
             dlq.add(operation="op", error="err")
-            past = datetime.utcnow() - timedelta(days=365)
+            past = datetime.now(UTC) - timedelta(days=365)
             count = dlq.purge(before=past)
             assert count == 0
             assert len(dlq.list_entries()) == 1

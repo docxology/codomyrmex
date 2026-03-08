@@ -162,7 +162,7 @@ codomyrmex validate-config --config ~/.codomyrmex/config_v1.0.yaml
 from codomyrmex.coding.data_visualization import create_plot
 from codomyrmex.analysis.static import run_analysis
 
-# After (v1.1.4) - NEW STRUCTURE
+# After (v1.1.9) - NEW STRUCTURE
 from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.coding.static_analysis import analyze_codebase
 
@@ -256,7 +256,7 @@ class CodomyrmexMigrator:
     def _migrate_imports(self, project_path: Path) -> List[Dict]:
         """Update import statements for new version."""
         import_mapping = {
-            # v0.x.x → v1.1.4 import mappings
+            # v0.x.x → v1.1.9 import mappings
             'from codomyrmex.coding.data_visualization import': 'from codomyrmex.data_visualization import',
             'from codomyrmex.analysis.static import': 'from codomyrmex.coding.static_analysis import',
             'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents import',
@@ -365,7 +365,7 @@ class CodomyrmexMigrator:
                 changes.append({
                     'type': 'config_migration',
                     'file': str(config_file),
-                    'changes': 'Structure updated for v1.1.4'
+                    'changes': 'Structure updated for v1.1.9'
                 })
 
             except Exception as e:
@@ -621,7 +621,7 @@ ModuleNotFoundError: No module named 'codomyrmex.coding.data_visualization'
 # Old import (v0.x.x)
 from codomyrmex.coding.data_visualization import create_plot
 
-# New import (v1.1.4)
+# New import (v1.1.9)
 from codomyrmex.data_visualization import create_line_plot
 ```
 
@@ -634,7 +634,7 @@ TypeError: run_analysis() got an unexpected keyword argument 'options'
 # Old call (v0.x.x)
 result = run_analysis(path, options={'detailed': True, 'cache': False})
 
-# New call (v1.1.4)
+# New call (v1.1.9)
 result = analyze_codebase(path, detailed=True, cache=False)
 ```
 
@@ -647,7 +647,7 @@ analysis:
   enabled: true
   detailed: true
 
-# New format (v1.1.4)
+# New format (v1.1.9)
 codomyrmex:
   version: "1.0.0"
   static_analysis:

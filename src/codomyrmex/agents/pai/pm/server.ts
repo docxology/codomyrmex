@@ -7,10 +7,10 @@
  * as the monolithic original but in a maintainable, modular structure.
  *
  * Usage:
- *   bun scripts/pai/pm/server.ts                    # Start on port 8889
+ *   bun scripts/pai/pm/server.ts                    # Start on port 8888
  *   bun scripts/pai/pm/server.ts --port 8888        # Custom port
  *
- * @version 2.0.0 (modular decomposition)
+ * @version 2.1.0 (modular decomposition + configurable LLM)
  */
 
 import { PORT } from "./config.ts";
@@ -42,7 +42,7 @@ async function handleAPI(req: Request): Promise<Response> {
         return new Response(null, {
             status: 204,
             headers: {
-                "Access-Control-Allow-Origin": `http://localhost:${PORT}`,
+                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
                 "Access-Control-Allow-Headers": "Content-Type, Authorization",
             },

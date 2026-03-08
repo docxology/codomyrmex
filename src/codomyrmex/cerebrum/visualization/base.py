@@ -166,21 +166,6 @@ class BaseVisualizer(ABC):
 class BaseNetworkVisualizer(BaseVisualizer):
     """Base class for network visualizations."""
 
-    def __init__(
-        self,
-        figure_size: tuple[float, float] = (12.0, 8.0),
-        dpi: int = 300,
-        theme: VisualizationTheme | None = None,
-    ):
-        """Initialize network visualizer.
-
-        Args:
-            figure_size: Figure size
-            dpi: DPI
-            theme: Visualization theme
-        """
-        super().__init__(figure_size, dpi, theme)
-
     def get_node_colors(
         self,
         G: nx.Graph,
@@ -350,21 +335,6 @@ class BaseNetworkVisualizer(BaseVisualizer):
 
 class BaseChartVisualizer(BaseVisualizer):
     """Base class for chart visualizations (bars, lines, distributions)."""
-
-    def __init__(
-        self,
-        figure_size: tuple[float, float] = (12.0, 8.0),
-        dpi: int = 300,
-        theme: VisualizationTheme | None = None,
-    ):
-        """Initialize chart visualizer.
-
-        Args:
-            figure_size: Figure size
-            dpi: DPI
-            theme: Visualization theme
-        """
-        super().__init__(figure_size, dpi, theme)
 
     def get_color_for_value(
         self,

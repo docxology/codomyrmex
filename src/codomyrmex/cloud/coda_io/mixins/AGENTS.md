@@ -1,6 +1,6 @@
 # Coda API Client Mixins - Agent Coordination
 
-> **codomyrmex v1.1.4** | March 2026
+> **codomyrmex v1.1.9** | March 2026
 
 ## Overview
 

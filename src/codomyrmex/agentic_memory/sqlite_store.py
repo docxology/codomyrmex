@@ -5,14 +5,13 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
-from typing import Any
 
 from codomyrmex.agentic_memory.models import Memory, MemoryImportance, MemoryType
 
 
 class SQLiteStore:
     """Thread-safe SQLite persistent memory store.
-    
+
     Provides the same CRUD API as InMemoryStore and JSONFileStore,
     but backs the data to a local SQLite database file.
     """
@@ -87,10 +86,10 @@ class SQLiteStore:
         with self._lock:
             with self._get_connection() as conn:
                 row = conn.execute("SELECT * FROM memories WHERE id = ?", (memory_id,)).fetchone()
-                
+
         if not row:
             return None
-            
+
         mem = Memory(
             id=row["id"],
             content=row["content"],
@@ -129,7 +128,7 @@ class SQLiteStore:
         with self._lock:
             with self._get_connection() as conn:
                 rows = conn.execute("SELECT * FROM memories ORDER BY created_at ASC").fetchall()
-                
+
         for row in rows:
             memories.append(
                 Memory(

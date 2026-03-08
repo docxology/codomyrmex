@@ -117,7 +117,9 @@ class TestAgentMailProviderGuards:
         """Constructor raises EmailAuthError when no API key provided or in env."""
         saved = os.environ.pop("AGENTMAIL_API_KEY", None)
         try:
-            from codomyrmex.email.agentmail.provider import AgentMailProvider
+            from codomyrmex.email.agentmail.provider import (
+                AgentMailProvider,
+            )
 
             with pytest.raises(EmailAuthError, match="No AgentMail API key"):
                 AgentMailProvider(api_key=None)
@@ -149,7 +151,9 @@ class TestAgentMailProviderGuards:
         saved = os.environ.get("AGENTMAIL_API_KEY")
         os.environ["AGENTMAIL_API_KEY"] = "env-test-key"
         try:
-            from codomyrmex.email.agentmail.provider import AgentMailProvider
+            from codomyrmex.email.agentmail.provider import (
+                AgentMailProvider,
+            )
 
             try:
                 provider = AgentMailProvider()
@@ -364,12 +368,16 @@ class TestRaiseForApiError:
     """Test the module-level _raise_for_api_error exception converter."""
 
     def test_function_is_importable(self):
-        from codomyrmex.email.agentmail.provider import _raise_for_api_error
+        from codomyrmex.email.agentmail.provider import (
+            _raise_for_api_error,
+        )
 
         assert callable(_raise_for_api_error)
 
     def test_401_raises_email_auth_error(self):
-        from codomyrmex.email.agentmail.provider import _raise_for_api_error
+        from codomyrmex.email.agentmail.provider import (
+            _raise_for_api_error,
+        )
         from codomyrmex.email.exceptions import EmailAuthError
 
         exc = Exception("unauthorized")
@@ -378,7 +386,9 @@ class TestRaiseForApiError:
             _raise_for_api_error(exc, "test_context")
 
     def test_403_raises_email_auth_error(self):
-        from codomyrmex.email.agentmail.provider import _raise_for_api_error
+        from codomyrmex.email.agentmail.provider import (
+            _raise_for_api_error,
+        )
         from codomyrmex.email.exceptions import EmailAuthError
 
         exc = Exception("forbidden")
@@ -387,7 +397,9 @@ class TestRaiseForApiError:
             _raise_for_api_error(exc, "test_context")
 
     def test_404_raises_message_not_found_error(self):
-        from codomyrmex.email.agentmail.provider import _raise_for_api_error
+        from codomyrmex.email.agentmail.provider import (
+            _raise_for_api_error,
+        )
         from codomyrmex.email.exceptions import MessageNotFoundError
 
         exc = Exception("not found")
@@ -396,7 +408,9 @@ class TestRaiseForApiError:
             _raise_for_api_error(exc, "test_context")
 
     def test_500_raises_email_api_error(self):
-        from codomyrmex.email.agentmail.provider import _raise_for_api_error
+        from codomyrmex.email.agentmail.provider import (
+            _raise_for_api_error,
+        )
         from codomyrmex.email.exceptions import EmailAPIError
 
         exc = Exception("server error")
@@ -405,7 +419,9 @@ class TestRaiseForApiError:
             _raise_for_api_error(exc, "test_context")
 
     def test_no_status_code_raises_email_api_error(self):
-        from codomyrmex.email.agentmail.provider import _raise_for_api_error
+        from codomyrmex.email.agentmail.provider import (
+            _raise_for_api_error,
+        )
         from codomyrmex.email.exceptions import EmailAPIError
 
         exc = Exception("generic error")
@@ -413,7 +429,9 @@ class TestRaiseForApiError:
             _raise_for_api_error(exc, "test_context")
 
     def test_preserves_exception_chain(self):
-        from codomyrmex.email.agentmail.provider import _raise_for_api_error
+        from codomyrmex.email.agentmail.provider import (
+            _raise_for_api_error,
+        )
         from codomyrmex.email.exceptions import EmailAPIError
 
         original = Exception("original error")
@@ -619,7 +637,10 @@ class TestModuleReExports:
     def test_gmail_provider_class_identity(self):
         """The GmailProvider from email.__init__ is the same class as from provider.py."""
         import codomyrmex.email as em
-        from codomyrmex.email.gmail.provider import GMAIL_AVAILABLE, GmailProvider
+        from codomyrmex.email.gmail.provider import (
+            GMAIL_AVAILABLE,
+            GmailProvider,
+        )
 
         if not GMAIL_AVAILABLE:
             pytest.skip("Gmail SDK not installed")

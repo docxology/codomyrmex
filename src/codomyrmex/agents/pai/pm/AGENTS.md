@@ -58,4 +58,31 @@ All state lives in `$PAI_DIR/MEMORY/STATE/` (default `~/.claude/MEMORY/STATE/`):
 
 ## Coordination
 
-These tools are the **single source of truth** for PAI project state. The PMServer.ts web dashboard reads from the same YAML files. Multiple agents can safely call these tools concurrently — each tool performs atomic file writes.
+These tools are the **single source of truth** for PAI project state. The modular server (`server.ts`) reads from the same YAML files and exposes a REST API + WebSocket + 15-tab SPA dashboard. Multiple agents can safely call these tools concurrently — each tool performs atomic file writes.
+
+### HTTP Server API
+
+```bash
+# Start the modular server
+bun scripts/pai/pm/server.ts --port=8888
+
+# Available endpoints
+curl http://localhost:8888/api/health
+curl http://localhost:8888/api/missions
+curl http://localhost:8888/api/projects
+curl http://localhost:8888/api/awareness
+```
+
+### LLM Configuration
+
+The bikeride/email features use LLM backends configurable via environment variables:
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `PAI_PM_LLM_BACKEND` | `ollama` | Backend: `ollama`, `gemini`, `claude` |
+| `PAI_PM_LLM_MODEL` | `qwen3:4b` | Model name |
+| `PAI_PM_LLM_TIMEOUT` | `60000` | Subprocess timeout (ms) |
+
+### Mission Status Values
+
+Missions support: `ACTIVE`, `PLANNING`, `IN_PROGRESS`, `PAUSED`, `COMPLETED`, `ARCHIVED`.

@@ -1,10 +1,10 @@
 # Project Documentation
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Project-level documentation covering architecture, contributing guidelines, and project governance for the Codomyrmex platform (88 modules).
+Project-level documentation covering architecture, contributing guidelines, and project governance for the Codomyrmex platform (128 modules).
 
 ## Contents
 

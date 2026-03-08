@@ -15,14 +15,14 @@ from .openapi_generator import OpenAPISpecification
 logger = get_logger(__name__)
 
 if TYPE_CHECKING:
-    from .standardization.api_versioning import APIVersion, APIVersionManager
+    from .standardization.api_versioning import APIVersionManager
     from .standardization.graphql_api import (
         GraphQLAPI,
         GraphQLField,
         GraphQLObjectType,
         GraphQLSchema,
     )
-    from .standardization.rest_api import RESTAPI, HTTPMethod
+    from .standardization.rest_api import RESTAPI
     from .standardization.rest_api import APIEndpoint as StandardizationAPIEndpoint
 else:
     # Runtime imports - try to import, but handle gracefully if circular import occurs

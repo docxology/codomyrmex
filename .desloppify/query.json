@@ -1,46 +1,90 @@
 {
-  "command": "resolve",
-  "patterns": [
-    "review::.::holistic::error_consistency::mixed-strategies-across-module-boundaries::5cb36965"
+  "command": "next",
+  "items": [
+    {
+      "id": "dupes::src/codomyrmex/coding/review/reviewer.py::_detect_language::src/codomyrmex/coding/static_analysis/static_analyzer.py::_detect_language",
+      "kind": "finding",
+      "tier": 2,
+      "effective_tier": 2,
+      "confidence": "high",
+      "detector": "dupes",
+      "file": "src/codomyrmex/coding/review/reviewer.py",
+      "summary": "Exact dupe: _detect_language (src/codomyrmex/coding/review/reviewer.py:154) <-> _detect_language (src/codomyrmex/coding/static_analysis/static_analyzer.py:165) [100%]",
+      "detail": {
+        "fn_a": {
+          "file": "src/codomyrmex/coding/review/reviewer.py",
+          "name": "_detect_language",
+          "line": 154,
+          "loc": 22
+        },
+        "fn_b": {
+          "file": "src/codomyrmex/coding/static_analysis/static_analyzer.py",
+          "name": "_detect_language",
+          "line": 165,
+          "loc": 22
+        },
+        "similarity": 1.0,
+        "kind": "exact",
+        "cluster_size": 2,
+        "cluster": [
+          {
+            "file": "src/codomyrmex/coding/review/reviewer.py",
+            "name": "_detect_language",
+            "line": 154,
+            "loc": 22
+          },
+          {
+            "file": "src/codomyrmex/coding/static_analysis/static_analyzer.py",
+            "name": "_detect_language",
+            "line": 165,
+            "loc": 22
+          }
+        ]
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"dupes::src/codomyrmex/coding/review/reviewer.py::_detect_language::src/codomyrmex/coding/static_analysis/static_analyzer.py::_detect_language\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    }
   ],
-  "status": "fixed",
-  "resolved": [
-    "review::.::holistic::error_consistency::mixed-strategies-across-module-boundaries::5cb36965"
-  ],
-  "count": 1,
-  "next_command": "desloppify issues",
-  "overall_score": 73.2,
-  "objective_score": 82.5,
-  "strict_score": 73.0,
-  "verified_strict_score": 82.1,
-  "prev_overall_score": 73.2,
-  "prev_objective_score": 82.5,
-  "prev_strict_score": 73.0,
-  "prev_verified_strict_score": 82.1,
-  "attestation": "I have actually added an Error Handling Convention section to CONTRIBUTING.md explaining when to return dict vs raise exceptions and I am not gaming the score by resolving without fixing.",
+  "queue": {
+    "tier_counts": {
+      "1": 0,
+      "2": 857,
+      "3": 4660,
+      "4": 35
+    },
+    "requested_tier": 2,
+    "selected_tier": 2,
+    "fallback_reason": null,
+    "available_tiers": [
+      2,
+      3,
+      4
+    ],
+    "total": 857
+  },
   "narrative": {
     "phase": "stagnation",
-    "headline": "\u26a0 127 security findings \u2014 review before other cleanup. Score plateaued at 73.0 for 5 scans. Test health (21.3%) is where the breakthrough is. 53 wontfix items may also be worth revisiting. (6 review findings \u2014 run `desloppify issues`)",
+    "headline": "\u26a0 128 security findings \u2014 review before other cleanup. All T1 items cleared!",
     "dimensions": {
       "lowest_dimensions": [
         {
           "name": "Test health",
-          "strict": 21.3,
-          "issues": 1696,
+          "strict": 21.4,
+          "issues": 1706,
           "impact": 0.0
         },
         {
           "name": "Test strategy",
-          "strict": 43.0,
-          "issues": 1,
+          "strict": 60.0,
+          "issues": 0,
           "impact": 0.0,
           "subjective": true,
           "impact_description": "re-review to improve"
         },
         {
           "name": "Low elegance",
-          "strict": 57.0,
-          "issues": 1,
+          "strict": 63.0,
+          "issues": 0,
           "impact": 0.0,
           "subjective": true,
           "impact_description": "re-review to improve"
@@ -49,16 +93,16 @@
       "biggest_gap_dimensions": [
         {
           "name": "Test health",
-          "lenient": 23.8,
-          "strict": 21.3,
+          "lenient": 23.9,
+          "strict": 21.4,
           "gap": 2.5,
-          "wontfix_count": 41
+          "wontfix_count": 40
         }
       ],
       "stagnant_dimensions": [
         {
           "name": "File health",
-          "strict": 90.3,
+          "strict": 90.6,
           "stuck_scans": 5
         },
         {
@@ -67,13 +111,8 @@
           "stuck_scans": 5
         },
         {
-          "name": "Duplication",
-          "strict": 98.6,
-          "stuck_scans": 5
-        },
-        {
           "name": "Test health",
-          "strict": 21.3,
+          "strict": 21.4,
           "stuck_scans": 5
         },
         {
@@ -88,27 +127,27 @@
         },
         {
           "name": "Abstraction fit",
-          "strict": 63.0,
+          "strict": 70.0,
           "stuck_scans": 5
         },
         {
           "name": "AI generated debt",
-          "strict": 68.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "High elegance",
-          "strict": 71.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Mid elegance",
           "strict": 72.0,
           "stuck_scans": 5
         },
         {
+          "name": "High elegance",
+          "strict": 72.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Mid elegance",
+          "strict": 66.0,
+          "stuck_scans": 5
+        },
+        {
           "name": "Low elegance",
-          "strict": 57.0,
+          "strict": 63.0,
           "stuck_scans": 5
         },
         {
@@ -128,7 +167,7 @@
         },
         {
           "name": "Test strategy",
-          "strict": 43.0,
+          "strict": 60.0,
           "stuck_scans": 5
         },
         {
@@ -138,23 +177,12 @@
         },
         {
           "name": "Design coherence",
-          "strict": 59.0,
+          "strict": 67.0,
           "stuck_scans": 5
         }
       ]
     },
     "actions": [
-      {
-        "type": "issue_queue",
-        "detector": "review",
-        "count": 6,
-        "description": "6 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
-        "command": "desloppify issues",
-        "impact": 0.0,
-        "dimension": "Unknown",
-        "priority": 1,
-        "lane": "refactor_0"
-      },
       {
         "type": "reorganize",
         "detector": "flat_dirs",
@@ -163,29 +191,29 @@
         "command": "desloppify show flat_dirs --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 2,
+        "priority": 1,
         "lane": "restructure"
       },
       {
         "type": "reorganize",
         "detector": "coupling",
-        "count": 29,
-        "description": "29 coupling findings \u2014 fix boundary violations with `desloppify move`",
+        "count": 24,
+        "description": "24 coupling findings \u2014 fix boundary violations with `desloppify move`",
         "command": "desloppify show coupling --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 3,
+        "priority": 2,
         "lane": "restructure"
       },
       {
         "type": "reorganize",
         "detector": "facade",
-        "count": 256,
-        "description": "256 facade findings \u2014 flatten re-export facades or consolidate barrel files",
+        "count": 272,
+        "description": "272 facade findings \u2014 flatten re-export facades or consolidate barrel files",
         "command": "desloppify show facade --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 4,
+        "priority": 3,
         "lane": "restructure"
       },
       {
@@ -196,19 +224,19 @@
         "command": "desloppify show uncalled_functions --status open",
         "impact": 0.0,
         "dimension": "Unknown",
-        "priority": 5,
-        "lane": "refactor_1"
+        "priority": 4,
+        "lane": "refactor"
       },
       {
         "type": "refactor",
         "detector": "structural",
-        "count": 766,
-        "description": "766 structural findings \u2014 decompose large files \u2014 extract logic into focused modules",
+        "count": 760,
+        "description": "760 structural findings \u2014 decompose large files \u2014 extract logic into focused modules",
         "command": "desloppify show structural --status open",
         "impact": 0.0,
         "dimension": "File health",
-        "priority": 6,
-        "lane": "refactor_1"
+        "priority": 5,
+        "lane": "refactor"
       },
       {
         "type": "refactor",
@@ -218,52 +246,52 @@
         "command": "desloppify show props --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 7,
-        "lane": "refactor_1"
+        "priority": 6,
+        "lane": "refactor"
       },
       {
         "type": "refactor",
         "detector": "dupes",
-        "count": 181,
-        "description": "181 dupes findings \u2014 extract shared utility or consolidate duplicates",
+        "count": 47,
+        "description": "47 dupes findings \u2014 extract shared utility or consolidate duplicates",
         "command": "desloppify show dupes --status open",
         "impact": 0.0,
         "dimension": "Duplication",
-        "priority": 8,
-        "lane": "refactor_1"
+        "priority": 7,
+        "lane": "refactor"
       },
       {
         "type": "refactor",
         "detector": "dict_keys",
-        "count": 288,
-        "description": "288 dict_keys findings \u2014 fix dict key mismatches \u2014 dead writes are likely dead code, schema drift suggests a typo or missed rename",
+        "count": 278,
+        "description": "278 dict_keys findings \u2014 fix dict key mismatches \u2014 dead writes are likely dead code, schema drift suggests a typo or missed rename",
         "command": "desloppify show dict_keys --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 9,
-        "lane": "refactor_1"
+        "priority": 8,
+        "lane": "refactor"
       },
       {
         "type": "refactor",
         "detector": "test_coverage",
-        "count": 1696,
-        "description": "1696 test_coverage findings \u2014 add tests for untested production modules \u2014 prioritize by import count",
+        "count": 1706,
+        "description": "1706 test_coverage findings \u2014 add tests for untested production modules \u2014 prioritize by import count",
         "command": "desloppify show test_coverage --status open",
         "impact": 0.0,
         "dimension": "Test health",
-        "priority": 10,
+        "priority": 9,
         "lane": "test_coverage"
       },
       {
         "type": "refactor",
         "detector": "responsibility_cohesion",
-        "count": 75,
-        "description": "75 responsibility_cohesion findings \u2014 split modules with too many responsibilities \u2014 extract focused sub-modules",
+        "count": 76,
+        "description": "76 responsibility_cohesion findings \u2014 split modules with too many responsibilities \u2014 extract focused sub-modules",
         "command": "desloppify show responsibility_cohesion --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 11,
-        "lane": "refactor_1"
+        "priority": 10,
+        "lane": "refactor"
       },
       {
         "type": "refactor",
@@ -273,30 +301,30 @@
         "command": "desloppify show boilerplate_duplication --status open",
         "impact": 0.0,
         "dimension": "Duplication",
-        "priority": 12,
-        "lane": "refactor_1"
+        "priority": 11,
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
         "detector": "unused",
-        "count": 109,
-        "description": "109 unused findings \u2014 inspect with `desloppify next` and fix manually",
+        "count": 11,
+        "description": "11 unused findings \u2014 inspect with `desloppify next` and fix manually",
         "command": "desloppify show unused --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 13,
-        "lane": "refactor_1"
+        "priority": 12,
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
         "detector": "smells",
-        "count": 1845,
-        "description": "1845 smells findings \u2014 inspect with `desloppify next` and fix manually",
+        "count": 1840,
+        "description": "1840 smells findings \u2014 inspect with `desloppify next` and fix manually",
         "command": "desloppify show smells --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 14,
-        "lane": "refactor_1"
+        "priority": 13,
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
@@ -306,36 +334,47 @@
         "command": "desloppify show global_mutable_config --status open",
         "impact": 0.0,
         "dimension": "Code quality",
+        "priority": 14,
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "private_imports",
+        "count": 2,
+        "description": "2 private_imports findings \u2014 stop importing private symbols across module boundaries",
+        "command": "desloppify show private_imports --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
         "priority": 15,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
         "detector": "stale_wontfix",
-        "count": 9,
-        "description": "9 stale_wontfix findings \u2014 re-evaluate old wontfix decisions \u2014 fix, document, or escalate",
+        "count": 12,
+        "description": "12 stale_wontfix findings \u2014 re-evaluate old wontfix decisions \u2014 fix, document, or escalate",
         "command": "desloppify show stale_wontfix --status open",
         "impact": 0.0,
         "dimension": "Unknown",
         "priority": 16,
-        "lane": "refactor_1"
+        "lane": "refactor"
       },
       {
         "type": "manual_fix",
         "detector": "security",
-        "count": 127,
-        "description": "127 security findings \u2014 review and fix security findings \u2014 prioritize by severity",
+        "count": 128,
+        "description": "128 security findings \u2014 review and fix security findings \u2014 prioritize by severity",
         "command": "desloppify show security --status open",
         "impact": 0.0,
         "dimension": "Security",
         "priority": 17,
-        "lane": "refactor_1"
+        "lane": "refactor"
       }
     ],
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 5785,
+        "total_count": 5542,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -343,31 +382,23 @@
       "lanes": {
         "restructure": {
           "actions": [
+            1,
             2,
-            3,
-            4
+            3
           ],
-          "file_count": 296,
+          "file_count": 307,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         },
-        "refactor_0": {
+        "refactor": {
           "actions": [
-            1
-          ],
-          "file_count": 1,
-          "total_impact": 0.0,
-          "automation": "manual",
-          "run_first": false
-        },
-        "refactor_1": {
-          "actions": [
+            4,
             5,
             6,
             7,
             8,
-            9,
+            10,
             11,
             12,
             13,
@@ -376,30 +407,30 @@
             16,
             17
           ],
-          "file_count": 1686,
+          "file_count": 1690,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         },
         "test_coverage": {
           "actions": [
-            10
+            9
           ],
-          "file_count": 1696,
+          "file_count": 1706,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         }
       },
       "can_parallelize": true,
-      "hint": "4 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 6 finding(s) \u2014 `desloppify issues`."
+      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify."
     },
     "tools": {
       "fixers": [],
       "move": {
         "available": true,
         "relevant": true,
-        "reason": "29 coupling violations + 11 flat directories",
+        "reason": "24 coupling violations + 11 flat directories",
         "usage": "desloppify move <source> <dest> [--dry-run]"
       },
       "plan": {
@@ -414,18 +445,18 @@
       }
     },
     "debt": {
-      "overall_gap": 0.2,
+      "overall_gap": 0.1,
       "wontfix_count": 53,
       "worst_dimension": "Test health",
       "worst_gap": 2.5,
       "trend": "stable"
     },
-    "milestone": null,
+    "milestone": "All T1 items cleared!",
     "primary_action": {
-      "command": "desloppify issues",
-      "description": "6 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
+      "command": "desloppify show flat_dirs --status open",
+      "description": "11 flat_dirs findings \u2014 create subdirectories and use `desloppify move`"
     },
-    "why_now": "4 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 6 finding(s) \u2014 `desloppify issues`.",
+    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify.",
     "verification_step": {
       "command": "desloppify scan",
       "reason": "revalidate after changes"
@@ -434,42 +465,341 @@
       {
         "type": "wontfix_gap",
         "severity": "high",
-        "message": "Strict/lenient gap is 0.2 pts with 53 wontfix findings"
+        "message": "Strict/lenient gap is 0.1 pts with 53 wontfix findings"
       }
     ],
     "strict_target": {
       "target": 95.0,
-      "current": 73.0,
-      "gap": 22.0,
+      "current": 74.0,
+      "gap": 21.0,
       "state": "below",
       "warning": null
     },
-    "reminders": [
-      {
-        "type": "rereview_needed",
-        "message": "Subjective results may be stale after resolve. Re-run `desloppify review --prepare` to refresh, or reset with `desloppify scan --reset-subjective` before a clean rerun.",
-        "command": "desloppify review --prepare",
-        "priority": 1,
-        "severity": "high"
-      },
-      {
-        "type": "rescan_needed",
-        "message": "Rescan to verify \u2014 cascading effects may create new findings.",
-        "command": "desloppify scan",
-        "priority": 1,
-        "severity": "high"
-      }
-    ],
+    "reminders": [],
     "reminder_history": {
       "zone_classification": 3,
-      "report_scores": 28,
+      "report_scores": 38,
       "feedback_nudge": 3,
       "stagnant_nudge": 17,
-      "review_findings_pending": 3,
-      "rereview_needed": 1,
-      "rescan_needed": 1
+      "review_findings_pending": 3
     }
   },
+  "overall_score": 74.1,
+  "objective_score": 82.8,
+  "strict_score": 74.0,
+  "scorecard_dimensions": [
+    {
+      "name": "File health",
+      "score": 90.6,
+      "strict": 90.6,
+      "checks": 2504,
+      "issues": 364,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "AI generated debt",
+      "score": 72.0,
+      "strict": 72.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 70.0,
+      "strict": 70.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Code quality",
+      "score": 93.1,
+      "strict": 93.1,
+      "checks": 18617,
+      "issues": 2244,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Convention drift",
+      "score": 80.0,
+      "strict": 80.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 77.0,
+      "strict": 77.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 76.0,
+      "strict": 76.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 67.0,
+      "strict": 67.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Duplication",
+      "score": 99.8,
+      "strict": 99.7,
+      "checks": 11521,
+      "issues": 47,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Elegance",
+      "score": 67.0,
+      "strict": 67.0,
+      "checks": 30,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 74.0,
+      "strict": 74.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Security",
+      "score": 98.8,
+      "strict": 98.8,
+      "checks": 5018,
+      "issues": 128,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Structure nav",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test health",
+      "score": 23.9,
+      "strict": 21.4,
+      "checks": 27409,
+      "issues": 1706,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Test strategy",
+      "score": 60.0,
+      "strict": 60.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
+  "subjective_measures": [
+    {
+      "name": "AI generated debt",
+      "score": 72.0,
+      "strict": 72.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 70.0,
+      "strict": 70.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Convention drift",
+      "score": 80.0,
+      "strict": 80.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 77.0,
+      "strict": 77.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 76.0,
+      "strict": 76.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 67.0,
+      "strict": 67.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Elegance",
+      "score": 67.0,
+      "strict": 67.0,
+      "checks": 30,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 74.0,
+      "strict": 74.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Structure nav",
+      "score": 68.0,
+      "strict": 68.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test strategy",
+      "score": 60.0,
+      "strict": 60.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
   "config": {
     "target_strict_score": 95,
     "review_max_age_days": 30,
@@ -481,7 +811,9 @@
     "ignore": [],
     "ignore_metadata": {},
     "zone_overrides": {
-      "projects/": "script"
+      "projects/": "script",
+      "scripts/": "script",
+      "examples/": "script"
     },
     "review_dimensions": [],
     "large_files_threshold": 0,

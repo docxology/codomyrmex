@@ -82,7 +82,7 @@ class TestAgentMemory:
 
     def test_remember(self):
         """Should store memory."""
-        agent = AgentMemory()
+        agent = AgentMemory(InMemoryStore())
         m = agent.remember("User prefers Python")
 
         assert m.content == "User prefers Python"
@@ -90,7 +90,7 @@ class TestAgentMemory:
 
     def test_recall(self):
         """Should recall relevant memories."""
-        agent = AgentMemory()
+        agent = AgentMemory(InMemoryStore())
         agent.remember("User prefers Python")
         agent.remember("User likes dark themes")
         agent.remember("User is learning ML")
@@ -101,7 +101,7 @@ class TestAgentMemory:
 
     def test_recall_with_filter(self):
         """Should filter by type."""
-        agent = AgentMemory()
+        agent = AgentMemory(InMemoryStore())
         agent.remember("Fact 1", memory_type=MemoryType.SEMANTIC)
         agent.remember("Experience 1", memory_type=MemoryType.EPISODIC)
 
@@ -110,7 +110,7 @@ class TestAgentMemory:
 
     def test_forget(self):
         """Should forget memory."""
-        agent = AgentMemory()
+        agent = AgentMemory(InMemoryStore())
         m = agent.remember("Temporary")
 
         assert agent.forget(m.id) is True
@@ -118,7 +118,7 @@ class TestAgentMemory:
 
     def test_get_context(self):
         """Should get formatted context."""
-        agent = AgentMemory()
+        agent = AgentMemory(InMemoryStore())
         agent.remember("Python is great")
 
         context = agent.get_context("programming")
@@ -126,7 +126,7 @@ class TestAgentMemory:
 
     def test_importance_filter(self):
         """Should filter by importance."""
-        agent = AgentMemory()
+        agent = AgentMemory(InMemoryStore())
         agent.remember("Low priority", importance=MemoryImportance.LOW)
         agent.remember("High priority", importance=MemoryImportance.HIGH)
 
@@ -141,7 +141,7 @@ class TestConversationMemory:
 
     def test_add_turn(self):
         """Should add conversation turn."""
-        mem = ConversationMemory()
+        mem = ConversationMemory(InMemoryStore())
         m = mem.add_turn("user", "Hello!", turn_number=1)
 
         assert m.content == "Hello!"
@@ -154,7 +154,7 @@ class TestKnowledgeMemory:
 
     def test_add_fact(self):
         """Should add fact."""
-        mem = KnowledgeMemory()
+        mem = KnowledgeMemory(InMemoryStore())
         m = mem.add_fact("Python was released in 1991", source="Wikipedia")
 
         assert m.memory_type == MemoryType.SEMANTIC

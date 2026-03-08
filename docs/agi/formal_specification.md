@@ -53,7 +53,7 @@ graph TB
 
 The most tractable layer. The Curry-Howard correspondence tells us that type-checking is *proof-checking*: a well-typed program is a proof of its type signature's proposition. Codomyrmex enforces:
 
-- **Ruff** — 0 violations enforced repo-wide (ratcheted v1.1.4). This eliminates entire *syntactic* classes of bugs — unused variables, undefined names, import cycles. Formally: ruff enforces a decidable subset of Python's context-free grammar constraints.
+- **Ruff** — 0 violations enforced repo-wide (ratcheted v1.1.9). This eliminates entire *syntactic* classes of bugs — unused variables, undefined names, import cycles. Formally: ruff enforces a decidable subset of Python's context-free grammar constraints.
 - **Type hints + py.typed** — 572 PEP 561 markers across the codebase. Under the Curry-Howard isomorphism, `def f(x: int) -> str` asserts the proposition `Int → Str` — a morphism in the category **Typ** of types.
 - **AST analysis** — `static_analysis` inspects syntax trees for structural invariants (pass-only stubs, circular imports). These are decidable because they reduce to graph properties of the AST.
 

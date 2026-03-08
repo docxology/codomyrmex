@@ -47,7 +47,6 @@ from .handlers import (
     run_workflow,
     show_info,
     show_modules,
-    show_system_status,
 )
 from .utils import (
     PERFORMANCE_MONITORING_AVAILABLE,
@@ -86,7 +85,8 @@ class Cli:
 
     def status(self):
         """Show comprehensive system status dashboard"""
-        return show_system_status()
+        from codomyrmex.cli.status import print_status_report
+        return print_status_report()
 
     def dashboard(self, port=8787, host="0.0.0.0", open=True):
         """Launch the Codomyrmex web dashboard"""

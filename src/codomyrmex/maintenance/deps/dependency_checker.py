@@ -79,7 +79,7 @@ def check_dependencies() -> dict[str, Any]:
     """Check if main dependencies can be imported."""
     deps = {
         "core": ["cased_kit", "python_dotenv"],
-        "llm": ["openai", "anthropic", "google.generativeai"],
+        "llm": ["openai", "anthropic", "google.genai"],
         "analysis": ["pylint", "flake8", "bandit"],
         "data": ["matplotlib", "seaborn", "numpy"],
         "dev": ["pytest", "black", "mypy"],

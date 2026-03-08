@@ -1,6 +1,6 @@
 # codomyrmex - Functional Specification
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -136,7 +136,7 @@ graph TB
 ```
 
 > [!NOTE]
-> The diagram above shows representative modules per layer. The full list of all 88 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
+> The diagram above shows representative modules per layer. The full list of all 128 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
 
 ### Module Layer Descriptions
 

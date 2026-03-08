@@ -81,7 +81,10 @@ export async function handleCalendarRoutes(
             const links = gcalLoadLinks();
             const events = (data.items || []).map((e: any) => ({ ...e, _pai_link: links[e.id] || null }));
             return json({ success: true, events, calendarName: data.summary });
-        } catch (e: any) { return error(e.message, e.message.includes("Not authenticated") ? 401 : 500); }
+        } catch (e: any) {
+            const isAuth = e.message?.includes("Not authenticated") || e.message?.includes("invalid_grant") || e.message?.includes("Invalid Credentials");
+            return json({ success: false, error: e.message, needsReauth: isAuth, events: [] }, isAuth ? 401 : 500);
+        }
     }
 
     if (path === "/api/calendar/events" && method === "POST") {

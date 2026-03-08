@@ -23,12 +23,7 @@ try:
     SECURITY_AVAILABLE = True
 except ImportError:
     SECURITY_AVAILABLE = False
-    analyze_email = None
-    assess_risk = None
-    check_access_permission = None
-    get_security_principles = None
-    grant_access = None
-    scan_vulnerabilities = None
+    analyze_email = assess_risk = check_access_permission = get_security_principles = grant_access = scan_vulnerabilities = None  # type: ignore
 
 pytestmark = [
     pytest.mark.integration,

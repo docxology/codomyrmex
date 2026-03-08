@@ -30,6 +30,8 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+from codomyrmex.ide.antigravity.client import _AntigravityClientMixin
+
 
 @dataclass
 class SkillMetadata:
@@ -46,7 +48,7 @@ class SkillMetadata:
     category: str = "antigravity"
 
 
-class AntigravityToolSkill:
+class AntigravityToolSkill(_AntigravityClientMixin):
     """Wraps a single Antigravity tool as a composable Skill.
 
     Implements the ``execute(**kwargs)`` interface expected by
@@ -87,19 +89,6 @@ class AntigravityToolSkill:
             name=f"antigravity.{tool_name}",
             description=desc,
         )
-
-    @property
-    def client(self) -> Any:
-        """Lazy-initialize the AntigravityClient.
-
-        Returns:
-            The AntigravityClient instance.
-        """
-        if self._client is None:
-            from codomyrmex.ide.antigravity import AntigravityClient
-
-            self._client = AntigravityClient()
-        return self._client
 
     def validate_params(self, **kwargs: Any) -> list[str]:
         """Validate parameters against the tool schema.
@@ -189,7 +178,7 @@ class AntigravityToolSkill:
         return f"AntigravityToolSkill({self.tool_name!r})"
 
 
-class AntigravitySkillFactory:
+class AntigravitySkillFactory(_AntigravityClientMixin):
     """Factory for creating AntigravityToolSkill instances.
 
     Shares a single client across all created skills.
@@ -205,19 +194,6 @@ class AntigravitySkillFactory:
             client: Optional ``AntigravityClient``. Lazy-created if None.
         """
         self._client = client
-
-    @property
-    def client(self) -> Any:
-        """Lazy-initialize the shared client.
-
-        Returns:
-            The AntigravityClient instance.
-        """
-        if self._client is None:
-            from codomyrmex.ide.antigravity import AntigravityClient
-
-            self._client = AntigravityClient()
-        return self._client
 
     def create(self, tool_name: str, **defaults: Any) -> AntigravityToolSkill:
         """Create a skill for the given tool.

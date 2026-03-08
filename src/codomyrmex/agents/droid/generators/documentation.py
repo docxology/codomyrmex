@@ -2,113 +2,86 @@
 
 from __future__ import annotations
 
-import os
-import sys
 from typing import TYPE_CHECKING
 
 from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from pathlib import Path
 
 logger = get_logger(__name__)
+
+
+def _assess_file_group(
+    paths: list[Path],
+    project_root: Path,
+    assess_fn: Callable[[str, Path], int],
+    header: str,
+) -> list[str]:
+    """Assess a group of documentation files and return formatted lines."""
+    lines = [header]
+    for path in paths:
+        if path.exists():
+            score = assess_fn(path.read_text(), path)
+            lines.append(f"✅ {path.relative_to(project_root)}: Score {score}/100")
+        else:
+            lines.append(f"❌ {path.relative_to(project_root)}: Missing")
+    return lines
+
+
+def _assess_tech_docs(docs_path: Path, project_root: Path) -> list[str]:
+    """Assess technical documentation files."""
+    tech_docs_path = docs_path / "docs"
+    if not tech_docs_path.exists():
+        return ["❌ Technical documentation directory missing"]
+    md_files = list(tech_docs_path.glob("*.md"))
+    lines = [
+        f"✅ {p.relative_to(project_root)}: Score {assess_technical_accuracy(p.read_text(), p)}/100"
+        for p in md_files[:5]
+    ]
+    if len(md_files) > 5:
+        lines.append(f"📁 ... and {len(md_files) - 5} more files")
+    return lines
+
+
+def _compute_overall_score(coverage_report: list[str]) -> float:
+    """Compute weighted average score from scored lines."""
+    scores = [
+        int(line.split("Score ")[1].split("/")[0])
+        for line in coverage_report
+        if "Score" in line
+    ]
+    return (sum(scores) / (len(scores) * 100) * 100) if scores else 0.0
 
 
 def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     """Assess documentation coverage for README, AGENTS.md, and technical accuracy."""
     from pathlib import Path
 
-    # Add the current directory to Python path for direct imports
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    if current_dir not in sys.path:
-        pass
-    #         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
-
-    # Define paths to check
     project_root = Path(__file__).parent.parent.parent.parent.parent
     docs_path = project_root / "src" / "codomyrmex" / "documentation"
 
-    coverage_report = []
-    coverage_report.append("📊 Documentation Coverage Assessment Report")
-    coverage_report.append("=" * 50)
-
-    # Check README files
-    readme_checks = []
-    readme_locations = [project_root / "README.md", docs_path / "README.md"]
-
-    for readme_path in readme_locations:
-        if readme_path.exists():
-            content = readme_path.read_text()
-            score = assess_readme_quality(content, readme_path)
-            readme_checks.append(
-                f"✅ {readme_path.relative_to(project_root)}: Score {score}/100"
-            )
-        else:
-            readme_checks.append(f"❌ {readme_path.relative_to(project_root)}: Missing")
-
-    coverage_report.append("\n📖 README Coverage:")
-    coverage_report.extend(readme_checks)
-
-    # Check AGENTS.md files
-    agents_checks = []
-    agents_locations = [
-        project_root / "AGENTS.md",
-        project_root / "src" / "AGENTS.md",
-        project_root / "docs" / "AGENTS.md",
+    coverage_report = [
+        "📊 Documentation Coverage Assessment Report",
+        "=" * 50,
     ]
-
-    for agents_path in agents_locations:
-        if agents_path.exists():
-            content = agents_path.read_text()
-            score = assess_agents_quality(content, agents_path)
-            agents_checks.append(
-                f"✅ {agents_path.relative_to(project_root)}: Score {score}/100"
-            )
-        else:
-            agents_checks.append(f"❌ {agents_path.relative_to(project_root)}: Missing")
-
-    coverage_report.append("\n🤖 AGENTS.md Coverage:")
-    coverage_report.extend(agents_checks)
-
-    # Check technical documentation
-    tech_docs_checks = []
-    tech_docs_path = docs_path / "docs"
-    if tech_docs_path.exists():
-        md_files = list(tech_docs_path.glob("*.md"))
-        for doc_path in md_files[:5]:  # Check first 5 files
-            content = doc_path.read_text()
-            score = assess_technical_accuracy(content, doc_path)
-            tech_docs_checks.append(
-                f"✅ {doc_path.relative_to(project_root)}: Score {score}/100"
-            )
-
-        if len(md_files) > 5:
-            tech_docs_checks.append(f"📁 ... and {len(md_files) - 5} more files")
-    else:
-        tech_docs_checks.append("❌ Technical documentation directory missing")
-
+    coverage_report.extend(_assess_file_group(
+        [project_root / "README.md", docs_path / "README.md"],
+        project_root, assess_readme_quality, "\n📖 README Coverage:",
+    ))
+    coverage_report.extend(_assess_file_group(
+        [project_root / "AGENTS.md", project_root / "src" / "AGENTS.md", project_root / "docs" / "AGENTS.md"],
+        project_root, assess_agents_quality, "\n🤖 AGENTS.md Coverage:",
+    ))
     coverage_report.append("\n📚 Technical Documentation Coverage:")
-    coverage_report.extend(tech_docs_checks)
+    coverage_report.extend(_assess_tech_docs(docs_path, project_root))
 
-    # Overall assessment
-    total_score = sum(
-        int(check.split("Score ")[1].split("/")[0])
-        for check in coverage_report
-        if "Score" in check
-    )
-    max_possible = len([check for check in coverage_report if "Score" in check]) * 100
-    overall_score = (total_score / max_possible * 100) if max_possible > 0 else 0
-
+    overall_score = _compute_overall_score(coverage_report)
     coverage_report.append(f"🏆 Overall Coverage Score: {overall_score:.1f}/100")
 
-    # Write report
-    report_path = docs_path / "coverage_assessment.md"
-    report_path.write_text("\n".join(coverage_report))
-
-    logger.info(
-        f"Documentation coverage assessed: {overall_score:.1f}/100",
-        extra={"description": description},
-    )
+    (docs_path / "coverage_assessment.md").write_text("\n".join(coverage_report))
+    logger.info(f"Documentation coverage assessed: {overall_score:.1f}/100", extra={"description": description})
     return f"Documentation coverage assessed: {overall_score:.1f}/100"
 
 

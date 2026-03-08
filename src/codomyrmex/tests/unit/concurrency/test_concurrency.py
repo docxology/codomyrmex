@@ -12,7 +12,7 @@ import asyncio
 import tempfile
 import threading
 import time
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -992,9 +992,9 @@ class TestDeadLetterQueueList:
         dlq, path = _tmp_dlq()
         try:
             dlq.add(operation="op", error="err")
-            future = datetime.utcnow() + timedelta(days=1)
+            future = datetime.now(UTC) + timedelta(days=1)
             assert dlq.list_entries(since=future) == []
-            past = datetime.utcnow() - timedelta(days=1)
+            past = datetime.now(UTC) - timedelta(days=1)
             assert len(dlq.list_entries(since=past)) == 1
         finally:
             path.unlink(missing_ok=True)
@@ -1068,9 +1068,9 @@ class TestDeadLetterQueuePurge:
         dlq, path = _tmp_dlq()
         try:
             dlq.add(operation="op", error="err")
-            future = datetime.utcnow() + timedelta(days=1)
+            future = datetime.now(UTC) + timedelta(days=1)
             assert dlq.purge(before=future) == 1
-            past = datetime.utcnow() - timedelta(days=365)
+            past = datetime.now(UTC) - timedelta(days=365)
             dlq.add(operation="op2", error="err")
             assert dlq.purge(before=past) == 0
             assert len(dlq.list_entries()) == 1

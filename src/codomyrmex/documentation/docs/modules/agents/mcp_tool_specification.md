@@ -4,7 +4,7 @@ This document outlines the specification for tools within the Agents module that
 
 ## 1. Overview
 
-The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 12 providers (5 API, 6 CLI, 1 local), parsing utilities, and discovery/health-probing via `AgentRegistry`.
+The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 14 providers (6 API, 7 CLI, 1 local), parsing utilities, and discovery/health-probing via `AgentRegistry`.
 
 - **Configuration**: Agents may require API keys, model configurations, and capability settings.
 
@@ -22,18 +22,18 @@ Executes a request through a specified AI agent, returning the agent's response 
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `agent_name` | `string` | Yes | Name of the agent to use (e.g., "claude", "gemini", "ollama") | `"claude"` |
-| `prompt` | `string` | Yes | The prompt or instruction for the agent | `"Generate a Python function to calculate fibonacci numbers"` |
+| Parameter Name | Type     | Required | Description                                                   | Example Value                                                 |
+| :------------- | :------- | :------- | :------------------------------------------------------------ | :------------------------------------------------------------ |
+| `agent_name`   | `string` | Yes      | Name of the agent to use (e.g., "claude", "gemini", "ollama") | `"claude"`                                                    |
+| `prompt`       | `string` | Yes      | The prompt or instruction for the agent                       | `"Generate a Python function to calculate fibonacci numbers"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | `"success"` or `"error"` | `"success"` |
-| `content` | `string` | Generated content or response | `"def fibonacci(n): ..."` |
-| `message` | `string` | Error message if status is `"error"` | `null` |
+| Field Name | Type     | Description                   | Example Value             |
+| :--------- | :------- | :---------------------------- | :------------------------ |
+| `status`   | `string` | `"success"` or `"error"`      | `"success"`               |
+| `content`  | `string` | Generated content or response | `"def fibonacci(n): ..."` |
+| `message`  | `string` | Error message if `"error"`    | `null`                    |
 
 ### 5. Error Handling
 

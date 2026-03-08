@@ -1,6 +1,6 @@
 # pai
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
@@ -151,5 +151,5 @@ uv run python scripts/pai/dashboard.py --restart
 
 See `scripts/pai/README.md` for full usage and `scripts/pai/dashboard.py` for implementation.
 
-- **PAI Project Manager** (primary): `http://localhost:8888` — 12 tabs, 45+ REST endpoints, AI dispatch
+- **PAI Project Manager** (primary): `http://localhost:8888` — 15 tabs, 50+ REST endpoints, AI dispatch
 - **Codomyrmex Admin** (secondary): `http://localhost:8787` — module health, MCP tools, trust gateway

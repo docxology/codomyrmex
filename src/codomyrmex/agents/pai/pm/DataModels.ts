@@ -11,7 +11,7 @@
 
 export type Priority = "HIGH" | "MEDIUM" | "LOW";
 
-export type MissionStatus = "ACTIVE" | "PAUSED" | "COMPLETED" | "ARCHIVED";
+export type MissionStatus = "ACTIVE" | "PLANNING" | "IN_PROGRESS" | "PAUSED" | "COMPLETED" | "ARCHIVED";
 
 export type ProjectStatus = "PLANNING" | "IN_PROGRESS" | "COMPLETED" | "PAUSED" | "BLOCKED";
 
@@ -70,7 +70,7 @@ export interface Task {
 
 export const VALID_PRIORITIES: Priority[] = ["HIGH", "MEDIUM", "LOW"];
 
-export const VALID_MISSION_STATUSES: MissionStatus[] = ["ACTIVE", "PAUSED", "COMPLETED", "ARCHIVED"];
+export const VALID_MISSION_STATUSES: MissionStatus[] = ["ACTIVE", "PLANNING", "IN_PROGRESS", "PAUSED", "COMPLETED", "ARCHIVED"];
 
 export const VALID_PROJECT_STATUSES: ProjectStatus[] = ["PLANNING", "IN_PROGRESS", "COMPLETED", "PAUSED", "BLOCKED"];
 

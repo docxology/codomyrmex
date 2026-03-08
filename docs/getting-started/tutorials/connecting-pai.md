@@ -4,7 +4,7 @@
 
 ## Overview
 
-This tutorial walks you through connecting the [PAI system](../../PAI.md) (`~/.claude/PAI/`) to codomyrmex via the Model Context Protocol (MCP). Once connected, PAI agents can use codomyrmex's 88 modules as tools during Algorithm execution.
+This tutorial walks you through connecting the [PAI system](../../PAI.md) (`~/.claude/PAI/`) to codomyrmex via the Model Context Protocol (MCP). Once connected, PAI agents can use codomyrmex's 128 modules as tools during Algorithm execution.
 
 ## Prerequisites
 
@@ -169,7 +169,7 @@ Edit `~/.claude/PAI/settings.json` to change:
 
 ## What's Next
 
-- **Explore modules**: Run `codomyrmex modules` to see all 88 modules
+- **Explore modules**: Run `codomyrmex modules` to see all 128 modules
 - **Read the bridge doc**: [`/PAI.md`](../../PAI.md) maps Algorithm phases to modules
 - **Agent integration**: [`src/codomyrmex/agents/PAI.md`](../../../src/codomyrmex/agents/PAI.md) details the three-tier agent mapping
 - **MCP details**: [`src/codomyrmex/model_context_protocol/PAI.md`](../../../src/codomyrmex/model_context_protocol/PAI.md) covers the full MCP bridge architecture

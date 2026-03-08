@@ -1,10 +1,10 @@
 # Agents Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
-Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 12 provider integrations, session management, response parsing, and theoretical architecture foundations.
+Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 13 provider integrations, session management, response parsing, and theoretical architecture foundations.
 
 When used with [PAI](../../../PAI.md) (`~/.claude/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
 
@@ -100,12 +100,21 @@ uv sync
 - `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
 - `PAI.md` - PAI integration details (three-tier agent mapping, Algorithm capability selection, composition patterns)
 - `SPEC.md` - Functional specification
-- `__init__.py` - Module exports (40+ items)
-- `exceptions.py` - Agent exception hierarchy
+- `__init__.py` - Module exports (60+ items)
+- `autonomous.py` - Autonomous agent implementation (relay-channel loop)
+- `benchmarks.py` - Agent performance benchmarking harness
+- `editing_loop.py` - Autonomous code editing loop (Ollama → Antigravity → Claude)
+- `education.py` - Education agent re-exports (Curriculum, Lesson)
+- `llm_client.py` - Unified LLM client factory (Claude/Ollama)
+- `mcp_tools.py` - MCP tool definitions (execute_agent, list_agents, get_agent_memory)
+- `orchestrator.py` - Infinite conversation orchestrator
+- `agent_setup/` - Agent discovery, YAML config, interactive setup wizard
+- `agentic_seek/` - agenticSeek autonomous agent integration
 - `ai_code_editing/` - AI-powered code editing integration
 - `claude/` - Claude API client
 - `cli/` - CLI subcommands and handlers
 - `codex/` - OpenAI Codex client
+- `context/` - Context management for agent conversations
 - `core/` - Core agent framework (base classes, config, sessions, parsers)
 - `deepseek/` - DeepSeek Coder integration
 - `droid/` - Droid controller integration
@@ -117,14 +126,20 @@ uv sync
 - `history/` - Conversation and context persistence
 - `infrastructure/` - Infrastructure management agent
 - `jules/` - Jules CLI client
+- `learning/` - Agent learning and curriculum subsystem
+- `memory/` - Agent memory and knowledge management
+- `meta/` - Meta-agent capabilities and self-reasoning
 - `mistral_vibe/` - Mistral Vibe CLI client
 - `o1/` - OpenAI o1/o3 reasoning model client
 - `openclaw/` - OpenClaw CLI client
 - `opencode/` - OpenCode CLI client
 - `pai/` - PAI system bridge (discovery, validation, status)
+- `planner/` - Agent planning subsystem
 - `pooling/` - Multi-agent load balancing and failover
 - `qwen/` - Qwen-Coder integration
+- `specialized/` - Specialized agent compositions
 - `theory/` - Theoretical foundations (reactive, deliberative, hybrid architectures)
+- `transport/` - Agent communication transport layer
 
 ## Quick Start
 

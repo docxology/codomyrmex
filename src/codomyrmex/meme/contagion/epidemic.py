@@ -5,12 +5,8 @@ from __future__ import annotations
 from codomyrmex.meme.contagion.models import PropagationTrace
 
 
-class SIRModel:
-    """Susceptible-Infected-Recovered model for meme spread.
-
-    Nodes move from Susceptible -> Infected (adopt meme) -> Recovered (bored/immune).
-    Recovered nodes generally do not re-adopt the meme.
-    """
+class _BaseCompartmentalModel:
+    """Shared initialisation for compartmental epidemic models."""
 
     def __init__(
         self, population_size: int = 1000, beta: float = 0.3, gamma: float = 0.1
@@ -24,6 +20,14 @@ class SIRModel:
         self.N = population_size
         self.beta = beta
         self.gamma = gamma
+
+
+class SIRModel(_BaseCompartmentalModel):
+    """Susceptible-Infected-Recovered model for meme spread.
+
+    Nodes move from Susceptible -> Infected (adopt meme) -> Recovered (bored/immune).
+    Recovered nodes generally do not re-adopt the meme.
+    """
 
     def simulate(self, steps: int = 100, initial_infected: int = 1) -> PropagationTrace:
         """Run simulation steps.
@@ -61,19 +65,12 @@ class SIRModel:
         return trace
 
 
-class SISModel:
+class SISModel(_BaseCompartmentalModel):
     """Susceptible-Infected-Susceptible model.
 
     Nodes recover but do not gain immunity (e.g. rumors, recurring trends).
     S -> I -> S loop allows endemic states.
     """
-
-    def __init__(
-        self, population_size: int = 1000, beta: float = 0.3, gamma: float = 0.1
-    ) -> None:
-        self.N = population_size
-        self.beta = beta
-        self.gamma = gamma
 
     def simulate(self, steps: int = 100, initial_infected: int = 1) -> PropagationTrace:
         """Simulate."""

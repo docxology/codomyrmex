@@ -1,6 +1,6 @@
 # Utilities Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -12,7 +12,7 @@ Common utility functions and helpers used across the entire Codomyrmex codebase.
 |----------------|------|-----------|
 | **ALL PHASES** | Shared utilities consumed by all agents across every Algorithm phase | Direct Python import |
 
-This module provides foundational utilities (string manipulation, datetime handling, file I/O helpers, type coercion) used by every PAI agent. No direct MCP exposure — access via `from codomyrmex.utils import ...`. All 88 modules depend on utils for common operations.
+This module provides foundational utilities (string manipulation, datetime handling, file I/O helpers, type coercion) used by every PAI agent. No direct MCP exposure — access via `from codomyrmex.utils import ...`. All 128 modules depend on utils for common operations.
 
 ## Key Exports
 

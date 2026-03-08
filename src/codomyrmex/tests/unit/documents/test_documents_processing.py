@@ -16,7 +16,9 @@ from codomyrmex.documents.models.document import (
 )
 
 try:
-    from codomyrmex.documents.transformation.converter import convert_document
+    from codomyrmex.documents.transformation.converter import (
+        convert_document,
+    )
 except ImportError:
     pass
 
@@ -26,12 +28,16 @@ except ImportError:
     pass
 
 try:
-    from codomyrmex.documents.transformation.splitter import split_document
+    from codomyrmex.documents.transformation.splitter import (
+        split_document,
+    )
 except ImportError:
     pass
 
 try:
-    from codomyrmex.documents.transformation.formatter import format_document
+    from codomyrmex.documents.transformation.formatter import (
+        format_document,
+    )
 except ImportError:
     pass
 
@@ -63,12 +69,18 @@ except ImportError:
     pass
 
 try:
-    from codomyrmex.documents.search.searcher import search_documents, search_index
+    from codomyrmex.documents.search.searcher import (
+        search_documents,
+        search_index,
+    )
 except ImportError:
     pass
 
 try:
-    from codomyrmex.documents.search.query_builder import QueryBuilder, build_query
+    from codomyrmex.documents.search.query_builder import (
+        QueryBuilder,
+        build_query,
+    )
 except ImportError:
     pass
 

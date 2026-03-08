@@ -22,7 +22,9 @@ try:
         ResourceTrackingResult,
         create_resource_report,
     )
-    from codomyrmex.performance.profiling.async_profiler import AsyncProfiler
+    from codomyrmex.performance.profiling.async_profiler import (
+        AsyncProfiler,
+    )
     from codomyrmex.system_discovery.health.health_checker import (
         HealthChecker,
         HealthCheckResult,

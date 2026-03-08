@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.ide import IDECommandResult, IDEStatus
 from codomyrmex.logging_monitoring import get_logger
 
 from .models import (
@@ -12,11 +13,26 @@ from .models import (
     CommandExecutionError,
     ConversationContext,
     IDEClient,
-    IDECommandResult,
-    IDEStatus,
 )
 
 logger = get_logger(__name__)
+
+
+class _AntigravityClientMixin:
+    """Mixin that provides lazy-init access to a shared AntigravityClient.
+
+    Subclasses must initialise ``self._client = None`` (or an existing client)
+    in their own ``__init__``.
+    """
+
+    _client: Any
+
+    @property
+    def client(self) -> "AntigravityClient":
+        """Lazy-initialise and return the AntigravityClient instance."""
+        if self._client is None:
+            self._client = AntigravityClient()
+        return self._client
 
 
 class AntigravityClient(IDEClient):

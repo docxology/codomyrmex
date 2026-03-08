@@ -1,7 +1,7 @@
 # SPEC.md — PAI PM Module Specification
 
 **Module**: `scripts/pai/pm/`
-**Version**: 2.0.0 (modular decomposition)
+**Version**: 2.1.0 (modular decomposition + robustness)
 **Runtime**: [Bun](https://bun.sh) ≥ 1.0.0
 **Language**: TypeScript
 
@@ -11,7 +11,7 @@ Complete Mission → Project → Task management system for the Personal AI Infr
 
 ## Architecture
 
-```
+```text
 scripts/pai/pm/
 ├── config.ts              # Centralized env-overridable configuration
 ├── helpers.ts             # Shared HTTP/WebSocket utilities
@@ -46,7 +46,7 @@ scripts/pai/pm/
 | --- | --- | --- |
 | `id` | `string` | URL-safe slug |
 | `title` | `string` | Display name |
-| `status` | `ACTIVE \| PAUSED \| COMPLETED \| ARCHIVED` | Current state |
+| `status` | `ACTIVE \| PLANNING \| IN_PROGRESS \| PAUSED \| COMPLETED \| ARCHIVED` | Current state |
 | `priority` | `HIGH \| MEDIUM \| LOW` | Priority level |
 | `description` | `string` | Mission description |
 | `linked_projects` | `string[]` | Linked project slugs |
@@ -75,7 +75,7 @@ scripts/pai/pm/
 
 All state is stored as YAML/JSON files under `$PAI_STATE_DIR` (default: `~/.claude/MEMORY/STATE/`):
 
-```
+```text
 ~/.claude/MEMORY/STATE/
 ├── missions/
 │   └── <slug>/
@@ -119,6 +119,9 @@ All configuration via environment variables (see `.env.example`):
 | `AGENTMAIL_API_KEY` | — | `services/oauth.ts` |
 | `AGENTMAIL_DEFAULT_INBOX` | — | `services/oauth.ts` |
 | `GITHUB_DEFAULT_OWNER` | — | `config.ts`, `routes/github.ts` |
+| `PAI_PM_LLM_BACKEND` | `ollama` | `config.ts`, `routes/email.ts`, `routes/dispatch.ts` |
+| `PAI_PM_LLM_MODEL` | `qwen3:4b` | `config.ts`, `routes/email.ts`, `routes/dispatch.ts`, `routes/interview.ts` |
+| `PAI_PM_LLM_TIMEOUT` | `60000` | `config.ts`, `routes/email.ts`, `routes/dispatch.ts` |
 
 ## PAIMixin Integration
 

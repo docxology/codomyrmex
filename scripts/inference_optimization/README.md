@@ -1,6 +1,6 @@
 # Inference Optimization Scripts
 
-**Version**: v1.1.4 | **Status**: Placeholder | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Placeholder | **Last Updated**: March 2026
 
 ## Overview
 

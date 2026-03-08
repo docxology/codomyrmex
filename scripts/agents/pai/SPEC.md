@@ -1,6 +1,6 @@
 # PAI Integration Scripts — Specification
 
-**Version**: v1.1.4 | **Status**: Active
+**Version**: v1.1.9 | **Status**: Active
 
 ## 1. Functional Requirements
 

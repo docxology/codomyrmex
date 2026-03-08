@@ -1,62 +1,20 @@
-"""
-Feature Store
+"""Feature Store — re-exports from canonical feature_store module."""
 
-Feature management, storage, and serving for ML applications.
-"""
-
-from .models import (
+from codomyrmex.feature_store import (
     TIMESTAMP_FEATURE,
     USER_ID_FEATURE,
     FeatureDefinition,
     FeatureGroup,
+    FeatureService,
+    FeatureStore,
+    FeatureTransform,
     FeatureType,
     FeatureValue,
     FeatureVector,
-    ValueType,
-)
-from .service import (
-    FeatureService,
-    FeatureTransform,
-)
-from .store import (
-    FeatureStore,
     InMemoryFeatureStore,
+    ValueType,
+    cli_commands,
 )
-
-# Shared schemas for cross-module interop
-try:
-    from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
-
-
-def cli_commands():
-    """Return CLI commands for the feature_store module."""
-
-    def _list_features():
-        """list Features ."""
-        print(
-            "Feature Store\n"
-            "  Feature types: " + ", ".join(ft.value for ft in FeatureType) + "\n"
-            "  Value types: " + ", ".join(vt.value for vt in ValueType) + "\n"
-            "  Built-in features: USER_ID_FEATURE, TIMESTAMP_FEATURE\n"
-            "  Use FeatureStore / InMemoryFeatureStore to manage feature storage."
-        )
-
-    def _feature_stats():
-        """feature Stats ."""
-        print(
-            "Feature Store Stats\n"
-            "  Use FeatureService to serve features with transforms.\n"
-            "  Use FeatureGroup to organize related features.\n"
-            "  Use FeatureVector for point-in-time feature retrieval."
-        )
-
-    return {
-        "features": _list_features,
-        "stats": _feature_stats,
-    }
-
 
 __all__ = [
     "TIMESTAMP_FEATURE",
@@ -64,16 +22,12 @@ __all__ = [
     "FeatureDefinition",
     "FeatureGroup",
     "FeatureService",
-    # Store
     "FeatureStore",
-    # Service
     "FeatureTransform",
-    # Models
     "FeatureType",
     "FeatureValue",
     "FeatureVector",
     "InMemoryFeatureStore",
     "ValueType",
-    # CLI
     "cli_commands",
 ]

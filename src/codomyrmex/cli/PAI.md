@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — CLI Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -62,7 +62,7 @@ codomyrmex quick pipe "codomyrmex check" "codomyrmex test agents"
 # See which modules are loaded and healthy
 codomyrmex status
 
-# List all 88 modules with their availability
+# List all 128 modules with their availability
 codomyrmex modules
 
 # Run environment validation before work begins

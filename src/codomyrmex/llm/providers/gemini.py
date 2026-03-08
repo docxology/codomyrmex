@@ -19,9 +19,9 @@ from __future__ import annotations
 import os
 from typing import TYPE_CHECKING, Any
 
-from codomyrmex.llm.providers import (
+from codomyrmex.llm.providers.base import LLMProvider
+from codomyrmex.llm.providers.models import (
     CompletionResponse,
-    LLMProvider,
     Message,
     ProviderConfig,
     ProviderType,
@@ -70,47 +70,29 @@ class GeminiProvider(LLMProvider):
 
     # ---- completions -------------------------------------------------------
 
-    def complete(
-        self,
-        messages: list[Message],
-        model: str | None = None,
-        temperature: float = 0.7,
-        max_tokens: int | None = None,
-        **kwargs: Any,
-    ) -> CompletionResponse:
-        """Generate a completion from messages."""
-        if not self._client:
-            raise RuntimeError(
-                "Gemini client not initialized. Install google-genai package."
-            )
-
-        model_name = self.get_model(model)
-        contents = self._messages_to_contents(messages)
-
-        config_params: dict[str, Any] = {"temperature": temperature}
+    def _build_genai_config(
+        self, temperature: float, max_tokens: int | None, messages: list[Message]
+    ) -> dict[str, Any]:
+        """Build GenerateContentConfig params dict from completion arguments."""
+        params: dict[str, Any] = {"temperature": temperature}
         if max_tokens is not None:
-            config_params["max_output_tokens"] = max_tokens
-
-        # Extract system instruction from messages
+            params["max_output_tokens"] = max_tokens
         system_msgs = [m for m in messages if m.role == "system"]
         if system_msgs:
-            config_params["system_instruction"] = system_msgs[0].content
+            params["system_instruction"] = system_msgs[0].content
+        return params
 
-        response = self._client.models.generate_content(
-            model=model_name,
-            contents=contents,
-            config=self._genai_types.GenerateContentConfig(**config_params)
-            if config_params
-            else None,
-            **kwargs,
-        )
-
+    def _parse_gemini_response(
+        self, response: Any, model_name: str
+    ) -> CompletionResponse:
+        """Convert a google-genai GenerateContentResponse to CompletionResponse."""
         content = ""
         if response.candidates and response.candidates[0].content:
             for part in response.candidates[0].content.parts:  # type: ignore
                 if part.text:
                     content += part.text
 
+        usage = None
         if response.usage_metadata:
             um = response.usage_metadata
             usage = {
@@ -132,6 +114,30 @@ class GeminiProvider(LLMProvider):
             raw_response=response,
         )
 
+    def complete(
+        self,
+        messages: list[Message],
+        model: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+        **kwargs: Any,
+    ) -> CompletionResponse:
+        """Generate a completion from messages."""
+        if not self._client:
+            raise RuntimeError(
+                "Gemini client not initialized. Install google-genai package."
+            )
+
+        model_name = self.get_model(model)
+        config_params = self._build_genai_config(temperature, max_tokens, messages)
+        response = self._client.models.generate_content(
+            model=model_name,
+            contents=self._messages_to_contents(messages),
+            config=self._genai_types.GenerateContentConfig(**config_params),
+            **kwargs,
+        )
+        return self._parse_gemini_response(response, model_name)
+
     def complete_stream(
         self,
         messages: list[Message],
@@ -145,22 +151,11 @@ class GeminiProvider(LLMProvider):
             raise RuntimeError("Gemini client not initialized.")
 
         model_name = self.get_model(model)
-        contents = self._messages_to_contents(messages)
-
-        config_params: dict[str, Any] = {"temperature": temperature}
-        if max_tokens is not None:
-            config_params["max_output_tokens"] = max_tokens
-
-        system_msgs = [m for m in messages if m.role == "system"]
-        if system_msgs:
-            config_params["system_instruction"] = system_msgs[0].content
-
+        config_params = self._build_genai_config(temperature, max_tokens, messages)
         stream = self._client.models.generate_content_stream(
             model=model_name,
-            contents=contents,
-            config=self._genai_types.GenerateContentConfig(**config_params)
-            if config_params
-            else None,
+            contents=self._messages_to_contents(messages),
+            config=self._genai_types.GenerateContentConfig(**config_params),
             **kwargs,
         )
 

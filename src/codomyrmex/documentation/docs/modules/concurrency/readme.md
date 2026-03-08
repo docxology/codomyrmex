@@ -1,6 +1,6 @@
 # Concurrency Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.2.0 | **Status**: Active | **Last Updated**: March 2026
 
 Distributed locks, semaphores, and synchronization primitives for multi-process and distributed environments.
 
@@ -39,6 +39,9 @@ uv sync
 - **`LocalSemaphore`** — Local thread-safe semaphore wrapper.
 - **`AsyncLocalSemaphore`** — Asyncio-compatible semaphore.
 - **`AsyncWorkerPool`** — Managed pool for bounded async task execution.
+- **`DeadLetterQueue`** — Persistent track-and-replay for failed operations.
+- **`TaskQueue`** — Priority-based task queue with deduplication.
+- **`Channel`** — Go-style async communication channels.
 
 ## Quick Start
 
@@ -120,6 +123,9 @@ asyncio.run(main())
 | `AsyncLocalSemaphore` | Asyncio-compatible counting semaphore |
 | `AsyncWorkerPool` | Managed pool for bounded async task execution |
 | `DeadLetterQueue` | Track and replay failed operations |
+| `TaskQueue` | Priority-based distributed task queue |
+| `Channel` | Async communication primitives (CSP) |
+| `AsyncTokenBucket` | Token-bucket rate limiting |
 
 ## Testing
 

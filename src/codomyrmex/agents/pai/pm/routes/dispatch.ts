@@ -6,7 +6,7 @@
  */
 
 import { json, error, parseBody, broadcast, buildSafeEnv, stripAnsi } from "../helpers.ts";
-import { PORT } from "../config.ts";
+import { PORT, LLM_BACKEND, LLM_MODEL, LLM_TIMEOUT, PAI_DIR, PROJECTS_DIR, MISSIONS_DIR } from "../config.ts";
 import { listMissions } from "../ListMissions.ts";
 import { listProjects } from "../ListProjects.ts";
 import { listTasks } from "../ListTasks.ts";
@@ -14,14 +14,8 @@ import { loadDashboardData } from "../PMDashboard.ts";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
-// State directory for project/mission YAML
-const PAI_DIR = process.env.PAI_DIR || join(process.env.HOME || "", ".claude");
-const PROJECTS_DIR = join(PAI_DIR, "MEMORY", "STATE", "projects");
-const MISSIONS_DIR = join(PAI_DIR, "MEMORY", "STATE", "missions");
-
 const yaml = await import("js-yaml");
-
-const TIMEOUT_MS = 120_000;
+const TIMEOUT_MS = LLM_TIMEOUT * 2; // dispatch gets 2× the LLM timeout
 
 export async function handleDispatchRoutes(
     path: string,
@@ -34,7 +28,7 @@ export async function handleDispatchRoutes(
 
     if (path === "/api/dispatch/execute" && method === "POST") {
         const body = await parseBody(req);
-        const backend = String(body.backend || "ollama");
+        const backend = String(body.backend || LLM_BACKEND);
         const action = String(body.action || "");
         const jobId = `dispatch-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
 
@@ -57,7 +51,7 @@ export async function handleDispatchRoutes(
 
                 if (backend === "ollama") {
                     const ollamaPath = Bun.which("ollama") ?? "ollama";
-                    const model = String(body.model || "llama3.2:1b");
+                    const model = String(body.model || LLM_MODEL);
                     cmd = [ollamaPath, "run", model, prompt];
                     modelName = model;
                 } else if (backend === "claude") {
@@ -204,7 +198,7 @@ export async function handleDispatchRoutes(
         const queueItem = {
             id: `queue-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
             entityType: body.entityType, entityId: body.entityId, action: body.action,
-            backend: body.backend || "ollama", model: body.model || "llama3.2:1b", addedAt: Date.now(),
+            backend: body.backend || LLM_BACKEND, model: body.model || LLM_MODEL, addedAt: Date.now(),
         };
         globalThis._dispatchQueue.push(queueItem);
         broadcast("dispatch", "queue", { action: "add", item: queueItem });

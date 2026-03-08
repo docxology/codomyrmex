@@ -154,7 +154,7 @@ class StatusReporter:
             # LLM providers
             "openai": self._check_import("openai"),
             "anthropic": self._check_import("anthropic"),
-            "google-generativeai": self._check_import("google.generativeai"),
+            "google-genai": self._check_import("google.genai"),
             # Data science
             "numpy": self._check_import("numpy"),
             "matplotlib": self._check_import("matplotlib"),
@@ -461,7 +461,7 @@ class StatusReporter:
 
         # Group dependencies
         core_deps = ["python-dotenv", "cased-kit"]
-        llm_deps = ["openai", "anthropic", "google-generativeai"]
+        llm_deps = ["openai", "anthropic", "google-genai"]
         data_deps = ["numpy", "matplotlib", "pandas"]
         dev_deps = ["pytest", "pylint", "black", "mypy"]
         web_deps = ["fastapi", "uvicorn"]

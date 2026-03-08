@@ -2429,7 +2429,7 @@
     var gitStatusCache = {};
     var dispatchSectionsExpanded = { missions: true, projects: true, tasks: false };
     var dispatchMode = 'copy'; // 'copy' | 'claude' | 'ollama' | 'gemini'
-    var dispatchOllamaModel = 'llama3.2';
+    var dispatchOllamaModel = 'qwen3:4b';
     var activeDispatchJob = null;
 
     // Dispatch action handler - either copy to clipboard or execute via backend
@@ -4187,7 +4187,10 @@
         }
         toast(type + ' moved to ' + newStatus);
         refreshData();
-      } catch (err) { toast('Failed to move', 'error'); }
+      } catch (err) {
+        toast('Failed to move: ' + (err.message || 'API error'), 'error');
+        refreshData(); // Restore board to original state
+      }
     }
 
     // ============================================================================
@@ -5625,7 +5628,7 @@
       try {
         if (type === 'mission') {
           var res = await api('GET', '/api/missions/' + slug);
-          data = (res.missions && res.missions[0]) || res;
+          data = (res.missions && res.missions.find(function (m) { return m.id === slug; })) || (res.missions && res.missions[0]) || res;
         } else {
           var res2 = await api('GET', '/api/projects/' + slug);
           data = (res2.projects && res2.projects[0]) || res2;
@@ -5637,7 +5640,7 @@
         fields = field('title', 'Title', 'text', data.title || '') +
           field('description', 'Description', 'textarea', data.description || '') +
           field('priority', 'Priority', 'select', data.priority || 'MEDIUM', '', ['HIGH', 'MEDIUM', 'LOW']) +
-          field('status', 'Status', 'select', data.status || 'ACTIVE', '', ['ACTIVE', 'PAUSED', 'COMPLETED', 'ARCHIVED']);
+          field('status', 'Status', 'select', data.status || 'ACTIVE', '', ['ACTIVE', 'PLANNING', 'IN_PROGRESS', 'PAUSED', 'COMPLETED', 'ARCHIVED']);
       } else {
         fields = field('title', 'Title', 'text', data.title || '') +
           field('goal', 'Goal', 'textarea', data.goal || '') +
@@ -6600,7 +6603,16 @@
       var timeMax = rangeMax.toISOString();
       try {
         var res = await api('GET', '/api/calendar/events?timeMin=' + encodeURIComponent(timeMin) + '&timeMax=' + encodeURIComponent(timeMax));
-        if (res.success) { calState.events = res.events || []; calState.calendarName = res.calendarName || 'Primary'; }
+        if (res.success) {
+          calState.events = res.events || [];
+          calState.calendarName = res.calendarName || 'Primary';
+        } else if (res.needsReauth) {
+          calState.authenticated = false;
+          calState.events = [];
+          toast('Calendar token expired \u2014 please reconnect', 'warning');
+        } else {
+          toast('Calendar: ' + (res.error || 'Unknown error'), 'error');
+        }
       } catch (e) { toast('Calendar fetch failed: ' + e.message, 'error'); }
       calState.loading = false;
       renderCalendarView();
@@ -7368,7 +7380,7 @@
       loadingAudio: {},
       playingAudio: null,
       backend: 'gemini',
-      model: 'llama3.2',
+      model: 'qwen3:4b',
       sendingDraft: {},
       sentDraft: {},
       // Voice Reply State

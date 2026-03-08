@@ -51,7 +51,7 @@ ARGUMENTS:
   <slug>                        Mission identifier (required)
 
 METADATA OPTIONS:
-  --status STATUS               Change status (ACTIVE, PAUSED, COMPLETED, ARCHIVED)
+  --status STATUS               Change status (ACTIVE, PLANNING, IN_PROGRESS, PAUSED, COMPLETED, ARCHIVED)
   --title "..."                 Update title
   --description "..."           Update description
   --vision "..."                Update vision statement

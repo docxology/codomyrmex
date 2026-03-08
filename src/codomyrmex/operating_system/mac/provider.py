@@ -9,7 +9,6 @@ from __future__ import annotations
 import os
 import platform
 import re
-import subprocess
 
 from src.codomyrmex.operating_system.base import (
     DiskInfo,
@@ -21,22 +20,8 @@ from src.codomyrmex.operating_system.base import (
     ServiceInfo,
     ServiceStatus,
     SystemInfo,
+    _run,
 )
-
-
-def _run(cmd: str, timeout: float = 10.0) -> str:
-    """Run a shell command and return stripped stdout."""
-    try:
-        result = subprocess.run(
-            cmd,
-            shell=True,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-        )
-        return result.stdout.strip()
-    except Exception:
-        return ""
 
 
 class MacOSProvider(OSProviderBase):

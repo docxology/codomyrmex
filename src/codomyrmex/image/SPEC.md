@@ -1,6 +1,6 @@
 # Image -- Functional Specification
 
-**Version**: v1.1.4 | **Updated**: March 2026
+**Version**: v1.1.9 | **Updated**: March 2026
 
 ## Overview
 

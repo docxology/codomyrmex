@@ -54,6 +54,17 @@ bun scripts/pai/pm/AddTask.ts <project> "<task text>" --priority HIGH
 For bulk operations or real-time awareness, agents should use the HTTP API:
 
 ```bash
-curl http://localhost:8889/api/awareness
-curl http://localhost:8889/api/missions
+curl http://localhost:8888/api/awareness
+curl http://localhost:8888/api/missions
+curl http://localhost:8888/api/health
 ```
+
+## Configuration
+
+LLM defaults for bikeride/email features are configurable via environment variables:
+
+| Variable | Default | Description |
+|---|---|---|
+| `PAI_PM_LLM_BACKEND` | `ollama` | LLM backend (`ollama`, `gemini`, `claude`) |
+| `PAI_PM_LLM_MODEL` | `qwen3:4b` | Model name |
+| `PAI_PM_LLM_TIMEOUT` | `60000` | Subprocess timeout (ms) |

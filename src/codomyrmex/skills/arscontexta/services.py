@@ -5,8 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -28,39 +27,10 @@ try:
 except ImportError:
     _HAS_DISCOVERY = False
 
-from .core import _DEFAULT_PRIMITIVES, _DIMENSION_KEYWORDS, ArsContextaManager
-from .models import VaultSpace
-from .types import (
-    ConfigDimension,
-    DimensionSignal,
-    KernelConfig,
-    KernelLayer,
-    KernelPrimitive,
-    PipelineStage,
-    StageResult,
-)
+from .core import ArsContextaManager
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from pathlib import Path
-
-
-def _build_default_primitives() -> list[KernelPrimitive]:
-    """Build the 15 default kernel primitives."""
-    layer_map = {
-        "foundation": KernelLayer.FOUNDATION,
-        "convention": KernelLayer.CONVENTION,
-        "automation": KernelLayer.AUTOMATION,
-    }
-    return [
-        KernelPrimitive(
-            name=d["name"],
-            layer=layer_map[d["layer"]],
-            description=d["description"],
-            dependencies=d["dependencies"],
-        )
-        for d in _DEFAULT_PRIMITIVES
-    ]
 
 
 def _register_arscontexta_skills() -> None:
@@ -197,150 +167,3 @@ def _register_arscontexta_skills() -> None:
         skill_obj = FunctionSkill(func, metadata=meta)
         DEFAULT_REGISTRY.register(skill_obj)
         logger.debug("Registered arscontexta skill: %s", name)
-
-
-class KernelPrimitiveRegistry:
-    """Registry holding the 15 default kernel primitives."""
-
-    def __init__(self) -> None:
-        self._primitives: dict[str, KernelPrimitive] = {}
-        for p in _build_default_primitives():
-            self._primitives[p.name] = p
-
-    def get(self, name: str) -> KernelPrimitive | None:
-        """Return the requested value."""
-        return self._primitives.get(name)
-
-    def list_all(self) -> list[KernelPrimitive]:
-        return list(self._primitives.values())
-
-    def list_by_layer(self, layer: KernelLayer) -> list[KernelPrimitive]:
-        return [p for p in self._primitives.values() if p.layer == layer]
-
-    def validate_primitive(self, name: str, vault_path: Path) -> bool:
-        """Check if a primitive's artefact exists at *vault_path*."""
-        prim = self.get(name)
-        if prim is None:
-            return False
-        # Structural check: for folder-structure, verify spaces exist
-        if name == "folder-structure":
-            return all((vault_path / s.value).is_dir() for s in VaultSpace)
-        # Default: primitive is registered and enabled
-        return prim.enabled
-
-    def to_kernel_config(self) -> KernelConfig:
-        return KernelConfig(primitives=list(self._primitives.values()))
-
-
-class ProcessingPipeline:
-    """Implements the 6R Processing Pipeline with pluggable stage handlers."""
-
-    def __init__(self) -> None:
-        self._handlers: dict[PipelineStage, list[Callable[[str, dict], str]]] = {
-            stage: [] for stage in PipelineStage
-        }
-        self._results: list[StageResult] = []
-
-    def register_handler(
-        self, stage: PipelineStage, handler: Callable[[str, dict], str]
-    ) -> None:
-        """Register a handler for a pipeline stage."""
-        self._handlers[stage].append(handler)
-
-    def process(
-        self, content: str, context: dict[str, Any] | None = None
-    ) -> list[StageResult]:
-        """Run content through all 6 pipeline stages in order."""
-        ctx = context or {}
-        self._results = []
-        current = content
-        for stage in PipelineStage:
-            result = self.process_single_stage(stage, current, ctx)
-            self._results.append(result)
-            if not result.success:
-                break
-            current = result.output_content
-        return list(self._results)
-
-    def process_single_stage(
-        self, stage: PipelineStage, content: str, context: dict[str, Any] | None = None
-    ) -> StageResult:
-        """Run a single stage."""
-        ctx = context or {}
-        start = time.monotonic()
-        output = content
-        try:
-            handlers = self._handlers.get(stage, [])
-            for handler in handlers:
-                output = handler(output, ctx)
-            elapsed = (time.monotonic() - start) * 1000
-            return StageResult(
-                stage=stage,
-                input_content=content,
-                output_content=output,
-                duration_ms=round(elapsed, 2),
-                success=True,
-            )
-        except Exception as exc:
-            elapsed = (time.monotonic() - start) * 1000
-            return StageResult(
-                stage=stage,
-                input_content=content,
-                output_content=output,
-                duration_ms=round(elapsed, 2),
-                success=False,
-                error=str(exc),
-            )
-
-    def get_results(self) -> list[StageResult]:
-        return list(self._results)
-
-
-class DerivationEngine:
-    """Maps user text to 8 configuration dimensions with confidence scoring."""
-
-    def __init__(self) -> None:
-        self._signals: list[DimensionSignal] = []
-
-    def ingest_signal(self, signal: DimensionSignal) -> None:
-        self._signals.append(signal)
-
-    def ingest_from_text(
-        self, text: str, source: str = "user"
-    ) -> list[DimensionSignal]:
-        """Extract dimension signals from free-form text via keyword heuristics."""
-        new_signals: list[DimensionSignal] = []
-        lower = text.lower()
-        for dim_key, keywords in _DIMENSION_KEYWORDS.items():
-            dimension = ConfigDimension(dim_key)
-            for keyword, value in keywords:
-                if keyword in lower:
-                    sig = DimensionSignal(
-                        dimension=dimension,
-                        value=value,
-                        confidence=0.6,
-                        source=source,
-                    )
-                    self._signals.append(sig)
-                    new_signals.append(sig)
-        return new_signals
-
-    def get_dimension_summary(self) -> dict[str, list[dict[str, Any]]]:
-        """Group signals by dimension."""
-        summary: dict[str, list[dict[str, Any]]] = {}
-        for sig in self._signals:
-            key = sig.dimension.value
-            if key not in summary:
-                summary[key] = []
-            summary[key].append(sig.to_dict())
-        return summary
-
-    def get_overall_confidence(self) -> float:
-        """Average confidence across all signals, or 0.0 if empty."""
-        if not self._signals:
-            return 0.0
-        return sum(s.confidence for s in self._signals) / len(self._signals)
-
-    def reset(self) -> None:
-        """Reset the state to its initial value."""
-        self._signals.clear()

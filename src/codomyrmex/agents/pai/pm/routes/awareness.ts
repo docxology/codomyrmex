@@ -7,6 +7,7 @@
 
 import { loadDashboardData } from "../PMDashboard.ts";
 import { json } from "../helpers.ts";
+import { PAI_DIR } from "../config.ts";
 
 export async function handleAwarenessRoutes(
     path: string,
@@ -32,7 +33,7 @@ export async function handleAwarenessRoutes(
         const path_mod = await import("path");
         const yaml_mod = await import("js-yaml");
 
-        const PAI_ROOT = path_mod.join(process.env.HOME || "", ".claude");
+        const PAI_ROOT = PAI_DIR;
 
         // Read missions
         const missionsDir = path_mod.join(PAI_ROOT, "MEMORY", "STATE", "missions");

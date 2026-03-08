@@ -31,7 +31,7 @@ export function broadcast(event: string, entity: string, data: unknown) {
 export function json(data: unknown, status = 200) {
     return Response.json(data, {
         status,
-        headers: { "Access-Control-Allow-Origin": `http://localhost:${PORT}` },
+        headers: { "Access-Control-Allow-Origin": "*" },
     });
 }
 

@@ -262,6 +262,7 @@ class MetricsMixin:
             return {
                 "total_groups": 0,
                 "duplicated_lines": 0,
+                "total_lines": 0,
                 "duplication_percentage": 0.0,
                 "score": 100.0,
             }

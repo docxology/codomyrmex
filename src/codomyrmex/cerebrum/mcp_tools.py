@@ -1,6 +1,9 @@
-"""MCP tools for the cerebrum module."""
+from typing import Any
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+logger = get_logger(__name__)
 
 
 @mcp_tool(category="cerebrum")
@@ -14,34 +17,31 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
     Returns:
         Structured retrieval results containing matching cases.
     """
+    if not query or not query.strip():
+        raise ValueError("query must be a non-empty string")
+    if not isinstance(limit, int) or limit < 1 or limit > 100:
+        raise ValueError("limit must be an integer between 1 and 100")
+
     from codomyrmex.cerebrum import CaseBase, CaseRetriever
 
-    try:
-        # Assuming a default initialization path
-        base = CaseBase()
-        retriever = CaseRetriever(base)
+    base = CaseBase()
+    retriever = CaseRetriever(base)
+    results = retriever.retrieve({"concept": query}, k=limit)
 
-        # Searching by conceptual similarity (using query as a feature filter)
-        results = retriever.retrieve({"concept": query}, k=limit)
-
-        formatted_results = []
-        for case, score in results:
-            formatted_results.append(
-                {
-                    "id": case.case_id,
-                    "features": case.features,
-                    "solution": case.metadata.get("solution"),
-                    "similarity_score": score,
-                }
-            )
-
-        return {
-            "status": "success",
-            "results": formatted_results,
-            "count": len(formatted_results),
+    formatted_results = [
+        {
+            "id": case.case_id,
+            "features": case.features,
+            "solution": case.metadata.get("solution"),
+            "similarity_score": score,
         }
-    except Exception as e:
-        return {"status": "error", "message": f"Knowledge base query failed: {e}"}
+        for case, score in results
+    ]
+    return {
+        "status": "success",
+        "results": formatted_results,
+        "count": len(formatted_results),
+    }
 
 
 @mcp_tool(category="cerebrum")
@@ -55,20 +55,66 @@ def add_case_reference(concept: str, solution: str) -> dict:
     Returns:
         Confirmation of case storage.
     """
+    if not concept or not concept.strip():
+        raise ValueError("concept must be a non-empty string")
+    if not solution or not solution.strip():
+        raise ValueError("solution must be a non-empty string")
+
     import uuid
 
     from codomyrmex.cerebrum import Case, CaseBase
 
-    try:
-        base = CaseBase()
-        case_id = str(uuid.uuid4())
-        case = Case(case_id=case_id, features={"concept": concept}, metadata={"solution": solution})
-        base.add_case(case)
+    base = CaseBase()
+    case_id = str(uuid.uuid4())
+    case = Case(case_id=case_id, features={"concept": concept}, metadata={"solution": solution})
+    base.add_case(case)
 
-        return {
-            "status": "success",
-            "message": "Case stored successfully",
-            "case_id": case.case_id,
-        }
-    except Exception as e:
-        return {"status": "error", "message": f"Failed to store case: {e}"}
+    return {
+        "status": "success",
+        "message": "Case stored successfully",
+        "case_id": case.case_id,
+    }
+@mcp_tool(
+    category="cerebrum",
+    description="Evaluate prediction-error 'surprise' (Free Energy) to trigger swarm deployment.",
+)
+def evaluate_surprise_signal(observation: dict[str, Any], threshold: float = 5.0) -> dict[str, Any]:
+    """Evaluate surprise signal using active inference.
+
+    If free energy > threshold, recommend swarm deployment.
+
+    Args:
+        observation: Data features to evaluate (e.g. {'anomaly_score': 0.8, 'drift': 0.5})
+        threshold: Surprise threshold (default 5.0)
+    """
+    from codomyrmex.cerebrum.inference.active_inference import (
+        BeliefState,
+        VariationalFreeEnergy,
+    )
+
+    # Define a default 2-state model
+    # States: nominal, critical
+    states = {"nominal": 0.9, "critical": 0.1}
+    beliefs = BeliefState(states=states)
+
+    # Likelihood model: How likely are these observations in each state?
+    # In 'nominal', seeing an 'anomaly' observation should have low probability.
+    # In 'critical', seeing it should have high probability.
+    likelihood = {
+        "nominal": dict.fromkeys(observation, 0.1),
+        "critical": dict.fromkeys(observation, 0.9),
+    }
+
+    vfe = VariationalFreeEnergy(precision=1.0)
+    fe = vfe.compute(beliefs, observation, likelihood)
+
+    should_deploy = fe > threshold
+
+    return {
+        "status": "success",
+        "free_energy": fe,
+        "threshold": threshold,
+        "recommendation": "DEPLOY_SWARM" if should_deploy else "MONITOR",
+        "signal_strength": round(max(0.0, fe / threshold), 2) if threshold > 0 else 0.0,
+        "observation_keys": list(observation.keys()),
+    }

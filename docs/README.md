@@ -1,6 +1,6 @@
 # 📚 Codomyrmex Documentation
 
-> **Version**: v1.1.4 | **Modules**: 127 | **Tests**: 21,000+ collected | **Ruff**: 0 violations
+> **Version**: v1.1.9 | **Modules**: 128 | **Tests**: 21,000+ collected | **Ruff**: 0 violations
 
 This directory contains all documentation for the Codomyrmex ecosystem — a modular, extensible Python workspace for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.
 
@@ -69,16 +69,16 @@ This directory contains all documentation for the Codomyrmex ecosystem — a mod
 
 ---
 
-## Quality Metrics (v1.1.4)
+## Quality Metrics (v1.1.9)
 
 | Metric | Value |
 |--------|-------|
-| Python modules | **127** auto-discovered |
+| Python modules | **128** auto-discovered |
 | MCP tools | **474** `@mcp_tool` decorators |
 | Test suite | **21,000+** collected |
 | Ruff violations | **0** (triaged from 119k) |
 | ty diagnostics | **971** (target < 1,000 met) |
-| Coverage | ~35% (`fail_under=35`) |
+| Coverage | ~35% (`fail_under=40`) |
 | Documentation pages | **1,029+** |
 | Zero-Mock compliance | **100%** |
 | Build backend | **uv_build** (PEP 517) |

@@ -6,7 +6,7 @@
 
 This directory contains the **complete PAI PM toolchain** — a set of TypeScript CLI tools powered by [Bun](https://bun.sh) that implement a three-tier project management hierarchy:
 
-```
+```text
 Mission (strategic goal)
   └── Project (deliverable)
        └── Task (actionable work item)
@@ -87,18 +87,24 @@ All paths are configurable via environment variables:
 | `PAI_SYNC_DIR` | `$PAI_STATE_DIR/sync` | GitHub sync mappings |
 | `GITHUB_DEFAULT_OWNER` | `""` | Default GitHub org for repo listing |
 | `GITHUB_TOKEN` | — | Required for `GitHubSync.ts` (or use `gh auth login`) |
+| `PAI_PM_LLM_BACKEND` | `ollama` | Default LLM backend for bikeride/email |
+| `PAI_PM_LLM_MODEL` | `qwen3:4b` | Default LLM model |
+| `PAI_PM_LLM_TIMEOUT` | `60000` | LLM subprocess timeout (ms) |
+| `GOOGLE_CLIENT_ID` | — | Google Calendar/Gmail OAuth |
+| `GOOGLE_CLIENT_SECRET` | — | Google Calendar/Gmail OAuth |
+| `AGENTMAIL_API_KEY` | — | AgentMail API key |
 
 ## Data Model
 
 See [DataModels.ts](DataModels.ts) for the full type definitions:
 
-- **Mission**: `id`, `title`, `description`, `status` (ACTIVE/PAUSED/COMPLETED/ARCHIVED), `priority`, `linked_projects[]`
+- **Mission**: `id`, `title`, `description`, `status` (ACTIVE/PLANNING/IN_PROGRESS/PAUSED/COMPLETED/ARCHIVED), `priority`, `linked_projects[]`
 - **Project**: `id`, `title`, `goal`, `status` (PLANNING/IN_PROGRESS/COMPLETED/PAUSED/BLOCKED), `parent_mission`
 - **Task**: `text`, `section` (completed/in_progress/remaining/blocked/optional), `priority`, `due`, `depends_on[]`
 
 ## Architecture
 
-```
+```text
 scripts/pai/pm/
 ├── config.ts           # Externalized path configuration
 ├── DataModels.ts       # Shared type definitions
@@ -111,6 +117,22 @@ scripts/pai/pm/
 ├── *Dashboard.ts       # Dashboard aggregation
 ├── TaskSummary.ts      # Task metrics
 ├── GitHubSync.ts       # GitHub ↔ PAI bidirectional sync
+├── server.ts           # Modular HTTP server (v2.1.0)
+├── helpers.ts          # Shared HTTP/WebSocket utilities
+├── services/
+│   └── oauth.ts        # Google Calendar, Gmail, AgentMail OAuth
+├── routes/
+│   ├── missions.ts     # /api/missions/* CRUD
+│   ├── projects.ts     # /api/projects/* + /api/gantt/*
+│   ├── tasks.ts        # /api/tasks/* CRUD
+│   ├── github.ts       # /api/github/* (sync engine)
+│   ├── dispatch.ts     # /api/dispatch/* (LLM dispatch)
+│   ├── interview.ts    # /api/interview/* (AI interviews)
+│   ├── awareness.ts    # /api/awareness (ecosystem state)
+│   ├── calendar.ts     # /api/calendar/* (Google Calendar)
+│   └── email.ts        # /api/email/* + /api/bikeride/*
+├── spa/
+│   └── index.html      # 15-tab single-page application
 └── package.json        # Bun package manifest
 ```
 

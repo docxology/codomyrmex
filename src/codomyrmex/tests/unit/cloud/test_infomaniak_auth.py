@@ -142,7 +142,9 @@ class TestInfomaniakAuthModule:
 
     def test_s3_credentials_from_env_valid(self, infomaniak_s3_env):
         """S3 credentials are correctly populated from valid environment variables."""
-        from codomyrmex.cloud.infomaniak.auth import InfomaniakS3Credentials
+        from codomyrmex.cloud.infomaniak.auth import (
+            InfomaniakS3Credentials,
+        )
 
         creds = InfomaniakS3Credentials.from_env()
 
@@ -171,7 +173,9 @@ class TestInfomaniakAuthModule:
 
     def test_s3_credentials_defaults(self):
         """S3 credentials use correct defaults for endpoint and region."""
-        from codomyrmex.cloud.infomaniak.auth import InfomaniakS3Credentials
+        from codomyrmex.cloud.infomaniak.auth import (
+            InfomaniakS3Credentials,
+        )
 
         creds = InfomaniakS3Credentials(
             access_key="ak",
@@ -191,7 +195,9 @@ class TestAuthFunctions:
     def test_create_openstack_connection_import_error(self):
         """create_openstack_connection raises ImportError when openstacksdk missing."""
 
-        from codomyrmex.cloud.infomaniak.auth import create_openstack_connection
+        from codomyrmex.cloud.infomaniak.auth import (
+            create_openstack_connection,
+        )
 
         # Temporarily hide openstack module
         saved = sys.modules.get("openstack")

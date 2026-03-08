@@ -14,7 +14,7 @@ import platform
 import shutil
 import sys
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import dotenv
 

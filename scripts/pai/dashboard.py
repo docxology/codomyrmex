@@ -5,8 +5,9 @@ PAI Dashboard Orchestrator
 Launches BOTH PAI interfaces in one command:
 
   🚀 PAI Project Manager  → http://localhost:8888  (primary)
-     Missions, projects, tasks, Kanban, Gantt, GitHub sync, AI agent dispatch
-     Powered by: bun scripts/pai/pm/server.ts
+     15-tab SPA: Analytics, Awareness, Blockers, Board, Calendar, Email,
+     Data, Dispatch, Git, Integration, Interview, Network, Projects,
+     Timeline, Bike Ride. Powered by: bun (auto-restart on crash)
 
   ◆  Codomyrmex Admin     → http://localhost:8787  (secondary)
      Module health, MCP tools, trust gateway, system audit
@@ -178,27 +179,41 @@ def phase_pai_pm(restart: bool, port: int = _PAI_PM_PORT) -> subprocess.Popen | 
             print_success(f"  Cleared :{port}")
             time.sleep(0.3)
 
-    proc = subprocess.Popen(
-        [bun, str(_PAI_PM_SERVER), f"--port={port}"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        bufsize=1,
-    )
-    print_info(f"  PAI PM process started (PID {proc.pid}) — waiting for :{port}…")
+    def _start_pm() -> subprocess.Popen:
+        p = subprocess.Popen(
+            [bun, str(_PAI_PM_SERVER), f"--port={port}"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        print_info(f"  PAI PM process started (PID {p.pid}) — waiting for :{port}…")
 
-    def _tail_logs(p: subprocess.Popen):
-        for line in p.stdout:
-            sys.stdout.write(f"\033[90m[PAI PM]\033[0m {line}")
-            sys.stdout.flush()
+        def _tail_logs(proc: subprocess.Popen) -> None:
+            for line in proc.stdout:
+                sys.stdout.write(f"\033[90m[PAI PM]\033[0m {line}")
+                sys.stdout.flush()
 
-    threading.Thread(target=_tail_logs, args=(proc,), daemon=True).start()
+        threading.Thread(target=_tail_logs, args=(p,), daemon=True).start()
+        return p
 
-    if _port_is_live(port, timeout=8.0):
+    proc = _start_pm()
+    if _port_is_live(port, timeout=15.0):
         print_success(f"  PAI Project Manager live → http://localhost:{port}")
+    elif proc.poll() is not None:
+        # Process crashed — retry once
+        print_error(f"  PAI PM crashed (exit code {proc.returncode}). Retrying…")
+        time.sleep(0.5)
+        proc = _start_pm()
+        if _port_is_live(port, timeout=15.0):
+            print_success(f"  PAI Project Manager live → http://localhost:{port}")
+        else:
+            print_error(
+                f"  PAI PM retry failed on :{port} — check logs above for errors."
+            )
     else:
         print_error(
-            f"  PAI PM did not respond on :{port} within 8s — it may still be starting."
+            f"  PAI PM did not respond on :{port} within 15s — it may still be starting."
         )
 
     return proc

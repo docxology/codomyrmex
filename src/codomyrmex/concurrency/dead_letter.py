@@ -19,7 +19,7 @@ from __future__ import annotations
 import json
 import threading
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -74,7 +74,7 @@ class DeadLetterQueue:
         entry_id = str(uuid.uuid4())
         entry = {
             "id": entry_id,
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(UTC).isoformat() + "Z",
             "operation": operation,
             "args": args or {},
             "error": error,
@@ -176,7 +176,7 @@ class DeadLetterQueue:
                     entry = json.loads(line)
                     if entry.get("id") == entry_id:
                         entry["replayed"] = True
-                        entry["replayed_at"] = datetime.utcnow().isoformat() + "Z"
+                        entry["replayed_at"] = datetime.now(UTC).isoformat() + "Z"
                     new_lines.append(json.dumps(entry))
                 except json.JSONDecodeError:
                     new_lines.append(line)

@@ -266,14 +266,18 @@ class TestAnalyticsWindow:
         assert metrics[AnalyticsMetric.MAX] == 50.0
 
     def test_is_complete(self):
-        from codomyrmex.physical_management.analytics import AnalyticsWindow
+        from codomyrmex.physical_management.analytics import (
+            AnalyticsWindow,
+        )
 
         past = time.time() - 120
         window = AnalyticsWindow(start_time=past, end_time=past + 60, duration=60)
         assert window.is_complete()
 
     def test_empty_window_metrics(self):
-        from codomyrmex.physical_management.analytics import AnalyticsWindow
+        from codomyrmex.physical_management.analytics import (
+            AnalyticsWindow,
+        )
 
         now = time.time()
         window = AnalyticsWindow(start_time=now, end_time=now + 60, duration=60)
@@ -343,7 +347,9 @@ class TestStreamingAnalytics:
     """Tests for StreamingAnalytics manager."""
 
     def test_create_and_delete_stream(self):
-        from codomyrmex.physical_management.analytics import StreamingAnalytics
+        from codomyrmex.physical_management.analytics import (
+            StreamingAnalytics,
+        )
 
         sa = StreamingAnalytics()
         stream = sa.create_stream("s1")
@@ -352,7 +358,9 @@ class TestStreamingAnalytics:
         assert sa.get_stream("s1") is None
 
     def test_add_data(self):
-        from codomyrmex.physical_management.analytics import StreamingAnalytics
+        from codomyrmex.physical_management.analytics import (
+            StreamingAnalytics,
+        )
 
         sa = StreamingAnalytics()
         sa.create_stream("s1")
@@ -361,7 +369,9 @@ class TestStreamingAnalytics:
         assert stats["total_points"] == 1
 
     def test_get_analytics_summary(self):
-        from codomyrmex.physical_management.analytics import StreamingAnalytics
+        from codomyrmex.physical_management.analytics import (
+            StreamingAnalytics,
+        )
 
         sa = StreamingAnalytics()
         sa.create_stream("a")
@@ -374,27 +384,37 @@ class TestStreamingAnalytics:
 # From test_coverage_boost_r7.py
 class TestSensorIntegration:
     def test_device_status(self):
-        from codomyrmex.physical_management.sensor_integration import DeviceStatus
+        from codomyrmex.physical_management.sensor_integration import (
+            DeviceStatus,
+        )
 
         assert DeviceStatus is not None  # DeviceStatus exists
 
     def test_coordinate_system(self):
-        from codomyrmex.physical_management.sensor_integration import CoordinateSystem
+        from codomyrmex.physical_management.sensor_integration import (
+            CoordinateSystem,
+        )
 
         assert CoordinateSystem is not None  # CoordinateSystem exists
 
     def test_physical_constants(self):
-        from codomyrmex.physical_management.sensor_integration import PhysicalConstants
+        from codomyrmex.physical_management.sensor_integration import (
+            PhysicalConstants,
+        )
 
         assert hasattr(PhysicalConstants, "GRAVITY") or PhysicalConstants is not None
 
     def test_device_interface(self):
-        from codomyrmex.physical_management.sensor_integration import DeviceInterface
+        from codomyrmex.physical_management.sensor_integration import (
+            DeviceInterface,
+        )
 
         assert DeviceInterface is not None
 
     def test_sensor_manager(self):
-        from codomyrmex.physical_management.sensor_integration import SensorManager
+        from codomyrmex.physical_management.sensor_integration import (
+            SensorManager,
+        )
 
         mgr = SensorManager()
         assert mgr is not None
@@ -403,7 +423,9 @@ class TestSensorIntegration:
 # From test_coverage_boost_r7.py
 class TestSimulationEngine:
     def test_vector3d(self):
-        from codomyrmex.physical_management.simulation_engine import Vector3D
+        from codomyrmex.physical_management.simulation_engine import (
+            Vector3D,
+        )
 
         v = Vector3D(x=1.0, y=2.0, z=3.0)
         assert v.x == 1.0
@@ -418,13 +440,17 @@ class TestSimulationEngine:
         assert ff.strength == 9.81
 
     def test_constraint(self):
-        from codomyrmex.physical_management.simulation_engine import Constraint
+        from codomyrmex.physical_management.simulation_engine import (
+            Constraint,
+        )
 
         c = Constraint(object1_id="obj1", object2_id="obj2", constraint_type="plane")
         assert c.constraint_type == "plane"
 
     def test_physics_simulator(self):
-        from codomyrmex.physical_management.simulation_engine import PhysicsSimulator
+        from codomyrmex.physical_management.simulation_engine import (
+            PhysicsSimulator,
+        )
 
         sim = PhysicsSimulator()
         assert sim is not None

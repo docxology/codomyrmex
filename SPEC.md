@@ -1,6 +1,6 @@
 # Codomyrmex Functional Specification
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 ## System Concept
 
@@ -179,22 +179,15 @@ This root directory serves as the nexus of the colony. It does not contain busin
 
 ## Known Architecture Debt
 
-Tracked items by sprint target. Resolved items are kept for historical reference.
+Active items tracked by sprint target.
 
 | Item | Status | Sprint Target | Notes |
 |------|--------|---------------|-------|
-| Circular imports: ~35 pairs across modules | Open | Sprint 3 | Use `isort --check` + dependency graph to surface |
-| Oversized files: 1 non-test file >1K LOC | Open | Sprint 3 | `server.py` (1,052 lines); `reviewer.py` modularized to 388 LOC in v1.0.2 |
-| EventBus trust events wrong signature | **Resolved v1.0.2** | — | `EventType.TRUST_LEVEL_CHANGED` added; `publish_event` call fixed in `trust_gateway.py` |
-| PAI.md thin files (5 modules at <52 lines) | **Resolved v1.0.2** | — | All 5 expanded to ≥100 lines with MCP tool docs and phase mapping |
-| Tool versioning: no deprecation scheme | **Resolved v1.0.2** | — | `version` + `deprecated_in` params added to `@mcp_tool` decorator |
-| Stale module/tool counts in docs | **Resolved v1.1.4** | — | Updated: 128 modules, 474 `@mcp_tool` decorators across auto-discovered modules |
+| Circular imports: ~35 pairs across modules | Open | Sprint 29 | Use `isort --check` + dependency graph to surface |
+| Oversized files: 1 non-test file >1K LOC | Open | Sprint 29 | `server.py` (1,052 lines); modularize further |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
-| Shutdown logging on closed streams | **Resolved v1.1.4** | — | `OrchestrationEngine.__del__` and `shutdown()` guarded against `ValueError` on closed file handles |
-| Session status enum misuse | **Resolved v1.1.4** | — | `close_session()` now uses `SessionStatus.COMPLETED` instead of raw `"closed"` string |
-| Telemetry DRY violation in server.py | **Resolved v1.1.4** | — | Extracted `_ensure_telemetry()` classmethod; eliminated ~60 lines of duplicated init code |
-| Bidirectional PAI↔codomyrmex comms | Open | Sprint 4 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
-| Tool versioning: no deprecation timeline UI | Open | Sprint 4 | `deprecated_in` metadata added but not surfaced in MCP tool list |
+| Bidirectional PAI↔codomyrmex comms | Open | Sprint 30 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
+| Tool versioning: no deprecation timeline UI | Open | Sprint 30 | `deprecated_in` metadata added but not surfaced in MCP tool list |
 
 ## Navigation Links
 

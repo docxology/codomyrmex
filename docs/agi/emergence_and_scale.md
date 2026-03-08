@@ -10,7 +10,7 @@ But emergence is not magic. It has formal structure. This essay traces four emer
 
 ## The Percolation Model
 
-Codomyrmex's dependency graph is a directed network with 127 nodes and 440+ edges. We can model emergent cross-module capabilities using **bond percolation** on this graph (Stauffer & Aharony, 1994).
+Codomyrmex's dependency graph is a directed network with 128 nodes and 440+ edges. We can model emergent cross-module capabilities using **bond percolation** on this graph (Stauffer & Aharony, 1994).
 
 Define the occupation probability *p* as the fraction of modules that are functional (i.e., pass health checks). Below a critical threshold *p_c*, the graph fragments into disconnected components — cross-module workflows are impossible. Above *p_c*, a **giant connected component** emerges spanning the system.
 
@@ -115,7 +115,7 @@ This fractal self-similarity is not coincidental — it reflects the autopoietic
 
 Anderson's deeper point is that at each level of complexity, **qualitatively new phenomena emerge** that cannot be predicted from the laws governing the level below. The relationship between levels is not ontological reduction but *broken symmetry*.
 
-Applied to codomyrmex's growth from 88 modules (v1.1.4) to 128 modules (v1.1.4):
+Applied to codomyrmex's growth from 128 modules (at inception) to 128 modules (v1.1.9):
 
 | Module Count | Phase | Emergent Capability | Symmetry Broken |
 |:-------------|:------|:-------------------|:---------------|

@@ -11,9 +11,7 @@ import os
 from pathlib import Path
 
 import psutil
-from rich import print as rprint
 from rich.console import Console
-from rich.layout import Layout
 from rich.panel import Panel
 from rich.table import Table
 

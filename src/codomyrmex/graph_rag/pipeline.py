@@ -75,14 +75,28 @@ class GraphRAGPipeline:
             if entity.id not in entity_ids:
                 entity_ids.append(entity.id)
 
-        # Expand to neighbors
+        # Expand to neighbors using multi-hop BFS
         all_entity_ids = set(entity_ids[:max_entities])
-        if include_neighbors:
-            for eid in list(all_entity_ids):
-                for neighbor in self.graph.get_neighbors(eid):
-                    all_entity_ids.add(neighbor.id)
+        if include_neighbors and max_depth > 0 and len(all_entity_ids) < max_entities:
+            current_layer = list(all_entity_ids)
+            visited = set(all_entity_ids)
+
+            for _ in range(max_depth):
+                next_layer = []
+                for eid in current_layer:
+                    for neighbor in self.graph.get_neighbors(eid):
+                        if neighbor.id not in visited:
+                            visited.add(neighbor.id)
+                            all_entity_ids.add(neighbor.id)
+                            next_layer.append(neighbor.id)
+
+                            if len(all_entity_ids) >= max_entities:
+                                break
                     if len(all_entity_ids) >= max_entities:
                         break
+                if not next_layer or len(all_entity_ids) >= max_entities:
+                    break
+                current_layer = next_layer
 
         # Get entities
         entities = [

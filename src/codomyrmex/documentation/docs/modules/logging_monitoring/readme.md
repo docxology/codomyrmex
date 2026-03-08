@@ -1,6 +1,6 @@
 # Logging & Monitoring Module
 
-**Version**: v1.1.4 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
 Centralized logging with configurable levels, formats, and outputs.
 
@@ -16,24 +16,25 @@ Every PAI Algorithm phase emits structured logs via this module. `logging_format
 
 ## Key Exports
 
-The following are exported from the top-level `__init__.py`:
+The following are exported from the top-level `codomyrmex.logging_monitoring`:
 
-### Functions
+### Core API
 - **`setup_logging()`** — Configure the logging system for the application.
 - **`get_logger(name)`** — Get a logger instance with the specified name.
+- **`LogContext`** — Context manager for correlation ID and contextual logging.
+- **`log_with_context()`** — Log a message with additional context data.
+- **`JSONFormatter`** — Formatter that outputs log records as JSON objects.
 
-### Submodule Classes (importable from subpackages)
-- **`AuditLogger`** — Specialized logger for recording immutable security and audit events (in `audit/`).
-- **`JSONFormatter`** — Formatter that outputs log records as JSON objects (in `formatters/`).
-- **`LogContext`** — Context manager for correlation ID and contextual logging (in `core/`).
-- **`PerformanceLogger`** — Logger specialized for performance metrics and timing operations (in `handlers/`).
-- **`LogRotationManager`** — Configures and manages rotating file handlers for loggers (in `handlers/`).
+### Correlation & Tracing
+- **`new_correlation_id()`**, **`get_correlation_id()`**, **`set_correlation_id()`** — Manage the active correlation ID.
+- **`with_correlation()`** — Context manager for simple correlation ID propagation.
+- **`CorrelationFilter`** — Logging filter that injects correlation IDs into records.
 
-### Submodule Functions (importable from subpackages)
-- **`log_with_context()`** — Log a message with additional context data (in `core/`).
-- **`create_correlation_id()`** — Generate a unique correlation ID for request tracing (in `core/`).
-
-**Note**: Only `setup_logging` and `get_logger` are re-exported at the package level. Other classes and functions must be imported from their respective subpackages (e.g., `from codomyrmex.logging_monitoring.core import LogContext`).
+### Specialized Loggers (importable from subpackages)
+- **`AuditLogger`** — Specialized logger for security and audit events (in `.audit`).
+- **`PerformanceLogger`** — Logger for performance metrics and timing (in `.handlers`).
+- **`LogRotationManager`** — Manages rotating file handlers (in `.handlers`).
+- **`StructuredFormatter`** — High-performance JSON-lines formatter (in `.formatters`).
 
 ## Quick Start
 
@@ -47,11 +48,102 @@ setup_logging()
 logger = get_logger(__name__)
 
 # Log at different levels
-logger.debug("Detailed debugging information")
 logger.info("Operation completed successfully")
-logger.warning("Something unexpected happened")
-logger.error("Operation failed", exc_info=True)
-logger.critical("System is in critical state")
+```
+
+## Usage Examples
+
+### Structured Logging and Context
+
+```python
+from codomyrmex.logging_monitoring import (
+    setup_logging, get_logger, LogContext, log_with_context, with_correlation
+)
+
+setup_logging()
+logger = get_logger(__name__)
+
+# Using LogContext for automatic correlation ID and extra context
+with LogContext(correlation_id="req-123", additional_context={"user": "alice"}) as ctx:
+    logger.info("Processing request")  # Automatically includes correlation_id and user
+
+# Using log_with_context for one-off structured logs
+log_with_context("info", "Task started", {"task_id": 42, "priority": "high"})
+
+# Using with_correlation for simple ID propagation
+with with_correlation("trace-789") as cid:
+    logger.info(f"Trace ID {cid} is active")
+```
+
+### Audit Logging
+
+```python
+from codomyrmex.logging_monitoring.audit import AuditLogger
+
+audit = AuditLogger()
+audit.log_event(
+    event_type="sensitive_access",
+    user_id="user_99",
+    status="success",
+    severity="info",
+    category="access",
+    details={"resource": "vault_01"}
+)
+
+# Query recent failures
+failures = audit.failures(limit=10)
+```
+
+### Performance Monitoring
+
+```python
+from codomyrmex.logging_monitoring.handlers import PerformanceLogger
+
+perf = PerformanceLogger("database_service")
+
+# Time a code block
+with perf.time_operation("complex_query", context={"table": "users"}):
+    # ... expensive database operation ...
+    pass
+
+# Log custom metrics
+perf.log_metric("cache_hit_ratio", 0.98, unit="percent")
+```
+
+### Log Rotation and Management
+
+```python
+from codomyrmex.logging_monitoring.handlers import LogRotationManager
+import logging
+
+mgr = LogRotationManager(log_dir="./logs")
+mgr.attach_rotating_handler(
+    logger_name="app.api",
+    filename="api.log",
+    max_bytes=10 * 1024 * 1024, # 10MB
+    backup_count=5
+)
+
+# Check disk usage
+usage = mgr.disk_usage()
+print(f"Total log size: {usage['total_mb']} MB")
+```
+
+### Advanced Formatting
+
+```python
+import logging
+from codomyrmex.logging_monitoring import JSONFormatter
+from codomyrmex.logging_monitoring.formatters import RedactedJSONFormatter
+
+# Redact sensitive information
+handler = logging.StreamHandler()
+handler.setFormatter(RedactedJSONFormatter(patterns=["credit_card", "ssn"]))
+
+logger = logging.getLogger("secure_logger")
+logger.addHandler(handler)
+logger.info("User data", extra={"credit_card": "1234-5678-9012-3456"})
+# Output will have: "credit_card": "[REDACTED]"
 ```
 
 ## Configuration
