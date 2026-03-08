@@ -93,9 +93,7 @@ class TaskPlanner:
             )
             subtasks.append(subtask)
 
-        self.logger.info(
-            f"Decomposed task {main_task.id} into {len(subtasks)} subtasks"
-        )
+        self.logger.info("Decomposed task %s into %d subtasks", main_task.id, len(subtasks))
 
         return subtasks
 
@@ -198,7 +196,7 @@ class TaskPlanner:
                     task.id for task in self.tasks.values() if task.id not in executed
                 ]
                 self.logger.warning(
-                    f"Circular dependency or missing tasks: {remaining}"
+                    "Circular dependency or missing tasks: %s", remaining
                 )
                 break
 

@@ -104,11 +104,11 @@ class CLIAgentBase(BaseAgent):
         available = self.is_available()
         if available:
             self.logger.info(
-                f"Connection test passed for {self.name} (Command available)"
+                "Connection test passed for %s (Command available)", self.name
             )
         else:
             self.logger.warning(
-                f"Connection test failed for {self.name}: Command not found"
+                "Connection test failed for %s: Command not found", self.name
             )
         return available
 
@@ -181,21 +181,26 @@ class CLIAgentBase(BaseAgent):
             self._command_available = available
             if not available:
                 self.logger.warning(
-                    f"Command '{cmd}' not found or not responding correctly",
+                    "Command '%s' not found or not responding correctly",
+                    cmd,
                     extra={"command": cmd, "exit_code": result.returncode},
                 )
             return available
         except (subprocess.TimeoutExpired, FileNotFoundError) as e:
             self._command_available = False
             self.logger.debug(
-                f"Command '{cmd}' availability check failed: {e}",
+                "Command '%s' availability check failed: %s",
+                cmd,
+                e,
                 extra={"command": cmd, "error": str(e)},
             )
             return False
         except Exception as e:
             self._command_available = False
             self.logger.warning(
-                f"Error checking command '{cmd}' availability: {e}",
+                "Error checking command '%s' availability: %s",
+                cmd,
+                e,
                 extra={"command": cmd, "error": str(e)},
             )
             return False
@@ -249,7 +254,8 @@ class CLIAgentBase(BaseAgent):
         env = env or self._build_env()
 
         self.logger.debug(
-            f"Executing command: {' '.join(cmd)}",
+            "Executing command: %s",
+            " ".join(cmd),
             extra={
                 "command": " ".join(cmd),
                 "timeout": timeout,
@@ -278,7 +284,8 @@ class CLIAgentBase(BaseAgent):
             success = result.returncode == 0 or (output and not stderr_output)
 
             self.logger.debug(
-                f"Command completed in {execution_time:.2f}s",
+                "Command completed in %.2fs",
+                execution_time,
                 extra={
                     "command": " ".join(cmd),
                     "exit_code": result.returncode,
@@ -300,7 +307,8 @@ class CLIAgentBase(BaseAgent):
         except subprocess.TimeoutExpired:
             execution_time = time.time() - start_time
             self.logger.error(
-                f"Command timed out after {timeout}s",
+                "Command timed out after %ss",
+                timeout,
                 extra={
                     "command": " ".join(cmd),
                     "timeout": timeout,
@@ -314,7 +322,8 @@ class CLIAgentBase(BaseAgent):
             ) from None
         except FileNotFoundError:
             self.logger.error(
-                f"Command not found: {self.command}",
+                "Command not found: %s",
+                self.command,
                 extra={"command": self.command},
             )
             raise AgentError(
@@ -324,7 +333,8 @@ class CLIAgentBase(BaseAgent):
         except Exception as e:
             execution_time = time.time() - start_time
             self.logger.error(
-                f"Command execution failed: {e}",
+                "Command execution failed: %s",
+                e,
                 exc_info=True,
                 extra={
                     "command": " ".join(cmd),
@@ -363,7 +373,8 @@ class CLIAgentBase(BaseAgent):
         env = env or self._build_env()
 
         self.logger.debug(
-            f"Streaming command: {' '.join(cmd)}",
+            "Streaming command: %s",
+            " ".join(cmd),
             extra={
                 "command": " ".join(cmd),
                 "cwd": str(cwd),
@@ -403,7 +414,8 @@ class CLIAgentBase(BaseAgent):
                 stderr = process.stderr.read()
                 if stderr:
                     self.logger.warning(
-                        f"Command returned non-zero exit code: {process.returncode}",
+                        "Command returned non-zero exit code: %s",
+                        process.returncode,
                         extra={
                             "command": " ".join(cmd),
                             "exit_code": process.returncode,
@@ -413,7 +425,8 @@ class CLIAgentBase(BaseAgent):
                     yield f"Error: {stderr}"
 
             self.logger.debug(
-                f"Stream completed with {line_count} lines",
+                "Stream completed with %s lines",
+                line_count,
                 extra={
                     "command": " ".join(cmd),
                     "exit_code": process.returncode,
@@ -423,7 +436,8 @@ class CLIAgentBase(BaseAgent):
 
         except Exception as e:
             self.logger.error(
-                f"Error streaming command output: {e}",
+                "Error streaming command output: %s",
+                e,
                 exc_info=True,
                 extra={"command": " ".join(cmd), "error": str(e)},
             )

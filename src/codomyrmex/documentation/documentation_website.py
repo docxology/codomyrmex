@@ -68,12 +68,16 @@ except ImportError as e_import:
     )
     logger = logging.getLogger(__name__)
     logger.warning(
-        f"Could not import 'codomyrmex.logging_monitoring' (Error: {e_import}). "
-        f"Attempted to add parent of CODOMYRMEX_DIR ('{_path_added_for_import_msg}') to sys.path. "
-        f"Identified CODOMYRMEX_DIR as '{_codomyrmex_dir_for_import_msg}'. "
-        f"Relevant sys.path entries (first 3): {sys.path[:3]}. "
+        "Could not import 'codomyrmex.logging_monitoring' (Error: %s). "
+        "Attempted to add parent of CODOMYRMEX_DIR ('%s') to sys.path. "
+        "Identified CODOMYRMEX_DIR as '%s'. "
+        "Relevant sys.path entries (first 3): %s. "
         "This might indicate a missing '__init__.py' in the 'codomyrmex' directory or its parent not being the correct path. "
-        "Using basic Python logging as a fallback."
+        "Using basic Python logging as a fallback.",
+        e_import,
+        _path_added_for_import_msg,
+        _codomyrmex_dir_for_import_msg,
+        sys.path[:3],
     )
 except Exception as e_setup:
     # Fallback if importing works but setup_logging() itself fails
@@ -84,8 +88,9 @@ except Exception as e_setup:
     )
     logger = logging.getLogger(__name__)
     logger.error(
-        f"Error occurred during setup_logging from 'codomyrmex.logging_monitoring' (Error: {e_setup}). "
-        "Using basic Python logging as a fallback."
+        "Error occurred during setup_logging from 'codomyrmex.logging_monitoring' (Error: %s). "
+        "Using basic Python logging as a fallback.",
+        e_setup,
     )
 
 # Final check to ensure logger is always minimally configured (should not be strictly necessary if above logic is sound)
@@ -176,7 +181,7 @@ def run_command_stream_output(command_parts, cwd):
     Returns True if successful, False otherwise.
     """
     try:
-        logger.info(f"Running command: {' '.join(command_parts)} in {cwd}")
+        logger.info("Running command: %s in %s", " ".join(command_parts), cwd)
         process = subprocess.Popen(
             command_parts,
             cwd=cwd,
@@ -193,20 +198,25 @@ def run_command_stream_output(command_parts, cwd):
         process.wait(timeout=300)
 
         if process.returncode == 0:
-            logger.info(f"Command '{' '.join(command_parts)}' executed successfully.")
+            logger.info("Command '%s' executed successfully.", " ".join(command_parts))
             return True
         logger.error(
-            f"Command '{' '.join(command_parts)}' failed with return code {process.returncode}."
+            "Command '%s' failed with return code %s.",
+            " ".join(command_parts),
+            process.returncode,
         )
         return False
     except FileNotFoundError:
         logger.error(
-            f"Error: Command '{command_parts[0]}' not found. Is it installed and in PATH?"
+            "Error: Command '%s' not found. Is it installed and in PATH?",
+            command_parts[0],
         )
         return False
     except Exception as e:
         logger.error(
-            f"An error occurred while running '{' '.join(command_parts)}': {e}"
+            "An error occurred while running '%s': %s",
+            " ".join(command_parts),
+            e,
         )
         return False
 
@@ -231,7 +241,7 @@ def start_dev_server(package_manager="npm"):
     """Starts the Docusaurus development server (hot-reloading)."""
     logger.info("Attempting to start development server using %s...", package_manager)
     logger.info(
-        f"Docusaurus site should be available at {EFFECTIVE_DOCS_URL} once started."
+        "Docusaurus site should be available at %s once started.", EFFECTIVE_DOCS_URL
     )
     logger.info("This command will run until you stop it (Ctrl+C).")
 
@@ -246,16 +256,17 @@ def start_dev_server(package_manager="npm"):
         return False
 
     try:
-        logger.info(f"Running command: {' '.join(cmd)} in {DOCUSAURUS_ROOT_DIR}")
+        logger.info("Running command: %s in %s", " ".join(cmd), DOCUSAURUS_ROOT_DIR)
         logger.info(
-            f"Try opening your browser at {EFFECTIVE_DOCS_URL} if it doesn't open automatically."
+            "Try opening your browser at %s if it doesn't open automatically.",
+            EFFECTIVE_DOCS_URL,
         )
         subprocess.run(cmd, cwd=DOCUSAURUS_ROOT_DIR, check=False, timeout=300)
         logger.info("Development server process finished or was stopped.")
         return True
     except FileNotFoundError:
         logger.error(
-            f"Error: Command '{cmd[0]}' not found. Is it installed and in PATH?"
+            "Error: Command '%s' not found. Is it installed and in PATH?", cmd[0]
         )
         return False
     except KeyboardInterrupt:
@@ -282,7 +293,8 @@ def build_static_site(package_manager="npm"):
     success = run_command_stream_output(cmd, DOCUSAURUS_ROOT_DIR)
     if success:
         logger.info(
-            f"Static site built successfully in '{os.path.join(DOCUSAURUS_ROOT_DIR, 'build')}'"
+            "Static site built successfully in '%s'",
+            os.path.join(DOCUSAURUS_ROOT_DIR, "build"),
         )
     return success
 
@@ -293,12 +305,15 @@ def serve_static_site(package_manager="npm"):
     build_dir = os.path.join(DOCUSAURUS_ROOT_DIR, "build")
     if not os.path.exists(build_dir) or not os.listdir(build_dir):
         logger.error(
-            f"Build directory '{build_dir}' does not exist or is empty. Please build the site first using the 'build' action."
+            "Build directory '%s' does not exist or is empty. Please build the site first using the 'build' action.",
+            build_dir,
         )
         return False
 
     logger.info(
-        f"Site will be served from '{build_dir}' and should be available at {EFFECTIVE_DOCS_URL}."
+        "Site will be served from '%s' and should be available at %s.",
+        build_dir,
+        EFFECTIVE_DOCS_URL,
     )
     logger.info("This command will run until you stop it (Ctrl+C).")
 
@@ -337,9 +352,10 @@ def serve_static_site(package_manager="npm"):
         return False
 
     try:
-        logger.info(f"Running command: {' '.join(cmd)} in {DOCUSAURUS_ROOT_DIR}")
+        logger.info("Running command: %s in %s", " ".join(cmd), DOCUSAURUS_ROOT_DIR)
         logger.info(
-            f"Try opening your browser at {EFFECTIVE_DOCS_URL} if it doesn't open automatically."
+            "Try opening your browser at %s if it doesn't open automatically.",
+            EFFECTIVE_DOCS_URL,
         )
         subprocess.run(cmd, cwd=DOCUSAURUS_ROOT_DIR, check=False, timeout=300)
         logger.info("Static site server process finished or was stopped.")
@@ -444,14 +460,17 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
                     shutil.rmtree(dest_docs_subdir)
                 except Exception as e:
                     logger.warning(
-                        f"Could not remove existing docs at {dest_docs_subdir}: {e}"
+                        "Could not remove existing docs at %s: %s", dest_docs_subdir, e
                     )
             try:
                 shutil.copytree(src_docs_dir, dest_docs_subdir)
                 logger.info("Copied docs tree %s -> %s", src_docs_dir, dest_docs_subdir)
             except Exception as e:
                 logger.error(
-                    f"Failed to copy docs tree {src_docs_dir} -> {dest_docs_subdir}: {e}"
+                    "Failed to copy docs tree %s -> %s: %s",
+                    src_docs_dir,
+                    dest_docs_subdir,
+                    e,
                 )
 
     logger.info(
@@ -543,12 +562,15 @@ def assess_site():
     try:
         if not webbrowser.open(EFFECTIVE_DOCS_URL):
             logger.warning(
-                f"webbrowser.open() returned False. Could not open {EFFECTIVE_DOCS_URL} automatically."
+                "webbrowser.open() returned False. Could not open %s automatically.",
+                EFFECTIVE_DOCS_URL,
             )
             logger.info("Please open manually: %s", EFFECTIVE_DOCS_URL)
     except Exception as e:
         logger.warning(
-            f"Could not open web browser automatically: {e}. Please open manually: {EFFECTIVE_DOCS_URL}"
+            "Could not open web browser automatically: %s. Please open manually: %s",
+            e,
+            EFFECTIVE_DOCS_URL,
         )
 
     print_assessment_checklist()
@@ -639,7 +661,7 @@ def main():
         logger.info("--- Step 1 (%s): Installing dependencies ---", DEFAULT_ACTION)
         if not install_dependencies(args.pm):
             logger.error(
-                f"Dependency installation failed. Aborting '{DEFAULT_ACTION}'."
+                "Dependency installation failed. Aborting '%s'.", DEFAULT_ACTION
             )
             sys.exit(1)
 
@@ -652,7 +674,8 @@ def main():
         assess_site()  # Open browser and print checklist
         serve_static_site(args.pm)  # Serve the built site (blocking)
         logger.info(
-            f"--- '{DEFAULT_ACTION}' sequence potentially finished (server might have been stopped) ---"
+            "--- '%s' sequence potentially finished (server might have been stopped) ---",
+            DEFAULT_ACTION,
         )
 
 

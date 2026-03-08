@@ -355,7 +355,7 @@ class ModelRunner:
             Benchmark results dictionary
         """
         self.logger.info(
-            f"Benchmarking model {model_name} with {len(test_prompts)} prompts"
+            "Benchmarking model %s with %s prompts", model_name, len(test_prompts)
         )
 
         results = []
@@ -405,7 +405,7 @@ class ModelRunner:
         }
 
         self.logger.info(
-            f"Benchmark completed: {len(successful_runs)}/{len(test_prompts)} successful"
+            "Benchmark completed: %s/%s successful", len(successful_runs), len(test_prompts)
         )
         return benchmark_summary
 
@@ -517,7 +517,7 @@ class ModelRunner:
             options = ExecutionOptions()
 
         self.logger.info(
-            f"[ASYNC] Running model {model_name} with prompt length: {len(prompt)}"
+            "[ASYNC] Running model %s with prompt length: %s", model_name, len(prompt)
         )
 
         start_time = time.time()
@@ -561,7 +561,7 @@ class ModelRunner:
                         tokens_used = data.get("eval_count")
 
                         self.logger.info(
-                            f"[ASYNC] Model {model_name} completed in {execution_time:.2f}s"
+                            "[ASYNC] Model %s completed in %.2fs", model_name, execution_time
                         )
 
                         return ModelExecutionResult(
@@ -668,7 +668,7 @@ class ModelRunner:
             options = ExecutionOptions()
 
         self.logger.info(
-            f"[ASYNC] Running chat with {model_name}, {len(messages)} messages"
+            "[ASYNC] Running chat with %s, %s messages", model_name, len(messages)
         )
 
         start_time = time.time()
@@ -710,7 +710,7 @@ class ModelRunner:
                         tokens_used = data.get("eval_count")
 
                         self.logger.info(
-                            f"[ASYNC] Chat with {model_name} completed in {execution_time:.2f}s"
+                            "[ASYNC] Chat with %s completed in %.2fs", model_name, execution_time
                         )
 
                         # Format the prompt as the conversation for logging
@@ -733,7 +733,7 @@ class ModelRunner:
                     error_text = await response.text()
                     error_msg = f"HTTP {response.status}: {error_text}"
                     self.logger.error(
-                        f"[ASYNC] Chat with {model_name} failed: {error_msg}"
+                        "[ASYNC] Chat with %s failed: %s", model_name, error_msg
                     )
 
                     return ModelExecutionResult(
@@ -837,7 +837,7 @@ class ModelRunner:
                         await response.text()
                         yield StreamingChunk(content="", done=True, token_count=0)
                         self.logger.error(
-                            f"[ASYNC] Stream failed: HTTP {response.status}"
+                            "[ASYNC] Stream failed: HTTP %s", response.status
                         )
                         return
 
@@ -894,7 +894,7 @@ class ModelRunner:
             List of ModelExecutionResult objects
         """
         self.logger.info(
-            f"[ASYNC] Running batch of {len(prompts)} prompts with {model_name}"
+            "[ASYNC] Running batch of %s prompts with %s", len(prompts), model_name
         )
 
         semaphore = asyncio.Semaphore(max_concurrent)
@@ -924,7 +924,9 @@ class ModelRunner:
                 final_results.append(result)
 
         self.logger.info(
-            f"[ASYNC] Batch completed: {sum(1 for r in final_results if r.success)}/{len(final_results)} successful"
+            "[ASYNC] Batch completed: %s/%s successful",
+            sum(1 for r in final_results if r.success),
+            len(final_results),
         )
 
         return final_results
