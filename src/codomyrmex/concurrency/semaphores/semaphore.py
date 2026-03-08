@@ -1,3 +1,5 @@
+import contextlib
+
 """Managed semaphores for resource throttling."""
 
 import asyncio
@@ -190,11 +192,8 @@ class AsyncLocalSemaphore(BaseSemaphore):
         Example:
             >>> sem.release()
         """
-        try:
+        with contextlib.suppress(ValueError):  # too many releases for internal semaphore
             self._semaphore.release()
-        except ValueError:
-            # Too many releases for the internal semaphore
-            pass
 
         with self._sync_lock:
             if self._sync_count < self.initial_value:

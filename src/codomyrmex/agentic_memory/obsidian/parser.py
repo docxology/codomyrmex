@@ -6,13 +6,12 @@ All extraction is regex/YAML-based with no external Obsidian dependencies.
 
 from __future__ import annotations
 
+import contextlib
 import re
 from typing import TYPE_CHECKING, Any
 
-try:
+with contextlib.suppress(ImportError):  # pragma: no cover – yaml is an optional dep
     import yaml
-except ImportError:  # pragma: no cover – yaml is an optional dep
-    pass
 
 from codomyrmex.agentic_memory.obsidian.models import (
     Callout,

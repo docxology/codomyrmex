@@ -40,10 +40,10 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 # Optional scheduler support -- not yet available in all installations.
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):  # pragma: no cover
     from codomyrmex.ide.antigravity.message_scheduler import MessageScheduler
-except ImportError:  # pragma: no cover
-    pass
 
 
 # =====================================================================

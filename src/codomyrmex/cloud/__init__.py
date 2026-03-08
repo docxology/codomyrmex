@@ -87,7 +87,7 @@ with contextlib.suppress(ImportError):
     from .azure import AzureBlobClient
 
 # Infomaniak clients (requires openstacksdk and/or boto3)
-try:
+with contextlib.suppress(ImportError):  # openstacksdk not installed
     from .infomaniak import (
         InfomaniakComputeClient,
         InfomaniakCredentials,
@@ -104,9 +104,6 @@ try:
         create_openstack_connection,
         create_s3_client,
     )
-except ImportError:
-    # openstacksdk not installed
-    pass
 
 # New submodule exports
 from . import common

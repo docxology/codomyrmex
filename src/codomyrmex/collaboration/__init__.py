@@ -9,6 +9,9 @@ Provides multi-agent collaboration capabilities including:
 
 # Core data models
 # Submodule exports
+# Shared schemas for cross-module interop
+import contextlib
+
 from . import agents, communication, coordination, protocols, swarm
 
 # Exceptions
@@ -69,11 +72,8 @@ from .swarm import (
     TaskDecomposer,
 )
 
-# Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):  # pragma: no cover
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:  # pragma: no cover
-    pass
 
 
 def cli_commands():  # pragma: no cover

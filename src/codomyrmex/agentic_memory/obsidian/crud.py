@@ -6,6 +6,7 @@ Path traversal is blocked.
 
 from __future__ import annotations
 
+import contextlib
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.agentic_memory.obsidian.parser import (
@@ -18,10 +19,8 @@ if TYPE_CHECKING:
 
     from codomyrmex.agentic_memory.obsidian.models import Note
 
-try:
+with contextlib.suppress(ImportError):  # pragma: no cover
     import yaml
-except ImportError:  # pragma: no cover
-    pass
 
 
 def _resolve_path(vault_path: Path, name: str) -> Path:
@@ -34,6 +33,13 @@ def _resolve_path(vault_path: Path, name: str) -> Path:
 
 
 # ── create ───────────────────────────────────────────────────────────
+
+
+def _render_frontmatter(frontmatter: dict) -> str:
+    """Serialize frontmatter dict to YAML or key:val fallback."""
+    if yaml is not None:
+        return yaml.dump(frontmatter, default_flow_style=False).strip()
+    return "\n".join(f"{k}: {v}" for k, v in frontmatter.items())
 
 
 def create_note(
@@ -77,10 +83,7 @@ def create_note(
 
     parts: list[str] = []
     if frontmatter:
-        if yaml is not None:
-            fm_str = yaml.dump(frontmatter, default_flow_style=False).strip()
-        else:
-            fm_str = "\n".join(f"{k}: {v}" for k, v in frontmatter.items())
+        fm_str = _render_frontmatter(frontmatter)
         parts.append(f"---\n{fm_str}\n---\n")
     parts.append(content)
     path.write_text("".join(parts))
