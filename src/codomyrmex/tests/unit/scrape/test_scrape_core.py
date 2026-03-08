@@ -454,11 +454,6 @@ class TestScraperUrlValidation:
         # Minimal concrete adapter that satisfies the abstract contract
         from codomyrmex.scrape.core import (
             BaseScraper,
-            CrawlResult,
-            ExtractResult,
-            MapResult,
-            ScrapeResult,
-            SearchResult,
         )
         from codomyrmex.scrape.extractors.scraper import Scraper
 

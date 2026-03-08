@@ -10,9 +10,6 @@ No mocks — all tests use real in-memory data with controlled timestamps.
 
 from __future__ import annotations
 
-import math
-import time
-
 import pytest
 
 try:

@@ -7,7 +7,6 @@ plus validation.schemas (Result, ResultStatus) and validation.pai
 Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 """
 
-from pathlib import Path
 
 import pytest
 

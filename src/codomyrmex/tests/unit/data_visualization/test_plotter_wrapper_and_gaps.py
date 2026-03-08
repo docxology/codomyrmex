@@ -37,7 +37,6 @@ if _has_matplotlib:
     mpl.use("Agg")
 
 import matplotlib.pyplot as plt
-import numpy as np
 
 from codomyrmex.data_visualization.engines._scatter import apply_scatter
 from codomyrmex.data_visualization.engines.advanced_plotter import (

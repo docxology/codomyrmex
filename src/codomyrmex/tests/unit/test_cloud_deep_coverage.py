@@ -7,8 +7,6 @@ and reference type construction for the full Coda API model layer.
 
 from __future__ import annotations
 
-import pytest
-
 from codomyrmex.cloud.coda_io.models import (
     AccessType,
     ColumnReference,

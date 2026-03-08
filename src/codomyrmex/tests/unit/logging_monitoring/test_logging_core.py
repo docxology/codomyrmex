@@ -6,15 +6,10 @@ No mocks, no monkeypatch, no MagicMock. All tests call real code with real input
 
 from __future__ import annotations
 
-import io
 import json
 import logging
 import os
 import tempfile
-import threading
-import time
-
-import pytest
 
 from codomyrmex.logging_monitoring.core.correlation import (
     CorrelationFilter,

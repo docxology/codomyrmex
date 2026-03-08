@@ -9,7 +9,6 @@ PhysicalObjectManager (create, move, batch ops, pathfinding, bounding box).
 from __future__ import annotations
 
 import json
-import time
 from typing import TYPE_CHECKING
 
 import pytest

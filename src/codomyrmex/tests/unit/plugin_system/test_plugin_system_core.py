@@ -10,8 +10,6 @@ from __future__ import annotations
 import os
 import tempfile
 
-import pytest
-
 from codomyrmex.plugin_system.core.plugin_registry import (
     Hook,
     Plugin,
@@ -29,9 +27,6 @@ from codomyrmex.plugin_system.dependency_resolver import (
 from codomyrmex.plugin_system.discovery import (
     DiscoveryResult,
     PluginDiscovery,
-)
-from codomyrmex.plugin_system.discovery import (
-    PluginInfo as DiscoveryPluginInfo,
 )
 from codomyrmex.plugin_system.discovery import (
     PluginState as DiscoveryPluginState,
