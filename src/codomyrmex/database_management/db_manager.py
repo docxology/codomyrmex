@@ -111,7 +111,7 @@ class DatabaseConnection:
         if self.db_type == DatabaseType.SQLITE:
             self._connection = sqlite3.connect(self.database)
             self.connection_count += 1
-            logger.info(f"Connected to SQLite database: {self.database}")
+            logger.info("Connected to SQLite database: %s", self.database)
         elif self.db_type in [DatabaseType.POSTGRESQL, DatabaseType.MYSQL]:
             # In a real implementation, we would use psycopg2 or pymysql here.
             # For this thin orchestrator, we'll keep it simple or raise if not available.
@@ -126,7 +126,7 @@ class DatabaseConnection:
         if self._connection:
             self._connection.close()
             self._connection = None
-            logger.info(f"Disconnected from database: {self.name}")
+            logger.info("Disconnected from database: %s", self.name)
 
     def is_connected(self) -> bool:
         """Check if connected."""
@@ -177,7 +177,7 @@ class DatabaseConnection:
             )
         except Exception as e:
             execution_time = time.time() - start_time
-            logger.error(f"Query execution failed: {e}")
+            logger.error("Query execution failed: %s", e)
             return QueryResult(
                 success=False,
                 rows=[],
@@ -198,7 +198,7 @@ class DatabaseConnection:
             self._connection.commit()
         except Exception as e:
             self._connection.rollback()
-            logger.error(f"Transaction rolled back: {e}")
+            logger.error("Transaction rolled back: %s", e)
             raise
 
 

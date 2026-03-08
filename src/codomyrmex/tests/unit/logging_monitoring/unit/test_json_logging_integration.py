@@ -122,7 +122,7 @@ class TestJSONLoggingIntegration:
             # Send enough logs to trigger rotation
             # Each JSON log entry will be > 100 bytes
             for i in range(10):
-                logger.info(f"Log message {i} with some extra padding to ensure rotation occurs quickly")
+                logger.info("Log message %s with some extra padding to ensure rotation occurs quickly", i)
 
             log_path = Path(temp_log_dir)
             files = list(log_path.glob("rotation.log*"))

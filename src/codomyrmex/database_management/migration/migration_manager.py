@@ -357,7 +357,7 @@ class MigrationManager:
                 self._migrations[migration.id] = migration
 
             except (json.JSONDecodeError, KeyError) as e:
-                logger.warning(f"Failed to load migration {migration_file}: {e}")
+                logger.warning("Failed to load migration %s: %s", migration_file, e)
 
         logger.info(
             f"Loaded {len(self._migrations)} migrations from {self.migrations_dir}"
@@ -416,7 +416,7 @@ class MigrationManager:
                 indent=2,
             )
 
-        logger.info(f"Created migration: {migration_id}")
+        logger.info("Created migration: %s", migration_id)
         return migration
 
     def apply_migration(
@@ -439,7 +439,7 @@ class MigrationManager:
 
         # Check if already applied
         if self._is_migration_applied(migration_id):
-            logger.info(f"Migration already applied: {migration_id}")
+            logger.info("Migration already applied: %s", migration_id)
             return MigrationResult(
                 migration_id=migration_id,
                 success=True,
@@ -453,7 +453,7 @@ class MigrationManager:
                 raise CodomyrmexError(f"Dependency migration not applied: {dep_id}")
 
         if dry_run:
-            logger.info(f"[DRY RUN] Would apply migration: {migration_id}")
+            logger.info("[DRY RUN] Would apply migration: %s", migration_id)
             return MigrationResult(
                 migration_id=migration_id,
                 success=True,
@@ -518,7 +518,7 @@ class MigrationManager:
             )
 
             migration.status = "failed"
-            logger.error(f"Failed to apply migration {migration_id}: {e}")
+            logger.error("Failed to apply migration %s: %s", migration_id, e)
 
             return result
 
@@ -592,7 +592,7 @@ class MigrationManager:
                 error_message=str(e),
             )
 
-            logger.error(f"Failed to rollback migration {migration_id}: {e}")
+            logger.error("Failed to rollback migration %s: %s", migration_id, e)
             return result
 
     def _is_migration_applied(self, migration_id: str) -> bool:
@@ -692,7 +692,7 @@ class MigrationManager:
             result = self.apply_migration(migration.id)
             results.append(result)
             if not result.success:
-                logger.warning(f"Stopping migration due to failure: {migration.id}")
+                logger.warning("Stopping migration due to failure: %s", migration.id)
                 break
 
         return results

@@ -97,7 +97,7 @@ class FirecrawlAdapter(BaseScraper):
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Error in FirecrawlAdapter.scrape: {e}")
+            logger.error("Error in FirecrawlAdapter.scrape: %s", e)
             raise ScrapeError(f"Failed to scrape {url}: {e}") from e
 
     def crawl(self, url: str, options: ScrapeOptions | None = None) -> CrawlResult:
@@ -141,7 +141,7 @@ class FirecrawlAdapter(BaseScraper):
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Error in FirecrawlAdapter.crawl: {e}")
+            logger.error("Error in FirecrawlAdapter.crawl: %s", e)
             raise ScrapeError(f"Failed to crawl {url}: {e}") from e
 
     def map(self, url: str, search: str | None = None) -> MapResult:
@@ -172,7 +172,7 @@ class FirecrawlAdapter(BaseScraper):
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Error in FirecrawlAdapter.map: {e}")
+            logger.error("Error in FirecrawlAdapter.map: %s", e)
             raise ScrapeError(f"Failed to map {url}: {e}") from e
 
     def search(self, query: str, options: ScrapeOptions | None = None) -> SearchResult:
@@ -216,7 +216,7 @@ class FirecrawlAdapter(BaseScraper):
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Error in FirecrawlAdapter.search: {e}")
+            logger.error("Error in FirecrawlAdapter.search: %s", e)
             raise ScrapeError(f"Failed to search '{query}': {e}") from e
 
     def extract(
@@ -256,7 +256,7 @@ class FirecrawlAdapter(BaseScraper):
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Error in FirecrawlAdapter.extract: {e}")
+            logger.error("Error in FirecrawlAdapter.extract: %s", e)
             raise ScrapeError(f"Failed to extract data: {e}") from e
 
     def _convert_scrape_result(

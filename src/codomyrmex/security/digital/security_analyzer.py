@@ -104,7 +104,7 @@ class SecurityAnalyzer:
 
             return findings
         except Exception as e:
-            logger.error(f"Could not analyze file {filepath}: {e}")
+            logger.error("Could not analyze file %s: %s", filepath, e)
             return []
 
     def _analyze_patterns(self, content: str, filepath: str) -> list[SecurityFinding]:
@@ -141,7 +141,7 @@ class SecurityAnalyzer:
             analyzer.visit(tree)
             findings.extend(analyzer.findings)
         except Exception as e:
-            logger.warning(f"AST analysis failed for {filepath}: {e}")
+            logger.warning("AST analysis failed for %s: %s", filepath, e)
         return findings
 
     def analyze_directory(

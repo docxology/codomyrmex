@@ -91,11 +91,11 @@ class FirecrawlClient:
             ```
         """
         formats = formats or ["markdown"]
-        logger.debug(f"Scraping URL with Firecrawl: {url}, formats: {formats}")
+        logger.debug("Scraping URL with Firecrawl: %s, formats: %s", url, formats)
 
         try:
             result = self._client.scrape(url, formats=formats)
-            logger.debug(f"Successfully scraped {url}")
+            logger.debug("Successfully scraped %s", url)
             return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
@@ -153,7 +153,7 @@ class FirecrawlClient:
             print(f"Job ID: {result['id']}")
             ```
         """
-        logger.debug(f"Starting crawl with Firecrawl: {url}, limit: {limit}")
+        logger.debug("Starting crawl with Firecrawl: %s, limit: %s", url, limit)
 
         try:
             result = self._client.crawl(
@@ -161,7 +161,7 @@ class FirecrawlClient:
                 limit=limit,
                 scrape_options=scrape_options or {},
             )
-            logger.debug(f"Crawl job started for {url}")
+            logger.debug("Crawl job started for %s", url)
             return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
@@ -210,7 +210,7 @@ class FirecrawlClient:
                 if search
                 else self._client.map(url)
             )
-            logger.debug(f"Successfully mapped {url}")
+            logger.debug("Successfully mapped %s", url)
             return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
@@ -254,14 +254,14 @@ class FirecrawlClient:
                 print(f"{item['url']}: {item.get('markdown', '')[:100]}")
             ```
         """
-        logger.debug(f"Searching web with Firecrawl: {query}, limit: {limit}")
+        logger.debug("Searching web with Firecrawl: %s, limit: %s", query, limit)
 
         try:
             # Note: Adjust method name based on actual Firecrawl SDK API
             result = self._client.search(
                 query, limit=limit, scrape_options=scrape_options
             )
-            logger.debug(f"Search completed for: {query}")
+            logger.debug("Search completed for: %s", query)
             return result  # type: ignore
         except Exception as e:
             error_msg = str(e).lower()
