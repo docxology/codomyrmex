@@ -49,13 +49,9 @@ Current coverage is 32.34% (126,615 stmts). Need ~9,700 more statements covered.
 
 **Strategy**: Write real functional tests (not imports) for P1 modules first. Each percentage point needs ~1,266 newly-covered statements.
 
-### TODO/FIXME/HACK/XXX Triage (189 comments)
+### ~~TODO/FIXME/HACK/XXX Triage~~ ✅ Done
 
-189 developer-intent comments scattered across source. Triage into:
-
-- **Remove**: Comment is stale, the work is done
-- **Promote**: Comment describes real work → create backlog item
-- **Keep**: Comment is valid context for future developers
+Triaged: all 189 grep hits are test data strings (pattern_matching fixtures) or template generators (`coding/test_generator.py`). **Zero real actionable TODO/FIXME/HACK/XXX comments in production source.**
 
 ### Oversized Files (14 files >800 LOC)
 
