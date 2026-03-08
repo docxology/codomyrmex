@@ -8,12 +8,14 @@ Submodules:
     service_mesh: Consolidated service mesh capabilities."""
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Re-export base NetworkError from main exceptions module
+import contextlib
+
 from codomyrmex.exceptions import NetworkError
 
 from . import service_mesh
@@ -31,10 +33,8 @@ from .exceptions import (
 from .http_client import HTTPClient, Response
 from .raw_sockets import PortScanner, TCPClient, TCPServer, UDPClient
 
-try:
+with contextlib.suppress(ImportError):
     from .ssh_sftp import SSHClient
-except ImportError:
-    pass
 from .websocket_client import WebSocketClient
 
 

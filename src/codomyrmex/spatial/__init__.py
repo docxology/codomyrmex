@@ -4,10 +4,10 @@ Provides submodules for 3D modeling, 4D modeling (Synergetics), and world models
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # New submodules
 from . import coordinates, four_d, physics, rendering, three_d, world_models

@@ -6,6 +6,8 @@ WCAG compliance checking and accessibility utilities.
 
 __version__ = "0.1.0"
 
+import contextlib
+
 from .checker import A11yChecker
 from .models import (
     AccessibilityIssue,
@@ -18,10 +20,8 @@ from .reporters import AccessibilityReporter
 from .utils import calculate_contrast_ratio, check_heading_hierarchy
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

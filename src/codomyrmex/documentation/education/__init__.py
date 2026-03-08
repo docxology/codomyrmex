@@ -4,18 +4,16 @@ Provides curriculum generation, interactive tutoring, and
 certification / assessment capabilities.
 """
 
+import contextlib
+
 from .curriculum import Curriculum, Difficulty, Lesson
 
 # Optional submodules (not yet implemented)
-try:
+with contextlib.suppress(ImportError):
     from .tutoring import Tutor, TutoringSession
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .certification import Assessment, Certificate
-except ImportError:
-    pass
 
 __all__ = [
     "Assessment",

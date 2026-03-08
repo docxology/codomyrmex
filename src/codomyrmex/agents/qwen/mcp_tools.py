@@ -167,7 +167,7 @@ def qwen_create_agent(
     try:
         from .qwen_agent_wrapper import create_assistant
 
-        assistant = create_assistant(
+        create_assistant(
             model=model,
             tools=tools,
             system_message=system_message,

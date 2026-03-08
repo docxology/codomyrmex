@@ -4,6 +4,8 @@ Workflow Testing Module
 Test workflows with step-based assertions, waits, and scripts.
 """
 
+import contextlib
+
 from .executors import (
     AssertionExecutor,
     ScriptExecutor,
@@ -21,10 +23,8 @@ from .models import (
 from .runner import WorkflowRunner
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

@@ -398,9 +398,9 @@ class TestSdkMessageToEmailMessage:
         # Ensure no timestamp attribute exists
         if hasattr(msg, "timestamp"):
             del msg.timestamp
-        before = datetime.now(UTC)
+        datetime.now(UTC)
         result = self._fn()(msg, "inbox@agentmail.to")
-        after = datetime.now(UTC)
+        datetime.now(UTC)
         # Date should be within a reasonable window (allow naive vs aware)
         assert isinstance(result.date, datetime)
 

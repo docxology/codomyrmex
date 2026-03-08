@@ -17,13 +17,12 @@ Example::
 
 from __future__ import annotations
 
+import contextlib
 import logging
 from typing import Any
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.core.registry import Tool, ToolRegistry
-except ImportError:
-    pass
 
 try:
     from codomyrmex.logging_monitoring import get_logger

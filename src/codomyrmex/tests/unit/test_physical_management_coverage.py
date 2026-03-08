@@ -454,6 +454,6 @@ class TestPhysicalObjectManager:
         mgr.create_object("wp2", "W2", ObjectType.DEVICE, 3.0, 0.0, 0.0)
         mgr.create_object("wp3", "W3", ObjectType.DEVICE, 6.0, 0.0, 0.0)
         # With objects this close, greedy pathfinding should find a path
-        path = mgr.find_path_between_objects("wp1", "wp3")
+        mgr.find_path_between_objects("wp1", "wp3")
         # path may be None if distance > 5.0 between steps; this tests the code path
         # either way, the function runs without error

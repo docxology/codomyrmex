@@ -15,6 +15,8 @@ Available classes:
 - MCPToolResult
 """
 
+import contextlib
+
 from codomyrmex.exceptions import CodomyrmexError
 
 # Submodule exports
@@ -69,10 +71,8 @@ from .transport.main import main, run_server
 from .transport.server import MCPServer, MCPServerConfig
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

@@ -6,6 +6,7 @@ Fault injection and resilience testing.
 
 __version__ = "0.1.0"
 
+import contextlib
 import random
 import threading
 import time
@@ -17,10 +18,8 @@ from enum import Enum
 from typing import Any, Optional
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 class FaultType(Enum):

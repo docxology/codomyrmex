@@ -3,6 +3,7 @@
 Follows the GitAgent pattern — BaseAgent subclass with JSON command dispatch.
 """
 
+import contextlib
 import json
 from collections.abc import Iterator
 from typing import Any
@@ -20,10 +21,8 @@ from .tool_factory import CloudToolFactory, Tool
 logger = get_logger(__name__)
 
 # Lazy import for security pipeline
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
-except ImportError:
-    pass
 
 
 class InfrastructureAgent(BaseAgent):

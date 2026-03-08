@@ -6,12 +6,14 @@ documentation templates, and dynamic content.
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Submodule exports - import first to make available
+import contextlib
+
 from codomyrmex.logging_monitoring import get_logger
 
 from . import context, engines, filters
@@ -30,15 +32,11 @@ try:
 except ImportError:
     CodomyrmexError = Exception  # type: ignore
 
-try:
+with contextlib.suppress(ImportError):
     from .engines.template_engine import Template, TemplateEngine
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .loaders.template_manager import TemplateManager
-except ImportError:
-    pass
 
 # Default engine instance for convenience functions
 _default_engine = None

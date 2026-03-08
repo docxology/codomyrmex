@@ -2,6 +2,7 @@
 MCP Tool definitions for the Languages module.
 """
 
+import contextlib
 from typing import Any
 
 # We will lazily import the managers to avoid slow startup or dependency issues
@@ -137,10 +138,8 @@ def mcp_run_language_script(language: str, script_content: str) -> str:
             )
             return result.stdout + result.stderr
         finally:
-            try:
+            with contextlib.suppress(Exception):
                 os.remove(temp_path)
-            except Exception as _exc:
-                pass
     except Exception as e:
         return f"Error running script: {e}"
 

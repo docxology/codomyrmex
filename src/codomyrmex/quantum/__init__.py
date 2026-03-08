@@ -6,6 +6,8 @@ Quantum algorithm primitives, simulation, and circuit patterns.
 
 __version__ = "0.1.0"
 
+import contextlib
+
 from .algorithms import bell_state, ghz_state, qft
 from .circuit import QuantumCircuit
 from .models import Gate, GateType, Qubit
@@ -13,10 +15,8 @@ from .simulator import QuantumSimulator
 from .visualization import circuit_stats, circuit_to_ascii
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 from collections.abc import Callable

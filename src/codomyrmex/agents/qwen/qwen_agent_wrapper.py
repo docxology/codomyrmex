@@ -8,21 +8,18 @@ Provides a high-level interface to the `qwen-agent` library, which supports:
 - WebUI for interactive chat
 """
 
+import contextlib
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-try:
+with contextlib.suppress(ImportError):
     from qwen_agent.agents import Assistant
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from qwen_agent.gui import WebUI
-except ImportError:
-    pass
 
 
 # --- Built-in tools ---

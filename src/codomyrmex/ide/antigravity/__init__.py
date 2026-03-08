@@ -11,6 +11,8 @@ Example:
     >>> capabilities = client.get_capabilities()
 """
 
+import contextlib
+
 from .client import AntigravityClient
 from .models import Artifact, ConversationContext
 
@@ -33,57 +35,41 @@ except ImportError:
     AG_DESTRUCTIVE_TOOLS = frozenset()
     AG_CONTROL_TOOLS = frozenset()
 
-try:
+with contextlib.suppress(ImportError):
     from .agent_bridge import AntigravityAgent
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .skill_adapter import (
         AntigravitySkillFactory,
         AntigravityToolSkill,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .history_bridge import ArtifactHistoryBridge
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .agent_relay import AgentRelay, RelayMessage
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .live_bridge import (
         ClaudeCodeEndpoint,
         LiveAgentBridge,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .message_scheduler import (
         MessageScheduler,
         SchedulerConfig,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .relay_endpoint import RelayEndpoint
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .antigravity_dispatcher import (
         AntigravityDispatcher,
         DispatcherConfig,
     )
-except ImportError:
-    pass
 
 __all__ = [
     # Relay

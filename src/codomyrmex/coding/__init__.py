@@ -28,6 +28,8 @@ Example:
     >>> fixed = debugger.debug(code, stdout, stderr, exit_code)
 """
 
+import contextlib
+
 from . import pattern_matching, static_analysis
 
 # Debugging submodule
@@ -91,10 +93,8 @@ from .sandbox import (
 )
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

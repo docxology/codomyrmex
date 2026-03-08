@@ -26,7 +26,7 @@ class TestOpenFangRunnerInit:
     def test_config_stored(self):
         cfg = OpenFangConfig(command=_NONEXISTENT_CMD)
         try:
-            runner = OpenFangRunner(config=cfg)
+            OpenFangRunner(config=cfg)
         except OpenFangNotInstalledError:
             pass  # Expected — config check itself is what we test indirectly
 

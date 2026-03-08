@@ -4,13 +4,12 @@ This module provides unified data serialization/deserialization with support
 for JSON, YAML, TOML, MessagePack, and other formats.
 """
 
+import contextlib
 from typing import Any, Optional, Union
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from collections.abc import Callable
 

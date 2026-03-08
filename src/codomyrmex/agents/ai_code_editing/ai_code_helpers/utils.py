@@ -7,14 +7,14 @@ try:
 except ImportError:
     OLLAMA_AVAILABLE = False
 
+import contextlib
+
 from codomyrmex.logging_monitoring import get_logger
 
 from .models import CodeLanguage
 
-try:
+with contextlib.suppress(ImportError):
     from environment_setup.env_checker import check_and_setup_env_vars
-except ImportError:
-    pass
 
 logger = get_logger(__name__)
 

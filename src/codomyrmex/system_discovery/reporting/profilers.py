@@ -1,5 +1,6 @@
 """Hardware and environment profilers."""
 
+import contextlib
 import multiprocessing
 import os
 import platform
@@ -8,10 +9,8 @@ import subprocess
 import sys
 from typing import Any
 
-try:
+with contextlib.suppress(ImportError):
     import psutil
-except ImportError:
-    pass
 
 try:
     from codomyrmex.logging_monitoring import get_logger

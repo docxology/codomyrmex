@@ -4,6 +4,7 @@ Contains the logic for handling CLI commands for the agents module.
 Intended to be called by the thin orchestrator script.
 """
 
+import contextlib
 import json
 from pathlib import Path
 from typing import Any
@@ -25,10 +26,8 @@ from codomyrmex.utils.cli_helpers import (
 )
 
 # Optional droid import
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.droid import DroidController, create_default_controller
-except ImportError:
-    pass
 
 logger = get_logger(__name__)
 

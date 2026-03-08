@@ -10,16 +10,15 @@ Submodules:
     registry: Consolidated registry capabilities.
     evaluation: Consolidated evaluation capabilities."""
 
+import contextlib
 import json
 import uuid
 from collections.abc import Callable
 from typing import Any, Optional
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Submodule exports
 from . import evaluation, optimization, registry, training
@@ -51,6 +50,8 @@ except ImportError:
     _EVALUATION_AVAILABLE = False
 
 # Metric classes (always available — pure Python, no external deps)
+import contextlib
+
 from .evaluation import (
     AccuracyMetric,
     AUCROCMetric,
@@ -70,15 +71,11 @@ from .evaluation import (
 )
 
 # Try optional submodules
-try:
+with contextlib.suppress(ImportError):
     from . import datasets
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from . import fine_tuning
-except ImportError:
-    pass
 
 
 class Dataset:

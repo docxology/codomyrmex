@@ -4,6 +4,7 @@ Composable pre/post security checks that integrate with cognitive security
 modules (defense, identity, privacy) when available.
 """
 
+import contextlib
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any
@@ -13,20 +14,14 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 # Lazy imports — all cross-module dependencies are optional
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.security.ai_safety import ActiveDefense
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.identity import IdentityManager, VerificationLevel
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.privacy import CrumbCleaner
-except ImportError:
-    pass
 
 
 class OperationRisk(Enum):

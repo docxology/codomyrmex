@@ -1,5 +1,6 @@
 """OpenAI o1/o3 reasoning model client for Codomyrmex agents."""
 
+import contextlib
 import time
 from collections.abc import Iterator
 from typing import Any
@@ -12,10 +13,8 @@ from codomyrmex.agents.core import (
 from codomyrmex.agents.core.exceptions import AgentError
 from codomyrmex.agents.generic.api_agent_base import APIAgentBase
 
-try:
+with contextlib.suppress(ImportError):
     import openai
-except ImportError:
-    pass
 
 
 class O1Client(APIAgentBase):

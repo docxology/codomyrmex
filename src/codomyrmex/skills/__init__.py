@@ -4,14 +4,13 @@ This module provides integration with the vibeship-spawner-skills repository,
 enabling skill management, syncing with upstream, and support for custom skills.
 """
 
+import contextlib
 from pathlib import Path
 from typing import Optional
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # New submodule exports
 from . import (

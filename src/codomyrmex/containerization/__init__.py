@@ -6,10 +6,10 @@ orchestration, and deployment capabilities for the Codomyrmex ecosystem.
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Submodule exports - import first
 try:

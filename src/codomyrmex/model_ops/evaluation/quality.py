@@ -8,6 +8,7 @@ quality estimation in evaluation pipelines.
 
 from __future__ import annotations
 
+import contextlib
 import math
 import re
 from collections import Counter
@@ -15,10 +16,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 class QualityDimension(Enum):

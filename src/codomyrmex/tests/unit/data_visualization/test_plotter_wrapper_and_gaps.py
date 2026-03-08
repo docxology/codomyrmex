@@ -187,7 +187,7 @@ class TestFinalizePlotWithSavePath:
         p.create_figure()
         p.plot_scatter([1, 2], [3, 4])
         out = tmp_path / "scatter.png"
-        fig = p.finalize_plot(save_path=str(out))
+        p.finalize_plot(save_path=str(out))
         # figure is still accessible after save
         assert p.current_figure is not None
 
@@ -684,7 +684,7 @@ class TestFinalizePlotOverrides:
         p = _sample_plotter()
         p.create_figure()
         p.plot_line([1, 2], [3, 4])
-        fig = p.finalize_plot(xlabel="Time", ylabel="Value")
+        p.finalize_plot(xlabel="Time", ylabel="Value")
         ax = next(iter(p._iter_axes()))
         assert ax.get_xlabel() == "Time"
         assert ax.get_ylabel() == "Value"

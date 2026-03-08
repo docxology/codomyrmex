@@ -2,13 +2,13 @@
 Validation utilities for system integrity and integration.
 """
 
+import contextlib
+
 from .pai import validate_pai_integration
 
 # Shared schemas for cross-module interop — imported by 74+ modules
-try:
+with contextlib.suppress(ImportError):
     from .schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 __all__ = [
     "Result",

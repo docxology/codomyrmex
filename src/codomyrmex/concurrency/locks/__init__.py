@@ -1,12 +1,12 @@
 """Locks subpackage for distributed and local lock primitives."""
 
+import contextlib
+
 from .distributed_lock import BaseLock, LocalLock
 from .lock_manager import LockManager, LockStats, ReadWriteLock
 
-try:
+with contextlib.suppress(ImportError):
     from .redis_lock import RedisLock
-except ImportError:
-    pass
 
 __all__ = [
     "BaseLock",

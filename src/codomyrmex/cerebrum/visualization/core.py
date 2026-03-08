@@ -1,3 +1,4 @@
+import contextlib
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -24,10 +25,8 @@ except ImportError:
     Figure = Any  # type: ignore
     Patch = Any  # type: ignore
 
-try:
+with contextlib.suppress(ImportError):
     import networkx as nx
-except ImportError:
-    pass
 
 logger = get_logger(__name__)
 

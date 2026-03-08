@@ -3,14 +3,14 @@
 Provides Crumb Cleaning (sanitization) and Mixnet Routing (anonymity).
 """
 
+import contextlib
+
 from .crumbs import CrumbCleaner
 from .mixnet import MixnetProxy
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

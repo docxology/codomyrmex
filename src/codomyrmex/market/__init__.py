@@ -3,14 +3,14 @@
 Provides Reverse Auction and Demand Aggregation capabilities.
 """
 
+import contextlib
+
 from .aggregator import DemandAggregator
 from .auction import AuctionRequest, Bid, ReverseAuction
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

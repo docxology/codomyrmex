@@ -373,13 +373,13 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/agents/generic/task_planner.py (edit), src/codomyrmex/agents/droid/generators/physical_generators/tasks.py (edit), src/codomyrmex/orchestrator/execution/runner.py (edit), src/codomyrmex/orchestrator/execution/runner.py (create), src/codomyrmex/cost_management/tracker.py (edit), src/codomyrmex/documents/utils/encoding_detector.py (edit), src/codomyrmex/collaboration/communication/broadcaster.py (edit), src/codomyrmex/collaboration/coordination/leader_election.py (edit), src/codomyrmex/git_operations/core/commands/merge.py (edit), src/codomyrmex/events/core/event_bus.py (edit)
-  ... and 18 more
+Files: src/codomyrmex/orchestrator/workflows/_models.py (create), src/codomyrmex/orchestrator/workflows/_factories.py (create), src/codomyrmex/collaboration/coordination/consensus.py (edit), src/codomyrmex/orchestrator/workflows/_factories.py (edit), src/codomyrmex/agents/llm_client.py (edit), src/codomyrmex/orchestrator/workflows/workflow.py (edit), src/codomyrmex/database_management/migration/migration_manager.py (edit), src/codomyrmex/database_management/migration/_db_connector.py (create), fix_g004.py (create), src/codomyrmex/agents/cli/handlers.py (edit)
+  ... and 12 more
 
 ## Crash Recovery
-Last session (2026-03-07T19:26:47.424315) was not properly closed (crash/kill).
-Recorded 60 file changes before crash.
-Last changed files: src/codomyrmex/orchestrator/workflows/workflow.py, src/codomyrmex/collaboration/coordination/consensus.py, src/codomyrmex/compression/core/compressor.py, src/codomyrmex/collaboration/agents/base.py, src/codomyrmex/agents/llm_client.py
+Last session (2026-03-07T19:40:50.602687) was not properly closed (crash/kill).
+Recorded 37 file changes before crash.
+Last changed files: src/codomyrmex/api/openapi_generator.py, src/codomyrmex/wallet/security/key_rotation.py, src/codomyrmex/skills/skills_manager.py, src/codomyrmex/orchestrator/resilience/agent_circuit_breaker.py, src/codomyrmex/coding/execution/executor.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

@@ -1,4 +1,6 @@
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.spatial.three_d import (
         ARSession,
         Camera3D,
@@ -10,8 +12,6 @@ try:
         Vector3D,
         VRRenderer,
     )
-except ImportError:
-    pass
 
 
 def basic_scene_example():

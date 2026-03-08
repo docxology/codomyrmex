@@ -10,6 +10,7 @@ All language managers inherit from ``BaseLanguageManager`` and configure:
 
 from __future__ import annotations
 
+import contextlib
 import os
 import subprocess
 
@@ -39,10 +40,8 @@ class BaseLanguageManager:
     def _cleanup(self, files: list[str]) -> None:
         """Remove temporary files, silently ignoring missing-file errors."""
         for path in files:
-            try:
+            with contextlib.suppress(OSError):
                 os.remove(path)
-            except OSError:
-                pass
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing the language toolchain."""

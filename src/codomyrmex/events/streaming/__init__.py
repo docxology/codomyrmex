@@ -4,6 +4,8 @@ Streaming Module
 Event streaming with in-memory, SSE, and topic-based backends.
 """
 
+import contextlib
+
 from .models import Event, EventType, Subscription, create_event
 from .processors import StreamProcessor
 from .stream import (
@@ -15,10 +17,8 @@ from .stream import (
 )
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

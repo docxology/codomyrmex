@@ -1,20 +1,15 @@
 """AI Code Editing Configuration & Setup."""
 
+import contextlib
 import os
 from typing import Any
 
-try:
+with contextlib.suppress(ImportError):
     from openai import OpenAI
-except ImportError:
-    pass
-try:
+with contextlib.suppress(ImportError):
     from anthropic import Anthropic
-except ImportError:
-    pass
-try:
+with contextlib.suppress(ImportError):
     from google import genai
-except ImportError:
-    pass
 
 try:
     from codomyrmex.llm.providers.ollama_manager import OLLAMA_AVAILABLE, OllamaManager

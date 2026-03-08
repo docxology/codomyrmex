@@ -4,9 +4,9 @@ Provides mechanisms for agents to improve via reflection and skill acquisition.
 """
 
 # Lazy imports
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from .skills import Skill
-except ImportError:
-    pass
 
 __all__ = ["Skill"]

@@ -519,7 +519,7 @@ class TestLoggerConfig:
                 setup_logging(force=True)
 
     def test_enable_structured_json_on_named_logger(self):
-        logger = get_logger("codomyrmex.struct.test")
+        get_logger("codomyrmex.struct.test")
         # Should not raise even if logger has no handlers
         enable_structured_json("codomyrmex.struct.test")
 

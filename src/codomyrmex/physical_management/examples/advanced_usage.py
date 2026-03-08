@@ -1,3 +1,4 @@
+import contextlib
 import math
 import random
 import time
@@ -17,9 +18,7 @@ from codomyrmex.physical_management import (
     Vector3D,
 )
 
-try:
-    pass
-except ImportError:
+with contextlib.suppress(ImportError):
     pass
 
 

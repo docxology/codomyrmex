@@ -6,6 +6,8 @@ Web3 and blockchain smart contract interfaces.
 
 __version__ = "0.1.0"
 
+import contextlib
+
 from .builders import TransactionBuilder
 from .contract import Contract, ContractCall
 from .events import ContractEvent, EventFilter, EventLog
@@ -20,10 +22,8 @@ from .registry import ContractRegistry
 from .utils import ether_to_wei, gwei_to_wei, wei_to_ether
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

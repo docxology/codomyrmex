@@ -15,10 +15,10 @@ Submodules:
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # New submodule exports
 from . import optimization, resources, routing, tracking

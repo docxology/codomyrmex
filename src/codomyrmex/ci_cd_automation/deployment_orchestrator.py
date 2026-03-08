@@ -5,6 +5,7 @@ Provides comprehensive deployment orchestration, environment management,
 and release coordination capabilities.
 """
 
+import contextlib
 import json
 import os
 import shutil
@@ -17,10 +18,8 @@ from enum import Enum
 from typing import Any
 
 # Optional imports handled gracefully at runtime
-try:
+with contextlib.suppress(ImportError):
     import docker
-except ImportError:
-    pass
 
 try:
     import kubernetes
@@ -29,15 +28,11 @@ try:
 except ImportError:
     pass
 
-try:
+with contextlib.suppress(ImportError):
     import requests
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     import yaml
-except ImportError:
-    pass
 
 from codomyrmex.logging_monitoring import get_logger
 

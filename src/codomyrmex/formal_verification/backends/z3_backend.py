@@ -10,12 +10,11 @@ References:
 
 from __future__ import annotations
 
+import contextlib
 from typing import Any
 
-try:
+with contextlib.suppress(ImportError):
     import z3
-except ImportError:
-    pass
 
 from codomyrmex.formal_verification.exceptions import (
     BackendNotAvailableError,

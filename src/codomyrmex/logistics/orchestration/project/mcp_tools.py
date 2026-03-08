@@ -361,7 +361,7 @@ class OrchestrationMCPTools:
         name = arguments["name"]
         template = arguments.get("template", "ai_analysis")
         description = arguments.get("description", "")
-        path = arguments.get("path")
+        arguments.get("path")
 
         try:
             project = self.project_manager.create_project(

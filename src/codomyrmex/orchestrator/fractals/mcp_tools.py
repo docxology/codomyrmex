@@ -55,7 +55,7 @@ def orchestrate_fractal_task(task_description: str, max_depth: int = 3, provider
                 leaf.status = TaskStatus.RUNNING
                 propagate_status(planned_tree)
 
-                result = execute_leaf_task(leaf, workspace, provider=provider)
+                execute_leaf_task(leaf, workspace, provider=provider)
 
                 leaf.status = TaskStatus.DONE
                 propagate_status(planned_tree)

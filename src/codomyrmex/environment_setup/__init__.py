@@ -5,6 +5,7 @@ This module provides tools for validating the environment, checking dependencies
 managing environment variables, and integrating with the uv package manager.
 """
 
+import contextlib
 from collections.abc import Callable
 from typing import Any
 
@@ -32,10 +33,8 @@ from .env_checker import (
 )
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands() -> dict[str, dict[str, str | Callable]]:

@@ -6,6 +6,8 @@ Edge deployment, IoT gateways, and latency-sensitive patterns.
 
 __version__ = "0.1.0"
 
+import contextlib
+
 from .core import (
     EdgeCluster,
     EdgeExecutionError,
@@ -33,10 +35,8 @@ from .infrastructure import (
 from .scheduling import EdgeScheduler, ScheduledJob, ScheduleType
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

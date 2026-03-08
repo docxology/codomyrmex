@@ -51,7 +51,7 @@ class GeminiClient(BaseAgent):
                 # Use http_options with retry configuration if available in the SDK
                 # Some versions might use different parameters, so we handle it gracefully
                 client_kwargs = {"api_key": self.api_key}
-                max_retries = (config or {}).get("max_retries", 3)
+                (config or {}).get("max_retries", 3)
 
                 # Rely on default google-genai SDK timeout/retry behavior
                 # for v1.0+ compatibility instead of injecting HttpOptions

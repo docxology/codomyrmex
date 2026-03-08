@@ -4,6 +4,7 @@ Uses real HTTP requests (via httpbin.org or local echo), real loopback
 TCP/UDP sockets, and skip markers for external services (SSH, WebSocket).
 """
 
+import contextlib
 import socket
 import threading
 
@@ -14,10 +15,8 @@ try:
     from codomyrmex import networking
 
     # Try importing EphemeralServer, might fail if path issues, handled in tests
-    try:
+    with contextlib.suppress(ImportError):
         from codomyrmex.tests.utils.ephemeral_server import EphemeralServer
-    except ImportError:
-        pass
 
     from codomyrmex.networking import (
         HTTPClient,

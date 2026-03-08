@@ -1,5 +1,7 @@
 """Unit tests for document processing -- parsing, validation, transformation, search, and chunking."""
 
+import contextlib
+
 import pytest
 
 from codomyrmex.documents import (
@@ -15,74 +17,54 @@ from codomyrmex.documents.models.document import (
     DocumentFormat,
 )
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.transformation.converter import (
         convert_document,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.transformation.merger import merge_documents
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.transformation.splitter import (
         split_document,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.transformation.formatter import (
         format_document,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.metadata.extractor import extract_metadata
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.metadata.manager import update_metadata
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.metadata.versioning import (
         get_document_version,
         set_document_version,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.search.indexer import (
         InMemoryIndex,
         create_index,
         index_document,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.search.searcher import (
         search_documents,
         search_index,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.search.query_builder import (
         QueryBuilder,
         build_query,
     )
-except ImportError:
-    pass
 
 from codomyrmex.documents.exceptions import (
     DocumentConversionError,

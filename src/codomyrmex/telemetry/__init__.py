@@ -8,10 +8,10 @@ Submodules:
     metrics: Consolidated metrics capabilities."""
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from codomyrmex.logging_monitoring import get_logger
 

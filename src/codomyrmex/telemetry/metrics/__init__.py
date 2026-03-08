@@ -6,6 +6,7 @@ Metrics collection and aggregation.
 
 __version__ = "0.1.0"
 
+import contextlib
 import statistics
 import threading
 import time
@@ -18,15 +19,11 @@ from typing import Any, Optional
 
 from .aggregator import MetricAggregator
 
-try:
+with contextlib.suppress(ImportError):
     from .prometheus_exporter import PrometheusExporter
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .statsd_client import StatsDClient
-except ImportError:
-    pass
 
 try:
     from codomyrmex.exceptions import CodomyrmexError

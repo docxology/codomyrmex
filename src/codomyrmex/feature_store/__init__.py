@@ -4,6 +4,8 @@ Feature Store
 Feature management, storage, and serving for ML applications.
 """
 
+import contextlib
+
 from .exceptions import (
     FeatureNotFoundError,
     FeatureRegistrationError,
@@ -30,10 +32,8 @@ from .store import (
 )
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

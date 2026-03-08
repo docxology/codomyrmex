@@ -12,6 +12,7 @@ Provides encryption, hashing, digital signatures, and key management:
 
 from __future__ import annotations
 
+import contextlib
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.exceptions import EncryptionError
@@ -31,10 +32,8 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

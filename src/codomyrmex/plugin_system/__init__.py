@@ -5,6 +5,8 @@ This module provides a plugin architecture that allows
 extending Codomyrmex functionality through third-party plugins.
 """
 
+import contextlib
+
 from .core.plugin_loader import PluginLoader
 from .core.plugin_manager import PluginManager
 from .core.plugin_registry import (
@@ -26,10 +28,8 @@ from .exceptions import (
 from .validation.plugin_validator import PluginValidator
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

@@ -33,13 +33,13 @@ Data structures:
 - RollbackStrategy: Rollback configuration and execution
 """
 
+import contextlib
+
 from . import pipeline
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from .deployment_orchestrator import (
     Deployment,

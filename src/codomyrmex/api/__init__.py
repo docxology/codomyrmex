@@ -26,13 +26,13 @@ The module is organized into submodules:
 Submodules:
     rate_limiting: Consolidated rate limiting capabilities."""
 
+import contextlib
+
 from . import rate_limiting
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Import from documentation submodule
 # Import from authentication submodule

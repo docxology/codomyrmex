@@ -4,6 +4,8 @@ Vector Store Module
 Vector similarity search with in-memory and namespaced backends.
 """
 
+import contextlib
+
 from .models import (
     DistanceMetric,
     SearchResult,
@@ -18,10 +20,8 @@ from .store import (
 )
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 try:
     from .chroma import ChromaVectorStore

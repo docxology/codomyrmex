@@ -16,6 +16,8 @@ Function exports.
     print_once, and _perform_* helpers.
 """
 
+import contextlib
+
 from .ast_matcher import ASTMatcher, ASTMatchResult
 from .code_patterns import PATTERNS, PatternDefinition, PatternDetector
 from .run_codomyrmex_analysis import (
@@ -40,10 +42,8 @@ from .run_codomyrmex_analysis import (
 from .similarity import CodeSimilarity, DuplicateResult
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

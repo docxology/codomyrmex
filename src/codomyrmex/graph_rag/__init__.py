@@ -4,6 +4,8 @@ Graph RAG
 Knowledge graph-enhanced retrieval-augmented generation.
 """
 
+import contextlib
+
 from .graph import KnowledgeGraph
 from .models import (
     Entity,
@@ -15,10 +17,8 @@ from .models import (
 from .pipeline import GraphRAGPipeline
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

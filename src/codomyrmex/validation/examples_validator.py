@@ -1,6 +1,7 @@
 import argparse
 import ast
 import concurrent.futures
+import contextlib
 import json
 import subprocess
 import sys
@@ -10,10 +11,8 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
-try:
+with contextlib.suppress(ImportError):
     import yaml
-except ImportError:
-    pass
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.utils.cli_helpers import (

@@ -23,6 +23,7 @@ Example::
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import time
 from typing import TYPE_CHECKING, Any
@@ -32,15 +33,13 @@ if TYPE_CHECKING:
 
     from codomyrmex.agents.core.registry import ToolRegistry
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.core import (
         AgentCapabilities,
         AgentRequest,
         AgentResponse,
         BaseAgent,
     )
-except ImportError:
-    pass
 
 from codomyrmex.ide.antigravity.client import _AntigravityClientMixin
 

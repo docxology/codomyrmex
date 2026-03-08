@@ -35,8 +35,6 @@ def is_in_range(value: Any, min_val: float | None = None, max_val: float | None 
         num = float(value)
         if min_val is not None and num < min_val:
             return False
-        if max_val is not None and num > max_val:
-            return False
-        return True
+        return not (max_val is not None and num > max_val)
     except (ValueError, TypeError):
         return False

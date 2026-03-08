@@ -5,10 +5,10 @@ Multi-modal content handling for images, audio, and text.
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from .builder import MultimodalMessageBuilder
 from .models import (

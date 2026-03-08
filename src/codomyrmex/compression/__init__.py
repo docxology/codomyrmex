@@ -10,6 +10,7 @@ This module provides data compression utilities and archive handling:
 - Archive creation and extraction
 """
 
+import contextlib
 from pathlib import Path
 from typing import Optional
 
@@ -27,10 +28,8 @@ from .engines.parallel import ParallelCompressor
 from .engines.zstd_compressor import ZstdCompressor
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

@@ -22,6 +22,8 @@ Example:
 
 """
 
+import contextlib
+
 from .models import (
     Segment,
     TranscriptionConfig,
@@ -39,10 +41,8 @@ from .providers import (
 from .transcriber import Transcriber
 
 # Conditionally export WhisperProvider
-try:
+with contextlib.suppress(ImportError):
     from .providers import WhisperProvider
-except ImportError:
-    pass
 
 
 __all__ = [

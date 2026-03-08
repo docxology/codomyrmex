@@ -5,6 +5,7 @@ This module provides health reporting capabilities,
 generating detailed reports on system and module health status.
 """
 
+import contextlib
 import json
 import time
 from dataclasses import dataclass, field
@@ -21,14 +22,12 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 # Import health checker
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.system_discovery.health.health_checker import (
         HealthChecker,
         HealthCheckResult,
         HealthStatus,
     )
-except ImportError:
-    pass
 
 
 @dataclass

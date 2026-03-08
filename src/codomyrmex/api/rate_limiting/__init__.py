@@ -4,6 +4,8 @@ Rate Limiting Module
 Rate limiting with fixed window, sliding window, and token bucket algorithms.
 """
 
+import contextlib
+
 from .limiters import (
     CompositeRateLimiter,
     FixedWindowLimiter,
@@ -17,10 +19,8 @@ from .models import RateLimitExceeded, RateLimitResult
 from .strategies import QuotaManager, create_limiter
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

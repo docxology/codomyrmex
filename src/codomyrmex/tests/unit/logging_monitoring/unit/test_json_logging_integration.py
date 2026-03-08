@@ -107,7 +107,7 @@ class TestJSONLoggingIntegration:
         filename = "rotation.log"
 
         # Max size 100 bytes, keep 2 backups
-        handler = manager.attach_rotating_handler(
+        manager.attach_rotating_handler(
             logger_name,
             filename,
             max_bytes=100,

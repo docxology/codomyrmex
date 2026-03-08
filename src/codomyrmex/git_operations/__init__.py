@@ -10,10 +10,10 @@ Integration:
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from codomyrmex.exceptions import CodomyrmexError
 

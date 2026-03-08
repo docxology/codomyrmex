@@ -7,15 +7,14 @@ running them against scorers, and collecting structured results.
 
 from __future__ import annotations
 
+import contextlib
 import time
 import uuid
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from .scorers import ExactMatchScorer, Scorer
 

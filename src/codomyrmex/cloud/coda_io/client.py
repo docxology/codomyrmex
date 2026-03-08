@@ -7,6 +7,8 @@ enabling programmatic access to Coda docs, pages, tables, rows, and more.
 API Documentation: https://coda.io/developers/apis/v1
 """
 
+import contextlib
+
 from codomyrmex.cloud.common import (
     CloudClient,
     CloudProvider,
@@ -24,10 +26,8 @@ from .mixins.pages import PagesMixin
 from .mixins.tables import TablesMixin
 from .mixins.utils import UtilsMixin
 
-try:
+with contextlib.suppress(ImportError):
     import requests
-except ImportError:
-    pass
 
 logger = get_logger(__name__)
 

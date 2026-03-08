@@ -5,13 +5,12 @@ This module provides unified caching strategies for code analysis results,
 LLM responses, build artifacts, and other frequently accessed data.
 """
 
+import contextlib
 from typing import Any, Optional
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # New submodule exports
 from . import (

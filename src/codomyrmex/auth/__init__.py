@@ -5,6 +5,7 @@ This module provides authentication and authorization with API key management,
 OAuth integration, and Role-Based Access Control (RBAC).
 """
 
+import contextlib
 from typing import Any, Optional
 
 from codomyrmex.exceptions import AuthenticationError, CodomyrmexError
@@ -16,10 +17,8 @@ from .tokens.token import Token, TokenManager
 from .tokens.validator import TokenValidator
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def authenticate(credentials: dict[str, Any]) -> Token | None:

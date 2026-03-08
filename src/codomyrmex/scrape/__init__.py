@@ -14,6 +14,8 @@ Example:
     ```
 """
 
+import contextlib
+
 from . import extractors
 from .config import ScrapeConfig, get_config, reset_config, set_config
 from .core import (
@@ -36,10 +38,8 @@ from .exceptions import (
 from .extractors.scraper import Scraper
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

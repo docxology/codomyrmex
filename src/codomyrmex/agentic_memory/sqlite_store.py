@@ -106,21 +106,19 @@ class SQLiteStore:
         # For strict thread-safety and simplicity in this implementation, we re-save it.
         # But we don't want to re-enter the lock recursively if we just call self.save().
         # So we write directly.
-        with self._lock:
-            with self._get_connection() as update_conn:
-                update_conn.execute(
-                    "UPDATE memories SET access_count = ?, last_accessed = ? WHERE id = ?",
-                    (mem.access_count, mem.last_accessed, mem.id)
-                )
+        with self._lock, self._get_connection() as update_conn:
+            update_conn.execute(
+                "UPDATE memories SET access_count = ?, last_accessed = ? WHERE id = ?",
+                (mem.access_count, mem.last_accessed, mem.id)
+            )
 
         return mem
 
     def delete(self, memory_id: str) -> bool:
         """Remove a memory. Returns ``True`` if it existed."""
-        with self._lock:
-            with self._get_connection() as conn:
-                cursor = conn.execute("DELETE FROM memories WHERE id = ?", (memory_id,))
-                return cursor.rowcount > 0
+        with self._lock, self._get_connection() as conn:
+            cursor = conn.execute("DELETE FROM memories WHERE id = ?", (memory_id,))
+            return cursor.rowcount > 0
 
     def list_all(self) -> list[Memory]:
         """Return every stored memory."""

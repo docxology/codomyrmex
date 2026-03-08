@@ -6,6 +6,7 @@ for modules at <30% coverage. Zero-mock policy: all tests use real methods.
 
 from __future__ import annotations
 
+import contextlib
 import importlib
 import inspect
 import pkgutil
@@ -225,10 +226,8 @@ class TestModelContextProtocolModule:
     def test_import_all(self) -> None:
         submodules = _iter_submodules("codomyrmex.model_context_protocol")
         for name in submodules:
-            try:
+            with contextlib.suppress(ImportError):
                 importlib.import_module(name)
-            except ImportError:
-                pass
 
     def test_mcp_tool_decorator_exists(self) -> None:
         """The core @mcp_tool decorator should be importable."""
@@ -245,10 +244,8 @@ class TestContainerizationModule:
     def test_import_all(self) -> None:
         submodules = _iter_submodules("codomyrmex.containerization")
         for name in submodules:
-            try:
+            with contextlib.suppress(ImportError):
                 importlib.import_module(name)
-            except ImportError:
-                pass
 
 
 class TestCICDAutomationModule:
@@ -257,10 +254,8 @@ class TestCICDAutomationModule:
     def test_import_all(self) -> None:
         submodules = _iter_submodules("codomyrmex.ci_cd_automation")
         for name in submodules:
-            try:
+            with contextlib.suppress(ImportError):
                 importlib.import_module(name)
-            except ImportError:
-                pass
 
 
 class TestDataVisualizationModule:
@@ -269,10 +264,8 @@ class TestDataVisualizationModule:
     def test_import_all(self) -> None:
         submodules = _iter_submodules("codomyrmex.data_visualization")
         for name in submodules:
-            try:
+            with contextlib.suppress(ImportError):
                 importlib.import_module(name)
-            except ImportError:
-                pass
 
 
 class TestCodingModule:
@@ -281,7 +274,5 @@ class TestCodingModule:
     def test_import_all(self) -> None:
         submodules = _iter_submodules("codomyrmex.coding")
         for name in submodules:
-            try:
+            with contextlib.suppress(ImportError):
                 importlib.import_module(name)
-            except ImportError:
-                pass

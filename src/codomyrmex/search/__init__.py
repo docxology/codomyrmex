@@ -5,10 +5,10 @@ Full-text search with TF-IDF scoring, fuzzy matching, and query parsing.
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from .engine import InMemoryIndex, SearchIndex, create_index, quick_search
 from .models import (

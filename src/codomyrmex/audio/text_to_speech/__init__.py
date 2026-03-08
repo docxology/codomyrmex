@@ -21,6 +21,8 @@ Example:
 
 """
 
+import contextlib
+
 from .models import (
     AudioFormat,
     SSMLOptions,
@@ -40,10 +42,8 @@ from .providers import (
 from .synthesizer import Synthesizer
 
 # Conditionally export providers
-try:
+with contextlib.suppress(ImportError):
     from .providers import Pyttsx3Provider
-except ImportError:
-    pass
 
 try:
     from .providers import POPULAR_VOICES, EdgeTTSProvider

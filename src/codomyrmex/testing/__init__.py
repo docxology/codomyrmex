@@ -9,10 +9,10 @@ Submodules:
     workflow: Consolidated workflow capabilities."""
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 from . import chaos, workflow
 from .fixture_utils import (

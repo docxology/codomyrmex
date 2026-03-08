@@ -6,16 +6,16 @@ Translation, localization, and message bundle management.
 
 __version__ = "0.1.0"
 
+import contextlib
+
 from .date_formatter import DateFormatter
 from .formatters import NumberFormatter, PluralRules
 from .models import Locale
 from .translator import MessageBundle, Translator
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Convenience
 _default_translator: Translator | None = None

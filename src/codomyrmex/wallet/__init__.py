@@ -12,6 +12,8 @@ Core Components:
 Submodules:
     contracts: Consolidated contracts capabilities."""
 
+import contextlib
+
 from . import contracts, security
 from .core import WalletManager
 from .exceptions import RitualError, WalletError, WalletKeyError, WalletNotFoundError
@@ -20,10 +22,8 @@ from .security.key_rotation import KeyRotation, RotationPolicy, RotationRecord
 from .security.recovery import NaturalRitualRecovery, RitualStep, hash_response
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

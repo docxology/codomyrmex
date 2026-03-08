@@ -45,14 +45,13 @@ Quick Start:
     print(f"Duration: {info.duration}s, Resolution: {info.width}x{info.height}")
     ```
 """
+import contextlib
 
 __version__ = "0.1.0"
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Import exceptions
 # Import configuration

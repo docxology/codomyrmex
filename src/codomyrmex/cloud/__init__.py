@@ -27,12 +27,14 @@ Submodules:
     common: Shared cloud utilities."""
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # Import from coda_io submodule
+import contextlib
+
 from .coda_io import (
     ACLSettings,
     CellEdit,
@@ -75,20 +77,14 @@ from .coda_io import (
 )
 
 # Import from other submodules with optional dependencies
-try:
+with contextlib.suppress(ImportError):
     from .aws import S3Client
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .gcp import GCSClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .azure import AzureBlobClient
-except ImportError:
-    pass
 
 # Infomaniak clients (requires openstacksdk and/or boto3)
 try:

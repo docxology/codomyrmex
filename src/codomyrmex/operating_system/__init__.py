@@ -23,6 +23,8 @@ Available functions (generic / cross-platform):
 - get_environment_variables
 """
 
+import contextlib
+
 from .base import (
     CommandResult,
     DiskInfo,
@@ -48,10 +50,8 @@ from .detector import (
 )
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

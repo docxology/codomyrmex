@@ -1,11 +1,10 @@
 """AI Code Generation Helpers."""
 
+import contextlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-try:
+with contextlib.suppress(ImportError):
     from google.genai import types
-except ImportError:
-    pass
 try:
     from codomyrmex.performance import monitor_performance
 except ImportError:

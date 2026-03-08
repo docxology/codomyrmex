@@ -1,5 +1,6 @@
 """Unit tests for document I/O -- reading, writing, and format handlers (markdown, JSON, YAML, text)."""
 
+import contextlib
 import json
 from pathlib import Path
 
@@ -19,47 +20,33 @@ from codomyrmex.documents.models.document import (
     DocumentFormat,
 )
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.formats.markdown_handler import (
         read_markdown,
         write_markdown,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.formats.json_handler import read_json, write_json
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.formats.yaml_handler import read_yaml, write_yaml
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.formats.text_handler import read_text, write_text
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.formats.html_handler import (
         read_html,
         strip_html_tags,
         write_html,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.formats.xml_handler import read_xml, write_xml
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.documents.formats.csv_handler import read_csv, write_csv
-except ImportError:
-    pass
 
 from codomyrmex.documents.exceptions import (
     DocumentReadError,

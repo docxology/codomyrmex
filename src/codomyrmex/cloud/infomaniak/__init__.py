@@ -37,6 +37,8 @@ Environment Variables:
 
 # Exception hierarchy
 # Core authentication
+import contextlib
+
 from .auth import (
     InfomaniakCredentials,
     InfomaniakS3Credentials,
@@ -59,50 +61,32 @@ from .exceptions import (
 )
 
 # Direct imports for type checking and direct access
-try:
+with contextlib.suppress(ImportError):
     from .compute import InfomaniakComputeClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .block_storage import InfomaniakVolumeClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .network import InfomaniakNetworkClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .object_storage import InfomaniakObjectStorageClient, InfomaniakS3Client
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .identity import InfomaniakIdentityClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .dns import InfomaniakDNSClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .orchestration import InfomaniakHeatClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .metering import InfomaniakMeteringClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .newsletter import InfomaniakNewsletterClient
-except ImportError:
-    pass
 
 
 __all__ = [

@@ -60,7 +60,7 @@ Output strictly JSON: {"kind": "atomic"} or {"kind": "composite"}"""
 
         data = json.loads(content.strip())
         return TaskKind(data["kind"])
-    except Exception as e:
+    except Exception:
         # Fallback to atomic if parsing fails
         return TaskKind.ATOMIC
 
@@ -98,7 +98,7 @@ Output strictly JSON: {"subtasks": ["subtask 1", "subtask 2"]}"""
 
         data = json.loads(content.strip())
         return data["subtasks"]
-    except Exception as e:
+    except Exception:
         # If parsing fails, return the original task as a single subtask
         return [task]
 

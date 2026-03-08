@@ -6,6 +6,8 @@ Spend tracking, budgeting, and cost optimization.
 
 __version__ = "0.1.0"
 
+import contextlib
+
 from .hooks import (
     AutoCostTracker,
     CostHook,
@@ -25,10 +27,8 @@ from .stores import CostStore, InMemoryCostStore
 from .tracker import BudgetManager, CostTracker
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

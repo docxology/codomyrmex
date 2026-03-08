@@ -18,10 +18,10 @@ Submodules:
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 # modular Ollama implementation
 # Submodule exports

@@ -3,14 +3,13 @@
 Handles loading and parsing YAML skill files with merge logic.
 """
 
+import contextlib
 import logging
 from pathlib import Path
 from typing import Any
 
-try:
+with contextlib.suppress(ImportError):
     import yaml
-except ImportError:
-    pass
 
 try:
     from codomyrmex.logging_monitoring import get_logger

@@ -21,17 +21,17 @@ def clean_system():
     # Reset the singleton bus
     import codomyrmex.events.core.event_bus as bus_mod
     bus_mod._event_bus = None
-    bus = get_event_bus()
+    get_event_bus()
 
     # Reset the singleton logger
     import codomyrmex.events.handlers.event_logger as logger_mod
     logger_mod._logger = None
-    logger = get_event_logger()
+    get_event_logger()
 
     # Reset the singleton store
     import codomyrmex.events.event_store as store_mod
     store_mod._event_store = None
-    store = get_event_store()
+    get_event_store()
 
 
 

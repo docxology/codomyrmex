@@ -4,6 +4,7 @@ This module provides functionality to fetch, parse, analyze, and export
 the First Principles Framework specification for use in prompt/context engineering.
 """
 
+import contextlib
 from pathlib import Path
 
 from .analysis.analyzer import FPFAnalyzer
@@ -33,10 +34,8 @@ from .visualization.visualizer import FPFVisualizer
 from .visualization.visualizer_png import FPFVisualizerPNG
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

@@ -29,5 +29,5 @@ def test_mcp_fractal_end_to_end_dummy() -> None:
         assert res["status"] in ["success", "error"]  # Depending on local keys
         if res["status"] == "success":
             assert res["subtasks_executed"] == 1
-    except Exception as e:
+    except Exception:
         pass  # We test structure, not remote endpoints when we aren't specifically targeting them

@@ -7,6 +7,8 @@ accessible ways.
 """
 
 # Submodule exports - import first
+import contextlib
+
 from codomyrmex.logging_monitoring import get_logger
 
 from . import commands, completions, rendering, shells
@@ -20,21 +22,15 @@ except ImportError as e:
     logger.debug("Optional terminal_interface submodule 'utils' not available: %s", e)
 
 # Try to import from existing modules, but don't fail if they don't exist
-try:
+with contextlib.suppress(ImportError):
     from .shells.interactive_shell import InteractiveShell
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .utils.terminal_utils import CommandRunner, TerminalFormatter
-except ImportError:
-    pass
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

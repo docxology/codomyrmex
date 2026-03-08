@@ -1,5 +1,6 @@
 """Shared pytest fixtures and configuration for Codomyrmex testing."""
 
+import contextlib
 import json
 import os
 import subprocess
@@ -14,10 +15,8 @@ try:
 except ImportError:
     YAML_AVAILABLE = False
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.logging_monitoring import get_logger, setup_logging
-except ImportError:
-    pass
 
 
 def pytest_configure(config):

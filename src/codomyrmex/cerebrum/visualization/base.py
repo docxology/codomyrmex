@@ -1,3 +1,4 @@
+import contextlib
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
@@ -22,10 +23,8 @@ except ImportError:
     Figure = Any  # type: ignore
     Axes = Any  # type: ignore
 
-try:
+with contextlib.suppress(ImportError):
     import networkx as nx
-except ImportError:
-    pass
 
 if TYPE_CHECKING:
     pass

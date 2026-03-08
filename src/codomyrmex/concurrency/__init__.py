@@ -4,10 +4,12 @@ This module provides distributed locks, semaphores, and other synchronization pr
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
+
+import contextlib
 
 from .locks.distributed_lock import (
     BaseLock,
@@ -18,12 +20,10 @@ from .locks.lock_manager import (
     ReadWriteLock,
 )
 
-try:
+with contextlib.suppress(ImportError):
     from .locks.redis_lock import (
         RedisLock,
     )
-except ImportError:
-    pass
 from .dead_letter import DeadLetterQueue
 from .semaphores.semaphore import (
     AsyncLocalSemaphore,

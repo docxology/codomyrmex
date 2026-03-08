@@ -5,6 +5,8 @@ Data migration with versioned steps, rollbacks, and transformers.
 
 # Import migration_manager names first (wildcard) so that explicit
 # imports from .models take precedence and don't get overwritten.
+import contextlib
+
 from .executor import DataMigrator, MigrationRunner
 from .migration_manager import *
 from .models import (
@@ -20,10 +22,8 @@ from .models import (
 )
 
 # Shared schemas for cross-module interop
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
 
 def cli_commands():

@@ -30,80 +30,56 @@ Available submodules:
 """
 
 # Shared schemas for cross-module interop
-try:
+import contextlib
+
+with contextlib.suppress(ImportError):
     from codomyrmex.validation.schemas import Result, ResultStatus
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.claude import ClaudeClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.codex import CodexClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.droid import DroidController
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.every_code import EveryCodeClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.gemini import GeminiClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.jules import JulesClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.mistral_vibe import MistralVibeClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.openclaw import OpenClawClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.openfang import OpenFangClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.opencode import OpenCodeClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from codomyrmex.agents.theory.agent_architectures import (
         DeliberativeArchitecture,
         HybridArchitecture,
         KnowledgeBase,
         ReactiveArchitecture,
     )
-except ImportError:
-    pass
+
+import contextlib
 
 from .core import (
     AgentCapabilities,
@@ -129,47 +105,31 @@ from .core import (
 )
 
 # Lazy imports for submodules that may not be installed yet
-try:
+with contextlib.suppress(ImportError):
     from .o1 import O1Client
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .deepseek import DeepSeekClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .qwen import QwenClient
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .pooling import AgentPool
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .evaluation import AgentEvaluator
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .history import ConversationHistory
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .infrastructure import InfrastructureAgent
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .agent_setup import AgentRegistry
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .core.exceptions import (
         AgentConfigurationError,
         AgentError,
@@ -179,23 +139,15 @@ try:
         SessionError,
         ToolError,
     )
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .generic import APIAgentBase, CLIAgentBase
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .git_agent import GitAgent
-except ImportError:
-    pass
 
-try:
+with contextlib.suppress(ImportError):
     from .agentic_seek import AgenticSeekClient
-except ImportError:
-    pass
 
 
 def cli_commands():
