@@ -207,7 +207,6 @@ class VotingMechanism:
             raise ConsensusError(f"Proposal not found: {proposal_id}")
 
         votes = self.get_votes(proposal_id)
-
         votes_for = sum(1 for v in votes if v.vote == VoteType.YES)
         votes_against = sum(1 for v in votes if v.vote == VoteType.NO)
         abstentions = sum(1 for v in votes if v.vote == VoteType.ABSTAIN)
@@ -236,7 +235,7 @@ class VotingMechanism:
         del self._votes[proposal_id]
 
         logger.info(
-            f"Voting complete: {proposal_id} - {'PASSED' if passed else 'REJECTED'}"
+            "Voting complete: %s - %s", proposal_id, "PASSED" if passed else "REJECTED",
         )
         return result
 

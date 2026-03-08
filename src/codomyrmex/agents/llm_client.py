@@ -48,24 +48,8 @@ class OllamaClient:
         """Execute request using Ollama."""
         return self.execute_with_session(request)
 
-    def execute_with_session(
-        self, request: AgentRequest, session: Any = None, session_id: Any = None
-    ) -> AgentResponse:
-        """Execute request using Ollama /api/chat for real conversation."""
-        url = f"{self.base_url}/api/chat"
-
-        # Build structured messages from request metadata (no string splitting — prevents prompt injection)
-        # Callers embed system context via request.metadata["system"], not by embedding "System:" in the prompt.
-        messages = []
-        if request.metadata and request.metadata.get("system"):
-            messages.append({"role": "system", "content": request.metadata["system"]})
-        messages.append({"role": "user", "content": request.prompt})
-
-        payload = {"model": self.model, "messages": messages, "stream": False}
-
-        start_time = time.monotonic()
-        content = ""
-        error = None
+    def _call_ollama(self, url: str, payload: dict) -> tuple[str, str | None]:
+        """POST payload to Ollama and return (content, error)."""
         try:
             req = urllib.request.Request(
                 url,
@@ -75,14 +59,10 @@ class OllamaClient:
             with urllib.request.urlopen(req) as response:
                 if response.status == 200:
                     data = json.loads(response.read().decode("utf-8"))
-                    msg = data.get("message", {})
-                    content = msg.get("content", "")
-                else:
-                    error = f"Ollama returned {response.status}"
+                    return data.get("message", {}).get("content", ""), None
+                return "", f"Ollama returned {response.status}"
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            # Propagate error with context
             try:
-                # Try to list models to help debugging
                 with urllib.request.urlopen(
                     f"{self.base_url}/api/tags", timeout=1.0
                 ) as resp:
@@ -90,20 +70,24 @@ class OllamaClient:
                         tags = json.loads(resp.read().decode("utf-8"))
                         models = [m.get("name") for m in tags.get("models", [])]
                         logger.debug("Available models for debugging: %s", models)
-            except (
-                ValueError,
-                RuntimeError,
-                AttributeError,
-                OSError,
-                TypeError,
-            ) as debug_err:
-                logger.debug(
-                    "Failed to list available Ollama models for debug: %s", debug_err
-                )
-            error = f"Real Ollama Connection Failed: {e}"
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as debug_err:
+                logger.debug("Failed to list available Ollama models for debug: %s", debug_err)
+            return "", f"Real Ollama Connection Failed: {e}"
 
+    def execute_with_session(
+        self, request: AgentRequest, session: Any = None, session_id: Any = None
+    ) -> AgentResponse:
+        """Execute request using Ollama /api/chat for real conversation."""
+        url = f"{self.base_url}/api/chat"
+        # Build structured messages (no string splitting — prevents prompt injection)
+        messages = []
+        if request.metadata and request.metadata.get("system"):
+            messages.append({"role": "system", "content": request.metadata["system"]})
+        messages.append({"role": "user", "content": request.prompt})
+        payload = {"model": self.model, "messages": messages, "stream": False}
+        start_time = time.monotonic()
+        content, error = self._call_ollama(url, payload)
         elapsed = time.monotonic() - start_time
-
         return AgentResponse(
             content=content,
             error=error,
@@ -174,7 +158,8 @@ def get_llm_client(identity: str = "agent") -> Any:
                 # Use configured model or default
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
                 logger.info(
-                    f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})"
+                    "[%s] Using real OllamaClient (Localhost reachable, model=%s)",
+                    identity, model,
                 )
                 return OllamaClient(model=model)
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:

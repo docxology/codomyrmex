@@ -162,7 +162,7 @@ class CollaborativeAgent(AbstractAgent):
                     await handler(message)
                 else:
                     logger.warning(
-                        f"No handler for message type: {message.message_type}"
+                        "No handler for message type: %s", message.message_type
                     )
             except TimeoutError:
                 continue

@@ -123,7 +123,8 @@ class TodoManager:
 
         if skipped_lines:
             logger.info(
-                f"Skipped {len(skipped_lines)} malformed TODO entries. Please fix the format."
+                "Skipped %d malformed TODO entries. Please fix the format.",
+                len(skipped_lines),
             )
 
         return todo_items, completed_items

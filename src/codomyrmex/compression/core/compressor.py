@@ -187,7 +187,7 @@ class Compressor:
             )
 
             logger.info(
-                f"Compressed {input_path} -> {output_path} ({ratio:.1f}% reduction)"
+                "Compressed %s -> %s (%.1f%% reduction)", input_path, output_path, ratio,
             )
             return output_path
         except Exception as e:
