@@ -28,7 +28,8 @@ def merge_branch(
 
     try:
         logger.info(
-            f"Merging branch '{source_branch}' into '{target_branch}' in {repository_path}"
+            "Merging branch '%s' into '%s' in %s",
+            source_branch, target_branch, repository_path,
         )
 
         # Switch to target branch first
@@ -70,7 +71,8 @@ def rebase_branch(
     try:
         current_branch = get_current_branch(repository_path)
         logger.info(
-            f"Rebasing branch '{current_branch}' onto '{target_branch}' in {repository_path}"
+            "Rebasing branch '%s' onto '%s' in %s",
+            current_branch, target_branch, repository_path,
         )
 
         cmd = ["git", "rebase"]

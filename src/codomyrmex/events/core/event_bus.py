@@ -107,7 +107,7 @@ class EventBus:
         self._subscriber_counter = 0
 
         logger.info(
-            f"EventBus initialized with {max_workers} workers, async={enable_async}"
+            "EventBus initialized with %d workers, async=%s", max_workers, enable_async
         )
 
     def subscribe(
@@ -150,7 +150,7 @@ class EventBus:
             self.subscriptions[subscriber_id] = subscription
 
         logger.info(
-            f"Subscribed {subscriber_id} to {len(event_patterns)} event patterns"
+            "Subscribed %s to %d event patterns", subscriber_id, len(event_patterns)
         )
         return subscriber_id
 
@@ -259,7 +259,7 @@ class EventBus:
                         subscription.handler(event)
                 except Exception as e:
                     logger.error(
-                        f"Error in event handler {subscription.subscriber_id}: {e}"
+                        "Error in event handler %s: %s", subscription.subscriber_id, e
                     )
                     self.events_failed += 1
 
