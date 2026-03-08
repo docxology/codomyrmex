@@ -141,6 +141,7 @@ __all__ = [
     "SwarmMessage",
     "SwarmMessageType",
     "SwarmStatus",
+    "SwarmVote",
     "Task",
     "TaskAssignment",
     "TaskDecomposer",
@@ -151,7 +152,6 @@ __all__ = [
     "TaskPriority",
     "TaskResult",
     "TaskStatus",
-    "SwarmVote",
     # Submodules
     "agents",
     # CLI integration

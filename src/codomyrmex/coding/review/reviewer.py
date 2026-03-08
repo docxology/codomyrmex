@@ -11,15 +11,14 @@ import time
 from pathlib import Path
 from typing import Any
 
+# Import models from this module
+from codomyrmex.coding._lang_utils import should_analyze_file as _lang_should_analyze
+
 # Import logger setup
 from codomyrmex.logging_monitoring import get_logger
 
 # Import analyzer
 from .analyzer import PyscnAnalyzer
-
-# Import models from this module
-from codomyrmex.coding._lang_utils import should_analyze_file as _lang_should_analyze
-
 from .models import (
     AnalysisResult,
     AnalysisSummary,
