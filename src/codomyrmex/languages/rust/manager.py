@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class RustManager:
+
+class RustManager(BaseLanguageManager):
     """Manager for the Rust language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if rustc and cargo are installed."""
-        try:
-            subprocess.run(
-                ["cargo", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["cargo", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing Rust."""
@@ -81,9 +73,3 @@ class RustManager:
         with tempfile.TemporaryDirectory() as temp_dir:
             return self.use_script(script_content, temp_dir)
 
-    def _cleanup(self, files: list[str]) -> None:
-        for file in files:
-            try:
-                os.remove(file)
-            except Exception as _exc:
-                pass

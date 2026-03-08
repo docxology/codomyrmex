@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class PhpManager:
+
+class PhpManager(BaseLanguageManager):
     """Manager for the PHP scripting language."""
 
-    def is_installed(self) -> bool:
-        """Check if php is installed."""
-        try:
-            subprocess.run(
-                ["php", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["php", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing PHP."""
@@ -65,10 +57,7 @@ class PhpManager:
                 text=True
             )
 
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.NamedTemporaryFile(suffix=".php", mode="w", delete=False) as temp:

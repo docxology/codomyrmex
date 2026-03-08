@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class RManager:
+
+class RManager(BaseLanguageManager):
     """Manager for the R programming language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if Rscript is installed."""
-        try:
-            subprocess.run(
-                ["Rscript", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["Rscript", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing R."""
@@ -61,10 +53,7 @@ class RManager:
                 text=True
             )
 
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.NamedTemporaryFile(suffix=".R", mode="w", delete=False) as temp:

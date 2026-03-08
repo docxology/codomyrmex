@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class RubyManager:
+
+class RubyManager(BaseLanguageManager):
     """Manager for the Ruby language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if ruby is installed."""
-        try:
-            subprocess.run(
-                ["ruby", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["ruby", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing Ruby."""
@@ -68,10 +60,7 @@ class RubyManager:
                 text=True
             )
 
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.NamedTemporaryFile(suffix=".rb", mode="w", delete=False) as temp:

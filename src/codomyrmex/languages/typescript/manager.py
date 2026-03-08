@@ -6,10 +6,11 @@ import os
 import subprocess
 import tempfile
 
-from src.codomyrmex.languages.javascript.manager import JavaScriptManager
+from codomyrmex.languages.base import BaseLanguageManager
+from codomyrmex.languages.javascript.manager import JavaScriptManager
 
 
-class TypeScriptManager:
+class TypeScriptManager(BaseLanguageManager):
     """Manager for the TypeScript language toolchain."""
 
     def is_installed(self) -> bool:
@@ -78,10 +79,7 @@ class TypeScriptManager:
                 capture_output=True,
                 text=True
             )
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.NamedTemporaryFile(suffix=".ts", mode="w", delete=False) as temp:

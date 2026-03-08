@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class CSharpManager:
+
+class CSharpManager(BaseLanguageManager):
     """Manager for the C# (.NET) language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if dotnet is installed."""
-        try:
-            subprocess.run(
-                ["dotnet", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["dotnet", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing .NET SDK for C#."""

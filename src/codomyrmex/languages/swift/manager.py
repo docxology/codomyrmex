@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class SwiftManager:
+
+class SwiftManager(BaseLanguageManager):
     """Manager for the Swift language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if swift is installed."""
-        try:
-            subprocess.run(
-                ["swift", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["swift", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing Swift."""
@@ -66,10 +58,7 @@ class SwiftManager:
                 text=True
             )
 
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.NamedTemporaryFile(suffix=".swift", mode="w", delete=False) as temp:

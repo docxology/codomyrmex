@@ -6,8 +6,10 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class PythonManager:
+
+class PythonManager(BaseLanguageManager):
     """Manager for the Python language toolchain."""
 
     def is_installed(self) -> bool:
@@ -90,10 +92,7 @@ class PythonManager:
                 text=True
             )
             # Clean up immediately after run
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.NamedTemporaryFile(suffix=".py", mode="w", delete=False) as temp:

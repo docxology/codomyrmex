@@ -6,8 +6,10 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class CppManager:
+
+class CppManager(BaseLanguageManager):
     """Manager for the C++ language toolchain."""
 
     def is_installed(self) -> bool:

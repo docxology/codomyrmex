@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class BashManager:
+
+class BashManager(BaseLanguageManager):
     """Manager for the Bash language shell."""
 
-    def is_installed(self) -> bool:
-        """Check if bash is installed."""
-        try:
-            subprocess.run(
-                ["bash", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["bash", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing Bash. Usually pre-installed."""
@@ -66,10 +58,7 @@ class BashManager:
                 capture_output=True,
                 text=True
             )
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.NamedTemporaryFile(suffix=".sh", mode="w", delete=False) as temp:

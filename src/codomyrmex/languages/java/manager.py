@@ -7,26 +7,13 @@ import re
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class JavaManager:
+
+class JavaManager(BaseLanguageManager):
     """Manager for the Java language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if javac and java are installed."""
-        try:
-            subprocess.run(
-                ["javac", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            subprocess.run(
-                ["java", "--version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["javac", "--version"], ["java", "--version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing Java."""
@@ -92,9 +79,3 @@ class JavaManager:
         with tempfile.TemporaryDirectory() as temp_dir:
             return self.use_script(script_content, temp_dir)
 
-    def _cleanup(self, files: list[str]) -> None:
-        for file in files:
-            try:
-                os.remove(file)
-            except Exception as _exc:
-                pass

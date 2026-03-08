@@ -6,21 +6,13 @@ import os
 import subprocess
 import tempfile
 
+from codomyrmex.languages.base import BaseLanguageManager
 
-class GoManager:
+
+class GoManager(BaseLanguageManager):
     """Manager for the Go language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if go is installed."""
-        try:
-            subprocess.run(
-                ["go", "version"],
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
-            return False
+    _check_commands = [["go", "version"]]
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing Go."""
@@ -72,10 +64,7 @@ class GoManager:
                 text=True
             )
 
-            try:
-                os.remove(script_path)
-            except Exception as _exc:
-                pass
+            self._cleanup([script_path])
             return result.stdout + result.stderr
 
         with tempfile.TemporaryDirectory() as temp_dir:
