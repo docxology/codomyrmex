@@ -4,8 +4,6 @@ Covers PII detection, masking functions, differential privacy,
 and the Privacy class with real data processing.
 """
 
-import math
-
 import pytest
 
 from codomyrmex.privacy.privacy import (
