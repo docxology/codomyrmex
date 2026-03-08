@@ -347,7 +347,7 @@ class AuditLogger:
             "details": details or {},
         }
         self.logger.info(
-            f"AUDIT: {actor} {action} {resource} -> {outcome}",
+            "AUDIT: %s %s %s -> %s", actor, action, resource, outcome,
             extra={"audit": audit_record},
         )
 

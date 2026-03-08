@@ -175,7 +175,7 @@ class NaturalRitualRecovery:
         for i, (step, response) in enumerate(zip(steps, responses, strict=False)):
             response_hash = hashlib.sha256(response.encode()).hexdigest()
             if response_hash != step.expected_response_hash:
-                logger.warning(f"Ritual failed at step {i + 1}: 'The memory was false'")
+                logger.warning("Ritual failed at step %s: 'The memory was false'", i + 1)
                 return False
 
         logger.info("Natural Ritual completed successfully. Access granted.")

@@ -72,7 +72,7 @@ class GeminiCLIWrapper(BaseAgent):
             cmd.extend(context["include_directories"])
 
         try:
-            logger.debug(f"Executing gemini CLI command: {' '.join(cmd)}")
+            logger.debug("Executing gemini CLI command: %s", " ".join(cmd))
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
             if result.returncode != 0:

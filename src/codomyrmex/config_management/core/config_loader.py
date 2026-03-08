@@ -268,7 +268,7 @@ class ConfigurationManager:
 
             self.config_dir = tempfile.mkdtemp(prefix="codomyrmex_config_")
             logger.warning(
-                f"Could not create config directory {config_dir}, using temporary location: {self.config_dir}"
+                "Could not create config directory %s, using temporary location: %s", config_dir, self.config_dir
             )
 
     def load_configuration(
@@ -350,7 +350,7 @@ class ConfigurationManager:
         validation_errors = config.validate()
         if validation_errors:
             logger.warning(
-                f"Configuration validation errors for {name}: {validation_errors}"
+                "Configuration validation errors for %s: %s", name, validation_errors
             )
 
         self.configurations[name] = config
@@ -716,7 +716,7 @@ class ConfigurationManager:
                     self.configurations[backup_name] = backup_config
 
                 logger.info(
-                    f"Successfully migrated {name} from {current_version} to {target_version}"
+                    "Successfully migrated %s from %s to %s", name, current_version, target_version
                 )
                 return True
             logger.error("Migration failed for %s: %s", name, migration_result.errors)

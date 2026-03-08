@@ -331,7 +331,7 @@ class ToolRunner:
 
             if pyrefly_result.error_message:
                 logger.warning(
-                    f"Pyrefly reported error for {file_path}: {pyrefly_result.error_message}"
+                    "Pyrefly reported error for %s: %s", file_path, pyrefly_result.error_message
                 )
 
         except (

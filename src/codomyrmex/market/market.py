@@ -44,7 +44,7 @@ class Market:
             "active_tasks": 0,
         }
         logger.info(
-            f"Agent {agent_id} registered with {len(capabilities)} capabilities"
+            "Agent %s registered with %s capabilities", agent_id, len(capabilities)
         )
 
     def post_task(

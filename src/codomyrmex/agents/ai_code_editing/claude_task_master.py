@@ -222,8 +222,8 @@ class ClaudeTaskMaster:
                 delay *= 0.75 + random.random() * 0.5  # Add jitter
 
                 logger.warning(
-                    f"Retryable error, attempt {attempt + 1}/{self.max_retries + 1}, "
-                    f"retrying in {delay:.1f}s: {e}"
+                    "Retryable error, attempt %s/%s, retrying in %.1fs: %s",
+                    attempt + 1, self.max_retries + 1, delay, e,
                 )
                 time.sleep(delay)
 
@@ -280,8 +280,8 @@ class ClaudeTaskMaster:
             self._total_cost += cost
 
             logger.info(
-                f"Executed task {task_id} using {self.model} "
-                f"in {execution_time:.2f}s ({tokens_used} tokens, ${cost:.6f})"
+                "Executed task %s using %s in %.2fs (%s tokens, $%.6f)",
+                task_id, self.model, execution_time, tokens_used, cost,
             )
 
             return {
@@ -424,8 +424,8 @@ class ClaudeTaskMaster:
             subtasks = self._parse_subtasks(result_text, include_dependencies)
 
             logger.info(
-                f"Decomposed task into {len(subtasks)} subtasks "
-                f"in {execution_time:.2f}s (${cost:.6f})"
+                "Decomposed task into %s subtasks in %.2fs ($%.6f)",
+                len(subtasks), execution_time, cost,
             )
 
             return {
@@ -497,7 +497,7 @@ class ClaudeTaskMaster:
             parsed = self._parse_analysis(analysis)
 
             logger.info(
-                f"Analyzed task in {execution_time:.2f}s ({tokens_used} tokens, ${cost:.6f})"
+                "Analyzed task in %.2fs (%s tokens, $%.6f)", execution_time, tokens_used, cost
             )
 
             return {
@@ -576,7 +576,7 @@ class ClaudeTaskMaster:
             self._total_cost += cost
 
             logger.info(
-                f"Created workflow plan in {execution_time:.2f}s ({tokens_used} tokens, ${cost:.6f})"
+                "Created workflow plan in %.2fs (%s tokens, $%.6f)", execution_time, tokens_used, cost
             )
 
             return {
@@ -651,7 +651,7 @@ class ClaudeTaskMaster:
             code = self._extract_code(result_text, language)
 
             logger.info(
-                f"Generated {language} code in {execution_time:.2f}s (${cost:.6f})"
+                "Generated %s code in %.2fs ($%.6f)", language, execution_time, cost
             )
 
             return {

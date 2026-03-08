@@ -54,7 +54,7 @@ class ExecutionMonitor:
                 break
 
         logger.info(
-            f"Ended execution {execution_id} ({status}) in {execution_time:.3f}s"
+            "Ended execution %s (%s) in %.3fs", execution_id, status, execution_time
         )
 
     def get_execution_stats(self) -> dict[str, Any]:

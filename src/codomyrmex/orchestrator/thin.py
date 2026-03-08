@@ -494,7 +494,7 @@ def retry(
                 last_error = e
                 if attempt < max_attempts:
                     logger.warning(
-                        f"Attempt {attempt} failed, retrying in {current_delay}s: {e}"
+                        "Attempt %s failed, retrying in %ss: %s", attempt, current_delay, e
                     )
                     await asyncio.sleep(current_delay)
                     current_delay *= backoff

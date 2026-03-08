@@ -261,8 +261,8 @@ def _create_llm_client(spec: AgentSpec) -> Any:
 
         base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
         logger.info(
-            f"[{spec.identity}] Provider '{spec.provider}' → "
-            f"Ollama fallback ({fallback_model})"
+            "[%s] Provider '%s' → Ollama fallback (%s)",
+            spec.identity, spec.provider, fallback_model,
         )
         return OllamaClient(model=fallback_model, base_url=base_url)
 
@@ -312,8 +312,8 @@ class ConversationOrchestrator:
             if fc.content:
                 self.context_files.append(fc)
                 logger.info(
-                    f"[Orchestrator] Loaded context file: {fc.name} "
-                    f"(~{fc.token_estimate} tokens)"
+                    "[Orchestrator] Loaded context file: %s (~%s tokens)",
+                    fc.name, fc.token_estimate,
                 )
 
         # Parse TO-DO items for per-round scaffolding.
@@ -326,8 +326,8 @@ class ConversationOrchestrator:
                 if not any(fc.path == todo_fc.path for fc in self.context_files):
                     self.context_files.append(todo_fc)
                 logger.info(
-                    f"[Orchestrator] Extracted {len(self.todo_items)} TO-DO items "
-                    f"for per-round scaffolding"
+                    "[Orchestrator] Extracted %s TO-DO items for per-round scaffolding",
+                    len(self.todo_items),
                 )
 
         # Parse agent specs.
@@ -361,7 +361,8 @@ class ConversationOrchestrator:
         for spec in self.agents:
             self.clients[spec.identity] = _create_llm_client(spec)
             logger.info(
-                f"[Orchestrator] Agent '{spec.identity}' → {spec.provider}/{spec.model}"
+                "[Orchestrator] Agent '%s' → %s/%s",
+                spec.identity, spec.provider, spec.model,
             )
 
         # Conversation state.
@@ -406,9 +407,8 @@ class ConversationOrchestrator:
         """Internal loop — runs inside a correlation context."""
         self._running = True
         logger.info(
-            f"[Orchestrator] Starting conversation '{self.channel_id}' — "
-            f"{len(self.agents)} agents, {rounds or '∞'} rounds, "
-            f"cid={self.log.correlation_id}"
+            "[Orchestrator] Starting conversation '%s' — %s agents, %s rounds, cid=%s",
+            self.channel_id, len(self.agents), rounds or "∞", self.log.correlation_id,
         )
 
         # Post the seed prompt from a neutral "moderator" if starting fresh.
@@ -441,8 +441,8 @@ class ConversationOrchestrator:
         self._running = False
 
         logger.info(
-            f"[Orchestrator] Conversation ended — {len(self.log.turns)} turns, "
-            f"{self.log.total_rounds} rounds"
+            "[Orchestrator] Conversation ended — %s turns, %s rounds",
+            len(self.log.turns), self.log.total_rounds,
         )
         return list(self.log.turns)
 
@@ -618,8 +618,8 @@ class ConversationOrchestrator:
             except Exception as exc:
                 last_error = exc
                 logger.warning(
-                    f"[{spec.identity}] LLM attempt {attempt}/{self.max_retries + 1} "
-                    f"failed: {exc}"
+                    "[%s] LLM attempt %s/%s failed: %s",
+                    spec.identity, attempt, self.max_retries + 1, exc,
                 )
                 if attempt <= self.max_retries:
                     time.sleep(0.5 * attempt)  # exponential-ish backoff
@@ -643,8 +643,7 @@ class ConversationOrchestrator:
             token_estimate=len(content.split()),
         )
         logger.info(
-            f"[Turn {turn_number}] [{spec.identity}] "
-            f"({elapsed:.1f}s, ~{turn.token_estimate} tokens): "
-            f"{content[:80]}..."
+            "[Turn %s] [%s] (%.1fs, ~%s tokens): %s...",
+            turn_number, spec.identity, elapsed, turn.token_estimate, content[:80],
         )
         return turn

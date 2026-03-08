@@ -247,7 +247,7 @@ class SensorManager:
         self._calibrations[sensor_id] = calibration
 
         logger.info(
-            f"Calibrated sensor {sensor_id}: slope={slope:.4f}, offset={offset:.4f}"
+            "Calibrated sensor %s: slope=%.4f, offset=%.4f", sensor_id, slope, offset
         )
         return calibration
 

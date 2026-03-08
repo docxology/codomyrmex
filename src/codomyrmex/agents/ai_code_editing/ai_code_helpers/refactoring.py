@@ -139,7 +139,7 @@ def refactor_code_snippet(
         }
 
         logger.info(
-            f"Refactored {language} code using {provider}/{model} in {execution_time:.2f}s"
+            "Refactored %s code using %s/%s in %.2fs", language, provider, model, execution_time
         )
         return result
 

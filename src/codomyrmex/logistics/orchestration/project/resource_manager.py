@@ -257,7 +257,7 @@ class ResourceManager:
             available = resource.capacity - resource.allocated
             if available < amount:
                 logger.warning(
-                    f"Insufficient capacity for {resource.name}: requested {amount}, available {available}"
+                    "Insufficient capacity for %s: requested %s, available %s", resource.name, amount, available
                 )
                 resource.status = (
                     ResourceStatus.BUSY if available <= 0 else ResourceStatus.ALLOCATED
@@ -285,7 +285,7 @@ class ResourceManager:
             )
 
             logger.info(
-                f"Allocated {amount} {resource.limits.unit} of {resource.name} to {requester_id}"
+                "Allocated %s %s of %s to %s", amount, resource.limits.unit, resource.name, requester_id
             )
             return allocation
 
@@ -321,7 +321,7 @@ class ResourceManager:
                 )
 
             logger.info(
-                f"Released {amount} {target_resource.limits.unit} of {target_resource.name}"
+                "Released %s %s of %s", amount, target_resource.limits.unit, target_resource.name
             )
             return True
 

@@ -77,7 +77,7 @@ def setup_environment() -> bool:
             logger.warning("No API keys found for any LLM provider")
             return False
 
-        logger.info(f"Available LLM providers: {', '.join(available_providers)}")
+        logger.info("Available LLM providers: %s", ", ".join(available_providers))
         return True
 
     except (OSError, ValueError, AttributeError, RuntimeError) as e:

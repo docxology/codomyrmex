@@ -81,7 +81,7 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     coverage_report.append(f"🏆 Overall Coverage Score: {overall_score:.1f}/100")
 
     (docs_path / "coverage_assessment.md").write_text("\n".join(coverage_report))
-    logger.info(f"Documentation coverage assessed: {overall_score:.1f}/100", extra={"description": description})
+    logger.info("Documentation coverage assessed: %.1f/100", overall_score, extra={"description": description})
     return f"Documentation coverage assessed: {overall_score:.1f}/100"
 
 
@@ -250,7 +250,7 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
         files_created.append("__init__.py (updated)")
 
     logger.info(
-        f"Documentation quality methods added: {len(files_created)} files",
+        "Documentation quality methods added: %s files", len(files_created),
         extra={"description": description},
     )
     return f"Documentation quality methods added: {len(files_created)} files"

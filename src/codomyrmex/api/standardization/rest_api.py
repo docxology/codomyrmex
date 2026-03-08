@@ -457,7 +457,7 @@ class RESTAPI:
 
             processing_time = time.time() - start_time
             logger.info(
-                f"Request completed: {method} {path} -> {response.status_code.value} ({processing_time:.3f}s)"
+                "Request completed: %s %s -> %s (%.3fs)", method, path, response.status_code.value, processing_time
             )
 
             return response

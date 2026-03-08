@@ -337,11 +337,8 @@ def profile_memory_usage(func: Callable) -> Callable:
             memory_delta = memory_after - memory_before
 
             logger.info(
-                f"Memory profile for {func.__name__}: "
-                f"before={memory_before:.1f}MB, "
-                f"after={memory_after:.1f}MB, "
-                f"delta={memory_delta:+.1f}MB, "
-                f"duration={end_time - start_time:.3f}s"
+                "Memory profile for %s: before=%.1fMB, after=%.1fMB, delta=%+.1fMB, duration=%.3fs",
+                func.__name__, memory_before, memory_after, memory_delta, end_time - start_time,
             )
 
     return wrapper
@@ -403,10 +400,8 @@ def track_resource_usage(operation: str):
         memory_delta = end_metrics.memory_used_mb - start_metrics.memory_used_mb
 
         logger.info(
-            f"Resource tracking for '{operation}': "
-            f"duration={duration:.3f}s, "
-            f"cpu_delta={cpu_used:+.1f}%, "
-            f"memory_delta={memory_delta:+.1f}MB"
+            "Resource tracking for '%s': duration=%.3fs, cpu_delta=%+.1f%%, memory_delta=%+.1fMB",
+            operation, duration, cpu_used, memory_delta,
         )
 
 

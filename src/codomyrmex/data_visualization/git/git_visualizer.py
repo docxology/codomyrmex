@@ -224,7 +224,7 @@ class GitVisualizer:
 
         except Exception as e:
             logger.error(
-                f"Error creating Git tree PNG visualization: {e}", exc_info=True
+                "Error creating Git tree PNG visualization: %s", e, exc_info=True
             )
             return False
 
@@ -396,7 +396,7 @@ class GitVisualizer:
 
         except Exception as e:
             logger.error(
-                f"Error creating commit activity PNG chart: {e}", exc_info=True
+                "Error creating commit activity PNG chart: %s", e, exc_info=True
             )
             return False
 
@@ -608,13 +608,13 @@ class GitVisualizer:
                 plt.close(fig)
 
             logger.info(
-                f"Repository summary PNG dashboard '{title}' generated successfully"
+                "Repository summary PNG dashboard '%s' generated successfully", title
             )
             return True
 
         except Exception as e:
             logger.error(
-                f"Error creating repository summary PNG dashboard: {e}", exc_info=True
+                "Error creating repository summary PNG dashboard: %s", e, exc_info=True
             )
             return False
 
@@ -714,7 +714,7 @@ class GitVisualizer:
         success_count = sum(results.values())
         total_count = len(results)
         logger.info(
-            f"Git report creation completed: {success_count}/{total_count} visualizations successful"
+            "Git report creation completed: %s/%s visualizations successful", success_count, total_count
         )
 
         return results
@@ -932,7 +932,7 @@ if __name__ == "__main__":
         success = visualizer.visualize_git_tree_png(
             title="Sample Git Tree", output_path=str(output_dir / "sample_git_tree.png")
         )
-        logger.info(f"Sample Git tree PNG: {'Success' if success else 'Failed'}")
+        logger.info("Sample Git tree PNG: %s", "Success" if success else "Failed")
 
         # Test Mermaid visualization
         mermaid_content = visualizer.visualize_git_tree_mermaid(
@@ -940,7 +940,7 @@ if __name__ == "__main__":
             output_path=str(output_dir / "sample_git_tree.mmd"),
         )
         logger.info(
-            f"Sample Git tree Mermaid: {'Success' if mermaid_content else 'Failed'}"
+            "Sample Git tree Mermaid: %s", "Success" if mermaid_content else "Failed"
         )
 
         # Test commit activity
@@ -948,14 +948,14 @@ if __name__ == "__main__":
             title="Sample Commit Activity",
             output_path=str(output_dir / "sample_commit_activity.png"),
         )
-        logger.info(f"Sample commit activity: {'Success' if success else 'Failed'}")
+        logger.info("Sample commit activity: %s", "Success" if success else "Failed")
 
         # Test repository summary
         success = visualizer.visualize_repository_summary_png(
             title="Sample Repository Summary",
             output_path=str(output_dir / "sample_repo_summary.png"),
         )
-        logger.info(f"Sample repository summary: {'Success' if success else 'Failed'}")
+        logger.info("Sample repository summary: %s", "Success" if success else "Failed")
 
     logger.info("Git visualization examples generated in %s", output_dir)
 

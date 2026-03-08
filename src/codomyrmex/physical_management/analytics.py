@@ -424,7 +424,7 @@ class StreamingAnalytics:
         triggered_alerts = self.check_alerts(stream_id, point)
         for alert in triggered_alerts:
             logger.warning(
-                f"Alert triggered: {alert['message']} (value: {point.value})"
+                "Alert triggered: %s (value: %s)", alert["message"], point.value
             )
 
 

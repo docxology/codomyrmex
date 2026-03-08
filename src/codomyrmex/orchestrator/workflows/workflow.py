@@ -15,11 +15,20 @@ Features:
 import asyncio
 import time
 from collections.abc import Callable
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
+
+from ._models import (
+    CycleError,
+    ProgressCallback,
+    RetryPolicy,
+    Task,
+    TaskFailedError,
+    TaskResult,
+    TaskStatus,
+    WorkflowError,
+)
 
 logger = get_logger(__name__)
 
@@ -36,118 +45,6 @@ __all__ = [
     "fan_out_fan_in",
     "parallel",
 ]
-
-
-class TaskStatus(Enum):
-    """Task execution status."""
-
-    PENDING = "pending"
-    RUNNING = "running"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    SKIPPED = "skipped"
-    RETRYING = "retrying"
-
-
-@dataclass
-class RetryPolicy:
-    """Retry configuration for tasks."""
-
-    max_attempts: int = 3
-    initial_delay: float = 1.0
-    max_delay: float = 60.0
-    exponential_base: float = 2.0
-    retry_on: tuple = (Exception,)  # Exception types to retry on
-
-    def get_delay(self, attempt: int) -> float:
-        """Calculate delay for attempt using exponential backoff."""
-        delay = self.initial_delay * (self.exponential_base ** (attempt - 1))
-        return min(delay, self.max_delay)
-
-
-@dataclass
-class TaskResult:
-    """Result of a task execution."""
-
-    success: bool
-    value: Any = None
-    error: str | None = None
-    execution_time: float = 0.0
-    attempts: int = 1
-
-
-@dataclass
-class Task:
-    """Represents a single unit of work in a workflow."""
-
-    name: str
-    action: Callable[..., Any]
-    args: list[Any] = field(default_factory=list)
-    kwargs: dict[str, Any] = field(default_factory=dict)
-    dependencies: set[str] = field(default_factory=set)
-    timeout: float | None = None
-
-    # Retry configuration
-    retry_policy: RetryPolicy | None = None
-
-    # Conditional execution: function that receives task results dict
-    # and returns True if task should run
-    condition: Callable[[dict[str, TaskResult]], bool] | None = None
-
-    # Result transformation: function to transform result before passing
-    transform_result: Callable[[Any], Any] | None = None
-
-    # Tags for filtering and grouping
-    tags: set[str] = field(default_factory=set)
-
-    # Metadata
-    metadata: dict[str, Any] = field(default_factory=dict)
-
-    # State
-    status: TaskStatus = TaskStatus.PENDING
-    result: Any = None
-    error: Exception | None = None
-    attempts: int = 0
-    execution_time: float = 0.0
-
-    def __hash__(self):
-        """Return the hash value."""
-        return hash(self.name)
-
-    def should_run(self, results: dict[str, TaskResult]) -> bool:
-        """Check if task should run based on condition."""
-        if self.condition is None:
-            return True
-        try:
-            return self.condition(results)
-        except Exception as e:
-            logger.warning("Condition check failed for %s: %s", self.name, e)
-            return False
-
-    def get_result(self) -> TaskResult:
-        """Get task result as TaskResult object."""
-        return TaskResult(
-            success=self.status == TaskStatus.COMPLETED,
-            value=self.result,
-            error=str(self.error) if self.error else None,
-            execution_time=self.execution_time,
-            attempts=self.attempts,
-        )
-
-
-class WorkflowError(Exception):
-    """Base exception for workflow errors."""
-
-
-class CycleError(WorkflowError):
-    """Raised when a circular dependency is detected."""
-
-
-class TaskFailedError(WorkflowError):
-    """Raised when a required task fails."""
-
-
-ProgressCallback = Callable[[str, str, dict[str, Any]], None]
 
 
 class Workflow:
@@ -198,57 +95,28 @@ class Workflow:
             except (AttributeError, TypeError, RuntimeError, ValueError) as exc:
                 self.logger.warning("EventBus publish failed: %s", exc)
 
-    def add_task(
-        self,
-        name: str,
-        action: Callable[..., Any],
-        dependencies: list[str] | None = None,
-        args: list[Any] | None = None,
-        kwargs: dict[str, Any] | None = None,
-        timeout: float | None = None,
-        retry_policy: RetryPolicy | None = None,
-        condition: Callable[[dict[str, TaskResult]], bool] | None = None,
-        transform_result: Callable[[Any], Any] | None = None,
-        tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
-    ) -> "Workflow":
-        """Add a task to the workflow.
+    def add_task(self, name: str, action: Callable[..., Any], **opts: Any) -> "Workflow":
+        """Add a task to the workflow. Returns self for chaining.
 
-        Args:
-            name: Unique task name
-            action: Callable to execute (sync or async)
-            dependencies: List of task names that must complete first
-            args: Positional arguments for action
-            kwargs: Keyword arguments for action
-            timeout: Task-specific timeout in seconds
-            retry_policy: Retry configuration for failures
-            condition: Function to determine if task should run based on results
-            transform_result: Function to transform result before storing
-            tags: Tags for filtering and grouping
-            metadata: Additional metadata
-
-        Returns:
-            Self for chaining
+        Keyword options: dependencies, args, kwargs, timeout, retry_policy,
+        condition, transform_result, tags, metadata.
         """
         if name in self.tasks:
             raise WorkflowError(f"Task '{name}' already exists in workflow.")
-
-        deps = set(dependencies) if dependencies else set()
-
-        task = Task(
-            name=name,
-            action=action,
-            dependencies=deps,
-            args=args or [],
-            kwargs=kwargs or {},
-            timeout=timeout,
-            retry_policy=retry_policy,
-            condition=condition,
-            transform_result=transform_result,
+        deps = opts.get("dependencies")
+        tags = opts.get("tags")
+        self.tasks[name] = Task(
+            name=name, action=action,
+            dependencies=set(deps) if deps else set(),
+            args=opts.get("args") or [],
+            kwargs=opts.get("kwargs") or {},
+            timeout=opts.get("timeout"),
+            retry_policy=opts.get("retry_policy"),
+            condition=opts.get("condition"),
+            transform_result=opts.get("transform_result"),
             tags=set(tags) if tags else set(),
-            metadata=metadata or {},
+            metadata=opts.get("metadata") or {},
         )
-        self.tasks[name] = task
         return self
 
     def cancel(self):
@@ -314,7 +182,7 @@ class Workflow:
         self.task_results.clear()
 
         self.logger.info(
-            f"Starting workflow '{self.name}' with {len(self.tasks)} tasks."
+            "Starting workflow '%s' with %s tasks.", self.name, len(self.tasks)
         )
         self._emit_progress("workflow", "started", {"total_tasks": len(self.tasks)})
 
@@ -378,7 +246,7 @@ class Workflow:
                     if task.status == TaskStatus.PENDING:
                         if not task.dependencies.isdisjoint(failed_tasks):
                             self.logger.warning(
-                                f"Task '{name}' skipped due to failed dependencies."
+                                "Task '%s' skipped due to failed dependencies.", name
                             )
                             task.status = TaskStatus.SKIPPED
                             task.error = Exception("Dependency failed")
@@ -441,7 +309,7 @@ class Workflow:
                             result = task.transform_result(result)
                         except Exception as e:
                             self.logger.warning(
-                                f"Result transform failed for {task.name}: {e}"
+                                "Result transform failed for %s: %s", task.name, e
                             )
 
                     task.status = TaskStatus.COMPLETED
@@ -449,7 +317,7 @@ class Workflow:
                     completed_tasks.add(task.name)
                     self.task_results[task.name] = task.get_result()
                     self.logger.info(
-                        f"Task '{task.name}' completed in {task.execution_time:.2f}s"
+                        "Task '%s' completed in %.2fs", task.name, task.execution_time
                     )
                     self._emit_progress(
                         task.name,
@@ -530,8 +398,8 @@ class Workflow:
                 if attempt < policy.max_attempts:
                     delay = policy.get_delay(attempt)
                     self.logger.warning(
-                        f"Task '{task.name}' failed (attempt {attempt}/{policy.max_attempts}), "
-                        f"retrying in {delay:.1f}s: {e}"
+                        "Task '%s' failed (attempt %s/%s), retrying in %.1fs: %s",
+                        task.name, attempt, policy.max_attempts, delay, e,
                     )
                     task.status = TaskStatus.RETRYING
                     self._emit_progress(
@@ -542,7 +410,7 @@ class Workflow:
                     await asyncio.sleep(delay)
                 else:
                     self.logger.error(
-                        f"Task '{task.name}' failed after {policy.max_attempts} attempts: {e}"
+                        "Task '%s' failed after %s attempts: %s", task.name, policy.max_attempts, e
                     )
                     raise
             except Exception as _exc:
@@ -626,87 +494,4 @@ class Workflow:
 # Convenience functions for creating common workflows
 
 
-def chain(*actions: Callable, names: list[str] | None = None) -> Workflow:
-    """Create a linear workflow where each task depends on the previous.
-
-    Args:
-        *actions: Callables to execute in order
-        names: Optional task names (defaults to action names or indices)
-
-    Returns:
-        Configured Workflow
-    """
-    workflow = Workflow(name="chain")
-    prev_name = None
-
-    for i, action in enumerate(actions):
-        name = (
-            names[i]
-            if names and i < len(names)
-            else getattr(action, "__name__", f"task_{i}")
-        )
-        deps = [prev_name] if prev_name else None
-        workflow.add_task(name=name, action=action, dependencies=deps)
-        prev_name = name
-
-    return workflow
-
-
-def parallel(*actions: Callable, names: list[str] | None = None) -> Workflow:
-    """Create a workflow where all tasks run in parallel.
-
-    Args:
-        *actions: Callables to execute in parallel
-        names: Optional task names
-
-    Returns:
-        Configured Workflow
-    """
-    workflow = Workflow(name="parallel")
-
-    for i, action in enumerate(actions):
-        name = (
-            names[i]
-            if names and i < len(names)
-            else getattr(action, "__name__", f"task_{i}")
-        )
-        workflow.add_task(name=name, action=action)
-
-    return workflow
-
-
-def fan_out_fan_in(
-    initial: Callable,
-    parallel_tasks: list[Callable],
-    final: Callable,
-    initial_name: str = "initial",
-    final_name: str = "final",
-) -> Workflow:
-    """Create a fan-out/fan-in workflow pattern.
-
-    initial -> [parallel_tasks...] -> final
-
-    Args:
-        initial: Initial task to run first
-        parallel_tasks: Tasks to run in parallel after initial
-        final: Final task to run after all parallel tasks complete
-
-    Returns:
-        Configured Workflow
-    """
-    workflow = Workflow(name="fan_out_fan_in")
-
-    # Initial task
-    workflow.add_task(name=initial_name, action=initial)
-
-    # Parallel tasks
-    parallel_names = []
-    for i, action in enumerate(parallel_tasks):
-        name = getattr(action, "__name__", f"parallel_{i}")
-        workflow.add_task(name=name, action=action, dependencies=[initial_name])
-        parallel_names.append(name)
-
-    # Final task depends on all parallel tasks
-    workflow.add_task(name=final_name, action=final, dependencies=parallel_names)
-
-    return workflow
+from ._factories import chain, fan_out_fan_in, parallel

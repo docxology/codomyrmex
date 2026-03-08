@@ -56,8 +56,8 @@ class SkillsManager:
         self.registry = SkillRegistry(self.loader)
 
         logger.info(
-            f"SkillsManager initialized: skills_dir={skills_dir}, "
-            f"upstream_repo={upstream_repo}, auto_sync={auto_sync}"
+            "SkillsManager initialized: skills_dir=%s, upstream_repo=%s, auto_sync=%s",
+            skills_dir, upstream_repo, auto_sync,
         )
 
     def initialize(self) -> bool:

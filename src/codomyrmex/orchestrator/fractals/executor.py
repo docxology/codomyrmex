@@ -75,7 +75,7 @@ def _invoke_claude(prompt: str, cwd: Path) -> str:
         del env["CLAUDECODE"]
 
     cmd = [CLAUDE_BIN, "--dangerously-skip-permissions", "-p", prompt]
-    logger.debug(f"[executor] spawning: {' '.join(cmd)}")
+    logger.debug("[executor] spawning: %s", " ".join(cmd))
 
     result = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True)
     if result.returncode != 0:

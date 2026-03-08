@@ -45,34 +45,33 @@ class EveryCodeClient(CLIAgentBase):
             working_dir=None,
             env_vars={},
         )
-
-        code_command = self.get_config_value("every_code_command", config=config)
-        alt_command = self.get_config_value("every_code_alt_command", config=config)
-        timeout = self.get_config_value("every_code_timeout", config=config)
-        working_dir_str = self.get_config_value("every_code_working_dir", config=config)
-        working_dir = Path(working_dir_str) if working_dir_str else None
-
-        available_command = self._find_available_command(code_command, alt_command)
-
-        api_key = self.get_config_value("every_code_api_key", config=config)
-        config_path = self.get_config_value("every_code_config_path", config=config)
-        if api_key:
-            self.env_vars["OPENAI_API_KEY"] = api_key
-        if config_path:
-            self.env_vars["CODE_HOME"] = config_path
-
-        self.command = available_command
-        self.timeout = timeout
-        self.working_dir = working_dir
-        self.api_key = api_key
-        self.config_path = config_path
-
+        self._apply_config_overrides(config)
         # Verify code is available
         if not self._check_command_available(check_args=["--version"]):
             self.logger.warning(
                 "Every Code command not found, some operations may fail",
                 extra={"command": self.command},
             )
+
+    def _apply_config_overrides(self, config: dict[str, Any] | None) -> None:
+        """Apply configuration overrides from the provided config dict."""
+        code_command = self.get_config_value("every_code_command", config=config)
+        alt_command = self.get_config_value("every_code_alt_command", config=config)
+        timeout = self.get_config_value("every_code_timeout", config=config)
+        working_dir_str = self.get_config_value("every_code_working_dir", config=config)
+        working_dir = Path(working_dir_str) if working_dir_str else None
+        available_command = self._find_available_command(code_command, alt_command)
+        api_key = self.get_config_value("every_code_api_key", config=config)
+        config_path = self.get_config_value("every_code_config_path", config=config)
+        if api_key:
+            self.env_vars["OPENAI_API_KEY"] = api_key
+        if config_path:
+            self.env_vars["CODE_HOME"] = config_path
+        self.command = available_command
+        self.timeout = timeout
+        self.working_dir = working_dir
+        self.api_key = api_key
+        self.config_path = config_path
 
     @staticmethod
     def _find_available_command(code_command: str, alt_command: str) -> str:
@@ -120,6 +119,28 @@ class EveryCodeClient(CLIAgentBase):
         # Return primary as default (will fail later if not available)
         return code_command
 
+    def _wrap_execute_error(self, e: Exception) -> None:
+        """Convert execution exceptions into EveryCodeError and re-raise."""
+        if isinstance(e, AgentTimeoutError):
+            raise EveryCodeError(
+                f"Every Code command timed out: {e!s}",
+                command=self.command,
+            ) from e
+        if isinstance(e, AgentError):
+            raise EveryCodeError(
+                f"Every Code command failed: {e!s}",
+                command=self.command,
+            ) from e
+        self.logger.error(
+            "Every Code execution failed: %s",
+            e,
+            exc_info=e,
+            extra={"command": self.command, "error": str(e)},
+        )
+        raise EveryCodeError(
+            f"Every Code command failed: {e!s}", command=self.command
+        ) from e
+
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """
         Execute Every Code command.
@@ -132,15 +153,10 @@ class EveryCodeClient(CLIAgentBase):
         """
         prompt = request.prompt
         context = request.context or {}
-
-        # Build code command input
         code_input = self._build_code_input(prompt, context)
 
         try:
-            # Execute code command using base class method
             result = self._execute_command(input_text=code_input)
-
-            # Build response using base class helper
             return self._build_response_from_result(
                 result,
                 request,
@@ -151,29 +167,8 @@ class EveryCodeClient(CLIAgentBase):
                     else code_input,
                 },
             )
-
-        except AgentTimeoutError as e:
-            # Convert timeout to EveryCodeError
-            raise EveryCodeError(
-                f"Every Code command timed out: {e!s}",
-                command=self.command,
-            ) from e
-        except AgentError as e:
-            # Convert base agent error to EveryCodeError
-            raise EveryCodeError(
-                f"Every Code command failed: {e!s}",
-                command=self.command,
-            ) from e
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            # Convert any other exception to EveryCodeError
-            self.logger.error(
-                f"Every Code execution failed: {e}",
-                exc_info=True,
-                extra={"command": self.command, "error": str(e)},
-            )
-            raise EveryCodeError(
-                f"Every Code command failed: {e!s}", command=self.command
-            ) from e
+        except (AgentTimeoutError, AgentError, ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            self._wrap_execute_error(e)
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """
@@ -294,7 +289,7 @@ class EveryCodeClient(CLIAgentBase):
             TypeError,
         ) as e:
             self.logger.warning(
-                f"Failed to get Every Code help: {e}",
+                "Failed to get Every Code help: %s", e,
                 extra={"command": self.command, "error": str(e)},
             )
             return {
@@ -329,7 +324,7 @@ class EveryCodeClient(CLIAgentBase):
             TypeError,
         ) as e:
             self.logger.warning(
-                f"Failed to get Every Code version: {e}",
+                "Failed to get Every Code version: %s", e,
                 extra={"command": self.command, "error": str(e)},
             )
             return {

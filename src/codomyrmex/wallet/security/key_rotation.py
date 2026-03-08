@@ -60,8 +60,8 @@ class KeyRotation:
         self._pre_rotate_hooks: list[Callable] = []
         self._post_rotate_hooks: list[Callable] = []
         logger.info(
-            f"KeyRotation initialized: max_age={self.policy.max_age_days}d, "
-            f"max_sigs={self.policy.max_signatures}"
+            "KeyRotation initialized: max_age=%sd, max_sigs=%s",
+            self.policy.max_age_days, self.policy.max_signatures,
         )
 
     def register_wallet(self, user_id: str, wallet_id: str) -> None:
@@ -150,7 +150,7 @@ class KeyRotation:
                 logger.warning("Post-rotate hook failed: %s", e)
 
         logger.info(
-            f"Recorded rotation for {user_id}: {old_wallet_id} -> {new_wallet_id}"
+            "Recorded rotation for %s: %s -> %s", user_id, old_wallet_id, new_wallet_id
         )
         return record
 

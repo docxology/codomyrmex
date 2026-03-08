@@ -229,7 +229,7 @@ def visualize_commit_activity(
 
     except Exception as e:
         logger.error(
-            f"Error creating commit activity visualization: {e}", exc_info=True
+            "Error creating commit activity visualization: %s", e, exc_info=True
         )
         return {"error": str(e)}
 

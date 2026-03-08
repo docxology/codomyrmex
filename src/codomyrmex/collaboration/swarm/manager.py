@@ -64,7 +64,7 @@ class SwarmManager:
         )
 
         logger.info(
-            f"Agent {agent.agent_id} registered and results subscription established."
+            "Agent %s registered and results subscription established.", agent.agent_id
         )
 
     def _handle_result(self, message: SwarmMessage) -> None:

@@ -62,7 +62,7 @@ class FabricOrchestrator:
                 self.logger.info("Pattern '%s' completed successfully", pattern)
             else:
                 self.logger.error(
-                    f"Pattern '{pattern}' failed: {result.get('error', 'Unknown error')}"
+                    "Pattern '%s' failed: %s", pattern, result.get("error", "Unknown error")
                 )
 
         return {

@@ -169,7 +169,7 @@ class APIDocumentationGenerator:
         self._generate_tags()
 
         logger.info(
-            f"Generated documentation with {len(self.discovered_endpoints)} endpoints"
+            "Generated documentation with %s endpoints", len(self.discovered_endpoints)
         )
         return self.documentation
 

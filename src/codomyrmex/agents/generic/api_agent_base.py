@@ -163,7 +163,7 @@ class APIAgentBase(BaseAgent):
         api_key = self.api_key
         if not api_key:
             self.logger.warning(
-                f"Connection test failed for {self.name}: No API key found"
+                "Connection test failed for %s: No API key found", self.name
             )
             return False
 
@@ -202,7 +202,7 @@ class APIAgentBase(BaseAgent):
                     break
 
         self.logger.error(
-            f"{self.name} API error",
+            "%s API error", self.name,
             extra={
                 "agent": self.name,
                 "model": getattr(self, "model", None),

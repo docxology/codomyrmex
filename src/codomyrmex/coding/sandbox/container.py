@@ -94,7 +94,7 @@ def run_code_in_docker(
         *container_cmd,
     ]
 
-    logger.info(f"Executing code in Docker: {' '.join(docker_cmd)}")  # type: ignore
+    logger.info("Executing code in Docker: %s", " ".join(docker_cmd))  # type: ignore
 
     try:
         # Open stdin file outside shell (no shell injection possible) (C3)

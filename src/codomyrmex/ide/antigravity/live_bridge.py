@@ -116,7 +116,7 @@ class LiveAgentBridge:
         )
         self._thread.start()
         logger.info(
-            f"LiveAgentBridge started: {self.identity} on {self.relay.channel_id}"
+            "LiveAgentBridge started: %s on %s", self.identity, self.relay.channel_id
         )
 
     def stop(self) -> None:
@@ -230,7 +230,7 @@ class LiveAgentBridge:
 
     def _handle_chat(self, msg: RelayMessage) -> None:
         """Dispatch a chat message to registered handlers."""
-        logger.info(f"[{msg.sender}] {msg.content[:100]}")
+        logger.info("[%s] %s", msg.sender, msg.content[:100])
         for handler in self._on_message:
             try:
                 handler(msg)
@@ -503,7 +503,7 @@ class ClaudeCodeEndpoint:
 
     def _handle_chat(self, msg: RelayMessage) -> None:
         """Process an incoming chat message."""
-        logger.info(f"[{msg.sender}] {msg.content[:100]}")
+        logger.info("[%s] %s", msg.sender, msg.content[:100])
 
         # Try custom handlers
         for handler in self._on_message:

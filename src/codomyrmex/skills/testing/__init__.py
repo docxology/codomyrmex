@@ -108,7 +108,7 @@ class SkillTestRunner:
 
         passed_count = sum(1 for r in results if r.passed)
         logger.info(
-            f"Test results for {skill_name}: {passed_count}/{len(results)} passed"
+            "Test results for %s: %s/%s passed", skill_name, passed_count, len(results)
         )
         return results
 

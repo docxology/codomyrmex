@@ -143,7 +143,7 @@ class CloudSecurityPipeline:
                     result.reason = f"Exploit detected in parameter '{key}'"
                     result.checks_failed.append("exploit_detection")
                     logger.warning(
-                        f"Security: blocked {operation_name} — exploit in '{key}'"
+                        "Security: blocked %s — exploit in '%s'", operation_name, key
                     )
                     return result
             result.checks_passed.append("exploit_detection")

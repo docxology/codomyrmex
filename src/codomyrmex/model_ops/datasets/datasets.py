@@ -34,7 +34,7 @@ class Dataset:
         for i, item in enumerate(self.data):
             if "messages" not in item and "prompt" not in item:
                 logger.error(
-                    f"Invalid format at index {i}: missing 'messages' or 'prompt'"
+                    "Invalid format at index %s: missing 'messages' or 'prompt'", i
                 )
                 return False
         return True

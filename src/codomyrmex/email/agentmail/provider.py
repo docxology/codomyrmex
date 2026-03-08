@@ -214,7 +214,7 @@ class AgentMailProvider(
             _raise_for_api_error(exc, f"get_message({message_id})")
         except Exception as exc:
             logger.error(
-                f"Unexpected error fetching AgentMail message {message_id}: {exc}"
+                "Unexpected error fetching AgentMail message %s: %s", message_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error fetching message {message_id}: {exc}"
@@ -309,7 +309,7 @@ class AgentMailProvider(
             raise
         except Exception as exc:
             logger.error(
-                f"Unexpected error deleting AgentMail message {message_id}: {exc}"
+                "Unexpected error deleting AgentMail message %s: %s", message_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error deleting message {message_id}: {exc}"
@@ -345,7 +345,7 @@ class AgentMailProvider(
             _raise_for_api_error(exc, f"modify_labels({message_id})")
         except Exception as exc:
             logger.error(
-                f"Unexpected error modifying AgentMail labels on {message_id}: {exc}"
+                "Unexpected error modifying AgentMail labels on %s: %s", message_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error modifying labels on {message_id}: {exc}"
@@ -398,7 +398,7 @@ class AgentMailProvider(
             _raise_for_api_error(exc, f"reply_to_message({message_id})")
         except Exception as exc:
             logger.error(
-                f"Unexpected error replying to AgentMail message {message_id}: {exc}"
+                "Unexpected error replying to AgentMail message %s: %s", message_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error replying to {message_id}: {exc}"
@@ -445,7 +445,7 @@ class AgentMailProvider(
             _raise_for_api_error(exc, f"forward_message({message_id})")
         except Exception as exc:
             logger.error(
-                f"Unexpected error forwarding AgentMail message {message_id}: {exc}"
+                "Unexpected error forwarding AgentMail message %s: %s", message_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error forwarding {message_id}: {exc}"
@@ -490,7 +490,7 @@ class AgentMailProvider(
             )
         except Exception as exc:
             logger.error(
-                f"Unexpected error downloading AgentMail attachment {attachment_id}: {exc}"
+                "Unexpected error downloading AgentMail attachment %s: %s", attachment_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error downloading attachment {attachment_id}: {exc}"
@@ -525,7 +525,7 @@ class AgentMailProvider(
             raise
         except Exception as exc:
             logger.error(
-                f"Unexpected error fetching raw AgentMail message {message_id}: {exc}"
+                "Unexpected error fetching raw AgentMail message %s: %s", message_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error fetching raw message {message_id}: {exc}"
@@ -659,7 +659,7 @@ class AgentMailProvider(
             _raise_for_api_error(exc, f"get_domain({domain_id})")
         except Exception as exc:
             logger.error(
-                f"Unexpected error fetching AgentMail domain {domain_id}: {exc}"
+                "Unexpected error fetching AgentMail domain %s: %s", domain_id, exc
             )
             raise EmailAPIError(
                 f"Unexpected error fetching domain {domain_id}: {exc}"

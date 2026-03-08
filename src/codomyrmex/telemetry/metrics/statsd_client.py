@@ -29,7 +29,7 @@ class StatsDClient:
         self.port = int(port or os.environ.get("STATSD_PORT") or 8125)
         self.client = statsd.StatsClient(host=self.host, port=self.port, prefix=prefix)
         logger.info(
-            f"StatsD client initialized for {self.host}:{self.port} with prefix '{prefix}'"
+            "StatsD client initialized for %s:%s with prefix '%s'", self.host, self.port, prefix
         )
 
     def incr(self, name: str, count: int = 1, rate: float = 1) -> None:

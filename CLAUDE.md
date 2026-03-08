@@ -228,7 +228,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (74720 symbols, 171781 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (77673 symbols, 180034 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -291,7 +291,6 @@ This project is indexed by GitNexus as **codomyrmex** (74720 symbols, 171781 rel
 ## Self-Check Before Finishing
 
 Before completing any code modification task, verify:
-
 1. `gitnexus_impact` was run for all modified symbols
 2. No HIGH/CRITICAL risk warnings were ignored
 3. `gitnexus_detect_changes()` confirms changes match expected scope
@@ -374,13 +373,13 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: MEMORY/WORK/20260307-160000_agents-openfang-integration/PRD.md (create), src/codomyrmex/agents/openfang/exceptions.py (create), src/codomyrmex/agents/openfang/config.py (create), src/codomyrmex/agents/openfang/core.py (create), src/codomyrmex/agents/openfang/hands.py (create), src/codomyrmex/agents/openfang/update.py (create), src/codomyrmex/agents/openfang/__init__.py (create), src/codomyrmex/agents/openfang/py.typed (create), src/codomyrmex/tests/unit/agents/openfang/__init__.py (create), src/codomyrmex/agents/openfang/mcp_tools.py (create)
-  ... and 17 more
+Files: src/codomyrmex/agents/generic/task_planner.py (edit), src/codomyrmex/agents/droid/generators/physical_generators/tasks.py (edit), src/codomyrmex/orchestrator/execution/runner.py (edit), src/codomyrmex/orchestrator/execution/runner.py (create), src/codomyrmex/cost_management/tracker.py (edit), src/codomyrmex/documents/utils/encoding_detector.py (edit), src/codomyrmex/collaboration/communication/broadcaster.py (edit), src/codomyrmex/collaboration/coordination/leader_election.py (edit), src/codomyrmex/git_operations/core/commands/merge.py (edit), src/codomyrmex/events/core/event_bus.py (edit)
+  ... and 18 more
 
 ## Crash Recovery
-Last session (2026-03-07T16:44:07.951471) was not properly closed (crash/kill).
-Recorded 31 file changes before crash.
-Last changed files: src/codomyrmex/agents/openfang/API_SPECIFICATION.md, src/codomyrmex/agents/openfang/MCP_TOOL_SPECIFICATION.md, src/codomyrmex/agents/openfang/PAI.md, src/codomyrmex/agents/openfang/SPEC.md, src/codomyrmex/agents/openfang/AGENTS.md
+Last session (2026-03-07T19:26:47.424315) was not properly closed (crash/kill).
+Recorded 60 file changes before crash.
+Last changed files: src/codomyrmex/orchestrator/workflows/workflow.py, src/codomyrmex/collaboration/coordination/consensus.py, src/codomyrmex/compression/core/compressor.py, src/codomyrmex/collaboration/agents/base.py, src/codomyrmex/agents/llm_client.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

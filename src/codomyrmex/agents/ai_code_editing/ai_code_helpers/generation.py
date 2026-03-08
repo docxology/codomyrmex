@@ -170,7 +170,8 @@ def generate_code_snippet(
         }
 
         logger.info(
-            f"Generated {language} code snippet using {provider}/{model} in {execution_time:.2f}s"
+            "Generated %s code snippet using %s/%s in %.2fs",
+            language, provider, model, execution_time,
         )
         return result
 
@@ -183,6 +184,112 @@ def generate_code_snippet(
         raise RuntimeError(f"Code generation failed: {e}") from None
 
 
+def _dispatch_generate(client, provider: str, model: str, full_prompt: str, max_length, temperature: float, **kwargs):
+    """Call the provider API for code generation and return (generated_code, tokens_used)."""
+    if provider == "openai":
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": full_prompt}],
+            max_tokens=max_length or 1000,
+            temperature=temperature,
+            **kwargs,
+        )
+        return response.choices[0].message.content, (response.usage.total_tokens if response.usage else None)
+    if provider == "anthropic":
+        response = client.messages.create(
+            model=model, max_tokens=max_length or 1000, temperature=temperature,
+            messages=[{"role": "user", "content": full_prompt}], **kwargs,
+        )
+        tokens = (response.usage.input_tokens + response.usage.output_tokens) if response.usage else None
+        return response.content[0].text, tokens
+    if provider == "google":
+        response = client.models.generate_content(
+            model=model, contents=full_prompt,
+            config=types.GenerateContentConfig(max_output_tokens=max_length or 2000, temperature=temperature)
+            if types else None,
+        )
+        tokens = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
+        return response.text, tokens
+    if provider == "ollama":
+        options = {"temperature": temperature}
+        if max_length:
+            options["max_tokens"] = max_length
+        result = client.run_model(model_name=model, prompt=full_prompt, options=options, save_output=False)
+        return result.response, result.tokens_used
+    raise ValueError(f"Unsupported provider: {provider}")
+
+
+def _dispatch_document(client, provider: str, model: str, prompt: str, **kwargs):
+    """Call the provider API for documentation and return (documentation, tokens_used)."""
+    if provider == "openai":
+        response = client.chat.completions.create(
+            model=model, messages=[{"role": "user", "content": prompt}], **kwargs
+        )
+        return response.choices[0].message.content, (response.usage.total_tokens if response.usage else None)
+    if provider == "anthropic":
+        response = client.messages.create(
+            model=model, messages=[{"role": "user", "content": prompt}], **kwargs
+        )
+        tokens = (response.usage.input_tokens + response.usage.output_tokens) if response.usage else None
+        return response.content[0].text, tokens
+    if provider == "google":
+        model_instance = client.GenerativeModel(model)
+        response = model_instance.generate_content(prompt)
+        return response.text, None
+    if provider == "ollama":
+        result = client.run_model(model_name=model, prompt=prompt, save_output=False)
+        return result.response, result.tokens_used
+    raise ValueError(f"Unsupported provider: {provider}")
+
+
+def _make_error_result(language, request_language, e: Exception) -> "CodeGenerationResult":
+    """Return a failed CodeGenerationResult for batch processing."""
+    return CodeGenerationResult(
+        generated_code="", language=request_language,
+        metadata={"error": str(e)}, execution_time=0.0,
+    )
+
+
+def _process_single_request(request: CodeGenerationRequest, provider, model_name, **kwargs) -> CodeGenerationResult:
+    """Process one CodeGenerationRequest, returning a result or an error result."""
+    try:
+        result = generate_code_snippet(
+            prompt=request.prompt, language=request.language.value,
+            provider=provider, model_name=model_name,
+            context=request.context, max_length=request.max_length,
+            temperature=request.temperature, **kwargs,
+        )
+        return CodeGenerationResult(
+            generated_code=result["generated_code"], language=request.language,
+            metadata=result["metadata"], execution_time=result["execution_time"],
+            tokens_used=result.get("tokens_used"),
+        )
+    except Exception as e:
+        logger.error("Error processing request: %s", e)
+        return _make_error_result(None, request.language, e)
+
+
+def _run_parallel_batch(
+    requests: list[CodeGenerationRequest], max_workers: int, provider, model_name, **kwargs
+) -> list[CodeGenerationResult]:
+    """Execute a batch of requests in parallel, preserving original order."""
+    logger.info("Processing %s requests in parallel with %s workers", len(requests), max_workers)
+    results_dict: dict[int, CodeGenerationResult] = {}
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_index = {
+            executor.submit(_process_single_request, req, provider, model_name, **kwargs): idx
+            for idx, req in enumerate(requests)
+        }
+        for future in as_completed(future_to_index):
+            idx = future_to_index[future]
+            try:
+                results_dict[idx] = future.result()
+            except Exception as e:
+                logger.error("Parallel execution failed for request %s: %s", idx, e)
+                results_dict[idx] = _make_error_result(None, requests[idx].language, e)
+    return [results_dict[i] for i in range(len(requests))]
+
+
 @monitor_performance("ai_code_generation_batch")
 def generate_code_batch(
     requests: list[CodeGenerationRequest],
@@ -192,97 +299,26 @@ def generate_code_batch(
     max_workers: int = 4,
     **kwargs,
 ) -> list[CodeGenerationResult]:
-    """
-    Generate multiple code snippets in batch.
-
-    Args:
-        requests: List of code generation requests
-        provider: LLM provider to use
-        model_name: Specific model to use (optional)
-        parallel: Whether to process requests in parallel
-        max_workers: Maximum number of parallel workers (default: 4)
-        **kwargs: Additional parameters for the LLM
-
-    Returns:
-        List of code generation results
-
-    Raises:
-        ValueError: If parameters are invalid
-        RuntimeError: If batch generation fails
-    """
+    """Generate multiple code snippets in batch. Returns list of CodeGenerationResult."""
     if not requests:
         raise ValueError("Requests list cannot be empty")
-
-    def process_request(request: CodeGenerationRequest) -> CodeGenerationResult:
-        """Process a single code generation request."""
-        try:
-            result = generate_code_snippet(
-                prompt=request.prompt,
-                language=request.language.value,
-                provider=provider,
-                model_name=model_name,
-                context=request.context,
-                max_length=request.max_length,
-                temperature=request.temperature,
-                **kwargs,
-            )
-
-            return CodeGenerationResult(
-                generated_code=result["generated_code"],
-                language=request.language,
-                metadata=result["metadata"],
-                execution_time=result["execution_time"],
-                tokens_used=result.get("tokens_used"),
-            )
-
-        except (RuntimeError, ValueError, ImportError) as e:
-            logger.error("Error processing request: %s", e)
-            return CodeGenerationResult(
-                generated_code="",
-                language=request.language,
-                metadata={"error": str(e)},
-                execution_time=0.0,
-            )
-        except Exception as e:
-            logger.error("Unexpected error processing request: %s", e, exc_info=True)
-            return CodeGenerationResult(
-                generated_code="",
-                language=request.language,
-                metadata={"error": str(e)},
-                execution_time=0.0,
-            )
-
     if parallel and len(requests) > 1:
-        logger.info(
-            f"Processing {len(requests)} requests in parallel with {max_workers} workers"
-        )
-        results_dict: dict[int, CodeGenerationResult] = {}
+        return _run_parallel_batch(requests, max_workers, provider, model_name, **kwargs)
+    return [_process_single_request(req, provider, model_name, **kwargs) for req in requests]
 
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # Submit all tasks and track their indices
-            future_to_index = {
-                executor.submit(process_request, req): idx
-                for idx, req in enumerate(requests)
-            }
 
-            for future in as_completed(future_to_index):
-                idx = future_to_index[future]
-                try:
-                    results_dict[idx] = future.result()
-                except Exception as e:
-                    logger.error("Parallel execution failed for request %s: %s", idx, e)
-                    results_dict[idx] = CodeGenerationResult(
-                        generated_code="",
-                        language=requests[idx].language,
-                        metadata={"error": str(e)},
-                        execution_time=0.0,
-                    )
-
-        # Return results in original order
-        return [results_dict[i] for i in range(len(requests))]
-
-    # Sequential processing
-    return [process_request(request) for request in requests]
+def _build_doc_prompt(language: str, doc_type: str, code: str, context: str | None) -> str:
+    """Build the documentation generation prompt."""
+    doc_prompts = {
+        "comprehensive": f"Generate comprehensive documentation for the following {language} code, including overview, function descriptions, parameters, return values, and usage examples:",
+        "api": f"Generate API documentation for the following {language} code, focusing on public interfaces, method signatures, and parameters:",
+        "inline": f"Generate inline documentation (comments) for the following {language} code, following the language's documentation standards:",
+        "readme": f"Generate a README-style documentation for the following {language} code, including installation, usage, and examples:",
+    }
+    prompt = doc_prompts.get(doc_type, doc_prompts["comprehensive"]) + f"\n\n{code}"
+    if context:
+        prompt += f"\n\nAdditional context: {context}"
+    return prompt
 
 
 @monitor_performance("ai_code_documentation")
@@ -295,89 +331,20 @@ def generate_code_documentation(
     context: str | None = None,
     **kwargs,
 ) -> dict[str, Any]:
-    """
-    Generate documentation for code using an LLM.
-
-    Args:
-        code: The code to document
-        language: Programming language of the code
-        doc_type: Type of documentation ("comprehensive", "api", "inline", "readme")
-        provider: LLM provider to use
-        model_name: Specific model to use (optional)
-        context: Additional context for documentation
-        **kwargs: Additional parameters for the LLM
-
-    Returns:
-        Dictionary containing generated documentation
-
-    Raises:
-        ValueError: If parameters are invalid
-        RuntimeError: If documentation generation fails
-    """
+    """Generate documentation for code using an LLM. Returns dict with documentation and metadata."""
+    if not code or not code.strip():
+        raise ValueError("Code cannot be empty")
     start_time = time.time()
-
     try:
-        # Validate inputs
-        if not code or not code.strip():
-            raise ValueError("Code cannot be empty")
-
-        # Get LLM client
         client, model = get_llm_client(provider, model_name)
-
-        # Prepare the prompt based on documentation type
-        doc_prompts = {
-            "comprehensive": f"Generate comprehensive documentation for the following {language} code, including overview, function descriptions, parameters, return values, and usage examples:",
-            "api": f"Generate API documentation for the following {language} code, focusing on public interfaces, method signatures, and parameters:",
-            "inline": f"Generate inline documentation (comments) for the following {language} code, following the language's documentation standards:",
-            "readme": f"Generate a README-style documentation for the following {language} code, including installation, usage, and examples:",
-        }
-
-        prompt = doc_prompts.get(doc_type, doc_prompts["comprehensive"])
-        prompt += f"\n\n{code}"
-
-        if context:
-            prompt += f"\n\nAdditional context: {context}"
-
-        # Generate documentation based on provider
-        if provider == "openai":
-            response = client.chat.completions.create(
-                model=model, messages=[{"role": "user", "content": prompt}], **kwargs
-            )
-            documentation = response.choices[0].message.content
-            tokens_used = response.usage.total_tokens if response.usage else None
-
-        elif provider == "anthropic":
-            response = client.messages.create(
-                model=model, messages=[{"role": "user", "content": prompt}], **kwargs
-            )
-            documentation = response.content[0].text
-            tokens_used = (
-                response.usage.input_tokens + response.usage.output_tokens
-                if response.usage
-                else None
-            )
-
-        elif provider == "google":
-            model_instance = client.GenerativeModel(model)
-            response = model_instance.generate_content(prompt)
-            documentation = response.text
-            tokens_used = None
-
-        elif provider == "ollama":
-            # Use Ollama integration
-            result = client.run_model(
-                model_name=model, prompt=prompt, save_output=False
-            )
-            documentation = result.response
-            tokens_used = result.tokens_used
-
-        else:
-            raise ValueError(f"Unsupported provider: {provider}")
-
+        prompt = _build_doc_prompt(language, doc_type, code, context)
+        documentation, tokens_used = _dispatch_document(client, provider, model, prompt, **kwargs)
         execution_time = time.time() - start_time
-
-        # Return result
-        result = {
+        logger.info(
+            "Generated %s documentation for %s code using %s/%s in %.2fs",
+            doc_type, language, provider, model, execution_time,
+        )
+        return {
             "code": code,
             "documentation": documentation,
             "doc_type": doc_type,
@@ -386,20 +353,11 @@ def generate_code_documentation(
             "model": model,
             "execution_time": execution_time,
             "tokens_used": tokens_used,
-            "metadata": {
-                "context": context,
-            },
+            "metadata": {"context": context},
         }
-
-        logger.info(
-            f"Generated {doc_type} documentation for {language} code using {provider}/{model} in {execution_time:.2f}s"
-        )
-        return result
-
     except (ValueError, ImportError, AttributeError) as e:
         logger.error("Error generating documentation: %s", e)
         raise RuntimeError(f"Documentation generation failed: {e}") from None
     except Exception as e:
-        # Final fallback for unexpected API errors or network issues
         logger.error("Unexpected error generating documentation: %s", e, exc_info=True)
         raise RuntimeError(f"Documentation generation failed: {e}") from None

@@ -39,7 +39,7 @@ def read_text(file_path: str | Path, encoding: str | None = None) -> str:
         return content
     except UnicodeDecodeError as e:
         logger.warning(
-            f"Encoding error reading {file_path}, trying different encodings"
+            "Encoding error reading %s, trying different encodings", file_path
         )
         # Try common encodings
         for enc in ["utf-8", "latin-1", "cp1252", "iso-8859-1"]:

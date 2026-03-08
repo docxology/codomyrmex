@@ -81,7 +81,7 @@ class FPFOrchestrator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.logger.info(
-            f"Initialized FPF Orchestrator with {len(self.spec.patterns)} patterns"
+            "Initialized FPF Orchestrator with %s patterns", len(self.spec.patterns)
         )
 
     def create_pattern_cases(self) -> list[Case]:
@@ -250,7 +250,7 @@ class FPFOrchestrator:
             }
 
         self.logger.info(
-            f"Completed case-based reasoning for {len(similarity_analysis)} patterns"
+            "Completed case-based reasoning for %s patterns", len(similarity_analysis)
         )
         return {
             "similarity_analysis": similarity_analysis,
@@ -305,7 +305,7 @@ class FPFOrchestrator:
                 inference_results[pattern.id] = {"error": str(e)}
 
         self.logger.info(
-            f"Completed Bayesian inference for {len(inference_results)} patterns"
+            "Completed Bayesian inference for %s patterns", len(inference_results)
         )
         return {
             "inference_results": inference_results,
@@ -405,7 +405,7 @@ class FPFOrchestrator:
         self.cerebrum.set_active_inference_agent(agent)
 
         self.logger.info(
-            f"Completed active inference exploration for {len(exploration_path)} patterns"
+            "Completed active inference exploration for %s patterns", len(exploration_path)
         )
         return {
             "exploration_path": exploration_path,
@@ -564,7 +564,7 @@ class FPFOrchestrator:
                     self.logger.info("Exported case similarity raw data to %s", csv_path)
         except Exception as e:
             self.logger.warning(
-                f"Failed to visualize case similarity: {e}", exc_info=True
+                "Failed to visualize case similarity: %s", e, exc_info=True
             )
 
         # Visualize inference results
@@ -630,11 +630,11 @@ class FPFOrchestrator:
                             writer.writeheader()
                             writer.writerows(inference_rows)
                         self.logger.info(
-                            f"Exported inference results raw data to {csv_path}"
+                            "Exported inference results raw data to %s", csv_path
                         )
         except Exception as e:
             self.logger.warning(
-                f"Failed to visualize inference results: {e}", exc_info=True
+                "Failed to visualize inference results: %s", e, exc_info=True
             )
 
         # Generate concordance visualizations
@@ -705,7 +705,7 @@ class FPFOrchestrator:
 
         except Exception as e:
             self.logger.warning(
-                f"Failed to generate concordance visualizations: {e}", exc_info=True
+                "Failed to generate concordance visualizations: %s", e, exc_info=True
             )
 
     def _generate_composition_visualizations(
@@ -764,7 +764,7 @@ class FPFOrchestrator:
 
         except Exception as e:
             self.logger.warning(
-                f"Failed to generate composition visualizations: {e}", exc_info=True
+                "Failed to generate composition visualizations: %s", e, exc_info=True
             )
 
     def export_results(self, analysis_results: dict[str, Any]) -> None:

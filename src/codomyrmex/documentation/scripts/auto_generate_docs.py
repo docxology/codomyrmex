@@ -215,7 +215,7 @@ For complete documentation, see:
                 continue
 
         logger.info(
-            f"Successfully generated documentation for {generated_count}/{len(modules)} modules"
+            "Successfully generated documentation for %s/%s modules", generated_count, len(modules)
         )
 
         return 0 if generated_count > 0 else 1

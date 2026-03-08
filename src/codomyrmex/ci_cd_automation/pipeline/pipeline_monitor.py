@@ -109,7 +109,7 @@ class PipelineMonitor:
 
         self._active_metrics[execution_id] = metrics
         logger.info(
-            f"Started monitoring pipeline {pipeline_name} with execution ID {execution_id}"
+            "Started monitoring pipeline %s with execution ID %s", pipeline_name, execution_id
         )
 
         return execution_id
@@ -189,7 +189,7 @@ class PipelineMonitor:
             ) * 100
 
         logger.info(
-            f"Finished monitoring pipeline {metrics.pipeline_name} - Status: {status}"
+            "Finished monitoring pipeline %s - Status: %s", metrics.pipeline_name, status
         )
 
         # Clean up active metrics
@@ -257,7 +257,7 @@ class PipelineMonitor:
             )
 
         logger.info(
-            f"Generated {report_type.value} report for execution {execution_id}"
+            "Generated %s report for execution %s", report_type.value, execution_id
         )
         return report
 

@@ -122,7 +122,7 @@ class ThreatModelBuilder:
         )
 
         logger.info(
-            f"Created threat model for {system_name} with {len(threats)} threats"
+            "Created threat model for %s with %s threats", system_name, len(threats)
         )
         return model
 

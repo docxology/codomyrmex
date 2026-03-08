@@ -46,7 +46,7 @@ class SkillLoader:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
 
         logger.info(
-            f"SkillLoader initialized: upstream={upstream_dir}, custom={custom_dir}, cache={cache_dir}"
+            "SkillLoader initialized: upstream=%s, custom=%s, cache=%s", upstream_dir, custom_dir, cache_dir
         )
 
     def load_skill_file(self, path: Path) -> dict[str, Any] | None:

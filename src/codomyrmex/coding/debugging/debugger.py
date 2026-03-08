@@ -93,7 +93,7 @@ class Debugger:
             return None
 
         logger.info(
-            f"Diagnosed error: {diagnosis.error_type} at line {diagnosis.line_number}"
+            "Diagnosed error: %s at line %s", diagnosis.error_type, diagnosis.line_number
         )
 
         # 2. Generate Patches

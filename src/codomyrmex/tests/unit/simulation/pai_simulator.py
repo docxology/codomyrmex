@@ -90,7 +90,7 @@ class PAISimulator:
 
         trigger = self.triggers[command]
         logger.info(
-            f"PAI: Recognized command '{command}'. Executing workflow '{trigger.workflow_file}'..."
+            "PAI: Recognized command '%s'. Executing workflow '%s'...", command, trigger.workflow_file
         )
 
         return self._run_workflow(trigger.workflow_file)

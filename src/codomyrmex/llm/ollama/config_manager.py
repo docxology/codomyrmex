@@ -250,7 +250,7 @@ class ConfigManager:
                 json.dump(config_with_metadata, f, indent=2, default=str)
 
             self.logger.info(
-                f"Saved model config for {model_name} to: {model_config_file}"
+                "Saved model config for %s to: %s", model_name, model_config_file
             )
             return True
 
@@ -322,7 +322,7 @@ class ConfigManager:
                                         )
                                 except Exception as e:
                                     self.logger.warning(
-                                        f"Error reading model config for {model_dir.name}: {e}"
+                                        "Error reading model config for %s: %s", model_dir.name, e
                                     )
 
             with open(export_file, "w", encoding="utf-8") as f:

@@ -257,7 +257,7 @@ def reset_changes(
 
     try:
         logger.info(
-            f"Resetting repository to '{target}' with mode '{mode}' in {repository_path}"
+            "Resetting repository to '%s' with mode '%s' in %s", target, mode, repository_path
         )
 
         cmd = ["git", "reset", f"--{mode}", target]

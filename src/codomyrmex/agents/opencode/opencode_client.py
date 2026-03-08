@@ -134,7 +134,7 @@ class OpenCodeClient(CLIAgentBase):
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(
-                f"Failed to initialize OpenCode project: {e}", exc_info=True
+                "Failed to initialize OpenCode project: %s", e, exc_info=True
             )
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 

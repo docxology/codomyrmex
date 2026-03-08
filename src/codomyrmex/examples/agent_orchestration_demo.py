@@ -41,7 +41,7 @@ class SimulatedAgent(AgentInterface):
 
     def execute(self, request: AgentRequest) -> AgentResponse:
         """Execute the operation."""
-        logger.info(f"[{self.name}] Received request: {request.prompt[:20]}...")
+        logger.info("[%s] Received request: %s...", self.name, request.prompt[:20])
 
         # Simulate work
         time.sleep(self.delay)

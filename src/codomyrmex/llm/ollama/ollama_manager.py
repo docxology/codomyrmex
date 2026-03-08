@@ -403,13 +403,13 @@ class OllamaManager:
                                 if data.get("completed", False):
                                     completed = True
                                     self.logger.info(
-                                        f"Model {model_name} pull completed via HTTP API"
+                                        "Model %s pull completed via HTTP API", model_name
                                     )
                                     break
                                 if data.get("status") == "success":
                                     completed = True
                                     self.logger.info(
-                                        f"Model {model_name} pull successful via HTTP API"
+                                        "Model %s pull successful via HTTP API", model_name
                                     )
                                     break
                             except json.JSONDecodeError:
@@ -425,7 +425,7 @@ class OllamaManager:
                     for _attempt in range(5):  # More retries
                         if self.is_model_available(model_name):
                             self.logger.info(
-                                f"Model {model_name} verified as available via HTTP API"
+                                "Model %s verified as available via HTTP API", model_name
                             )
                             return True
                         time.sleep(2)  # Longer wait between retries
@@ -440,7 +440,7 @@ class OllamaManager:
                             m.name for m in models if base_name in m.name
                         ]
                         self.logger.info(
-                            f"Model {base_name} appears to be available: {matching_models}"
+                            "Model %s appears to be available: %s", base_name, matching_models
                         )
                         # Update model name to match what's actually available
                         if matching_models:
@@ -450,7 +450,7 @@ class OllamaManager:
                     # If pull completed, assume success even if not in list yet
                     if completed:
                         self.logger.info(
-                            f"Pull completed for {model_name}, model should be available"
+                            "Pull completed for %s, model should be available", model_name
                         )
                         return True
 
@@ -458,7 +458,7 @@ class OllamaManager:
                     return False
                 error_text = response.text[:200] if response.text else "Unknown error"
                 self.logger.error(
-                    f"Pull failed: HTTP {response.status_code}: {error_text}"
+                    "Pull failed: HTTP %s: %s", response.status_code, error_text
                 )
                 return False
             except requests.exceptions.RequestException as e:
@@ -537,7 +537,7 @@ class OllamaManager:
             )
 
         self.logger.info(
-            f"Running model {model_name} with prompt length: {len(prompt)}"
+            "Running model %s with prompt length: %s", model_name, len(prompt)
         )
 
         start_time = time.time()
@@ -592,7 +592,7 @@ class OllamaManager:
                     tokens_used = data.get("eval_count")  # Approximate token count
 
                     self.logger.info(
-                        f"Model {model_name} completed successfully in {execution_time:.2f}s"
+                        "Model %s completed successfully in %.2fs", model_name, execution_time
                     )
 
                     # Save output if requested
@@ -664,7 +664,7 @@ class OllamaManager:
                 success = True
 
                 self.logger.info(
-                    f"Model {model_name} completed successfully in {execution_time:.2f}s"
+                    "Model %s completed successfully in %.2fs", model_name, execution_time
                 )
 
                 # Save output if requested

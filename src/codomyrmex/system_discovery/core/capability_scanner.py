@@ -427,7 +427,7 @@ class CapabilityScanner:
 
         except Exception as e:
             logger.debug(
-                f"Error analyzing function {getattr(node, 'name', 'unknown')}: {e}"
+                "Error analyzing function %s: %s", getattr(node, "name", "unknown"), e
             )
             return None
 
@@ -502,7 +502,7 @@ class CapabilityScanner:
 
         except Exception as e:
             logger.debug(
-                f"Error analyzing class {getattr(node, 'name', 'unknown')}: {e}"
+                "Error analyzing class %s: %s", getattr(node, "name", "unknown"), e
             )
             return None
 

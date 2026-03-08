@@ -351,7 +351,7 @@ class DeploymentOrchestrator:
     def _deploy_to_development(self, deployment: Deployment):
         """Deploy to development environment (typically local Docker)."""
         logger.info(
-            f"Deploying to development environment: {deployment.environment.name}"
+            "Deploying to development environment: %s", deployment.environment.name
         )
 
         # Use Docker for development deployments
@@ -379,7 +379,7 @@ class DeploymentOrchestrator:
     def _deploy_to_production(self, deployment: Deployment):
         """Deploy to production environment."""
         logger.info(
-            f"Deploying to production environment: {deployment.environment.name}"
+            "Deploying to production environment: %s", deployment.environment.name
         )
 
         # Use Kubernetes for production deployments
@@ -396,7 +396,7 @@ class DeploymentOrchestrator:
     def _deploy_traditional(self, deployment: Deployment):
         """Traditional deployment via SSH/rsync."""
         logger.info(
-            f"Deploying via traditional method to: {deployment.environment.name}"
+            "Deploying via traditional method to: %s", deployment.environment.name
         )
 
         # Use rsync/ssh for traditional deployments
@@ -650,13 +650,14 @@ class DeploymentOrchestrator:
     def _rollback_deployment(self, deployment: Deployment):
         """Rollback a failed deployment."""
         logger.info(
-            f"Rolling back deployment: {deployment.name} (strategy: {deployment.strategy})"
+            "Rolling back deployment: %s (strategy: %s)",
+            deployment.name, deployment.strategy,
         )
 
         try:
             if not deployment.previous_version:
                 logger.warning(
-                    f"No previous version found for rollback of {deployment.name}"
+                    "No previous version found for rollback of %s", deployment.name
                 )
                 return
 
@@ -668,7 +669,8 @@ class DeploymentOrchestrator:
             else:
                 # Default to re-deploying previous version
                 logger.info(
-                    f"Executing default rollback by re-deploying version {deployment.previous_version}"
+                    "Executing default rollback by re-deploying version %s",
+                    deployment.previous_version,
                 )
                 # We would normally trigger a new deployment with previous version
 
@@ -679,7 +681,7 @@ class DeploymentOrchestrator:
     def _rollback_rolling(self, deployment: Deployment):
         """Rollback rolling deployment."""
         logger.info(
-            f"Rolling back rolling deployment to version {deployment.previous_version}"
+            "Rolling back rolling deployment to version %s", deployment.previous_version
         )
         if self.k8s_client:
             # In K8s, we can use kubectl rollout undo
@@ -702,7 +704,7 @@ class DeploymentOrchestrator:
     def _rollback_blue_green(self, deployment: Deployment):
         """Rollback blue-green deployment."""
         logger.info(
-            f"Rolling back blue-green deployment to version {deployment.previous_version}"
+            "Rolling back blue-green deployment to version %s", deployment.previous_version
         )
         # Typically involves switching a load balancer or service selector back
         if self.k8s_client:

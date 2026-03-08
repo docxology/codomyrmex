@@ -97,7 +97,7 @@ class PerimeterManager:
         }
 
         logger.info(
-            f"Checked perimeter security: {active_points}/{total_points} active"
+            "Checked perimeter security: %s/%s active", active_points, total_points
         )
         return status
 

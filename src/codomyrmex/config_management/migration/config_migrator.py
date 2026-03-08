@@ -169,7 +169,7 @@ class ConfigMigrator:
             rules = self.migration_rules.get((step_from, step_to), [])
             if rules:
                 logger.info(
-                    f"Applying {len(rules)} migration rules from {step_from} to {step_to}"
+                    "Applying %s migration rules from %s to %s", len(rules), step_from, step_to
                 )
 
                 for rule in rules:
@@ -193,7 +193,7 @@ class ConfigMigrator:
 
         if result.success and applied_rules:
             logger.info(
-                f"Successfully migrated config from {from_version} to {to_version} using {len(applied_rules)} rules"
+                "Successfully migrated config from %s to %s using %s rules", from_version, to_version, len(applied_rules)
             )
         elif result.success and not applied_rules:
             logger.info("No migration rules applied (config may already be compatible)")
@@ -286,7 +286,7 @@ class ConfigMigrator:
         """Apply a single migration rule to the configuration."""
         if rule.condition and not rule.condition(config):
             logger.debug(
-                f"Migration rule '{rule.description}' condition not met, skipping"
+                "Migration rule '%s' condition not met, skipping", rule.description
             )
             return
 

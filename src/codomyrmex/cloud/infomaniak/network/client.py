@@ -158,7 +158,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 router_id, subnet_id=subnet_id
             )
             logger.info(
-                f"Removed interface for subnet {subnet_id} from router {router_id}"
+                "Removed interface for subnet %s from router %s", subnet_id, router_id
             )
             return True
         except Exception as e:
@@ -603,7 +603,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             return True
         except Exception as e:
             logger.error(
-                f"Failed to remove member {member_id} from pool {pool_id}: {e}"
+                "Failed to remove member %s from pool %s: %s", member_id, pool_id, e
             )
             return False
 

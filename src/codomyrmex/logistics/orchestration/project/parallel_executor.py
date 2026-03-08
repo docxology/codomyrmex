@@ -153,16 +153,16 @@ class ParallelExecutor:
 
                             if result.status == ExecutionStatus.COMPLETED:
                                 logger.info(
-                                    f"Task '{task_name}' completed successfully"
+                                    "Task '%s' completed successfully", task_name
                                 )
                             else:
                                 logger.error(
-                                    f"Task '{task_name}' failed: {result.error}"
+                                    "Task '%s' failed: %s", task_name, result.error
                                 )
 
                         except Exception as e:
                             logger.error(
-                                f"Error getting result for task '{task_name}': {e}"
+                                "Error getting result for task '%s': %s", task_name, e
                             )
                             results[task_name].status = ExecutionStatus.FAILED
                             results[task_name].error = str(e)
@@ -177,7 +177,7 @@ class ParallelExecutor:
             # Handle timeout
             if len(completed) < len(tasks):
                 logger.warning(
-                    f"Execution timed out. Completed {len(completed)}/{len(tasks)} tasks"
+                    "Execution timed out. Completed %s/%s tasks", len(completed), len(tasks)
                 )
                 for task_name in task_dict:
                     if task_name not in completed:

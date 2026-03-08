@@ -139,7 +139,7 @@ class SupervisorAgent(CollaborativeAgent):
 
                 if attempt < self._max_retries - 1:
                     logger.warning(
-                        f"Task {task.id} failed (attempt {attempt + 1}), retrying..."
+                        "Task %s failed (attempt %s), retrying...", task.id, attempt + 1
                     )
             except Exception as e:
                 if attempt < self._max_retries - 1:

@@ -382,7 +382,7 @@ def run_command(
         prepared_env = _prepare_environment(env, inherit_env)
 
         logger.debug(
-            f"Running command: {prepared_command if isinstance(prepared_command, str) else ' '.join(prepared_command)}"
+            "Running command: %s", prepared_command if isinstance(prepared_command, str) else " ".join(prepared_command)
         )
 
         process_result = subprocess.run(
@@ -411,7 +411,7 @@ def run_command(
             else f"Command exited with code {process_result.returncode}",
         )
         logger.debug(
-            f"Command completed with return code {result.return_code} in {duration:.3f}s"
+            "Command completed with return code %s in %.3fs", result.return_code, duration
         )
         if check:
             result.raise_on_error()
@@ -532,7 +532,7 @@ async def run_command_async(
             cmd_list = (
                 shlex.split(command) if isinstance(command, str) else list(command)
             )
-            logger.debug(f"Running async command: {' '.join(cmd_list)}")
+            logger.debug("Running async command: %s", " ".join(cmd_list))
 
             process = await asyncio.create_subprocess_exec(
                 *cmd_list,
@@ -571,7 +571,7 @@ async def run_command_async(
         )
 
         logger.debug(
-            f"Async command completed with return code {result.return_code} in {duration:.3f}s"
+            "Async command completed with return code %s in %.3fs", result.return_code, duration
         )
 
         return result

@@ -370,7 +370,7 @@ class PipelineOptimizer:
             json.dump(optimization_plan, f, indent=2, default=str)
 
         logger.info(
-            f"Generated optimization plan for {pipeline_name} with {len(relevant_suggestions)} suggestions"
+            "Generated optimization plan for %s with %s suggestions", pipeline_name, len(relevant_suggestions)
         )
         return optimization_plan
 

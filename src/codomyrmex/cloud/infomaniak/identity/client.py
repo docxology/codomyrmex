@@ -199,7 +199,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
             return True
         except Exception as e:
             logger.error(
-                f"Failed to delete application credential {credential_id}: {e}"
+                "Failed to delete application credential %s: %s", credential_id, e
             )
             return False
 

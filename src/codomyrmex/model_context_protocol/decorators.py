@@ -154,7 +154,7 @@ def _generate_schema_from_signature(func: Callable[..., Any]) -> dict[str, Any]:
         }
     except Exception as e:
         logger.warning(
-            f"Failed to generate schema for {getattr(func, '__name__', '?')}: {e}"
+            "Failed to generate schema for %s: %s", getattr(func, "__name__", "?"), e
         )
         return {"type": "object", "properties": {}}  # Fallback
 

@@ -72,7 +72,7 @@ class FPFCombinatoricsAnalyzer:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.logger.info(
-            f"Initialized combinatorics analyzer with {len(self.spec.patterns)} patterns"
+            "Initialized combinatorics analyzer with %s patterns", len(self.spec.patterns)
         )
 
     def analyze_pattern_pairs(self) -> dict[str, Any]:
@@ -603,7 +603,7 @@ class FPFCombinatoricsAnalyzer:
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, indent=2)
             self.logger.info(
-                f"Exported concept co-occurrence network JSON to {json_path}"
+                "Exported concept co-occurrence network JSON to %s", json_path
             )
 
             # Export CSV format (edge list)
@@ -616,7 +616,7 @@ class FPFCombinatoricsAnalyzer:
                         {"term1": u, "term2": v, "weight": G[u][v].get("weight", 1)}
                     )
             self.logger.info(
-                f"Exported concept co-occurrence network CSV to {csv_path}"
+                "Exported concept co-occurrence network CSV to %s", csv_path
             )
 
             if not strong_pairs:
@@ -736,7 +736,7 @@ class FPFCombinatoricsAnalyzer:
                             }
                         )
             self.logger.info(
-                f"Exported cross-part relationships raw data to {csv_path}"
+                "Exported cross-part relationships raw data to %s", csv_path
             )
 
             if not part_pair_counts:

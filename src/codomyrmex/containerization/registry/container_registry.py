@@ -559,7 +559,7 @@ class ContainerRegistry:
         """
         if not self.is_available():
             logger.info(
-                f"[SIMULATED] Tag image: {source_image} -> {target_name}:{target_tag}"
+                "[SIMULATED] Tag image: %s -> %s:%s", source_image, target_name, target_tag
             )
             return True
 

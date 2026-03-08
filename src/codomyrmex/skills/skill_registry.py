@@ -55,9 +55,8 @@ class SkillRegistry:
                     category, name, skill_data
                 )
 
-        logger.info(
-            f"Index built: {len(self._index)} categories, {sum(len(s) for s in self._index.values())} skills"
-        )
+        total_skills = sum(len(s) for s in self._index.values())
+        logger.info("Index built: %d categories, %d skills", len(self._index), total_skills)
         return self._index
 
     def _extract_metadata(

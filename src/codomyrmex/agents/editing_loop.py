@@ -166,9 +166,9 @@ class EditingOrchestrator:
             )
 
         logger.info(
-            f"EditingOrchestrator initialized: planner={self.config.ollama_model}, "
-            f"reviewer={self.config.review_provider}/{self.config.review_model}, "
-            f"channel={channel}"
+            "EditingOrchestrator initialized: planner=%s, reviewer=%s/%s, channel=%s",
+            self.config.ollama_model, self.config.review_provider,
+            self.config.review_model, channel,
         )
 
     # ── Public API ───────────────────────────────────────────────────
@@ -190,8 +190,8 @@ class EditingOrchestrator:
             iteration += 1
             task.iterations_used = iteration
             logger.info(
-                f"[EditLoop] Task '{task.description[:50]}' — "
-                f"iteration {iteration}/{self.config.max_iterations}"
+                "[EditLoop] Task '%s' — iteration %s/%s",
+                task.description[:50], iteration, self.config.max_iterations,
             )
 
             # 1. Plan
@@ -200,7 +200,7 @@ class EditingOrchestrator:
 
             # 2. Edit
             edit_summary = self._edit(task, plan)
-            logger.info(f"[EditLoop] Edit applied: {edit_summary[:80]}")
+            logger.info("[EditLoop] Edit applied: %s", edit_summary[:80])
 
             # 3. Review
             approved, notes, score = self._review(task, plan, edit_summary)
@@ -210,12 +210,12 @@ class EditingOrchestrator:
                 task.approved = True
                 task.result = edit_summary
                 logger.info(
-                    f"[EditLoop] APPROVED at iteration {iteration} (score={score:.1f})"
+                    "[EditLoop] APPROVED at iteration %s (score=%.1f)", iteration, score
                 )
             else:
                 feedback = notes
                 logger.info(
-                    f"[EditLoop] Revision requested (score={score:.1f}): {notes[:80]}"
+                    "[EditLoop] Revision requested (score=%.1f): %s", score, notes[:80]
                 )
 
         if not task.approved:

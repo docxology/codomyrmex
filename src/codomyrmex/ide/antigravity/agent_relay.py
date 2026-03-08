@@ -219,7 +219,7 @@ class AgentRelay:
             metadata=metadata or {},
         )
         self._append(msg)
-        logger.info(f"[{sender}] posted chat: {content[:80]}...")
+        logger.info("[%s] posted chat: %s...", sender, content[:80])
         return msg
 
     def post_tool_request(

@@ -227,7 +227,7 @@ class StandardizationOpenAPIGenerator:
         self.spec.spec["info"]["x-api-versions"] = version_info
 
         logger.debug(
-            f"Added version information for {len(version_manager.versions)} versions"
+            "Added version information for %s versions", len(version_manager.versions)
         )
 
     def _add_rest_endpoint(self, endpoint: StandardizationAPIEndpoint) -> None:

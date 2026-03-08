@@ -121,7 +121,7 @@ class RepositoryManager:
                     parts = line.split("|")
                     if len(parts) != 6:
                         logger.warning(
-                            f"Invalid repository entry at line {line_num}: {line}"
+                            "Invalid repository entry at line %s: %s", line_num, line
                         )
                         continue
 
@@ -131,7 +131,7 @@ class RepositoryManager:
                         repo_type = RepositoryType(repo_type_str)
                     except ValueError:
                         logger.warning(
-                            f"Invalid repository type '{repo_type_str}' at line {line_num}"
+                            "Invalid repository type '%s' at line %s", repo_type_str, line_num
                         )
                         continue
 
@@ -294,7 +294,7 @@ class RepositoryManager:
 
         except Exception as e:
             logger.warning(
-                f"Could not set up development branches for {repo.full_name}: {e}"
+                "Could not set up development branches for %s: %s", repo.full_name, e
             )
 
     def update_repository(self, full_name: str, custom_path: str | None = None) -> bool:
@@ -396,7 +396,7 @@ class RepositoryManager:
         futures = {}
 
         logger.info(
-            f"Bulk cloning {len(repos)} repositories with {max_workers} workers..."
+            "Bulk cloning %s repositories with %s workers...", len(repos), max_workers
         )
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -456,7 +456,7 @@ class RepositoryManager:
         futures = {}
 
         logger.info(
-            f"Bulk updating {len(repos_to_update)} repositories with {max_workers} workers..."
+            "Bulk updating %s repositories with %s workers...", len(repos_to_update), max_workers
         )
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:

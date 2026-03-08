@@ -15,7 +15,7 @@ def create_3d_module_documentation(
     files_created.append("docs/architecture.md")
 
     logger.info(
-        f"3D modeling module created at {module_path}",
+        "3D modeling module created at %s", module_path,
         extra={"description": description},
     )
     return f"3D modeling module created with {len(files_created)} files"

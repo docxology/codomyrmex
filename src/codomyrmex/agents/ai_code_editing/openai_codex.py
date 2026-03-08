@@ -83,6 +83,37 @@ class OpenAICodex:
                 ) from None
         return self._client
 
+    def _call_api(
+        self,
+        messages: list[dict[str, str]],
+        max_tokens: int,
+        temperature: float,
+        **kwargs: Any,
+    ):
+        """Send a chat completion request and return the raw response."""
+        client = self._get_client()
+        return client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            **kwargs,
+        )
+
+    def _parse_response(self, response, start_time: float) -> tuple[str, int, float, str]:
+        """Extract (content, tokens_used, execution_time, finish_reason) from a response."""
+        execution_time = time.time() - start_time
+        content = response.choices[0].message.content or ""
+        tokens_used = response.usage.total_tokens if response.usage else 0
+        finish_reason = response.choices[0].finish_reason or "unknown"
+        return content, tokens_used, execution_time, finish_reason
+
+    @staticmethod
+    def _reraise(label: str, e: Exception) -> None:
+        """Log and re-raise a caught exception as RuntimeError."""
+        logger.error("Error in %s: %s", label, e, exc_info=e)
+        raise RuntimeError(f"{label} failed: {e}") from e
+
     def generate_code(
         self,
         prompt: str,
@@ -92,57 +123,20 @@ class OpenAICodex:
         temperature: float = DEFAULT_TEMPERATURE,
         **kwargs: Any,
     ) -> dict[str, Any]:
-        """Generate code using OpenAI models.
-
-        Args:
-            prompt: Code generation prompt describing what to create
-            language: Target programming language
-            context: Additional context for code generation
-            max_tokens: Maximum tokens for generated code
-            temperature: Sampling temperature (0.0 to 1.0)
-            **kwargs: Additional arguments for the API
-
-        Returns:
-            Dictionary containing generated code and metadata
-
-        Raises:
-            RuntimeError: If code generation fails
-        """
+        """Generate code using OpenAI models. Returns dict with generated_code and metadata."""
         start_time = time.time()
-
         try:
-            client = self._get_client()
-
-            # Build the system prompt for code generation
-            system_prompt = self._build_system_prompt(language)
-
-            # Build the user prompt
-            user_prompt = self._build_user_prompt(prompt, context)
-
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                max_tokens=max_tokens,
-                temperature=temperature,
-                **kwargs,
-            )
-
-            execution_time = time.time() - start_time
-            generated_code = response.choices[0].message.content or ""
-            tokens_used = response.usage.total_tokens if response.usage else 0
-            finish_reason = response.choices[0].finish_reason or "unknown"
-
-            # Extract just the code block if wrapped
+            messages = [
+                {"role": "system", "content": self._build_system_prompt(language)},
+                {"role": "user", "content": self._build_user_prompt(prompt, context)},
+            ]
+            response = self._call_api(messages, max_tokens, temperature, **kwargs)
+            generated_code, tokens_used, execution_time, finish_reason = self._parse_response(response, start_time)
             generated_code = self._extract_code_block(generated_code, language)
-
             logger.info(
-                f"Generated {language} code using {self.model} "
-                f"in {execution_time:.2f}s ({tokens_used} tokens)"
+                "Generated %s code using %s in %.2fs (%s tokens)",
+                language, self.model, execution_time, tokens_used,
             )
-
             return {
                 "generated_code": generated_code,
                 "language": language,
@@ -153,16 +147,11 @@ class OpenAICodex:
                 "prompt": prompt,
                 "status": "success",
             }
-
         except ImportError as e:
             logger.error("OpenAI import error: %s", e)
             raise
-        except ValueError as e:
-            logger.error("Configuration error: %s", e)
-            raise RuntimeError(f"Code generation failed: {e}") from e
-        except (RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error("Error generating code: %s", e, exc_info=True)
-            raise RuntimeError(f"Code generation failed: {e}") from e
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            self._reraise("code generation", e)
 
     def complete_code(
         self,
@@ -193,6 +182,36 @@ class OpenAICodex:
             **kwargs,
         )
 
+    def _build_edit_messages(self, code: str, instruction: str, language: str) -> list[dict[str, str]]:
+        """Build chat messages for an edit_code request."""
+        system_prompt = (
+            f"You are a code editor. Edit the provided {language} code "
+            "according to the given instruction. Return only the edited code, "
+            "with no explanations."
+        )
+        user_prompt = f"Instruction: {instruction}\n\nCode to edit:\n```{language}\n{code}\n```"
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+
+    def _build_explain_messages(self, code: str, language: str, detail_level: str) -> list[dict[str, str]]:
+        """Build chat messages for an explain_code request."""
+        detail_instructions = {
+            "brief": "Provide a brief one-paragraph summary.",
+            "medium": "Provide a clear explanation with key points.",
+            "detailed": "Provide a detailed explanation covering all aspects.",
+        }
+        detail = detail_instructions.get(detail_level, detail_instructions["medium"])
+        system_prompt = (
+            f"You are a code documentation expert. Explain the following "
+            f"{language} code. {detail}"
+        )
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": f"```{language}\n{code}\n```"},
+        ]
+
     def edit_code(
         self,
         code: str,
@@ -202,55 +221,17 @@ class OpenAICodex:
         temperature: float = DEFAULT_TEMPERATURE,
         **kwargs: Any,
     ) -> dict[str, Any]:
-        """Edit existing code based on instructions.
-
-        Args:
-            code: The code to edit
-            instruction: Edit instruction
-            language: Programming language
-            max_tokens: Maximum tokens
-            temperature: Sampling temperature
-            **kwargs: Additional arguments
-
-        Returns:
-            Dictionary containing edited code and metadata
-        """
+        """Edit existing code based on instructions. Returns dict with edited_code and metadata."""
         start_time = time.time()
-
         try:
-            client = self._get_client()
-
-            system_prompt = (
-                f"You are a code editor. Edit the provided {language} code "
-                "according to the given instruction. Return only the edited code, "
-                "with no explanations."
-            )
-
-            user_prompt = f"Instruction: {instruction}\n\nCode to edit:\n```{language}\n{code}\n```"
-
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                max_tokens=max_tokens,
-                temperature=temperature,
-                **kwargs,
-            )
-
-            execution_time = time.time() - start_time
-            edited_code = response.choices[0].message.content or ""
-            tokens_used = response.usage.total_tokens if response.usage else 0
-
-            # Extract code block
+            messages = self._build_edit_messages(code, instruction, language)
+            response = self._call_api(messages, max_tokens, temperature, **kwargs)
+            edited_code, tokens_used, execution_time, _ = self._parse_response(response, start_time)
             edited_code = self._extract_code_block(edited_code, language)
-
             logger.info(
-                f"Edited {language} code using {self.model} "
-                f"in {execution_time:.2f}s ({tokens_used} tokens)"
+                "Edited %s code using %s in %.2fs (%s tokens)",
+                language, self.model, execution_time, tokens_used,
             )
-
             return {
                 "original_code": code,
                 "edited_code": edited_code,
@@ -261,10 +242,8 @@ class OpenAICodex:
                 "execution_time": execution_time,
                 "status": "success",
             }
-
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error("Error editing code: %s", e, exc_info=True)
-            raise RuntimeError(f"Code editing failed: {e}") from e
+            self._reraise("code editing", e)
 
     def explain_code(
         self,
@@ -273,53 +252,16 @@ class OpenAICodex:
         detail_level: str = "medium",
         **kwargs: Any,
     ) -> dict[str, Any]:
-        """Generate explanation for code.
-
-        Args:
-            code: Code to explain
-            language: Programming language
-            detail_level: Level of detail ("brief", "medium", "detailed")
-            **kwargs: Additional arguments
-
-        Returns:
-            Dictionary containing explanation and metadata
-        """
+        """Generate explanation for code. Returns dict with explanation and metadata."""
         start_time = time.time()
-
         try:
-            client = self._get_client()
-
-            detail_instructions = {
-                "brief": "Provide a brief one-paragraph summary.",
-                "medium": "Provide a clear explanation with key points.",
-                "detailed": "Provide a detailed explanation covering all aspects.",
-            }
-
-            system_prompt = (
-                f"You are a code documentation expert. Explain the following "
-                f"{language} code. {detail_instructions.get(detail_level, detail_instructions['medium'])}"
-            )
-
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"```{language}\n{code}\n```"},
-                ],
-                max_tokens=2048,
-                temperature=0.3,
-                **kwargs,
-            )
-
-            execution_time = time.time() - start_time
-            explanation = response.choices[0].message.content or ""
-            tokens_used = response.usage.total_tokens if response.usage else 0
-
+            messages = self._build_explain_messages(code, language, detail_level)
+            response = self._call_api(messages, 2048, 0.3, **kwargs)
+            explanation, tokens_used, execution_time, _ = self._parse_response(response, start_time)
             logger.info(
-                f"Generated code explanation using {self.model} "
-                f"in {execution_time:.2f}s ({tokens_used} tokens)"
+                "Generated code explanation using %s in %.2fs (%s tokens)",
+                self.model, execution_time, tokens_used,
             )
-
             return {
                 "code": code,
                 "explanation": explanation,
@@ -330,10 +272,8 @@ class OpenAICodex:
                 "execution_time": execution_time,
                 "status": "success",
             }
-
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error("Error explaining code: %s", e, exc_info=True)
-            raise RuntimeError(f"Code explanation failed: {e}") from e
+            self._reraise("code explanation", e)
 
     def _build_system_prompt(self, language: str) -> str:
         """Build system prompt for code generation."""

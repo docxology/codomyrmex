@@ -50,7 +50,7 @@ def create_pull_request(
     pr_data = {"title": title, "head": head_branch, "base": base_branch, "body": body}
 
     logger.info(
-        f"Creating PR in {repo_owner}/{repo_name}: {head_branch} -> {base_branch}"
+        "Creating PR in %s/%s: %s -> %s", repo_owner, repo_name, head_branch, base_branch
     )
 
     try:
@@ -63,7 +63,7 @@ def create_pull_request(
         if response.status_code == 201:
             pr_info = response.json()
             logger.info(
-                f"Successfully created PR #{pr_info['number']}: {pr_info['title']}"
+                "Successfully created PR #%s: %s", pr_info["number"], pr_info["title"]
             )
 
             return {
@@ -206,7 +206,7 @@ def get_pull_request(
 
         if response.status_code == 200:
             pr = response.json()
-            logger.info(f"Found PR #{pr['number']}: {pr['title']}")
+            logger.info("Found PR #%s: %s", pr["number"], pr["title"])
 
             return {
                 "number": pr["number"],
@@ -343,7 +343,7 @@ async def async_create_pull_request(
     pr_data = {"title": title, "head": head_branch, "base": base_branch, "body": body}
 
     logger.info(
-        f"[ASYNC] Creating PR in {repo_owner}/{repo_name}: {head_branch} -> {base_branch}"
+        "[ASYNC] Creating PR in %s/%s: %s -> %s", repo_owner, repo_name, head_branch, base_branch
     )
 
     status, data = await _async_request(
@@ -356,7 +356,7 @@ async def async_create_pull_request(
     if status == 201:
         pr_info = data
         logger.info(
-            f"[ASYNC] Successfully created PR #{pr_info['number']}: {pr_info['title']}"
+            "[ASYNC] Successfully created PR #%s: %s", pr_info["number"], pr_info["title"]
         )
 
         return {
@@ -421,7 +421,7 @@ async def async_get_pull_request(
 
     if status == 200:
         pr = data
-        logger.info(f"[ASYNC] Found PR #{pr['number']}: {pr['title']}")
+        logger.info("[ASYNC] Found PR #%s: %s", pr["number"], pr["title"])
 
         return {
             "number": pr["number"],

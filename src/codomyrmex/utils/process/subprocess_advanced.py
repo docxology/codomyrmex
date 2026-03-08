@@ -97,7 +97,7 @@ def stream_command(
         prepared_env = _prepare_environment(env, inherit_env)
 
         logger.debug(
-            f"Streaming command: {prepared_command if isinstance(prepared_command, str) else ' '.join(prepared_command)}"
+            "Streaming command: %s", prepared_command if isinstance(prepared_command, str) else " ".join(prepared_command)
         )
 
         # Use merged stderr if combining

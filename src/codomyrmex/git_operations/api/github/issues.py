@@ -44,7 +44,7 @@ def create_issue(
 
         if response.status_code == 201:
             issue = response.json()
-            logger.info(f"Successfully created issue #{issue['number']}")
+            logger.info("Successfully created issue #%s", issue["number"])
             return issue
         error_msg = f"Failed to create issue: {response.status_code} - {response.text}"
         logger.error(error_msg)
@@ -215,7 +215,7 @@ async def async_create_issue(
 
     if status == 201:
         issue = data
-        logger.info(f"[ASYNC] Successfully created issue #{issue['number']}")
+        logger.info("[ASYNC] Successfully created issue #%s", issue["number"])
         return issue  # type: ignore
     error_msg = f"Failed to create issue: {status}"
     if isinstance(data, dict):

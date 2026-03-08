@@ -112,7 +112,7 @@ def execute_code(
         ... )
         >>> print(result["stdout"])  # "Got: hello"
     """
-    logger.info(f"Executing {language} code (session_id: {session_id or 'none'})")
+    logger.info("Executing %s code (session_id: %s)", language, session_id or "none")
 
     # Validate inputs
     if not validate_language(language):
@@ -170,7 +170,7 @@ def execute_code(
         return result
 
     except Exception as e:
-        logger.error(f"Unexpected error executing code: {e!s}", exc_info=True)
+        logger.error("Unexpected error executing code: %s", e, exc_info=True)
         return {
             "stdout": "",
             "stderr": f"Internal error: {e!s}",

@@ -168,7 +168,7 @@ class VersionedEndpoint:
 
         if version in self.deprecated_versions:
             logger.warning(
-                f"Using deprecated version {version} for endpoint {self.path}"
+                "Using deprecated version %s for endpoint %s", version, self.path
             )
 
         if version not in self.versions:
@@ -239,7 +239,7 @@ class APIVersionManager:
         )
 
         logger.info(
-            f"API Version Manager initialized with default version {default_version}"
+            "API Version Manager initialized with default version %s", default_version
         )
 
     def register_version(self, version: APIVersion) -> None:

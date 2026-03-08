@@ -113,7 +113,7 @@ class AsyncPipelineManager:
             AsyncPipelineResult with trigger status
         """
         logger.info(
-            f"[ASYNC] Triggering pipeline {pipeline_name} for {repo_owner}/{repo_name}"
+            "[ASYNC] Triggering pipeline %s for %s/%s", pipeline_name, repo_owner, repo_name
         )
 
         url = f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/workflows/{workflow_id}/dispatches"
@@ -132,7 +132,7 @@ class AsyncPipelineManager:
                 ) as response:
                     if response.status == 204:
                         logger.info(
-                            f"[ASYNC] Pipeline {pipeline_name} triggered successfully"
+                            "[ASYNC] Pipeline %s triggered successfully", pipeline_name
                         )
                         return AsyncPipelineResult(
                             pipeline_id=pipeline_name,
@@ -256,7 +256,8 @@ class AsyncPipelineManager:
                             status = PipelineStatus.PENDING
 
                         logger.info(
-                            f"[ASYNC] Pipeline status: {status.value} (GitHub: {gh_status}/{gh_conclusion})"
+                            "[ASYNC] Pipeline status: %s (GitHub: %s/%s)",
+                            status.value, gh_status, gh_conclusion,
                         )
 
                         return AsyncPipelineResult(
@@ -333,7 +334,7 @@ class AsyncPipelineManager:
             AsyncPipelineResult with final pipeline status
         """
         logger.info(
-            f"[ASYNC] Waiting for pipeline {run_id} to complete (timeout: {timeout}s)"
+            "[ASYNC] Waiting for pipeline %s to complete (timeout: %ss)", run_id, timeout
         )
 
         start_time = time.time()
@@ -367,8 +368,8 @@ class AsyncPipelineManager:
             ):
                 elapsed = time.time() - start_time
                 logger.info(
-                    f"[ASYNC] Pipeline {run_id} completed with status {current_status.value} "
-                    f"after {elapsed:.1f}s"
+                    "[ASYNC] Pipeline %s completed with status %s after %.1fs",
+                    run_id, current_status.value, elapsed,
                 )
                 return result
 
@@ -377,7 +378,8 @@ class AsyncPipelineManager:
         # Timeout reached
         elapsed = time.time() - start_time
         logger.warning(
-            f"[ASYNC] Pipeline {run_id} did not complete within {timeout}s (waited {elapsed:.1f}s)"
+            "[ASYNC] Pipeline %s did not complete within %ss (waited %.1fs)",
+            run_id, timeout, elapsed,
         )
         return AsyncPipelineResult(
             pipeline_id=str(run_id),
@@ -407,7 +409,7 @@ class AsyncPipelineManager:
             AsyncPipelineResult with cancellation status
         """
         logger.info(
-            f"[ASYNC] Cancelling pipeline {run_id} for {repo_owner}/{repo_name}"
+            "[ASYNC] Cancelling pipeline %s for %s/%s", run_id, repo_owner, repo_name
         )
 
         url = f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/runs/{run_id}/cancel"
@@ -421,7 +423,7 @@ class AsyncPipelineManager:
                 ) as response:
                     if response.status == 202:
                         logger.info(
-                            f"[ASYNC] Pipeline {run_id} cancel request accepted"
+                            "[ASYNC] Pipeline %s cancel request accepted", run_id
                         )
                         return AsyncPipelineResult(
                             pipeline_id=str(run_id),

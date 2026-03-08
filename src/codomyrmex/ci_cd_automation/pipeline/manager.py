@@ -166,7 +166,7 @@ class PipelineManager:
                 pipeline.status = PipelineStatus.SUCCESS
 
             logger.info(
-                f"Pipeline {pipeline_name} completed with status: {pipeline.status.value}"
+                "Pipeline %s completed with status: %s", pipeline_name, pipeline.status.value
             )
 
         except Exception as e:
@@ -231,7 +231,7 @@ class PipelineManager:
             # Check if all dependencies are satisfied
             if not all(dep in executed_stages for dep in stage.dependencies):
                 logger.warning(
-                    f"Skipping stage {stage.name} due to unsatisfied dependencies"
+                    "Skipping stage %s due to unsatisfied dependencies", stage.name
                 )
                 stage.status = StageStatus.SKIPPED
                 continue

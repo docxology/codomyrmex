@@ -92,7 +92,7 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
             return False
 
         prompt = args.prompt
-        logger.debug(f"Executing {client_name} request: {prompt[:50]}...")
+        logger.debug("Executing %s request: %s...", client_name, prompt[:50])
 
         client = client_class()
         request = _create_agent_request(prompt, args)
@@ -131,7 +131,7 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
             return False
 
         prompt = args.prompt
-        logger.debug(f"Streaming {client_name} response: {prompt[:50]}...")
+        logger.debug("Streaming %s response: %s...", client_name, prompt[:50])
 
         client = client_class()
         request = _create_agent_request(prompt, args)
@@ -397,9 +397,8 @@ def handle_opencode_init(args):
         client = OpenCodeClient()
         project_path = getattr(args, "path", None)
 
-        logger.debug(
-            f"Initializing OpenCode for project: {project_path or 'current directory'}"
-        )
+        label = project_path or "current directory"
+        logger.debug("Initializing OpenCode for project: %s", label)
 
         result = client.initialize_project(project_path)
 

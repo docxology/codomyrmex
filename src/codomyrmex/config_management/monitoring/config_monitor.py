@@ -234,7 +234,7 @@ class ConfigurationMonitor:
             )
 
         logger.info(
-            f"Created configuration snapshot: {snapshot_id} ({len(config_paths)} files)"
+            "Created configuration snapshot: %s (%s files)", snapshot_id, len(config_paths)
         )
         return snapshot
 

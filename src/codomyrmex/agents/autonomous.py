@@ -115,7 +115,7 @@ class AutonomousAgent:
 
     def send(self, message: str) -> None:
         """Send a message to the channel."""
-        logger.info(f"[{self.identity}] Sending: {message[:50]}...")
+        logger.info("[%s] Sending: %s...", self.identity, message[:50])
         self.endpoint.relay.post_message(self.identity, message)
 
     def pause(self) -> None:
@@ -140,7 +140,7 @@ class AutonomousAgent:
             return
 
         logger.info(
-            f"[{self.identity}] Received from {msg.sender}: {msg.content[:50]}..."
+            "[%s] Received from %s: %s...", self.identity, msg.sender, msg.content[:50]
         )
 
         if not self.running:

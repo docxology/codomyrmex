@@ -250,7 +250,7 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
         try:
             _on_trust_change(old_level, new_level)
         except (TypeError, RuntimeError) as e:
-            logging.getLogger(__name__).error(f"Trust change callback failed: {e}")
+            logging.getLogger(__name__).error("Trust change callback failed: %s", e)
 
     # Emit trust level change via EventBus
     try:
