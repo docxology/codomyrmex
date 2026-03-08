@@ -102,15 +102,15 @@ class Scraper(BaseScraper):
                 value=url,
             )
 
-        logger.info(f"Scraping URL: {url}")
+        logger.info("Scraping URL: %s", url)
         try:
             result = self.adapter.scrape(url, options)
-            logger.debug(f"Successfully scraped {url}, status: {result.status_code}")
+            logger.debug("Successfully scraped %s, status: %s", url, result.status_code)
             return result
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Unexpected error scraping {url}: {e}")
+            logger.error("Unexpected error scraping %s: %s", url, e)
             raise ScrapeError(f"Failed to scrape {url}: {e}") from e
 
     def crawl(self, url: str, options: ScrapeOptions | None = None) -> CrawlResult:
@@ -139,15 +139,15 @@ class Scraper(BaseScraper):
                 value=url,
             )
 
-        logger.info(f"Starting crawl from URL: {url}")
+        logger.info("Starting crawl from URL: %s", url)
         try:
             result = self.adapter.crawl(url, options)
-            logger.info(f"Crawl job {result.job_id} created, status: {result.status}")
+            logger.info("Crawl job %s created, status: %s", result.job_id, result.status)
             return result
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Unexpected error crawling {url}: {e}")
+            logger.error("Unexpected error crawling %s: %s", url, e)
             raise ScrapeError(f"Failed to crawl {url}: {e}") from e
 
     def map(self, url: str, search: str | None = None) -> MapResult:
@@ -182,12 +182,12 @@ class Scraper(BaseScraper):
         )
         try:
             result = self.adapter.map(url, search)
-            logger.info(f"Found {result.total} links for {url}")
+            logger.info("Found %s links for %s", result.total, url)
             return result
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Unexpected error mapping {url}: {e}")
+            logger.error("Unexpected error mapping %s: %s", url, e)
             raise ScrapeError(f"Failed to map {url}: {e}") from e
 
     def search(self, query: str, options: ScrapeOptions | None = None) -> SearchResult:
@@ -209,15 +209,15 @@ class Scraper(BaseScraper):
                 "Query must be a non-empty string", field="query", value=str(query)
             )
 
-        logger.info(f"Searching web: {query}")
+        logger.info("Searching web: %s", query)
         try:
             result = self.adapter.search(query, options)
-            logger.info(f"Found {result.total} results for query: {query}")
+            logger.info("Found %s results for query: %s", result.total, query)
             return result
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Unexpected error searching '{query}': {e}")
+            logger.error("Unexpected error searching '%s': %s", query, e)
             raise ScrapeError(f"Failed to search '{query}': {e}") from e
 
     def extract(
@@ -263,10 +263,10 @@ class Scraper(BaseScraper):
         logger.info(f"Extracting data from {len(urls)} URL(s)")
         try:
             result = self.adapter.extract(urls, schema, prompt)
-            logger.info(f"Extraction completed, status: {result.status}")
+            logger.info("Extraction completed, status: %s", result.status)
             return result
         except ScrapeError:
             raise
         except Exception as e:
-            logger.error(f"Unexpected error extracting from URLs: {e}")
+            logger.error("Unexpected error extracting from URLs: %s", e)
             raise ScrapeError(f"Failed to extract data: {e}") from e

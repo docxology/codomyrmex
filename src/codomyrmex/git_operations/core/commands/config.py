@@ -16,7 +16,7 @@ def get_config(
         repository_path = os.getcwd()
 
     try:
-        logger.debug(f"Getting Git config: {key}")
+        logger.debug("Getting Git config: %s", key)
 
         cmd = ["git", "config"]
         if global_config:
@@ -33,14 +33,14 @@ def get_config(
         )
 
         value = result.stdout.strip()
-        logger.debug(f"Config value for {key}: {value}")
+        logger.debug("Config value for %s: %s", key, value)
         return value
 
     except subprocess.CalledProcessError:
-        logger.debug(f"Config key '{key}' not found or not set")
+        logger.debug("Config key '%s' not found or not set", key)
         return None
     except Exception as e:
-        logger.error(f"Unexpected error getting config: {e}")
+        logger.error("Unexpected error getting config: %s", e)
         return None
 
 
@@ -56,7 +56,7 @@ def set_config(
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Setting Git config: {key} = {value}")
+        logger.info("Setting Git config: %s = %s", key, value)
 
         cmd = ["git", "config"]
         if global_config:
@@ -72,14 +72,14 @@ def set_config(
             timeout=30,
         )
 
-        logger.info(f"Config '{key}' set successfully")
+        logger.info("Config '%s' set successfully", key)
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to set config '{key}': {e}")
+        logger.error("Failed to set config '%s': %s", key, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error setting config: {e}")
+        logger.error("Unexpected error setting config: %s", e)
         return False

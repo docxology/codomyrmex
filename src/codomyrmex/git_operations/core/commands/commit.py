@@ -38,7 +38,7 @@ def commit_changes(
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Committing changes with message: {message}")
+        logger.info("Committing changes with message: %s", message)
 
         # Stage files if needed
         if file_paths:
@@ -122,12 +122,12 @@ def commit_changes(
         return commit_sha
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to commit changes: {e}")
+        logger.error("Failed to commit changes: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return None
     except Exception as e:
-        logger.error(f"Unexpected error committing changes: {e}")
+        logger.error("Unexpected error committing changes: %s", e)
         return None
 
 
@@ -138,7 +138,7 @@ def revert_commit(commit_sha: str, repository_path: str | None = None) -> bool:
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Reverting commit '{commit_sha}' in {repository_path}")
+        logger.info("Reverting commit '%s' in %s", commit_sha, repository_path)
         # --no-edit to avoid opening editor for commit message
         subprocess.run(
             ["git", "revert", "--no-edit", commit_sha],
@@ -151,12 +151,12 @@ def revert_commit(commit_sha: str, repository_path: str | None = None) -> bool:
         logger.info(f"Successfully reverted commit {commit_sha[:8]}")
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to revert commit '{commit_sha}': {e}")
+        logger.error("Failed to revert commit '%s': %s", commit_sha, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error reverting commit: {e}")
+        logger.error("Unexpected error reverting commit: %s", e)
         return False
 
 
@@ -169,7 +169,7 @@ def cherry_pick(
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Cherry-picking commit: {commit_sha}")
+        logger.info("Cherry-picking commit: %s", commit_sha)
 
         cmd = ["git", "cherry-pick"]
         if no_commit:
@@ -189,12 +189,12 @@ def cherry_pick(
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to cherry-pick commit '{commit_sha}': {e}")
+        logger.error("Failed to cherry-pick commit '%s': %s", commit_sha, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error cherry-picking commit: {e}")
+        logger.error("Unexpected error cherry-picking commit: %s", e)
         return False
 
 
@@ -280,10 +280,10 @@ def amend_commit(
         return commit_sha
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to amend commit: {e}")
+        logger.error("Failed to amend commit: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return None
     except Exception as e:
-        logger.error(f"Unexpected error amending commit: {e}")
+        logger.error("Unexpected error amending commit: %s", e)
         return None

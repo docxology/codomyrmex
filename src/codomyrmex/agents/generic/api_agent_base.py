@@ -148,7 +148,7 @@ class APIAgentBase(BaseAgent):
                 # In a real app we might save this to a config file
                 # For now we just check if it looks like an ENV var or a key
                 if api_key.isupper() and "_" in api_key:
-                    self.logger.info(f"User provided env var name: {api_key}")
+                    self.logger.info("User provided env var name: %s", api_key)
                 else:
                     self.logger.info("User provided raw API key")
             else:
@@ -169,7 +169,7 @@ class APIAgentBase(BaseAgent):
 
         # We could try a simple generation here if we want to be thorough
         # For now, presence of key is a basic check
-        self.logger.info(f"Connection test passed for {self.name} (Key present)")
+        self.logger.info("Connection test passed for %s (Key present)", self.name)
         return True
 
     def _handle_api_error(

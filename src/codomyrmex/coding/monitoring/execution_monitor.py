@@ -35,7 +35,7 @@ class ExecutionMonitor:
                 "status": "running",
             }
         )
-        logger.info(f"Started execution {execution_id} ({language})")
+        logger.info("Started execution %s (%s)", execution_id, language)
 
     def end_execution(
         self, execution_id: str, status: str, result: dict[str, Any] | None = None

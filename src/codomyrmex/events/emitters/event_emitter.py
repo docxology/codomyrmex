@@ -45,7 +45,7 @@ class EventEmitter:
         self.default_metadata: dict[str, Any] = {}
         self.enabled = True
 
-        logger.debug(f"EventEmitter initialized for source: {source}")
+        logger.debug("EventEmitter initialized for source: %s", source)
 
     def emit(
         self,
@@ -78,9 +78,9 @@ class EventEmitter:
 
         try:
             self.event_bus.publish(event)
-            logger.debug(f"Emitted event: {event_type.value} from {self.source}")
+            logger.debug("Emitted event: %s from %s", event_type.value, self.source)
         except (RuntimeError, AttributeError) as e:
-            logger.error(f"Failed to emit event {event_type.value}: {e}")
+            logger.error("Failed to emit event %s: %s", event_type.value, e)
 
     def emit_sync(
         self,
@@ -133,9 +133,9 @@ class EventEmitter:
 
         try:
             await self.event_bus.publish_async(event)
-            logger.debug(f"Emitted async event: {event_type.value} from {self.source}")
+            logger.debug("Emitted async event: %s from %s", event_type.value, self.source)
         except (RuntimeError, AttributeError) as e:
-            logger.error(f"Failed to emit async event {event_type.value}: {e}")
+            logger.error("Failed to emit async event %s: %s", event_type.value, e)
 
     def emit_batch(self, events: list[dict[str, Any]]) -> None:
         """
@@ -183,7 +183,7 @@ class EventEmitter:
                 await asyncio.gather(*tasks, return_exceptions=True)
                 logger.debug(f"Emitted {len(tasks)} events in batch from {self.source}")
             except (RuntimeError, AttributeError) as e:
-                logger.error(f"Failed to emit batch events: {e}")
+                logger.error("Failed to emit batch events: %s", e)
 
     def start_operation(
         self, operation_name: str, operation_data: dict[str, Any] | None = None

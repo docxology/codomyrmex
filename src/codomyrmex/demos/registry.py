@@ -55,7 +55,7 @@ class DemoRegistry:
     ) -> None:
         """Register a new demonstration."""
         if name in self._demos:
-            logger.warning(f"Overwriting demo: {name}")
+            logger.warning("Overwriting demo: %s", name)
 
         self._demos[name] = DemoInfo(
             name=name,
@@ -65,7 +65,7 @@ class DemoRegistry:
             category=category,
             metadata=metadata,
         )
-        logger.debug(f"Registered demo: {name}")
+        logger.debug("Registered demo: %s", name)
 
     def get_demo(self, name: str) -> DemoInfo | None:
         """Get demo info by name."""
@@ -88,7 +88,7 @@ class DemoRegistry:
         """Discover demo scripts in a directory."""
         dir_path = Path(directory)
         if not dir_path.exists() or not dir_path.is_dir():
-            logger.error(f"Discovery directory does not exist: {directory}")
+            logger.error("Discovery directory does not exist: %s", directory)
             return
 
         for script_path in dir_path.glob(pattern):
@@ -119,7 +119,7 @@ class DemoRegistry:
             )
 
         start_time = time.time()
-        logger.info(f"Starting demo: {name}")
+        logger.info("Starting demo: %s", name)
 
         try:
             if isinstance(info.target, Path):

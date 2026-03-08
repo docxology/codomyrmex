@@ -252,7 +252,7 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                     return AntigravityCodeImplementerWrapper(client)
                 return client
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                logger.error(f"Failed to create Claude client: {e}")
+                logger.error("Failed to create Claude client: %s", e)
 
         # Fallback: same Ollama path, overriding the user's model choice for valid local inference if they selected Claude but don't have a key.
         fallback_model = spec.model
@@ -626,7 +626,7 @@ class ConversationOrchestrator:
 
         if last_error is not None:
             content = f"[Error after {self.max_retries + 1} attempts: {last_error}]"
-            logger.error(f"[{spec.identity}] LLM exhausted retries: {last_error}")
+            logger.error("[%s] LLM exhausted retries: %s", spec.identity, last_error)
         elapsed = time.monotonic() - start
 
         # Post to relay (persists in JSONL).

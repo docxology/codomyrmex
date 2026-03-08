@@ -148,5 +148,5 @@ class OpenCodeClient(CLIAgentBase):
                 "available": result.get("success", False),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.warning(f"Failed to get OpenCode version: {e}")
+            self.logger.warning("Failed to get OpenCode version: %s", e)
             return {"version": "", "exit_code": -1, "available": False, "error": str(e)}

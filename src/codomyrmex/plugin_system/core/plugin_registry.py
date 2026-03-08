@@ -98,7 +98,7 @@ class Hook:
             try:
                 results.append(handler(*args, **kwargs))
             except Exception as e:
-                logger.error(f"Error in hook {self.name}: {e}")
+                logger.error("Error in hook %s: %s", self.name, e)
         return results
 
 
@@ -193,7 +193,7 @@ class PluginRegistry:
         """Register a plugin."""
         info = plugin.info
         if info.name in self._plugins:
-            logger.warning(f"Plugin {info.name} already registered")
+            logger.warning("Plugin %s already registered", info.name)
             return False
 
         self._plugins[info.name] = plugin
@@ -210,7 +210,7 @@ class PluginRegistry:
         if info.name not in self.categories[cat_key]:
             self.categories[cat_key].append(info.name)
 
-        logger.info(f"Registered plugin: {info.name} v{info.version}")
+        logger.info("Registered plugin: %s v%s", info.name, info.version)
         return True
 
     def unregister(self, name: str) -> bool:
@@ -232,7 +232,7 @@ class PluginRegistry:
 
         del self._plugins[name]
         del self._plugin_info[name]
-        logger.info(f"Unregistered plugin: {name}")
+        logger.info("Unregistered plugin: %s", name)
         return True
 
     def get(self, name: str) -> Plugin | None:
@@ -269,7 +269,7 @@ class PluginRegistry:
             try:
                 results[name] = plugin.initialize()
             except Exception as e:
-                logger.error(f"Failed to initialize {name}: {e}")
+                logger.error("Failed to initialize %s: %s", name, e)
                 results[name] = False
         return results
 
@@ -280,7 +280,7 @@ class PluginRegistry:
             try:
                 results[name] = plugin.shutdown()
             except Exception as e:
-                logger.error(f"Failed to shutdown {name}: {e}")
+                logger.error("Failed to shutdown %s: %s", name, e)
                 results[name] = False
         return results
 

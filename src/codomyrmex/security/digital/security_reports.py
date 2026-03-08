@@ -371,7 +371,7 @@ class SecurityReportGenerator:
                 return False
             return True
         except Exception as e:
-            logger.error(f"Export failed: {e}")
+            logger.error("Export failed: %s", e)
             return False
 
 

@@ -67,7 +67,7 @@ class DirectMessenger:
 
         """
         self._handlers[agent_id] = handler
-        logger.info(f"Registered message handler for agent: {agent_id}")
+        logger.info("Registered message handler for agent: %s", agent_id)
 
     def unregister_handler(self, agent_id: str) -> bool:
         """Unregister a message handler."""
@@ -119,7 +119,7 @@ class DirectMessenger:
                 await handler(message)
             else:
                 handler(message)
-            logger.debug(f"Message delivered: {sender_id} -> {receiver_id}")
+            logger.debug("Message delivered: %s -> %s", sender_id, receiver_id)
         except Exception as e:
             raise MessageDeliveryError(
                 message.id, sender_id, receiver_id, str(e)

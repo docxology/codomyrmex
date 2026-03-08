@@ -214,7 +214,7 @@ class TaskManager:
         task.status = TaskStatus.QUEUED
         self._queue.push(task)
         self._graph.add_task(task)
-        logger.info(f"Task submitted: {task.name} ({task.id})")
+        logger.info("Task submitted: %s (%s)", task.name, task.id)
         return task.id
 
     def submit_batch(self, tasks: list[Task]) -> list[str]:
@@ -227,7 +227,7 @@ class TaskManager:
         Running tasks cannot be cancelled through this method.
         """
         if task_id in self._running:
-            logger.warning(f"Cannot cancel running task: {task_id}")
+            logger.warning("Cannot cancel running task: %s", task_id)
             return False
 
         task = self._queue.get(task_id)
@@ -235,7 +235,7 @@ class TaskManager:
             self._queue.remove(task_id)
             self._graph.remove_task(task_id)
             task.status = TaskStatus.CANCELLED
-            logger.info(f"Task cancelled: {task_id}")
+            logger.info("Task cancelled: %s", task_id)
             return True
         return False
 
@@ -276,7 +276,7 @@ class TaskManager:
                 self._agent_tasks[agent.agent_id] = set()
             self._agent_tasks[agent.agent_id].add(task.id)
 
-            logger.info(f"Task {task.name} assigned to {agent.name}")
+            logger.info("Task %s assigned to %s", task.name, agent.name)
             return task
 
         return None
@@ -296,11 +296,11 @@ class TaskManager:
         if result.success:
             task.status = TaskStatus.COMPLETED
             self._completed[task_id] = result
-            logger.info(f"Task completed: {task.name}")
+            logger.info("Task completed: %s", task.name)
         else:
             task.status = TaskStatus.FAILED
             self._failed[task_id] = result
-            logger.warning(f"Task failed: {task.name} - {result.error}")
+            logger.warning("Task failed: %s - %s", task.name, result.error)
 
         self._graph.remove_task(task_id)
 
@@ -308,7 +308,7 @@ class TaskManager:
             try:
                 callback(task, result)
             except Exception as e:
-                logger.error(f"Callback error: {e}")
+                logger.error("Callback error: %s", e)
 
     def get_task_status(self, task_id: str) -> TaskStatus | None:
         """Get the status of a task."""

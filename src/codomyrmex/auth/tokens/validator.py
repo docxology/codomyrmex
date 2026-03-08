@@ -98,5 +98,5 @@ class TokenValidator:
             logger.error("Token validation error: Invalid JSON")
             return None
         except Exception as e:
-            logger.error(f"Token validation error: {e}")
+            logger.error("Token validation error: %s", e)
             return None

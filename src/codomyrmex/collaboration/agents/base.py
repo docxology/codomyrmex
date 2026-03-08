@@ -121,7 +121,7 @@ class CollaborativeAgent(AbstractAgent):
         """Add a capability to this agent."""
         if not self.has_capability(capability.name):
             self._capabilities.append(capability)
-            logger.info(f"Agent {self.name} gained capability: {capability.name}")
+            logger.info("Agent %s gained capability: %s", self.name, capability.name)
 
     def get_status(self) -> AgentStatus:
         """Get current agent status."""
@@ -167,19 +167,19 @@ class CollaborativeAgent(AbstractAgent):
             except TimeoutError:
                 continue
             except Exception as e:
-                logger.error(f"Error processing message: {e}")
+                logger.error("Error processing message: %s", e)
 
     async def start(self) -> None:
         """Start the agent's message processing loop."""
         self._running = True
         self._state = AgentState.IDLE
-        logger.info(f"Agent {self.name} ({self._agent_id}) started")
+        logger.info("Agent %s (%s) started", self.name, self._agent_id)
 
     async def stop(self) -> None:
         """Stop the agent."""
         self._running = False
         self._state = AgentState.TERMINATED
-        logger.info(f"Agent {self.name} ({self._agent_id}) stopped")
+        logger.info("Agent %s (%s) stopped", self.name, self._agent_id)
 
     async def process_task(self, task: Task) -> TaskResult:
         """Process a task and return a result.
@@ -211,7 +211,7 @@ class CollaborativeAgent(AbstractAgent):
         except Exception as e:
             duration = (datetime.now() - start_time).total_seconds()
             self._tasks_failed += 1
-            logger.error(f"Task {task.id} failed: {e}")
+            logger.error("Task %s failed: %s", task.id, e)
 
             return TaskResult(
                 task_id=task.id,

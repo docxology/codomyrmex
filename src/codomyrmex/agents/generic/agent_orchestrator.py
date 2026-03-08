@@ -83,7 +83,7 @@ class AgentOrchestrator:
                     OSError,
                     TypeError,
                 ) as e:
-                    self.logger.error(f"Agent {agent} failed: {e}")
+                    self.logger.error("Agent %s failed: %s", agent, e)
                     responses[i] = AgentResponse(
                         content="",
                         error=str(e),
@@ -123,10 +123,10 @@ class AgentOrchestrator:
                 responses.append(response)
 
                 if stop_on_success and response.is_success():
-                    self.logger.info(f"Stopping after successful response from {agent}")
+                    self.logger.info("Stopping after successful response from %s", agent)
                     break
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                self.logger.error(f"Agent {agent} failed: {e}")
+                self.logger.error("Agent %s failed: %s", agent, e)
                 responses.append(
                     AgentResponse(
                         content="",
@@ -165,12 +165,12 @@ class AgentOrchestrator:
             try:
                 response = agent.execute(request)
                 if response.is_success():
-                    self.logger.info(f"Success with agent {agent}")
+                    self.logger.info("Success with agent %s", agent)
                     return response
                 last_error_response = response
-                self.logger.warning(f"Agent {agent} failed: {response.error}")
+                self.logger.warning("Agent %s failed: %s", agent, response.error)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                self.logger.error(f"Agent {agent} raised exception: {e}")
+                self.logger.error("Agent %s raised exception: %s", agent, e)
                 last_error_response = AgentResponse(
                     content="",
                     error=str(e),
@@ -202,7 +202,7 @@ class AgentOrchestrator:
         try:
             capability_enum = AgentCapabilities(capability)
         except ValueError:
-            self.logger.warning(f"Unknown capability: {capability}")
+            self.logger.warning("Unknown capability: %s", capability)
             return []
 
         supported_agents = [

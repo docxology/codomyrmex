@@ -111,7 +111,7 @@ class CircuitBreaker:
             elapsed = time.time() - health.opened_at
             if elapsed >= self._cooldown:
                 health.state = CircuitState.HALF_OPEN
-                logger.info(f"Circuit half-open for {agent_id}")
+                logger.info("Circuit half-open for %s", agent_id)
                 return True
             return False
 
@@ -129,7 +129,7 @@ class CircuitBreaker:
 
         if health.state in (CircuitState.OPEN, CircuitState.HALF_OPEN):
             health.state = CircuitState.CLOSED
-            logger.info(f"Circuit closed for {agent_id} (recovered)")
+            logger.info("Circuit closed for %s (recovered)", agent_id)
 
     def record_failure(self, agent_id: str) -> None:
         """Record a failed operation for an agent."""

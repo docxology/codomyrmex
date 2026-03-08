@@ -31,7 +31,7 @@ class ComplexityMixin:
                         suggestions.append(suggestion)
 
         except Exception as e:
-            logger.error(f"Error analyzing complexity patterns: {e}")
+            logger.error("Error analyzing complexity patterns: %s", e)
 
         return suggestions
 
@@ -112,5 +112,5 @@ def complex_function(data):
             ]
 
         except Exception as e:
-            logger.error(f"Error getting top complexity issues: {e}")
+            logger.error("Error getting top complexity issues: %s", e)
             return []

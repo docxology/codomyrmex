@@ -61,7 +61,7 @@ def create_scatter_plot(
         plt.show()
     else:
         plt.close(fig)
-    logger.info(f"Scatter plot '{title}' generated successfully.")
+    logger.info("Scatter plot '%s' generated successfully.", title)
     return fig
 
 

@@ -59,7 +59,7 @@ class PatternAnalyzer:
                             )
                         )
         except Exception as e:
-            logger.error(f"Error analyzing {file_path}: {e}")
+            logger.error("Error analyzing %s: %s", file_path, e)
 
         return matches
 
@@ -145,12 +145,12 @@ def print_once(msg: str) -> None:
 
 def _perform_repository_index(path: str) -> None:
     """Index repository."""
-    logger.info(f"Indexing {path}")
+    logger.info("Indexing %s", path)
 
 
 def _perform_dependency_analysis(path: str) -> None:
     """Analyze dependencies."""
-    logger.info(f"Analyzing dependencies for {path}")
+    logger.info("Analyzing dependencies for %s", path)
 
 
 def _perform_text_search(query: str, path: str) -> list[Any]:
@@ -198,7 +198,7 @@ def _perform_code_summarization(path: str) -> str:
 
 def _perform_docstring_indexing(path: str) -> None:
     """Index docstrings."""
-    logger.info(f"Indexing docstrings for {path}")
+    logger.info("Indexing docstrings for %s", path)
 
 
 def _perform_symbol_extraction(path: str) -> list[str]:

@@ -199,7 +199,7 @@ class VersionedEndpoint:
         """
         if version in self.versions and version not in self.deprecated_versions:
             self.deprecated_versions.append(version)
-            logger.info(f"Deprecated version {version} for endpoint {self.path}")
+            logger.info("Deprecated version %s for endpoint %s", version, self.path)
 
 
 class APIVersionManager:
@@ -255,7 +255,7 @@ class APIVersionManager:
             )
 
         self.versions[version.version] = version
-        logger.info(f"Registered API version: {version}")
+        logger.info("Registered API version: %s", version)
 
     def get_version(self, version_str: str) -> APIVersion | None:
         """
@@ -344,7 +344,7 @@ class APIVersionManager:
             endpoint: Endpoint to register
         """
         self.endpoints[endpoint.path] = endpoint
-        logger.debug(f"Registered versioned endpoint: {endpoint.path}")
+        logger.debug("Registered versioned endpoint: %s", endpoint.path)
 
     def get_endpoint(
         self, path: str, version: str | None = None
@@ -376,7 +376,7 @@ class APIVersionManager:
             self.migration_rules[from_version] = {}
 
         self.migration_rules[from_version][to_version] = migrator
-        logger.debug(f"Added migration rule: {from_version} -> {to_version}")
+        logger.debug("Added migration rule: %s -> %s", from_version, to_version)
 
     def migrate_data(self, data: Any, from_version: str, to_version: str) -> Any:
         """

@@ -57,7 +57,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             network = self._conn.network.create_network(
                 name=name, description=description, is_shared=is_shared, **kwargs
             )
-            logger.info(f"Created network: {network.id}")
+            logger.info("Created network: %s", network.id)
             return {"id": network.id, "name": network.name}
 
         return self._safe_call(_op, "create", f"network {name}")
@@ -67,7 +67,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
 
         def _op():
             self._conn.network.delete_network(network_id)
-            logger.info(f"Deleted network: {network_id}")
+            logger.info("Deleted network: %s", network_id)
             return True
 
         return self._safe_call(_op, "delete", f"network {network_id}", default=False)
@@ -95,10 +95,10 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 dns_nameservers=dns_nameservers or [],
                 **kwargs,
             )
-            logger.info(f"Created subnet: {subnet.id}")
+            logger.info("Created subnet: %s", subnet.id)
             return {"id": subnet.id, "name": subnet.name, "cidr": subnet.cidr}
         except Exception as e:
-            logger.error(f"Failed to create subnet {name}: {e}")
+            logger.error("Failed to create subnet %s: %s", name, e)
             return None
 
     # =========================================================================
@@ -119,7 +119,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for r in routers
             ]
         except Exception as e:
-            logger.error(f"Failed to list routers: {e}")
+            logger.error("Failed to list routers: %s", e)
             return []
 
     def create_router(
@@ -135,20 +135,20 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                     router_args["external_gateway_info"] = {"network_id": ext_net.id}
 
             router = self._conn.network.create_router(**router_args)
-            logger.info(f"Created router: {router.id}")
+            logger.info("Created router: %s", router.id)
             return {"id": router.id, "name": router.name}
         except Exception as e:
-            logger.error(f"Failed to create router {name}: {e}")
+            logger.error("Failed to create router %s: %s", name, e)
             return None
 
     def add_router_interface(self, router_id: str, subnet_id: str) -> bool:
         """Add a subnet interface to a router."""
         try:
             self._conn.network.add_interface_to_router(router_id, subnet_id=subnet_id)
-            logger.info(f"Added interface for subnet {subnet_id} to router {router_id}")
+            logger.info("Added interface for subnet %s to router %s", subnet_id, router_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to add interface to router {router_id}: {e}")
+            logger.error("Failed to add interface to router %s: %s", router_id, e)
             return False
 
     def remove_router_interface(self, router_id: str, subnet_id: str) -> bool:
@@ -162,17 +162,17 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             )
             return True
         except Exception as e:
-            logger.error(f"Failed to remove interface from router {router_id}: {e}")
+            logger.error("Failed to remove interface from router %s: %s", router_id, e)
             return False
 
     def delete_router(self, router_id: str) -> bool:
         """Delete a router."""
         try:
             self._conn.network.delete_router(router_id)
-            logger.info(f"Deleted router: {router_id}")
+            logger.info("Deleted router: %s", router_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete router {router_id}: {e}")
+            logger.error("Failed to delete router %s: %s", router_id, e)
             return False
 
     # =========================================================================
@@ -193,7 +193,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for sg in sgs
             ]
         except Exception as e:
-            logger.error(f"Failed to list security groups: {e}")
+            logger.error("Failed to list security groups: %s", e)
             return []
 
     def create_security_group(
@@ -204,10 +204,10 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             sg = self._conn.network.create_security_group(
                 name=name, description=description or ""
             )
-            logger.info(f"Created security group: {sg.id}")
+            logger.info("Created security group: %s", sg.id)
             return {"id": sg.id, "name": sg.name}
         except Exception as e:
-            logger.error(f"Failed to create security group {name}: {e}")
+            logger.error("Failed to create security group %s: %s", name, e)
             return None
 
     def add_security_group_rule(
@@ -244,20 +244,20 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 ether_type=ethertype,
                 **kwargs,
             )
-            logger.info(f"Created security group rule: {rule.id}")
+            logger.info("Created security group rule: %s", rule.id)
             return {"id": rule.id, "direction": direction, "protocol": protocol}
         except Exception as e:
-            logger.error(f"Failed to add rule to {security_group_id}: {e}")
+            logger.error("Failed to add rule to %s: %s", security_group_id, e)
             return None
 
     def delete_security_group(self, security_group_id: str) -> bool:
         """Delete a security group."""
         try:
             self._conn.network.delete_security_group(security_group_id)
-            logger.info(f"Deleted security group: {security_group_id}")
+            logger.info("Deleted security group: %s", security_group_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete security group {security_group_id}: {e}")
+            logger.error("Failed to delete security group %s: %s", security_group_id, e)
             return False
 
     # =========================================================================
@@ -279,7 +279,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for fip in fips
             ]
         except Exception as e:
-            logger.error(f"Failed to list floating IPs: {e}")
+            logger.error("Failed to list floating IPs: %s", e)
             return []
 
     def allocate_floating_ip(self, external_network: str) -> dict[str, Any] | None:
@@ -287,24 +287,24 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         try:
             ext_net = self._conn.network.find_network(external_network)
             if not ext_net:
-                logger.error(f"External network not found: {external_network}")
+                logger.error("External network not found: %s", external_network)
                 return None
 
             fip = self._conn.network.create_ip(floating_network_id=ext_net.id)
-            logger.info(f"Allocated floating IP: {fip.floating_ip_address}")
+            logger.info("Allocated floating IP: %s", fip.floating_ip_address)
             return {"id": fip.id, "floating_ip_address": fip.floating_ip_address}
         except Exception as e:
-            logger.error(f"Failed to allocate floating IP: {e}")
+            logger.error("Failed to allocate floating IP: %s", e)
             return None
 
     def associate_floating_ip(self, floating_ip_id: str, port_id: str) -> bool:
         """Associate a floating IP with a port."""
         try:
             self._conn.network.update_ip(floating_ip_id, port_id=port_id)
-            logger.info(f"Associated floating IP {floating_ip_id} with port {port_id}")
+            logger.info("Associated floating IP %s with port %s", floating_ip_id, port_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to associate floating IP: {e}")
+            logger.error("Failed to associate floating IP: %s", e)
             return False
 
     # =========================================================================
@@ -326,7 +326,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for lb in lbs
             ]
         except Exception as e:
-            logger.error(f"Failed to list load balancers: {e}")
+            logger.error("Failed to list load balancers: %s", e)
             return []
 
     def create_loadbalancer(
@@ -337,10 +337,10 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             lb = self._conn.load_balancer.create_load_balancer(
                 name=name, vip_subnet_id=subnet_id, vip_address=vip_address, **kwargs
             )
-            logger.info(f"Created load balancer: {lb.id}")
+            logger.info("Created load balancer: %s", lb.id)
             return {"id": lb.id, "name": lb.name, "vip_address": lb.vip_address}
         except Exception as e:
-            logger.error(f"Failed to create load balancer {name}: {e}")
+            logger.error("Failed to create load balancer %s: %s", name, e)
             return None
 
     def delete_loadbalancer(self, loadbalancer_id: str, cascade: bool = False) -> bool:
@@ -349,10 +349,10 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             self._conn.load_balancer.delete_load_balancer(
                 loadbalancer_id, cascade=cascade
             )
-            logger.info(f"Deleted load balancer: {loadbalancer_id}")
+            logger.info("Deleted load balancer: %s", loadbalancer_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete load balancer {loadbalancer_id}: {e}")
+            logger.error("Failed to delete load balancer %s: %s", loadbalancer_id, e)
             return False
 
     # =========================================================================
@@ -376,7 +376,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for s in subnets
             ]
         except Exception as e:
-            logger.error(f"Failed to list subnets: {e}")
+            logger.error("Failed to list subnets: %s", e)
             return []
 
     def get_subnet(self, subnet_id: str) -> dict[str, Any] | None:
@@ -394,17 +394,17 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 }
             return None
         except Exception as e:
-            logger.error(f"Failed to get subnet {subnet_id}: {e}")
+            logger.error("Failed to get subnet %s: %s", subnet_id, e)
             return None
 
     def delete_subnet(self, subnet_id: str) -> bool:
         """Delete a subnet."""
         try:
             self._conn.network.delete_subnet(subnet_id)
-            logger.info(f"Deleted subnet: {subnet_id}")
+            logger.info("Deleted subnet: %s", subnet_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete subnet {subnet_id}: {e}")
+            logger.error("Failed to delete subnet %s: %s", subnet_id, e)
             return False
 
     # =========================================================================
@@ -415,20 +415,20 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         """Release (delete/deallocate) a floating IP."""
         try:
             self._conn.network.delete_ip(floating_ip_id)
-            logger.info(f"Released floating IP: {floating_ip_id}")
+            logger.info("Released floating IP: %s", floating_ip_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to release floating IP {floating_ip_id}: {e}")
+            logger.error("Failed to release floating IP %s: %s", floating_ip_id, e)
             return False
 
     def disassociate_floating_ip(self, floating_ip_id: str) -> bool:
         """Disassociate a floating IP from its port."""
         try:
             self._conn.network.update_ip(floating_ip_id, port_id=None)
-            logger.info(f"Disassociated floating IP: {floating_ip_id}")
+            logger.info("Disassociated floating IP: %s", floating_ip_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to disassociate floating IP {floating_ip_id}: {e}")
+            logger.error("Failed to disassociate floating IP %s: %s", floating_ip_id, e)
             return False
 
     # =========================================================================
@@ -455,7 +455,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for listener in listeners
             ]
         except Exception as e:
-            logger.error(f"Failed to list listeners: {e}")
+            logger.error("Failed to list listeners: %s", e)
             return []
 
     def create_listener(
@@ -470,20 +470,20 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 protocol_port=port,
                 **kwargs,
             )
-            logger.info(f"Created listener: {listener.id}")
+            logger.info("Created listener: %s", listener.id)
             return {"id": listener.id, "name": listener.name, "protocol": protocol}
         except Exception as e:
-            logger.error(f"Failed to create listener {name}: {e}")
+            logger.error("Failed to create listener %s: %s", name, e)
             return None
 
     def delete_listener(self, listener_id: str) -> bool:
         """Delete a listener."""
         try:
             self._conn.load_balancer.delete_listener(listener_id)
-            logger.info(f"Deleted listener: {listener_id}")
+            logger.info("Deleted listener: %s", listener_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete listener {listener_id}: {e}")
+            logger.error("Failed to delete listener %s: %s", listener_id, e)
             return False
 
     # =========================================================================
@@ -507,7 +507,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for p in pools
             ]
         except Exception as e:
-            logger.error(f"Failed to list pools: {e}")
+            logger.error("Failed to list pools: %s", e)
             return []
 
     def create_pool(
@@ -529,20 +529,20 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 loadbalancer_id=loadbalancer_id,
                 **kwargs,
             )
-            logger.info(f"Created pool: {pool.id}")
+            logger.info("Created pool: %s", pool.id)
             return {"id": pool.id, "name": pool.name, "protocol": protocol}
         except Exception as e:
-            logger.error(f"Failed to create pool {name}: {e}")
+            logger.error("Failed to create pool %s: %s", name, e)
             return None
 
     def delete_pool(self, pool_id: str) -> bool:
         """Delete a pool."""
         try:
             self._conn.load_balancer.delete_pool(pool_id)
-            logger.info(f"Deleted pool: {pool_id}")
+            logger.info("Deleted pool: %s", pool_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete pool {pool_id}: {e}")
+            logger.error("Failed to delete pool %s: %s", pool_id, e)
             return False
 
     # =========================================================================
@@ -565,7 +565,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for m in members
             ]
         except Exception as e:
-            logger.error(f"Failed to list pool members for {pool_id}: {e}")
+            logger.error("Failed to list pool members for %s: %s", pool_id, e)
             return []
 
     def add_pool_member(
@@ -589,17 +589,17 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 subnet_id=subnet_id,
                 **kwargs,
             )
-            logger.info(f"Added pool member: {member.id}")
+            logger.info("Added pool member: %s", member.id)
             return {"id": member.id, "address": address, "port": port}
         except Exception as e:
-            logger.error(f"Failed to add member to pool {pool_id}: {e}")
+            logger.error("Failed to add member to pool %s: %s", pool_id, e)
             return None
 
     def remove_pool_member(self, pool_id: str, member_id: str) -> bool:
         """Remove a member from a pool."""
         try:
             self._conn.load_balancer.delete_member(member_id, pool_id)
-            logger.info(f"Removed pool member: {member_id}")
+            logger.info("Removed pool member: %s", member_id)
             return True
         except Exception as e:
             logger.error(
@@ -631,7 +631,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 for hm in monitors
             ]
         except Exception as e:
-            logger.error(f"Failed to list health monitors: {e}")
+            logger.error("Failed to list health monitors: %s", e)
             return []
 
     def create_health_monitor(
@@ -664,18 +664,18 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
                 name=name,
                 **kwargs,
             )
-            logger.info(f"Created health monitor: {hm.id}")
+            logger.info("Created health monitor: %s", hm.id)
             return {"id": hm.id, "type": monitor_type, "pool_id": pool_id}
         except Exception as e:
-            logger.error(f"Failed to create health monitor for pool {pool_id}: {e}")
+            logger.error("Failed to create health monitor for pool %s: %s", pool_id, e)
             return None
 
     def delete_health_monitor(self, health_monitor_id: str) -> bool:
         """Delete a health monitor."""
         try:
             self._conn.load_balancer.delete_health_monitor(health_monitor_id)
-            logger.info(f"Deleted health monitor: {health_monitor_id}")
+            logger.info("Deleted health monitor: %s", health_monitor_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete health monitor {health_monitor_id}: {e}")
+            logger.error("Failed to delete health monitor %s: %s", health_monitor_id, e)
             return False

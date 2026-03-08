@@ -77,7 +77,7 @@ class PerimeterManager:
             status="active",
         )
         self.access_points[point_id] = point
-        logger.info(f"Registered access point {point_id} at {location}")
+        logger.info("Registered access point %s at %s", point_id, location)
         return point
 
     def check_perimeter_security(self) -> dict:

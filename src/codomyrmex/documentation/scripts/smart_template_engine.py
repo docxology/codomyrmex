@@ -70,7 +70,7 @@ class SmartTemplateEngine:
 
     def analyze_module(self, module_path: Path) -> ModuleAnalysis:
         """Analyze a Python module."""
-        logger.info(f"Analyzing module: {module_path}")
+        logger.info("Analyzing module: %s", module_path)
 
         try:
             # Read module content
@@ -113,7 +113,7 @@ class SmartTemplateEngine:
             )
 
         except Exception as e:
-            logger.error(f"Error analyzing {module_path}: {e}")
+            logger.error("Error analyzing %s: %s", module_path, e)
             return ModuleAnalysis(
                 module_path=str(module_path.relative_to(self.repo_root)),
                 module_name=module_path.stem,
@@ -469,7 +469,7 @@ class SmartTemplateEngine:
         # Write JSON
         output_file.write_text(json.dumps(analysis_dict, indent=2))
 
-        logger.info(f"Analysis exported to {output_file}")
+        logger.info("Analysis exported to %s", output_file)
         return output_file
 
 

@@ -69,7 +69,7 @@ def merge_documents(
         return merged_doc
 
     except Exception as e:
-        logger.error(f"Error merging documents: {e}")
+        logger.error("Error merging documents: %s", e)
         if isinstance(e, DocumentConversionError):
             raise
         raise DocumentConversionError(f"Failed to merge documents: {e!s}") from e

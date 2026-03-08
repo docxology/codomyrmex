@@ -53,7 +53,7 @@ class SimulatedAgent(AgentInterface):
             raise RuntimeError(error_msg)
 
         response_content = f"[{self.name}] Processed: {request.prompt}"
-        logger.info(f"[{self.name}] Finished processing")
+        logger.info("[%s] Finished processing", self.name)
 
         return AgentResponse(
             content=response_content,

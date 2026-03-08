@@ -517,7 +517,7 @@ async def run_command_async(
         if shell:
             # For shell mode, use string command
             cmd_str = command if isinstance(command, str) else " ".join(command)
-            logger.debug(f"Running async shell command: {cmd_str}")
+            logger.debug("Running async shell command: %s", cmd_str)
 
             process = await asyncio.create_subprocess_shell(
                 cmd_str,

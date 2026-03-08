@@ -51,7 +51,7 @@ class SkillExecutor:
             SkillExecutionError: If execution fails
         """
         skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))
-        logger.info(f"Executing skill: {skill_name}")
+        logger.info("Executing skill: %s", skill_name)
         start_time = time.monotonic()
 
         try:
@@ -75,7 +75,7 @@ class SkillExecutor:
                     "elapsed": elapsed,
                 }
             )
-            logger.info(f"Skill {skill_name} completed in {elapsed:.3f}s")
+            logger.info("Skill %s completed in %.3fs", skill_name, elapsed)
             return result
 
         except SkillExecutionError:

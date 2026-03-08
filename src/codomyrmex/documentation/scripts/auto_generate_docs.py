@@ -37,14 +37,14 @@ class AutoDocumentationGenerator:
             # Find specific module
             module_path = self.src_path / module_name
             if not module_path.exists():
-                logger.error(f"Module not found: {module_name}")
+                logger.error("Module not found: %s", module_name)
                 return []
 
             # Find __init__.py in the module
             init_file = module_path / "__init__.py"
             if init_file.exists():
                 return [init_file]
-            logger.warning(f"No __init__.py found in {module_name}")
+            logger.warning("No __init__.py found in %s", module_name)
             return []
 
         # Find all modules
@@ -180,7 +180,7 @@ For complete documentation, see:
             module_dir = module_path.parent
             module_name = module_dir.name
 
-            logger.info(f"Generating documentation for {module_name}...")
+            logger.info("Generating documentation for %s...", module_name)
 
             try:
                 # Analyze module
@@ -191,27 +191,27 @@ For complete documentation, see:
                 readme_path = module_dir / "README.md"
 
                 if self.dry_run:
-                    logger.info(f"[DRY RUN] Would write README to: {readme_path}")
+                    logger.info("[DRY RUN] Would write README to: %s", readme_path)
                     print(f"\n--- README.md preview for {module_name} ---")
                     print(readme_content[:500] + "...\n")
                 else:
                     readme_path.write_text(readme_content, encoding="utf-8")
-                    logger.info(f"Generated: {readme_path}")
+                    logger.info("Generated: %s", readme_path)
 
                 # Generate AGENTS.md
                 agents_content = self.generate_agents_md(module_path, analysis)
                 agents_path = module_dir / "AGENTS.md"
 
                 if self.dry_run:
-                    logger.info(f"[DRY RUN] Would write AGENTS.md to: {agents_path}")
+                    logger.info("[DRY RUN] Would write AGENTS.md to: %s", agents_path)
                 else:
                     agents_path.write_text(agents_content, encoding="utf-8")
-                    logger.info(f"Generated: {agents_path}")
+                    logger.info("Generated: %s", agents_path)
 
                 generated_count += 1
 
             except Exception as e:
-                logger.error(f"Error generating documentation for {module_name}: {e}")
+                logger.error("Error generating documentation for %s: %s", module_name, e)
                 continue
 
         logger.info(

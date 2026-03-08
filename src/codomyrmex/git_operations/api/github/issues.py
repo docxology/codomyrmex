@@ -33,7 +33,7 @@ def create_issue(
     if assignees:
         data["assignees"] = assignees
 
-    logger.info(f"Creating issue in {owner}/{repo_name}: {title}")
+    logger.info("Creating issue in %s/%s: %s", owner, repo_name, title)
 
     try:
         response = requests.post(
@@ -71,7 +71,7 @@ def list_issues(
     if labels:
         params["labels"] = ",".join(labels)
 
-    logger.info(f"Listing {state} issues in {owner}/{repo_name}")
+    logger.info("Listing %s issues in %s/%s", state, owner, repo_name)
 
     try:
         response = requests.get(
@@ -111,7 +111,7 @@ def close_issue(
 
     data = {"state": "closed"}
 
-    logger.info(f"Closing issue #{issue_number} in {owner}/{repo_name}")
+    logger.info("Closing issue #%s in %s/%s", issue_number, owner, repo_name)
 
     try:
         response = requests.patch(
@@ -121,7 +121,7 @@ def close_issue(
         )
 
         if response.status_code == 200:
-            logger.info(f"Successfully closed issue #{issue_number}")
+            logger.info("Successfully closed issue #%s", issue_number)
             return response.json()
         error_msg = f"Failed to close issue: {response.status_code} - {response.text}"
         logger.error(error_msg)
@@ -146,7 +146,7 @@ def add_comment(
 
     data = {"body": body}
 
-    logger.info(f"Adding comment to #{issue_number} in {owner}/{repo_name}")
+    logger.info("Adding comment to #%s in %s/%s", issue_number, owner, repo_name)
 
     try:
         response = requests.post(
@@ -156,7 +156,7 @@ def add_comment(
         )
 
         if response.status_code == 201:
-            logger.info(f"Successfully added comment to #{issue_number}")
+            logger.info("Successfully added comment to #%s", issue_number)
             return response.json()
         error_msg = f"Failed to add comment: {response.status_code} - {response.text}"
         logger.error(error_msg)
@@ -204,7 +204,7 @@ async def async_create_issue(
     if assignees:
         issue_data["assignees"] = assignees
 
-    logger.info(f"[ASYNC] Creating issue in {owner}/{repo_name}: {title}")
+    logger.info("[ASYNC] Creating issue in %s/%s: %s", owner, repo_name, title)
 
     status, data = await _async_request(
         "POST",
@@ -257,7 +257,7 @@ async def async_list_issues(
     if labels:
         params["labels"] = ",".join(labels)
 
-    logger.info(f"[ASYNC] Listing {state} issues in {owner}/{repo_name}")
+    logger.info("[ASYNC] Listing %s issues in %s/%s", state, owner, repo_name)
 
     status, data = await _async_request(
         "GET",
@@ -306,7 +306,7 @@ async def async_close_issue(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info(f"[ASYNC] Closing issue #{issue_number} in {owner}/{repo_name}")
+    logger.info("[ASYNC] Closing issue #%s in %s/%s", issue_number, owner, repo_name)
 
     status, data = await _async_request(
         "PATCH",
@@ -316,7 +316,7 @@ async def async_close_issue(
     )
 
     if status == 200:
-        logger.info(f"[ASYNC] Successfully closed issue #{issue_number}")
+        logger.info("[ASYNC] Successfully closed issue #%s", issue_number)
         return data  # type: ignore
     error_msg = f"Failed to close issue: {status}"
     if isinstance(data, dict):
@@ -354,7 +354,7 @@ async def async_add_comment(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info(f"[ASYNC] Adding comment to #{issue_number} in {owner}/{repo_name}")
+    logger.info("[ASYNC] Adding comment to #%s in %s/%s", issue_number, owner, repo_name)
 
     status, data = await _async_request(
         "POST",
@@ -364,7 +364,7 @@ async def async_add_comment(
     )
 
     if status == 201:
-        logger.info(f"[ASYNC] Successfully added comment to #{issue_number}")
+        logger.info("[ASYNC] Successfully added comment to #%s", issue_number)
         return data  # type: ignore
     error_msg = f"Failed to add comment: {status}"
     if isinstance(data, dict):

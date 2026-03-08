@@ -61,13 +61,13 @@ class SupervisorAgent(CollaborativeAgent):
     def add_worker(self, worker: WorkerAgent) -> None:
         """Add a worker to the supervision pool."""
         self._workers[worker.agent_id] = worker
-        logger.info(f"Supervisor {self.name} added worker: {worker.name}")
+        logger.info("Supervisor %s added worker: %s", self.name, worker.name)
 
     def remove_worker(self, worker_id: str) -> bool:
         """Remove a worker from the supervision pool."""
         if worker_id in self._workers:
             del self._workers[worker_id]
-            logger.info(f"Supervisor {self.name} removed worker: {worker_id}")
+            logger.info("Supervisor %s removed worker: %s", self.name, worker_id)
             return True
         return False
 
@@ -129,7 +129,7 @@ class SupervisorAgent(CollaborativeAgent):
         worker = self._select_worker(task)
         self._delegated_tasks[task.id] = worker.agent_id
 
-        logger.info(f"Supervisor {self.name} delegating '{task.name}' to {worker.name}")
+        logger.info("Supervisor %s delegating '%s' to %s", self.name, task.name, worker.name)
 
         for attempt in range(self._max_retries):
             try:
@@ -143,7 +143,7 @@ class SupervisorAgent(CollaborativeAgent):
                     )
             except Exception as e:
                 if attempt < self._max_retries - 1:
-                    logger.warning(f"Task {task.id} error: {e}, retrying...")
+                    logger.warning("Task %s error: %s, retrying...", task.id, e)
                 else:
                     raise TaskExecutionError(task.id, str(e), worker.agent_id) from e
 

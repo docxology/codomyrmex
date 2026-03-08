@@ -39,7 +39,7 @@ class GitVisualizationDemo:
 
         # Create output directory
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        logger.info(f"Initialized demo with output directory: {self.output_dir}")
+        logger.info("Initialized demo with output directory: %s", self.output_dir)
 
     def run_all_demos(
         self,
@@ -61,7 +61,7 @@ class GitVisualizationDemo:
 
         # 2. Real repository analysis
         if repository_path:
-            logger.info(f"Running real repository analysis for: {repository_path}")
+            logger.info("Running real repository analysis for: %s", repository_path)
             results["real_repo"] = self.demo_real_repository_analysis(repository_path)
         else:
             logger.info(
@@ -316,14 +316,14 @@ class GitVisualizationDemo:
         output_dir = self.output_dir / "real_repository"
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"=== Analyzing Real Git Repository: {repository_path} ===")
+        logger.info("=== Analyzing Real Git Repository: %s ===", repository_path)
 
         if not check_git_availability():
             logger.error("Git is not available on this system")
             return False
 
         if not is_git_repository(repository_path):
-            logger.error(f"Path {repository_path} is not a Git repository")
+            logger.error("Path %s is not a Git repository", repository_path)
             return False
 
         # 1. Comprehensive Report

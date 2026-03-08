@@ -158,7 +158,7 @@ class TaskOrchestrator:
         """Submit a task for execution."""
         with self._lock:
             if task.id in self.tasks:
-                logger.warning(f"Task {task.id} already exists, handling as update")
+                logger.warning("Task %s already exists, handling as update", task.id)
 
             self.tasks[task.id] = task
             task.status = TaskStatus.PENDING
@@ -170,7 +170,7 @@ class TaskOrchestrator:
                 self.queues[task.priority].append(task.id)
                 task.status = TaskStatus.READY
 
-            logger.info(f"Submitted task: {task.name} ({task.id})")
+            logger.info("Submitted task: %s (%s)", task.name, task.id)
 
             # Ensure processor is running
             self.start_processing()
@@ -208,7 +208,7 @@ class TaskOrchestrator:
                     time.sleep(0.1)
 
             except Exception as e:
-                logger.error(f"Error in task processor: {e}")
+                logger.error("Error in task processor: %s", e)
                 time.sleep(1.0)
 
     def _get_next_task(self) -> str | None:
@@ -260,7 +260,7 @@ class TaskOrchestrator:
 
     def _execute_task_logic(self, task: Task) -> Any:
         """Execute the actual task logic."""
-        logger.info(f"Executing task: {task.name} ({task.action})")
+        logger.info("Executing task: %s (%s)", task.name, task.action)
 
         # Simulate execution or dynamically call module
         # Ideally this would use `importlib` to load `task.module` and call `task.action`
@@ -311,11 +311,11 @@ class TaskOrchestrator:
                     end_time=task.completed_at,
                     duration=task.execution_time,
                 )
-                logger.error(f"Task {task.name} failed: {e}")
+                logger.error("Task %s failed: %s", task.name, e)
 
             self.task_results[task_id] = task_result
             task.result = task_result
-            logger.info(f"Task completed: {task.name} ({task.status.value})")
+            logger.info("Task completed: %s (%s)", task.name, task.status.value)
 
     def list_tasks(self) -> list[Task]:
         """List all tasks."""
@@ -345,7 +345,7 @@ class TaskOrchestrator:
             # Note: We can't easily kill running threads in ThreadPoolExecutor
             # but we can mark it as cancelled so we don't return its result or trigger dependents
 
-            logger.info(f"Cancelled task: {task.name}")
+            logger.info("Cancelled task: %s", task.name)
             return True
 
     def add_task(self, task: Task) -> str:

@@ -91,7 +91,7 @@ class InfomaniakOpenStackBase:
             try:
                 self._conn.close()
             except Exception as e:
-                logger.warning(f"Error closing {self._service_name} connection: {e}")
+                logger.warning("Error closing %s connection: %s", self._service_name, e)
 
     def _safe_call(self, operation_fn, verb: str, resource: str, *, default=None):
         """Execute an OpenStack API call with standardized error logging.
@@ -123,7 +123,7 @@ class InfomaniakOpenStackBase:
             list(self._conn.identity.projects())
             return True
         except Exception as e:
-            logger.error(f"Connection validation failed for {self._service_name}: {e}")
+            logger.error("Connection validation failed for %s: %s", self._service_name, e)
             return False
 
 
@@ -202,7 +202,7 @@ class InfomaniakS3Base:
             self._client.list_buckets()
             return True
         except Exception as e:
-            logger.error(f"S3 connection validation failed: {e}")
+            logger.error("S3 connection validation failed: %s", e)
             return False
 
 
@@ -263,7 +263,7 @@ class InfomaniakRESTBase:
             try:
                 self._session.close()
             except Exception as e:
-                logger.warning(f"Error closing {self._service_name} session: {e}")
+                logger.warning("Error closing %s session: %s", self._service_name, e)
 
     def validate_connection(self) -> bool:
         """

@@ -65,7 +65,7 @@ class SecretManager:
         }
 
         self._secrets[secret_id] = secret_data
-        logger.info(f"Stored secret: {name}")
+        logger.info("Stored secret: %s", name)
 
         return secret_id
 
@@ -126,7 +126,7 @@ class SecretManager:
         """
         if secret_id in self._secrets:
             del self._secrets[secret_id]
-            logger.info(f"Deleted secret: {secret_id}")
+            logger.info("Deleted secret: %s", secret_id)
             return True
         return False
 
@@ -154,10 +154,10 @@ class SecretManager:
                 # Re-encrypt with new key
                 secret["value"] = self.fernet.encrypt(decrypted_value.encode()).decode()
             except Exception as e:
-                logger.error(f"Failed to re-encrypt secret {secret_id}: {e}")
+                logger.error("Failed to re-encrypt secret %s: %s", secret_id, e)
 
         new_key_id = secrets.token_hex(8)
-        logger.info(f"Rotated encryption key: {new_key_id}")
+        logger.info("Rotated encryption key: %s", new_key_id)
         return new_key_id
 
     def rotate_secret(self, name: str, new_value: str) -> dict[str, Any]:
@@ -195,7 +195,7 @@ class SecretManager:
             "rotated_at": datetime.now().isoformat(),
         }
         self._rotation_history.append(event)
-        logger.info(f"Rotated secret {name!r}: {previous_id} → {new_id}")
+        logger.info("Rotated secret %r: %s → %s", name, previous_id, new_id)
         return event
 
     def get_rotation_history(self, name: str | None = None) -> list[dict[str, Any]]:

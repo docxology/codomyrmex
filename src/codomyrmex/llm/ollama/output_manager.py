@@ -121,7 +121,7 @@ class OutputManager:
             with open(metadata_file, "w", encoding="utf-8") as f:
                 json.dump(metadata, f, indent=2, default=str)
 
-        self.logger.info(f"Saved model output to: {output_file}")
+        self.logger.info("Saved model output to: %s", output_file)
         return str(output_file)
 
     def save_execution_result(
@@ -156,7 +156,7 @@ class OutputManager:
         with open(result_file, "w", encoding="utf-8") as f:
             json.dump(result_dict, f, indent=2, default=str)
 
-        self.logger.info(f"Saved execution result to: {result_file}")
+        self.logger.info("Saved execution result to: %s", result_file)
         return str(result_file)
 
     def save_model_config(
@@ -195,7 +195,7 @@ class OutputManager:
         with open(config_file, "w", encoding="utf-8") as f:
             json.dump(config_with_metadata, f, indent=2, default=str)
 
-        self.logger.info(f"Saved model config to: {config_file}")
+        self.logger.info("Saved model config to: %s", config_file)
         return str(config_file)
 
     def load_model_config(
@@ -226,11 +226,11 @@ class OutputManager:
             with open(config_file, encoding="utf-8") as f:
                 config_data = json.load(f)
 
-            self.logger.info(f"Loaded model config from: {config_file}")
+            self.logger.info("Loaded model config from: %s", config_file)
             return config_data.get("configuration", config_data)
 
         except Exception as e:
-            self.logger.error(f"Error loading config {config_file}: {e}")
+            self.logger.error("Error loading config %s: %s", config_file, e)
             raise
 
     def save_batch_results(
@@ -274,7 +274,7 @@ class OutputManager:
         with open(batch_file, "w", encoding="utf-8") as f:
             json.dump(batch_data, f, indent=2, default=str)
 
-        self.logger.info(f"Saved batch results to: {batch_file}")
+        self.logger.info("Saved batch results to: %s", batch_file)
         return str(batch_file)
 
     def save_benchmark_report(
@@ -314,7 +314,7 @@ class OutputManager:
         with open(report_file, "w", encoding="utf-8") as f:
             json.dump(benchmark_results, f, indent=2, default=str)
 
-        self.logger.info(f"Saved benchmark report to: {report_file}")
+        self.logger.info("Saved benchmark report to: %s", report_file)
         return str(report_file)
 
     def save_model_comparison(
@@ -349,7 +349,7 @@ class OutputManager:
         with open(comparison_file, "w", encoding="utf-8") as f:
             json.dump(comparison_results, f, indent=2, default=str)
 
-        self.logger.info(f"Saved model comparison to: {comparison_file}")
+        self.logger.info("Saved model comparison to: %s", comparison_file)
         return str(comparison_file)
 
     def list_saved_outputs(
@@ -404,7 +404,7 @@ class OutputManager:
                         outputs.append(output_info)
 
                     except Exception as e:
-                        self.logger.warning(f"Error reading {item}: {e}")
+                        self.logger.warning("Error reading %s: %s", item, e)
 
         # Sort by creation time (newest first)
         outputs.sort(key=lambda x: x["created_at"], reverse=True)
@@ -487,9 +487,9 @@ class OutputManager:
                             try:
                                 item.unlink()
                                 removed_count += 1
-                                self.logger.info(f"Removed old output: {item}")
+                                self.logger.info("Removed old output: %s", item)
                             except Exception as e:
-                                self.logger.warning(f"Could not remove {item}: {e}")
+                                self.logger.warning("Could not remove %s: %s", item, e)
 
-        self.logger.info(f"Cleaned up {removed_count} old output files")
+        self.logger.info("Cleaned up %s old output files", removed_count)
         return removed_count

@@ -63,7 +63,7 @@ class Market:
             "status": "open",
             "assigned_to": None,
         }
-        logger.debug(f"Task {task_id} posted with priority {priority}")
+        logger.debug("Task %s posted with priority %s", task_id, priority)
 
     def process(self, data: Any = None) -> dict[str, Any]:
         """

@@ -43,10 +43,10 @@ class ConfigWatcher:
                 if os.path.exists(self.file_path):
                     current_mtime = os.path.getmtime(self.file_path)
                     if current_mtime > self._last_mtime:
-                        logger.info(f"Config file changed: {self.file_path}")
+                        logger.info("Config file changed: %s", self.file_path)
                         self._last_mtime = current_mtime
                         self.callback()
             except Exception as e:
-                logger.error(f"Error watching config file: {e}")
+                logger.error("Error watching config file: %s", e)
 
             time.sleep(self.interval)

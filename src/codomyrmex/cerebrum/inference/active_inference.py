@@ -319,7 +319,7 @@ class ActiveInferenceAgent:
             policies, expected_free_energies, temperature=1.0 / self.precision
         )
 
-        self.logger.debug(f"Selected action: {selected}")
+        self.logger.debug("Selected action: %s", selected)
         return selected
 
     def _compute_action_efe(self, action: str) -> float:

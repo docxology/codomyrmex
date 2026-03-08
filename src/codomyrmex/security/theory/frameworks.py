@@ -248,7 +248,7 @@ def apply_framework(framework_name: str, context: dict[str, Any]) -> dict[str, A
     """
     framework = FRAMEWORKS.get(framework_name)
     if not framework:
-        logger.warning(f"Unknown framework: {framework_name}")
+        logger.warning("Unknown framework: %s", framework_name)
         return {
             "applied": False,
             "error": f"Unknown framework: {framework_name}",

@@ -115,7 +115,7 @@ class DocumentReader:
             return document
 
         except Exception as e:
-            logger.error(f"Error reading document {file_path}: {e}")
+            logger.error("Error reading document %s: %s", file_path, e)
             if isinstance(e, (DocumentReadError, UnsupportedFormatError)):
                 raise
             raise DocumentReadError(

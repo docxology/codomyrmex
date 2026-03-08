@@ -73,7 +73,7 @@ class RefactoringMixin:
             )
 
         except Exception as e:
-            logger.error(f"Error generating refactoring plan: {e}")
+            logger.error("Error generating refactoring plan: %s", e)
 
         return plan
 
@@ -236,7 +236,7 @@ class RefactoringMixin:
                     )
 
         except Exception as e:
-            logger.error(f"Error suggesting automated fixes: {e}")
+            logger.error("Error suggesting automated fixes: %s", e)
 
         return fixes
 
@@ -300,7 +300,7 @@ class RefactoringMixin:
             )
 
         except Exception as e:
-            logger.error(f"Error analyzing technical debt: {e}")
+            logger.error("Error analyzing technical debt: %s", e)
 
         return debt_analysis
 

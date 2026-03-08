@@ -27,7 +27,7 @@ class TimezoneManager:
         try:
             self.timezone = pytz.timezone(self.timezone_str)
         except pytz.exceptions.UnknownTimeZoneError:
-            logger.warning(f"Unknown timezone {timezone}, using UTC")
+            logger.warning("Unknown timezone %s, using UTC", timezone)
             self.timezone = pytz.UTC
             self.timezone_str = "UTC"
 
@@ -55,7 +55,7 @@ class TimezoneManager:
                 dt = pytz.UTC.localize(dt)  # type: ignore
             return dt.astimezone(target_tz)
         except pytz.exceptions.UnknownTimeZoneError:
-            logger.warning(f"Unknown timezone {timezone}, returning original datetime")
+            logger.warning("Unknown timezone %s, returning original datetime", timezone)
             return dt
 
     def localize(self, dt: datetime) -> datetime:

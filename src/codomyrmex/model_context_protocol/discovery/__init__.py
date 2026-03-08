@@ -151,7 +151,7 @@ class MCPDiscovery:
         try:
             root_pkg = importlib.import_module(package_name)
         except ImportError as e:
-            logger.error(f"Failed to import root package {package_name}: {e}")
+            logger.error("Failed to import root package %s: %s", package_name, e)
             return DiscoveryReport(
                 failed_modules=[FailedModule(package_name, str(e), type(e).__name__)]
             )
@@ -178,7 +178,7 @@ class MCPDiscovery:
 
             except Exception as e:
                 # Isolate failure
-                logger.debug(f"Failed to scan module {name}: {e}")
+                logger.debug("Failed to scan module %s: %s", name, e)
                 failed_modules.append(FailedModule(name, str(e), type(e).__name__))
                 self._failed_modules.append(
                     FailedModule(name, str(e), type(e).__name__)

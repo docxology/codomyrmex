@@ -35,7 +35,7 @@ def read_csv(file_path: str | Path, encoding: str | None = None) -> list[dict]:
             rows = list(reader)
         return rows
     except Exception as e:
-        logger.error(f"Error reading CSV file {file_path}: {e}")
+        logger.error("Error reading CSV file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read CSV file: {e!s}", file_path=str(file_path)
         ) from e
@@ -87,9 +87,9 @@ def write_csv(
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(data)
-        logger.debug(f"Wrote CSV to {file_path}")
+        logger.debug("Wrote CSV to %s", file_path)
     except Exception as e:
-        logger.error(f"Error writing CSV file {file_path}: {e}")
+        logger.error("Error writing CSV file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write CSV file: {e!s}", file_path=str(file_path)
         ) from e

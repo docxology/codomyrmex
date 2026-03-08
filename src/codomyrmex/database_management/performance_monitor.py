@@ -107,7 +107,7 @@ class DatabasePerformanceMonitor:
         if len(self._query_metrics) > 10000:
             self._query_metrics = self._query_metrics[-10000:]
 
-        logger.debug(f"Recorded query metrics for {query_hash}")
+        logger.debug("Recorded query metrics for %s", query_hash)
 
     def record_database_metrics(self, database_name: str, metrics: dict[str, Any]):
         """Record database performance metrics.
@@ -134,7 +134,7 @@ class DatabasePerformanceMonitor:
         if len(self._database_metrics) > 1000:
             self._database_metrics = self._database_metrics[-1000:]
 
-        logger.debug(f"Recorded database metrics for {database_name}")
+        logger.debug("Recorded database metrics for %s", database_name)
 
     def analyze_query_performance(self, hours: int = 24) -> dict[str, Any]:
         """Analyze query performance over time.
@@ -436,7 +436,7 @@ class DatabasePerformanceMonitor:
         with open(report_file, "w") as f:
             json.dump(report, f, indent=2, default=str)
 
-        logger.info(f"Generated performance report for {database_name}")
+        logger.info("Generated performance report for %s", database_name)
         return report
 
     def _generate_recommendations(

@@ -75,7 +75,7 @@ class Compressor:
                 return buffer.getvalue()
             raise ValueError(f"Unknown format: {self.format}")
         except Exception as e:
-            logger.error(f"Compression error: {e}")
+            logger.error("Compression error: %s", e)
             raise CompressionError(f"Failed to compress: {e!s}") from e
 
     def decompress(self, data: bytes) -> bytes:
@@ -101,7 +101,7 @@ class Compressor:
             else:
                 raise ValueError(f"Unknown format: {self.format}")
         except Exception as e:
-            logger.error(f"Decompression error: {e}")
+            logger.error("Decompression error: %s", e)
             raise CompressionError(f"Failed to decompress: {e!s}") from e
 
     def compress_stream(
@@ -191,7 +191,7 @@ class Compressor:
             )
             return output_path
         except Exception as e:
-            logger.error(f"File compression error: {e}")
+            logger.error("File compression error: %s", e)
             raise CompressionError(f"Failed to compress file: {e!s}") from e
 
     def decompress_file(self, input_path: str, output_path: str | None = None) -> str:
@@ -225,10 +225,10 @@ class Compressor:
             with open(output_path, "wb") as f:
                 f.write(decompressed)
 
-            logger.info(f"Decompressed {input_path} -> {output_path}")
+            logger.info("Decompressed %s -> %s", input_path, output_path)
             return output_path
         except Exception as e:
-            logger.error(f"File decompression error: {e}")
+            logger.error("File decompression error: %s", e)
             raise CompressionError(f"Failed to decompress file: {e!s}") from e
 
     @staticmethod

@@ -28,7 +28,7 @@ def orchestrate_fractal_task(task_description: str, max_depth: int = 3, provider
     Returns:
         A dictionary containing the task execution summary and status.
     """
-    logger.info(f"Starting fractal orchestration for: {task_description}")
+    logger.info("Starting fractal orchestration for: %s", task_description)
 
     try:
         # 1. Initialization and Planning
@@ -65,7 +65,7 @@ def orchestrate_fractal_task(task_description: str, max_depth: int = 3, provider
             except Exception as e:
                 leaf.status = TaskStatus.FAILED
                 propagate_status(planned_tree)
-                logger.error(f"Task failed: {leaf.description} - {e!s}")
+                logger.error("Task failed: %s - %s", leaf.description, e)
                 execution_results.append({"task": leaf.description, "status": "error", "message": str(e)})
 
         return {

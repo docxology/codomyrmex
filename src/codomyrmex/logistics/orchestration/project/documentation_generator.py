@@ -34,7 +34,7 @@ class DocumentationGenerator:
             try:
                 return template_path.read_text(encoding="utf-8")
             except Exception as e:
-                logger.error(f"Failed to load template {template_name}: {e}")
+                logger.error("Failed to load template %s: %s", template_name, e)
                 return None
         return None
 
@@ -119,10 +119,10 @@ class DocumentationGenerator:
 
         try:
             readme_path.write_text(content, encoding="utf-8")
-            logger.info(f"Generated README.md for {project_name}")
+            logger.info("Generated README.md for %s", project_name)
             return True
         except Exception as e:
-            logger.error(f"Failed to generate README.md: {e}")
+            logger.error("Failed to generate README.md: %s", e)
             return False
 
     def generate_root_agents(
@@ -168,10 +168,10 @@ class DocumentationGenerator:
 
         try:
             agents_path.write_text(content, encoding="utf-8")
-            logger.info(f"Generated AGENTS.md for {project_name}")
+            logger.info("Generated AGENTS.md for %s", project_name)
             return True
         except Exception as e:
-            logger.error(f"Failed to generate AGENTS.md: {e}")
+            logger.error("Failed to generate AGENTS.md: %s", e)
             return False
 
     def generate_nested_readme(
@@ -222,10 +222,10 @@ class DocumentationGenerator:
 
         try:
             readme_path.write_text(content, encoding="utf-8")
-            logger.debug(f"Generated README.md for {dir_name}")
+            logger.debug("Generated README.md for %s", dir_name)
             return True
         except Exception as e:
-            logger.error(f"Failed to generate nested README.md for {dir_name}: {e}")
+            logger.error("Failed to generate nested README.md for %s: %s", dir_name, e)
             return False
 
     def generate_nested_agents(
@@ -272,10 +272,10 @@ class DocumentationGenerator:
 
         try:
             agents_path.write_text(content, encoding="utf-8")
-            logger.debug(f"Generated AGENTS.md for {dir_name}")
+            logger.debug("Generated AGENTS.md for %s", dir_name)
             return True
         except Exception as e:
-            logger.error(f"Failed to generate nested AGENTS.md for {dir_name}: {e}")
+            logger.error("Failed to generate nested AGENTS.md for %s: %s", dir_name, e)
             return False
 
     def generate_all_documentation(

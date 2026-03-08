@@ -57,7 +57,7 @@ async def create_item(item: ItemCreate):
     item_dict["id"] = current_id
     item_dict["created_at"] = time.time()
     fake_items_db[current_id] = item_dict
-    logger.info(f"Created item {current_id}: {item.name}")
+    logger.info("Created item %s: %s", current_id, item.name)
     return item_dict
 
 
@@ -71,7 +71,7 @@ async def read_items(skip: int = 0, limit: int = 10):
 async def read_item(item_id: int):
     """Get a specific item by ID."""
     if item_id not in fake_items_db:
-        logger.warning(f"Item not found: {item_id}")
+        logger.warning("Item not found: %s", item_id)
         raise HTTPException(status_code=404, detail="Item not found")
     return fake_items_db[item_id]
 

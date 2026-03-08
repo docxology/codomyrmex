@@ -46,7 +46,7 @@ def read_text(file_path: str | Path, encoding: str | None = None) -> str:
             try:
                 with open(file_path, encoding=enc) as f:
                     content = f.read()
-                logger.info(f"Successfully read {file_path} with encoding {enc}")
+                logger.info("Successfully read %s with encoding %s", file_path, enc)
                 return content
             except UnicodeDecodeError:
                 continue
@@ -54,7 +54,7 @@ def read_text(file_path: str | Path, encoding: str | None = None) -> str:
             f"Could not decode file with any encoding: {e!s}", file_path=str(file_path)
         ) from e
     except Exception as e:
-        logger.error(f"Error reading text file {file_path}: {e}")
+        logger.error("Error reading text file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read text file: {e!s}", file_path=str(file_path)
         ) from e
@@ -81,9 +81,9 @@ def write_text(
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding=encoding) as f:
             f.write(content)
-        logger.debug(f"Wrote text to {file_path}")
+        logger.debug("Wrote text to %s", file_path)
     except Exception as e:
-        logger.error(f"Error writing text file {file_path}: {e}")
+        logger.error("Error writing text file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write text file: {e!s}", file_path=str(file_path)
         ) from e

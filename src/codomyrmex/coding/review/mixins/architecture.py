@@ -25,7 +25,7 @@ class ArchitectureMixin:
             violations.extend(self._check_naming_conventions())
 
         except Exception as e:
-            logger.error(f"Error analyzing architecture compliance: {e}")
+            logger.error("Error analyzing architecture compliance: %s", e)
 
         return violations
 

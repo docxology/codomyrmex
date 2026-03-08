@@ -296,7 +296,7 @@ def run_with_retry(
     last_result: SubprocessResult | None = None
 
     for attempt in range(1, max_attempts + 1):
-        logger.debug(f"Executing command (attempt {attempt}/{max_attempts})")
+        logger.debug("Executing command (attempt %s/%s)", attempt, max_attempts)
 
         result = run_command(command, **kwargs)
         last_result = result
@@ -313,12 +313,12 @@ def run_with_retry(
         # If successful or no retry needed, return
         if not should_retry:
             if result.success:
-                logger.debug(f"Command succeeded on attempt {attempt}")
+                logger.debug("Command succeeded on attempt %s", attempt)
             return result
 
         # If this was the last attempt, return the result
         if attempt >= max_attempts:
-            logger.warning(f"Command failed after {max_attempts} attempts")
+            logger.warning("Command failed after %s attempts", max_attempts)
             return result
 
         # Call retry callback if provided
@@ -326,10 +326,10 @@ def run_with_retry(
             try:
                 on_retry(attempt, result)
             except Exception as e:
-                logger.warning(f"Retry callback raised exception: {e}")
+                logger.warning("Retry callback raised exception: %s", e)
 
         # Wait before retrying
-        logger.debug(f"Retrying in {current_delay:.1f}s...")
+        logger.debug("Retrying in %.1fs...", current_delay)
         time.sleep(current_delay)
         current_delay *= backoff
 

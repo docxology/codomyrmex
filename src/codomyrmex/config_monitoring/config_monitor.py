@@ -103,7 +103,7 @@ class ConfigurationMonitor:
                         )
                         self._snapshots[snapshot.snapshot_id] = snapshot
                 except (json.JSONDecodeError, KeyError, ValueError, OSError) as e:
-                    logger.warning(f"Failed to load snapshot {snap_file}: {e}")
+                    logger.warning("Failed to load snapshot %s: %s", snap_file, e)
 
     def _load_audit_data(self) -> None:
         """Load audit reports from local storage if they exist."""
@@ -123,7 +123,7 @@ class ConfigurationMonitor:
                         )
                         self._audits.append(audit)
                 except (json.JSONDecodeError, KeyError, ValueError, OSError) as e:
-                    logger.warning(f"Failed to load audit {audit_file}: {e}")
+                    logger.warning("Failed to load audit %s: %s", audit_file, e)
 
     def calculate_file_hash(self, file_path: str | Path) -> str:
         """Calculate SHA-256 hash of a configuration file.
@@ -206,7 +206,7 @@ class ConfigurationMonitor:
                 if previous_hash:
                     change = self.record_change(str_path, "deleted", previous_hash, "")
                     changes.append(change)
-                    logger.info(f"Detected deletion: {str_path}")
+                    logger.info("Detected deletion: %s", str_path)
                     # Remove from new_hashes so it's removed from persistence
                     self._remove_hash(str_path)
                 continue
@@ -214,14 +214,14 @@ class ConfigurationMonitor:
             if previous_hash is None:
                 change = self.record_change(str_path, "created", None, current_hash)
                 changes.append(change)
-                logger.info(f"Detected new file: {str_path}")
+                logger.info("Detected new file: %s", str_path)
                 new_hashes[str_path] = current_hash
             elif current_hash != previous_hash:
                 change = self.record_change(
                     str_path, "modified", previous_hash, current_hash
                 )
                 changes.append(change)
-                logger.info(f"Detected modification: {str_path}")
+                logger.info("Detected modification: %s", str_path)
                 new_hashes[str_path] = current_hash
             else:
                 # No change, but keep it in the store
@@ -468,7 +468,7 @@ class ConfigurationMonitor:
                             f"Move sensitive data in {f.name} to a secure secret manager"
                         )
             except Exception as e:
-                logger.debug(f"Could not read {f} for audit: {e}")
+                logger.debug("Could not read %s for audit: %s", f, e)
 
         audit_id = f"audit_{environment}_{int(time.time())}"
         audit = ConfigAudit(

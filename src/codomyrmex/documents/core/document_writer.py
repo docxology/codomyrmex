@@ -109,10 +109,10 @@ class DocumentWriter:
                     f"Format {format.value} not yet implemented", format=format.value
                 )
 
-            logger.info(f"Successfully wrote document to {file_path}")
+            logger.info("Successfully wrote document to %s", file_path)
 
         except Exception as e:
-            logger.error(f"Error writing document to {file_path}: {e}")
+            logger.error("Error writing document to %s: %s", file_path, e)
             if isinstance(e, (DocumentWriteError, UnsupportedFormatError)):
                 raise
             raise DocumentWriteError(

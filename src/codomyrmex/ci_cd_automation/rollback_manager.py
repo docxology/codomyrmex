@@ -276,14 +276,14 @@ class RollbackManager:
                     )
 
                     execution.completed_steps += 1
-                    logger.info(f"Completed rollback step: {step.name}")
+                    logger.info("Completed rollback step: %s", step.name)
 
                 except TimeoutError:
                     execution.failed_steps += 1
                     execution.errors.append(
                         f"Step '{step.name}' timed out after {step.timeout}s"
                     )
-                    logger.error(f"Rollback step '{step.name}' timed out")
+                    logger.error("Rollback step '%s' timed out", step.name)
 
                     # For immediate strategy, fail fast
                     if plan.strategy == RollbackStrategy.IMMEDIATE:
@@ -292,7 +292,7 @@ class RollbackManager:
                 except Exception as e:
                     execution.failed_steps += 1
                     execution.errors.append(f"Step '{step.name}' failed: {e!s}")
-                    logger.error(f"Rollback step '{step.name}' failed: {e}")
+                    logger.error("Rollback step '%s' failed: %s", step.name, e)
 
                     # For immediate strategy, fail fast
                     if plan.strategy == RollbackStrategy.IMMEDIATE:
@@ -301,7 +301,7 @@ class RollbackManager:
             # Mark as completed or failed
             if execution.failed_steps == 0:
                 execution.status = "completed"
-                logger.info(f"Rollback execution {execution_id} completed successfully")
+                logger.info("Rollback execution %s completed successfully", execution_id)
             else:
                 execution.status = "failed"
                 logger.error(
@@ -311,7 +311,7 @@ class RollbackManager:
         except Exception as e:
             execution.status = "failed"
             execution.errors.append(f"Rollback execution failed: {e!s}")
-            logger.error(f"Rollback execution {execution_id} failed: {e}")
+            logger.error("Rollback execution %s failed: %s", execution_id, e)
             raise
         finally:
             execution.end_time = datetime.now()
@@ -421,7 +421,7 @@ class RollbackManager:
             execution.status = "cancelled"
             execution.end_time = datetime.now()
             del self._active_rollbacks[execution_id]
-            logger.info(f"Cancelled rollback execution {execution_id}")
+            logger.info("Cancelled rollback execution %s", execution_id)
             return True
 
         return False
@@ -460,7 +460,7 @@ def handle_rollback(
         loop.close()
         return execution
     except Exception as e:
-        logger.error(f"Rollback execution failed: {e}")
+        logger.error("Rollback execution failed: %s", e)
         # Return a failed execution record
         return RollbackExecution(
             execution_id=f"failed_{deployment_id}_{int(time.time())}",

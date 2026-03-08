@@ -63,7 +63,7 @@ class ToolRunner:
                     )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running pylint on {file_path}: {e}")
+            logger.error("Error running pylint on %s: %s", file_path, e)
 
         return results
 
@@ -118,7 +118,7 @@ class ToolRunner:
                             )
 
         except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running flake8 on {file_path}: {e}")
+            logger.error("Error running flake8 on %s: %s", file_path, e)
 
         return results
 
@@ -151,7 +151,7 @@ class ToolRunner:
                             )
 
         except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running mypy on {file_path}: {e}")
+            logger.error("Error running mypy on %s: %s", file_path, e)
 
         return results
 
@@ -189,7 +189,7 @@ class ToolRunner:
                     )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running bandit on {file_path}: {e}")
+            logger.error("Error running bandit on %s: %s", file_path, e)
 
         return results
 
@@ -225,7 +225,7 @@ class ToolRunner:
                             )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running radon on {file_path}: {e}")
+            logger.error("Error running radon on %s: %s", file_path, e)
 
         return results
 
@@ -265,7 +265,7 @@ class ToolRunner:
                             )
 
         except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running vulture on {file_path}: {e}")
+            logger.error("Error running vulture on %s: %s", file_path, e)
 
         return results
 
@@ -297,7 +297,7 @@ class ToolRunner:
                         )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running safety: {e}")
+            logger.error("Error running safety: %s", e)
 
         return results
 
@@ -340,7 +340,7 @@ class ToolRunner:
             FileNotFoundError,
             Exception,
         ) as e:
-            logger.error(f"Error running Pyrefly on {file_path}: {e}")
+            logger.error("Error running Pyrefly on %s: %s", file_path, e)
 
         return results
 
@@ -392,7 +392,7 @@ class ToolRunner:
                         )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running eslint on {file_path}: {e}")
+            logger.error("Error running eslint on %s: %s", file_path, e)
 
         return results
 
@@ -425,7 +425,7 @@ class ToolRunner:
                             )
 
         except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error(f"Error running TypeScript compiler on {file_path}: {e}")
+            logger.error("Error running TypeScript compiler on %s: %s", file_path, e)
 
         return results
 
@@ -464,6 +464,6 @@ class ToolRunner:
                     )
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error(f"Error running spotbugs on {file_path}: {e}")
+            logger.error("Error running spotbugs on %s: %s", file_path, e)
 
         return results

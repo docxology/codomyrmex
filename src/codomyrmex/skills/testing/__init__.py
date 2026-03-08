@@ -161,7 +161,7 @@ class SkillTestRunner:
             Dictionary with benchmark results (min, max, avg, total times)
         """
         skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))
-        logger.info(f"Benchmarking skill {skill_name} with {iterations} iterations")
+        logger.info("Benchmarking skill %s with %s iterations", skill_name, iterations)
 
         times = []
         errors = 0

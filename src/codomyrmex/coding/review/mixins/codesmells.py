@@ -23,7 +23,7 @@ class CodeSmellsMixin:
             code_smells.extend(self._detect_primitive_obsession())
 
         except Exception as e:
-            logger.error(f"Error detecting code smells: {e}")
+            logger.error("Error detecting code smells: %s", e)
 
         return code_smells
 
@@ -51,7 +51,7 @@ class CodeSmellsMixin:
                     )
 
         except Exception as e:
-            logger.error(f"Error detecting long methods: {e}")
+            logger.error("Error detecting long methods: %s", e)
 
         return smells
 
@@ -76,7 +76,7 @@ class CodeSmellsMixin:
                     )
 
         except Exception as e:
-            logger.error(f"Error detecting large classes: {e}")
+            logger.error("Error detecting large classes: %s", e)
 
         return smells
 

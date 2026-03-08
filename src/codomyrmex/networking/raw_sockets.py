@@ -54,7 +54,7 @@ class TCPServer:
         """Start the operation or service."""
         self.sock.bind((self.host, self.port))
         self.sock.listen(1)
-        logger.info(f"TCP server listening on {self.host}:{self.port}")
+        logger.info("TCP server listening on %s:%s", self.host, self.port)
 
     def accept(self):
         """Accept."""

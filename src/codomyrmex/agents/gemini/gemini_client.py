@@ -58,7 +58,7 @@ class GeminiClient(BaseAgent):
 
                 self.client = genai.Client(**client_kwargs)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                logger.error(f"Failed to initialize Gemini Client: {e}")
+                logger.error("Failed to initialize Gemini Client: %s", e)
                 raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
 
         self.default_model = self.get_config_value(
@@ -193,7 +193,7 @@ class GeminiClient(BaseAgent):
                 if chunk.text:
                     yield chunk.text
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Gemini streaming failed: {e}")
+            logger.error("Gemini streaming failed: %s", e)
             yield f"\n[Error: {e}]"
 
     def start_chat(
@@ -224,7 +224,7 @@ class GeminiClient(BaseAgent):
                     img = Image.open(img_path)
                     parts.append(img)
                 except (OSError, AttributeError) as e:
-                    logger.warning(f"Failed to load image: {e}")
+                    logger.warning("Failed to load image: %s", e)
         return [parts]
 
     def _build_response_from_api_result(
@@ -269,7 +269,7 @@ class GeminiClient(BaseAgent):
         try:
             return [m.model_dump() for m in self.client.models.list()]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to list models: {e}")
+            logger.error("Failed to list models: %s", e)
             raise GeminiError(f"Failed to list models: {e}") from e
 
     def get_model(self, model_name: str) -> dict[str, Any]:
@@ -278,7 +278,7 @@ class GeminiClient(BaseAgent):
         try:
             return self.client.models.get(model=model_name).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to get model {model_name}: {e}")
+            logger.error("Failed to get model %s: %s", model_name, e)
             raise GeminiError(f"Failed to get model {model_name}: {e}") from e
 
     def count_tokens(self, content: str | list[Any], model: str | None = None) -> int:
@@ -289,7 +289,7 @@ class GeminiClient(BaseAgent):
             resp = self.client.models.count_tokens(model=model_name, contents=content)
             return int(resp.total_tokens) if resp.total_tokens is not None else 0
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to count tokens: {e}")
+            logger.error("Failed to count tokens: %s", e)
             raise GeminiError(f"Failed to count tokens: {e}") from e
 
     def embed_content(
@@ -305,7 +305,7 @@ class GeminiClient(BaseAgent):
                 return [list(e.values or []) for e in resp.embeddings]
             return []
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to embed content: {e}")
+            logger.error("Failed to embed content: %s", e)
             raise GeminiError(f"Failed to embed content: {e}") from e
 
     def generate_images(
@@ -324,7 +324,7 @@ class GeminiClient(BaseAgent):
             # Bypass Pydantic internals to prevent 'KeyboardInterrupt' resolution hangs
             return [{"image_bytes": img.image_bytes} for img in result.images]
         except Exception as e:
-            logger.error(f"Failed to generate images: {e}")
+            logger.error("Failed to generate images: %s", e)
             raise GeminiError(f"Failed to generate images: {e}") from e
 
     def upscale_image(
@@ -349,7 +349,7 @@ class GeminiClient(BaseAgent):
             )
             return [img.model_dump() for img in result.images]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to upscale image: {e}")
+            logger.error("Failed to upscale image: %s", e)
             raise GeminiError(f"Failed to upscale image: {e}") from e
 
     def edit_image(
@@ -381,7 +381,7 @@ class GeminiClient(BaseAgent):
             )
             return [img.model_dump() for img in result.images]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to edit image: {e}")
+            logger.error("Failed to edit image: %s", e)
             raise GeminiError(f"Failed to edit image: {e}") from e
 
     def generate_videos(
@@ -428,12 +428,12 @@ class GeminiClient(BaseAgent):
                         req = urllib.request.urlopen(v_uri)
                         outputs.append({"video_bytes": req.read()})
                     except Exception as e:
-                        logger.warning(f"Failed to download video URI {v_uri}: {e}")
+                        logger.warning("Failed to download video URI %s: %s", v_uri, e)
                         outputs.append({"uri": v_uri})
 
             return outputs
         except Exception as e:
-            logger.error(f"Failed to generate videos: {e}")
+            logger.error("Failed to generate videos: %s", e)
             raise GeminiError(f"Failed to generate videos: {e}") from e
 
     def upload_file(
@@ -446,7 +446,7 @@ class GeminiClient(BaseAgent):
             file_ref = self.client.files.upload(file=file_path, config=config)
             return file_ref.model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to upload file: {e}")
+            logger.error("Failed to upload file: %s", e)
             raise GeminiError(f"Failed to upload file: {e}") from e
 
     def list_files(self) -> list[dict[str, Any]]:
@@ -455,7 +455,7 @@ class GeminiClient(BaseAgent):
         try:
             return [f.model_dump() for f in self.client.files.list()]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to list files: {e}")
+            logger.error("Failed to list files: %s", e)
             raise GeminiError(f"Failed to list files: {e}") from e
 
     def get_file(self, file_name: str) -> dict[str, Any]:
@@ -464,7 +464,7 @@ class GeminiClient(BaseAgent):
         try:
             return self.client.files.get(name=file_name).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to get file {file_name}: {e}")
+            logger.error("Failed to get file %s: %s", file_name, e)
             raise GeminiError(f"Failed to get file {file_name}: {e}") from e
 
     def delete_file(self, file_name: str) -> bool:
@@ -474,7 +474,7 @@ class GeminiClient(BaseAgent):
             self.client.files.delete(name=file_name)
             return True
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to delete file {file_name}: {e}")
+            logger.error("Failed to delete file %s: %s", file_name, e)
             raise GeminiError(f"Failed to delete file {file_name}: {e}") from e
 
     def create_cached_content(
@@ -494,7 +494,7 @@ class GeminiClient(BaseAgent):
                 model=model, config=config
             ).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to create cached content: {e}")
+            logger.error("Failed to create cached content: %s", e)
             raise GeminiError(f"Failed to create cached content: {e}") from e
 
     def list_cached_contents(self) -> list[dict[str, Any]]:
@@ -503,7 +503,7 @@ class GeminiClient(BaseAgent):
         try:
             return [c.model_dump() for c in self.client.caches.list()]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to list cached contents: {e}")
+            logger.error("Failed to list cached contents: %s", e)
             raise GeminiError(f"Failed to list cached contents: {e}") from e
 
     def get_cached_content(self, name: str) -> dict[str, Any]:
@@ -512,7 +512,7 @@ class GeminiClient(BaseAgent):
         try:
             return self.client.caches.get(name=name).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to get cached content {name}: {e}")
+            logger.error("Failed to get cached content %s: %s", name, e)
             raise GeminiError(f"Failed to get cached content {name}: {e}") from e
 
     def delete_cached_content(self, name: str) -> bool:
@@ -522,7 +522,7 @@ class GeminiClient(BaseAgent):
             self.client.caches.delete(name=name)
             return True
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to delete cached content {name}: {e}")
+            logger.error("Failed to delete cached content %s: %s", name, e)
             raise GeminiError(f"Failed to delete cached content {name}: {e}") from e
 
     def update_cached_content(
@@ -535,7 +535,7 @@ class GeminiClient(BaseAgent):
                 name=name, config=types.UpdateCachedContentConfig(ttl=ttl)
             ).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to update cached content {name}: {e}")
+            logger.error("Failed to update cached content %s: %s", name, e)
             raise GeminiError(f"Failed to update cached content {name}: {e}") from e
 
     def create_tuned_model(
@@ -557,7 +557,7 @@ class GeminiClient(BaseAgent):
             )
             return job.model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to create tuned model: {e}")
+            logger.error("Failed to create tuned model: %s", e)
             raise GeminiError(f"Failed to create tuned model: {e}") from e
 
     def list_tuned_models(self) -> list[dict[str, Any]]:
@@ -566,7 +566,7 @@ class GeminiClient(BaseAgent):
         try:
             return [m.model_dump() for m in self.client.tunings.list()]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to list tuned models: {e}")
+            logger.error("Failed to list tuned models: %s", e)
             raise GeminiError(f"Failed to list tuned models: {e}") from e
 
     def get_tuned_model(self, name: str) -> dict[str, Any]:
@@ -575,7 +575,7 @@ class GeminiClient(BaseAgent):
         try:
             return self.client.tunings.get(name=name).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to get tuned model {name}: {e}")
+            logger.error("Failed to get tuned model %s: %s", name, e)
             raise GeminiError(f"Failed to get tuned model {name}: {e}") from e
 
     def delete_tuned_model(self, name: str) -> bool:
@@ -585,7 +585,7 @@ class GeminiClient(BaseAgent):
             self.client.tunings.delete(name=name)
             return True
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to delete tuned model {name}: {e}")
+            logger.error("Failed to delete tuned model %s: %s", name, e)
             raise GeminiError(f"Failed to delete tuned model {name}: {e}") from e
 
     def create_batch(
@@ -599,7 +599,7 @@ class GeminiClient(BaseAgent):
                 src=requests,
             ).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to create batch: {e}")
+            logger.error("Failed to create batch: %s", e)
             raise GeminiError(f"Failed to create batch: {e}") from e
 
     def get_batch(self, name: str) -> dict[str, Any]:
@@ -608,7 +608,7 @@ class GeminiClient(BaseAgent):
         try:
             return self.client.batches.get(name=name).model_dump()
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to get batch {name}: {e}")
+            logger.error("Failed to get batch %s: %s", name, e)
             raise GeminiError(f"Failed to get batch {name}: {e}") from e
 
     def list_batches(self) -> list[dict[str, Any]]:
@@ -617,7 +617,7 @@ class GeminiClient(BaseAgent):
         try:
             return [b.model_dump() for b in self.client.batches.list()]
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to list batches: {e}")
+            logger.error("Failed to list batches: %s", e)
             raise GeminiError(f"Failed to list batches: {e}") from e
 
     def delete_batch(self, name: str) -> bool:
@@ -627,5 +627,5 @@ class GeminiClient(BaseAgent):
             self.client.batches.delete(name=name)
             return True
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Failed to delete batch {name}: {e}")
+            logger.error("Failed to delete batch %s: %s", name, e)
             raise GeminiError(f"Failed to delete batch {name}: {e}") from e

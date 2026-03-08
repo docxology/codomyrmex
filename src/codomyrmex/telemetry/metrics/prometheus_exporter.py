@@ -25,7 +25,7 @@ class PrometheusExporter:
         if not self._server_started:
             start_http_server(self.port, addr=self.addr)
             self._server_started = True
-            logger.info(f"Prometheus metrics exposed on {self.addr}:{self.port}")
+            logger.info("Prometheus metrics exposed on %s:%s", self.addr, self.port)
 
 
 def create_counter(name: str, documentation: str, labelnames: tuple = ()) -> Counter:

@@ -220,7 +220,7 @@ class EditingOrchestrator:
 
         if not task.approved:
             task.result = f"Not approved after {iteration} iterations"
-            logger.warning(f"[EditLoop] Task exhausted {iteration} iterations")
+            logger.warning("[EditLoop] Task exhausted %s iterations", iteration)
 
         return task
 

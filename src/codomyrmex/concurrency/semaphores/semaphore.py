@@ -247,5 +247,5 @@ class AsyncLocalSemaphore(BaseSemaphore):
             try:
                 return asyncio.run(_acquire_with_timeout())
             except Exception as e:
-                logger.error(f"Failed to acquire semaphore synchronously: {e}")
+                logger.error("Failed to acquire semaphore synchronously: %s", e)
                 return False

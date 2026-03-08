@@ -132,7 +132,7 @@ class PatchGenerator:
             )
             return patches
         except Exception as e:
-            logger.error(f"Failed to generate patch: {e}")
+            logger.error("Failed to generate patch: %s", e)
             return []
 
     def _parse_patches(

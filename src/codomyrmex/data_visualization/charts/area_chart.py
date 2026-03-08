@@ -99,7 +99,7 @@ def create_area_chart(
     else:
         plt.close(fig)
 
-    logger.info(f"Area chart '{title}' generated successfully.")
+    logger.info("Area chart '%s' generated successfully.", title)
     return fig
 
 

@@ -72,7 +72,7 @@ class GmailProvider(EmailProvider):
         try:
             self.service = service or build("gmail", "v1", credentials=credentials)
         except Exception as e:
-            logger.error(f"Failed to initialize Gmail API service: {e}")
+            logger.error("Failed to initialize Gmail API service: %s", e)
             raise EmailAuthError(f"Failed to initialize Gmail API service: {e}") from e
 
     @classmethod
@@ -205,7 +205,7 @@ class GmailProvider(EmailProvider):
                             elif mime_type == "text/html":
                                 body_html += decoded_data
                         except Exception as e:
-                            logger.warning(f"Failed to decode part: {e}")
+                            logger.warning("Failed to decode part: %s", e)
                     if "parts" in part:
                         extract_parts(part["parts"])
 
@@ -240,7 +240,7 @@ class GmailProvider(EmailProvider):
                 labels=payload.get("labelIds", []),
             )
         except Exception as e:
-            logger.error(f"Failed to parse Gmail message data: {e}")
+            logger.error("Failed to parse Gmail message data: %s", e)
             raise InvalidMessageError(f"Failed to parse Gmail message data: {e}") from e
 
     def _create_raw_message(self, draft: EmailDraft) -> dict:
@@ -281,7 +281,7 @@ class GmailProvider(EmailProvider):
                 full_messages.append(self.get_message(msg_meta["id"], user_id))
             return full_messages
         except HttpError as e:
-            logger.error(f"Failed to list Gmail messages: {e}")
+            logger.error("Failed to list Gmail messages: %s", e)
             raise EmailAPIError(f"Failed to list messages: {e}") from e
 
     def get_message(self, message_id: str, user_id: str = "me") -> EmailMessage:
@@ -299,7 +299,7 @@ class GmailProvider(EmailProvider):
                 raise MessageNotFoundError(
                     f"Message with ID {message_id} not found."
                 ) from e
-            logger.error(f"Failed to fetch Gmail message {message_id}: {e}")
+            logger.error("Failed to fetch Gmail message %s: %s", message_id, e)
             raise EmailAPIError(f"Failed to fetch message: {e}") from e
 
     def send_message(self, draft: EmailDraft, user_id: str = "me") -> EmailMessage:
@@ -314,7 +314,7 @@ class GmailProvider(EmailProvider):
             )
             return self.get_message(sent_message["id"], user_id)
         except HttpError as e:
-            logger.error(f"Failed to send Gmail message: {e}")
+            logger.error("Failed to send Gmail message: %s", e)
             raise EmailAPIError(f"Failed to send email: {e}") from e
 
     def create_draft(self, draft: EmailDraft, user_id: str = "me") -> str:
@@ -329,7 +329,7 @@ class GmailProvider(EmailProvider):
             )
             return created_draft["id"]
         except HttpError as e:
-            logger.error(f"Failed to create Gmail draft: {e}")
+            logger.error("Failed to create Gmail draft: %s", e)
             raise EmailAPIError(f"Failed to create draft: {e}") from e
 
     def delete_message(self, message_id: str, user_id: str = "me") -> None:
@@ -343,7 +343,7 @@ class GmailProvider(EmailProvider):
                 raise MessageNotFoundError(
                     f"Message with ID {message_id} not found for deletion."
                 ) from e
-            logger.error(f"Failed to delete Gmail message {message_id}: {e}")
+            logger.error("Failed to delete Gmail message %s: %s", message_id, e)
             raise EmailAPIError(f"Failed to delete message: {e}") from e
 
     def modify_labels(
@@ -364,7 +364,7 @@ class GmailProvider(EmailProvider):
                 raise MessageNotFoundError(
                     f"Message with ID {message_id} not found for label modification."
                 ) from e
-            logger.error(f"Failed to modify Gmail labels on {message_id}: {e}")
+            logger.error("Failed to modify Gmail labels on %s: %s", message_id, e)
             raise EmailAPIError(f"Failed to modify message labels: {e}") from e
 
     def list_labels(self, user_id: str = "me") -> list[dict[str, str]]:
@@ -373,5 +373,5 @@ class GmailProvider(EmailProvider):
             results = self.service.users().labels().list(userId=user_id).execute()
             return results.get("labels", [])
         except HttpError as e:
-            logger.error(f"Failed to list Gmail labels: {e}")
+            logger.error("Failed to list Gmail labels: %s", e)
             raise EmailAPIError(f"Failed to list labels: {e}") from e

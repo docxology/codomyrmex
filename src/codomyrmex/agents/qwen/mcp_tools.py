@@ -74,7 +74,7 @@ def qwen_chat(
             "status": "success",
         }
     except Exception as e:
-        logger.error(f"qwen_chat error: {e}")
+        logger.error("qwen_chat error: %s", e)
         return {"content": "", "error": str(e), "status": "error"}
 
 
@@ -116,7 +116,7 @@ def qwen_chat_with_tools(
         )
         return {"messages": result, "status": "success"}
     except Exception as e:
-        logger.error(f"qwen_chat_with_tools error: {e}")
+        logger.error("qwen_chat_with_tools error: %s", e)
         return {"messages": messages, "error": str(e), "status": "error"}
 
 
@@ -244,5 +244,5 @@ def qwen_code_review(
             "status": "success",
         }
     except Exception as e:
-        logger.error(f"qwen_code_review error: {e}")
+        logger.error("qwen_code_review error: %s", e)
         return {"review": "", "error": str(e), "status": "error"}

@@ -48,12 +48,12 @@ class FileSystemManager:
         """
         path = Path(path)
         if path.exists() and not overwrite:
-            logger.error(f"File already exists: {path}")
+            logger.error("File already exists: %s", path)
             raise FileExistsError(f"File exists: {path}")
 
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
-        logger.info(f"File created: {path}")
+        logger.info("File created: %s", path)
         return path
 
     def read_file(self, path: str | Path) -> str:
@@ -71,7 +71,7 @@ class FileSystemManager:
         """
         path = Path(path)
         if not path.is_file():
-            logger.error(f"File not found: {path}")
+            logger.error("File not found: %s", path)
             raise FileNotFoundError(f"File not found: {path}")
 
         return path.read_text(encoding="utf-8")
@@ -90,7 +90,7 @@ class FileSystemManager:
         path = Path(path)
         with path.open("a", encoding="utf-8") as f:
             f.write(content)
-        logger.debug(f"Appended to file: {path}")
+        logger.debug("Appended to file: %s", path)
         return path
 
     def delete(self, path: str | Path, recursive: bool = False) -> bool:
@@ -109,7 +109,7 @@ class FileSystemManager:
         """
         path = Path(path)
         if not path.exists():
-            logger.warning(f"Path does not exist, nothing to delete: {path}")
+            logger.warning("Path does not exist, nothing to delete: %s", path)
             return False
 
         if path.is_file():
@@ -120,7 +120,7 @@ class FileSystemManager:
             else:
                 path.rmdir()
 
-        logger.info(f"Deleted path: {path}")
+        logger.info("Deleted path: %s", path)
         return True
 
     def create_directory(self, path: str | Path, exist_ok: bool = True) -> Path:
@@ -136,7 +136,7 @@ class FileSystemManager:
         """
         path = Path(path)
         path.mkdir(parents=True, exist_ok=exist_ok)
-        logger.info(f"Directory created: {path}")
+        logger.info("Directory created: %s", path)
         return path
 
     def list_dir(self, path: str | Path = ".", recursive: bool = False) -> list[Path]:
@@ -236,7 +236,7 @@ class FileSystemManager:
                         hashes[h] = []
                     hashes[h].append(item)
                 except Exception as e:
-                    logger.error(f"Error hashing {item}: {e}")
+                    logger.error("Error hashing %s: %s", item, e)
 
         # Only return items with duplicates
         return {h: paths for h, paths in hashes.items() if len(paths) > 1}

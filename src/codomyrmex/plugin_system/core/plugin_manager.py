@@ -67,7 +67,7 @@ class PluginManager:
         self, plugin_name: str, config: dict[str, Any] | None = None
     ) -> LoadResult:
         """Load and initialize a plugin."""
-        logger.info(f"Loading plugin: {plugin_name}")
+        logger.info("Loading plugin: %s", plugin_name)
 
         plugin_info = self.registry.get_plugin_info(plugin_name)
         if not plugin_info:
@@ -111,7 +111,7 @@ class PluginManager:
 
     def unload_plugin(self, plugin_name: str) -> bool:
         """Unload a plugin."""
-        logger.info(f"Unloading plugin: {plugin_name}")
+        logger.info("Unloading plugin: %s", plugin_name)
         success = self.loader.unload_plugin(plugin_name)
         if success:
             self.registry.unregister(plugin_name)
@@ -205,7 +205,7 @@ class PluginManager:
     ) -> Hook:
         """Register a global hook."""
         hook = self.registry.register_global_hook(hook_name, signature, description)
-        logger.info(f"Registered global hook: {hook_name}")
+        logger.info("Registered global hook: %s", hook_name)
         return hook
 
     def emit_hook(self, hook_name: str, *args, **kwargs) -> list[Any]:

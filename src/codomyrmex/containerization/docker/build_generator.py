@@ -221,7 +221,7 @@ class BuildGenerator:
             return "\n".join(optimized_lines)
 
         except Exception as e:
-            logger.error(f"Error optimizing Dockerfile {dockerfile_path}: {e}")
+            logger.error("Error optimizing Dockerfile %s: %s", dockerfile_path, e)
             raise
 
     def generate_build_script(self, config: dict[str, Any]) -> BuildScript:

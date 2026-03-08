@@ -72,20 +72,20 @@ class AssetInventory:
             last_checked=datetime.now(),
         )
         self.assets[asset_id] = asset
-        logger.info(f"Registered asset {asset_id}: {name}")
+        logger.info("Registered asset %s: %s", asset_id, name)
         return asset
 
     def track_asset(self, asset_id: str, location: str | None = None) -> bool:
         """Update asset tracking information."""
         if asset_id not in self.assets:
-            logger.warning(f"Asset {asset_id} not found")
+            logger.warning("Asset %s not found", asset_id)
             return False
 
         asset = self.assets[asset_id]
         if location:
             asset.location = location
         asset.last_checked = datetime.now()
-        logger.debug(f"Tracked asset {asset_id} at {asset.location}")
+        logger.debug("Tracked asset %s at %s", asset_id, asset.location)
         return True
 
     def get_asset_status(self, asset_id: str) -> PhysicalAsset | None:
@@ -95,13 +95,13 @@ class AssetInventory:
     def update_status(self, asset_id: str, status: str) -> bool:
         """Update asset status and last_checked timestamp."""
         if asset_id not in self.assets:
-            logger.warning(f"Asset {asset_id} not found for status update")
+            logger.warning("Asset %s not found for status update", asset_id)
             return False
 
         asset = self.assets[asset_id]
         asset.status = status
         asset.last_checked = datetime.now()
-        logger.info(f"Updated asset {asset_id} status to '{status}'")
+        logger.info("Updated asset %s status to '%s'", asset_id, status)
         return True
 
     def list_assets(
@@ -121,12 +121,12 @@ class AssetInventory:
     def decommission_asset(self, asset_id: str) -> bool:
         """Decommission an asset by setting its status to 'decommissioned'."""
         if asset_id not in self.assets:
-            logger.warning(f"Asset {asset_id} not found for decommission")
+            logger.warning("Asset %s not found for decommission", asset_id)
             return False
 
         self.assets[asset_id].status = "decommissioned"
         self.assets[asset_id].last_checked = datetime.now()
-        logger.info(f"Decommissioned asset {asset_id}")
+        logger.info("Decommissioned asset %s", asset_id)
         return True
 
 

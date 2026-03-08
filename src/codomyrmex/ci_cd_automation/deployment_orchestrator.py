@@ -213,7 +213,7 @@ class DeploymentOrchestrator:
                     self.environments[env.name] = env
 
             except Exception as e:
-                logger.warning(f"Failed to load deployment config: {e}")
+                logger.warning("Failed to load deployment config: %s", e)
 
     def _initialize_clients(self):
         """Initialize Docker and Kubernetes clients."""
@@ -222,7 +222,7 @@ class DeploymentOrchestrator:
                 self.docker_client = docker.from_env()
                 logger.info("Docker client initialized")
             except Exception as e:
-                logger.warning(f"Failed to initialize Docker client: {e}")
+                logger.warning("Failed to initialize Docker client: %s", e)
 
         if kubernetes:
             try:
@@ -230,7 +230,7 @@ class DeploymentOrchestrator:
                 self.k8s_client = kubernetes.client.CoreV1Api()
                 logger.info("Kubernetes client initialized")
             except Exception as e:
-                logger.warning(f"Failed to initialize Kubernetes client: {e}")
+                logger.warning("Failed to initialize Kubernetes client: %s", e)
 
     def create_deployment(
         self,
@@ -270,7 +270,7 @@ class DeploymentOrchestrator:
         )
 
         self.deployments[name] = deployment
-        logger.info(f"Created deployment: {name} v{version} to {environment_name}")
+        logger.info("Created deployment: %s v%s to %s", name, version, environment_name)
 
         return deployment
 
@@ -294,7 +294,7 @@ class DeploymentOrchestrator:
         deployment.started_at = datetime.now(UTC)
         deployment.logs = []
 
-        logger.info(f"Starting deployment: {deployment_name}")
+        logger.info("Starting deployment: %s", deployment_name)
 
         try:
             # Execute pre-deployment hooks
@@ -316,9 +316,9 @@ class DeploymentOrchestrator:
             # Perform health checks
             if self._perform_health_checks(deployment):
                 deployment.status = DeploymentStatus.SUCCESS
-                logger.info(f"Deployment {deployment_name} completed successfully")
+                logger.info("Deployment %s completed successfully", deployment_name)
             else:
-                logger.warning(f"Health checks failed for deployment {deployment_name}")
+                logger.warning("Health checks failed for deployment %s", deployment_name)
                 if deployment.rollback_on_failure:
                     self._rollback_deployment(deployment)
                     deployment.status = DeploymentStatus.ROLLED_BACK
@@ -327,14 +327,14 @@ class DeploymentOrchestrator:
 
         except Exception as e:
             deployment.logs.append(f"Deployment failed: {e!s}")
-            logger.error(f"Deployment {deployment_name} failed: {e}")
+            logger.error("Deployment %s failed: %s", deployment_name, e)
 
             if deployment.rollback_on_failure:
                 try:
                     self._rollback_deployment(deployment)
                     deployment.status = DeploymentStatus.ROLLED_BACK
                 except Exception as rollback_error:
-                    logger.error(f"Rollback failed: {rollback_error}")
+                    logger.error("Rollback failed: %s", rollback_error)
                     deployment.status = DeploymentStatus.FAILURE
             else:
                 deployment.status = DeploymentStatus.FAILURE
@@ -367,7 +367,7 @@ class DeploymentOrchestrator:
 
     def _deploy_to_staging(self, deployment: Deployment):
         """Deploy to staging environment."""
-        logger.info(f"Deploying to staging environment: {deployment.environment.name}")
+        logger.info("Deploying to staging environment: %s", deployment.environment.name)
 
         # Use Docker Compose or similar for staging
         if os.path.exists("docker-compose.yml"):
@@ -421,14 +421,14 @@ class DeploymentOrchestrator:
                     path=extract_dir, tag=image_tag, rm=True
                 )
 
-                logger.info(f"Built Docker image: {image_tag}")
+                logger.info("Built Docker image: %s", image_tag)
 
                 # Clean up
                 if os.path.exists(extract_dir):
                     shutil.rmtree(extract_dir)
 
         except Exception as e:
-            logger.error(f"Failed to build Docker image: {e}")
+            logger.error("Failed to build Docker image: %s", e)
             raise
 
     def _run_docker_container(self, image_tag: str, environment_vars: dict[str, str]):
@@ -443,10 +443,10 @@ class DeploymentOrchestrator:
                 ports={"8000/tcp": 8000},  # Example port mapping
             )
 
-            logger.info(f"Started Docker container: {container.id}")
+            logger.info("Started Docker container: %s", container.id)
 
         except Exception as e:
-            logger.error(f"Failed to run Docker container: {e}")
+            logger.error("Failed to run Docker container: %s", e)
             raise
 
     def _run_docker_compose(self, environment_vars: dict[str, str]):
@@ -469,7 +469,7 @@ class DeploymentOrchestrator:
             logger.info("Docker Compose deployment completed")
 
         except Exception as e:
-            logger.error(f"Docker Compose deployment failed: {e}")
+            logger.error("Docker Compose deployment failed: %s", e)
             raise
 
     def _deploy_to_kubernetes(
@@ -510,7 +510,7 @@ class DeploymentOrchestrator:
                     os.unlink(temp_manifest)
 
         except Exception as e:
-            logger.error(f"Kubernetes deployment failed: {e}")
+            logger.error("Kubernetes deployment failed: %s", e)
             raise
 
     def _deploy_via_ssh(self, artifact_path: str, environment: Environment):
@@ -542,10 +542,10 @@ class DeploymentOrchestrator:
             if result.returncode != 0:
                 raise Exception(f"SSH deployment failed: {result.stderr}")
 
-            logger.info(f"SSH deployment completed to {environment.host}")
+            logger.info("SSH deployment completed to %s", environment.host)
 
         except Exception as e:
-            logger.error(f"SSH deployment failed: {e}")
+            logger.error("SSH deployment failed: %s", e)
             raise
 
     def _execute_hooks(self, deployment: Deployment, hook_type: str):
@@ -558,7 +558,7 @@ class DeploymentOrchestrator:
 
         for hook in hooks:
             try:
-                logger.info(f"Executing {hook_type} hook: {hook}")
+                logger.info("Executing %s hook: %s", hook_type, hook)
                 # Use environment variables from deployment
                 env = os.environ.copy()
                 env.update(deployment.environment.variables)
@@ -575,16 +575,16 @@ class DeploymentOrchestrator:
                 )
 
                 if result.returncode != 0:
-                    logger.warning(f"Hook failed: {hook} - {result.stderr}")
+                    logger.warning("Hook failed: %s - %s", hook, result.stderr)
                     deployment.logs.append(
                         f"Hook failed: {hook} (exit code {result.returncode})"
                     )
                 else:
                     deployment.logs.append(f"Hook executed: {hook}")
-                    logger.info(f"Hook successful: {hook}")
+                    logger.info("Hook successful: %s", hook)
 
             except Exception as e:
-                logger.error(f"Hook execution failed: {hook} - {e}")
+                logger.error("Hook execution failed: %s - %s", hook, e)
                 deployment.logs.append(f"Hook execution failed: {hook} - {e}")
 
     def _perform_health_checks(self, deployment: Deployment) -> bool:
@@ -601,25 +601,25 @@ class DeploymentOrchestrator:
                 endpoint = check.get("endpoint", "")
                 timeout = check.get("timeout", 30)
 
-                logger.info(f"Performing {check_type} health check on {endpoint}")
+                logger.info("Performing %s health check on %s", check_type, endpoint)
 
                 if check_type == "http":
                     healthy = self._check_http_health(endpoint, timeout)
                 elif check_type == "tcp":
                     healthy = self._check_tcp_health(endpoint, timeout)
                 else:
-                    logger.warning(f"Unknown health check type: {check_type}")
+                    logger.warning("Unknown health check type: %s", check_type)
                     healthy = False
 
                 if not healthy:
                     all_healthy = False
                     deployment.logs.append(f"Health check failed: {endpoint}")
-                    logger.warning(f"Health check failed: {endpoint}")
+                    logger.warning("Health check failed: %s", endpoint)
                 else:
-                    logger.info(f"Health check passed: {endpoint}")
+                    logger.info("Health check passed: %s", endpoint)
 
             except Exception as e:
-                logger.error(f"Health check error: {e}")
+                logger.error("Health check error: %s", e)
                 all_healthy = False
 
         return all_healthy
@@ -633,7 +633,7 @@ class DeploymentOrchestrator:
             response = requests.get(endpoint, timeout=timeout)
             return response.status_code >= 200 and response.status_code < 400
         except Exception as e:
-            logger.debug(f"HTTP health check failed for {endpoint}: {e}")
+            logger.debug("HTTP health check failed for %s: %s", endpoint, e)
             return False
 
     def _check_tcp_health(self, endpoint: str, timeout: int) -> bool:
@@ -644,7 +644,7 @@ class DeploymentOrchestrator:
             sock.close()
             return True
         except Exception as e:
-            logger.debug(f"TCP health check failed for {endpoint}: {e}")
+            logger.debug("TCP health check failed for %s: %s", endpoint, e)
             return False
 
     def _rollback_deployment(self, deployment: Deployment):
@@ -673,7 +673,7 @@ class DeploymentOrchestrator:
                 # We would normally trigger a new deployment with previous version
 
         except Exception as e:
-            logger.error(f"Rollback failed: {e}")
+            logger.error("Rollback failed: %s", e)
             raise
 
     def _rollback_rolling(self, deployment: Deployment):
@@ -692,7 +692,7 @@ class DeploymentOrchestrator:
                     timeout=300,
                 )
             except Exception as e:
-                logger.error(f"K8s rolling rollback failed: {e}")
+                logger.error("K8s rolling rollback failed: %s", e)
                 raise
         elif self.docker_client:
             # For Docker, we'd stop the new containers and start the old ones
@@ -733,7 +733,7 @@ class DeploymentOrchestrator:
         deployment = self.deployments[deployment_name]
         if deployment.status == DeploymentStatus.RUNNING:
             deployment.status = DeploymentStatus.CANCELLED
-            logger.info(f"Cancelled deployment: {deployment_name}")
+            logger.info("Cancelled deployment: %s", deployment_name)
             return True
 
         return False

@@ -35,10 +35,10 @@ def update_metadata(file_path: str | Path, metadata: dict[str, Any]) -> None:
         elif suffix in [".md", ".markdown"]:
             _update_markdown_metadata(file_path, metadata)
         else:
-            logger.warning(f"Metadata update not supported for format: {suffix}")
+            logger.warning("Metadata update not supported for format: %s", suffix)
 
     except Exception as e:
-        logger.error(f"Error updating metadata for {file_path}: {e}")
+        logger.error("Error updating metadata for %s: %s", file_path, e)
         raise MetadataError(f"Failed to update metadata: {e!s}") from e
 
 
@@ -101,5 +101,5 @@ def _update_markdown_metadata(file_path: Path, metadata: dict[str, Any]) -> None
             f.write(new_content)
 
     except Exception as e:
-        logger.error(f"Error updating markdown metadata: {e}")
+        logger.error("Error updating markdown metadata: %s", e)
         raise

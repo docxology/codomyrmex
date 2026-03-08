@@ -140,7 +140,7 @@ class AntigravityToolSkill(_AntigravityClientMixin):
             chain_input = merged.pop("input")
             self._apply_chain_input(merged, chain_input)
 
-        logger.info(f"Executing skill: {self.metadata.name}")
+        logger.info("Executing skill: %s", self.metadata.name)
         return self.client.invoke_tool(self.tool_name, merged)
 
     def _apply_chain_input(self, args: dict[str, Any], chain_input: Any) -> None:
@@ -170,7 +170,7 @@ class AntigravityToolSkill(_AntigravityClientMixin):
                     if not isinstance(chain_input, str)
                     else chain_input
                 )
-                logger.debug(f"Chain: mapped input to {req}")
+                logger.debug("Chain: mapped input to %s", req)
                 break
 
     def __repr__(self) -> str:

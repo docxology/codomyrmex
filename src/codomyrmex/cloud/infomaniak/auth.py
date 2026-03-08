@@ -184,10 +184,10 @@ def create_openstack_connection(
             region_name=credentials.region,
             **kwargs,
         )
-        logger.info(f"Connected to Infomaniak cloud at {credentials.auth_url}")
+        logger.info("Connected to Infomaniak cloud at %s", credentials.auth_url)
         return conn
     except Exception as e:
-        logger.error(f"Failed to connect to Infomaniak: {e}")
+        logger.error("Failed to connect to Infomaniak: %s", e)
         raise InfomaniakAuthError(f"Authentication failed: {e}") from e
 
 
@@ -227,5 +227,5 @@ def create_s3_client(
         region_name=credentials.region,
         **kwargs,
     )
-    logger.info(f"Created S3 client for {credentials.endpoint_url}")
+    logger.info("Created S3 client for %s", credentials.endpoint_url)
     return client

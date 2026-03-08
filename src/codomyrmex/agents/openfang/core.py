@@ -108,5 +108,5 @@ def get_openfang_version() -> str:
         runner = OpenFangRunner()
         result = runner.version()
         return result["stdout"].strip()
-    except Exception:
+    except Exception as _exc:
         return ""

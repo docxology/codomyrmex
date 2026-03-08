@@ -69,7 +69,7 @@ def scaffold_new_module(
 
     # Create directory
     target_path.mkdir(parents=True, exist_ok=False)
-    logger.info(f"Created module directory: {target_path}")
+    logger.info("Created module directory: %s", target_path)
 
     # Copy and customize template files
     replacements = {
@@ -84,15 +84,15 @@ def scaffold_new_module(
 
         if src_file.exists():
             _copy_and_customize(src_file, dst_file, replacements, description, author)
-            logger.debug(f"Created: {dst_file}")
+            logger.debug("Created: %s", dst_file)
         else:
-            logger.warning(f"Template file not found: {src_file}")
+            logger.warning("Template file not found: %s", src_file)
 
     # Create core module file
     core_file = target_path / f"{module_name}.py"
     _create_core_module(core_file, module_name, description)
 
-    logger.info(f"Successfully scaffolded module '{module_name}' at {target_path}")
+    logger.info("Successfully scaffolded module '%s' at %s", module_name, target_path)
     return target_path
 
 
@@ -130,7 +130,7 @@ def _copy_and_customize(
             os.unlink(temp_path)
             raise
     except OSError as e:
-        logger.error(f"Error customizing {src}: {e}")
+        logger.error("Error customizing %s: %s", src, e)
         # Fall back to simple copy
         shutil.copy2(src, dst)
 
@@ -163,7 +163,7 @@ class {class_name}:
             config: Optional configuration dictionary
         """
         self.config = config or {{}}
-        logger.info(f"{class_name} initialized")
+        logger.info("%s initialized", class_name)
 
     def process(self, data: Any) -> Any:
         """
@@ -175,7 +175,7 @@ class {class_name}:
         Returns:
             Processed data
         """
-        logger.debug(f"Processing data: {{type(data).__name__}}")
+        logger.debug("Processing data: {type(data).__name__}")
         raise NotImplementedError("scaffold.process() requires implementation by consuming module")  # ABC: intentional
 
 
@@ -203,7 +203,7 @@ def create_{module_name}(config: Optional[Dict[str, Any]] = None) -> {class_name
     except Exception as _exc:
         os.unlink(temp_path)
         raise
-    logger.debug(f"Created core module: {path}")
+    logger.debug("Created core module: %s", path)
 
 
 def list_template_files() -> list[str]:

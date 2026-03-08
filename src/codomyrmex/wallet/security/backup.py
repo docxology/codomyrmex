@@ -39,7 +39,7 @@ class BackupManager:
         self.backup_dir = backup_dir or Path.home() / ".codomyrmex" / "wallet_backups"
         self.backup_dir.mkdir(parents=True, exist_ok=True)
         self.key_manager = key_manager or KeyManager()
-        logger.info(f"BackupManager initialized with dir: {self.backup_dir}")
+        logger.info("BackupManager initialized with dir: %s", self.backup_dir)
 
     def create_backup(
         self,
@@ -83,7 +83,7 @@ class BackupManager:
         backup_file.write_text(json.dumps(backup_record, indent=2))
         backup_file.chmod(0o600)
 
-        logger.info(f"Created backup {backup_id} for user {user_id}")
+        logger.info("Created backup %s for user %s", backup_id, user_id)
         return backup_record
 
     def list_backups(self, user_id: str) -> list[dict[str, Any]]:
@@ -102,7 +102,7 @@ class BackupManager:
                 record = json.loads(backup_file.read_text())
                 backups.append(record)
             except (json.JSONDecodeError, OSError) as e:
-                logger.warning(f"Skipping corrupt backup file {backup_file}: {e}")
+                logger.warning("Skipping corrupt backup file %s: %s", backup_file, e)
 
         backups.sort(key=lambda b: b.get("timestamp", ""), reverse=True)
         return backups
@@ -154,6 +154,6 @@ class BackupManager:
         backup_file = self.backup_dir / f"backup_{user_id}_{backup_id}.json"
         if backup_file.exists():
             backup_file.unlink()
-            logger.info(f"Deleted backup {backup_id} for user {user_id}")
+            logger.info("Deleted backup %s for user %s", backup_id, user_id)
             return True
         return False

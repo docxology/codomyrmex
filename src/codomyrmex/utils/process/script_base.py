@@ -474,7 +474,7 @@ Environment Variables:
     def log_success(self, message: str) -> None:
         """Log success message."""
         if self.logger:
-            self.logger.info(f"SUCCESS: {message}")
+            self.logger.info("SUCCESS: %s", message)
         print(f"✅ {message}")
 
     def log_warning(self, message: str) -> None:

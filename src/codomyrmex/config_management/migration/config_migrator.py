@@ -186,7 +186,7 @@ class ConfigMigrator:
                 if not result.success:
                     break
             else:
-                logger.debug(f"No migration rules for {step_from} -> {step_to}")
+                logger.debug("No migration rules for %s -> %s", step_from, step_to)
 
         result.migrated_config = current_config
         result.applied_rules = applied_rules
@@ -321,7 +321,7 @@ class ConfigMigrator:
         if old_value is not None:
             self._set_nested_value(config, rule.new_path, old_value)
             self._delete_nested_value(config, rule.old_path)
-            logger.debug(f"Renamed field {rule.old_path} to {rule.new_path}")
+            logger.debug("Renamed field %s to %s", rule.old_path, rule.new_path)
         else:
             result.warnings.append(f"Field {rule.old_path} not found for renaming")
 
@@ -337,7 +337,7 @@ class ConfigMigrator:
         if old_value is not None:
             self._set_nested_value(config, rule.new_path, old_value)
             self._delete_nested_value(config, rule.old_path)
-            logger.debug(f"Moved field from {rule.old_path} to {rule.new_path}")
+            logger.debug("Moved field from %s to %s", rule.old_path, rule.new_path)
         else:
             result.warnings.append(f"Field {rule.old_path} not found for moving")
 
@@ -355,13 +355,13 @@ class ConfigMigrator:
                 try:
                     new_value = rule.transform_func(old_value)
                     self._set_nested_value(config, rule.old_path, new_value)
-                    logger.debug(f"Transformed value at {rule.old_path}")
+                    logger.debug("Transformed value at %s", rule.old_path)
                 except Exception as e:
                     result.errors.append(f"Transform function failed: {e}")
             else:
                 # Simple value replacement
                 self._set_nested_value(config, rule.old_path, rule.new_value)
-                logger.debug(f"Replaced value at {rule.old_path}")
+                logger.debug("Replaced value at %s", rule.old_path)
         else:
             result.warnings.append(
                 f"Field {rule.old_path} not found for transformation"
@@ -377,7 +377,7 @@ class ConfigMigrator:
 
         if self._get_nested_value(config, rule.new_path) is None:
             self._set_nested_value(config, rule.new_path, rule.new_value)
-            logger.debug(f"Added field {rule.new_path}")
+            logger.debug("Added field %s", rule.new_path)
         else:
             result.warnings.append(f"Field {rule.new_path} already exists, not adding")
 
@@ -391,7 +391,7 @@ class ConfigMigrator:
 
         if self._get_nested_value(config, rule.old_path) is not None:
             self._delete_nested_value(config, rule.old_path)
-            logger.debug(f"Removed field {rule.old_path}")
+            logger.debug("Removed field %s", rule.old_path)
         else:
             result.warnings.append(f"Field {rule.old_path} not found for removal")
 

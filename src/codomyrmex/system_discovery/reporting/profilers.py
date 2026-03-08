@@ -44,7 +44,7 @@ class HardwareProfiler:
                 info["total_ram_gb"] = round(psutil.virtual_memory().total / (1024**3), 2)
                 info["available_ram_gb"] = round(psutil.virtual_memory().available / (1024**3), 2)
             except Exception as e:
-                logger.debug(f"Failed to get psutil info: {e}")
+                logger.debug("Failed to get psutil info: %s", e)
         else:
             info["cpu_freq"] = None
             info["total_ram_gb"] = None
@@ -81,7 +81,7 @@ class HardwareProfiler:
                                     "driver_version": parts[2]
                                 })
             except Exception as e:
-                logger.debug(f"Failed to run nvidia-smi: {e}")
+                logger.debug("Failed to run nvidia-smi: %s", e)
 
         # Check for rocm-smi (AMD)
         rocm_smi = shutil.which("rocm-smi")
@@ -109,7 +109,7 @@ class HardwareProfiler:
                                     "model": line.split(":")[1].strip()
                                 })
             except Exception as e:
-                logger.debug(f"Failed to run system_profiler: {e}")
+                logger.debug("Failed to run system_profiler: %s", e)
 
         return gpu_info
 

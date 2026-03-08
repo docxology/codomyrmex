@@ -94,7 +94,7 @@ class ContainerRegistry:
                 self._docker_client = docker.from_env()
                 logger.info("Docker client initialized")
             except DockerException as e:
-                logger.warning(f"Failed to initialize Docker client: {e}")
+                logger.warning("Failed to initialize Docker client: %s", e)
                 self._docker_client = None
         else:
             logger.warning("Docker SDK not available")
@@ -136,7 +136,7 @@ class ContainerRegistry:
         local_name = local_image or f"{image_name}:{image_tag}"
 
         if not self.is_available():
-            logger.info(f"[SIMULATED] Push image: {full_name}")
+            logger.info("[SIMULATED] Push image: %s", full_name)
             return {
                 "status": "simulated",
                 "image": full_name,
@@ -191,7 +191,7 @@ class ContainerRegistry:
 
             duration = (datetime.now() - start_time).total_seconds()
 
-            logger.info(f"Pushed image {full_name} in {duration:.2f}s")
+            logger.info("Pushed image %s in %.2fs", full_name, duration)
 
             return {
                 "status": "success",
@@ -220,7 +220,7 @@ class ContainerRegistry:
         full_name = self._get_full_image_name(image_name, image_tag)
 
         if not self.is_available():
-            logger.info(f"[SIMULATED] Pull image: {full_name}")
+            logger.info("[SIMULATED] Pull image: %s", full_name)
             return {
                 "status": "simulated",
                 "image": full_name,
@@ -253,7 +253,7 @@ class ContainerRegistry:
                 1024 * 1024
             )
 
-            logger.info(f"Pulled image {full_name} in {duration:.2f}s")
+            logger.info("Pulled image %s in %.2fs", full_name, duration)
 
             return {
                 "status": "success",
@@ -292,7 +292,7 @@ class ContainerRegistry:
         full_name = self._get_full_image_name(image_name, image_tag)
 
         if not self.is_available():
-            logger.info(f"[SIMULATED] Build and push: {full_name}")
+            logger.info("[SIMULATED] Build and push: %s", full_name)
             return {
                 "status": "simulated",
                 "image": full_name,
@@ -321,7 +321,7 @@ class ContainerRegistry:
             )
 
             build_duration = (datetime.now() - start_time).total_seconds()
-            logger.info(f"Built image {full_name} in {build_duration:.2f}s")
+            logger.info("Built image %s in %.2fs", full_name, build_duration)
 
             # Push image
             push_result = self.push_image(image_name, image_tag, full_name)
@@ -383,7 +383,7 @@ class ContainerRegistry:
             return result
 
         except DockerException as e:
-            logger.error(f"Failed to list images: {e}")
+            logger.error("Failed to list images: %s", e)
             return []
 
     def list_registry_images(
@@ -433,11 +433,11 @@ class ContainerRegistry:
 
                 return result
 
-            logger.warning(f"Registry API returned status {response.status_code}")
+            logger.warning("Registry API returned status %s", response.status_code)
             return []
 
         except Exception as e:
-            logger.error(f"Failed to list registry images: {e}")
+            logger.error("Failed to list registry images: %s", e)
             return []
 
     def delete_image(
@@ -456,13 +456,13 @@ class ContainerRegistry:
         full_name = self._get_full_image_name(image_name, image_tag)
 
         if not self.is_available():
-            logger.info(f"[SIMULATED] Delete image: {full_name}")
+            logger.info("[SIMULATED] Delete image: %s", full_name)
             return True
 
         try:
             # Delete from local Docker
             self._docker_client.images.remove(full_name, force=True)
-            logger.info(f"Deleted local image: {full_name}")
+            logger.info("Deleted local image: %s", full_name)
 
             if not local_only and REQUESTS_AVAILABLE and self._session:
                 # Try to delete from registry (requires delete enabled on registry)
@@ -485,17 +485,17 @@ class ContainerRegistry:
                                 delete_url, timeout=30
                             )
                             if delete_response.status_code in [200, 202]:
-                                logger.info(f"Deleted image from registry: {full_name}")
+                                logger.info("Deleted image from registry: %s", full_name)
                 except Exception as e:
-                    logger.warning(f"Could not delete from registry: {e}")
+                    logger.warning("Could not delete from registry: %s", e)
 
             return True
 
         except ImageNotFound:
-            logger.warning(f"Image not found: {full_name}")
+            logger.warning("Image not found: %s", full_name)
             return False
         except DockerException as e:
-            logger.error(f"Failed to delete image: {e}")
+            logger.error("Failed to delete image: %s", e)
             return False
 
     def get_image_info(self, image_name: str, image_tag: str) -> dict[str, Any] | None:
@@ -543,7 +543,7 @@ class ContainerRegistry:
             logger.warning("Image not found in registry: %s", e)
             return None
         except DockerException as e:
-            logger.error(f"Failed to get image info: {e}")
+            logger.error("Failed to get image info: %s", e)
             return None
 
     def tag_image(self, source_image: str, target_name: str, target_tag: str) -> bool:
@@ -567,14 +567,14 @@ class ContainerRegistry:
             image = self._docker_client.images.get(source_image)
             full_target = self._get_full_image_name(target_name, target_tag)
             image.tag(full_target)
-            logger.info(f"Tagged {source_image} as {full_target}")
+            logger.info("Tagged %s as %s", source_image, full_target)
             return True
 
         except ImageNotFound:
-            logger.error(f"Source image not found: {source_image}")
+            logger.error("Source image not found: %s", source_image)
             return False
         except DockerException as e:
-            logger.error(f"Failed to tag image: {e}")
+            logger.error("Failed to tag image: %s", e)
             return False
 
     def inspect_manifest(
@@ -610,7 +610,7 @@ class ContainerRegistry:
             return None
 
         except Exception as e:
-            logger.error(f"Failed to inspect manifest: {e}")
+            logger.error("Failed to inspect manifest: %s", e)
             return None
 
 

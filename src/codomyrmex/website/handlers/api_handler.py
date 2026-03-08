@@ -635,7 +635,7 @@ class APIHandler:
                     try:
                         WebsiteServer._dispatch_orch.run(rounds=3)
                     except Exception as e:
-                        logger.error(f"Dispatch error: {e}")
+                        logger.error("Dispatch error: %s", e)
 
                 WebsiteServer._dispatch_thread = threading.Thread(
                     target=run_orch, daemon=True

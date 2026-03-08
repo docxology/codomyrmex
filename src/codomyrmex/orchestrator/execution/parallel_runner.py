@@ -109,7 +109,7 @@ class ParallelRunner:
             try:
                 self.progress_callback(script, status, details or {})
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                logger.warning(f"Progress callback error: {e}")
+                logger.warning("Progress callback error: %s", e)
 
     def run_scripts(
         self,

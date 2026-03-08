@@ -55,4 +55,4 @@ class TTLManager:
                     # Fallback or specific logic
                     pass
             except Exception as e:
-                logger.error(f"Error during cache cleanup: {e}")
+                logger.error("Error during cache cleanup: %s", e)

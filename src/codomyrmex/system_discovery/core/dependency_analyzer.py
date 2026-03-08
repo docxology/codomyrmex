@@ -51,7 +51,7 @@ class DependencyAnalyzer:
                         if line.strip() and not line.startswith("#"):
                             return line.strip()
             except Exception as e:
-                logger.debug(f"Could not read README for {module_path}: {e}")
+                logger.debug("Could not read README for %s: %s", module_path, e)
 
         # Try __init__.py docstring
         init_path = module_path / "__init__.py"
@@ -63,7 +63,7 @@ class DependencyAnalyzer:
                     if docstring:
                         return docstring
             except Exception as e:
-                logger.debug(f"Could not get docstring from {init_path}: {e}")
+                logger.debug("Could not get docstring from %s: %s", init_path, e)
 
         return "No description available"
 
@@ -85,7 +85,7 @@ class DependencyAnalyzer:
                                     ) and isinstance(node.value, ast.Constant):
                                         return node.value.value  # type: ignore
             except Exception as e:
-                logger.debug(f"Could not get version from {init_path}: {e}")
+                logger.debug("Could not get version from %s: %s", init_path, e)
 
         return "unknown"
 
@@ -108,7 +108,7 @@ class DependencyAnalyzer:
                             )
                             dependencies.append(pkg_name.strip())
             except Exception as e:
-                logger.debug(f"Could not read requirements from {req_path}: {e}")
+                logger.debug("Could not read requirements from %s: %s", req_path, e)
 
         return dependencies
 
@@ -140,7 +140,7 @@ class DependencyAnalyzer:
                     "%Y-%m-%d %H:%M:%S"
                 )
         except Exception as e:
-            logger.debug(f"Could not get last modified time for {module_path}: {e}")
+            logger.debug("Could not get last modified time for %s: %s", module_path, e)
 
         return "unknown"
 
@@ -199,11 +199,11 @@ class DependencyAnalyzer:
                                 capabilities.append(capability)
 
                 except Exception as e:
-                    logger.warning(f"Could not analyze {py_file}: {e}")
+                    logger.warning("Could not analyze %s: %s", py_file, e)
                     continue
 
         except Exception as e:
-            logger.error(f"Error in static analysis of {module_path}: {e}")
+            logger.error("Error in static analysis of %s: %s", module_path, e)
 
         return capabilities
 
@@ -251,7 +251,7 @@ class DependencyAnalyzer:
                     file_path = source_file
                     line_number = inspect.getsourcelines(obj)[1]
                 except Exception as e:
-                    logger.debug(f"Could not get details for function {name}: {e}")
+                    logger.debug("Could not get details for function %s: %s", name, e)
 
             elif inspect.isclass(obj):
                 obj_type = "class"
@@ -262,7 +262,7 @@ class DependencyAnalyzer:
                     file_path = source_file
                     line_number = inspect.getsourcelines(obj)[1]
                 except Exception as e:
-                    logger.debug(f"Could not get details for class {name}: {e}")
+                    logger.debug("Could not get details for class %s: %s", name, e)
 
             elif inspect.ismethod(obj):
                 obj_type = "method"
@@ -270,7 +270,7 @@ class DependencyAnalyzer:
                     signature = str(inspect.signature(obj))
                     docstring = inspect.getdoc(obj) or "No docstring"
                 except Exception as e:
-                    logger.debug(f"Could not get details for method {name}: {e}")
+                    logger.debug("Could not get details for method %s: %s", name, e)
 
             elif isinstance(obj, (str, int, float, bool, list, dict)):
                 obj_type = "constant"
@@ -292,5 +292,5 @@ class DependencyAnalyzer:
             )
 
         except Exception as e:
-            logger.debug(f"Error analyzing object {name}: {e}")
+            logger.debug("Error analyzing object %s: %s", name, e)
             return None

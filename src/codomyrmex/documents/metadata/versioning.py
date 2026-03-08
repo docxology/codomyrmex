@@ -47,5 +47,5 @@ def set_document_version(file_path: str | Path, version: str) -> None:
 
         update_metadata(file_path, {"version": version})
     except Exception as e:
-        logger.error(f"Error setting document version: {e}")
+        logger.error("Error setting document version: %s", e)
         raise MetadataError(f"Failed to set version: {e!s}") from e

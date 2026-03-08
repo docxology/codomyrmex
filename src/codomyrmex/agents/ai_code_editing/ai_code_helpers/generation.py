@@ -175,7 +175,7 @@ def generate_code_snippet(
         return result
 
     except (ValueError, ImportError, AttributeError) as e:
-        logger.error(f"Error generating code snippet: {e}")
+        logger.error("Error generating code snippet: %s", e)
         raise RuntimeError(f"Code generation failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
@@ -236,7 +236,7 @@ def generate_code_batch(
             )
 
         except (RuntimeError, ValueError, ImportError) as e:
-            logger.error(f"Error processing request: {e}")
+            logger.error("Error processing request: %s", e)
             return CodeGenerationResult(
                 generated_code="",
                 language=request.language,
@@ -270,7 +270,7 @@ def generate_code_batch(
                 try:
                     results_dict[idx] = future.result()
                 except Exception as e:
-                    logger.error(f"Parallel execution failed for request {idx}: {e}")
+                    logger.error("Parallel execution failed for request %s: %s", idx, e)
                     results_dict[idx] = CodeGenerationResult(
                         generated_code="",
                         language=requests[idx].language,
@@ -397,7 +397,7 @@ def generate_code_documentation(
         return result
 
     except (ValueError, ImportError, AttributeError) as e:
-        logger.error(f"Error generating documentation: {e}")
+        logger.error("Error generating documentation: %s", e)
         raise RuntimeError(f"Documentation generation failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues

@@ -46,7 +46,7 @@ class DocumentParser:
             return document
 
         except Exception as e:
-            logger.error(f"Error parsing document: {e}")
+            logger.error("Error parsing document: %s", e)
             raise DocumentParseError(f"Failed to parse document: {e!s}") from e
 
     def _parse_content(self, content: str, format: DocumentFormat) -> Any:

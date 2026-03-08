@@ -132,7 +132,7 @@ class AwarenessTrainer:
             difficulty=difficulty,
         )
         self.modules[module_id] = module
-        logger.info(f"Created training module: {title}")
+        logger.info("Created training module: %s", title)
         return module
 
     def assess_effectiveness(self, user_id: str) -> dict:

@@ -40,7 +40,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 for s in stacks
             ]
         except Exception as e:
-            logger.error(f"Failed to list stacks: {e}")
+            logger.error("Failed to list stacks: %s", e)
             return []
 
     def get_stack(self, stack_id: str) -> dict[str, Any] | None:
@@ -63,7 +63,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 }
             return None
         except Exception as e:
-            logger.error(f"Failed to get stack {stack_id}: {e}")
+            logger.error("Failed to get stack %s: %s", stack_id, e)
             return None
 
     def create_stack(
@@ -97,10 +97,10 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 disable_rollback=disable_rollback,
                 **kwargs,
             )
-            logger.info(f"Created stack: {stack.id}")
+            logger.info("Created stack: %s", stack.id)
             return {"id": stack.id, "name": name}
         except Exception as e:
-            logger.error(f"Failed to create stack {name}: {e}")
+            logger.error("Failed to create stack %s: %s", name, e)
             return None
 
     def create_stack_from_file(
@@ -116,7 +116,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 template = f.read()
             return self.create_stack(name, template, parameters, **kwargs)
         except Exception as e:
-            logger.error(f"Failed to read template {template_path}: {e}")
+            logger.error("Failed to read template %s: %s", template_path, e)
             return None
 
     def update_stack(
@@ -139,40 +139,40 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
             updates.update(kwargs)
 
             self._conn.orchestration.update_stack(stack_id, **updates)
-            logger.info(f"Updated stack: {stack_id}")
+            logger.info("Updated stack: %s", stack_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to update stack {stack_id}: {e}")
+            logger.error("Failed to update stack %s: %s", stack_id, e)
             return False
 
     def delete_stack(self, stack_id: str) -> bool:
         """Delete a stack."""
         try:
             self._conn.orchestration.delete_stack(stack_id)
-            logger.info(f"Deleted stack: {stack_id}")
+            logger.info("Deleted stack: %s", stack_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete stack {stack_id}: {e}")
+            logger.error("Failed to delete stack %s: %s", stack_id, e)
             return False
 
     def suspend_stack(self, stack_id: str) -> bool:
         """Suspend a stack."""
         try:
             self._conn.orchestration.suspend_stack(stack_id)
-            logger.info(f"Suspended stack: {stack_id}")
+            logger.info("Suspended stack: %s", stack_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to suspend stack {stack_id}: {e}")
+            logger.error("Failed to suspend stack %s: %s", stack_id, e)
             return False
 
     def resume_stack(self, stack_id: str) -> bool:
         """Resume a suspended stack."""
         try:
             self._conn.orchestration.resume_stack(stack_id)
-            logger.info(f"Resumed stack: {stack_id}")
+            logger.info("Resumed stack: %s", stack_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to resume stack {stack_id}: {e}")
+            logger.error("Failed to resume stack %s: %s", stack_id, e)
             return False
 
     # =========================================================================
@@ -194,7 +194,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 for r in resources
             ]
         except Exception as e:
-            logger.error(f"Failed to list resources for stack {stack_id}: {e}")
+            logger.error("Failed to list resources for stack %s: %s", stack_id, e)
             return []
 
     def get_stack_resource(
@@ -213,7 +213,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 }
             return None
         except Exception as e:
-            logger.error(f"Failed to get resource {resource_name}: {e}")
+            logger.error("Failed to get resource %s: %s", resource_name, e)
             return None
 
     # =========================================================================
@@ -237,7 +237,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 for e in events
             ]
         except Exception as e:
-            logger.error(f"Failed to list events for stack {stack_id}: {e}")
+            logger.error("Failed to list events for stack %s: %s", stack_id, e)
             return []
 
     # =========================================================================
@@ -267,7 +267,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 "parameters": result.get("Parameters", {}),
             }
         except Exception as e:
-            logger.error(f"Template validation failed: {e}")
+            logger.error("Template validation failed: %s", e)
             return {"valid": False, "error": str(e)}
 
     def get_stack_template(self, stack_id: str) -> str | None:
@@ -276,7 +276,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
             template = self._conn.orchestration.get_stack_template(stack_id)
             return template
         except Exception as e:
-            logger.error(f"Failed to get template for stack {stack_id}: {e}")
+            logger.error("Failed to get template for stack %s: %s", stack_id, e)
             return None
 
     # =========================================================================
@@ -294,5 +294,5 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
                 }
             return {}
         except Exception as e:
-            logger.error(f"Failed to get outputs for stack {stack_id}: {e}")
+            logger.error("Failed to get outputs for stack %s: %s", stack_id, e)
             return {}

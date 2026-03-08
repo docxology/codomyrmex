@@ -64,7 +64,7 @@ class WebSocketClient:
 
         while self._running:
             try:
-                logger.info(f"Connecting to {self.url}...")
+                logger.info("Connecting to %s...", self.url)
                 async with websockets.connect(
                     self.url, extra_headers=self.headers
                 ) as websocket:
@@ -77,14 +77,14 @@ class WebSocketClient:
                         await self._handle_message(message)
 
             except (OSError, websockets.exceptions.WebSocketException) as e:
-                logger.warning(f"WebSocket connection failed: {e}")
+                logger.warning("WebSocket connection failed: %s", e)
             except Exception as e:
-                logger.error(f"Unexpected WebSocket error: {e}")
+                logger.error("Unexpected WebSocket error: %s", e)
             finally:
                 self.connection = None
 
             if self._running:
-                logger.info(f"Reconnecting in {delay}s...")
+                logger.info("Reconnecting in %ss...", delay)
                 await asyncio.sleep(delay)
                 delay = min(delay * 1.5, self.max_reconnect_delay)
 
@@ -127,4 +127,4 @@ class WebSocketClient:
                 else:
                     handler(data)
             except Exception as e:
-                logger.error(f"Error in message handler: {e}")
+                logger.error("Error in message handler: %s", e)

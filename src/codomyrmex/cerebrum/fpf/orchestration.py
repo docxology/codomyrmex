@@ -301,7 +301,7 @@ class FPFOrchestrator:
                     "evidence": evidence,
                 }
             except Exception as e:
-                self.logger.warning(f"Inference failed for {pattern.id}: {e}")
+                self.logger.warning("Inference failed for %s: %s", pattern.id, e)
                 inference_results[pattern.id] = {"error": str(e)}
 
         self.logger.info(
@@ -497,7 +497,7 @@ class FPFOrchestrator:
                 json_path = viz_dir / "bayesian_network.json"
                 with open(json_path, "w", encoding="utf-8") as f:
                     json.dump(network_data, f, indent=2)
-                self.logger.info(f"Exported Bayesian network raw data to {json_path}")
+                self.logger.info("Exported Bayesian network raw data to %s", json_path)
             except Exception as e:
                 self.logger.warning(f"Failed to visualize network: {e}", exc_info=True)
 
@@ -561,7 +561,7 @@ class FPFOrchestrator:
                         writer.writerows(
                             case_data_rows[:20]
                         )  # Match visualization limit
-                    self.logger.info(f"Exported case similarity raw data to {csv_path}")
+                    self.logger.info("Exported case similarity raw data to %s", csv_path)
         except Exception as e:
             self.logger.warning(
                 f"Failed to visualize case similarity: {e}", exc_info=True
@@ -779,12 +779,12 @@ class FPFOrchestrator:
         json_path = self.output_dir / "comprehensive_analysis.json"
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(analysis_results, f, indent=2, default=str)
-        self.logger.info(f"Exported JSON to {json_path}")
+        self.logger.info("Exported JSON to %s", json_path)
 
         # Export markdown report
         md_path = self.output_dir / "comprehensive_analysis.md"
         self._generate_markdown_report(analysis_results, md_path)
-        self.logger.info(f"Exported markdown report to {md_path}")
+        self.logger.info("Exported markdown report to %s", md_path)
 
     def _generate_markdown_report(
         self, results: dict[str, Any], output_path: Path
@@ -933,7 +933,7 @@ class FPFOrchestrator:
             self.logger.error(f"Visualization generation failed: {e}", exc_info=True)
             # Continue even if visualization fails
 
-        self.logger.info(f"Analysis complete. Results saved to {self.output_dir}")
+        self.logger.info("Analysis complete. Results saved to %s", self.output_dir)
         return results
 
 

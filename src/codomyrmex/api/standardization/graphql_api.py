@@ -183,7 +183,7 @@ class GraphQLResolver:
         try:
             return self.resolver_func(parent, args, context)
         except Exception as e:
-            logger.error(f"Resolver error for field {self.field_name}: {e}")
+            logger.error("Resolver error for field %s: %s", self.field_name, e)
             raise
 
 
@@ -211,7 +211,7 @@ class GraphQLMutation:
         try:
             return self.resolver(input_data, context)
         except Exception as e:
-            logger.error(f"Mutation error for {self.name}: {e}")
+            logger.error("Mutation error for %s: %s", self.name, e)
             raise
 
 
@@ -264,7 +264,7 @@ class GraphQLAPI:
             self.resolvers[type_name] = {}
 
         self.resolvers[type_name][field_name] = resolver
-        logger.debug(f"Registered resolver: {type_name}.{field_name}")
+        logger.debug("Registered resolver: %s.%s", type_name, field_name)
 
     def register_mutation(self, mutation: GraphQLMutation) -> None:
         """
@@ -274,7 +274,7 @@ class GraphQLAPI:
             mutation: Mutation to register
         """
         self.mutations[mutation.name] = mutation
-        logger.debug(f"Registered mutation: {mutation.name}")
+        logger.debug("Registered mutation: %s", mutation.name)
 
     def execute_query(
         self,
@@ -315,7 +315,7 @@ class GraphQLAPI:
 
         except Exception as e:
             self.error_count += 1
-            logger.error(f"Query execution error: {e}")
+            logger.error("Query execution error: %s", e)
             return {"errors": [{"message": str(e)}]}
 
     def _parse_query(self, query: str) -> GraphQLQuery:
@@ -407,7 +407,7 @@ class GraphQLAPI:
                 try:
                     value = field.resolver(parent, {}, context)
                 except Exception as e:
-                    logger.error(f"Field resolution error for {field_name}: {e}")
+                    logger.error("Field resolution error for %s: %s", field_name, e)
                     value = None
             else:
                 # Default field resolution

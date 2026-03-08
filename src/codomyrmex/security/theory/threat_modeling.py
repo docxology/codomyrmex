@@ -80,7 +80,7 @@ class ThreatModelBuilder:
             methodology: Threat modeling methodology (STRIDE, DREAD, PASTA, etc.)
         """
         self.methodology = methodology
-        logger.info(f"ThreatModelBuilder initialized with {methodology} methodology")
+        logger.info("ThreatModelBuilder initialized with %s methodology", methodology)
 
     def create_model(
         self,

@@ -61,13 +61,13 @@ class Simulator:
         if agent.id in self.agents:
             raise ValueError(f"Agent with ID {agent.id} already exists")
         self.agents[agent.id] = agent
-        logger.debug(f"Added agent {agent.id}")
+        logger.debug("Added agent %s", agent.id)
 
     def remove_agent(self, agent_id: str) -> None:
         """Remove an agent from the simulation."""
         if agent_id in self.agents:
             del self.agents[agent_id]
-            logger.debug(f"Removed agent {agent_id}")
+            logger.debug("Removed agent %s", agent_id)
 
     @mcp_tool(name="Simulator.run", description="Run the simulation loop")
     def run(self) -> SimulationResult:
@@ -81,12 +81,12 @@ class Simulator:
                 self.step()
                 self.step_count += 1
         except Exception as e:
-            logger.error(f"Simulation failed at step {self.step_count}: {e}")
+            logger.error("Simulation failed at step %s: %s", self.step_count, e)
             raise
         finally:
             self._running = False
 
-        logger.info(f"Simulation completed after {self.step_count} steps")
+        logger.info("Simulation completed after %s steps", self.step_count)
         return self.get_results()
 
     def step(self) -> None:
@@ -101,7 +101,7 @@ class Simulator:
                 agent.record_action(action)
                 actions.append((agent.id, action))
             except Exception as e:
-                logger.error(f"Agent {agent.id} failed to act: {e}")
+                logger.error("Agent %s failed to act: %s", agent.id, e)
 
         # 2. Environment updates based on actions
         self._update_environment(actions)
@@ -112,7 +112,7 @@ class Simulator:
                 reward = self._calculate_reward(agent)
                 agent.learn(reward)
             except Exception as e:
-                logger.error(f"Agent {agent.id} failed to learn: {e}")
+                logger.error("Agent %s failed to learn: %s", agent.id, e)
 
     def _get_observation(self, agent: Agent) -> dict[str, Any]:
         """Get observation for a specific agent."""

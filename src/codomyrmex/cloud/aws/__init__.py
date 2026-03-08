@@ -26,7 +26,7 @@ class S3Client(StorageClient):
             response = self.client.list_buckets()
             return [bucket["Name"] for bucket in response.get("Buckets", [])]
         except ClientError as e:
-            logger.error(f"S3 list_buckets error: {e}")
+            logger.error("S3 list_buckets error: %s", e)
             return []
 
     def create_bucket(self, name: str, region: str | None = None) -> bool:
@@ -41,7 +41,7 @@ class S3Client(StorageClient):
                 self.client.create_bucket(Bucket=name)
             return True
         except ClientError as e:
-            logger.error(f"S3 create_bucket error: {e}")
+            logger.error("S3 create_bucket error: %s", e)
             return False
 
     def delete_bucket(self, name: str) -> bool:
@@ -50,7 +50,7 @@ class S3Client(StorageClient):
             self.client.delete_bucket(Bucket=name)
             return True
         except ClientError as e:
-            logger.error(f"S3 delete_bucket error: {e}")
+            logger.error("S3 delete_bucket error: %s", e)
             return False
 
     def bucket_exists(self, name: str) -> bool:
@@ -73,7 +73,7 @@ class S3Client(StorageClient):
             self.client.upload_file(file_path, bucket, key, ExtraArgs=extra_args)
             return True
         except ClientError as e:
-            logger.error(f"S3 upload_file error: {e}")
+            logger.error("S3 upload_file error: %s", e)
             return False
 
     def download_file(self, bucket: str, key: str, file_path: str) -> bool:
@@ -82,7 +82,7 @@ class S3Client(StorageClient):
             self.client.download_file(bucket, key, file_path)
             return True
         except ClientError as e:
-            logger.error(f"S3 download_file error: {e}")
+            logger.error("S3 download_file error: %s", e)
             return False
 
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
@@ -95,7 +95,7 @@ class S3Client(StorageClient):
             response = self.client.list_objects_v2(**kwargs)
             return [obj["Key"] for obj in response.get("Contents", [])]
         except ClientError as e:
-            logger.error(f"S3 list_objects error: {e}")
+            logger.error("S3 list_objects error: %s", e)
             return []
 
     def delete_object(self, bucket: str, key: str) -> bool:
@@ -104,7 +104,7 @@ class S3Client(StorageClient):
             self.client.delete_object(Bucket=bucket, Key=key)
             return True
         except ClientError as e:
-            logger.error(f"S3 delete_object error: {e}")
+            logger.error("S3 delete_object error: %s", e)
             return False
 
     def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
@@ -113,7 +113,7 @@ class S3Client(StorageClient):
             response = self.client.head_object(Bucket=bucket, Key=key)
             return response.get("Metadata", {})
         except ClientError as e:
-            logger.error(f"S3 get_object_metadata error: {e}")
+            logger.error("S3 get_object_metadata error: %s", e)
             return {}
 
     def generate_presigned_url(
@@ -131,7 +131,7 @@ class S3Client(StorageClient):
                 ExpiresIn=expires_in,
             )
         except ClientError as e:
-            logger.error(f"S3 generate_presigned_url error: {e}")
+            logger.error("S3 generate_presigned_url error: %s", e)
             return ""
 
     # Legacy method for backward compatibility

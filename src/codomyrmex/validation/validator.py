@@ -112,7 +112,7 @@ class Validator:
                 return self._validate_custom(data, schema)
             raise ValueError(f"Unknown validator type: {self.validator_type}")
         except Exception as e:
-            logger.error(f"Validation error: {e}")
+            logger.error("Validation error: %s", e)
             return ValidationResult(
                 is_valid=False,
                 errors=[

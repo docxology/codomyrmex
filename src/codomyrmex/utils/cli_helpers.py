@@ -404,10 +404,10 @@ def load_json_file(path: str | Path) -> dict[str, Any]:
         with open(file_path, encoding="utf-8") as f:
             return json.load(f)
     except json.JSONDecodeError as e:
-        logger.error(f"Invalid JSON in file {path}: {e}")
+        logger.error("Invalid JSON in file %s: %s", path, e)
         raise
     except Exception as e:
-        logger.error(f"Failed to read file {path}: {e}")
+        logger.error("Failed to read file %s: %s", path, e)
         raise
 
 
@@ -441,7 +441,7 @@ def save_json_file(
             json.dump(data, f, indent=indent, ensure_ascii=False)
         return output_path
     except Exception as e:
-        logger.error(f"Failed to write file {path}: {e}")
+        logger.error("Failed to write file %s: %s", path, e)
         raise
 
 
@@ -546,25 +546,25 @@ def handle_common_exceptions(
             try:
                 return func(*args, **kwargs)
             except FileNotFoundError as e:
-                logger.error(f"{operation_name}: File not found - {e}")
+                logger.error("%s: File not found - %s", operation_name, e)
                 print_error(f"{operation_name} failed: File not found", context)
                 if verbose:
                     logger.exception("Detailed error information:")
                 return False
             except PermissionError as e:
-                logger.error(f"{operation_name}: Permission denied - {e}")
+                logger.error("%s: Permission denied - %s", operation_name, e)
                 print_error(f"{operation_name} failed: Permission denied", context)
                 if verbose:
                     logger.exception("Detailed error information:")
                 return False
             except json.JSONDecodeError as e:
-                logger.error(f"{operation_name}: Invalid JSON - {e}")
+                logger.error("%s: Invalid JSON - %s", operation_name, e)
                 print_error(f"{operation_name} failed: Invalid JSON", context)
                 if verbose:
                     logger.exception("Detailed error information:")
                 return False
             except Exception as e:
-                logger.exception(f"{operation_name}: Unexpected error")
+                logger.exception("%s: Unexpected error", operation_name)
                 print_error(f"{operation_name} failed: Unexpected error", context, e)
                 if verbose:
                     logger.exception("Detailed error information:")

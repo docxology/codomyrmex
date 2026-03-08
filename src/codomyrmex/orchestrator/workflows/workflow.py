@@ -121,7 +121,7 @@ class Task:
         try:
             return self.condition(results)
         except Exception as e:
-            logger.warning(f"Condition check failed for {self.name}: {e}")
+            logger.warning("Condition check failed for %s: %s", self.name, e)
             return False
 
     def get_result(self) -> TaskResult:
@@ -196,7 +196,7 @@ class Workflow:
             try:
                 self._event_bus.publish(event)
             except (AttributeError, TypeError, RuntimeError, ValueError) as exc:
-                self.logger.warning(f"EventBus publish failed: {exc}")
+                self.logger.warning("EventBus publish failed: %s", exc)
 
     def add_task(
         self,
@@ -254,7 +254,7 @@ class Workflow:
     def cancel(self):
         """Cancel the workflow execution."""
         self._cancelled = True
-        self.logger.info(f"Workflow '{self.name}' cancellation requested")
+        self.logger.info("Workflow '%s' cancellation requested", self.name)
 
     def _emit_progress(
         self, task_name: str, status: str, details: dict[str, Any] | None = None
@@ -264,7 +264,7 @@ class Workflow:
             try:
                 self.progress_callback(task_name, status, details or {})
             except Exception as e:
-                self.logger.warning(f"Progress callback error: {e}")
+                self.logger.warning("Progress callback error: %s", e)
 
     def validate(self):
         """Validate workflow structure (check dependencies exist, check for cycles)."""
@@ -360,7 +360,7 @@ class Workflow:
                         if task.should_run(self.task_results):
                             runnable.append(task)
                         else:
-                            self.logger.info(f"Task '{name}' skipped by condition")
+                            self.logger.info("Task '%s' skipped by condition", name)
                             task.status = TaskStatus.SKIPPED
                             skipped_tasks.add(name)
                             self.task_results[name] = task.get_result()
@@ -420,7 +420,7 @@ class Workflow:
                     task.error = result
                     failed_tasks.add(task.name)
                     self.task_results[task.name] = task.get_result()
-                    self.logger.error(f"Task '{task.name}' failed: {result}")
+                    self.logger.error("Task '%s' failed: %s", task.name, result)
                     self._emit_progress(task.name, "failed", {"error": str(result)})
                     try:
                         from .observability.orchestrator_events import (

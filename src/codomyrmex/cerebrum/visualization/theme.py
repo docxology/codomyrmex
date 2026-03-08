@@ -224,7 +224,7 @@ class VisualizationTheme:
 
             logger.debug("Matplotlib theme configured")
         except Exception as e:
-            logger.warning(f"Failed to configure matplotlib theme: {e}")
+            logger.warning("Failed to configure matplotlib theme: %s", e)
 
     def apply_to_axes(self, ax) -> None:
         """Apply theme to a matplotlib axes object.

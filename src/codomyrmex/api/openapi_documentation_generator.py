@@ -224,14 +224,14 @@ class DocumentationOpenAPIGenerator:
                     yaml.dump(spec, f, default_flow_style=False)
 
             else:
-                logger.error(f"Unsupported format: {format}")
+                logger.error("Unsupported format: %s", format)
                 return False
 
-            logger.info(f"OpenAPI spec exported to {output_path}")
+            logger.info("OpenAPI spec exported to %s", output_path)
             return True
 
         except Exception as e:
-            logger.error(f"Failed to export OpenAPI spec: {e}")
+            logger.error("Failed to export OpenAPI spec: %s", e)
             return False
 
     def generate_html_docs(self, spec: dict[str, Any], output_path: str) -> bool:
@@ -251,11 +251,11 @@ class DocumentationOpenAPIGenerator:
             with open(output_path, "w") as f:
                 f.write(html_content)
 
-            logger.info(f"HTML documentation generated: {output_path}")
+            logger.info("HTML documentation generated: %s", output_path)
             return True
 
         except Exception as e:
-            logger.error(f"Failed to generate HTML docs: {e}")
+            logger.error("Failed to generate HTML docs: %s", e)
             return False
 
     def _generate_html_content(self, spec: dict[str, Any]) -> str:

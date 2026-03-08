@@ -52,7 +52,7 @@ class ReverseAuction:
             max_price=max_price,
         )
         self._auctions[auction_id] = request
-        logger.info(f"Created auction {auction_id} for persona {persona_id}")
+        logger.info("Created auction %s for persona %s", auction_id, persona_id)
         return auction_id
 
     def place_bid(
@@ -67,7 +67,7 @@ class ReverseAuction:
             return False
 
         if amount > auction.max_price:
-            logger.debug(f"Bid rejected: {amount} > {auction.max_price}")
+            logger.debug("Bid rejected: %s > %s", amount, auction.max_price)
             return False
 
         bid = Bid(provider_id=provider_id, amount=amount, details=details)
@@ -108,7 +108,7 @@ class ReverseAuction:
             return False
 
         auction.status = "CANCELLED"
-        logger.info(f"Auction {auction_id} cancelled by {requester_id}")
+        logger.info("Auction %s cancelled by %s", auction_id, requester_id)
         return True
 
     def get_history(self, persona_id: str) -> list[AuctionRequest]:

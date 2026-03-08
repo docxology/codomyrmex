@@ -10,6 +10,9 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.edge_computing.core.models import EdgeFunction, EdgeNodeStatus
+from codomyrmex.logging_monitoring import get_logger
+
+logger = get_logger(__name__)
 
 if TYPE_CHECKING:
     from codomyrmex.edge_computing.core.cluster import EdgeCluster
@@ -119,32 +122,46 @@ class DeploymentManager:
 
     # --- Strategy implementations ---
 
+    def _deploy_node(self, plan: DeploymentPlan, node_id: str, *, stop_on_error: bool) -> bool:
+        """Deploy to a single node; return False if caller should abort iteration.
+
+        When *stop_on_error* is True and an error occurs, triggers rollback and
+        signals the caller to halt by returning False.  When False, the node is
+        recorded as failed and the caller continues to the next node.
+        """
+        runtime = self._cluster.get_runtime(node_id)
+        if not runtime:
+            logger.warning("No runtime found for node %s; skipping", node_id)
+            plan.failed_nodes.append(node_id)
+            if stop_on_error and plan.rollback_on_error:
+                self.rollback(plan)
+                plan.state = DeploymentState.ROLLED_BACK
+                return False
+            return True
+        try:
+            runtime.deploy(plan.function)
+            plan.deployed_nodes.append(node_id)
+        except Exception as exc:
+            logger.warning("Deploy to node %s failed: %s", node_id, exc)
+            plan.failed_nodes.append(node_id)
+            if stop_on_error and plan.rollback_on_error:
+                self.rollback(plan)
+                plan.state = DeploymentState.ROLLED_BACK
+                return False
+        return True
+
+    def _finalise_state(self, plan: DeploymentPlan) -> None:
+        """Set terminal state based on whether any nodes failed."""
+        plan.state = (
+            DeploymentState.COMPLETED if not plan.failed_nodes else DeploymentState.FAILED
+        )
+
     def _rolling_deploy(self, plan: DeploymentPlan) -> DeploymentPlan:
         """Deploy one node at a time, stop on failure if rollback enabled."""
         for node_id in plan.target_nodes:
-            runtime = self._cluster.get_runtime(node_id)
-            if not runtime:
-                plan.failed_nodes.append(node_id)
-                if plan.rollback_on_error:
-                    self.rollback(plan)
-                    plan.state = DeploymentState.ROLLED_BACK
-                    return plan
-                continue
-            try:
-                runtime.deploy(plan.function)
-                plan.deployed_nodes.append(node_id)
-            except Exception as _exc:
-                plan.failed_nodes.append(node_id)
-                if plan.rollback_on_error:
-                    self.rollback(plan)
-                    plan.state = DeploymentState.ROLLED_BACK
-                    return plan
-
-        plan.state = (
-            DeploymentState.COMPLETED
-            if not plan.failed_nodes
-            else DeploymentState.FAILED
-        )
+            if not self._deploy_node(plan, node_id, stop_on_error=True):
+                return plan
+        self._finalise_state(plan)
         return plan
 
     def _blue_green_deploy(self, plan: DeploymentPlan) -> DeploymentPlan:
@@ -155,25 +172,13 @@ class DeploymentManager:
         all nodes at once.
         """
         for node_id in plan.target_nodes:
-            runtime = self._cluster.get_runtime(node_id)
-            if not runtime:
-                plan.failed_nodes.append(node_id)
-                continue
-            try:
-                runtime.deploy(plan.function)
-                plan.deployed_nodes.append(node_id)
-            except Exception as _exc:
-                plan.failed_nodes.append(node_id)
+            self._deploy_node(plan, node_id, stop_on_error=False)
 
         if plan.failed_nodes and plan.rollback_on_error:
             self.rollback(plan)
             plan.state = DeploymentState.ROLLED_BACK
         else:
-            plan.state = (
-                DeploymentState.COMPLETED
-                if not plan.failed_nodes
-                else DeploymentState.FAILED
-            )
+            self._finalise_state(plan)
         return plan
 
     def _canary_deploy(self, plan: DeploymentPlan) -> DeploymentPlan:
@@ -186,44 +191,17 @@ class DeploymentManager:
         canary_nodes = plan.target_nodes[:canary_count]
         remaining_nodes = plan.target_nodes[canary_count:]
 
-        # Phase 1: canary
+        # Phase 1: canary — stop immediately on failure
         for node_id in canary_nodes:
-            runtime = self._cluster.get_runtime(node_id)
-            if not runtime:
-                plan.failed_nodes.append(node_id)
-                if plan.rollback_on_error:
-                    self.rollback(plan)
-                    plan.state = DeploymentState.ROLLED_BACK
-                    return plan
-                continue
-            try:
-                runtime.deploy(plan.function)
-                plan.deployed_nodes.append(node_id)
-            except Exception as _exc:
-                plan.failed_nodes.append(node_id)
-                if plan.rollback_on_error:
-                    self.rollback(plan)
-                    plan.state = DeploymentState.ROLLED_BACK
-                    return plan
+            if not self._deploy_node(plan, node_id, stop_on_error=True):
+                return plan
 
         plan.metadata["canary_nodes"] = canary_nodes
         plan.metadata["canary_complete"] = True
 
-        # Phase 2: remaining
+        # Phase 2: remaining — continue past failures (canary already validated)
         for node_id in remaining_nodes:
-            runtime = self._cluster.get_runtime(node_id)
-            if not runtime:
-                plan.failed_nodes.append(node_id)
-                continue
-            try:
-                runtime.deploy(plan.function)
-                plan.deployed_nodes.append(node_id)
-            except Exception as _exc:
-                plan.failed_nodes.append(node_id)
+            self._deploy_node(plan, node_id, stop_on_error=False)
 
-        plan.state = (
-            DeploymentState.COMPLETED
-            if not plan.failed_nodes
-            else DeploymentState.FAILED
-        )
+        self._finalise_state(plan)
         return plan

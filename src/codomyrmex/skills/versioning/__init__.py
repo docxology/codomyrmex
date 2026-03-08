@@ -104,7 +104,7 @@ class SkillVersionManager:
             self._version_history[skill_id] = []
         if version not in self._version_history[skill_id]:
             self._version_history[skill_id].append(version)
-            logger.info(f"Registered version {version} for skill {skill_id}")
+            logger.info("Registered version %s for skill %s", version, skill_id)
 
 
 __all__ = ["SkillVersionManager", "parse_version"]

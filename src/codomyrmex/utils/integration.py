@@ -61,11 +61,11 @@ def log_performance(
             try:
                 result = func(*args, **kwargs)
                 elapsed = (time.time() - start) * 1000
-                log.debug(f"{operation}: {elapsed:.2f}ms")
+                log.debug("%s: %.2fms", operation, elapsed)
                 return result
             except Exception as e:
                 elapsed = (time.time() - start) * 1000
-                log.error(f"{operation} failed after {elapsed:.2f}ms: {e}")
+                log.error("%s failed after %.2fms: %s", operation, elapsed, e)
                 raise
 
         return wrapper
@@ -214,7 +214,7 @@ def timed_operation(name: str, logger: logging.Logger | None = None):
         yield
     finally:
         elapsed = (time.time() - start) * 1000
-        log.info(f"{name}: {elapsed:.2f}ms")
+        log.info("%s: %.2fms", name, elapsed)
 
 
 @asynccontextmanager
@@ -226,7 +226,7 @@ async def async_timed_operation(name: str, logger: logging.Logger | None = None)
         yield
     finally:
         elapsed = (time.time() - start) * 1000
-        log.info(f"{name}: {elapsed:.2f}ms")
+        log.info("%s: %.2fms", name, elapsed)
 
 
 # ============================================================================
@@ -268,7 +268,7 @@ class ModuleRegistry:
             try:
                 results.append(handler(*args, **kwargs))
             except Exception as e:
-                logger.error(f"Hook error for {event}: {e}")
+                logger.error("Hook error for %s: %s", event, e)
         return results
 
 

@@ -37,7 +37,7 @@ class Ledger:
             raise LedgerError(f"Account '{name}' already exists.")
         account = Account(name, account_type)
         self._accounts[name] = account
-        logger.info(f"Created account: {account}")
+        logger.info("Created account: %s", account)
         return account
 
     def get_account(self, name: str) -> Account:
@@ -65,7 +65,7 @@ class Ledger:
         self._apply_entry(credit_acc, transaction.amount, is_debit=False)
 
         self._transactions.append(transaction)
-        logger.info(f"Recorded transaction: {transaction}")
+        logger.info("Recorded transaction: %s", transaction)
 
     def _apply_entry(self, account: Account, amount: float, is_debit: bool) -> None:
         """Update account balance based on normal balance rules."""

@@ -141,7 +141,7 @@ class MistralVibeClient(CLIAgentBase):
                 "available": result.get("success", False),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.warning(f"Failed to get Mistral Vibe help: {e}")
+            self.logger.warning("Failed to get Mistral Vibe help: %s", e)
             return {
                 "help_text": "",
                 "exit_code": -1,

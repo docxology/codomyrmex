@@ -213,10 +213,10 @@ class ResourceManager:
         """Add a resource to management."""
         with self._lock:
             if resource.id in self.resources:
-                logger.warning(f"Resource {resource.id} already exists, overwriting")
+                logger.warning("Resource %s already exists, overwriting", resource.id)
 
             self.resources[resource.id] = resource
-            logger.info(f"Added resource: {resource.name} ({resource.type.value})")
+            logger.info("Added resource: %s (%s)", resource.name, resource.type.value)
             return True
 
     @monitor_performance("get_resource")
@@ -243,14 +243,14 @@ class ResourceManager:
         with self._lock:
             resource = self.resources.get(resource_id)
             if not resource:
-                logger.error(f"Cannot allocate: Resource {resource_id} not found")
+                logger.error("Cannot allocate: Resource %s not found", resource_id)
                 return None
 
             if resource.status not in (
                 ResourceStatus.AVAILABLE,
                 ResourceStatus.ALLOCATED,
             ):
-                logger.warning(f"Resource {resource.name} is {resource.status.value}")
+                logger.warning("Resource %s is %s", resource.name, resource.status.value)
                 return None
 
             # Check capacity
@@ -304,7 +304,7 @@ class ResourceManager:
                     break
 
             if not target_resource or not target_allocation:
-                logger.warning(f"Allocation {allocation_id} not found")
+                logger.warning("Allocation %s not found", allocation_id)
                 return False
 
             # Remove allocation
@@ -366,7 +366,7 @@ class ResourceManager:
                         cleaned_count += 1
 
         if cleaned_count > 0:
-            logger.info(f"Cleaned up {cleaned_count} expired allocations")
+            logger.info("Cleaned up %s expired allocations", cleaned_count)
 
         return cleaned_count
 

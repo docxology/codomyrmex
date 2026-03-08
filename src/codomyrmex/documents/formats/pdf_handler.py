@@ -86,7 +86,7 @@ def read_pdf(file_path: str | Path) -> PDFDocument:
                 ) from None
 
     except Exception as e:
-        logger.error(f"Error reading PDF file {file_path}: {e}")
+        logger.error("Error reading PDF file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read PDF file: {e!s}", file_path=str(file_path)
         ) from e
@@ -141,7 +141,7 @@ def write_pdf(
                 y -= 20
 
             c.save()
-            logger.debug(f"Wrote PDF to {file_path}")
+            logger.debug("Wrote PDF to %s", file_path)
 
         except ImportError:
             # Fallback to fpdf
@@ -164,7 +164,7 @@ def write_pdf(
                     pdf.cell(0, 10, txt=line, ln=1)
 
                 pdf.output(str(file_path))
-                logger.debug(f"Wrote PDF to {file_path}")
+                logger.debug("Wrote PDF to %s", file_path)
 
             except ImportError:
                 raise DocumentWriteError(
@@ -173,7 +173,7 @@ def write_pdf(
                 ) from None
 
     except Exception as e:
-        logger.error(f"Error writing PDF file {file_path}: {e}")
+        logger.error("Error writing PDF file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write PDF file: {e!s}", file_path=str(file_path)
         ) from e

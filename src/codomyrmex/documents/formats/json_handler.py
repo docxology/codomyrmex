@@ -60,10 +60,10 @@ def read_json(
         return data
 
     except json.JSONDecodeError as e:
-        logger.error(f"Invalid JSON in file {file_path}: {e}")
+        logger.error("Invalid JSON in file %s: %s", file_path, e)
         raise DocumentReadError(f"Invalid JSON: {e!s}", file_path=str(file_path)) from e
     except Exception as e:
-        logger.error(f"Error reading JSON file {file_path}: {e}")
+        logger.error("Error reading JSON file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read JSON file: {e!s}", file_path=str(file_path)
         ) from e
@@ -96,9 +96,9 @@ def write_json(
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding=encoding) as f:
             json.dump(data, f, indent=indent, ensure_ascii=ensure_ascii)
-        logger.debug(f"Wrote JSON to {file_path}")
+        logger.debug("Wrote JSON to %s", file_path)
     except Exception as e:
-        logger.error(f"Error writing JSON file {file_path}: {e}")
+        logger.error("Error writing JSON file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write JSON file: {e!s}", file_path=str(file_path)
         ) from e

@@ -103,7 +103,7 @@ class RelayEndpoint:
     def client(self) -> Any:
         """Lazy-init the LLM client via :func:`get_llm_client` if needed."""
         if self._llm_client is None:
-            logger.info(f"Auto-detecting LLM client for identity={self.identity!r}")
+            logger.info("Auto-detecting LLM client for identity=%r", self.identity)
             self._llm_client = get_llm_client(self.identity)
         return self._llm_client
 
@@ -147,7 +147,7 @@ class RelayEndpoint:
             self._thread.join(timeout=self.poll_interval * 2)
             self._thread = None
         self.relay.post_system(f"{self.identity} left the channel")
-        logger.info(f"RelayEndpoint stopped: {self.identity}")
+        logger.info("RelayEndpoint stopped: %s", self.identity)
 
     # ── Callbacks ─────────────────────────────────────────────────
 
@@ -167,7 +167,7 @@ class RelayEndpoint:
             try:
                 return self._scheduler.send(message, **metadata)
             except Exception as exc:
-                logger.error(f"Scheduler send failed, falling back to direct: {exc}")
+                logger.error("Scheduler send failed, falling back to direct: %s", exc)
         return self.relay.post_message(self.identity, message, metadata=metadata)
 
     # ── Polling ───────────────────────────────────────────────────
@@ -178,7 +178,7 @@ class RelayEndpoint:
             try:
                 self._poll_once()
             except Exception as exc:
-                logger.error(f"RelayEndpoint poll error: {exc}")
+                logger.error("RelayEndpoint poll error: %s", exc)
             time.sleep(self.poll_interval)
 
     def _poll_once(self) -> None:
@@ -194,7 +194,7 @@ class RelayEndpoint:
             elif msg.is_tool_request:
                 self._handle_tool_request(msg)
             elif msg.msg_type == MSG_SYSTEM:
-                logger.info(f"[system] {msg.content}")
+                logger.info("[system] %s", msg.content)
 
     # ── Message Handling ──────────────────────────────────────────
 
@@ -208,7 +208,7 @@ class RelayEndpoint:
                     self.relay.post_message(self.identity, response)
                     return
             except Exception as exc:
-                logger.error(f"Message handler error: {exc}")
+                logger.error("Message handler error: %s", exc)
         if self.auto_respond:
             self._auto_respond(msg)
 
@@ -237,7 +237,7 @@ class RelayEndpoint:
                     metadata={"error": True, "in_reply_to": msg.id},
                 )
         except Exception as exc:
-            logger.error(f"Auto-respond failed: {exc}")
+            logger.error("Auto-respond failed: %s", exc)
             self.relay.post_message(
                 self.identity,
                 f"[error] Failed to generate response: {exc}",
@@ -252,7 +252,7 @@ class RelayEndpoint:
             result = call_tool(msg.tool_name, **(msg.tool_args or {}))
             self.relay.post_tool_result(self.identity, msg.id, result)
         except Exception as exc:
-            logger.error(f"Tool request failed: {exc}")
+            logger.error("Tool request failed: %s", exc)
             self.relay.post_tool_result(
                 self.identity,
                 msg.id,

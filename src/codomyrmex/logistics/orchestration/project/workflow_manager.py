@@ -99,7 +99,7 @@ class WorkflowManager:
     def create_workflow(self, name: str, steps: list[WorkflowStep]) -> bool:
         """Create and register a new workflow."""
         if name in self.workflows:
-            logger.warning(f"Overwriting existing workflow: {name}")
+            logger.warning("Overwriting existing workflow: %s", name)
         self.workflows[name] = steps
         logger.info(f"Created workflow: {name} with {len(steps)} steps")
         return True
@@ -123,7 +123,7 @@ class WorkflowManager:
         self.executions[execution_id] = execution
         execution.status = WorkflowStatus.RUNNING
 
-        logger.info(f"Starting workflow execution: {name} ({execution_id})")
+        logger.info("Starting workflow execution: %s (%s)", name, execution_id)
 
         try:
             # Map step names to task IDs
@@ -172,7 +172,7 @@ class WorkflowManager:
             execution.status = WorkflowStatus.FAILED
             execution.error = str(e)
             execution.end_time = datetime.now(UTC)
-            logger.error(f"Workflow execution failed: {e}")
+            logger.error("Workflow execution failed: %s", e)
             return execution
 
     # ------------------------------------------------------------------
@@ -207,9 +207,9 @@ class WorkflowManager:
                     )
 
                 self.workflows[workflow_name] = steps
-                logger.info(f"Loaded workflow '{workflow_name}' from {workflow_file}")
+                logger.info("Loaded workflow '%s' from %s", workflow_name, workflow_file)
             except Exception as exc:
-                logger.warning(f"Failed to load workflow from {workflow_file}: {exc}")
+                logger.warning("Failed to load workflow from %s: %s", workflow_file, exc)
 
     # ------------------------------------------------------------------
     # DAG & dependency helpers

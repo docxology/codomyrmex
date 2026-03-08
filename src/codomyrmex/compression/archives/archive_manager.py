@@ -50,7 +50,7 @@ class ArchiveManager:
                 return True
             raise ValueError(f"Unknown format: {format}")
         except Exception as e:
-            logger.error(f"Archive creation error: {e}")
+            logger.error("Archive creation error: %s", e)
             raise CompressionError(f"Failed to create archive: {e!s}") from e
 
     def extract_archive(self, archive: Path, output: Path) -> bool:
@@ -96,5 +96,5 @@ class ArchiveManager:
                 return True
             raise ValueError(f"Unknown archive format: {archive.suffix}")
         except Exception as e:
-            logger.error(f"Archive extraction error: {e}")
+            logger.error("Archive extraction error: %s", e)
             raise CompressionError(f"Failed to extract archive: {e!s}") from e

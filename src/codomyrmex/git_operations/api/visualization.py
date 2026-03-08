@@ -58,7 +58,7 @@ def create_git_analysis_report(
     Returns:
         Dictionary with report status and file paths
     """
-    logger.info(f"Creating Git analysis report for {repository_path}")
+    logger.info("Creating Git analysis report for %s", repository_path)
 
     if not VISUALIZATION_AVAILABLE:
         logger.error("Data visualization module not available")
@@ -69,7 +69,7 @@ def create_git_analysis_report(
         return {"error": "Git not available"}
 
     if not is_git_repository(repository_path):
-        logger.error(f"Path {repository_path} is not a Git repository")
+        logger.error("Path %s is not a Git repository", repository_path)
         return {"error": "Not a Git repository"}
 
     if not report_name:
@@ -125,7 +125,7 @@ def visualize_git_branches(
     Returns:
         Dictionary with visualization status and details
     """
-    logger.debug(f"Creating Git branch visualization for {repository_path}")
+    logger.debug("Creating Git branch visualization for %s", repository_path)
 
     if not VISUALIZATION_AVAILABLE:
         return {"error": "Visualization module not available"}
@@ -196,7 +196,7 @@ def visualize_commit_activity(
     Returns:
         Dictionary with visualization status and details
     """
-    logger.debug(f"Creating commit activity visualization for {repository_path}")
+    logger.debug("Creating commit activity visualization for %s", repository_path)
 
     if not VISUALIZATION_AVAILABLE:
         return {"error": "Visualization module not available"}
@@ -250,7 +250,7 @@ def create_git_workflow_diagram(
     Returns:
         Dictionary with diagram creation status and content
     """
-    logger.debug(f"Creating Git workflow diagram: {workflow_type}")
+    logger.debug("Creating Git workflow diagram: %s", workflow_type)
 
     if not VISUALIZATION_AVAILABLE:
         return {"error": "Visualization module not available"}
@@ -358,7 +358,7 @@ def analyze_repository_structure(
     Returns:
         Dictionary with analysis results and diagram
     """
-    logger.debug(f"Analyzing repository structure for {repository_path}")
+    logger.debug("Analyzing repository structure for %s", repository_path)
 
     if not VISUALIZATION_AVAILABLE:
         return {"error": "Visualization module not available"}
@@ -406,7 +406,7 @@ def get_repository_metadata(repository_path: str) -> dict[str, Any]:
     Returns:
         Dictionary with repository metadata
     """
-    logger.debug(f"Getting repository metadata for {repository_path}")
+    logger.debug("Getting repository metadata for %s", repository_path)
 
     if not is_git_repository(repository_path):
         return {"error": "Not a Git repository"}
@@ -520,7 +520,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         repo_path = sys.argv[1]
 
-        logger.info(f"Testing Git visualization integration with: {repo_path}")
+        logger.info("Testing Git visualization integration with: %s", repo_path)
 
         # Test comprehensive report
         report_result = create_git_analysis_report(

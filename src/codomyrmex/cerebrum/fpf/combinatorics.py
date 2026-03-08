@@ -321,7 +321,7 @@ class FPFCombinatoricsAnalyzer:
                 analysis_results.get("pattern_pairs", {}), viz_dir
             )
         except Exception as e:
-            self.logger.warning(f"Failed to visualize pair similarity: {e}")
+            self.logger.warning("Failed to visualize pair similarity: %s", e)
 
         # 2. Dependency chain visualization
         try:
@@ -329,7 +329,7 @@ class FPFCombinatoricsAnalyzer:
                 analysis_results.get("dependency_chains", {}), viz_dir
             )
         except Exception as e:
-            self.logger.warning(f"Failed to visualize dependency chains: {e}")
+            self.logger.warning("Failed to visualize dependency chains: %s", e)
 
         # 3. Concept co-occurrence network
         try:
@@ -337,7 +337,7 @@ class FPFCombinatoricsAnalyzer:
                 analysis_results.get("concept_cooccurrence", {}), viz_dir
             )
         except Exception as e:
-            self.logger.warning(f"Failed to visualize concept co-occurrence: {e}")
+            self.logger.warning("Failed to visualize concept co-occurrence: %s", e)
 
         # 4. Cross-part relationship network
         try:
@@ -345,7 +345,7 @@ class FPFCombinatoricsAnalyzer:
                 analysis_results.get("cross_part_relationships", {}), viz_dir
             )
         except Exception as e:
-            self.logger.warning(f"Failed to visualize cross-part relationships: {e}")
+            self.logger.warning("Failed to visualize cross-part relationships: %s", e)
 
     def _visualize_pair_similarity(
         self, pairs_data: dict[str, Any], viz_dir: Path
@@ -451,7 +451,7 @@ class FPFCombinatoricsAnalyzer:
                         "shared_concepts": ",".join(pair.get("shared_concepts", [])),
                     }
                     writer.writerow(row)
-            self.logger.info(f"Exported pair similarity raw data to {csv_path}")
+            self.logger.info("Exported pair similarity raw data to %s", csv_path)
 
             # Export similarity matrix
             matrix_path = viz_dir / "pair_similarity_matrix.csv"
@@ -463,7 +463,7 @@ class FPFCombinatoricsAnalyzer:
                 for i, pattern_id in enumerate(pattern_ids):
                     row = [pattern_id, *similarity_matrix[i].tolist()]
                     writer.writerow(row)
-            self.logger.info(f"Exported similarity matrix to {matrix_path}")
+            self.logger.info("Exported similarity matrix to %s", matrix_path)
         except ImportError:
             self.logger.warning("matplotlib not available for visualization")
 
@@ -486,7 +486,7 @@ class FPFCombinatoricsAnalyzer:
             json_path = viz_dir / "dependency_chains.json"
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, indent=2)
-            self.logger.info(f"Exported dependency chains raw data to {json_path}")
+            self.logger.info("Exported dependency chains raw data to %s", json_path)
 
             if not chains:
                 self.logger.info("No dependency chains to visualize")
@@ -907,7 +907,7 @@ class FPFCombinatoricsAnalyzer:
         output_path = self.output_dir / "combinatorics_analysis.json"
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)
-        self.logger.info(f"Exported analysis to {output_path}")
+        self.logger.info("Exported analysis to %s", output_path)
 
         # Generate visualizations
         self.generate_all_visualizations(results)

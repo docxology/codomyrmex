@@ -69,14 +69,14 @@ class ObjectRegistry:
                 )
             )
 
-            logger.info(f"Registered physical object: {obj.id}")
+            logger.info("Registered physical object: %s", obj.id)
 
     def unregister_object(self, object_id: str) -> PhysicalObject | None:
         """Unregister a physical object."""
         if object_id in self.objects:
             obj = self.objects.pop(object_id)
             self._remove_from_location_index(obj)
-            logger.info(f"Unregistered physical object: {object_id}")
+            logger.info("Unregistered physical object: %s", object_id)
             return obj
         return None
 
@@ -209,7 +209,7 @@ class ObjectRegistry:
             try:
                 handler(event)
             except Exception as e:
-                logger.error(f"Error in event handler: {e}")
+                logger.error("Error in event handler: %s", e)
 
     def add_event_handler(
         self, event_type: EventType, handler: Callable[[ObjectEvent], None]

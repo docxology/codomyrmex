@@ -118,7 +118,7 @@ class Authenticator:
             logger.warning("Authentication failed: invalid credentials")
             return None
         except Exception as e:
-            logger.error(f"Authentication error: {e}")
+            logger.error("Authentication error: %s", e)
             raise AuthenticationError(f"Authentication failed: {e!s}") from e
 
     def authorize(self, token: Token | str, resource: str, permission: str) -> bool:

@@ -221,7 +221,7 @@ class RepositoryMetadataManager:
                 logger.info(f"Loaded metadata for {len(self.metadata)} repositories")
 
             except Exception as e:
-                logger.error(f"Error loading metadata: {e}")
+                logger.error("Error loading metadata: %s", e)
                 self.metadata = {}
         else:
             logger.info("No existing metadata file found, starting fresh")
@@ -234,7 +234,7 @@ class RepositoryMetadataManager:
             if self.metadata_file.exists():
                 backup_file = f"{self.metadata_file}.backup.{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                 self.metadata_file.rename(backup_file)
-                logger.info(f"Created backup: {backup_file}")
+                logger.info("Created backup: %s", backup_file)
 
             # Prepare data for JSON serialization
             data = {}
@@ -249,7 +249,7 @@ class RepositoryMetadataManager:
             return True
 
         except Exception as e:
-            logger.error(f"Error saving metadata: {e}")
+            logger.error("Error saving metadata: %s", e)
             raise
 
     def get_repository_metadata(self, full_name: str) -> RepositoryMetadata | None:
@@ -271,7 +271,7 @@ class RepositoryMetadataManager:
             return response.json()
 
         except requests.RequestException as e:
-            logger.warning(f"Failed to fetch GitHub metadata for {owner}/{repo}: {e}")
+            logger.warning("Failed to fetch GitHub metadata for %s/%s: %s", owner, repo, e)
             return None
 
     def determine_access_level(
@@ -345,7 +345,7 @@ class RepositoryMetadataManager:
             metadata.clone_status = CloneStatus.CLONED
 
         except Exception as e:
-            logger.warning(f"Error updating local info for {metadata.full_name}: {e}")
+            logger.warning("Error updating local info for %s: %s", metadata.full_name, e)
             metadata.clone_status = CloneStatus.ERROR
 
     def create_or_update_metadata(
@@ -405,7 +405,7 @@ class RepositoryMetadataManager:
                     if lang_response.status_code == 200:
                         metadata.stats.languages = lang_response.json()
             except Exception as e:
-                logger.warning(f"Failed to fetch languages for {full_name}: {e}")
+                logger.warning("Failed to fetch languages for %s: %s", full_name, e)
 
         # Update local repository information
         if local_path:
@@ -441,10 +441,10 @@ class RepositoryMetadataManager:
                     local_path=local_path,
                 )
                 results[full_name] = True
-                logger.info(f"Updated metadata for {full_name}")
+                logger.info("Updated metadata for %s", full_name)
 
             except Exception as e:
-                logger.error(f"Failed to update metadata for {full_name}: {e}")
+                logger.error("Failed to update metadata for %s: %s", full_name, e)
                 results[full_name] = False
 
         # Save all metadata

@@ -57,10 +57,10 @@ class CrumbCleaner:
         if add:
             for key in add:
                 self._blacklist.add(key.lower())
-                logger.debug(f"Added to blacklist: {key}")
+                logger.debug("Added to blacklist: %s", key)
 
         if remove:
             for key in remove:
                 if key.lower() in self._blacklist:
                     self._blacklist.remove(key.lower())
-                    logger.debug(f"Removed from blacklist: {key}")
+                    logger.debug("Removed from blacklist: %s", key)

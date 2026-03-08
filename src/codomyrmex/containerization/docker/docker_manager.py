@@ -79,7 +79,7 @@ class DockerManager:
             logger.info("Docker client initialized successfully")
 
         except Exception as e:
-            logger.error(f"Failed to initialize Docker client: {e}")
+            logger.error("Failed to initialize Docker client: %s", e)
             self.client = None
 
     def build_image(
@@ -169,7 +169,7 @@ class DockerManager:
             return {"success": False, "error": "Docker client not available"}
 
         try:
-            logger.info(f"Pushing image: {image_name}")
+            logger.info("Pushing image: %s", image_name)
 
             # Push the image
             push_logs = self.client.images.push(image_name, auth_config=auth_config)
@@ -189,7 +189,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to push image {image_name}: {e}")
+            logger.error("Failed to push image %s: %s", image_name, e)
             return {"success": False, "error": str(e)}
 
     def run_container(
@@ -291,7 +291,7 @@ class DockerManager:
             ]
 
         except Exception as e:
-            logger.error(f"Failed to list containers: {e}")
+            logger.error("Failed to list containers: %s", e)
             return []
 
     def stop_container(self, container_id: str) -> dict[str, Any]:
@@ -318,7 +318,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to stop container {container_id}: {e}")
+            logger.error("Failed to stop container %s: %s", container_id, e)
             return {"success": False, "error": str(e)}
 
     def remove_container(
@@ -348,7 +348,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to remove container {container_id}: {e}")
+            logger.error("Failed to remove container %s: %s", container_id, e)
             return {"success": False, "error": str(e)}
 
     def get_container_logs(self, container_id: str, tail: int = 100) -> dict[str, Any]:
@@ -377,7 +377,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to get logs for container {container_id}: {e}")
+            logger.error("Failed to get logs for container %s: %s", container_id, e)
             return {"success": False, "error": str(e)}
 
     def get_container_stats(self, container_id: str) -> dict[str, Any]:
@@ -407,7 +407,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to get stats for container {container_id}: {e}")
+            logger.error("Failed to get stats for container %s: %s", container_id, e)
             return {"success": False, "error": str(e)}
 
     def create_network(self, name: str, driver: str = "bridge") -> dict[str, Any]:
@@ -436,7 +436,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to create network {name}: {e}")
+            logger.error("Failed to create network %s: %s", name, e)
             return {"success": False, "error": str(e)}
 
     def list_images(self) -> list[dict[str, Any]]:
@@ -462,7 +462,7 @@ class DockerManager:
             ]
 
         except Exception as e:
-            logger.error(f"Failed to list images: {e}")
+            logger.error("Failed to list images: %s", e)
             return []
 
     def remove_image(self, image_name: str, force: bool = False) -> dict[str, Any]:
@@ -489,7 +489,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to remove image {image_name}: {e}")
+            logger.error("Failed to remove image %s: %s", image_name, e)
             return {"success": False, "error": str(e)}
 
     def get_docker_info(self) -> dict[str, Any]:
@@ -520,7 +520,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to get Docker info: {e}")
+            logger.error("Failed to get Docker info: %s", e)
             return {"available": False, "error": str(e)}
 
     def optimize_container_image(self, base_image: str, requirements: list[str]) -> str:
@@ -637,7 +637,7 @@ class DockerManager:
             return analysis
 
         except Exception as e:
-            logger.error(f"Failed to analyze image {image_name}: {e}")
+            logger.error("Failed to analyze image %s: %s", image_name, e)
             return {"error": str(e)}
 
     def get_image_layers(self, image_name: str) -> list[dict[str, Any]]:
@@ -674,7 +674,7 @@ class DockerManager:
             return layers
 
         except Exception as e:
-            logger.error(f"Failed to get layers for image {image_name}: {e}")
+            logger.error("Failed to get layers for image %s: %s", image_name, e)
             return []
 
 

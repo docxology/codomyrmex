@@ -87,7 +87,7 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
         return converted_doc
 
     except Exception as e:
-        logger.error(f"Error converting document: {e}")
+        logger.error("Error converting document: %s", e)
         if isinstance(e, (DocumentConversionError, UnsupportedFormatError)):
             raise
         raise DocumentConversionError(f"Failed to convert document: {e!s}") from e

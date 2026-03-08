@@ -59,7 +59,7 @@ class MermaidDiagramGenerator:
         Returns:
             Mermaid diagram content as string
         """
-        logger.debug(f"Creating Git branch diagram: {title}")
+        logger.debug("Creating Git branch diagram: %s", title)
 
         mermaid_content = """gitGraph
     commit id: "Initial"
@@ -89,7 +89,7 @@ class MermaidDiagramGenerator:
         if output_path:
             self._save_mermaid_content(mermaid_content, output_path)
 
-        logger.info(f"Git branch diagram '{title}' generated successfully")
+        logger.info("Git branch diagram '%s' generated successfully", title)
         return mermaid_content
 
     def create_git_workflow_diagram(
@@ -109,7 +109,7 @@ class MermaidDiagramGenerator:
         Returns:
             Mermaid diagram content as string
         """
-        logger.debug(f"Creating Git workflow diagram: {title}")
+        logger.debug("Creating Git workflow diagram: %s", title)
 
         flowchart_content = ["flowchart TD"]
         flowchart_content.append("    Start([Start]) --> Clone[git clone]")
@@ -132,7 +132,7 @@ class MermaidDiagramGenerator:
         if output_path:
             self._save_mermaid_content(mermaid_content, output_path)
 
-        logger.info(f"Git workflow diagram '{title}' generated successfully")
+        logger.info("Git workflow diagram '%s' generated successfully", title)
         return mermaid_content
 
     def create_repository_structure_diagram(
@@ -152,7 +152,7 @@ class MermaidDiagramGenerator:
         Returns:
             Mermaid diagram content as string
         """
-        logger.debug(f"Creating repository structure diagram: {title}")
+        logger.debug("Creating repository structure diagram: %s", title)
 
         graph_content = ["graph TD"]
         graph_content.append("    Root[📁 Repository Root] --> SRC[📁 src/]")
@@ -173,7 +173,7 @@ class MermaidDiagramGenerator:
         if output_path:
             self._save_mermaid_content(mermaid_content, output_path)
 
-        logger.info(f"Repository structure diagram '{title}' generated successfully")
+        logger.info("Repository structure diagram '%s' generated successfully", title)
         return mermaid_content
 
     def create_commit_timeline_diagram(
@@ -193,7 +193,7 @@ class MermaidDiagramGenerator:
         Returns:
             Mermaid diagram content as string
         """
-        logger.debug(f"Creating commit timeline diagram: {title}")
+        logger.debug("Creating commit timeline diagram: %s", title)
 
         timeline_content = ["timeline"]
         timeline_content.append(f"    title {title}")
@@ -213,7 +213,7 @@ class MermaidDiagramGenerator:
         if output_path:
             self._save_mermaid_content(mermaid_content, output_path)
 
-        logger.info(f"Commit timeline diagram '{title}' generated successfully")
+        logger.info("Commit timeline diagram '%s' generated successfully", title)
         return mermaid_content
 
     def _build_gitgraph_from_data(
@@ -392,10 +392,10 @@ class MermaidDiagramGenerator:
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(content)
 
-            logger.info(f"Mermaid diagram saved to {output_path}")
+            logger.info("Mermaid diagram saved to %s", output_path)
             return True
         except Exception as e:
-            logger.error(f"Error saving Mermaid content to {output_path}: {e}")
+            logger.error("Error saving Mermaid content to %s: %s", output_path, e)
             return False
 
 
@@ -534,7 +534,7 @@ if __name__ == "__main__":
         output_path=str(output_dir / "commit_timeline_diagram.mmd"),
     )
 
-    logger.info(f"Mermaid diagram examples generated in {output_dir}")
+    logger.info("Mermaid diagram examples generated in %s", output_dir)
 
     # Basic logging setup if running standalone
     if not logger.hasHandlers():

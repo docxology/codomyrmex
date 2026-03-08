@@ -105,7 +105,7 @@ class RepositoryManager:
     def _load_repository_library(self) -> None:
         """Load repositories from the library file."""
         if not os.path.exists(self.library_file):
-            logger.warning(f"Repository library file not found: {self.library_file}")
+            logger.warning("Repository library file not found: %s", self.library_file)
             return
 
         try:
@@ -149,7 +149,7 @@ class RepositoryManager:
             logger.info(f"Loaded {len(self.repositories)} repositories from library")
 
         except Exception as e:
-            logger.error(f"Error loading repository library: {e}")
+            logger.error("Error loading repository library: %s", e)
 
     def list_repositories(
         self, repo_type: RepositoryType | None = None
@@ -230,14 +230,14 @@ class RepositoryManager:
         """
         repo = self.get_repository(full_name)
         if not repo:
-            logger.error(f"Repository '{full_name}' not found in library")
+            logger.error("Repository '%s' not found in library", full_name)
             return False
 
         local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         local_path.parent.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"Cloning {repo.full_name} to {local_path}")
+        logger.info("Cloning %s to %s", repo.full_name, local_path)
 
         metadata = self.metadata_manager.create_or_update_metadata(
             full_name=repo.full_name,
@@ -252,7 +252,7 @@ class RepositoryManager:
         success = clone_repository(repo.url, str(local_path))
 
         if success:
-            logger.info(f"Successfully cloned {repo.full_name}")
+            logger.info("Successfully cloned %s", repo.full_name)
 
             metadata.clone_date = datetime.now().isoformat()
             metadata.clone_status = CloneStatus.CLONED
@@ -266,7 +266,7 @@ class RepositoryManager:
             if repo.is_development_repo:
                 self._setup_development_repo(str(local_path), repo)
         else:
-            logger.error(f"Failed to clone {repo.full_name}")
+            logger.error("Failed to clone %s", repo.full_name)
             metadata.clone_status = CloneStatus.ERROR
             self.metadata_manager.update_repository_metadata(metadata)
             self.metadata_manager.save_metadata()
@@ -283,14 +283,14 @@ class RepositoryManager:
         """
         try:
             current_branch = get_current_branch(repo_path)
-            logger.info(f"Repository {repo.full_name} is on branch: {current_branch}")
+            logger.info("Repository %s is on branch: %s", repo.full_name, current_branch)
 
             # For own repositories, create a development branch
             if repo.repo_type == RepositoryType.OWN:
                 dev_branch = "develop"
                 if current_branch != dev_branch:
                     create_branch(dev_branch, repo_path)
-                    logger.info(f"Created development branch: {dev_branch}")
+                    logger.info("Created development branch: %s", dev_branch)
 
         except Exception as e:
             logger.warning(
@@ -310,28 +310,28 @@ class RepositoryManager:
         """
         repo = self.get_repository(full_name)
         if not repo:
-            logger.error(f"Repository '{full_name}' not found in library")
+            logger.error("Repository '%s' not found in library", full_name)
             return False
 
         local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         if not is_git_repository(str(local_path)):
-            logger.error(f"Repository not found locally: {local_path}")
+            logger.error("Repository not found locally: %s", local_path)
             return False
 
-        logger.info(f"Updating {repo.full_name} at {local_path}")
+        logger.info("Updating %s at %s", repo.full_name, local_path)
 
         current_branch = get_current_branch(str(local_path))
         if not current_branch:
-            logger.error(f"Could not determine current branch for {repo.full_name}")
+            logger.error("Could not determine current branch for %s", repo.full_name)
             return False
 
         success = pull_changes("origin", current_branch, str(local_path))
 
         if success:
-            logger.info(f"Successfully updated {repo.full_name}")
+            logger.info("Successfully updated %s", repo.full_name)
         else:
-            logger.error(f"Failed to update {repo.full_name}")
+            logger.error("Failed to update %s", repo.full_name)
 
         return success
 
@@ -350,7 +350,7 @@ class RepositoryManager:
         """
         repo = self.get_repository(full_name)
         if not repo:
-            logger.error(f"Repository '{full_name}' not found in library")
+            logger.error("Repository '%s' not found in library", full_name)
             return None
 
         local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
@@ -410,13 +410,13 @@ class RepositoryManager:
                     success = future.result()
                     results[repo_name] = success
                 except Exception as e:
-                    logger.error(f"Error cloning {repo_name}: {e}")
+                    logger.error("Error cloning %s: %s", repo_name, e)
                     results[repo_name] = False
 
         successful = sum(1 for success in results.values() if success)
         total = len(results)
 
-        logger.info(f"Bulk clone completed: {successful}/{total} successful")
+        logger.info("Bulk clone completed: %s/%s successful", successful, total)
 
         return results
 
@@ -450,7 +450,7 @@ class RepositoryManager:
             if is_git_repository(str(local_path)):
                 repos_to_update.append(repo)
             else:
-                logger.info(f"Skipping {repo.full_name} - not cloned locally")
+                logger.info("Skipping %s - not cloned locally", repo.full_name)
                 results[repo.full_name] = False
 
         futures = {}
@@ -470,13 +470,13 @@ class RepositoryManager:
                     success = future.result()
                     results[repo_name] = success
                 except Exception as e:
-                    logger.error(f"Error updating {repo_name}: {e}")
+                    logger.error("Error updating %s: %s", repo_name, e)
                     results[repo_name] = False
 
         successful = sum(1 for success in results.values() if success)
         total = len(repos_to_update)
 
-        logger.info(f"Bulk update completed: {successful}/{total} successful")
+        logger.info("Bulk update completed: %s/%s successful", successful, total)
 
         return results
 
@@ -499,7 +499,7 @@ class RepositoryManager:
         local_path = Path(custom_path) if custom_path else self.get_local_path(repo)
 
         # Then push
-        logger.info(f"Syncing (pushing) {repo.full_name}...")
+        logger.info("Syncing (pushing) %s...", repo.full_name)
         return push_changes(repository_path=str(local_path))
 
     def prune_repository(self, full_name: str, custom_path: str | None = None) -> bool:
@@ -522,7 +522,7 @@ class RepositoryManager:
         if not is_git_repository(str(local_path)):
             return False
 
-        logger.info(f"Pruning {repo.full_name}...")
+        logger.info("Pruning %s...", repo.full_name)
         return prune_remote("origin", str(local_path))
 
     def print_repository_summary(self) -> None:

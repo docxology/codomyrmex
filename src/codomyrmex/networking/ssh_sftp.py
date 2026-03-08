@@ -42,7 +42,7 @@ class SSHClient:
             password=self.password,
             key_filename=self.key_filename,
         )
-        logger.info(f"Connected to {self.username}@{self.hostname}:{self.port}")
+        logger.info("Connected to %s@%s:%s", self.username, self.hostname, self.port)
 
     def execute_command(self, command: str) -> tuple[int, str, str]:
         """Execute a command on the remote host."""
@@ -57,7 +57,7 @@ class SSHClient:
     def close(self) -> None:
         """Close the SSH connection."""
         self.client.close()
-        logger.info(f"Closed connection to {self.hostname}")
+        logger.info("Closed connection to %s", self.hostname)
 
     def __enter__(self):
         """Enter the context manager."""

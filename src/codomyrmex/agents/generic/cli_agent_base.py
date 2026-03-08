@@ -93,7 +93,7 @@ class CLIAgentBase(BaseAgent):
             if path:
                 self.config[f"{self.name}_command"] = path.strip()
                 self.command = path.strip()
-                self.logger.info(f"User provided command path: {path}")
+                self.logger.info("User provided command path: %s", path)
             else:
                 self.logger.warning("No command path provided during setup")
 

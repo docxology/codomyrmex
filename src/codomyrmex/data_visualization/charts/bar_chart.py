@@ -68,7 +68,7 @@ def create_bar_chart(
         plt.show()
     else:
         plt.close(fig)
-    logger.info(f"Bar chart '{title}' generated successfully.")
+    logger.info("Bar chart '%s' generated successfully.", title)
     return fig
 
 

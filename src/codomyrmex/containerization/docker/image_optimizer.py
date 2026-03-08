@@ -126,7 +126,7 @@ class ImageOptimizer:
         except docker.errors.ImageNotFound:
             raise ValueError(f"Image '{image_name}' not found") from None
         except Exception as e:
-            logger.error(f"Error analyzing image {image_name}: {e}")
+            logger.error("Error analyzing image %s: %s", image_name, e)
             raise
 
     def optimize_image(self, config: dict[str, Any]) -> dict[str, Any]:
@@ -164,7 +164,7 @@ class ImageOptimizer:
             analysis = self.analyze_image(image_name)
             return self._generate_suggestions(analysis)
         except Exception as e:
-            logger.error(f"Error generating suggestions for {image_name}: {e}")
+            logger.error("Error generating suggestions for %s: %s", image_name, e)
             return []
 
     def compare_images(self, image1: str, image2: str) -> dict[str, Any]:
@@ -211,7 +211,7 @@ class ImageOptimizer:
             return comparison
 
         except Exception as e:
-            logger.error(f"Error comparing images {image1} and {image2}: {e}")
+            logger.error("Error comparing images %s and %s: %s", image1, image2, e)
             return {"error": str(e)}
 
     def get_optimization_report(self, image_name: str) -> dict[str, Any]:
@@ -249,7 +249,7 @@ class ImageOptimizer:
             return report
 
         except Exception as e:
-            logger.error(f"Error generating optimization report for {image_name}: {e}")
+            logger.error("Error generating optimization report for %s: %s", image_name, e)
             return {"error": str(e)}
 
     def _extract_base_image(self, image_attrs: dict[str, Any]) -> str:

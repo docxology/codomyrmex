@@ -84,7 +84,7 @@ class SecretsDetector:
             try:
                 self.compiled_patterns[name] = re.compile(pattern)
             except re.error as e:
-                logger.error(f"Invalid regex for {name}: {e}")
+                logger.error("Invalid regex for %s: %s", name, e)
 
     def scan_file(self, file_path: str) -> list[SecretFinding]:
         """Scan a single file for secrets."""
@@ -100,7 +100,7 @@ class SecretsDetector:
                 findings.extend(self._scan_line(line, i, file_path))
 
         except Exception as e:
-            logger.debug(f"Error scanning file {file_path}: {e}")
+            logger.debug("Error scanning file %s: %s", file_path, e)
 
         return findings
 

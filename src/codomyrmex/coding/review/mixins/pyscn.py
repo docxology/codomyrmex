@@ -74,6 +74,6 @@ class PyscnMixin:
                 )
 
         except Exception as e:
-            logger.error(f"Error in pyscn analysis for {file_path}: {e}")
+            logger.error("Error in pyscn analysis for %s: %s", file_path, e)
 
         return results

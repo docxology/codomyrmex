@@ -169,9 +169,9 @@ class AgentRelay:
 
         if not self.messages_path.exists():
             self.messages_path.touch()
-            logger.info(f"Created relay channel: {self.channel_id}")
+            logger.info("Created relay channel: %s", self.channel_id)
 
-        logger.info(f"AgentRelay initialized: {self.channel_dir}")
+        logger.info("AgentRelay initialized: %s", self.channel_dir)
 
     # ── Writing ───────────────────────────────────────────────────
 
@@ -192,7 +192,7 @@ class AgentRelay:
             os.fsync(f.fileno())
 
         cursor = self._count_lines()
-        logger.debug(f"Appended message {msg.id} at cursor {cursor}")
+        logger.debug("Appended message %s at cursor %s", msg.id, cursor)
         return cursor
 
     def post_message(
@@ -250,7 +250,7 @@ class AgentRelay:
             metadata=metadata or {},
         )
         self._append(msg)
-        logger.info(f"[{sender}] requested tool: {tool_name}")
+        logger.info("[%s] requested tool: %s", sender, tool_name)
         return msg
 
     def post_tool_result(
@@ -289,7 +289,7 @@ class AgentRelay:
             metadata=meta,
         )
         self._append(msg)
-        logger.info(f"[{sender}] posted tool result for request {request_id}")
+        logger.info("[%s] posted tool result for request %s", sender, request_id)
         return msg
 
     def post_heartbeat(self, sender: str) -> RelayMessage:
@@ -364,7 +364,7 @@ class AgentRelay:
                 try:
                     msg = RelayMessage.from_json(line, cursor=line_num + 1)
                 except (json.JSONDecodeError, TypeError) as e:
-                    logger.warning(f"Skipping malformed line {line_num}: {e}")
+                    logger.warning("Skipping malformed line %s: %s", line_num, e)
                     continue
 
                 # Filters
@@ -444,7 +444,7 @@ class AgentRelay:
 
             time.sleep(poll_interval)
 
-        logger.warning(f"Timeout waiting for response to {request_id}")
+        logger.warning("Timeout waiting for response to %s", request_id)
         return None
 
     # ── Channel Management ────────────────────────────────────────
@@ -453,7 +453,7 @@ class AgentRelay:
         """Clear all messages in the channel."""
         with open(self.messages_path, "w", encoding="utf-8") as f:
             f.truncate(0)
-        logger.info(f"Cleared channel: {self.channel_id}")
+        logger.info("Cleared channel: %s", self.channel_id)
 
     def get_stats(self) -> dict[str, Any]:
         """Get channel statistics.

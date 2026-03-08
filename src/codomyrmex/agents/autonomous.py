@@ -96,7 +96,7 @@ class AutonomousAgent:
 
     def start(self, background: bool = True) -> None:
         """Start the agent loop."""
-        logger.info(f"[{self.identity}] Starting Autonomous Agent ({self.persona})")
+        logger.info("[%s] Starting Autonomous Agent (%s)", self.identity, self.persona)
         self.running = True
         self.endpoint.start()
 
@@ -109,7 +109,7 @@ class AutonomousAgent:
 
     def stop(self) -> None:
         """Stop the agent loop."""
-        logger.info(f"[{self.identity}] Stopping...")
+        logger.info("[%s] Stopping...", self.identity)
         self.running = False
         self.endpoint.stop()
 
@@ -163,7 +163,7 @@ class AutonomousAgent:
                 self._scheduler.record_success()
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"[{self.identity}] Generation error: {e}")
+            logger.error("[%s] Generation error: %s", self.identity, e)
             if self._scheduler is not None:
                 self._scheduler.record_error()
 

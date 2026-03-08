@@ -75,7 +75,7 @@ class Broadcaster:
             self._topic_created_at[topic] = datetime.now()
             self._message_counts[topic] = 0
             self._retained_messages[topic] = []
-            logger.info(f"Created topic: {topic}")
+            logger.info("Created topic: %s", topic)
 
     def delete_topic(self, topic: str) -> bool:
         """Delete a topic and all its subscriptions."""
@@ -89,7 +89,7 @@ class Broadcaster:
         del self._topic_created_at[topic]
         del self._message_counts[topic]
         del self._retained_messages[topic]
-        logger.info(f"Deleted topic: {topic}")
+        logger.info("Deleted topic: %s", topic)
         return True
 
     def subscribe(
@@ -128,7 +128,7 @@ class Broadcaster:
         self._subscriptions[subscription_id] = subscription
         self._topics[topic].add(subscription_id)
 
-        logger.info(f"Agent {subscriber_id} subscribed to {topic}")
+        logger.info("Agent %s subscribed to %s", subscriber_id, topic)
 
         # Replay retained messages if requested
         if replay_retained and topic in self._retained_messages:
@@ -140,7 +140,7 @@ class Broadcaster:
                         else:
                             handler(message)
                     except Exception as e:
-                        logger.error(f"Error replaying message: {e}")
+                        logger.error("Error replaying message: %s", e)
 
         return subscription_id
 
@@ -211,7 +211,7 @@ class Broadcaster:
                         f"Error delivering to {subscription.subscriber_id}: {e}"
                     )
 
-        logger.debug(f"Published to {topic}: {delivered} subscribers received")
+        logger.debug("Published to %s: %s subscribers received", topic, delivered)
         return delivered
 
     def publish_sync(self, topic: str, message: AgentMessage) -> int:

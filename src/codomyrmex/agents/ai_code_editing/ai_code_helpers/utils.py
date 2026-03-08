@@ -81,5 +81,5 @@ def setup_environment() -> bool:
         return True
 
     except (OSError, ValueError, AttributeError, RuntimeError) as e:
-        logger.error(f"Error setting up environment: {e}")
+        logger.error("Error setting up environment: %s", e)
         return False

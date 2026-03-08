@@ -55,7 +55,7 @@ def create_histogram(
         plt.show()
     else:
         plt.close(fig)
-    logger.info(f"Histogram '{title}' generated successfully.")
+    logger.info("Histogram '%s' generated successfully.", title)
     return fig
 
 

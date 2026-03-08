@@ -19,7 +19,7 @@ def check_git_availability() -> bool:
             ["git", "--version"], capture_output=True, text=True, check=True, timeout=60
         )
         version = result.stdout.strip()
-        logger.debug(f"Git is available: {version}")
+        logger.debug("Git is available: %s", version)
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         logger.error("Git is not available on this system")
@@ -63,7 +63,7 @@ def initialize_git_repository(
         initial_commit: Whether to create an initial commit with a README.md.
     """
     try:
-        logger.info(f"Initializing Git repository at: {repository_path}")
+        logger.info("Initializing Git repository at: %s", repository_path)
 
         # Ensure directory exists
         os.makedirs(repository_path, exist_ok=True)
@@ -125,12 +125,12 @@ def initialize_git_repository(
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to initialize Git repository: {e}")
+        logger.error("Failed to initialize Git repository: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error initializing repository: {e}")
+        logger.error("Unexpected error initializing repository: %s", e)
         return False
 
 
@@ -138,7 +138,7 @@ def initialize_git_repository(
 def clone_repository(url: str, destination: str, branch: str | None = None) -> bool:
     """Clone a Git repository to the specified destination."""
     try:
-        logger.info(f"Cloning repository from {url} to {destination}")
+        logger.info("Cloning repository from %s to %s", url, destination)
 
         cmd = ["git", "clone"]
         if branch:
@@ -151,12 +151,12 @@ def clone_repository(url: str, destination: str, branch: str | None = None) -> b
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to clone repository: {e}")
+        logger.error("Failed to clone repository: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error cloning repository: {e}")
+        logger.error("Unexpected error cloning repository: %s", e)
         return False
 
 

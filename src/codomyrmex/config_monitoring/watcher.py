@@ -44,7 +44,7 @@ class ConfigWatcher:
         """Start the watcher thread."""
         with self._lock:
             if self._thread and self._thread.is_alive():
-                logger.debug(f"Watcher already running for {self.file_path}")
+                logger.debug("Watcher already running for %s", self.file_path)
                 return
             self._stop_event.clear()
             self._thread = threading.Thread(
@@ -64,7 +64,7 @@ class ConfigWatcher:
             if self._thread:
                 self._thread.join(timeout=min(self.interval * 2, 5.0))
                 self._thread = None
-                logger.info(f"Stopped watching {self.file_path}")
+                logger.info("Stopped watching %s", self.file_path)
 
     def _run(self) -> None:
         """Run the polling loop to check for file changes."""
@@ -72,7 +72,7 @@ class ConfigWatcher:
             try:
                 current_mtime = self._get_mtime()
                 if current_mtime > self._last_mtime:
-                    logger.info(f"Config file changed: {self.file_path}")
+                    logger.info("Config file changed: %s", self.file_path)
                     self._last_mtime = current_mtime
                     try:
                         self.callback()
@@ -82,7 +82,7 @@ class ConfigWatcher:
                         )
                 elif current_mtime < self._last_mtime and current_mtime == 0:
                     # File disappeared
-                    logger.warning(f"Watched file disappeared: {self.file_path}")
+                    logger.warning("Watched file disappeared: %s", self.file_path)
                     self._last_mtime = 0
             except Exception as e:
                 logger.error(

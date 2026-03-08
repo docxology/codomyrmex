@@ -28,7 +28,7 @@ def push_changes(
             return False
 
     try:
-        logger.info(f"Pushing changes to {remote}/{branch}")
+        logger.info("Pushing changes to %s/%s", remote, branch)
 
         subprocess.run(
             ["git", "push", remote, branch],
@@ -43,12 +43,12 @@ def push_changes(
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to push changes: {e}")
+        logger.error("Failed to push changes: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error pushing changes: {e}")
+        logger.error("Unexpected error pushing changes: %s", e)
         return False
 
 
@@ -69,7 +69,7 @@ def pull_changes(
             return False
 
     try:
-        logger.info(f"Pulling changes from {remote}/{branch}")
+        logger.info("Pulling changes from %s/%s", remote, branch)
 
         subprocess.run(
             ["git", "pull", remote, branch],
@@ -84,12 +84,12 @@ def pull_changes(
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to pull changes: {e}")
+        logger.error("Failed to pull changes: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error pulling changes: {e}")
+        logger.error("Unexpected error pulling changes: %s", e)
         return False
 
 
@@ -105,7 +105,7 @@ def fetch_changes(
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Fetching changes from {remote}")
+        logger.info("Fetching changes from %s", remote)
 
         cmd = ["git", "fetch"]
         if prune:
@@ -123,14 +123,14 @@ def fetch_changes(
             timeout=_GIT_TIMEOUT,
         )
 
-        logger.info(f"Successfully fetched changes from {remote}")
+        logger.info("Successfully fetched changes from %s", remote)
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to fetch changes from {remote}: {e}")
+        logger.error("Failed to fetch changes from %s: %s", remote, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error fetching changes: {e}")
+        logger.error("Unexpected error fetching changes: %s", e)
         return False

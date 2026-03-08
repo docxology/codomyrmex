@@ -210,7 +210,7 @@ class OrchestrationEngine:
                 try:
                     handler(event, data)
                 except Exception as e:
-                    logger.error(f"Error in event handler for {event}: {e}")
+                    logger.error("Error in event handler for %s: %s", event, e)
 
     def create_session(self, user_id: str = "system", **kwargs) -> str:
         """Create a new orchestration session."""
@@ -230,7 +230,7 @@ class OrchestrationEngine:
         self.emit_event(
             "session_created", {"session_id": context.session_id, "user_id": user_id}
         )
-        logger.info(f"Created orchestration session: {context.session_id}")
+        logger.info("Created orchestration session: %s", context.session_id)
 
         return context.session_id
 
@@ -253,7 +253,7 @@ class OrchestrationEngine:
                 del self.active_sessions[session_id]
 
                 self.emit_event("session_closed", {"session_id": session_id})
-                logger.info(f"Closed orchestration session: {session_id}")
+                logger.info("Closed orchestration session: %s", session_id)
                 return True
         return False
 
@@ -320,7 +320,7 @@ class OrchestrationEngine:
                         self.workflow_manager.execute_workflow(workflow_name, **params)
                     )
             except Exception as e:
-                logger.error(f"Async workflow execution failed: {e}")
+                logger.error("Async workflow execution failed: %s", e)
                 return {"success": False, "error": f"Workflow execution failed: {e}"}
 
             # Convert WorkflowExecution to dict format
@@ -358,7 +358,7 @@ class OrchestrationEngine:
         except Exception as e:
             context.status = SessionStatus.FAILED
             context.completed_at = datetime.now(UTC)
-            logger.error(f"Workflow execution failed: {e}")
+            logger.error("Workflow execution failed: %s", e)
 
             return {"success": False, "error": str(e)}
         finally:
@@ -407,7 +407,7 @@ class OrchestrationEngine:
             }
 
         except Exception as e:
-            logger.error(f"Task execution failed: {e}")
+            logger.error("Task execution failed: %s", e)
             return {"success": False, "error": str(e)}
 
     @monitor_performance(function_name="execute_project_workflow")
@@ -442,7 +442,7 @@ class OrchestrationEngine:
             return result
 
         except Exception as e:
-            logger.error(f"Project workflow execution failed: {e}")
+            logger.error("Project workflow execution failed: %s", e)
             return {"success": False, "error": str(e)}
 
     def execute_complex_workflow(
@@ -499,7 +499,7 @@ class OrchestrationEngine:
             return {"success": False, "error": "Workflow execution timed out"}
 
         except Exception as e:
-            logger.error(f"Complex workflow execution failed: {e}")
+            logger.error("Complex workflow execution failed: %s", e)
             return {"success": False, "error": str(e)}
 
     def get_system_status(self) -> dict[str, Any]:
@@ -559,7 +559,7 @@ class OrchestrationEngine:
             return {"success": True, "project_created": True, "workflow_result": result}
 
         except Exception as e:
-            logger.error(f"Failed to create project and execute workflow: {e}")
+            logger.error("Failed to create project and execute workflow: %s", e)
             return {"success": False, "error": str(e)}
 
     def health_check(self) -> dict[str, Any]:

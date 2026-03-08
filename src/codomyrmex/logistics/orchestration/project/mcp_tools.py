@@ -306,7 +306,7 @@ class OrchestrationMCPTools:
                 return self._create_complex_workflow_tool(arguments)
             return MCPToolResult(status="failure", error=MCPErrorDetail(error_type="ValueError", error_message=f"Tool '{tool_name}' not found"))
         except Exception as e:
-            logger.error(f"Error executing tool {tool_name}: {e}")
+            logger.error("Error executing tool %s: %s", tool_name, e)
             return MCPToolResult(status="failure", error=MCPErrorDetail(error_type=type(e).__name__, error_message=str(e)))
 
     def _execute_workflow_tool(self, arguments: dict[str, Any]) -> MCPToolResult:

@@ -137,7 +137,7 @@ class NaturalRitualRecovery:
             user_id: The user identifier.
         """
         self._attempt_counts[user_id] = 0
-        logger.info(f"Reset attempt counter for {user_id}")
+        logger.info("Reset attempt counter for %s", user_id)
 
     def initiate_recovery(self, user_id: str, responses: list[str]) -> bool:
         """Attempt recovery by enacting the ritual.
@@ -195,6 +195,6 @@ class NaturalRitualRecovery:
         if user_id in self._rituals:
             del self._rituals[user_id]
             self._attempt_counts.pop(user_id, None)
-            logger.info(f"Unregistered ritual for {user_id}")
+            logger.info("Unregistered ritual for %s", user_id)
             return True
         return False

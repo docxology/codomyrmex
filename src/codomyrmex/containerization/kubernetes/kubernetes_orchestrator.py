@@ -93,7 +93,7 @@ class KubernetesOrchestrator:
                 logger.info("Loaded in-cluster Kubernetes configuration")
             elif self.kubeconfig_path:
                 config.load_kube_config(config_file=self.kubeconfig_path)
-                logger.info(f"Loaded Kubernetes config from: {self.kubeconfig_path}")
+                logger.info("Loaded Kubernetes config from: %s", self.kubeconfig_path)
             else:
                 # Try default locations
                 default_path = os.path.expanduser("~/.kube/config")
@@ -110,7 +110,7 @@ class KubernetesOrchestrator:
             logger.info("Kubernetes client initialized successfully")
 
         except Exception as e:
-            logger.warning(f"Failed to initialize Kubernetes client: {e}")
+            logger.warning("Failed to initialize Kubernetes client: %s", e)
             self._configured = False
 
     def is_available(self) -> bool:
@@ -130,7 +130,7 @@ class KubernetesOrchestrator:
             CodomyrmexError: If deployment creation fails
         """
         if not self.is_available():
-            logger.info(f"[SIMULATED] Created deployment: {deployment.name}")
+            logger.info("[SIMULATED] Created deployment: %s", deployment.name)
             return deployment.name
 
         # Build container spec
@@ -190,12 +190,12 @@ class KubernetesOrchestrator:
             self._apps_api.create_namespaced_deployment(
                 namespace=deployment.namespace, body=deployment_manifest
             )
-            logger.info(f"Created Kubernetes deployment: {deployment.name}")
+            logger.info("Created Kubernetes deployment: %s", deployment.name)
             return deployment.name
 
         except ApiException as e:
             if e.status == 409:
-                logger.warning(f"Deployment already exists: {deployment.name}")
+                logger.warning("Deployment already exists: %s", deployment.name)
                 return deployment.name
             raise CodomyrmexError(f"Failed to create deployment: {e}") from e
 
@@ -212,7 +212,7 @@ class KubernetesOrchestrator:
             CodomyrmexError: If service creation fails
         """
         if not self.is_available():
-            logger.info(f"[SIMULATED] Created service: {service.name}")
+            logger.info("[SIMULATED] Created service: %s", service.name)
             return service.name
 
         # Build service port
@@ -245,12 +245,12 @@ class KubernetesOrchestrator:
             self._core_api.create_namespaced_service(
                 namespace=service.namespace, body=service_manifest
             )
-            logger.info(f"Created Kubernetes service: {service.name}")
+            logger.info("Created Kubernetes service: %s", service.name)
             return service.name
 
         except ApiException as e:
             if e.status == 409:
-                logger.warning(f"Service already exists: {service.name}")
+                logger.warning("Service already exists: %s", service.name)
                 return service.name
             raise CodomyrmexError(f"Failed to create service: {e}") from e
 
@@ -268,7 +268,7 @@ class KubernetesOrchestrator:
             True if scaled successfully
         """
         if not self.is_available():
-            logger.info(f"[SIMULATED] Scaled {deployment_name} to {replicas} replicas")
+            logger.info("[SIMULATED] Scaled %s to %s replicas", deployment_name, replicas)
             return True
 
         try:
@@ -284,11 +284,11 @@ class KubernetesOrchestrator:
                 name=deployment_name, namespace=namespace, body=deployment
             )
 
-            logger.info(f"Scaled deployment {deployment_name} to {replicas} replicas")
+            logger.info("Scaled deployment %s to %s replicas", deployment_name, replicas)
             return True
 
         except ApiException as e:
-            logger.error(f"Failed to scale deployment {deployment_name}: {e}")
+            logger.error("Failed to scale deployment %s: %s", deployment_name, e)
             return False
 
     def get_deployment_status(
@@ -344,7 +344,7 @@ class KubernetesOrchestrator:
         except ApiException as e:
             if e.status == 404:
                 return None
-            logger.error(f"Failed to get deployment status: {e}")
+            logger.error("Failed to get deployment status: %s", e)
             return None
 
     def list_deployments(self, namespace: str = "default") -> list[dict[str, Any]]:
@@ -379,7 +379,7 @@ class KubernetesOrchestrator:
             ]
 
         except ApiException as e:
-            logger.error(f"Failed to list deployments: {e}")
+            logger.error("Failed to list deployments: %s", e)
             return []
 
     def delete_deployment(
@@ -395,21 +395,21 @@ class KubernetesOrchestrator:
             True if deleted successfully
         """
         if not self.is_available():
-            logger.info(f"[SIMULATED] Deleted deployment: {deployment_name}")
+            logger.info("[SIMULATED] Deleted deployment: %s", deployment_name)
             return True
 
         try:
             self._apps_api.delete_namespaced_deployment(
                 name=deployment_name, namespace=namespace
             )
-            logger.info(f"Deleted deployment: {deployment_name}")
+            logger.info("Deleted deployment: %s", deployment_name)
             return True
 
         except ApiException as e:
             if e.status == 404:
-                logger.warning(f"Deployment not found: {deployment_name}")
+                logger.warning("Deployment not found: %s", deployment_name)
                 return False
-            logger.error(f"Failed to delete deployment: {e}")
+            logger.error("Failed to delete deployment: %s", e)
             return False
 
     def delete_service(self, service_name: str, namespace: str = "default") -> bool:
@@ -423,21 +423,21 @@ class KubernetesOrchestrator:
             True if deleted successfully
         """
         if not self.is_available():
-            logger.info(f"[SIMULATED] Deleted service: {service_name}")
+            logger.info("[SIMULATED] Deleted service: %s", service_name)
             return True
 
         try:
             self._core_api.delete_namespaced_service(
                 name=service_name, namespace=namespace
             )
-            logger.info(f"Deleted service: {service_name}")
+            logger.info("Deleted service: %s", service_name)
             return True
 
         except ApiException as e:
             if e.status == 404:
-                logger.warning(f"Service not found: {service_name}")
+                logger.warning("Service not found: %s", service_name)
                 return False
-            logger.error(f"Failed to delete service: {e}")
+            logger.error("Failed to delete service: %s", e)
             return False
 
     def get_pod_logs(
@@ -471,7 +471,7 @@ class KubernetesOrchestrator:
             return logs
 
         except ApiException as e:
-            logger.error(f"Failed to get pod logs: {e}")
+            logger.error("Failed to get pod logs: %s", e)
             return f"Error retrieving logs: {e}"
 
     def list_pods(
@@ -510,7 +510,7 @@ class KubernetesOrchestrator:
             ]
 
         except ApiException as e:
-            logger.error(f"Failed to list pods: {e}")
+            logger.error("Failed to list pods: %s", e)
             return []
 
     def apply_manifest(
@@ -545,7 +545,7 @@ class KubernetesOrchestrator:
             else:
                 return {"status": "error", "message": f"Unsupported kind: {kind}"}
 
-            logger.info(f"Applied {kind}/{name} in namespace {ns}")
+            logger.info("Applied %s/%s in namespace %s", kind, name, ns)
             return {"status": "created", "kind": kind, "name": name, "namespace": ns}
 
         except ApiException as e:

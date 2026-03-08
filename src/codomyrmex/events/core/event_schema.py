@@ -218,7 +218,7 @@ class EventSchema:
             schema: JSON Schema definition
         """
         self.schemas[event_type.value] = schema
-        logger.info(f"Registered schema for event type: {event_type.value}")
+        logger.info("Registered schema for event type: %s", event_type.value)
 
     def get_event_schema(self, event_type: EventType) -> dict[str, Any] | None:
         """

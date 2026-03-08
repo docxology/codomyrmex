@@ -130,7 +130,7 @@ def get_pull_requests(
 
     params = {"state": state}
 
-    logger.info(f"Fetching {state} PRs from {repo_owner}/{repo_name}")
+    logger.info("Fetching %s PRs from %s/%s", state, repo_owner, repo_name)
 
     try:
         response = requests.get(
@@ -196,7 +196,7 @@ def get_pull_request(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info(f"Fetching PR #{pr_number} from {repo_owner}/{repo_name}")
+    logger.info("Fetching PR #%s from %s/%s", pr_number, repo_owner, repo_name)
 
     try:
         response = requests.get(
@@ -272,7 +272,7 @@ async def async_list_pull_requests(
 
     params = {"state": state}
 
-    logger.info(f"[ASYNC] Fetching {state} PRs from {repo_owner}/{repo_name}")
+    logger.info("[ASYNC] Fetching %s PRs from %s/%s", state, repo_owner, repo_name)
 
     status, data = await _async_request(
         "GET",
@@ -411,7 +411,7 @@ async def async_get_pull_request(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info(f"[ASYNC] Fetching PR #{pr_number} from {repo_owner}/{repo_name}")
+    logger.info("[ASYNC] Fetching PR #%s from %s/%s", pr_number, repo_owner, repo_name)
 
     status, data = await _async_request(
         "GET",

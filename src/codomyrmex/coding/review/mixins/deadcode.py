@@ -27,7 +27,7 @@ class DeadCodeMixin:
                     findings.append(enhanced_finding)
 
         except Exception as e:
-            logger.error(f"Error analyzing dead code patterns: {e}")
+            logger.error("Error analyzing dead code patterns: %s", e)
 
         return findings
 
@@ -113,5 +113,5 @@ class DeadCodeMixin:
             ]
 
         except Exception as e:
-            logger.error(f"Error getting top dead code issues: {e}")
+            logger.error("Error getting top dead code issues: %s", e)
             return []

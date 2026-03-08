@@ -100,7 +100,7 @@ class ProjectManager:
         project_path = self.projects_root / name
 
         if project_path.exists():
-            logger.error(f"Project directory already exists: {project_path}")
+            logger.error("Project directory already exists: %s", project_path)
             return None
 
         try:
@@ -132,11 +132,11 @@ class ProjectManager:
             )
 
             self.active_projects[name] = project
-            logger.info(f"Created project: {name}")
+            logger.info("Created project: %s", name)
             return project
 
         except Exception as e:
-            logger.error(f"Failed to create project {name}: {e}")
+            logger.error("Failed to create project %s: %s", name, e)
             if project_path.exists():
                 shutil.rmtree(project_path)
             return None
@@ -155,7 +155,7 @@ class ProjectManager:
         if project:
             project.status = status
             project.updated_at = datetime.now(UTC)
-            logger.info(f"Updated status for project {name}: {status.value}")
+            logger.info("Updated status for project %s: %s", name, status.value)
             return True
         return False
 

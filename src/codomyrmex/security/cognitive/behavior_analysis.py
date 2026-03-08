@@ -86,7 +86,7 @@ class BehaviorAnalyzer:
                 )
             )
 
-        logger.debug(f"Analyzed behavior for user {user_id}")
+        logger.debug("Analyzed behavior for user %s", user_id)
         return patterns
 
     def detect_anomalies(self, user_id: str, current_behavior: dict) -> list[Anomaly]:
@@ -156,7 +156,7 @@ class BehaviorAnalyzer:
                 )
             )
 
-        logger.debug(f"Checked for anomalies for user {user_id}")
+        logger.debug("Checked for anomalies for user %s", user_id)
         return anomalies
 
 

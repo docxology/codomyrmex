@@ -164,7 +164,7 @@ class MCPToolRegistry:
             "schema": schema,
             "handler": handler,
         }
-        logger.debug(f"Registered tool: {tool_name}")
+        logger.debug("Registered tool: %s", tool_name)
 
     def unregister(self, tool_name: str) -> bool:
         """
@@ -178,7 +178,7 @@ class MCPToolRegistry:
         """
         if tool_name in self._tools:
             del self._tools[tool_name]
-            logger.debug(f"Unregistered tool: {tool_name}")
+            logger.debug("Unregistered tool: %s", tool_name)
             return True
         return False
 
@@ -258,7 +258,7 @@ class MCPToolRegistry:
             result = handler(**tool_call.arguments)
             return MCPToolResult(status="success", data={"result": result})
         except Exception as e:
-            logger.error(f"Tool execution failed: {e}")
+            logger.error("Tool execution failed: %s", e)
             return MCPToolResult(
                 status="failure",
                 error=MCPErrorDetail(error_type=type(e).__name__, error_message=str(e)),

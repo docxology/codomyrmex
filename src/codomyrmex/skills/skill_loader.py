@@ -60,7 +60,7 @@ class SkillLoader:
             Parsed skill data or None if file doesn't exist or is invalid
         """
         if not path.exists():
-            logger.debug(f"Skill file does not exist: {path}")
+            logger.debug("Skill file does not exist: %s", path)
             return None
 
         if yaml is None:
@@ -71,14 +71,14 @@ class SkillLoader:
             with open(path, encoding="utf-8") as f:
                 data = yaml.safe_load(f)
                 if not isinstance(data, dict):
-                    logger.warning(f"Skill file does not contain a dictionary: {path}")
+                    logger.warning("Skill file does not contain a dictionary: %s", path)
                     return None
                 return data
         except yaml.YAMLError as e:
-            logger.error(f"Error parsing YAML file {path}: {e}")
+            logger.error("Error parsing YAML file %s: %s", path, e)
             return None
         except Exception as e:
-            logger.error(f"Error loading skill file {path}: {e}")
+            logger.error("Error loading skill file %s: %s", path, e)
             return None
 
     def get_skill_paths(
@@ -143,13 +143,13 @@ class SkillLoader:
                 merged.setdefault("_upstream_available", True)
             else:
                 merged.setdefault("_source", "custom")
-            logger.debug(f"Loaded custom skill: {category}/{name}")
+            logger.debug("Loaded custom skill: %s/%s", category, name)
         elif upstream_skill:
             merged = upstream_skill.copy()
             merged.setdefault("_source", "upstream")
-            logger.debug(f"Loaded upstream skill: {category}/{name}")
+            logger.debug("Loaded upstream skill: %s/%s", category, name)
         else:
-            logger.debug(f"Skill not found: {category}/{name}")
+            logger.debug("Skill not found: %s/%s", category, name)
             return None
 
         # Cache the result
@@ -163,7 +163,7 @@ class SkillLoader:
                 with open(cache_file, "w", encoding="utf-8") as f:
                     yaml.dump(merged, f, default_flow_style=False)
             except Exception as e:
-                logger.warning(f"Failed to cache skill: {e}")
+                logger.warning("Failed to cache skill: %s", e)
 
         return merged
 

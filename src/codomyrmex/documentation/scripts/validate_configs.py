@@ -106,7 +106,7 @@ class ConfigValidator:
         config_files = []
 
         if not self.config_dir.exists():
-            logger.error(f"Config directory not found: {self.config_dir}")
+            logger.error("Config directory not found: %s", self.config_dir)
             return config_files
 
         # Find YAML files
@@ -158,7 +158,7 @@ class ConfigValidator:
 
         if verbose:
             status = "✓ VALID" if result["valid"] else "✗ INVALID"
-            logger.info(f"  {status}: {file_path}")
+            logger.info("  %s: %s", status, file_path)
 
         return result
 
@@ -270,9 +270,9 @@ class ConfigValidator:
                 result["fixed"] = True
                 result["valid"] = True
                 result["errors"] = []
-                logger.info(f"Successfully auto-fixed {file_path}")
+                logger.info("Successfully auto-fixed %s", file_path)
         except Exception as e:
-            logger.error(f"Failed to auto-fix {file_path}: {e}")
+            logger.error("Failed to auto-fix %s: %s", file_path, e)
 
     def print_report(self, results: dict[str, Any], verbose: bool = False):
         """Print validation results."""
@@ -302,7 +302,7 @@ class ConfigValidator:
         with open(output_file, "w", encoding="utf-8") as f:  # type: ignore
             json.dump(results, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"Report saved to: {output_file}")
+        logger.info("Report saved to: %s", output_file)
 
 
 def main():

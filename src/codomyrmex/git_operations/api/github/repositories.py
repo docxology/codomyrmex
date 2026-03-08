@@ -61,7 +61,7 @@ def create_github_repository(
     if license_template:
         repo_data["license_template"] = license_template
 
-    logger.info(f"Creating GitHub repository: {name} (private: {private})")
+    logger.info("Creating GitHub repository: %s (private: %s)", name, private)
 
     try:
         response = requests.post(
@@ -123,7 +123,7 @@ def delete_github_repository(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info(f"Deleting GitHub repository: {owner}/{repo_name}")
+    logger.info("Deleting GitHub repository: %s/%s", owner, repo_name)
 
     try:
         response = requests.delete(
@@ -131,7 +131,7 @@ def delete_github_repository(
         )
 
         if response.status_code == 204:
-            logger.info(f"Successfully deleted repository: {owner}/{repo_name}")
+            logger.info("Successfully deleted repository: %s/%s", owner, repo_name)
             return True
         error_msg = f"Failed to delete repository: {response.status_code}"
         if response.text:
@@ -170,7 +170,7 @@ def get_repository_info(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info(f"Fetching repository info for {repo_owner}/{repo_name}")
+    logger.info("Fetching repository info for %s/%s", repo_owner, repo_name)
 
     try:
         response = requests.get(
@@ -237,7 +237,7 @@ async def async_get_repo_info(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
 
-    logger.info(f"[ASYNC] Fetching repository info for {repo_owner}/{repo_name}")
+    logger.info("[ASYNC] Fetching repository info for %s/%s", repo_owner, repo_name)
 
     status, data = await _async_request(
         "GET",

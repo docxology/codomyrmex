@@ -49,10 +49,10 @@ def read_yaml(
             "PyYAML library not available", file_path=str(file_path)
         ) from None
     except yaml.YAMLError as e:
-        logger.error(f"Invalid YAML in file {file_path}: {e}")
+        logger.error("Invalid YAML in file %s: %s", file_path, e)
         raise DocumentReadError(f"Invalid YAML: {e!s}", file_path=str(file_path)) from e
     except Exception as e:
-        logger.error(f"Error reading YAML file {file_path}: {e}")
+        logger.error("Error reading YAML file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read YAML file: {e!s}", file_path=str(file_path)
         ) from e
@@ -87,7 +87,7 @@ def write_yaml(
             yaml.dump(
                 data, f, default_flow_style=default_flow_style, allow_unicode=True
             )
-        logger.debug(f"Wrote YAML to {file_path}")
+        logger.debug("Wrote YAML to %s", file_path)
 
     except ImportError:
         logger.error("PyYAML not installed. Install with: uv pip install pyyaml")
@@ -95,7 +95,7 @@ def write_yaml(
             "PyYAML library not available", file_path=str(file_path)
         ) from None
     except Exception as e:
-        logger.error(f"Error writing YAML file {file_path}: {e}")
+        logger.error("Error writing YAML file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write YAML file: {e!s}", file_path=str(file_path)
         ) from e

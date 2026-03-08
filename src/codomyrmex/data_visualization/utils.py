@@ -90,11 +90,11 @@ def save_plot(
             bbox_inches=bbox_inches,
         )
 
-        logger.info(f"Plot saved successfully to {output_path}")
+        logger.info("Plot saved successfully to %s", output_path)
         return True
 
     except Exception as e:
-        logger.error(f"Failed to save plot to {output_path}: {e}")
+        logger.error("Failed to save plot to %s: %s", output_path, e)
         raise
 
 
@@ -155,7 +155,7 @@ def apply_theme_to_axes(ax, theme_name):
         if ax.figure:
             ax.figure.set_facecolor(theme.figure_facecolor)
     except (ImportError, ValueError) as e:
-        logger.debug(f"Could not apply theme: {e}")
+        logger.debug("Could not apply theme: %s", e)
     return ax
 
 

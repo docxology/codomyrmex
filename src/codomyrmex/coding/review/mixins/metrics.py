@@ -121,7 +121,7 @@ class MetricsMixin:
             }
 
         except Exception as e:
-            logger.error(f"Error getting complexity metrics: {e}")
+            logger.error("Error getting complexity metrics: %s", e)
             return {
                 "total_functions": 0,
                 "average_complexity": 0,
@@ -172,7 +172,7 @@ class MetricsMixin:
             }
 
         except Exception as e:
-            logger.error(f"Error getting dead code metrics: {e}")
+            logger.error("Error getting dead code metrics: %s", e)
             return {
                 "total_findings": 0,
                 "critical_count": 0,
@@ -258,7 +258,7 @@ class MetricsMixin:
             }
 
         except Exception as e:
-            logger.error(f"Error getting duplication metrics: {e}")
+            logger.error("Error getting duplication metrics: %s", e)
             return {
                 "total_groups": 0,
                 "duplicated_lines": 0,
@@ -310,7 +310,7 @@ class MetricsMixin:
             }
 
         except Exception as e:
-            logger.error(f"Error getting coupling metrics: {e}")
+            logger.error("Error getting coupling metrics: %s", e)
             return {
                 "total_classes": 0,
                 "high_coupling_count": 0,
@@ -431,7 +431,7 @@ class MetricsMixin:
             return round(score, 1)
 
         except Exception as e:
-            logger.error(f"Error calculating maintainability score: {e}")
+            logger.error("Error calculating maintainability score: %s", e)
             return 50.0  # Default to neutral score on error
 
     def _calculate_testability_score(self) -> float:
@@ -482,7 +482,7 @@ class MetricsMixin:
             return round(score, 1)
 
         except Exception as e:
-            logger.error(f"Error calculating testability score: {e}")
+            logger.error("Error calculating testability score: %s", e)
             return 50.0
 
     def _calculate_reliability_score(self) -> float:
@@ -545,7 +545,7 @@ class MetricsMixin:
             return round(min(100.0, score), 1)
 
         except Exception as e:
-            logger.error(f"Error calculating reliability score: {e}")
+            logger.error("Error calculating reliability score: %s", e)
             return 50.0
 
     def _calculate_security_score(self) -> float:
@@ -606,7 +606,7 @@ class MetricsMixin:
             return round(score, 1)
 
         except Exception as e:
-            logger.error(f"Error calculating security score: {e}")
+            logger.error("Error calculating security score: %s", e)
             return 50.0
 
     def _get_top_duplication_issues(self) -> list[dict[str, Any]]:
@@ -667,5 +667,5 @@ class MetricsMixin:
             return issues
 
         except Exception as e:
-            logger.error(f"Error getting top duplication issues: {e}")
+            logger.error("Error getting top duplication issues: %s", e)
             return []

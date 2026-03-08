@@ -74,7 +74,7 @@ class SwarmManager:
             future = self._pending_results.pop(task_id)
             if not future.done():
                 future.set_result(message.payload.get("result", {}))
-                logger.debug(f"Received result for task {task_id}")
+                logger.debug("Received result for task %s", task_id)
 
     async def execute_task(
         self, description: str, role: AgentRole = AgentRole.CODER, timeout: float = 30.0
@@ -97,7 +97,7 @@ class SwarmManager:
 
         try:
             agent = self.pool.assign(assignment)
-            logger.info(f"Assigned task {assignment.task_id} to {agent.agent_id}")
+            logger.info("Assigned task %s to %s", assignment.task_id, agent.agent_id)
 
             # Prepare for result
             future = asyncio.get_running_loop().create_future()
@@ -121,14 +121,14 @@ class SwarmManager:
                 assignment.result = result
                 return result
             except TimeoutError:
-                logger.error(f"Task {assignment.task_id} timed out after {timeout}s")
+                logger.error("Task %s timed out after %ss", assignment.task_id, timeout)
                 self._pending_results.pop(assignment.task_id, None)
                 return {"status": "error", "message": "timeout"}
             finally:
                 self.pool.release(agent.agent_id)
 
         except Exception as exc:
-            logger.error(f"Task execution failed: {exc}")
+            logger.error("Task execution failed: %s", exc)
             return {"status": "error", "message": str(exc)}
 
     async def execute_mission(self, mission: str) -> list[dict[str, Any]]:
@@ -141,7 +141,7 @@ class SwarmManager:
             List of results for each sub-task.
 
         """
-        logger.info(f"Starting mission: {mission}")
+        logger.info("Starting mission: %s", mission)
         subtasks = self.decomposer.decompose(mission)
         order = self.decomposer.execution_order(subtasks)
 
@@ -168,7 +168,7 @@ class SwarmManager:
             Consensus decision.
 
         """
-        logger.info(f"Requesting consensus for: {proposal}")
+        logger.info("Requesting consensus for: %s", proposal)
         result = self.consensus_engine.resolve(votes, strategy=strategy)
 
         # Publish result to the swarm

@@ -41,7 +41,7 @@ def load_config(scripts_dir: Path) -> dict[str, Any]:
                     OSError,
                     TypeError,
                 ) as e:
-                    logger.warning(f"Failed to load YAML config {config_path}: {e}")
+                    logger.warning("Failed to load YAML config %s: %s", config_path, e)
 
         # Also check for scripts_config.json
         json_path = current / "scripts_config.json"
@@ -50,7 +50,7 @@ def load_config(scripts_dir: Path) -> dict[str, Any]:
                 with open(json_path) as f:
                     return json.load(f)
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                logger.warning(f"Failed to load JSON config {json_path}: {e}")
+                logger.warning("Failed to load JSON config %s: %s", json_path, e)
 
         # Stop if we hit project root or system root
         if (current / "src").exists() or current.parent == current:

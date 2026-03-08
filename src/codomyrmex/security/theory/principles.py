@@ -232,14 +232,14 @@ def apply_principle(principle_name: str, context: dict[str, Any]) -> dict[str, A
     """
     principle = PRINCIPLES.get(principle_name)
     if not principle:
-        logger.warning(f"Unknown principle: {principle_name}")
+        logger.warning("Unknown principle: %s", principle_name)
         return {
             "applied": False,
             "error": f"Unknown principle: {principle_name}",
             "available_principles": list(PRINCIPLES.keys()),
         }
 
-    logger.info(f"Applying principle '{principle.name}' to context")
+    logger.info("Applying principle '%s' to context", principle.name)
 
     # Generate recommendations based on principle and context
     recommendations = []

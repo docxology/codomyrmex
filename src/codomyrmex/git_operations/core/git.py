@@ -113,16 +113,16 @@ if __name__ == "__main__":
 
         # Test repository detection
         is_repo = is_git_repository(os.getcwd())
-        logger.info(f"Current directory is Git repository: {is_repo}")
+        logger.info("Current directory is Git repository: %s", is_repo)
 
         if is_repo:
             # Test getting status
             status = get_status(os.getcwd())
-            logger.info(f"Repository status: {status}")
+            logger.info("Repository status: %s", status)
 
             # Test getting current branch
             branch = get_current_branch(os.getcwd())
-            logger.info(f"Current branch: {branch}")
+            logger.info("Current branch: %s", branch)
 
             # Test getting commit history
             commits = get_commit_history(limit=5, repository_path=os.getcwd())

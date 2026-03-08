@@ -66,7 +66,7 @@ class TaskPlanner:
         )
 
         self.tasks[task_id] = task
-        self.logger.debug(f"Created task: {task_id} - {description}")
+        self.logger.debug("Created task: %s - %s", task_id, description)
 
         return task
 
@@ -129,7 +129,7 @@ class TaskPlanner:
         """
         task = self.tasks.get(task_id)
         if not task:
-            self.logger.warning(f"Task not found: {task_id}")
+            self.logger.warning("Task not found: %s", task_id)
             return
 
         task.status = status
@@ -138,7 +138,7 @@ class TaskPlanner:
         if error is not None:
             task.error = error
 
-        self.logger.debug(f"Updated task {task_id} status to {status.value}")
+        self.logger.debug("Updated task %s status to %s", task_id, status.value)
 
     def get_ready_tasks(self) -> list[Task]:
         """

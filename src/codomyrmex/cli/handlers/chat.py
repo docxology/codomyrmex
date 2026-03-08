@@ -61,6 +61,6 @@ def handle_chat_session(
         print("\nConversation stopped by user.")
         return True
     except Exception as e:
-        logger.error(f"Chat session failed: {e}")
+        logger.error("Chat session failed: %s", e)
         traceback.print_exc()
         return False

@@ -106,7 +106,7 @@ class Debugger:
         for patch in patches:
             verification = self.verifier.verify(source_code, patch)
             if verification.success:
-                logger.info(f"Patch verified successfully: {patch.description}")
+                logger.info("Patch verified successfully: %s", patch.description)
                 # In a real impl, we'd return the patched source code
                 return self.verifier._apply_patch(source_code, patch)
 

@@ -38,7 +38,7 @@ class Queue:
                 logger.warning("Redis not available, falling back to in-memory queue")
                 self._queue = InMemoryQueue()
         else:
-            logger.warning(f"Unknown backend {backend}, using in-memory queue")
+            logger.warning("Unknown backend %s, using in-memory queue", backend)
             self._queue = InMemoryQueue()
 
     def enqueue(self, job: Job, priority: int = 0) -> str:

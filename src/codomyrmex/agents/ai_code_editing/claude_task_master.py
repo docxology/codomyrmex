@@ -299,10 +299,10 @@ class ClaudeTaskMaster:
             }
 
         except ImportError as e:
-            logger.error(f"Anthropic import error: {e}")
+            logger.error("Anthropic import error: %s", e)
             raise
         except ValueError as e:
-            logger.error(f"Configuration error: {e}")
+            logger.error("Configuration error: %s", e)
             raise RuntimeError(f"Task execution failed: {e}") from None
         except (RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time

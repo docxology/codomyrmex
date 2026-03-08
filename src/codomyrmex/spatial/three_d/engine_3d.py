@@ -52,10 +52,10 @@ class Object3D:
     def play_animation(self, name: str) -> None:
         """Play a specific animation."""
         if name in self.animations:
-            logger.info(f"Playing animation: {name}")
+            logger.info("Playing animation: %s", name)
             # Logic to update object transforms over time
         else:
-            logger.warning(f"Animation not found: {name}")
+            logger.warning("Animation not found: %s", name)
 
 
 class PhysicsEngine:

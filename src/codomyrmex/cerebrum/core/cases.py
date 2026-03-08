@@ -77,9 +77,9 @@ class CaseBase:
             case: Case to add
         """
         if case.case_id in self.cases:
-            self.logger.warning(f"Case {case.case_id} already exists, updating")
+            self.logger.warning("Case %s already exists, updating", case.case_id)
         self.cases[case.case_id] = case
-        self.logger.debug(f"Added case {case.case_id}")
+        self.logger.debug("Added case %s", case.case_id)
 
     def get_case(self, case_id: str) -> Case:
         """Retrieve a case by ID.
@@ -105,7 +105,7 @@ class CaseBase:
         """
         if case_id in self.cases:
             del self.cases[case_id]
-            self.logger.debug(f"Removed case {case_id}")
+            self.logger.debug("Removed case %s", case_id)
 
     def compute_similarity(self, case1: Case, case2: Case) -> float:
         """Compute similarity between two cases.
@@ -170,7 +170,7 @@ class CaseBase:
         case = self.cases[case_id]
         case.outcome = outcome
         case.metadata.update(kwargs)
-        self.logger.debug(f"Updated case {case_id}")
+        self.logger.debug("Updated case %s", case_id)
 
     def size(self) -> int:
         """Get the number of cases in the case base."""

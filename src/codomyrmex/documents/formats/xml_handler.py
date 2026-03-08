@@ -36,10 +36,10 @@ def read_xml(file_path: str | Path, encoding: str | None = None) -> str:
         ET.fromstring(content)
         return content
     except ET.ParseError as e:
-        logger.error(f"Invalid XML in file {file_path}: {e}")
+        logger.error("Invalid XML in file %s: %s", file_path, e)
         raise DocumentReadError(f"Invalid XML: {e!s}", file_path=str(file_path)) from e
     except Exception as e:
-        logger.error(f"Error reading XML file {file_path}: {e}")
+        logger.error("Error reading XML file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read XML file: {e!s}", file_path=str(file_path)
         ) from e
@@ -67,14 +67,14 @@ def write_xml(content: str, file_path: str | Path, encoding: str | None = None) 
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding=encoding) as f:
             f.write(content)
-        logger.debug(f"Wrote XML to {file_path}")
+        logger.debug("Wrote XML to %s", file_path)
     except ET.ParseError as e:
-        logger.error(f"Attempted to write invalid XML to {file_path}: {e}")
+        logger.error("Attempted to write invalid XML to %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Invalid XML content: {e!s}", file_path=str(file_path)
         ) from e
     except Exception as e:
-        logger.error(f"Error writing XML file {file_path}: {e}")
+        logger.error("Error writing XML file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write XML file: {e!s}", file_path=str(file_path)
         ) from e

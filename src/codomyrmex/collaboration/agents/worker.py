@@ -66,7 +66,7 @@ class WorkerAgent(CollaborativeAgent):
                 )
             )
 
-        logger.info(f"Worker {self.name} registered handler for: {capability_name}")
+        logger.info("Worker %s registered handler for: %s", self.name, capability_name)
 
     def can_handle_task(self, task: Task) -> bool:
         """Check if this worker can handle a task."""
@@ -95,14 +95,14 @@ class WorkerAgent(CollaborativeAgent):
                 task.required_capabilities, self.get_capabilities()
             )
 
-        logger.info(f"Worker {self.name} executing task: {task.name}")
+        logger.info("Worker %s executing task: %s", self.name, task.name)
 
         if asyncio.iscoroutinefunction(handler):
             result = await handler(task)
         else:
             result = handler(task)
 
-        logger.info(f"Worker {self.name} completed task: {task.name}")
+        logger.info("Worker %s completed task: %s", self.name, task.name)
         return result
 
     async def execute_batch(self, tasks: list[Task]) -> list[TaskResult]:

@@ -142,7 +142,7 @@ class HealthChecker:
             result.status = self._determine_overall_status(result)
 
         except Exception as e:
-            logger.error(f"Error during health check for {module_name}: {e}")
+            logger.error("Error during health check for %s: %s", module_name, e)
             result.status = HealthStatus.UNKNOWN
             result.add_issue(
                 f"Health check failed: {e!s}",

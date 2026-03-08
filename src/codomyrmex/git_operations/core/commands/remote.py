@@ -16,7 +16,7 @@ def fetch_remote(remote: str = "origin", repository_path: str | None = None) -> 
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Fetching from remote '{remote}' in {repository_path}")
+        logger.info("Fetching from remote '%s' in %s", remote, repository_path)
         subprocess.run(
             ["git", "fetch", remote],
             cwd=repository_path,
@@ -27,12 +27,12 @@ def fetch_remote(remote: str = "origin", repository_path: str | None = None) -> 
         )
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to fetch remote '{remote}': {e}")
+        logger.error("Failed to fetch remote '%s': %s", remote, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         raise
     except Exception as e:
-        logger.error(f"Unexpected error fetching remote: {e}")
+        logger.error("Unexpected error fetching remote: %s", e)
         raise
 
 
@@ -43,7 +43,7 @@ def prune_remote(remote: str = "origin", repository_path: str | None = None) -> 
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Pruning remote '{remote}' in {repository_path}")
+        logger.info("Pruning remote '%s' in %s", remote, repository_path)
         subprocess.run(
             ["git", "remote", "prune", remote],
             cwd=repository_path,
@@ -54,12 +54,12 @@ def prune_remote(remote: str = "origin", repository_path: str | None = None) -> 
         )
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to prune remote '{remote}': {e}")
+        logger.error("Failed to prune remote '%s': %s", remote, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         raise
     except Exception as e:
-        logger.error(f"Unexpected error pruning remote: {e}")
+        logger.error("Unexpected error pruning remote: %s", e)
         raise
 
 
@@ -70,7 +70,7 @@ def add_remote(remote_name: str, url: str, repository_path: str | None = None) -
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Adding remote '{remote_name}' with URL: {url}")
+        logger.info("Adding remote '%s' with URL: %s", remote_name, url)
 
         subprocess.run(
             ["git", "remote", "add", remote_name, url],
@@ -81,16 +81,16 @@ def add_remote(remote_name: str, url: str, repository_path: str | None = None) -
             timeout=_GIT_TIMEOUT,
         )
 
-        logger.info(f"Remote '{remote_name}' added successfully")
+        logger.info("Remote '%s' added successfully", remote_name)
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to add remote '{remote_name}': {e}")
+        logger.error("Failed to add remote '%s': %s", remote_name, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         raise
     except Exception as e:
-        logger.error(f"Unexpected error adding remote: {e}")
+        logger.error("Unexpected error adding remote: %s", e)
         raise
 
 
@@ -101,7 +101,7 @@ def remove_remote(remote_name: str, repository_path: str | None = None) -> bool:
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Removing remote '{remote_name}'")
+        logger.info("Removing remote '%s'", remote_name)
 
         subprocess.run(
             ["git", "remote", "remove", remote_name],
@@ -112,16 +112,16 @@ def remove_remote(remote_name: str, repository_path: str | None = None) -> bool:
             timeout=_GIT_TIMEOUT,
         )
 
-        logger.info(f"Remote '{remote_name}' removed successfully")
+        logger.info("Remote '%s' removed successfully", remote_name)
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to remove remote '{remote_name}': {e}")
+        logger.error("Failed to remove remote '%s': %s", remote_name, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         raise
     except Exception as e:
-        logger.error(f"Unexpected error removing remote: {e}")
+        logger.error("Unexpected error removing remote: %s", e)
         raise
 
 
@@ -173,8 +173,8 @@ def list_remotes(repository_path: str | None = None) -> list[dict[str, str]]:
         return remotes
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to list remotes: {e}")
+        logger.error("Failed to list remotes: %s", e)
         raise
     except Exception as e:
-        logger.error(f"Unexpected error listing remotes: {e}")
+        logger.error("Unexpected error listing remotes: %s", e)
         raise

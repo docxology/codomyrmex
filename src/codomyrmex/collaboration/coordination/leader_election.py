@@ -363,7 +363,7 @@ class RotatingLeadership:
         self._term_count += 1
 
         leader = self._agents[self._current_index]
-        logger.info(f"Leadership rotated to {leader.name} (term {self._term_count})")
+        logger.info("Leadership rotated to %s (term %s)", leader.name, self._term_count)
         return leader
 
     def get_term_count(self) -> int:

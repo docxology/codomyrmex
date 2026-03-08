@@ -156,7 +156,7 @@ class LockManager:
                     return False
             return True
         except Exception as e:
-            logger.error(f"Failed to acquire multiple locks: {e}")
+            logger.error("Failed to acquire multiple locks: %s", e)
             for lock in reversed(acquired):
                 lock.release()
                 with self._manager_lock:

@@ -125,7 +125,7 @@ class PipelineMonitor:
             success: Whether the stage completed successfully
         """
         if execution_id not in self._active_metrics:
-            logger.warning(f"No active metrics found for execution ID {execution_id}")
+            logger.warning("No active metrics found for execution ID %s", execution_id)
             return
 
         metrics = self._active_metrics[execution_id]
@@ -134,7 +134,7 @@ class PipelineMonitor:
         if not success:
             metrics.error_count += 1
 
-        logger.debug(f"Recorded stage completion: {stage_name} (success: {success})")
+        logger.debug("Recorded stage completion: %s (success: %s)", stage_name, success)
 
     def record_job_completion(self, execution_id: str, job_name: str, success: bool):
         """Record completion of a pipeline job.
@@ -145,7 +145,7 @@ class PipelineMonitor:
             success: Whether the job completed successfully
         """
         if execution_id not in self._active_metrics:
-            logger.warning(f"No active metrics found for execution ID {execution_id}")
+            logger.warning("No active metrics found for execution ID %s", execution_id)
             return
 
         metrics = self._active_metrics[execution_id]
@@ -154,7 +154,7 @@ class PipelineMonitor:
         if not success:
             metrics.error_count += 1
 
-        logger.debug(f"Recorded job completion: {job_name} (success: {success})")
+        logger.debug("Recorded job completion: %s (success: %s)", job_name, success)
 
     def finish_monitoring(
         self, execution_id: str, status: str = "completed"

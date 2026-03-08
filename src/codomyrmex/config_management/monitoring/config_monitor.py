@@ -121,7 +121,7 @@ class ConfigurationMonitor:
                     current_hash="",
                 )
                 changes.append(change)
-                logger.info(f"Detected configuration file deletion: {path}")
+                logger.info("Detected configuration file deletion: %s", path)
                 continue
 
             current_hash = self.calculate_file_hash(str(path))
@@ -139,7 +139,7 @@ class ConfigurationMonitor:
                     current_hash=current_hash,
                 )
                 changes.append(change)
-                logger.info(f"Detected new configuration file: {path}")
+                logger.info("Detected new configuration file: %s", path)
 
             elif current_hash != previous_hash:
                 # File modified
@@ -152,7 +152,7 @@ class ConfigurationMonitor:
                     current_hash=current_hash,
                 )
                 changes.append(change)
-                logger.info(f"Detected configuration file modification: {path}")
+                logger.info("Detected configuration file modification: %s", path)
 
         # Store changes
         self._changes.extend(changes)
@@ -304,7 +304,7 @@ class ConfigurationMonitor:
                     }
                 )
 
-        logger.info(f"Configuration drift analysis complete for {snapshot_id}")
+        logger.info("Configuration drift analysis complete for %s", snapshot_id)
         return drift_report
 
     def audit_configuration(
@@ -402,7 +402,7 @@ class ConfigurationMonitor:
                 indent=2,
             )
 
-        logger.info(f"Completed configuration audit: {audit_id} ({compliance_status})")
+        logger.info("Completed configuration audit: %s (%s)", audit_id, compliance_status)
         return audit
 
     def _contains_sensitive_data(self, content: str) -> bool:

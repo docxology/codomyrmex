@@ -75,7 +75,7 @@ class KeyRotation:
         self._creation_times[user_id] = datetime.now(UTC)
         if user_id not in self._history:
             self._history[user_id] = []
-        logger.info(f"Registered wallet {wallet_id} for rotation tracking")
+        logger.info("Registered wallet %s for rotation tracking", wallet_id)
 
     def record_signature(self, user_id: str) -> None:
         """Record that a signature was made, incrementing the counter.
@@ -96,14 +96,14 @@ class KeyRotation:
         """
         sig_count = self._signature_counts.get(user_id, 0)
         if sig_count >= self.policy.max_signatures:
-            logger.info(f"User {user_id}: rotation needed (signatures={sig_count})")
+            logger.info("User %s: rotation needed (signatures=%s)", user_id, sig_count)
             return True
 
         created = self._creation_times.get(user_id)
         if created:
             age = (datetime.now(UTC) - created).days
             if age >= self.policy.max_age_days:
-                logger.info(f"User {user_id}: rotation needed (age={age} days)")
+                logger.info("User %s: rotation needed (age=%s days)", user_id, age)
                 return True
 
         return False
@@ -147,7 +147,7 @@ class KeyRotation:
             try:
                 hook(record)
             except Exception as e:
-                logger.warning(f"Post-rotate hook failed: {e}")
+                logger.warning("Post-rotate hook failed: %s", e)
 
         logger.info(
             f"Recorded rotation for {user_id}: {old_wallet_id} -> {new_wallet_id}"

@@ -40,7 +40,7 @@ class FineTuningJob:
 
     def run(self):
         """Trigger the fine-tuning job."""
-        logger.info(f"Starting fine-tuning for {self.base_model} via {self.provider}")
+        logger.info("Starting fine-tuning for %s via %s", self.base_model, self.provider)
         # In a real implementation, this would call provider SDKs
         self.job_id = "ft-mock-12345"
         self.status = "running"

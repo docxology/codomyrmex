@@ -827,7 +827,7 @@ print("Sandbox execution complete! ✅")
                 return [name for name in module_names if name.startswith(text)]
             return module_names
         except Exception as e:
-            logger.error(f"Error in tab completion: {e}")
+            logger.error("Error in tab completion: %s", e)
             return []
 
     def run(self):
@@ -837,7 +837,7 @@ print("Sandbox execution complete! ✅")
         except KeyboardInterrupt:
             print("\n\n🐜 Interrupted! Thanks for exploring the Codomyrmex nest!")
         except Exception as e:
-            logger.error(f"Error in interactive shell: {e}")
+            logger.error("Error in interactive shell: %s", e)
             print(f"\n❌ An error occurred: {e}")
             print("🐜 Thanks for exploring the Codomyrmex nest!")
 

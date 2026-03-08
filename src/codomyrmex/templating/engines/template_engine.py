@@ -73,7 +73,7 @@ class TemplateEngine:
                 return self._render_mako(template, context)
             raise ValueError(f"Unknown engine: {self.engine}")
         except Exception as e:
-            logger.error(f"Template rendering error: {e}")
+            logger.error("Template rendering error: %s", e)
             raise TemplatingError(f"Failed to render template: {e!s}") from e
 
     def load_template(self, path: str) -> Template:
@@ -104,7 +104,7 @@ class TemplateEngine:
             self._cache[path_str] = template
             return template
         except Exception as e:
-            logger.error(f"Template loading error: {e}")
+            logger.error("Template loading error: %s", e)
             raise TemplatingError(f"Failed to load template: {e!s}") from e
 
     def register_filter(self, name: str, func: Callable) -> None:

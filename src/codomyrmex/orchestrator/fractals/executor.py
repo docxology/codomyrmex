@@ -54,10 +54,10 @@ def execute_leaf_task(
     provider: str = "claude"
 ) -> str:
     """Execute a single atomic task using the specified provider in a git worktree."""
-    logger.info(f"[execute] [{task.id}] '{task.description}' ({provider})")
+    logger.info("[execute] [%s] '%s' (%s)", task.id, task.description, provider)
 
     worktree_path = workspace_manager.create_worktree(task.id)
-    logger.info(f"[execute] [{task.id}] worktree: {worktree_path}")
+    logger.info("[execute] [%s] worktree: %s", task.id, worktree_path)
 
     prompt = build_prompt(task)
 

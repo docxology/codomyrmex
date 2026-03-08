@@ -135,7 +135,7 @@ def analyze_code_quality(
         return result
 
     except (ValueError, ImportError, AttributeError) as e:
-        logger.error(f"Error analyzing code: {e}")
+        logger.error("Error analyzing code: %s", e)
         raise RuntimeError(f"Code analysis failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
@@ -263,7 +263,7 @@ Please analyze:
         return result
 
     except (ValueError, ImportError, AttributeError) as e:
-        logger.error(f"Error comparing code versions: {e}")
+        logger.error("Error comparing code versions: %s", e)
         raise RuntimeError(f"Code comparison failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues

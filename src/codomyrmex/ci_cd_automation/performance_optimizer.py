@@ -97,7 +97,7 @@ class PipelineOptimizer:
         if len(self._metrics_history) > 1000:
             self._metrics_history = self._metrics_history[-1000:]
 
-        logger.debug(f"Recorded metric: {name} = {value} {unit}")
+        logger.debug("Recorded metric: %s = %s %s", name, value, unit)
 
     def analyze_performance(
         self, pipeline_name: str, time_range: int = 7
@@ -439,7 +439,7 @@ class PipelineOptimizer:
                     }
                 )
             except Exception as e:
-                logger.warning(f"Failed to load optimization plan {plan_file}: {e}")
+                logger.warning("Failed to load optimization plan %s: %s", plan_file, e)
 
         # Sort by creation date (most recent first)
         history.sort(key=lambda x: x.get("created_at", ""), reverse=True)

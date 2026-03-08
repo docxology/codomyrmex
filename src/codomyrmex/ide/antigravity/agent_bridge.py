@@ -213,7 +213,7 @@ if BaseAgent is not None:
                     tool_name = "view_file"
                 else:
                     tool_name = "grep_search"
-                logger.info(f"No intent match, defaulting to {tool_name}")
+                logger.info("No intent match, defaulting to %s", tool_name)
 
             args = _extract_context_args(request)
 
@@ -223,7 +223,7 @@ if BaseAgent is not None:
             if tool_name == "find_by_name" and "Pattern" not in args:
                 args["Pattern"] = request.prompt
 
-            logger.info(f"Routing to tool: {tool_name}")
+            logger.info("Routing to tool: %s", tool_name)
 
             try:
                 result = self.client.invoke_tool(tool_name, args)
@@ -236,7 +236,7 @@ if BaseAgent is not None:
                 )
             except Exception as e:
                 elapsed = time.monotonic() - start
-                logger.error(f"Tool {tool_name} failed: {e}")
+                logger.error("Tool %s failed: %s", tool_name, e)
                 return AgentResponse(
                     content="",
                     error=str(e),

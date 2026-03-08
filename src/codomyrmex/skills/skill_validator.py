@@ -130,7 +130,7 @@ class SkillValidator:
         results = {}
 
         if not directory.exists():
-            logger.warning(f"Directory does not exist: {directory}")
+            logger.warning("Directory does not exist: %s", directory)
             return results
 
         for category_dir in directory.iterdir():

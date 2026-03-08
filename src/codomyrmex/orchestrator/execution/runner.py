@@ -41,7 +41,7 @@ def _set_memory_limit(memory_limit_mb: int):
         limit_bytes = memory_limit_mb * 1024 * 1024
         resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
     except (ValueError, OSError) as e:
-        logger.warning(f"Failed to set memory limit: {e}")
+        logger.warning("Failed to set memory limit: %s", e)
 
 
 def run_script(

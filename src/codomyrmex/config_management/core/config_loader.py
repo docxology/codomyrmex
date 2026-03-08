@@ -290,7 +290,7 @@ class ConfigurationManager:
         Returns:
             Configuration: Loaded and merged configuration
         """
-        logger.info(f"Loading configuration: {name}")
+        logger.info("Loading configuration: %s", name)
 
         # Load schema if provided
         schema = None
@@ -354,7 +354,7 @@ class ConfigurationManager:
             )
 
         self.configurations[name] = config
-        logger.info(f"Configuration loaded: {name} from {config.source}")
+        logger.info("Configuration loaded: %s from %s", name, config.source)
 
         return config
 
@@ -392,7 +392,7 @@ class ConfigurationManager:
                 return json.load(f)
 
         except Exception as e:
-            logger.error(f"Failed to load config file {file_path}: {e}")
+            logger.error("Failed to load config file %s: %s", file_path, e)
             return None
 
     def _load_from_url(self, url: str) -> dict[str, Any] | None:
@@ -407,7 +407,7 @@ class ConfigurationManager:
             return response.json()
 
         except Exception as e:
-            logger.error(f"Failed to load config from URL {url}: {e}")
+            logger.error("Failed to load config from URL %s: %s", url, e)
             return None
 
     def _load_environment_variables(self, config_name: str) -> dict[str, Any]:
@@ -454,7 +454,7 @@ class ConfigurationManager:
             )
 
         except Exception as e:
-            logger.error(f"Failed to load schema {schema_path}: {e}")
+            logger.error("Failed to load schema %s: %s", schema_path, e)
             return None
 
     def save_configuration(
@@ -472,7 +472,7 @@ class ConfigurationManager:
             bool: True if save successful
         """
         if name not in self.configurations:
-            logger.error(f"Configuration not found: {name}")
+            logger.error("Configuration not found: %s", name)
             return False
 
         config = self.configurations[name]
@@ -486,11 +486,11 @@ class ConfigurationManager:
                 else:
                     json.dump(config.data, f, indent=2)
 
-            logger.info(f"Configuration saved: {name} to {output_path}")
+            logger.info("Configuration saved: %s to %s", name, output_path)
             return True
 
         except Exception as e:
-            logger.error(f"Failed to save configuration {name}: {e}")
+            logger.error("Failed to save configuration %s: %s", name, e)
             return False
 
     def validate_all_configurations(self) -> dict[str, list[str]]:
@@ -520,7 +520,7 @@ class ConfigurationManager:
             bool: True if reload successful
         """
         if name not in self.configurations:
-            logger.error(f"Configuration not found: {name}")
+            logger.error("Configuration not found: %s", name)
             return False
 
         # Get original sources
@@ -530,11 +530,11 @@ class ConfigurationManager:
         # Reload configuration
         try:
             self.load_configuration(name, sources)
-            logger.info(f"Configuration reloaded: {name}")
+            logger.info("Configuration reloaded: %s", name)
             return True
 
         except Exception as e:
-            logger.error(f"Failed to reload configuration {name}: {e}")
+            logger.error("Failed to reload configuration %s: %s", name, e)
             return False
 
     def get_configuration(self, name: str) -> Configuration | None:
@@ -570,11 +570,11 @@ class ConfigurationManager:
                 else:
                     json.dump(template, f, indent=2)
 
-            logger.info(f"Configuration template created: {output_path}")
+            logger.info("Configuration template created: %s", output_path)
             return True
 
         except Exception as e:
-            logger.error(f"Failed to create configuration template: {e}")
+            logger.error("Failed to create configuration template: %s", e)
             return False
 
     def _generate_template_from_schema(self, schema: dict[str, Any]) -> dict[str, Any]:
@@ -656,20 +656,20 @@ class ConfigurationManager:
                 result = validator.validate(config.data)
 
                 if not result.is_valid:
-                    logger.error(f"Configuration validation failed for {path}:")
+                    logger.error("Configuration validation failed for %s:", path)
                     for issue in result.errors:
-                        logger.error(f"  - {issue.message}")
+                        logger.error("  - %s", issue.message)
                     return None
 
                 if result.warnings:
-                    logger.warning(f"Configuration validation warnings for {path}:")
+                    logger.warning("Configuration validation warnings for %s:", path)
                     for issue in result.warnings:
-                        logger.warning(f"  - {issue.message}")
+                        logger.warning("  - %s", issue.message)
 
             return config
 
         except Exception as e:
-            logger.error(f"Failed to load and validate configuration {path}: {e}")
+            logger.error("Failed to load and validate configuration %s: %s", path, e)
             return None
 
     def migrate_configuration(self, name: str, target_version: str) -> bool:
@@ -684,7 +684,7 @@ class ConfigurationManager:
             bool: True if migration successful
         """
         if name not in self.configurations:
-            logger.error(f"Configuration not found: {name}")
+            logger.error("Configuration not found: %s", name)
             return False
 
         config = self.configurations[name]
@@ -719,11 +719,11 @@ class ConfigurationManager:
                     f"Successfully migrated {name} from {current_version} to {target_version}"
                 )
                 return True
-            logger.error(f"Migration failed for {name}: {migration_result.errors}")
+            logger.error("Migration failed for %s: %s", name, migration_result.errors)
             return False
 
         except Exception as e:
-            logger.error(f"Migration error for {name}: {e}")
+            logger.error("Migration error for %s: %s", name, e)
             return False
 
     def validate_config_schema(
@@ -792,7 +792,7 @@ class ConfigurationManager:
             }
 
         except Exception as e:
-            logger.error(f"Error generating validation report for {name}: {e}")
+            logger.error("Error generating validation report for %s: %s", name, e)
             return {"is_valid": False, "error": str(e)}
 
     def create_migration_backup(self, name: str) -> bool:
@@ -821,11 +821,11 @@ class ConfigurationManager:
             )
 
             self.configurations[backup_name] = backup_config
-            logger.info(f"Created backup: {backup_name}")
+            logger.info("Created backup: %s", backup_name)
             return True
 
         except Exception as e:
-            logger.error(f"Failed to create backup for {name}: {e}")
+            logger.error("Failed to create backup for %s: %s", name, e)
             return False
 
 

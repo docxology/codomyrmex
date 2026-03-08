@@ -111,7 +111,7 @@ class AdaptationTransformer(ModelTransformer):
             {"case_id": case.case_id, "adaptation_rate": self.adaptation_rate}
         )
 
-        self.logger.debug(f"Adapted model {model.name} to case {case.case_id}")
+        self.logger.debug("Adapted model %s to case %s", model.name, case.case_id)
         return adapted
 
     def update_parameters(self, model: Model, updates: dict[str, Any]) -> Model:
@@ -131,7 +131,7 @@ class AdaptationTransformer(ModelTransformer):
             metadata=model.metadata.copy(),
         )
 
-        self.logger.debug(f"Updated parameters for model {model.name}")
+        self.logger.debug("Updated parameters for model %s", model.name)
         return updated
 
 
@@ -204,7 +204,7 @@ class LearningTransformer(ModelTransformer):
             {"feedback": feedback, "learning_rate": self.learning_rate}
         )
 
-        self.logger.debug(f"Learned from feedback for model {model.name}")
+        self.logger.debug("Learned from feedback for model %s", model.name)
         return learned
 
     def gradient_update(self, model: Model, gradient: dict[str, Any]) -> Model:
@@ -233,7 +233,7 @@ class LearningTransformer(ModelTransformer):
             ):
                 updated.parameters[param_key] -= self.learning_rate * grad_value
 
-        self.logger.debug(f"Applied gradient update to model {model.name}")
+        self.logger.debug("Applied gradient update to model %s", model.name)
         return updated
 
 
@@ -253,7 +253,7 @@ class TransformationManager:
             transformer: Transformer instance
         """
         self.transformers[name] = transformer
-        self.logger.debug(f"Registered transformer: {name}")
+        self.logger.debug("Registered transformer: %s", name)
 
     def transform(
         self,

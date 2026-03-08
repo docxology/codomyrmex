@@ -46,9 +46,9 @@ class ToolRegistry:
         """Register a tool instance."""
         with self._lock:
             if tool.name in self._tools:
-                self.logger.warning(f"Overwriting tool '{tool.name}'")
+                self.logger.warning("Overwriting tool '%s'", tool.name)
             self._tools[tool.name] = tool
-            self.logger.debug(f"Registered tool: {tool.name}")
+            self.logger.debug("Registered tool: %s", tool.name)
 
     def register_function(
         self, func: Callable, name: str | None = None, description: str | None = None
@@ -145,7 +145,7 @@ class ToolRegistry:
             )
 
             if handler is None:
-                registry.logger.warning(f"MCP tool '{name}' has no handler, skipping")
+                registry.logger.warning("MCP tool '%s' has no handler, skipping", name)
                 continue
 
             tool = Tool(

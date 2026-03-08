@@ -114,7 +114,7 @@ class MetaAgent:
             try:
                 outcome = task_fn(strategy.name)
             except Exception as exc:
-                logger.warning(f"Task failed: {exc}")
+                logger.warning("Task failed: %s", exc)
                 strategy.record_outcome(False)
                 self._history.append(EvolutionRecord(i, strategy.name, 0.0))
                 continue

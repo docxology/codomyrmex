@@ -153,7 +153,7 @@ class AsyncPipelineManager:
                     except json.JSONDecodeError:
                         error_msg += f" - {error_text}"
 
-                    logger.error(f"[ASYNC] {error_msg}")
+                    logger.error("[ASYNC] %s", error_msg)
                     return AsyncPipelineResult(
                         pipeline_id=pipeline_name,
                         status=PipelineStatus.FAILURE,
@@ -163,7 +163,7 @@ class AsyncPipelineManager:
 
         except TimeoutError:
             error_msg = "Pipeline trigger request timed out"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id=pipeline_name,
                 status=PipelineStatus.FAILURE,
@@ -172,7 +172,7 @@ class AsyncPipelineManager:
             )
         except aiohttp.ClientError as e:
             error_msg = f"Network error triggering pipeline: {e}"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id=pipeline_name,
                 status=PipelineStatus.FAILURE,
@@ -201,7 +201,7 @@ class AsyncPipelineManager:
         Returns:
             AsyncPipelineResult with pipeline status details
         """
-        logger.info(f"[ASYNC] Getting pipeline status for {repo_owner}/{repo_name}")
+        logger.info("[ASYNC] Getting pipeline status for %s/%s", repo_owner, repo_name)
 
         if run_id:
             url = (
@@ -279,7 +279,7 @@ class AsyncPipelineManager:
                         )
                     await response.text()
                     error_msg = f"Failed to get pipeline status: HTTP {response.status}"
-                    logger.error(f"[ASYNC] {error_msg}")
+                    logger.error("[ASYNC] %s", error_msg)
                     return AsyncPipelineResult(
                         pipeline_id=str(run_id)
                         if run_id
@@ -291,7 +291,7 @@ class AsyncPipelineManager:
 
         except TimeoutError:
             error_msg = "Pipeline status request timed out"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id=str(run_id) if run_id else (workflow_id or "unknown"),
                 status=PipelineStatus.FAILURE,
@@ -300,7 +300,7 @@ class AsyncPipelineManager:
             )
         except aiohttp.ClientError as e:
             error_msg = f"Network error getting pipeline status: {e}"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id=str(run_id) if run_id else (workflow_id or "unknown"),
                 status=PipelineStatus.FAILURE,
@@ -347,7 +347,7 @@ class AsyncPipelineManager:
             )
 
             if result.error:
-                logger.warning(f"[ASYNC] Error checking status: {result.error}")
+                logger.warning("[ASYNC] Error checking status: %s", result.error)
                 # Continue polling despite transient errors
                 await asyncio.sleep(poll_interval)
                 continue
@@ -356,7 +356,7 @@ class AsyncPipelineManager:
 
             # Log status changes
             if current_status != last_status:
-                logger.info(f"[ASYNC] Pipeline {run_id} status: {current_status.value}")
+                logger.info("[ASYNC] Pipeline %s status: %s", run_id, current_status.value)
                 last_status = current_status
 
             # Check for terminal states
@@ -431,7 +431,7 @@ class AsyncPipelineManager:
                         )
                     await response.text()
                     error_msg = f"Failed to cancel pipeline: HTTP {response.status}"
-                    logger.error(f"[ASYNC] {error_msg}")
+                    logger.error("[ASYNC] %s", error_msg)
                     return AsyncPipelineResult(
                         pipeline_id=str(run_id),
                         status=PipelineStatus.FAILURE,
@@ -441,7 +441,7 @@ class AsyncPipelineManager:
 
         except TimeoutError:
             error_msg = "Pipeline cancel request timed out"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id=str(run_id),
                 status=PipelineStatus.FAILURE,
@@ -450,7 +450,7 @@ class AsyncPipelineManager:
             )
         except aiohttp.ClientError as e:
             error_msg = f"Network error cancelling pipeline: {e}"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id=str(run_id),
                 status=PipelineStatus.FAILURE,
@@ -483,7 +483,7 @@ class AsyncPipelineManager:
         Returns:
             AsyncPipelineResult with list of workflow runs
         """
-        logger.info(f"[ASYNC] Getting workflow runs for {repo_owner}/{repo_name}")
+        logger.info("[ASYNC] Getting workflow runs for %s/%s", repo_owner, repo_name)
 
         if workflow_id:
             url = f"{self.base_url}/repos/{repo_owner}/{repo_name}/actions/workflows/{workflow_id}/runs"
@@ -532,7 +532,7 @@ class AsyncPipelineManager:
                         )
                     await response.text()
                     error_msg = f"Failed to get workflow runs: HTTP {response.status}"
-                    logger.error(f"[ASYNC] {error_msg}")
+                    logger.error("[ASYNC] %s", error_msg)
                     return AsyncPipelineResult(
                         pipeline_id="workflow_runs",
                         status=PipelineStatus.FAILURE,
@@ -542,7 +542,7 @@ class AsyncPipelineManager:
 
         except TimeoutError:
             error_msg = "Workflow runs request timed out"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id="workflow_runs",
                 status=PipelineStatus.FAILURE,
@@ -551,7 +551,7 @@ class AsyncPipelineManager:
             )
         except aiohttp.ClientError as e:
             error_msg = f"Network error getting workflow runs: {e}"
-            logger.error(f"[ASYNC] {error_msg}")
+            logger.error("[ASYNC] %s", error_msg)
             return AsyncPipelineResult(
                 pipeline_id="workflow_runs",
                 status=PipelineStatus.FAILURE,
@@ -580,7 +580,7 @@ class AsyncPipelineManager:
         if pipeline_name not in self._sync_manager.pipelines:
             raise ValueError(f"Pipeline '{pipeline_name}' not found")
 
-        logger.info(f"[ASYNC] Running local pipeline: {pipeline_name}")
+        logger.info("[ASYNC] Running local pipeline: %s", pipeline_name)
 
         # Run the pipeline in the async context
         return await self._sync_manager.run_pipeline_async(pipeline_name, variables)

@@ -153,7 +153,7 @@ class OpenClawClient(CLIAgentBase):
                 "available": result.get("success", False),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.warning(f"Failed to get OpenClaw version: {e}")
+            self.logger.warning("Failed to get OpenClaw version: %s", e)
             return {"version": "", "exit_code": -1, "available": False, "error": str(e)}
 
     def run_doctor(self) -> dict[str, Any]:
@@ -217,5 +217,5 @@ class OpenClawClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.warning(f"Failed to get Gateway status: {e}")
+            self.logger.warning("Failed to get Gateway status: %s", e)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}

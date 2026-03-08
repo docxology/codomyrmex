@@ -27,7 +27,7 @@ def format_document(document: Document, style: str = "default") -> Document:
             return _format_yaml(document, style)
         return document
     except Exception as e:
-        logger.warning(f"Formatting failed: {e}, returning original document")
+        logger.warning("Formatting failed: %s, returning original document", e)
         return document
 
 

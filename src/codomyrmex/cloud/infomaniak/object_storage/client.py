@@ -38,27 +38,27 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             containers = list(self._conn.object_store.containers())
             return [c.name for c in containers]
         except Exception as e:
-            logger.error(f"Failed to list containers: {e}")
+            logger.error("Failed to list containers: %s", e)
             return []
 
     def create_container(self, name: str) -> bool:
         """Create a container."""
         try:
             self._conn.object_store.create_container(name)
-            logger.info(f"Created container: {name}")
+            logger.info("Created container: %s", name)
             return True
         except Exception as e:
-            logger.error(f"Failed to create container {name}: {e}")
+            logger.error("Failed to create container %s: %s", name, e)
             return False
 
     def delete_container(self, name: str) -> bool:
         """Delete a container (must be empty)."""
         try:
             self._conn.object_store.delete_container(name)
-            logger.info(f"Deleted container: {name}")
+            logger.info("Deleted container: %s", name)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete container {name}: {e}")
+            logger.error("Failed to delete container %s: %s", name, e)
             return False
 
     def get_container_metadata(self, name: str) -> dict[str, Any]:
@@ -67,7 +67,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             container = self._conn.object_store.get_container_metadata(name)
             return dict(container.metadata) if container else {}
         except Exception as e:
-            logger.error(f"Failed to get container metadata {name}: {e}")
+            logger.error("Failed to get container metadata %s: %s", name, e)
             return {}
 
     # =========================================================================
@@ -80,7 +80,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             objects = list(self._conn.object_store.objects(container, prefix=prefix))
             return [obj.name for obj in objects]
         except Exception as e:
-            logger.error(f"Failed to list objects in {container}: {e}")
+            logger.error("Failed to list objects in %s: %s", container, e)
             return []
 
     def upload_object(
@@ -91,10 +91,10 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             self._conn.object_store.upload_object(
                 container=container, name=name, data=data, content_type=content_type
             )
-            logger.info(f"Uploaded object: {container}/{name}")
+            logger.info("Uploaded object: %s/%s", container, name)
             return True
         except Exception as e:
-            logger.error(f"Failed to upload object {container}/{name}: {e}")
+            logger.error("Failed to upload object %s/%s: %s", container, name, e)
             return False
 
     def upload_file(
@@ -106,7 +106,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
                 data = f.read()
             return self.upload_object(container, name, data, content_type)
         except Exception as e:
-            logger.error(f"Failed to upload file {file_path}: {e}")
+            logger.error("Failed to upload file %s: %s", file_path, e)
             return False
 
     def download_object(self, container: str, name: str) -> bytes | None:
@@ -115,7 +115,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             obj = self._conn.object_store.download_object(container, name)
             return obj
         except Exception as e:
-            logger.error(f"Failed to download object {container}/{name}: {e}")
+            logger.error("Failed to download object %s/%s: %s", container, name, e)
             return None
 
     def download_file(self, container: str, name: str, file_path: str) -> bool:
@@ -128,17 +128,17 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
                 return True
             return False
         except Exception as e:
-            logger.error(f"Failed to download file {container}/{name}: {e}")
+            logger.error("Failed to download file %s/%s: %s", container, name, e)
             return False
 
     def delete_object(self, container: str, name: str) -> bool:
         """Delete an object from a container."""
         try:
             self._conn.object_store.delete_object(name, container=container)
-            logger.info(f"Deleted object: {container}/{name}")
+            logger.info("Deleted object: %s/%s", container, name)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete object {container}/{name}: {e}")
+            logger.error("Failed to delete object %s/%s: %s", container, name, e)
             return False
 
     def get_object_metadata(self, container: str, name: str) -> dict[str, Any]:
@@ -155,7 +155,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
                 else None,
             }
         except Exception as e:
-            logger.error(f"Failed to get object metadata {container}/{name}: {e}")
+            logger.error("Failed to get object metadata %s/%s: %s", container, name, e)
             return {}
 
     # =========================================================================
@@ -172,20 +172,20 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
         """
         try:
             self._conn.object_store.set_container_metadata(container, read_acl=acl)
-            logger.info(f"Set read ACL for {container}: {acl}")
+            logger.info("Set read ACL for %s: %s", container, acl)
             return True
         except Exception as e:
-            logger.error(f"Failed to set read ACL for {container}: {e}")
+            logger.error("Failed to set read ACL for %s: %s", container, e)
             return False
 
     def set_container_write_acl(self, container: str, acl: str) -> bool:
         """Set container write ACL."""
         try:
             self._conn.object_store.set_container_metadata(container, write_acl=acl)
-            logger.info(f"Set write ACL for {container}: {acl}")
+            logger.info("Set write ACL for %s: %s", container, acl)
             return True
         except Exception as e:
-            logger.error(f"Failed to set write ACL for {container}: {e}")
+            logger.error("Failed to set write ACL for %s: %s", container, e)
             return False
 
 
@@ -212,7 +212,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             response = self._client.list_buckets()
             return [b["Name"] for b in response.get("Buckets", [])]
         except Exception as e:
-            logger.error(f"Failed to list buckets: {e}")
+            logger.error("Failed to list buckets: %s", e)
             return []
 
     def create_bucket(self, name: str, region: str | None = None) -> bool:
@@ -222,20 +222,20 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             if region:
                 kwargs["CreateBucketConfiguration"] = {"LocationConstraint": region}
             self._client.create_bucket(**kwargs)
-            logger.info(f"Created bucket: {name}")
+            logger.info("Created bucket: %s", name)
             return True
         except Exception as e:
-            logger.error(f"Failed to create bucket {name}: {e}")
+            logger.error("Failed to create bucket %s: %s", name, e)
             return False
 
     def delete_bucket(self, name: str) -> bool:
         """Delete a bucket (must be empty)."""
         try:
             self._client.delete_bucket(Bucket=name)
-            logger.info(f"Deleted bucket: {name}")
+            logger.info("Deleted bucket: %s", name)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete bucket {name}: {e}")
+            logger.error("Failed to delete bucket %s: %s", name, e)
             return False
 
     def bucket_exists(self, name: str) -> bool:
@@ -263,7 +263,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             response = self._client.list_objects_v2(**params)
             return [obj["Key"] for obj in response.get("Contents", [])]
         except Exception as e:
-            logger.error(f"Failed to list objects in {bucket}: {e}")
+            logger.error("Failed to list objects in %s: %s", bucket, e)
             return []
 
     def upload_file(
@@ -275,10 +275,10 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             if content_type:
                 extra_args["ContentType"] = content_type
             self._client.upload_file(file_path, bucket, key, ExtraArgs=extra_args)
-            logger.info(f"Uploaded file: {bucket}/{key}")
+            logger.info("Uploaded file: %s/%s", bucket, key)
             return True
         except Exception as e:
-            logger.error(f"Failed to upload file to {bucket}/{key}: {e}")
+            logger.error("Failed to upload file to %s/%s: %s", bucket, key, e)
             return False
 
     def upload_data(
@@ -291,20 +291,20 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
                 params["ContentType"] = content_type
 
             self._client.put_object(**params)
-            logger.info(f"Uploaded data: {bucket}/{key}")
+            logger.info("Uploaded data: %s/%s", bucket, key)
             return True
         except Exception as e:
-            logger.error(f"Failed to upload data to {bucket}/{key}: {e}")
+            logger.error("Failed to upload data to %s/%s: %s", bucket, key, e)
             return False
 
     def download_file(self, bucket: str, key: str, file_path: str) -> bool:
         """Download an object to a local file."""
         try:
             self._client.download_file(bucket, key, file_path)
-            logger.info(f"Downloaded file: {bucket}/{key}")
+            logger.info("Downloaded file: %s/%s", bucket, key)
             return True
         except Exception as e:
-            logger.error(f"Failed to download {bucket}/{key}: {e}")
+            logger.error("Failed to download %s/%s: %s", bucket, key, e)
             return False
 
     def download_data(self, bucket: str, key: str) -> bytes | None:
@@ -313,17 +313,17 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             response = self._client.get_object(Bucket=bucket, Key=key)
             return response["Body"].read()
         except Exception as e:
-            logger.error(f"Failed to download {bucket}/{key}: {e}")
+            logger.error("Failed to download %s/%s: %s", bucket, key, e)
             return None
 
     def delete_object(self, bucket: str, key: str) -> bool:
         """Delete an object."""
         try:
             self._client.delete_object(Bucket=bucket, Key=key)
-            logger.info(f"Deleted object: {bucket}/{key}")
+            logger.info("Deleted object: %s/%s", bucket, key)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete {bucket}/{key}: {e}")
+            logger.error("Failed to delete %s/%s: %s", bucket, key, e)
             return False
 
     def delete_file(self, bucket: str, key: str) -> bool:
@@ -336,7 +336,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             response = self._client.head_object(Bucket=bucket, Key=key)
             return response.get("Metadata", {})
         except Exception as e:
-            logger.error(f"Failed to get metadata for {bucket}/{key}: {e}")
+            logger.error("Failed to get metadata for %s/%s: %s", bucket, key, e)
             return {}
 
     def get_metadata(self, bucket: str, key: str) -> dict[str, Any]:
@@ -367,7 +367,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             )
             return url
         except Exception as e:
-            logger.error(f"Failed to generate presigned URL: {e}")
+            logger.error("Failed to generate presigned URL: %s", e)
             return ""
 
     # =========================================================================
@@ -384,10 +384,10 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
                 Key=dst_key,
                 CopySource={"Bucket": src_bucket, "Key": src_key},
             )
-            logger.info(f"Copied {src_bucket}/{src_key} -> {dst_bucket}/{dst_key}")
+            logger.info("Copied %s/%s -> %s/%s", src_bucket, src_key, dst_bucket, dst_key)
             return True
         except Exception as e:
-            logger.error(f"Failed to copy object: {e}")
+            logger.error("Failed to copy object: %s", e)
             return False
 
     def list_objects_paginated(
@@ -406,7 +406,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
                     keys.append(obj["Key"])
             return keys
         except Exception as e:
-            logger.error(f"Failed to list objects (paginated) in {bucket}: {e}")
+            logger.error("Failed to list objects (paginated) in %s: %s", bucket, e)
             return []
 
     def delete_objects_batch(self, bucket: str, keys: list[str]) -> dict[str, Any]:
@@ -435,9 +435,9 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
                 deleted_count += len(response.get("Deleted", []))
                 errors.extend(response.get("Errors", []))
 
-            logger.info(f"Batch deleted {deleted_count} objects from {bucket}")
+            logger.info("Batch deleted %s objects from %s", deleted_count, bucket)
         except Exception as e:
-            logger.error(f"Failed batch delete in {bucket}: {e}")
+            logger.error("Failed batch delete in %s: %s", bucket, e)
             errors.append({"Key": "batch", "Message": str(e)})
 
         return {"deleted": deleted_count, "errors": errors}
@@ -448,10 +448,10 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             self._client.put_bucket_versioning(
                 Bucket=bucket, VersioningConfiguration={"Status": "Enabled"}
             )
-            logger.info(f"Enabled versioning on bucket: {bucket}")
+            logger.info("Enabled versioning on bucket: %s", bucket)
             return True
         except Exception as e:
-            logger.error(f"Failed to enable versioning on {bucket}: {e}")
+            logger.error("Failed to enable versioning on %s: %s", bucket, e)
             return False
 
     def get_versioning(self, bucket: str) -> str | None:
@@ -465,7 +465,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             response = self._client.get_bucket_versioning(Bucket=bucket)
             return response.get("Status")
         except Exception as e:
-            logger.error(f"Failed to get versioning for {bucket}: {e}")
+            logger.error("Failed to get versioning for %s: %s", bucket, e)
             return None
 
     def get_bucket_policy(self, bucket: str) -> str | None:
@@ -482,7 +482,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             error_str = str(e)
             if "NoSuchBucketPolicy" in error_str or "404" in error_str:
                 return None
-            logger.error(f"Failed to get bucket policy for {bucket}: {e}")
+            logger.error("Failed to get bucket policy for %s: %s", bucket, e)
             return None
 
     def put_bucket_policy(self, bucket: str, policy: str) -> bool:
@@ -495,8 +495,8 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         """
         try:
             self._client.put_bucket_policy(Bucket=bucket, Policy=policy)
-            logger.info(f"Set bucket policy on: {bucket}")
+            logger.info("Set bucket policy on: %s", bucket)
             return True
         except Exception as e:
-            logger.error(f"Failed to set bucket policy on {bucket}: {e}")
+            logger.error("Failed to set bucket policy on %s: %s", bucket, e)
             return False

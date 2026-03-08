@@ -144,7 +144,7 @@ def refactor_code_snippet(
         return result
 
     except (ValueError, ImportError, AttributeError) as e:
-        logger.error(f"Error refactoring code: {e}")
+        logger.error("Error refactoring code: %s", e)
         raise RuntimeError(f"Code refactoring failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues

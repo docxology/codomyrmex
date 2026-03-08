@@ -158,7 +158,7 @@ class StaticAnalyzer:
         elif language == Language.JAVA:
             file_results.extend(self._analyze_java_file(file_path, analysis_types))
         else:
-            logger.warning(f"Unsupported language for file: {file_path}")
+            logger.warning("Unsupported language for file: %s", file_path)
 
         self.results.extend(file_results)
         return file_results
@@ -306,7 +306,7 @@ class StaticAnalyzer:
                 self.analyze_file(file_path, analysis_types)
                 files_analyzed += 1
             except Exception as e:
-                logger.error(f"Error analyzing file {file_path}: {e}")
+                logger.error("Error analyzing file %s: %s", file_path, e)
 
         analysis_time = time.time() - start_time
 
@@ -376,7 +376,7 @@ class StaticAnalyzer:
             return metrics
 
         except Exception as e:
-            logger.error(f"Error calculating metrics for {file_path}: {e}")
+            logger.error("Error calculating metrics for %s: %s", file_path, e)
             return CodeMetrics(0, 0, 0, 0, 0)
 
     def _calculate_cyclomatic_complexity(self, content: str) -> int:
@@ -493,14 +493,14 @@ class StaticAnalyzer:
                         )
 
             else:
-                logger.error(f"Unsupported export format: {format}")
+                logger.error("Unsupported export format: %s", format)
                 return False
 
-            logger.info(f"Results exported to {output_path}")
+            logger.info("Results exported to %s", output_path)
             return True
 
         except Exception as e:
-            logger.error(f"Error exporting results: {e}")
+            logger.error("Error exporting results: %s", e)
             return False
 
     def clear_results(self):

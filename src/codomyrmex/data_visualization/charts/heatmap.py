@@ -105,7 +105,7 @@ def create_heatmap(
     else:
         plt.close(fig)
 
-    logger.info(f"Heatmap '{title}' generated successfully.")
+    logger.info("Heatmap '%s' generated successfully.", title)
     return fig
 
 

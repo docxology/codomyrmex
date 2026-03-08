@@ -92,13 +92,13 @@ class GitVisualizer:
         Returns:
             True if successful, False otherwise
         """
-        logger.debug(f"Creating Git tree PNG visualization: {title}")
+        logger.debug("Creating Git tree PNG visualization: %s", title)
 
         try:
             # Get data from repository or use provided data
             if repository_path and GIT_OPERATIONS_AVAILABLE:
                 if not is_git_repository(repository_path):
-                    logger.error(f"Path {repository_path} is not a Git repository")
+                    logger.error("Path %s is not a Git repository", repository_path)
                     return False
 
                 commits_data = get_commit_history(max_commits, repository_path)
@@ -219,7 +219,7 @@ class GitVisualizer:
             else:
                 plt.close(fig)
 
-            logger.info(f"Git tree PNG visualization '{title}' generated successfully")
+            logger.info("Git tree PNG visualization '%s' generated successfully", title)
             return True
 
         except Exception as e:
@@ -249,13 +249,13 @@ class GitVisualizer:
         Returns:
             Mermaid diagram content as string
         """
-        logger.debug(f"Creating Git tree Mermaid diagram: {title}")
+        logger.debug("Creating Git tree Mermaid diagram: %s", title)
 
         try:
             # Get data from repository if available
             if repository_path and GIT_OPERATIONS_AVAILABLE:
                 if not is_git_repository(repository_path):
-                    logger.error(f"Path {repository_path} is not a Git repository")
+                    logger.error("Path %s is not a Git repository", repository_path)
                     return ""
 
                 commits_data = get_commit_history(20, repository_path)
@@ -279,7 +279,7 @@ class GitVisualizer:
                 branches=branches, commits=commits, title=title, output_path=output_path
             )
 
-            logger.info(f"Git tree Mermaid diagram '{title}' generated successfully")
+            logger.info("Git tree Mermaid diagram '%s' generated successfully", title)
             return mermaid_content
 
         except Exception as e:
@@ -311,7 +311,7 @@ class GitVisualizer:
         Returns:
             True if successful, False otherwise
         """
-        logger.debug(f"Creating commit activity PNG chart: {title}")
+        logger.debug("Creating commit activity PNG chart: %s", title)
 
         try:
             # Get commit data
@@ -391,7 +391,7 @@ class GitVisualizer:
             else:
                 plt.close(fig)
 
-            logger.info(f"Commit activity PNG chart '{title}' generated successfully")
+            logger.info("Commit activity PNG chart '%s' generated successfully", title)
             return True
 
         except Exception as e:
@@ -579,7 +579,7 @@ class GitVisualizer:
         Returns:
             True if successful, False otherwise
         """
-        logger.debug(f"Creating repository summary PNG dashboard: {title}")
+        logger.debug("Creating repository summary PNG dashboard: %s", title)
 
         try:
             repo_data = self._get_repo_data(repository_path, repo_data)
@@ -635,7 +635,7 @@ class GitVisualizer:
         Returns:
             Dictionary with success status for each visualization type
         """
-        logger.info(f"Creating comprehensive Git report for {repository_path}")
+        logger.info("Creating comprehensive Git report for %s", repository_path)
 
         if not GIT_OPERATIONS_AVAILABLE:
             logger.error("Git operations module not available")
@@ -646,7 +646,7 @@ class GitVisualizer:
             return {}
 
         if not is_git_repository(repository_path):
-            logger.error(f"Path {repository_path} is not a Git repository")
+            logger.error("Path %s is not a Git repository", repository_path)
             return {}
 
         os.makedirs(output_dir, exist_ok=True)
@@ -706,7 +706,7 @@ class GitVisualizer:
             )
             results["structure_mermaid"] = bool(structure_content)
         except Exception as e:
-            logger.error(f"Error creating structure diagram: {e}")
+            logger.error("Error creating structure diagram: %s", e)
             results["structure_mermaid"] = False
 
         self._create_report_summary(output_dir, report_name, results, repository_path)
@@ -787,7 +787,7 @@ class GitVisualizer:
                     structure[item.name] = "file"
 
         except Exception as e:
-            logger.error(f"Error getting repository structure: {e}")
+            logger.error("Error getting repository structure: %s", e)
 
         return structure
 
@@ -841,7 +841,7 @@ class GitVisualizer:
         with open(summary_path, "w") as f:
             f.write("\n".join(summary_content))
 
-        logger.info(f"Report summary saved to {summary_path}")
+        logger.info("Report summary saved to %s", summary_path)
 
 
 # Convenience functions for easy import
@@ -918,13 +918,13 @@ if __name__ == "__main__":
     repo_path = sys.argv[1] if len(sys.argv) > 1 else None
 
     if repo_path and os.path.exists(repo_path):
-        logger.info(f"Creating comprehensive Git report for: {repo_path}")
+        logger.info("Creating comprehensive Git report for: %s", repo_path)
         results = visualizer.create_comprehensive_git_report(
             repository_path=repo_path,
             output_dir=str(output_dir),
             report_name="test_git_report",
         )
-        logger.info(f"Results: {results}")
+        logger.info("Results: %s", results)
     else:
         logger.info("Testing with sample data")
 
@@ -957,7 +957,7 @@ if __name__ == "__main__":
         )
         logger.info(f"Sample repository summary: {'Success' if success else 'Failed'}")
 
-    logger.info(f"Git visualization examples generated in {output_dir}")
+    logger.info("Git visualization examples generated in %s", output_dir)
 
     # Basic logging setup if running standalone
     if not logging.getLogger("").hasHandlers():

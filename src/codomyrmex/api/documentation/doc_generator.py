@@ -149,7 +149,7 @@ class APIDocumentationGenerator:
             APIDocumentation: Generated API documentation
         """
         base_url = base_url or os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL)
-        logger.info(f"Generating API documentation: {title} v{version}")
+        logger.info("Generating API documentation: %s v%s", title, version)
 
         # Discover API endpoints
         self.discovered_endpoints = self._discover_endpoints()
@@ -213,7 +213,7 @@ class APIDocumentationGenerator:
                         endpoints.append(endpoint)
 
         except Exception as e:
-            logger.warning(f"Failed to scan {file_path}: {e}")
+            logger.warning("Failed to scan %s: %s", file_path, e)
 
         return endpoints
 
@@ -426,14 +426,14 @@ class APIDocumentationGenerator:
                     yaml.dump(self.documentation.to_dict(), f, default_flow_style=False)
 
             else:
-                logger.error(f"Unsupported export format: {format}")
+                logger.error("Unsupported export format: %s", format)
                 return False
 
-            logger.info(f"API documentation exported to {output_path}")
+            logger.info("API documentation exported to %s", output_path)
             return True
 
         except Exception as e:
-            logger.error(f"Failed to export API documentation: {e}")
+            logger.error("Failed to export API documentation: %s", e)
             return False
 
     def validate_documentation(self) -> list[str]:

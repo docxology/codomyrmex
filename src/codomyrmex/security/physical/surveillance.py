@@ -59,7 +59,7 @@ class SurveillanceMonitor:
             severity=severity,
         )
         self.events.append(event)
-        logger.info(f"Logged {severity} event: {event_type} at {location}")
+        logger.info("Logged %s event: %s at %s", severity, event_type, location)
         return event
 
     def monitor_physical_access(self, location: str, user_id: str) -> PhysicalEvent:

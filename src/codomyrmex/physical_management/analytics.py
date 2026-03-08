@@ -99,7 +99,7 @@ class AnalyticsWindow:
                 ]
 
         except Exception as e:
-            logger.error(f"Error calculating metrics: {e}")
+            logger.error("Error calculating metrics: %s", e)
 
         return metrics
 
@@ -174,7 +174,7 @@ class DataStream:
             try:
                 subscriber(point)
             except Exception as e:
-                logger.error(f"Error in stream subscriber: {e}")
+                logger.error("Error in stream subscriber: %s", e)
 
     def subscribe(self, callback: Callable[[DataPoint], None]) -> None:
         """Subscribe to stream updates."""
@@ -418,7 +418,7 @@ class StreamingAnalytics:
             try:
                 processor(stream_id, point)
             except Exception as e:
-                logger.error(f"Error in data processor: {e}")
+                logger.error("Error in data processor: %s", e)
 
         # Check alerts
         triggered_alerts = self.check_alerts(stream_id, point)
@@ -468,7 +468,7 @@ class PredictiveAnalytics:
             return predicted_value
 
         except Exception as e:
-            logger.error(f"Error in linear trend prediction: {e}")
+            logger.error("Error in linear trend prediction: %s", e)
             return None
 
     def detect_anomalies(
@@ -495,7 +495,7 @@ class PredictiveAnalytics:
             return anomalies
 
         except Exception as e:
-            logger.error(f"Error in anomaly detection: {e}")
+            logger.error("Error in anomaly detection: %s", e)
             return []
 
     def calculate_correlation(
@@ -541,7 +541,7 @@ class PredictiveAnalytics:
             return correlation
 
         except Exception as e:
-            logger.error(f"Error calculating correlation: {e}")
+            logger.error("Error calculating correlation: %s", e)
             return None
 
 

@@ -160,7 +160,7 @@ class BaseVisualizer(ABC):
             output_path, dpi=dpi, bbox_inches=bbox_inches, format=format, **kwargs
         )
         plt.close(fig)
-        self.logger.debug(f"Saved figure to {output_path}")
+        self.logger.debug("Saved figure to %s", output_path)
 
 
 class BaseNetworkVisualizer(BaseVisualizer):

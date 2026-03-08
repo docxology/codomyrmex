@@ -53,11 +53,11 @@ class JobScheduler:
                 # Check for jobs ready to execute
                 job = self.queue.dequeue()
                 if job:
-                    logger.info(f"Executing job: {job.job_id}")
+                    logger.info("Executing job: %s", job.job_id)
                     # Job execution would happen here
                     job.status = JobStatus.COMPLETED
             except Exception as e:
-                logger.error(f"Error in scheduler: {e}")
+                logger.error("Error in scheduler: %s", e)
 
             time.sleep(self.check_interval)
 
@@ -89,9 +89,9 @@ class JobScheduler:
         # Use Queue's cancel method
         result = self.queue.cancel(job_id)
         if result:
-            logger.info(f"Cancelled job: {job_id}")
+            logger.info("Cancelled job: %s", job_id)
         else:
-            logger.warning(f"Failed to cancel job: {job_id}")
+            logger.warning("Failed to cancel job: %s", job_id)
         return result
 
     def get_job(self, job_id: str) -> Optional["Job"]:

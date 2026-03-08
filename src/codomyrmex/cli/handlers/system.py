@@ -281,6 +281,6 @@ def run_interactive_shell() -> bool:
         shell.run()
         return True
     except (ImportError, Exception) as e:
-        logger.error(f"Failed to launch interactive shell: {e}")
+        logger.error("Failed to launch interactive shell: %s", e)
         print(f"❌ Failed to launch interactive shell: {e}")
         return False

@@ -53,7 +53,7 @@ def extract_metadata(file_path: str | Path) -> dict[str, Any]:
         return metadata
 
     except Exception as e:
-        logger.error(f"Error extracting metadata from {file_path}: {e}")
+        logger.error("Error extracting metadata from %s: %s", file_path, e)
         raise MetadataError(f"Failed to extract metadata: {e!s}") from e
 
 

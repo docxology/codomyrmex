@@ -115,7 +115,7 @@ def resolve_handler(handler_path: str) -> Callable:
         module = importlib.import_module(module_name)
         return getattr(module, function_name)
     except (ImportError, AttributeError) as e:
-        logger.error(f"Failed to resolve handler {handler_path}: {e}")
+        logger.error("Failed to resolve handler %s: %s", handler_path, e)
         raise
 
 

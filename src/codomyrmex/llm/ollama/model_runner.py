@@ -188,7 +188,7 @@ class ModelRunner:
 
         # For now, implement streaming as a series of regular calls
         # In a full implementation, this would use Ollama's streaming API
-        self.logger.info(f"Starting streaming execution for {model_name}")
+        self.logger.info("Starting streaming execution for %s", model_name)
 
         # Run the model and collect chunks
         result = self.run_with_options(model_name, prompt, options)
@@ -432,7 +432,7 @@ class ModelRunner:
 
         for model_name in model_names:
             if not self.ollama_manager.is_model_available(model_name):
-                self.logger.warning(f"Model {model_name} not available, skipping")
+                self.logger.warning("Model %s not available, skipping", model_name)
                 continue
 
             result = self.run_with_options(model_name, test_prompt, options)
@@ -576,7 +576,7 @@ class ModelRunner:
                         )
                     error_text = await response.text()
                     error_msg = f"HTTP {response.status}: {error_text}"
-                    self.logger.error(f"[ASYNC] Model {model_name} failed: {error_msg}")
+                    self.logger.error("[ASYNC] Model %s failed: %s", model_name, error_msg)
 
                     return ModelExecutionResult(
                         model_name=model_name,
@@ -800,7 +800,7 @@ class ModelRunner:
         if options is None:
             options = ExecutionOptions()
 
-        self.logger.info(f"[ASYNC] Starting streaming generation with {model_name}")
+        self.logger.info("[ASYNC] Starting streaming generation with %s", model_name)
 
         # Build Ollama API payload with streaming enabled
         payload: dict[str, Any] = {
@@ -868,10 +868,10 @@ class ModelRunner:
             self.logger.error("[ASYNC] Streaming generation timed out")
             yield StreamingChunk(content="", done=True, token_count=0)
         except aiohttp.ClientError as e:
-            self.logger.error(f"[ASYNC] Streaming network error: {e}")
+            self.logger.error("[ASYNC] Streaming network error: %s", e)
             yield StreamingChunk(content="", done=True, token_count=0)
         except Exception as e:
-            self.logger.error(f"[ASYNC] Streaming error: {e}")
+            self.logger.error("[ASYNC] Streaming error: %s", e)
             yield StreamingChunk(content="", done=True, token_count=0)
 
     async def async_run_batch(

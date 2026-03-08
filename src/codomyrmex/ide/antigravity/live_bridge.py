@@ -126,7 +126,7 @@ class LiveAgentBridge:
             self._thread.join(timeout=self.poll_interval * 2)
             self._thread = None
         self.relay.post_system(f"{self.identity} left the channel")
-        logger.info(f"LiveAgentBridge stopped: {self.identity}")
+        logger.info("LiveAgentBridge stopped: %s", self.identity)
 
     @property
     def is_running(self) -> bool:
@@ -202,7 +202,7 @@ class LiveAgentBridge:
             try:
                 self._poll_once()
             except Exception as e:
-                logger.error(f"Poll error: {e}")
+                logger.error("Poll error: %s", e)
             time.sleep(self.poll_interval)
 
     def _poll_once(self) -> None:
@@ -226,7 +226,7 @@ class LiveAgentBridge:
             elif msg.is_tool_result:
                 pass  # handled by await_response
             elif msg.msg_type == MSG_SYSTEM:
-                logger.info(f"[system] {msg.content}")
+                logger.info("[system] %s", msg.content)
 
     def _handle_chat(self, msg: RelayMessage) -> None:
         """Dispatch a chat message to registered handlers."""
@@ -235,11 +235,11 @@ class LiveAgentBridge:
             try:
                 handler(msg)
             except Exception as e:
-                logger.error(f"Message handler error: {e}")
+                logger.error("Message handler error: %s", e)
 
     def _handle_tool_request(self, msg: RelayMessage) -> None:
         """Handle an incoming tool request."""
-        logger.info(f"[{msg.sender}] requests tool: {msg.tool_name}")
+        logger.info("[%s] requests tool: %s", msg.sender, msg.tool_name)
 
         # Try custom handlers first
         for handler in self._on_tool_request:
@@ -248,7 +248,7 @@ class LiveAgentBridge:
                 self.relay.post_tool_result(self.identity, msg.id, result)
                 return
             except Exception as e:
-                logger.error(f"Tool request handler error: {e}")
+                logger.error("Tool request handler error: %s", e)
 
         # Auto-execute via AntigravityToolProvider
         if self.auto_execute_tools and msg.tool_name:
@@ -433,7 +433,7 @@ class ClaudeCodeEndpoint:
             daemon=True,
         )
         self._thread.start()
-        logger.info(f"ClaudeCodeEndpoint started on {self.relay.channel_id}")
+        logger.info("ClaudeCodeEndpoint started on %s", self.relay.channel_id)
 
     def stop(self) -> None:
         """Stop the endpoint."""
@@ -482,7 +482,7 @@ class ClaudeCodeEndpoint:
             try:
                 self._poll_once()
             except Exception as e:
-                logger.error(f"ClaudeCode poll error: {e}")
+                logger.error("ClaudeCode poll error: %s", e)
             time.sleep(self.poll_interval)
 
     def _poll_once(self) -> None:
@@ -513,7 +513,7 @@ class ClaudeCodeEndpoint:
                     self.relay.post_message(self.identity, response)
                     return
             except Exception as e:
-                logger.error(f"Message handler error: {e}")
+                logger.error("Message handler error: %s", e)
 
         # Auto-respond via Claude API
         if self.auto_respond:
@@ -552,7 +552,7 @@ class ClaudeCodeEndpoint:
                 )
 
         except Exception as e:
-            logger.error(f"Auto-respond failed: {e}")
+            logger.error("Auto-respond failed: %s", e)
             self.relay.post_message(
                 self.identity,
                 f"[error] Failed to generate response: {e}",

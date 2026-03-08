@@ -33,7 +33,7 @@ def merge_branch(
 
         # Switch to target branch first
         if not switch_branch(target_branch, repository_path):
-            logger.error(f"Could not switch to target branch '{target_branch}'")
+            logger.error("Could not switch to target branch '%s'", target_branch)
             return False
 
         # Prepare merge command
@@ -46,16 +46,16 @@ def merge_branch(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
-        logger.info(f"Successfully merged '{source_branch}' into '{target_branch}'")
+        logger.info("Successfully merged '%s' into '%s'", source_branch, target_branch)
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to merge branch '{source_branch}': {e}")
+        logger.error("Failed to merge branch '%s': %s", source_branch, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error merging branch: {e}")
+        logger.error("Unexpected error merging branch: %s", e)
         return False
 
 
@@ -82,14 +82,14 @@ def rebase_branch(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
-        logger.info(f"Successfully rebased '{current_branch}' onto '{target_branch}'")
+        logger.info("Successfully rebased '%s' onto '%s'", current_branch, target_branch)
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to rebase onto '{target_branch}': {e}")
+        logger.error("Failed to rebase onto '%s': %s", target_branch, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error rebasing branch: {e}")
+        logger.error("Unexpected error rebasing branch: %s", e)
         return False

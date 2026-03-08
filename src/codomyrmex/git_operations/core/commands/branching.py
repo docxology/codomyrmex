@@ -79,7 +79,7 @@ def delete_branch(
             check=True,
             timeout=_GIT_TIMEOUT,
         )
-        logger.info(f"Deleted branch {branch_name} (force={force})")
+        logger.info("Deleted branch %s (force=%s)", branch_name, force)
         return True
     except subprocess.CalledProcessError as e:
         logger.error("Failed to delete branch '%s': %s", branch_name, e.stderr or e)

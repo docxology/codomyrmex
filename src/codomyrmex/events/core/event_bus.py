@@ -67,7 +67,7 @@ class Subscription:
                 if not self.filter_func(event):
                     return False
             except Exception as e:
-                logger.error(f"Error in subscription filter function: {e}")
+                logger.error("Error in subscription filter function: %s", e)
                 return False
 
         return True
@@ -198,7 +198,7 @@ class EventBus:
         with self._lock:
             if subscriber_id in self.subscriptions:
                 del self.subscriptions[subscriber_id]
-                logger.info(f"Unsubscribed {subscriber_id}")
+                logger.info("Unsubscribed %s", subscriber_id)
                 return True
         return False
 
@@ -265,7 +265,7 @@ class EventBus:
 
             self.events_processed += 1
         except Exception as e:
-            logger.error(f"Error processing event: {e}")
+            logger.error("Error processing event: %s", e)
             self.dead_letter_queue.append(event)
             self.events_failed += 1
 
@@ -285,7 +285,7 @@ class EventBus:
                 finally:
                     loop.close()
         except Exception as e:
-            logger.error(f"Error in async event handler: {e}")
+            logger.error("Error in async event handler: %s", e)
             self.events_failed += 1
 
     def get_stats(self) -> dict[str, Any]:

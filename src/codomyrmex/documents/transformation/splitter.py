@@ -36,7 +36,7 @@ def split_document(document: Document, criteria: dict) -> list[Document]:
         return _split_by_lines(document, criteria)
 
     except Exception as e:
-        logger.error(f"Error splitting document: {e}")
+        logger.error("Error splitting document: %s", e)
         if isinstance(e, DocumentConversionError):
             raise
         raise DocumentConversionError(f"Failed to split document: {e!s}") from e

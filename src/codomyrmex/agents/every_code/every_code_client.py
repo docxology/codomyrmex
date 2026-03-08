@@ -198,7 +198,7 @@ class EveryCodeClient(CLIAgentBase):
         try:
             # Prevent directory traversal / shell injection attempts
             if ".." in path_str or ";" in path_str or "|" in path_str:
-                self.logger.warning(f"Suspicious path detected and ignored: {path_str}")
+                self.logger.warning("Suspicious path detected and ignored: %s", path_str)
                 return None
 
             path = Path(path_str).resolve()
@@ -208,7 +208,7 @@ class EveryCodeClient(CLIAgentBase):
 
             return str(path)
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.warning(f"Error sanitizing path {path_str}: {e}")
+            self.logger.warning("Error sanitizing path %s: %s", path_str, e)
             return None
 
     def _build_code_input(self, prompt: str, context: dict[str, Any]) -> str:

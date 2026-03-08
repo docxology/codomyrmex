@@ -14,7 +14,7 @@ def init_submodules(repository_path: str | None = None) -> bool:
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Initializing submodules in {repository_path}")
+        logger.info("Initializing submodules in %s", repository_path)
         subprocess.run(
             ["git", "submodule", "update", "--init", "--recursive"],
             cwd=repository_path,
@@ -24,12 +24,12 @@ def init_submodules(repository_path: str | None = None) -> bool:
         )
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to init submodules: {e}")
+        logger.error("Failed to init submodules: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error initializing submodules: {e}")
+        logger.error("Unexpected error initializing submodules: %s", e)
         return False
 
 
@@ -40,7 +40,7 @@ def update_submodules(repository_path: str | None = None) -> bool:
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Updating submodules in {repository_path}")
+        logger.info("Updating submodules in %s", repository_path)
         subprocess.run(
             ["git", "submodule", "update", "--remote", "--recursive"],
             cwd=repository_path,
@@ -50,10 +50,10 @@ def update_submodules(repository_path: str | None = None) -> bool:
         )
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to update submodules: {e}")
+        logger.error("Failed to update submodules: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error updating submodules: {e}")
+        logger.error("Unexpected error updating submodules: %s", e)
         return False

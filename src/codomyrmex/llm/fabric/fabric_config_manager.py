@@ -58,7 +58,7 @@ class FabricConfigManager:
                     patterns_dir=data.get("patterns_dir"),
                 )
             except Exception as e:
-                logger.warning(f"Failed to load config: {e}")
+                logger.warning("Failed to load config: %s", e)
         return FabricConfig()
 
     def save_config(self):

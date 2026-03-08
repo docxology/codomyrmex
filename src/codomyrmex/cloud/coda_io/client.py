@@ -149,6 +149,7 @@ class CodaClient(
                 metadata={"browser_link": doc.browser_link},
             )
         except Exception as _exc:
+            logger.warning("Failed to retrieve Coda resource %s: %s", resource_id, _exc)
             return None
 
     def create_resource(
@@ -176,4 +177,5 @@ class CodaClient(
             self.delete_doc(resource_id)
             return True
         except Exception as _exc:
+            logger.warning("Failed to delete Coda document %s: %s", resource_id, _exc)
             return False

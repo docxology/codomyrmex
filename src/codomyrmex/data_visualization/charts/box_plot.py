@@ -92,7 +92,7 @@ def create_box_plot(
     else:
         plt.close(fig)
 
-    logger.info(f"Box plot '{title}' generated successfully.")
+    logger.info("Box plot '%s' generated successfully.", title)
     return fig
 
 

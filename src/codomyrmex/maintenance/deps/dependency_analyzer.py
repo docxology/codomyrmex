@@ -115,9 +115,9 @@ class DependencyAnalyzer:
                         imports.add(module_name)
 
         except SyntaxError as e:
-            logger.warning(f"Syntax error in {file_path}: {e}")
+            logger.warning("Syntax error in %s: %s", file_path, e)
         except Exception as e:
-            logger.error(f"Error parsing {file_path}: {e}")
+            logger.error("Error parsing %s: %s", file_path, e)
 
         return imports
 
@@ -143,7 +143,7 @@ class DependencyAnalyzer:
     def scan_all_modules(self) -> None:
         """Scan all modules in the repository."""
         if not self.src_path.exists():
-            logger.error(f"Source path not found: {self.src_path}")
+            logger.error("Source path not found: %s", self.src_path)
             return
 
         for item in self.src_path.iterdir():

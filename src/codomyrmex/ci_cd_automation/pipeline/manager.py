@@ -76,11 +76,11 @@ class PipelineManager:
             pipeline = self._parse_pipeline_config(config)
             self.pipelines[pipeline.name] = pipeline
 
-            logger.info(f"Created pipeline: {pipeline.name}")
+            logger.info("Created pipeline: %s", pipeline.name)
             return pipeline
 
         except Exception as e:
-            logger.error(f"Failed to create pipeline from {config_path}: {e}")
+            logger.error("Failed to create pipeline from %s: %s", config_path, e)
             raise
 
     def _parse_pipeline_config(self, config: dict[str, Any]) -> Pipeline:
@@ -147,7 +147,7 @@ class PipelineManager:
         pipeline.status = PipelineStatus.RUNNING
         pipeline.started_at = datetime.now(UTC)
 
-        logger.info(f"Starting pipeline execution: {pipeline_name}")
+        logger.info("Starting pipeline execution: %s", pipeline_name)
 
         try:
             # Execute stages in dependency order
@@ -177,7 +177,7 @@ class PipelineManager:
                     pipeline.finished_at - pipeline.started_at
                 ).total_seconds()
 
-            logger.error(f"Pipeline {pipeline_name} failed: {e}")
+            logger.error("Pipeline %s failed: %s", pipeline_name, e)
 
         return pipeline
 
@@ -245,7 +245,7 @@ class PipelineManager:
         stage.status = StageStatus.RUNNING
         stage.start_time = datetime.now(UTC)
 
-        logger.info(f"Executing stage: {stage.name}")
+        logger.info("Executing stage: %s", stage.name)
 
         try:
             if stage.parallel:
@@ -267,7 +267,7 @@ class PipelineManager:
 
         except Exception as e:
             stage.status = StageStatus.FAILURE
-            logger.error(f"Stage {stage.name} failed: {e}")
+            logger.error("Stage %s failed: %s", stage.name, e)
 
         stage.end_time = datetime.now(UTC)
 
@@ -287,7 +287,7 @@ class PipelineManager:
         job.status = JobStatus.RUNNING
         job.start_time = datetime.now(UTC)
 
-        logger.info(f"Executing job: {job.name}")
+        logger.info("Executing job: %s", job.name)
 
         try:
             # Execute commands
@@ -306,7 +306,7 @@ class PipelineManager:
 
                 if result.get("returncode", 0) != 0:
                     if job.retry_count > 0:
-                        logger.warning(f"Job {job.name} failed, retrying...")
+                        logger.warning("Job %s failed, retrying...", job.name)
                         job.retry_count -= 1
                         continue
                     raise Exception(f"Command failed: {resolved_cmd}")
@@ -316,7 +316,7 @@ class PipelineManager:
         except Exception as e:
             job.status = JobStatus.FAILURE
             job.error += str(e)
-            logger.error(f"Job {job.name} failed: {e}")
+            logger.error("Job %s failed: %s", job.name, e)
 
             if not job.allow_failure:
                 raise
@@ -394,7 +394,7 @@ class PipelineManager:
         if pipeline_name in self.pipelines:
             self.pipelines[pipeline_name].status = PipelineStatus.CANCELLED
 
-        logger.info(f"Cancelled pipeline: {pipeline_name}")
+        logger.info("Cancelled pipeline: %s", pipeline_name)
         return True
 
     def validate_pipeline_config(self, config: dict) -> tuple[bool, list[str]]:
@@ -929,4 +929,4 @@ class PipelineManager:
             else:
                 json.dump(config, f, indent=2)
 
-        logger.info(f"Saved pipeline config to {output_path}")
+        logger.info("Saved pipeline config to %s", output_path)

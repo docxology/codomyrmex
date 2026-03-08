@@ -102,7 +102,7 @@ class ReActAgent(BaseAgent):
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """Execute the ReAct loop via plan→act→observe."""
-        self.logger.info(f"Starting ReAct loop for prompt: {request.prompt}")
+        self.logger.info("Starting ReAct loop for prompt: %s", request.prompt)
 
         actions = self.plan(request)
         context: dict[str, Any] = {
@@ -139,14 +139,14 @@ class ReActAgent(BaseAgent):
                 logger.debug("Could not parse tool kwargs as JSON: %s", e)
 
         try:
-            self.logger.info(f"Executing tool {tool_name} with {kwargs}")
+            self.logger.info("Executing tool %s with %s", tool_name, kwargs)
             result = self.tool_registry.execute(tool_name, **kwargs)
             return AgentResponse(
                 content=f"Tool {tool_name} returned: {result}",
                 metadata={"tool": tool_name, "steps_taken": 1},
             )
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"Tool {tool_name} failed: {e}")
+            self.logger.error("Tool %s failed: %s", tool_name, e)
             return AgentResponse(content="", error=str(e))
 
     def _act_llm_loop(self, context: dict[str, Any]) -> AgentResponse:
@@ -209,7 +209,7 @@ class ReActAgent(BaseAgent):
                     history.append(AgentMessage.assistant(response_text))
 
             except Exception as llm_error:
-                self.logger.warning(f"LLM call failed: {llm_error}")
+                self.logger.warning("LLM call failed: %s", llm_error)
                 break
 
         if final_answer is None:

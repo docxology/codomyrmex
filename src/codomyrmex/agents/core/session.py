@@ -110,7 +110,7 @@ class AgentSession:
     def clear(self) -> None:
         """Clear all messages from the session."""
         self.messages.clear()
-        logger.info(f"Session {self.session_id} cleared")
+        logger.info("Session %s cleared", self.session_id)
 
     def _trim_history(self) -> None:
         """Trim history to max_history limit, preserving system messages."""
@@ -146,7 +146,7 @@ class AgentSession:
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
 
-        logger.info(f"Session saved to {path}")
+        logger.info("Session saved to %s", path)
 
     @classmethod
     def load(cls, path: Path) -> "AgentSession":
@@ -171,7 +171,7 @@ class AgentSession:
             max_history=data.get("max_history", 50),
         )
 
-        logger.info(f"Session loaded from {path}")
+        logger.info("Session loaded from %s", path)
         return session
 
     def __len__(self) -> int:
@@ -210,7 +210,7 @@ class SessionManager:
             agent_name=agent_name,
         )
         self.sessions[session.session_id] = session
-        logger.info(f"Created session {session.session_id} for {agent_name}")
+        logger.info("Created session %s for %s", session.session_id, agent_name)
         return session
 
     def get_session(self, session_id: str) -> AgentSession | None:
@@ -233,7 +233,7 @@ class SessionManager:
                 path = self.storage_dir / f"{session_id}.json"
                 if path.exists():
                     path.unlink()
-            logger.info(f"Deleted session {session_id}")
+            logger.info("Deleted session %s", session_id)
             return True
         return False
 
@@ -259,7 +259,7 @@ class SessionManager:
                 self.sessions[session.session_id] = session
                 count += 1
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                logger.warning(f"Failed to load session from {path}: {e}")
+                logger.warning("Failed to load session from %s: %s", path, e)
 
         return count
 

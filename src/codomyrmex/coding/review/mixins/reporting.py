@@ -23,11 +23,11 @@ class ReportingMixin:
                 return self._generate_json_report(output_path)
             if format.lower() == "markdown":
                 return self._generate_markdown_report(output_path)
-            logger.error(f"Unsupported report format: {format}")
+            logger.error("Unsupported report format: %s", format)
             return False
 
         except Exception as e:
-            logger.error(f"Error generating report: {e}")
+            logger.error("Error generating report: %s", e)
             return False
 
     def _generate_html_report(self, output_path: str) -> bool:
@@ -173,11 +173,11 @@ class ReportingMixin:
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(html_content)
 
-            logger.info(f"Comprehensive report generated: {output_path}")
+            logger.info("Comprehensive report generated: %s", output_path)
             return True
 
         except Exception as e:
-            logger.error(f"Error generating comprehensive report: {e}")
+            logger.error("Error generating comprehensive report: %s", e)
             return False
 
     def _generate_dashboard_html(self, dashboard: QualityDashboard) -> str:

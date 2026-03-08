@@ -262,7 +262,7 @@ class CompositionVisualizer:
         if output_path:
             fig.savefig(output_path, dpi=self.dpi, bbox_inches="tight")
             plt.close(fig)
-            self.logger.info(f"Saved dashboard to {output_path}")
+            self.logger.info("Saved dashboard to %s", output_path)
         else:
             plt.tight_layout(pad=self.theme.figure.tight_layout_pad)
             return fig

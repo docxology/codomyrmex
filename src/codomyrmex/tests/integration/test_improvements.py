@@ -106,7 +106,7 @@ class TestComprehensiveImprovements:
         try:
             raise CodomyrmexError("Integration test error", context={"test": "data"})
         except CodomyrmexError as e:
-            logger.error(f"Caught error: {e}")
+            logger.error("Caught error: %s", e)
             # Exception should be serializable for logging
             error_data = e.to_dict()
             assert "message" in error_data

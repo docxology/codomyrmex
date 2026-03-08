@@ -64,5 +64,5 @@ def get_system_context(root_dir: str = ".") -> dict[str, Any]:
         return context
 
     except Exception as e:
-        logger.error(f"Failed to get system context: {e}")
+        logger.error("Failed to get system context: %s", e)
         return {"error": str(e)}

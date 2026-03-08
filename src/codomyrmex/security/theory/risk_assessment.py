@@ -83,7 +83,7 @@ class RiskAssessor:
             methodology: Assessment methodology (qualitative, quantitative, hybrid)
         """
         self.methodology = methodology
-        logger.info(f"RiskAssessor initialized with {methodology} methodology")
+        logger.info("RiskAssessor initialized with %s methodology", methodology)
 
     def assess(self, context: dict[str, Any]) -> RiskAssessment:
         """

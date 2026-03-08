@@ -79,7 +79,7 @@ def create_pie_chart(
         plt.show()
     else:
         plt.close(fig)
-    logger.info(f"Pie chart '{title}' generated successfully.")
+    logger.info("Pie chart '%s' generated successfully.", title)
     return fig
 
 

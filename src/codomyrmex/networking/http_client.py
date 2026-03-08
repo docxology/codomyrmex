@@ -156,5 +156,5 @@ class HTTPClient:
                 json_data=json_data,
             )
         except requests.exceptions.RequestException as e:
-            logger.error(f"HTTP request failed: {e}")
+            logger.error("HTTP request failed: %s", e)
             raise NetworkingError(f"HTTP request failed: {e!s}") from e

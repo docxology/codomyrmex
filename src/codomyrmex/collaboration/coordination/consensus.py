@@ -152,7 +152,7 @@ class VotingMechanism:
         )
         self._active_proposals[proposal.proposal_id] = proposal
         self._votes[proposal.proposal_id] = {}
-        logger.info(f"Proposal created: {title} ({proposal.proposal_id})")
+        logger.info("Proposal created: %s (%s)", title, proposal.proposal_id)
         return proposal
 
     def cast_vote(
@@ -181,7 +181,7 @@ class VotingMechanism:
             reason=reason,
         )
         self._votes[proposal_id][voter_id] = vote_obj
-        logger.info(f"Vote cast: {voter_id} voted {vote.value} on {proposal_id}")
+        logger.info("Vote cast: %s voted %s on %s", voter_id, vote.value, proposal_id)
         return vote_obj
 
     def get_votes(self, proposal_id: str) -> list[Vote]:
@@ -350,7 +350,7 @@ class ConsensusBuilder:
                     value = value_fn(agent)
                     self.propose_value(key, agent.agent_id, value)
                 except Exception as e:
-                    logger.warning(f"Agent {agent.agent_id} failed to propose: {e}")
+                    logger.warning("Agent %s failed to propose: %s", agent.agent_id, e)
                     failures += 1
 
             if failures == len(agents):
@@ -365,7 +365,7 @@ class ConsensusBuilder:
 
             await asyncio.sleep(0.1)  # Brief delay between rounds
 
-        logger.warning(f"Consensus not reached for '{key}' after {max_rounds} rounds")
+        logger.warning("Consensus not reached for '%s' after %s rounds", key, max_rounds)
         return None
 
 

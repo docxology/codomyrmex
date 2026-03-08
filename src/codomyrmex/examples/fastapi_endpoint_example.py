@@ -70,7 +70,7 @@ async def create_user(user: UserCreate):
     # Check for existing username
     for existing_user in fake_users_db.values():
         if existing_user["username"] == user.username:
-            logger.warning(f"Attempt to create duplicate user: {user.username}")
+            logger.warning("Attempt to create duplicate user: %s", user.username)
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Username already registered",
@@ -82,7 +82,7 @@ async def create_user(user: UserCreate):
     user_dict["created_at"] = time.time()
 
     fake_users_db[current_id] = user_dict
-    logger.info(f"User created: {user.username} (ID: {current_id})")
+    logger.info("User created: %s (ID: %s)", user.username, current_id)
 
     return user_dict
 
@@ -102,7 +102,7 @@ async def read_user(user_id: int):
     Get a specific user by ID.
     """
     if user_id not in fake_users_db:
-        logger.error(f"User not found: {user_id}")
+        logger.error("User not found: %s", user_id)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )

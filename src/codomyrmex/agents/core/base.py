@@ -219,7 +219,7 @@ class BaseAgent(AgentInterface):
         """
         Default setup implementation.
         """
-        self.logger.info(f"Setting up agent: {self.name}")
+        self.logger.info("Setting up agent: %s", self.name)
         # Base implementation does nothing but log
 
     def test_connection(self) -> bool:
@@ -229,7 +229,7 @@ class BaseAgent(AgentInterface):
         Returns:
             True (default assumption if not overridden)
         """
-        self.logger.info(f"Testing connection for agent: {self.name}")
+        self.logger.info("Testing connection for agent: %s", self.name)
         # Default to True for base agent, override in subclasses
         return True
 
@@ -247,7 +247,7 @@ class BaseAgent(AgentInterface):
             self._validate_request(request)
             return self._execute_impl(request)
         except Exception as e:
-            self.logger.exception(f"Error executing {self.name} request")
+            self.logger.exception("Error executing %s request", self.name)
             return AgentResponse(
                 content="",
                 error=str(e),
@@ -269,7 +269,7 @@ class BaseAgent(AgentInterface):
             self._validate_request(request)
             yield from self._stream_impl(request)
         except Exception as e:
-            self.logger.exception(f"Error streaming {self.name} response")
+            self.logger.exception("Error streaming %s response", self.name)
             yield f"Error: {e!s}"
 
     def _validate_request(self, request: AgentRequest) -> None:

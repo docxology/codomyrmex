@@ -16,7 +16,7 @@ def create_tag(
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Creating tag '{tag_name}' in {repository_path}")
+        logger.info("Creating tag '%s' in %s", tag_name, repository_path)
 
         cmd = ["git", "tag"]
         if message:
@@ -28,16 +28,16 @@ def create_tag(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
-        logger.info(f"Tag '{tag_name}' created successfully")
+        logger.info("Tag '%s' created successfully", tag_name)
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to create tag '{tag_name}': {e}")
+        logger.error("Failed to create tag '%s': %s", tag_name, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         raise
     except Exception as e:
-        logger.error(f"Unexpected error creating tag: {e}")
+        logger.error("Unexpected error creating tag: %s", e)
         raise
 
 
@@ -63,8 +63,8 @@ def list_tags(repository_path: str | None = None) -> list[str]:
         return tags
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to list tags: {e}")
+        logger.error("Failed to list tags: %s", e)
         raise
     except Exception as e:
-        logger.error(f"Unexpected error listing tags: {e}")
+        logger.error("Unexpected error listing tags: %s", e)
         raise

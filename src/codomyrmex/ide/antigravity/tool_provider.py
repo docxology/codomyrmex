@@ -352,7 +352,7 @@ class AntigravityToolProvider:
         """
         self.client = client
         self.prefix = prefix
-        logger.info(f"AntigravityToolProvider initialized with prefix '{prefix}'")
+        logger.info("AntigravityToolProvider initialized with prefix '%s'", prefix)
 
     def _make_tool_func(self, tool_name: str):
         """Create a closure that invokes the given tool via the client.
@@ -416,7 +416,7 @@ class AntigravityToolProvider:
             registry.register(tool)
             registered += 1
 
-        logger.info(f"Registered {registered} Antigravity tools in ToolRegistry")
+        logger.info("Registered %s Antigravity tools in ToolRegistry", registered)
         return registry
 
     def get_safe_registry(self) -> ToolRegistry:

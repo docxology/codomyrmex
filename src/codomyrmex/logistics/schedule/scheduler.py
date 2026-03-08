@@ -54,7 +54,7 @@ class ScheduleManager:
             "args": args,
             "kwargs": kwargs,
         }
-        logger.info(f"Scheduled cron task {task_id} with expression {cron_expression}")
+        logger.info("Scheduled cron task %s with expression %s", task_id, cron_expression)
         return task_id
 
     def schedule_recurring(
@@ -84,7 +84,7 @@ class ScheduleManager:
             "args": args,
             "kwargs": kwargs,
         }
-        logger.info(f"Scheduled recurring task {task_id}")
+        logger.info("Scheduled recurring task %s", task_id)
         return task_id
 
     def cancel(self, task_id: str) -> bool:
@@ -98,7 +98,7 @@ class ScheduleManager:
         """
         if task_id in self._scheduled_tasks:
             del self._scheduled_tasks[task_id]
-            logger.info(f"Cancelled task {task_id}")
+            logger.info("Cancelled task %s", task_id)
             return True
         return False
 
@@ -147,13 +147,13 @@ class ScheduleManager:
                             task_info["callback"](
                                 *task_info["args"], **task_info["kwargs"]
                             )
-                            logger.info(f"Executed scheduled task {task_id}")
+                            logger.info("Executed scheduled task %s", task_id)
                         except Exception as e:
-                            logger.error(f"Error executing task {task_id}: {e}")
+                            logger.error("Error executing task %s: %s", task_id, e)
 
                 time.sleep(check_interval)
             except Exception as e:
-                logger.error(f"Error in scheduler loop: {e}")
+                logger.error("Error in scheduler loop: %s", e)
                 time.sleep(check_interval)
 
     def list_tasks(self) -> list[str]:

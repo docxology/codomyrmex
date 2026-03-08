@@ -89,7 +89,7 @@ class SensorManager:
     def register_device(self, device: DeviceInterface) -> None:
         """Register a new device."""
         self.devices[device.device_id] = device
-        logger.info(f"Registered device: {device.device_id}")
+        logger.info("Registered device: %s", device.device_id)
 
     def unregister_device(self, device_id: str) -> DeviceInterface | None:
         """Unregister a device."""
@@ -110,7 +110,7 @@ class SensorManager:
                 try:
                     callback(reading)
                 except Exception as e:
-                    logger.error(f"Callback error: {e}")
+                    logger.error("Callback error: %s", e)
 
     def get_latest_reading(self, sensor_type: SensorType) -> SensorReading | None:
         """Get the latest reading for a sensor type."""

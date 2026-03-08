@@ -44,7 +44,7 @@ class MessageBus:
             self.subscribers[message_type] = []
 
         self.subscribers[message_type].append(handler)
-        self.logger.debug(f"Subscribed handler to message type: {message_type}")
+        self.logger.debug("Subscribed handler to message type: %s", message_type)
 
     def unsubscribe(
         self, message_type: str, handler: Callable[[Message], None]

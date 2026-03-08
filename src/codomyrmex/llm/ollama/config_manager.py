@@ -122,13 +122,13 @@ class ConfigManager:
                         filtered_config[key] = value
 
                 self.config = OllamaConfig(**filtered_config)
-                self.logger.debug(f"Loaded configuration from: {self.config_file}")
+                self.logger.debug("Loaded configuration from: %s", self.config_file)
                 return True
             self.logger.info("Configuration file not found, using defaults")
             return True
 
         except Exception as e:
-            self.logger.error(f"Error loading configuration: {e}")
+            self.logger.error("Error loading configuration: %s", e)
             # Keep existing config (defaults)
             return False
 
@@ -153,11 +153,11 @@ class ConfigManager:
             with open(self.config_file, "w", encoding="utf-8") as f:
                 json.dump(config_dict, f, indent=2, default=str)
 
-            self.logger.info(f"Saved configuration to: {self.config_file}")
+            self.logger.info("Saved configuration to: %s", self.config_file)
             return True
 
         except Exception as e:
-            self.logger.error(f"Error saving configuration: {e}")
+            self.logger.error("Error saving configuration: %s", e)
             raise
 
     def create_default_config(self) -> OllamaConfig:
@@ -179,12 +179,12 @@ class ConfigManager:
                 if hasattr(self.config, key):
                     setattr(self.config, key, value)
                 else:
-                    self.logger.warning(f"Unknown configuration key: {key}")
+                    self.logger.warning("Unknown configuration key: %s", key)
 
             return self.save_config()
 
         except Exception as e:
-            self.logger.error(f"Error updating configuration: {e}")
+            self.logger.error("Error updating configuration: %s", e)
             raise
 
     def get_model_config(self, model_name: str) -> dict[str, Any] | None:
@@ -213,7 +213,7 @@ class ConfigManager:
                 with open(model_config_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:
-                self.logger.warning(f"Error loading model config for {model_name}: {e}")
+                self.logger.warning("Error loading model config for %s: %s", model_name, e)
 
         return None
 
@@ -255,7 +255,7 @@ class ConfigManager:
             return True
 
         except Exception as e:
-            self.logger.error(f"Error saving model config for {model_name}: {e}")
+            self.logger.error("Error saving model config for %s: %s", model_name, e)
             raise
 
     def get_execution_presets(self) -> dict[str, ExecutionOptions]:
@@ -328,11 +328,11 @@ class ConfigManager:
             with open(export_file, "w", encoding="utf-8") as f:
                 json.dump(export_data, f, indent=2, default=str)
 
-            self.logger.info(f"Exported configuration to: {export_file}")
+            self.logger.info("Exported configuration to: %s", export_file)
             return True
 
         except Exception as e:
-            self.logger.error(f"Error exporting configuration: {e}")
+            self.logger.error("Error exporting configuration: %s", e)
             raise
 
     def import_config(self, import_path: str) -> bool:
@@ -349,7 +349,7 @@ class ConfigManager:
             import_file = Path(import_path)
 
             if not import_file.exists():
-                self.logger.error(f"Import file not found: {import_file}")
+                self.logger.error("Import file not found: %s", import_file)
                 return False
 
             with open(import_file, encoding="utf-8") as f:
@@ -367,11 +367,11 @@ class ConfigManager:
             # Save updated configuration
             self.save_config()
 
-            self.logger.info(f"Imported configuration from: {import_file}")
+            self.logger.info("Imported configuration from: %s", import_file)
             return True
 
         except Exception as e:
-            self.logger.error(f"Error importing configuration: {e}")
+            self.logger.error("Error importing configuration: %s", e)
             raise
 
     def reset_to_defaults(self) -> bool:
@@ -386,7 +386,7 @@ class ConfigManager:
             return self.save_config()
 
         except Exception as e:
-            self.logger.error(f"Error resetting configuration: {e}")
+            self.logger.error("Error resetting configuration: %s", e)
             raise
 
     def validate_config(self) -> dict[str, Any]:
@@ -464,7 +464,7 @@ class ConfigManager:
                 data = response.json()
                 return [model["name"] for model in data.get("models", [])]
         except Exception as e:
-            self.logger.warning(f"Failed to fetch models from Ollama: {e}")
+            self.logger.warning("Failed to fetch models from Ollama: %s", e)
 
         # Fallback to configured models if API fails
         if self.config and self.config.preferred_models:

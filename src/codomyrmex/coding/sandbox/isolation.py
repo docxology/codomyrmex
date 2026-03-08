@@ -84,7 +84,7 @@ def resource_limits_context(limits: ExecutionLimits):
         try:
             resource.setrlimit(resource.RLIMIT_CPU, (limited_time, hard))
         except (ValueError, OSError) as e:
-            logger.warning(f"Failed to set CPU limit: {e}")
+            logger.warning("Failed to set CPU limit: %s", e)
 
         # Set memory limit (address space)
         soft, hard = resource.getrlimit(resource.RLIMIT_AS)
@@ -95,7 +95,7 @@ def resource_limits_context(limits: ExecutionLimits):
         try:
             resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
         except (ValueError, OSError) as e:
-            logger.warning(f"Failed to set memory limit: {e}")
+            logger.warning("Failed to set memory limit: %s", e)
 
         yield
 
@@ -105,7 +105,7 @@ def resource_limits_context(limits: ExecutionLimits):
             try:
                 resource.setrlimit(rlimit, (soft, hard))
             except Exception as e:
-                logger.warning(f"Failed to restore resource limit {rlimit}: {e}")
+                logger.warning("Failed to restore resource limit %s: %s", rlimit, e)
 
 
 def execute_with_limits(

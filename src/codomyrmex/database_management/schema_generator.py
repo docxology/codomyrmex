@@ -289,7 +289,7 @@ class SchemaGenerator:
         with open(schema_file, "w") as f:
             json.dump(table.to_dict(), f, indent=2)
 
-        logger.info(f"Created table schema: {table.name}")
+        logger.info("Created table schema: %s", table.name)
         return table_id
 
     def create_table_from_dict(self, table_def: dict[str, Any]) -> str:
@@ -391,7 +391,7 @@ class SchemaGenerator:
         up_file.write_text(up_sql)
         down_file.write_text(down_sql)
 
-        logger.info(f"Generated migration: {migration_id}")
+        logger.info("Generated migration: %s", migration_id)
         return migration
 
     def _generate_up_sql(self, changes: dict[str, Any]) -> str:
@@ -689,7 +689,7 @@ class SchemaGenerator:
         else:
             raise CodomyrmexError(f"Unsupported format: {format}")
 
-        logger.info(f"Exported schema to {output}")
+        logger.info("Exported schema to %s", output)
         return str(output)
 
     def list_migrations(self) -> list[dict[str, Any]]:

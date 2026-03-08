@@ -148,13 +148,13 @@ class PluginLoader:
                 result.success = True
                 result.plugin_instance = plugin_instance
 
-                logger.info(f"Successfully loaded plugin: {plugin_info.name}")
+                logger.info("Successfully loaded plugin: %s", plugin_info.name)
             else:
                 plugin_instance.state = PluginState.ERROR
                 result.error_message = "Plugin initialization failed"
 
         except Exception as e:
-            logger.error(f"Error loading plugin '{plugin_info.name}': {e}")
+            logger.error("Error loading plugin '%s': %s", plugin_info.name, e)
             result.error_message = str(e)
 
         return result
@@ -170,7 +170,7 @@ class PluginLoader:
             True if successfully unloaded
         """
         if plugin_name not in self.loaded_plugins:
-            logger.warning(f"Plugin '{plugin_name}' not loaded")
+            logger.warning("Plugin '%s' not loaded", plugin_name)
             return False
 
         plugin = self.loaded_plugins[plugin_name]
@@ -185,11 +185,11 @@ class PluginLoader:
             if plugin_name in self.load_cache:
                 del self.load_cache[plugin_name]
 
-            logger.info(f"Successfully unloaded plugin: {plugin_name}")
+            logger.info("Successfully unloaded plugin: %s", plugin_name)
             return True
 
         except Exception as e:
-            logger.error(f"Error unloading plugin '{plugin_name}': {e}")
+            logger.error("Error unloading plugin '%s': %s", plugin_name, e)
             plugin.state = PluginState.ERROR
             return False
 
@@ -290,13 +290,13 @@ class PluginLoader:
                     break
 
             if not plugin_path:
-                logger.error(f"Plugin file not found: {entry_point}")
+                logger.error("Plugin file not found: %s", entry_point)
                 return None
 
             # Load the module
             spec = importlib.util.spec_from_file_location(plugin_info.name, plugin_path)
             if not spec or not spec.loader:
-                logger.error(f"Could not create module spec for {plugin_path}")
+                logger.error("Could not create module spec for %s", plugin_path)
                 return None
 
             module = importlib.util.module_from_spec(spec)
@@ -306,7 +306,7 @@ class PluginLoader:
                 spec.loader.exec_module(module)
                 return module
             except Exception as e:
-                logger.error(f"Error loading plugin module {plugin_path}: {e}")
+                logger.error("Error loading plugin module %s: %s", plugin_path, e)
                 return None
 
         else:
@@ -314,7 +314,7 @@ class PluginLoader:
             try:
                 return importlib.import_module(entry_point)
             except ImportError as e:
-                logger.error(f"Could not import plugin module {entry_point}: {e}")
+                logger.error("Could not import plugin module %s: %s", entry_point, e)
                 return None
 
     def _find_plugin_class(
@@ -418,7 +418,7 @@ class PluginLoader:
                         )
 
                 except Exception as e:
-                    logger.warning(f"Error loading metadata from {metadata_file}: {e}")
+                    logger.warning("Error loading metadata from %s: %s", metadata_file, e)
 
         return None
 
@@ -462,7 +462,7 @@ class PluginLoader:
                 )
 
         except Exception as e:
-            logger.debug(f"Could not extract metadata from {plugin_file}: {e}")
+            logger.debug("Could not extract metadata from %s: %s", plugin_file, e)
 
         return None
 

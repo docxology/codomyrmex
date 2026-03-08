@@ -91,7 +91,7 @@ class RedisLock(BaseLock):
                 ):
                     self.redis.delete(self.key)
         except redis.RedisError as e:
-            logger.error(f"Error releasing Redis lock '{self.name}': {e}")
+            logger.error("Error releasing Redis lock '%s': %s", self.name, e)
         finally:
             self.is_held = False
 
@@ -133,7 +133,7 @@ class RedisLock(BaseLock):
                     return bool(self.redis.expire(self.key, additional_ttl))
                 return False
         except redis.RedisError as e:
-            logger.error(f"Error extending Redis lock '{self.name}': {e}")
+            logger.error("Error extending Redis lock '%s': %s", self.name, e)
             return False
 
     def is_locked_externally(self) -> bool:

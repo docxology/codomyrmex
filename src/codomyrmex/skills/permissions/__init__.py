@@ -52,7 +52,7 @@ class SkillPermissionManager:
         if skill_id not in self._permissions:
             self._permissions[skill_id] = set()
         self._permissions[skill_id].add(permission)
-        logger.info(f"Granted '{permission}' permission to skill {skill_id}")
+        logger.info("Granted '%s' permission to skill %s", permission, skill_id)
 
     def revoke(self, skill_id: str, permission: str) -> bool:
         """
@@ -67,7 +67,7 @@ class SkillPermissionManager:
         """
         if skill_id in self._permissions and permission in self._permissions[skill_id]:
             self._permissions[skill_id].discard(permission)
-            logger.info(f"Revoked '{permission}' permission from skill {skill_id}")
+            logger.info("Revoked '%s' permission from skill %s", permission, skill_id)
             return True
         return False
 
@@ -103,7 +103,7 @@ class SkillPermissionManager:
         """
         if skill_id in self._permissions:
             self._permissions[skill_id].clear()
-            logger.info(f"Revoked all permissions from skill {skill_id}")
+            logger.info("Revoked all permissions from skill %s", skill_id)
 
 
 __all__ = ["SkillPermissionManager"]

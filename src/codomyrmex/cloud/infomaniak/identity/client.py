@@ -39,7 +39,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 "is_enabled": user.is_enabled,
             }
         except Exception as e:
-            logger.error(f"Failed to get current user: {e}")
+            logger.error("Failed to get current user: %s", e)
             return {}
 
     def get_user(self, user_id: str) -> dict[str, Any] | None:
@@ -57,7 +57,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 else None
             )
         except Exception as e:
-            logger.error(f"Failed to get user {user_id}: {e}")
+            logger.error("Failed to get user %s: %s", user_id, e)
             return None
 
     # =========================================================================
@@ -79,7 +79,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 for p in projects
             ]
         except Exception as e:
-            logger.error(f"Failed to list projects: {e}")
+            logger.error("Failed to list projects: %s", e)
             return []
 
     def get_current_project(self) -> dict[str, Any]:
@@ -97,7 +97,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 else {}
             )
         except Exception as e:
-            logger.error(f"Failed to get current project: {e}")
+            logger.error("Failed to get current project: %s", e)
             return {}
 
     # =========================================================================
@@ -120,7 +120,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 for c in creds
             ]
         except Exception as e:
-            logger.error(f"Failed to list application credentials: {e}")
+            logger.error("Failed to list application credentials: %s", e)
             return []
 
     def create_application_credential(
@@ -156,7 +156,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 unrestricted=unrestricted,
             )
 
-            logger.info(f"Created application credential: {cred.id}")
+            logger.info("Created application credential: %s", cred.id)
             return {
                 "id": cred.id,
                 "name": cred.name,
@@ -164,7 +164,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 "expires_at": str(cred.expires_at) if cred.expires_at else None,
             }
         except Exception as e:
-            logger.error(f"Failed to create application credential {name}: {e}")
+            logger.error("Failed to create application credential %s: %s", name, e)
             return None
 
     def get_application_credential(self, credential_id: str) -> dict[str, Any] | None:
@@ -185,7 +185,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 else None
             )
         except Exception as e:
-            logger.error(f"Failed to get application credential {credential_id}: {e}")
+            logger.error("Failed to get application credential %s: %s", credential_id, e)
             return None
 
     def delete_application_credential(self, credential_id: str) -> bool:
@@ -195,7 +195,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
             self._conn.identity.delete_application_credential(
                 user=user_id, application_credential=credential_id
             )
-            logger.info(f"Deleted application credential: {credential_id}")
+            logger.info("Deleted application credential: %s", credential_id)
             return True
         except Exception as e:
             logger.error(
@@ -216,7 +216,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 for r in roles
             ]
         except Exception as e:
-            logger.error(f"Failed to list roles: {e}")
+            logger.error("Failed to list roles: %s", e)
             return []
 
     def list_user_roles(self, project_id: str | None = None) -> list[dict[str, Any]]:
@@ -236,7 +236,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                     roles.append({"id": role.id, "name": role.name})
             return roles
         except Exception as e:
-            logger.error(f"Failed to list user roles: {e}")
+            logger.error("Failed to list user roles: %s", e)
             return []
 
     # =========================================================================
@@ -258,7 +258,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 if c.type == "ec2"
             ]
         except Exception as e:
-            logger.error(f"Failed to list EC2 credentials: {e}")
+            logger.error("Failed to list EC2 credentials: %s", e)
             return []
 
     def create_ec2_credentials(
@@ -284,7 +284,7 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 blob='{"access": "", "secret": ""}',  # Keystone generates these
             )
 
-            logger.info(f"Created EC2 credentials: {cred.id}")
+            logger.info("Created EC2 credentials: %s", cred.id)
             return {
                 "id": cred.id,
                 "access": cred.access,
@@ -292,15 +292,15 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 "project_id": cred.project_id,
             }
         except Exception as e:
-            logger.error(f"Failed to create EC2 credentials: {e}")
+            logger.error("Failed to create EC2 credentials: %s", e)
             return None
 
     def delete_ec2_credentials(self, credential_id: str) -> bool:
         """Delete EC2-style credentials."""
         try:
             self._conn.identity.delete_credential(credential_id)
-            logger.info(f"Deleted EC2 credentials: {credential_id}")
+            logger.info("Deleted EC2 credentials: %s", credential_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete EC2 credentials {credential_id}: {e}")
+            logger.error("Failed to delete EC2 credentials %s: %s", credential_id, e)
             return False

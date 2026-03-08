@@ -101,7 +101,7 @@ class InMemoryIndex:
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f)
 
-        logger.debug(f"Saved index to {path}")
+        logger.debug("Saved index to %s", path)
 
     @classmethod
     def load(cls, path: Path) -> "InMemoryIndex":

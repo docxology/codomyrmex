@@ -63,7 +63,7 @@ class WalletManager:
         if self.key_manager.store_key(key_id, secret_key):
             self._wallets[user_id] = wallet_id
             self._created_at[user_id] = datetime.now(UTC).isoformat()
-            logger.info(f"Created wallet {wallet_id} for user {user_id}")
+            logger.info("Created wallet %s for user %s", wallet_id, user_id)
             return wallet_id
         raise WalletKeyError(f"Failed to store wallet key for user {user_id}")
 
@@ -211,7 +211,7 @@ class WalletManager:
         self.key_manager.delete_key(key_id)
         del self._wallets[user_id]
         self._created_at.pop(user_id, None)
-        logger.info(f"Deleted wallet for user {user_id}")
+        logger.info("Deleted wallet for user %s", user_id)
         return True
 
     def list_wallets(self) -> dict[str, str]:

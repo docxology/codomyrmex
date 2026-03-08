@@ -93,7 +93,7 @@ class AgentRegistry:
                 self._capability_index[capability] = set()
             self._capability_index[capability].add(agent.agent_id)
 
-        logger.info(f"Registered agent: {agent.name} ({agent.agent_id})")
+        logger.info("Registered agent: %s (%s)", agent.name, agent.agent_id)
         self._notify_listeners("registered", agent.agent_id)
 
         return agent.agent_id
@@ -120,7 +120,7 @@ class AgentRegistry:
                     del self._capability_index[capability]
 
         del self._agents[agent_id]
-        logger.info(f"Unregistered agent: {agent_id}")
+        logger.info("Unregistered agent: %s", agent_id)
         self._notify_listeners("unregistered", agent_id)
 
         return True
@@ -201,7 +201,7 @@ class AgentRegistry:
             try:
                 listener(event, agent_id)
             except Exception as e:
-                logger.error(f"Listener error: {e}")
+                logger.error("Listener error: %s", e)
 
     async def start_health_monitoring(self) -> None:
         """Start the health monitoring background task."""
@@ -238,7 +238,7 @@ class AgentRegistry:
         for agent_id, agent in list(self._agents.items()):
             status = agent.get_status()
             if now - status.last_heartbeat > timeout:
-                logger.warning(f"Agent {agent_id} missed heartbeat")
+                logger.warning("Agent %s missed heartbeat", agent_id)
                 agent.state = AgentState.ERROR
                 self._notify_listeners("unhealthy", agent_id)
 

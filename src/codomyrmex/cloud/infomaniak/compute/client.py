@@ -45,7 +45,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             servers = list(self._conn.compute.servers())
             return [self._server_to_dict(s) for s in servers]
         except Exception as e:
-            logger.error(f"Failed to list instances: {e}")
+            logger.error("Failed to list instances: %s", e)
             return []
 
     def get_instance(self, instance_id: str) -> dict[str, Any] | None:
@@ -62,7 +62,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             server = self._conn.compute.get_server(instance_id)
             return self._server_to_dict(server) if server else None
         except Exception as e:
-            logger.error(f"Failed to get instance {instance_id}: {e}")
+            logger.error("Failed to get instance %s: %s", instance_id, e)
             return None
 
     def create_instance(  # type: ignore
@@ -98,19 +98,19 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             # Resolve flavor
             flavor_obj = self._conn.compute.find_flavor(flavor)
             if not flavor_obj:
-                logger.error(f"Flavor not found: {flavor}")
+                logger.error("Flavor not found: %s", flavor)
                 return None
 
             # Resolve image
             image_obj = self._conn.image.find_image(image)
             if not image_obj:
-                logger.error(f"Image not found: {image}")
+                logger.error("Image not found: %s", image)
                 return None
 
             # Resolve network
             network_obj = self._conn.network.find_network(network)
             if not network_obj:
-                logger.error(f"Network not found: {network}")
+                logger.error("Network not found: %s", network)
                 return None
 
             server = self._conn.compute.create_server(
@@ -127,11 +127,11 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
             # Wait for server to be active
             server = self._conn.compute.wait_for_server(server)
-            logger.info(f"Created instance: {server.id}")
+            logger.info("Created instance: %s", server.id)
             return self._server_to_dict(server)
 
         except Exception as e:
-            logger.error(f"Failed to create instance {name}: {e}")
+            logger.error("Failed to create instance %s: %s", name, e)
             return None
 
     def start_instance(self, instance_id: str) -> bool:
@@ -146,10 +146,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         """
         try:
             self._conn.compute.start_server(instance_id)
-            logger.info(f"Started instance: {instance_id}")
+            logger.info("Started instance: %s", instance_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to start instance {instance_id}: {e}")
+            logger.error("Failed to start instance %s: %s", instance_id, e)
             return False
 
     def stop_instance(self, instance_id: str) -> bool:
@@ -164,10 +164,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         """
         try:
             self._conn.compute.stop_server(instance_id)
-            logger.info(f"Stopped instance: {instance_id}")
+            logger.info("Stopped instance: %s", instance_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to stop instance {instance_id}: {e}")
+            logger.error("Failed to stop instance %s: %s", instance_id, e)
             return False
 
     def reboot_instance(self, instance_id: str, reboot_type: str = "SOFT") -> bool:
@@ -183,10 +183,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         """
         try:
             self._conn.compute.reboot_server(instance_id, reboot_type)
-            logger.info(f"Rebooted instance: {instance_id} ({reboot_type})")
+            logger.info("Rebooted instance: %s (%s)", instance_id, reboot_type)
             return True
         except Exception as e:
-            logger.error(f"Failed to reboot instance {instance_id}: {e}")
+            logger.error("Failed to reboot instance %s: %s", instance_id, e)
             return False
 
     def delete_instance(self, instance_id: str, force: bool = False) -> bool:
@@ -202,10 +202,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         """
         try:
             self._conn.compute.delete_server(instance_id, force=force)
-            logger.info(f"Deleted instance: {instance_id}")
+            logger.info("Deleted instance: %s", instance_id)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete instance {instance_id}: {e}")
+            logger.error("Failed to delete instance %s: %s", instance_id, e)
             return False
 
     def terminate_instance(self, instance_id: str) -> bool:
@@ -246,7 +246,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
                 for img in images
             ]
         except Exception as e:
-            logger.error(f"Failed to list images: {e}")
+            logger.error("Failed to list images: %s", e)
             return []
 
     def get_image(self, image_id: str) -> dict[str, Any] | None:
@@ -264,7 +264,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
                 }
             return None
         except Exception as e:
-            logger.error(f"Failed to get image {image_id}: {e}")
+            logger.error("Failed to get image %s: %s", image_id, e)
             return None
 
     # =========================================================================
@@ -292,7 +292,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
                 for f in flavors
             ]
         except Exception as e:
-            logger.error(f"Failed to list flavors: {e}")
+            logger.error("Failed to list flavors: %s", e)
             return []
 
     # =========================================================================
@@ -317,7 +317,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
                 for kp in keypairs
             ]
         except Exception as e:
-            logger.error(f"Failed to list keypairs: {e}")
+            logger.error("Failed to list keypairs: %s", e)
             return []
 
     def create_keypair(
@@ -346,10 +346,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             if hasattr(keypair, "private_key") and keypair.private_key:
                 result["private_key"] = keypair.private_key
 
-            logger.info(f"Created keypair: {name}")
+            logger.info("Created keypair: %s", name)
             return result
         except Exception as e:
-            logger.error(f"Failed to create keypair {name}: {e}")
+            logger.error("Failed to create keypair %s: %s", name, e)
             return None
 
     def delete_keypair(self, name: str) -> bool:
@@ -364,10 +364,10 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         """
         try:
             self._conn.compute.delete_keypair(name)
-            logger.info(f"Deleted keypair: {name}")
+            logger.info("Deleted keypair: %s", name)
             return True
         except Exception as e:
-            logger.error(f"Failed to delete keypair {name}: {e}")
+            logger.error("Failed to delete keypair %s: %s", name, e)
             return False
 
     # =========================================================================
@@ -391,7 +391,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
                 for zone in zones
             ]
         except Exception as e:
-            logger.error(f"Failed to list availability zones: {e}")
+            logger.error("Failed to list availability zones: %s", e)
             return []
 
     # =========================================================================

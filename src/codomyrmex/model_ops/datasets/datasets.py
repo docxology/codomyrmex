@@ -27,7 +27,7 @@ class Dataset:
         """Save dataset to a JSONL file."""
         with open(file_path, "w") as f:
             f.writelines(json.dumps(item) + "\n" for item in self.data)
-        logger.info(f"Dataset saved to {file_path}")
+        logger.info("Dataset saved to %s", file_path)
 
     def validate(self) -> bool:
         """Basic validation for LLM datasets."""

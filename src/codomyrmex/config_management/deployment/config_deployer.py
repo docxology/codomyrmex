@@ -123,7 +123,7 @@ class ConfigurationDeployer:
                 indent=2,
             )
 
-        logger.info(f"Created environment: {name} ({env_type.value})")
+        logger.info("Created environment: %s (%s)", name, env_type.value)
         return environment
 
     def deploy_configuration(
@@ -165,11 +165,11 @@ class ConfigurationDeployer:
             self._execute_deployment(deployment)
 
             deployment.status = DeploymentStatus.SUCCESS
-            logger.info(f"Successfully deployed configuration to {environment_name}")
+            logger.info("Successfully deployed configuration to %s", environment_name)
 
         except Exception as e:
             deployment.status = DeploymentStatus.FAILED
-            logger.error(f"Failed to deploy configuration to {environment_name}: {e}")
+            logger.error("Failed to deploy configuration to %s: %s", environment_name, e)
             raise
 
         finally:
@@ -230,7 +230,7 @@ class ConfigurationDeployer:
                 target_path.parent.mkdir(parents=True, exist_ok=True)
                 target_path.write_text(content)
 
-                logger.debug(f"Deployed {config_file} to {target_path}")
+                logger.debug("Deployed %s to %s", config_file, target_path)
 
     def _apply_environment_variables(
         self, content: str, variables: dict[str, str]
@@ -278,11 +278,11 @@ class ConfigurationDeployer:
             self._execute_rollback(rollback_deployment)
 
             rollback_deployment.status = DeploymentStatus.SUCCESS
-            logger.info(f"Successfully rolled back deployment {deployment_id}")
+            logger.info("Successfully rolled back deployment %s", deployment_id)
 
         except Exception as e:
             rollback_deployment.status = DeploymentStatus.FAILED
-            logger.error(f"Failed to rollback deployment {deployment_id}: {e}")
+            logger.error("Failed to rollback deployment %s: %s", deployment_id, e)
             raise
 
         finally:
@@ -294,7 +294,7 @@ class ConfigurationDeployer:
         """Execute the rollback process."""
         # This would typically restore from backup or previous version
         # For now, just log the operation
-        logger.info(f"Executing rollback for deployment {deployment.deployment_id}")
+        logger.info("Executing rollback for deployment %s", deployment.deployment_id)
 
     def get_deployment_status(self, deployment_id: str) -> ConfigDeployment | None:
         """Get status of a configuration deployment.

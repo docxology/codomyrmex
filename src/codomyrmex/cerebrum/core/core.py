@@ -56,7 +56,7 @@ class ModelManager:
 
         model = Model(name=name, model_type=model_type, parameters=config or {})
         self.models[name] = model
-        self.logger.info(f"Created model: {name} ({model_type})")
+        self.logger.info("Created model: %s (%s)", name, model_type)
         return model
 
     def get_model(self, name: str) -> Model:
@@ -83,7 +83,7 @@ class ModelManager:
         """
         if name in self.models:
             del self.models[name]
-            self.logger.debug(f"Removed model: {name}")
+            self.logger.debug("Removed model: %s", name)
 
     def list_models(self) -> list[str]:
         """List all model names."""
@@ -213,7 +213,7 @@ class ReasoningEngine:
                             weighted_outcome = best_dist.mode()
                             confidence = max(best_dist.probabilities)
             except Exception as e:
-                self.logger.warning(f"Bayesian inference failed: {e}")
+                self.logger.warning("Bayesian inference failed: %s", e)
 
         return ReasoningResult(
             prediction=weighted_outcome,
@@ -282,7 +282,7 @@ class CerebrumEngine:
             case: Case to add
         """
         self.case_base.add_case(case)
-        self.logger.debug(f"Added case: {case.case_id}")
+        self.logger.debug("Added case: %s", case.case_id)
 
     def reason(
         self, case: Case, context: dict[str, Any] | None = None
@@ -312,7 +312,7 @@ class CerebrumEngine:
         """
         case.outcome = outcome
         self.case_base.add_case(case)
-        self.logger.debug(f"Learned from case: {case.case_id}")
+        self.logger.debug("Learned from case: %s", case.case_id)
 
     def decide(
         self,
@@ -365,7 +365,7 @@ class CerebrumEngine:
         self.reasoning_engine = ReasoningEngine(
             self.case_base, self.bayesian_network, self.config
         )
-        self.logger.info(f"Set Bayesian network: {network.name}")
+        self.logger.info("Set Bayesian network: %s", network.name)
 
     def set_active_inference_agent(self, agent: ActiveInferenceAgent) -> None:
         """Set active inference agent.
@@ -392,14 +392,14 @@ class CerebrumEngine:
         """
         path = Path(path)
         if not path.exists():
-            self.logger.error(f"Knowledge file not found: {path}")
+            self.logger.error("Knowledge file not found: %s", path)
             return
 
         with open(path) as f:
             data = json.load(f)
             if "case_base" in data:
                 self.case_base = CaseBase.from_dict(data["case_base"])
-        self.logger.info(f"Loaded knowledge from {path}")
+        self.logger.info("Loaded knowledge from %s", path)
 
     def save_knowledge(self, path: str | Path) -> None:
         """Save knowledge to a JSON file.
@@ -410,7 +410,7 @@ class CerebrumEngine:
         path = Path(path)
         with open(path, "w") as f:
             json.dump(self.to_dict(), f, indent=2)
-        self.logger.info(f"Saved knowledge to {path}")
+        self.logger.info("Saved knowledge to %s", path)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert engine state to dictionary."""

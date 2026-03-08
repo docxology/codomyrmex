@@ -245,7 +245,7 @@ class HealthProviderMixin:
                     "ollama_reachable": True,
                 }
         except Exception as e:
-            logger.warning(f"Failed to load LLM config: {e}")
+            logger.warning("Failed to load LLM config: %s", e)
 
         # Fallback defaults — Ollama unreachable or not configured
         return {

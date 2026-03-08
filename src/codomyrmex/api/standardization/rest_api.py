@@ -164,7 +164,7 @@ class APIRouter:
         """
         key = f"{endpoint.method.value}:{self._normalize_path(endpoint.path)}"
         self.endpoints[key] = endpoint
-        logger.debug(f"Added endpoint: {key}")
+        logger.debug("Added endpoint: %s", key)
 
     def add_router(self, router: "APIRouter") -> None:
         """
@@ -347,7 +347,7 @@ class RESTAPI:
         self.add_middleware(self._logging_middleware)
         self.add_middleware(self._error_handling_middleware)
 
-        logger.info(f"REST API initialized: {title} v{version}")
+        logger.info("REST API initialized: %s v%s", title, version)
 
     def add_middleware(
         self, middleware: Callable[[APIRequest], APIResponse | None]
@@ -464,14 +464,14 @@ class RESTAPI:
 
         except Exception as e:
             self.error_count += 1
-            logger.error(f"Request error: {method} {path} - {e}")
+            logger.error("Request error: %s %s - %s", method, path, e)
             return APIResponse.error(
                 "Internal server error", HTTPStatus.INTERNAL_SERVER_ERROR
             )
 
     def _logging_middleware(self, request: APIRequest) -> APIResponse | None:
         """Middleware for request logging."""
-        logger.debug(f"Incoming request: {request.method.value} {request.path}")
+        logger.debug("Incoming request: %s %s", request.method.value, request.path)
         return None
 
     def _error_handling_middleware(self, request: APIRequest) -> APIResponse | None:

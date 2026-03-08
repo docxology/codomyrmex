@@ -16,7 +16,7 @@ def get_commit_history(
         repository_path = os.getcwd()
 
     try:
-        logger.debug(f"Getting commit history (limit: {limit})")
+        logger.debug("Getting commit history (limit: %s)", limit)
 
         result = subprocess.run(
             [
@@ -53,10 +53,10 @@ def get_commit_history(
         return commits
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get commit history: {e}")
+        logger.error("Failed to get commit history: %s", e)
         return []
     except Exception as e:
-        logger.error(f"Unexpected error getting commit history: {e}")
+        logger.error("Unexpected error getting commit history: %s", e)
         return []
 
 
@@ -77,12 +77,12 @@ def get_blame(file_path: str, repository_path: str | None = None) -> str:
         )
         return result.stdout
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get blame for {file_path}: {e}")
+        logger.error("Failed to get blame for %s: %s", file_path, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return ""
     except Exception as e:
-        logger.error(f"Unexpected error getting blame for {file_path}: {e}")
+        logger.error("Unexpected error getting blame for %s: %s", file_path, e)
         return ""
 
 
@@ -117,12 +117,12 @@ def get_commit_details(commit_sha: str, repository_path: str | None = None) -> d
             "body": parts[5],
         }
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get commit details for {commit_sha}: {e}")
+        logger.error("Failed to get commit details for %s: %s", commit_sha, e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return {}
     except Exception as e:
-        logger.error(f"Unexpected error getting commit details: {e}")
+        logger.error("Unexpected error getting commit details: %s", e)
         return {}
 
 
@@ -155,7 +155,7 @@ def get_commit_history_filtered(
         repository_path = os.getcwd()
 
     try:
-        logger.debug(f"Getting filtered commit history (limit: {limit})")
+        logger.debug("Getting filtered commit history (limit: %s)", limit)
 
         cmd = [
             "git",
@@ -207,8 +207,8 @@ def get_commit_history_filtered(
         return commits
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get filtered commit history: {e}")
+        logger.error("Failed to get filtered commit history: %s", e)
         return []
     except Exception as e:
-        logger.error(f"Unexpected error getting filtered commit history: {e}")
+        logger.error("Unexpected error getting filtered commit history: %s", e)
         return []

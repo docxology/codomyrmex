@@ -38,7 +38,7 @@ class ReasoningChain:
             action: Optional callable to execute for this step
         """
         self.steps.append(ReasoningStep(description=description, action=action))
-        self.logger.debug(f"Added reasoning step: {description}")
+        self.logger.debug("Added reasoning step: %s", description)
 
     def execute(self, memory: WorkingMemory) -> "ChainExecutionResult":
         """Execute all steps in the chain.
@@ -57,11 +57,11 @@ class ReasoningChain:
                     step.result = step.action(memory)
                 step.status = "completed"
                 completed_steps += 1
-                self.logger.debug(f"Completed step: {step.description}")
+                self.logger.debug("Completed step: %s", step.description)
             except Exception as e:
                 step.status = "failed"
                 step.result = str(e)
-                self.logger.error(f"Failed step: {step.description} - {e}")
+                self.logger.error("Failed step: %s - %s", step.description, e)
                 break
 
         return ChainExecutionResult(

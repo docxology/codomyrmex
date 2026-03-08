@@ -70,7 +70,7 @@ class ConfigAuditor:
                 rule_issues = rule.check_func(content, str(path))
                 issues.extend(rule_issues)
             except Exception as e:
-                logger.error(f"Error applying rule {rule.rule_id}: {e}")
+                logger.error("Error applying rule %s: %s", rule.rule_id, e)
                 issues.append(
                     AuditIssue(
                         rule_id="SYS003",
@@ -103,7 +103,7 @@ class ConfigAuditor:
         results = []
 
         if not path.is_dir():
-            logger.error(f"Not a directory: {directory_path}")
+            logger.error("Not a directory: %s", directory_path)
             return results
 
         # Support common config extensions if pattern is default

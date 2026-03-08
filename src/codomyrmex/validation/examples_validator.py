@@ -173,7 +173,7 @@ class ExamplesValidator:
                         print(f"{status} {module} ({result.duration:.2f}s)")
 
                 except Exception as e:
-                    logger.error(f"Error validating module {module}: {e}")
+                    logger.error("Error validating module %s: %s", module, e)
                     results[module] = ModuleValidationResult(
                         module=module,
                         success=False,

@@ -86,7 +86,7 @@ class ReactiveArchitecture(AgentArchitecture):
             action: Action function
         """
         self.rules.append((condition, action))
-        self.logger.debug(f"Added rule: {condition.__name__} -> {action.__name__}")
+        self.logger.debug("Added rule: %s -> %s", condition.__name__, action.__name__)
 
     def perceive(self, environment: dict[str, Any]) -> dict[str, Any]:
         """Perceive the environment (pass-through for reactive agents)."""
@@ -104,7 +104,7 @@ class ReactiveArchitecture(AgentArchitecture):
         """
         for condition, action in self.rules:
             if condition(perception):
-                self.logger.debug(f"Rule matched: {condition.__name__}")
+                self.logger.debug("Rule matched: %s", condition.__name__)
                 return {"action": action, "args": perception}
 
         return {"action": None, "args": perception}
@@ -186,7 +186,7 @@ class DeliberativeArchitecture(AgentArchitecture):
             goal: Goal description
         """
         self.goals.append(goal)
-        self.logger.debug(f"Set goal: {goal}")
+        self.logger.debug("Set goal: %s", goal)
 
     def plan(
         self, goal: dict[str, Any], current_state: dict[str, Any]
@@ -217,7 +217,7 @@ class DeliberativeArchitecture(AgentArchitecture):
             )
 
         self.plans.append(plan)
-        self.logger.debug(f"Created plan for goal: {goal}")
+        self.logger.debug("Created plan for goal: %s", goal)
         return plan
 
     def perceive(self, environment: dict[str, Any]) -> dict[str, Any]:
@@ -277,7 +277,7 @@ class DeliberativeArchitecture(AgentArchitecture):
         """
         action = decision.get("action")
         if action:
-            self.logger.info(f"Executing deliberative action: {action}")
+            self.logger.info("Executing deliberative action: %s", action)
             return {"result": "executed", "action": action}
         return {"result": "no_action"}
 

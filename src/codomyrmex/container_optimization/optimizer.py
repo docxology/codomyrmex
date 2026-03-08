@@ -72,7 +72,7 @@ class ContainerOptimizer:
         try:
             self.client = client or docker.from_env()
         except Exception as e:
-            logger.warning(f"Could not connect to Docker: {e}")
+            logger.warning("Could not connect to Docker: %s", e)
             self.client = None
 
     def analyze_image(self, image_name: str) -> ImageAnalysis:
@@ -123,7 +123,7 @@ class ContainerOptimizer:
         except docker.errors.ImageNotFound as exc:
             raise ValueError(f"Image '{image_name}' not found") from exc
         except Exception as e:
-            logger.error(f"Failed to analyze image {image_name}: {e}")
+            logger.error("Failed to analyze image %s: %s", image_name, e)
             raise
 
     def suggest_optimizations(self, image_name: str) -> list[OptimizationSuggestion]:
@@ -197,7 +197,7 @@ class ContainerOptimizer:
                     if match:
                         return match.group(1).strip()
         except Exception as e:
-            logger.debug(f"Failed to extract base image from history: {e}")
+            logger.debug("Failed to extract base image from history: %s", e)
         return "unknown"
 
     def _analyze_optimizations(self, analysis: ImageAnalysis) -> list[str]:

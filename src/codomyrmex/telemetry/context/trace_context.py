@@ -33,7 +33,7 @@ class TraceContext:
         provider = TracerProvider(resource=resource)
         trace.set_tracer_provider(provider)
         cls._initialized = True
-        logger.info(f"Telemetry initialized for service: {service_name}")
+        logger.info("Telemetry initialized for service: %s", service_name)
 
     @staticmethod
     def get_tracer(name: str = "codomyrmex") -> trace.Tracer:

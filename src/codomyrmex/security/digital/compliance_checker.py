@@ -125,7 +125,7 @@ def check_compliance_standards(
             try:
                 enum_standards.append(ComplianceStandard[s])
             except KeyError:
-                logger.warning(f"Unknown standard: {s}")
+                logger.warning("Unknown standard: %s", s)
 
     results = checker.check_compliance(config, enum_standards or None)
     return [

@@ -155,7 +155,7 @@ class ConfigValidator:
                         if isinstance(issue, ValidationIssue):
                             result.add_issue(issue)
             except Exception as e:
-                logger.error(f"Custom validator '{validator_name}' failed: {e}")
+                logger.error("Custom validator '%s' failed: %s", validator_name, e)
                 result.add_issue(
                     ValidationIssue(
                         field_path="",

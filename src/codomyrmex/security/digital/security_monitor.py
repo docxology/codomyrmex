@@ -129,7 +129,7 @@ class SecurityMonitor:
                     user_config = json.load(f)
                 default_config.update(user_config)
             except Exception as e:
-                logger.warning(f"Failed to load monitor config: {e}")
+                logger.warning("Failed to load monitor config: %s", e)
 
         return default_config
 
@@ -213,7 +213,7 @@ class SecurityMonitor:
                 time.sleep(self.config.get("monitoring_interval", 10))
 
             except Exception as e:
-                logger.error(f"Error in monitoring loop: {e}")
+                logger.error("Error in monitoring loop: %s", e)
                 time.sleep(30)
 
         logger.info("Security monitoring loop stopped")
@@ -231,7 +231,7 @@ class SecurityMonitor:
                             if event:
                                 self.events.append(event)
                 except Exception as e:
-                    logger.error(f"Error reading log file {log_file}: {e}")
+                    logger.error("Error reading log file %s: %s", log_file, e)
 
     def _parse_log_line(self, line: str, source: str) -> SecurityEvent | None:
         """Parse a log line and extract security events."""
@@ -306,13 +306,13 @@ class SecurityMonitor:
 
     def _trigger_alert(self, rule: AlertRule, event: SecurityEvent):
         """Trigger an alert for a security event."""
-        logger.warning(f"🚨 SECURITY ALERT: {rule.name} - {event.event_type.value}")
+        logger.warning("🚨 SECURITY ALERT: %s - %s", rule.name, event.event_type.value)
         self.active_alerts[event.event_id] = event
         for callback in self.alert_callbacks:
             try:
                 callback(event)
             except Exception as e:
-                logger.error(f"Error in alert callback: {e}")
+                logger.error("Error in alert callback: %s", e)
 
     def _cleanup_old_events(self):
         """Clean up old events and alerts."""

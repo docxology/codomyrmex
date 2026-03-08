@@ -105,7 +105,7 @@ class SkillSync:
                 return False
 
         try:
-            logger.info(f"Cloning upstream repository to {self.upstream_dir}")
+            logger.info("Cloning upstream repository to %s", self.upstream_dir)
             self.upstream_dir.parent.mkdir(parents=True, exist_ok=True)
 
             success = clone_repository(
@@ -119,7 +119,7 @@ class SkillSync:
             return success
 
         except Exception as e:
-            logger.error(f"Error cloning upstream repository: {e}")
+            logger.error("Error cloning upstream repository: %s", e)
             return False
 
     def pull_upstream(self) -> bool:
@@ -142,7 +142,7 @@ class SkillSync:
             return self.clone_upstream(force=True)
 
         try:
-            logger.info(f"Pulling latest changes from upstream: {self.upstream_dir}")
+            logger.info("Pulling latest changes from upstream: %s", self.upstream_dir)
             success = pull_changes(repository_path=str(self.upstream_dir))
 
             if success:
@@ -152,7 +152,7 @@ class SkillSync:
             return success
 
         except Exception as e:
-            logger.error(f"Error pulling upstream changes: {e}")
+            logger.error("Error pulling upstream changes: %s", e)
             return False
 
     def check_upstream_status(self) -> dict:
@@ -210,7 +210,7 @@ class SkillSync:
             status["last_commit"] = result.stdout.strip()[:8]
 
         except Exception as e:
-            logger.warning(f"Error checking upstream status: {e}")
+            logger.warning("Error checking upstream status: %s", e)
 
         return status
 
@@ -236,5 +236,5 @@ class SkillSync:
             )
             return result.stdout.strip()
         except Exception as e:
-            logger.warning(f"Error getting upstream version: {e}")
+            logger.warning("Error getting upstream version: %s", e)
             return None

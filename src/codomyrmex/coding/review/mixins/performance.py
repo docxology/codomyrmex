@@ -29,7 +29,7 @@ class PerformanceMixin:
             optimizations["caching_opportunities"] = self._find_caching_opportunities()
 
         except Exception as e:
-            logger.error(f"Error generating performance optimizations: {e}")
+            logger.error("Error generating performance optimizations: %s", e)
 
         return optimizations
 
@@ -146,5 +146,5 @@ class PerformanceMixin:
             return round(score, 1)
 
         except Exception as e:
-            logger.error(f"Error calculating performance score: {e}")
+            logger.error("Error calculating performance score: %s", e)
             return 50.0

@@ -91,7 +91,7 @@ class SkillsManager:
             logger.info("Skills system initialized successfully")
             return True
         except Exception as e:
-            logger.error(f"Error building skill index: {e}")
+            logger.error("Error building skill index: %s", e)
             return False
 
     def sync_upstream(self, force: bool = False) -> bool:
@@ -218,11 +218,11 @@ class SkillsManager:
             self.loader.clear_cache()
             self.registry.refresh_index()
 
-            logger.info(f"Custom skill added: {category}/{name}")
+            logger.info("Custom skill added: %s/%s", category, name)
             return True
 
         except Exception as e:
-            logger.error(f"Error adding custom skill: {e}")
+            logger.error("Error adding custom skill: %s", e)
             return False
 
     def get_merged_skill(self, category: str, name: str) -> dict[str, Any] | None:

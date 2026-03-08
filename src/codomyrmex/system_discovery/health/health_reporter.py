@@ -148,7 +148,7 @@ class HealthReporter:
                 report.recommendations.extend(result.recommendations)
 
             except Exception as e:
-                logger.error(f"Failed to check module {module_name}: {e}")
+                logger.error("Failed to check module %s: %s", module_name, e)
                 # Create a failed result
                 failed_result = HealthCheckResult(
                     module_name=module_name, status=HealthStatus.UNKNOWN
@@ -166,7 +166,7 @@ class HealthReporter:
 
                 report.system_metrics = get_system_metrics()
             except Exception as e:
-                logger.warning(f"Failed to collect system metrics: {e}")
+                logger.warning("Failed to collect system metrics: %s", e)
                 report.system_metrics = {"error": str(e)}
 
         # Calculate duration
@@ -175,7 +175,7 @@ class HealthReporter:
         # Generate additional recommendations based on overall health
         self._generate_overall_recommendations(report)
 
-        logger.info(f"Health check completed in {report.duration_seconds:.2f}s")
+        logger.info("Health check completed in %.2fs", report.duration_seconds)
         return report
 
     def _create_empty_report(self) -> HealthReport:
@@ -387,10 +387,10 @@ class HealthReporter:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(formatted_report)
 
-            logger.info(f"Health report exported to {filepath}")
+            logger.info("Health report exported to %s", filepath)
 
         except Exception as e:
-            logger.error(f"Failed to export health report to {filepath}: {e}")
+            logger.error("Failed to export health report to %s: %s", filepath, e)
             raise
 
     def compare_health_reports(

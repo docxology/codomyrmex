@@ -137,7 +137,7 @@ class ResourceTracker:
         self._context = context or {}
         self._start_time = time.time()
 
-        logger.info(f"Started resource tracking for operation: {operation}")
+        logger.info("Started resource tracking for operation: %s", operation)
 
         # Take initial snapshot
         self._take_snapshot("start")
@@ -170,7 +170,7 @@ class ResourceTracker:
         # Calculate results
         result = self._calculate_results(operation, end_time)
 
-        logger.info(f"Stopped resource tracking for operation: {operation}")
+        logger.info("Stopped resource tracking for operation: %s", operation)
         logger.info(
             f"Tracking summary: {result.duration:.3f}s, "
             f"peak memory: {result.peak_memory_rss_mb:.1f}MB, "
@@ -217,7 +217,7 @@ class ResourceTracker:
                         self._snapshots.pop(1)
 
         except Exception as e:
-            logger.error(f"Error taking resource snapshot: {e}")
+            logger.error("Error taking resource snapshot: %s", e)
 
     def _calculate_results(
         self, operation: str, end_time: float

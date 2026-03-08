@@ -93,7 +93,7 @@ class Channel(ABC):
     def close(self) -> None:
         """Close the channel."""
         self._state = ChannelState.CLOSED
-        logger.info(f"Channel {self._name} ({self._channel_id}) closed")
+        logger.info("Channel %s (%s) closed", self._name, self._channel_id)
 
     def pause(self) -> None:
         """Pause the channel."""
@@ -244,7 +244,7 @@ class QueueChannel(Channel):
 
         await self._queue.put(message)
         self._message_count += 1
-        logger.debug(f"Message {message.id} sent on channel {self._name}")
+        logger.debug("Message %s sent on channel %s", message.id, self._name)
 
     async def receive(self, timeout: float | None = None) -> AgentMessage:
         """Receive a message from the queue."""
@@ -296,7 +296,7 @@ class ChannelManager:
             )
 
         self._channels[channel.channel_id] = channel
-        logger.info(f"Created channel: {name} ({channel.channel_id})")
+        logger.info("Created channel: %s (%s)", name, channel.channel_id)
         return channel
 
     def get_channel(self, channel_id: str) -> Channel | None:

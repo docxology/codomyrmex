@@ -43,5 +43,5 @@ def detect_encoding(file_path: Path, sample_size: int = 8192) -> str | None:
         logger.warning("chardet not available, using default encoding")
         return get_config().default_encoding
     except Exception as e:
-        logger.warning(f"Encoding detection failed: {e}, using default")
+        logger.warning("Encoding detection failed: %s, using default", e)
         return get_config().default_encoding

@@ -161,7 +161,7 @@ class OllamaManager:
             return False
 
         except Exception as e:
-            self.logger.error(f"Error starting Ollama server: {e}")
+            self.logger.error("Error starting Ollama server: %s", e)
             return False
 
     def _initialize_sub_managers(self):
@@ -176,7 +176,7 @@ class OllamaManager:
             self.logger.info("Initialized Ollama sub-managers successfully")
 
         except ImportError as e:
-            self.logger.warning(f"Could not initialize some sub-managers: {e}")
+            self.logger.warning("Could not initialize some sub-managers: %s", e)
             # Continue without sub-managers - core functionality still works
 
     def list_models(self, force_refresh: bool = False) -> list[OllamaModel]:
@@ -248,9 +248,9 @@ class OllamaManager:
                     self.logger.info(f"Found {len(models)} Ollama models via HTTP API")
                     return models
             except requests.exceptions.RequestException as e:
-                self.logger.warning(f"HTTP API failed, falling back to CLI: {e}")
+                self.logger.warning("HTTP API failed, falling back to CLI: %s", e)
             except Exception as e:
-                self.logger.warning(f"HTTP API parsing error, falling back to CLI: {e}")
+                self.logger.warning("HTTP API parsing error, falling back to CLI: %s", e)
 
         # Fallback to subprocess
         try:
@@ -259,7 +259,7 @@ class OllamaManager:
             )
 
             if result.returncode != 0:
-                self.logger.error(f"Ollama list failed: {result.stderr}")
+                self.logger.error("Ollama list failed: %s", result.stderr)
                 return []
 
             lines = result.stdout.strip().split("\n")[1:]  # Skip header
@@ -305,7 +305,7 @@ class OllamaManager:
             return models
 
         except Exception as e:
-            self.logger.error(f"Error listing models: {e}")
+            self.logger.error("Error listing models: %s", e)
             return []
 
     def _parse_size(self, size_str: str) -> int:
@@ -347,7 +347,7 @@ class OllamaManager:
             return info
 
         except Exception as e:
-            self.logger.warning(f"Could not get model info for {model_name}: {e}")
+            self.logger.warning("Could not get model info for %s: %s", model_name, e)
             return None
 
     def download_model(self, model_name: str) -> bool:
@@ -360,7 +360,7 @@ class OllamaManager:
         Returns:
             True if successful
         """
-        self.logger.info(f"Pulling model: {model_name}")
+        self.logger.info("Pulling model: %s", model_name)
 
         # Try HTTP API first if enabled
         if self.use_http_api:
@@ -396,7 +396,7 @@ class OllamaManager:
                                         or "digest" in status.lower()
                                         or "layer" in status.lower()
                                     ):
-                                        self.logger.info(f"Pull status: {status}")
+                                        self.logger.info("Pull status: %s", status)
                                     last_status = status
 
                                 # Check for completion
@@ -454,7 +454,7 @@ class OllamaManager:
                         )
                         return True
 
-                    self.logger.warning(f"Pull may not have completed for {model_name}")
+                    self.logger.warning("Pull may not have completed for %s", model_name)
                     return False
                 error_text = response.text[:200] if response.text else "Unknown error"
                 self.logger.error(
@@ -462,7 +462,7 @@ class OllamaManager:
                 )
                 return False
             except requests.exceptions.RequestException as e:
-                self.logger.warning(f"HTTP API pull failed, falling back to CLI: {e}")
+                self.logger.warning("HTTP API pull failed, falling back to CLI: %s", e)
 
         # Fallback to subprocess
         try:
@@ -477,19 +477,19 @@ class OllamaManager:
             success = result.returncode == 0
 
             if success:
-                self.logger.info(f"Model {model_name} pulled successfully via CLI")
+                self.logger.info("Model %s pulled successfully via CLI", model_name)
                 # Clear cache to force refresh
                 self._models_cache = None
             else:
-                self.logger.error(f"Failed to pull model {model_name}: {result.stderr}")
+                self.logger.error("Failed to pull model %s: %s", model_name, result.stderr)
 
             return success
 
         except subprocess.TimeoutExpired:
-            self.logger.error(f"Model pull timed out for {model_name}")
+            self.logger.error("Model pull timed out for %s", model_name)
             return False
         except Exception as e:
-            self.logger.error(f"Error pulling model {model_name}: {e}")
+            self.logger.error("Error pulling model %s: %s", model_name, e)
             return False
 
     def is_model_available(self, model_name: str) -> bool:
@@ -616,7 +616,7 @@ class OllamaManager:
                         metadata={"api_method": "http"},
                     )
                 error_msg = f"HTTP {response.status_code}: {response.text}"
-                self.logger.error(f"Model {model_name} failed: {error_msg}")
+                self.logger.error("Model %s failed: %s", model_name, error_msg)
                 return ModelExecutionResult(
                     model_name=model_name,
                     prompt=prompt,
@@ -637,7 +637,7 @@ class OllamaManager:
                     error_message="Model execution timed out",
                 )
             except requests.exceptions.RequestException as e:
-                self.logger.warning(f"HTTP API failed, falling back to CLI: {e}")
+                self.logger.warning("HTTP API failed, falling back to CLI: %s", e)
 
         # Fallback to subprocess
         try:
@@ -678,7 +678,7 @@ class OllamaManager:
                 success = False
                 error_msg = result.stderr.strip()
 
-                self.logger.error(f"Model {model_name} failed: {error_msg}")
+                self.logger.error("Model %s failed: %s", model_name, error_msg)
 
             return ModelExecutionResult(
                 model_name=model_name,

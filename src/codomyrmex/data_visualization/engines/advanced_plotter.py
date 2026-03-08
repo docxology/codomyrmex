@@ -209,10 +209,10 @@ class AdvancedPlotter(
                 transparent=transparent,
             )
         except OSError as e:
-            logger.error(f"Failed to save plot to {path}: {e}")
+            logger.error("Failed to save plot to %s: %s", path, e)
             return False
 
-        logger.info(f"Plot saved to {path}")
+        logger.info("Plot saved to %s", path)
         return True
 
     def _plot_dataset(self, ax: plt.Axes, dataset: "Dataset") -> None:

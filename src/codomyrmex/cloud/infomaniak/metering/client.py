@@ -63,7 +63,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                 "period_end": end.isoformat() if end else None,
             }
         except Exception as e:
-            logger.error(f"Failed to get compute usage: {e}")
+            logger.error("Failed to get compute usage: %s", e)
             return {}
 
     def get_storage_usage(self) -> dict[str, Any]:
@@ -81,7 +81,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                 "unattached_count": len(volumes) - attached_count,
             }
         except Exception as e:
-            logger.error(f"Failed to get storage usage: {e}")
+            logger.error("Failed to get storage usage: %s", e)
             return {}
 
     def get_network_usage(self) -> dict[str, Any]:
@@ -100,7 +100,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                 "floating_ips_in_use": sum(1 for fip in floating_ips if fip.port_id),
             }
         except Exception as e:
-            logger.error(f"Failed to get network usage: {e}")
+            logger.error("Failed to get network usage: %s", e)
             return {}
 
     def get_object_storage_usage(self) -> dict[str, Any]:
@@ -122,7 +122,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                 "total_size_gb": total_bytes / (1024**3) if total_bytes else 0,
             }
         except Exception as e:
-            logger.error(f"Failed to get object storage usage: {e}")
+            logger.error("Failed to get object storage usage: %s", e)
             return {}
 
     def get_all_usage(self) -> dict[str, Any]:
@@ -158,7 +158,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                     }
                 )
         except Exception as e:
-            logger.warning(f"Failed to list compute instances: {e}")
+            logger.warning("Failed to list compute instances: %s", e)
 
         # Volumes
         try:
@@ -173,7 +173,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                     }
                 )
         except Exception as e:
-            logger.warning(f"Failed to list volumes: {e}")
+            logger.warning("Failed to list volumes: %s", e)
 
         # Floating IPs
         try:
@@ -188,7 +188,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                     }
                 )
         except Exception as e:
-            logger.warning(f"Failed to list floating IPs: {e}")
+            logger.warning("Failed to list floating IPs: %s", e)
 
         return resources
 
@@ -209,7 +209,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                 "server_groups": quotas.server_groups,
             }
         except Exception as e:
-            logger.error(f"Failed to get compute quotas: {e}")
+            logger.error("Failed to get compute quotas: %s", e)
             return {}
 
     def get_network_quotas(self) -> dict[str, Any]:
@@ -226,7 +226,7 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                 "security_group_rules": quotas.security_group_rules,
             }
         except Exception as e:
-            logger.error(f"Failed to get network quotas: {e}")
+            logger.error("Failed to get network quotas: %s", e)
             return {}
 
     def get_storage_quotas(self) -> dict[str, Any]:
@@ -241,5 +241,5 @@ class InfomaniakMeteringClient(InfomaniakOpenStackBase):
                 "backups": quotas.backups,
             }
         except Exception as e:
-            logger.error(f"Failed to get storage quotas: {e}")
+            logger.error("Failed to get storage quotas: %s", e)
             return {}

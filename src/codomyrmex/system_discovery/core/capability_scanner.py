@@ -113,7 +113,7 @@ class CapabilityScanner:
         capabilities = {}
 
         if not self.codomyrmex_path.exists():
-            logger.error(f"Codomyrmex path does not exist: {self.codomyrmex_path}")
+            logger.error("Codomyrmex path does not exist: %s", self.codomyrmex_path)
             return capabilities
 
         # Find all modules
@@ -121,14 +121,14 @@ class CapabilityScanner:
             if module_dir.is_dir() and not module_dir.name.startswith("."):
                 if (module_dir / "__init__.py").exists():
                     module_name = module_dir.name
-                    logger.info(f"Scanning capabilities for {module_name}...")
+                    logger.info("Scanning capabilities for %s...", module_name)
 
                     try:
                         module_capability = self.scan_module(module_name, module_dir)
                         if module_capability:
                             capabilities[module_name] = module_capability
                     except Exception as e:
-                        logger.error(f"Error scanning {module_name}: {e}")
+                        logger.error("Error scanning %s: %s", module_name, e)
 
         return capabilities
 
@@ -154,7 +154,7 @@ class CapabilityScanner:
                 module = importlib.import_module(module_import_path)
                 use_runtime_analysis = True
             except Exception as e:
-                logger.warning(f"Could not import {module_import_path}: {e}")
+                logger.warning("Could not import %s: %s", module_import_path, e)
                 module = None
                 use_runtime_analysis = False
 
@@ -194,7 +194,7 @@ class CapabilityScanner:
                     imports.update(file_imports)
 
                 except Exception as e:
-                    logger.warning(f"Could not analyze {py_file}: {e}")
+                    logger.warning("Could not analyze %s: %s", py_file, e)
                     continue
 
             # Get module docstring and exports
@@ -230,7 +230,7 @@ class CapabilityScanner:
             )
 
         except Exception as e:
-            logger.error(f"Error scanning module {module_name}: {e}")
+            logger.error("Error scanning module %s: %s", module_name, e)
             return None
 
     def _analyze_ast(
@@ -539,7 +539,7 @@ class CapabilityScanner:
                     docstring = ast.get_docstring(tree)
                     return docstring or "No docstring"
             except Exception as e:
-                logger.debug(f"Could not get docstring from {init_path}: {e}")
+                logger.debug("Could not get docstring from %s: %s", init_path, e)
 
         return "No docstring"
 
@@ -556,7 +556,7 @@ class CapabilityScanner:
                     "%Y-%m-%d %H:%M:%S"
                 )
         except Exception as e:
-            logger.debug(f"Could not get last modified time for {module_path}: {e}")
+            logger.debug("Could not get last modified time for %s: %s", module_path, e)
 
         return "unknown"
 
@@ -686,11 +686,11 @@ class CapabilityScanner:
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(serializable_data, f, indent=2, ensure_ascii=False)
 
-            logger.info(f"Capabilities report exported to: {output_path}")
+            logger.info("Capabilities report exported to: %s", output_path)
             return str(output_path)
 
         except Exception as e:
-            logger.error(f"Failed to export capabilities report: {e}")
+            logger.error("Failed to export capabilities report: %s", e)
             return ""
 
 

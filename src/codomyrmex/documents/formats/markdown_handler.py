@@ -33,7 +33,7 @@ def read_markdown(file_path: str | Path, encoding: str | None = None) -> str:
             content = f.read()
         return content
     except Exception as e:
-        logger.error(f"Error reading markdown file {file_path}: {e}")
+        logger.error("Error reading markdown file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read markdown file: {e!s}", file_path=str(file_path)
         ) from e
@@ -60,9 +60,9 @@ def write_markdown(
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding=encoding) as f:
             f.write(content)
-        logger.debug(f"Wrote markdown to {file_path}")
+        logger.debug("Wrote markdown to %s", file_path)
     except Exception as e:
-        logger.error(f"Error writing markdown file {file_path}: {e}")
+        logger.error("Error writing markdown file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write markdown file: {e!s}", file_path=str(file_path)
         ) from e

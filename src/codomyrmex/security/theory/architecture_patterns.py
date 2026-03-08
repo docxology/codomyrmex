@@ -359,14 +359,14 @@ def apply_pattern(pattern_name: str, context: dict[str, Any]) -> dict[str, Any]:
     """
     pattern = PATTERNS.get(pattern_name)
     if not pattern:
-        logger.warning(f"Unknown pattern: {pattern_name}")
+        logger.warning("Unknown pattern: %s", pattern_name)
         return {
             "applied": False,
             "error": f"Unknown pattern: {pattern_name}",
             "available_patterns": list(PATTERNS.keys()),
         }
 
-    logger.info(f"Applying pattern '{pattern.name}' to context")
+    logger.info("Applying pattern '%s' to context", pattern.name)
 
     # Generate recommendations based on pattern
     recommendations = []

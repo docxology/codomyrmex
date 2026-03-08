@@ -101,9 +101,9 @@ async def run_server() -> None:
                         schema=tool_schema,
                         handler=obj,
                     )
-                    logger.info(f"Registered tool: {tool_name} from {module.__name__}")
+                    logger.info("Registered tool: %s from %s", tool_name, module.__name__)
                 except Exception as e:
-                    logger.error(f"Failed to register tool {name}: {e}")
+                    logger.error("Failed to register tool %s: %s", name, e)
 
     await server.run_stdio()
 

@@ -190,7 +190,7 @@ class InfrastructureAgent(BaseAgent):
         except TypeError as e:
             return AgentResponse(content="", error=f"Parameter error: {e}")
         except Exception as e:
-            logger.exception(f"InfrastructureAgent execution error: {e}")
+            logger.exception("InfrastructureAgent execution error: %s", e)
             return AgentResponse(content="", error=str(e))
 
     def stream(self, request: AgentRequest) -> Iterator[str]:
@@ -234,9 +234,9 @@ class InfrastructureAgent(BaseAgent):
             if validate and callable(validate):
                 try:
                     if not validate():
-                        logger.warning(f"Connection test failed for {name}")
+                        logger.warning("Connection test failed for %s", name)
                         return False
                 except (AttributeError, TypeError, OSError, ConnectionError):
-                    logger.warning(f"Connection test error for {name}")
+                    logger.warning("Connection test error for %s", name)
                     return False
         return True

@@ -46,7 +46,7 @@ class ToolsMixin:
                 self._tool_handlers: dict[str, Callable] = {}
             self._tool_handlers[name] = handler
 
-        self.logger.debug(f"Registered tool: {name}")
+        self.logger.debug("Registered tool: %s", name)
 
     def get_registered_tools(self) -> list[dict[str, Any]]:
         """Get list of registered tools."""

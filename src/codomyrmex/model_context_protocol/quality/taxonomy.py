@@ -111,7 +111,7 @@ def categorize_tool(tool_name: str) -> ToolCategory:
         if pattern.search(short):
             return category
 
-    logger.debug(f"No category rule matched for '{tool_name}', defaulting to QUERY")
+    logger.debug("No category rule matched for '%s', defaulting to QUERY", tool_name)
     return ToolCategory.QUERY
 
 

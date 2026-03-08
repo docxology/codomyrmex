@@ -130,7 +130,7 @@ def get_llm_client(identity: str = "agent") -> Any:
         try:
             from codomyrmex.agents.claude.claude_client import ClaudeClient
 
-            logger.info(f"[{identity}] Using real ClaudeClient (API Key found)")
+            logger.info("[%s] Using real ClaudeClient (API Key found)", identity)
             return ClaudeClient()
         except ImportError as e:
             logger.warning("[%s] ClaudeClient import failed: %s", identity, e)
@@ -140,7 +140,7 @@ def get_llm_client(identity: str = "agent") -> Any:
         try:
             from codomyrmex.agents.gemini.gemini_client import GeminiClient
 
-            logger.info(f"[{identity}] Using real GeminiClient (API Key found)")
+            logger.info("[%s] Using real GeminiClient (API Key found)", identity)
             return GeminiClient()
         except ImportError as e:
             logger.warning("[%s] GeminiClient import failed: %s", identity, e)
@@ -150,7 +150,7 @@ def get_llm_client(identity: str = "agent") -> Any:
         try:
             from codomyrmex.agents.o1.o1_client import O1Client
 
-            logger.info(f"[{identity}] Using real O1Client (API Key found)")
+            logger.info("[%s] Using real O1Client (API Key found)", identity)
             return O1Client()
         except ImportError as e:
             logger.warning("[%s] O1Client import failed: %s", identity, e)
@@ -160,7 +160,7 @@ def get_llm_client(identity: str = "agent") -> Any:
         try:
             from codomyrmex.agents.deepseek.deepseek_client import DeepSeekClient
 
-            logger.info(f"[{identity}] Using real DeepSeekClient (API Key found)")
+            logger.info("[%s] Using real DeepSeekClient (API Key found)", identity)
             return DeepSeekClient()
         except ImportError as e:
             logger.warning("[%s] DeepSeekClient import failed: %s", identity, e)

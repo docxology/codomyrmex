@@ -77,7 +77,7 @@ class FileBasedCache(Cache):
             self._stats.hits += 1
             return value
         except Exception as e:
-            logger.error(f"Error reading cache: {e}")
+            logger.error("Error reading cache: %s", e)
             self._stats.misses += 1
             return None
 
@@ -103,7 +103,7 @@ class FileBasedCache(Cache):
             self._stats.size += 1
             return True
         except Exception as e:
-            logger.error(f"Error writing cache: {e}")
+            logger.error("Error writing cache: %s", e)
             raise
 
     def delete(self, key: str) -> bool:
@@ -134,7 +134,7 @@ class FileBasedCache(Cache):
             self._stats.size = 0
             return True
         except Exception as e:
-            logger.error(f"Error clearing cache: {e}")
+            logger.error("Error clearing cache: %s", e)
             raise
 
     def exists(self, key: str) -> bool:

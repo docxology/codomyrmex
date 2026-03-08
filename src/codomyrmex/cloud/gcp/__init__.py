@@ -24,7 +24,7 @@ class GCSClient(StorageClient):
             buckets = self.client.list_buckets()
             return [bucket.name for bucket in buckets]
         except Exception as e:
-            logger.error(f"GCS list_buckets error: {e}")
+            logger.error("GCS list_buckets error: %s", e)
             return []
 
     def create_bucket(self, name: str, region: str | None = "US") -> bool:
@@ -33,7 +33,7 @@ class GCSClient(StorageClient):
             self.client.create_bucket(name, location=region)
             return True
         except Exception as e:
-            logger.error(f"GCS create_bucket error: {e}")
+            logger.error("GCS create_bucket error: %s", e)
             return False
 
     def delete_bucket(self, name: str) -> bool:
@@ -43,7 +43,7 @@ class GCSClient(StorageClient):
             bucket.delete()
             return True
         except Exception as e:
-            logger.error(f"GCS delete_bucket error: {e}")
+            logger.error("GCS delete_bucket error: %s", e)
             return False
 
     def bucket_exists(self, name: str) -> bool:
@@ -64,7 +64,7 @@ class GCSClient(StorageClient):
             blob.upload_from_filename(file_path, content_type=content_type)
             return True
         except Exception as e:
-            logger.error(f"GCS upload_file error: {e}")
+            logger.error("GCS upload_file error: %s", e)
             return False
 
     def download_file(self, bucket: str, key: str, file_path: str) -> bool:
@@ -75,7 +75,7 @@ class GCSClient(StorageClient):
             blob.download_to_filename(file_path)
             return True
         except Exception as e:
-            logger.error(f"GCS download_file error: {e}")
+            logger.error("GCS download_file error: %s", e)
             return False
 
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
@@ -84,7 +84,7 @@ class GCSClient(StorageClient):
             blobs = self.client.list_blobs(bucket, prefix=prefix)
             return [blob.name for blob in blobs]
         except Exception as e:
-            logger.error(f"GCS list_objects error: {e}")
+            logger.error("GCS list_objects error: %s", e)
             return []
 
     def delete_object(self, bucket: str, key: str) -> bool:
@@ -95,7 +95,7 @@ class GCSClient(StorageClient):
             blob.delete()
             return True
         except Exception as e:
-            logger.error(f"GCS delete_object error: {e}")
+            logger.error("GCS delete_object error: %s", e)
             return False
 
     def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
@@ -105,7 +105,7 @@ class GCSClient(StorageClient):
             blob = bucket_obj.get_blob(key)
             return blob.metadata if blob and blob.metadata else {}
         except Exception as e:
-            logger.error(f"GCS get_object_metadata error: {e}")
+            logger.error("GCS get_object_metadata error: %s", e)
             return {}
 
     def generate_presigned_url(
@@ -129,7 +129,7 @@ class GCSClient(StorageClient):
                 method=method,
             )
         except Exception as e:
-            logger.error(f"GCS generate_presigned_url error: {e}")
+            logger.error("GCS generate_presigned_url error: %s", e)
             return ""
 
     # Legacy methods for backward compatibility

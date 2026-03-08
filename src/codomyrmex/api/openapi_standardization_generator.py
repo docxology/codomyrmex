@@ -81,7 +81,7 @@ class StandardizationOpenAPIGenerator:
             "tags": [],
         }
 
-        logger.info(f"OpenAPI Generator initialized: {title} v{version}")
+        logger.info("OpenAPI Generator initialized: %s v%s", title, version)
 
     def add_rest_api(self, api) -> None:
         """
@@ -488,6 +488,6 @@ class StandardizationOpenAPIGenerator:
         # Validate before returning
         errors = self.validate_spec()
         if errors:
-            logger.warning(f"OpenAPI specification validation errors: {errors}")
+            logger.warning("OpenAPI specification validation errors: %s", errors)
 
         return self.spec

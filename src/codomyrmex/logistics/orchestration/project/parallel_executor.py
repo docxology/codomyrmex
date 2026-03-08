@@ -185,7 +185,7 @@ class ParallelExecutor:
                         results[task_name].end_time = time.time()
 
         except Exception as e:
-            logger.error(f"Error during parallel execution: {e}")
+            logger.error("Error during parallel execution: %s", e)
             # Mark remaining tasks as failed
             for task_name in task_dict:
                 if results[task_name].status in [
@@ -323,7 +323,7 @@ class ParallelExecutor:
 
             # Here we would normally call the actual module function
             # For now, we'll simulate execution
-            logger.info(f"Executing task '{task_name}': {module}.{action}")
+            logger.info("Executing task '%s': %s.%s", task_name, module, action)
 
             # Simulate task execution (replace with actual module calls)
             result = self._simulate_task_execution(task)
@@ -344,7 +344,7 @@ class ParallelExecutor:
             end_time = time.time()
             duration = end_time - start_time
 
-            logger.error(f"Task '{task_name}' failed: {e}")
+            logger.error("Task '%s' failed: %s", task_name, e)
 
             return ExecutionResult(
                 task_name=task_name,

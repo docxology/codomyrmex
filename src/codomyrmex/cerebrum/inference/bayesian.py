@@ -92,7 +92,7 @@ class BayesianNetwork:
         # Create default CPT entry (no parents)
         self.cpt[node][()] = Distribution(values, prior.copy())
 
-        self.logger.debug(f"Added node {node}")
+        self.logger.debug("Added node %s", node)
 
     def add_edge(self, parent: str, child: str) -> None:
         """Add a directed edge from parent to child.
@@ -111,7 +111,7 @@ class BayesianNetwork:
 
         self.edges[parent].append(child)
         self.parents[child].append(parent)
-        self.logger.debug(f"Added edge {parent} -> {child}")
+        self.logger.debug("Added edge %s -> %s", parent, child)
 
     def set_cpt(self, node: str, cpt: dict[tuple, dict[Any, float]]) -> None:
         """Set conditional probability table for a node.
@@ -139,7 +139,7 @@ class BayesianNetwork:
             distributions[parent_config] = Distribution(node_values, probs)
 
         self.cpt[node] = distributions
-        self.logger.debug(f"Set CPT for node {node}")
+        self.logger.debug("Set CPT for node %s", node)
 
     def get_topological_order(self) -> list[str]:
         """Get nodes in topological order (parents before children).

@@ -49,7 +49,7 @@ class SkillMarketplace:
             List of matching skill metadata dicts from remote sources.
             Each dict includes 'source', 'name', and 'description'.
         """
-        logger.info(f"Searching remote sources for: {query}")
+        logger.info("Searching remote sources for: %s", query)
         results = []
         for source in self._sources:
             results.append(
@@ -76,7 +76,7 @@ class SkillMarketplace:
         source_name = source or (
             self._sources[0]["name"] if self._sources else "unknown"
         )
-        logger.info(f"Installing skill {skill_id} from {source_name}")
+        logger.info("Installing skill %s from %s", skill_id, source_name)
 
         return {
             "success": False,
@@ -104,7 +104,7 @@ class SkillMarketplace:
             source_type: Source type (default: 'git')
         """
         self._sources.append({"name": name, "url": url, "type": source_type})
-        logger.info(f"Added marketplace source: {name} ({url})")
+        logger.info("Added marketplace source: %s (%s)", name, url)
 
     def remove_source(self, name: str) -> bool:
         """
@@ -119,7 +119,7 @@ class SkillMarketplace:
         for i, source in enumerate(self._sources):
             if source["name"] == name:
                 self._sources.pop(i)
-                logger.info(f"Removed marketplace source: {name}")
+                logger.info("Removed marketplace source: %s", name)
                 return True
         return False
 

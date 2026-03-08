@@ -213,7 +213,7 @@ def run_command_stream_output(command_parts, cwd):
 
 def install_dependencies(package_manager="npm"):
     """Installs Docusaurus dependencies."""
-    logger.info(f"Attempting to install dependencies using {package_manager}...")
+    logger.info("Attempting to install dependencies using %s...", package_manager)
     if package_manager == "yarn" and command_exists("yarn"):
         cmd = ["yarn", "install"]
     elif command_exists("npm"):
@@ -229,7 +229,7 @@ def install_dependencies(package_manager="npm"):
 
 def start_dev_server(package_manager="npm"):
     """Starts the Docusaurus development server (hot-reloading)."""
-    logger.info(f"Attempting to start development server using {package_manager}...")
+    logger.info("Attempting to start development server using %s...", package_manager)
     logger.info(
         f"Docusaurus site should be available at {EFFECTIVE_DOCS_URL} once started."
     )
@@ -262,13 +262,13 @@ def start_dev_server(package_manager="npm"):
         logger.info("Development server process interrupted by user (Ctrl+C).")
         return True
     except Exception as e:
-        logger.error(f"An error occurred while trying to start the dev server: {e}")
+        logger.error("An error occurred while trying to start the dev server: %s", e)
         return False
 
 
 def build_static_site(package_manager="npm"):
     """Builds the static Docusaurus site."""
-    logger.info(f"Attempting to build static site using {package_manager}...")
+    logger.info("Attempting to build static site using %s...", package_manager)
     if package_manager == "yarn" and command_exists("yarn"):
         cmd = ["yarn", "build"]
     elif command_exists("npm"):
@@ -289,7 +289,7 @@ def build_static_site(package_manager="npm"):
 
 def serve_static_site(package_manager="npm"):
     """Serves the built static Docusaurus site."""
-    logger.info(f"Attempting to serve the built static site using {package_manager}...")
+    logger.info("Attempting to serve the built static site using %s...", package_manager)
     build_dir = os.path.join(DOCUSAURUS_ROOT_DIR, "build")
     if not os.path.exists(build_dir) or not os.listdir(build_dir):
         logger.error(
@@ -353,7 +353,7 @@ def serve_static_site(package_manager="npm"):
         logger.info("Static site server process interrupted by user (Ctrl+C).")
         return True
     except Exception as e:
-        logger.error(f"An error occurred while trying to serve the static site: {e}")
+        logger.error("An error occurred while trying to serve the static site: %s", e)
         return False
 
 
@@ -392,8 +392,8 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
     source_root = source_root or os.path.join(project_root, "src", "codomyrmex")
     dest_root = dest_root or os.path.join(DOCUSAURUS_ROOT_DIR, "docs", "modules")
 
-    logger.info(f"Source docs root: {source_root}")
-    logger.info(f"Destination docs root: {dest_root}")
+    logger.info("Source docs root: %s", source_root)
+    logger.info("Destination docs root: %s", dest_root)
 
     os.makedirs(dest_root, exist_ok=True)
 
@@ -429,9 +429,9 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
                     dest_fname = fname.lower()
                     dest_path = os.path.join(dest_module_dir, dest_fname)
                     shutil.copy2(src, dest_path)
-                    logger.info(f"Copied {src} -> {dest_path}")
+                    logger.info("Copied %s -> %s", src, dest_path)
                 except Exception as e:
-                    logger.error(f"Failed to copy {src} -> {dest_module_dir}: {e}")
+                    logger.error("Failed to copy %s -> %s: %s", src, dest_module_dir, e)
 
         # Copy module docs/ subtree if present
         src_docs_dir = os.path.join(module_path, "docs")
@@ -448,7 +448,7 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
                     )
             try:
                 shutil.copytree(src_docs_dir, dest_docs_subdir)
-                logger.info(f"Copied docs tree {src_docs_dir} -> {dest_docs_subdir}")
+                logger.info("Copied docs tree %s -> %s", src_docs_dir, dest_docs_subdir)
             except Exception as e:
                 logger.error(
                     f"Failed to copy docs tree {src_docs_dir} -> {dest_docs_subdir}: {e}"
@@ -520,14 +520,14 @@ def validate_doc_versions():
     if validation_errors:
         logger.error("Version validation found errors:")
         for error in validation_errors:
-            logger.error(f"  - {error}")
+            logger.error("  - %s", error)
     else:
         logger.info("No version validation errors found")
 
     if validation_warnings:
         logger.warning("Version validation found warnings:")
         for warning in validation_warnings:
-            logger.warning(f"  - {warning}")
+            logger.warning("  - %s", warning)
     else:
         logger.info("No version validation warnings found")
 
@@ -536,7 +536,7 @@ def validate_doc_versions():
 
 def assess_site():
     """Guides user through assessing the site by opening browser and printing checklist."""
-    logger.info(f"Attempting to open {EFFECTIVE_DOCS_URL} in your web browser.")
+    logger.info("Attempting to open %s in your web browser.", EFFECTIVE_DOCS_URL)
     logger.info(
         "Ensure a local server (dev or static) is running and accessible at this URL."
     )
@@ -545,7 +545,7 @@ def assess_site():
             logger.warning(
                 f"webbrowser.open() returned False. Could not open {EFFECTIVE_DOCS_URL} automatically."
             )
-            logger.info(f"Please open manually: {EFFECTIVE_DOCS_URL}")
+            logger.info("Please open manually: %s", EFFECTIVE_DOCS_URL)
     except Exception as e:
         logger.warning(
             f"Could not open web browser automatically: {e}. Please open manually: {EFFECTIVE_DOCS_URL}"
@@ -631,24 +631,24 @@ def main():
             logger.error("Documentation validation failed!")
             sys.exit(1)
     elif action_to_perform == DEFAULT_ACTION:
-        logger.info(f"--- Starting '{DEFAULT_ACTION}' sequence ---")
+        logger.info("--- Starting '%s' sequence ---", DEFAULT_ACTION)
         if not check_doc_environment():
-            logger.error(f"Environment check failed. Aborting '{DEFAULT_ACTION}'.")
+            logger.error("Environment check failed. Aborting '%s'.", DEFAULT_ACTION)
             sys.exit(1)
 
-        logger.info(f"--- Step 1 ({DEFAULT_ACTION}): Installing dependencies ---")
+        logger.info("--- Step 1 (%s): Installing dependencies ---", DEFAULT_ACTION)
         if not install_dependencies(args.pm):
             logger.error(
                 f"Dependency installation failed. Aborting '{DEFAULT_ACTION}'."
             )
             sys.exit(1)
 
-        logger.info(f"--- Step 2 ({DEFAULT_ACTION}): Building static site ---")
+        logger.info("--- Step 2 (%s): Building static site ---", DEFAULT_ACTION)
         if not build_static_site(args.pm):
-            logger.error(f"Static site build failed. Aborting '{DEFAULT_ACTION}'.")
+            logger.error("Static site build failed. Aborting '%s'.", DEFAULT_ACTION)
             sys.exit(1)
 
-        logger.info(f"--- Step 3 ({DEFAULT_ACTION}): Assessing and serving site ---")
+        logger.info("--- Step 3 (%s): Assessing and serving site ---", DEFAULT_ACTION)
         assess_site()  # Open browser and print checklist
         serve_static_site(args.pm)  # Serve the built site (blocking)
         logger.info(

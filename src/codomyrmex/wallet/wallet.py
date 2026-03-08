@@ -38,7 +38,7 @@ class Wallet:
         self._manager = WalletManager(storage_path=storage_path)
         self._recovery = NaturalRitualRecovery()
         self._address: str | None = None
-        logger.info(f"Wallet initialized for user {user_id}")
+        logger.info("Wallet initialized for user %s", user_id)
 
     @property
     def address(self) -> str | None:

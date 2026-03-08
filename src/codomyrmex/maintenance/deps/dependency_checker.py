@@ -124,7 +124,7 @@ def check_security() -> dict[str, Any]:
                 vulnerabilities = json.loads(stdout)
                 security["vulnerabilities"].extend(vulnerabilities)
             except (json.JSONDecodeError, ValueError) as e:
-                logger.debug(f"Failed to parse pip-audit output: {e}")
+                logger.debug("Failed to parse pip-audit output: %s", e)
 
     return security
 

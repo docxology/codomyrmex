@@ -115,7 +115,7 @@ class DocumentationBootstrapper:
                     inventory.append(f"{item.name}/")
 
         except PermissionError:
-            logger.warning(f"Cannot access directory: {dir_path}")
+            logger.warning("Cannot access directory: %s", dir_path)
             return []
 
         return inventory
@@ -275,7 +275,7 @@ class DocumentationBootstrapper:
         content = self.generate_readme_md(dir_path)
         readme_path.write_text(content, encoding="utf-8")
         self.generated_count += 1
-        logger.info(f"Processed documentation for {rel_path}")
+        logger.info("Processed documentation for %s", rel_path)
 
     def bootstrap_repository(self) -> None:
         """Bootstrap documentation for the entire repository."""
@@ -285,10 +285,10 @@ class DocumentationBootstrapper:
         for surface_root in self.SURFACE_ROOTS:
             surface_path = self.repo_root / surface_root
             if not surface_path.exists():
-                logger.warning(f"Surface root not found: {surface_root}")
+                logger.warning("Surface root not found: %s", surface_root)
                 continue
 
-            logger.info(f"Processing surface: {surface_root}")
+            logger.info("Processing surface: %s", surface_root)
 
             # Process the surface root directory itself
             if self.should_process_directory(surface_path):
@@ -299,7 +299,7 @@ class DocumentationBootstrapper:
                 if dir_path.is_dir() and self.should_process_directory(dir_path):
                     self.process_directory(dir_path)
 
-        logger.info(f"Bootstrap complete: processed {self.generated_count} files")
+        logger.info("Bootstrap complete: processed %s files", self.generated_count)
 
 
 def main():

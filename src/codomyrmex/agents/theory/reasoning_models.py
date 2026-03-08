@@ -77,7 +77,7 @@ class SymbolicReasoningModel(ReasoningModel):
             rule: Rule definition
         """
         self.rules.append(rule)
-        self.logger.debug(f"Added rule: {rule}")
+        self.logger.debug("Added rule: %s", rule)
 
     def add_fact(self, fact: str, value: Any) -> None:
         """
@@ -88,7 +88,7 @@ class SymbolicReasoningModel(ReasoningModel):
             value: Fact value
         """
         self.facts[fact] = value
-        self.logger.debug(f"Added fact: {fact} = {value}")
+        self.logger.debug("Added fact: %s = %s", fact, value)
 
     def reason(
         self, premises: dict[str, Any], context: dict[str, Any] | None = None
@@ -180,7 +180,7 @@ class NeuralReasoningModel(ReasoningModel):
             pattern: Pattern data
         """
         self.patterns[pattern_name] = pattern
-        self.logger.debug(f"Learned pattern: {pattern_name}")
+        self.logger.debug("Learned pattern: %s", pattern_name)
 
     def reason(
         self, premises: dict[str, Any], context: dict[str, Any] | None = None

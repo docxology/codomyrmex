@@ -80,7 +80,7 @@ class TerminalFormatter:
                 )
                 self.rich = RichRenderer(force_terminal=self.use_colors)
             except Exception as e:
-                logger.warning(f"Failed to initialize Rich: {e}")
+                logger.warning("Failed to initialize Rich: %s", e)
 
     def _supports_color(self) -> bool:
         """Check if terminal supports color output."""

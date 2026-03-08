@@ -189,7 +189,7 @@ class BackupManager:
 
         except Exception as e:
             duration = time.time() - start_time
-            logger.error(f"Failed to create backup {backup_id}: {e}")
+            logger.error("Failed to create backup %s: %s", backup_id, e)
             return BackupResult(
                 backup_id=backup_id,
                 success=False,
@@ -326,7 +326,7 @@ class BackupManager:
             del self._backups[backup_id]
             return True
         except Exception as e:
-            logger.error(f"Failed to delete backup: {e}")
+            logger.error("Failed to delete backup: %s", e)
             return False
 
 

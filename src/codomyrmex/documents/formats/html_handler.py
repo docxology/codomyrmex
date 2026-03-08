@@ -34,7 +34,7 @@ def read_html(file_path: str | Path, encoding: str | None = None) -> str:
             content = f.read()
         return content
     except Exception as e:
-        logger.error(f"Error reading HTML file {file_path}: {e}")
+        logger.error("Error reading HTML file %s: %s", file_path, e)
         raise DocumentReadError(
             f"Failed to read HTML file: {e!s}", file_path=str(file_path)
         ) from e
@@ -61,9 +61,9 @@ def write_html(
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding=encoding) as f:
             f.write(content)
-        logger.debug(f"Wrote HTML to {file_path}")
+        logger.debug("Wrote HTML to %s", file_path)
     except Exception as e:
-        logger.error(f"Error writing HTML file {file_path}: {e}")
+        logger.error("Error writing HTML file %s: %s", file_path, e)
         raise DocumentWriteError(
             f"Failed to write HTML file: {e!s}", file_path=str(file_path)
         ) from e

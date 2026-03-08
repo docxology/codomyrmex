@@ -197,7 +197,7 @@ class JulesClient(CLIAgentBase):
                 "available": result.get("success", False),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.warning(f"Failed to get Jules help: {e}")
+            self.logger.warning("Failed to get Jules help: %s", e)
             return {
                 "help_text": "",
                 "exit_code": -1,

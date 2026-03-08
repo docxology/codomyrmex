@@ -54,12 +54,12 @@ class FabricOrchestrator:
         results = {}
 
         for pattern in patterns:
-            self.logger.info(f"Running Fabric pattern: {pattern}")
+            self.logger.info("Running Fabric pattern: %s", pattern)
             result = self.fabric_manager.run_pattern(pattern, code_content)
             results[pattern] = result
 
             if result["success"]:
-                self.logger.info(f"Pattern '{pattern}' completed successfully")
+                self.logger.info("Pattern '%s' completed successfully", pattern)
             else:
                 self.logger.error(
                     f"Pattern '{pattern}' failed: {result.get('error', 'Unknown error')}"
@@ -152,11 +152,11 @@ class FabricOrchestrator:
                     bar_color="lightgreen",
                 )
 
-                self.logger.info(f"Created workflow visualization: {output_path}")
+                self.logger.info("Created workflow visualization: %s", output_path)
                 return True
 
         except Exception as e:
-            self.logger.error(f"Failed to create visualization: {e}")
+            self.logger.error("Failed to create visualization: %s", e)
             raise
 
         return False

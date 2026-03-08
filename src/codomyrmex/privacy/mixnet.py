@@ -64,6 +64,6 @@ class MixnetProxy:
         current_packet = packet
         for node in path:
             current_packet = node.relay(current_packet)
-            # logger.debug(f"Relayed via {node.node_id}")
+            # logger.debug("Relayed via %s", node.node_id)
 
         return current_packet.payload

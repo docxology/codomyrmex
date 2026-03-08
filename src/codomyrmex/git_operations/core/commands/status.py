@@ -21,7 +21,7 @@ def add_files(file_paths: list[str], repository_path: str | None = None) -> bool
         return True
 
     try:
-        logger.info(f"Adding files to staging area: {file_paths}")
+        logger.info("Adding files to staging area: %s", file_paths)
 
         cmd = ["git", "add", *file_paths]
         subprocess.run(
@@ -37,12 +37,12 @@ def add_files(file_paths: list[str], repository_path: str | None = None) -> bool
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to add files to staging area: {e}")
+        logger.error("Failed to add files to staging area: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error adding files: {e}")
+        logger.error("Unexpected error adding files: %s", e)
         return False
 
 
@@ -116,10 +116,10 @@ def get_status(repository_path: str | None = None) -> dict[str, Any]:
         return status_info
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get repository status: {e}")
+        logger.error("Failed to get repository status: %s", e)
         return {"error": str(e)}
     except Exception as e:
-        logger.error(f"Unexpected error getting status: {e}")
+        logger.error("Unexpected error getting status: %s", e)
         return {"error": str(e)}
 
 
@@ -140,7 +140,7 @@ def clean_repository(
             # -x also removes ignored files
             base_cmd.append("-x")
 
-        logger.info(f"Cleaning repository in {repository_path}")
+        logger.info("Cleaning repository in %s", repository_path)
         subprocess.run(
             base_cmd,
             cwd=repository_path,
@@ -151,12 +151,12 @@ def clean_repository(
         )
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to clean repository: {e}")
+        logger.error("Failed to clean repository: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error cleaning repository: {e}")
+        logger.error("Unexpected error cleaning repository: %s", e)
         return False
 
 
@@ -193,13 +193,13 @@ def get_diff(
         )
         return result.stdout
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get diff: {e}")
+        logger.error("Failed to get diff: %s", e)
         return ""
     except FileNotFoundError as e:
         logger.warning("Git not found when getting diff: %s", e)
         return ""
     except Exception as e:
-        logger.error(f"Unexpected error getting diff: {e}")
+        logger.error("Unexpected error getting diff: %s", e)
         return ""
 
 
@@ -235,10 +235,10 @@ def get_diff_files(
         return result.stdout
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to get diff: {e}")
+        logger.error("Failed to get diff: %s", e)
         return ""
     except Exception as e:
-        logger.error(f"Unexpected error getting diff: {e}")
+        logger.error("Unexpected error getting diff: %s", e)
         return ""
 
 
@@ -252,7 +252,7 @@ def reset_changes(
 
     valid_modes = ["soft", "mixed", "hard"]
     if mode not in valid_modes:
-        logger.error(f"Invalid reset mode '{mode}'. Valid modes: {valid_modes}")
+        logger.error("Invalid reset mode '%s'. Valid modes: %s", mode, valid_modes)
         return False
 
     try:
@@ -274,10 +274,10 @@ def reset_changes(
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to reset repository: {e}")
+        logger.error("Failed to reset repository: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error resetting repository: {e}")
+        logger.error("Unexpected error resetting repository: %s", e)
         return False

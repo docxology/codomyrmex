@@ -154,10 +154,10 @@ class SystemDiscovery:
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(inventory, f, indent=2, default=default_serializer)
 
-            logger.info(f"System inventory exported to {output_path}")
+            logger.info("System inventory exported to %s", output_path)
             return True
         except Exception as e:
-            logger.error(f"Failed to export inventory: {e}")
+            logger.error("Failed to export inventory: %s", e)
             return False
 
     def export_full_inventory(self) -> None:
@@ -183,7 +183,7 @@ class SystemDiscovery:
         print(f"\nScanning modules in {self.codomyrmex_path}...")
 
         if not self.codomyrmex_path.exists():
-            logger.error(f"Codomyrmex path does not exist: {self.codomyrmex_path}")
+            logger.error("Codomyrmex path does not exist: %s", self.codomyrmex_path)
             return
 
         for module_dir in self.codomyrmex_path.iterdir():
@@ -204,9 +204,9 @@ class SystemDiscovery:
             try:
                 module = importlib.import_module(module_import_path)
                 is_importable = True
-                logger.info(f"Successfully imported {module_import_path}")
+                logger.info("Successfully imported %s", module_import_path)
             except Exception as e:
-                logger.warning(f"Could not import {module_import_path}: {e}")
+                logger.warning("Could not import %s: %s", module_import_path, e)
                 module = None
                 is_importable = False
 
@@ -237,7 +237,7 @@ class SystemDiscovery:
             )
 
         except Exception as e:
-            logger.error(f"Error analyzing module {module_name}: {e}")
+            logger.error("Error analyzing module %s: %s", module_name, e)
             return None
 
     def _discover_module_capabilities(
@@ -256,7 +256,7 @@ class SystemDiscovery:
                     capabilities.append(capability)
 
         except Exception as e:
-            logger.error(f"Error discovering capabilities for {module}: {e}")
+            logger.error("Error discovering capabilities for %s: %s", module, e)
 
         return capabilities
 

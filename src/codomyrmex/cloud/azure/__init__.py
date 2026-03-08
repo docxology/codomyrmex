@@ -45,7 +45,7 @@ class AzureBlobClient(StorageClient):
             containers = self.client.list_containers()
             return [container.name for container in containers]
         except Exception as e:
-            logger.error(f"Azure list_buckets (containers) error: {e}")
+            logger.error("Azure list_buckets (containers) error: %s", e)
             return []
 
     def create_bucket(self, name: str, region: str | None = None) -> bool:
@@ -56,7 +56,7 @@ class AzureBlobClient(StorageClient):
             self.client.create_container(name)
             return True
         except Exception as e:
-            logger.error(f"Azure create_bucket (container) error: {e}")
+            logger.error("Azure create_bucket (container) error: %s", e)
             return False
 
     def delete_bucket(self, name: str) -> bool:
@@ -67,7 +67,7 @@ class AzureBlobClient(StorageClient):
             self.client.delete_container(name)
             return True
         except Exception as e:
-            logger.error(f"Azure delete_bucket (container) error: {e}")
+            logger.error("Azure delete_bucket (container) error: %s", e)
             return False
 
     def bucket_exists(self, name: str) -> bool:
@@ -78,7 +78,7 @@ class AzureBlobClient(StorageClient):
             container_client = self.client.get_container_client(name)
             return container_client.exists()
         except Exception as e:
-            logger.error(f"Azure bucket_exists (container) error: {e}")
+            logger.error("Azure bucket_exists (container) error: %s", e)
             return False
 
     def upload_file(
@@ -98,7 +98,7 @@ class AzureBlobClient(StorageClient):
                 )
             return True
         except Exception as e:
-            logger.error(f"Azure upload_file error: {e}")
+            logger.error("Azure upload_file error: %s", e)
             return False
 
     def download_file(self, bucket: str, key: str, file_path: str) -> bool:
@@ -111,7 +111,7 @@ class AzureBlobClient(StorageClient):
                 download_file.write(blob_client.download_blob().readall())
             return True
         except Exception as e:
-            logger.error(f"Azure download_file error: {e}")
+            logger.error("Azure download_file error: %s", e)
             return False
 
     def list_objects(self, bucket: str, prefix: str | None = None) -> list[str]:
@@ -123,7 +123,7 @@ class AzureBlobClient(StorageClient):
             blobs = container_client.list_blobs(name_starts_with=prefix)
             return [blob.name for blob in blobs]
         except Exception as e:
-            logger.error(f"Azure list_objects error: {e}")
+            logger.error("Azure list_objects error: %s", e)
             return []
 
     def delete_object(self, bucket: str, key: str) -> bool:
@@ -135,7 +135,7 @@ class AzureBlobClient(StorageClient):
             blob_client.delete_blob()
             return True
         except Exception as e:
-            logger.error(f"Azure delete_object error: {e}")
+            logger.error("Azure delete_object error: %s", e)
             return False
 
     def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
@@ -147,7 +147,7 @@ class AzureBlobClient(StorageClient):
             properties = blob_client.get_blob_properties()
             return properties.metadata or {}
         except Exception as e:
-            logger.error(f"Azure get_object_metadata error: {e}")
+            logger.error("Azure get_object_metadata error: %s", e)
             return {}
 
     def generate_presigned_url(
@@ -191,7 +191,7 @@ class AzureBlobClient(StorageClient):
             )
             return f"{self.client.url}{bucket}/{key}?{sas_token}"
         except Exception as e:
-            logger.error(f"Azure generate_presigned_url error: {e}")
+            logger.error("Azure generate_presigned_url error: %s", e)
             return ""
 
     # Legacy methods for backward compatibility

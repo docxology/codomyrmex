@@ -76,12 +76,12 @@ def create_line_plot(
         save_plot(fig, output_path)
 
     if show_plot:
-        logger.debug(f"Displaying plot: {title}")
+        logger.debug("Displaying plot: %s", title)
         plt.show()
     else:
         plt.close(fig)  # Close the figure to free memory if not shown
 
-    logger.info(f"Line plot '{title}' generated successfully.")
+    logger.info("Line plot '%s' generated successfully.", title)
     return fig  # Return the figure object for potential further manipulation
 
 
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
     test_output_dir = os.path.join(current_dir, "test_outputs_data_visualization")
     os.makedirs(test_output_dir, exist_ok=True)
-    logger.info(f"Test outputs will be saved in {test_output_dir}")
+    logger.info("Test outputs will be saved in %s", test_output_dir)
 
     x_simple = [1, 2, 3, 4, 5]
     y_simple = [2, 3, 5, 7, 6]

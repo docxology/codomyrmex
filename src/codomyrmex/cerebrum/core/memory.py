@@ -23,7 +23,7 @@ class WorkingMemory:
             value: Value to store
         """
         self.storage[key] = value
-        self.logger.debug(f"Stored in memory: {key}")
+        self.logger.debug("Stored in memory: %s", key)
 
     def retrieve(self, key: str, default: Any = None) -> Any:
         """Retrieve a value from memory.
@@ -45,7 +45,7 @@ class WorkingMemory:
         """
         if key in self.storage:
             del self.storage[key]
-            self.logger.debug(f"Deleted from memory: {key}")
+            self.logger.debug("Deleted from memory: %s", key)
 
     def clear(self) -> None:
         """Clear all memory."""

@@ -44,7 +44,7 @@ class FeatureTransform:
                 try:
                     transformed[name] = self._transforms[name](value)
                 except Exception as e:
-                    logger.error(f"Error applying transform to feature '{name}': {e}")
+                    logger.error("Error applying transform to feature '%s': %s", name, e)
                     transformed[name] = value
             else:
                 transformed[name] = value
@@ -141,7 +141,7 @@ class FeatureService:
                         f"Skipping record for entity '{entity_id}' due to error: {e}"
                     )
             else:
-                logger.warning(f"Skipping record: missing '{entity_id_field}' field")
+                logger.warning("Skipping record: missing '%s' field", entity_id_field)
         return count
 
     def get_features(
@@ -166,7 +166,7 @@ class FeatureService:
         """Get all features in a group for an entity."""
         group = self._groups.get(group_name)
         if not group:
-            logger.warning(f"Feature group '{group_name}' not found")
+            logger.warning("Feature group '%s' not found", group_name)
             return FeatureVector(entity_id=entity_id, features={})
 
         return self.get_features(entity_id, group.feature_names)

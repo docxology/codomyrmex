@@ -134,7 +134,7 @@ class DocumentationConsistencyChecker:
                         )
 
         except Exception as e:
-            logger.error(f"Error checking file {file_path}: {e}")
+            logger.error("Error checking file %s: %s", file_path, e)
 
         return issues
 

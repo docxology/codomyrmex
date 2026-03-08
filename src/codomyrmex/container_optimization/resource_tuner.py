@@ -39,7 +39,7 @@ class ResourceTuner:
         try:
             self.client = client or docker.from_env()
         except Exception as e:
-            logger.warning(f"Could not connect to Docker: {e}")
+            logger.warning("Could not connect to Docker: %s", e)
             self.client = None
 
     def analyze_usage(self, container_id: str) -> ResourceUsage:
@@ -85,7 +85,7 @@ class ResourceTuner:
         except docker.errors.NotFound as exc:
             raise ValueError(f"Container '{container_id}' not found") from exc
         except Exception as e:
-            logger.error(f"Failed to analyze container {container_id}: {e}")
+            logger.error("Failed to analyze container %s: %s", container_id, e)
             raise
 
     def suggest_limits(self, usage: ResourceUsage) -> dict[str, str]:

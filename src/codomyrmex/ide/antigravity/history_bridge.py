@@ -57,7 +57,7 @@ class ArtifactHistoryBridge:
         """
         self.brain_dir = Path(brain_dir)
         self._memory_dir = self.brain_dir / ".agent_memory"
-        logger.info(f"ArtifactHistoryBridge initialized: {self.brain_dir}")
+        logger.info("ArtifactHistoryBridge initialized: %s", self.brain_dir)
 
     def list_artifacts(self) -> list[str]:
         """List existing artifacts in the brain directory.
@@ -135,7 +135,7 @@ class ArtifactHistoryBridge:
             json.dumps(data, indent=2, default=str),
             encoding="utf-8",
         )
-        logger.info(f"Saved agent memory: {key}")
+        logger.info("Saved agent memory: %s", key)
 
     def load_agent_memory(self, key: str) -> Any | None:
         """Load structured data from the agent memory store.

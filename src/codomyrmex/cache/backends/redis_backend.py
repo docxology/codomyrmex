@@ -62,7 +62,7 @@ class RedisCache(Cache):
             self._stats.hits += 1
             return json.loads(value.decode("utf-8"))  # SECURITY: JSON instead of pickle
         except Exception as e:
-            logger.error(f"Error reading from Redis: {e}")
+            logger.error("Error reading from Redis: %s", e)
             self._stats.misses += 1
             return None
 
@@ -80,7 +80,7 @@ class RedisCache(Cache):
             self._stats.size += 1
             return True
         except Exception as e:
-            logger.error(f"Error writing to Redis: {e}")
+            logger.error("Error writing to Redis: %s", e)
             raise
 
     def delete(self, key: str) -> bool:
@@ -91,7 +91,7 @@ class RedisCache(Cache):
                 self._stats.size = max(0, self._stats.size - 1)
             return bool(result)
         except Exception as e:
-            logger.error(f"Error deleting from Redis: {e}")
+            logger.error("Error deleting from Redis: %s", e)
             raise
 
     def clear(self) -> bool:
@@ -101,7 +101,7 @@ class RedisCache(Cache):
             self._stats.size = 0
             return True
         except Exception as e:
-            logger.error(f"Error clearing Redis: {e}")
+            logger.error("Error clearing Redis: %s", e)
             raise
 
     def exists(self, key: str) -> bool:
@@ -109,7 +109,7 @@ class RedisCache(Cache):
         try:
             return bool(self.client.exists(key))
         except Exception as e:
-            logger.error(f"Error checking Redis: {e}")
+            logger.error("Error checking Redis: %s", e)
             raise
 
     def get_stats(self) -> CacheStats:

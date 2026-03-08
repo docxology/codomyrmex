@@ -67,7 +67,7 @@ def _parse_context(context_str: str | None) -> dict[str, Any]:
     try:
         return json.loads(context_str)
     except json.JSONDecodeError as e:
-        logger.warning(f"Invalid JSON context: {e}, using empty context")
+        logger.warning("Invalid JSON context: %s, using empty context", e)
         return {}
 
 
@@ -365,7 +365,7 @@ def handle_jules_command(args):
         command = args.cmd
         command_args = getattr(args, "args", []) or []
 
-        logger.debug(f"Executing Jules command: {command} with args: {command_args}")
+        logger.debug("Executing Jules command: %s with args: %s", command, command_args)
 
         result = client.execute_jules_command(command, command_args)
 
@@ -459,7 +459,7 @@ def handle_gemini_chat_save(args):
         tag = args.tag
         prompt = getattr(args, "prompt", None)
 
-        logger.debug(f"Saving Gemini chat session: {tag}")
+        logger.debug("Saving Gemini chat session: %s", tag)
 
         result = client.save_chat(tag, prompt)
 
@@ -489,7 +489,7 @@ def handle_gemini_chat_resume(args):
         client = GeminiClient()
         tag = args.tag
 
-        logger.debug(f"Resuming Gemini chat session: {tag}")
+        logger.debug("Resuming Gemini chat session: %s", tag)
 
         result = client.resume_chat(tag)
 

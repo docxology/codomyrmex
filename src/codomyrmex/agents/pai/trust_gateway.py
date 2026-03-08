@@ -363,7 +363,7 @@ class TrustRegistry:
                             e,
                         )
         except (json.JSONDecodeError, OSError, KeyError) as e:
-            logger.warning(f"Failed to load trust ledger: {e}")
+            logger.warning("Failed to load trust ledger: %s", e)
         self._disk_loaded = True
         # One-time migration: restrict existing file permissions
         try:
@@ -384,7 +384,7 @@ class TrustRegistry:
             tmp_path.rename(self._ledger_path)
             self._disk_loaded = True  # cache is now consistent with disk
         except OSError as e:
-            logger.error(f"Failed to save trust ledger: {e}")
+            logger.error("Failed to save trust ledger: %s", e)
 
     # ── Queries ───────────────────────────────────────────────────
 

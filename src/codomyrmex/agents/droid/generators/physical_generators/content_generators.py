@@ -115,14 +115,14 @@ class ObjectRegistry:
         """Register a physical object."""
         self.objects[obj.id] = obj
         self._update_location_index(obj)
-        logger.info(f"Registered physical object: {obj.id}")
+        logger.info("Registered physical object: %s", obj.id)
 
     def unregister_object(self, object_id: str) -> Optional[PhysicalObject]:
         """Unregister a physical object."""
         if object_id in self.objects:
             obj = self.objects.pop(object_id)
             self._remove_from_location_index(obj)
-            logger.info(f"Unregistered physical object: {object_id}")
+            logger.info("Unregistered physical object: %s", object_id)
             return obj
         return None
 
@@ -554,7 +554,7 @@ class SensorManager:
     def register_device(self, device: DeviceInterface) -> None:
         """Register a new device."""
         self.devices[device.device_id] = device
-        logger.info(f"Registered device: {device.device_id}")
+        logger.info("Registered device: %s", device.device_id)
 
     def unregister_device(self, device_id: str) -> Optional[DeviceInterface]:
         """Unregister a device."""
@@ -575,7 +575,7 @@ class SensorManager:
                 try:
                     callback(reading)
                 except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                    logger.error(f"Callback error: {e}")
+                    logger.error("Callback error: %s", e)
 
     def get_latest_reading(self, sensor_type: SensorType) -> Optional[SensorReading]:
         """Get the latest reading for a sensor type."""

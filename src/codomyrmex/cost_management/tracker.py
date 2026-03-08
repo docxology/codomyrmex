@@ -226,7 +226,7 @@ class BudgetManager:
         with self._lock:
             self._budgets[budget.id] = budget
 
-        logger.info(f"Created budget: {name} (${amount:.2f} per {period.value})")
+        logger.info("Created budget: %s ($%.2f per %s)", name, amount, period.value)
         return budget
 
     def get_budget(self, budget_id: str) -> Budget | None:

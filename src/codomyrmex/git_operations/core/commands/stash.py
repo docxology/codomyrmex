@@ -16,7 +16,7 @@ def stash_changes(
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Stashing changes in {repository_path}")
+        logger.info("Stashing changes in %s", repository_path)
 
         cmd = ["git", "stash"]
         if message:
@@ -30,12 +30,12 @@ def stash_changes(
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to stash changes: {e}")
+        logger.error("Failed to stash changes: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error stashing changes: {e}")
+        logger.error("Unexpected error stashing changes: %s", e)
         return False
 
 
@@ -48,7 +48,7 @@ def apply_stash(
         repository_path = os.getcwd()
 
     try:
-        logger.info(f"Applying stash in {repository_path}")
+        logger.info("Applying stash in %s", repository_path)
 
         cmd = ["git", "stash", "apply"]
         if stash_ref:
@@ -62,12 +62,12 @@ def apply_stash(
         return True
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to apply stash: {e}")
+        logger.error("Failed to apply stash: %s", e)
         if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
+            logger.error("Git error: %s", e.stderr)
         return False
     except Exception as e:
-        logger.error(f"Unexpected error applying stash: {e}")
+        logger.error("Unexpected error applying stash: %s", e)
         return False
 
 
@@ -106,8 +106,8 @@ def list_stashes(repository_path: str | None = None) -> list[dict[str, str]]:
         return stashes
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to list stashes: {e}")
+        logger.error("Failed to list stashes: %s", e)
         return []
     except Exception as e:
-        logger.error(f"Unexpected error listing stashes: {e}")
+        logger.error("Unexpected error listing stashes: %s", e)
         return []

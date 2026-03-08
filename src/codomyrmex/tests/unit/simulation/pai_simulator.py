@@ -77,14 +77,14 @@ class PAISimulator:
                     cmd = t.strip()
                     if cmd.startswith("/"):
                         self.triggers[cmd] = trigger_obj
-                        logger.info(f"Registered command: {cmd} -> {path_raw}")
+                        logger.info("Registered command: %s -> %s", cmd, path_raw)
 
     def execute_command(self, command: str) -> bool:
         """Simulate a user typing a slash command."""
-        logger.info(f"USER: {command}")
+        logger.info("USER: %s", command)
 
         if command not in self.triggers:
-            logger.error(f"Command not found: {command}")
+            logger.error("Command not found: %s", command)
             logger.info(f"Available commands: {list(self.triggers.keys())}")
             return False
 
@@ -99,7 +99,7 @@ class PAISimulator:
         """Parse and run a workflow markdown file."""
         workflow_path = self.skill_path / relative_path
         if not workflow_path.exists():
-            logger.error(f"Workflow file not found: {workflow_path}")
+            logger.error("Workflow file not found: %s", workflow_path)
             return False
 
         content = workflow_path.read_text()
@@ -115,7 +115,7 @@ class PAISimulator:
 
         success = True
         for i, (lang, code) in enumerate(blocks, 1):
-            logger.info(f"\n--- Block {i} ({lang}) ---")
+            logger.info("\n--- Block %s (%s) ---", i, lang)
 
             if lang == "bash":
                 success = self._run_bash(code)
@@ -123,7 +123,7 @@ class PAISimulator:
                 success = self._run_python(code)
 
             if not success:
-                logger.error(f"Block {i} failed. Stopping workflow.")
+                logger.error("Block %s failed. Stopping workflow.", i)
                 return False
 
         return True
@@ -162,7 +162,7 @@ class PAISimulator:
             return True
 
         except Exception as e:
-            logger.error(f"Execution failed: {e}")
+            logger.error("Execution failed: %s", e)
             return False
 
     def _run_python(self, code: str) -> bool:
@@ -187,5 +187,5 @@ class PAISimulator:
             return True
 
         except Exception as e:
-            logger.error(f"Python execution failed: {e}")
+            logger.error("Python execution failed: %s", e)
             return False
