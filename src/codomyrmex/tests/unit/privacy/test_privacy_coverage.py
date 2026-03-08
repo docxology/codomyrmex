@@ -9,8 +9,8 @@ import math
 import pytest
 
 from codomyrmex.privacy.privacy import (
-    Privacy,
     PIIMatch,
+    Privacy,
     PrivacyRule,
     add_laplace_noise,
     create_privacy,
