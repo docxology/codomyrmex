@@ -70,23 +70,9 @@ def memory_get(memory_id: str) -> dict[str, Any] | None:
     return mem.to_dict() if hasattr(mem, "to_dict") else mem  # type: ignore
 
 
-def memory_search(
-    query: str,
-    k: int = 5,
-    context_rules: str = "",
-) -> list[dict[str, Any]]:
-    """Search across stored memories. Returns top-k results.
-
-    Args:
-        query: Text query to search for.
-        k: Maximum number of memory results to return.
-        context_rules: Optional file_path or module_name context. If provided,
-                       applicable rules will be prepended to the results.
-    """
-    memory = _vector_memory()()
-    results = memory.search(query, k=k)
-
-    formatted_results = [
+def _format_results(results: list) -> list[dict[str, Any]]:
+    """Format raw VectorStoreMemory search results into dicts."""
+    return [
         {
             "memory": r.memory.to_dict(),
             "relevance": r.relevance_score,
@@ -95,46 +81,48 @@ def memory_search(
         for r in results
     ]
 
+
+def _inject_rules(context_rules: str, formatted: list[dict[str, Any]]) -> None:
+    """Prepend applicable rule-engine entries to *formatted* in-place."""
+    try:
+        from codomyrmex.agentic_memory.rules.engine import RuleEngine
+
+        engine = RuleEngine()
+        file_path = context_rules if "." in context_rules or "/" in context_rules else None
+        module_name = context_rules if not file_path else None
+        rule_set = engine.get_applicable_rules(file_path=file_path, module_name=module_name)
+        for rule in reversed(list(rule_set.resolved())):
+            formatted.insert(0, {
+                "memory": {
+                    "id": f"rule-{rule.name}",
+                    "content": rule.raw_content,
+                    "memory_type": "semantic",
+                    "importance": 4,
+                    "metadata": {"source": "rule_engine", "priority": rule.priority.name, "rule_name": rule.name},
+                    "tags": ["rule", rule.priority.name.lower()],
+                },
+                "relevance": 1.0,
+                "combined_score": 1.0,
+            })
+    except Exception:
+        logger.warning("Rule injection failed during memory_search", exc_info=True)
+
+
+@mcp_tool(
+    category="agentic_memory",
+    description="Search across stored memories using semantic similarity. Returns top-k results.",
+)
+def memory_search(
+    query: str,
+    k: int = 5,
+    context_rules: str = "",
+) -> list[dict[str, Any]]:
+    """Search stored memories. Optionally prepends context rules if *context_rules* is given."""
+    memory = _vector_memory()()
+    formatted = _format_results(memory.search(query, k=k))
     if context_rules:
-        try:
-            from codomyrmex.agentic_memory.rules.engine import RuleEngine
-
-            engine = RuleEngine()
-            # Heuristic: if it has a period or slash, assume file_path, else module_name
-            file_path = (
-                context_rules if "." in context_rules or "/" in context_rules else None
-            )
-            module_name = context_rules if not file_path else None
-
-            rule_set = engine.get_applicable_rules(
-                file_path=file_path, module_name=module_name
-            )
-
-            # Prepend rules as critical-importance semantic memories
-            for rule in reversed(list(rule_set.resolved())):
-                formatted_results.insert(
-                    0,
-                    {
-                        "memory": {
-                            "id": f"rule-{rule.name}",
-                            "content": rule.raw_content,
-                            "memory_type": "semantic",
-                            "importance": 4,  # CRITICAL
-                            "metadata": {
-                                "source": "rule_engine",
-                                "priority": rule.priority.name,
-                                "rule_name": rule.name,
-                            },
-                            "tags": ["rule", rule.priority.name.lower()],
-                        },
-                        "relevance": 1.0,
-                        "combined_score": 1.0,
-                    },
-                )
-        except Exception as _exc:
-            logger.warning("Rule injection failed during memory_search", exc_info=True)
-
-    return formatted_results
+        _inject_rules(context_rules, formatted)
+    return formatted
 
 
 @mcp_tool(

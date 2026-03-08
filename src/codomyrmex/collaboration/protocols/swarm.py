@@ -1,8 +1,18 @@
 """Swarm coordination implementation (Legacy Compatibility).
 
-This module provides legacy access to swarm functionality.
-New code should use codomyrmex.collaboration.swarm.
+.. deprecated::
+    This module is deprecated and will be removed in a future release.
+    Use :mod:`codomyrmex.collaboration.swarm` for all new code.
 """
+
+import warnings
+
+warnings.warn(
+    "codomyrmex.collaboration.protocols.swarm is deprecated. "
+    "Use codomyrmex.collaboration.swarm instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 from codomyrmex.collaboration.swarm import AgentRole
 from codomyrmex.collaboration.swarm import SwarmManager as NewSwarmManager
