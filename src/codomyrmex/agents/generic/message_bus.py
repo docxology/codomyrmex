@@ -59,9 +59,7 @@ class MessageBus:
         if message_type in self.subscribers:
             if handler in self.subscribers[message_type]:
                 self.subscribers[message_type].remove(handler)
-                self.logger.debug(
-                    f"Unsubscribed handler from message type: {message_type}"
-                )
+                self.logger.debug("Unsubscribed handler from message type: %s", message_type)
 
     def publish(self, message: Message) -> None:
         """
@@ -98,13 +96,9 @@ class MessageBus:
                     OSError,
                     TypeError,
                 ) as e:
-                    self.logger.error(
-                        f"Error in wildcard message handler: {e}", exc_info=True
-                    )
+                    self.logger.error("Error in wildcard message handler: %s", e, exc_info=True)
 
-        self.logger.debug(
-            f"Published message {message.id} of type {message.message_type}"
-        )
+        self.logger.debug("Published message %s of type %s", message.id, message.message_type)
 
     def send(
         self,
