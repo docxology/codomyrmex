@@ -54,7 +54,7 @@ def network_analysis_add_edge(
         graph = _get_graph()
         graph.add_edge(source, target, weight=weight)
         return {
-            "status": "ok",
+            "status": "success",
             "message": f"Edge added between '{source}' and '{target}' with weight {weight}.",
         }
     except Exception as exc:
@@ -75,7 +75,7 @@ def network_analysis_calculate_centrality() -> dict[str, Any]:
     try:
         graph = _get_graph()
         centrality = graph.calculate_centrality()
-        return {"status": "ok", "centrality_scores": centrality}
+        return {"status": "success", "centrality_scores": centrality}
     except Exception as exc:
         return {"status": "error", "error": str(exc)}
 
@@ -95,7 +95,7 @@ def network_analysis_find_communities() -> dict[str, Any]:
         graph = _get_graph()
         communities = graph.find_communities()
         return {
-            "status": "ok",
+            "status": "success",
             "communities": [list(c) for c in communities],
             "count": len(communities),
         }

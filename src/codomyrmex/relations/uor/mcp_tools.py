@@ -55,7 +55,7 @@ def uor_add_entity(
             entity_type=entity_type,
             attributes=attributes or {},
         )
-        return {"status": "ok", "entity": entity.to_dict()}
+        return {"status": "success", "entity": entity.to_dict()}
     except Exception as exc:
         return {"status": "error", "error": str(exc)}
 
@@ -82,7 +82,7 @@ def uor_find_path(
         graph = _get_uor_graph()
         path = graph.find_path(source_id, target_id)
         if not path:
-            return {"status": "ok", "message": "No path found."}
-        return {"status": "ok", "path": path}
+            return {"status": "success", "message": "No path found."}
+        return {"status": "success", "path": path}
     except Exception as exc:
         return {"status": "error", "error": str(exc)}

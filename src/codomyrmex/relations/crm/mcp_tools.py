@@ -56,7 +56,7 @@ def crm_add_contact(
             tags=tags or [],
             metadata=metadata or {},
         )
-        return {"status": "ok", "contact": contact.to_dict()}
+        return {"status": "success", "contact": contact.to_dict()}
     except Exception as exc:
         return {"status": "error", "error": str(exc)}
 
@@ -76,7 +76,7 @@ def crm_search_contacts(query: str) -> dict[str, Any]:
         manager = _get_manager()
         results = manager.search_contacts(query)
         return {
-            "status": "ok",
+            "status": "success",
             "results": [c.to_dict() for c in results],
             "count": len(results),
         }
@@ -108,7 +108,7 @@ def crm_add_interaction(
             return {"status": "error", "error": f"Contact '{contact_id}' not found"}
 
         return {
-            "status": "ok",
+            "status": "success",
             "interaction": {
                 "id": interaction.id,
                 "type": interaction.type,

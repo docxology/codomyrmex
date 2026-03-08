@@ -37,6 +37,6 @@ def social_media_analyze_sentiment(
             score = 0.0
             label = "neutral"
 
-        return {"status": "ok", "score": score, "label": label}
+        return {"status": "success", "score": score, "label": label}
     except Exception as exc:
         return {"status": "error", "error": str(exc)}

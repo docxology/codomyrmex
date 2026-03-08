@@ -6,6 +6,7 @@ from codomyrmex.cost_management.models import BudgetPeriod
 from codomyrmex.cost_management.stores import JSONCostStore
 from codomyrmex.cost_management.tracker import BudgetManager, CostTracker
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.model_context_protocol.response_helpers import error_response
 
 
 @mcp_tool(category="cost_management")
@@ -24,7 +25,7 @@ def get_cost_summary(period_str: str = "MONTHLY") -> dict[str, Any]:
             try:
                 period = BudgetPeriod[period_str.upper()]
             except KeyError:
-                return {"error": f"Invalid period: {period_str}"}
+                return error_response(f"Invalid period: {period_str}")
 
         summary = tracker.get_summary(period=period)
         return {
@@ -34,7 +35,7 @@ def get_cost_summary(period_str: str = "MONTHLY") -> dict[str, Any]:
             "period": period_str,
         }
     except Exception as e:
-        return {"error": str(e)}
+        return error_response(str(e))
 
 @mcp_tool(category="cost_management")
 def check_budgets() -> dict[str, Any]:
@@ -68,7 +69,7 @@ def check_budgets() -> dict[str, Any]:
             "alerts": alert_list
         }
     except Exception as e:
-        return {"error": str(e)}
+        return error_response(str(e))
 
 def register_mcp_tools(mcp_server: Any) -> None:
     """Register all MCP tools provided by the cost_management module."""
