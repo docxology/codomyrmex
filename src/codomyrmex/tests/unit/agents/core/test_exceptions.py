@@ -188,3 +188,20 @@ class TestSimpleAgentErrors:
         for cls in [CodexError, OpenCodeError, GeminiError, MistralVibeError,
                     EveryCodeError, OpenClawError, SessionError]:
             assert issubclass(cls, AgentError), f"{cls.__name__} should inherit AgentError"
+
+    def test_gemini_error_with_exit_code(self):
+        e = GeminiError(command="gemini run", exit_code=127)
+        assert e.context["exit_code"] == 127
+
+    def test_mistral_vibe_error_with_command_and_exit_code(self):
+        e = MistralVibeError(command="vibe run", exit_code=2)
+        assert e.context["command"] == "vibe run"
+        assert e.context["exit_code"] == 2
+
+    def test_every_code_error_with_command(self):
+        e = EveryCodeError(command="everycode run")
+        assert e.context["command"] == "everycode run"
+
+    def test_every_code_error_with_exit_code(self):
+        e = EveryCodeError(command="everycode run", exit_code=1)
+        assert e.context["exit_code"] == 1

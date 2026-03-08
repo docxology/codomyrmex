@@ -17,10 +17,10 @@ from codomyrmex.scrape.exceptions import (
     ParseError,
     RateLimitError,
     RequestError,
-    ScrapingError,
     ScrapeConnectionError,
     ScrapeTimeoutError,
     ScrapeValidationError,
+    ScrapingError,
     classify_http_error,
 )
 
