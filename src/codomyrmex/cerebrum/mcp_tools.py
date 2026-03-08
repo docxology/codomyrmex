@@ -18,9 +18,9 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
         Structured retrieval results containing matching cases.
     """
     if not query or not query.strip():
-        raise ValueError("query must be a non-empty string")
+        return {"status": "error", "message": "query must be a non-empty string"}
     if not isinstance(limit, int) or limit < 1 or limit > 100:
-        raise ValueError("limit must be an integer between 1 and 100")
+        return {"status": "error", "message": "limit must be an integer between 1 and 100"}
 
     from codomyrmex.cerebrum import CaseBase, CaseRetriever
 
@@ -56,9 +56,9 @@ def add_case_reference(concept: str, solution: str) -> dict:
         Confirmation of case storage.
     """
     if not concept or not concept.strip():
-        raise ValueError("concept must be a non-empty string")
+        return {"status": "error", "message": "concept must be a non-empty string"}
     if not solution or not solution.strip():
-        raise ValueError("solution must be a non-empty string")
+        return {"status": "error", "message": "solution must be a non-empty string"}
 
     import uuid
 
