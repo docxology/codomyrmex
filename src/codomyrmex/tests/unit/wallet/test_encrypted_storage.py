@@ -4,8 +4,6 @@ Tests EncryptedStore and EncryptedEntry using real in-memory crypto logic.
 No external dependencies — pure Python standard library.
 """
 
-import pytest
-
 from codomyrmex.wallet.security.encrypted_storage import EncryptedEntry, EncryptedStore
 
 
