@@ -78,7 +78,8 @@ class SkillSync:
         self.upstream_repo = upstream_repo
         self.upstream_branch = upstream_branch
         logger.info(
-            f"SkillSync initialized: {upstream_dir}, repo={upstream_repo}, branch={upstream_branch}"
+            "SkillSync initialized: %s, repo=%s, branch=%s",
+            upstream_dir, upstream_repo, upstream_branch,
         )
 
     def clone_upstream(self, force: bool = False) -> bool:
@@ -93,14 +94,13 @@ class SkillSync:
         """
         if self.upstream_dir.exists():
             if force:
-                logger.info(
-                    f"Removing existing upstream directory: {self.upstream_dir}"
-                )
+                logger.info("Removing existing upstream directory: %s", self.upstream_dir)
 
                 shutil.rmtree(self.upstream_dir)
             else:
                 logger.warning(
-                    f"Upstream directory already exists: {self.upstream_dir}. Use force=True to overwrite."
+                    "Upstream directory already exists: %s. Use force=True to overwrite.",
+                    self.upstream_dir,
                 )
                 return False
 
@@ -131,13 +131,14 @@ class SkillSync:
         """
         if not self.upstream_dir.exists():
             logger.warning(
-                f"Upstream directory does not exist: {self.upstream_dir}. Cloning instead."
+                "Upstream directory does not exist: %s. Cloning instead.", self.upstream_dir
             )
             return self.clone_upstream()
 
         if not is_git_repository(str(self.upstream_dir)):
             logger.warning(
-                f"Upstream directory is not a git repository: {self.upstream_dir}. Cloning instead."
+                "Upstream directory is not a git repository: %s. Cloning instead.",
+                self.upstream_dir,
             )
             return self.clone_upstream(force=True)
 
@@ -155,9 +156,31 @@ class SkillSync:
             logger.error("Error pulling upstream changes: %s", e)
             return False
 
+    def _query_git_status(self) -> dict:
+        """Run git queries to get branch, changes, and last commit for upstream dir."""
+        info: dict = {"branch": None, "has_changes": False, "last_commit": None}
+        try:
+            result = subprocess.run(
+                ["git", "branch", "--show-current"],
+                cwd=str(self.upstream_dir), capture_output=True, text=True, check=True,
+            )
+            info["branch"] = result.stdout.strip()
+            result = subprocess.run(
+                ["git", "status", "--porcelain"],
+                cwd=str(self.upstream_dir), capture_output=True, text=True, check=True,
+            )
+            info["has_changes"] = bool(result.stdout.strip())
+            result = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=str(self.upstream_dir), capture_output=True, text=True, check=True,
+            )
+            info["last_commit"] = result.stdout.strip()[:8]
+        except Exception as e:
+            logger.warning("Error checking upstream status: %s", e)
+        return info
+
     def check_upstream_status(self) -> dict:
-        """
-        Check the status of the upstream repository.
+        """Check the status of the upstream repository.
 
         Returns:
             Dictionary with status information
@@ -169,49 +192,10 @@ class SkillSync:
             "has_changes": False,
             "last_commit": None,
         }
-
-        if not status["exists"]:
+        if not status["exists"] or not is_git_repository(str(self.upstream_dir)):
             return status
-
-        if not is_git_repository(str(self.upstream_dir)):
-            return status
-
         status["is_git_repo"] = True
-
-        try:
-            # Get current branch
-            result = subprocess.run(
-                ["git", "branch", "--show-current"],
-                cwd=str(self.upstream_dir),
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            status["branch"] = result.stdout.strip()
-
-            # Check for uncommitted changes
-            result = subprocess.run(
-                ["git", "status", "--porcelain"],
-                cwd=str(self.upstream_dir),
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            status["has_changes"] = bool(result.stdout.strip())
-
-            # Get last commit hash
-            result = subprocess.run(
-                ["git", "rev-parse", "HEAD"],
-                cwd=str(self.upstream_dir),
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            status["last_commit"] = result.stdout.strip()[:8]
-
-        except Exception as e:
-            logger.warning("Error checking upstream status: %s", e)
-
+        status.update(self._query_git_status())
         return status
 
     def get_upstream_version(self) -> str | None:

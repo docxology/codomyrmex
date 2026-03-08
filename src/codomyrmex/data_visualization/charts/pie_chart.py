@@ -43,7 +43,8 @@ def create_pie_chart(
         )
     if explode and len(explode) != len(labels):
         logger.warning(
-            f"Length mismatch for pie chart explode: labels ({len(labels)}) vs explode ({len(explode)}). Ignoring explode."
+            "Length mismatch for pie chart explode: labels (%d) vs explode (%d). Ignoring explode.",
+            len(labels), len(explode),
         )
         explode = None
 
@@ -53,7 +54,8 @@ def create_pie_chart(
     # Add a check for sum of sizes to avoid division by zero in autopct if all sizes are 0
     if sum(s for s in sizes if isinstance(s, (int, float))) == 0:
         logger.warning(
-            f"All sizes are zero for pie chart '{title}'. Plotting with equal segments if labels exist, but percentages might be misleading."
+            "All sizes are zero for pie chart '%s'. Plotting with equal segments if labels exist, but percentages might be misleading.",
+            title,
         )
         # Optionally, plot equal segments or skip autopct
         # sizes = [1] * len(labels) # Plot equal segments
@@ -162,7 +164,7 @@ if __name__ == "__main__":
         output_path=str(output_dir / "basic_pie_chart.png"),
         show_plot=False,
     )
-    logger.info(f"Pie chart example saved to {output_dir / 'basic_pie_chart.png'}")
+    logger.info("Pie chart example saved to %s", output_dir / "basic_pie_chart.png")
 
     logger.info("--- Example: Pie Chart with Exploded Slice ---")
     pie_explode = [0, 0.1, 0, 0]  # Explode the 2nd slice (Hogs)
@@ -174,7 +176,7 @@ if __name__ == "__main__":
         show_plot=False,
         explode=pie_explode,
     )
-    logger.info(f"Pie chart example saved to {output_dir / 'exploded_pie_chart.png'}")
+    logger.info("Pie chart example saved to %s", output_dir / "exploded_pie_chart.png")
 
     if not logging.getLogger("").hasHandlers():
         logging.basicConfig(
