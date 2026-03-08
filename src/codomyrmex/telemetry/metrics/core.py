@@ -67,8 +67,8 @@ class Metric(ABC):
         """Get current value."""
 
 
-class Counter(Metric):
-    """Counter metric (only increases)."""
+class _LabeledMetric(Metric):
+    """Intermediate base for label-keyed scalar metrics (Counter, Gauge)."""
 
     def __init__(
         self,
@@ -88,15 +88,19 @@ class Counter(Metric):
         else:
             self.labels = {}
 
-    @property
-    def metric_type(self) -> MetricType:
-        return MetricType.COUNTER
-
     def _key(self, labels: dict[str, str] | None) -> str:
-        """Key."""
+        """Compute label key string."""
         if not labels:
             return ""
         return "|".join(f"{k}={v}" for k, v in sorted(labels.items()))
+
+
+class Counter(_LabeledMetric):
+    """Counter metric (only increases)."""
+
+    @property
+    def metric_type(self) -> MetricType:
+        return MetricType.COUNTER
 
     def inc(self, value: float = 1.0, labels: dict[str, str] | None = None) -> None:
         """Increment the counter."""
@@ -119,36 +123,12 @@ class Counter(Metric):
         return self.get_value()
 
 
-class Gauge(Metric):
+class Gauge(_LabeledMetric):
     """Gauge metric (can go up and down)."""
-
-    def __init__(
-        self,
-        name: str,
-        description: str = "",
-        labels: dict[str, str] | list[str] | None = None,
-        value: float = 0.0,
-    ):
-        allowed = labels
-        if isinstance(labels, dict):
-            allowed = list(labels.keys())
-        super().__init__(name, description, allowed)
-        self._values: dict[str, float] = {"": value}
-        if isinstance(labels, dict):
-            self.labels = labels
-            self._values[self._key(labels)] = value
-        else:
-            self.labels = {}
 
     @property
     def metric_type(self) -> MetricType:
         return MetricType.GAUGE
-
-    def _key(self, labels: dict[str, str] | None) -> str:
-        """Key."""
-        if not labels:
-            return ""
-        return "|".join(f"{k}={v}" for k, v in sorted(labels.items()))
 
     def set(self, value: float, labels: dict[str, str] | None = None) -> None:
         """Set the gauge value."""

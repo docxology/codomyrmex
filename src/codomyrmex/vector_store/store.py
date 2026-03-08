@@ -9,6 +9,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Any
 
+from ._search_mixin import _SearchMixin
 from .models import DistanceMetric, SearchResult, VectorEntry
 
 
@@ -47,7 +48,7 @@ class VectorStore(ABC):
         """Clear all vectors."""
 
 
-class InMemoryVectorStore(VectorStore):
+class InMemoryVectorStore(_SearchMixin, VectorStore):
     """In-memory vector store implementation."""
 
     def __init__(self, distance_metric: str = "cosine"):
@@ -103,29 +104,6 @@ class InMemoryVectorStore(VectorStore):
                 del self._vectors[id]
                 return True
         return False
-
-    def search(
-        self,
-        query: list[float],
-        k: int = 10,
-        filter_fn: Callable[[dict[str, Any]], bool] | None = None,
-    ) -> list[SearchResult]:
-        """Search for similar vectors."""
-        results = []
-        for entry in self._vectors.values():
-            if filter_fn and not filter_fn(entry.metadata):
-                continue
-            score = self._distance_fn(query, entry.embedding)
-            results.append(
-                SearchResult(
-                    id=entry.id,
-                    score=score,
-                    embedding=entry.embedding,
-                    metadata=entry.metadata,
-                )
-            )
-        results.sort(key=lambda x: x.score, reverse=self._higher_is_better)
-        return results[:k]
 
     def count(self) -> int:
         """Get total number of vectors."""

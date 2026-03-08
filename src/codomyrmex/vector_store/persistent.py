@@ -18,11 +18,12 @@ from . import (
     VectorEntry,
     VectorStore,
 )
+from ._search_mixin import _SearchMixin
 
 logger = get_logger(__name__)
 
 
-class PersistentVectorStore(VectorStore):
+class PersistentVectorStore(_SearchMixin, VectorStore):
     """Vector store with file persistence."""
 
     def __init__(
@@ -128,32 +129,6 @@ class PersistentVectorStore(VectorStore):
                 self._maybe_save()
                 return True
         return False
-
-    def search(
-        self,
-        query: list[float],
-        k: int = 10,
-        filter_fn: Callable[[dict[str, Any]], bool] | None = None,
-    ) -> list[SearchResult]:
-        """Search for similar vectors."""
-        results = []
-
-        for entry in self._vectors.values():
-            if filter_fn and not filter_fn(entry.metadata):
-                continue
-
-            score = self._distance_fn(query, entry.embedding)
-            results.append(
-                SearchResult(
-                    id=entry.id,
-                    score=score,
-                    embedding=entry.embedding,
-                    metadata=entry.metadata,
-                )
-            )
-
-        results.sort(key=lambda x: x.score, reverse=self._higher_is_better)
-        return results[:k]
 
     def count(self) -> int:
         """Get vector count."""

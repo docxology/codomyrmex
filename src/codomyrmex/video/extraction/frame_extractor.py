@@ -7,6 +7,7 @@ generating thumbnails, and extracting audio from video files.
 import time
 from pathlib import Path
 
+from codomyrmex.video._validation import SUPPORTED_FORMATS, validate_video_path
 from codomyrmex.video.config import get_config
 from codomyrmex.video.exceptions import (
     AudioExtractionError,
@@ -92,27 +93,8 @@ class FrameExtractor:
             )
 
     def _validate_input(self, video_path: str | Path) -> Path:
-        """Validate input video path.
-
-        Args:
-            video_path: Path to validate
-
-        Returns:
-            Validated Path object
-        """
-        path = Path(video_path)
-
-        if not path.exists():
-            raise VideoReadError(f"Video file not found: {path}", video_path=path)
-
-        if path.suffix.lower() not in SUPPORTED_FORMATS:
-            raise UnsupportedFormatError(
-                f"Unsupported format: {path.suffix}",
-                format_type=path.suffix,
-                supported_formats=list(SUPPORTED_FORMATS),
-            )
-
-        return path
+        """Validate input video path."""
+        return validate_video_path(video_path)
 
     def extract_frame(
         self,

@@ -1,67 +1,23 @@
 {
-  "command": "next",
-  "items": [
-    {
-      "id": "dupes::src/codomyrmex/telemetry/metrics/__init__.py::export::src/codomyrmex/telemetry/metrics/core.py::export",
-      "kind": "finding",
-      "tier": 2,
-      "effective_tier": 2,
-      "confidence": "high",
-      "detector": "dupes",
-      "file": "src/codomyrmex/telemetry/metrics/__init__.py",
-      "summary": "Exact dupe: export (src/codomyrmex/telemetry/metrics/__init__.py:488) <-> export (src/codomyrmex/telemetry/metrics/core.py:450) [100%]",
-      "detail": {
-        "fn_a": {
-          "file": "src/codomyrmex/telemetry/metrics/__init__.py",
-          "name": "export",
-          "line": 488,
-          "loc": 20
-        },
-        "fn_b": {
-          "file": "src/codomyrmex/telemetry/metrics/core.py",
-          "name": "export",
-          "line": 450,
-          "loc": 20
-        },
-        "similarity": 1.0,
-        "kind": "exact",
-        "cluster_size": 2,
-        "cluster": [
-          {
-            "file": "src/codomyrmex/telemetry/metrics/__init__.py",
-            "name": "export",
-            "line": 488,
-            "loc": 20
-          },
-          {
-            "file": "src/codomyrmex/telemetry/metrics/core.py",
-            "name": "export",
-            "line": 450,
-            "loc": 20
-          }
-        ]
-      },
-      "status": "open",
-      "primary_command": "desloppify resolve fixed \"dupes::src/codomyrmex/telemetry/metrics/__init__.py::export::src/codomyrmex/telemetry/metrics/core.py::export\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
-    }
+  "command": "resolve",
+  "patterns": [
+    "dupes::src/codomyrmex/video/analysis/video_analyzer.py::_validate_input::src/codomyrmex/video/extraction/frame_extractor.py::_validate_input"
   ],
-  "queue": {
-    "tier_counts": {
-      "1": 0,
-      "2": 851,
-      "3": 4660,
-      "4": 35
-    },
-    "requested_tier": 2,
-    "selected_tier": 2,
-    "fallback_reason": null,
-    "available_tiers": [
-      2,
-      3,
-      4
-    ],
-    "total": 851
-  },
+  "status": "fixed",
+  "resolved": [
+    "dupes::src/codomyrmex/video/analysis/video_analyzer.py::_validate_input::src/codomyrmex/video/extraction/frame_extractor.py::_validate_input"
+  ],
+  "count": 1,
+  "next_command": "desloppify scan",
+  "overall_score": 74.2,
+  "objective_score": 82.8,
+  "strict_score": 74.0,
+  "verified_strict_score": 82.3,
+  "prev_overall_score": 74.2,
+  "prev_objective_score": 82.8,
+  "prev_strict_score": 74.0,
+  "prev_verified_strict_score": 82.3,
+  "attestation": "I have actually created video/_validation.py with the shared validation function and updated both video_analyzer.py and frame_extractor.py to delegate their _validate_input methods to it and I am not gaming the score by resolving without fixing.",
   "narrative": {
     "phase": "stagnation",
     "headline": "\u26a0 128 security findings \u2014 review before other cleanup. All T1 items cleared!",
@@ -252,8 +208,8 @@
       {
         "type": "refactor",
         "detector": "dupes",
-        "count": 41,
-        "description": "41 dupes findings \u2014 extract shared utility or consolidate duplicates",
+        "count": 33,
+        "description": "33 dupes findings \u2014 extract shared utility or consolidate duplicates",
         "command": "desloppify show dupes --status open",
         "impact": 0.0,
         "dimension": "Duplication",
@@ -374,7 +330,7 @@
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 5536,
+        "total_count": 5528,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -446,7 +402,7 @@
     },
     "debt": {
       "overall_gap": 0.1,
-      "wontfix_count": 54,
+      "wontfix_count": 59,
       "worst_dimension": "Test health",
       "worst_gap": 2.5,
       "trend": "stable"
@@ -465,7 +421,7 @@
       {
         "type": "wontfix_gap",
         "severity": "high",
-        "message": "Strict/lenient gap is 0.1 pts with 54 wontfix findings"
+        "message": "Strict/lenient gap is 0.1 pts with 59 wontfix findings"
       }
     ],
     "strict_target": {
@@ -475,331 +431,32 @@
       "state": "below",
       "warning": null
     },
-    "reminders": [],
+    "reminders": [
+      {
+        "type": "rereview_needed",
+        "message": "Subjective results may be stale after resolve. Re-run `desloppify review --prepare` to refresh, or reset with `desloppify scan --reset-subjective` before a clean rerun.",
+        "command": "desloppify review --prepare",
+        "priority": 1,
+        "severity": "high"
+      },
+      {
+        "type": "rescan_needed",
+        "message": "Rescan to verify \u2014 cascading effects may create new findings.",
+        "command": "desloppify scan",
+        "priority": 1,
+        "severity": "high"
+      }
+    ],
     "reminder_history": {
       "zone_classification": 3,
       "report_scores": 38,
       "feedback_nudge": 3,
       "stagnant_nudge": 17,
-      "review_findings_pending": 3
+      "review_findings_pending": 3,
+      "rereview_needed": 1,
+      "rescan_needed": 1
     }
   },
-  "overall_score": 74.1,
-  "objective_score": 82.8,
-  "strict_score": 74.0,
-  "scorecard_dimensions": [
-    {
-      "name": "File health",
-      "score": 90.6,
-      "strict": 90.6,
-      "checks": 2504,
-      "issues": 364,
-      "tier": 3,
-      "subjective": false
-    },
-    {
-      "name": "AI generated debt",
-      "score": 72.0,
-      "strict": 72.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "ai_generated_debt"
-      ]
-    },
-    {
-      "name": "Abstraction fit",
-      "score": 70.0,
-      "strict": 70.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "abstraction_fitness"
-      ]
-    },
-    {
-      "name": "Code quality",
-      "score": 93.1,
-      "strict": 93.1,
-      "checks": 18617,
-      "issues": 2244,
-      "tier": 3,
-      "subjective": false
-    },
-    {
-      "name": "Convention drift",
-      "score": 80.0,
-      "strict": 80.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "convention_outlier"
-      ]
-    },
-    {
-      "name": "Cross-module arch",
-      "score": 77.0,
-      "strict": 77.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "cross_module_architecture"
-      ]
-    },
-    {
-      "name": "Dep health",
-      "score": 76.0,
-      "strict": 76.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "dependency_health"
-      ]
-    },
-    {
-      "name": "Design coherence",
-      "score": 67.0,
-      "strict": 67.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "design_coherence"
-      ]
-    },
-    {
-      "name": "Duplication",
-      "score": 99.8,
-      "strict": 99.8,
-      "checks": 11521,
-      "issues": 41,
-      "tier": 3,
-      "subjective": false
-    },
-    {
-      "name": "Elegance",
-      "score": 67.0,
-      "strict": 67.0,
-      "checks": 30,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "high_level_elegance",
-        "mid_level_elegance",
-        "low_level_elegance"
-      ]
-    },
-    {
-      "name": "Error consistency",
-      "score": 74.0,
-      "strict": 74.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "error_consistency"
-      ]
-    },
-    {
-      "name": "Security",
-      "score": 98.8,
-      "strict": 98.8,
-      "checks": 5018,
-      "issues": 128,
-      "tier": 4,
-      "subjective": false
-    },
-    {
-      "name": "Structure nav",
-      "score": 68.0,
-      "strict": 68.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "package_organization"
-      ]
-    },
-    {
-      "name": "Test health",
-      "score": 23.9,
-      "strict": 21.4,
-      "checks": 27409,
-      "issues": 1706,
-      "tier": 4,
-      "subjective": false
-    },
-    {
-      "name": "Test strategy",
-      "score": 60.0,
-      "strict": 60.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "test_strategy"
-      ]
-    }
-  ],
-  "subjective_measures": [
-    {
-      "name": "AI generated debt",
-      "score": 72.0,
-      "strict": 72.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "ai_generated_debt"
-      ]
-    },
-    {
-      "name": "Abstraction fit",
-      "score": 70.0,
-      "strict": 70.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "abstraction_fitness"
-      ]
-    },
-    {
-      "name": "Convention drift",
-      "score": 80.0,
-      "strict": 80.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "convention_outlier"
-      ]
-    },
-    {
-      "name": "Cross-module arch",
-      "score": 77.0,
-      "strict": 77.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "cross_module_architecture"
-      ]
-    },
-    {
-      "name": "Dep health",
-      "score": 76.0,
-      "strict": 76.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "dependency_health"
-      ]
-    },
-    {
-      "name": "Design coherence",
-      "score": 67.0,
-      "strict": 67.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "design_coherence"
-      ]
-    },
-    {
-      "name": "Elegance",
-      "score": 67.0,
-      "strict": 67.0,
-      "checks": 30,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "high_level_elegance",
-        "mid_level_elegance",
-        "low_level_elegance"
-      ]
-    },
-    {
-      "name": "Error consistency",
-      "score": 74.0,
-      "strict": 74.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "error_consistency"
-      ]
-    },
-    {
-      "name": "Structure nav",
-      "score": 68.0,
-      "strict": 68.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "package_organization"
-      ]
-    },
-    {
-      "name": "Test strategy",
-      "score": 60.0,
-      "strict": 60.0,
-      "checks": 10,
-      "issues": 0,
-      "tier": 4,
-      "subjective": true,
-      "placeholder": false,
-      "cli_keys": [
-        "test_strategy"
-      ]
-    }
-  ],
   "config": {
     "target_strict_score": 95,
     "review_max_age_days": 30,
