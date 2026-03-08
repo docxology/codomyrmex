@@ -1,3 +1,3 @@
-## 2024-02-23 - Visual Feedback for Async Buttons
-**Learning:** In async contexts (like chat submissions), simply disabling the input field isn't enough UX feedback. If the submit button itself isn't disabled and lacks a loading indicator, users might attempt double submissions or think the app is unresponsive.
-**Action:** Always pair `input.disabled = true` with a disabled submit button state, ideally injecting a `.loader` visual indicator and updating the button text (e.g. 'Sending...'). Re-enable in the `finally` block to ensure recovery on error.
+## 2024-10-27 - ARIA Alert Role on Dynamic Banners
+**Learning:** Dynamically injected error banners (like the Ollama offline warnings) need `role="alert"` so screen readers immediately announce them to users.
+**Action:** Always verify dynamically inserted DOM elements conveying critical system states include the appropriate ARIA live region attributes (`role="alert"` or `aria-live="assertive"`).
