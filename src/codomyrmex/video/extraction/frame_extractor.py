@@ -41,9 +41,6 @@ except ImportError:
     MOVIEPY_AVAILABLE = False
 
 
-SUPPORTED_FORMATS = {".mp4", ".avi", ".mov", ".mkv", ".webm", ".wmv", ".flv", ".m4v"}
-
-
 class FrameExtractor:
     """Extract frames and audio from video files.
 
@@ -91,10 +88,6 @@ class FrameExtractor:
                 "PIL/Pillow is required. Install with: uv sync --extra video"
             )
 
-    def _validate_input(self, video_path: str | Path) -> Path:
-        """Validate input video path."""
-        return validate_video_path(video_path)
-
     def extract_frame(
         self,
         video_path: str | Path,
@@ -112,7 +105,7 @@ class FrameExtractor:
         Raises:
             FrameExtractionError: If extraction fails
         """
-        path = self._validate_input(video_path)
+        path = validate_video_path(video_path)
 
         if OPENCV_AVAILABLE:
             return self._extract_frame_opencv(path, timestamp)
@@ -177,6 +170,42 @@ class FrameExtractor:
                 timestamp=timestamp,
             ) from e
 
+    def _extract_frames_opencv(
+        self, path: Path, interval: float, start: float, end: float
+    ) -> list["Image.Image"]:
+        """Extract frames at intervals using OpenCV."""
+        frames: list[Image.Image] = []
+        cap = cv2.VideoCapture(str(path))
+        if not cap.isOpened():
+            raise VideoReadError(f"Cannot open video: {path}")
+        try:
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+            effective_end = end if end is not None else total_frames / fps
+            current_time = start
+            while current_time <= effective_end:
+                cap.set(cv2.CAP_PROP_POS_FRAMES, int(current_time * fps))
+                ret, frame = cap.read()
+                if ret:
+                    frames.append(Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)))
+                current_time += interval
+        finally:
+            cap.release()
+        return frames
+
+    def _extract_frames_moviepy(
+        self, path: Path, interval: float, start: float, end: float | None
+    ) -> list["Image.Image"]:
+        """Extract frames at intervals using moviepy."""
+        frames: list[Image.Image] = []
+        with VideoFileClip(str(path)) as clip:
+            effective_end = end if end is not None else clip.duration
+            current_time = start
+            while current_time <= effective_end:
+                frames.append(Image.fromarray(clip.get_frame(current_time).astype("uint8")))
+                current_time += interval
+        return frames
+
     def extract_frames(
         self,
         video_path: str | Path,
@@ -195,49 +224,12 @@ class FrameExtractor:
         Returns:
             List of PIL Images
         """
-        path = self._validate_input(video_path)
-        frames = []
-
+        path = validate_video_path(video_path)
         if OPENCV_AVAILABLE:
-            cap = cv2.VideoCapture(str(path))
-            if not cap.isOpened():
-                raise VideoReadError(f"Cannot open video: {path}")
-
-            try:
-                fps = cap.get(cv2.CAP_PROP_FPS)
-                total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-                duration = total_frames / fps
-
-                if end is None:
-                    end = duration
-
-                current_time = start
-                while current_time <= end:
-                    frame_number = int(current_time * fps)
-                    cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
-                    ret, frame = cap.read()
-
-                    if ret:
-                        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                        frames.append(Image.fromarray(frame_rgb))
-
-                    current_time += interval
-
-            finally:
-                cap.release()
-
-        elif MOVIEPY_AVAILABLE:
-            with VideoFileClip(str(path)) as clip:
-                if end is None:
-                    end = clip.duration
-
-                current_time = start
-                while current_time <= end:
-                    frame = clip.get_frame(current_time)
-                    frames.append(Image.fromarray(frame.astype("uint8")))
-                    current_time += interval
-
-        return frames
+            return self._extract_frames_opencv(path, interval, start, end)
+        if MOVIEPY_AVAILABLE:
+            return self._extract_frames_moviepy(path, interval, start, end)
+        return []
 
     def extract_frames_at_timestamps(
         self,
@@ -253,22 +245,15 @@ class FrameExtractor:
         Returns:
             ExtractionResult with frames and metadata
         """
-        path = self._validate_input(video_path)
+        path = validate_video_path(video_path)
         start_time = time.time()
-
-        frames = []
-        for ts in timestamps:
-            frame = self.extract_frame(path, ts)
-            frames.append(frame)
-
-        processing_time = time.time() - start_time
-
+        frames = [self.extract_frame(path, ts) for ts in timestamps]
         return ExtractionResult(
             source_path=path,
             frames=frames,
             timestamps=timestamps,
             frame_count=len(frames),
-            processing_time=processing_time,
+            processing_time=time.time() - start_time,
         )
 
     def generate_thumbnail(
@@ -287,32 +272,37 @@ class FrameExtractor:
         Returns:
             PIL Image thumbnail
         """
-        path = self._validate_input(video_path)
-
-        # Get video duration to calculate default timestamp
+        path = validate_video_path(video_path)
         if timestamp is None:
             if OPENCV_AVAILABLE:
                 cap = cv2.VideoCapture(str(path))
-                fps = cap.get(cv2.CAP_PROP_FPS)
-                total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-                duration = total_frames / fps
+                duration = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) / cap.get(cv2.CAP_PROP_FPS)
                 cap.release()
             elif MOVIEPY_AVAILABLE:
                 with VideoFileClip(str(path)) as clip:
                     duration = clip.duration
             else:
                 duration = 10.0
-
-            # Default: 10% into the video
             timestamp = duration * 0.1
-
         frame = self.extract_frame(path, timestamp)
-
-        # Calculate height maintaining aspect ratio
-        aspect_ratio = frame.height / frame.width
-        height = int(width * aspect_ratio)
-
+        height = int(width * frame.height / frame.width)
         return frame.resize((width, height), Image.Resampling.LANCZOS)
+
+    def _write_audio_file(
+        self, path: Path, output: Path, bitrate: str, audio_format: str
+    ) -> None:
+        """Write audio from video clip to output file."""
+        try:
+            with VideoFileClip(str(path)) as clip:
+                if clip.audio is None:
+                    raise AudioExtractionError("Video has no audio track", video_path=path)
+                clip.audio.write_audiofile(str(output), bitrate=bitrate, verbose=False, logger=None)
+        except AudioExtractionError:
+            raise
+        except Exception as e:
+            raise AudioExtractionError(
+                f"Audio extraction failed: {e}", video_path=path, audio_format=audio_format
+            ) from e
 
     def extract_audio(
         self,
@@ -335,43 +325,11 @@ class FrameExtractor:
         Raises:
             AudioExtractionError: If extraction fails
         """
-        path = self._validate_input(video_path)
-
-        if output_path:
-            output = Path(output_path)
-        else:
-            output = path.parent / f"{path.stem}.{audio_format}"
-
+        path = validate_video_path(video_path)
+        output = Path(output_path) if output_path else path.parent / f"{path.stem}.{audio_format}"
         if not MOVIEPY_AVAILABLE:
-            raise AudioExtractionError(
-                "moviepy required for audio extraction",
-                video_path=path,
-            )
-
-        try:
-            with VideoFileClip(str(path)) as clip:
-                if clip.audio is None:
-                    raise AudioExtractionError(
-                        "Video has no audio track",
-                        video_path=path,
-                    )
-
-                clip.audio.write_audiofile(
-                    str(output),
-                    bitrate=bitrate,
-                    verbose=False,
-                    logger=None,
-                )
-
-        except AudioExtractionError:
-            raise
-        except Exception as e:
-            raise AudioExtractionError(
-                f"Audio extraction failed: {e}",
-                video_path=path,
-                audio_format=audio_format,
-            ) from e
-
+            raise AudioExtractionError("moviepy required for audio extraction", video_path=path)
+        self._write_audio_file(path, output, bitrate, audio_format)
         return output
 
     def save_frames(

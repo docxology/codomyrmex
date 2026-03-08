@@ -191,10 +191,11 @@ class TestExecutionMixin:
 
         assert callable(getattr(ExecutionMixin, "_execute_impl", None))
 
-    def test_has_execute_with_retry_method(self):
-        from codomyrmex.agents.claude.mixins.execution import ExecutionMixin
+    def test_has_claude_pricing_constant(self):
+        from codomyrmex.agents.claude.mixins.execution import CLAUDE_PRICING
 
-        assert callable(getattr(ExecutionMixin, "_execute_with_retry", None))
+        assert isinstance(CLAUDE_PRICING, dict)
+        assert len(CLAUDE_PRICING) > 0
 
     def test_has_stream_impl_method(self):
         from codomyrmex.agents.claude.mixins.execution import ExecutionMixin

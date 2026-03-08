@@ -33,9 +33,6 @@ except ImportError:
     MOVIEPY_AVAILABLE = False
 
 
-SUPPORTED_FORMATS = {".mp4", ".avi", ".mov", ".mkv", ".webm", ".wmv", ".flv", ".m4v"}
-
-
 class VideoAnalyzer:
     """Analyze video files and extract metadata.
 
@@ -69,10 +66,6 @@ class VideoAnalyzer:
                 "No video backend available. Install with: uv sync --extra video"
             )
 
-    def _validate_input(self, video_path: str | Path) -> Path:
-        """Validate input video path."""
-        return validate_video_path(video_path)
-
     def get_info(self, video_path: str | Path) -> VideoInfo:
         """Get complete information about a video file.
 
@@ -82,7 +75,7 @@ class VideoAnalyzer:
         Returns:
             VideoInfo with all metadata
         """
-        path = self._validate_input(video_path)
+        path = validate_video_path(video_path)
 
         if OPENCV_AVAILABLE:
             info = self._get_info_opencv(path)
@@ -217,7 +210,7 @@ class VideoAnalyzer:
         Returns:
             True if video has audio
         """
-        path = self._validate_input(video_path)
+        path = validate_video_path(video_path)
 
         if MOVIEPY_AVAILABLE:
             try:
@@ -285,8 +278,8 @@ class VideoAnalyzer:
         Returns:
             VideoComparison with comparison results
         """
-        path1 = self._validate_input(video_path1)
-        path2 = self._validate_input(video_path2)
+        path1 = validate_video_path(video_path1)
+        path2 = validate_video_path(video_path2)
 
         info1 = self.get_info(path1)
         info2 = self.get_info(path2)
