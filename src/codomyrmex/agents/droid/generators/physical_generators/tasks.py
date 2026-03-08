@@ -26,17 +26,36 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
+def _write_module_files(module_path: Path) -> list[str]:
+    """Write all source/doc files for the physical management module."""
+    files_created = []
+    writes = [
+        ("__init__.py", generate_physical_init_content()),
+        ("object_manager.py", generate_physical_manager_content()),
+        ("simulation_engine.py", generate_physical_simulation_content()),
+        ("sensor_integration.py", generate_sensor_integration_content()),
+        ("README.md", generate_physical_readme_content()),
+        ("API_SPECIFICATION.md", generate_physical_api_spec()),
+        ("requirements.txt", generate_physical_requirements()),
+    ]
+    for filename, content in writes:
+        (module_path / filename).write_text(content)
+        files_created.append(filename)
+
+    (module_path / "examples" / "basic_usage.py").write_text(generate_physical_examples())
+    files_created.append("examples/basic_usage.py")
+
+    (module_path / "tests" / "test_object_manager.py").write_text(generate_physical_tests())
+    files_created.append("tests/test_object_manager.py")
+
+    (module_path / "docs" / "architecture.md").write_text(generate_physical_docs_content())
+    files_created.append("docs/architecture.md")
+
+    return files_created
+
+
 def create_physical_management_module(*, prompt: str, description: str) -> str:
     """Create a comprehensive physical object management module for Codomyrmex."""
-    from pathlib import Path
-
-    # Add the current directory to Python path for direct imports
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    if current_dir not in sys.path:
-        pass
-    #         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
-
-    # Define the physical management module structure
     module_name = "physical_management"
     module_path = (
         Path(__file__).parent.parent.parent.parent.parent
@@ -45,67 +64,16 @@ def create_physical_management_module(*, prompt: str, description: str) -> str:
         / module_name
     )
 
-    # Create module directory structure
     module_path.mkdir(exist_ok=True)
     (module_path / "docs").mkdir(exist_ok=True)
     (module_path / "tests").mkdir(exist_ok=True)
     (module_path / "examples").mkdir(exist_ok=True)
 
-    # Generate comprehensive physical management module files
-    files_created = []
-
-    # 1. Main module __init__.py
-    init_content = generate_physical_init_content()
-    (module_path / "__init__.py").write_text(init_content)
-    files_created.append("__init__.py")
-
-    # 2. Core physical object manager
-    manager_content = generate_physical_manager_content()
-    (module_path / "object_manager.py").write_text(manager_content)
-    files_created.append("object_manager.py")
-
-    # 3. Physical simulation engine
-    simulation_content = generate_physical_simulation_content()
-    (module_path / "simulation_engine.py").write_text(simulation_content)
-    files_created.append("simulation_engine.py")
-
-    # 4. Sensor integration
-    sensor_content = generate_sensor_integration_content()
-    (module_path / "sensor_integration.py").write_text(sensor_content)
-    files_created.append("sensor_integration.py")
-
-    # 5. Documentation
-    readme_content = generate_physical_readme_content()
-    (module_path / "README.md").write_text(readme_content)
-    files_created.append("README.md")
-
-    # 6. API specification
-    api_content = generate_physical_api_spec()
-    (module_path / "API_SPECIFICATION.md").write_text(api_content)
-    files_created.append("API_SPECIFICATION.md")
-
-    # 7. Usage examples
-    examples_content = generate_physical_examples()
-    (module_path / "examples" / "basic_usage.py").write_text(examples_content)
-    files_created.append("examples/basic_usage.py")
-
-    # 8. Tests
-    test_content = generate_physical_tests()
-    (module_path / "tests" / "test_object_manager.py").write_text(test_content)
-    files_created.append("tests/test_object_manager.py")
-
-    # 9. Requirements
-    reqs_content = generate_physical_requirements()
-    (module_path / "requirements.txt").write_text(reqs_content)
-    files_created.append("requirements.txt")
-
-    # 10. Documentation files
-    docs_content = generate_physical_docs_content()
-    (module_path / "docs" / "architecture.md").write_text(docs_content)
-    files_created.append("docs/architecture.md")
+    files_created = _write_module_files(module_path)
 
     logger.info(
-        f"Physical management module created at {module_path}",
+        "Physical management module created at %s",
+        module_path,
         extra={"description": description},
     )
     return f"Physical management module created with {len(files_created)} files"
@@ -143,7 +111,8 @@ def test_statistics_display(*, prompt: str, description: str) -> str:
     print(f"   Slowest task: {max_time:.3f}s")
 
     logger.info(
-        f"Statistics test completed: avg={avg_time:.3f}s",
+        "Statistics test completed: avg=%.3fs",
+        avg_time,
         extra={"description": description},
     )
     return f"Statistics test completed: {len(task_times)} tasks processed"

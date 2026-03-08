@@ -20,14 +20,6 @@ from codomyrmex.logging_monitoring import get_logger
 """Script Runner.
 
 Handles the actual execution of Python scripts.
-
-This module provides runner functionality including:
-- 1 functions: run_script
-- 0 classes:
-
-Usage:
-    from runner import FunctionName, ClassName
-    # Example usage here
 """
 logger = get_logger(__name__)
 
@@ -44,34 +36,87 @@ def _set_memory_limit(memory_limit_mb: int):
         logger.warning("Failed to set memory limit: %s", e)
 
 
-def run_script(
+def _find_project_root(script_path: Path) -> Path | None:
+    """Climb directory tree to find the project root containing 'src'."""
+    current_dir = script_path.parent
+    for _ in range(5):
+        if (current_dir / "src").exists():
+            return current_dir
+        if current_dir.parent == current_dir:
+            break
+        current_dir = current_dir.parent
+    return None
+
+
+def _build_run_env(
+    env: dict[str, str] | None,
+    script_config: dict[str, Any],
     script_path: Path,
-    timeout: int = 60,
-    env: dict[str, str] | None = None,
-    cwd: Path | None = None,
-    config: dict[str, Any] | None = None,
-    memory_limit_mb: int | None = None,
+) -> dict[str, str]:
+    """Build the subprocess environment with PYTHONPATH configured."""
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    if "env" in script_config:
+        run_env.update(script_config["env"])
+
+    project_root = _find_project_root(script_path)
+    if project_root:
+        src_path = project_root / "src"
+        scripts_root = project_root / "scripts"
+        new_path = f"{src_path}:{scripts_root}"
+        pythonpath = run_env.get("PYTHONPATH", "")
+        run_env["PYTHONPATH"] = f"{new_path}:{pythonpath}" if pythonpath else new_path
+
+    return run_env
+
+
+def _execute_subprocess(
+    cmd: list[str],
+    timeout: int,
+    cwd: Path,
+    run_env: dict[str, str],
+    allowed_exit_codes: list[int],
+    memory_limit_mb: int | None,
 ) -> dict[str, Any]:
-    """
-    Run a single script and capture output.
+    """Run subprocess and return status/output dict."""
+    partial: dict[str, Any] = {"exit_code": None, "stdout": "", "stderr": "", "status": "unknown", "error": None}
+    try:
+        preexec = None
+        if memory_limit_mb and RESOURCE_LIMIT_AVAILABLE:
+            def preexec():
+                return _set_memory_limit(memory_limit_mb)
 
-    Args:
-        script_path: Path to the script
-        script_path: Path to the script
-        timeout: Timeout in seconds
-        env: Environment variables
-        cwd: Working directory
-        config: Script configuration
-        memory_limit_mb: Optional memory limit in MB (Unix only)
+        process = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            cwd=cwd,
+            env=run_env,
+            stdin=subprocess.DEVNULL,
+            preexec_fn=preexec,
+        )
+        partial["exit_code"] = process.returncode
+        partial["stdout"] = process.stdout
+        partial["stderr"] = process.stderr
+        partial["status"] = "passed" if process.returncode in allowed_exit_codes else "failed"
+        if partial["status"] == "passed" and process.returncode != 0:
+            partial["stdout"] += f"\n[INFO] Script exited with code {process.returncode} (ALLOWED)"
+    except subprocess.TimeoutExpired as e:
+        partial["status"] = "timeout"
+        partial["error"] = f"Script timed out after {timeout}s"
+        partial["stdout"] = e.stdout or ""
+        partial["stderr"] = e.stderr or ""
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        partial["status"] = "error"
+        partial["error"] = str(e)
+    return partial
 
-    Returns:
-        Execution result dictionary
-    """
-    script_config = config or {}
-    timeout = script_config.get("timeout", timeout)
-    allowed_exit_codes = script_config.get("allowed_exit_codes", [0])
 
-    result = {
+def _init_script_result(script_path: Path) -> dict[str, Any]:
+    """Build initial result skeleton for a script execution."""
+    return {
         "script": str(script_path),
         "name": script_path.name,
         "subdirectory": script_path.parent.name,
@@ -84,114 +129,39 @@ def run_script(
         "error": None,
     }
 
-    # Log SCRIPT_START event
+
+def run_script(
+    script_path: Path,
+    timeout: int = 60,
+    env: dict[str, str] | None = None,
+    cwd: Path | None = None,
+    config: dict[str, Any] | None = None,
+    memory_limit_mb: int | None = None,
+) -> dict[str, Any]:
+    """Run a single script and capture output."""
+    script_config = config or {}
+    timeout = script_config.get("timeout", timeout)
+    allowed_exit_codes = script_config.get("allowed_exit_codes", [0])
+    result = _init_script_result(script_path)
+
     logger.info(
-        f"Script execution started: {script_path.name}",
-        extra={
-            "event": "SCRIPT_START",
-            "script": str(script_path),
-            "subdirectory": script_path.parent.name,
-        },
+        "Script execution started: %s",
+        script_path.name,
+        extra={"event": "SCRIPT_START", "script": str(script_path), "subdirectory": script_path.parent.name},
     )
 
     start_time = time.time()
-
-    # Prepare environment
-    run_env = os.environ.copy()
-    if env:
-        run_env.update(env)
-
-    # Merge env from config
-    if "env" in script_config:
-        run_env.update(script_config["env"])
-
-    # Add project src to PYTHONPATH
-    # Assuming standard structure where scripts is at root/scripts and src is at root/src
-    # script_path -> subdir -> scripts -> root
-    # Add project src to PYTHONPATH
-    # Robustly find project root by searching for 'src' directory
-    current_dir = script_path.parent
-    project_root = None
-
-    # Climb up to 5 levels to find project root containing 'src'
-    for _ in range(5):
-        if (current_dir / "src").exists():
-            project_root = current_dir
-            break
-        if current_dir.parent == current_dir:  # Root reached
-            break
-        current_dir = current_dir.parent
-
-    if project_root:
-        src_path = project_root / "src"
-        pythonpath = run_env.get("PYTHONPATH", "")
-        # Add scripts root to path as well
-        scripts_root = project_root / "scripts"
-        new_path = f"{src_path}:{scripts_root}"
-        run_env["PYTHONPATH"] = f"{new_path}:{pythonpath}" if pythonpath else new_path
-
-        # Also ensure sys.executable is used from environment if available
-        # or stick to sys.executable from current process
-    # Fallback for when src is not found relative to script
-    # This logs a warning but continues
-    elif env and env.get("PYTHONPATH"):
-        pass  # External env configured
-    else:
-        pass  # Removed DEBUG print statement
-
-    # get args from config
-    script_args = script_config.get("args", [])
-    cmd = [sys.executable, str(script_path), *script_args]
-    # Debug logging removed - use --verbose flag for detailed output
-
-    try:
-        # Prepare preexec_fn for memory limit
-        preexec = None
-        if memory_limit_mb and RESOURCE_LIMIT_AVAILABLE:
-
-            def preexec():
-                return _set_memory_limit(memory_limit_mb)
-
-        process = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-            cwd=cwd or script_path.parent,
-            env=run_env,
-            stdin=subprocess.DEVNULL,
-            preexec_fn=preexec,
-        )
-
-        result["exit_code"] = process.returncode
-        result["stdout"] = process.stdout
-        result["stderr"] = process.stderr
-        result["status"] = (
-            "passed" if process.returncode in allowed_exit_codes else "failed"
-        )
-
-        if result["status"] == "passed" and process.returncode != 0:
-            # Annotate passed (non-zero)
-            result["stdout"] += (
-                f"\n[INFO] Script exited with code {process.returncode} (ALLOWED)"
-            )
-
-    except subprocess.TimeoutExpired as e:
-        result["status"] = "timeout"
-        result["error"] = f"Script timed out after {timeout}s"
-        result["stdout"] = e.stdout or ""
-        result["stderr"] = e.stderr or ""
-
-    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-        result["status"] = "error"
-        result["error"] = str(e)
-
+    run_env = _build_run_env(env, script_config, script_path)
+    cmd = [sys.executable, str(script_path), *script_config.get("args", [])]
+    result.update(_execute_subprocess(
+        cmd, timeout, cwd or script_path.parent, run_env, allowed_exit_codes, memory_limit_mb
+    ))
     result["execution_time"] = time.time() - start_time
     result["end_time"] = datetime.now().isoformat()
 
-    # Log SCRIPT_END event
     logger.info(
-        f"Script execution completed: {script_path.name}",
+        "Script execution completed: %s",
+        script_path.name,
         extra={
             "event": "SCRIPT_END",
             "script": str(script_path),
@@ -201,7 +171,6 @@ def run_script(
             "execution_time": result["execution_time"],
         },
     )
-
     return result
 
 
@@ -216,6 +185,24 @@ def _target_wrapper(q, f, a, k, memory_limit_mb):
         q.put(("error", traceback.format_exc()))
 
 
+def _collect_queue_result(queue: multiprocessing.Queue, p: multiprocessing.Process) -> dict[str, Any]:
+    """Read the result placed by _target_wrapper into queue."""
+    partial: dict[str, Any] = {"status": "unknown", "result": None, "error": None}
+    try:
+        status, val = queue.get(timeout=5)
+        if status == "success":
+            partial["status"] = "passed"
+            partial["result"] = val
+        else:
+            partial["status"] = "error"
+            partial["error"] = val
+    except Exception:
+        partial["status"] = "failed" if p.exitcode != 0 else "passed"
+        if p.exitcode != 0:
+            partial["error"] = f"Process exited with code {p.exitcode}"
+    return partial
+
+
 def run_function(
     func: callable,  # type: ignore
     args: tuple = (),
@@ -223,23 +210,11 @@ def run_function(
     timeout: int = 60,
     memory_limit_mb: int | None = None,
 ) -> dict[str, Any]:
-    """
-    Run a python function in a monitored separate process.
-
-    Args:
-        func: Function to run
-        args: Positional arguments
-        kwargs: Keyword arguments
-        timeout: Timeout in seconds
-        memory_limit_mb: Optional memory limit
-
-    Returns:
-        Execution result dictionary
-    """
+    """Run a python function in a monitored separate process."""
     kwargs = kwargs or {}
     func_name = getattr(func, "__name__", "unknown_function")
 
-    result = {
+    result: dict[str, Any] = {
         "name": func_name,
         "type": "function",
         "start_time": datetime.now().isoformat(),
@@ -247,10 +222,10 @@ def run_function(
         "execution_time": 0.0,
         "result": None,
         "error": None,
-        "stdout": "",  # Capturing stdout from functon complicates things with multiprocessing
+        "stdout": "",
     }
 
-    queue = multiprocessing.Queue()
+    queue: multiprocessing.Queue = multiprocessing.Queue()
     start_time = time.time()
 
     p = multiprocessing.Process(
@@ -265,25 +240,8 @@ def run_function(
         result["status"] = "timeout"
         result["error"] = f"Function timed out after {timeout}s"
     else:
-        try:
-            # Use get(timeout) instead of queue.empty() — empty() is unreliable
-            # under heavy multiprocessing load (race condition in flush timing)
-            status, val = queue.get(timeout=5)
-            if status == "success":
-                result["status"] = "passed"
-                result["result"] = val
-            else:
-                result["status"] = "error"
-                result["error"] = val
-        except Exception as _exc:
-            # Succeeded but no return? or crashed silently?
-            if p.exitcode != 0:
-                result["status"] = "failed"
-                result["error"] = f"Process exited with code {p.exitcode}"
-            else:
-                result["status"] = "passed"
+        result.update(_collect_queue_result(queue, p))
 
     result["execution_time"] = time.time() - start_time
     result["end_time"] = datetime.now().isoformat()
-
     return result

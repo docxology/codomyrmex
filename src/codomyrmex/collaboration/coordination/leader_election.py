@@ -100,6 +100,30 @@ class LeaderElection(ABC):
             ElectionState.COMPLETED if result.success else ElectionState.FAILED
         )
 
+    def _prepare_election(
+        self, agents: list[CollaborativeAgent]
+    ) -> tuple[list[CollaborativeAgent], ElectionResult | None]:
+        """Validate agents and set up election state.
+
+        Returns (healthy_agents, failure_result). If failure_result is not None
+        the caller should record it and return immediately.
+        """
+        if not agents:
+            return [], ElectionResult(
+                leader_id=None, success=False, round_count=0,
+                participants=[], error="No agents to elect from",
+            )
+        self._state = ElectionState.IN_PROGRESS
+        self._participants = {a.agent_id for a in agents}
+        healthy = self._filter_healthy(agents)
+        if not healthy:
+            return [], ElectionResult(
+                leader_id=None, success=False, round_count=1,
+                participants=list(self._participants),
+                error="No healthy agents available",
+            )
+        return healthy, None
+
 
 class BullyElection(LeaderElection):
     """Bully algorithm for leader election.
@@ -129,63 +153,22 @@ class BullyElection(LeaderElection):
         return hash(agent.agent_id)
 
     async def elect(self, agents: list[CollaborativeAgent]) -> ElectionResult:
-        """Run the bully election algorithm.
+        """Run the bully election algorithm."""
+        healthy_agents, failure = self._prepare_election(agents)
+        if failure is not None:
+            self._record_result(failure)
+            return failure
 
-        Args:
-            agents: List of agents participating in the election.
-
-        Returns:
-            Election result with the selected leader.
-
-        """
-        if not agents:
-            result = ElectionResult(
-                leader_id=None,
-                success=False,
-                round_count=0,
-                participants=[],
-                error="No agents to elect from",
-            )
-            self._record_result(result)
-            return result
-
-        self._state = ElectionState.IN_PROGRESS
-        self._participants = {a.agent_id for a in agents}
-
-        # Filter to healthy agents only
-        healthy_agents = self._filter_healthy(agents)
-
-        if not healthy_agents:
-            result = ElectionResult(
-                leader_id=None,
-                success=False,
-                round_count=1,
-                participants=list(self._participants),
-                error="No healthy agents available",
-            )
-            self._record_result(result)
-            return result
-
-        # Sort by priority (highest first)
-        sorted_agents = sorted(
-            healthy_agents,
-            key=self._priority_fn,
-            reverse=True,
-        )
-
-        # The highest priority agent becomes leader
-        leader = sorted_agents[0]
-
+        leader = sorted(healthy_agents, key=self._priority_fn, reverse=True)[0]
         result = ElectionResult(
             leader_id=leader.agent_id,
             success=True,
             round_count=1,
             participants=list(self._participants),
         )
-
         self._record_result(result)
         logger.info(
-            f"Bully election complete: Leader is {leader.name} ({leader.agent_id})"
+            "Bully election complete: Leader is %s (%s)", leader.name, leader.agent_id
         )
         return result
 
@@ -205,63 +188,24 @@ class RingElection(LeaderElection):
         self._priority_fn = priority_fn or (lambda a: hash(a.agent_id))
 
     async def elect(self, agents: list[CollaborativeAgent]) -> ElectionResult:
-        """Run the ring election algorithm.
+        """Run the ring election algorithm (simulated ring traversal)."""
+        healthy_agents, failure = self._prepare_election(agents)
+        if failure is not None:
+            self._record_result(failure)
+            return failure
 
-        In this implementation, we simulate the ring traversal.
-        """
-        if not agents:
-            result = ElectionResult(
-                leader_id=None,
-                success=False,
-                round_count=0,
-                participants=[],
-                error="No agents to elect from",
-            )
-            self._record_result(result)
-            return result
-
-        self._state = ElectionState.IN_PROGRESS
-        self._participants = {a.agent_id for a in agents}
-
-        # Filter to healthy agents
-        healthy_agents = self._filter_healthy(agents)
-
-        if not healthy_agents:
-            result = ElectionResult(
-                leader_id=None,
-                success=False,
-                round_count=1,
-                participants=list(self._participants),
-                error="No healthy agents available",
-            )
-            self._record_result(result)
-            return result
-
-        # Simulate ring traversal
-        # Each agent adds itself to the candidate list if it has higher priority
-        candidates = []
-        round_count = 0
-
-        for agent in healthy_agents:
-            round_count += 1
-            priority = self._priority_fn(agent)
-
-            candidates.append((priority, agent))
-
-        # Sort and select highest priority
+        candidates = [(self._priority_fn(a), a) for a in healthy_agents]
         candidates.sort(key=lambda x: x[0], reverse=True)
         leader = candidates[0][1]
-
         result = ElectionResult(
             leader_id=leader.agent_id,
             success=True,
-            round_count=round_count,
+            round_count=len(healthy_agents),
             participants=list(self._participants),
         )
-
         self._record_result(result)
         logger.info(
-            f"Ring election complete: Leader is {leader.name} ({leader.agent_id})"
+            "Ring election complete: Leader is %s (%s)", leader.name, leader.agent_id
         )
         return result
 
@@ -275,47 +219,21 @@ class RandomElection(LeaderElection):
 
     async def elect(self, agents: list[CollaborativeAgent]) -> ElectionResult:
         """Randomly select a leader."""
-        if not agents:
-            result = ElectionResult(
-                leader_id=None,
-                success=False,
-                round_count=0,
-                participants=[],
-                error="No agents to elect from",
-            )
-            self._record_result(result)
-            return result
+        healthy_agents, failure = self._prepare_election(agents)
+        if failure is not None:
+            self._record_result(failure)
+            return failure
 
-        self._state = ElectionState.IN_PROGRESS
-        self._participants = {a.agent_id for a in agents}
-
-        # Filter to healthy agents
-        healthy_agents = self._filter_healthy(agents)
-
-        if not healthy_agents:
-            result = ElectionResult(
-                leader_id=None,
-                success=False,
-                round_count=1,
-                participants=list(self._participants),
-                error="No healthy agents available",
-            )
-            self._record_result(result)
-            return result
-
-        # Random selection
         leader = random.choice(healthy_agents)
-
         result = ElectionResult(
             leader_id=leader.agent_id,
             success=True,
             round_count=1,
             participants=list(self._participants),
         )
-
         self._record_result(result)
         logger.info(
-            f"Random election complete: Leader is {leader.name} ({leader.agent_id})"
+            "Random election complete: Leader is %s (%s)", leader.name, leader.agent_id
         )
         return result
 

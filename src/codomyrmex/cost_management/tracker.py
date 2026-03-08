@@ -92,9 +92,34 @@ class CostTracker:
 
         self.store.save_entry(entry)
         logger.debug(
-            f"Recorded cost: ${amount:.4f} for {category.value} ({description})"
+            "Recorded cost: $%.4f for %s (%s)", amount, category.value, description
         )
         return entry
+
+    def _resolve_start(self, period: BudgetPeriod | None, start: datetime | None) -> datetime:
+        """Return start datetime, deriving from period if needed."""
+        if start is not None:
+            return start
+        if period:
+            budget = Budget(id="temp", name="temp", amount=0, period=period)
+            return budget.get_period_start()
+        return datetime.min
+
+    def _accumulate_entry(self, summary: CostSummary, entry: object) -> None:
+        """Add a single cost entry's amounts into summary buckets."""
+        summary.total += entry.amount
+        cat = entry.category.value
+        summary.by_category[cat] = summary.by_category.get(cat, 0.0) + entry.amount
+        if entry.resource_id:
+            summary.by_resource[entry.resource_id] = (
+                summary.by_resource.get(entry.resource_id, 0.0) + entry.amount
+            )
+        for tag_key, tag_value in entry.tags.items():
+            if tag_key not in summary.by_tag:
+                summary.by_tag[tag_key] = {}
+            summary.by_tag[tag_key][tag_value] = (
+                summary.by_tag[tag_key].get(tag_value, 0.0) + entry.amount
+            )
 
     def get_summary(
         self,
@@ -104,60 +129,16 @@ class CostTracker:
         category: CostCategory | None = None,
         tags_filter: dict[str, str] | None = None,
     ) -> CostSummary:
-        """
-        Get cost summary for a period.
-
-        Args:
-            period: Budget period (uses current period)
-            start: Custom start date
-            end: Custom end date
-            category: Filter by category
-            tags_filter: Filter by tags
-
-        Returns:
-            CostSummary with aggregated costs
-        """
-        if start is None:
-            if period:
-                budget = Budget(id="temp", name="temp", amount=0, period=period)
-                start = budget.get_period_start()
-            else:
-                start = datetime.min
-
-        if end is None:
-            end = datetime.now()
+        """Get cost summary for a period."""
+        start = self._resolve_start(period, start)
+        end = end if end is not None else datetime.now()
 
         entries = self.store.get_entries(
             start=start, end=end, category=category, tags_filter=tags_filter
         )
-
-        summary = CostSummary(
-            entry_count=len(entries),
-            period_start=start,
-            period_end=end,
-        )
-
+        summary = CostSummary(entry_count=len(entries), period_start=start, period_end=end)
         for entry in entries:
-            summary.total += entry.amount
-
-            # By category
-            cat = entry.category.value
-            summary.by_category[cat] = summary.by_category.get(cat, 0.0) + entry.amount
-
-            # By resource
-            if entry.resource_id:
-                summary.by_resource[entry.resource_id] = (
-                    summary.by_resource.get(entry.resource_id, 0.0) + entry.amount
-                )
-
-            # By tag
-            for tag_key, tag_value in entry.tags.items():
-                if tag_key not in summary.by_tag:
-                    summary.by_tag[tag_key] = {}
-                summary.by_tag[tag_key][tag_value] = (
-                    summary.by_tag[tag_key].get(tag_value, 0.0) + entry.amount
-                )
-
+            self._accumulate_entry(summary, entry)
         return summary
 
     def get_total(
@@ -304,8 +285,8 @@ class BudgetManager:
             remaining = budget.amount * (1 - utilization)
             if amount > remaining:
                 logger.warning(
-                    f"Spend blocked by budget '{budget.id}': "
-                    f"Need ${amount:.4f}, only ${remaining:.4f} remaining."
+                    "Spend blocked by budget '%s': Need $%.4f, only $%.4f remaining.",
+                    budget.id, amount, remaining,
                 )
                 return False
 

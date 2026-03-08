@@ -100,19 +100,7 @@ class Broadcaster:
         filter_fn: Callable[[AgentMessage], bool] | None = None,
         replay_retained: bool = False,
     ) -> str:
-        """Subscribe to a topic.
-
-        Args:
-            topic: Topic to subscribe to.
-            subscriber_id: ID of the subscribing agent.
-            handler: Callback function for received messages.
-            filter_fn: Optional filter function to filter messages.
-            replay_retained: Whether to replay retained messages.
-
-        Returns:
-            Subscription ID.
-
-        """
+        """Subscribe to a topic and return the subscription ID."""
         if topic not in self._topics:
             self.create_topic(topic)
 
@@ -159,7 +147,8 @@ class Broadcaster:
 
         del self._subscriptions[subscription_id]
         logger.info(
-            f"Agent {subscription.subscriber_id} unsubscribed from {subscription.topic}"
+            "Agent %s unsubscribed from %s",
+            subscription.subscriber_id, subscription.topic,
         )
         return True
 
@@ -208,7 +197,7 @@ class Broadcaster:
                     delivered += 1
                 except Exception as e:
                     logger.error(
-                        f"Error delivering to {subscription.subscriber_id}: {e}"
+                        "Error delivering to %s: %s", subscription.subscriber_id, e
                     )
 
         logger.debug("Published to %s: %s subscribers received", topic, delivered)
@@ -242,7 +231,7 @@ class Broadcaster:
                     delivered += 1
                 except Exception as e:
                     logger.error(
-                        f"Error delivering to {subscription.subscriber_id}: {e}"
+                        "Error delivering to %s: %s", subscription.subscriber_id, e
                     )
 
         return delivered

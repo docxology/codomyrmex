@@ -31,11 +31,11 @@ def detect_encoding(file_path: Path, sample_size: int = 8192) -> str | None:
 
         if encoding and confidence > 0.7:
             logger.debug(
-                f"Detected encoding {encoding} with confidence {confidence:.2f}"
+                "Detected encoding %s with confidence %.2f", encoding, confidence
             )
             return encoding
         logger.warning(
-            f"Low confidence encoding detection: {encoding} ({confidence:.2f})"
+            "Low confidence encoding detection: %s (%.2f)", encoding, confidence
         )
         return get_config().default_encoding
 
