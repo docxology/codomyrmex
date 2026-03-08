@@ -102,7 +102,7 @@ def list_stashes(repository_path: str | None = None) -> list[dict[str, str]]:
                         }
                     )
 
-        logger.debug(f"Found {len(stashes)} stashes")
+        logger.debug("Found %s stashes", len(stashes))
         return stashes
 
     except subprocess.CalledProcessError as e:

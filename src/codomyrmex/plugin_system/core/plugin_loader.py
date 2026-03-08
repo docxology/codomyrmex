@@ -96,7 +96,7 @@ class PluginLoader:
                     if plugin_info:
                         discovered_plugins.append(plugin_info)
 
-        logger.info(f"Discovered {len(discovered_plugins)} plugins")
+        logger.info("Discovered %s plugins", len(discovered_plugins))
         return discovered_plugins
 
     def load_plugin(

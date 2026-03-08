@@ -78,7 +78,7 @@ class NaturalRitualRecovery:
             raise RitualError("Ritual must have at least one step")
         self._rituals[user_id] = steps
         self._attempt_counts[user_id] = 0
-        logger.info(f"Registered natural ritual for {user_id} with {len(steps)} steps")
+        logger.info("Registered natural ritual for %s with %s steps", user_id, len(steps))
 
     def has_ritual(self, user_id: str) -> bool:
         """Check if a user has a registered ritual.

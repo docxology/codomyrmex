@@ -139,7 +139,7 @@ def analyze_code_quality(
         raise RuntimeError(f"Code analysis failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
-        logger.error(f"Unexpected error analyzing code: {e}", exc_info=True)
+        logger.error("Unexpected error analyzing code: %s", e, exc_info=True)
         raise RuntimeError(f"Code analysis failed: {e}") from None
 
 
@@ -267,5 +267,5 @@ Please analyze:
         raise RuntimeError(f"Code comparison failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
-        logger.error(f"Unexpected error comparing code versions: {e}", exc_info=True)
+        logger.error("Unexpected error comparing code versions: %s", e, exc_info=True)
         raise RuntimeError(f"Code comparison failed: {e}") from None

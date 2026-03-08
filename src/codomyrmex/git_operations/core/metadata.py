@@ -218,7 +218,7 @@ class RepositoryMetadataManager:
                 for repo_name, repo_data in data.items():
                     self.metadata[repo_name] = RepositoryMetadata.from_dict(repo_data)
 
-                logger.info(f"Loaded metadata for {len(self.metadata)} repositories")
+                logger.info("Loaded metadata for %s repositories", len(self.metadata))
 
             except Exception as e:
                 logger.error("Error loading metadata: %s", e)
@@ -245,7 +245,7 @@ class RepositoryMetadataManager:
             with open(self.metadata_file, "w") as f:
                 json.dump(data, f, indent=2, sort_keys=True)
 
-            logger.info(f"Saved metadata for {len(self.metadata)} repositories")
+            logger.info("Saved metadata for %s repositories", len(self.metadata))
             return True
 
         except Exception as e:

@@ -112,7 +112,7 @@ def get_status(repository_path: str | None = None) -> dict[str, Any]:
             if index_status == "?" and worktree_status == "?":
                 status_info["untracked"].append(filename)
 
-        logger.debug(f"Repository status: {len(status_lines)} changes")
+        logger.debug("Repository status: %s changes", len(status_lines))
         return status_info
 
     except subprocess.CalledProcessError as e:
@@ -231,7 +231,7 @@ def get_diff_files(
             timeout=_GIT_TIMEOUT,
         )
 
-        logger.debug(f"Retrieved diff ({len(result.stdout)} characters)")
+        logger.debug("Retrieved diff (%s characters)", len(result.stdout))
         return result.stdout
 
     except subprocess.CalledProcessError as e:

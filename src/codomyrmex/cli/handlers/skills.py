@@ -25,7 +25,7 @@ def handle_skills_sync(force: bool) -> bool:
             print_error("Failed to sync skills")
         return success
     except Exception as e:
-        logger.error(f"Error syncing skills: {e}", exc_info=True)
+        logger.error("Error syncing skills: %s", e, exc_info=True)
         print_error(f"Error syncing skills: {e!s}")
         return False
 
@@ -55,7 +55,7 @@ def handle_skills_list(category: str | None) -> bool:
 
         return True
     except Exception as e:
-        logger.error(f"Error listing skills: {e}", exc_info=True)
+        logger.error("Error listing skills: %s", e, exc_info=True)
         print_error(f"Error listing skills: {e!s}")
         return False
 
@@ -88,7 +88,7 @@ def handle_skills_get(category: str, name: str, output: str | None) -> bool:
 
         return True
     except Exception as e:
-        logger.error(f"Error getting skill: {e}", exc_info=True)
+        logger.error("Error getting skill: %s", e, exc_info=True)
         print_error(f"Error getting skill: {e!s}")
         return False
 
@@ -116,6 +116,6 @@ def handle_skills_search(query: str) -> bool:
 
         return True
     except Exception as e:
-        logger.error(f"Error searching skills: {e}", exc_info=True)
+        logger.error("Error searching skills: %s", e, exc_info=True)
         print_error(f"Error searching skills: {e!s}")
         return False

@@ -119,7 +119,7 @@ class ConfigValidator:
         for json_file in self.config_dir.rglob("*.json"):
             config_files.append((json_file, "json"))
 
-        logger.info(f"Found {len(config_files)} configuration files")
+        logger.info("Found %s configuration files", len(config_files))
         return config_files
 
     def _validate_config_file(
@@ -136,7 +136,7 @@ class ConfigValidator:
         }
 
         if verbose:
-            logger.info(f"Validating {file_type.upper()}: {file_path}")
+            logger.info("Validating %s: %s", file_type.upper(), file_path)
 
         # Load the configuration
         config = self._load_config_file(file_path, file_type, result)

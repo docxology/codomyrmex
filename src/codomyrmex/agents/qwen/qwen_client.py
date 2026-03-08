@@ -234,7 +234,7 @@ class QwenClient(APIAgentBase):
                         yield delta.content
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"Qwen streaming error: {e}", exc_info=True)
+            self.logger.error("Qwen streaming error: %s", e, exc_info=True)
             yield f"Error: {e!s}"
 
     # --- Tool calling ---

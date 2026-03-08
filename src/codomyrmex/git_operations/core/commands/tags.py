@@ -59,7 +59,7 @@ def list_tags(repository_path: str | None = None) -> list[str]:
         )
 
         tags = [tag.strip() for tag in result.stdout.strip().split("\n") if tag.strip()]
-        logger.debug(f"Found {len(tags)} tags")
+        logger.debug("Found %s tags", len(tags))
         return tags
 
     except subprocess.CalledProcessError as e:

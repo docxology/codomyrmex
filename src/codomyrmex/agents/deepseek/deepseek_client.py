@@ -119,5 +119,5 @@ class DeepSeekClient(APIAgentBase):
                         yield delta.content
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"DeepSeek streaming error: {e}", exc_info=True)
+            self.logger.error("DeepSeek streaming error: %s", e, exc_info=True)
             yield f"Error: {e!s}"

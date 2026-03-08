@@ -156,5 +156,5 @@ class ToolRegistry:
             )
             registry.register(tool)
 
-        registry.logger.info(f"Bridged {len(registry._tools)} tools from MCP registry")
+        registry.logger.info("Bridged %s tools from MCP registry", len(registry._tools))
         return registry

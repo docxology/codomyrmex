@@ -112,7 +112,7 @@ class Market:
                 best_agent["active_tasks"] += 1
 
         self._allocations.extend(new_allocations)
-        logger.info(f"Allocated {len(new_allocations)} tasks to agents")
+        logger.info("Allocated %s tasks to agents", len(new_allocations))
 
         return {
             "allocated": len(new_allocations),

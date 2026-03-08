@@ -169,7 +169,7 @@ def list_remotes(repository_path: str | None = None) -> list[dict[str, str]]:
                             if remote["name"] == name and fetch_or_push == "(push)":
                                 remote["push"] = url
 
-        logger.debug(f"Found {len(remotes)} remotes")
+        logger.debug("Found %s remotes", len(remotes))
         return remotes
 
     except subprocess.CalledProcessError as e:

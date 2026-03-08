@@ -172,7 +172,7 @@ For complete documentation, see:
             logger.error("No modules found to document")
             return 1
 
-        logger.info(f"Found {len(modules)} modules to document")
+        logger.info("Found %s modules to document", len(modules))
 
         generated_count = 0
 

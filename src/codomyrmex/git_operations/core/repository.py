@@ -146,7 +146,7 @@ class RepositoryManager:
 
                     self.repositories[repo.full_name] = repo
 
-            logger.info(f"Loaded {len(self.repositories)} repositories from library")
+            logger.info("Loaded %s repositories from library", len(self.repositories))
 
         except Exception as e:
             logger.error("Error loading repository library: %s", e)

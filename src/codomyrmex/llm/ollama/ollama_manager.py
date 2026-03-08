@@ -245,7 +245,7 @@ class OllamaManager:
                     # Update cache
                     self._models_cache = models
                     self._cache_timestamp = current_time
-                    self.logger.info(f"Found {len(models)} Ollama models via HTTP API")
+                    self.logger.info("Found %s Ollama models via HTTP API", len(models))
                     return models
             except requests.exceptions.RequestException as e:
                 self.logger.warning("HTTP API failed, falling back to CLI: %s", e)
@@ -301,7 +301,7 @@ class OllamaManager:
             self._models_cache = models
             self._cache_timestamp = current_time
 
-            self.logger.info(f"Found {len(models)} Ollama models via CLI")
+            self.logger.info("Found %s Ollama models via CLI", len(models))
             return models
 
         except Exception as e:
@@ -444,7 +444,7 @@ class OllamaManager:
                         )
                         # Update model name to match what's actually available
                         if matching_models:
-                            self.logger.info(f"Using model: {matching_models[0]}")
+                            self.logger.info("Using model: %s", matching_models[0])
                         return True
 
                     # If pull completed, assume success even if not in list yet

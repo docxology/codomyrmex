@@ -92,7 +92,7 @@ class MistralVibeClient(CLIAgentBase):
                 f"Mistral Vibe command failed: {e!s}", command=self.command
             ) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"Mistral Vibe execution failed: {e}", exc_info=True)
+            self.logger.error("Mistral Vibe execution failed: %s", e, exc_info=True)
             raise MistralVibeError(
                 f"Mistral Vibe command failed: {e!s}", command=self.command
             ) from e

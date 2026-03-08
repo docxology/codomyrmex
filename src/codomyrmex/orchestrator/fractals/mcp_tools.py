@@ -45,7 +45,7 @@ def orchestrate_fractal_task(task_description: str, max_depth: int = 3, provider
 
         # 3. Execution
         leaves = planned_tree.get_leaves()
-        logger.info(f"Executing {len(leaves)} atomic tasks in {target_dir}")
+        logger.info("Executing %s atomic tasks in %s", len(leaves), target_dir)
 
         # In this synchronous wrapping, we execute sequentially. Over async boundaries, we could
         # gather them concurrently.

@@ -397,7 +397,7 @@ class Workflow:
             if not runnable:
                 break
 
-            self.logger.info(f"Running batch: {[t.name for t in runnable]}")
+            self.logger.info("Running batch: %s", [t.name for t in runnable])
 
             # Run tasks concurrently
             coroutines = []

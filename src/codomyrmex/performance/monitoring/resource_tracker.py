@@ -433,7 +433,7 @@ def benchmark_resource_usage(
         try:
             func(*args, **kwargs)
         except Exception as e:
-            logger.error(f"Benchmark iteration {i + 1} failed: {e}")
+            logger.error("Benchmark iteration %s failed: %s", i + 1, e)
 
         tracking_result = tracker.stop_tracking(f"{func.__name__}_iteration_{i + 1}")
         results.append(tracking_result)

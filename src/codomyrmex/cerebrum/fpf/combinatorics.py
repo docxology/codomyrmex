@@ -130,7 +130,7 @@ class FPFCombinatoricsAnalyzer:
         # Sort by similarity
         pairs_analysis.sort(key=lambda x: x["similarity"], reverse=True)
 
-        self.logger.info(f"Analyzed {len(pairs_analysis)} pattern pairs")
+        self.logger.info("Analyzed %s pattern pairs", len(pairs_analysis))
         return {
             "total_pairs": len(pairs_analysis),
             "high_similarity_pairs": [
@@ -208,7 +208,7 @@ class FPFCombinatoricsAnalyzer:
 
         chain_analysis.sort(key=lambda x: x["avg_importance"], reverse=True)
 
-        self.logger.info(f"Found {len(chains)} dependency chains")
+        self.logger.info("Found %s dependency chains", len(chains))
         return {
             "total_chains": len(chains),
             "longest_chains": sorted(chains, key=len, reverse=True)[:10],
@@ -244,7 +244,7 @@ class FPFCombinatoricsAnalyzer:
         # Analyze concept clusters
         concept_clusters = self._find_concept_clusters(cooccurrence, min_weight=3)
 
-        self.logger.info(f"Found {len(strong_pairs)} strong concept co-occurrences")
+        self.logger.info("Found %s strong concept co-occurrences", len(strong_pairs))
         return {
             "cooccurrence_matrix": {
                 k: dict(v) for k, v in list(cooccurrence.items())[:50]
@@ -295,7 +295,7 @@ class FPFCombinatoricsAnalyzer:
             pair = tuple(sorted([rel["source_part"], rel["target_part"]]))
             part_pair_counts[pair] += 1
 
-        self.logger.info(f"Found {len(cross_part_rels)} cross-part relationships")
+        self.logger.info("Found %s cross-part relationships", len(cross_part_rels))
         return {
             "total_cross_part_relationships": len(cross_part_rels),
             "relationships": cross_part_rels[:50],

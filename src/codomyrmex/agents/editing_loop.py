@@ -196,7 +196,7 @@ class EditingOrchestrator:
 
             # 1. Plan
             plan = self._plan(task, feedback)
-            logger.info(f"[EditLoop] Plan generated ({len(plan)} chars)")
+            logger.info("[EditLoop] Plan generated (%s chars)", len(plan))
 
             # 2. Edit
             edit_summary = self._edit(task, plan)
@@ -267,7 +267,7 @@ class EditingOrchestrator:
         tasks = [EditTask(description=item, edit_type="todo") for item in items]
 
         orch = cls(config=config)
-        logger.info(f"[EditLoop] from_todo: {len(tasks)} tasks from {path.name}")
+        logger.info("[EditLoop] from_todo: %s tasks from %s", len(tasks), path.name)
         return orch, tasks
 
     # ── Private: Plan ────────────────────────────────────────────────

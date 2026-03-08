@@ -79,7 +79,7 @@ class ToolsMixin:
         try:
             return handler(**tool_input)
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"Tool execution failed: {tool_name}", exc_info=True)
+            self.logger.error("Tool execution failed: %s", tool_name, exc_info=True)
             raise ClaudeError(
                 f"Tool execution failed: {e}",
                 api_error=str(e),

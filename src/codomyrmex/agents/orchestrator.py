@@ -175,7 +175,7 @@ class ConversationLog:
             f.write(json.dumps(self.summary()) + "\n")
             for turn in self.turns:
                 f.write(json.dumps(asdict(turn)) + "\n")
-        logger.info(f"[Orchestrator] Exported {len(self.turns)} turns to {p}")
+        logger.info("[Orchestrator] Exported %s turns to %s", len(self.turns), p)
         return p
 
 
@@ -488,7 +488,7 @@ class ConversationOrchestrator:
             # Re-seed into the relay so agents can read it natively if needed
             self.relay.post_message(turn.speaker, turn.content)
 
-        logger.info(f"[Orchestrator] Loaded {len(self.log.turns)} turns from {p}")
+        logger.info("[Orchestrator] Loaded %s turns from %s", len(self.log.turns), p)
 
     @classmethod
     def dev_loop(

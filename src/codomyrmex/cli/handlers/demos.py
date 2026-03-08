@@ -35,7 +35,7 @@ def demo_data_visualization() -> bool:
         print("❌ Data visualization module not available")
         return False
     except Exception as e:
-        logger.error(f"Data visualization demo failed: {e}", exc_info=True)
+        logger.error("Data visualization demo failed: %s", e, exc_info=True)
         print(f"❌ Demo failed: {e!s}")
         return False
 
@@ -64,7 +64,7 @@ def demo_ai_code_editing() -> bool:
         print("❌ AI code editing module not available")
         return False
     except Exception as e:
-        logger.error(f"AI code editing demo failed: {e}", exc_info=True)
+        logger.error("AI code editing demo failed: %s", e, exc_info=True)
         print(f"❌ Demo failed: {e!s}")
         return False
 
@@ -103,7 +103,7 @@ for i in range(8):
         print("❌ Code execution sandbox module not available")
         return False
     except Exception as e:
-        logger.error(f"Code execution demo failed: {e}", exc_info=True)
+        logger.error("Code execution demo failed: %s", e, exc_info=True)
         print(f"❌ Demo failed: {e!s}")
         return False
 
@@ -126,7 +126,7 @@ def demo_git_operations() -> bool:
         print("❌ Git operations module not available")
         return False
     except Exception as e:
-        logger.error(f"Git operations demo failed: {e}", exc_info=True)
+        logger.error("Git operations demo failed: %s", e, exc_info=True)
         print(f"❌ Demo failed: {e!s}")
         return False
 

@@ -77,7 +77,7 @@ class GitVisualizationDemo:
         self._generate_overall_summary(results, repository_path)
 
         success_count = sum(1 for r in results.values() if r)
-        logger.info(f"Demo run completed. Successful: {success_count}/{len(results)}")
+        logger.info("Demo run completed. Successful: %s/%s", success_count, len(results))
 
         return success_count > 0
 
@@ -307,7 +307,7 @@ class GitVisualizationDemo:
         )
 
         success_count = sum(1 for success in results.values() if success)
-        logger.info(f"Sample data demo: {success_count}/{len(results)} successful")
+        logger.info("Sample data demo: %s/%s successful", success_count, len(results))
 
         return success_count > 0
 

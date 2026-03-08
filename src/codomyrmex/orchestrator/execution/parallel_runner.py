@@ -297,7 +297,7 @@ class BatchRunner:
         results = []
 
         for i, batch in enumerate(batches):
-            logger.info(f"Running batch {i + 1}/{len(batches)} ({len(batch)} scripts)")
+            logger.info("Running batch %s/%s (%s scripts)", i + 1, len(batches), len(batch))
 
             result = self.parallel_runner.run_scripts(
                 scripts=batch, timeout=timeout, cwd=cwd
@@ -305,7 +305,7 @@ class BatchRunner:
             results.append(result)
 
             if stop_on_batch_failure and not result.success:
-                logger.warning(f"Batch {i + 1} failed, stopping")
+                logger.warning("Batch %s failed, stopping", i + 1)
                 break
 
         return results

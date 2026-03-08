@@ -59,7 +59,7 @@ class MixnetProxy:
 
         # Select random path
         path = random.sample(self._nodes, k=min(hops, len(self._nodes)))
-        logger.info(f"Routing packet {route_id} via {len(path)} hops")
+        logger.info("Routing packet %s via %s hops", route_id, len(path))
 
         current_packet = packet
         for node in path:

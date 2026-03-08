@@ -126,6 +126,6 @@ if __name__ == "__main__":
 
             # Test getting commit history
             commits = get_commit_history(limit=5, repository_path=os.getcwd())
-            logger.info(f"Recent commits: {len(commits)}")
+            logger.info("Recent commits: %s", len(commits))
     else:
         logger.warning("Git is not available. Cannot test Git operations.")

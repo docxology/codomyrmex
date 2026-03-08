@@ -161,7 +161,7 @@ class OpenAICodex:
             logger.error("Configuration error: %s", e)
             raise RuntimeError(f"Code generation failed: {e}") from e
         except (RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Error generating code: {e}", exc_info=True)
+            logger.error("Error generating code: %s", e, exc_info=True)
             raise RuntimeError(f"Code generation failed: {e}") from e
 
     def complete_code(
@@ -263,7 +263,7 @@ class OpenAICodex:
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Error editing code: {e}", exc_info=True)
+            logger.error("Error editing code: %s", e, exc_info=True)
             raise RuntimeError(f"Code editing failed: {e}") from e
 
     def explain_code(
@@ -332,7 +332,7 @@ class OpenAICodex:
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Error explaining code: {e}", exc_info=True)
+            logger.error("Error explaining code: %s", e, exc_info=True)
             raise RuntimeError(f"Code explanation failed: {e}") from e
 
     def _build_system_prompt(self, language: str) -> str:

@@ -73,7 +73,7 @@ class Scraper(BaseScraper):
                     context={"error_type": type(e).__name__},
                 ) from e
 
-        logger.debug(f"Scraper initialized with config: {self.config.to_dict()}")
+        logger.debug("Scraper initialized with config: %s", self.config.to_dict())
 
     def scrape(self, url: str, options: ScrapeOptions | None = None) -> ScrapeResult:
         """Scrape a single URL.
@@ -260,7 +260,7 @@ class Scraper(BaseScraper):
                     value=url,
                 )
 
-        logger.info(f"Extracting data from {len(urls)} URL(s)")
+        logger.info("Extracting data from %s URL(s)", len(urls))
         try:
             result = self.adapter.extract(urls, schema, prompt)
             logger.info("Extraction completed, status: %s", result.status)

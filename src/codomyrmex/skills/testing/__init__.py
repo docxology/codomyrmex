@@ -72,7 +72,7 @@ class SkillTestRunner:
         """
         results = []
         skill_name = getattr(getattr(skill, "metadata", None), "name", str(skill))
-        logger.info(f"Running {len(test_cases)} test cases for skill: {skill_name}")
+        logger.info("Running %s test cases for skill: %s", len(test_cases), skill_name)
 
         for case in test_cases:
             name = case.get("name", "unnamed")

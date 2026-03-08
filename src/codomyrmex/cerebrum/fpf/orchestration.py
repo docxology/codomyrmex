@@ -130,7 +130,7 @@ class FPFOrchestrator:
             )
             cases.append(case)
 
-        self.logger.info(f"Created {len(cases)} cases from FPF patterns")
+        self.logger.info("Created %s cases from FPF patterns", len(cases))
         return cases
 
     def build_bayesian_network_from_fpf(self) -> BayesianNetwork:
@@ -181,7 +181,7 @@ class FPFOrchestrator:
             },
         )
 
-        self.logger.info(f"Built Bayesian network with {len(network.nodes)} nodes")
+        self.logger.info("Built Bayesian network with %s nodes", len(network.nodes))
         return network
 
     def analyze_with_case_based_reasoning(self) -> dict[str, Any]:
@@ -499,7 +499,7 @@ class FPFOrchestrator:
                     json.dump(network_data, f, indent=2)
                 self.logger.info("Exported Bayesian network raw data to %s", json_path)
             except Exception as e:
-                self.logger.warning(f"Failed to visualize network: {e}", exc_info=True)
+                self.logger.warning("Failed to visualize network: %s", e, exc_info=True)
 
         # Visualize case similarity
         try:
@@ -930,7 +930,7 @@ class FPFOrchestrator:
         try:
             self.generate_visualizations(results)
         except Exception as e:
-            self.logger.error(f"Visualization generation failed: {e}", exc_info=True)
+            self.logger.error("Visualization generation failed: %s", e, exc_info=True)
             # Continue even if visualization fails
 
         self.logger.info("Analysis complete. Results saved to %s", self.output_dir)

@@ -306,7 +306,7 @@ class ClaudeTaskMaster:
             raise RuntimeError(f"Task execution failed: {e}") from None
         except (RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
-            logger.error(f"Error executing task: {e}", exc_info=True)
+            logger.error("Error executing task: %s", e, exc_info=True)
             return {
                 "task_id": task_id,
                 "task": task,
@@ -356,7 +356,7 @@ class ClaudeTaskMaster:
                 yield from stream.text_stream
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Streaming error: {e}", exc_info=True)
+            logger.error("Streaming error: %s", e, exc_info=True)
             yield f"Error: {e!s}"
 
     def decompose_task(
@@ -441,7 +441,7 @@ class ClaudeTaskMaster:
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Error decomposing task: {e}", exc_info=True)
+            logger.error("Error decomposing task: %s", e, exc_info=True)
             raise RuntimeError(f"Task decomposition failed: {e}") from None
 
     def analyze_task(
@@ -513,7 +513,7 @@ class ClaudeTaskMaster:
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Error analyzing task: {e}", exc_info=True)
+            logger.error("Error analyzing task: %s", e, exc_info=True)
             raise RuntimeError(f"Task analysis failed: {e}") from None
 
     def plan_workflow(
@@ -592,7 +592,7 @@ class ClaudeTaskMaster:
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Error planning workflow: {e}", exc_info=True)
+            logger.error("Error planning workflow: %s", e, exc_info=True)
             raise RuntimeError(f"Workflow planning failed: {e}") from None
 
     def generate_code(
@@ -668,7 +668,7 @@ class ClaudeTaskMaster:
             }
 
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            logger.error(f"Error generating code: {e}", exc_info=True)
+            logger.error("Error generating code: %s", e, exc_info=True)
             raise RuntimeError(f"Code generation failed: {e}") from None
 
     def get_usage_stats(self) -> dict[str, Any]:

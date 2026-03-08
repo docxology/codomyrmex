@@ -41,7 +41,7 @@ def handle_code_analysis(path: str, output_dir: str | None) -> bool:
         OSError,
         FileNotFoundError,
     ) as e:
-        logger.error(f"Error analyzing code: {e}", exc_info=True)
+        logger.error("Error analyzing code: %s", e, exc_info=True)
         print_error(f"Error analyzing code: {e!s}")
         return False
 
@@ -67,7 +67,7 @@ def handle_git_analysis(repo_path: str) -> bool:
         print_error("Git operations or data visualization modules not available")
         return False
     except Exception as e:
-        logger.error(f"Error analyzing git repository: {e}", exc_info=True)
+        logger.error("Error analyzing git repository: %s", e, exc_info=True)
         print_error(f"Error analyzing git repository: {e!s}")
         return False
 
@@ -123,6 +123,6 @@ def handle_module_test(module_name: str) -> bool:
         return result.returncode == 0
 
     except Exception as e:
-        logger.error(f"Error testing module: {e}", exc_info=True)
+        logger.error("Error testing module: %s", e, exc_info=True)
         print_error(f"Error testing module: {e!s}")
         return False

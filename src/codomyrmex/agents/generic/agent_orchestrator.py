@@ -58,7 +58,7 @@ class AgentOrchestrator:
         if not agents_to_use:
             raise AgentError("No agents available for orchestration")
 
-        self.logger.info(f"Executing parallel request on {len(agents_to_use)} agents")
+        self.logger.info("Executing parallel request on %s agents", len(agents_to_use))
 
         responses = [None] * len(agents_to_use)
         import concurrent.futures
@@ -114,7 +114,7 @@ class AgentOrchestrator:
         if not agents_to_use:
             raise AgentError("No agents available for orchestration")
 
-        self.logger.info(f"Executing sequential request on {len(agents_to_use)} agents")
+        self.logger.info("Executing sequential request on %s agents", len(agents_to_use))
 
         responses = []
         for agent in agents_to_use:
@@ -157,7 +157,7 @@ class AgentOrchestrator:
         if not agents_to_use:
             raise AgentError("No agents available for orchestration")
 
-        self.logger.info(f"Executing with fallback on {len(agents_to_use)} agents")
+        self.logger.info("Executing with fallback on %s agents", len(agents_to_use))
 
         last_error_response = None
 

@@ -88,7 +88,7 @@ class ExamplesValidator:
 
         # Discover modules
         self.modules = self._discover_modules()
-        logger.info(f"Discovered {len(self.modules)} modules to validate")
+        logger.info("Discovered %s modules to validate", len(self.modules))
 
     def _discover_modules(self) -> list[str]:
         """Discover all module directories in the examples/scripts folder."""

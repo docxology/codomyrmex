@@ -161,4 +161,4 @@ class PerformanceLogger:
         extra = {"metric_name": name, "metric_value": value, "context": context or {}}
         if unit:
             extra["metric_unit"] = unit
-        self.logger.info(f"Metric: {name} = {value}", extra=extra)
+        self.logger.info("Metric: %s = %s", name, value, extra=extra)

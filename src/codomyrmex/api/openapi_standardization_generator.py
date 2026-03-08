@@ -115,7 +115,7 @@ class StandardizationOpenAPIGenerator:
             {"url": self.base_url, "description": f"{api.title} v{api.version}"}
         ]
 
-        logger.debug(f"Added REST API with {len(api.get_endpoints())} endpoints")
+        logger.debug("Added REST API with %s endpoints", len(api.get_endpoints()))
 
     def add_graphql_api(self, api: GraphQLAPI) -> None:
         """

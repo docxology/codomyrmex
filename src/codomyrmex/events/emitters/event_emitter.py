@@ -181,7 +181,7 @@ class EventEmitter:
         if tasks:
             try:
                 await asyncio.gather(*tasks, return_exceptions=True)
-                logger.debug(f"Emitted {len(tasks)} events in batch from {self.source}")
+                logger.debug("Emitted %s events in batch from %s", len(tasks), self.source)
             except (RuntimeError, AttributeError) as e:
                 logger.error("Failed to emit batch events: %s", e)
 

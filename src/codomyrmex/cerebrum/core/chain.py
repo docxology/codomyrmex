@@ -49,7 +49,7 @@ class ReasoningChain:
         Returns:
             Execution result
         """
-        self.logger.info(f"Executing reasoning chain with {len(self.steps)} steps")
+        self.logger.info("Executing reasoning chain with %s steps", len(self.steps))
         completed_steps = 0
         for step in self.steps:
             try:

@@ -134,7 +134,7 @@ def parse_code_blocks(text: str, language: str | None = None) -> list[CodeBlock]
             )
         )
 
-    logger.debug(f"Extracted {len(blocks)} code blocks")
+    logger.debug("Extracted %s code blocks", len(blocks))
     return blocks
 
 

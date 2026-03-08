@@ -360,7 +360,7 @@ class ConsensusBuilder:
 
             consensus = self.check_consensus(key, len(agents))
             if consensus is not None:
-                logger.info(f"Consensus reached for {key} in round {round_num + 1}")
+                logger.info("Consensus reached for %s in round %s", key, round_num + 1)
                 return consensus
 
             await asyncio.sleep(0.1)  # Brief delay between rounds

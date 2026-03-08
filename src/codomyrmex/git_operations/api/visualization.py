@@ -101,7 +101,7 @@ def create_git_analysis_report(
         }
 
     except Exception as e:
-        logger.error(f"Error creating Git analysis report: {e}", exc_info=True)
+        logger.error("Error creating Git analysis report: %s", e, exc_info=True)
         return {"error": str(e)}
 
 
@@ -174,7 +174,7 @@ def visualize_git_branches(
         return {"error": f"Unsupported format: {format_type}"}
 
     except Exception as e:
-        logger.error(f"Error creating Git branch visualization: {e}", exc_info=True)
+        logger.error("Error creating Git branch visualization: %s", e, exc_info=True)
         return {"error": str(e)}
 
 
@@ -336,7 +336,7 @@ def create_git_workflow_diagram(
         }
 
     except Exception as e:
-        logger.error(f"Error creating Git workflow diagram: {e}", exc_info=True)
+        logger.error("Error creating Git workflow diagram: %s", e, exc_info=True)
         return {"error": str(e)}
 
 
@@ -392,7 +392,7 @@ def analyze_repository_structure(
         }
 
     except Exception as e:
-        logger.error(f"Error analyzing repository structure: {e}", exc_info=True)
+        logger.error("Error analyzing repository structure: %s", e, exc_info=True)
         return {"error": str(e)}
 
 
@@ -444,7 +444,7 @@ def get_repository_metadata(repository_path: str) -> dict[str, Any]:
         return metadata
 
     except Exception as e:
-        logger.error(f"Error getting repository metadata: {e}", exc_info=True)
+        logger.error("Error getting repository metadata: %s", e, exc_info=True)
         return {"error": str(e)}
 
 

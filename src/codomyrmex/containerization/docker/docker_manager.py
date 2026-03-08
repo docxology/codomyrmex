@@ -103,7 +103,7 @@ class DockerManager:
             return {"success": False, "error": "Docker client not available"}
 
         try:
-            logger.info(f"Building Docker image: {config.get_full_image_name()}")
+            logger.info("Building Docker image: %s", config.get_full_image_name())
 
             # Prepare build arguments
             build_kwargs = {
@@ -145,11 +145,11 @@ class DockerManager:
                 )
                 result["push_result"] = push_result
 
-            logger.info(f"Successfully built image: {config.get_full_image_name()}")
+            logger.info("Successfully built image: %s", config.get_full_image_name())
             return result
 
         except Exception as e:
-            logger.error(f"Failed to build image {config.get_full_image_name()}: {e}")
+            logger.error("Failed to build image %s: %s", config.get_full_image_name(), e)
             return {"success": False, "error": str(e)}
 
     def push_image(
@@ -209,7 +209,7 @@ class DockerManager:
             return {"success": False, "error": "Docker client not available"}
 
         try:
-            logger.info(f"Running container: {config.get_full_image_name()}")
+            logger.info("Running container: %s", config.get_full_image_name())
 
             # Prepare run arguments
             run_kwargs = {
@@ -254,7 +254,7 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error(f"Failed to run container {config.get_full_image_name()}: {e}")
+            logger.error("Failed to run container %s: %s", config.get_full_image_name(), e)
             return {"success": False, "error": str(e)}
 
     def list_containers(self, show_all: bool = False) -> list[dict[str, Any]]:

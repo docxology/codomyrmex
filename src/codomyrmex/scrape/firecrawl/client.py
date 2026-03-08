@@ -307,7 +307,7 @@ class FirecrawlClient:
             print(result["data"])
             ```
         """
-        logger.debug(f"Extracting data with Firecrawl from {len(urls)} URL(s)")
+        logger.debug("Extracting data with Firecrawl from %s URL(s)", len(urls))
 
         try:
             # Note: Adjust method name and parameters based on actual Firecrawl SDK API

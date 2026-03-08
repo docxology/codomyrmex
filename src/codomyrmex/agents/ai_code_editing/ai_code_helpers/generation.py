@@ -179,7 +179,7 @@ def generate_code_snippet(
         raise RuntimeError(f"Code generation failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
-        logger.error(f"Unexpected error generating code snippet: {e}", exc_info=True)
+        logger.error("Unexpected error generating code snippet: %s", e, exc_info=True)
         raise RuntimeError(f"Code generation failed: {e}") from None
 
 
@@ -244,7 +244,7 @@ def generate_code_batch(
                 execution_time=0.0,
             )
         except Exception as e:
-            logger.error(f"Unexpected error processing request: {e}", exc_info=True)
+            logger.error("Unexpected error processing request: %s", e, exc_info=True)
             return CodeGenerationResult(
                 generated_code="",
                 language=request.language,
@@ -401,5 +401,5 @@ def generate_code_documentation(
         raise RuntimeError(f"Documentation generation failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
-        logger.error(f"Unexpected error generating documentation: {e}", exc_info=True)
+        logger.error("Unexpected error generating documentation: %s", e, exc_info=True)
         raise RuntimeError(f"Documentation generation failed: {e}") from None

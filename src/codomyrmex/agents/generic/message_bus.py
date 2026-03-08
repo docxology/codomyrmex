@@ -84,7 +84,7 @@ class MessageBus:
                     OSError,
                     TypeError,
                 ) as e:
-                    self.logger.error(f"Error in message handler: {e}", exc_info=True)
+                    self.logger.error("Error in message handler: %s", e, exc_info=True)
 
         # Publish to wildcard subscribers
         if "*" in self.subscribers:

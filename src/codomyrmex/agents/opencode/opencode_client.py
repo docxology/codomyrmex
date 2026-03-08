@@ -83,7 +83,7 @@ class OpenCodeClient(CLIAgentBase):
                 f"OpenCode command failed: {e!s}", command=self.command
             ) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"OpenCode execution failed: {e}", exc_info=True)
+            self.logger.error("OpenCode execution failed: %s", e, exc_info=True)
             raise OpenCodeError(
                 f"OpenCode command failed: {e!s}", command=self.command
             ) from e

@@ -141,7 +141,7 @@ def get_pull_requests(
 
         if response.status_code == 200:
             prs = response.json()
-            logger.info(f"Found {len(prs)} {state} PRs")
+            logger.info("Found %s %s PRs", len(prs), state)
 
             return [
                 {
@@ -283,7 +283,7 @@ async def async_list_pull_requests(
 
     if status == 200:
         prs = data
-        logger.info(f"[ASYNC] Found {len(prs)} {state} PRs")
+        logger.info("[ASYNC] Found %s %s PRs", len(prs), state)
 
         return [
             {

@@ -49,7 +49,7 @@ def get_commit_history(
                         }
                     )
 
-        logger.debug(f"Retrieved {len(commits)} commits")
+        logger.debug("Retrieved %s commits", len(commits))
         return commits
 
     except subprocess.CalledProcessError as e:
@@ -203,7 +203,7 @@ def get_commit_history_filtered(
                         }
                     )
 
-        logger.debug(f"Retrieved {len(commits)} filtered commits")
+        logger.debug("Retrieved %s filtered commits", len(commits))
         return commits
 
     except subprocess.CalledProcessError as e:

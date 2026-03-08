@@ -125,7 +125,7 @@ class HealthReporter:
         report = HealthReport()
         report.total_modules = len(modules)
 
-        logger.info(f"Starting health check for {len(modules)} modules")
+        logger.info("Starting health check for %s modules", len(modules))
 
         # Perform health checks for each module
         for module_name in modules:

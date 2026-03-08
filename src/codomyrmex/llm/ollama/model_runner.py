@@ -219,7 +219,7 @@ class ModelRunner:
         Returns:
             List of ModelExecutionResult objects
         """
-        self.logger.info(f"Running batch of {len(prompts)} prompts with {model_name}")
+        self.logger.info("Running batch of %s prompts with %s", len(prompts), model_name)
 
         async def run_batch_async():
             semaphore = asyncio.Semaphore(max_concurrent)
@@ -362,7 +362,7 @@ class ModelRunner:
         total_start_time = time.time()
 
         for i, prompt in enumerate(test_prompts):
-            self.logger.info(f"Running benchmark prompt {i + 1}/{len(test_prompts)}")
+            self.logger.info("Running benchmark prompt %s/%s", i + 1, len(test_prompts))
 
             result = self.run_with_options(model_name, prompt, options)
 
@@ -426,7 +426,7 @@ class ModelRunner:
         Returns:
             Comparison results dictionary
         """
-        self.logger.info(f"Comparing {len(model_names)} models on the same prompt")
+        self.logger.info("Comparing %s models on the same prompt", len(model_names))
 
         comparison_results = {}
 

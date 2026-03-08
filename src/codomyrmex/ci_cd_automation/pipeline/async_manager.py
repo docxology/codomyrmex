@@ -508,7 +508,7 @@ class AsyncPipelineManager:
                         data = await response.json()
                         runs = data.get("workflow_runs", [])
 
-                        logger.info(f"[ASYNC] Found {len(runs)} workflow runs")
+                        logger.info("[ASYNC] Found %s workflow runs", len(runs))
 
                         return AsyncPipelineResult(
                             pipeline_id="workflow_runs",

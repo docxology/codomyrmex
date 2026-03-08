@@ -148,5 +148,5 @@ def refactor_code_snippet(
         raise RuntimeError(f"Code refactoring failed: {e}") from None
     except Exception as e:
         # Final fallback for unexpected API errors or network issues
-        logger.error(f"Unexpected error refactoring code: {e}", exc_info=True)
+        logger.error("Unexpected error refactoring code: %s", e, exc_info=True)
         raise RuntimeError(f"Code refactoring failed: {e}") from None

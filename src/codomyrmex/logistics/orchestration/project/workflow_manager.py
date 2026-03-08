@@ -101,7 +101,7 @@ class WorkflowManager:
         if name in self.workflows:
             logger.warning("Overwriting existing workflow: %s", name)
         self.workflows[name] = steps
-        logger.info(f"Created workflow: {name} with {len(steps)} steps")
+        logger.info("Created workflow: %s with %s steps", name, len(steps))
         return True
 
     def get_workflow(self, name: str) -> list[WorkflowStep] | None:

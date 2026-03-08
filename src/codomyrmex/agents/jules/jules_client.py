@@ -133,7 +133,7 @@ class JulesClient(CLIAgentBase):
                     f"Jules command failed: {e}", command=self.command
                 ) from e
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-                self.logger.error(f"Jules execution failed: {e}", exc_info=True)
+                self.logger.error("Jules execution failed: %s", e, exc_info=True)
                 raise JulesError(
                     f"Jules command failed: {e}", command=self.command
                 ) from e

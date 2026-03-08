@@ -87,7 +87,7 @@ def list_issues(
             # To get only issues, check if 'pull_request' key is present in item.
             all_items = response.json()
             issues = [item for item in all_items if "pull_request" not in item]
-            logger.info(f"Found {len(issues)} issues")
+            logger.info("Found %s issues", len(issues))
             return issues
         error_msg = f"Failed to list issues: {response.status_code} - {response.text}"
         logger.error(error_msg)
@@ -270,7 +270,7 @@ async def async_list_issues(
         all_items = data
         # Filter out pull requests (GitHub API includes PRs in issues endpoint)
         issues = [item for item in all_items if "pull_request" not in item]
-        logger.info(f"[ASYNC] Found {len(issues)} issues")
+        logger.info("[ASYNC] Found %s issues", len(issues))
         return issues  # type: ignore
     error_msg = f"Failed to list issues: {status}"
     if isinstance(data, dict):

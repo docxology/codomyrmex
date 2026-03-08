@@ -85,7 +85,7 @@ class PAISimulator:
 
         if command not in self.triggers:
             logger.error("Command not found: %s", command)
-            logger.info(f"Available commands: {list(self.triggers.keys())}")
+            logger.info("Available commands: %s", list(self.triggers.keys()))
             return False
 
         trigger = self.triggers[command]
@@ -111,7 +111,7 @@ class PAISimulator:
             logger.warning("No executable blocks found in workflow.")
             return True
 
-        logger.info(f"Found {len(blocks)} executable blocks.")
+        logger.info("Found %s executable blocks.", len(blocks))
 
         success = True
         for i, (lang, code) in enumerate(blocks, 1):

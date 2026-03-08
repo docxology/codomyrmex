@@ -220,7 +220,7 @@ def stream_command(
 
     except Exception as e:
         duration = time.perf_counter() - start_time
-        logger.error(f"Error streaming command: {e}", exc_info=True)
+        logger.error("Error streaming command: %s", e, exc_info=True)
         return SubprocessResult(
             stdout="\n".join(stdout_lines),
             stderr="\n".join(stderr_lines),

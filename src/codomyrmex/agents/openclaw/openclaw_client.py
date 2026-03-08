@@ -91,7 +91,7 @@ class OpenClawClient(CLIAgentBase):
                 f"OpenClaw command failed: {e!s}", command=self.command
             ) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"OpenClaw execution failed: {e}", exc_info=True)
+            self.logger.error("OpenClaw execution failed: %s", e, exc_info=True)
             raise OpenClawError(
                 f"OpenClaw command failed: {e!s}", command=self.command
             ) from e
@@ -167,7 +167,7 @@ class OpenClawClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"OpenClaw doctor failed: {e}", exc_info=True)
+            self.logger.error("OpenClaw doctor failed: %s", e, exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
     def send_message(self, target: str, message: str) -> dict[str, Any]:
@@ -189,7 +189,7 @@ class OpenClawClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"OpenClaw send_message failed: {e}", exc_info=True)
+            self.logger.error("OpenClaw send_message failed: %s", e, exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
     def start_gateway(self) -> dict[str, Any]:
@@ -203,7 +203,7 @@ class OpenClawClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
             }
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
-            self.logger.error(f"OpenClaw gateway start failed: {e}", exc_info=True)
+            self.logger.error("OpenClaw gateway start failed: %s", e, exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
     def get_gateway_status(self) -> dict[str, Any]:

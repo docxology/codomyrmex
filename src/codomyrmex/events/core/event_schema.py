@@ -373,7 +373,7 @@ class EventSchema:
             "required": ["alert_name", "alert_level", "message"],
         }
 
-        logger.info(f"Loaded {len(self.schemas)} standard event schemas")
+        logger.info("Loaded %s standard event schemas", len(self.schemas))
 
 
 # Convenience functions for creating common events

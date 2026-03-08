@@ -37,7 +37,7 @@ class InMemoryIndex:
                 self._index[token] = set()
             self._index[token].add(doc_id)
 
-        logger.debug(f"Indexed document {doc_id} with {len(tokens)} tokens")
+        logger.debug("Indexed document %s with %s tokens", doc_id, len(tokens))
 
     def remove(self, doc_id: str) -> None:
         """Remove a document from the index."""
