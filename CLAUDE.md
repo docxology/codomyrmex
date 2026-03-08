@@ -374,13 +374,7 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: MEMORY/WORK/20260307-000000_security-wontfix-batch/inspect_state.py (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/analyze_security.py (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/PRD.md (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/patch_security_wontfix.py (create)
-
-## Crash Recovery
-Last session (2026-03-07T16:25:03.036858) was not properly closed (crash/kill).
-Recorded 4 file changes before crash.
-Last changed files: MEMORY/WORK/20260307-000000_security-wontfix-batch/patch_security_wontfix.py, MEMORY/WORK/20260307-000000_security-wontfix-batch/PRD.md, MEMORY/WORK/20260307-000000_security-wontfix-batch/analyze_security.py, MEMORY/WORK/20260307-000000_security-wontfix-batch/inspect_state.py
-Bridge from previous session is valid (above).
-For details use: memory_search("changes last session")
+Files: MEMORY/WORK/20260307-000000_security-wontfix-batch/patch_remaining_wontfix.py (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/PRD.md (edit), MEMORY/WORK/20260307-120000_agents-droid-zero-mock-tests/PRD.md (create), MEMORY/WORK/20260307-120000_data-visualization-tests/PRD.md (create), .desloppify/external_review_sessions/ext_20260308_003142_dbbd0d5c/review_result.json (create), src/codomyrmex/tests/unit/agents/test_droid_full.py (create), src/codomyrmex/tests/unit/email/test_email_provider_full.py (create), .desloppify/external_review_sessions/ext_20260308_003142_dbbd0d5c/review_result.json (edit), src/codomyrmex/tests/unit/data_visualization/test_plotter_wrapper_and_gaps.py (create), src/codomyrmex/tests/unit/email/test_email_provider_full.py (edit)
+  ... and 4 more
 
 # === END COGNILAYER ===

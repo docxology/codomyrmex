@@ -15,10 +15,11 @@ This is the authoritative project backlog. Updated after each sprint.
 | Source files (non-test) | ~1,800+ | `find -name "*.py" -not -path "*/tests/*"` |
 | Total LOC (incl. tests) | ~560,000 | `wc -l` across all `.py` |
 | Test files | **944** | `find -name "test_*.py"` |
-| Test suite | **26,770** tests collected | `uv run pytest --collect-only` |
+| Test suite | **26,981** tests collected | `uv run pytest --collect-only` |
 | Ruff violations | **0** | `uv run ruff check .` ✅ |
 | ty diagnostics | **0** errors (264 warnings) | `uv run ty check src/` ✅ |
 | Coverage gate | `fail_under=32`; actual ~32% ✅ | Gate ratcheted (target: 40%) |
+| Coverage test files | **11** new (Sprint 28) | Targeting 11 modules |
 | MCP `@mcp_tool` decorators | **474** | `grep -r '@mcp_tool'` |
 | RASP documentation | 128/128 | Automated audit ✅ |
 | `py.typed` markers | **572** | PEP 561 ✅ |
@@ -35,31 +36,38 @@ This is the authoritative project backlog. Updated after each sprint.
 
 Current coverage is 32.34% (126,615 stmts). Need ~9,700 more statements covered.
 
-| Module | Coverage | Missing Stmts | Priority |
-| :--- | :--- | :--- | :--- |
-| `documentation` | 14.1% | 3,716 | **P1** — largest gap |
-| `cli` | 16.5% | 1,513 | **P1** |
-| `git_operations` | 19.3% | 2,644 | **P1** |
-| `system_discovery` | 21.0% | 1,387 | **P2** |
-| `crypto` | 24.9% | 1,698 | **P2** |
-| `cerebrum` | 26.0% | 2,190 | **P2** |
-| `containerization` | 28.4% | 1,401 | **P3** |
-| `ci_cd_automation` | 29.8% | 1,437 | **P3** |
-| `coding` | 29.5% | 2,709 | **P3** |
+| Module | Coverage | Missing Stmts | Priority | Coverage Tests |
+| :--- | :--- | :--- | :--- | :--- |
+| `documentation` | 14.1% | 3,716 | **P1** — largest gap | ✅ `test_documentation_coverage.py` |
+| `cli` | 16.5% | 1,513 | **P1** | ✅ `test_cli_coverage.py` |
+| `git_operations` | 19.3% | 2,644 | **P1** | ✅ `test_git_operations_coverage.py` |
+| `physical_management` | — | — | **P1** | ✅ `test_physical_management_coverage.py` (50 tests) |
+| `collaboration` | — | — | **P1** | ✅ `test_collaboration_coverage.py` (84 tests) |
+| `config_management` | — | — | **P2** | ✅ `test_config_management_coverage.py` |
+| `cerebrum` | 26.0% | 2,190 | **P2** | ✅ `test_cerebrum_coverage.py` |
+| `data_visualization` | — | — | **P2** | ✅ `test_data_visualization_coverage.py` |
+| `agentic_memory` | — | — | **P2** | ✅ `test_agentic_memory_coverage.py` |
+| `cloud` | — | — | **P2** | ✅ `test_cloud_coverage.py` |
+| `system_discovery` | 21.0% | 1,387 | **P3** | Covered by `test_coverage_smoke.py` |
+| `crypto` | 24.9% | 1,698 | **P3** | Covered by `test_coverage_smoke.py` |
+| `containerization` | 28.4% | 1,401 | **P3** | Covered by `test_coverage_smoke.py` |
+| `ci_cd_automation` | 29.8% | 1,437 | **P3** | — |
+| `coding` | 29.5% | 2,709 | **P3** | Covered by `test_coverage_smoke.py` |
 
-**Strategy**: Write real functional tests (not imports) for P1 modules first. Each percentage point needs ~1,266 newly-covered statements.
+**Strategy**: 11 new coverage test files written (Sprint 28). Deep functional tests (not just imports) exercising real object creation, spatial queries, network analysis, event system, persistence, batch ops. Next step: deeper execution-path tests to push from ~32% to 40%.
 
 ### ~~TODO/FIXME/HACK/XXX Triage~~ ✅ Done
 
 Triaged: all 189 grep hits are test data strings (pattern_matching fixtures) or template generators (`coding/test_generator.py`). **Zero real actionable TODO/FIXME/HACK/XXX comments in production source.**
 
-### Oversized Files (14 files >800 LOC)
+### Oversized Files (13 remaining >800 LOC)
+
+✅ **Done**: `physical_management/object_manager.py` (951→645 LOC) → extracted `models.py` (330 LOC)
 
 | File | LOC | Action |
 | :--- | :--- | :--- |
 | `cerebrum/fpf/orchestration.py` | 980 | Extract pipeline stages |
 | `data_visualization/git/git_visualizer.py` | 970 | Split chart types |
-| `physical_management/object_manager.py` | 950 | Separate CRUD from logic |
 | `cloud/coda_io/models.py` | 944 | Split data models |
 | `ci_cd_automation/pipeline/manager.py` | 932 | Extract step handlers |
 | `llm/ollama/model_runner.py` | 930 | Separate download/run |
