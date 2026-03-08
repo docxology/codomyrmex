@@ -190,10 +190,11 @@ class TestLockManagerCore:
             mgr.register_lock("l2", self._local_lock("l2", tmpdir))
             assert mgr.stats.total_locks == 2
 
-    def test_acquire_all_unknown_lock_raises(self):
+    def test_acquire_all_unknown_lock_returns_false(self):
         mgr = self._mgr()
-        with pytest.raises(ValueError, match="not registered"):
-            mgr.acquire_all(["nonexistent"])
+        # acquire_all catches the ValueError internally and returns False
+        result = mgr.acquire_all(["nonexistent"], timeout=1.0)
+        assert result is False
 
     def test_acquire_all_and_release_all(self):
         with tempfile.TemporaryDirectory() as tmpdir:
