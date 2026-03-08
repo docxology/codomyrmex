@@ -9,7 +9,6 @@ from pathlib import Path
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.video._validation import SUPPORTED_FORMATS, validate_video_path
 from codomyrmex.video.exceptions import (
-    UnsupportedFormatError,
     VideoAnalysisError,
     VideoReadError,
 )

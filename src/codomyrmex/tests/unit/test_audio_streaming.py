@@ -13,7 +13,6 @@ from codomyrmex.audio.streaming.codec import (
     AudioCodec,
     CodecCapabilities,
     CodecNegotiator,
-    NegotiationResult,
 )
 from codomyrmex.audio.streaming.models import (
     AudioChunk,

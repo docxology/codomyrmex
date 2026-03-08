@@ -126,7 +126,6 @@ class TestDocumentationModule:
 
     def test_submodule_structure(self) -> None:
         """Documentation should have expected submodules."""
-        import codomyrmex.documentation
         submodules = _iter_submodules("codomyrmex.documentation")
         assert len(submodules) >= 3
 

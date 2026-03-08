@@ -8,8 +8,6 @@ from __future__ import annotations
 import math
 import struct
 
-import pytest
-
 from codomyrmex.audio.speech_to_text.vad import (
     SpeechSegment,
     VADConfig,

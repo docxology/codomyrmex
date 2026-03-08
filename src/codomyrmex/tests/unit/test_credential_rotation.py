@@ -11,7 +11,6 @@ import time
 import pytest
 
 from codomyrmex.auth.rotation import (
-    AuditEvent,
     CredentialEntry,
     CredentialRotator,
     InMemoryCredentialStore,

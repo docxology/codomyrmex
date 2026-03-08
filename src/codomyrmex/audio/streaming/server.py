@@ -12,12 +12,10 @@ Example::
 
 from __future__ import annotations
 
-import asyncio
-import json
 import logging
 from typing import Any
 
-from .codec import AudioCodec, CodecCapabilities, CodecNegotiator
+from .codec import AudioCodec, CodecCapabilities
 from .models import AudioChunk, StreamConfig, StreamState, TranscriptionEvent
 
 logger = logging.getLogger(__name__)

@@ -8,7 +8,7 @@ empty-file edge cases).
 
 import tempfile
 import threading
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest

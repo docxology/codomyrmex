@@ -26,10 +26,10 @@ import threading
 import time
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Protocol, TypeVar, runtime_checkable
 
-from .models import CostCategory, CostEntry
+from .models import CostCategory
 
 if TYPE_CHECKING:
     from .tracker import CostTracker

@@ -14,7 +14,6 @@ from codomyrmex.cloud.cost_management.hooks import (
     ModelPricingTable,
     cost_tracked,
 )
-from codomyrmex.cloud.cost_management.models import CostCategory
 from codomyrmex.cloud.cost_management.tracker import CostTracker
 
 # ── ModelPricingTable ─────────────────────────────────────────────────

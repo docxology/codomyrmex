@@ -7,8 +7,7 @@ Zero-mock policy: all tests use actual git commands.
 from __future__ import annotations
 
 import subprocess
-import tempfile
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -23,8 +22,11 @@ from codomyrmex.git_operations import (
     check_git_availability,
 )
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
-@pytest.fixture()
+
+@pytest.fixture
 def git_repo(tmp_path: Path) -> Path:
     """Create a real temporary git repository."""
     subprocess.run(

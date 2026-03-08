@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any
 
 from .codec import AudioCodec, CodecCapabilities, CodecNegotiator, NegotiationResult
 from .models import AudioChunk, StreamConfig, StreamState, TranscriptionEvent

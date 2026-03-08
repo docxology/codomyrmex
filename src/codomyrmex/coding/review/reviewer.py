@@ -8,7 +8,6 @@ for high-performance code quality assessment, security scanning, and maintainabi
 import os
 import subprocess
 import time
-from pathlib import Path
 from typing import Any
 
 # Import models from this module
@@ -23,7 +22,6 @@ from .models import (
     AnalysisResult,
     AnalysisSummary,
     CodeMetrics,
-    Language,
     QualityGateResult,
 )
 from .reviewer_impl import (

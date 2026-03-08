@@ -12,7 +12,6 @@ from codomyrmex.video.config import get_config
 from codomyrmex.video.exceptions import (
     AudioExtractionError,
     FrameExtractionError,
-    UnsupportedFormatError,
     VideoReadError,
 )
 from codomyrmex.video.models import ExtractionResult
