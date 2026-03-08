@@ -77,16 +77,24 @@ from .coda_io import (
 )
 
 # Import from other submodules with optional dependencies
+S3Client = None
 with contextlib.suppress(ImportError):
     from .aws import S3Client
 
+GCSClient = None
 with contextlib.suppress(ImportError):
     from .gcp import GCSClient
 
+AzureBlobClient = None
 with contextlib.suppress(ImportError):
     from .azure import AzureBlobClient
 
 # Infomaniak clients (requires openstacksdk and/or boto3)
+InfomaniakComputeClient = InfomaniakCredentials = InfomaniakDNSClient = None
+InfomaniakHeatClient = InfomaniakIdentityClient = InfomaniakMeteringClient = None
+InfomaniakNetworkClient = InfomaniakNewsletterClient = InfomaniakObjectStorageClient = None
+InfomaniakS3Client = InfomaniakS3Credentials = InfomaniakVolumeClient = None
+create_openstack_connection = None
 with contextlib.suppress(ImportError):  # openstacksdk not installed
     from .infomaniak import (
         InfomaniakComputeClient,
