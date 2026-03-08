@@ -29,10 +29,13 @@ from codomyrmex.plugin_system.dependency_resolver import (
 from codomyrmex.plugin_system.discovery import (
     DiscoveryResult,
     PluginDiscovery,
+)
+from codomyrmex.plugin_system.discovery import (
     PluginInfo as DiscoveryPluginInfo,
+)
+from codomyrmex.plugin_system.discovery import (
     PluginState as DiscoveryPluginState,
 )
-
 
 # ---------------------------------------------------------------------------
 # TestPluginInfo
@@ -107,7 +110,7 @@ class TestHook:
     def test_emit_calls_handler(self):
         hook = Hook("on_process")
         results = []
-        hook.register(lambda x: results.append(x))
+        hook.register(results.append)
         hook.emit(42)
         assert results == [42]
 
@@ -202,13 +205,13 @@ class TestPlugin:
     def test_register_hook_creates_hook(self):
         plugin = self.make_plugin()
         results = []
-        plugin.register_hook("on_data", lambda d: results.append(d))
+        plugin.register_hook("on_data", results.append)
         assert "on_data" in plugin.hooks
 
     def test_emit_hook_calls_registered_handler(self):
         plugin = self.make_plugin()
         results = []
-        plugin.register_hook("on_data", lambda d: results.append(d))
+        plugin.register_hook("on_data", results.append)
         plugin.emit_hook("on_data", "payload")
         assert "payload" in results
 
@@ -369,7 +372,7 @@ class TestPluginRegistry:
         registry = self.make_registry()
         results = []
         hook = registry.register_global_hook("on_event")
-        hook.register(lambda x: results.append(x))
+        hook.register(results.append)
         registry.emit_global_hook("on_event", "fired")
         assert "fired" in results
 

@@ -2,7 +2,6 @@
 import os
 from pathlib import Path
 
-
 from codomyrmex.agents.openfang.config import (
     OpenFangConfig,
     _default_vendor_dir,

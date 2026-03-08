@@ -27,7 +27,6 @@ from codomyrmex.events.core.event_schema import (
 )
 from codomyrmex.events.core.exceptions import EventPublishError, EventSubscriptionError
 
-
 # ---------------------------------------------------------------------------
 # TestEvent
 # ---------------------------------------------------------------------------

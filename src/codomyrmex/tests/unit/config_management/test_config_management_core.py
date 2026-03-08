@@ -19,7 +19,7 @@ import pytest
 # ---------------------------------------------------------------------------
 
 try:
-    from cryptography.fernet import Fernet as _Fernet  # noqa: F401
+    from cryptography.fernet import Fernet as _Fernet
 
     _CRYPTO_AVAILABLE = True
 except ImportError:

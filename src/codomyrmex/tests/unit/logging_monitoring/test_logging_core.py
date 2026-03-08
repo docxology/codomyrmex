@@ -42,12 +42,13 @@ from codomyrmex.logging_monitoring.formatters.json_formatter import (
 )
 from codomyrmex.logging_monitoring.formatters.structured_formatter import (
     FormatterConfig,
-    LogContext as StructuredLogContext,
     LogLevel,
     StructuredFormatter,
     StructuredLogEntry,
 )
-
+from codomyrmex.logging_monitoring.formatters.structured_formatter import (
+    LogContext as StructuredLogContext,
+)
 
 # ---------------------------------------------------------------------------
 # Helpers

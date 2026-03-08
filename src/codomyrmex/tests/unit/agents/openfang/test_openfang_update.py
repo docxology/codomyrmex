@@ -3,7 +3,6 @@ import os
 import tempfile
 from pathlib import Path
 
-
 from codomyrmex.agents.openfang.update import (
     build_and_install,
     build_from_source,

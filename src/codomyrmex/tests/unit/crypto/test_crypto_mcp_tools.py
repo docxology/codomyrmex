@@ -11,7 +11,6 @@ import pytest
 
 from codomyrmex.crypto.mcp_tools import generate_key, hash_data, verify_hash
 
-
 # ==============================================================================
 # hash_data
 # ==============================================================================
@@ -83,7 +82,7 @@ class TestHashData:
     def test_unicode_input_encoded_as_utf8(self):
         result = hash_data("héllo wörld")
         assert result["status"] == "success"
-        expected = hashlib.sha256("héllo wörld".encode("utf-8")).hexdigest()
+        expected = hashlib.sha256("héllo wörld".encode()).hexdigest()
         assert result["digest"] == expected
 
     def test_return_keys_present(self):

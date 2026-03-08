@@ -11,9 +11,12 @@ from pathlib import Path
 
 import pytest
 
-from codomyrmex.validation.mcp_tools import validate_config, validate_schema, validation_summary
+from codomyrmex.validation.mcp_tools import (
+    validate_config,
+    validate_schema,
+    validation_summary,
+)
 from codomyrmex.validation.schemas import Result, ResultStatus
-
 
 # ==============================================================================
 # validate_schema MCP tool

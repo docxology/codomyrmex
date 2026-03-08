@@ -21,7 +21,7 @@ from pathlib import Path
 import pytest
 
 try:
-    import yaml as _yaml_check  # noqa: F401
+    import yaml as _yaml_check
 
     _YAML_AVAILABLE = True
 except ImportError:
@@ -72,8 +72,8 @@ class TestSerializerJson:
 
     def _serializer(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         return Serializer(default_format=SerializationFormat.JSON)
@@ -117,8 +117,8 @@ class TestSerializerJson:
         from enum import Enum
 
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         class Color(Enum):
@@ -133,8 +133,8 @@ class TestSerializerJson:
 
     def test_serializes_path_as_string(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         s = Serializer(SerializationFormat.JSON)
@@ -148,8 +148,8 @@ class TestSerializerJson:
         import json
 
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         @dataclass
@@ -175,8 +175,8 @@ class TestSerializerPickle:
 
     def _serializer(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         return Serializer(default_format=SerializationFormat.PICKLE)
@@ -195,9 +195,9 @@ class TestSerializerPickle:
 
     def test_deserialize_requires_bytes(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationError,
             SerializationFormat,
+            Serializer,
         )
 
         s = Serializer(SerializationFormat.PICKLE)
@@ -206,9 +206,9 @@ class TestSerializerPickle:
 
     def test_deserialize_rejects_oversized_payload(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationError,
             SerializationFormat,
+            Serializer,
         )
 
         s = Serializer(SerializationFormat.PICKLE)
@@ -219,8 +219,8 @@ class TestSerializerPickle:
 
     def test_serialize_pickle_returns_bytes(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         s = Serializer(SerializationFormat.PICKLE)
@@ -241,8 +241,8 @@ class TestSerializerYaml:
 
     def _serializer(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         return Serializer(default_format=SerializationFormat.YAML)
@@ -269,8 +269,8 @@ class TestSerializerYaml:
         import yaml
 
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         @dataclass
@@ -296,8 +296,8 @@ class TestSerializerFileIO:
 
     def test_to_file_and_from_file_json(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         s = Serializer(SerializationFormat.JSON)
@@ -313,8 +313,8 @@ class TestSerializerFileIO:
 
     def test_to_file_and_from_file_pickle(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         s = Serializer(SerializationFormat.PICKLE)
@@ -331,8 +331,8 @@ class TestSerializerFileIO:
     @_SKIP_YAML
     def test_to_file_and_from_file_yaml(self):
         from codomyrmex.serialization.serializer import (
-            Serializer,
             SerializationFormat,
+            Serializer,
         )
 
         s = Serializer(SerializationFormat.YAML)

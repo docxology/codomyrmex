@@ -22,7 +22,7 @@ from pathlib import Path
 import pytest
 
 try:
-    import zstandard as _zstd_check  # noqa: F401
+    import zstandard as _zstd_check
 
     _ZSTD_AVAILABLE = True
 except ImportError:
@@ -122,8 +122,8 @@ class TestCompressorGzip:
 
     def test_decompress_invalid_data_raises_compression_error(self):
         from codomyrmex.compression.core.compressor import (
-            Compressor,
             CompressionError,
+            Compressor,
         )
 
         c = Compressor(format="gzip")
@@ -155,8 +155,8 @@ class TestCompressorZlib:
 
     def test_decompress_invalid_data_raises_compression_error(self):
         from codomyrmex.compression.core.compressor import (
-            Compressor,
             CompressionError,
+            Compressor,
         )
 
         c = Compressor(format="zlib")
@@ -189,8 +189,8 @@ class TestCompressorZip:
 
     def test_decompress_invalid_raises_compression_error(self):
         from codomyrmex.compression.core.compressor import (
-            Compressor,
             CompressionError,
+            Compressor,
         )
 
         c = Compressor(format="zip")
@@ -401,7 +401,7 @@ class TestCompareFormats:
 
         data = b"timing test " * 50
         results = compare_formats(data)
-        for fmt, info in results.items():
+        for info in results.values():
             assert info.get("time_ms", 0) >= 0
 
 
@@ -414,18 +414,18 @@ class TestAutoDecompress:
     """auto_decompress convenience function."""
 
     def test_auto_decompress_gzip(self):
-        from codomyrmex.compression.core.compressor import auto_decompress
-
         import gzip
+
+        from codomyrmex.compression.core.compressor import auto_decompress
 
         data = b"auto decompression"
         compressed = gzip.compress(data)
         assert auto_decompress(compressed) == data
 
     def test_auto_decompress_zlib(self):
-        from codomyrmex.compression.core.compressor import auto_decompress
-
         import zlib
+
+        from codomyrmex.compression.core.compressor import auto_decompress
 
         data = b"zlib auto"
         compressed = zlib.compress(data)
