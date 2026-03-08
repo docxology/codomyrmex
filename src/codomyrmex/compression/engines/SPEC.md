@@ -16,11 +16,11 @@ Two compression engines: `ParallelCompressor` for multi-threaded batch compressi
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `compress_batch` | `data_list: list[bytes], on_progress: Callable \| None` | `list[bytes]` | Compress multiple blobs in parallel (order preserved) |
-| `decompress_batch` | `data_list: list[bytes], on_progress: Callable \| None` | `list[bytes]` | Decompress multiple blobs in parallel |
-| `split_and_compress` | `data: bytes, on_progress: Callable \| None` | `list[bytes]` | Split large data into chunks and compress each |
+| `compress_batch` | `data_list: list[bytes], on_progress: Callable \ | None` | `list[bytes]` Compress multiple blobs in parallel (order preserved) |
+| `decompress_batch` | `data_list: list[bytes], on_progress: Callable \ | None` | `list[bytes]` Decompress multiple blobs in parallel |
+| `split_and_compress` | `data: bytes, on_progress: Callable \ | None` | `list[bytes]` Split large data into chunks and compress each |
 | `decompress_and_merge` | `compressed_chunks: list[bytes], on_progress` | `bytes` | Decompress chunks and concatenate |
-| `last_stats` | property | `CompressionStats \| None` | Stats from most recent operation |
+| `last_stats` | property | `CompressionStats \ | None` Stats from most recent operation |
 
 Constructor: `format: str = "gzip"`, `max_workers: int = 4`, `chunk_size: int = 1048576` (1MB)
 
@@ -40,7 +40,7 @@ Constructor: `format: str = "gzip"`, `max_workers: int = 4`, `chunk_size: int = 
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `compress` | `data: bytes, level: int \| None` | `bytes` | Compress with Zstd; optional level override (1-22) |
+| `compress` | `data: bytes, level: int \ | None` | `bytes` Compress with Zstd; optional level override (1-22) |
 | `decompress` | `data: bytes` | `bytes` | Decompress Zstd data |
 
 Constructor: `level: int = 3`. Raises `ImportError` if `zstandard` not installed.

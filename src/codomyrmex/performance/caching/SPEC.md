@@ -16,9 +16,9 @@ Two-tier caching system providing both in-memory (with LRU eviction) and disk-ba
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `cache_dir: str\|Path\|None, max_memory_items: int=1000, default_ttl: int=3600` | `None` | Initialize with optional disk dir (defaults to temp), size limit, and TTL |
-| `get` | `key: str` | `Any\|None` | Retrieve value; checks memory then disk; evicts expired entries |
-| `set` | `key: str, value: Any, ttl: int\|None` | `None` | Store value in both tiers; triggers LRU eviction if over limit |
+| `__init__` | `cache_dir: str\ | Path\ | None, max_memory_items: int=1000, default_ttl: int=3600` `None` Initialize with optional disk dir (defaults to temp), size limit, and TTL |
+| `get` | `key: str` | `Any\ | None` Retrieve value; checks memory then disk; evicts expired entries |
+| `set` | `key: str, value: Any, ttl: int\ | None` | `None` Store value in both tiers; triggers LRU eviction if over limit |
 | `clear` | | `None` | Remove all in-memory entries and all `.pkl` files |
 | `get_stats` | | `dict[str, Any]` | Returns memory_items, max_memory_items, cache_dir, disk_files |
 
@@ -26,9 +26,9 @@ Two-tier caching system providing both in-memory (with LRU eviction) and disk-ba
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `ttl` | `int\|None` | `None` | Per-entry TTL in seconds |
-| `cache_key_prefix` | `str\|None` | `None` | Override function name in cache key |
-| `cache_manager` | `CacheManager\|None` | `None` | Override global cache instance |
+| `ttl` | `int\ | None` | `None` Per-entry TTL in seconds |
+| `cache_key_prefix` | `str\ | None` | `None` Override function name in cache key |
+| `cache_manager` | `CacheManager\ | None` | `None` Override global cache instance |
 
 The decorated function gains `cache_clear()` and `cache_stats()` helper methods.
 

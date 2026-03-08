@@ -2,7 +2,7 @@
 
 **A Modular, Extensible Coding Workspace** — v1.1.9
 
-Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **128 deeply integrated modules**.
+Welcome to the Codomyrmex documentation. This site covers architecture, tutorials, API reference, and development guides for a production-grade ecosystem with **130 deeply integrated modules**.
 
 ## Quick Start
 
@@ -28,7 +28,7 @@ just build
 
 ## Key Features
 
-- **128 auto-discovered modules** covering AI agents, code analysis, security, cloud, and more
+- **130 auto-discovered modules** covering AI agents, code analysis, security, cloud, and more
 - **474 dynamic MCP tools** for AI agent integration
 - **Zero-Mock testing** policy — all tests use real functional verification (21,000+ collected)
 - **PAI integration** — Personal AI bridge with 15-tab SPA dashboard + WebSocket push

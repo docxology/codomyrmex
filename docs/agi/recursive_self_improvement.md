@@ -85,7 +85,7 @@ Strong epistasis implies that combinatorial improvements (modifying multiple mod
 
 Kauffman's (1993) NK model predicts that ruggedness increases with epistasis (K), making search harder but potentially placing higher peaks available. Codomyrmex's modular architecture implements what developmental biologists call **developmental constraints** (Maynard Smith et al., 1985): the module boundaries channel modification along specific directions, just as compartmentalized body plans channel evolutionary change.
 
-These constraints are *beneficial*: they reduce the effective dimensionality of the search space. A modification confined to one module (dimension ≤ dim(module)) is far easier to evaluate than a cross-cutting change (dimension ~ dim(codebase)). The 128-module partition creates 127 *quasi-independent* optimization cells.
+These constraints are *beneficial*: they reduce the effective dimensionality of the search space. A modification confined to one module (dimension ≤ dim(module)) is far easier to evaluate than a cross-cutting change (dimension ~ dim(codebase)). The 130-module partition creates 127 *quasi-independent* optimization cells.
 
 ## The Gödel Machine Connection
 

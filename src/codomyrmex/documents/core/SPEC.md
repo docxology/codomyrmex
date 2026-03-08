@@ -14,7 +14,7 @@ All classes are stateless and instantiated without arguments. Each exposes a sin
 
 | Method | Signature | Returns |
 |--------|-----------|---------|
-| `read` | `(file_path: str, format: DocumentFormat \| None = None) -> Document` | Loaded document |
+| `read` | `(file_path: str, format: DocumentFormat \ | None = None) -> Document` Loaded document |
 | `_detect_format` | `(file_path: str) -> DocumentFormat` | Auto-detected format via MIME type |
 
 Supports formats: `MARKDOWN`, `JSON`, `YAML`, `PDF`, `TEXT`. Uses `mimetypes.guess_type()` for detection. Falls back to `TEXT` for unknown types.
@@ -42,7 +42,7 @@ Creates parent directories via `os.makedirs(exist_ok=True)`. Encodes content usi
 
 | Method | Signature | Returns |
 |--------|-----------|---------|
-| `parse` | `(content: str, format: DocumentFormat \| None = None) -> Document` | Parsed document |
+| `parse` | `(content: str, format: DocumentFormat \ | None = None) -> Document` Parsed document |
 | `_parse_content` | `(content: str, format: DocumentFormat) -> Any` | Format-specific parsed data |
 
 ## Dependencies

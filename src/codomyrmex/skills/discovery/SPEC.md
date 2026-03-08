@@ -23,7 +23,7 @@ Registry pattern with ABC-based skill contracts. `FunctionSkill` infers metadata
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `func: Callable, metadata: SkillMetadata\|None` | `None` | Wrap function; auto-infer metadata if not provided |
+| `__init__` | `func: Callable, metadata: SkillMetadata\ | None` | `None` Wrap function; auto-infer metadata if not provided |
 | `execute` | `**kwargs` | `Any` | Call the wrapped function |
 
 ### `SkillRegistry`
@@ -32,8 +32,8 @@ Registry pattern with ABC-based skill contracts. `FunctionSkill` infers metadata
 |--------|-----------|---------|-------------|
 | `register` | `skill: Skill` | `None` | Register by ID; index by category and tags |
 | `unregister` | `skill_id: str` | `None` | Remove skill and all index entries |
-| `get` | `skill_id: str` | `Skill\|None` | Lookup by ID |
-| `get_by_name` | `name: str` | `Skill\|None` | Lookup by metadata name |
+| `get` | `skill_id: str` | `Skill\ | None` Lookup by ID |
+| `get_by_name` | `name: str` | `Skill\ | None` Lookup by metadata name |
 | `search` | `query, category, tags, enabled_only` | `list[Skill]` | Filter by text, category, tags, enabled state |
 | `list_all` | | `list[SkillMetadata]` | All registered skill metadata |
 | `execute` | `skill_id, **kwargs` | `Any` | Validate params then execute |

@@ -27,7 +27,7 @@ Progressive (marginal) tax calculation engine with configurable bracket definiti
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `brackets: list[dict] \| None` | -- | Initialize with custom or default US federal brackets |
+| `__init__` | `brackets: list[dict] \ | None` | -- Initialize with custom or default US federal brackets |
 | `calculate_tax` | `income: float` | `TaxResult` | Compute progressive tax with full bracket breakdown |
 | `apply_deductions` | `income, deductions: list[dict]` | `float` | Reduce income by deduction amounts (floor at zero) |
 

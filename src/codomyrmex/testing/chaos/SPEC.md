@@ -56,7 +56,7 @@ Constructor: `(name, hypothesis: SteadyStateHypothesis, action: Callable, rollba
 |--------|-----------|-------------|
 | `add_experiment` | `(experiment: ChaosExperiment) -> None` | Register experiment |
 | `run_all` | `() -> list[ExperimentResult]` | Run all experiments sequentially |
-| `run_random` | `() -> ExperimentResult | None` | Run one random experiment |
+| `run_random` | `() -> ExperimentResult | None` Run one random experiment |
 
 ### ChaosScenarioRunner (async)
 

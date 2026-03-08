@@ -11,7 +11,7 @@ Compliance documentation for the Codomyrmex project, including audit reports, po
 | Policy | Status | Evidence |
 |--------|--------|----------|
 | Zero-Mock compliance | **100%** | Only 2 pass-only stubs remain repo-wide |
-| RASP documentation | **100%** | All 128 modules have README, AGENTS, SPEC, PAI |
+| RASP documentation | **100%** | All 130 modules have README, AGENTS, SPEC, PAI |
 | License (MIT) | **Compliant** | All deps audited via pip-licenses |
 | Security scanning | **Active** | CI: Bandit, CodeQL, pip-audit, TruffleHog |
 | Code quality | **0 violations** | Ruff `select=ALL` from 119k→0 |

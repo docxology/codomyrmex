@@ -45,9 +45,9 @@ class SoulAgent:
 | `soul_path` | `str` | `"SOUL.md"` | Path to the agent identity file |
 | `memory_path` | `str` | `"MEMORY.md"` | Path to the conversation log |
 | `provider` | `str` | `"anthropic"` | LLM provider: `'anthropic'`, `'openai'`, `'openai-compatible'` |
-| `api_key` | `str \| None` | `None` | API key; reads from env var when None |
-| `model` | `str \| None` | `None` | Model override; uses provider default when None |
-| `base_url` | `str \| None` | `None` | Base URL for openai-compatible endpoints |
+| `api_key` | `str \ | None` | `None` API key; reads from env var when None |
+| `model` | `str \ | None` | `None` Model override; uses provider default when None |
+| `base_url` | `str \ | None` | `None` Base URL for openai-compatible endpoints |
 
 ### Raises
 

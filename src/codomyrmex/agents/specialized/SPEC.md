@@ -61,7 +61,7 @@ Two independent but complementary workflows:
 | `mutable_default` | `def\s+\w+\([^)]*=\s*\[\]` | 0.8 | `=None` |
 | `star_import` | `from\s+\S+\s+import\s+\*` | 0.5 | None (manual fix) |
 | `print_debug` | `^\s*print\s*\(` | 0.3 | None (manual fix) |
-| `todo_fixme` | `#\s*(TODO\|FIXME\|HACK\|XXX)` | 0.2 | None (manual fix) |
+| `todo_fixme` | `#\s*(TODO\ | FIXME\ | HACK\ XXX)` 0.2 None (manual fix) |
 
 ## Dependencies
 

@@ -14,7 +14,7 @@ The droid package implements a thread-safe autonomous task runner that processes
 | `controller.py` | `DroidConfig` | Frozen dataclass holding immutable configuration (LLM provider, mode, safe_mode, retry settings); constructed from dicts, JSON, files, or environment variables |
 | `controller.py` | `DroidMetrics` | Mutable dataclass tracking sessions started/completed, tasks executed/failed, last error, and heartbeat timestamps |
 | `controller.py` | `DroidMode` / `DroidStatus` | Enums for operating modes (DEVELOPMENT, PRODUCTION, TEST, MAINTENANCE) and lifecycle states (STOPPED, IDLE, RUNNING, ERROR) |
-| `todo.py` | `TodoItem` | Dataclass representing a single TODO entry; parses both new 3-column format (`task_name | description | outcomes`) and legacy handler-based format |
+| `todo.py` | `TodoItem` | Dataclass representing a single TODO entry; parses both new 3-column format (`task_name description outcomes`) and legacy handler-based format |
 | `todo.py` | `TodoManager` | Manages TODO file I/O: load, save, rotate completed items, validate entries, and migrate legacy formats to 3-column |
 | `tasks.py` | `ensure_documentation_exists` | Task handler verifying DroidController has docstrings |
 | `tasks.py` | `verify_real_methods` | Task handler confirming required symbols exist in the controller module |

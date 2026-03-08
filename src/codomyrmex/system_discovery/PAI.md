@@ -70,9 +70,9 @@ report = reporter.generate()
 
 | Tool | Description | Key Parameters | PAI Phase |
 |------|-------------|----------------|-----------|
-| `health_check` | Run health checks across all codomyrmex modules | `module: str \| None` | OBSERVE |
+| `health_check` | Run health checks across all codomyrmex modules | `module: str \ | None` OBSERVE |
 | `list_modules` | List all available codomyrmex modules with metadata | -- | OBSERVE |
-| `dependency_tree` | Generate module dependency tree | `module: str \| None` | OBSERVE |
+| `dependency_tree` | Generate module dependency tree | `module: str \ | None` OBSERVE |
 
 ## Architecture Role
 

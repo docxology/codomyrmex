@@ -48,7 +48,7 @@ Fields: `id`, `name`, `handler` (Callable), `memory_mb` (128), `timeout_seconds`
 | `deregister_node` | `(node_id: str)` | `bool` |
 | `heartbeat` | `(node_id: str)` | None |
 | `deploy_to_all` | `(function: EdgeFunction)` | `int` (count) |
-| `deploy_least_loaded` | `(function: EdgeFunction)` | `str \| None` (node_id) |
+| `deploy_least_loaded` | `(function: EdgeFunction)` | `str \ None` (node_id) |
 | `drain_node` | `(node_id: str)` | `bool` |
 | `health` | `()` | `dict` (cluster summary) |
 | `detect_stale_nodes` | `(timeout_seconds: float)` | `list[str]` |

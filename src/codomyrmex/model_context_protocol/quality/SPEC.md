@@ -21,7 +21,7 @@ Three independent sub-modules behind a unified `__init__.py`:
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `tool_name` | `str` | For logging and error messages only |
-| `arguments` | `dict[str, Any] | None` | Raw arguments from caller |
+| `arguments` | `dict[str, Any] | None` Raw arguments from caller |
 | `schema` | `dict[str, Any]` | Tool schema with `inputSchema` key or bare JSON Schema |
 | `coerce` | `bool` (default `True`) | Enable string-to-type coercion |
 

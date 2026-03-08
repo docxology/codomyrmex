@@ -284,7 +284,7 @@ uv run ruff check src/codomyrmex/
 uv run black src/codomyrmex/
 
 # Type checking (if configured)
-uv run mypy src/codomyrmex/
+uv run ty check src/codomyrmex/
 ```
 
 ## 🐛 Troubleshooting Guide

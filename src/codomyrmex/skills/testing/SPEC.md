@@ -31,9 +31,9 @@ Framework for validating, running, and benchmarking Codomyrmex skills. Provides 
 |-------|------|-------------|
 | `name` | `str` | Test case name |
 | `passed` | `bool` | Whether the test passed |
-| `expected` | `Any \| None` | Expected value (if provided) |
-| `actual` | `Any \| None` | Actual return value |
-| `error` | `str \| None` | Error message on exception |
+| `expected` | `Any \ | None` Expected value (if provided) |
+| `actual` | `Any \ | None` Actual return value |
+| `error` | `str \ | None` Error message on exception |
 
 Method: `to_dict() -> dict[str, Any]` -- excludes None fields.
 

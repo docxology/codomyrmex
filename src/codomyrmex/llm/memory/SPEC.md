@@ -20,7 +20,7 @@ Template method pattern: `Memory` (ABC) defines the interface (`add_message`, `g
 | `content` | `str` | Message text |
 | `timestamp` | `datetime` | When the message was created |
 | `metadata` | `dict[str, Any]` | Arbitrary metadata (e.g., entities) |
-| `token_count` | `int \| None` | Optional pre-computed token count |
+| `token_count` | `int \ | None` Optional pre-computed token count |
 
 ### `BufferMemory`
 
@@ -49,7 +49,7 @@ Template method pattern: `Memory` (ABC) defines the interface (`add_message`, `g
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `add_message` | `role: str, content: str, **metadata` | `None` | Extracts entities from `metadata["entities"]` and tracks mention counts |
-| `get_entity` | `name: str` | `dict \| None` | Looks up entity data by name |
+| `get_entity` | `name: str` | `dict \ | None` Looks up entity data by name |
 | `get_messages` | -- | `list[dict[str, str]]` | Entity summary as system message + last 10 messages |
 
 ## Dependencies

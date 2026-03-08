@@ -28,8 +28,8 @@ Constructor: `(health_checker: HealthChecker | None, deploy_fn: Callable | None)
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `deploy` | `service_name, version, strategy` | `DeploymentState` | Executes deployment; appends to history; tracks active deployment |
-| `rollback` | `service_name, strategy` | `DeploymentState \| None` | Rolls back active deployment; returns None if no active deployment |
-| `get_active` | `service_name` | `DeploymentState \| None` | Returns current active deployment for a service |
+| `rollback` | `service_name, strategy` | `DeploymentState \ | None` Rolls back active deployment; returns None if no active deployment |
+| `get_active` | `service_name` | `DeploymentState \ | None` Returns current active deployment for a service |
 | `summary` | -- | `dict` | Returns counts: total_deployments, active_services, completed, failed, rolled_back |
 
 Properties: `history` (list of all DeploymentState), `active_deployments` (dict of service name to DeploymentState)

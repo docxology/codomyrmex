@@ -1,6 +1,6 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing ~474 MCP tools across 128 modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing ~474 MCP tools across 130 modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
@@ -59,7 +59,7 @@ result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 
 - **Destructive**: `write_file`, `run_command`, `run_tests`, `call_module_function`
 
-Auto-discovered from 128 modules covering: agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
+Auto-discovered from 130 modules covering: agents, cerebrum, coding, containerization, crypto, data_visualization, documentation, events, formal_verification, git_analysis, git_operations, llm, logging_monitoring, maintenance, orchestrator, performance, plugin_system, relations, scrape, search, security, and more.
 
 ## Resources
 

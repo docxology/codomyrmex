@@ -26,7 +26,7 @@ Layered resilience pattern:
 | `allow` | `agent_id: str` | `bool` | Check if agent may receive work (checks cooldown for open circuits) |
 | `record_success` | `agent_id: str` | `None` | Record success; resets consecutive failures and closes circuit |
 | `record_failure` | `agent_id: str` | `None` | Record failure; opens circuit if threshold exceeded |
-| `get_health` | `agent_id: str` | `AgentHealth \| None` | Retrieve health record |
+| `get_health` | `agent_id: str` | `AgentHealth \ | None` Retrieve health record |
 | `reset` | `agent_id: str` | `None` | Force circuit back to closed state |
 
 Constructor: `failure_threshold: int = 3`, `cooldown_seconds: float = 30.0`
@@ -35,7 +35,7 @@ Constructor: `failure_threshold: int = 3`, `cooldown_seconds: float = 30.0`
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `diagnose` | `error: Exception \| str, context: dict \| None` | `Diagnosis` | Classify error, identify root cause, assess impact, build recovery plan |
+| `diagnose` | `error: Exception \ | str, context: dict \ | None` `Diagnosis` Classify error, identify root cause, assess impact, build recovery plan |
 
 ### `RetryEngine`
 

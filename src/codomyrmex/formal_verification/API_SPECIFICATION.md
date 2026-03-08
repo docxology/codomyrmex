@@ -12,14 +12,14 @@ ConstraintSolver(backend: str = "z3")
 | Method | Signature | Returns | Description |
 |--------|----------|---------|-------------|
 | `clear_model` | `() -> None` | None | Remove all items |
-| `add_item` | `(item: str, index: int \| None) -> int` | Index | Add constraint/declaration |
+| `add_item` | `(item: str, index: int \ | None) -> int` | Index Add constraint/declaration |
 | `delete_item` | `(index: int) -> str` | Removed item | Remove by index |
 | `replace_item` | `(index: int, new_item: str) -> str` | Old item | Replace at index |
 | `get_model` | `() -> list[tuple[int, str]]` | Items | All (index, content) pairs |
 | `solve` | `(timeout_ms: int = 30000) -> SolverResult` | Result | Execute solver |
 | `add_constraints` | `(*items: str) -> list[int]` | Indices | Batch add |
 | `item_count` | `() -> int` | Count | Number of items |
-| `is_satisfiable` | `(timeout_ms: int = 30000) -> bool \| None` | Bool/None | Quick SAT check |
+| `is_satisfiable` | `(timeout_ms: int = 30000) -> bool \ | None` | Bool/None Quick SAT check |
 
 ## verify_criteria_consistency
 

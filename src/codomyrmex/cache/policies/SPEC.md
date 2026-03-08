@@ -16,9 +16,9 @@ Abstract `EvictionPolicy[K, V]` base class with four concrete implementations. E
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `get` | `key: K` | `V \| None` | Retrieve value; removes if expired |
-| `put` | `key: K, value: V, ttl: timedelta \| None` | `None` | Store value; evicts if at capacity |
-| `remove` | `key: K` | `V \| None` | Remove and return value |
+| `get` | `key: K` | `V \ | None` Retrieve value; removes if expired |
+| `put` | `key: K, value: V, ttl: timedelta \ | None` | `None` Store value; evicts if at capacity |
+| `remove` | `key: K` | `V \ | None` Remove and return value |
 | `clear` | none | `None` | Clear all entries |
 | `size` | none | `int` | Current entry count |
 | `contains` | `key: K` | `bool` | Check existence (calls `get`) |

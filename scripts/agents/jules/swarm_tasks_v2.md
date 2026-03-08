@@ -625,7 +625,7 @@ Run 'uv run pytest --collect-only src/codomyrmex/tests/unit/events/' and verify 
 Run 'uv run pytest --collect-only' across the entire test suite. Identify the 10 module test directories with the fewest tests relative to the module size. For the top 3, add at least 5 new zero-mock tests each.
 Review all conftest.py files in the repository. Ensure none contain mock objects or mock fixtures. Replace any remaining mock-based fixtures with real InMemory or Test implementations per the Zero-Mock policy.
 Audit the repository for any remaining uses of unittest.mock, MagicMock, or patch() in test files. List all occurrences. Replace each with a real functional alternative following the Zero-Mock policy. Use 'uv run pytest' to verify.
-In pyproject.toml, review the [tool.pytest] and [tool.coverage] configuration. Ensure coverage source includes all 128 modules. Verify the fail_under gate is set correctly. Audit the mutmut configuration for the v1.1.7 expansion targets.
+In pyproject.toml, review the [tool.pytest] and [tool.coverage] configuration. Ensure coverage source includes all 130 modules. Verify the fail_under gate is set correctly. Audit the mutmut configuration for the v1.1.7 expansion targets.
 Review the pytest markers defined in pyproject.toml. Ensure all custom markers (slow, integration, flaky, etc.) are properly registered and used consistently across the test suite.
 In src/codomyrmex/tests/integration/, review and improve all integration tests. Ensure they test real cross-module interactions without mocking. Add missing integration tests for critical module boundaries.
 Run 'uv run pytest -x --tb=short' to identify and fix the first failing test. Then run the full suite with 'uv run pytest --tb=short' and report the results (pass/fail/skip counts).
@@ -640,7 +640,7 @@ Add pytest-rerunfailures configuration as specified in TODO.md v1.1.7. Apply @py
 
 Review pyproject.toml for overall project health. Ensure all dependencies are up to date, extras are properly defined, version is correct (1.1.7), and build backend configuration is optimal for uv_build.
 Review all AGENTS.md files across the repository (root and module-level). Ensure each accurately describes how AI agents should interact with that module. Fix any outdated references or missing capability descriptions.
-Review the root README.md. Ensure badges are current, installation instructions work, and the project description accurately reflects the v1.1.7 state with 128 modules and 21,000+ tests.
+Review the root README.md. Ensure badges are current, installation instructions work, and the project description accurately reflects the v1.1.7 state with 130 modules and 21,000+ tests.
 Review CLAUDE.md and ensure it accurately describes the repository structure, development commands (uv run pytest, uv run ruff, uv run ty), and the Zero-Mock policy for Claude Code integration.
 Review .github/workflows/ for all workflow files. Ensure security scanning (Semgrep), CI testing, dependency management, and release automation are all properly configured and reference correct versions.
 Review and improve the CHANGELOG.md or release documentation. Ensure all changes from v1.1.5 through v1.1.7 are properly documented with categorized entries (Added, Changed, Fixed, Removed).
@@ -691,7 +691,7 @@ For modules cerebrum, spatial, embodiment, evolutionary_ai, and graph_rag: verif
 For modules identity, wallet, defense, market, and privacy: verify that SKILL.md exists and accurately maps to the correct Skill Domain. Fix any incorrect domain assignments.
 For modules crypto, encryption, security, auth, and formal_verification: verify that SKILL.md exists and accurately maps to the correct Skill Domain. Fix any incorrect domain assignments.
 Audit all py.typed marker files across src/codomyrmex/*/. Ensure every module directory contains a py.typed file for PEP 561 compliance. Create any missing markers with the standard content.
-Review src/codomyrmex/SPEC.md for accuracy. Ensure all 128 modules are listed with correct purpose statements, dependency maps, and public API summaries. Cross-reference against the actual module contents.
+Review src/codomyrmex/SPEC.md for accuracy. Ensure all 130 modules are listed with correct purpose statements, dependency maps, and public API summaries. Cross-reference against the actual module contents.
 Review src/codomyrmex/INDEX.md for accuracy. Ensure the module index is complete, alphabetically sorted, and links to each module's README.md. Fix any broken links or missing entries.
 Review src/codomyrmex/README.md for accuracy. Ensure it provides a clear overview of the package, installation instructions, and quick-start examples that work with the current API.
 Review src/codomyrmex/AGENTS.md for accuracy. Ensure it provides comprehensive guidance for AI agents on how to interact with the package, including available MCP tools, testing commands, and coding standards.

@@ -16,10 +16,10 @@ Send an email immediately via AgentMail.
 | `to` | `List[str]` | Yes | Recipient email addresses |
 | `subject` | `str` | Yes | Email subject line |
 | `text` | `str` | Yes | Plain-text message body |
-| `html` | `str \| None` | No | HTML message body |
-| `cc` | `List[str] \| None` | No | CC recipients |
-| `bcc` | `List[str] \| None` | No | BCC recipients |
-| `inbox_id` | `str \| None` | No | Sending inbox (defaults to `AGENTMAIL_DEFAULT_INBOX`) |
+| `html` | `str \ | None` | No HTML message body |
+| `cc` | `List[str] \ | None` | No CC recipients |
+| `bcc` | `List[str] \ | None` | No BCC recipients |
+| `inbox_id` | `str \ | None` | No Sending inbox (defaults to `AGENTMAIL_DEFAULT_INBOX`) |
 
 ### Output Schema
 
@@ -43,9 +43,9 @@ List recent messages in an AgentMail inbox.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `inbox_id` | `str \| None` | No | Inbox to query |
+| `inbox_id` | `str \ | None` | No Inbox to query |
 | `limit` | `int` | No | Max results (default 20) |
-| `labels` | `List[str] \| None` | No | Filter by labels |
+| `labels` | `List[str] \ | None` | No Filter by labels |
 
 ### Output Schema
 
@@ -78,7 +78,7 @@ Fetch full content of a specific message.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `message_id` | `str` | Yes | AgentMail message ID |
-| `inbox_id` | `str \| None` | No | Containing inbox |
+| `inbox_id` | `str \ | None` | No Containing inbox |
 
 ### Output Schema
 
@@ -113,9 +113,9 @@ Reply to an existing message.
 |-----------|------|----------|-------------|
 | `message_id` | `str` | Yes | Message to reply to |
 | `text` | `str` | Yes | Plain-text reply body |
-| `html` | `str \| None` | No | HTML reply body |
+| `html` | `str \ | None` | No HTML reply body |
 | `reply_all` | `bool` | No | Reply to all recipients (default false) |
-| `inbox_id` | `str \| None` | No | Sending inbox |
+| `inbox_id` | `str \ | None` | No Sending inbox |
 
 ### Output Schema
 
@@ -167,8 +167,8 @@ Create a new inbox.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `username` | `str \| None` | No | Username (auto-generated if omitted) |
-| `display_name` | `str \| None` | No | Human-readable label |
+| `username` | `str \ | None` | No Username (auto-generated if omitted) |
+| `display_name` | `str \ | None` | No Human-readable label |
 
 ### Output Schema
 
@@ -192,9 +192,9 @@ List conversation threads in an inbox.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `inbox_id` | `str \| None` | No | Inbox to query |
+| `inbox_id` | `str \ | None` | No Inbox to query |
 | `limit` | `int` | No | Max threads (default 20) |
-| `labels` | `List[str] \| None` | No | Filter by labels |
+| `labels` | `List[str] \ | None` | No Filter by labels |
 
 ### Output Schema
 
@@ -227,7 +227,7 @@ Register a webhook for AgentMail events.
 |-----------|------|----------|-------------|
 | `url` | `str` | Yes | HTTPS endpoint to receive events |
 | `event_types` | `List[str]` | Yes | Events to subscribe to (e.g. `["message.received"]`) |
-| `inbox_ids` | `List[str] \| None` | No | Scope to specific inboxes |
+| `inbox_ids` | `List[str] \ | None` | No Scope to specific inboxes |
 
 ### Common Event Types
 
@@ -261,9 +261,9 @@ Send an email via Gmail API using OAuth2 credentials.
 | `to` | `List[str]` | Yes | Recipient email addresses |
 | `subject` | `str` | Yes | Email subject line |
 | `body_text` | `str` | Yes | Plain-text message body |
-| `body_html` | `str \| None` | No | HTML message body |
-| `cc` | `List[str] \| None` | No | CC recipients |
-| `bcc` | `List[str] \| None` | No | BCC recipients |
+| `body_html` | `str \ | None` | No HTML message body |
+| `cc` | `List[str] \ | None` | No CC recipients |
+| `bcc` | `List[str] \ | None` | No BCC recipients |
 
 ### Output Schema
 
@@ -356,9 +356,9 @@ Create a Gmail draft without sending it.
 | `to` | `List[str]` | Yes | Recipient email addresses |
 | `subject` | `str` | Yes | Email subject line |
 | `body_text` | `str` | Yes | Plain-text message body |
-| `body_html` | `str \| None` | No | HTML message body |
-| `cc` | `List[str] \| None` | No | CC recipients |
-| `bcc` | `List[str] \| None` | No | BCC recipients |
+| `body_html` | `str \ | None` | No HTML message body |
+| `cc` | `List[str] \ | None` | No CC recipients |
+| `bcc` | `List[str] \ | None` | No BCC recipients |
 
 ### Output Schema
 

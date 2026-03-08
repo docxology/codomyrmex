@@ -106,7 +106,7 @@ no file-based output format -- consumers handle serialization.
 | `check_layer_violations` | `list[dict[str, Any]]` -- violation dicts (superset of edge fields + `reason`) |
 | `extract_imports_ast` | `list[str]` -- module names |
 | `audit_exports` | `list[dict[str, str]]` -- finding dicts |
-| `check_all_defined` | `tuple[bool, list[str] \| None]` |
+| `check_all_defined` | `tuple[bool, list[str] \ None]` |
 | `find_dead_exports` | `list[dict[str, Any]]` |
 | `find_unused_functions` | `list[dict[str, Any]]` |
 | `full_audit` | `dict[str, Any]` |

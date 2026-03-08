@@ -1,6 +1,6 @@
 # 📚 Codomyrmex Documentation
 
-> **Version**: v1.1.9 | **Modules**: 128 | **Tests**: 21,000+ collected | **Ruff**: 0 violations
+> **Version**: v1.1.9 | **Modules**: 130 | **Tests**: 21,000+ collected | **Ruff**: 0 violations
 
 This directory contains all documentation for the Codomyrmex ecosystem — a modular, extensible Python workspace for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.
 
@@ -73,7 +73,7 @@ This directory contains all documentation for the Codomyrmex ecosystem — a mod
 
 | Metric | Value |
 |--------|-------|
-| Python modules | **128** auto-discovered |
+| Python modules | **130** auto-discovered |
 | MCP tools | **474** `@mcp_tool` decorators |
 | Test suite | **21,000+** collected |
 | Ruff violations | **0** (triaged from 119k) |

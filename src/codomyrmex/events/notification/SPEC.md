@@ -21,7 +21,7 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 | `body` | `str` | Notification body text |
 | `channel` | `NotificationChannel` | Delivery channel (default: CONSOLE) |
 | `priority` | `NotificationPriority` | Priority level (default: MEDIUM) |
-| `recipient` | `str \| None` | Optional recipient identifier |
+| `recipient` | `str \ | None` Optional recipient identifier |
 | `metadata` | `dict[str, Any]` | Arbitrary metadata |
 | `created_at` | `datetime` | Creation timestamp |
 
@@ -36,7 +36,7 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `router: NotificationRouter \| None` | `None` | Initialize with optional router |
+| `__init__` | `router: NotificationRouter \ | None` | `None` Initialize with optional router |
 | `register_provider` | `provider: NotificationProvider` | `None` | Register a delivery provider |
 | `register_template` | `template: NotificationTemplate` | `None` | Register a named template |
 | `send` | `notification: Notification` | `NotificationResult` | Route and deliver a notification |

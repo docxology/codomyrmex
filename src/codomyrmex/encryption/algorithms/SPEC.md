@@ -18,7 +18,7 @@ AESGCMEncryptor(key: bytes | None = None)
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `key` | `bytes \| None` | `None` | AES key (16, 24, or 32 bytes). If `None`, a random 32-byte key is generated. |
+| `key` | `bytes \ | None` | `None` AES key (16, 24, or 32 bytes). If `None`, a random 32-byte key is generated. |
 
 **Raises:** `ValueError` if key is provided but not 16, 24, or 32 bytes.
 
@@ -33,8 +33,8 @@ AESGCMEncryptor(key: bytes | None = None)
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `encrypt(data, associated_data)` | `data: bytes`, `associated_data: bytes \| None = None` | `bytes` | Encrypt data with a random 12-byte nonce. AAD is authenticated but not encrypted. Returns `nonce (12B) \|\| ciphertext+tag`. |
-| `decrypt(data, associated_data)` | `data: bytes`, `associated_data: bytes \| None = None` | `bytes` | Decrypt data. Expects `nonce (12B) \|\| ciphertext+tag` format. Verifies authenticity. |
+| `encrypt(data, associated_data)` | `data: bytes`, `associated_data: bytes \ | None = None` | `bytes` Encrypt data with a random 12-byte nonce. AAD is authenticated but not encrypted. Returns `nonce (12B) \ \ ciphertext+tag`. |
+| `decrypt(data, associated_data)` | `data: bytes`, `associated_data: bytes \ | None = None` | `bytes` Decrypt data. Expects `nonce (12B) \ \ ciphertext+tag` format. Verifies authenticity. |
 
 **Raises:** `cryptography.exceptions.InvalidTag` on tampered ciphertext during decrypt.
 

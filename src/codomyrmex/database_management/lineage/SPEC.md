@@ -25,9 +25,9 @@ The module follows a layered design: `models.py` defines data structures, `graph
 | `__init__` | `()` | Initialises empty node/edge dictionaries with `threading.Lock` |
 | `add_node` | `(node: LineageNode) -> None` | Registers a node by ID; thread-safe |
 | `add_edge` | `(edge: LineageEdge) -> None` | Adds a directed edge; appends to adjacency lists; thread-safe |
-| `get_node` | `(node_id: str) -> LineageNode \| None` | Looks up node by ID |
-| `get_upstream` | `(node_id: str, max_depth: int \| None) -> list[LineageNode]` | DFS traversal of reverse edges; returns all ancestor nodes within optional depth bound |
-| `get_downstream` | `(node_id: str, max_depth: int \| None) -> list[LineageNode]` | DFS traversal of forward edges; returns all descendant nodes within optional depth bound |
+| `get_node` | `(node_id: str) -> LineageNode \ | None` Looks up node by ID |
+| `get_upstream` | `(node_id: str, max_depth: int \ | None) -> list[LineageNode]` DFS traversal of reverse edges; returns all ancestor nodes within optional depth bound |
+| `get_downstream` | `(node_id: str, max_depth: int \ | None) -> list[LineageNode]` DFS traversal of forward edges; returns all descendant nodes within optional depth bound |
 | `get_path` | `(from_id: str, to_id: str) -> list[LineageNode]` | Finds a path between two nodes using DFS; returns empty list if no path exists |
 | `to_dict` | `() -> dict` | Serializes nodes and edges to a dictionary |
 
@@ -35,7 +35,7 @@ The module follows a layered design: `models.py` defines data structures, `graph
 
 | Method | Signature | Behaviour |
 |--------|-----------|-----------|
-| `__init__` | `(graph: LineageGraph \| None)` | Wraps or creates a `LineageGraph` |
+| `__init__` | `(graph: LineageGraph \ | None)` Wraps or creates a `LineageGraph` |
 | `register_dataset` | `(id, name, location, metadata) -> LineageNode` | Creates a `DATASET` node with location in metadata |
 | `register_transformation` | `(id, name, inputs, outputs, metadata) -> LineageNode` | Creates a `TRANSFORMATION` node; adds `INPUT_TO` edges from each input and `PRODUCED_BY` edges to each output |
 | `get_origin` | `(node_id: str) -> list[LineageNode]` | Returns root datasets (datasets with no upstream) reachable from the given node |

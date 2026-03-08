@@ -455,15 +455,15 @@ Exception
   |     +-- SchemaError (network.py)
   |     +-- TimeoutError (network.py)
   |     +-- CerebrumError (cerebrum.py)
-  |     |     +-- CaseError
-  |     |     |     +-- CaseNotFoundError
-  |     |     |     +-- InvalidCaseError
-  |     |     +-- BayesianInferenceError
-  |     |     |     +-- InferenceError
-  |     |     |     +-- NetworkStructureError
-  |     |     +-- ActiveInferenceError
-  |     |     +-- ModelError
-  |     |     +-- TransformationError
+| +-- CaseError |
+| +-- CaseNotFoundError |
+| +-- InvalidCaseError |
+| +-- BayesianInferenceError |
+| +-- InferenceError |
+| +-- NetworkStructureError |
+| +-- ActiveInferenceError |
+| +-- ModelError |
+| +-- TransformationError |
   |     +-- PerformanceError (specialized.py)
   |     +-- LoggingError (specialized.py)
   |     +-- SystemDiscoveryError (specialized.py)

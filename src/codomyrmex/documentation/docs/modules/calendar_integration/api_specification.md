@@ -19,14 +19,14 @@ uv sync --extra calendar
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `id` | `str \| None` | No | Provider-assigned event ID; `None` for unsaved events |
+| `id` | `str \ | None` | No Provider-assigned event ID; `None` for unsaved events |
 | `summary` | `str` | Yes | Event title shown in calendar UIs |
-| `description` | `str \| None` | No | Free-text body or agenda |
+| `description` | `str \ | None` | No Free-text body or agenda |
 | `start_time` | `datetime` | Yes | Timezone-aware start datetime |
 | `end_time` | `datetime` | Yes | Timezone-aware end datetime |
-| `location` | `str \| None` | No | Physical or virtual location |
+| `location` | `str \ | None` | No Physical or virtual location |
 | `attendees` | `List[str]` | No | Attendee email addresses |
-| `html_link` | `str \| None` | No | URL to open event in browser (provider-assigned) |
+| `html_link` | `str \ | None` | No URL to open event in browser (provider-assigned) |
 
 > **Important**: `start_time` and `end_time` must be timezone-aware. Pass naive datetimes through `dt.replace(tzinfo=timezone.utc)` or use `zoneinfo.ZoneInfo`. Providers may raise `InvalidEventError` for timezone-naive values.
 

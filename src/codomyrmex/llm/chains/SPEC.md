@@ -20,7 +20,7 @@ Strategy pattern: `Chain` is an abstract base class. Concrete strategies (`Simpl
 | `prompt_template` | `str` | Template with `{variable}` placeholders |
 | `output_key` | `str` | Key under which parsed output is stored in context (default `"output"`) |
 | `input_keys` | `list[str]` | Expected input keys from context |
-| `parser` | `Callable[[str], Any] \| None` | Optional output parser |
+| `parser` | `Callable[[str], Any] \ | None` Optional output parser |
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|

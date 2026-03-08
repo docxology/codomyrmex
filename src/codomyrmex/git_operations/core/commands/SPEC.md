@@ -99,7 +99,7 @@ All functions share these invariants:
 
 | Parameter | Type | Default | Semantics |
 |-----------|------|---------|-----------|
-| `repository_path` | `str \| None` | `None` (cwd) | Absolute or relative path to a git working tree |
+| `repository_path` | `str \ | None` | `None` (cwd) Absolute or relative path to a git working tree |
 
 Return types are strictly `bool`, `str`, `str | None`, `list[str]`,
 `list[dict]`, or `dict[str, Any]` -- all JSON-serialisable.

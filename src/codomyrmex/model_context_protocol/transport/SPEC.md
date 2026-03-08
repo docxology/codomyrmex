@@ -23,7 +23,7 @@ Server and client implementations for MCP communication over stdio and HTTP tran
 | `register_resource` | `uri, name, description, mime_type, content_provider` | `None` | Register a URI-addressable resource |
 | `register_file_resource` | `path: str` | `None` | Register a local file as a resource with auto-detected MIME type |
 | `register_prompt` | `name, description, arguments, template` | `None` | Register a prompt template with `{key}` substitution |
-| `handle_request` | `message: dict, correlation_id: str | None` | `dict | None` | Process a JSON-RPC message; returns `None` for notifications |
+| `handle_request` | `message: dict, correlation_id: str | None` | `dict None` Process a JSON-RPC message; returns `None` for notifications |
 | `run_stdio` | — | `None` (async) | Read JSON-RPC from stdin, write responses to stdout |
 | `run_http` | `host, port` | `None` (async) | Start FastAPI server with `/mcp`, `/tools`, `/resources`, `/prompts`, `/health` endpoints |
 | `run` | — | `None` | Synchronous entry point (runs stdio) |

@@ -43,7 +43,7 @@ Adds streaming audio pipeline, vision module, and Hermes agent hardening.
 ### Changed
 
 - **Version bump**: `__init__.py` → 1.1.9, `pyproject.toml` → 1.1.9
-- **docs/ARCHITECTURE.md**: Added `vision` to Specialized subgraph (128 modules)
+- **docs/ARCHITECTURE.md**: Added `vision` to Specialized subgraph (130 modules)
 - **Repo-wide version sync**: All root docs, docs/ directory, config/ RASP files updated from stale v1.1.4 to v1.1.9
 
 ---

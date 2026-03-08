@@ -30,7 +30,7 @@ Configuration data object with validation and metadata.
 | `data` | `dict[str, Any]` | Configuration key-value data |
 | `source` | `str` | Comma-separated source identifiers |
 | `loaded_at` | `datetime` | Auto-set on init (UTC) |
-| `schema` | `ConfigSchema \| None` | Optional validation schema |
+| `schema` | `ConfigSchema \ | None` Optional validation schema |
 | `environment` | `str` | Environment name (default `"default"`) |
 | `version` | `str` | Config version (default `"1.0.0"`) |
 | `metadata` | `dict[str, Any]` | Arbitrary metadata |

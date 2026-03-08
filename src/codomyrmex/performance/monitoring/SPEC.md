@@ -22,9 +22,9 @@ Two complementary monitors: `PerformanceMonitor` for function-level timing metri
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `start_tracking` | `(operation: str, context: dict \| None)` | Begin resource sampling for named operation |
+| `start_tracking` | `(operation: str, context: dict \ | None)` Begin resource sampling for named operation |
 | `stop_tracking` | `(operation: str) -> ResourceTrackingResult` | End tracking and compute aggregates |
-| `get_current_snapshot` | `() -> ResourceSnapshot \| None` | Most recent snapshot |
+| `get_current_snapshot` | `() -> ResourceSnapshot \ | None` Most recent snapshot |
 | `is_tracking` | `() -> bool` | Whether tracking is active |
 
 ### ResourceSnapshot (dataclass)

@@ -60,7 +60,7 @@ Methods: `access() -> None`, `to_dict() -> dict`, `from_dict(data) -> Memory` (c
 | Method | Signature | Returns | Description |
 |--------|-----------|---------|-------------|
 | `save` | `(memory: Memory)` | `None` | Upsert a memory entry |
-| `get` | `(memory_id: str)` | `Memory \| None` | Fetch by ID; increments `access_count` |
+| `get` | `(memory_id: str)` | `Memory \ | None` Fetch by ID; increments `access_count` |
 | `delete` | `(memory_id: str)` | `bool` | Remove; returns `True` if existed |
 | `list_all` | `()` | `list[Memory]` | Return all stored memories |
 

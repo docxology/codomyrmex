@@ -17,8 +17,8 @@ Three independent modules cooperate: `channels.py` provides Go-style communicati
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `__init__` | `capacity: int = 0` | -- | 0 = unbuffered (queue maxsize=1); >0 = buffered |
-| `send` | `item: T, timeout: float \| None` | `None` (async) | Put item; raises `ChannelClosed` if closed |
-| `receive` | `timeout: float \| None` | `T` (async) | Get item; raises `ChannelClosed` if closed and empty |
+| `send` | `item: T, timeout: float \ | None` | `None` (async) Put item; raises `ChannelClosed` if closed |
+| `receive` | `timeout: float \ | None` | `T` (async) Get item; raises `ChannelClosed` if closed and empty |
 | `close` | none | `None` | Prevent further sends; remaining items can still be received |
 | `closed` (prop) | -- | `bool` | Whether the channel is closed |
 | `__aiter__` | -- | async iterator | Yields items until closed and drained |
@@ -28,7 +28,7 @@ Three independent modules cooperate: `channels.py` provides Go-style communicati
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `*channels` | `Channel` | Variable number of channels to listen on |
-| `timeout` | `float \| None` | Max wait time |
+| `timeout` | `float \ | None` Max wait time |
 | returns | `tuple[int, Any]` | `(channel_index, item)` for first ready channel |
 
 ### `AsyncWorkerPool`
@@ -46,15 +46,15 @@ Three independent modules cooperate: `channels.py` provides Go-style communicati
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `rate: float, capacity: int \| None` | -- | Tokens per second; capacity defaults to `int(rate)` |
-| `acquire` | `tokens: int = 1, timeout: float \| None` | `bool` (async) | Wait for tokens; refills based on elapsed time |
+| `__init__` | `rate: float, capacity: int \ | None` | -- Tokens per second; capacity defaults to `int(rate)` |
+| `acquire` | `tokens: int = 1, timeout: float \ | None` | `bool` (async) Wait for tokens; refills based on elapsed time |
 
 ### `AsyncSlidingWindow`
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `__init__` | `max_requests: int, window_seconds: float` | -- | Max requests within the rolling window |
-| `acquire` | `timeout: float \| None` | `bool` (async) | Check and record request; prunes expired timestamps |
+| `acquire` | `timeout: float \ | None` | `bool` (async) Check and record request; prunes expired timestamps |
 
 ## Dependencies
 

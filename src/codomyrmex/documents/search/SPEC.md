@@ -14,10 +14,10 @@ Three modules with distinct responsibilities: `indexer.py` (storage and retrieva
 
 | Method | Signature | Returns |
 |--------|-----------|---------|
-| `add` | `(doc_id: str, content: str, document: Document \| None = None)` | None |
+| `add` | `(doc_id: str, content: str, document: Document \ | None = None)` None |
 | `remove` | `(doc_id: str)` | `bool` |
 | `search` | `(query: str)` | `list[str]` (doc IDs, AND semantics) |
-| `get_document` | `(doc_id: str)` | `Document \| None` |
+| `get_document` | `(doc_id: str)` | `Document \ None` |
 | `save` | `(path: str)` | None (JSON persistence) |
 | `load` | `(path: str)` | None (JSON restore) |
 | `document_count` | property | `int` |

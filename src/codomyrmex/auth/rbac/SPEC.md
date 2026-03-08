@@ -16,7 +16,7 @@ Single-class design with four internal stores: role-permission sets, role hierar
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `register_role` | `role: str, permissions: list[str] \| None` | `None` | Register a role with direct permissions |
+| `register_role` | `role: str, permissions: list[str] \ | None` | `None` Register a role with direct permissions |
 | `add_inheritance` | `child: str, parent: str` | `None` | Make child inherit parent's permissions |
 | `remove_role` | `role: str` | `bool` | Remove role and unassign from all users |
 | `assign_role` | `user_id: str, role: str` | `None` | Assign a role to a user |

@@ -41,8 +41,8 @@ Constructor: `FPFIndexer()`
 | Method | Signature | Behavior |
 |--------|-----------|----------|
 | `build_index` | `(spec: FPFSpec) -> FPFIndex` | Builds 5 indexes: pattern_index, concept_index, keyword_index, title_index, relationship_graph (bidirectional) |
-| `search_patterns` | `(query: str, filters: dict | None) -> list[Pattern]` | Delegates to `FPFIndex.search_patterns()` |
-| `get_pattern_by_id` | `(pattern_id: str) -> Pattern | None` | Direct ID lookup |
+| `search_patterns` | `(query: str, filters: dict | None) -> list[Pattern]` Delegates to `FPFIndex.search_patterns()` |
+| `get_pattern_by_id` | `(pattern_id: str) -> Pattern | None` Direct ID lookup |
 | `get_related_patterns` | `(pattern_id: str, depth: int = 1) -> list[Pattern]` | Traverses relationship graph to specified depth |
 
 **Indexing details**:

@@ -23,7 +23,7 @@ The package follows a controller-configuration-manager pattern:
 |--------|-----------|---------|-------------|
 | `from_dict` | `data: dict[str, Any]` | `DroidConfig` | Construct from dictionary, coercing mode strings to `DroidMode` |
 | `from_json` | `raw: str` | `DroidConfig` | Construct from JSON string |
-| `from_file` | `path: str \| PathLike` | `DroidConfig` | Construct from JSON file on disk |
+| `from_file` | `path: str \ | PathLike` | `DroidConfig` Construct from JSON file on disk |
 | `from_env` | `prefix: str = "DROID_"` | `DroidConfig` | Construct from environment variables with given prefix |
 | `with_overrides` | `**kwargs` | `DroidConfig` | Return new config with overrides applied (validates) |
 | `validate` | -- | `None` | Raises `ValueError` if constraints violated (e.g. `max_parallel_tasks < 1`) |

@@ -21,9 +21,9 @@ Two parallel stacks coexist:
 |-----------|------|-------------|
 | `script_path` | `Path` | Path to the Python script |
 | `timeout` | `int` | Execution timeout in seconds (default 60) |
-| `env` | `dict[str, str] \| None` | Additional environment variables |
-| `cwd` | `Path \| None` | Working directory |
-| `memory_limit_mb` | `int \| None` | Unix-only memory limit via `resource.setrlimit` |
+| `env` | `dict[str, str] \ | None` Additional environment variables |
+| `cwd` | `Path \ | None` Working directory |
+| `memory_limit_mb` | `int \ | None` Unix-only memory limit via `resource.setrlimit` |
 
 Returns a dict with keys: `script`, `name`, `status`, `exit_code`, `stdout`, `stderr`, `execution_time`, `error`.
 
@@ -48,7 +48,7 @@ Returns a dict with keys: `script`, `name`, `status`, `exit_code`, `stdout`, `st
 | `schedule` | `func, name, args, kwargs, priority, max_runs` | `str` (job ID) | Queue an async job with priority ordering |
 | `run_all` | none | `dict[str, AsyncJob]` | Execute all pending jobs respecting priority via `TaskGroup` |
 | `cancel` | `job_id: str` | `bool` | Cancel a pending job |
-| `list_jobs` | `status: AsyncJobStatus \| None` | `list[AsyncJob]` | List jobs optionally filtered by status |
+| `list_jobs` | `status: AsyncJobStatus \ | None` | `list[AsyncJob]` List jobs optionally filtered by status |
 
 ## Dependencies
 

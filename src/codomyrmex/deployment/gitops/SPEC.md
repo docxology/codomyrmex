@@ -28,9 +28,9 @@ Constructor: `(repo_path: str, target_branch: str = "main")`
 | Field | Type | Description |
 |-------|------|-------------|
 | `state` | `SyncState` | IN_SYNC, DRIFTED, UNKNOWN, SYNCING, or ERROR |
-| `desired_revision` | `str \| None` | Git revision representing desired state |
-| `actual_revision` | `str \| None` | Currently deployed revision |
-| `last_synced_at` | `datetime \| None` | Timestamp of last successful sync |
+| `desired_revision` | `str \ | None` Git revision representing desired state |
+| `actual_revision` | `str \ | None` Currently deployed revision |
+| `last_synced_at` | `datetime \ | None` Timestamp of last successful sync |
 | `drift_details` | `list[str]` | Description of detected differences |
 
 ### `GitOpsSynchronizer` (`gitops.py`)
@@ -38,7 +38,7 @@ Constructor: `(repo_path: str, target_branch: str = "main")`
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `sync` | `branch: str = "main"` | `bool` | Clones repo if absent, hard-resets if present |
-| `get_version` | -- | `str \| None` | Returns current commit SHA of local repo |
+| `get_version` | -- | `str \ | None` Returns current commit SHA of local repo |
 
 Constructor: `(repo_url: str, local_path: str)`
 

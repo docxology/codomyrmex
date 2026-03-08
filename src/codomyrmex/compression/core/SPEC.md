@@ -21,9 +21,9 @@ Single-class design with `Compressor` as the primary interface. Each instance is
 | `decompress` | `data: bytes` | `bytes` | Decompresses in-memory data |
 | `compress_stream` | `input_stream: IO[bytes], output_stream: IO[bytes], level: int = 6` | `None` | Stream-to-stream compression |
 | `decompress_stream` | `input_stream: IO[bytes], output_stream: IO[bytes]` | `None` | Stream-to-stream decompression |
-| `compress_file` | `input_path: str, output_path: str \| None, level: int = 6` | `str` | Compresses a file; returns output path; logs ratio |
-| `decompress_file` | `input_path: str, output_path: str \| None` | `str` | Decompresses a file; infers output path from extension |
-| `detect_format` | `data: bytes` | `str \| None` | Detects format from magic bytes |
+| `compress_file` | `input_path: str, output_path: str \ | None, level: int = 6` | `str` Compresses a file; returns output path; logs ratio |
+| `decompress_file` | `input_path: str, output_path: str \ | None` | `str` Decompresses a file; infers output path from extension |
+| `detect_format` | `data: bytes` | `str \ | None` Detects format from magic bytes |
 | `get_compression_ratio` | `original: bytes, compressed: bytes` | `float` | Static method returning percentage reduction |
 
 ### Module-Level Functions

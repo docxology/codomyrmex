@@ -33,7 +33,7 @@ Dual-engine design:
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `add_step` | `step: WorkflowStep` | `None` | Add a step to the DAG |
-| `run` | `context: dict \| None` | `WorkflowResult` | Execute in topological order |
+| `run` | `context: dict \ | None` | `WorkflowResult` Execute in topological order |
 | `step_count` | property | `int` | Number of registered steps |
 | `step_names` | none | `list[str]` | Ordered step name list |
 
@@ -61,7 +61,7 @@ Dual-engine design:
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `instantiate` | `overrides: dict[str, Callable] \| None` | `WorkflowRunner` | Create runner from template with optional action overrides |
+| `instantiate` | `overrides: dict[str, Callable] \ | None` | `WorkflowRunner` Create runner from template with optional action overrides |
 
 Built-in templates: `ci_cd_template` (lint-build-test-deploy), `code_review_template` (generate-test-review-merge), `data_pipeline_template` (ingest-validate-transform-export).
 

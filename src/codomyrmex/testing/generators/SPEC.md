@@ -65,10 +65,10 @@ Values: `STRING`, `INTEGER`, `FLOAT`, `BOOLEAN`, `DATE`, `EMAIL`, `UUID`, `NAME`
 | `data_type` | `DataType` | required | Data type for generation |
 | `nullable` | `bool` | `False` | Whether field can be None |
 | `unique` | `bool` | `False` | Whether values must be unique |
-| `min_value` | `int | float | None` | `None` | Minimum numeric value |
-| `max_value` | `int | float | None` | `None` | Maximum numeric value |
-| `choices` | `list[Any] | None` | `None` | Constrained value set |
-| `pattern` | `str | None` | `None` | Regex pattern constraint |
+| `min_value` | `int | float | None` `None` Minimum numeric value |
+| `max_value` | `int | float | None` `None` Maximum numeric value |
+| `choices` | `list[Any] | None` | `None` Constrained value set |
+| `pattern` | `str | None` | `None` Regex pattern constraint |
 
 ## Dependencies
 

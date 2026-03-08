@@ -9,6 +9,7 @@ run_command infrastructure:
 from __future__ import annotations
 
 import subprocess
+import sys
 import time
 from typing import TYPE_CHECKING, Any
 
@@ -26,6 +27,51 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Generator, Mapping, Sequence
 
 logger = get_logger(__name__)
+
+
+def _poll_readable_streams(
+    process: subprocess.Popen,
+    combine_streams: bool,
+) -> list:
+    """Return streams that have data available, using ``select`` on POSIX."""
+    if sys.platform != "win32":
+        import select
+
+        rlist: list = []
+        if process.stdout:
+            rlist.append(process.stdout)
+        if not combine_streams and process.stderr:
+            rlist.append(process.stderr)
+        if rlist:
+            readable, _, _ = select.select(rlist, [], [], 0.05)
+            return readable
+        return []
+
+    readable: list = [process.stdout] if process.stdout else []
+    if not combine_streams and process.stderr:
+        readable.append(process.stderr)
+    return readable
+
+
+def _build_error_result(
+    command: str | list[str],
+    stdout_lines: list[str],
+    stderr_lines: list[str],
+    start_time: float,
+    error_message: str,
+    *,
+    timed_out: bool = False,
+) -> SubprocessResult:
+    """Build a ``SubprocessResult`` for an error/timeout case."""
+    return SubprocessResult(
+        stdout="\n".join(stdout_lines),
+        stderr="\n".join(stderr_lines),
+        return_code=-1,
+        duration=time.perf_counter() - start_time,
+        command=command,
+        timed_out=timed_out,
+        error_message=error_message,
+    )
 
 
 def stream_command(
@@ -57,31 +103,11 @@ def stream_command(
         errors: Error handling for encoding issues.
 
     Yields:
-        Output lines from the command (prefixed with 'stdout:' or 'stderr:' if not combined).
+        Output lines from the command (prefixed with 'stdout:' or 'stderr:'
+        if not combined).
 
     Returns:
         SubprocessResult when the generator is exhausted.
-
-    Example:
-        >>> result = None
-        >>> for line in stream_command(["python", "-m", "pytest", "-v"]):
-        ...     print(line)
-        ...     result = line  # The last value will be overwritten
-        >>> # After the loop, get the final result
-        >>> gen = stream_command(["ls", "-la"])
-        >>> lines = list(gen)
-        >>> # The result is available via send() at the end
-
-    Note:
-        The SubprocessResult is returned when the generator finishes.
-        To capture it, use:
-        >>> gen = stream_command(cmd)
-        >>> lines = []
-        >>> try:
-        ...     while True:
-        ...         lines.append(next(gen))
-        ... except StopIteration as e:
-        ...     result = e.value
     """
     start_time = time.perf_counter()
     stdout_lines: list[str] = []
@@ -89,18 +115,17 @@ def stream_command(
     process: subprocess.Popen | None = None
 
     try:
-        # Validate working directory
         cwd = _validate_working_directory(cwd)
-
-        # Prepare command and environment
         prepared_command = _prepare_command(command, shell)
         prepared_env = _prepare_environment(env, inherit_env)
 
         logger.debug(
-            "Streaming command: %s", prepared_command if isinstance(prepared_command, str) else " ".join(prepared_command)
+            "Streaming command: %s",
+            prepared_command
+            if isinstance(prepared_command, str)
+            else " ".join(prepared_command),
         )
 
-        # Use merged stderr if combining
         stderr_pipe = subprocess.STDOUT if combine_streams else subprocess.PIPE
 
         process = subprocess.Popen(
@@ -113,60 +138,37 @@ def stream_command(
             text=True,
             encoding=encoding,
             errors=errors,
-            bufsize=1,  # Line buffered
+            bufsize=1,
         )
 
         deadline = time.perf_counter() + timeout if timeout else None
 
-        # Read lines from both streams
         while True:
+            # Timeout guard
             if deadline and time.perf_counter() > deadline:
                 process.kill()
-                duration = time.perf_counter() - start_time
-                return SubprocessResult(
-                    stdout="\n".join(stdout_lines),
-                    stderr="\n".join(stderr_lines),
-                    return_code=-1,
-                    duration=duration,
-                    command=command,
+                return _build_error_result(
+                    command,
+                    stdout_lines,
+                    stderr_lines,
+                    start_time,
+                    f"Command timed out after {timeout}s",
                     timed_out=True,
-                    error_message=f"Command timed out after {timeout}s",
                 )
 
-            # Check if process has ended
             poll_result = process.poll()
+            readable = _poll_readable_streams(process, combine_streams)
 
-            # Use select to wait up to 0.05s on POSIX systems so we don't block
-            readable = []
-            import sys
-
-            if sys.platform != "win32":
-                import select
-
-                rlist = []
-                if process.stdout:
-                    rlist.append(process.stdout)
-                if not combine_streams and process.stderr:
-                    rlist.append(process.stderr)
-                if rlist:
-                    readable, _, _ = select.select(rlist, [], [], 0.05)
-            else:
-                readable = [process.stdout] if process.stdout else []
-                if not combine_streams and process.stderr:
-                    readable.append(process.stderr)
-
-            # Read available output
+            # Yield stdout lines
             if process.stdout and process.stdout in readable:
                 line = process.stdout.readline()
                 if line:
                     line = line.rstrip("\n\r")
                     stdout_lines.append(line)
-                    if combine_streams:
-                        yield line
-                    else:
-                        yield f"stdout: {line}"
+                    yield line if combine_streams else f"stdout: {line}"
                     continue
 
+            # Yield stderr lines
             if not combine_streams and process.stderr and process.stderr in readable:
                 line = process.stderr.readline()
                 if line:
@@ -175,19 +177,14 @@ def stream_command(
                     yield f"stderr: {line}"
                     continue
 
-            # If process ended and no more output, break
+            # Process finished — drain remaining output
             if poll_result is not None:
-                # Read any remaining output
                 if process.stdout:
                     remaining = process.stdout.read()
                     if remaining:
                         for line in remaining.rstrip("\n\r").split("\n"):
                             stdout_lines.append(line)
-                            if combine_streams:
-                                yield line
-                            else:
-                                yield f"stdout: {line}"
-
+                            yield line if combine_streams else f"stdout: {line}"
                 if not combine_streams and process.stderr:
                     remaining = process.stderr.read()
                     if remaining:
@@ -196,47 +193,39 @@ def stream_command(
                             yield f"stderr: {line}"
                 break
 
-        duration = time.perf_counter() - start_time
-
         return SubprocessResult(
             stdout="\n".join(stdout_lines),
             stderr="\n".join(stderr_lines),
             return_code=process.returncode if process.returncode is not None else -1,
-            duration=duration,
+            duration=time.perf_counter() - start_time,
             command=command,
             timed_out=False,
         )
 
     except FileNotFoundError as e:
-        duration = time.perf_counter() - start_time
-        return SubprocessResult(
-            stdout="\n".join(stdout_lines),
-            stderr="\n".join(stderr_lines),
-            return_code=-1,
-            duration=duration,
-            command=command,
-            error_message=f"Command not found: {e.filename or command}",
+        return _build_error_result(
+            command,
+            stdout_lines,
+            stderr_lines,
+            start_time,
+            f"Command not found: {e.filename or command}",
         )
 
     except Exception as e:
-        duration = time.perf_counter() - start_time
         logger.error("Error streaming command: %s", e, exc_info=True)
-        return SubprocessResult(
-            stdout="\n".join(stdout_lines),
-            stderr="\n".join(stderr_lines),
-            return_code=-1,
-            duration=duration,
-            command=command,
-            error_message=f"Error streaming command: {e}",
+        return _build_error_result(
+            command,
+            stdout_lines,
+            stderr_lines,
+            start_time,
+            f"Error streaming command: {e}",
         )
 
     finally:
         if process is not None:
-            # Ensure process is terminated
             if process.poll() is None:
                 process.kill()
                 process.wait()
-            # Close file handles
             if process.stdout:
                 process.stdout.close()
             if process.stderr:

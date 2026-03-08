@@ -26,10 +26,10 @@ The `EdgeScheduler` maintains a thread-safe dict of `ScheduledJob` entries. It d
 | `function_id` | `str` | required |
 | `schedule_type` | `ScheduleType` | required |
 | `interval_seconds` | `float` | `60.0` |
-| `next_run` | `datetime \| None` | `None` |
-| `last_run` | `datetime \| None` | `None` |
+| `next_run` | `datetime \ | None` `None` |
+| `last_run` | `datetime \ | None` `None` |
 | `run_count` | `int` | `0` |
-| `max_runs` | `int \| None` | `None` |
+| `max_runs` | `int \ | None` `None` |
 | `enabled` | `bool` | `True` |
 | `args` | `tuple` | `()` |
 | `kwargs` | `dict[str, Any]` | `{}` |
@@ -42,7 +42,7 @@ Property: `exhausted -> bool` (True when `run_count >= max_runs`).
 |--------|-----------|---------|
 | `add_job` | `(job_id, function_id, schedule_type, interval_seconds, max_runs, args, kwargs)` | `ScheduledJob` |
 | `remove_job` | `(job_id: str)` | `bool` |
-| `get_job` | `(job_id: str)` | `ScheduledJob \| None` |
+| `get_job` | `(job_id: str)` | `ScheduledJob \ None` |
 | `list_jobs` | `(enabled_only: bool)` | `list[ScheduledJob]` |
 | `get_due_jobs` | `()` | `list[ScheduledJob]` |
 | `mark_executed` | `(job_id: str)` | None |

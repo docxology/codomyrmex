@@ -34,7 +34,7 @@ BeliefState(states: dict[str, float], observations: dict[str, Any])
 
 | Method | Signature | Behavior |
 |--------|-----------|----------|
-| `add_node` | `(node: str, values: list, prior: list[float] | None)` | Registers node; raises `NetworkStructureError` on duplicate |
+| `add_node` | `(node: str, values: list, prior: list[float] | None)` Registers node; raises `NetworkStructureError` on duplicate |
 | `add_edge` | `(parent: str, child: str)` | Directed edge; validates both nodes exist |
 | `set_cpt` | `(node: str, cpt: dict[tuple, dict[Any, float]])` | Sets conditional probability table; validates parent config length |
 | `get_topological_order` | `() -> list[str]` | DFS-based topological sort |
@@ -46,8 +46,8 @@ Constructor: `InferenceEngine(network: BayesianNetwork, method: str = "variable_
 
 | Method | Signature | Notes |
 |--------|-----------|-------|
-| `infer` | `(query: dict, evidence: dict | None) -> dict[str, Distribution]` | Dispatches to method-specific implementation |
-| `compute_marginal` | `(variable: str, evidence: dict | None) -> Distribution` | Single-variable convenience wrapper |
+| `infer` | `(query: dict, evidence: dict | None) -> dict[str, Distribution]` Dispatches to method-specific implementation |
+| `compute_marginal` | `(variable: str, evidence: dict | None) -> Distribution` Single-variable convenience wrapper |
 | `update_beliefs` | `(evidence: dict) -> dict[str, Distribution]` | Queries all non-evidence variables |
 
 **Inference methods**:
@@ -86,10 +86,10 @@ Constructor: `ActiveInferenceAgent(states, observations, actions, precision, pol
 
 | Method | Signature | Behavior |
 |--------|-----------|----------|
-| `set_transition_model` | `(model: dict)` | P(s'|s, a) keyed as `"{state}_{action}"` |
-| `set_observation_model` | `(model: dict)` | P(o|s) keyed by state |
-| `predict` | `(observation: dict | None) -> dict[str, float]` | Bayesian belief update or current beliefs |
-| `select_action` | `(state: dict | None) -> str` | EFE-based policy selection |
+| `set_transition_model` | `(model: dict)` | P(s' s, a) keyed as `"{state}_{action}"` |
+| `set_observation_model` | `(model: dict)` | P(o s) keyed by state |
+| `predict` | `(observation: dict | None) -> dict[str, float]` Bayesian belief update or current beliefs |
+| `select_action` | `(state: dict | None) -> str` EFE-based policy selection |
 | `update_beliefs` | `(observation: dict)` | Updates internal `BeliefState` |
 | `compute_free_energy` | `(beliefs, observations) -> float` | Delegates to `VariationalFreeEnergy` |
 | `reset` | `()` | Resets to uniform beliefs |

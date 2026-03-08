@@ -41,7 +41,7 @@ Method: `to_dict() -> dict`
 | `rollback_to` | `version: str` | `RollbackResult` | Restores to target version; marks later snapshots SUPERSEDED |
 | `list_snapshots` | -- | `list[DeploymentSnapshot]` | Returns shallow copies in chronological order |
 | `verify_rollback` | -- | `bool` | True if exactly one ROLLED_BACK snapshot matches current_version |
-| `current_version` | -- (property) | `str \| None` | Currently active version |
+| `current_version` | -- (property) | `str \ | None` Currently active version |
 
 ## Dependencies
 

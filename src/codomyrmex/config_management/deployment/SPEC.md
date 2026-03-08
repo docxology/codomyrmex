@@ -16,14 +16,14 @@ Centered on `ConfigurationDeployer`, which manages a registry of `Environment` o
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `workspace_dir: str \| None` | `None` | Initializes deployer with workspace directory; creates `config_deployments/` and `environments/` subdirs |
+| `__init__` | `workspace_dir: str \ | None` | `None` Initializes deployer with workspace directory; creates `config_deployments/` and `environments/` subdirs |
 | `create_environment` | `name, env_type: EnvironmentType, config_path, variables` | `Environment` | Creates and persists an environment definition |
 | `deploy_configuration` | `environment_name, config_files: list[str], deployed_by` | `ConfigDeployment` | Deploys config files to a named environment with change analysis |
 | `rollback_deployment` | `deployment_id: str` | `ConfigDeployment` | Creates a rollback deployment record for a previous deployment |
-| `get_deployment_status` | `deployment_id: str` | `ConfigDeployment \| None` | Returns deployment record by ID |
-| `list_deployments` | `environment: str \| None` | `list[ConfigDeployment]` | Lists deployments, optionally filtered by environment, sorted by time |
+| `get_deployment_status` | `deployment_id: str` | `ConfigDeployment \ | None` Returns deployment record by ID |
+| `list_deployments` | `environment: str \ | None` | `list[ConfigDeployment]` Lists deployments, optionally filtered by environment, sorted by time |
 | `list_environments` | | `list[Environment]` | Lists all registered environments |
-| `get_environment_config` | `environment_name: str` | `Environment \| None` | Returns a single environment by name |
+| `get_environment_config` | `environment_name: str` | `Environment \ | None` Returns a single environment by name |
 
 ### `DeploymentStatus` (Enum)
 

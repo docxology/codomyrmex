@@ -19,27 +19,27 @@ loaders/
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `register` | `(name: str, template_source: str, parent: str \| None = None) -> None` | Register template by name with optional parent |
-| `add_template` | `(name: str, template: str \| Template) -> None` | Add template (accepts raw string or Template object) |
+| `register` | `(name: str, template_source: str, parent: str \ | None = None) -> None` Register template by name with optional parent |
+| `add_template` | `(name: str, template: str \ | Template) -> None` Add template (accepts raw string or Template object) |
 | `remove_template` | `(name: str) -> bool` | Remove template and its parent link; returns True if found |
 | `has_template` | `(name: str) -> bool` | Check if template is registered |
 | `list_templates` | `() -> list[str]` | Return sorted list of template names |
-| `get_template` | `(name: str) -> str \| None` | Get template source by name |
-| `get_parent` | `(name: str) -> str \| None` | Get parent template name |
+| `get_template` | `(name: str) -> str \ | None` Get template source by name |
+| `get_parent` | `(name: str) -> str \ | None` Get parent template name |
 
 ### Rendering
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `render` | `(name: str, context: dict \| None = None) -> str` | Render template; if parent defined, inject into parent's `{{ content }}` |
-| `render_string` | `(template_source: str, context: dict \| None = None) -> str` | Render ad-hoc template string without registration |
+| `render` | `(name: str, context: dict \ | None = None) -> str` Render template; if parent defined, inject into parent's `{{ content }}` |
+| `render_string` | `(template_source: str, context: dict \ | None = None) -> str` Render ad-hoc template string without registration |
 | `render_batch` | `(name: str, contexts: list[dict]) -> list[str]` | Render same template with multiple contexts |
 
 ### File System Loading
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `load_directory` | `(directory: str \| Path, extension: str = ".html") -> int` | Load all matching files from directory; returns count loaded |
+| `load_directory` | `(directory: str \ | Path, extension: str = ".html") -> int` Load all matching files from directory; returns count loaded |
 
 ### Validation and Summary
 

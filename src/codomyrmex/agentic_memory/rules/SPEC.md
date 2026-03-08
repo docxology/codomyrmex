@@ -109,15 +109,15 @@ graph TD
 | Class | Required Methods |
 |-------|-----------------|
 | `RuleEngine` | `get_applicable_rules(file_path, module_name) → RuleSet` |
-| `RuleEngine` | `get_module_rule(module_name) → Rule | None` |
+| `RuleEngine` | `get_module_rule(module_name) → Rule None` |
 | `RuleEngine` | `list_module_names() → list[str]` |
-| `RuleRegistry` | `get_general() → Rule | None` |
-| `RuleRegistry` | `get_module_rule(name) → Rule | None` |
+| `RuleRegistry` | `get_general() → Rule None` |
+| `RuleRegistry` | `get_module_rule(name) → Rule None` |
 | `RuleRegistry` | `get_cross_module_rules() → list[Rule]` |
-| `RuleRegistry` | `get_file_rule(file_path) → Rule | None` |
+| `RuleRegistry` | `get_file_rule(file_path) → Rule None` |
 | `RuleLoader` | `load(path: Path) → Rule` |
 | `RuleSet` | `resolved() → list[Rule]` (sorted by priority, FILE_SPECIFIC first) |
-| `Rule` | `get_section(number: int) → RuleSection | None` |
+| `Rule` | `get_section(number: int) → RuleSection None` |
 | `Rule` | `to_dict() → dict` |
 
 ### MCP Tool Requirements
@@ -125,7 +125,7 @@ graph TD
 | Tool | Signature | Returns |
 |------|-----------|---------|
 | `rules_list_modules` | `() → list[str]` | Sorted module names |
-| `rules_get_module_rule` | `(module_name: str) → dict | None` | Rule dict or null |
+| `rules_get_module_rule` | `(module_name: str) → dict | None` Rule dict or null |
 | `rules_get_applicable` | `(file_path: str, module_name: str) → list[dict]` | Rule dicts, highest priority first |
 
 ### Mandatory Policies (defined in `general.cursorrules §2`)

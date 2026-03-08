@@ -64,7 +64,7 @@ print(results.agent_count)      # 1
 |-------|------|---------|---------|
 | `name` | `str` | `"default_simulation"` | Simulation identifier |
 | `max_steps` | `int` | `1000` | Maximum number of steps before termination |
-| `seed` | `int \| None` | `None` | Random seed for reproducibility |
+| `seed` | `int \ | None` | `None` Random seed for reproducibility |
 | `params` | `dict[str, Any]` | `{}` | Arbitrary custom parameters |
 
 ### SimulationResult

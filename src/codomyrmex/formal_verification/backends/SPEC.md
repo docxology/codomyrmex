@@ -29,7 +29,7 @@ Abstract base class. All methods are `@abstractmethod`.
 | Method | Parameters | Returns |
 |--------|-----------|---------|
 | `clear_model` | none | `None` |
-| `add_item` | `item: str`, `index: int \| None` | `int` (insertion index) |
+| `add_item` | `item: str`, `index: int \ | None` `int` (insertion index) |
 | `delete_item` | `index: int` | `str` (removed item) |
 | `replace_item` | `index: int`, `new_item: str` | `str` (old item) |
 | `get_model` | none | `list[tuple[int, str]]` |
@@ -41,10 +41,10 @@ Abstract base class. All methods are `@abstractmethod`.
 | Field | Type | Description |
 |-------|------|-------------|
 | `status` | `SolverStatus` | SAT, UNSAT, UNKNOWN, TIMEOUT, ERROR |
-| `model` | `dict[str, Any] \| None` | Variable assignments when SAT |
-| `objective_value` | `Any \| None` | Optimization objective value |
+| `model` | `dict[str, Any] \ | None` Variable assignments when SAT |
+| `objective_value` | `Any \ | None` Optimization objective value |
 | `statistics` | `dict[str, Any]` | Solver statistics (e.g., num_constraints) |
-| `error_message` | `str \| None` | Error description when ERROR |
+| `error_message` | `str \ | None` Error description when ERROR |
 
 Properties: `is_sat`, `is_unsat`.
 

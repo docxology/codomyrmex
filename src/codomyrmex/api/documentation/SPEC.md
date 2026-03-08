@@ -22,10 +22,10 @@ documentation/
 |-------|------|-------------|
 | `path` | `str` | URL path pattern (e.g., `/users/{id}`) |
 | `method` | `str` | HTTP method (GET, POST, etc.) |
-| `summary` | `str \| None` | Short description from docstring |
-| `description` | `str \| None` | Full description |
+| `summary` | `str \ | None` Short description from docstring |
+| `description` | `str \ | None` Full description |
 | `parameters` | `list[dict]` | Path/query parameter definitions |
-| `request_body` | `dict \| None` | Request body schema |
+| `request_body` | `dict \ | None` Request body schema |
 | `responses` | `dict[int, dict]` | Status code to response schema mapping |
 | `tags` | `list[str]` | Grouping tags |
 

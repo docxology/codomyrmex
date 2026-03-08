@@ -22,7 +22,7 @@ This module exposes only a Python import API — it has no MCP tools. See `MCP_T
 
 | Function | Signature | Returns | Description |
 |----------|-----------|---------|-------------|
-| `get_layer` | `(module: str) -> str` | `"foundation" \| "core" \| "service" \| "specialized" \| "other"` | Classify a module by architectural layer |
+| `get_layer` | `(module: str) -> str` | `"foundation" \ | "core" \ "service" \ "specialized" \ "other"` Classify a module by architectural layer |
 | `extract_imports_ast` | `(filepath: Path) -> List[str]` | `List[str]` | Extract imported codomyrmex module names from a single file using AST |
 | `scan_imports` | `(src_dir: Path) -> List[Dict[str, Any]]` | `List[edge dicts]` | Scan all `.py` files; each edge has `src`, `dst`, `file`, `src_layer`, `dst_layer` |
 | `check_layer_violations` | `(edges: List[Dict]) -> List[Dict]` | `List[violation dicts]` | Apply layer rules; violations add a `reason` field |
@@ -39,7 +39,7 @@ This module exposes only a Python import API — it has no MCP tools. See `MCP_T
 | Function | Signature | Returns | Description |
 |----------|-----------|---------|-------------|
 | `get_modules` | `(src_dir: Path) -> list[Path]` | `list[Path]` | Return module dirs that have `__init__.py` |
-| `check_all_defined` | `(init_path: Path) -> tuple[bool, list[str] \| None]` | `(has_all, names)` | Parse `__init__.py` for `__all__` definition |
+| `check_all_defined` | `(init_path: Path) -> tuple[bool, list[str] \ | None]` | `(has_all, names)` Parse `__init__.py` for `__all__` definition |
 | `audit_exports` | `(src_dir: Path) -> list[dict]` | Findings with `module`, `issue`, `detail` | Find modules missing `__all__` |
 | `find_dead_exports` | `(src_dir: Path) -> list[dict]` | Findings with `module`, `export_name`, `detail` | Find `__all__` exports never imported elsewhere |
 | `find_unused_functions` | `(src_dir: Path) -> list[dict]` | Findings with `file`, `function_name`, `detail` | Find top-level public functions never referenced |

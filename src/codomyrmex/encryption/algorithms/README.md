@@ -35,9 +35,9 @@ enc2 = AESGCMEncryptor(key=key)  # reuse for decryption elsewhere
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `__init__` | `(key: bytes \| None = None)` | Create encryptor; auto-generates 32-byte key if none given |
-| `encrypt` | `(data: bytes, associated_data: bytes \| None = None) -> bytes` | Encrypt with fresh 12-byte nonce; returns `nonce \|\| ciphertext \|\| tag` |
-| `decrypt` | `(data: bytes, associated_data: bytes \| None = None) -> bytes` | Decrypt and verify; raises `InvalidTag` on failure |
+| `__init__` | `(key: bytes \ | None = None)` Create encryptor; auto-generates 32-byte key if none given |
+| `encrypt` | `(data: bytes, associated_data: bytes \ | None = None) -> bytes` Encrypt with fresh 12-byte nonce; returns `nonce \ \ ciphertext \ \ tag` |
+| `decrypt` | `(data: bytes, associated_data: bytes \ | None = None) -> bytes` Decrypt and verify; raises `InvalidTag` on failure |
 
 ## Dependencies
 

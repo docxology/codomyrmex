@@ -8,8 +8,13 @@ This module provides comprehensive Git visualization capabilities including:
 - Git workflow diagrams
 - Integration with git_operations module data
 
-- Uses logging_monitoring for logging.
-- Integrates with both matplotlib (PNG) and Mermaid (text diagrams).
+The ``GitVisualizer`` class is composed from focused mixin classes:
+
+- ``GitChartsMixin`` — tree/branch visualizations, commit activity charts
+- ``GitDashboardMixin`` — repository summary dashboard subplot helpers
+
+Uses logging_monitoring for logging.
+Integrates with both matplotlib (PNG) and Mermaid (text diagrams).
 """
 
 import logging
@@ -19,25 +24,21 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
 from codomyrmex.data_visualization.mermaid.mermaid_generator import (
     MermaidDiagramGenerator,
 )
-from codomyrmex.data_visualization.utils import (
-    apply_common_aesthetics,
-    save_plot,
-)
+from codomyrmex.data_visualization.utils import save_plot
 from codomyrmex.logging_monitoring import get_logger
+
+from ._charts import GitChartsMixin
+from ._dashboard import GitDashboardMixin
 
 # Import git_operations if available
 try:
     from codomyrmex.git_operations.core.git import (
         check_git_availability,
-        get_commit_history,
-        get_current_branch,
-        get_status,
         is_git_repository,
     )
 
@@ -48,513 +49,31 @@ except ImportError:
 logger = get_logger(__name__)
 
 
-class GitVisualizer:
-    """Comprehensive Git visualization class supporting both PNG and Mermaid outputs."""
+class GitVisualizer(GitChartsMixin, GitDashboardMixin):
+    """Comprehensive Git visualization class supporting both PNG and Mermaid outputs.
+
+    Tree/branch visualizations and commit activity charts are provided by
+    ``GitChartsMixin``. Dashboard subplot helpers are provided by
+    ``GitDashboardMixin``.
+    """
 
     def __init__(self):
         """Initialize the Git visualizer."""
         self.mermaid_generator = MermaidDiagramGenerator()
         self.colors = {
-            "main": "#2E8B57",  # Sea green
-            "develop": "#4169E1",  # Royal blue
-            "feature": "#FF6347",  # Tomato
-            "hotfix": "#DC143C",  # Crimson
-            "release": "#9932CC",  # Dark orchid
-            "commit": "#696969",  # Dim gray
-            "merge": "#FFD700",  # Gold
-            "tag": "#FF1493",  # Deep pink
+            "main": "#2E8B57",
+            "develop": "#4169E1",
+            "feature": "#FF6347",
+            "hotfix": "#DC143C",
+            "release": "#9932CC",
+            "commit": "#696969",
+            "merge": "#FFD700",
+            "tag": "#FF1493",
         }
 
-    def visualize_git_tree_png(
-        self,
-        repository_path: str | None = None,
-        branches: list[dict[str, Any]] | None = None,
-        commits: list[dict[str, Any]] | None = None,
-        title: str = "Git Tree Visualization",
-        output_path: str | None = None,
-        show_plot: bool = False,
-        figure_size: tuple[int, int] = (12, 8),
-        max_commits: int = 20,
-    ) -> bool:
-        """
-        Create a PNG visualization of Git tree/branches using matplotlib.
-
-        Args:
-            repository_path: Path to Git repository (if None, uses provided data)
-            branches: List of branch dictionaries (used if repository_path is None)
-            commits: List of commit dictionaries (used if repository_path is None)
-            title: Plot title
-            output_path: File path to save PNG
-            show_plot: Whether to display the plot
-            figure_size: Size of the figure (width, height)
-            max_commits: Maximum number of commits to show
-
-        Returns:
-            True if successful, False otherwise
-        """
-        logger.debug("Creating Git tree PNG visualization: %s", title)
-
-        try:
-            # Get data from repository or use provided data
-            if repository_path and GIT_OPERATIONS_AVAILABLE:
-                if not is_git_repository(repository_path):
-                    logger.error("Path %s is not a Git repository", repository_path)
-                    return False
-
-                commits_data = get_commit_history(max_commits, repository_path)
-                current_branch = get_current_branch(repository_path)
-
-                # Convert to our expected format
-                commits = [
-                    {
-                        "hash": commit["hash"][:8],
-                        "message": commit["message"],
-                        "author_name": commit["author_name"],
-                        "date": commit["date"],
-                        "branch": current_branch or "main",
-                    }
-                    for commit in commits_data
-                ]
-
-                branches = [{"name": current_branch or "main", "commits": len(commits)}]
-
-            elif branches and commits:
-                # Use provided data
-                pass
-            else:
-                # Use sample data for demonstration
-                branches = [
-                    {"name": "main", "commits": 8},
-                    {"name": "develop", "commits": 5},
-                    {"name": "feature/auth", "commits": 3},
-                ]
-                commits = self._generate_sample_commits()
-
-            fig, ax = plt.subplots(figsize=figure_size)
-
-            # Plot branches as horizontal lanes
-            branch_y_positions = {}
-            for i, branch in enumerate(branches):
-                branch_name = branch["name"]
-                y_pos = len(branches) - i - 1
-                branch_y_positions[branch_name] = y_pos
-
-                # Draw branch line
-                color = self._get_branch_color(branch_name)
-                ax.axhline(y=y_pos, color=color, linewidth=2, alpha=0.3)
-
-                ax.text(
-                    -0.5,
-                    y_pos,
-                    branch_name,
-                    fontweight="bold",
-                    color=color,
-                    va="center",
-                    ha="right",
-                )
-
-            for i, commit in enumerate(commits[:max_commits]):
-                branch = commit.get("branch", "main")
-                y_pos = branch_y_positions.get(branch, 0)
-                x_pos = i
-
-                color = self._get_branch_color(branch)
-                ax.scatter(x_pos, y_pos, color=color, s=100, zorder=3)
-
-                ax.text(
-                    x_pos,
-                    y_pos - 0.15,
-                    commit.get("hash", ""),
-                    fontsize=8,
-                    ha="center",
-                    va="top",
-                )
-
-                # Add commit message (rotated for space)
-                message = commit.get("message", "")[:30]
-                ax.text(
-                    x_pos,
-                    y_pos + 0.15,
-                    message,
-                    fontsize=8,
-                    ha="center",
-                    va="bottom",
-                    rotation=45,
-                )
-
-            for i in range(1, min(len(commits), max_commits)):
-                prev_commit = commits[i - 1]
-                curr_commit = commits[i]
-                prev_branch = prev_commit.get("branch", "main")
-                curr_branch = curr_commit.get("branch", "main")
-
-                prev_y = branch_y_positions.get(prev_branch, 0)
-                curr_y = branch_y_positions.get(curr_branch, 0)
-
-                # Draw connection line
-                ax.plot([i - 1, i], [prev_y, curr_y], "k-", alpha=0.5, zorder=1)
-
-            apply_common_aesthetics(ax, title, "Commits (timeline →)", "Branches")
-            ax.set_xlim(-1, max(max_commits - 1, 5))
-            ax.set_ylim(-0.5, len(branches) - 0.5)
-            ax.set_yticks(range(len(branches)))
-            ax.set_yticklabels([b["name"] for b in reversed(branches)])
-
-            # Add legend
-            legend_patches = [
-                mpatches.Patch(color=self.colors[key], label=key.capitalize())
-                for key in ["main", "develop", "feature", "hotfix"]
-                if any(key in b["name"].lower() for b in branches)
-            ]
-            if legend_patches:
-                ax.legend(handles=legend_patches, loc="upper right")
-
-            plt.tight_layout()
-
-            if output_path:
-                save_plot(fig, output_path)
-
-            if show_plot:
-                plt.show()
-            else:
-                plt.close(fig)
-
-            logger.info("Git tree PNG visualization '%s' generated successfully", title)
-            return True
-
-        except Exception as e:
-            logger.error(
-                "Error creating Git tree PNG visualization: %s", e, exc_info=True
-            )
-            return False
-
-    def visualize_git_tree_mermaid(
-        self,
-        repository_path: str | None = None,
-        branches: list[dict[str, Any]] | None = None,
-        commits: list[dict[str, Any]] | None = None,
-        title: str = "Git Tree Diagram",
-        output_path: str | None = None,
-    ) -> str:
-        """
-        Create a Mermaid Git tree/branch diagram.
-
-        Args:
-            repository_path: Path to Git repository
-            branches: List of branch dictionaries
-            commits: List of commit dictionaries
-            title: Diagram title
-            output_path: File path to save Mermaid file
-
-        Returns:
-            Mermaid diagram content as string
-        """
-        logger.debug("Creating Git tree Mermaid diagram: %s", title)
-
-        try:
-            # Get data from repository if available
-            if repository_path and GIT_OPERATIONS_AVAILABLE:
-                if not is_git_repository(repository_path):
-                    logger.error("Path %s is not a Git repository", repository_path)
-                    return ""
-
-                commits_data = get_commit_history(20, repository_path)
-                current_branch = get_current_branch(repository_path)
-
-                # Convert to expected format
-                branches = [
-                    {"name": current_branch or "main", "created_at": "2024-01-01"}
-                ]
-                commits = [
-                    {
-                        "hash": commit["hash"],
-                        "message": commit["message"],
-                        "branch": current_branch or "main",
-                        "date": commit["date"],
-                    }
-                    for commit in commits_data
-                ]
-
-            mermaid_content = self.mermaid_generator.create_git_branch_diagram(
-                branches=branches, commits=commits, title=title, output_path=output_path
-            )
-
-            logger.info("Git tree Mermaid diagram '%s' generated successfully", title)
-            return mermaid_content
-
-        except Exception as e:
-            logger.error("Error creating Git tree Mermaid diagram: %s", e, exc_info=True)
-            return ""
-
-    def visualize_commit_activity_png(
-        self,
-        repository_path: str | None = None,
-        commits: list[dict[str, Any]] | None = None,
-        title: str = "Commit Activity",
-        output_path: str | None = None,
-        show_plot: bool = False,
-        figure_size: tuple[int, int] = (12, 6),
-        days_back: int = 30,
-    ) -> bool:
-        """
-        Create a PNG chart showing commit activity over time.
-
-        Args:
-            repository_path: Path to Git repository
-            commits: List of commit dictionaries
-            title: Plot title
-            output_path: File path to save PNG
-            show_plot: Whether to display the plot
-            figure_size: Size of the figure
-            days_back: Number of days back to analyze
-
-        Returns:
-            True if successful, False otherwise
-        """
-        logger.debug("Creating commit activity PNG chart: %s", title)
-
-        try:
-            # Get commit data
-            if repository_path and GIT_OPERATIONS_AVAILABLE:
-                commits_data = get_commit_history(100, repository_path)
-                commits = commits_data
-            elif commits:
-                pass
-            else:
-                # Generate sample data
-                commits = self._generate_sample_commits(days_back)
-
-            # Process commit dates
-            commit_dates = []
-            for commit in commits:
-                try:
-                    date_str = commit.get("date", "")
-                    # Parse different date formats
-                    if "T" in date_str:
-                        date = datetime.fromisoformat(date_str)
-                    else:
-                        date = datetime.strptime(date_str[:19], "%Y-%m-%d %H:%M:%S")
-                    commit_dates.append(date.date())
-                except (ValueError, TypeError):
-                    continue
-
-            if not commit_dates:
-                logger.warning("No valid commit dates found")
-                return False
-
-            from collections import Counter
-
-            commit_counts = Counter(commit_dates)
-
-            end_date = max(commit_dates)
-            start_date = end_date - timedelta(days=days_back)
-            date_range = [start_date + timedelta(days=i) for i in range(days_back + 1)]
-
-            # Get counts for each date
-            daily_counts = [commit_counts.get(date, 0) for date in date_range]
-
-            fig, ax = plt.subplots(figsize=figure_size)
-
-            ax.bar(date_range, daily_counts, color=self.colors["commit"], alpha=0.7)
-            ax.set_xlabel("Date")
-            ax.set_ylabel("Number of Commits")
-            ax.set_title(title)
-
-            # Format dates on x-axis
-            import matplotlib.dates as mdates
-
-            ax.xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
-            ax.xaxis.set_major_locator(
-                mdates.DayLocator(interval=max(1, days_back // 10))
-            )
-            plt.xticks(rotation=45)
-
-            # Add statistics
-            total_commits = sum(daily_counts)
-            avg_commits = total_commits / days_back
-            ax.text(
-                0.02,
-                0.95,
-                f"Total: {total_commits} commits\nAvg: {avg_commits:.1f} commits/day",
-                transform=ax.transAxes,
-                va="top",
-                bbox={"boxstyle": "round", "facecolor": "white", "alpha": 0.8},
-            )
-
-            plt.tight_layout()
-
-            if output_path:
-                save_plot(fig, output_path)
-
-            if show_plot:
-                plt.show()
-            else:
-                plt.close(fig)
-
-            logger.info("Commit activity PNG chart '%s' generated successfully", title)
-            return True
-
-        except Exception as e:
-            logger.error(
-                "Error creating commit activity PNG chart: %s", e, exc_info=True
-            )
-            return False
-
-    def _get_repo_data(
-        self, repository_path: str, repo_data: dict[str, Any]
-    ) -> dict[str, Any]:
-        """Get repository data from path or use provided data."""
-        if repository_path and GIT_OPERATIONS_AVAILABLE:
-            repo_status = get_status(repository_path)
-            commit_history = get_commit_history(100, repository_path)
-            current_branch = get_current_branch(repository_path)
-
-            return {
-                "status": repo_status,
-                "commits": commit_history,
-                "current_branch": current_branch,
-                "total_commits": len(commit_history),
-            }
-        if repo_data:
-            return repo_data
-        # Use sample data
-        return {
-            "status": {"clean": True, "modified": [], "untracked": []},
-            "commits": self._generate_sample_commits(),
-            "current_branch": "main",
-            "total_commits": 50,
-        }
-
-    def _plot_repository_status(self, ax, repo_data: dict[str, Any]):
-        """Plot repository status pie chart."""
-        status = repo_data.get("status", {})
-        status_data = {
-            "Clean": 1 if status.get("clean", False) else 0,
-            "Modified": len(status.get("modified", [])),
-            "Untracked": len(status.get("untracked", [])),
-        }
-
-        if any(status_data.values()):
-            ax.pie(
-                status_data.values(),
-                labels=status_data.keys(),
-                autopct="%1.0f",
-                colors=["#90EE90", "#FFD700", "#FF6347"],
-            )
-        ax.set_title("Repository Status")
-
-    def _plot_commit_timeline(self, ax, commits: list[dict[str, Any]]):
-        """Plot recent commits timeline."""
-        if not commits:
-            return
-
-        dates = []
-        for commit in commits[:20]:
-            try:
-                date_str = commit.get("date", "")
-                date = datetime.fromisoformat(date_str)
-                dates.append(date)
-            except (ValueError, KeyError, AttributeError):
-                continue
-
-        if dates:
-            ax.plot(dates, range(len(dates)), "o-", color=self.colors["commit"])
-            ax.set_xlabel("Date")
-            ax.set_ylabel("Commits")
-            ax.set_title("Recent Commits Timeline")
-            plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
-
-    def _plot_author_contributions(self, ax, commits: list[dict[str, Any]]):
-        """Plot top contributors bar chart."""
-        author_counts = {}
-        for commit in commits:
-            author = commit.get("author_name", "Unknown")
-            author_counts[author] = author_counts.get(author, 0) + 1
-
-        if author_counts:
-            authors = list(author_counts.keys())[:5]  # Top 5 authors
-            counts = [author_counts[author] for author in authors]
-            ax.barh(authors, counts, color=self.colors["feature"])
-            ax.set_title("Top Contributors")
-            ax.set_xlabel("Commits")
-
-    def _plot_branch_info(self, ax, repo_data: dict[str, Any]):
-        """Plot branch information text."""
-        current_branch = repo_data.get("current_branch", "main")
-        branch_info = f"Current: {current_branch}\nTotal Commits: {repo_data.get('total_commits', 0)}"
-        ax.text(
-            0.5,
-            0.5,
-            branch_info,
-            transform=ax.transAxes,
-            ha="center",
-            va="center",
-            fontsize=12,
-            bbox={"boxstyle": "round", "facecolor": self.colors["main"], "alpha": 0.3},
-        )
-        ax.set_title("Branch Info")
-        ax.axis("off")
-
-    def _plot_commit_words(self, ax, commits: list[dict[str, Any]]):
-        """Plot common commit words bar chart."""
-        commit_words = {}
-        for commit in commits:
-            message = commit.get("message", "").lower()
-            words = message.split()
-            for word in words:
-                if len(word) > 3:  # Only words longer than 3 characters
-                    commit_words[word] = commit_words.get(word, 0) + 1
-
-        if commit_words:
-            top_words = sorted(commit_words.items(), key=lambda x: x[1], reverse=True)[
-                :10
-            ]
-            words, counts = zip(*top_words, strict=False)
-            ax.barh(words, counts, color=self.colors["develop"])
-            ax.set_title("Common Commit Words")
-            ax.set_xlabel("Frequency")
-
-    def _plot_activity_heatmap(self, ax, commits: list[dict[str, Any]]):
-        """Plot weekly activity heatmap."""
-        commit_dates = []
-        for commit in commits:
-            try:
-                date_str = commit.get("date", "")
-                date = datetime.fromisoformat(date_str)
-                commit_dates.append(date)
-            except (ValueError, KeyError, AttributeError):
-                continue
-
-        if not commit_dates:
-            return
-
-        # Group by week and day of week
-        from collections import defaultdict
-
-        weekly_activity = defaultdict(lambda: defaultdict(int))
-
-        for date in commit_dates:
-            week = date.strftime("%Y-W%U")
-            day = date.weekday()
-            weekly_activity[week][day] += 1
-
-        # Convert to matrix
-        weeks = sorted(weekly_activity.keys())[-8:]  # Last 8 weeks
-        activity_matrix = []
-        for week in weeks:
-            week_data = [weekly_activity[week][day] for day in range(7)]
-            activity_matrix.append(week_data)
-
-        if activity_matrix:
-            im = ax.imshow(activity_matrix, cmap="Greens", aspect="auto")
-            ax.set_title("Weekly Commit Activity Heatmap")
-            ax.set_xlabel("Day of Week")
-            ax.set_ylabel("Week")
-            ax.set_xticks(range(7))
-            ax.set_xticklabels(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
-            ax.set_yticks(range(len(weeks)))
-            ax.set_yticklabels(weeks, fontsize=8)
-            plt.colorbar(im, ax=ax, label="Commits")
+    # =========================================================================
+    # Repository Summary Dashboard
+    # =========================================================================
 
     def visualize_repository_summary_png(
         self,
@@ -565,20 +84,7 @@ class GitVisualizer:
         show_plot: bool = False,
         figure_size: tuple[int, int] = (14, 10),
     ) -> bool:
-        """
-        Create a comprehensive PNG dashboard of repository statistics.
-
-        Args:
-            repository_path: Path to Git repository
-            repo_data: Repository data dictionary
-            title: Plot title
-            output_path: File path to save PNG
-            show_plot: Whether to display the plot
-            figure_size: Size of the figure
-
-        Returns:
-            True if successful, False otherwise
-        """
+        """Create a comprehensive PNG dashboard of repository statistics."""
         logger.debug("Creating repository summary PNG dashboard: %s", title)
 
         try:
@@ -589,7 +95,6 @@ class GitVisualizer:
 
             commits = repo_data.get("commits", [])
 
-            # Create all subplots using helper methods
             self._plot_repository_status(fig.add_subplot(gs[0, 0]), repo_data)
             self._plot_commit_timeline(fig.add_subplot(gs[0, 1:]), commits)
             self._plot_author_contributions(fig.add_subplot(gs[1, 0]), commits)
@@ -601,7 +106,6 @@ class GitVisualizer:
 
             if output_path:
                 save_plot(fig, output_path, dpi=150)
-
             if show_plot:
                 plt.show()
             else:
@@ -618,23 +122,17 @@ class GitVisualizer:
             )
             return False
 
+    # =========================================================================
+    # Comprehensive Report
+    # =========================================================================
+
     def create_comprehensive_git_report(
         self,
         repository_path: str,
         output_dir: str,
         report_name: str = "git_analysis_report",
     ) -> dict[str, bool]:
-        """
-        Create a comprehensive Git analysis report with both PNG and Mermaid outputs.
-
-        Args:
-            repository_path: Path to Git repository
-            output_dir: Directory to save all outputs
-            report_name: Base name for report files
-
-        Returns:
-            Dictionary with success status for each visualization type
-        """
+        """Create a comprehensive Git analysis report with both PNG and Mermaid outputs."""
         logger.info("Creating comprehensive Git report for %s", repository_path)
 
         if not GIT_OPERATIONS_AVAILABLE:
@@ -653,7 +151,6 @@ class GitVisualizer:
 
         results = {}
 
-        # 1. Git tree visualizations
         results["git_tree_png"] = self.visualize_git_tree_png(
             repository_path=repository_path,
             title=f"Git Tree - {os.path.basename(repository_path)}",
@@ -668,14 +165,12 @@ class GitVisualizer:
             )
         )
 
-        # 2. Commit activity analysis
         results["commit_activity"] = self.visualize_commit_activity_png(
             repository_path=repository_path,
             title=f"Commit Activity - {os.path.basename(repository_path)}",
             output_path=os.path.join(output_dir, f"{report_name}_commit_activity.png"),
         )
 
-        # 3. Repository summary dashboard
         results["repo_summary"] = self.visualize_repository_summary_png(
             repository_path=repository_path,
             title=f"Repository Summary - {os.path.basename(repository_path)}",
@@ -684,16 +179,13 @@ class GitVisualizer:
             ),
         )
 
-        # 4. Git workflow diagram (Mermaid)
         workflow_content = self.mermaid_generator.create_git_workflow_diagram(
             title=f"Git Workflow - {os.path.basename(repository_path)}",
             output_path=os.path.join(output_dir, f"{report_name}_workflow.mmd"),
         )
         results["workflow_mermaid"] = bool(workflow_content)
 
-        # 5. Repository structure diagram (Mermaid)
         try:
-            # Get basic repository structure
             repo_structure = self._get_repository_structure(repository_path)
             structure_content = (
                 self.mermaid_generator.create_repository_structure_diagram(
@@ -714,10 +206,16 @@ class GitVisualizer:
         success_count = sum(results.values())
         total_count = len(results)
         logger.info(
-            "Git report creation completed: %s/%s visualizations successful", success_count, total_count
+            "Git report creation completed: %s/%s visualizations successful",
+            success_count,
+            total_count,
         )
 
         return results
+
+    # =========================================================================
+    # Utility Methods
+    # =========================================================================
 
     def _get_branch_color(self, branch_name: str) -> str:
         """Get color for branch based on name."""
@@ -764,13 +262,11 @@ class GitVisualizer:
         path = Path(repository_path)
 
         try:
-            # Get top-level directories and files
             for item in path.iterdir():
                 if item.name.startswith("."):
                     continue
 
                 if item.is_dir():
-                    # Get subdirectory structure (limited depth)
                     substructure = {}
                     try:
                         for subitem in item.iterdir():
@@ -844,23 +340,17 @@ class GitVisualizer:
         logger.info("Report summary saved to %s", summary_path)
 
 
+# =========================================================================
 # Convenience functions for easy import
+# =========================================================================
+
+
 def visualize_git_repository(
     repository_path: str,
     output_dir: str = "./git_analysis",
     report_name: str = "git_report",
 ) -> dict[str, bool]:
-    """
-    Create comprehensive Git repository visualizations.
-
-    Args:
-        repository_path: Path to Git repository
-        output_dir: Directory to save outputs
-        report_name: Base name for output files
-
-    Returns:
-        Dictionary with success status for each visualization
-    """
+    """Create comprehensive Git repository visualizations."""
     visualizer = GitVisualizer()
     return visualizer.create_comprehensive_git_report(
         repository_path, output_dir, report_name
@@ -904,9 +394,6 @@ def create_git_tree_mermaid(
 
 
 if __name__ == "__main__":
-    # Test the Git visualizer
-    import sys
-
     output_dir = Path(__file__).parent.parent / "output" / "git_visualization_examples"
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -914,7 +401,6 @@ if __name__ == "__main__":
 
     visualizer = GitVisualizer()
 
-    # Test with sample data if no git repo provided
     repo_path = sys.argv[1] if len(sys.argv) > 1 else None
 
     if repo_path and os.path.exists(repo_path):
@@ -928,13 +414,11 @@ if __name__ == "__main__":
     else:
         logger.info("Testing with sample data")
 
-        # Test PNG visualization with sample data
         success = visualizer.visualize_git_tree_png(
             title="Sample Git Tree", output_path=str(output_dir / "sample_git_tree.png")
         )
         logger.info("Sample Git tree PNG: %s", "Success" if success else "Failed")
 
-        # Test Mermaid visualization
         mermaid_content = visualizer.visualize_git_tree_mermaid(
             title="Sample Git Diagram",
             output_path=str(output_dir / "sample_git_tree.mmd"),
@@ -943,14 +427,12 @@ if __name__ == "__main__":
             "Sample Git tree Mermaid: %s", "Success" if mermaid_content else "Failed"
         )
 
-        # Test commit activity
         success = visualizer.visualize_commit_activity_png(
             title="Sample Commit Activity",
             output_path=str(output_dir / "sample_commit_activity.png"),
         )
         logger.info("Sample commit activity: %s", "Success" if success else "Failed")
 
-        # Test repository summary
         success = visualizer.visualize_repository_summary_png(
             title="Sample Repository Summary",
             output_path=str(output_dir / "sample_repo_summary.png"),
@@ -959,7 +441,6 @@ if __name__ == "__main__":
 
     logger.info("Git visualization examples generated in %s", output_dir)
 
-    # Basic logging setup if running standalone
     if not logging.getLogger("").hasHandlers():
         logging.basicConfig(
             level=logging.DEBUG,

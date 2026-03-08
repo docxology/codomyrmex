@@ -38,7 +38,7 @@ print(result["metadata"])  # {"version": 1, "created": "2026-02-24"}
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `__init__` | `(key: bytes)` | Create container with AES key (16/24/32 bytes) |
-| `pack` | `(data: Any, metadata: dict \| None = None) -> bytes` | Serialize and encrypt |
+| `pack` | `(data: Any, metadata: dict \ | None = None) -> bytes` Serialize and encrypt |
 | `unpack` | `(encrypted_data: bytes) -> dict[str, Any]` | Decrypt and deserialize |
 
 ## Dependencies

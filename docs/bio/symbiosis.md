@@ -35,7 +35,7 @@ graph TB
     HOLOGENOME -->|"natural selection<br/>acts on composite"| FITNESS["Holobiont Fitness"]
 
     subgraph CDM_HOLO["Codomyrmex Holobiont"]
-        CDM_HOST["Codomyrmex Core<br/><i>128 modules</i>"]
+        CDM_HOST["Codomyrmex Core<br/><i>130 modules</i>"]
         CDM_LLM["LLM Providers<br/><i>obligate mutualist</i>"]
         CDM_PLUGINS["Plugins<br/><i>facultative symbionts</i>"]
         CDM_PAI["PAI<br/><i>cognitive symbiont</i>"]

@@ -30,7 +30,7 @@ Three cooperating classes form a pipeline: `TaskQueue` manages ordering and deli
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `enqueue` | `task: Task` | `bool` | Add task; dedup by task_id; returns False if duplicate |
-| `dequeue` | none | `Task \| None` | Pop highest-priority task; skips expired to dead-letter |
+| `dequeue` | none | `Task \ | None` Pop highest-priority task; skips expired to dead-letter |
 | `ack` | `task_id: str` | `bool` | Mark task completed; remove from in-flight |
 | `nack` | `task_id: str` | `bool` | Retry or dead-letter; True if requeued |
 | `requeue_dead_letters` | none | `int` | Move all dead-letter tasks back; returns count |

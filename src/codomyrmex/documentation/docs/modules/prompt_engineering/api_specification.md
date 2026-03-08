@@ -105,7 +105,7 @@ VersionManager()
 | `changelog` | `str` | `""` | Change description |
 | `author` | `str` | `""` | Author name |
 | `bump` | `str` | `"patch"` | Version bump level: "major", "minor", "patch" |
-| `version_override` | `str \| None` | `None` | Explicit version (overrides auto-increment) |
+| `version_override` | `str \ | None` | `None` Explicit version (overrides auto-increment) |
 
 ---
 

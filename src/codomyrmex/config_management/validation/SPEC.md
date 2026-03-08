@@ -16,7 +16,7 @@ Schema-driven validation engine. `ConfigValidator` validates a configuration dic
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `schema: dict[str, ConfigSchema] \| None` | `None` | Initializes with optional schema |
+| `__init__` | `schema: dict[str, ConfigSchema] \ | None` | `None` Initializes with optional schema |
 | `validate` | `config: dict[str, Any]` | `ValidationResult` | Validates config against schema and custom validators |
 | `validate_required_fields` | `config, required: list[str]` | `list[str]` | Returns names of missing required fields |
 | `validate_types` | `config, schema: dict[str, Any]` | `list[ValidationIssue]` | Checks value types against a type map |

@@ -29,7 +29,7 @@ agent_setup/
 |-------|------|-------------|
 | `name` | `str` | Unique identifier (e.g. `"claude"`) |
 | `display_name` | `str` | Human-readable name |
-| `agent_type` | `str` | `"api"` \| `"cli"` \| `"local"` |
+| `agent_type` | `str` | `"api"` \ `"cli"` \ `"local"` |
 | `env_var` | `str` | Primary env var |
 | `config_key` | `str` | AgentConfig field name |
 | `default_model` | `str` | Default model string |
@@ -40,9 +40,9 @@ agent_setup/
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | `str` | Agent name |
-| `status` | `str` | `"operative"` \| `"key_missing"` \| `"unreachable"` \| `"unavailable"` |
+| `status` | `str` | `"operative"` \ `"key_missing"` \ `"unreachable"` \ `"unavailable"` |
 | `detail` | `str` | Human-readable explanation |
-| `latency_ms` | `float \| None` | Probe response time |
+| `latency_ms` | `float \ | None` Probe response time |
 
 ## Probe Strategy
 

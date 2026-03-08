@@ -24,7 +24,7 @@ SecureDataContainer(key: bytes)
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `pack(data, metadata)` | `data: Any`, `metadata: dict[str, Any] \| None = None` | `bytes` | Serialize `{"data": data, "metadata": metadata}` to JSON, encrypt with AES-GCM |
+| `pack(data, metadata)` | `data: Any`, `metadata: dict[str, Any] \ | None = None` | `bytes` Serialize `{"data": data, "metadata": metadata}` to JSON, encrypt with AES-GCM |
 | `unpack(encrypted_data)` | `encrypted_data: bytes` | `dict[str, Any]` | Decrypt and deserialize; returns dict with `"data"` and `"metadata"` keys |
 
 ### Wire Format

@@ -19,7 +19,7 @@ Mixin composition pattern: `ClaudeClient(ExecutionMixin, ToolsMixin, SessionMixi
 | `_execute_impl` | `request: AgentRequest` | `AgentResponse` | Delegates to `_execute_with_retry` |
 | `_execute_with_retry` | `request, attempt=0` | `AgentResponse` | Retry with exponential backoff and jitter |
 | `_stream_impl` | `request: AgentRequest` | `Iterator[str]` | Stream Claude API response chunks |
-| `_build_messages_with_system` | `request: AgentRequest` | `tuple[list, str\|None]` | Extract system message and build message list with image support |
+| `_build_messages_with_system` | `request: AgentRequest` | `tuple[list, str\ | None]` Extract system message and build message list with image support |
 | `_calculate_cost` | `input_tokens, output_tokens` | `float` | USD cost from `CLAUDE_PRICING` lookup |
 | `_extract_response_content` | `response` | `tuple[str, list[dict]]` | Split text content and tool-use blocks |
 

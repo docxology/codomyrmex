@@ -23,7 +23,7 @@ stdlib. `MemoryProfiler` uses Python's `gc` module for full-heap traversal.
 | `snapshot(label)` | `label: str` | `MemorySnapshot` | Full gc traversal; calls `gc.collect()` first; stores top 20 types by count |
 | `snapshot_lightweight(label, tracked_count)` | `label: str, tracked_count: int` | `MemorySnapshot` | No gc traversal; uses caller-supplied count |
 | `diff(label_a, label_b)` | `str, str` | `MemoryDelta` | Computes object delta and per-type changes; sets `leak_suspected` if delta > threshold |
-| `get_snapshot(label)` | `label: str` | `MemorySnapshot \| None` | Retrieve stored snapshot by label |
+| `get_snapshot(label)` | `label: str` | `MemorySnapshot \ | None` Retrieve stored snapshot by label |
 
 ### `MemorySnapshot`
 

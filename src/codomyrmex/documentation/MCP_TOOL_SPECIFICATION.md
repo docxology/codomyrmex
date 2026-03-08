@@ -77,7 +77,7 @@ Audit the repository for RASP (README, AGENTS, SPEC, PAI) compliance. Can audit 
 
 | Parameter Name | Type | Required | Description | Example Value |
 | :--- | :--- | :--- | :--- | :--- |
-| `module_name` | `string \| null` | No | Module name to audit specifically. If not provided (or null), audits the entire repository. | `"agents"` |
+| `module_name` | `string \ | null` | No | Module name to audit specifically. If not provided (or null), audits the entire repository. `"agents"` |
 
 ### 4. Output Schema (Return Value)
 

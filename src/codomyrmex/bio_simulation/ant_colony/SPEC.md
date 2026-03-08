@@ -50,7 +50,7 @@ Enum with values: `FORAGING`, `RETURNING`, `IDLE`.
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `__init__` | `(width: int, height: int, nest_position: tuple[int, int] | None = None)` | Create grid; nest defaults to center |
+| `__init__` | `(width: int, height: int, nest_position: tuple[int, int] | None = None)` Create grid; nest defaults to center |
 | `add_food_source` | `(position: tuple[int, int], amount: float) -> None` | Place or merge food at a cell |
 | `remove_food` | `(position: tuple[int, int], amount: float) -> float` | Remove food, return actual amount taken |
 | `add_obstacle` | `(position: tuple[int, int]) -> None` | Mark cell as impassable |
@@ -59,7 +59,7 @@ Enum with values: `FORAGING`, `RETURNING`, `IDLE`.
 | `set_pheromone` | `(position: tuple[int, int], amount: float) -> None` | Add pheromone at a cell |
 | `decay_pheromones` | `(rate: float) -> None` | Multiplicative decay; prune cells below 0.01 |
 | `get_neighbors` | `(position: tuple[int, int], radius: int = 1) -> list[tuple[int, int]]` | Passable neighbors within Chebyshev radius |
-| `food_at` | `(position: tuple[int, int], radius: float = 1.5) -> FoodSource | None` | Nearest food source within radius |
+| `food_at` | `(position: tuple[int, int], radius: float = 1.5) -> FoodSource | None` Nearest food source within radius |
 
 **Properties**: `food_sources: list[FoodSource]`, `obstacles: set[tuple[int, int]]`
 

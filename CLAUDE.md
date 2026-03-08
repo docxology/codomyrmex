@@ -27,9 +27,9 @@ uv run pytest src/codomyrmex/tests/unit/<module>/test_<module>.py
 uv run pytest -k "test_name"     # Run tests matching pattern
 
 # Code formatting and linting
-uv run black src/
+uv run ruff format src/
 uv run ruff check src/
-uv run mypy src/
+uv run ty check src/
 
 # CLI usage
 codomyrmex --help
@@ -49,7 +49,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 128 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 130 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -228,7 +228,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (77905 symbols, 180473 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (80435 symbols, 186357 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -291,10 +291,29 @@ This project is indexed by GitNexus as **codomyrmex** (77905 symbols, 180473 rel
 ## Self-Check Before Finishing
 
 Before completing any code modification task, verify:
+
 1. `gitnexus_impact` was run for all modified symbols
 2. No HIGH/CRITICAL risk warnings were ignored
 3. `gitnexus_detect_changes()` confirms changes match expected scope
 4. All d=1 (WILL BREAK) dependents were updated
+
+## Keeping the Index Fresh
+
+After committing code changes, the GitNexus index becomes stale. Re-run analyze to update it:
+
+```bash
+npx gitnexus analyze
+```
+
+If the index previously included embeddings, preserve them by adding `--embeddings`:
+
+```bash
+npx gitnexus analyze --embeddings
+```
+
+To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.embeddings` field shows the count (0 means no embeddings). **Running analyze without `--embeddings` will delete any previously generated embeddings.**
+
+> Claude Code users: A PostToolUse hook handles this automatically after `git commit` and `git merge`.
 
 ## CLI
 
@@ -315,13 +334,16 @@ This project is configured with the `qmd` skill for local hybrid search of Markd
 ## === COGNILAYER (auto-generated, do not delete) ===
 
 ## CogniLayer v3 Active
+
 Persistent memory is ON.
 ON FIRST USER MESSAGE in this session, briefly tell the user:
   'CogniLayer v3 active — persistent memory is on. Type /cognihelp for available commands.'
 Say it ONCE, keep it short, then continue with their request.
 
 ## Memory Tools
+
 You have access to the `cognilayer` MCP server:
+
 - memory_search(query) — search memory semantically
 - memory_write(content) — save important information
 - file_search(query) — search project files (PRD, docs...)
@@ -333,13 +355,17 @@ When you need info from PRD or docs, use file_search
 INSTEAD of reading the entire file.
 
 ## VERIFY-BEFORE-ACT — MANDATORY
+
 When memory_search returns a fact marked with ⚠ STALE:
+
 1. ALWAYS read the source file and verify the fact still holds
 2. If the fact changed -> update it via memory_write
 3. NEVER make changes based on STALE facts without verification
 
 ## PROACTIVE MEMORY — IMPORTANT
+
 When you discover something important during work, SAVE IT IMMEDIATELY:
+
 - Bug and fix -> memory_write(type="error_fix")
 - Pitfall/danger -> memory_write(type="gotcha")
 - Exact procedure -> memory_write(type="procedure")
@@ -349,21 +375,25 @@ When you discover something important during work, SAVE IT IMMEDIATELY:
 DO NOT wait for /harvest — session may crash.
 
 ## RUNNING BRIDGE — CRITICAL
+
 After completing each task AUTOMATICALLY update session bridge:
   session_bridge(action="save", content="Progress: ...; Open: ...")
 This is Tier 1 — do it yourself, don't announce, it's part of the job.
 
 ## Safety Rules — MANDATORY
+
 - Before ANY deploy, push, ssh, pm2, docker, db migration:
   1. ALWAYS call verify_identity(action_type="...") first
   2. If it returns BLOCKED — STOP and ask the user
   3. If it returns VERIFIED — READ the target server to the user and request confirmation
 
 ## Git Rules
+
 - Commit often, small atomic changes. Format: "[type] what and why"
 - commit = Tier 1 (do it yourself). push = Tier 3 (verify_identity).
 
 ## Project DNA: codomyrmex
+
 Stack: unknown
 Style: [unknown]
 Structure: .agent, .benchmarks, .desloppify, .gemini, .github, .gitnexus, .mypy_cache, .pipelines
@@ -372,14 +402,15 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
+
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/orchestrator/workflows/_models.py (create), src/codomyrmex/orchestrator/workflows/_factories.py (create), src/codomyrmex/collaboration/coordination/consensus.py (edit), src/codomyrmex/orchestrator/workflows/_factories.py (edit), src/codomyrmex/agents/llm_client.py (edit), src/codomyrmex/orchestrator/workflows/workflow.py (edit), src/codomyrmex/database_management/migration/migration_manager.py (edit), src/codomyrmex/database_management/migration/_db_connector.py (create), fix_g004.py (create), src/codomyrmex/agents/cli/handlers.py (edit)
-  ... and 12 more
+Files: src/codomyrmex/tests/unit/agents/test_core_exceptions.py (create), src/codomyrmex/tests/unit/llm/test_llm_exceptions_direct.py (create), src/codomyrmex/tests/unit/finance/test_finance_models.py (create)
 
 ## Crash Recovery
-Last session (2026-03-07T19:40:50.602687) was not properly closed (crash/kill).
-Recorded 37 file changes before crash.
-Last changed files: src/codomyrmex/api/openapi_generator.py, src/codomyrmex/wallet/security/key_rotation.py, src/codomyrmex/skills/skills_manager.py, src/codomyrmex/orchestrator/resilience/agent_circuit_breaker.py, src/codomyrmex/coding/execution/executor.py
+
+Last session (2026-03-07T23:11:46.873679) was not properly closed (crash/kill).
+Recorded 3 file changes before crash.
+Last changed files: src/codomyrmex/tests/unit/finance/test_finance_models.py, src/codomyrmex/tests/unit/llm/test_llm_exceptions_direct.py, src/codomyrmex/tests/unit/agents/test_core_exceptions.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

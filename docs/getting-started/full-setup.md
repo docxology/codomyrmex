@@ -101,7 +101,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/coding/static_analysis/ # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 128 modules total
+│   └── ...                  # 130 modules total
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -266,7 +266,7 @@ uv run black src/
 uv run ruff check src/
 
 # Type checking
-uv run mypy src/
+uv run ty check src/
 ```
 
 ### Module Development
@@ -299,9 +299,9 @@ Copyright (c) 2025 The Codomyrmex Contributors (@docxology)
 
 ## Key Metrics
 
-- **Lines of Code**: ~100K+ across 128 modules
+- **Lines of Code**: ~100K+ across 130 modules
 - **Test Coverage**: ~68% (15,179 tests passing, gate: 67%)
-- **Module Count**: 128 modules (88 load successfully; 6 additional require optional SDKs)
+- **Module Count**: 130 modules (88 load successfully; 6 additional require optional SDKs)
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

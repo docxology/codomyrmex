@@ -5,7 +5,7 @@
 ## Module Overview
 
 Module introspection, capability scanning, and system health reporting for the Codomyrmex platform.
-Provides `SystemDiscovery` to scan all 128 modules and report their status, `CapabilityScanner` for
+Provides `SystemDiscovery` to scan all 130 modules and report their status, `CapabilityScanner` for
 feature-level capability queries, and `StatusReporter` for health score generation. Three MCP tools
 (`health_check`, `list_modules`, `dependency_tree`) expose these capabilities to PAI agents.
 
@@ -111,7 +111,7 @@ assert 0 <= report.health_score <= 100
 **Use Cases**: Module inventory for architectural decisions, dependency tree review, planning module relationships.
 
 ### QATester Agent
-**Use Cases**: System health verification during VERIFY, confirming all 128 modules are discoverable.
+**Use Cases**: System health verification during VERIFY, confirming all 130 modules are discoverable.
 
 ### Researcher Agent
 **Use Cases**: Full read access for research-phase system discovery, module health inspection, dependency analysis.

@@ -21,7 +21,7 @@ are computed from the adjacency structure without external graph libraries.
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `add_node` | `id: str, attributes: dict \| None` | `None` | Add or update a node with optional metadata |
+| `add_node` | `id: str, attributes: dict \ | None` | `None` Add or update a node with optional metadata |
 | `add_edge` | `source: str, target: str, weight: float` | `None` | Add an undirected weighted edge (auto-creates nodes) |
 | `find_communities` | -- | `list[set[str]]` | Detect communities via label propagation (max 50 iterations) |
 | `calculate_centrality` | -- | `dict[str, float]` | Degree centrality normalised to [0, 1] |

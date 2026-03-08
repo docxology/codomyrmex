@@ -22,12 +22,12 @@ Method: `distance_to(other: Location) -> float` -- haversine distance in kilomet
 
 | Field | Type | Default |
 |-------|------|---------|
-| `max_distance` | `float \| None` | `None` (km) |
-| `max_duration` | `float \| None` | `None` (minutes) |
-| `max_stops` | `int \| None` | `None` |
+| `max_distance` | `float \ | None` `None` (km) |
+| `max_duration` | `float \ | None` `None` (minutes) |
+| `max_stops` | `int \ | None` `None` |
 | `required_stops` | `list[str]` | `[]` |
 | `avoid_locations` | `list[str]` | `[]` |
-| `vehicle_capacity` | `float \| None` | `None` |
+| `vehicle_capacity` | `float \ | None` `None` |
 | `time_windows` | `dict[str, tuple[int, int]]` | `{}` |
 
 ### `Route` / `RouteStop`

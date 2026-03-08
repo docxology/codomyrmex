@@ -16,7 +16,7 @@ Single-class design (`Forecaster`) with stateless computation methods. The `fore
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `data: list[float] \| None` | -- | Initialize with optional historical time-series data |
+| `__init__` | `data: list[float] \ | None` | -- Initialize with optional historical time-series data |
 | `moving_average` | `window: int = 3` | `list[float]` | Simple moving average; output is shorter by `window - 1` |
 | `exponential_smoothing` | `alpha: float = 0.3` | `list[float]` | Single exponential smoothing; same length as input |
 | `linear_trend` | -- | `dict` | OLS regression returning `slope`, `intercept`, `r_squared` |

@@ -16,8 +16,8 @@ Two independent subsystems: `RepoIndexer` uses Python's `ast` module for static 
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `index_file` | `file_path: str \| Path` | `RepoIndex` | Parse a single Python file, extract `Symbol` and `ImportEdge` entries |
-| `index_directory` | `root: str \| Path` | `RepoIndex` | Walk a directory, index all `.py` files, return merged `RepoIndex` |
+| `index_file` | `file_path: str \ | Path` | `RepoIndex` Parse a single Python file, extract `Symbol` and `ImportEdge` entries |
+| `index_directory` | `root: str \ | Path` | `RepoIndex` Walk a directory, index all `.py` files, return merged `RepoIndex` |
 
 ### `RepoIndex`
 
@@ -33,8 +33,8 @@ Two independent subsystems: `RepoIndexer` uses Python's `ast` module for static 
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `extensions: set[str] \| None`, `exclude_dirs: set[str] \| None` | `None` | Configure file extensions and exclusion patterns |
-| `scan` | `root: str \| Path` | `ProjectContext` | Walk directory tree and build project context |
+| `__init__` | `extensions: set[str] \ | None`, `exclude_dirs: set[str] \ | None` `None` Configure file extensions and exclusion patterns |
+| `scan` | `root: str \ | Path` | `ProjectContext` Walk directory tree and build project context |
 
 ### `ToolSelector`
 

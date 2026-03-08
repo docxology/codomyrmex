@@ -58,7 +58,7 @@ Create a new event in Google Calendar.
 | `end_time` | `str` | Yes | ISO 8601 string, e.g. `"2026-02-24T11:00:00Z"` |
 | `description` | `str` | No | Event description (default empty) |
 | `location` | `str` | No | Location (default empty) |
-| `attendees` | `List[str] \| None` | No | Additional attendee email addresses |
+| `attendees` | `List[str] \ | None` | No Additional attendee email addresses |
 
 ### Output Schema
 
@@ -145,7 +145,7 @@ Update an existing calendar event (PUT semantics — all fields replaced).
 | `end_time` | `str` | Yes | ISO 8601 string, e.g. `"2026-02-24T11:00:00Z"` |
 | `description` | `str` | No | Replacement description (default empty) |
 | `location` | `str` | No | Replacement location (default empty) |
-| `attendees` | `List[str] \| None` | No | Replacement attendee list |
+| `attendees` | `List[str] \ | None` | No Replacement attendee list |
 
 ### Output Schema
 

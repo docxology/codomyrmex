@@ -27,7 +27,7 @@ Three independent classes, each following a simple append/query model with no ex
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `__init__` | `max_turns: int = 1000` | `None` | Sets turn limit |
-| `add` | `role: str`, `content: str`, `metadata: dict \| None` | `Turn` | Appends turn, trims to `max_turns` |
+| `add` | `role: str`, `content: str`, `metadata: dict \ | None` | `Turn` Appends turn, trims to `max_turns` |
 | `last` | `n: int = 1` | `list[Turn]` | Returns last N turns |
 | `by_role` | `role: str` | `list[Turn]` | Filters turns by role |
 | `summary` | -- | `dict[str, Any]` | Returns turn count, total words, per-role counts |
@@ -72,7 +72,7 @@ Three independent classes, each following a simple append/query model with no ex
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `put` | `key: str`, `value: Any`, `ttl: float = 0`, `tags: list \| None` | `None` | Stores value; ttl > 0 sets expiry |
+| `put` | `key: str`, `value: Any`, `ttl: float = 0`, `tags: list \ | None` | `None` Stores value; ttl > 0 sets expiry |
 | `get` | `key: str`, `default: Any = None` | `Any` | Returns value or default; evicts if expired |
 | `delete` | `key: str` | `bool` | Removes entry, returns True if existed |
 | `has` | `key: str` | `bool` | Checks existence; evicts if expired |

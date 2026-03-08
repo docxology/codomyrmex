@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🐜 Codomyrmex</h1>
   <p align="center">
-    <strong>A modular, AI-native coding workspace with 128 composable modules and 474 MCP tools</strong>
+    <strong>A modular, AI-native coding workspace with 130 composable modules and 474 MCP tools</strong>
   </p>
 </p>
 
@@ -27,7 +27,7 @@
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together **128 specialized modules** for AI-assisted development, code analysis, orchestration, security, and documentation. Every module is self-contained, zero-mock tested, and composable — use what you need.
+Codomyrmex is a **modular development platform** that brings together **130 specialized modules** for AI-assisted development, code analysis, orchestration, security, and documentation. Every module is self-contained, zero-mock tested, and composable — use what you need.
 
 ### Why Codomyrmex?
 
@@ -38,7 +38,7 @@ Codomyrmex is a **modular development platform** that brings together **128 spec
 | 🧪 **21,000+ Tests** | Zero-mock policy — every test exercises real code |
 | 🔒 **Security First** | Secret scanning, SBOM generation, detect-secrets integration |
 | 🎛️ **Multi-Agent Orchestration** | Claude, Gemini, GPT, and 10+ agent providers |
-| 📦 **PyPI Ready** | `hatch build` + `twine check` verified |
+| 📦 **PyPI Ready** | `uv build` + `twine check` verified |
 
 ## Quick Start
 
@@ -124,8 +124,8 @@ uv run pytest --cov=src/codomyrmex               # With coverage
 
 # Quality
 uv run ruff check src/                           # Lint (0 violations ✅)
-uv run mypy src/                                 # Type check
-uv run hatch build && uv run twine check dist/*  # Build validation
+uv run ty check src/                             # Type check
+uv build && uv run twine check dist/*            # Build validation
 
 # Mutation testing
 uv run mutmut run                                # 6-file mutation suite
@@ -148,14 +148,14 @@ uv run mutmut run                                # 6-file mutation suite
 
 | Metric | Value |
 |--------|-------|
-| Modules | **128** |
+| Modules | **130** |
 | MCP tools | **474** dynamically discovered |
 | Test suite | **21,000+** tests |
-| Coverage | ~35% (gate: 32% (target: 40%)) |
+| Coverage | ~35% (gate: 33% (target: 40%)) |
 | `@mcp_tool` decorators | **474** |
 | Ruff violations | **0** |
 | PAI skills | **81** installed |
-| RASP docs compliance | **128/128** |
+| RASP docs compliance | **130/130** |
 | Python compatibility | 3.11 – 3.14 |
 
 ## Contributing

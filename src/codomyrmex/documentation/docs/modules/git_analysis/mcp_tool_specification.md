@@ -161,7 +161,7 @@ Detailed commit history with per-commit statistics.
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 | `max_count` | `int` | No | 50 | Maximum commits to return |
-| `branch` | `str \| null` | No | `null` | Branch to walk (default: active branch) |
+| `branch` | `str \ | null` | No | `null` Branch to walk (default: active branch) |
 
 **Returns on success:**
 ```json
@@ -299,10 +299,10 @@ Filtered commit history with optional date range, author, and branch constraints
 |------|------|----------|---------|-------------|
 | `repo_path` | `str` | No | `"."` | Path to the git repository |
 | `max_count` | `int` | No | 50 | Maximum commits to return |
-| `since` | `str \| null` | No | `null` | ISO-8601 date — only commits after this date |
-| `until` | `str \| null` | No | `null` | ISO-8601 date — only commits before this date |
-| `author` | `str \| null` | No | `null` | Author name substring filter (case-insensitive) |
-| `branch` | `str \| null` | No | `null` | Branch to walk (default: active branch) |
+| `since` | `str \ | null` | No | `null` ISO-8601 date — only commits after this date |
+| `until` | `str \ | null` | No | `null` ISO-8601 date — only commits before this date |
+| `author` | `str \ | null` | No | `null` Author name substring filter (case-insensitive) |
+| `branch` | `str \ | null` | No | `null` Branch to walk (default: active branch) |
 
 **Returns on success:** Same shape as `git_analysis_commit_history`.
 ```json

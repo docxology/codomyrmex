@@ -17,7 +17,7 @@ Strategy pattern: `InvalidationManager` delegates eviction decisions to an `Inva
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `set` | `key, value, ttl, tags` | `None` | Store entry; evicts if at capacity |
-| `get` | `key: str` | `Any \| None` | Retrieve entry; evicts if policy says so; calls `touch()` |
+| `get` | `key: str` | `Any \ | None` Retrieve entry; evicts if policy says so; calls `touch()` |
 | `invalidate` | `key: str` | `bool` | Remove a specific entry |
 | `invalidate_by_tag` | `tag: str` | `int` | Remove all entries with matching tag |
 | `invalidate_all` | none | `int` | Clear entire cache |
@@ -32,7 +32,7 @@ Constructor: `policy: InvalidationPolicy | None = None` (default TTLPolicy), `ma
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `should_evict` | `entry: CacheEntry` | `bool` | Check if a specific entry should be evicted |
-| `select_for_eviction` | `entries: dict[str, CacheEntry]` | `str \| None` | Select one entry key for eviction |
+| `select_for_eviction` | `entries: dict[str, CacheEntry]` | `str \ | None` Select one entry key for eviction |
 
 ### Policy Implementations
 

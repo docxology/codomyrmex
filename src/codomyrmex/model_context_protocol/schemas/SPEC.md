@@ -33,7 +33,7 @@ Dual-model design:
 | `description` | `str` | Human-readable description |
 | `required` | `bool` | Whether the parameter is required (default `True`) |
 | `default` | `Any` | Default value |
-| `enum` | `list[Any] | None` | Allowed values |
+| `enum` | `list[Any] | None` Allowed values |
 
 #### `Message`
 
@@ -57,9 +57,9 @@ Dual-model design:
 | Field | Type | Validation |
 |-------|------|------------|
 | `status` | `str` | Required |
-| `data` | `dict | None` | Must be null/omitted on failure status |
-| `error` | `MCPErrorDetail | None` | Must be populated on failure status |
-| `explanation` | `str | None` | Optional human-readable explanation |
+| `data` | `dict | None` Must be null/omitted on failure status |
+| `error` | `MCPErrorDetail | None` Must be populated on failure status |
+| `explanation` | `str | None` Optional human-readable explanation |
 
 #### `MCPToolRegistry`
 
@@ -67,9 +67,9 @@ Dual-model design:
 |--------|-----------|---------|-------------|
 | `register` | `tool_name, schema, handler` | `None` | Register a tool with schema and handler |
 | `unregister` | `tool_name: str` | `bool` | Remove a tool; returns `True` if found |
-| `get` | `tool_name: str` | `dict | None` | Look up tool metadata |
+| `get` | `tool_name: str` | `dict | None` Look up tool metadata |
 | `list_tools` | — | `list[str]` | List all registered tool names |
-| `validate_call` | `tool_call: MCPToolCall` | `tuple[bool, str | None]` | Check if tool exists |
+| `validate_call` | `tool_call: MCPToolCall` | `tuple[bool, str | None]` Check if tool exists |
 | `execute` | `tool_call: MCPToolCall` | `MCPToolResult` | Dispatch to handler; wrap exceptions in error result |
 
 ## Dependencies

@@ -29,7 +29,7 @@ class LLMConfig:
         | LLM_TOP_K           | Top-k sampling parameter       | 40                |
         | LLM_TIMEOUT         | Request timeout in seconds     | 30                |
         | LLM_BASE_URL        | Ollama server base URL         | http://localhost:11434 |
-        | LLM_OUTPUT_ROOT     | Root directory for outputs     | src/codomyrmex.llm/outputs |
+        | LLM_OUTPUT_ROOT     | Root directory for outputs     | src/codomyrmex/llm/outputs |
 
     Example:
         # Using environment variables
@@ -54,7 +54,7 @@ class LLMConfig:
     DEFAULT_BASE_URL = os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)
 
     # Output configuration
-    OUTPUT_ROOT = Path("src/codomyrmex.llm/outputs")
+    OUTPUT_ROOT = Path("src/codomyrmex/llm/outputs")
     TEST_RESULTS_DIR = OUTPUT_ROOT / "test_results"
     LLM_OUTPUTS_DIR = OUTPUT_ROOT / "llm_outputs"
     REPORTS_DIR = OUTPUT_ROOT / "reports"

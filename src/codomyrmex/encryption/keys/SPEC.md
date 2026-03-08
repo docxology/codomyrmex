@@ -19,11 +19,11 @@ Default `key_dir`: `$TMPDIR/codomyrmex_keys/`. Directory is created if absent. K
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `store_key(key_id, key)` | `key_id: str`, `key: bytes` | `bool` | Store key bytes to disk with 0600 permissions |
-| `get_key(key_id)` | `key_id: str` | `bytes \| None` | Retrieve key by ID, or `None` if absent |
+| `get_key(key_id)` | `key_id: str` | `bytes \ | None` Retrieve key by ID, or `None` if absent |
 | `delete_key(key_id)` | `key_id: str` | `bool` | Delete key file; `False` if not found |
 | `list_keys()` | none | `list[str]` | List all stored key IDs (sorted) |
 | `key_exists(key_id)` | `key_id: str` | `bool` | Check if key exists without loading |
-| `rotate_key(key_id, new_key)` | `key_id: str`, `new_key: bytes` | `bytes \| None` | Replace key, return old key (for re-encryption) |
+| `rotate_key(key_id, new_key)` | `key_id: str`, `new_key: bytes` | `bytes \ | None` Replace key, return old key (for re-encryption) |
 
 ### Function: `derive_key_hkdf`
 

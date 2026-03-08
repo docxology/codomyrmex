@@ -46,8 +46,8 @@ scripts/pai/pm/
 | --- | --- | --- |
 | `id` | `string` | URL-safe slug |
 | `title` | `string` | Display name |
-| `status` | `ACTIVE \| PAUSED \| COMPLETED \| ARCHIVED` | Current state |
-| `priority` | `HIGH \| MEDIUM \| LOW` | Priority level |
+| `status` | `ACTIVE \ | PAUSED \ COMPLETED \ ARCHIVED` Current state |
+| `priority` | `HIGH \ | MEDIUM \ LOW` Priority level |
 | `description` | `string` | Mission description |
 | `linked_projects` | `string[]` | Linked project slugs |
 
@@ -57,7 +57,7 @@ scripts/pai/pm/
 | --- | --- | --- |
 | `id` | `string` | URL-safe slug |
 | `title` | `string` | Display name |
-| `status` | `PLANNING \| IN_PROGRESS \| COMPLETED \| PAUSED \| BLOCKED` | Current state |
+| `status` | `PLANNING \ | IN_PROGRESS \ COMPLETED \ PAUSED \ BLOCKED` Current state |
 | `goal` | `string` | Project goal |
 | `parent_mission` | `string` | Parent mission slug |
 
@@ -66,9 +66,9 @@ scripts/pai/pm/
 | Field | Type | Description |
 | --- | --- | --- |
 | `text` | `string` | Task description |
-| `section` | `completed \| in_progress \| remaining \| blocked \| optional` | Kanban section |
-| `priority` | `HIGH \| MEDIUM \| LOW` | Priority |
-| `due` | `string \| null` | Due date (ISO 8601) |
+| `section` | `completed \ | in_progress \ remaining \ blocked \ optional` Kanban section |
+| `priority` | `HIGH \ | MEDIUM \ LOW` Priority |
+| `due` | `string \ | null` Due date (ISO 8601) |
 | `depends_on` | `string[]` | Dependency list |
 
 ## State Storage

@@ -16,8 +16,8 @@ Each strategy extends `EvaluationStrategy` (ABC) and implements three methods: `
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `user_id` | `str \| None` | `None` | Identifies the user for targeting and percentage hashing |
-| `session_id` | `str \| None` | `None` | Session identifier (used in hash key for sticky rollouts) |
+| `user_id` | `str \ | None` | `None` Identifies the user for targeting and percentage hashing |
+| `session_id` | `str \ | None` | `None` Session identifier (used in hash key for sticky rollouts) |
 | `environment` | `str` | `"production"` | Current environment name |
 | `attributes` | `dict[str, Any]` | `{}` | Arbitrary context attributes for `AttributeStrategy` |
 | `timestamp` | `datetime` | `now()` | Evaluation time |
@@ -28,7 +28,7 @@ Each strategy extends `EvaluationStrategy` (ABC) and implements three methods: `
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `enabled` | `bool` | required | Whether the flag is on for this evaluation |
-| `variant` | `str \| None` | `None` | Optional variant name for multivariate flags |
+| `variant` | `str \ | None` | `None` Optional variant name for multivariate flags |
 | `reason` | `str` | `""` | Human-readable evaluation reason (e.g., `"percentage:25%"`) |
 | `metadata` | `dict[str, Any]` | `{}` | Strategy-specific details |
 

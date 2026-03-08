@@ -12,7 +12,7 @@ High-fidelity biological simulation engine for ant colony modeling, emergent beh
 
 | Interface | Signature | Description |
 |-----------|-----------|-------------|
-| `Colony(population)` | `Colony(population: int, seed: int | None, environment: dict | None) → Colony` | Create a colony with N agents |
+| `Colony(population)` | `Colony(population: int, seed: int | None, environment: dict None) → Colony` Create a colony with N agents |
 | `colony.step(hours)` | `step(hours: int) → dict` | Advance simulation by hours, returns step summary |
 | `colony.ants` | Property → `list[Ant]` | Access living agents |
 | `colony.stats()` | `stats() → dict` | Return current simulation statistics |
@@ -31,7 +31,7 @@ High-fidelity biological simulation engine for ant colony modeling, emergent beh
 | Interface | Signature | Description |
 |-----------|-----------|-------------|
 | `Genome.random()` | `classmethod → Genome` | Generate random genome with standard traits |
-| `Population(genomes)` | `Population(genomes: list[Genome] | None) → Population` | Create population |
+| `Population(genomes)` | `Population(genomes: list[Genome] | None) → Population` Create population |
 | `population.trait_distribution()` | `→ dict[str, dict[str, float]]` | Compute trait frequencies (mean, std, min, max) |
 | `population.evolve(gens)` | `evolve(generations: int) → list[Genome]` | Run GA for N generations |
 

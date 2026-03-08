@@ -210,82 +210,80 @@ def analyze_file(file_path: Path, base_path: Path) -> dict | None:
         return {"path": str(file_path.relative_to(base_path)), "error": str(e)}
 
 
-def main():
-    """Run comprehensive triple-check."""
-    base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
+_SKIP_DIRS = frozenset({
+    "__pycache__", "node_modules", "venv", ".venv", ".git", "@output",
+})
+_DOC_FILENAMES = ("README.md", "AGENTS.md", "SPEC.md")
 
-    doc_files = []
+
+def _collect_doc_files(base_path: Path) -> list[Path]:
+    """Walk *base_path* and return all SPEC/AGENTS/README file paths."""
+    doc_files: list[Path] = []
     for root, dirs, _files in os.walk(base_path):
-        dirs[:] = [
-            d
-            for d in dirs
-            if not d.startswith(".")
-            and d
-            not in ["__pycache__", "node_modules", "venv", ".venv", ".git", "@output"]
-        ]
+        dirs[:] = [d for d in dirs if not d.startswith(".") and d not in _SKIP_DIRS]
+        for name in _DOC_FILENAMES:
+            fp = Path(root) / name
+            if fp.exists():
+                doc_files.append(fp)
+    return doc_files
 
-        for file in ["README.md", "AGENTS.md", "SPEC.md"]:
-            file_path = Path(root) / file
-            if file_path.exists():
-                doc_files.append(file_path)
 
-    print(f"Triple-checking {len(doc_files)} documentation files...\n")
+def _categorize_results(results: list[dict]) -> dict[str, list[dict]]:
+    """Group analysis results by issue type and compute totals."""
+    cats = {
+        "placeholders": [r for r in results if r.get("placeholders")],
+        "broken_links": [r for r in results if r.get("broken_links")],
+        "completeness": [r for r in results if r.get("completeness_issues")],
+    }
+    cats["total_placeholders"] = sum(len(r.get("placeholders", [])) for r in results)
+    cats["total_broken_links"] = sum(len(r.get("broken_links", [])) for r in results)
+    cats["total_completeness"] = sum(
+        len(r.get("completeness_issues", [])) for r in results
+    )
+    return cats
 
-    results = []
-    for file_path in doc_files:
-        result = analyze_file(file_path, base_path)
-        if result:
-            results.append(result)
 
-    # Categorize issues
-    files_with_placeholders = [r for r in results if r.get("placeholders")]
-    files_with_broken_links = [r for r in results if r.get("broken_links")]
-    files_with_completeness = [r for r in results if r.get("completeness_issues")]
-
-    total_placeholders = sum(len(r.get("placeholders", [])) for r in results)
-    total_broken_links = sum(len(r.get("broken_links", [])) for r in results)
-    total_completeness = sum(len(r.get("completeness_issues", [])) for r in results)
-
+def _print_console_summary(
+    doc_count: int, results: list[dict], cats: dict[str, list[dict] | int]
+) -> None:
+    """Print a concise summary of triple-check results to stdout."""
     print("\n=== TRIPLE-CHECK SUMMARY ===")
-    print(f"Total files checked: {len(doc_files)}")
+    print(f"Total files checked: {doc_count}")
     print(f"Files with issues: {len(results)}")
-    print(f"Total placeholders: {total_placeholders}")
-    print(f"Total broken links: {total_broken_links}")
-    print(f"Total completeness issues: {total_completeness}")
+    print(f"Total placeholders: {cats['total_placeholders']}")
+    print(f"Total broken links: {cats['total_broken_links']}")
+    print(f"Total completeness issues: {cats['total_completeness']}")
 
-    # Show top issues
-    if files_with_placeholders:
-        print(f"\n=== FILES WITH PLACEHOLDERS ({len(files_with_placeholders)}) ===")
+    if cats["placeholders"]:
+        print(f"\n=== FILES WITH PLACEHOLDERS ({len(cats['placeholders'])}) ===")
         for result in sorted(
-            files_with_placeholders,
+            cats["placeholders"],
             key=lambda x: len(x.get("placeholders", [])),
             reverse=True,
         )[:10]:
             print(f"\n{result['path']}: {len(result['placeholders'])} placeholder(s)")
-            for placeholder in result["placeholders"][:3]:
-                print(
-                    f"  Line {placeholder['line']}: {placeholder['description']} - {placeholder['match'][:50]}"
-                )
+            for ph in result["placeholders"][:3]:
+                print(f"  Line {ph['line']}: {ph['description']} - {ph['match'][:50]}")
 
-    if files_with_broken_links:
-        print(f"\n=== FILES WITH BROKEN LINKS ({len(files_with_broken_links)}) ===")
+    if cats["broken_links"]:
+        print(f"\n=== FILES WITH BROKEN LINKS ({len(cats['broken_links'])}) ===")
         for result in sorted(
-            files_with_broken_links,
+            cats["broken_links"],
             key=lambda x: len(x.get("broken_links", [])),
             reverse=True,
         )[:10]:
             print(f"\n{result['path']}: {len(result['broken_links'])} broken link(s)")
-            for link in result["broken_links"][:3]:
+            for lk in result["broken_links"][:3]:
                 print(
-                    f"  Line {link['line']}: [{link['text']}]({link['url']}) - {link['error']}"
+                    f"  Line {lk['line']}: [{lk['text']}]({lk['url']}) - {lk['error']}"
                 )
 
-    if files_with_completeness:
+    if cats["completeness"]:
         print(
-            f"\n=== FILES WITH COMPLETENESS ISSUES ({len(files_with_completeness)}) ==="
+            f"\n=== FILES WITH COMPLETENESS ISSUES ({len(cats['completeness'])}) ==="
         )
         for result in sorted(
-            files_with_completeness,
+            cats["completeness"],
             key=lambda x: len(x.get("completeness_issues", [])),
             reverse=True,
         )[:10]:
@@ -293,52 +291,56 @@ def main():
             for issue in result["completeness_issues"]:
                 print(f"  - {issue}")
 
-    # Generate detailed report
-    report_path = base_path / "output" / "triple_check_report.md"
+
+def _write_report(
+    report_path: Path,
+    doc_count: int,
+    results: list[dict],
+    cats: dict[str, list[dict] | int],
+) -> None:
+    """Write a detailed markdown report to *report_path*."""
     report_path.parent.mkdir(exist_ok=True)
 
     report = ["# Documentation Triple-Check Report\n\n"]
     report.append(f"**Generated**: {Path(__file__).stat().st_mtime}\n\n")
     report.append("## Summary\n\n")
-    report.append(f"- **Total Files Checked**: {len(doc_files)}\n")
+    report.append(f"- **Total Files Checked**: {doc_count}\n")
     report.append(f"- **Files with Issues**: {len(results)}\n")
-    report.append(f"- **Total Placeholders**: {total_placeholders}\n")
-    report.append(f"- **Total Broken Links**: {total_broken_links}\n")
-    report.append(f"- **Total Completeness Issues**: {total_completeness}\n\n")
+    report.append(f"- **Total Placeholders**: {cats['total_placeholders']}\n")
+    report.append(f"- **Total Broken Links**: {cats['total_broken_links']}\n")
+    report.append(f"- **Total Completeness Issues**: {cats['total_completeness']}\n\n")
 
-    if files_with_placeholders:
+    if cats["placeholders"]:
         report.append("## Placeholders\n\n")
         for result in sorted(
-            files_with_placeholders,
+            cats["placeholders"],
             key=lambda x: len(x.get("placeholders", [])),
             reverse=True,
         ):
             report.append(f"### {result['path']}\n\n")
-            for placeholder in result["placeholders"]:
-                report.append(
-                    f"- **Line {placeholder['line']}**: {placeholder['description']}\n"
-                )
-                report.append(f"  - Match: `{placeholder['match']}`\n")
-                report.append(f"  - Context: `{placeholder['context'][:100]}...`\n\n")
+            for ph in result["placeholders"]:
+                report.append(f"- **Line {ph['line']}**: {ph['description']}\n")
+                report.append(f"  - Match: `{ph['match']}`\n")
+                report.append(f"  - Context: `{ph['context'][:100]}...`\n\n")
 
-    if files_with_broken_links:
+    if cats["broken_links"]:
         report.append("## Broken Links\n\n")
         for result in sorted(
-            files_with_broken_links,
+            cats["broken_links"],
             key=lambda x: len(x.get("broken_links", [])),
             reverse=True,
         ):
             report.append(f"### {result['path']}\n\n")
-            for link in result["broken_links"]:
+            for lk in result["broken_links"]:
                 report.append(
-                    f"- **Line {link['line']}**: `[{link['text']}]({link['url']})`\n"
+                    f"- **Line {lk['line']}**: `[{lk['text']}]({lk['url']})`\n"
                 )
-                report.append(f"  - Error: {link['error']}\n\n")
+                report.append(f"  - Error: {lk['error']}\n\n")
 
-    if files_with_completeness:
+    if cats["completeness"]:
         report.append("## Completeness Issues\n\n")
         for result in sorted(
-            files_with_completeness,
+            cats["completeness"],
             key=lambda x: len(x.get("completeness_issues", [])),
             reverse=True,
         ):
@@ -351,5 +353,22 @@ def main():
     print(f"\nDetailed report: {report_path}")
 
 
+def main():
+    """Run comprehensive triple-check."""
+    base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
+
+    doc_files = _collect_doc_files(base_path)
+    print(f"Triple-checking {len(doc_files)} documentation files...\n")
+
+    results = [r for fp in doc_files if (r := analyze_file(fp, base_path)) is not None]
+
+    cats = _categorize_results(results)
+    _print_console_summary(len(doc_files), results, cats)
+
+    report_path = base_path / "output" / "triple_check_report.md"
+    _write_report(report_path, len(doc_files), results, cats)
+
+
 if __name__ == "__main__":
     main()
+

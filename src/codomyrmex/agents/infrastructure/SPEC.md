@@ -20,7 +20,7 @@ Follows the GitAgent pattern: a `BaseAgent` subclass receives structured JSON pr
 | `from_env` | (classmethod) | `InfrastructureAgent` | Creates agent from env vars, attempting each Infomaniak client |
 | `_execute_impl` | `request: AgentRequest` | `AgentResponse` | Parses JSON prompt, dispatches to client method, applies security checks |
 | `stream` | `request: AgentRequest` | `Iterator[str]` | Yields single execute result (streaming not natively supported) |
-| `populate_tool_registry` | `registry: dict[str, Tool] \| None` | `dict[str, Tool]` | Auto-generates Tool objects from all configured client methods |
+| `populate_tool_registry` | `registry: dict[str, Tool] \ | None` | `dict[str, Tool]` Auto-generates Tool objects from all configured client methods |
 | `available_services` | -- | `list[str]` | Returns names of configured service clients |
 | `test_connection` | -- | `bool` | Validates connectivity to all configured clients |
 
@@ -31,7 +31,7 @@ Follows the GitAgent pattern: a `BaseAgent` subclass receives structured JSON pr
 | `name` | `str` | Unique tool identifier, format: `infomaniak_{service}_{method}` |
 | `description` | `str` | `{service}.{method}` label |
 | `parameters` | `dict[str, Any]` | JSON-schema-like parameter definition |
-| `handler` | `Callable \| None` | Bound method or security-wrapped callable |
+| `handler` | `Callable \ | None` Bound method or security-wrapped callable |
 
 ### `CloudToolFactory`
 

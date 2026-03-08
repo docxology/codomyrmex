@@ -32,8 +32,8 @@ Computation engine over Z/(2^(8*(quantum+1)))Z.
 
 | Method | Signature | Description |
 |---|---|---|
-| `neg` | `(n: int \| tuple) → tuple[int, ...]` | Additive inverse (two's complement) |
-| `bnot` | `(n: int \| tuple) → tuple[int, ...]` | Bitwise complement |
+| `neg` | `(n: int \ | tuple) → tuple[int, ...]` Additive inverse (two's complement) |
+| `bnot` | `(n: int \ | tuple) → tuple[int, ...]` Bitwise complement |
 | `xor` | `(a, b) → tuple[int, ...]` | Bitwise XOR |
 | `band` | `(a, b) → tuple[int, ...]` | Bitwise AND |
 | `bor` | `(a, b) → tuple[int, ...]` | Bitwise OR |
@@ -81,7 +81,7 @@ Computation engine over Z/(2^(8*(quantum+1)))Z.
 | `entity_type` | `str` | `"generic"` |
 | `attributes` | `dict[str, Any]` | `{}` |
 | `content_hash` | `str` | SHA256 auto-computed |
-| `triadic_coordinates` | `TriadicCoordinate \| None` | `None` |
+| `triadic_coordinates` | `TriadicCoordinate \ | None` `None` |
 | `created_at` | `str` | ISO timestamp |
 
 **Methods**: `to_dict()`, `recompute_hash()`
@@ -113,9 +113,9 @@ EntityManager(quantum: int = 0)
 | Method | Signature | Returns |
 |---|---|---|
 | `add_entity` | `(name, entity_type, attributes, compute_coordinates)` | `UOREntity` |
-| `get_entity` | `(entity_id: str)` | `UOREntity \| None` |
+| `get_entity` | `(entity_id: str)` | `UOREntity \ None` |
 | `remove_entity` | `(entity_id: str)` | `bool` |
-| `search_entities` | `(query: str, entity_type: str \| None)` | `list[UOREntity]` |
+| `search_entities` | `(query: str, entity_type: str \ | None)` `list[UOREntity]` |
 | `find_similar` | `(entity_id: str, threshold: float)` | `list[tuple[UOREntity, float]]` |
 | `find_duplicates` | `()` | `list[list[UOREntity]]` |
 
@@ -132,11 +132,11 @@ UORGraph(quantum: int = 0)
 | Method | Signature | Returns |
 |---|---|---|
 | `add_entity` | `(name, entity_type, attributes, compute_coordinates)` | `UOREntity` |
-| `get_entity` | `(entity_id: str)` | `UOREntity \| None` |
+| `get_entity` | `(entity_id: str)` | `UOREntity \ None` |
 | `remove_entity` | `(entity_id: str)` | `bool` (cascades) |
-| `add_relationship` | `(source_id, target_id, relationship_type, attributes)` | `UORRelationship \| None` |
-| `get_relationship` | `(relationship_id: str)` | `UORRelationship \| None` |
-| `get_relationships` | `(entity_id: str, relationship_type: str \| None)` | `list[UORRelationship]` |
+| `add_relationship` | `(source_id, target_id, relationship_type, attributes)` | `UORRelationship \ None` |
+| `get_relationship` | `(relationship_id: str)` | `UORRelationship \ None` |
+| `get_relationships` | `(entity_id: str, relationship_type: str \ | None)` `list[UORRelationship]` |
 | `remove_relationship` | `(relationship_id: str)` | `bool` |
 | `get_neighbors` | `(entity_id: str)` | `list[UOREntity]` |
 | `find_path` | `(source_id, target_id: str)` | `list[str]` |

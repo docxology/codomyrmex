@@ -19,7 +19,7 @@ Two-class design: `TokenManager` manages the token lifecycle using an in-memory 
 | `create_token` | `user_id: str, permissions: list[str], ttl: int` | `Token` | Create a UUID token with permissions and TTL |
 | `validate_token` | `token: Token` | `bool` | Check revocation, expiry, and store membership |
 | `revoke_token` | `token: Token` | `bool` | Add to revocation set and remove from store |
-| `refresh_token` | `token: Token, ttl: int` | `Token \| None` | Create new token with same permissions, revoke old |
+| `refresh_token` | `token: Token, ttl: int` | `Token \ | None` Create new token with same permissions, revoke old |
 
 Constructor: `secret: str | None = None`
 
@@ -30,8 +30,8 @@ Constructor: `secret: str | None = None`
 | `token_id` | `str` | UUID identifier |
 | `user_id` | `str` | Token owner |
 | `permissions` | `list[str]` | Granted permissions |
-| `expires_at` | `float \| None` | Expiry timestamp |
-| `secret` | `str \| None` | Optional signing secret |
+| `expires_at` | `float \ | None` Expiry timestamp |
+| `secret` | `str \ | None` Optional signing secret |
 
 Methods: `is_expired() -> bool`, `to_dict() -> dict`, `from_dict(data) -> Token`
 
@@ -40,7 +40,7 @@ Methods: `is_expired() -> bool`, `to_dict() -> dict`, `from_dict(data) -> Token`
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `sign_token_data` | `token_data: dict` | `str` | Sign data with HMAC-SHA256 and return base64-encoded token |
-| `validate_signed_token` | `token_str: str` | `dict \| None` | Decode, verify signature and expiry; returns data or `None` |
+| `validate_signed_token` | `token_str: str` | `dict \ | None` Decode, verify signature and expiry; returns data or `None` |
 
 Constructor: `secret: str` (encoded to bytes internally)
 

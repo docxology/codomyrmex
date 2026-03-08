@@ -82,7 +82,7 @@ uv run ruff check src/ --fix
 uv run ruff check src/
 
 # Type checking
-uv run mypy src/
+uv run ty check src/
 ```
 
 ### Rules

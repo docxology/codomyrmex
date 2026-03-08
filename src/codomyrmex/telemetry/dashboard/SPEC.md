@@ -14,7 +14,7 @@ Four subsystems: `DashboardManager` for panel-based dashboard CRUD, `MetricColle
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `create` | `(name, description?, tags?) -> Dashboard` | Create dashboard with ID derived from lowercased name |
-| `get` | `(dashboard_id) -> Dashboard \| None` | Retrieve by ID |
+| `get` | `(dashboard_id) -> Dashboard \ | None` Retrieve by ID |
 | `list` | `() -> list[Dashboard]` | All dashboards |
 | `delete` | `(dashboard_id) -> bool` | Remove a dashboard |
 | `get_panel_data` | `(dashboard_id, panel_id, duration_minutes=60) -> list[MetricValue]` | Query collector for panel metrics within time range |
@@ -25,7 +25,7 @@ Four subsystems: `DashboardManager` for panel-based dashboard CRUD, `MetricColle
 |--------|-----------|-------------|
 | `record` | `(name, value, labels?, metric_type?) -> None` | Store a metric value with timestamp |
 | `get_metrics` | `(name, start?, end?) -> list[MetricValue]` | Time-range filtered query |
-| `get_latest` | `(name) -> MetricValue \| None` | Most recent value |
+| `get_latest` | `(name) -> MetricValue \ | None` Most recent value |
 | `cleanup_old` | `() -> int` | Remove metrics older than `retention_minutes` (default 60) |
 
 ### SLOTracker
@@ -34,14 +34,14 @@ Four subsystems: `DashboardManager` for panel-based dashboard CRUD, `MetricColle
 |--------|-----------|-------------|
 | `create_slo` | `(slo_id, name, sli_type, target, window_days=30) -> SLO` | Create SLO with associated SLI |
 | `record_event` | `(slo_id, is_good, count=1)` | Record good/bad events; auto-detects violations |
-| `get_status` | `(slo_id) -> dict \| None` | Current SLI value, budget remaining, event counts |
+| `get_status` | `(slo_id) -> dict \ | None` Current SLI value, budget remaining, event counts |
 | `get_violations` | `(slo_id?, since?) -> list[SLOViolation]` | Filtered violation history |
 
 ### ErrorBudgetPolicy
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `evaluate` | `(slo_id) -> str \| None` | Returns posture: `"normal"`, `"increase_reviews"`, `"reduce_risk"`, `"freeze_deployments"` |
+| `evaluate` | `(slo_id) -> str \ | None` Returns posture: `"normal"`, `"increase_reviews"`, `"reduce_risk"`, `"freeze_deployments"` |
 
 ### Key Dataclasses
 

@@ -27,8 +27,8 @@ Properties: `size_bytes`, `hash` (SHA-256 truncated to 16 chars)
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `add_text` | `text: str` | `self` | Sets text content |
-| `add_image` | `image: bytes \| str \| ImageContent` | `self` | Adds image (auto-detects input type) |
-| `add_audio` | `audio: bytes \| str \| AudioContent` | `self` | Adds audio content |
+| `add_image` | `image: bytes \ | str \ | ImageContent` `self` Adds image (auto-detects input type) |
+| `add_audio` | `audio: bytes \ | str \ | AudioContent` `self` Adds audio content |
 | `to_dict` | -- | `dict` | Serializes to API-compatible format with `role` and `content` array |
 
 Properties: `has_images`, `has_audio`, `image_count`

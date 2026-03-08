@@ -515,7 +515,7 @@ class DataProvider:
 |--------|---------|-------------|
 | `get_system_summary()` | `dict[str, Any]` | Status, version, module/agent counts, last build timestamp |
 | `get_modules()` | `list[dict[str, Any]]` | All packages under `src/codomyrmex/` with status and description |
-| `get_module_detail(name: str)` | `dict[str, Any] \| None` | Enriched detail for a single module (tests, specs, file count) |
+| `get_module_detail(name: str)` | `dict[str, Any] \ | None` Enriched detail for a single module (tests, specs, file count) |
 | `get_actual_agents()` | `list[dict[str, Any]]` | AI agent integrations from `src/codomyrmex/agents/` |
 | `get_available_scripts()` | `list[dict[str, Any]]` | Python scripts found recursively under `scripts/` |
 | `get_config_files()` | `list[dict[str, str]]` | Configuration files in the project root and `config/` directory |
@@ -525,7 +525,7 @@ class DataProvider:
 | `get_doc_content(doc_path: str)` | `str` | Content of a documentation file (`.md` only, traversal protected) |
 | `get_pipeline_status()` | `list[dict[str, Any]]` | CI/CD workflow definitions from `.github/workflows/*.yml` |
 | `get_health_status()` | `dict[str, Any]` | Comprehensive health: uptime, python, git, module coverage, architecture layers |
-| `run_tests(module: str \| None = None)` | `dict[str, Any]` | Run pytest and return structured results (passed/failed/skipped/errors) |
+| `run_tests(module: str \ | None = None)` | `dict[str, Any]` Run pytest and return structured results (passed/failed/skipped/errors) |
 | `get_pai_missions()` | `list[dict[str, Any]]` | PAI missions from `~/.claude/MEMORY/STATE/missions/` |
 | `get_pai_projects()` | `list[dict[str, Any]]` | PAI projects from `~/.claude/MEMORY/STATE/projects/` |
 | `get_pai_tasks(project_id: str)` | `dict[str, Any]` | Parse TASKS.md for a specific project (path-traversal protected) |

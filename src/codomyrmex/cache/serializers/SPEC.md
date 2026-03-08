@@ -23,10 +23,10 @@ Strategy pattern: `CacheSerializer` ABC defines the `serialize`/`deserialize` co
 
 | Class | Constructor | Behavior |
 |-------|-----------|----------|
-| `JSONSerializer` | `indent: int \| None = None` | `json.dumps` with `default=str` fallback |
+| `JSONSerializer` | `indent: int \ | None = None` `json.dumps` with `default=str` fallback |
 | `PickleSerializer` | `protocol: int = HIGHEST_PROTOCOL` | `pickle.dumps`/`pickle.loads` (trusted data only) |
 | `StringSerializer` | `encoding: str = "utf-8"` | `str(value).encode()` / `data.decode()` |
-| `TypedSerializer` | `base_serializer: CacheSerializer \| None` | Wraps value in `{"_type": ..., "_value": ...}`; restores primitives |
+| `TypedSerializer` | `base_serializer: CacheSerializer \ | None` Wraps value in `{"_type": ..., "_value": ...}`; restores primitives |
 
 ### Composable Wrappers
 

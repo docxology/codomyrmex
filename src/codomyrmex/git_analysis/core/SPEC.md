@@ -12,7 +12,7 @@ All methods return `list[dict]` or `dict` -- no custom return types.
 
 | Method | Parameters | Returns |
 |--------|-----------|---------|
-| `get_commit_history` | `max_count: int = 50`, `branch: str \| None` | `list[dict]` (sha, author, email, date, message, insertions, deletions, files_changed) |
+| `get_commit_history` | `max_count: int = 50`, `branch: str \ | None` `list[dict]` (sha, author, email, date, message, insertions, deletions, files_changed) |
 | `get_contributor_stats` | none | `list[dict]` sorted by commit count desc |
 | `get_code_churn` | `top_n: int = 20` | `list[dict]` (file, change_count) |
 | `get_branch_topology` | none | `dict` (active_branch, branches list, branch_count) |
@@ -33,7 +33,7 @@ Subprocess-based bridge. Prefers `npx gitnexus`, falls back to `vendor/gitnexus/
 | `query` | `query_text: str`, `limit: int = 10` | `dict` -- hybrid BM25 + semantic search |
 | `get_context` | `symbol: str` | `dict` -- 360-degree dependency analysis |
 | `assess_impact` | `symbol: str` | `dict` -- blast-radius assessment |
-| `detect_changes` | `diff: str \| None` | `dict` -- maps diff to architectural impact |
+| `detect_changes` | `diff: str \ | None` `dict` -- maps diff to architectural impact |
 | `run_cypher` | `cypher_query: str` | `dict` -- raw KuzuDB Cypher query |
 | `list_repos` | none | `list[dict]` -- all indexed repos |
 

@@ -14,7 +14,7 @@ Two-part framework: `HealthChecker` for on-demand system health probes with aggr
 | `unregister` | `name: str` | `bool` |
 | `run` | `name: str` | `HealthCheckResult` |
 | `run_all` | none | `AggregateHealthReport` |
-| `last_result` | `name: str` | `HealthCheckResult \| None` |
+| `last_result` | `name: str` | `HealthCheckResult \ None` |
 | `summary_text` | `report: AggregateHealthReport` | `str` (multi-line summary) |
 | `clear` | none | `None` |
 
@@ -30,7 +30,7 @@ Overall status logic: UNHEALTHY if any unhealthy, else DEGRADED if any degraded,
 |--------|-----------|---------|
 | `register` | `task: MaintenanceTask` | `None` |
 | `unregister` | `name: str` | `bool` |
-| `get_task` | `name: str` | `MaintenanceTask \| None` |
+| `get_task` | `name: str` | `MaintenanceTask \ None` |
 | `list_tasks` | none | `list[MaintenanceTask]` (sorted by priority) |
 | `get_due_tasks` | `now: float` | `list[MaintenanceTask]` |
 | `execute` | `name: str` | `TaskResult` |

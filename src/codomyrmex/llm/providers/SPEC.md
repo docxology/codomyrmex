@@ -20,7 +20,7 @@ Strategy pattern with factory: `LLMProvider` (ABC) defines the contract. Three c
 | `complete_stream` | `messages, model, temperature, max_tokens, **kwargs` | `Iterator[str]` | Yields content deltas |
 | `complete_async` | `messages, model, temperature, max_tokens, **kwargs` | `CompletionResponse` | Async completion |
 | `list_models` | -- | `list[str]` | Available models for this provider |
-| `get_model` | `model: str \| None` | `str` | Resolves model name with fallback to default |
+| `get_model` | `model: str \ | None` | `str` Resolves model name with fallback to default |
 | `cleanup` | -- | `None` | Release resources (called by context manager exit) |
 
 ### `OpenAIProvider`
@@ -52,7 +52,7 @@ Strategy pattern with factory: `LLMProvider` (ABC) defines the contract. Three c
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `provider_type` | `ProviderType` | Which provider to instantiate |
-| `config` | `ProviderConfig \| None` | Optional config object |
+| `config` | `ProviderConfig \ | None` Optional config object |
 | `**kwargs` | -- | Passed to `ProviderConfig` if config is None |
 
 Returns: `LLMProvider` instance. Raises `ValueError` for unsupported provider types.

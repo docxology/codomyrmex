@@ -28,8 +28,8 @@ Constructor: `(name: str, timeout: float = 5.0, critical: bool = True)`
 | `url` | `str` | -- | Endpoint URL to check |
 | `method` | `str` | `"GET"` | HTTP method |
 | `expected_status` | `int` | `200` | Expected HTTP status code |
-| `expected_body` | `str \| None` | `None` | Substring that must appear in response body |
-| `headers` | `dict[str, str] \| None` | `None` | Custom request headers |
+| `expected_body` | `str \ | None` | `None` Substring that must appear in response body |
+| `headers` | `dict[str, str] \ | None` | `None` Custom request headers |
 
 ### `TCPHealthCheck`
 
@@ -44,7 +44,7 @@ Constructor: `(name: str, timeout: float = 5.0, critical: bool = True)`
 |-----------|------|---------|-------------|
 | `command` | `list[str]` | -- | Command and arguments to execute |
 | `expected_exit_code` | `int` | `0` | Expected process exit code |
-| `expected_output` | `str \| None` | `None` | Substring that must appear in stdout |
+| `expected_output` | `str \ | None` | `None` Substring that must appear in stdout |
 | `timeout` | `float` | `10.0` | Command timeout in seconds |
 
 ### `MemoryHealthCheck`

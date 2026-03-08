@@ -16,7 +16,7 @@ Two profiling approaches: `AsyncProfiler` for decorator-based per-function timin
 | `profile` | `(func: Callable) -> Callable` | Async function decorator measuring duration with `time.perf_counter` |
 | `profile_sync` | `(func: Callable) -> Callable` | Sync function decorator with same measurements |
 | `record` | `(function_name, duration, error?)` | Manual profiling entry |
-| `get_stats` | `(function_name) -> ProfileStats \| None` | Aggregate stats for a function |
+| `get_stats` | `(function_name) -> ProfileStats \ | None` Aggregate stats for a function |
 | `all_stats` | `() -> list[ProfileStats]` | Stats for all profiled functions |
 | `summary` | `() -> dict` | Overview: function count, total calls, slow calls, per-function avg/max ms |
 | `clear` | `()` | Reset all profiling data |

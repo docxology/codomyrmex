@@ -35,7 +35,7 @@ standardization/
 |--------|-----------|-------------|
 | `add_endpoint` | `(endpoint: APIEndpoint) -> None` | Register an endpoint |
 | `get/post/put/delete/patch` | `(path, summary, **kwargs) -> decorator` | Decorator-based route registration |
-| `match_endpoint` | `(method, path) -> tuple[APIEndpoint, dict] \| None` | Route matching with path parameter extraction |
+| `match_endpoint` | `(method, path) -> tuple[APIEndpoint, dict] \ | None` Route matching with path parameter extraction |
 | `add_router` | `(router: APIRouter) -> None` | Nest sub-routers |
 
 ### GraphQLAPI — `graphql_api.py`
@@ -54,9 +54,9 @@ standardization/
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `query_type` | `GraphQLObjectType \| None` | Root query type |
-| `mutation_type` | `GraphQLObjectType \| None` | Root mutation type |
-| `subscription_type` | `GraphQLObjectType \| None` | Root subscription type |
+| `query_type` | `GraphQLObjectType \ | None` Root query type |
+| `mutation_type` | `GraphQLObjectType \ | None` Root mutation type |
+| `subscription_type` | `GraphQLObjectType \ | None` Root subscription type |
 | `types` | `dict[str, GraphQLObjectType]` | Named type registry |
 | `generate_sdl()` | `-> str` | Render full SDL string |
 

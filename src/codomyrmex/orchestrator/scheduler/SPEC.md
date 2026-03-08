@@ -22,8 +22,8 @@ Three-tier design:
 |--------|-----------|---------|-------------|
 | `schedule` | `func, name, trigger, args, kwargs, max_runs` | `str` (job ID) | Schedule a job with trigger |
 | `cancel` | `job_id: str` | `bool` | Cancel a pending job |
-| `get_job` | `job_id: str` | `Job \| None` | Retrieve job by ID |
-| `list_jobs` | `status: JobStatus \| None` | `list[Job]` | List jobs optionally filtered |
+| `get_job` | `job_id: str` | `Job \ | None` Retrieve job by ID |
+| `list_jobs` | `status: JobStatus \ | None` | `list[Job]` List jobs optionally filtered |
 | `start` | none | `None` | Start background daemon thread |
 | `stop` | none | `None` | Stop scheduler and shutdown executor |
 | `run_now` | `job_id: str` | `Any` | Execute job immediately |
@@ -48,7 +48,7 @@ Three-tier design:
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `from_expression` | `expr: str` | `CronTrigger` | Parse 5-field cron string |
-| `get_next_run` | `from_time: datetime \| None` | `datetime \| None` | Scan forward to find next matching minute |
+| `get_next_run` | `from_time: datetime \ | None` | `datetime \ None` Scan forward to find next matching minute |
 
 ## Dependencies
 

@@ -68,7 +68,7 @@ Three independent modules unified by `__init__.py`:
 | `on_tool_call_start` | `tool_name: str` | `float` | Returns start timestamp |
 | `on_tool_call_end` | `tool_name, duration, error` | `None` | Records call count, duration, and optional error |
 | `get_metrics` | — | `dict` | Global and per-tool counters (JSON-serializable) |
-| `get_tool_metrics` | `tool_name: str` | `ToolMetrics | None` | Metrics for a specific tool |
+| `get_tool_metrics` | `tool_name: str` | `ToolMetrics | None` Metrics for a specific tool |
 | `get_metrics_json` | — | `str` | JSON string for MCP resource exposure |
 | `reset` | — | `None` | Clear all counters |
 

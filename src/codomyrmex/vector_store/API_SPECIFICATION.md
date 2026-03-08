@@ -44,7 +44,7 @@ All backends implement this interface:
 | Method | Signature | Description |
 |:-------|:----------|:------------|
 | `add` | `(id, embedding, metadata=None) -> None` | Store a vector |
-| `get` | `(id) -> VectorEntry \| None` | Retrieve by ID |
+| `get` | `(id) -> VectorEntry \ | None` Retrieve by ID |
 | `delete` | `(id) -> bool` | Remove by ID |
 | `search` | `(query, k=10, filter_fn=None) -> list[SearchResult]` | Similarity search |
 | `count` | `() -> int` | Total stored vectors |

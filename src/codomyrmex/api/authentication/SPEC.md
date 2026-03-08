@@ -41,9 +41,9 @@ authentication/
 | Field | Type | Description |
 |-------|------|-------------|
 | `authenticated` | `bool` | Whether authentication succeeded |
-| `user_id` | `str \| None` | Identified user on success |
+| `user_id` | `str \ | None` Identified user on success |
 | `roles` | `list[str]` | Roles/permissions associated with the user |
-| `error` | `str \| None` | Error message on failure |
+| `error` | `str \ | None` Error message on failure |
 
 ### Authenticator (ABC)
 
@@ -56,7 +56,7 @@ authentication/
 | Class | Constructor Args | Behaviour |
 |-------|-----------------|-----------|
 | `APIKeyAuthenticator` | `keys: dict[str, str]` | Looks up `credentials.value` in `keys` dict |
-| `BearerTokenAuthenticator` | `verify: Callable[[str], dict \| None]` | Calls `verify(token)` callable; returns user info dict or None |
+| `BearerTokenAuthenticator` | `verify: Callable[[str], dict \ | None]` Calls `verify(token)` callable; returns user info dict or None |
 | `BasicAuthenticator` | `users: dict[str, str]` | Matches username (from metadata) + password against `users` dict |
 | `HMACAuthenticator` | `secret: str` | Verifies HMAC signature in `credentials.value` against expected |
 

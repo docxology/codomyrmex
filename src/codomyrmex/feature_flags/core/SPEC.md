@@ -20,11 +20,11 @@ Dataclass representing a single feature flag.
 |-------|------|---------|-------------|
 | `key` | `str` | required | Unique flag identifier |
 | `enabled` | `bool` | `False` | Boolean on/off state |
-| `percentage` | `float \| None` | `None` | 0-100 rollout percentage (deterministic per user) |
+| `percentage` | `float \ | None` | `None` 0-100 rollout percentage (deterministic per user) |
 | `allowlist` | `list[str]` | `[]` | User IDs that always receive `True` |
 | `denylist` | `list[str]` | `[]` | User IDs that always receive `False` |
-| `start_time` | `float \| None` | `None` | Unix timestamp: flag active after this time |
-| `end_time` | `float \| None` | `None` | Unix timestamp: flag inactive after this time |
+| `start_time` | `float \ | None` | `None` Unix timestamp: flag active after this time |
+| `end_time` | `float \ | None` | `None` Unix timestamp: flag inactive after this time |
 | `description` | `str` | `""` | Human-readable description |
 | `metadata` | `dict[str, Any]` | `{}` | Arbitrary data; `metadata["value"]` used for multivariate flags |
 
@@ -32,10 +32,10 @@ Dataclass representing a single feature flag.
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `config: dict \| None` | `None` | Bootstrap flags from a config dict (bool or dict values) |
+| `__init__` | `config: dict \ | None` | `None` Bootstrap flags from a config dict (bool or dict values) |
 | `create_flag` | `key: str, **kwargs` | `FlagDefinition` | Create or replace a flag definition |
 | `delete_flag` | `key: str` | `bool` | Remove a flag; returns True if it existed |
-| `get_flag` | `key: str` | `FlagDefinition \| None` | Retrieve a flag definition |
+| `get_flag` | `key: str` | `FlagDefinition \ | None` Retrieve a flag definition |
 | `list_flags` | none | `list[FlagDefinition]` | List all registered flags |
 | `is_enabled` | `key: str, default: bool, **context` | `bool` | Evaluate flag using six-step priority chain |
 | `get_value` | `key: str, default: Any, **context` | `Any` | Get multivariate value from metadata |

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Project-level documentation covering architecture, contributing guidelines, and project governance for the Codomyrmex platform (128 modules).
+Project-level documentation covering architecture, contributing guidelines, and project governance for the Codomyrmex platform (130 modules).
 
 ## Contents
 

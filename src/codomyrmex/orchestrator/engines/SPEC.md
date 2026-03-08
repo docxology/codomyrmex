@@ -17,7 +17,7 @@ Strategy pattern with an `ExecutionEngine` ABC defining synchronous `execute` an
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `add_task` | `name, action, dependencies, **kwargs` | `str` (task ID) | Add a task with optional dependencies, timeout, retries |
-| `get_task` | `task_id: str` | `TaskDefinition\|None` | Lookup by ID or name |
+| `get_task` | `task_id: str` | `TaskDefinition\ | None` Lookup by ID or name |
 | `get_execution_order` | | `list[list[TaskDefinition]]` | Topological sort into parallelizable batches (Kahn's algorithm) |
 
 ### `TaskDefinition` (dataclass)
@@ -26,12 +26,12 @@ Strategy pattern with an `ExecutionEngine` ABC defining synchronous `execute` an
 |-------|------|---------|-------------|
 | `id` | `str` | UUID | Unique task identifier |
 | `name` | `str` | `""` | Human-readable name |
-| `action` | `Callable\|None` | `None` | Function to execute; receives context dict |
+| `action` | `Callable\ | None` | `None` Function to execute; receives context dict |
 | `dependencies` | `list[str]` | `[]` | Task IDs/names this task depends on |
-| `timeout` | `float\|None` | `None` | Maximum execution time |
+| `timeout` | `float\ | None` | `None` Maximum execution time |
 | `retries` | `int` | `0` | Number of retry attempts on failure |
 | `retry_delay` | `float` | `1.0` | Delay between retries in seconds |
-| `condition` | `Callable[[dict], bool]\|None` | `None` | Optional condition; task is SKIPPED if False |
+| `condition` | `Callable[[dict], bool]\ | None` | `None` Optional condition; task is SKIPPED if False |
 
 ### `ExecutionEngine` (ABC)
 

@@ -86,8 +86,8 @@ Ask a persistent markdown-memory agent a question.
 | `soul_path` | `str` | No | `"SOUL.md"` | Agent identity file |
 | `memory_path` | `str` | No | `"MEMORY.md"` | Conversation log |
 | `provider` | `str` | No | `"anthropic"` | LLM provider |
-| `model` | `str \| None` | No | `None` | Model override |
-| `base_url` | `str \| None` | No | `None` | Endpoint for openai-compatible |
+| `model` | `str \ | None` | No | `None` Model override |
+| `base_url` | `str \ | None` | No | `None` Endpoint for openai-compatible |
 | `remember` | `bool` | No | `True` | Persist exchange to MEMORY.md |
 
 ### Returns

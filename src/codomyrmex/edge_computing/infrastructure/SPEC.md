@@ -14,8 +14,8 @@ Each module is self-contained with its own dataclass models. Thread safety is pr
 
 | Method | Signature | Returns |
 |--------|-----------|---------|
-| `get` | `(key: str)` | `Any \| None` |
-| `put` | `(key: str, value: Any, ttl: float \| None)` | None |
+| `get` | `(key: str)` | `Any \ None` |
+| `put` | `(key: str, value: Any, ttl: float \ | None)` None |
 | `delete` | `(key: str)` | `bool` |
 | `clear` | `()` | `int` (removed count) |
 | `purge_expired` | `()` | `int` (expired count) |

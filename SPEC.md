@@ -32,7 +32,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 128 modules.
+- Consistent directory structure and naming conventions across all 130 modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 
@@ -184,7 +184,7 @@ Active items tracked by sprint target.
 | Item | Status | Sprint Target | Notes |
 |------|--------|---------------|-------|
 | Circular imports: ~35 pairs across modules | Open | Sprint 29 | Use `isort --check` + dependency graph to surface |
-| Oversized files: 1 non-test file >1K LOC | Open | Sprint 29 | `server.py` (1,052 lines); modularize further |
+| Oversized files: 16 non-test files >800 LOC | Open | Sprint 29 | Largest: `orchestration.py` (980); see TODO.md for full list |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
 | Bidirectional PAI↔codomyrmex comms | Open | Sprint 30 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
 | Tool versioning: no deprecation timeline UI | Open | Sprint 30 | `deprecated_in` metadata added but not surfaced in MCP tool list |

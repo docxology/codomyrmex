@@ -36,7 +36,7 @@ Values: `FUNCTION`, `CLASS`, `MODULE`, `SESSION`
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `filter` | `(**kwargs) -> list[dict]` | Filter records by exact field value match |
-| `find` | `(**kwargs) -> dict | None` | Return first matching record or None |
+| `find` | `(**kwargs) -> dict | None` Return first matching record or None |
 | `all` | `() -> list[dict]` | Return all records |
 
 Supports `__getitem__`, `__len__`, `__iter__` for list-like access.

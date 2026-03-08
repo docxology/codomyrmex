@@ -16,7 +16,7 @@ Command-dispatch pattern: `GitAgent._execute_impl` parses the incoming prompt (J
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `config: dict\|None, repository_manager: RepositoryManager\|None` | -- | Initialize with optional config and repository manager (defaults to `RepositoryManager()`) |
+| `__init__` | `config: dict\ | None, repository_manager: RepositoryManager\ | None` -- Initialize with optional config and repository manager (defaults to `RepositoryManager()`) |
 | `_execute_impl` | `request: AgentRequest` | `AgentResponse` | Parse prompt into action + params, dispatch via `_handle_action` |
 | `_handle_action` | `action: str, params: dict` | `Any` | Route to specific Git/GitHub operation |
 | `stream` | `request: AgentRequest` | `Iterator[str]` | Yields single chunk from `execute()` (streaming not natively supported) |

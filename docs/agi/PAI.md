@@ -87,7 +87,7 @@ The Colony Thesis ([the_colony_thesis.md](./the_colony_thesis.md)) argues that t
 | Reasoning (THINK) | ⚠️ 60% | No dynamic DAG synthesis (PSPACE-hard) |
 | Planning (PLAN) | ✅ 80% | Static workflows; no automated decomposition |
 | Construction (BUILD) | ✅ 85% | Human-gated deployment |
-| Execution (EXECUTE) | ✅ 90% | 474 tools, 128 modules, L3-L4 autonomy |
+| Execution (EXECUTE) | ✅ 90% | 474 tools, 130 modules, L3-L4 autonomy |
 | Verification (VERIFY) | ⚠️ 65% | Undecidable properties at Σ₂⁰ |
 | Learning (LEARN) | ⚠️ 55% | No automatic consolidation; no forgetting |
 

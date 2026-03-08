@@ -59,7 +59,7 @@ error dicts rather than raising exceptions at the tool boundary.
 | `hands_list()` | `openfang hands list` |
 | `hands_run(name)` | `openfang hands run <name>` |
 | `send_message(ch, to, msg)` | `openfang message send --channel --to --message` |
-| `gateway_action(action)` | `openfang gateway <start|stop|status>` |
+| `gateway_action(action)` | `openfang gateway <start stop status>` |
 | `doctor()` | `openfang doctor` |
 | `version()` | `openfang --version` |
 

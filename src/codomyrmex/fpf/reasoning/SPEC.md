@@ -27,7 +27,7 @@ First-principles reasoning engine implementing the Strategy pattern for structur
 | `content` | `str` | -- | The premise statement |
 | `step_type` | `ReasoningStep` | -- | Classification of this premise |
 | `confidence` | `float` | `1.0` | Confidence in [0.0, 1.0] |
-| `source` | `str | None` | `None` | Provenance reference |
+| `source` | `str | None` | `None` Provenance reference |
 | `depends_on` | `list[str]` | `[]` | IDs of prerequisite premises |
 
 ### ReasoningChain (Dataclass)
@@ -37,7 +37,7 @@ First-principles reasoning engine implementing the Strategy pattern for structur
 | `id` | `str` | Chain identifier (set by strategy) |
 | `goal` | `str` | What this chain aims to solve |
 | `premises` | `list[Premise]` | Ordered list of reasoning steps |
-| `conclusion` | `str | None` | Final conclusion text |
+| `conclusion` | `str | None` Final conclusion text |
 | `metadata` | `dict` | Arbitrary metadata |
 
 | Method | Returns | Behavior |

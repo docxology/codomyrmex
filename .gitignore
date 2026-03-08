@@ -247,7 +247,8 @@ fix_*.py
 .desloppify/state-python.json
 .desloppify/review_packet_blind.json
 src/codomyrmex/dark/pdf/vendor/dark-pdf
-src/codomyrmex/codomyrmex/codomyrmex.llm/
+src/codomyrmex.llm/
+src/codomyrmex/llm/outputs/
 /static_analysis_codeql_1/codeql.db
 3-4-2026.md
 /.desloppify
@@ -255,6 +256,16 @@ cov_config.json
 codomyrmex_inventory.json
 /.desloppify
 /chroma_db
+
+# Generated root-level data files
+memory.db
+scorecard.png
+/index.html
+fail_prompt.py
+review.md
+config_audits/
+config_monitoring/
+db_performance/
 
 # Test artifacts
 config/default.yaml

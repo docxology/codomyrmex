@@ -138,7 +138,7 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 
 | Operation | Target Latency | Notes |
 |-----------|---------------|-------|
-| `health_check()` (full scan) | < 5s | Scans all ~128 modules; parallelized per-module checks |
+| `health_check()` (full scan) | < 5s | Scans all ~130 modules; parallelized per-module checks |
 | `health_check(modules=["X"])` | < 500ms | Single module health probe |
 | `list_modules()` | < 100ms | In-memory registry; cached after first scan |
 | `dependency_tree()` | < 500ms | Graph construction from module metadata |

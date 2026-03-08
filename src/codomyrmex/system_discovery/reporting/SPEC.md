@@ -30,7 +30,7 @@ environment-variable inspection respectively.
 | `check_external_tools` | -- | `dict[str, bool]` | Availability of git, npm, node, docker, uv |
 | `generate_comprehensive_report` | -- | `dict[str, Any]` | Aggregated report from all checks above |
 | `display_status_report` | -- | `None` | Pretty-prints the report to stdout with colour |
-| `export_report` | `filename: str \| None` | `str` | Export report as JSON file; returns path |
+| `export_report` | `filename: str \ | None` | `str` Export report as JSON file; returns path |
 
 ### `HardwareProfiler`
 

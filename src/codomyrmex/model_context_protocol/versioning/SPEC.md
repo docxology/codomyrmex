@@ -32,7 +32,7 @@ Frozen dataclass with natural ordering on `(major, minor, patch)`.
 | `register` | `name, version, introduced` | `None` | Register a versioned tool |
 | `deprecate` | `name, since, removal, replacement` | `bool` | Mark a tool deprecated; returns `False` if not found |
 | `is_deprecated` | `name: str` | `bool` | Check deprecation status |
-| `get_tool` | `name: str` | `VersionedTool | None` | Look up a tool |
+| `get_tool` | `name: str` | `VersionedTool | None` Look up a tool |
 | `list_versions` | `name: str` | `list[APIVersion]` | All known versions of a tool |
 | `list_deprecated` | — | `list[str]` | All deprecated tool names |
 | `list_all` | — | `list[VersionedTool]` | All registered tools |

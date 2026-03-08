@@ -166,6 +166,139 @@ class Workflow:
             if name not in visited:
                 check_cycle(name)
 
+    def _try_emit_event(self, factory_path: str, *args: Any, **kwargs: Any) -> None:
+        """Emit an observability event, silently skipping if unavailable."""
+        try:
+            import importlib
+
+            mod = importlib.import_module(
+                ".observability.orchestrator_events",
+                package=__package__,
+            )
+            factory = getattr(mod, factory_path)
+            self._publish_event(factory(*args, **kwargs))
+        except (ImportError, AttributeError) as e:
+            self.logger.debug("Observability events not available: %s", e)
+
+    def _find_runnable_tasks(
+        self,
+        completed_tasks: set[str],
+        skipped_tasks: set[str],
+    ) -> list["Task"]:
+        """Identify pending tasks whose dependencies are satisfied.
+
+        Tasks whose condition evaluates to False are marked SKIPPED.
+        """
+        runnable: list[Task] = []
+        for name, task in self.tasks.items():
+            if task.status != TaskStatus.PENDING:
+                continue
+            if not task.dependencies.issubset(completed_tasks):
+                continue
+            if task.should_run(self.task_results):
+                runnable.append(task)
+            else:
+                self.logger.info("Task '%s' skipped by condition", name)
+                task.status = TaskStatus.SKIPPED
+                skipped_tasks.add(name)
+                self.task_results[name] = task.get_result()
+                self._emit_progress(name, "skipped", {"reason": "condition"})
+        return runnable
+
+    def _skip_blocked_tasks(
+        self,
+        failed_tasks: set[str],
+        skipped_tasks: set[str],
+    ) -> bool:
+        """Mark pending tasks with failed dependencies as SKIPPED.
+
+        Returns True if at least one task was newly skipped (so the main
+        loop should re-evaluate), False if a deadlock is detected.
+        """
+        any_skipped = False
+        for name, task in self.tasks.items():
+            if task.status == TaskStatus.PENDING:
+                if not task.dependencies.isdisjoint(failed_tasks):
+                    self.logger.warning(
+                        "Task '%s' skipped due to failed dependencies.", name
+                    )
+                    task.status = TaskStatus.SKIPPED
+                    task.error = Exception("Dependency failed")
+                    skipped_tasks.add(name)
+                    self.task_results[name] = task.get_result()
+                    self._emit_progress(
+                        name, "skipped", {"reason": "dependency_failed"}
+                    )
+                    any_skipped = True
+        return any_skipped
+
+    async def _launch_batch(self, runnable: list["Task"]) -> list[Any]:
+        """Start a batch of runnable tasks concurrently.
+
+        Returns the list of results (or exceptions) from ``asyncio.gather``.
+        """
+        self.logger.info("Running batch: %s", [t.name for t in runnable])
+        for task in runnable:
+            task.status = TaskStatus.RUNNING
+            self._emit_progress(task.name, "running", {})
+            self._try_emit_event("task_started", self.name, task.name)
+
+        coroutines = [self._execute_task_with_retry(t) for t in runnable]
+        return await asyncio.gather(*coroutines, return_exceptions=True)
+
+    def _process_batch_results(
+        self,
+        runnable: list["Task"],
+        results: list[Any],
+        completed_tasks: set[str],
+        failed_tasks: set[str],
+    ) -> None:
+        """Categorise batch results into completed / failed sets."""
+        for task, result in zip(runnable, results, strict=False):
+            if isinstance(result, Exception):
+                task.status = TaskStatus.FAILED
+                task.error = result
+                failed_tasks.add(task.name)
+                self.task_results[task.name] = task.get_result()
+                self.logger.error("Task '%s' failed: %s", task.name, result)
+                self._emit_progress(task.name, "failed", {"error": str(result)})
+                self._try_emit_event(
+                    "task_failed", self.name, task.name, str(result)
+                )
+                if self.fail_fast:
+                    self.logger.info("Fail-fast: stopping workflow")
+                    self._cancelled = True
+            else:
+                if task.transform_result:
+                    try:
+                        result = task.transform_result(result)
+                    except Exception as e:
+                        self.logger.warning(
+                            "Result transform failed for %s: %s", task.name, e
+                        )
+                task.status = TaskStatus.COMPLETED
+                task.result = result
+                completed_tasks.add(task.name)
+                self.task_results[task.name] = task.get_result()
+                self.logger.info(
+                    "Task '%s' completed in %.2fs", task.name, task.execution_time
+                )
+                self._emit_progress(
+                    task.name,
+                    "completed",
+                    {
+                        "execution_time": task.execution_time,
+                        "attempts": task.attempts,
+                    },
+                )
+                self._try_emit_event(
+                    "task_completed",
+                    self.name,
+                    task.name,
+                    execution_time=task.execution_time,
+                    attempts=task.attempts,
+                )
+
     async def run(self) -> dict[str, Any]:
         """Execute the workflow.
 
@@ -185,14 +318,7 @@ class Workflow:
             "Starting workflow '%s' with %s tasks.", self.name, len(self.tasks)
         )
         self._emit_progress("workflow", "started", {"total_tasks": len(self.tasks)})
-
-        # Emit typed event
-        try:
-            from .observability.orchestrator_events import workflow_started as _ws
-
-            self._publish_event(_ws(self.name, len(self.tasks)))
-        except ImportError as e:
-            self.logger.debug("Observability events not available: %s", e)
+        self._try_emit_event("workflow_started", self.name, len(self.tasks))
 
         # Reset task states
         for task in self.tasks.values():
@@ -202,146 +328,36 @@ class Workflow:
             task.attempts = 0
             task.execution_time = 0.0
 
-        # Topological execution with parallel batching
-        completed_tasks = set()
-        failed_tasks = set()
-        skipped_tasks = set()
+        completed_tasks: set[str] = set()
+        failed_tasks: set[str] = set()
+        skipped_tasks: set[str] = set()
 
         while len(completed_tasks) + len(failed_tasks) + len(skipped_tasks) < len(
             self.tasks
         ):
-            # Check cancellation
             if self._cancelled:
                 self.logger.info("Workflow cancelled")
                 break
-
-            # Check workflow timeout
             if self.timeout and (time.time() - self._start_time) > self.timeout:
                 raise WorkflowError(f"Workflow timeout after {self.timeout}s")
 
-            # Find runnable tasks
-            runnable = []
-            for name, task in self.tasks.items():
-                if task.status == TaskStatus.PENDING:
-                    if task.dependencies.issubset(completed_tasks):
-                        # Check condition
-                        if task.should_run(self.task_results):
-                            runnable.append(task)
-                        else:
-                            self.logger.info("Task '%s' skipped by condition", name)
-                            task.status = TaskStatus.SKIPPED
-                            skipped_tasks.add(name)
-                            self.task_results[name] = task.get_result()
-                            self._emit_progress(
-                                name, "skipped", {"reason": "condition"}
-                            )
+            runnable = self._find_runnable_tasks(completed_tasks, skipped_tasks)
 
-            # Handle blocked tasks
             if not runnable and (
                 len(completed_tasks) + len(failed_tasks) + len(skipped_tasks)
                 < len(self.tasks)
             ):
-                blocked = False
-                for name, task in self.tasks.items():
-                    if task.status == TaskStatus.PENDING:
-                        if not task.dependencies.isdisjoint(failed_tasks):
-                            self.logger.warning(
-                                "Task '%s' skipped due to failed dependencies.", name
-                            )
-                            task.status = TaskStatus.SKIPPED
-                            task.error = Exception("Dependency failed")
-                            skipped_tasks.add(name)
-                            self.task_results[name] = task.get_result()
-                            self._emit_progress(
-                                name, "skipped", {"reason": "dependency_failed"}
-                            )
-                            blocked = True
-
-                if blocked:
-                    continue
-
-                raise WorkflowError("Deadlock detected during execution.")
+                if not self._skip_blocked_tasks(failed_tasks, skipped_tasks):
+                    raise WorkflowError("Deadlock detected during execution.")
+                continue
 
             if not runnable:
                 break
 
-            self.logger.info("Running batch: %s", [t.name for t in runnable])
-
-            # Run tasks concurrently
-            coroutines = []
-            for task in runnable:
-                task.status = TaskStatus.RUNNING
-                self._emit_progress(task.name, "running", {})
-                try:
-                    from .observability.orchestrator_events import task_started as _ts
-
-                    self._publish_event(_ts(self.name, task.name))
-                except ImportError as e:
-                    self.logger.debug("Observability events not available: %s", e)
-                coroutines.append(self._execute_task_with_retry(task))
-
-            results = await asyncio.gather(*coroutines, return_exceptions=True)
-
-            for task, result in zip(runnable, results, strict=False):
-                if isinstance(result, Exception):
-                    task.status = TaskStatus.FAILED
-                    task.error = result
-                    failed_tasks.add(task.name)
-                    self.task_results[task.name] = task.get_result()
-                    self.logger.error("Task '%s' failed: %s", task.name, result)
-                    self._emit_progress(task.name, "failed", {"error": str(result)})
-                    try:
-                        from .observability.orchestrator_events import (
-                            task_failed as _tf,
-                        )
-
-                        self._publish_event(_tf(self.name, task.name, str(result)))
-                    except ImportError as e:
-                        self.logger.debug("Observability events not available: %s", e)
-
-                    if self.fail_fast:
-                        self.logger.info("Fail-fast: stopping workflow")
-                        self._cancelled = True
-                else:
-                    # Apply transform if specified
-                    if task.transform_result:
-                        try:
-                            result = task.transform_result(result)
-                        except Exception as e:
-                            self.logger.warning(
-                                "Result transform failed for %s: %s", task.name, e
-                            )
-
-                    task.status = TaskStatus.COMPLETED
-                    task.result = result
-                    completed_tasks.add(task.name)
-                    self.task_results[task.name] = task.get_result()
-                    self.logger.info(
-                        "Task '%s' completed in %.2fs", task.name, task.execution_time
-                    )
-                    self._emit_progress(
-                        task.name,
-                        "completed",
-                        {
-                            "execution_time": task.execution_time,
-                            "attempts": task.attempts,
-                        },
-                    )
-                    try:
-                        from .observability.orchestrator_events import (
-                            task_completed as _tc,
-                        )
-
-                        self._publish_event(
-                            _tc(
-                                self.name,
-                                task.name,
-                                execution_time=task.execution_time,
-                                attempts=task.attempts,
-                            )
-                        )
-                    except ImportError as e:
-                        self.logger.debug("Observability events not available: %s", e)
+            results = await self._launch_batch(runnable)
+            self._process_batch_results(
+                runnable, results, completed_tasks, failed_tasks
+            )
 
         # Summary
         elapsed = time.time() - self._start_time
@@ -355,29 +371,21 @@ class Workflow:
                 "elapsed": elapsed,
             },
         )
+        if failed_tasks:
+            self._try_emit_event(
+                "workflow_failed", self.name, f"{len(failed_tasks)} tasks failed"
+            )
+        else:
+            self._try_emit_event(
+                "workflow_completed",
+                self.name,
+                completed=len(completed_tasks),
+                failed=len(failed_tasks),
+                skipped=len(skipped_tasks),
+                elapsed=elapsed,
+            )
 
-        # Emit typed workflow completed/failed event
-        try:
-            from .observability.orchestrator_events import workflow_completed as _wc
-            from .observability.orchestrator_events import workflow_failed as _wf
-
-            if failed_tasks:
-                self._publish_event(_wf(self.name, f"{len(failed_tasks)} tasks failed"))
-            else:
-                self._publish_event(
-                    _wc(
-                        self.name,
-                        completed=len(completed_tasks),
-                        failed=len(failed_tasks),
-                        skipped=len(skipped_tasks),
-                        elapsed=elapsed,
-                    )
-                )
-        except ImportError as e:
-            self.logger.debug("Observability events not available: %s", e)
-
-        results = {name: task.result for name, task in self.tasks.items()}
-        return results
+        return {name: task.result for name, task in self.tasks.items()}
 
     async def _execute_task_with_retry(self, task: Task) -> Any:
         """Execute a task with retry logic."""

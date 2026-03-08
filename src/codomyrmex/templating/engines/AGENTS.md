@@ -13,7 +13,7 @@ Template rendering engine implementations supporting multiple template syntaxes:
 | `TemplateContext` | Hierarchical context with parent chain lookup via `get()` and `child()` |
 | `TemplateEngine` (ABC) | Abstract base defining `render(template, context)` and `render_file(path, context)` |
 | `SimpleTemplateEngine` | Regex-based `{{ var }}` interpolation with dotted path resolution and optional HTML escaping |
-| `Jinja2LikeEngine` | Control structures (`{% for %}`, `{% if %}`), filter pipeline (`|`), 12 built-in filters, autoescape |
+| `Jinja2LikeEngine` | Control structures (`{% for %}`, `{% if %}`), filter pipeline (` `), 12 built-in filters, autoescape |
 | `MustacheEngine` | Logic-less templates with `{{#section}}`, `{{^inverted}}`, `{{{unescaped}}}`, `{{&unescaped}}` |
 | `create_engine(engine_type)` | Factory function returning engine by name: `"simple"`, `"jinja2"`, `"mustache"` |
 

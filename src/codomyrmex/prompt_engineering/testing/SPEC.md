@@ -62,7 +62,7 @@ Three-layer design: models (data classes for test cases and results), evaluators
 |--------|-----------|---------|-------------|
 | `add_variant` | `name: str, prompt_template: str` | `ABTest` | Add a prompt variant |
 | `run` | `suite, executor_factory` | `dict[str, TestSuiteResult]` | Run all variants |
-| `get_winner` | `metric: str` | `str\|None` | Name of best variant by metric |
+| `get_winner` | `metric: str` | `str\ | None` Name of best variant by metric |
 | `compare` | | `dict[str, dict]` | Side-by-side metric comparison |
 
 ## Dependencies

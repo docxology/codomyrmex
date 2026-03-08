@@ -85,7 +85,7 @@ class GitHubAPIError(Exception):
 
 | Parameter | Type | Default | Semantics |
 |-----------|------|---------|-----------|
-| `github_token` | `str \| None` | `None` | Falls back to `GITHUB_TOKEN` env var |
+| `github_token` | `str \ | None` | `None` Falls back to `GITHUB_TOKEN` env var |
 | `repo_owner` / `owner` | `str` | required | GitHub organisation or username |
 | `repo_name` | `str` | required | Repository name |
 

@@ -196,9 +196,9 @@ The `conclusion` object contains:
 
 | Field Name | Type | Description |
 | :--- | :--- | :--- |
-| `action` | `string \| null` | The recommended action |
-| `justification` | `string \| null` | Reasoning behind the conclusion |
-| `confidence` | `number \| null` | Conclusion-specific confidence score |
+| `action` | `string \ | null` The recommended action |
+| `justification` | `string \ | null` Reasoning behind the conclusion |
+| `confidence` | `number \ | null` Conclusion-specific confidence score |
 
 ### 5. Error Handling
 
@@ -241,7 +241,7 @@ Execute a single ReAct (Reasoning + Acting) step. Given an observation, the agen
 | Parameter Name | Type | Required | Description | Example Value |
 | :--- | :--- | :--- | :--- | :--- |
 | `observation` | `string` | Yes | Current observation or task description | `"The test suite has 3 failing tests in the auth module"` |
-| `available_tools` | `array[string] \| null` | No | List of tool names available for actions. Defaults to `["search", "think", "calculate", "conclude"]` if not provided. | `["search", "read_file", "run_tests"]` |
+| `available_tools` | `array[string] \ | null` | No | List of tool names available for actions. Defaults to `["search", "think", "calculate", "conclude"]` if not provided. `["search", "read_file", "run_tests"]` |
 | `max_steps` | `integer` | No | Maximum number of steps before forced conclusion (default: `5`) | `3` |
 
 ### 4. Output Schema (Return Value)

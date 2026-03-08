@@ -4,13 +4,13 @@
 
 ## Overview
 
-Source code directory containing all Python packages and modules for the Codomyrmex platform. The main package `codomyrmex/` contains 128 specialized modules for AI-assisted development workflows.
+Source code directory containing all Python packages and modules for the Codomyrmex platform. The main package `codomyrmex/` contains 130 specialized modules for AI-assisted development workflows.
 
 ## Directory Contents
 
 | Directory                      | Description                                |
 | ------------------------------ | ------------------------------------------ |
-| [**codomyrmex/**](codomyrmex/) | Main Python package with 128 modules       |
+| [**codomyrmex/**](codomyrmex/) | Main Python package with 130 modules       |
 
 ### Key Files
 
@@ -23,14 +23,14 @@ Source code directory containing all Python packages and modules for the Codomyr
 
 ```text
 src/
-├── codomyrmex/           # Main package (128 modules)
+├── codomyrmex/           # Main package (130 modules)
 │   ├── agents/           # AI agent integrations
 │   ├── llm/              # LLM infrastructure
 │   ├── orchestrator/     # Workflow orchestration
 │   ├── meme/             # Memetics & Info War
 │   ├── coding/           # Code execution
 │   ├── documentation/    # Doc generation
-│   └── ...               # 128 modules total
+│   └── ...               # 130 modules total
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ uv pip install -e .
 uv run pytest src/codomyrmex/tests/
 
 # Type checking
-uv run mypy src/codomyrmex/
+uv run ty check src/codomyrmex/
 ```
 
 ## Navigation

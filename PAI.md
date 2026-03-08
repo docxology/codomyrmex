@@ -23,7 +23,7 @@ Codomyrmex is a **128-module Python development platform**. PAI agents consume c
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              128 modules of dev-platform tools
+     Algorithm + Skills + Hooks              130 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.

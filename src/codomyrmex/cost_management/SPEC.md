@@ -26,19 +26,19 @@ BudgetManager ──> CostTracker
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `record` | `amount: float, category: CostCategory, description: str, resource_id: str, tags: dict, metadata: dict, timestamp: datetime` | `CostEntry` | Record a cost entry and persist to store |
-| `get_summary` | `period: BudgetPeriod \| None, start: datetime \| None, end: datetime \| None, category: CostCategory \| None, tags_filter: dict \| None` | `CostSummary` | Aggregate costs by category, resource, and tag |
-| `get_total` | `period: BudgetPeriod \| None, category: CostCategory \| None, tags_filter: dict \| None` | `float` | Get total spend, with period, category, and tag filters |
+| `get_summary` | `period: BudgetPeriod \ | None, start: datetime \ | None, end: datetime \ None, category: CostCategory \ None, tags_filter: dict \ None` `CostSummary` Aggregate costs by category, resource, and tag |
+| `get_total` | `period: BudgetPeriod \ | None, category: CostCategory \ | None, tags_filter: dict \ None` `float` Get total spend, with period, category, and tag filters |
 
 ### `BudgetManager`
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `create` | `name: str, amount: float, period: BudgetPeriod, category: CostCategory \| None, tags_filter: dict, alert_thresholds: list[float]` | `Budget` | Create a new budget |
-| `get_budget` | `budget_id: str` | `Budget \| None` | Retrieve budget by ID |
+| `create` | `name: str, amount: float, period: BudgetPeriod, category: CostCategory \ | None, tags_filter: dict, alert_thresholds: list[float]` | `Budget` Create a new budget |
+| `get_budget` | `budget_id: str` | `Budget \ | None` Retrieve budget by ID |
 | `list_budgets` | -- | `list[Budget]` | List all budgets |
 | `get_utilization` | `budget: Budget` | `float` | Current utilization ratio (0.0 - 1.0+) |
 | `check_budgets` | -- | `list[BudgetAlert]` | Check all budgets, return new alerts |
-| `can_spend` | `amount: float, category: CostCategory, tags: dict \| None` | `bool` | Check if spending is within all applicable budgets |
+| `can_spend` | `amount: float, category: CostCategory, tags: dict \ | None` | `bool` Check if spending is within all applicable budgets |
 | `reset_period_alerts` | -- | `None` | Clear triggered alert state |
 
 ### `CostStore` (ABC)
@@ -46,7 +46,7 @@ BudgetManager ──> CostTracker
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `save_entry` | `entry: CostEntry` | `None` | Persist a cost entry |
-| `get_entries` | `start: datetime, end: datetime, category: CostCategory \| None, tags_filter: dict \| None` | `list[CostEntry]` | Query entries by date range, category, and tag |
+| `get_entries` | `start: datetime, end: datetime, category: CostCategory \ | None, tags_filter: dict \ | None` `list[CostEntry]` Query entries by date range, category, and tag |
 
 ### `InMemoryCostStore`
 

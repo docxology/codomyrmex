@@ -18,9 +18,9 @@ Two complementary validation subsystems: `PluginValidator` for metadata, depende
 |--------|-----------|---------|-------------|
 | `validate` | `plugin: Plugin` | `ValidationResult` | Check required methods (`initialize`, `shutdown`) exist |
 | `validate_plugin_metadata` | `metadata: dict` | `ValidationResult` | Verify required fields (`name`, `version`) |
-| `check_plugin_dependencies` | `deps_or_info: PluginInfo\|list[str], available: list[str]\|None` | `ValidationResult` | Check dependency satisfaction; warns on risky deps |
+| `check_plugin_dependencies` | `deps_or_info: PluginInfo\ | list[str], available: list[str]\ | None` `ValidationResult` Check dependency satisfaction; warns on risky deps |
 | `validate_dockerfile` | `content: str` | `ValidationResult` | Check for `FROM` instruction, flag `chmod 777` and `USER root` |
-| `validate_plugin` | `target: str\|Plugin` | `ValidationResult` | Dispatch: file path triggers security scan, Plugin triggers `validate` |
+| `validate_plugin` | `target: str\ | Plugin` | `ValidationResult` Dispatch: file path triggers security scan, Plugin triggers `validate` |
 
 ### `ValidationResult` (dataclass)
 

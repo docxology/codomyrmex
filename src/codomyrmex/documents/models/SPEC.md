@@ -32,13 +32,13 @@ Each format maps to a `DocumentType` via the module-level `_FORMAT_TYPE_MAP` dic
 
 | Field | Type | Default |
 |-------|------|---------|
-| `content` | `str \| bytes` | required |
+| `content` | `str \ | bytes` required |
 | `format` | `DocumentFormat` | required |
-| `file_path` | `str \| None` | `None` |
+| `file_path` | `str \ | None` `None` |
 | `encoding` | `str` | `"utf-8"` |
 | `metadata` | `dict[str, Any]` | `{}` |
 | `id` | `str` | `uuid4().hex` |
-| `document_type` | `DocumentType \| None` | derived from format |
+| `document_type` | `DocumentType \ | None` derived from format |
 | `created_at` | `datetime` | `datetime.now()` |
 | `modified_at` | `datetime` | `datetime.now()` |
 
@@ -59,8 +59,8 @@ Methods: `get_content_as_string() -> str`, `to_dict() -> dict[str, Any]`.
 |-------|------|---------|
 | `title` | `str` | `""` |
 | `author` | `str` | `""` |
-| `created_at` | `datetime \| None` | `None` |
-| `modified_at` | `datetime \| None` | `None` |
+| `created_at` | `datetime \ | None` `None` |
+| `modified_at` | `datetime \ | None` `None` |
 | `version` | `str` | `""` |
 | `tags` | `list[str]` | `[]` |
 | `custom_fields` | `dict[str, MetadataField]` | `{}` |

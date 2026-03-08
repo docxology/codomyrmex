@@ -42,7 +42,7 @@ Curriculum objects aggregate named modules, each containing ordered lists of Les
 | `get_modules` | `() -> dict[str, list[Lesson]]` | All modules |
 | `total_duration` | `() -> int` | Sum of all lesson durations (minutes) |
 | `generate_learning_path` | `() -> list[Lesson]` | Topological sort via Kahn's algorithm; raises `ValueError` on cycles |
-| `export` | `(format: str) -> dict | str` | Export as `"json"` dict or `"text"` string |
+| `export` | `(format: str) -> dict | str` Export as `"json"` dict or `"text"` string |
 
 ### `render_curriculum_path`
 

@@ -136,7 +136,7 @@ graph TB
 ```
 
 > [!NOTE]
-> The diagram above shows representative modules per layer. The full list of all 128 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
+> The diagram above shows representative modules per layer. The full list of all 130 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
 
 ### Module Layer Descriptions
 

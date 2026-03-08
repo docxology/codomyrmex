@@ -12,9 +12,9 @@ Three-layer plugin architecture: `PluginRegistry` for storage and lookup, `Plugi
 |--------|-----------|---------|
 | `register` | `plugin: Plugin` | `bool` (False if duplicate) |
 | `unregister` | `name: str` | `bool` |
-| `get` | `name: str` | `Plugin \| None` |
-| `get_plugin_info` | `name: str` | `PluginInfo \| None` |
-| `list_plugins` | `plugin_type: PluginType \| None` | `list[PluginInfo]` |
+| `get` | `name: str` | `Plugin \ None` |
+| `get_plugin_info` | `name: str` | `PluginInfo \ None` |
+| `list_plugins` | `plugin_type: PluginType \ | None` `list[PluginInfo]` |
 | `check_dependencies` | `name: str` | `list[str]` (missing deps) |
 | `initialize_all` | none | `dict[str, bool]` |
 | `shutdown_all` | none | `dict[str, bool]` |
@@ -32,7 +32,7 @@ Singleton: `get_registry()`.
 | `unload_plugin` | `name: str` | `bool` |
 | `reload_plugin` | `name: str` | `LoadResult` |
 | `enable_plugin` / `disable_plugin` | `name: str` | `bool` |
-| `get_plugin` | `name: str` | `Plugin \| None` |
+| `get_plugin` | `name: str` | `Plugin \ None` |
 | `list_plugins` | none | `list[PluginInfo]` |
 | `get_system_status` | none | `dict[str, Any]` |
 | `cleanup` | none | `None` |

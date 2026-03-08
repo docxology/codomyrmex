@@ -17,7 +17,7 @@ Pub/sub pattern with glob-based topic matching (`fnmatch`). The `EventBus` maint
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `__init__` | `max_workers: int = 4`, `enable_async: bool = False` | `None` | Initialize with thread pool and optional async queue |
-| `subscribe` | `event_patterns: list[Any]`, `handler: Callable`, `subscriber_id: str \| None`, `filter_func`, `priority: int` | `str` | Register handler for matching patterns; returns subscriber ID |
+| `subscribe` | `event_patterns: list[Any]`, `handler: Callable`, `subscriber_id: str \ | None`, `filter_func`, `priority: int` | `str` Register handler for matching patterns; returns subscriber ID |
 | `subscribe_typed` | `event_type: EventType`, `handler`, `subscriber_id`, `**kwargs` | `str` | Convenience wrapper for single EventType subscription |
 | `unsubscribe` | `subscriber_id: str` | `bool` | Remove a subscription |
 | `publish` | `event: Event` | `None` | Publish event synchronously (or queue if async enabled) |
@@ -41,14 +41,14 @@ Pub/sub pattern with glob-based topic matching (`fnmatch`). The `EventBus` maint
 |--------|-----------|---------|-------------|
 | `validate_event` | `event: Event` | `tuple[bool, list[str]]` | Validate event data against registered schema |
 | `register_event_schema` | `event_type: EventType`, `schema: dict` | `None` | Register JSON Schema for an event type |
-| `get_event_schema` | `event_type: EventType` | `dict \| None` | Retrieve registered schema |
+| `get_event_schema` | `event_type: EventType` | `dict \ | None` Retrieve registered schema |
 | `list_registered_schemas` | — | `list[str]` | List all registered event type names |
 
 ### `EventMixin`
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `init_events` | `source: str`, `event_bus: EventBus \| None` | `None` | Initialize event capabilities |
+| `init_events` | `source: str`, `event_bus: EventBus \ | None` | `None` Initialize event capabilities |
 | `emit` | `event_type`, `data`, `correlation_id`, `priority`, `metadata` | `Event` | Emit an event from this module |
 | `on` | `event_types: list`, `handler`, `priority: int` | `str` | Subscribe to events; returns subscription ID |
 | `off` | `subscription_id: str` | `bool` | Unsubscribe |

@@ -39,7 +39,7 @@ Two independent class hierarchies coexist:
 | `create_backup` | `(database_url: str) -> BackupResult` | Parses URL scheme, dispatches to `_backup_sqlite`/`_backup_postgres`/`_backup_mysql`, compresses with gzip, computes SHA256 |
 | `restore` | `(backup_id: str, target_url: str) -> BackupResult` | Currently supports SQLite only; decompresses gzip, executes SQL statements |
 | `list_backups` | `() -> list[Backup]` | Returns all tracked `Backup` instances |
-| `get_backup` | `(backup_id: str) -> Backup \| None` | Looks up backup by ID |
+| `get_backup` | `(backup_id: str) -> Backup \ | None` Looks up backup by ID |
 
 ### BackupFormat (Enum)
 

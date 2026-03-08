@@ -16,7 +16,7 @@ Facade pattern over `EventBus`. Emitters encapsulate a source identifier and del
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `bus: Any \| None` | `None` | Initialize with optional event bus (defaults to global) |
+| `__init__` | `bus: Any \ | None` | `None` Initialize with optional event bus (defaults to global) |
 | `emit` | `event_type: EventType`, `payload: Any`, `priority: int = 0` | `None` | Async: emit a single event |
 | `emit_later` | `event_type: EventType`, `payload: Any`, `delay: float` | `None` | Schedule delayed event emission via asyncio.sleep |
 
@@ -24,13 +24,13 @@ Facade pattern over `EventBus`. Emitters encapsulate a source identifier and del
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `source: str`, `event_bus: EventBus \| None` | `None` | Initialize with source ID and optional bus |
+| `__init__` | `source: str`, `event_bus: EventBus \ | None` | `None` Initialize with source ID and optional bus |
 | `emit` | `event_type`, `data`, `correlation_id`, `metadata`, `priority` | `None` | Sync publish; no-op if disabled |
 | `emit_sync` | (same as `emit`) | `None` | Alias for `emit` |
 | `emit_async` | (same as `emit`) | `None` | Async publish via `bus.publish_async` |
 | `emit_batch` | `events: list[dict]` | `None` | Sync publish multiple events |
 | `emit_batch_async` | `events: list[dict]` | `None` | Async publish multiple events via `asyncio.gather` |
-| `start_operation` | `operation_name: str`, `operation_data: dict \| None` | `str` | Emit start event, return correlation ID |
+| `start_operation` | `operation_name: str`, `operation_data: dict \ | None` | `str` Emit start event, return correlation ID |
 | `update_operation` | `correlation_id`, `operation_name`, `progress`, `status`, `data` | `None` | Emit progress event |
 | `end_operation` | `correlation_id`, `operation_name`, `success`, `result`, `error` | `None` | Emit completion event, clear correlation context |
 | `emit_error` | `error_type`, `error_message`, `context`, `correlation_id` | `None` | Emit SYSTEM_ERROR at priority 2 |

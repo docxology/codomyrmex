@@ -29,7 +29,7 @@ Dual-analyzer pattern: `SecurityAnalyzer` performs static analysis using regex p
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `scan_vulnerabilities` | `target_path: str, scan_types: list[str] \| None` | `VulnerabilityReport` | Run dependency, code, and/or compliance scans |
+| `scan_vulnerabilities` | `target_path: str, scan_types: list[str] \ | None` | `VulnerabilityReport` Run dependency, code, and/or compliance scans |
 | `_scan_python_dependencies` | `target_path: str` | `list[dict]` | Shell out to `pip-audit` with 120s timeout |
 | `_scan_code_security` | `target_path: str` | `list[dict]` | Shell out to `bandit` with 120s timeout |
 | `_check_owasp_compliance` | `target_path: str` | `list[dict]` | Check OWASP Top 10 requirements |

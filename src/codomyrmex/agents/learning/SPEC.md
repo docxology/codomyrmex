@@ -29,7 +29,7 @@ Simple repository pattern: `SkillLibrary` holds `Skill` dataclasses in a name-ke
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `add_skill` | `skill: Skill` | `None` | Adds a skill; raises `ValueError` on name collision |
-| `get_skill` | `name: str` | `Skill \| None` | Retrieves a skill by name |
+| `get_skill` | `name: str` | `Skill \ | None` Retrieves a skill by name |
 | `search` | `tag: str` | `list[Skill]` | Returns all skills containing the given tag |
 
 ### `plot_skill_distribution`

@@ -58,7 +58,7 @@ uv pip install -e .
 uv pip install -e ".[dev]"
 
 # Or install specific development tools
-uv pip install pytest black mypy ruff pre-commit
+uv pip install pytest ruff pre-commit
 ```
 
 ## 🔧 Daily Development Workflow
@@ -139,7 +139,7 @@ uv run black src/ src/codomyrmex/tests/
 uv run ruff check src/ src/codomyrmex/tests/
 
 # Type checking
-uv run mypy src/codomyrmex/
+uv run ty check src/codomyrmex/
 
 # Security scanning
 uv run bandit -r src/codomyrmex/

@@ -93,7 +93,7 @@ ToolRegistry()
 |:-------|:----------|:--------|:------------|
 | `register` | `(entry: ToolEntry) -> None` | `None` | Register a tool. Raises `ValueError` if name exists |
 | `unregister` | `(name: str) -> bool` | `bool` | Remove by name. Returns True if found |
-| `get` | `(name: str) -> ToolEntry \| None` | `ToolEntry \| None` | Retrieve by exact name |
+| `get` | `(name: str) -> ToolEntry \ | None` | `ToolEntry \ None` Retrieve by exact name |
 | `list` | `() -> list[ToolEntry]` | `list[ToolEntry]` | All entries sorted by name |
 | `list_names` | `() -> list[str]` | `list[str]` | All tool names sorted |
 | `search` | `(*, name_contains, tags, match_all_tags) -> list[ToolEntry]` | `list[ToolEntry]` | Search by name substring and/or tags |
@@ -103,8 +103,8 @@ ToolRegistry()
 
 | Parameter | Type | Required | Description |
 |:----------|:-----|:---------|:------------|
-| `name_contains` | `str \| None` | No | Case-insensitive name substring |
-| `tags` | `list[str] \| None` | No | Tags to filter by |
+| `name_contains` | `str \ | None` | No Case-insensitive name substring |
+| `tags` | `list[str] \ | None` | No Tags to filter by |
 | `match_all_tags` | `bool` | No | If True, all tags must match (default False = any) |
 
 **`invoke()` parameters:**
@@ -140,10 +140,10 @@ Marks a function as a tool and optionally registers it. The decorated function r
 |:----------|:-----|:---------|:------------|
 | `name` | `str` | Yes | Unique tool name |
 | `description` | `str` | No | Human-readable description |
-| `input_schema` | `dict \| None` | No | JSON-schema-like input spec |
-| `output_schema` | `dict \| None` | No | JSON-schema-like output spec |
-| `tags` | `list[str] \| None` | No | Categorization tags |
-| `registry` | `ToolRegistry \| None` | No | If provided, auto-registers the tool |
+| `input_schema` | `dict \ | None` | No JSON-schema-like input spec |
+| `output_schema` | `dict \ | None` | No JSON-schema-like output spec |
+| `tags` | `list[str] \ | None` | No Categorization tags |
+| `registry` | `ToolRegistry \ | None` | No If provided, auto-registers the tool |
 
 ---
 
@@ -204,7 +204,7 @@ ToolChain(registry: ToolRegistry)
 
 | Parameter | Type | Default | Description |
 |:----------|:-----|:--------|:------------|
-| `initial_input` | `dict[str, Any] \| None` | `None` | Starting context for the first step |
+| `initial_input` | `dict[str, Any] \ | None` | `None` Starting context for the first step |
 | `stop_on_failure` | `bool` | `True` | Stop chain on first tool failure |
 | `validate_tools` | `bool` | `True` | Pre-validate all referenced tools exist |
 

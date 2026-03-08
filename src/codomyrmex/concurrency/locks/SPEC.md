@@ -26,7 +26,7 @@ All locks extend `BaseLock` (ABC) which defines `acquire`/`release` and a contex
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `__init__` | `name: str, lock_dir: str = "/tmp/codomyrmex/locks"` | -- | Creates lock directory if missing |
-| `acquire` | `timeout: float, retry_interval: float` | `bool` | Uses `fcntl.flock(LOCK_EX \| LOCK_NB)` with retry loop |
+| `acquire` | `timeout: float, retry_interval: float` | `bool` | Uses `fcntl.flock(LOCK_EX \ LOCK_NB)` with retry loop |
 | `release` | none | `None` | Unlocks via `fcntl.LOCK_UN`, closes file, removes lock file |
 
 ### `RedisLock`

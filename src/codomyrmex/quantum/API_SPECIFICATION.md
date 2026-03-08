@@ -35,8 +35,8 @@ Represents a gate in a circuit.
 | :--- | :--- | :--- | :--- |
 | `gate_type` | `GateType` | required | The gate operation |
 | `target` | `int` | required | Target qubit index |
-| `control` | `int | None` | `None` | Control qubit for two-qubit gates |
-| `parameter` | `float | None` | `None` | Rotation angle for RX/RY/RZ |
+| `control` | `int | None` | `None` Control qubit for two-qubit gates |
+| `parameter` | `float | None` | `None` Rotation angle for RX/RY/RZ |
 
 ### `Qubit`
 
@@ -44,8 +44,8 @@ Represents a single qubit state as amplitudes.
 
 | Field | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `alpha` | `complex` | `1+0j` | Amplitude of |0> |
-| `beta` | `complex` | `0+0j` | Amplitude of |1> |
+| `alpha` | `complex` | `1+0j` | Amplitude of 0> |
+| `beta` | `complex` | `0+0j` | Amplitude of 1> |
 
 #### Class Methods
 

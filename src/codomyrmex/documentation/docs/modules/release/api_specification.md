@@ -61,7 +61,7 @@ The `release` module provides Python-native tools for validating release readine
 
 | Method | Signature | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `(metadata: PackageMetadata \| None)` | — | Initialize with metadata; defaults to `PackageMetadata()` |
+| `__init__` | `(metadata: PackageMetadata \ | None)` | — Initialize with metadata; defaults to `PackageMetadata()` |
 | `validate_metadata` | `()` | `list[str]` | Validate name, version, python_requires; returns errors |
 | `build` | `()` | `BuildReport` | Build sdist + wheel artifacts; fails if metadata invalid |
 | `metadata` | property | `PackageMetadata` | Access current metadata |
@@ -78,7 +78,7 @@ The `release` module provides Python-native tools for validating release readine
 
 | Method | Signature | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `(build: BuildReport \| None)` | — | Initialize with a build report |
+| `__init__` | `(build: BuildReport \ | None)` | — Initialize with a build report |
 | `preflight` | `(target: DistributionTarget)` | `PreflightResult` | Check build, artifacts, and metadata (3 checks) |
 | `publish` | `(target: DistributionTarget)` | `PublishResult` | Run preflight; publish if ready; sets URL for PyPI/TestPyPI/GitHub |
 | `publish_history` | `()` | `list[PublishResult]` | All previous publish operations |

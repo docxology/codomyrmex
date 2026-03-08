@@ -95,7 +95,7 @@ Wei et al.'s (2022) emergent abilities framework predicts that capabilities appe
 | ~60 modules | Basic tool composition | Connected component size | Graph connectivity |
 | ~80 modules | Self-description | Fraction of self-modeling coverage | `system_discovery` completeness |
 | ~100 modules | Cross-domain transfer | Transfer entropy between domains | Embedding space overlap |
-| 128 modules | Self-healing loop | Mean time to recovery | All feedback path modules present |
+| 130 modules | Self-healing loop | Mean time to recovery | All feedback path modules present |
 
 These thresholds are *percolation thresholds* for specific subgraph structures. The self-healing loop requires a cycle in the dependency graph connecting `telemetry → defense → ci_cd_automation → deployment → telemetry`; this cycle cannot form below ~100 modules because the intermediate modules don't exist.
 
@@ -115,7 +115,7 @@ This fractal self-similarity is not coincidental — it reflects the autopoietic
 
 Anderson's deeper point is that at each level of complexity, **qualitatively new phenomena emerge** that cannot be predicted from the laws governing the level below. The relationship between levels is not ontological reduction but *broken symmetry*.
 
-Applied to codomyrmex's growth from 128 modules (at inception) to 128 modules (v1.1.9):
+Applied to codomyrmex's growth from 130 modules (at inception) to 130 modules (v1.1.9):
 
 | Module Count | Phase | Emergent Capability | Symmetry Broken |
 |:-------------|:------|:-------------------|:---------------|

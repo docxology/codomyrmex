@@ -16,10 +16,10 @@ Single-class design with `SecretManager` as the primary interface. Encryption ke
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `key_file: str \| None` | `None` | Loads or generates Fernet key at `~/.codomyrmex/secrets.key` |
-| `store_secret` | `name: str, value: str, metadata: dict \| None` | `str` | Encrypts and stores a secret; returns hex ID |
-| `get_secret` | `secret_id: str` | `str \| None` | Decrypts and returns secret value by ID |
-| `get_secret_by_name` | `name: str` | `str \| None` | Decrypts and returns secret value by name |
+| `__init__` | `key_file: str \ | None` | `None` Loads or generates Fernet key at `~/.codomyrmex/secrets.key` |
+| `store_secret` | `name: str, value: str, metadata: dict \ | None` | `str` Encrypts and stores a secret; returns hex ID |
+| `get_secret` | `secret_id: str` | `str \ | None` Decrypts and returns secret value by ID |
+| `get_secret_by_name` | `name: str` | `str \ | None` Decrypts and returns secret value by name |
 | `list_secrets` | | `list[dict]` | Returns metadata for all secrets (no values exposed) |
 | `delete_secret` | `secret_id: str` | `bool` | Removes a secret from the store |
 | `rotate_key` | | `str` | Generates new key, re-encrypts all secrets, returns new key ID |
