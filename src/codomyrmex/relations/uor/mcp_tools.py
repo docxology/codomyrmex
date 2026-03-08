@@ -57,7 +57,7 @@ def uor_add_entity(
         )
         return {"status": "success", "entity": entity.to_dict()}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -85,4 +85,4 @@ def uor_find_path(
             return {"status": "success", "message": "No path found."}
         return {"status": "success", "path": path}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

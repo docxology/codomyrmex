@@ -33,19 +33,7 @@ class RubyManager(BaseLanguageManager):
 
     def setup_project(self, path: str) -> bool:
         """Initialize a new Ruby project."""
-        try:
-            os.makedirs(path, exist_ok=True)
-            subprocess.run(
-                ["bundle", "init"],
-                cwd=path,
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except Exception as e:
-            # Bundle might not be installed; fallback to simple dir creation
-            logger.warning("Warning on Ruby setup: %s", e)
-            return True
+        return self._setup_command(path, ["bundle", "init"], lang_name="Ruby")
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write and execute a Ruby script."""

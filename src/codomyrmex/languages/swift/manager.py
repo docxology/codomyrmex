@@ -32,18 +32,7 @@ class SwiftManager(BaseLanguageManager):
 
     def setup_project(self, path: str) -> bool:
         """Initialize a new Swift project."""
-        try:
-            os.makedirs(path, exist_ok=True)
-            subprocess.run(
-                ["swift", "package", "init", "--type", "executable"],
-                cwd=path,
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except (OSError, subprocess.SubprocessError) as e:
-            logger.warning("Failed to setup Swift project: %s", e)
-            return False
+        return self._setup_command(path, ["swift", "package", "init", "--type", "executable"], lang_name="Swift")
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write and execute a Swift script."""

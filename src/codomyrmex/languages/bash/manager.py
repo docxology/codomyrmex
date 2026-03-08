@@ -33,13 +33,8 @@ class BashManager(BaseLanguageManager):
         )
 
     def setup_project(self, path: str) -> bool:
-        """Initialize a new directory for Bash scripts."""
-        try:
-            os.makedirs(path, exist_ok=True)
-            return True
-        except (OSError, subprocess.SubprocessError) as e:
-            logger.warning("Failed to setup Bash dir: %s", e)
-            return False
+        """Initialize a new Bash project directory."""
+        return self._setup_command(path, lang_name="Bash")
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write and execute a Bash script."""

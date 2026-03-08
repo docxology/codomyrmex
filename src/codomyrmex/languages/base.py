@@ -11,8 +11,11 @@ All language managers inherit from ``BaseLanguageManager`` and configure:
 from __future__ import annotations
 
 import contextlib
+import logging
 import os
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 
 class BaseLanguageManager:
@@ -42,6 +45,40 @@ class BaseLanguageManager:
         for path in files:
             with contextlib.suppress(OSError):
                 os.remove(path)
+
+    def _setup_command(
+        self,
+        path: str,
+        cmd: list[str] | None = None,
+        *,
+        cwd: str | None = None,
+        lang_name: str = "",
+    ) -> bool:
+        """Create *path* and optionally run a setup command inside it.
+
+        Args:
+            path: Directory to create (``exist_ok=True``).
+            cmd: Optional toolchain command to run after creating the directory.
+            cwd: Working directory for the command (defaults to *path*).
+            lang_name: Used in the warning log on failure.
+
+        Returns:
+            True on success, False on OSError or SubprocessError.
+        """
+        try:
+            os.makedirs(path, exist_ok=True)
+            if cmd:
+                subprocess.run(
+                    cmd,
+                    cwd=cwd or path,
+                    check=True,
+                    capture_output=True,
+                )
+            return True
+        except (OSError, subprocess.SubprocessError) as e:
+            label = lang_name or "project"
+            logger.warning("Failed to setup %s: %s", label, e)
+            return False
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing the language toolchain."""

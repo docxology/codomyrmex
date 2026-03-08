@@ -228,7 +228,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (77673 symbols, 180034 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (77905 symbols, 180473 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

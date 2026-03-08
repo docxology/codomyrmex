@@ -39,4 +39,4 @@ def social_media_analyze_sentiment(
 
         return {"status": "success", "score": score, "label": label}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

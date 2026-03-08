@@ -58,7 +58,7 @@ def network_analysis_add_edge(
             "message": f"Edge added between '{source}' and '{target}' with weight {weight}.",
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -77,7 +77,7 @@ def network_analysis_calculate_centrality() -> dict[str, Any]:
         centrality = graph.calculate_centrality()
         return {"status": "success", "centrality_scores": centrality}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -100,4 +100,4 @@ def network_analysis_find_communities() -> dict[str, Any]:
             "count": len(communities),
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

@@ -1,198 +1,60 @@
 {
-  "command": "show",
-  "query": "smells",
-  "status_filter": "open",
-  "total": 10,
-  "summary": {
-    "by_tier": {
-      "T2": 10
+  "command": "next",
+  "items": [
+    {
+      "id": "review::.::holistic::ai_generated_debt::base_language_manager_integrated::4c7f8d44",
+      "kind": "finding",
+      "tier": 3,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "review",
+      "file": ".",
+      "summary": "BaseLanguageManager template-method pattern fully integrated: 14 language managers inherit from base class. _check_commands class variable replaces 12 identical is_installed() boilerplate blocks. -130 LOC net. All language tests pass.",
+      "detail": {
+        "holistic": true,
+        "dimension": "ai_generated_debt",
+        "related_files": [
+          "src/codomyrmex/languages/base.py",
+          "src/codomyrmex/languages/go/manager.py",
+          "src/codomyrmex/languages/java/manager.py",
+          "src/codomyrmex/languages/typescript/manager.py"
+        ],
+        "evidence": [
+          "base.py: _check_commands: list[list[str]] = [] + is_installed() template + _cleanup() shared utility",
+          "12 managers: _check_commands class var replaces identical 11-line is_installed() try/except blocks",
+          "Java: _check_commands=[['javac','--version'],['java','--version']] handles dual-command check",
+          "Python/TypeScript: custom is_installed() retained (genuinely complex multi-tool detection logic)",
+          "Rust/Java: removed redundant _cleanup() methods (now inherited from base)",
+          "Net: 1309\u21921179 LOC in managers; +62 LOC base class; -67 LOC net; all language tests pass"
+        ],
+        "suggestion": "Remaining AI debt: 8 managers have identical setup_project() bodies (makedirs + one subprocess). Extract _setup_command(cmd: list[str]) template to base class. Estimated -120 LOC additional.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "primary_command": "desloppify issues"
+    }
+  ],
+  "queue": {
+    "tier_counts": {
+      "1": 15,
+      "2": 745,
+      "3": 4754,
+      "4": 35
     },
-    "by_detector": {
-      "smells": 10
-    },
-    "files": 6
+    "requested_tier": 1,
+    "selected_tier": 1,
+    "fallback_reason": null,
+    "available_tiers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "total": 15
   },
-  "by_file": {
-    "projects/test_project/run_demo.py": [
-      {
-        "id": "smells::projects/test_project/run_demo.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            20
-          ]
-        }
-      },
-      {
-        "id": "smells::projects/test_project/run_demo.py::swallowed_error",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "6x Catch block that only logs (swallowed error)",
-        "detail": {
-          "smell_id": "swallowed_error",
-          "severity": "high",
-          "count": 6,
-          "lines": [
-            164,
-            185,
-            218,
-            236,
-            258,
-            286
-          ]
-        }
-      }
-    ],
-    "scripts/agentic_memory/agentic_memory_demo.py": [
-      {
-        "id": "smells::scripts/agentic_memory/agentic_memory_demo.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            13
-          ]
-        }
-      },
-      {
-        "id": "smells::scripts/agentic_memory/agentic_memory_demo.py::sys_exit_in_library",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.exit() outside CLI entry point \u2014 use exceptions",
-        "detail": {
-          "smell_id": "sys_exit_in_library",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            42
-          ]
-        }
-      }
-    ],
-    "scripts/agents/advanced_workflow.py": [
-      {
-        "id": "smells::scripts/agents/advanced_workflow.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            16
-          ]
-        }
-      },
-      {
-        "id": "smells::scripts/agents/advanced_workflow.py::sys_exit_in_library",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.exit() outside CLI entry point \u2014 use exceptions",
-        "detail": {
-          "smell_id": "sys_exit_in_library",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            56
-          ]
-        }
-      }
-    ],
-    "scripts/agents/agent_comparison.py": [
-      {
-        "id": "smells::scripts/agents/agent_comparison.py::import_path_mutation",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "1x sys.path mutation at import time (boundary purity leak)",
-        "detail": {
-          "smell_id": "import_path_mutation",
-          "severity": "high",
-          "count": 1,
-          "lines": [
-            16
-          ]
-        }
-      },
-      {
-        "id": "smells::scripts/agents/agent_comparison.py::silent_except",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "3x Except handler silently suppresses error (pass/continue, no log)",
-        "detail": {
-          "smell_id": "silent_except",
-          "severity": "high",
-          "count": 3,
-          "lines": [
-            84,
-            91,
-            98
-          ]
-        }
-      }
-    ],
-    "projects/test_project/src/git_workflow.py": [
-      {
-        "id": "smells::projects/test_project/src/git_workflow.py::swallowed_error",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "7x Catch block that only logs (swallowed error)",
-        "detail": {
-          "smell_id": "swallowed_error",
-          "severity": "high",
-          "count": 7,
-          "lines": [
-            98,
-            106,
-            112,
-            118,
-            168,
-            174,
-            177
-          ]
-        }
-      }
-    ],
-    "projects/test_project/src/mcp_explorer.py": [
-      {
-        "id": "smells::projects/test_project/src/mcp_explorer.py::swallowed_error",
-        "tier": 2,
-        "confidence": "medium",
-        "summary": "3x Catch block that only logs (swallowed error)",
-        "detail": {
-          "smell_id": "swallowed_error",
-          "severity": "high",
-          "count": 3,
-          "lines": [
-            118,
-            124,
-            162
-          ]
-        }
-      }
-    ]
-  },
-  "total_matching": 1858,
-  "hidden": {
-    "by_detector": {
-      "smells": 1848
-    },
-    "total": 1848
-  },
-  "noise_budget": 10,
-  "noise_global_budget": 0,
   "narrative": {
     "phase": "stagnation",
-    "headline": "\u26a0 1 security finding \u2014 review before other cleanup. Score plateaued at 80.0 for 5 scans. Test health (21.4%) is where the breakthrough is. 284 wontfix items may also be worth revisiting. (12 review findings \u2014 run `desloppify issues`)",
+    "headline": "\u26a0 1 security finding \u2014 review before other cleanup. Score plateaued at 80.0 for 5 scans. Test health (21.4%) is where the breakthrough is. 295 wontfix items may also be worth revisiting. (9 review findings \u2014 run `desloppify issues`)",
     "dimensions": {
       "lowest_dimensions": [
         {
@@ -271,8 +133,8 @@
       {
         "type": "issue_queue",
         "detector": "review",
-        "count": 12,
-        "description": "12 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
+        "count": 9,
+        "description": "9 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
         "command": "desloppify issues",
         "impact": 0.0,
         "dimension": "Unknown",
@@ -403,8 +265,8 @@
       {
         "type": "manual_fix",
         "detector": "unused",
-        "count": 34,
-        "description": "34 unused findings \u2014 inspect with `desloppify next` and fix manually",
+        "count": 24,
+        "description": "24 unused findings \u2014 inspect with `desloppify next` and fix manually",
         "command": "desloppify show unused --status open",
         "impact": 0.0,
         "dimension": "Code quality",
@@ -470,7 +332,7 @@
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 5576,
+        "total_count": 5557,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -536,7 +398,7 @@
         }
       },
       "can_parallelize": true,
-      "hint": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 12 finding(s) \u2014 `desloppify issues`."
+      "hint": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 9 finding(s) \u2014 `desloppify issues`."
     },
     "tools": {
       "fixers": [],
@@ -559,7 +421,7 @@
     },
     "debt": {
       "overall_gap": 0.3,
-      "wontfix_count": 284,
+      "wontfix_count": 295,
       "worst_dimension": "Test health",
       "worst_gap": 2.4,
       "trend": "stable"
@@ -567,9 +429,9 @@
     "milestone": null,
     "primary_action": {
       "command": "desloppify issues",
-      "description": "12 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
+      "description": "9 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
     },
-    "why_now": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 12 finding(s) \u2014 `desloppify issues`.",
+    "why_now": "5 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 9 finding(s) \u2014 `desloppify issues`.",
     "verification_step": {
       "command": "desloppify scan",
       "reason": "revalidate after changes"
@@ -578,7 +440,7 @@
       {
         "type": "wontfix_gap",
         "severity": "high",
-        "message": "Strict/lenient gap is 0.3 pts with 284 wontfix findings"
+        "message": "Strict/lenient gap is 0.3 pts with 295 wontfix findings"
       }
     ],
     "strict_target": {
@@ -606,6 +468,322 @@
       "review_not_run": 3
     }
   },
+  "overall_score": 80.2,
+  "objective_score": 83.0,
+  "strict_score": 80.0,
+  "scorecard_dimensions": [
+    {
+      "name": "File health",
+      "score": 90.7,
+      "strict": 90.7,
+      "checks": 2541,
+      "issues": 365,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "AI generated debt",
+      "score": 83.0,
+      "strict": 83.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 81.0,
+      "strict": 81.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Code quality",
+      "score": 93.2,
+      "strict": 93.1,
+      "checks": 18884,
+      "issues": 2249,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Convention drift",
+      "score": 89.0,
+      "strict": 89.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 84.0,
+      "strict": 84.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 81.0,
+      "strict": 81.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 77.0,
+      "strict": 77.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Duplication",
+      "score": 99.9,
+      "strict": 99.8,
+      "checks": 11648,
+      "issues": 33,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Elegance",
+      "score": 78.0,
+      "strict": 78.0,
+      "checks": 30,
+      "issues": 2,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 87.0,
+      "strict": 87.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Security",
+      "score": 100.0,
+      "strict": 98.8,
+      "checks": 5092,
+      "issues": 1,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Structure nav",
+      "score": 73.0,
+      "strict": 73.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test health",
+      "score": 23.8,
+      "strict": 21.4,
+      "checks": 27755,
+      "issues": 1732,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Test strategy",
+      "score": 74.0,
+      "strict": 74.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
+  "subjective_measures": [
+    {
+      "name": "AI generated debt",
+      "score": 83.0,
+      "strict": 83.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 81.0,
+      "strict": 81.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Convention drift",
+      "score": 89.0,
+      "strict": 89.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 84.0,
+      "strict": 84.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 81.0,
+      "strict": 81.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 77.0,
+      "strict": 77.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Elegance",
+      "score": 78.0,
+      "strict": 78.0,
+      "checks": 30,
+      "issues": 2,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 87.0,
+      "strict": 87.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Structure nav",
+      "score": 73.0,
+      "strict": 73.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test strategy",
+      "score": 74.0,
+      "strict": 74.0,
+      "checks": 10,
+      "issues": 1,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
   "config": {
     "target_strict_score": 95,
     "review_max_age_days": 30,

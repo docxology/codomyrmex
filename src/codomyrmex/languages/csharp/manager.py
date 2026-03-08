@@ -29,19 +29,8 @@ class CSharpManager(BaseLanguageManager):
         )
 
     def setup_project(self, path: str) -> bool:
-        """Initialize a new C# console project using dotnet."""
-        try:
-            os.makedirs(path, exist_ok=True)
-            subprocess.run(
-                ["dotnet", "new", "console"],
-                cwd=path,
-                check=True,
-                capture_output=True,
-            )
-            return True
-        except Exception as e:
-            print(f"Failed to setup C# project: {e}")
-            return False
+        """Initialize a new C# project."""
+        return self._setup_command(path, ["dotnet", "new", "console"], lang_name="C#")
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write, compile and execute a C# file."""

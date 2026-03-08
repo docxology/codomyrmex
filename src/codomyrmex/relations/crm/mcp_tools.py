@@ -58,7 +58,7 @@ def crm_add_contact(
         )
         return {"status": "success", "contact": contact.to_dict()}
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -81,7 +81,7 @@ def crm_search_contacts(query: str) -> dict[str, Any]:
             "count": len(results),
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}
 
 
 @mcp_tool(
@@ -105,7 +105,7 @@ def crm_add_interaction(
         manager = _get_manager()
         interaction = manager.add_interaction(contact_id, type, notes)
         if interaction is None:
-            return {"status": "error", "error": f"Contact '{contact_id}' not found"}
+            return {"status": "error", "message": f"Contact '{contact_id}' not found"}
 
         return {
             "status": "success",
@@ -117,4 +117,4 @@ def crm_add_interaction(
             },
         }
     except Exception as exc:
-        return {"status": "error", "error": str(exc)}
+        return {"status": "error", "message": str(exc)}

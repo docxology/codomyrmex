@@ -32,13 +32,8 @@ class PhpManager(BaseLanguageManager):
         )
 
     def setup_project(self, path: str) -> bool:
-        """Initialize a basic PHP project."""
-        try:
-            os.makedirs(path, exist_ok=True)
-            return True
-        except (OSError, subprocess.SubprocessError) as e:
-            logger.warning("Failed to setup PHP project: %s", e)
-            return False
+        """Initialize a new PHP project directory."""
+        return self._setup_command(path, lang_name="PHP")
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write and execute a PHP script."""
