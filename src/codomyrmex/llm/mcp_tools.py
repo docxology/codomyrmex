@@ -20,8 +20,6 @@ def generate_text(
         Structured response with the generated text.
     """
     if provider == "openrouter":
-        from codomyrmex.llm import ask
-
         try:
             response = ask(question=prompt, model=model)
             if response.startswith("Error:"):
@@ -142,3 +140,37 @@ def reason(prompt: str, depth: str = "normal", max_steps: int = 5) -> dict:
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
+@mcp_tool(category="llm")
+def ask(question: str, model: str = "openrouter/free") -> str:
+    """Ask a question to an LLM provider (default: OpenRouter Free Tier).
+
+    Args:
+        question: The prompt/question to ask
+        model: Model to use (default: openrouter/free)
+
+    Returns:
+        The text response from the LLM.
+    """
+    import os
+
+    from codomyrmex.llm.providers import (
+        Message,
+        ProviderConfig,
+        ProviderType,
+        get_provider,
+    )
+
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        return "Error: OPENROUTER_API_KEY not set in environment."
+
+    try:
+        config = ProviderConfig(api_key=api_key)
+        with get_provider(ProviderType.OPENROUTER, config) as provider:
+            response = provider.complete(
+                messages=[Message(role="user", content=question)], model=model
+            )
+            return response.content
+    except Exception as e:
+        return f"Error querying LLM: {e!s}"

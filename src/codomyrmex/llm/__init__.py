@@ -25,7 +25,6 @@ with contextlib.suppress(ImportError):
 
 # modular Ollama implementation
 # Submodule exports
-from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from . import (
     chains,
@@ -132,7 +131,6 @@ __all__ = [
 ]
 
 
-@mcp_tool(category="llm")
 def ask(question: str, model: str = "openrouter/free") -> str:
     """
     Ask a question to an LLM provider (default: OpenRouter Free Tier).

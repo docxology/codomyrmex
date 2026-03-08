@@ -53,20 +53,13 @@ def create_note(
 ) -> Note:
     """Create a new note file in the vault.
 
-    Parameters
-    ----------
-    vault : ObsidianVault
-        The vault instance.
-    name : str
-        Note name or path (relative to vault root).
-    content : str
-        Body text for the note.
-    frontmatter : dict | None
-        YAML frontmatter key-value pairs.
-    overwrite : bool
-        If ``True``, replace an existing note.
-    template : str | None
-        If given, read the template file and use its content as a base.
+    Args:
+        vault (ObsidianVault): The vault instance.
+        name (str): Note name or path (relative to vault root).
+        content (str): Body text for the note.
+        frontmatter (dict | None): YAML frontmatter key-value pairs.
+        overwrite (bool): If ``True``, replace an existing note.
+        template (str | None): If given, read the template file and use its content as a base.
     """
     path = _resolve_path(vault.path, name)
     if path.exists() and not overwrite:
@@ -150,11 +143,9 @@ def append_note(
 ) -> Note:
     """Append text to the end of an existing note.
 
-    Parameters
-    ----------
-    newline : bool
-        If ``True``, prepend a newline before the appended content if
-        the file doesn't already end with one.
+    Args:
+        newline (bool): If ``True``, prepend a newline before the appended content if
+            the file doesn't already end with one.
     """
     path = _resolve_path(vault.path, name)
     if not path.exists():
@@ -176,11 +167,9 @@ def prepend_note(
 ) -> Note:
     """Prepend text to a note.
 
-    Parameters
-    ----------
-    after_frontmatter : bool
-        If ``True`` (default), insert after any YAML frontmatter block.
-        If ``False``, insert at the very start of the file.
+    Args:
+        after_frontmatter (bool): If ``True`` (default), insert after any YAML frontmatter block.
+            If ``False``, insert at the very start of the file.
     """
     path = _resolve_path(vault.path, name)
     if not path.exists():
@@ -277,10 +266,8 @@ def rename_note(vault: Any, old_name: str, new_name: str) -> Note:
 def move_note(vault: Any, name: str, *, to: str) -> Note:
     """Move a note to a new folder path, updating all wikilinks.
 
-    Parameters
-    ----------
-    to : str
-        Target path (folder/name.md or just folder/).
+    Args:
+        to (str): Target path (folder/name.md or just folder/).
     """
     old_path = _resolve_path(vault.path, name)
     if not old_path.exists():
