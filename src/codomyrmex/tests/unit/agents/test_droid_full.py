@@ -18,7 +18,6 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 import pytest
 
@@ -36,7 +35,6 @@ from codomyrmex.agents.droid.controller import (
 from codomyrmex.agents.droid.todo import (
     COMPLETED_HEADER,
     TODO_HEADER,
-    TodoItem,
     TodoManager,
 )
 

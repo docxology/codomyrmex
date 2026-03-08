@@ -1,5 +1,4 @@
 """Tests for HandsManager output parsing — zero-mock."""
-import pytest
 
 from codomyrmex.agents.openfang.hands import Hand, HandsManager
 

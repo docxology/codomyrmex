@@ -11,10 +11,7 @@ Live Google Calendar API tests are module-level guarded by GOOGLE_CALENDAR_TOKEN
 or GOOGLE_CLIENT_ID env var; skipped when credentials are absent.
 """
 
-import json
 import os
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -116,7 +113,6 @@ class TestGetProviderErrors:
     def test_raises_when_no_token_file(self):
         """Raises RuntimeError when gcal_token.json does not exist."""
         # Ensure token file is absent by using a path that cannot exist
-        import codomyrmex.calendar_integration.mcp_tools as mod
 
         # Temporarily redirect home-based token path by patching Path.home
         # WITHOUT monkeypatch — we check the real error: token path absent
@@ -163,7 +159,6 @@ class TestGetProviderMalformedToken:
         """Write a malformed JSON token and verify RuntimeError is raised."""
         from pathlib import Path as _Path
 
-        import codomyrmex.calendar_integration.mcp_tools as mod
 
         # Build a fake token path with invalid JSON
         fake_dir = tmp_path / ".codomyrmex"

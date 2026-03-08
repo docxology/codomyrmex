@@ -1,5 +1,4 @@
 """Tests for openfang MCP tools — zero-mock, validates return shapes."""
-import os
 
 import pytest
 

@@ -2,7 +2,6 @@
 import os
 from pathlib import Path
 
-import pytest
 
 from codomyrmex.agents.openfang.config import (
     OpenFangConfig,

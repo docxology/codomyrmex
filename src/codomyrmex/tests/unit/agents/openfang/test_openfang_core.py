@@ -54,7 +54,6 @@ class TestGetOpenfangVersion:
         os.environ["PATH"] = "/nonexistent_path_openfang_xyz"
         try:
             # Need to reload the module-level HAS_OPENFANG check
-            import importlib
 
             import codomyrmex.agents.openfang.core as core_mod
             result = core_mod.get_openfang_version()
