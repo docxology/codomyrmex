@@ -280,7 +280,6 @@ class BackupManager:
             str(params["port"]),
             "-u",
             params["user"],
-            f"-p{params.get('password', '')}",
             params["database"],
         ]
 
@@ -289,7 +288,10 @@ class BackupManager:
         if not include_schema:
             cmd.append("--no-create-info")
 
-        result = subprocess.run(cmd, capture_output=True, timeout=3600)
+        env = os.environ.copy()
+        env["MYSQL_PWD"] = params.get("password", "")
+
+        result = subprocess.run(cmd, capture_output=True, env=env, timeout=3600)
         if result.returncode != 0:
             raise CodomyrmexError(f"mysqldump failed: {result.stderr.decode()}")
 
