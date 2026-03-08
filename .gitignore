@@ -255,3 +255,7 @@ cov_config.json
 codomyrmex_inventory.json
 /.desloppify
 /chroma_db
+
+# Test artifacts
+config/default.yaml
+MEMORY/
