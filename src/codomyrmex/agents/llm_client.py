@@ -109,7 +109,6 @@ def get_llm_client(identity: str = "agent") -> Any:
 
     Raises RuntimeError if no real client is available.
     """
-    # 1. Check Claude
     if os.environ.get("ANTHROPIC_API_KEY"):
         try:
             from codomyrmex.agents.claude.claude_client import ClaudeClient
@@ -119,7 +118,6 @@ def get_llm_client(identity: str = "agent") -> Any:
         except ImportError as e:
             logger.warning("[%s] ClaudeClient import failed: %s", identity, e)
 
-    # 2. Check Gemini
     if os.environ.get("GEMINI_API_KEY"):
         try:
             from codomyrmex.agents.gemini.gemini_client import GeminiClient

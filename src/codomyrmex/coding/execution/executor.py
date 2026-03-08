@@ -60,7 +60,6 @@ def validate_timeout(timeout: int | None) -> int:
     if timeout is None:
         return DEFAULT_TIMEOUT
 
-    # Ensure timeout is within allowed range
     timeout = max(MIN_TIMEOUT, min(MAX_TIMEOUT, timeout))
     return timeout
 

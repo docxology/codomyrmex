@@ -44,7 +44,7 @@ class AgentRequest:
     id: str | None = None
 
     def __post_init__(self) -> None:
-        """Initialize default values."""
+        """Set default optional fields to empty collections."""
         if self.context is None:
             self.context = {}
         if self.capabilities is None:
@@ -66,7 +66,7 @@ class AgentResponse:
     request_id: str | None = None
 
     def __post_init__(self) -> None:
-        """Initialize default values."""
+        """Set default optional fields to empty collections."""
         if self.metadata is None:
             self.metadata = {}
 
