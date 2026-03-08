@@ -27,7 +27,7 @@ def _run(cmd: str, timeout: float = 10.0) -> str:
             timeout=timeout,
         )
         return result.stdout.strip()
-    except Exception:
+    except Exception as _exc:
         return ""
 
 

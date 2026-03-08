@@ -555,7 +555,7 @@ def _get_droid_controller() -> Any | None:
     if _droid_controller is None and create_default_controller is not None:
         try:
             _droid_controller = create_default_controller()
-        except Exception:
+        except Exception as _exc:
             logger.exception("Failed to create droid controller")
             raise
     return _droid_controller

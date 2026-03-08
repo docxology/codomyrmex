@@ -100,7 +100,7 @@ class DemoRegistry:
                 if '"""' in content:
                     doc = content.split('"""')[1].strip()
                     description = doc.split("\n")[0]
-            except Exception:
+            except Exception as _exc:
                 pass
 
             self.register(

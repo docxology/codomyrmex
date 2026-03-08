@@ -96,5 +96,5 @@ class JavaManager:
         for file in files:
             try:
                 os.remove(file)
-            except Exception:
+            except Exception as _exc:
                 pass

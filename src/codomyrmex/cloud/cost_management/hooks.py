@@ -253,7 +253,7 @@ class AutoCostTracker:
         for hook in self._hooks:
             try:
                 hook.on_call_start(provider, operation)
-            except Exception:
+            except Exception as _exc:
                 logger.debug("Hook on_call_start failed", exc_info=True)
 
         start = time.monotonic()
@@ -294,7 +294,7 @@ class AutoCostTracker:
                     hook.on_call_end(
                         provider, operation, duration_ms, total_tokens, cost
                     )
-                except Exception:
+                except Exception as _exc:
                     logger.debug("Hook on_call_end failed", exc_info=True)
 
 

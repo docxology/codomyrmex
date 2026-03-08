@@ -103,7 +103,7 @@ class PaiPmServerManager:
             url = f"{self._base_url()}/api/health"
             with urllib.request.urlopen(url, timeout=2) as resp:
                 return resp.status == 200
-        except Exception:
+        except Exception as _exc:
             return False
 
     def start(self) -> dict[str, object]:

@@ -71,7 +71,7 @@ def resolve_path(
 
         exists = target.exists()
         return (exists, target)
-    except Exception:
+    except Exception as _exc:
         return (False, None)
 
 

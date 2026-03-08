@@ -265,7 +265,7 @@ class AlertManager:
         for name, rule in self._rules.items():
             try:
                 triggered = rule["condition"](metrics)
-            except Exception:
+            except Exception as _exc:
                 triggered = False
 
             if triggered:

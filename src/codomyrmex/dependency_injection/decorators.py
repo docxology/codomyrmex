@@ -162,7 +162,7 @@ def inject(fn: Callable[..., Any]) -> Callable[..., Any]:
     # Pre-compute injectable parameters from type hints
     try:
         hints = get_type_hints(fn)
-    except Exception:
+    except Exception as _exc:
         hints = getattr(fn, "__annotations__", {})
 
     sig = inspect.signature(fn)

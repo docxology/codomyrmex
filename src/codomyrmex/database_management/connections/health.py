@@ -37,7 +37,7 @@ class HealthChecker:
             with self.pool.connection() as conn:
                 conn.execute(self.health_query)
             self._last_result = True
-        except Exception:
+        except Exception as _exc:
             self._last_result = False
         self._last_check = datetime.now()
         return self._last_result

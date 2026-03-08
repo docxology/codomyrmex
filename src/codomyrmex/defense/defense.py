@@ -176,7 +176,7 @@ class ThreatDetector:
                         response=rule.response,
                     )
                     threats.append(event)
-            except Exception:
+            except Exception as _exc:
                 logger.exception("Detection rule '%s' raised exception", rule.name)
         return threats
 

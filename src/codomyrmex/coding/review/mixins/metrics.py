@@ -531,7 +531,7 @@ class MetricsMixin:
                         > 3
                     ):
                         break
-            except Exception:
+            except Exception as _exc:
                 error_handling_score = 10.0  # Default if can't analyze
 
             # Reliability score calculation

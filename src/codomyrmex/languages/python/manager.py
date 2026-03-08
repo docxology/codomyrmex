@@ -25,7 +25,7 @@ class PythonManager:
                 except FileNotFoundError:
                     continue
             return False
-        except Exception:
+        except Exception as _exc:
             return False
 
     def install_instructions(self) -> str:
@@ -92,7 +92,7 @@ class PythonManager:
             # Clean up immediately after run
             try:
                 os.remove(script_path)
-            except Exception:
+            except Exception as _exc:
                 pass
             return result.stdout + result.stderr
 

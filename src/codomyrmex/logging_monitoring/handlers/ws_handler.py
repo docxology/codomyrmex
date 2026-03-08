@@ -54,7 +54,7 @@ class WebSocketLogHandler(logging.Handler):
         try:
             entry = self._format_record(record)
             self._enqueue(entry)
-        except Exception:
+        except Exception as _exc:
             self.handleError(record)
 
     # ------------------------------------------------------------------

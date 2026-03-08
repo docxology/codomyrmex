@@ -302,7 +302,7 @@ def audio_batch_transcribe(
                             "language": result.language,
                         }
                     )
-                except Exception:
+                except Exception as _exc:
                     failed += 1
 
         return {

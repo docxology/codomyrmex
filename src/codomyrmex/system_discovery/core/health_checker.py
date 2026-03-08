@@ -212,7 +212,7 @@ class SystemHealthChecker:
                 if status_result.returncode == 0:
                     status["git"]["clean"] = not status_result.stdout.strip()
 
-        except Exception:
+        except Exception as _exc:
             status["git"]["is_repo"] = False
 
         return status

@@ -148,7 +148,7 @@ class CodaClient(
                 created_at=doc.created_at,
                 metadata={"browser_link": doc.browser_link},
             )
-        except Exception:
+        except Exception as _exc:
             return None
 
     def create_resource(
@@ -175,5 +175,5 @@ class CodaClient(
         try:
             self.delete_doc(resource_id)
             return True
-        except Exception:
+        except Exception as _exc:
             return False

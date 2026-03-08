@@ -374,13 +374,12 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: MEMORY/WORK/20260307-120000_desloppify-score-push/PRD.md (create), src/codomyrmex/operating_system/linux/provider.py (edit), src/codomyrmex/operating_system/mac/provider.py (edit), src/codomyrmex/skills/arscontexta/services.py (edit), src/codomyrmex/coding/_lang_utils.py (create), src/codomyrmex/coding/review/reviewer.py (edit), src/codomyrmex/coding/static_analysis/static_analyzer.py (edit), src/codomyrmex/containerization/docker/image_optimizer.py (edit), src/codomyrmex/skills/arscontexta/services.py (create), src/codomyrmex/telemetry/metrics/__init__.py (edit)
-  ... and 7 more
+Files: MEMORY/WORK/20260307-000000_security-wontfix-batch/inspect_state.py (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/analyze_security.py (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/PRD.md (create), MEMORY/WORK/20260307-000000_security-wontfix-batch/patch_security_wontfix.py (create)
 
 ## Crash Recovery
-Last session (2026-03-07T16:01:59.502374) was not properly closed (crash/kill).
-Recorded 28 file changes before crash.
-Last changed files: src/codomyrmex/video/extraction/frame_extractor.py, src/codomyrmex/video/analysis/video_analyzer.py, src/codomyrmex/video/_validation.py, src/codomyrmex/vector_store/persistent.py, src/codomyrmex/vector_store/store.py
+Last session (2026-03-07T16:25:03.036858) was not properly closed (crash/kill).
+Recorded 4 file changes before crash.
+Last changed files: MEMORY/WORK/20260307-000000_security-wontfix-batch/patch_security_wontfix.py, MEMORY/WORK/20260307-000000_security-wontfix-batch/PRD.md, MEMORY/WORK/20260307-000000_security-wontfix-batch/analyze_security.py, MEMORY/WORK/20260307-000000_security-wontfix-batch/inspect_state.py
 Bridge from previous session is valid (above).
 For details use: memory_search("changes last session")
 

@@ -162,7 +162,7 @@ class ROS2Bridge:
                     await callback(msg)
                 else:
                     callback(msg)
-            except Exception:
+            except Exception as _exc:
                 logger.exception("Subscriber callback failed on topic '%s'", topic)
 
         logger.debug("Published to '%s': %s", topic, payload)
@@ -204,7 +204,7 @@ class ROS2Bridge:
                         await callback(msg)
                     else:
                         callback(msg)
-            except Exception:
+            except Exception as _exc:
                 logger.exception("Latched replay failed on '%s'", topic)
 
         def _unsubscribe() -> None:

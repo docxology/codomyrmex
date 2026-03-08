@@ -242,7 +242,7 @@ class PAIProviderMixin:
 
         try:
             content = tasks_file.read_text(encoding="utf-8")
-        except Exception:
+        except OSError:
             return {}
 
         completed: list[str] = []
@@ -275,7 +275,7 @@ class PAIProviderMixin:
             try:
                 content = md_file.read_text(encoding="utf-8")
                 size = md_file.stat().st_size
-            except Exception:
+            except OSError:
                 content = ""
                 size = 0
             telos.append(
@@ -435,19 +435,23 @@ class PAIProviderMixin:
         # ── Fallback: direct YAML reads (offline mode) ──
         try:
             missions = self.get_pai_missions()
-        except Exception:
+        except Exception as e:
+            logger.debug("PAI data fetch failed: %s", e)
             missions = []
         try:
             projects = self.get_pai_projects()
-        except Exception:
+        except Exception as e:
+            logger.debug("PAI data fetch failed: %s", e)
             projects = []
         try:
             telos = self.get_pai_telos()
-        except Exception:
+        except Exception as e:
+            logger.debug("PAI data fetch failed: %s", e)
             telos = []
         try:
             memory = self.get_pai_memory_overview()
-        except Exception:
+        except Exception as e:
+            logger.debug("PAI data fetch failed: %s", e)
             memory = {"directories": [], "total_files": 0, "work_sessions_count": 0}
 
         total_tasks = 0
@@ -529,5 +533,6 @@ class PAIProviderMixin:
         """Build mermaid graph with error isolation."""
         try:
             return self._build_pai_mermaid_graph(missions, projects)
-        except Exception:
+        except Exception as e:
+            logger.debug("Mermaid graph build failed: %s", e)
             return 'graph TD\n    ERR["Graph unavailable"]'

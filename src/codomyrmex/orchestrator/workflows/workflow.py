@@ -545,7 +545,7 @@ class Workflow:
                         f"Task '{task.name}' failed after {policy.max_attempts} attempts: {e}"
                     )
                     raise
-            except Exception:
+            except Exception as _exc:
                 task.execution_time = time.time() - start_time
                 raise
 

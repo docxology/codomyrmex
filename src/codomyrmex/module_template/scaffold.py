@@ -126,7 +126,7 @@ def _copy_and_customize(
             with open(fd, "w", encoding="utf-8") as f:
                 f.write(content)
             os.replace(temp_path, dst)
-        except Exception:
+        except Exception as _exc:
             os.unlink(temp_path)
             raise
     except OSError as e:
@@ -200,7 +200,7 @@ def create_{module_name}(config: Optional[Dict[str, Any]] = None) -> {class_name
         with open(fd, "w", encoding="utf-8") as f:
             f.write(content)
         os.replace(temp_path, path)
-    except Exception:
+    except Exception as _exc:
         os.unlink(temp_path)
         raise
     logger.debug(f"Created core module: {path}")

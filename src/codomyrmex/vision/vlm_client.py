@@ -65,7 +65,7 @@ class VLMClient:
                 data = json.loads(resp.read())
                 models = [m.get("name", "").split(":")[0] for m in data.get("models", [])]
                 return self._config.model_name in models
-        except Exception:
+        except Exception as _exc:
             return False
 
     def analyze_image(

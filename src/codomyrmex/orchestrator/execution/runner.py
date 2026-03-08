@@ -275,7 +275,7 @@ def run_function(
             else:
                 result["status"] = "error"
                 result["error"] = val
-        except Exception:
+        except Exception as _exc:
             # Succeeded but no return? or crashed silently?
             if p.exitcode != 0:
                 result["status"] = "failed"

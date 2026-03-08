@@ -266,7 +266,7 @@ class BasicAuthenticator(Authenticator):
             encoded = auth_header[6:]  # Remove "Basic " prefix
             decoded = base64.b64decode(encoded).decode("utf-8")
             username, password = decoded.split(":", 1)
-        except Exception:
+        except Exception as _exc:
             return AuthResult(
                 authenticated=False,
                 error="Invalid Basic auth format",

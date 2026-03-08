@@ -101,7 +101,7 @@ class SecretScanner:
         try:
             text = path.read_text(errors="ignore")
             return self.scan_text(text, str(path))
-        except Exception:
+        except Exception as _exc:
             return ScanResult()
 
     def scan_directory(self, directory: str, extensions: list[str] | None = None) -> ScanResult:

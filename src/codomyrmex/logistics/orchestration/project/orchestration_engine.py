@@ -156,7 +156,7 @@ class OrchestrationSession:
         if data.get("status"):
             try:
                 sess.status = SessionStatus(data["status"])
-            except Exception:
+            except Exception as _exc:
                 sess.status = SessionStatus.PENDING
         return sess
 

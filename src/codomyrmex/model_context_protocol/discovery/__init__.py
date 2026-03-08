@@ -375,7 +375,7 @@ def mcp_tool(
 
         try:
             params = _generate_schema_from_func(func)
-        except Exception:
+        except Exception as _exc:
             params = {}
 
         func._mcp_tool_meta = {

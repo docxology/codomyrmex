@@ -43,7 +43,7 @@ class HealthProviderMixin:
                 content = wf_file.read_text(encoding="utf-8")
                 try:
                     data = yaml.safe_load(content)
-                except Exception:
+                except Exception as _exc:
                     data = None
 
                 if not isinstance(data, dict):
@@ -86,7 +86,7 @@ class HealthProviderMixin:
                         "stages": stages,
                     }
                 )
-            except Exception:
+            except Exception as _exc:
                 continue
 
         return pipelines
@@ -321,7 +321,7 @@ class HealthProviderMixin:
         try:
             data = yaml.safe_load(layers_file.read_text(encoding="utf-8"))
             layer_defs = data.get("layers", [])
-        except Exception:
+        except Exception as _exc:
             layer_defs = [
                 {
                     "name": "Foundation",

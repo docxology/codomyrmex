@@ -577,7 +577,7 @@ class Container:
         # Fallback: inspect __init__ type hints directly
         try:
             hints = get_type_hints(impl.__init__)
-        except Exception:
+        except Exception as _exc:
             hints = getattr(impl.__init__, "__annotations__", {})
 
         if not hints:

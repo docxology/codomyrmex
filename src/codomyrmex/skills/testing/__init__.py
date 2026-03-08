@@ -170,7 +170,7 @@ class SkillTestRunner:
             start = time.monotonic()
             try:
                 skill.execute(**kwargs)
-            except Exception:
+            except Exception as _exc:
                 errors += 1
             elapsed = time.monotonic() - start
             times.append(elapsed)

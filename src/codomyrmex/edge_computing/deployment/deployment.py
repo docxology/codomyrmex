@@ -133,7 +133,7 @@ class DeploymentManager:
             try:
                 runtime.deploy(plan.function)
                 plan.deployed_nodes.append(node_id)
-            except Exception:
+            except Exception as _exc:
                 plan.failed_nodes.append(node_id)
                 if plan.rollback_on_error:
                     self.rollback(plan)
@@ -162,7 +162,7 @@ class DeploymentManager:
             try:
                 runtime.deploy(plan.function)
                 plan.deployed_nodes.append(node_id)
-            except Exception:
+            except Exception as _exc:
                 plan.failed_nodes.append(node_id)
 
         if plan.failed_nodes and plan.rollback_on_error:
@@ -199,7 +199,7 @@ class DeploymentManager:
             try:
                 runtime.deploy(plan.function)
                 plan.deployed_nodes.append(node_id)
-            except Exception:
+            except Exception as _exc:
                 plan.failed_nodes.append(node_id)
                 if plan.rollback_on_error:
                     self.rollback(plan)
@@ -218,7 +218,7 @@ class DeploymentManager:
             try:
                 runtime.deploy(plan.function)
                 plan.deployed_nodes.append(node_id)
-            except Exception:
+            except Exception as _exc:
                 plan.failed_nodes.append(node_id)
 
         plan.state = (

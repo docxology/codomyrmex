@@ -51,7 +51,7 @@ class GCSClient(StorageClient):
         try:
             self.client.get_bucket(name)
             return True
-        except Exception:
+        except Exception as _exc:
             return False
 
     def upload_file(

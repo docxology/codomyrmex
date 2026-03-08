@@ -63,7 +63,7 @@ class RManager:
 
             try:
                 os.remove(script_path)
-            except Exception:
+            except Exception as _exc:
                 pass
             return result.stdout + result.stderr
 

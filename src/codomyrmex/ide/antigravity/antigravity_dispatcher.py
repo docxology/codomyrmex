@@ -206,7 +206,7 @@ class AntigravityDispatcher:
         while self._running:
             try:
                 self._poll_once()
-            except Exception:
+            except Exception as _exc:
                 logger.exception("AntigravityDispatcher poll error")
             time.sleep(self.config.response_poll_interval)
 
@@ -250,13 +250,13 @@ class AntigravityDispatcher:
                 from codomyrmex.ide.antigravity import AntigravityClient
 
                 self._client = AntigravityClient()
-            except Exception:
+            except Exception as _exc:
                 logger.exception("Failed to create AntigravityClient")
                 self._failed_count += 1
                 if self._scheduler is not None:
                     try:
                         self._scheduler.record_error()
-                    except Exception:
+                    except Exception as _exc:
                         logger.exception("Scheduler record_error failed")
                 return False
 
@@ -280,7 +280,7 @@ class AntigravityDispatcher:
                 if self._scheduler is not None:
                     try:
                         self._scheduler.record_success()
-                    except Exception:
+                    except Exception as _exc:
                         logger.exception("Scheduler record_success failed")
                 return True
             error_detail = getattr(result, "error", "unknown error")
@@ -294,11 +294,11 @@ class AntigravityDispatcher:
             if self._scheduler is not None:
                 try:
                     self._scheduler.record_error()
-                except Exception:
+                except Exception as _exc:
                     logger.exception("Scheduler record_error failed")
             return False
 
-        except Exception:
+        except Exception as _exc:
             logger.exception(
                 "Exception dispatching message %s to Antigravity",
                 msg.id,
@@ -308,7 +308,7 @@ class AntigravityDispatcher:
             if self._scheduler is not None:
                 try:
                     self._scheduler.record_error()
-                except Exception:
+                except Exception as _exc:
                     logger.exception("Scheduler record_error failed")
             return False
 

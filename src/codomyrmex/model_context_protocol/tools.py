@@ -142,7 +142,7 @@ def list_directory(
                         "modified": datetime.fromtimestamp(stats.st_mtime).isoformat(),
                     }
                 )
-            except Exception:
+            except Exception as _exc:
                 continue
 
         return {
@@ -299,7 +299,7 @@ def search_codebase(
 
                         if len(matches) >= max_results:
                             break
-            except Exception:
+            except Exception as _exc:
                 continue
 
             if len(matches) >= max_results:

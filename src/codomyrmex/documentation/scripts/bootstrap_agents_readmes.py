@@ -16,7 +16,7 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 try:
     setup_logging()
-except Exception:
+except Exception as _exc:
     logging.basicConfig(level=logging.INFO)
 
 logger = get_logger(__name__)

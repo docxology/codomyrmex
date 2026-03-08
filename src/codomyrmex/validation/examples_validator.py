@@ -321,7 +321,7 @@ class ExamplesValidator:
                         ):
                             has_tests = True
                             break
-            except Exception:
+            except Exception as _exc:
                 continue
             if has_tests:
                 break

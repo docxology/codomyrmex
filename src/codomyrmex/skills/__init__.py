@@ -42,7 +42,7 @@ def cli_commands():
             skills = registry.list_skills()
             for skill in skills:
                 print(f"  {skill}")
-        except Exception:
+        except Exception as _exc:
             print("Skills: use SkillRegistry to discover available skills")
 
     def _info_skill():
@@ -52,7 +52,7 @@ def cli_commands():
             print(f"Skills registry: {registry}")
             print(f"Upstream: {DEFAULT_UPSTREAM_REPO}")
             print(f"Branch: {DEFAULT_UPSTREAM_BRANCH}")
-        except Exception:
+        except Exception as _exc:
             print(
                 f"Skills upstream: {DEFAULT_UPSTREAM_REPO} ({DEFAULT_UPSTREAM_BRANCH})"
             )

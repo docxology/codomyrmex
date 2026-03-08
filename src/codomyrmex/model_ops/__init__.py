@@ -279,7 +279,7 @@ class Evaluator:
         for name, metric_fn in self.metrics.items():
             try:
                 results[name] = metric_fn(predictions, references)
-            except Exception:
+            except Exception as _exc:
                 results[name] = 0.0
         return results
 

@@ -151,7 +151,7 @@ def count_calls(name: str, labels: dict[str, str] | None = None):
                 result = func(*args, **kwargs)
                 metrics.increment(f"{name}_success_total", labels=labels)
                 return result
-            except Exception:
+            except Exception as _exc:
                 metrics.increment(f"{name}_errors_total", labels=labels)
                 raise
 
@@ -177,7 +177,7 @@ class ModuleHealth:
         if module in self._check_fns:
             try:
                 self._health[module] = self._check_fns[module]()
-            except Exception:
+            except Exception as _exc:
                 self._health[module] = False
             self._last_check[module] = datetime.now()
         return self._health.get(module, False)

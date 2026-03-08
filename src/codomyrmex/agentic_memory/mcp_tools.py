@@ -131,7 +131,7 @@ def memory_search(
                         "combined_score": 1.0,
                     },
                 )
-        except Exception:
+        except Exception as _exc:
             logger.warning("Rule injection failed during memory_search", exc_info=True)
 
     return formatted_results

@@ -194,7 +194,7 @@ class WASMOrchestrator:
                     or result.error != f"Instance not found: {instance_id}"
                 ):
                     return result
-            except Exception:
+            except Exception as _exc:
                 continue
         return None
 

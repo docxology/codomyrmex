@@ -11,7 +11,7 @@ try:
     from codomyrmex.logging_monitoring import get_logger
 
     logger = get_logger(__name__)
-except Exception:
+except Exception as _exc:
     logger = logging.getLogger(__name__)
 from email.message import EmailMessage as PyEmailMessage
 

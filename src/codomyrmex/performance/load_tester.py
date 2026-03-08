@@ -77,7 +77,7 @@ class LoadTester:
             try:
                 fn()
                 successes += 1
-            except Exception:
+            except Exception as _exc:
                 failures += 1
             elapsed = (time.monotonic() - req_start) * 1000
             latencies.append(elapsed)

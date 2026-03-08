@@ -136,7 +136,7 @@ class EdgeScheduler:
                         self.mark_executed(job.id)
                         executed_count += 1
                         break
-                    except Exception:
+                    except Exception as _exc:
                         continue
         return executed_count
 

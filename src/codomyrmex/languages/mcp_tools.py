@@ -139,7 +139,7 @@ def mcp_run_language_script(language: str, script_content: str) -> str:
         finally:
             try:
                 os.remove(temp_path)
-            except Exception:
+            except Exception as _exc:
                 pass
     except Exception as e:
         return f"Error running script: {e}"

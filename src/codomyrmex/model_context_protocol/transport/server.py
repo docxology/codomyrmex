@@ -654,7 +654,7 @@ class MCPServer:
         async def call_tool(tool_name: str, request: Request) -> JSONResponse:
             try:
                 body = await request.json()
-            except Exception:
+            except Exception as _exc:
                 body = {}
 
             cid = request.headers.get("x-correlation-id") or request.headers.get(

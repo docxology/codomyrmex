@@ -104,7 +104,7 @@ class FPFFetcher:
                 "date": commit_data.get("commit", {}).get("author", {}).get("date", ""),
                 "message": commit_data.get("commit", {}).get("message", ""),
             }
-        except Exception:
+        except Exception as _exc:
             return {
                 "sha": "unknown",
                 "date": "unknown",

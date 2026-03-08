@@ -274,7 +274,7 @@ class CapabilityScanner:
                                 constants[target.id] = node.value.s
                             elif isinstance(node.value, ast.Num):  # Python < 3.8
                                 constants[target.id] = node.value.n
-                        except Exception:
+                        except Exception as _e:
                             constants[target.id] = "complex_value"
 
             elif isinstance(node, (ast.Import, ast.ImportFrom)):
@@ -312,7 +312,7 @@ class CapabilityScanner:
                 if param_index >= 0:
                     try:
                         parameters[param_index]["default"] = ast.unparse(default)
-                    except Exception:
+                    except Exception as _e:
                         parameters[param_index]["default"] = "complex_default"
 
         # Add *args if present
@@ -352,7 +352,7 @@ class CapabilityScanner:
         if node.returns:
             try:
                 return ast.unparse(node.returns)
-            except Exception:
+            except Exception as _e:
                 return "complex_annotation"
         return ""
 
@@ -382,7 +382,7 @@ class CapabilityScanner:
         for decorator in node.decorator_list:
             try:
                 decorators.append(ast.unparse(decorator))
-            except Exception:
+            except Exception as _e:
                 decorators.append("complex_decorator")
         return decorators
 
@@ -471,7 +471,7 @@ class CapabilityScanner:
             for base in node.bases:
                 try:
                     inheritance.append(ast.unparse(base))
-                except Exception:
+                except Exception as _e:
                     inheritance.append("complex_base")
 
             # Check for decorators
@@ -479,7 +479,7 @@ class CapabilityScanner:
             for decorator in node.decorator_list:
                 try:
                     decorators.append(ast.unparse(decorator))
-                except Exception:
+                except Exception as _e:
                     decorators.append("complex_decorator")
 
             # Check if abstract

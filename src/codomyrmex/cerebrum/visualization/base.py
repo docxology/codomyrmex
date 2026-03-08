@@ -322,7 +322,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
         elif layout == "hierarchical":
             try:
                 pos = nx.nx_agraph.graphviz_layout(G, prog="dot", **kwargs)
-            except Exception:
+            except Exception as _exc:
                 # Fallback to spring layout
                 pos = nx.spring_layout(G, k=2, iterations=100, **kwargs)
         elif layout == "kamada_kawai":

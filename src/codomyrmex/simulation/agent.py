@@ -131,7 +131,7 @@ class RuleBasedAgent(Agent):
             try:
                 if condition(observation):
                     return Action(type=action_type, parameters=params)
-            except Exception:
+            except Exception as _exc:
                 continue
         return Action(type="idle")
 

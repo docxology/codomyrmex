@@ -75,7 +75,7 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             return "ImportError"
         except SyntaxError:
             return "SyntaxError"
-        except Exception:
+        except Exception as _exc:
             return "Unknown"
 
     def get_modules(self) -> list[dict[str, Any]]:
@@ -332,7 +332,7 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                         if line and not line.startswith("#"):
                             return line if len(line) < 100 else line[:97] + "..."
                     return "Documented"
-                except Exception:
+                except Exception as _exc:
                     continue
         return "No description available"
 
@@ -552,5 +552,5 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             )
             timestamp = result.stdout.strip()
             return timestamp or "N/A"
-        except Exception:
+        except Exception as _exc:
             return "N/A"

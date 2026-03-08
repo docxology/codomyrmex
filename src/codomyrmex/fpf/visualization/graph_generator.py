@@ -135,7 +135,7 @@ class GraphGenerator:
         """
         try:
             pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
-        except Exception:
+        except Exception as _exc:
             # Fallback to spring layout if graphviz not available
             pos = nx.spring_layout(G, k=2, iterations=50)
 
@@ -188,7 +188,7 @@ class GraphGenerator:
                 pos = nx.nx_agraph.graphviz_layout(G, prog="dot", root=root)
             else:
                 pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
-        except Exception:
+        except Exception as _exc:
             # Fallback to hierarchical spring layout
             pos = nx.spring_layout(G, k=2, iterations=100)
 

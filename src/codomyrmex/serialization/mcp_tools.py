@@ -63,7 +63,7 @@ def deserialize_data(data: str, format: str = "json") -> dict[str, Any] | list[A
 
             raw = base64.b64decode(data.encode("utf-8"))
             return cast("dict[str, Any] | list[Any]", deserialize(raw, fmt))
-        except Exception:
+        except Exception as _exc:
             raise e from None
 
 
