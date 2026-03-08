@@ -316,67 +316,6 @@ This project is configured with the `qmd` skill for local hybrid search of Markd
 ## === COGNILAYER (auto-generated, do not delete) ===
 
 ## CogniLayer v3 Active
-
-Persistent memory is ON.
-ON FIRST USER MESSAGE in this session, briefly tell the user:
-  'CogniLayer v3 active — persistent memory is on. Type /cognihelp for available commands.'
-Say it ONCE, keep it short, then continue with their request.
-
-## Memory Tools
-
-You have access to the `cognilayer` MCP server:
-
-- memory_search(query) — search memory semantically
-- memory_write(content) — save important information
-- file_search(query) — search project files (PRD, docs...)
-- decision_log(query) — find past decisions
-
-When unsure about context or project history,
-ALWAYS search memory first via memory_search.
-When you need info from PRD or docs, use file_search
-INSTEAD of reading the entire file.
-
-## VERIFY-BEFORE-ACT — MANDATORY
-
-When memory_search returns a fact marked with ⚠ STALE:
-
-1. ALWAYS read the source file and verify the fact still holds
-2. If the fact changed -> update it via memory_write
-3. NEVER make changes based on STALE facts without verification
-
-## PROACTIVE MEMORY — IMPORTANT
-
-When you discover something important during work, SAVE IT IMMEDIATELY:
-
-- Bug and fix -> memory_write(type="error_fix")
-- Pitfall/danger -> memory_write(type="gotcha")
-- Exact procedure -> memory_write(type="procedure")
-- How components communicate -> memory_write(type="api_contract")
-- Performance issue -> memory_write(type="performance")
-- Important command -> memory_write(type="command")
-DO NOT wait for /harvest — session may crash.
-
-## RUNNING BRIDGE — CRITICAL
-
-After completing each task AUTOMATICALLY update session bridge:
-  session_bridge(action="save", content="Progress: ...; Open: ...")
-This is Tier 1 — do it yourself, don't announce, it's part of the job.
-
-## Safety Rules — MANDATORY
-
-- Before ANY deploy, push, ssh, pm2, docker, db migration:
-  1. ALWAYS call verify_identity(action_type="...") first
-  2. If it returns BLOCKED — STOP and ask the user
-  3. If it returns VERIFIED — READ the target server to the user and request confirmation
-
-## Git Rules
-
-- Commit often, small atomic changes. Format: "[type] what and why"
-- commit = Tier 1 (do it yourself). push = Tier 3 (verify_identity).
-
-# === COGNILAYER (auto-generated, do not delete) ===
-
-## CogniLayer v3 Active
 Persistent memory is ON.
 ON FIRST USER MESSAGE in this session, briefly tell the user:
   'CogniLayer v3 active — persistent memory is on. Type /cognihelp for available commands.'
@@ -435,6 +374,14 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: ~/.claude/Plans/generic-prancing-pizza.md (create)
+Files: MEMORY/WORK/20260307-120000_desloppify-score-push/PRD.md (create), src/codomyrmex/operating_system/linux/provider.py (edit), src/codomyrmex/operating_system/mac/provider.py (edit), src/codomyrmex/skills/arscontexta/services.py (edit), src/codomyrmex/coding/_lang_utils.py (create), src/codomyrmex/coding/review/reviewer.py (edit), src/codomyrmex/coding/static_analysis/static_analyzer.py (edit), src/codomyrmex/containerization/docker/image_optimizer.py (edit), src/codomyrmex/skills/arscontexta/services.py (create), src/codomyrmex/telemetry/metrics/__init__.py (edit)
+  ... and 7 more
+
+## Crash Recovery
+Last session (2026-03-07T16:01:59.502374) was not properly closed (crash/kill).
+Recorded 28 file changes before crash.
+Last changed files: src/codomyrmex/video/extraction/frame_extractor.py, src/codomyrmex/video/analysis/video_analyzer.py, src/codomyrmex/video/_validation.py, src/codomyrmex/vector_store/persistent.py, src/codomyrmex/vector_store/store.py
+Bridge from previous session is valid (above).
+For details use: memory_search("changes last session")
 
 # === END COGNILAYER ===
