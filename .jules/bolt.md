@@ -1,0 +1,3 @@
+## 2026-03-05 - EventBus Pattern Matching Bottleneck
+**Learning:** `fnmatch.fnmatch()` can be a significant performance bottleneck when checking large numbers of subscriptions against published events. While `fnmatch` caches regex compilation, the sheer volume of patterns to test causes excessive overhead. We found that most event patterns in the system are exact string literal matches, while only some use glob wildcards (`*`, `?`, etc.).
+**Action:** When implementing message routers or event buses, separate event patterns into `literal_patterns` (used with O(1) set `in` lookups) and `compiled_patterns` (using `re.compile(fnmatch.translate())`). Avoid `fnmatch.fnmatch()` in hot loops by doing the compilation work once during initialization.
