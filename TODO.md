@@ -1,25 +1,24 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.1.9 | **Date**: 2026-03-07 | **Modules**: 128 | **Sprint**: 28
+**Version**: v1.1.9 | **Date**: 2026-03-07 | **Modules**: 130 | **Sprint**: 28
 
 This is the authoritative project backlog. Updated after each sprint.
 
 ---
 
-## Codebase Snapshot (Verified 2026-03-07)
+## Codebase Snapshot (Verified 2026-03-07 18:25)
 
 | Metric | Value | Method |
 | :--- | :--- | :--- |
-| Top-level source modules | **128** | `ls -d src/codomyrmex/*/` |
-| Source files (non-test) | ~1,800+ | `find -name "*.py" -not -path "*/tests/*"` |
-| Total LOC (incl. tests) | ~560,000 | `wc -l` across all `.py` |
-| Test files | **944** | `find -name "test_*.py"` |
-| Test suite | **26,981** tests collected | `uv run pytest --collect-only` |
+| Top-level source modules | **130** | `ls -d src/codomyrmex/*/` |
+| Source files (non-test) | **2,075** | `find -name "*.py" -not -path "*/tests/*"` |
+| Test files | **1,023** | `find -name "test_*.py"` |
+| Test unit dirs | **162** | Module-level test directories |
 | Ruff violations | **0** | `uv run ruff check .` ✅ |
 | ty diagnostics | **0** errors (264 warnings) | `uv run ty check src/` ✅ |
 | Coverage gate | `fail_under=32`; actual ~32% ✅ | Gate ratcheted (target: 40%) |
-| Coverage test files | **11** new (Sprint 28) | Targeting 11 modules |
+| GitNexus index | **77,101** symbols, **178,276** relationships | `npx gitnexus analyze` |
 | MCP `@mcp_tool` decorators | **474** | `grep -r '@mcp_tool'` |
 | RASP documentation | 128/128 | Automated audit ✅ |
 | `py.typed` markers | **572** | PEP 561 ✅ |
@@ -34,27 +33,35 @@ This is the authoritative project backlog. Updated after each sprint.
 
 ### Coverage Gap: 32% → 40%
 
-Current coverage is 32.34% (126,615 stmts). Need ~9,700 more statements covered.
+Current coverage is ~32% (126,615 stmts). Need ~9,700 more statements covered.
 
-| Module | Coverage | Missing Stmts | Priority | Coverage Tests |
-| :--- | :--- | :--- | :--- | :--- |
-| `documentation` | 14.1% | 3,716 | **P1** — largest gap | ✅ `test_documentation_coverage.py` |
-| `cli` | 16.5% | 1,513 | **P1** | ✅ `test_cli_coverage.py` |
-| `git_operations` | 19.3% | 2,644 | **P1** | ✅ `test_git_operations_coverage.py` |
-| `physical_management` | — | — | **P1** | ✅ `test_physical_management_coverage.py` (50 tests) |
-| `collaboration` | — | — | **P1** | ✅ `test_collaboration_coverage.py` (84 tests) |
-| `config_management` | — | — | **P2** | ✅ `test_config_management_coverage.py` |
-| `cerebrum` | 26.0% | 2,190 | **P2** | ✅ `test_cerebrum_coverage.py` |
-| `data_visualization` | — | — | **P2** | ✅ `test_data_visualization_coverage.py` |
-| `agentic_memory` | — | — | **P2** | ✅ `test_agentic_memory_coverage.py` |
-| `cloud` | — | — | **P2** | ✅ `test_cloud_coverage.py` |
-| `system_discovery` | 21.0% | 1,387 | **P3** | Covered by `test_coverage_smoke.py` |
-| `crypto` | 24.9% | 1,698 | **P3** | Covered by `test_coverage_smoke.py` |
-| `containerization` | 28.4% | 1,401 | **P3** | Covered by `test_coverage_smoke.py` |
-| `ci_cd_automation` | 29.8% | 1,437 | **P3** | — |
-| `coding` | 29.5% | 2,709 | **P3** | Covered by `test_coverage_smoke.py` |
+**Sprint 28 coverage test campaign**: 13 dedicated coverage test files (this session) + 30+ module-level `test_*_core.py` / `test_*_mcp_tools.py` files (parallel session). Total 162 test unit dirs.
 
-**Strategy**: 11 new coverage test files written (Sprint 28). Deep functional tests (not just imports) exercising real object creation, spatial queries, network analysis, event system, persistence, batch ops. Next step: deeper execution-path tests to push from ~32% to 40%.
+| Module Group | Coverage Tests | Status |
+| :--- | :--- | :--- |
+| **P1 — largest gaps** | | |
+| `documentation` (14.1%, 3,716 missing) | ✅ `test_documentation_coverage.py` | Written |
+| `cli` (16.5%, 1,513 missing) | ✅ `test_cli_coverage.py` | Written |
+| `git_operations` (19.3%, 2,644 missing) | ✅ `test_git_operations_coverage.py` | Written |
+| `physical_management` | ✅ `test_physical_management_coverage.py` (50 tests) | Written |
+| `collaboration` | ✅ `test_collaboration_coverage.py` (84 tests) | Written |
+| **P2 — mid-range** | | |
+| `cerebrum` (26%, 2,190 missing) | ✅ `test_cerebrum_coverage.py` + `test_cerebrum_deep_coverage.py` | Written |
+| `config_management` | ✅ `test_config_management_coverage.py` + `test_config_management_core.py` | Written |
+| `data_visualization` | ✅ `test_data_visualization_coverage.py` | Written |
+| `agentic_memory` | ✅ `test_agentic_memory_coverage.py` | Written |
+| `cloud` | ✅ `test_cloud_coverage.py` + `test_cloud_deep_coverage.py` | Written |
+| **P3+ — parallel session (30+ modules)** | | |
+| `auth`, `cache`, `compression` | ✅ `test_*_core.py` / `test_*_mcp_tools.py` | Written |
+| `concurrency`, `crypto`, `defense` | ✅ `test_*_core.py` | Written |
+| `deployment`, `events`, `formal_verification` | ✅ `test_*_core.py` | Written |
+| `logging_monitoring`, `maintenance`, `model_ops` | ✅ `test_*_core.py` | Written |
+| `networking`, `plugin_system`, `relations` | ✅ `test_*_core.py` | Written |
+| `scrape`, `search`, `serialization` | ✅ `test_*_core.py` | Written |
+| `static_analysis`, `telemetry`, `utils` | ✅ `test_*_core.py` / `test_*_mcp_tools.py` | Written |
+| `validation`, `vector_store`, `video` | ✅ `test_*_core.py` / `test_*_mcp_tools.py` | Written |
+
+**Next step**: Run full suite with `--cov` to measure actual coverage delta from all new test files. Ratchet `fail_under` gate upward as coverage increases.
 
 ### ~~TODO/FIXME/HACK/XXX Triage~~ ✅ Done
 
@@ -92,8 +99,12 @@ Triaged: all 189 grep hits are test data strings (pattern_matching fixtures) or 
 - **Streaming Audio Pipeline** — `audio/streaming/` with `AudioStreamServer`, `AudioStreamClient`, `CodecNegotiator`, energy-based VAD
 - **Vision Module** — `vision/` with `VLMClient`, `PDFExtractor`, `AnnotationExtractor` (Ollama local-first)
 - **Hermes Agent** — Dual-backend (`hermes3` CLI + Ollama), session persistence, prompt template library
+- **OpenFang Agent** — `agents/openfang/` with core, hands, update, config, exceptions, MCP tools (7 source files)
 - **Version Sync** — 17,000+ files synchronized to v1.1.9; RASP 128/128; ruff 0 violations
 - **RASP Completion** — `vision/PAI.md` and `languages/PAI.md` created; 128/128 modules documented
+- **Modularization** — `physical_management/object_manager.py` (951→645 LOC) → `models.py` (330 LOC)
+- **Zero-Mock Test Campaign** — 1,023 test files across 162 unit test directories; 30+ modules with new `_core.py`/`_mcp_tools.py` tests
+- **GitNexus Re-Index** — 77,101 symbols, 178,276 relationships, 300 execution flows
 
 ### Remaining (v1.1.9)
 
