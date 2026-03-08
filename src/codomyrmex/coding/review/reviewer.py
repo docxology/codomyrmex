@@ -18,6 +18,8 @@ from codomyrmex.logging_monitoring import get_logger
 from .analyzer import PyscnAnalyzer
 
 # Import models from this module
+from codomyrmex.coding._lang_utils import should_analyze_file as _lang_should_analyze
+
 from .models import (
     AnalysisResult,
     AnalysisSummary,
@@ -151,47 +153,9 @@ class CodeReviewer(
 
         return tools
 
-    def _detect_language(self, file_path: str) -> Language:
-        """Detect the programming language of a file."""
-        extension = Path(file_path).suffix.lower()
-
-        language_map = {
-            ".py": Language.PYTHON,
-            ".js": Language.JAVASCRIPT,
-            ".ts": Language.TYPESCRIPT,
-            ".tsx": Language.TYPESCRIPT,
-            ".jsx": Language.JAVASCRIPT,
-            ".java": Language.JAVA,
-            ".cpp": Language.CPP,
-            ".cc": Language.CPP,
-            ".cxx": Language.CPP,
-            ".cs": Language.CSHARP,
-            ".go": Language.GO,
-            ".rs": Language.RUST,
-            ".php": Language.PHP,
-            ".rb": Language.RUBY,
-        }
-
-        return language_map.get(extension, Language.PYTHON)
-
     def _should_analyze_file(self, file_path: str) -> bool:
         """Determine if a file should be analyzed."""
-        supported_extensions = {
-            ".py",
-            ".js",
-            ".ts",
-            ".tsx",
-            ".jsx",
-            ".java",
-            ".cpp",
-            ".cc",
-            ".cs",
-            ".go",
-            ".rs",
-            ".php",
-            ".rb",
-        }
-        return Path(file_path).suffix.lower() in supported_extensions
+        return _lang_should_analyze(file_path)
 
     def analyze_file(
         self, file_path: str, analysis_types: list[str] | None = None

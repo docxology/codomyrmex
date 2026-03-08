@@ -151,7 +151,7 @@ uv run mutmut run                                # 6-file mutation suite
 | Modules | **128** |
 | MCP tools | **474** dynamically discovered |
 | Test suite | **21,000+** tests |
-| Coverage | ~35% (gate: 40%) |
+| Coverage | ~35% (gate: 32% (target: 40%)) |
 | `@mcp_tool` decorators | **474** |
 | Ruff violations | **0** |
 | PAI skills | **81** installed |

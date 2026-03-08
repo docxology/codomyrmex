@@ -2,53 +2,53 @@
   "command": "next",
   "items": [
     {
-      "id": "dupes::src/codomyrmex/coding/review/reviewer.py::_detect_language::src/codomyrmex/coding/static_analysis/static_analyzer.py::_detect_language",
+      "id": "dupes::src/codomyrmex/telemetry/metrics/__init__.py::export::src/codomyrmex/telemetry/metrics/core.py::export",
       "kind": "finding",
       "tier": 2,
       "effective_tier": 2,
       "confidence": "high",
       "detector": "dupes",
-      "file": "src/codomyrmex/coding/review/reviewer.py",
-      "summary": "Exact dupe: _detect_language (src/codomyrmex/coding/review/reviewer.py:154) <-> _detect_language (src/codomyrmex/coding/static_analysis/static_analyzer.py:165) [100%]",
+      "file": "src/codomyrmex/telemetry/metrics/__init__.py",
+      "summary": "Exact dupe: export (src/codomyrmex/telemetry/metrics/__init__.py:488) <-> export (src/codomyrmex/telemetry/metrics/core.py:450) [100%]",
       "detail": {
         "fn_a": {
-          "file": "src/codomyrmex/coding/review/reviewer.py",
-          "name": "_detect_language",
-          "line": 154,
-          "loc": 22
+          "file": "src/codomyrmex/telemetry/metrics/__init__.py",
+          "name": "export",
+          "line": 488,
+          "loc": 20
         },
         "fn_b": {
-          "file": "src/codomyrmex/coding/static_analysis/static_analyzer.py",
-          "name": "_detect_language",
-          "line": 165,
-          "loc": 22
+          "file": "src/codomyrmex/telemetry/metrics/core.py",
+          "name": "export",
+          "line": 450,
+          "loc": 20
         },
         "similarity": 1.0,
         "kind": "exact",
         "cluster_size": 2,
         "cluster": [
           {
-            "file": "src/codomyrmex/coding/review/reviewer.py",
-            "name": "_detect_language",
-            "line": 154,
-            "loc": 22
+            "file": "src/codomyrmex/telemetry/metrics/__init__.py",
+            "name": "export",
+            "line": 488,
+            "loc": 20
           },
           {
-            "file": "src/codomyrmex/coding/static_analysis/static_analyzer.py",
-            "name": "_detect_language",
-            "line": 165,
-            "loc": 22
+            "file": "src/codomyrmex/telemetry/metrics/core.py",
+            "name": "export",
+            "line": 450,
+            "loc": 20
           }
         ]
       },
       "status": "open",
-      "primary_command": "desloppify resolve fixed \"dupes::src/codomyrmex/coding/review/reviewer.py::_detect_language::src/codomyrmex/coding/static_analysis/static_analyzer.py::_detect_language\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+      "primary_command": "desloppify resolve fixed \"dupes::src/codomyrmex/telemetry/metrics/__init__.py::export::src/codomyrmex/telemetry/metrics/core.py::export\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
     }
   ],
   "queue": {
     "tier_counts": {
       "1": 0,
-      "2": 857,
+      "2": 851,
       "3": 4660,
       "4": 35
     },
@@ -60,7 +60,7 @@
       3,
       4
     ],
-    "total": 857
+    "total": 851
   },
   "narrative": {
     "phase": "stagnation",
@@ -252,8 +252,8 @@
       {
         "type": "refactor",
         "detector": "dupes",
-        "count": 47,
-        "description": "47 dupes findings \u2014 extract shared utility or consolidate duplicates",
+        "count": 41,
+        "description": "41 dupes findings \u2014 extract shared utility or consolidate duplicates",
         "command": "desloppify show dupes --status open",
         "impact": 0.0,
         "dimension": "Duplication",
@@ -374,7 +374,7 @@
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 5542,
+        "total_count": 5536,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -446,7 +446,7 @@
     },
     "debt": {
       "overall_gap": 0.1,
-      "wontfix_count": 53,
+      "wontfix_count": 54,
       "worst_dimension": "Test health",
       "worst_gap": 2.5,
       "trend": "stable"
@@ -465,7 +465,7 @@
       {
         "type": "wontfix_gap",
         "severity": "high",
-        "message": "Strict/lenient gap is 0.1 pts with 53 wontfix findings"
+        "message": "Strict/lenient gap is 0.1 pts with 54 wontfix findings"
       }
     ],
     "strict_target": {
@@ -587,9 +587,9 @@
     {
       "name": "Duplication",
       "score": 99.8,
-      "strict": 99.7,
+      "strict": 99.8,
       "checks": 11521,
-      "issues": 47,
+      "issues": 41,
       "tier": 3,
       "subjective": false
     },

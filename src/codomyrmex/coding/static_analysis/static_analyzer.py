@@ -14,6 +14,7 @@ import os
 import time
 from pathlib import Path
 
+from codomyrmex.coding._lang_utils import should_analyze_file as _lang_should_analyze
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -315,22 +316,7 @@ class StaticAnalyzer:
 
     def _should_analyze_file(self, file_path: str) -> bool:
         """Determine if a file should be analyzed."""
-        supported_extensions = {
-            ".py",
-            ".js",
-            ".ts",
-            ".tsx",
-            ".jsx",
-            ".java",
-            ".cpp",
-            ".cc",
-            ".cs",
-            ".go",
-            ".rs",
-            ".php",
-            ".rb",
-        }
-        return Path(file_path).suffix.lower() in supported_extensions
+        return _lang_should_analyze(file_path)
 
     def _generate_summary(
         self, files_analyzed: int, analysis_time: float

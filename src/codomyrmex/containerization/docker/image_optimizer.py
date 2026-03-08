@@ -5,6 +5,7 @@ from typing import Any
 
 import docker
 
+from codomyrmex.container_optimization.optimizer import OptimizationSuggestion
 from codomyrmex.logging_monitoring import get_logger
 
 """Image Optimizer for Codomyrmex Containerization."""
@@ -50,29 +51,6 @@ class ImageAnalysis:
             "commands": self.commands,
             "potential_optimizations": self.potential_optimizations,
             "optimization_score": self.optimization_score,
-        }
-
-
-@dataclass
-class OptimizationSuggestion:
-    """A specific optimization suggestion."""
-
-    category: str
-    description: str
-    impact: str  # "high", "medium", "low"
-    effort: str  # "easy", "medium", "hard"
-    dockerfile_changes: list[str] = field(default_factory=list)
-    size_reduction_mb: float | None = None
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary."""
-        return {
-            "category": self.category,
-            "description": self.description,
-            "impact": self.impact,
-            "effort": self.effort,
-            "dockerfile_changes": self.dockerfile_changes,
-            "size_reduction_mb": self.size_reduction_mb,
         }
 
 

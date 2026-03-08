@@ -151,7 +151,7 @@ __all__ = [
     "TaskPriority",
     "TaskResult",
     "TaskStatus",
-    "Vote",
+    "SwarmVote",
     # Submodules
     "agents",
     # CLI integration
