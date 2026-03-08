@@ -4,7 +4,6 @@ Targets uncovered paths in scorer functions, PromptEvaluator, and comparison log
 All tests use real function calls with inline data.
 """
 
-import pytest
 
 from codomyrmex.prompt_engineering.evaluation import (
     EvaluationCriteria,

@@ -5,7 +5,6 @@ These tests exercise pure-Python data models and exception classes — no API ne
 API-dependent tests are guarded with @pytest.mark.skipif.
 """
 
-import os
 from datetime import datetime, timezone
 
 import pytest
@@ -17,7 +16,6 @@ from codomyrmex.email.exceptions import (
     InvalidMessageError,
     MessageNotFoundError,
 )
-from datetime import datetime  # noqa: F401 — needed for Pydantic model rebuild
 
 from codomyrmex.email.generics import (
     EmailAddress,

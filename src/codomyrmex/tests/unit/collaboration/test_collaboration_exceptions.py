@@ -1,6 +1,5 @@
 """Tests for collaboration.exceptions module."""
 
-import pytest
 
 from codomyrmex.collaboration.exceptions import (
     AgentBusyError,

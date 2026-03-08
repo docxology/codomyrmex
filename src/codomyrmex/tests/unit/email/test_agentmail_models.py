@@ -21,7 +21,6 @@ from codomyrmex.email.agentmail.models import (
     _sdk_thread_to_model,
     _sdk_webhook_to_model,
 )
-from codomyrmex.email.generics import EmailAddress
 
 
 def _ns(**kwargs):

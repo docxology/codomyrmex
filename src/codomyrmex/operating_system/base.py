@@ -16,7 +16,7 @@ from enum import Enum
 from typing import Any
 
 
-def _run(cmd: str, timeout: float = 10.0) -> str:
+def run_shell(cmd: str, timeout: float = 10.0) -> str:
     """Run a shell command and return stripped stdout."""
     try:
         result = subprocess.run(
@@ -304,4 +304,5 @@ __all__ = [
     "ServiceInfo",
     "ServiceStatus",
     "SystemInfo",
+    "run_shell",
 ]

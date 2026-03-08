@@ -8,9 +8,11 @@ Demonstrates functionality of the agentic_memory module.
 import sys
 from pathlib import Path
 
-# Add project root to path
-PROJECT_ROOT = Path(__file__).parent.parent.parent  # 3 levels up
-sys.path.insert(0, str(PROJECT_ROOT / "src"))
+try:
+    import codomyrmex
+except ImportError:
+    PROJECT_ROOT = Path(__file__).parent.parent.parent  # 3 levels up
+    sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from codomyrmex.utils.cli_helpers import (
     print_error,

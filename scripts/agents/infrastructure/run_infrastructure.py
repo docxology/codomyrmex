@@ -40,7 +40,7 @@ def main() -> int:
     print_info(f"  InfrastructureAgent bases: {[b.__name__ for b in InfrastructureAgent.__mro__[1:]]}")
 
     factory = CloudToolFactory()
-    tools = factory.list_tools() if hasattr(factory, "list_tools") else dir(factory)
+    _tools = factory.list_tools() if hasattr(factory, "list_tools") else dir(factory)
     print_info(f"  CloudToolFactory methods: {[m for m in dir(factory) if not m.startswith('_')][:10]}")
 
     agent = InfrastructureAgent()

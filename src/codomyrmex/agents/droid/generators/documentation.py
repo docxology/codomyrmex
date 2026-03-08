@@ -165,11 +165,7 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
     """Add methods for documentation consistency and quality assessment."""
     from pathlib import Path
 
-    # Add the current directory to Python path for direct imports
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    if current_dir not in sys.path:
-        pass
-    #         sys.path.insert(0, current_dir)  # Removed sys.path manipulation
+
 
     # Define the documentation module path
     project_root = Path(__file__).parent.parent.parent.parent.parent

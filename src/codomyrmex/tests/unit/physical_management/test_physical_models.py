@@ -1,6 +1,5 @@
 """Tests for physical_management.models."""
 
-import math
 
 from codomyrmex.physical_management.models import (
     EventType,

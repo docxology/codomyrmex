@@ -25,7 +25,6 @@ class GeminiMediaMixin:
             if config is None and kwargs:
                 config = kwargs
 
-            from google.genai import types
 
             result = self.client.models.generate_images(
                 model=model, prompt=prompt, config=config

@@ -20,7 +20,7 @@ from src.codomyrmex.operating_system.base import (
     ServiceInfo,
     ServiceStatus,
     SystemInfo,
-    _run,
+    run_shell,
 )
 
 
@@ -35,23 +35,23 @@ class LinuxProvider(OSProviderBase):
         cpu_count = os.cpu_count() or 1
 
         # Distribution version
-        platform_version = _run(
+        platform_version = run_shell(
             "cat /etc/os-release 2>/dev/null | grep ^PRETTY_NAME | cut -d= -f2 | tr -d '\"'"
         )
         if not platform_version:
-            platform_version = _run("uname -r")
+            platform_version = run_shell("uname -r")
 
-        kernel_version = _run("uname -r") or platform.release()
+        kernel_version = run_shell("uname -r") or platform.release()
 
         # Memory from /proc/meminfo
-        mem_raw = _run("grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}'")
+        mem_raw = run_shell("grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}'")
         try:
             memory_total = int(mem_raw) * 1024  # /proc/meminfo reports in kB
         except (ValueError, TypeError):
             memory_total = 0
 
         # Uptime from /proc/uptime
-        uptime_raw = _run("cat /proc/uptime 2>/dev/null | awk '{print $1}'")
+        uptime_raw = run_shell("cat /proc/uptime 2>/dev/null | awk '{print $1}'")
         try:
             uptime = float(uptime_raw)
         except (ValueError, TypeError):
@@ -71,7 +71,7 @@ class LinuxProvider(OSProviderBase):
     # ── Processes ───────────────────────────────────────────────────
 
     def list_processes(self, limit: int = 50) -> list[ProcessInfo]:
-        raw = _run(f"ps -eo pid,stat,user,%cpu,rss,comm --no-headers | head -n {limit}")
+        raw = run_shell(f"ps -eo pid,stat,user,%cpu,rss,comm --no-headers | head -n {limit}")
         processes: list[ProcessInfo] = []
         for line in raw.splitlines():
             parts = line.split(None, 5)
@@ -107,7 +107,7 @@ class LinuxProvider(OSProviderBase):
     # ── Disk Usage ──────────────────────────────────────────────────
 
     def get_disk_usage(self) -> list[DiskInfo]:
-        raw = _run(
+        raw = run_shell(
             "df -kT --exclude-type=tmpfs --exclude-type=devtmpfs --exclude-type=squashfs 2>/dev/null || df -k"
         )
         disks: list[DiskInfo] = []
@@ -163,7 +163,7 @@ class LinuxProvider(OSProviderBase):
     # ── Services ────────────────────────────────────────────────────
 
     def get_services(self, pattern: str = "") -> list[ServiceInfo]:
-        raw = _run(
+        raw = run_shell(
             "systemctl list-units --type=service --no-pager --no-legend 2>/dev/null"
         )
         services: list[ServiceInfo] = []
@@ -192,7 +192,7 @@ class LinuxProvider(OSProviderBase):
 
     def get_network_interfaces(self) -> list[NetworkInfo]:
         # Try ip command first, fall back to ifconfig
-        raw = _run("ip -o addr show 2>/dev/null")
+        raw = run_shell("ip -o addr show 2>/dev/null")
         interfaces: list[NetworkInfo] = []
 
         if raw:
@@ -214,7 +214,7 @@ class LinuxProvider(OSProviderBase):
                         is_up=True,
                     )
             # Get MAC addresses
-            link_raw = _run("ip -o link show 2>/dev/null")
+            link_raw = run_shell("ip -o link show 2>/dev/null")
             for line in link_raw.splitlines():
                 m_iface = re.match(r"^\d+:\s+(\S+):", line)
                 m_mac = re.search(r"link/ether\s+([0-9a-f:]+)", line)
@@ -230,7 +230,7 @@ class LinuxProvider(OSProviderBase):
             interfaces = list(seen.values())
         else:
             # Fallback: ifconfig
-            raw = _run("ifconfig -a 2>/dev/null")
+            raw = run_shell("ifconfig -a 2>/dev/null")
             current_iface = ""
             ip_addr = ""
             mac_addr = ""

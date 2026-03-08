@@ -1,6 +1,5 @@
 """Tests for agents.core.exceptions."""
 
-import pytest
 
 from codomyrmex.agents.core.exceptions import (
     AgentConfigurationError,

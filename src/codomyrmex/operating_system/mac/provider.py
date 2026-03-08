@@ -20,7 +20,7 @@ from src.codomyrmex.operating_system.base import (
     ServiceInfo,
     ServiceStatus,
     SystemInfo,
-    _run,
+    run_shell,
 )
 
 
@@ -35,20 +35,20 @@ class MacOSProvider(OSProviderBase):
         cpu_count = os.cpu_count() or 1
 
         # macOS version via sw_vers
-        platform_version = _run("sw_vers -productVersion") or platform.mac_ver()[0]
+        platform_version = run_shell("sw_vers -productVersion") or platform.mac_ver()[0]
 
         # Kernel
-        kernel_version = _run("uname -r") or platform.release()
+        kernel_version = run_shell("uname -r") or platform.release()
 
         # Total physical memory via sysctl
-        mem_raw = _run("sysctl -n hw.memsize")
+        mem_raw = run_shell("sysctl -n hw.memsize")
         try:
             memory_total = int(mem_raw)
         except (ValueError, TypeError):
             memory_total = 0
 
         # Uptime (seconds since boot)
-        boot_raw = _run("sysctl -n kern.boottime")
+        boot_raw = run_shell("sysctl -n kern.boottime")
         uptime = 0.0
         m = re.search(r"sec\s*=\s*(\d+)", boot_raw)
         if m:
@@ -70,7 +70,7 @@ class MacOSProvider(OSProviderBase):
     # ── Processes ───────────────────────────────────────────────────
 
     def list_processes(self, limit: int = 50) -> list[ProcessInfo]:
-        raw = _run(f"ps -eo pid,stat,user,%cpu,rss,comm | head -n {limit + 1}")
+        raw = run_shell(f"ps -eo pid,stat,user,%cpu,rss,comm | head -n {limit + 1}")
         processes: list[ProcessInfo] = []
         for line in raw.splitlines()[1:]:  # skip header
             parts = line.split(None, 5)
@@ -106,7 +106,7 @@ class MacOSProvider(OSProviderBase):
     # ── Disk Usage ──────────────────────────────────────────────────
 
     def get_disk_usage(self) -> list[DiskInfo]:
-        raw = _run("df -k -T nodevfs,autofs,map")
+        raw = run_shell("df -k -T nodevfs,autofs,map")
         disks: list[DiskInfo] = []
         for line in raw.splitlines()[1:]:
             parts = line.split()
@@ -143,7 +143,7 @@ class MacOSProvider(OSProviderBase):
     # ── Services ────────────────────────────────────────────────────
 
     def get_services(self, pattern: str = "") -> list[ServiceInfo]:
-        raw = _run("launchctl list")
+        raw = run_shell("launchctl list")
         services: list[ServiceInfo] = []
         for line in raw.splitlines()[1:]:
             parts = line.split("\t")
@@ -170,7 +170,7 @@ class MacOSProvider(OSProviderBase):
     # ── Network ─────────────────────────────────────────────────────
 
     def get_network_interfaces(self) -> list[NetworkInfo]:
-        raw = _run("ifconfig -a")
+        raw = run_shell("ifconfig -a")
         interfaces: list[NetworkInfo] = []
         current_iface = ""
         ip_addr = ""

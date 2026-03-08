@@ -2,7 +2,6 @@
 
 from datetime import datetime
 
-import pytest
 
 from codomyrmex.fpf.core.models import (
     Concept,

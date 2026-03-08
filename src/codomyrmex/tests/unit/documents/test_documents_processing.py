@@ -44,7 +44,6 @@ with contextlib.suppress(ImportError):
 with contextlib.suppress(ImportError):
     from codomyrmex.documents.metadata.versioning import (
         get_document_version,
-        set_document_version,
     )
 
 with contextlib.suppress(ImportError):

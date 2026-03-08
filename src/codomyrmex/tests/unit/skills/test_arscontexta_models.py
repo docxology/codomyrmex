@@ -1,7 +1,6 @@
 """Tests for skills.arscontexta.models."""
 
 import pytest
-from pathlib import Path
 
 from codomyrmex.skills.arscontexta.models import (
     ArsContextaError,

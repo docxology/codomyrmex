@@ -1,6 +1,5 @@
 """Tests for coding.exceptions module."""
 
-import pytest
 
 from codomyrmex.coding.exceptions import (
     BreakpointError,
@@ -87,7 +86,7 @@ class TestCodeReviewErrors:
         assert isinstance(e, CodomyrmexError)
 
     def test_review_comment_error(self):
-        e = ReviewCommentError("comment failed")
+        _e = ReviewCommentError("comment failed")
         assert issubclass(ReviewCommentError, CodeReviewError)
 
 

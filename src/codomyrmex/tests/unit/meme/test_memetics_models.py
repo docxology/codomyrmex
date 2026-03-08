@@ -1,6 +1,5 @@
 """Tests for meme.memetics.models."""
 
-import math
 
 from codomyrmex.meme.memetics.models import (
     FitnessMap,

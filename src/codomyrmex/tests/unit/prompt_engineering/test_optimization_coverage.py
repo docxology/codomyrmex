@@ -4,7 +4,6 @@ Targets uncovered paths in PromptOptimizer strategies and OptimizationResult.
 All tests use real function calls with inline data - no mocking.
 """
 
-import pytest
 
 from codomyrmex.prompt_engineering.optimization import (
     OptimizationResult,

@@ -4,8 +4,6 @@ Zero-mock policy: no MagicMock, no monkeypatch, no unittest.mock.
 PDF-specific tests are guarded with skipif when PyMuPDF is not installed.
 """
 
-import io
-import os
 
 import pytest
 
