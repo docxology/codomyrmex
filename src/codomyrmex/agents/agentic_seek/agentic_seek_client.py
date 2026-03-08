@@ -41,6 +41,16 @@ if TYPE_CHECKING:
 logger = get_logger(__name__)
 
 
+def _ini_bool(val: str) -> bool:
+    """Parse a configparser string as a boolean."""
+    return val.strip().lower() in ("true", "1", "yes")
+
+
+def _ini_languages(raw: str) -> list[str]:
+    """Parse a comma/space-separated language list from config."""
+    return [lang.strip() for lang in raw.replace(",", " ").split() if lang.strip()]
+
+
 class AgenticSeekClient(CLIAgentBase):
     """Client for the agenticSeek autonomous agent framework.
 
@@ -240,20 +250,11 @@ class AgenticSeekClient(CLIAgentBase):
             raise ValueError("config.ini missing [MAIN] section")
 
         main = parser["MAIN"]
-        browser = parser.get("BROWSER", {})
-
-        def _bool(val: str) -> bool:
-            return val.strip().lower() in ("true", "1", "yes")
-
-        languages_raw = main.get("languages", "en")
-        languages = [
-            lang.strip()
-            for lang in languages_raw.replace(",", " ").split()
-            if lang.strip()
-        ]
-
+        # ConfigParser.get(section, option) ≠ dict.get(key, default):
+        # calling parser.get("BROWSER", {}) passes {} as the *option* arg, not fallback.
+        browser = parser["BROWSER"] if "BROWSER" in parser else {}  # noqa: SIM401
         return AgenticSeekConfig(
-            is_local=_bool(main.get("is_local", "True")),
+            is_local=_ini_bool(main.get("is_local", "True")),
             provider_name=main.get("provider_name", "ollama"),
             provider_model=main.get("provider_model", "deepseek-r1:14b"),
             provider_server_address=main.get(
@@ -261,15 +262,15 @@ class AgenticSeekClient(CLIAgentBase):
                 os.getenv("AGENTIC_SEEK_PROVIDER_URL", DEFAULT_OLLAMA_URL),
             ),
             agent_name=main.get("agent_name", "Friday"),
-            recover_last_session=_bool(main.get("recover_last_session", "False")),
-            save_session=_bool(main.get("save_session", "False")),
-            speak=_bool(main.get("speak", "False")),
-            listen=_bool(main.get("listen", "False")),
+            recover_last_session=_ini_bool(main.get("recover_last_session", "False")),
+            save_session=_ini_bool(main.get("save_session", "False")),
+            speak=_ini_bool(main.get("speak", "False")),
+            listen=_ini_bool(main.get("listen", "False")),
             work_dir=main.get("work_dir", ""),
-            jarvis_personality=_bool(main.get("jarvis_personality", "False")),
-            languages=languages,
-            headless_browser=_bool(browser.get("headless_browser", "True")),
-            stealth_mode=_bool(browser.get("stealth_mode", "True")),
+            jarvis_personality=_ini_bool(main.get("jarvis_personality", "False")),
+            languages=_ini_languages(main.get("languages", "en")),
+            headless_browser=_ini_bool(browser.get("headless_browser", "True")),
+            stealth_mode=_ini_bool(browser.get("stealth_mode", "True")),
         )
 
     # ------------------------------------------------------------------ #
