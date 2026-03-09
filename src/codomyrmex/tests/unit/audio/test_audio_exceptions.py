@@ -21,7 +21,6 @@ from codomyrmex.audio.exceptions import (
 )
 from codomyrmex.exceptions import CodomyrmexError
 
-
 # ── AudioError ────────────────────────────────────────────────────────
 
 

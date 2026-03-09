@@ -9,15 +9,14 @@ import tempfile
 import pytest
 
 from codomyrmex.database_management.schema_generator import (
+    TYPE_MAPPINGS,
     Column,
     Index,
     SchemaDefinition,
     SchemaGenerator,
     SchemaMigration,
     SchemaTable,
-    TYPE_MAPPINGS,
 )
-
 
 # ---------------------------------------------------------------------------
 # TYPE_MAPPINGS

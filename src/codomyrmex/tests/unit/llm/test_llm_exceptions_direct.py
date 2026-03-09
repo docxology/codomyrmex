@@ -2,6 +2,7 @@
 
 import pytest
 
+from codomyrmex.exceptions import AIProviderError
 from codomyrmex.llm.exceptions import (
     ContentFilterError,
     ContextWindowError,
@@ -20,7 +21,6 @@ from codomyrmex.llm.exceptions import (
     StreamingError,
     TokenLimitError,
 )
-from codomyrmex.exceptions import AIProviderError
 
 
 class TestLLMErrorHierarchy:

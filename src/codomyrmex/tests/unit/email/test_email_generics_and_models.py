@@ -5,7 +5,7 @@ These tests exercise pure-Python data models and exception classes — no API ne
 API-dependent tests are guarded with @pytest.mark.skipif.
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 
 import pytest
 
@@ -16,7 +16,6 @@ from codomyrmex.email.exceptions import (
     InvalidMessageError,
     MessageNotFoundError,
 )
-
 from codomyrmex.email.generics import (
     EmailAddress,
     EmailDraft,
@@ -111,7 +110,7 @@ class TestEmailMessage:
         defaults = {
             "subject": "Test Subject",
             "sender": EmailAddress(email="sender@example.com"),
-            "date": datetime.now(timezone.utc),
+            "date": datetime.now(UTC),
         }
         defaults.update(kwargs)
         return EmailMessage(**defaults)
@@ -153,7 +152,7 @@ class TestEmailMessage:
         assert "sender@example.com" in msg.summary
 
     def test_message_summary_contains_date(self):
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         msg = self._make_message(date=now)
         assert now.isoformat()[:10] in msg.summary  # date portion matches
 
@@ -231,7 +230,7 @@ class TestEmailProviderABC:
                     id=message_id,
                     subject="Test",
                     sender=EmailAddress(email="s@example.com"),
-                    date=datetime.now(timezone.utc),
+                    date=datetime.now(UTC),
                 )
 
             def send_message(self, draft):
