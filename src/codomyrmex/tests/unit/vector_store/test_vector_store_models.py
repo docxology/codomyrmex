@@ -16,7 +16,6 @@ from codomyrmex.vector_store.models import (
     random_embedding,
 )
 
-
 # ──────────────────────────── SearchResult ────────────────────────────────
 
 

@@ -14,7 +14,6 @@ from codomyrmex.config_management.migration.config_migrator import (
     MigrationRule,
 )
 
-
 # ---------------------------------------------------------------------------
 # MigrationAction enum
 # ---------------------------------------------------------------------------
