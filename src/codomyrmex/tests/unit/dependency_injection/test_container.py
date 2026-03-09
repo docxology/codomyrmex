@@ -18,7 +18,6 @@ from codomyrmex.dependency_injection.container import (
 )
 from codomyrmex.dependency_injection.scopes import Scope
 
-
 # ---------------------------------------------------------------------------
 # Test fixtures (real classes — zero mocks)
 # ---------------------------------------------------------------------------
@@ -124,13 +123,13 @@ class TestContainerRegistration:
 
     def test_register_factory(self):
         c = Container()
-        c.register_factory(Greeter, lambda: EnglishGreeter())
+        c.register_factory(Greeter, EnglishGreeter)
         result = c.resolve(Greeter)
         assert isinstance(result, EnglishGreeter)
 
     def test_register_factory_returns_self(self):
         c = Container()
-        ret = c.register_factory(Greeter, lambda: EnglishGreeter())
+        ret = c.register_factory(Greeter, EnglishGreeter)
         assert ret is c
 
     def test_has_returns_false_for_unregistered(self):
