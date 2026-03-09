@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (refreshBtn) {
         refreshBtn.addEventListener('click', async () => {
             refreshBtn.disabled = true;
-            refreshBtn.textContent = 'Refreshing...';
+            refreshBtn.innerHTML = '<span class="loader"></span> Refreshing...';
             try {
                 const resp = await fetch('/api/refresh', { method: 'POST' });
                 if (resp.ok) {
