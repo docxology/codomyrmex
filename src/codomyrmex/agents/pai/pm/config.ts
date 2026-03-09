@@ -52,8 +52,8 @@ export const GMAIL_TOKEN_PATH = join(CODOMYRMEX_CONFIG_DIR, "gmail_token.json");
 /** Default LLM backend for bikeride/email features. */
 export const LLM_BACKEND = process.env.PAI_PM_LLM_BACKEND || "ollama";
 
-/** Default LLM model for bikeride/email features. */
-export const LLM_MODEL = process.env.PAI_PM_LLM_MODEL || "qwen3:4b";
+/** Default LLM model for bikeride/email features. gemma3 preferred over qwen3 (no thinking artifacts). */
+export const LLM_MODEL = process.env.PAI_PM_LLM_MODEL || "gemma3:4b";
 
 /** LLM subprocess timeout in milliseconds. */
 export const LLM_TIMEOUT = parseInt(process.env.PAI_PM_LLM_TIMEOUT || "60000");

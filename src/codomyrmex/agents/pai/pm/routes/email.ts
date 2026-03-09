@@ -442,6 +442,22 @@ export async function handleEmailRoutes(
 
     // ---- BIKE RIDE (Awaiting-reply threads + LLM summary + TTS) ----
 
+    /**
+     * Strip LLM thinking/reasoning blocks from output.
+     * Handles: <think>...</think> XML tags, "Thinking..." preambles,
+     * and other chain-of-thought artifacts from models like qwen3.
+     */
+    function stripThinking(text: string): string {
+        let cleaned = text;
+        // Remove <think>...</think> XML blocks (qwen3 format)
+        cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "");
+        // Remove "Thinking..." preamble blocks that end with "...done thinking."
+        cleaned = cleaned.replace(/Thinking\.\.\.[\s\S]*?\.{3}done thinking\.\s*/gi, "");
+        // Remove standalone "Thinking..." at start followed by reasoning until first double newline
+        cleaned = cleaned.replace(/^Thinking\.{3}[\s\S]*?\n\n/i, "");
+        return cleaned.trim();
+    }
+
     // 1. LLM helper (used by load and improve)
     async function runLlm(prompt: string, backend: string = LLM_BACKEND, model: string = LLM_MODEL): Promise<string> {
         const tmpPath = `/tmp/pai_bikeride_${Date.now()}_${Math.random().toString(36).slice(2)}.txt`;
@@ -475,7 +491,8 @@ export async function handleEmailRoutes(
             }
         } catch { }
         try { require("fs").unlinkSync(tmpPath); } catch { }
-        return responseText || "";
+        // Always strip thinking/reasoning artifacts from the response
+        return stripThinking(responseText);
     }
 
     if (path === "/api/bikeride/load" && method === "POST") {
@@ -590,13 +607,13 @@ export async function handleEmailRoutes(
                     t.rawText = convoTruncated;
 
                     t.summary = await runLlm(
-                        `Summarize this email thread in 2-3 concise sentences for an audio briefing. Focus on: who wrote, what they want, and what action is needed from you. Be direct and conversational.\n\n${convoTruncated}`,
+                        `/no_think\nSummarize this email thread in exactly 2-3 sentences for a quick audio briefing. State who wrote, what they want, and what you need to do next. Output ONLY the summary sentences — no reasoning, no preamble, no thinking.\n\nThread:\n${convoTruncated}`,
                         backend, model
                     ) || "(summary unavailable)";
 
-                    const draftA = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (2-3 sentence) friendly acknowledgment/thank-you response. Be warm but brief. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`, backend, model);
-                    const draftB = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (3-5 sentence) substantive response that directly addresses the points raised. Be helpful and actionable. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`, backend, model);
-                    const draftC = await runLlm(`You are FristonBlanket replying to this email thread. Write a SHORT (3-4 sentence) response that acknowledges the email and suggests scheduling a meeting to discuss further. Use these REAL available calendar slots: ${calendarSlots}. Propose specific times from those slots. Reply ONLY with the email body text, no subject line or headers.\n\n${convoTruncated}`, backend, model);
+                    const draftA = await runLlm(`/no_think\nYou are FristonBlanket. Write a 2-3 sentence friendly reply to this email thread. Be warm but brief. Output ONLY the email body — no reasoning, no subject line, no headers, no preamble.\n\nThread:\n${convoTruncated}`, backend, model);
+                    const draftB = await runLlm(`/no_think\nYou are FristonBlanket. Write a 3-5 sentence substantive reply that directly addresses the points raised. Be helpful and specific. Output ONLY the email body — no reasoning, no subject line, no headers, no preamble.\n\nThread:\n${convoTruncated}`, backend, model);
+                    const draftC = await runLlm(`/no_think\nYou are FristonBlanket. Write a 3-4 sentence reply acknowledging this email and suggesting a meeting. Use these available times: ${calendarSlots}. Output ONLY the email body — no reasoning, no subject line, no headers, no preamble.\n\nThread:\n${convoTruncated}`, backend, model);
 
                     t.drafts = [
                         { label: "A", title: "Quick Reply", text: draftA || "Thanks for your email! I'll get back to you soon." },
@@ -669,13 +686,7 @@ export async function handleEmailRoutes(
             const { draft, threadContext, backend, model } = body as any;
             if (!draft) return error("Missing: draft");
 
-            const prompt = `You are editing a draft email reply. Retain ALL original information and meaning from the draft. Only improve: spelling, grammar, formatting, flow, and clarity. Use the email thread context below for reference to ensure facts are correct. Output ONLY the improved email body text without any preamble, subject line, or headers.
-
-Draft:
-${draft}
-
-Thread context:
-${threadContext || "(no context provided)"}`;
+            const prompt = `/no_think\nEdit this draft email reply. Keep all original meaning. Fix only spelling, grammar, and clarity. Output ONLY the improved email body — no reasoning, no preamble, no headers.\n\nDraft:\n${draft}\n\nThread context:\n${threadContext || "(no context provided)"}`;
 
             const improved = await runLlm(prompt, backend || LLM_BACKEND, model || LLM_MODEL);
             return json({ success: true, improved: improved || draft });

@@ -33,35 +33,35 @@ export async function handleGitHubRoutes(
 
     if (path === "/api/github/link" && method === "POST") {
         const body = await parseBody(req);
-        const result = linkProject(body as any);
+        const result = linkProject(String(body.project || ""), String(body.repo || ""));
         if (result.success) broadcast("github", "link", result);
         return json(result);
     }
 
     if (path === "/api/github/unlink" && method === "POST") {
         const body = await parseBody(req);
-        const result = unlinkProject(body as any);
+        const result = unlinkProject(String(body.project || ""));
         if (result.success) broadcast("github", "unlink", result);
         return json(result);
     }
 
     if (path === "/api/github/push" && method === "POST") {
         const body = await parseBody(req);
-        const result = body.all ? pushAll() : pushToGitHub(body as any);
+        const result = body.all ? pushAll() : pushToGitHub(String(body.project || ""), !!body.dryRun);
         if (result.success) broadcast("github", "push", result);
         return json(result);
     }
 
     if (path === "/api/github/pull" && method === "POST") {
         const body = await parseBody(req);
-        const result = body.all ? pullAll() : pullFromGitHub(body as any);
+        const result = body.all ? pullAll() : pullFromGitHub(String(body.project || ""), !!body.dryRun);
         if (result.success) broadcast("github", "pull", result);
         return json(result);
     }
 
     if (path === "/api/github/sync" && method === "POST") {
         const body = await parseBody(req);
-        const result = body.all ? syncAll() : syncBidirectional(body as any);
+        const result = body.all ? syncAll() : syncBidirectional(String(body.project || ""), !!body.dryRun);
         if (result.success) broadcast("github", "sync", result);
         return json(result);
     }
@@ -74,19 +74,40 @@ export async function handleGitHubRoutes(
 
     if (path === "/api/github/issues" && method === "POST") {
         const body = await parseBody(req);
-        const result = createIssue(body as any);
+        const result = createIssue(
+            String(body.project || ""),
+            String(body.title || ""),
+            body.body ? String(body.body) : undefined,
+            String(body.section || "remaining"),
+            body.priority ? String(body.priority) : undefined,
+        );
         return json(result);
     }
 
     if (path === "/api/github/issues/close" && method === "POST") {
         const body = await parseBody(req);
-        const result = closeIssue(body as any);
+        const result = closeIssue(
+            String(body.project || ""),
+            Number(body.issueNumber || body.issue || 0),
+            body.close !== false,
+        );
         return json(result);
     }
 
     if (path === "/api/github/issues/edit" && method === "POST") {
         const body = await parseBody(req);
-        const result = editIssue(body as any);
+        const result = editIssue(
+            String(body.project || ""),
+            Number(body.issueNumber || body.issue || 0),
+            {
+                title: body.title ? String(body.title) : undefined,
+                body: body.body ? String(body.body) : undefined,
+                addLabels: body.addLabels,
+                removeLabels: body.removeLabels,
+                assignee: body.assignee ? String(body.assignee) : undefined,
+                section: body.section ? String(body.section) : undefined,
+            },
+        );
         return json(result);
     }
 
@@ -104,13 +125,18 @@ export async function handleGitHubRoutes(
 
     if (path === "/api/github/repo" && method === "POST") {
         const body = await parseBody(req);
-        const result = createRepo(body as any);
+        const result = createRepo(
+            String(body.name || ""),
+            body.isPrivate !== false,
+            body.description ? String(body.description) : undefined,
+            body.owner ? String(body.owner) : undefined,
+        );
         return json(result);
     }
 
     if (path === "/api/github/cleanup-test-issues" && method === "POST") {
         const body = await parseBody(req);
-        const result = cleanupTestIssues(body as any);
+        const result = cleanupTestIssues(String(body.repo || ""), !!body.dryRun);
         return json(result);
     }
 

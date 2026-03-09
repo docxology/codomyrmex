@@ -88,7 +88,7 @@ All paths are configurable via environment variables:
 | `GITHUB_DEFAULT_OWNER` | `""` | Default GitHub org for repo listing |
 | `GITHUB_TOKEN` | — | Required for `GitHubSync.ts` (or use `gh auth login`) |
 | `PAI_PM_LLM_BACKEND` | `ollama` | Default LLM backend for bikeride/email |
-| `PAI_PM_LLM_MODEL` | `qwen3:4b` | Default LLM model |
+| `PAI_PM_LLM_MODEL` | `gemma3:4b` | Default LLM model (gemma3 preferred — no thinking artifacts) |
 | `PAI_PM_LLM_TIMEOUT` | `60000` | LLM subprocess timeout (ms) |
 | `GOOGLE_CLIENT_ID` | — | Google Calendar/Gmail OAuth |
 | `GOOGLE_CLIENT_SECRET` | — | Google Calendar/Gmail OAuth |

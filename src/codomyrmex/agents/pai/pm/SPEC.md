@@ -1,7 +1,7 @@
 # SPEC.md — PAI PM Module Specification
 
 **Module**: `scripts/pai/pm/`
-**Version**: 2.1.0 (modular decomposition + robustness)
+**Version**: 2.2.0 (github.ts arg-fix + Bike Ride LLM refinements)
 **Runtime**: [Bun](https://bun.sh) ≥ 1.0.0
 **Language**: TypeScript
 
@@ -112,7 +112,7 @@ All configuration via environment variables (see `.env.example`):
 
 | Variable | Default | Used By |
 | --- | --- | --- |
-| `PAI_PM_PORT` | `8889` | `server.ts`, `config.ts` |
+| `PAI_PM_PORT` | `8888` | `server.ts`, `config.ts` |
 | `PAI_DIR` | `~/.claude` | `config.ts`, all CLI tools |
 | `PAI_STATE_DIR` | `$PAI_DIR/MEMORY/STATE` | `config.ts` |
 | `GOOGLE_CLIENT_ID/SECRET` | — | `services/oauth.ts` |
@@ -120,7 +120,7 @@ All configuration via environment variables (see `.env.example`):
 | `AGENTMAIL_DEFAULT_INBOX` | — | `services/oauth.ts` |
 | `GITHUB_DEFAULT_OWNER` | — | `config.ts`, `routes/github.ts` |
 | `PAI_PM_LLM_BACKEND` | `ollama` | `config.ts`, `routes/email.ts`, `routes/dispatch.ts` |
-| `PAI_PM_LLM_MODEL` | `qwen3:4b` | `config.ts`, `routes/email.ts`, `routes/dispatch.ts`, `routes/interview.ts` |
+| `PAI_PM_LLM_MODEL` | `gemma3:4b` | `config.ts`, `routes/email.ts`, `routes/dispatch.ts`, `routes/interview.ts` |
 | `PAI_PM_LLM_TIMEOUT` | `60000` | `config.ts`, `routes/email.ts`, `routes/dispatch.ts` |
 
 ## PAIMixin Integration

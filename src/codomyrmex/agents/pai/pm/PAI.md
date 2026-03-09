@@ -66,5 +66,5 @@ LLM defaults for bikeride/email features are configurable via environment variab
 | Variable | Default | Description |
 |---|---|---|
 | `PAI_PM_LLM_BACKEND` | `ollama` | LLM backend (`ollama`, `gemini`, `claude`) |
-| `PAI_PM_LLM_MODEL` | `qwen3:4b` | Model name |
+| `PAI_PM_LLM_MODEL` | `gemma3:4b` | Model name (gemma3 preferred — no thinking artifacts) |
 | `PAI_PM_LLM_TIMEOUT` | `60000` | Subprocess timeout (ms) |

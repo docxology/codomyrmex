@@ -80,9 +80,26 @@ The bikeride/email features use LLM backends configurable via environment variab
 | Variable | Default | Description |
 | --- | --- | --- |
 | `PAI_PM_LLM_BACKEND` | `ollama` | Backend: `ollama`, `gemini`, `claude` |
-| `PAI_PM_LLM_MODEL` | `qwen3:4b` | Model name |
+| `PAI_PM_LLM_MODEL` | `gemma3:4b` | Model name (gemma3 preferred — no thinking artifacts) |
 | `PAI_PM_LLM_TIMEOUT` | `60000` | Subprocess timeout (ms) |
 
 ### Mission Status Values
 
 Missions support: `ACTIVE`, `PLANNING`, `IN_PROGRESS`, `PAUSED`, `COMPLETED`, `ARCHIVED`.
+
+### Bike Ride (Email Briefing)
+
+The Bike Ride feature loads Gmail threads awaiting reply, summarizes them via LLM, and generates A/B/C draft responses:
+
+```bash
+# Load unanswered threads + generate summaries/drafts
+curl -X POST http://localhost:8888/api/bikeride/load -H 'Content-Type: application/json' -d '{"backend":"ollama","model":"gemma3:4b"}'
+
+# Text-to-speech for audio briefing
+curl -X POST http://localhost:8888/api/bikeride/tts -H 'Content-Type: application/json' -d '{"text":"Your summary here"}'
+
+# Improve a draft
+curl -X POST http://localhost:8888/api/bikeride/improve -H 'Content-Type: application/json' -d '{"draft":"Draft text","backend":"ollama"}'
+```
+
+All LLM output is post-processed by `stripThinking()` to remove chain-of-thought artifacts.
