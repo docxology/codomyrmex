@@ -9,35 +9,35 @@ This module provides a complete **Mission → Project → Task** management syst
 ### Creating work items
 
 ```bash
-bun scripts/pai/pm/CreateMission.ts --slug <slug> --title "<title>" --description "<desc>"
-bun scripts/pai/pm/CreateProject.ts --slug <slug> --title "<title>" --goal "<goal>" --mission <mission-slug>
-bun scripts/pai/pm/AddTask.ts <project-slug> "<task text>" --priority HIGH
+bun src/codomyrmex/agents/pai/pm/CreateMission.ts --slug <slug> --title "<title>" --description "<desc>"
+bun src/codomyrmex/agents/pai/pm/CreateProject.ts --slug <slug> --title "<title>" --goal "<goal>" --mission <mission-slug>
+bun src/codomyrmex/agents/pai/pm/AddTask.ts <project-slug> "<task text>" --priority HIGH
 ```
 
 ### Querying state
 
 ```bash
-bun scripts/pai/pm/ListMissions.ts --verbose --json
-bun scripts/pai/pm/ListProjects.ts --status IN_PROGRESS --json
-bun scripts/pai/pm/ListTasks.ts --project <slug> --json
-bun scripts/pai/pm/PMDashboard.ts --json
+bun src/codomyrmex/agents/pai/pm/ListMissions.ts --verbose --json
+bun src/codomyrmex/agents/pai/pm/ListProjects.ts --status IN_PROGRESS --json
+bun src/codomyrmex/agents/pai/pm/ListTasks.ts --project <slug> --json
+bun src/codomyrmex/agents/pai/pm/PMDashboard.ts --json
 ```
 
 ### Updating state
 
 ```bash
-bun scripts/pai/pm/UpdateTask.ts <project-slug> "<task text>" --move-to completed
-bun scripts/pai/pm/UpdateProject.ts <slug> --status IN_PROGRESS
-bun scripts/pai/pm/UpdateMission.ts <slug> --link-project <project-slug>
+bun src/codomyrmex/agents/pai/pm/UpdateTask.ts <project-slug> "<task text>" --move-to completed
+bun src/codomyrmex/agents/pai/pm/UpdateProject.ts <slug> --status IN_PROGRESS
+bun src/codomyrmex/agents/pai/pm/UpdateMission.ts <slug> --link-project <project-slug>
 ```
 
 ### GitHub sync
 
 ```bash
-bun scripts/pai/pm/GitHubSync.ts link --project <slug> --repo owner/repo
-bun scripts/pai/pm/GitHubSync.ts push --project <slug>
-bun scripts/pai/pm/GitHubSync.ts pull --project <slug>
-bun scripts/pai/pm/GitHubSync.ts sync --all
+bun src/codomyrmex/agents/pai/pm/GitHubSync.ts link --project <slug> --repo owner/repo
+bun src/codomyrmex/agents/pai/pm/GitHubSync.ts push --project <slug>
+bun src/codomyrmex/agents/pai/pm/GitHubSync.ts pull --project <slug>
+bun src/codomyrmex/agents/pai/pm/GitHubSync.ts sync --all
 ```
 
 ## Output Format
@@ -64,7 +64,7 @@ These tools are the **single source of truth** for PAI project state. The modula
 
 ```bash
 # Start the modular server
-bun scripts/pai/pm/server.ts --port=8888
+bun src/codomyrmex/agents/pai/pm/server.ts --port=8888
 
 # Available endpoints
 curl http://localhost:8888/api/health

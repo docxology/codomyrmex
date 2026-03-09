@@ -1,6 +1,6 @@
 # PAI.md — PAI Integration Reference
 
-**Module**: `scripts/pai/pm/`
+**Module**: `src/codomyrmex/agents/pai/pm/`
 **PAI Version Compatibility**: v4.0.x+
 
 ## How This Module Connects to PAI
@@ -30,7 +30,7 @@ Uses credentials stored in `~/.codomyrmex/`:
 
 The `scripts/pai/dashboard.py` orchestrator launches both:
 
-- This module's PMServer (`:8888`/`:8889`) — primary TypeScript server
+- This module's PMServer (`:8888`) — primary TypeScript server
 - The Python WebsiteServer (`:8787`) — admin module dashboard
 
 ### 4. PAIMixin (Python-side awareness)
@@ -46,9 +46,9 @@ The upstream [danielmiessler/Personal_AI_Infrastructure](https://github.com/dani
 Agents should use the CLI tools for atomic operations:
 
 ```bash
-bun scripts/pai/pm/CreateMission.ts --slug <slug> --title "<title>"
-bun scripts/pai/pm/ListProjects.ts --json
-bun scripts/pai/pm/AddTask.ts <project> "<task text>" --priority HIGH
+bun src/codomyrmex/agents/pai/pm/CreateMission.ts --slug <slug> --title "<title>"
+bun src/codomyrmex/agents/pai/pm/ListProjects.ts --json
+bun src/codomyrmex/agents/pai/pm/AddTask.ts <project> "<task text>" --priority HIGH
 ```
 
 For bulk operations or real-time awareness, agents should use the HTTP API:

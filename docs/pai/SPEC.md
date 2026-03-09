@@ -19,6 +19,7 @@ Expanded reference documentation for the PAI-Codomyrmex integration. Supplements
 | `api-reference.md` | PAIBridge (24 methods), TrustRegistry, module functions, dataclasses, constants |
 | `workflows.md` | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm phase mapping |
 | `skills-and-commands.md` | External Claude Code skills (visual-explainer, slash commands) |
+| `on-ramp.md` | 5-level flexibility curriculum — Observer → Orchestrator |
 | `screenshots/` | PAI Dashboard interface screenshots (15 tabs + 1 WebP tour) |
 
 ## Capability Specifications

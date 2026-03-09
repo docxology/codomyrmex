@@ -18,7 +18,7 @@ All state is stored as YAML files under `~/.claude/MEMORY/STATE/` (configurable 
 
 ```bash
 # Install dependencies
-cd scripts/pai/pm && bun install
+cd src/codomyrmex/agents/pai/pm && bun install
 
 # Create a mission
 bun CreateMission.ts --slug my-mission --title "My Mission" --description "What we're doing"
@@ -105,7 +105,7 @@ See [DataModels.ts](DataModels.ts) for the full type definitions:
 ## Architecture
 
 ```text
-scripts/pai/pm/
+src/codomyrmex/agents/pai/pm/
 ├── config.ts           # Externalized path configuration
 ├── DataModels.ts       # Shared type definitions
 ├── YamlUtils.ts        # YAML parsing/writing utilities

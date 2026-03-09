@@ -83,4 +83,5 @@ Run `/codomyrmexTrust` before BUILD or EXECUTE phases.
 - [api-reference.md](api-reference.md) — Python API reference
 - [workflows.md](workflows.md) — Workflow documentation
 - [skills-and-commands.md](skills-and-commands.md) — External Claude Code skills
+- [on-ramp.md](on-ramp.md) — 5-level flexibility curriculum
 - [screenshots/](screenshots/) — All 15 PAI Dashboard interface screenshots

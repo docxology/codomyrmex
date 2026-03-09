@@ -17,6 +17,7 @@ Documentation module for the PAI-Codomyrmex integration. Provides architecture r
 | `api-reference.md` | Python API reference (PAIBridge, TrustRegistry) |
 | `workflows.md` | Workflow documentation and Algorithm mapping |
 | `skills-and-commands.md` | External Claude Code skills and slash commands |
+| `on-ramp.md` | 5-level flexibility curriculum — Observer → Orchestrator |
 | `screenshots/` | PAI Dashboard interface screenshots (15 tabs) |
 
 ## Visual Reference

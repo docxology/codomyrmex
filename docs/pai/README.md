@@ -353,7 +353,8 @@ graph TD
     DOCS --> TOOLS["tools-reference.md"]
     DOCS --> API["api-reference.md"]
     DOCS --> WF["workflows.md"]
-    DOCS --> SCREENSHOTS["screenshots/<br/>8 PNG + 1 WebP"]
+    DOCS --> ONRAMP["on-ramp.md"]
+    DOCS --> SCREENSHOTS["screenshots/<br/>15 PNG + 1 WebP"]
 
     SRC --> BRIDGE["mcp_bridge.py"]
     SRC --> TRUST_GW["trust_gateway.py"]
@@ -376,6 +377,7 @@ graph TD
 | [api-reference.md](api-reference.md) | PAIBridge (24 methods), TrustRegistry, dataclasses |
 | [workflows.md](workflows.md) | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm phase mapping |
 | [skills-and-commands.md](skills-and-commands.md) | External Claude Code skills and slash commands |
+| [on-ramp.md](on-ramp.md) | 5-level flexibility curriculum — Observer → Orchestrator |
 | [screenshots/](screenshots/) | 15 PNG screenshots + 1 WebP tour recording |
 
 ### RASP Documentation

@@ -1,6 +1,6 @@
 # SPEC.md — PAI PM Module Specification
 
-**Module**: `scripts/pai/pm/`
+**Module**: `src/codomyrmex/agents/pai/pm/`
 **Version**: 2.2.0 (github.ts arg-fix + Bike Ride LLM refinements)
 **Runtime**: [Bun](https://bun.sh) ≥ 1.0.0
 **Language**: TypeScript
@@ -12,7 +12,7 @@ Complete Mission → Project → Task management system for the Personal AI Infr
 ## Architecture
 
 ```text
-scripts/pai/pm/
+src/codomyrmex/agents/pai/pm/
 ├── config.ts              # Centralized env-overridable configuration
 ├── helpers.ts             # Shared HTTP/WebSocket utilities
 ├── DataModels.ts          # TypeScript type definitions

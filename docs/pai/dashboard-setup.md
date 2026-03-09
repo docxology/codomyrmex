@@ -152,6 +152,19 @@ src/codomyrmex/agents/pai/pm/
 | `/api/bikeride/load` | POST | Load unanswered Gmail threads + generate drafts |
 | `/api/bikeride/send` | POST | Send a selected draft reply |
 | `/api/bikeride/tts` | POST | Text-to-speech for email briefings |
+| `/api/bikeride/improve` | POST | Improve a draft with LLM (grammar, clarity) |
+
+### LLM Configuration
+
+The Bike Ride and Dispatch tabs use a configurable LLM backend:
+
+| Variable | Default | Purpose |
+|----------|---------|--------|
+| `PAI_PM_LLM_BACKEND` | `ollama` | Backend: `ollama`, `gemini`, `claude` |
+| `PAI_PM_LLM_MODEL` | `gemma3:4b` | Model name — gemma3 preferred (no thinking artifacts) |
+| `PAI_PM_LLM_TIMEOUT` | `60000` | Subprocess timeout (ms) |
+
+All LLM output passes through `stripThinking()` to remove chain-of-thought artifacts (`<think>` blocks, "Thinking..." preambles) from models that include reasoning in their responses.
 
 ---
 
@@ -175,4 +188,5 @@ The Codomyrmex Admin's **PAI Control** tab reads from `~/.claude/` to surface PA
 - **Self**: [dashboard-setup.md](dashboard-setup.md)
 - **Architecture**: [architecture.md](architecture.md)
 - **Tool Reference**: [tools-reference.md](tools-reference.md)
+- **On Ramp**: [on-ramp.md](on-ramp.md)
 - **Root Bridge**: [../../PAI.md](../../PAI.md)

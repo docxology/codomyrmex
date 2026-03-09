@@ -14,7 +14,7 @@ Static screenshot assets documenting the PAI (Personal AI Infrastructure) system
 
 ## Contents
 
-- 8 PNG screenshots covering core PAI interface areas
+- 15 PNG screenshots covering all PAI interface tabs
 - 1 WebP animated interface tour
 
 ## Navigation
