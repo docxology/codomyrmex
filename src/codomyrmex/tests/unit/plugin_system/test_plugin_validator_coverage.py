@@ -8,6 +8,7 @@ Uses real temp files for file scanning tests.
 import tempfile
 from pathlib import Path
 
+
 from codomyrmex.plugin_system.validation.plugin_validator import (
     PluginValidator,
     ValidationResult,

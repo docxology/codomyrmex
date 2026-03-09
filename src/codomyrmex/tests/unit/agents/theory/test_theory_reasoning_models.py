@@ -23,6 +23,7 @@ from codomyrmex.agents.theory.reasoning_models import (
     SymbolicReasoningModel,
 )
 
+
 # ===========================================================================
 # ReasoningType
 # ===========================================================================
@@ -45,7 +46,7 @@ class TestReasoningType:
 
     def test_members_are_distinct(self):
         members = list(ReasoningType)
-        assert len({m.value for m in members}) == 3
+        assert len(set(m.value for m in members)) == 3
 
     @pytest.mark.parametrize(
         ("name", "expected"),

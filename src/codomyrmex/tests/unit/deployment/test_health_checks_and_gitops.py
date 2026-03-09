@@ -10,7 +10,6 @@ import tempfile
 
 import pytest
 
-from codomyrmex.deployment.gitops.gitops import GitOpsSynchronizer
 from codomyrmex.deployment.health_checks.checks import (
     CommandHealthCheck,
     DiskHealthCheck,
@@ -23,6 +22,7 @@ from codomyrmex.deployment.health_checks.models import (
     HealthCheckResult,
     HealthStatus,
 )
+from codomyrmex.deployment.gitops.gitops import GitOpsSynchronizer
 
 
 class TestHealthCheckResult:

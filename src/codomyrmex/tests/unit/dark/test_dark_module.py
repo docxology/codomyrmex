@@ -95,7 +95,7 @@ class TestDarkMCPTools:
     """Test dark mcp_tools module imports and structure."""
 
     def test_mcp_tools_module_importable(self):
-        from codomyrmex.dark import mcp_tools
+        from codomyrmex.dark import mcp_tools  # noqa: F401
 
     def test_mcp_tools_has_dark_status_function(self):
         from codomyrmex.dark import mcp_tools
@@ -122,11 +122,11 @@ class TestDarkPDFWrapper:
     """Test PDF dark mode wrapper when PyMuPDF is installed."""
 
     def test_dark_pdf_module_importable(self):
-        from codomyrmex.dark.pdf import DarkPDF, DarkPDFFilter
+        from codomyrmex.dark.pdf import DarkPDF, DarkPDFFilter  # noqa: F401
 
     def test_dark_pdf_filter_has_preset_names(self):
         from codomyrmex.dark.pdf import DarkPDF
         assert hasattr(DarkPDF, "PRESETS") or True  # just check it loads
 
     def test_apply_dark_mode_function_importable(self):
-        from codomyrmex.dark.pdf import apply_dark_mode
+        from codomyrmex.dark.pdf import apply_dark_mode  # noqa: F401
