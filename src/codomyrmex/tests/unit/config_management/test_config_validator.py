@@ -15,6 +15,7 @@ from codomyrmex.config_management.validation.config_validator import (
     ValidationSeverity,
 )
 
+
 # ---------------------------------------------------------------------------
 # ValidationSeverity
 # ---------------------------------------------------------------------------

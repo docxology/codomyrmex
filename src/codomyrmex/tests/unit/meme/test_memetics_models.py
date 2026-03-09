@@ -4,8 +4,8 @@
 from codomyrmex.meme.memetics.models import (
     FitnessMap,
     Meme,
-    Memeplex,
     MemeticCode,
+    Memeplex,
     MemeType,
 )
 

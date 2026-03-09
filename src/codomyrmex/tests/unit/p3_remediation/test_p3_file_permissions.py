@@ -10,6 +10,7 @@ Zero-Mock compliant — uses real file operations.
 import stat
 
 import pytest
+
 from codomyrmex.ci_cd_automation.build.pipeline.build_orchestrator import (
     synthesize_build_artifact,
 )
