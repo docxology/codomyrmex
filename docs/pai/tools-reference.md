@@ -279,4 +279,5 @@ The Email tab in the PAI Dashboard provides a browser-accessible interface for a
 - **Index**: [README.md](README.md)
 - **Architecture**: [architecture.md](architecture.md)
 - **API**: [api-reference.md](api-reference.md)
+- **On Ramp**: [on-ramp.md](on-ramp.md)
 - **Workflows**: [workflows.md](workflows.md)

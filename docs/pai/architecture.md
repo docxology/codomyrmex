@@ -180,4 +180,5 @@ The Integration tab visualizes the GitHub ↔ PAI bridge, sync status, and data 
 - **Tools**: [tools-reference.md](tools-reference.md)
 - **API**: [api-reference.md](api-reference.md)
 - **Workflows**: [workflows.md](workflows.md)
+- **On Ramp**: [on-ramp.md](on-ramp.md)
 - **Root PAI Bridge**: [../../PAI.md](../../PAI.md)

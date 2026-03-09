@@ -212,4 +212,5 @@ Skills (SKILL.md) are active immediately in the current session without `/clear`
 - **Architecture**: [architecture.md](architecture.md)
 - **Tools**: [tools-reference.md](tools-reference.md)
 - **API**: [api-reference.md](api-reference.md)
+- **On Ramp**: [on-ramp.md](on-ramp.md)
 - **External Skills**: [skills-and-commands.md](skills-and-commands.md)
