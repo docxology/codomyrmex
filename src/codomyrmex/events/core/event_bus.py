@@ -8,10 +8,11 @@ subscription handling, and asynchronous event processing.
 import asyncio
 import fnmatch
 import inspect
+import re
 import threading
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 # Import logging
@@ -40,6 +41,18 @@ class Subscription:
     is_async: bool = False
     filter_func: Callable[[Event], bool] | None = None
     priority: int = 0  # Higher numbers = higher priority
+    _literal_patterns: set[str] = field(default_factory=set, init=False, repr=False)
+    _regex_patterns: list[re.Pattern] = field(default_factory=list, init=False, repr=False)
+
+    def __post_init__(self):
+        self._literal_patterns = set()
+        self._regex_patterns = []
+        for pattern in self.event_patterns:
+            p_str = pattern.value if hasattr(pattern, "value") else str(pattern)
+            if any(c in p_str for c in "*?[]"):
+                self._regex_patterns.append(re.compile(fnmatch.translate(p_str)))
+            else:
+                self._literal_patterns.add(p_str)
 
     def matches_event(self, event: Event) -> bool:
         """Check if this subscription matches an event."""
@@ -51,12 +64,13 @@ class Subscription:
         )
 
         match_found = False
-        for pattern in self.event_patterns:
-            # Ensure pattern is a string for fnmatch
-            p_str = pattern.value if hasattr(pattern, "value") else str(pattern)
-            if fnmatch.fnmatch(event_type_str, p_str):
-                match_found = True
-                break
+        if event_type_str in self._literal_patterns:
+            match_found = True
+        else:
+            for regex in self._regex_patterns:
+                if regex.match(event_type_str):
+                    match_found = True
+                    break
 
         if not match_found:
             return False

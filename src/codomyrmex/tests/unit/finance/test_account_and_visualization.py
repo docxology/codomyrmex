@@ -242,9 +242,11 @@ class TestFinanceVisualization:
 
     def _make_ledger_accounts(self):
         """Build a small set of Account objects via AccountChart for viz tests."""
-        from codomyrmex.finance.ledger.ledger import Account as LedgerAccount, AccountType as LedgerAccountType
-        from decimal import Decimal
         import uuid
+        from decimal import Decimal
+
+        from codomyrmex.finance.ledger.ledger import Account as LedgerAccount
+        from codomyrmex.finance.ledger.ledger import AccountType as LedgerAccountType
 
         # Create ledger Account objects (visualization uses ledger.Account)
         cash = LedgerAccount(
