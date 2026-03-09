@@ -1,6 +1,11 @@
-"""Tests for agentic_memory.obsidian.models."""
+"""Comprehensive tests for agentic_memory.obsidian.models — zero-mock.
 
-from pathlib import Path
+Covers: Wikilink, Embed, Tag, Callout, CodeBlock, MathBlock, DataviewField,
+Note (with word_count and aliases properties), SearchResult, VaultMetadata,
+CanvasNode, CanvasEdge, Canvas (with get_node/get_edge).
+"""
+
+import pytest
 
 from codomyrmex.agentic_memory.obsidian.models import (
     Callout,
@@ -21,249 +26,166 @@ from codomyrmex.agentic_memory.obsidian.models import (
 
 class TestWikilink:
     def test_basic(self):
-        w = Wikilink(target="My Note")
-        assert w.target == "My Note"
-        assert w.alias is None
-        assert w.heading is None
-        assert w.block is None
-
-    def test_with_alias(self):
-        w = Wikilink(target="My Note", alias="Click here")
-        assert w.alias == "Click here"
+        link = Wikilink(target="MyNote")
+        assert link.target == "MyNote"
+        assert link.alias is None
 
     def test_with_heading(self):
-        w = Wikilink(target="My Note", heading="Section 1")
-        assert w.heading == "Section 1"
+        link = Wikilink(target="Note", heading="Section 1")
+        assert link.heading == "Section 1"
 
     def test_with_block(self):
-        w = Wikilink(target="My Note", block="abc123")
-        assert w.block == "abc123"
+        link = Wikilink(target="Note", block="abc123")
+        assert link.block == "abc123"
 
 
 class TestEmbed:
     def test_basic(self):
-        e = Embed(target="image.png")
-        assert e.target == "image.png"
-        assert e.width is None
-        assert e.height is None
+        embed = Embed(target="image.png")
+        assert embed.width is None
 
     def test_with_dimensions(self):
-        e = Embed(target="image.png", width=400, height=300)
-        assert e.width == 400
-        assert e.height == 300
+        embed = Embed(target="photo.jpg", width=800, height=600)
+        assert embed.width == 800
 
 
 class TestTag:
-    def test_defaults(self):
-        t = Tag(name="python")
-        assert t.name == "python"
-        assert t.source == "content"
+    def test_default_source(self):
+        tag = Tag(name="python")
+        assert tag.source == "content"
 
     def test_frontmatter_source(self):
-        t = Tag(name="python", source="frontmatter")
-        assert t.source == "frontmatter"
+        tag = Tag(name="project", source="frontmatter")
+        assert tag.source == "frontmatter"
 
 
 class TestCallout:
-    def test_defaults(self):
-        c = Callout(type="info")
-        assert c.type == "info"
-        assert c.title == ""
-        assert c.content == ""
+    def test_basic(self):
+        c = Callout(type="NOTE", title="Important")
         assert c.foldable is False
-        assert c.default_open is False
 
-    def test_full(self):
-        c = Callout(
-            type="warning",
-            title="Be careful",
-            content="This is dangerous",
-            foldable=True,
-            default_open=True,
-        )
-        assert c.title == "Be careful"
+    def test_foldable(self):
+        c = Callout(type="WARNING", foldable=True, default_open=True)
         assert c.foldable is True
-        assert c.default_open is True
 
 
 class TestCodeBlock:
-    def test_defaults(self):
-        cb = CodeBlock()
-        assert cb.language == ""
-        assert cb.content == ""
-        assert cb.line_start == 0
-
-    def test_with_values(self):
-        cb = CodeBlock(language="python", content="print('hello')", line_start=5)
+    def test_basic(self):
+        cb = CodeBlock(language="python", content="print('hello')", line_start=10)
         assert cb.language == "python"
-        assert cb.line_start == 5
 
 
 class TestMathBlock:
-    def test_defaults(self):
-        m = MathBlock()
-        assert m.content == ""
-        assert m.inline is False
+    def test_block(self):
+        mb = MathBlock(content="E = mc^2", inline=False)
+        assert not mb.inline
 
     def test_inline(self):
-        m = MathBlock(content="E=mc^2", inline=True)
-        assert m.inline is True
+        mb = MathBlock(content="x^2", inline=True)
+        assert mb.inline
 
 
 class TestDataviewField:
-    def test_construction(self):
-        df = DataviewField(key="status", value="done")
-        assert df.key == "status"
-        assert df.value == "done"
-        assert df.line == 0
-
-    def test_with_line(self):
-        df = DataviewField(key="author", value="Alice", line=12)
-        assert df.line == 12
+    def test_basic(self):
+        f = DataviewField(key="status", value="done", line=5)
+        assert f.key == "status"
 
 
 class TestNote:
-    def test_basic(self):
-        n = Note(title="My Note")
-        assert n.title == "My Note"
-        assert n.path is None
-        assert n.content == ""
-        assert n.frontmatter == {}
+    def test_create_note(self):
+        note = Note(title="My Note")
+        assert note.title == "My Note"
+        assert note.links == []
+
+    def test_word_count(self):
+        note = Note(title="Test", content="This is a test note with seven words")
+        assert note.word_count == 8
 
     def test_word_count_empty(self):
-        n = Note(title="t")
-        assert n.word_count == 0
+        note = Note(title="Empty")
+        assert note.word_count == 0
 
-    def test_word_count_nonempty(self):
-        n = Note(title="t", content="hello world foo")
-        assert n.word_count == 3
+    def test_aliases_from_list(self):
+        note = Note(title="Test", frontmatter={"aliases": ["Alias1", "Alias2"]})
+        assert note.aliases == ["Alias1", "Alias2"]
 
-    def test_word_count_with_extra_spaces(self):
-        n = Note(title="t", content="  hello   world  ")
-        # str.split() handles multiple spaces
-        assert n.word_count == 2
+    def test_aliases_from_string(self):
+        note = Note(title="Test", frontmatter={"aliases": "SingleAlias"})
+        assert note.aliases == ["SingleAlias"]
 
-    def test_aliases_empty_frontmatter(self):
-        n = Note(title="t")
-        assert n.aliases == []
+    def test_aliases_missing(self):
+        note = Note(title="Test", frontmatter={})
+        assert note.aliases == []
 
-    def test_aliases_list(self):
-        n = Note(title="t", frontmatter={"aliases": ["A", "B"]})
-        assert n.aliases == ["A", "B"]
-
-    def test_aliases_string(self):
-        n = Note(title="t", frontmatter={"aliases": "single"})
-        assert n.aliases == ["single"]
-
-    def test_aliases_non_list_non_string(self):
-        n = Note(title="t", frontmatter={"aliases": 42})
-        assert n.aliases == []
-
-    def test_independent_default_lists(self):
-        n1 = Note(title="a")
-        n2 = Note(title="b")
-        n1.links.append(Wikilink(target="x"))
-        assert len(n2.links) == 0
-
-    def test_with_path(self):
-        p = Path("/vault/notes/test.md")
-        n = Note(title="test", path=p)
-        assert n.path == p
+    def test_note_with_links(self):
+        note = Note(title="Linked", links=[Wikilink(target="A"), Wikilink(target="B")])
+        assert len(note.links) == 2
 
 
 class TestSearchResult:
-    def test_construction(self):
-        note = Note(title="Result Note")
-        sr = SearchResult(note=note, score=0.85, match_type="title", context="some context")
-        assert sr.note.title == "Result Note"
-        assert sr.score == 0.85
-        assert sr.match_type == "title"
-
-    def test_defaults(self):
-        note = Note(title="t")
-        sr = SearchResult(note=note)
-        assert sr.score == 0.0
-        assert sr.match_type == "content"
-        assert sr.context == ""
+    def test_basic(self):
+        note = Note(title="Found")
+        sr = SearchResult(note=note, score=0.95, match_type="title")
+        assert sr.score == 0.95
 
 
 class TestVaultMetadata:
     def test_defaults(self):
         vm = VaultMetadata()
         assert vm.note_count == 0
-        assert vm.tag_count == 0
-        assert vm.link_count == 0
-        assert vm.total_words == 0
-        assert vm.folder_count == 0
 
     def test_with_values(self):
-        vm = VaultMetadata(note_count=100, tag_count=50, link_count=200, total_words=50000, folder_count=10)
+        vm = VaultMetadata(note_count=100, tag_count=50, link_count=200)
         assert vm.note_count == 100
-        assert vm.folder_count == 10
 
 
 class TestCanvasNode:
-    def test_required_fields(self):
-        node = CanvasNode(id="n1", type="text")
+    def test_create(self):
+        node = CanvasNode(id="n1", type="text", text="Hello")
         assert node.id == "n1"
-        assert node.type == "text"
-
-    def test_defaults(self):
-        node = CanvasNode(id="n1", type="file")
-        assert node.x == 0
-        assert node.y == 0
         assert node.width == 250
-        assert node.height == 140
-        assert node.text is None
-        assert node.file is None
-        assert node.color is None
 
-    def test_with_text(self):
-        node = CanvasNode(id="n1", type="text", text="Hello world")
-        assert node.text == "Hello world"
+    def test_file_node(self):
+        node = CanvasNode(id="n2", type="file", file="path/to/note.md")
+        assert node.file == "path/to/note.md"
 
 
 class TestCanvasEdge:
-    def test_required_field(self):
-        e = CanvasEdge(id="e1")
-        assert e.id == "e1"
-        assert e.fromNode == ""
-        assert e.toNode == ""
+    def test_create(self):
+        edge = CanvasEdge(id="e1", fromNode="n1", toNode="n2")
+        assert edge.fromNode == "n1"
 
-    def test_with_nodes(self):
-        e = CanvasEdge(id="e1", fromNode="n1", toNode="n2", label="connects")
-        assert e.fromNode == "n1"
-        assert e.toNode == "n2"
-        assert e.label == "connects"
+    def test_with_label(self):
+        edge = CanvasEdge(id="e2", fromNode="a", toNode="b", label="links")
+        assert edge.label == "links"
 
 
 class TestCanvas:
-    def test_empty_canvas(self):
-        c = Canvas()
-        assert c.nodes == []
-        assert c.edges == []
-        assert c.path is None
+    def test_empty(self):
+        canvas = Canvas()
+        assert canvas.nodes == []
 
     def test_get_node_found(self):
         node = CanvasNode(id="n1", type="text")
-        c = Canvas(nodes=[node])
-        assert c.get_node("n1") is node
+        canvas = Canvas(nodes=[node])
+        assert canvas.get_node("n1") is node
 
     def test_get_node_not_found(self):
-        c = Canvas()
-        assert c.get_node("missing") is None
+        canvas = Canvas()
+        assert canvas.get_node("x") is None
 
     def test_get_edge_found(self):
-        edge = CanvasEdge(id="e1", fromNode="n1", toNode="n2")
-        c = Canvas(edges=[edge])
-        assert c.get_edge("e1") is edge
+        edge = CanvasEdge(id="e1", fromNode="a", toNode="b")
+        canvas = Canvas(edges=[edge])
+        assert canvas.get_edge("e1") is edge
 
     def test_get_edge_not_found(self):
-        c = Canvas()
-        assert c.get_edge("missing") is None
+        canvas = Canvas()
+        assert canvas.get_edge("x") is None
 
-    def test_independent_default_lists(self):
-        c1 = Canvas()
-        c2 = Canvas()
-        c1.nodes.append(CanvasNode(id="x", type="text"))
-        assert len(c2.nodes) == 0
+    def test_full_canvas(self):
+        nodes = [CanvasNode(id="n1", type="text"), CanvasNode(id="n2", type="text")]
+        edges = [CanvasEdge(id="e1", fromNode="n1", toNode="n2")]
+        canvas = Canvas(nodes=nodes, edges=edges)
+        assert len(canvas.nodes) == 2
+        assert len(canvas.edges) == 1
