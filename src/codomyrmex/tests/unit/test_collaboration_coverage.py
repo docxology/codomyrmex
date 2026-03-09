@@ -64,7 +64,9 @@ class TestEnums:
 
     def test_agent_role_members(self) -> None:
         roles = collab.AgentRole
-        assert hasattr(roles, "LEADER") or hasattr(roles, "WORKER") or len(list(roles)) > 0
+        assert (
+            hasattr(roles, "LEADER") or hasattr(roles, "WORKER") or len(list(roles)) > 0
+        )
 
     def test_agent_state_members(self) -> None:
         states = collab.AgentState
@@ -144,7 +146,11 @@ class TestManagerClasses:
     def test_agent_coordinator(self) -> None:
         coord = collab.AgentCoordinator()
         assert coord is not None
-        public = [m for m in dir(coord) if not m.startswith("_") and callable(getattr(coord, m))]
+        public = [
+            m
+            for m in dir(coord)
+            if not m.startswith("_") and callable(getattr(coord, m))
+        ]
         assert len(public) > 0
 
     def test_agent_pool(self) -> None:

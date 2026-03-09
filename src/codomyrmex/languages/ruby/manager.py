@@ -45,10 +45,7 @@ class RubyManager(BaseLanguageManager):
                 f.write(script_content)
 
             result = subprocess.run(
-                ["ruby", "script.rb"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["ruby", "script.rb"], cwd=dir_path, capture_output=True, text=True
             )
 
             self._cleanup([script_path])
@@ -59,11 +56,7 @@ class RubyManager(BaseLanguageManager):
             temp_path = temp.name
 
         try:
-            result = subprocess.run(
-                ["ruby", temp_path],
-                capture_output=True,
-                text=True
-            )
+            result = subprocess.run(["ruby", temp_path], capture_output=True, text=True)
             return result.stdout + result.stderr
         finally:
             os.remove(temp_path)

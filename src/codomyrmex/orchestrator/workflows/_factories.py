@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 def _make_workflow(name: str) -> Workflow:
     from .workflow import Workflow
+
     return Workflow(name=name)
 
 
@@ -21,10 +22,13 @@ def chain(*actions: Callable, names: list[str] | None = None) -> Workflow:
     prev_name = None
     for i, action in enumerate(actions):
         name = (
-            names[i] if names and i < len(names)
+            names[i]
+            if names and i < len(names)
             else getattr(action, "__name__", f"task_{i}")
         )
-        workflow.add_task(name=name, action=action, dependencies=[prev_name] if prev_name else None)
+        workflow.add_task(
+            name=name, action=action, dependencies=[prev_name] if prev_name else None
+        )
         prev_name = name
     return workflow
 
@@ -34,7 +38,8 @@ def parallel(*actions: Callable, names: list[str] | None = None) -> Workflow:
     workflow = _make_workflow("parallel")
     for i, action in enumerate(actions):
         name = (
-            names[i] if names and i < len(names)
+            names[i]
+            if names and i < len(names)
             else getattr(action, "__name__", f"task_{i}")
         )
         workflow.add_task(name=name, action=action)

@@ -166,7 +166,9 @@ class PipelineManager:
                 pipeline.status = PipelineStatus.SUCCESS
 
             logger.info(
-                "Pipeline %s completed with status: %s", pipeline_name, pipeline.status.value
+                "Pipeline %s completed with status: %s",
+                pipeline_name,
+                pipeline.status.value,
             )
 
         except Exception as e:

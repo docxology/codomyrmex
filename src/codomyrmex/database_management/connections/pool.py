@@ -27,7 +27,9 @@ class ConnectionPool(Generic[T]):
             result = conn.execute("SELECT * FROM users")
     """
 
-    def __init__(self, factory: ConnectionFactory[T], config: PoolConfig | None = None) -> None:
+    def __init__(
+        self, factory: ConnectionFactory[T], config: PoolConfig | None = None
+    ) -> None:
         self.factory = factory
         self.config = config or PoolConfig()
         self._pool: queue.Queue = queue.Queue()
@@ -129,8 +131,12 @@ class ConnectionPool(Generic[T]):
     @property
     def stats(self) -> ConnectionStats:
         with self._lock:
-            active = sum(1 for c in self._all_connections if c.state == ConnectionState.IN_USE)
-            idle = sum(1 for c in self._all_connections if c.state == ConnectionState.IDLE)
+            active = sum(
+                1 for c in self._all_connections if c.state == ConnectionState.IN_USE
+            )
+            idle = sum(
+                1 for c in self._all_connections if c.state == ConnectionState.IDLE
+            )
             return ConnectionStats(
                 total_connections=len(self._all_connections),
                 active_connections=active,
@@ -138,7 +144,8 @@ class ConnectionPool(Generic[T]):
                 waiting_requests=0,
                 total_checkouts=self._total_checkouts,
                 total_timeouts=self._total_timeouts,
-                avg_wait_time_ms=sum(self._wait_times[-100:]) / max(len(self._wait_times[-100:]), 1),
+                avg_wait_time_ms=sum(self._wait_times[-100:])
+                / max(len(self._wait_times[-100:]), 1),
             )
 
     def close(self) -> None:

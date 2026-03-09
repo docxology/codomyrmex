@@ -64,7 +64,6 @@ except ImportError as _exc:
 
     create_default_scorer = _not_available  # type: ignore
 
-
     analyze_quality = _not_available  # type: ignore
 
 # Metrics module (classification/regression evaluation)

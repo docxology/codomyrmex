@@ -70,7 +70,9 @@ class WorkflowDefinition:
         dependencies: list[str] | None = None,
         **kwargs: Any,
     ) -> str:
-        task = TaskDefinition(name=name, action=action, dependencies=dependencies or [], **kwargs)
+        task = TaskDefinition(
+            name=name, action=action, dependencies=dependencies or [], **kwargs
+        )
         self.tasks.append(task)
         return task.id
 

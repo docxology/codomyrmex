@@ -16,6 +16,7 @@ Example::
     if limiter.try_acquire():
         response = make_api_call()
 
+
     # Decorator-style usage
     @rate_limited(limiter)
     def call_provider():
@@ -137,8 +138,7 @@ class TokenBucketLimiter:
         """
         if tokens > self._config.burst_size:
             msg = (
-                f"Requested {tokens} tokens but burst_size is "
-                f"{self._config.burst_size}"
+                f"Requested {tokens} tokens but burst_size is {self._config.burst_size}"
             )
             raise ValueError(msg)
 
@@ -211,9 +211,9 @@ def rate_limited(limiter: TokenBucketLimiter) -> Callable[[F], F]:
 
         limiter = TokenBucketLimiter(RateLimiterConfig(max_requests_per_second=5))
 
+
         @rate_limited(limiter)
-        def call_api():
-            ...
+        def call_api(): ...
     """
 
     def decorator(fn: F) -> F:

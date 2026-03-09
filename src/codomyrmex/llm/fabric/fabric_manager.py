@@ -88,7 +88,9 @@ class FabricManager:
         self.results_history.append(result)
         return result
 
-    def _run_subprocess(self, cmd: list[str], input_text: str, pattern: str) -> dict[str, Any]:
+    def _run_subprocess(
+        self, cmd: list[str], input_text: str, pattern: str
+    ) -> dict[str, Any]:
         """Write input to temp file, run cmd, return result dict."""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as tmp:
             tmp.write(input_text)
@@ -113,7 +115,8 @@ class FabricManager:
         if result_data["success"]:
             self.logger.info(
                 "Fabric pattern '%s' executed successfully in %.2fs",
-                pattern, result_data["duration"],
+                pattern,
+                result_data["duration"],
             )
         else:
             self.logger.error(
@@ -126,7 +129,12 @@ class FabricManager:
     ) -> dict[str, Any]:
         """Run a Fabric pattern with given input."""
         if not self.fabric_available:
-            return {"success": False, "error": "Fabric not available", "output": "", "pattern": pattern}
+            return {
+                "success": False,
+                "error": "Fabric not available",
+                "output": "",
+                "pattern": pattern,
+            }
 
         cmd = [self.fabric_binary, "--pattern", pattern, *(additional_args or [])]
         try:

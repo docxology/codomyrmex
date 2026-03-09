@@ -384,7 +384,9 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
                 Key=dst_key,
                 CopySource={"Bucket": src_bucket, "Key": src_key},
             )
-            logger.info("Copied %s/%s -> %s/%s", src_bucket, src_key, dst_bucket, dst_key)
+            logger.info(
+                "Copied %s/%s -> %s/%s", src_bucket, src_key, dst_bucket, dst_key
+            )
             return True
         except Exception as e:
             logger.error("Failed to copy object: %s", e)

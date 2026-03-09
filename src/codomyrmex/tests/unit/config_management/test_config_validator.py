@@ -196,9 +196,7 @@ class TestConfigValidatorRequired:
 
     def test_some_required_missing(self):
         validator = ConfigValidator()
-        missing = validator.validate_required_fields(
-            {"a": 1}, required=["a", "b", "c"]
-        )
+        missing = validator.validate_required_fields({"a": 1}, required=["a", "b", "c"])
         assert "b" in missing
         assert "c" in missing
 
@@ -216,30 +214,22 @@ class TestConfigValidatorRequired:
 class TestConfigValidatorTypes:
     def test_validate_type_string(self):
         validator = ConfigValidator()
-        issues = validator.validate_types(
-            {"name": "hello"}, {"name": "str"}
-        )
+        issues = validator.validate_types({"name": "hello"}, {"name": "str"})
         assert len(issues) == 0
 
     def test_validate_type_integer(self):
         validator = ConfigValidator()
-        issues = validator.validate_types(
-            {"port": 8080}, {"port": "int"}
-        )
+        issues = validator.validate_types({"port": 8080}, {"port": "int"})
         assert len(issues) == 0
 
     def test_validate_type_mismatch(self):
         validator = ConfigValidator()
-        issues = validator.validate_types(
-            {"port": "not_int"}, {"port": "int"}
-        )
+        issues = validator.validate_types({"port": "not_int"}, {"port": "int"})
         assert len(issues) > 0
 
     def test_validate_type_boolean(self):
         validator = ConfigValidator()
-        issues = validator.validate_types(
-            {"debug": True}, {"debug": "bool"}
-        )
+        issues = validator.validate_types({"debug": True}, {"debug": "bool"})
         assert len(issues) == 0
 
 
@@ -251,16 +241,12 @@ class TestConfigValidatorTypes:
 class TestConfigValidatorConstraints:
     def test_validate_min_constraint(self):
         validator = ConfigValidator()
-        issues = validator.validate_values(
-            {"port": 0}, {"port": {"min": 1}}
-        )
+        issues = validator.validate_values({"port": 0}, {"port": {"min": 1}})
         assert len(issues) > 0
 
     def test_validate_max_constraint(self):
         validator = ConfigValidator()
-        issues = validator.validate_values(
-            {"port": 70000}, {"port": {"max": 65535}}
-        )
+        issues = validator.validate_values({"port": 70000}, {"port": {"max": 65535}})
         assert len(issues) > 0
 
     def test_validate_within_range(self):

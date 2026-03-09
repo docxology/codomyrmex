@@ -118,7 +118,9 @@ class TodoManager:
                 bucket.append(TodoItem.parse(stripped))
             except ValueError as e:
                 skipped_lines.append((line_num, stripped, str(e)))
-                logger.warning("Skipping malformed TODO entry on line %s: %s", line_num, e)
+                logger.warning(
+                    "Skipping malformed TODO entry on line %s: %s", line_num, e
+                )
                 continue
 
         if skipped_lines:

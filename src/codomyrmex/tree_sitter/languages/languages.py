@@ -29,7 +29,10 @@ class LanguageManager:
             return True
         except Exception as e:
             logger.error(
-                "Failed to load tree-sitter language %s from %s: %s", lang_name, library_path, e
+                "Failed to load tree-sitter language %s from %s: %s",
+                lang_name,
+                library_path,
+                e,
             )
             return False
 

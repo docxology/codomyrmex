@@ -11,12 +11,14 @@ logger = get_logger(__name__)
 
 try:
     import psycopg2
+
     POSTGRESQL_AVAILABLE = True
 except ImportError:
     POSTGRESQL_AVAILABLE = False
 
 try:
     import pymysql
+
     MYSQL_AVAILABLE = True
 except ImportError:
     MYSQL_AVAILABLE = False
@@ -53,10 +55,13 @@ class DatabaseConnector:
         match = re.match(pattern, url)
         if match:
             return {
-                "user": match.group(1) or ("postgres" if self._db_type == "postgresql" else "root"),
+                "user": match.group(1)
+                or ("postgres" if self._db_type == "postgresql" else "root"),
                 "password": match.group(2) or "",
                 "host": match.group(3),
-                "port": int(match.group(4)) if match.group(4) else (5432 if self._db_type == "postgresql" else 3306),
+                "port": int(match.group(4))
+                if match.group(4)
+                else (5432 if self._db_type == "postgresql" else 3306),
                 "database": match.group(5),
             }
         raise CodomyrmexError(f"Invalid database URL: {url}")
@@ -70,18 +75,28 @@ class DatabaseConnector:
             logger.info("Connected to SQLite database: %s", params["database"])
         elif self._db_type == "postgresql":
             if not POSTGRESQL_AVAILABLE:
-                raise CodomyrmexError("PostgreSQL driver not available. Install with: uv pip install psycopg2-binary")
+                raise CodomyrmexError(
+                    "PostgreSQL driver not available. Install with: uv pip install psycopg2-binary"
+                )
             self._connection = psycopg2.connect(
-                host=params["host"], port=params["port"], database=params["database"],
-                user=params["user"], password=params["password"],
+                host=params["host"],
+                port=params["port"],
+                database=params["database"],
+                user=params["user"],
+                password=params["password"],
             )
             logger.info("Connected to PostgreSQL database: %s", params["database"])
         elif self._db_type == "mysql":
             if not MYSQL_AVAILABLE:
-                raise CodomyrmexError("MySQL driver not available. Install with: uv pip install pymysql")
+                raise CodomyrmexError(
+                    "MySQL driver not available. Install with: uv pip install pymysql"
+                )
             self._connection = pymysql.connect(
-                host=params["host"], port=params["port"], database=params["database"],
-                user=params["user"], password=params["password"],
+                host=params["host"],
+                port=params["port"],
+                database=params["database"],
+                user=params["user"],
+                password=params["password"],
             )
             logger.info("Connected to MySQL database: %s", params["database"])
 

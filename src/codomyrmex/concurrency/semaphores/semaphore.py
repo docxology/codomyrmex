@@ -192,7 +192,9 @@ class AsyncLocalSemaphore(BaseSemaphore):
         Example:
             >>> sem.release()
         """
-        with contextlib.suppress(ValueError):  # too many releases for internal semaphore
+        with contextlib.suppress(
+            ValueError
+        ):  # too many releases for internal semaphore
             self._semaphore.release()
 
         with self._sync_lock:

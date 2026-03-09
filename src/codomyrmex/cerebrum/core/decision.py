@@ -57,7 +57,9 @@ class DecisionModule:
             )
 
         self.logger.info(
-            "Making decision among %s options with %s criteria", len(options), len(criteria)
+            "Making decision among %s options with %s criteria",
+            len(options),
+            len(criteria),
         )
 
         scores = []

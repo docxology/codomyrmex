@@ -75,7 +75,8 @@ class TestNetworkFailuresAndRetries:
         assert not response.is_success()
         assert response.error is not None
         assert (
-            "not found" in (response.error or "").lower() or "failed" in (response.error or "").lower()
+            "not found" in (response.error or "").lower()
+            or "failed" in (response.error or "").lower()
         )
 
     def test_partial_network_failure(self):
@@ -335,7 +336,10 @@ class TestEdgeCases:
 
         # Validation should catch empty prompt
         assert not response.is_success()
-        assert "empty" in (response.error or "").lower() or "prompt" in (response.error or "").lower()
+        assert (
+            "empty" in (response.error or "").lower()
+            or "prompt" in (response.error or "").lower()
+        )
 
     def test_very_long_prompt(self):
         """Test handling of very long prompts."""

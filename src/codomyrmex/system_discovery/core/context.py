@@ -55,6 +55,7 @@ def get_system_context(root_dir: str = ".") -> dict[str, Any]:
 
         # Add specific capabilities if tools are found on path
         import shutil
+
         if shutil.which("docker"):
             context["capabilities"].append("docker")
 

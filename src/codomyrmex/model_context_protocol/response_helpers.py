@@ -10,7 +10,11 @@ All MCP tool responses follow a consistent schema::
 
 Usage::
 
-    from codomyrmex.model_context_protocol.response_helpers import ok_response, error_response
+    from codomyrmex.model_context_protocol.response_helpers import (
+        ok_response,
+        error_response,
+    )
+
 
     @mcp_tool(category="my_module")
     def my_tool(arg: str) -> dict:
@@ -26,7 +30,9 @@ from __future__ import annotations
 from typing import Any
 
 
-def ok_response(data: dict[str, Any] | None = None, message: str = "OK") -> dict[str, Any]:
+def ok_response(
+    data: dict[str, Any] | None = None, message: str = "OK"
+) -> dict[str, Any]:
     """Return a standardized MCP success response.
 
     Args:

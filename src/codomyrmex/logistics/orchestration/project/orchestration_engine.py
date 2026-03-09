@@ -538,7 +538,11 @@ class OrchestrationEngine:
         try:
             # Create project
             self.project_manager.create_project(
-                name=project_name, type=__import__("codomyrmex.logistics.orchestration.project.models").logistics.orchestration.project.models.ProjectType.CUSTOM, **kwargs
+                name=project_name,
+                type=__import__(
+                    "codomyrmex.logistics.orchestration.project.models"
+                ).logistics.orchestration.project.models.ProjectType.CUSTOM,
+                **kwargs,
             )
 
             # Execute workflow for project

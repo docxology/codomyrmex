@@ -223,7 +223,10 @@ class ClaudeTaskMaster:
 
                 logger.warning(
                     "Retryable error, attempt %s/%s, retrying in %.1fs: %s",
-                    attempt + 1, self.max_retries + 1, delay, e,
+                    attempt + 1,
+                    self.max_retries + 1,
+                    delay,
+                    e,
                 )
                 time.sleep(delay)
 
@@ -281,7 +284,11 @@ class ClaudeTaskMaster:
 
             logger.info(
                 "Executed task %s using %s in %.2fs (%s tokens, $%.6f)",
-                task_id, self.model, execution_time, tokens_used, cost,
+                task_id,
+                self.model,
+                execution_time,
+                tokens_used,
+                cost,
             )
 
             return {
@@ -425,7 +432,9 @@ class ClaudeTaskMaster:
 
             logger.info(
                 "Decomposed task into %s subtasks in %.2fs ($%.6f)",
-                len(subtasks), execution_time, cost,
+                len(subtasks),
+                execution_time,
+                cost,
             )
 
             return {
@@ -497,7 +506,10 @@ class ClaudeTaskMaster:
             parsed = self._parse_analysis(analysis)
 
             logger.info(
-                "Analyzed task in %.2fs (%s tokens, $%.6f)", execution_time, tokens_used, cost
+                "Analyzed task in %.2fs (%s tokens, $%.6f)",
+                execution_time,
+                tokens_used,
+                cost,
             )
 
             return {
@@ -576,7 +588,10 @@ class ClaudeTaskMaster:
             self._total_cost += cost
 
             logger.info(
-                "Created workflow plan in %.2fs (%s tokens, $%.6f)", execution_time, tokens_used, cost
+                "Created workflow plan in %.2fs (%s tokens, $%.6f)",
+                execution_time,
+                tokens_used,
+                cost,
             )
 
             return {

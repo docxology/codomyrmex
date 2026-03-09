@@ -46,7 +46,7 @@ class CSharpManager(BaseLanguageManager):
                 ["dotnet", "new", "console", "--force"],
                 cwd=dir_path,
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
+                stderr=subprocess.DEVNULL,
             )
 
             script_path = os.path.join(dir_path, "Program.cs")
@@ -54,10 +54,7 @@ class CSharpManager(BaseLanguageManager):
                 f.write(script_content)
 
             result = subprocess.run(
-                ["dotnet", "run"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["dotnet", "run"], cwd=dir_path, capture_output=True, text=True
             )
 
             return result.stdout + result.stderr

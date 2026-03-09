@@ -101,8 +101,12 @@ class Jinja2LikeEngine(TemplateEngine):
             filter_expr = filter_expr.strip()
             if "(" in filter_expr:
                 fname = filter_expr[: filter_expr.index("(")]
-                args_str = filter_expr[filter_expr.index("(") + 1 : filter_expr.rindex(")")]
-                args = [a.strip().strip("\"'") for a in args_str.split(",") if a.strip()]
+                args_str = filter_expr[
+                    filter_expr.index("(") + 1 : filter_expr.rindex(")")
+                ]
+                args = [
+                    a.strip().strip("\"'") for a in args_str.split(",") if a.strip()
+                ]
             else:
                 fname = filter_expr
                 args = []
@@ -190,10 +194,14 @@ class Jinja2LikeEngine(TemplateEngine):
             return not self._evaluate_condition(condition[4:], context)
 
         if " and " in condition:
-            return all(self._evaluate_condition(p, context) for p in condition.split(" and "))
+            return all(
+                self._evaluate_condition(p, context) for p in condition.split(" and ")
+            )
 
         if " or " in condition:
-            return any(self._evaluate_condition(p, context) for p in condition.split(" or "))
+            return any(
+                self._evaluate_condition(p, context) for p in condition.split(" or ")
+            )
 
         return bool(self._parse_expression(condition, context))
 

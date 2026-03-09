@@ -139,7 +139,9 @@ class PyscnAnalyzer:
             return []
 
         except (json.JSONDecodeError, FileNotFoundError, Exception) as e:
-            logger.error("Error running pyscn complexity analysis on %s: %s", file_path, e)
+            logger.error(
+                "Error running pyscn complexity analysis on %s: %s", file_path, e
+            )
             return []
 
     @monitor_performance("pyscn_detect_dead_code")
@@ -185,7 +187,9 @@ class PyscnAnalyzer:
             return []
 
         except (json.JSONDecodeError, FileNotFoundError, Exception) as e:
-            logger.error("Error running pyscn dead code analysis on %s: %s", file_path, e)
+            logger.error(
+                "Error running pyscn dead code analysis on %s: %s", file_path, e
+            )
             return []
 
     @monitor_performance("pyscn_find_clones")
@@ -307,7 +311,9 @@ class PyscnAnalyzer:
             return []
 
         except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
-            logger.error("Error running pyscn coupling analysis on %s: %s", file_path, e)
+            logger.error(
+                "Error running pyscn coupling analysis on %s: %s", file_path, e
+            )
             return []
 
     @monitor_performance("pyscn_generate_report")

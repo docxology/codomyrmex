@@ -54,7 +54,11 @@ class TestGitBranchDiagram:
         ]
         result = gen.create_git_branch_diagram(branches, commits)
         assert isinstance(result, str)
-        assert "gitGraph" in result or "gitgraph" in result.lower() or "graph" in result.lower()
+        assert (
+            "gitGraph" in result
+            or "gitgraph" in result.lower()
+            or "graph" in result.lower()
+        )
 
     def test_empty_branches(self, gen):
         result = gen.create_git_branch_diagram([], [])
@@ -170,7 +174,15 @@ class TestCommitTimelineDiagram:
 class TestFileIcons:
     @pytest.mark.parametrize(
         "filename",
-        ["main.py", "index.js", "style.css", "data.json", "README.md", "image.png", "unknown.xyz"],
+        [
+            "main.py",
+            "index.js",
+            "style.css",
+            "data.json",
+            "README.md",
+            "image.png",
+            "unknown.xyz",
+        ],
     )
     def test_get_file_icon_returns_string(self, gen, filename):
         icon = gen._get_file_icon(filename)

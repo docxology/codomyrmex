@@ -233,7 +233,9 @@ class TestHookError:
 
     def test_raise_and_catch(self):
         with pytest.raises(HookError):
-            raise HookError("post hook crashed", hook_name="on_shutdown", hook_type="post")
+            raise HookError(
+                "post hook crashed", hook_name="on_shutdown", hook_type="post"
+            )
 
 
 # ── PluginValidationError ─────────────────────────────────────────────
@@ -402,7 +404,9 @@ class TestInheritanceChain:
             PluginStateError,
             PluginConflictError,
         ]:
-            assert issubclass(cls, PluginError), f"{cls.__name__} must subclass PluginError"
+            assert issubclass(cls, PluginError), (
+                f"{cls.__name__} must subclass PluginError"
+            )
 
     def test_all_inherit_from_codomyrmex_error(self):
         for cls in [

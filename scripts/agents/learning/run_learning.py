@@ -13,7 +13,9 @@ from pathlib import Path
 try:
     import codomyrmex
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
 
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -37,6 +39,7 @@ def main() -> int:
     print_info(f"  Fields: {[f for f in dir(Skill) if not f.startswith('_')][:10]}")
     print_success("Learning probe complete.")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -129,7 +129,9 @@ class SupervisorAgent(CollaborativeAgent):
         worker = self._select_worker(task)
         self._delegated_tasks[task.id] = worker.agent_id
 
-        logger.info("Supervisor %s delegating '%s' to %s", self.name, task.name, worker.name)
+        logger.info(
+            "Supervisor %s delegating '%s' to %s", self.name, task.name, worker.name
+        )
 
         for attempt in range(self._max_retries):
             try:

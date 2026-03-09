@@ -7,7 +7,6 @@ plus validation.schemas (Result, ResultStatus) and validation.pai
 Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 """
 
-
 import pytest
 
 from codomyrmex.validation.mcp_tools import (
@@ -183,9 +182,7 @@ class TestValidateConfigMCPTool:
         assert "database_url" in result["errors"][0]["message"]
 
     def test_multiple_missing_keys(self):
-        result = validate_config(
-            config={}, required_keys=["a", "b", "c"]
-        )
+        result = validate_config(config={}, required_keys=["a", "b", "c"])
         assert result["is_valid"] is False
         assert len(result["missing_keys"]) == 3
 

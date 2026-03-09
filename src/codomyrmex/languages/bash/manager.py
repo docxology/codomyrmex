@@ -51,10 +51,7 @@ class BashManager(BaseLanguageManager):
             os.chmod(script_path, 0o755)
 
             result = subprocess.run(
-                ["bash", "script.sh"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["bash", "script.sh"], cwd=dir_path, capture_output=True, text=True
             )
             self._cleanup([script_path])
             return result.stdout + result.stderr
@@ -66,11 +63,7 @@ class BashManager(BaseLanguageManager):
         os.chmod(temp_path, 0o755)
 
         try:
-            result = subprocess.run(
-                ["bash", temp_path],
-                capture_output=True,
-                text=True
-            )
+            result = subprocess.run(["bash", temp_path], capture_output=True, text=True)
             return result.stdout + result.stderr
         finally:
             os.remove(temp_path)

@@ -50,7 +50,11 @@ def create_pull_request(
     pr_data = {"title": title, "head": head_branch, "base": base_branch, "body": body}
 
     logger.info(
-        "Creating PR in %s/%s: %s -> %s", repo_owner, repo_name, head_branch, base_branch
+        "Creating PR in %s/%s: %s -> %s",
+        repo_owner,
+        repo_name,
+        head_branch,
+        base_branch,
     )
 
     try:
@@ -343,7 +347,11 @@ async def async_create_pull_request(
     pr_data = {"title": title, "head": head_branch, "base": base_branch, "body": body}
 
     logger.info(
-        "[ASYNC] Creating PR in %s/%s: %s -> %s", repo_owner, repo_name, head_branch, base_branch
+        "[ASYNC] Creating PR in %s/%s: %s -> %s",
+        repo_owner,
+        repo_name,
+        head_branch,
+        base_branch,
     )
 
     status, data = await _async_request(
@@ -356,7 +364,9 @@ async def async_create_pull_request(
     if status == 201:
         pr_info = data
         logger.info(
-            "[ASYNC] Successfully created PR #%s: %s", pr_info["number"], pr_info["title"]
+            "[ASYNC] Successfully created PR #%s: %s",
+            pr_info["number"],
+            pr_info["title"],
         )
 
         return {

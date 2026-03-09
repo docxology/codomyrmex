@@ -106,7 +106,9 @@ class VoiceActivityDetector:
             List of :class:`SpeechSegment` objects.
         """
         window = self._config.window_size_samples * 2  # 2 bytes per int16 sample
-        ms_per_window = (self._config.window_size_samples / self._config.sample_rate) * 1000
+        ms_per_window = (
+            self._config.window_size_samples / self._config.sample_rate
+        ) * 1000
 
         segments: list[SpeechSegment] = []
         in_speech = False
@@ -129,7 +131,9 @@ class VoiceActivityDetector:
             elif not is_voice and in_speech:
                 if silence_start is None:
                     silence_start = current_ms
-                elif (current_ms - silence_start) >= self._config.min_silence_duration_ms:
+                elif (
+                    current_ms - silence_start
+                ) >= self._config.min_silence_duration_ms:
                     duration = silence_start - speech_start
                     if duration >= self._config.min_speech_duration_ms:
                         segments.append(
@@ -211,7 +215,7 @@ class VoiceActivityDetector:
         if n_samples == 0:
             return 0.0
 
-        samples = struct.unpack(f"<{n_samples}h", chunk[:n_samples * 2])
+        samples = struct.unpack(f"<{n_samples}h", chunk[: n_samples * 2])
         sum_sq = sum(s * s for s in samples)
         rms = (sum_sq / n_samples) ** 0.5
         # Normalize to 0–1 range (int16 max = 32767)

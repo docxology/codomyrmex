@@ -61,10 +61,7 @@ class GoManager(BaseLanguageManager):
                 f.write(script_content)
 
             result = subprocess.run(
-                ["go", "run", "main.go"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["go", "run", "main.go"], cwd=dir_path, capture_output=True, text=True
             )
 
             self._cleanup([script_path])

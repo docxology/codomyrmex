@@ -48,7 +48,11 @@ class RefinedUtilities:
                             random.uniform(0, 1) if jitter else 0
                         )
                         logger.warning(
-                            "Retry %s/%s after %.2fs due to: %s", i + 1, retries, delay, e
+                            "Retry %s/%s after %.2fs due to: %s",
+                            i + 1,
+                            retries,
+                            delay,
+                            e,
                         )
                         time.sleep(delay)
                 return None

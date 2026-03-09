@@ -54,7 +54,9 @@ class ScheduleManager:
             "args": args,
             "kwargs": kwargs,
         }
-        logger.info("Scheduled cron task %s with expression %s", task_id, cron_expression)
+        logger.info(
+            "Scheduled cron task %s with expression %s", task_id, cron_expression
+        )
         return task_id
 
     def schedule_recurring(

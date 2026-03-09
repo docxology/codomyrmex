@@ -149,7 +149,9 @@ class DockerManager:
             return result
 
         except Exception as e:
-            logger.error("Failed to build image %s: %s", config.get_full_image_name(), e)
+            logger.error(
+                "Failed to build image %s: %s", config.get_full_image_name(), e
+            )
             return {"success": False, "error": str(e)}
 
     def push_image(
@@ -254,7 +256,9 @@ class DockerManager:
             }
 
         except Exception as e:
-            logger.error("Failed to run container %s: %s", config.get_full_image_name(), e)
+            logger.error(
+                "Failed to run container %s: %s", config.get_full_image_name(), e
+            )
             return {"success": False, "error": str(e)}
 
     def list_containers(self, show_all: bool = False) -> list[dict[str, Any]]:

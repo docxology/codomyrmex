@@ -66,14 +66,26 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
         "📊 Documentation Coverage Assessment Report",
         "=" * 50,
     ]
-    coverage_report.extend(_assess_file_group(
-        [project_root / "README.md", docs_path / "README.md"],
-        project_root, assess_readme_quality, "\n📖 README Coverage:",
-    ))
-    coverage_report.extend(_assess_file_group(
-        [project_root / "AGENTS.md", project_root / "src" / "AGENTS.md", project_root / "docs" / "AGENTS.md"],
-        project_root, assess_agents_quality, "\n🤖 AGENTS.md Coverage:",
-    ))
+    coverage_report.extend(
+        _assess_file_group(
+            [project_root / "README.md", docs_path / "README.md"],
+            project_root,
+            assess_readme_quality,
+            "\n📖 README Coverage:",
+        )
+    )
+    coverage_report.extend(
+        _assess_file_group(
+            [
+                project_root / "AGENTS.md",
+                project_root / "src" / "AGENTS.md",
+                project_root / "docs" / "AGENTS.md",
+            ],
+            project_root,
+            assess_agents_quality,
+            "\n🤖 AGENTS.md Coverage:",
+        )
+    )
     coverage_report.append("\n📚 Technical Documentation Coverage:")
     coverage_report.extend(_assess_tech_docs(docs_path, project_root))
 
@@ -81,7 +93,11 @@ def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     coverage_report.append(f"🏆 Overall Coverage Score: {overall_score:.1f}/100")
 
     (docs_path / "coverage_assessment.md").write_text("\n".join(coverage_report))
-    logger.info("Documentation coverage assessed: %.1f/100", overall_score, extra={"description": description})
+    logger.info(
+        "Documentation coverage assessed: %.1f/100",
+        overall_score,
+        extra={"description": description},
+    )
     return f"Documentation coverage assessed: {overall_score:.1f}/100"
 
 
@@ -165,8 +181,6 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
     """Add methods for documentation consistency and quality assessment."""
     from pathlib import Path
 
-
-
     # Define the documentation module path
     project_root = Path(__file__).parent.parent.parent.parent.parent
     docs_module_path = project_root / "src" / "codomyrmex" / "documentation"
@@ -246,7 +260,8 @@ def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
         files_created.append("__init__.py (updated)")
 
     logger.info(
-        "Documentation quality methods added: %s files", len(files_created),
+        "Documentation quality methods added: %s files",
+        len(files_created),
         extra={"description": description},
     )
     return f"Documentation quality methods added: {len(files_created)} files"

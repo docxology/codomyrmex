@@ -86,13 +86,17 @@ class TestMediaContent:
 
 class TestImageContent:
     def test_construction(self):
-        img = ImageContent(media_type=MediaType.IMAGE, data=b"img_data", width=800, height=600)
+        img = ImageContent(
+            media_type=MediaType.IMAGE, data=b"img_data", width=800, height=600
+        )
         assert img.media_type == MediaType.IMAGE  # set by __post_init__
         assert img.width == 800
         assert img.height == 600
 
     def test_dimensions(self):
-        img = ImageContent(media_type=MediaType.IMAGE, data=b"x", width=1920, height=1080)
+        img = ImageContent(
+            media_type=MediaType.IMAGE, data=b"x", width=1920, height=1080
+        )
         assert img.dimensions == (1920, 1080)
 
     def test_aspect_ratio(self):
@@ -110,7 +114,9 @@ class TestImageContent:
 
 class TestAudioContent:
     def test_construction(self):
-        audio = AudioContent(media_type=MediaType.AUDIO, data=b"audio_data", duration_seconds=3.5)
+        audio = AudioContent(
+            media_type=MediaType.AUDIO, data=b"audio_data", duration_seconds=3.5
+        )
         assert audio.media_type == MediaType.AUDIO  # set by __post_init__
         assert audio.duration_seconds == 3.5
         assert audio.sample_rate == 44100
@@ -144,7 +150,9 @@ class TestMultimodalMessage:
 
     def test_add_image_from_image_content(self):
         msg = MultimodalMessage(id="m1")
-        img = ImageContent(media_type=MediaType.IMAGE, data=b"img", width=100, height=100)
+        img = ImageContent(
+            media_type=MediaType.IMAGE, data=b"img", width=100, height=100
+        )
         msg.add_image(img)
         assert len(msg.contents) == 1
         assert msg.contents[0] is img
@@ -157,7 +165,9 @@ class TestMultimodalMessage:
 
     def test_add_audio_from_audio_content(self):
         msg = MultimodalMessage(id="m1")
-        audio = AudioContent(media_type=MediaType.AUDIO, data=b"audio", duration_seconds=1.0)
+        audio = AudioContent(
+            media_type=MediaType.AUDIO, data=b"audio", duration_seconds=1.0
+        )
         msg.add_audio(audio)
         assert msg.contents[0] is audio
 
@@ -198,7 +208,9 @@ class TestMultimodalMessage:
     def test_to_dict_with_image(self):
         msg = MultimodalMessage(id="m1")
         msg.add_text("describe this")
-        msg.add_image(ImageContent(media_type=MediaType.IMAGE, data=b"img", format="png"))
+        msg.add_image(
+            ImageContent(media_type=MediaType.IMAGE, data=b"img", format="png")
+        )
         d = msg.to_dict()
         content = d["content"]
         assert isinstance(content, list)

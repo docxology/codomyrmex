@@ -381,7 +381,9 @@ class TestBaseAgentIntegration:
         resp = client_no_key.execute(req)
         assert isinstance(resp, AgentResponse)
         assert resp.error is not None
-        assert "not initialized" in (resp.error or "").lower() or "Gemini" in (resp.error or "")
+        assert "not initialized" in (resp.error or "").lower() or "Gemini" in (
+            resp.error or ""
+        )
 
     def test_execute_empty_prompt_raises(self, client_no_key):
         """BaseAgent._validate_request rejects empty prompt."""

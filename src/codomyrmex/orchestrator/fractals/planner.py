@@ -136,7 +136,7 @@ def plan(task: TaskNode, max_depth: int = 5) -> TaskNode:
             id=f"{task.id}.{i + 1}",
             description=desc,
             depth=task.depth + 1,
-            lineage=child_lineage
+            lineage=child_lineage,
         )
         for i, desc in enumerate(subtask_descriptions)
     ]

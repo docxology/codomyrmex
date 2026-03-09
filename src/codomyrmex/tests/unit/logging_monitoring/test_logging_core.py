@@ -305,8 +305,7 @@ class TestStructuredFormatter:
     def test_format_batch_produces_newline_separated(self):
         formatter = StructuredFormatter()
         entries = [
-            StructuredLogEntry(level=LogLevel.INFO, message=f"msg{i}")
-            for i in range(3)
+            StructuredLogEntry(level=LogLevel.INFO, message=f"msg{i}") for i in range(3)
         ]
         result = formatter.format_batch(entries)
         lines = result.strip().split("\n")

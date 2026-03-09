@@ -113,9 +113,7 @@ class TestAuditEvent:
 
     def test_creation(self):
         now = time.time()
-        event = AuditEvent(
-            provider="myprov", event_type="rotate", rotation_id="abc123"
-        )
+        event = AuditEvent(provider="myprov", event_type="rotate", rotation_id="abc123")
         assert event.provider == "myprov"
         assert event.event_type == "rotate"
         assert event.rotation_id == "abc123"

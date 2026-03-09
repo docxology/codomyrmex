@@ -56,7 +56,12 @@ class TestVLMResponse:
         assert r.metadata == {}
 
     def test_full_construction(self):
-        r = VLMResponse(text="cat detected", model="llava", confidence=0.92, metadata={"source": "test"})
+        r = VLMResponse(
+            text="cat detected",
+            model="llava",
+            confidence=0.92,
+            metadata={"source": "test"},
+        )
         assert r.text == "cat detected"
         assert r.model == "llava"
         assert r.confidence == 0.92

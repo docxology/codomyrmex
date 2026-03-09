@@ -90,9 +90,7 @@ class TestTokenBucketLimiter:
         assert limiter.wait(timeout=0.05) is False
 
     def test_wait_raises_on_excess_tokens(self) -> None:
-        limiter = TokenBucketLimiter(
-            RateLimiterConfig(burst_size=3)
-        )
+        limiter = TokenBucketLimiter(RateLimiterConfig(burst_size=3))
         with pytest.raises(ValueError, match="burst_size"):
             limiter.wait(tokens=5)
 

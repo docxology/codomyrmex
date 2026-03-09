@@ -49,10 +49,7 @@ class PhpManager(BaseLanguageManager):
                 f.write(script_content)
 
             result = subprocess.run(
-                ["php", "script.php"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["php", "script.php"], cwd=dir_path, capture_output=True, text=True
             )
 
             self._cleanup([script_path])
@@ -63,11 +60,7 @@ class PhpManager(BaseLanguageManager):
             temp_path = temp.name
 
         try:
-            result = subprocess.run(
-                ["php", temp_path],
-                capture_output=True,
-                text=True
-            )
+            result = subprocess.run(["php", temp_path], capture_output=True, text=True)
             return result.stdout + result.stderr
         finally:
             os.remove(temp_path)

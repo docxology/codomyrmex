@@ -154,9 +154,7 @@ class CredentialRotator:
 
     Example::
 
-        rotator = CredentialRotator(
-            policy=RotationPolicy(ttl_seconds=1800)
-        )
+        rotator = CredentialRotator(policy=RotationPolicy(ttl_seconds=1800))
         rotator.register_provider("aws", fetch_aws_key)
         cred = rotator.get_credential("aws")
     """
@@ -274,9 +272,7 @@ class CredentialRotator:
     # Internals
     # ------------------------------------------------------------------
 
-    def _needs_rotation(
-        self, entry: CredentialEntry, policy: RotationPolicy
-    ) -> bool:
+    def _needs_rotation(self, entry: CredentialEntry, policy: RotationPolicy) -> bool:
         """Check whether *entry* should be rotated under *policy*."""
         now = time.time()
 
@@ -301,9 +297,7 @@ class CredentialRotator:
 
         return False
 
-    def _rotate_locked(
-        self, provider: str, policy: RotationPolicy
-    ) -> CredentialEntry:
+    def _rotate_locked(self, provider: str, policy: RotationPolicy) -> CredentialEntry:
         """Fetch a new credential and store it (must be called under lock)."""
         fetcher = self._fetchers[provider]
         rotation_id = uuid.uuid4().hex[:12]

@@ -1,4 +1,3 @@
-
 from codomyrmex.languages.bash.manager import BashManager
 
 

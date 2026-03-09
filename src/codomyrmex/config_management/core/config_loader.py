@@ -82,11 +82,7 @@ def deep_merge(base: dict[str, Any], extension: dict[str, Any]) -> dict[str, Any
         The merged dictionary (modified in-place if possible, but returns it).
     """
     for key, value in extension.items():
-        if (
-            key in base
-            and isinstance(base[key], dict)
-            and isinstance(value, dict)
-        ):
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
             deep_merge(base[key], value)
         else:
             base[key] = value
@@ -268,7 +264,9 @@ class ConfigurationManager:
 
             self.config_dir = tempfile.mkdtemp(prefix="codomyrmex_config_")
             logger.warning(
-                "Could not create config directory %s, using temporary location: %s", config_dir, self.config_dir
+                "Could not create config directory %s, using temporary location: %s",
+                config_dir,
+                self.config_dir,
             )
 
     def load_configuration(
@@ -716,7 +714,10 @@ class ConfigurationManager:
                     self.configurations[backup_name] = backup_config
 
                 logger.info(
-                    "Successfully migrated %s from %s to %s", name, current_version, target_version
+                    "Successfully migrated %s from %s to %s",
+                    name,
+                    current_version,
+                    target_version,
                 )
                 return True
             logger.error("Migration failed for %s: %s", name, migration_result.errors)
@@ -849,9 +850,7 @@ def load_configuration(
         Configuration: Loaded configuration
     """
     manager = ConfigurationManager()
-    return manager.load_configuration(
-        name, sources, schema_path, defaults=defaults
-    )
+    return manager.load_configuration(name, sources, schema_path, defaults=defaults)
 
 
 def validate_configuration(config: Configuration) -> list[str]:

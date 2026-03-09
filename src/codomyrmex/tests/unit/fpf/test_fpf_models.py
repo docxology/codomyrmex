@@ -96,7 +96,9 @@ class TestPattern:
         assert p.cluster == "C1"
 
     def test_with_sections(self):
-        p = self._make_pattern(sections={"Problem": "No ordering.", "Solution": "Use layers."})
+        p = self._make_pattern(
+            sections={"Problem": "No ordering.", "Solution": "Use layers."}
+        )
         assert p.sections["Problem"] == "No ordering."
 
 
@@ -163,7 +165,9 @@ class TestRelationship:
 
 class TestFPFSpec:
     def _make_pattern(self, pid: str) -> Pattern:
-        return Pattern(id=pid, title=f"Pattern {pid}", status=PatternStatus.STABLE, content="c")
+        return Pattern(
+            id=pid, title=f"Pattern {pid}", status=PatternStatus.STABLE, content="c"
+        )
 
     def _make_concept(self, name: str, pid: str) -> Concept:
         return Concept(name=name, definition="d", pattern_id=pid, type=ConceptType.TERM)
@@ -239,8 +243,12 @@ class TestFPFSpec:
 
 
 class TestFPFIndex:
-    def _make_pattern(self, pid: str, title: str = "Test", content: str = "content") -> Pattern:
-        return Pattern(id=pid, title=title, status=PatternStatus.STABLE, content=content)
+    def _make_pattern(
+        self, pid: str, title: str = "Test", content: str = "content"
+    ) -> Pattern:
+        return Pattern(
+            id=pid, title=title, status=PatternStatus.STABLE, content=content
+        )
 
     def test_empty_index(self):
         idx = FPFIndex()
@@ -267,14 +275,18 @@ class TestFPFIndex:
         assert any(r.id == "A.2" for r in results)
 
     def test_search_patterns_by_content(self):
-        p = self._make_pattern("A.3", content="This pattern describes dependency inversion.")
+        p = self._make_pattern(
+            "A.3", content="This pattern describes dependency inversion."
+        )
         idx = FPFIndex(pattern_index={"A.3": p})
         results = idx.search_patterns("dependency inversion")
         assert any(r.id == "A.3" for r in results)
 
     def test_search_with_status_filter(self):
         p_stable = self._make_pattern("A.1", title="query")
-        p_draft = Pattern(id="A.2", title="query pattern", status=PatternStatus.DRAFT, content="c")
+        p_draft = Pattern(
+            id="A.2", title="query pattern", status=PatternStatus.DRAFT, content="c"
+        )
         idx = FPFIndex(pattern_index={"A.1": p_stable, "A.2": p_draft})
         results = idx.search_patterns("query", filters={"status": "Stable"})
         ids = [r.id for r in results]

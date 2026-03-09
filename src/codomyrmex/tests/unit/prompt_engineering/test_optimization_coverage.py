@@ -4,7 +4,6 @@ Targets uncovered paths in PromptOptimizer strategies and OptimizationResult.
 All tests use real function calls with inline data - no mocking.
 """
 
-
 from codomyrmex.prompt_engineering.optimization import (
     OptimizationResult,
     OptimizationStrategy,
@@ -177,7 +176,10 @@ class TestDetailedOptimization:
         optimizer = PromptOptimizer()
         template = make_template("Summarize the following text.")
         result = optimizer.optimize(template, OptimizationStrategy.DETAILED)
-        assert "Role" in result.optimized.template_str or "role" in result.optimized.template_str.lower()
+        assert (
+            "Role" in result.optimized.template_str
+            or "role" in result.optimized.template_str.lower()
+        )
 
     def test_wraps_in_task_section(self):
         optimizer = PromptOptimizer()
@@ -189,13 +191,19 @@ class TestDetailedOptimization:
         optimizer = PromptOptimizer()
         template = make_template("Write a poem.")
         result = optimizer.optimize(template, OptimizationStrategy.DETAILED)
-        assert "Constraint" in result.optimized.template_str or "constraint" in result.optimized.template_str.lower()
+        assert (
+            "Constraint" in result.optimized.template_str
+            or "constraint" in result.optimized.template_str.lower()
+        )
 
     def test_adds_output_format_when_missing(self):
         optimizer = PromptOptimizer()
         template = make_template("Describe the situation.")
         result = optimizer.optimize(template, OptimizationStrategy.DETAILED)
-        assert "Output" in result.optimized.template_str or "format" in result.optimized.template_str.lower()
+        assert (
+            "Output" in result.optimized.template_str
+            or "format" in result.optimized.template_str.lower()
+        )
 
     def test_does_not_duplicate_role_when_present(self):
         optimizer = PromptOptimizer()
@@ -252,10 +260,12 @@ class TestFewShotOptimization:
 
     def test_with_examples_adds_them(self):
         optimizer = PromptOptimizer()
-        optimizer.set_few_shot_examples([
-            {"input": "cat", "output": "animal"},
-            {"input": "car", "output": "vehicle"},
-        ])
+        optimizer.set_few_shot_examples(
+            [
+                {"input": "cat", "output": "animal"},
+                {"input": "car", "output": "vehicle"},
+            ]
+        )
         template = make_template("Classify: dog")
         result = optimizer.optimize(template, OptimizationStrategy.FEW_SHOT)
         content = result.optimized.template_str
@@ -266,7 +276,10 @@ class TestFewShotOptimization:
         optimizer = PromptOptimizer()
         template = make_template("Classify this item.")
         result = optimizer.optimize(template, OptimizationStrategy.FEW_SHOT)
-        assert "No examples" in result.optimized.template_str or "no examples" in result.optimized.template_str.lower()
+        assert (
+            "No examples" in result.optimized.template_str
+            or "no examples" in result.optimized.template_str.lower()
+        )
 
     def test_examples_via_kwargs(self):
         optimizer = PromptOptimizer()
@@ -286,10 +299,12 @@ class TestFewShotOptimization:
 
     def test_changes_includes_example_count(self):
         optimizer = PromptOptimizer()
-        optimizer.set_few_shot_examples([
-            {"input": "a", "output": "b"},
-            {"input": "c", "output": "d"},
-        ])
+        optimizer.set_few_shot_examples(
+            [
+                {"input": "a", "output": "b"},
+                {"input": "c", "output": "d"},
+            ]
+        )
         template = make_template("Test prompt")
         result = optimizer.optimize(template, OptimizationStrategy.FEW_SHOT)
         assert any("2" in c for c in result.changes)
@@ -317,6 +332,8 @@ class TestBulkOptimize:
     def test_bulk_optimize_applies_same_strategy(self):
         optimizer = PromptOptimizer()
         templates = [make_template("T1"), make_template("T2"), make_template("T3")]
-        results = optimizer.bulk_optimize(templates, OptimizationStrategy.CHAIN_OF_THOUGHT)
+        results = optimizer.bulk_optimize(
+            templates, OptimizationStrategy.CHAIN_OF_THOUGHT
+        )
         for r in results:
             assert r.strategy == OptimizationStrategy.CHAIN_OF_THOUGHT

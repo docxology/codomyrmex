@@ -18,7 +18,6 @@ except ImportError:
     class _DummyPSUtil:
         """No-op psutil stub used when psutil is not installed; all metrics return zero."""
 
-
         def cpu_percent(*args, **kwargs):
             return 0.0
 

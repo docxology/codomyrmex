@@ -62,7 +62,9 @@ class TestLLMConnectionError:
         assert err.context["endpoint"] == "http://localhost:11434"
 
     def test_stores_provider_and_endpoint_together(self):
-        err = LLMConnectionError("fail", provider="anthropic", endpoint="https://api.anthropic.com")
+        err = LLMConnectionError(
+            "fail", provider="anthropic", endpoint="https://api.anthropic.com"
+        )
         assert err.context["provider"] == "anthropic"
         assert err.context["endpoint"] == "https://api.anthropic.com"
 

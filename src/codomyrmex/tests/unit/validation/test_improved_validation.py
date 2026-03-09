@@ -39,6 +39,7 @@ class TestRules:
         assert is_in_range(-1, min_val=0) is False
         assert is_in_range(11, max_val=10) is False
 
+
 @pytest.mark.unit
 class TestSanitizers:
     def test_strip_whitespace(self):
@@ -59,6 +60,7 @@ class TestSanitizers:
         assert sanitize_numeric("123") == 123
         assert sanitize_numeric("123.45") == 123.45
         assert sanitize_numeric("abc") is None
+
 
 @pytest.mark.unit
 class TestValidatorImprovements:
@@ -81,6 +83,7 @@ class TestValidatorImprovements:
         assert v._basic_validation(50, schema).is_valid is True
         assert v._basic_validation(150, schema).is_valid is False
 
+
 @pytest.mark.unit
 class TestTypeCoercion:
     def test_coerce_int(self):
@@ -100,6 +103,7 @@ class TestTypeCoercion:
         result = TypeSafeParser.coerce(data, MyModel)
         assert result is not None
         assert result.age == 30
+
 
 @pytest.mark.unit
 class TestErrorMessageFormatting:

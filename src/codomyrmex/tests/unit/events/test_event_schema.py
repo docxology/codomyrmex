@@ -188,17 +188,13 @@ class TestConvenienceFactories:
         assert "components_loaded" in e.data or "components" in e.data
 
     def test_create_module_load_event(self):
-        e = create_module_load_event(
-            module_name="agents", version="1.0", load_time=0.5
-        )
+        e = create_module_load_event(module_name="agents", version="1.0", load_time=0.5)
         assert isinstance(e, Event)
         assert e.data["module_name"] == "agents"
         assert e.data["load_time"] == 0.5
 
     def test_create_analysis_start_event(self):
-        e = create_analysis_start_event(
-            analysis_type="static", target="main.py"
-        )
+        e = create_analysis_start_event(analysis_type="static", target="main.py")
         assert isinstance(e, Event)
         assert e.data["analysis_type"] == "static"
 

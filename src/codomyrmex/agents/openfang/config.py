@@ -1,4 +1,5 @@
 """openfang configuration dataclass — all values from environment variables."""
+
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -16,8 +17,12 @@ class OpenFangConfig:
     All fields default to environment variables with sensible fallbacks.
     """
 
-    command: str = field(default_factory=lambda: os.getenv("OPENFANG_COMMAND", "openfang"))
-    timeout: int = field(default_factory=lambda: int(os.getenv("OPENFANG_TIMEOUT", "120")))
+    command: str = field(
+        default_factory=lambda: os.getenv("OPENFANG_COMMAND", "openfang")
+    )
+    timeout: int = field(
+        default_factory=lambda: int(os.getenv("OPENFANG_TIMEOUT", "120"))
+    )
     gateway_url: str = field(
         default_factory=lambda: os.getenv("OPENFANG_GATEWAY_URL", "ws://localhost:3000")
     )

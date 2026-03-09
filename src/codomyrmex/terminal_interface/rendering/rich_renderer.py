@@ -32,7 +32,11 @@ class RichRenderer:
     High-level renderer using the 'rich' library.
     """
 
-    def __init__(self, theme: Optional[dict[str, str]] = None, force_terminal: Optional[bool] = None):
+    def __init__(
+        self,
+        theme: Optional[dict[str, str]] = None,
+        force_terminal: Optional[bool] = None,
+    ):
         """
         Initialize the Rich renderer.
 
@@ -42,7 +46,9 @@ class RichRenderer:
         """
         custom_theme = Theme(theme) if theme else None
         self.console = Console(theme=custom_theme, force_terminal=force_terminal)
-        self.error_console = Console(theme=custom_theme, force_terminal=force_terminal, stderr=True)
+        self.error_console = Console(
+            theme=custom_theme, force_terminal=force_terminal, stderr=True
+        )
 
     def print(self, *args: Any, style: Optional[str] = None, **kwargs: Any) -> None:
         """Print styled text to the console."""
@@ -56,7 +62,9 @@ class RichRenderer:
         """Print a heading with a rule."""
         self.console.rule(f"[{style}]{text}[/{style}]")
 
-    def panel(self, content: Any, title: Optional[str] = None, style: str = "blue") -> None:
+    def panel(
+        self, content: Any, title: Optional[str] = None, style: str = "blue"
+    ) -> None:
         """Print content inside a panel."""
         self.console.print(Panel(content, title=title, border_style=style))
 
@@ -119,18 +127,25 @@ class RichRenderer:
         stream: Optional[Any] = None,
     ) -> str:
         """Prompt the user for input."""
-        return __import__("typing").cast(str, Prompt.ask(
-            message,
-            console=self.console,
-            default=default,
-            choices=choices,
-            password=password,
-            stream=stream,
-        ))
+        return __import__("typing").cast(
+            str,
+            Prompt.ask(
+                message,
+                console=self.console,
+                default=default,
+                choices=choices,
+                password=password,
+                stream=stream,
+            ),
+        )
 
-    def confirm(self, message: str, default: bool = False, stream: Optional[Any] = None) -> bool:
+    def confirm(
+        self, message: str, default: bool = False, stream: Optional[Any] = None
+    ) -> bool:
         """Ask the user for a yes/no confirmation."""
-        return Confirm.ask(message, console=self.console, default=default, stream=stream)
+        return Confirm.ask(
+            message, console=self.console, default=default, stream=stream
+        )
 
     def live(self, renderable: Any, transient: bool = True) -> Live:
         """Create a live display context manager."""

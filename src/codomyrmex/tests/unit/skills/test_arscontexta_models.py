@@ -156,7 +156,9 @@ class TestResearchClaim:
 
 class TestDimensionSignal:
     def test_construction(self):
-        ds = DimensionSignal(dimension=ConfigDimension.DOMAIN, value="software_engineering")
+        ds = DimensionSignal(
+            dimension=ConfigDimension.DOMAIN, value="software_engineering"
+        )
         assert ds.dimension == ConfigDimension.DOMAIN
         assert ds.value == "software_engineering"
         assert ds.confidence == 0.5
@@ -218,8 +220,12 @@ class TestStageResult:
         assert d["error"] is None
 
     def test_independent_default_metadata(self):
-        sr1 = StageResult(stage=PipelineStage.REFLECT, input_content="i", output_content="o")
-        sr2 = StageResult(stage=PipelineStage.REFLECT, input_content="i", output_content="o")
+        sr1 = StageResult(
+            stage=PipelineStage.REFLECT, input_content="i", output_content="o"
+        )
+        sr2 = StageResult(
+            stage=PipelineStage.REFLECT, input_content="i", output_content="o"
+        )
         sr1.metadata["key"] = "val"
         assert sr2.metadata == {}
 
@@ -298,7 +304,10 @@ class TestKernelConfig:
 
     def test_validate_dependencies_missing(self):
         p = KernelPrimitive(
-            name="b", layer=KernelLayer.CONVENTION, description="d", dependencies=["missing_dep"]
+            name="b",
+            layer=KernelLayer.CONVENTION,
+            description="d",
+            dependencies=["missing_dep"],
         )
         kc = KernelConfig(primitives=[p])
         missing = kc.validate_dependencies()

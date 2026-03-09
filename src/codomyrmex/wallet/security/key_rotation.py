@@ -61,7 +61,8 @@ class KeyRotation:
         self._post_rotate_hooks: list[Callable] = []
         logger.info(
             "KeyRotation initialized: max_age=%sd, max_sigs=%s",
-            self.policy.max_age_days, self.policy.max_signatures,
+            self.policy.max_age_days,
+            self.policy.max_signatures,
         )
 
     def register_wallet(self, user_id: str, wallet_id: str) -> None:

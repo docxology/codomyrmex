@@ -14,7 +14,9 @@ logger = get_logger(__name__)
 
 
 @mcp_tool(category="orchestrator")
-def orchestrate_fractal_task(task_description: str, max_depth: int = 3, provider: str = "claude") -> dict:
+def orchestrate_fractal_task(
+    task_description: str, max_depth: int = 3, provider: str = "claude"
+) -> dict:
     """Recursively decompose and execute a complex task using the fractal orchestration pattern.
 
     This tool breaks down a high-level task into smaller atomic tasks, creates isolated git
@@ -60,13 +62,17 @@ def orchestrate_fractal_task(task_description: str, max_depth: int = 3, provider
                 leaf.status = TaskStatus.DONE
                 propagate_status(planned_tree)
 
-                execution_results.append({"task": leaf.description, "status": "success"})
+                execution_results.append(
+                    {"task": leaf.description, "status": "success"}
+                )
 
             except Exception as e:
                 leaf.status = TaskStatus.FAILED
                 propagate_status(planned_tree)
                 logger.error("Task failed: %s - %s", leaf.description, e)
-                execution_results.append({"task": leaf.description, "status": "error", "message": str(e)})
+                execution_results.append(
+                    {"task": leaf.description, "status": "error", "message": str(e)}
+                )
 
         return {
             "status": "success",
@@ -74,12 +80,9 @@ def orchestrate_fractal_task(task_description: str, max_depth: int = 3, provider
             "workspace_path": str(target_dir),
             "final_tree_status": planned_tree.status.value,
             "subtasks_executed": len(leaves),
-            "results": execution_results
+            "results": execution_results,
         }
 
     except Exception as e:
         logger.exception("Fractal orchestration failed")
-        return {
-            "status": "error",
-            "message": f"Orchestration failed: {e!s}"
-        }
+        return {"status": "error", "message": f"Orchestration failed: {e!s}"}

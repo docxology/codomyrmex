@@ -95,7 +95,8 @@ class HermesClient(CLIAgentBase):
             self.get_config_value("hermes_backend", config=cfg) or "auto"
         ).lower()
         self._ollama_model: str = str(
-            self.get_config_value("hermes_model", config=cfg) or self.DEFAULT_OLLAMA_MODEL
+            self.get_config_value("hermes_model", config=cfg)
+            or self.DEFAULT_OLLAMA_MODEL
         )
 
         # Probe availability
@@ -158,11 +159,17 @@ class HermesClient(CLIAgentBase):
                     command=self.command,
                 )
             return self._build_response_from_result(
-                result, request,
-                additional_metadata={"backend": "cli", "command_full": " ".join([self.command, *hermes_args])},
+                result,
+                request,
+                additional_metadata={
+                    "backend": "cli",
+                    "command_full": " ".join([self.command, *hermes_args]),
+                },
             )
         except AgentTimeoutError as e:
-            raise HermesError(f"Hermes CLI timed out after {self.timeout}s: {e}", command=self.command) from e
+            raise HermesError(
+                f"Hermes CLI timed out after {self.timeout}s: {e}", command=self.command
+            ) from e
         except AgentError as e:
             raise HermesError(f"Hermes CLI failed: {e}", command=self.command) from e
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -175,12 +182,17 @@ class HermesClient(CLIAgentBase):
         prompt = request.prompt
         cmd = [ollama_bin, "run", self._ollama_model, prompt]
 
-        self.logger.info("Hermes via Ollama: model=%s, prompt=%s…", self._ollama_model, prompt[:60])
+        self.logger.info(
+            "Hermes via Ollama: model=%s, prompt=%s…", self._ollama_model, prompt[:60]
+        )
         start = time.time()
 
         try:
             proc = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=self.timeout,
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
                 env={**__import__("os").environ, "NO_COLOR": "1"},
             )
             elapsed = time.time() - start
@@ -214,7 +226,9 @@ class HermesClient(CLIAgentBase):
             raise
         except Exception as e:
             self.logger.error("Ollama execution failed: %s", e, exc_info=True)
-            raise HermesError(f"Ollama execution failed: {e}", command=" ".join(cmd)) from e
+            raise HermesError(
+                f"Ollama execution failed: {e}", command=" ".join(cmd)
+            ) from e
 
     # ------------------------------------------------------------------
     # Streaming
@@ -237,8 +251,11 @@ class HermesClient(CLIAgentBase):
 
         try:
             process = subprocess.Popen(
-                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                text=True, bufsize=1,
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
                 env={**__import__("os").environ, "NO_COLOR": "1"},
             )
             for line in iter(process.stdout.readline, ""):
@@ -287,7 +304,10 @@ class HermesClient(CLIAgentBase):
             return {"success": False, "error": "Skills listing requires the Hermes CLI"}
         try:
             result = self._execute_command(args=["skills", "list"])
-            return {"success": result.get("success", False), "output": result.get("stdout", "")}
+            return {
+                "success": result.get("success", False),
+                "output": result.get("stdout", ""),
+            }
         except Exception as e:
             self.logger.warning("Failed to list Hermes skills: %s", e)
             return {"success": False, "error": str(e)}
@@ -307,11 +327,13 @@ class HermesClient(CLIAgentBase):
         if self._active_backend == "cli":
             try:
                 result = self._execute_command(args=["status"], timeout=10)
-                status.update({
-                    "success": result.get("success", False),
-                    "output": result.get("stdout", ""),
-                    "exit_code": result.get("exit_code", 0),
-                })
+                status.update(
+                    {
+                        "success": result.get("success", False),
+                        "output": result.get("stdout", ""),
+                        "exit_code": result.get("exit_code", 0),
+                    }
+                )
             except Exception as e:
                 status.update({"success": False, "error": str(e), "exit_code": -1})
         else:

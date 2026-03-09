@@ -529,5 +529,7 @@ class TestCanaryAnalyzer:
 
     def test_comparisons_list_length_matches_metric_count(self):
         analyzer = CanaryAnalyzer()
-        report = analyzer.analyze({"a": 1.0, "b": 2.0, "c": 3.0}, {"a": 1.0, "b": 2.0, "c": 3.0})
+        report = analyzer.analyze(
+            {"a": 1.0, "b": 2.0, "c": 3.0}, {"a": 1.0, "b": 2.0, "c": 3.0}
+        )
         assert len(report.comparisons) == 3

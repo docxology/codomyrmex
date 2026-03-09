@@ -1,6 +1,5 @@
 """Tests for meme.memetics.models."""
 
-
 from codomyrmex.meme.memetics.models import (
     FitnessMap,
     Meme,
@@ -198,7 +197,10 @@ class TestMemeplex:
         mutant = mp.mutate(mutation_rate=1.0)
         assert mutant.name == "base_mutant"
         assert len(mutant.memes) == 1
-        assert mutant.memes[0].content != "original" or "[mutated]" in mutant.memes[0].content
+        assert (
+            mutant.memes[0].content != "original"
+            or "[mutated]" in mutant.memes[0].content
+        )
 
     def test_recombine_empty(self):
         mp1 = Memeplex(name="a")

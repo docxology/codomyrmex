@@ -22,7 +22,9 @@ class TestEventSchemaInvariants:
     @given(
         event_type=event_types,
         source=st.text(min_size=1, max_size=50),
-        data=st.dictionaries(st.text(min_size=1, max_size=20), st.integers(), max_size=5),
+        data=st.dictionaries(
+            st.text(min_size=1, max_size=20), st.integers(), max_size=5
+        ),
     )
     @settings(max_examples=50, deadline=2000)
     def test_event_creation_preserves_fields(self, event_type, source, data):

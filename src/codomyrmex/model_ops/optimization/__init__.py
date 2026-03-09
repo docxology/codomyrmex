@@ -3,6 +3,7 @@ Inference Optimization Module
 
 Model optimization techniques including quantization and batching.
 """
+
 import contextlib
 
 __version__ = "0.1.0"

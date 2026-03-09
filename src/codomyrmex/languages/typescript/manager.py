@@ -47,12 +47,18 @@ class TypeScriptManager(BaseLanguageManager):
             os.makedirs(path, exist_ok=True)
 
             if self._has_cmd("bun"):
-                subprocess.run(["bun", "init", "-y"], cwd=path, check=True, capture_output=True)
+                subprocess.run(
+                    ["bun", "init", "-y"], cwd=path, check=True, capture_output=True
+                )
                 return True
 
             # Fallback npm and tsc
-            subprocess.run(["npm", "init", "-y"], cwd=path, check=True, capture_output=True)
-            subprocess.run(["npx", "tsc", "--init"], cwd=path, check=True, capture_output=True)
+            subprocess.run(
+                ["npm", "init", "-y"], cwd=path, check=True, capture_output=True
+            )
+            subprocess.run(
+                ["npx", "tsc", "--init"], cwd=path, check=True, capture_output=True
+            )
             return True
         except (OSError, subprocess.SubprocessError) as e:
             logger.warning("Failed to setup TS project: %s", e)
@@ -77,10 +83,7 @@ class TypeScriptManager(BaseLanguageManager):
                 f.write(script_content)
 
             result = subprocess.run(
-                [*cmd, "script.ts"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                [*cmd, "script.ts"], cwd=dir_path, capture_output=True, text=True
             )
             self._cleanup([script_path])
             return result.stdout + result.stderr
@@ -90,18 +93,16 @@ class TypeScriptManager(BaseLanguageManager):
             temp_path = temp.name
 
         try:
-            result = subprocess.run(
-                [*cmd, temp_path],
-                capture_output=True,
-                text=True
-            )
+            result = subprocess.run([*cmd, temp_path], capture_output=True, text=True)
             return result.stdout + result.stderr
         finally:
             os.remove(temp_path)
 
     def _has_cmd(self, cmd: str) -> bool:
         try:
-            subprocess.run([cmd, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(
+                [cmd, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
             return True
         except FileNotFoundError:
             return False

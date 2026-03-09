@@ -167,7 +167,12 @@ class TestCheckCompliance:
         context = {"system_type": "api"}
         result = check_compliance_with_practices(context)
         # Should have some indication of pass/fail
-        assert "recommendations" in result or "results" in result or "status" in result or len(result) > 0
+        assert (
+            "recommendations" in result
+            or "results" in result
+            or "status" in result
+            or len(result) > 0
+        )
 
 
 # ---------------------------------------------------------------------------

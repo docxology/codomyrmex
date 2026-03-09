@@ -527,7 +527,14 @@ class TestScrapeMcpToolsContent:
 
         html = "<html><body><h1>Heading</h1><p>Para</p></body></html>"
         result = scrape_extract_content(html=html)
-        for key in ("title", "headings", "paragraph_count", "link_count", "word_count", "content_hash"):
+        for key in (
+            "title",
+            "headings",
+            "paragraph_count",
+            "link_count",
+            "word_count",
+            "content_hash",
+        ):
             assert key in result
 
     def test_headings_structured(self):

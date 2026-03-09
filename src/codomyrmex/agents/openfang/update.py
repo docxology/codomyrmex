@@ -7,6 +7,7 @@ Flow:
 
 Or call build_and_install() which runs all three steps.
 """
+
 from __future__ import annotations
 
 import shutil
@@ -112,8 +113,7 @@ def install_binary(vendor_dir: str = "", install_dir: str = "") -> dict[str, str
         return {
             "status": "error",
             "message": (
-                f"Compiled binary not found at {src}. "
-                "Run build_from_source() first."
+                f"Compiled binary not found at {src}. Run build_from_source() first."
             ),
         }
     try:

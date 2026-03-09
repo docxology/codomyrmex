@@ -95,7 +95,9 @@ class TestModelContextProtocol:
 
         # Test with extra arguments (should be allowed due to Config.extra = 'allow')
         tool_call_extra = MCPToolCall(
-            tool_name="test.tool", arguments={"arg1": "val1"}, extra_field="extra_value"  # type: ignore
+            tool_name="test.tool",
+            arguments={"arg1": "val1"},
+            extra_field="extra_value",  # type: ignore
         )
         assert hasattr(tool_call_extra, "extra_field")
         assert tool_call_extra.extra_field == "extra_value"

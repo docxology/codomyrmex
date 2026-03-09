@@ -92,7 +92,9 @@ with contextlib.suppress(ImportError):
 # Infomaniak clients (requires openstacksdk and/or boto3)
 InfomaniakComputeClient = InfomaniakCredentials = InfomaniakDNSClient = None
 InfomaniakHeatClient = InfomaniakIdentityClient = InfomaniakMeteringClient = None
-InfomaniakNetworkClient = InfomaniakNewsletterClient = InfomaniakObjectStorageClient = None
+InfomaniakNetworkClient = InfomaniakNewsletterClient = InfomaniakObjectStorageClient = (
+    None
+)
 InfomaniakS3Client = InfomaniakS3Credentials = InfomaniakVolumeClient = None
 create_openstack_connection = None
 with contextlib.suppress(ImportError):  # openstacksdk not installed

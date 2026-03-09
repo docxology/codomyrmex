@@ -59,7 +59,9 @@ class TestBayesianNetwork:
 
     def test_has_methods(self) -> None:
         bn = cerebrum.BayesianNetwork()
-        public = [m for m in dir(bn) if not m.startswith("_") and callable(getattr(bn, m))]
+        public = [
+            m for m in dir(bn) if not m.startswith("_") and callable(getattr(bn, m))
+        ]
         assert len(public) > 0
 
 

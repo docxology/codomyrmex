@@ -401,7 +401,8 @@ class FPFOrchestrator(FPFVisualizationMixin, FPFReportMixin):
         self.cerebrum.set_active_inference_agent(agent)
 
         self.logger.info(
-            "Completed active inference exploration for %s patterns", len(exploration_path)
+            "Completed active inference exploration for %s patterns",
+            len(exploration_path),
         )
         return {
             "exploration_path": exploration_path,

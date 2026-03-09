@@ -32,7 +32,11 @@ class SwiftManager(BaseLanguageManager):
 
     def setup_project(self, path: str) -> bool:
         """Initialize a new Swift project."""
-        return self._setup_command(path, ["swift", "package", "init", "--type", "executable"], lang_name="Swift")
+        return self._setup_command(
+            path,
+            ["swift", "package", "init", "--type", "executable"],
+            lang_name="Swift",
+        )
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write and execute a Swift script."""
@@ -44,24 +48,21 @@ class SwiftManager(BaseLanguageManager):
                 f.write(script_content)
 
             result = subprocess.run(
-                ["swift", "script.swift"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["swift", "script.swift"], cwd=dir_path, capture_output=True, text=True
             )
 
             self._cleanup([script_path])
             return result.stdout + result.stderr
 
-        with tempfile.NamedTemporaryFile(suffix=".swift", mode="w", delete=False) as temp:
+        with tempfile.NamedTemporaryFile(
+            suffix=".swift", mode="w", delete=False
+        ) as temp:
             temp.write(script_content)
             temp_path = temp.name
 
         try:
             result = subprocess.run(
-                ["swift", temp_path],
-                capture_output=True,
-                text=True
+                ["swift", temp_path], capture_output=True, text=True
             )
             return result.stdout + result.stderr
         finally:

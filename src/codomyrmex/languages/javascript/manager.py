@@ -62,10 +62,7 @@ class JavaScriptManager(BaseLanguageManager):
                 f.write(script_content)
 
             result = subprocess.run(
-                ["node", "script.js"],
-                cwd=dir_path,
-                capture_output=True,
-                text=True
+                ["node", "script.js"], cwd=dir_path, capture_output=True, text=True
             )
             self._cleanup([script_path])
             return result.stdout + result.stderr
@@ -75,11 +72,7 @@ class JavaScriptManager(BaseLanguageManager):
             temp_path = temp.name
 
         try:
-            result = subprocess.run(
-                ["node", temp_path],
-                capture_output=True,
-                text=True
-            )
+            result = subprocess.run(["node", temp_path], capture_output=True, text=True)
             return result.stdout + result.stderr
         finally:
             os.remove(temp_path)

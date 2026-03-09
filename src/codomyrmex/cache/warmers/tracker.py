@@ -67,7 +67,9 @@ class AccessTracker(Generic[K]):
 class AdaptiveKeyProvider(KeyProvider[K]):
     """Key provider that supplies hot keys from an AccessTracker."""
 
-    def __init__(self, tracker: AccessTracker[K], threshold: int = 5, limit: int = 1000):
+    def __init__(
+        self, tracker: AccessTracker[K], threshold: int = 5, limit: int = 1000
+    ):
         self.tracker = tracker
         self.threshold = threshold
         self.limit = limit

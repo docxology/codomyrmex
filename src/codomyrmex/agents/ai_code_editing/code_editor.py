@@ -136,7 +136,9 @@ class CodeEditor(BaseAgent):
                 analysis["classes"].append({"name": name, "line": i + 1})
 
         logger.debug(
-            "Analyzed code: %s lines, %s functions", analysis["total_lines"], len(analysis["functions"])
+            "Analyzed code: %s lines, %s functions",
+            analysis["total_lines"],
+            len(analysis["functions"]),
         )
         return analysis
 

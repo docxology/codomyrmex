@@ -61,7 +61,9 @@ class TestIconDeserialization:
     """Icon.from_dict round-trip."""
 
     def test_from_dict(self) -> None:
-        icon = Icon.from_dict({"name": "star", "type": "emoji", "browserLink": "/icons/star"})
+        icon = Icon.from_dict(
+            {"name": "star", "type": "emoji", "browserLink": "/icons/star"}
+        )
         assert icon is not None
         assert icon.name == "star"
 
@@ -87,12 +89,14 @@ class TestWorkspaceReference:
     """WorkspaceReference.from_dict."""
 
     def test_from_dict(self) -> None:
-        ws = WorkspaceReference.from_dict({
-            "id": "ws-1",
-            "type": "workspace",
-            "name": "My Workspace",
-            "organizationId": "org-1",
-        })
+        ws = WorkspaceReference.from_dict(
+            {
+                "id": "ws-1",
+                "type": "workspace",
+                "name": "My Workspace",
+                "organizationId": "org-1",
+            }
+        )
         assert ws is not None
         assert ws.id == "ws-1"
 
@@ -114,7 +118,9 @@ class TestDocSize:
     """DocSize.from_dict."""
 
     def test_from_dict(self) -> None:
-        ds = DocSize.from_dict({"totalRowCount": 100, "tableAndViewCount": 5, "pageCount": 3})
+        ds = DocSize.from_dict(
+            {"totalRowCount": 100, "tableAndViewCount": 5, "pageCount": 3}
+        )
         assert ds is not None
         assert ds.total_row_count == 100
 
@@ -136,7 +142,9 @@ class TestTableReference:
     """TableReference.from_dict."""
 
     def test_from_dict(self) -> None:
-        t = TableReference.from_dict({"id": "t-1", "tableType": "table", "name": "Users"})
+        t = TableReference.from_dict(
+            {"id": "t-1", "tableType": "table", "name": "Users"}
+        )
         assert t is not None
         assert t.id == "t-1"
 

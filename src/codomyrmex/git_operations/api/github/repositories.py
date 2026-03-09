@@ -65,8 +65,10 @@ def create_github_repository(
     token = _validate_github_token(github_token)
     headers = _get_github_headers(token)
     repo_data: dict = {
-        "name": name, "description": description,
-        "private": private, "auto_init": auto_init,
+        "name": name,
+        "description": description,
+        "private": private,
+        "auto_init": auto_init,
     }
     if gitignore_template:
         repo_data["gitignore_template"] = gitignore_template
@@ -83,13 +85,24 @@ def create_github_repository(
             logger.info("Successfully created repository: %s", repo_info["full_name"])
             return {
                 "success": True,
-                "repository": {k: repo_info[k] for k in (
-                    "name", "full_name", "html_url", "clone_url",
-                    "ssh_url", "private", "description", "default_branch",
-                )},
+                "repository": {
+                    k: repo_info[k]
+                    for k in (
+                        "name",
+                        "full_name",
+                        "html_url",
+                        "clone_url",
+                        "ssh_url",
+                        "private",
+                        "description",
+                        "default_branch",
+                    )
+                },
                 "created_at": datetime.now().isoformat(),
             }
-        error_msg = _parse_error_response(response.text, response.status_code, "Failed to create repository")
+        error_msg = _parse_error_response(
+            response.text, response.status_code, "Failed to create repository"
+        )
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
     except requests.RequestException as e:
@@ -112,7 +125,9 @@ def delete_github_repository(
         if response.status_code == 204:
             logger.info("Successfully deleted repository: %s/%s", owner, repo_name)
             return True
-        error_msg = _parse_error_response(response.text, response.status_code, "Failed to delete repository")
+        error_msg = _parse_error_response(
+            response.text, response.status_code, "Failed to delete repository"
+        )
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
     except requests.RequestException as e:
@@ -136,7 +151,9 @@ def get_repository_info(
             repo = response.json()
             logger.info("Found repository: %s", repo["full_name"])
             return _extract_repo_fields(repo)
-        error_msg = _parse_error_response(response.text, response.status_code, "Failed to fetch repository info")
+        error_msg = _parse_error_response(
+            response.text, response.status_code, "Failed to fetch repository info"
+        )
         logger.error(error_msg)
         raise GitHubAPIError(error_msg) from None
     except requests.RequestException as e:

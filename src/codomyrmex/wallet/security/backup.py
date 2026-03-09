@@ -137,7 +137,9 @@ class BackupManager:
         current_hash = hashlib.sha256(key).hexdigest()
         is_valid = stored_hash == current_hash
         logger.info(
-            "Backup verification for %s: %s", backup_id, "valid" if is_valid else "stale (key rotated)"
+            "Backup verification for %s: %s",
+            backup_id,
+            "valid" if is_valid else "stale (key rotated)",
         )
         return is_valid
 

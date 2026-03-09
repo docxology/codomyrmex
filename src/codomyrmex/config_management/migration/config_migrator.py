@@ -169,7 +169,10 @@ class ConfigMigrator:
             rules = self.migration_rules.get((step_from, step_to), [])
             if rules:
                 logger.info(
-                    "Applying %s migration rules from %s to %s", len(rules), step_from, step_to
+                    "Applying %s migration rules from %s to %s",
+                    len(rules),
+                    step_from,
+                    step_to,
                 )
 
                 for rule in rules:
@@ -193,7 +196,10 @@ class ConfigMigrator:
 
         if result.success and applied_rules:
             logger.info(
-                "Successfully migrated config from %s to %s using %s rules", from_version, to_version, len(applied_rules)
+                "Successfully migrated config from %s to %s using %s rules",
+                from_version,
+                to_version,
+                len(applied_rules),
             )
         elif result.success and not applied_rules:
             logger.info("No migration rules applied (config may already be compatible)")

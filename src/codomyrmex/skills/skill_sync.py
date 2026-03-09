@@ -79,7 +79,9 @@ class SkillSync:
         self.upstream_branch = upstream_branch
         logger.info(
             "SkillSync initialized: %s, repo=%s, branch=%s",
-            upstream_dir, upstream_repo, upstream_branch,
+            upstream_dir,
+            upstream_repo,
+            upstream_branch,
         )
 
     def clone_upstream(self, force: bool = False) -> bool:
@@ -94,7 +96,9 @@ class SkillSync:
         """
         if self.upstream_dir.exists():
             if force:
-                logger.info("Removing existing upstream directory: %s", self.upstream_dir)
+                logger.info(
+                    "Removing existing upstream directory: %s", self.upstream_dir
+                )
 
                 shutil.rmtree(self.upstream_dir)
             else:
@@ -131,7 +135,8 @@ class SkillSync:
         """
         if not self.upstream_dir.exists():
             logger.warning(
-                "Upstream directory does not exist: %s. Cloning instead.", self.upstream_dir
+                "Upstream directory does not exist: %s. Cloning instead.",
+                self.upstream_dir,
             )
             return self.clone_upstream()
 
@@ -162,17 +167,26 @@ class SkillSync:
         try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],
-                cwd=str(self.upstream_dir), capture_output=True, text=True, check=True,
+                cwd=str(self.upstream_dir),
+                capture_output=True,
+                text=True,
+                check=True,
             )
             info["branch"] = result.stdout.strip()
             result = subprocess.run(
                 ["git", "status", "--porcelain"],
-                cwd=str(self.upstream_dir), capture_output=True, text=True, check=True,
+                cwd=str(self.upstream_dir),
+                capture_output=True,
+                text=True,
+                check=True,
             )
             info["has_changes"] = bool(result.stdout.strip())
             result = subprocess.run(
                 ["git", "rev-parse", "HEAD"],
-                cwd=str(self.upstream_dir), capture_output=True, text=True, check=True,
+                cwd=str(self.upstream_dir),
+                capture_output=True,
+                text=True,
+                check=True,
             )
             info["last_commit"] = result.stdout.strip()[:8]
         except Exception as e:

@@ -123,7 +123,10 @@ class TestSymbolicReasoningModelConstruction:
 class TestSymbolicReasoningModelMutation:
     def test_add_rule_appends(self):
         m = SymbolicReasoningModel()
-        rule = {"conditions": [{"fact": "x", "operator": "==", "value": 1}], "conclusion": {"result": "yes"}}
+        rule = {
+            "conditions": [{"fact": "x", "operator": "==", "value": 1}],
+            "conclusion": {"result": "yes"},
+        }
         m.add_rule(rule)
         assert len(m.rules) == 1
         assert m.rules[0] is rule
@@ -246,14 +249,18 @@ class TestSymbolicReasoningModelReason:
 
     def test_reason_multiple_rules_some_fire(self):
         m = SymbolicReasoningModel()
-        m.add_rule({
-            "conditions": [{"fact": "a", "operator": "==", "value": 1}],
-            "conclusion": {"fired": "rule1"},
-        })
-        m.add_rule({
-            "conditions": [{"fact": "b", "operator": "==", "value": 2}],
-            "conclusion": {"fired": "rule2"},
-        })
+        m.add_rule(
+            {
+                "conditions": [{"fact": "a", "operator": "==", "value": 1}],
+                "conclusion": {"fired": "rule1"},
+            }
+        )
+        m.add_rule(
+            {
+                "conditions": [{"fact": "b", "operator": "==", "value": 2}],
+                "conclusion": {"fired": "rule2"},
+            }
+        )
         result = m.reason({"a": 1, "b": 99})
         assert len(result["conclusions"]) == 1
         assert {"fired": "rule1"} in result["conclusions"]

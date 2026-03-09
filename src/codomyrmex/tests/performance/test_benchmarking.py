@@ -412,7 +412,7 @@ class TestBenchmarkingIntegration:
         chart = create_bar_chart(
             categories=list(results.keys()),
             values=list(results.values()),
-            title="Function Performance Comparison"
+            title="Function Performance Comparison",
         )
 
         assert chart is not None

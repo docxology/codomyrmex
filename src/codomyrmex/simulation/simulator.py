@@ -53,7 +53,9 @@ class Simulator:
         self._running = False
         self._environment_state: dict[str, Any] = {}
         logger.info(
-            "Simulator initialized: %s with %s agents", self.config.name, len(self.agents)
+            "Simulator initialized: %s with %s agents",
+            self.config.name,
+            len(self.agents),
         )
 
     def add_agent(self, agent: Agent) -> None:

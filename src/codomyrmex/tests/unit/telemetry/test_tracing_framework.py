@@ -61,6 +61,7 @@ class TestTracingFramework:
         assert span_data["status"]["code"] == "ERROR"
         assert any(e["name"] == "exception" for e in span_data["events"])
 
+
 @pytest.mark.unit
 class TestMetricAggregatorLabels:
     """Tests for the improved MetricAggregator with label support."""
@@ -71,8 +72,18 @@ class TestMetricAggregatorLabels:
         agg.increment("http_requests", labels={"method": "GET", "status": "200"})
         agg.increment("http_requests", labels={"method": "POST", "status": "201"})
 
-        assert agg.counter_value("http_requests", labels={"method": "GET", "status": "200"}) == 2.0
-        assert agg.counter_value("http_requests", labels={"method": "POST", "status": "201"}) == 1.0
+        assert (
+            agg.counter_value(
+                "http_requests", labels={"method": "GET", "status": "200"}
+            )
+            == 2.0
+        )
+        assert (
+            agg.counter_value(
+                "http_requests", labels={"method": "POST", "status": "201"}
+            )
+            == 1.0
+        )
 
         snap = agg.snapshot()
         assert "http_requests{method=GET,status=200}" in snap.counters
@@ -89,6 +100,7 @@ class TestMetricAggregatorLabels:
         assert stats["p50"] == 30.0
         assert stats["min"] == 10.0
         assert stats["max"] == 50.0
+
 
 @pytest.mark.unit
 class TestMetricCounterLightweight:

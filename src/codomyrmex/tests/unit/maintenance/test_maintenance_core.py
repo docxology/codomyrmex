@@ -52,7 +52,9 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestHealthStatus:
     """Tests for HealthStatus enum values."""
 
@@ -81,7 +83,9 @@ class TestHealthStatus:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestHealthCheckResult:
     """Tests for HealthCheckResult dataclass."""
 
@@ -107,7 +111,9 @@ class TestHealthCheckResult:
         assert r.timestamp > 0.0
 
     def test_custom_message_stored(self):
-        r = HealthCheckResult(name="cache", status=HealthStatus.DEGRADED, message="slow")
+        r = HealthCheckResult(
+            name="cache", status=HealthStatus.DEGRADED, message="slow"
+        )
         assert r.message == "slow"
 
     def test_custom_details_stored(self):
@@ -126,7 +132,9 @@ class TestHealthCheckResult:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestHealthCheckDataclass:
     """Tests for HealthCheck dataclass (the registration container)."""
 
@@ -175,7 +183,9 @@ class TestHealthCheckDataclass:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestAggregateHealthReport:
     """Tests for AggregateHealthReport dataclass."""
 
@@ -203,7 +213,9 @@ class TestAggregateHealthReport:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestHealthCheckerRegistration:
     """Tests for HealthChecker.register, unregister, check_count."""
 
@@ -219,18 +231,26 @@ class TestHealthCheckerRegistration:
 
     def test_register_increments_count(self):
         checker = self._make_checker()
-        checker.register(HealthCheck(name="db", description="DB", check_fn=self._healthy_fn))
+        checker.register(
+            HealthCheck(name="db", description="DB", check_fn=self._healthy_fn)
+        )
         assert checker.check_count == 1
 
     def test_register_two_checks(self):
         checker = self._make_checker()
-        checker.register(HealthCheck(name="db", description="DB", check_fn=self._healthy_fn))
-        checker.register(HealthCheck(name="cache", description="Cache", check_fn=self._healthy_fn))
+        checker.register(
+            HealthCheck(name="db", description="DB", check_fn=self._healthy_fn)
+        )
+        checker.register(
+            HealthCheck(name="cache", description="Cache", check_fn=self._healthy_fn)
+        )
         assert checker.check_count == 2
 
     def test_unregister_existing_returns_true(self):
         checker = self._make_checker()
-        checker.register(HealthCheck(name="db", description="DB", check_fn=self._healthy_fn))
+        checker.register(
+            HealthCheck(name="db", description="DB", check_fn=self._healthy_fn)
+        )
         result = checker.unregister("db")
         assert result is True
 
@@ -241,14 +261,20 @@ class TestHealthCheckerRegistration:
 
     def test_unregister_decrements_count(self):
         checker = self._make_checker()
-        checker.register(HealthCheck(name="db", description="DB", check_fn=self._healthy_fn))
+        checker.register(
+            HealthCheck(name="db", description="DB", check_fn=self._healthy_fn)
+        )
         checker.unregister("db")
         assert checker.check_count == 0
 
     def test_clear_removes_all_checks(self):
         checker = self._make_checker()
-        checker.register(HealthCheck(name="a", description="A", check_fn=self._healthy_fn))
-        checker.register(HealthCheck(name="b", description="B", check_fn=self._healthy_fn))
+        checker.register(
+            HealthCheck(name="a", description="A", check_fn=self._healthy_fn)
+        )
+        checker.register(
+            HealthCheck(name="b", description="B", check_fn=self._healthy_fn)
+        )
         checker.clear()
         assert checker.check_count == 0
 
@@ -263,77 +289,93 @@ class TestHealthCheckerRegistration:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestHealthCheckerRun:
     """Tests for HealthChecker.run() with various check functions."""
 
     def test_run_healthy_check_returns_healthy_status(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="ok",
-            description="Always healthy",
-            check_fn=lambda: (HealthStatus.HEALTHY, "All good", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="ok",
+                description="Always healthy",
+                check_fn=lambda: (HealthStatus.HEALTHY, "All good", {}),
+            )
+        )
         result = checker.run("ok")
         assert result.status == HealthStatus.HEALTHY
 
     def test_run_unhealthy_check_returns_unhealthy_status(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="bad",
-            description="Always unhealthy",
-            check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="bad",
+                description="Always unhealthy",
+                check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
+            )
+        )
         result = checker.run("bad")
         assert result.status == HealthStatus.UNHEALTHY
 
     def test_run_degraded_check_returns_degraded_status(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="slow",
-            description="Degraded",
-            check_fn=lambda: (HealthStatus.DEGRADED, "Slow", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="slow",
+                description="Degraded",
+                check_fn=lambda: (HealthStatus.DEGRADED, "Slow", {}),
+            )
+        )
         result = checker.run("slow")
         assert result.status == HealthStatus.DEGRADED
 
     def test_run_sets_result_name(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="mycheck",
-            description="Test",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="mycheck",
+                description="Test",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
         result = checker.run("mycheck")
         assert result.name == "mycheck"
 
     def test_run_sets_result_message(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="x",
-            description="Test",
-            check_fn=lambda: (HealthStatus.HEALTHY, "custom msg", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="x",
+                description="Test",
+                check_fn=lambda: (HealthStatus.HEALTHY, "custom msg", {}),
+            )
+        )
         result = checker.run("x")
         assert result.message == "custom msg"
 
     def test_run_sets_result_details(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="x",
-            description="Test",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {"key": "val"}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="x",
+                description="Test",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {"key": "val"}),
+            )
+        )
         result = checker.run("x")
         assert result.details["key"] == "val"
 
     def test_run_duration_is_non_negative(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="x",
-            description="Test",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="x",
+                description="Test",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
         result = checker.run("x")
         assert result.duration_ms >= 0.0
 
@@ -352,17 +394,22 @@ class TestHealthCheckerRun:
             raise ValueError("invalid config")
 
         checker = HealthChecker()
-        checker.register(HealthCheck(name="err", description="Error check", check_fn=bad_fn))
+        checker.register(
+            HealthCheck(name="err", description="Error check", check_fn=bad_fn)
+        )
         result = checker.run("err")
         assert "error" in result.details
         assert "invalid config" in result.details["error"]
 
     def test_last_result_updated_after_run(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="x", description="Test",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="x",
+                description="Test",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
         assert checker.last_result("x") is None
         checker.run("x")
         assert checker.last_result("x") is not None
@@ -377,7 +424,9 @@ class TestHealthCheckerRun:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestHealthCheckerRunAll:
     """Tests for HealthChecker.run_all() aggregation logic."""
 
@@ -389,72 +438,102 @@ class TestHealthCheckerRunAll:
     def test_run_all_all_healthy_returns_healthy(self):
         checker = HealthChecker()
         for name in ("a", "b", "c"):
-            checker.register(HealthCheck(
-                name=name, description=name,
-                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-            ))
+            checker.register(
+                HealthCheck(
+                    name=name,
+                    description=name,
+                    check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+                )
+            )
         report = checker.run_all()
         assert report.overall_status == HealthStatus.HEALTHY
 
     def test_run_all_one_unhealthy_returns_unhealthy(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="ok", description="OK",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
-        checker.register(HealthCheck(
-            name="bad", description="Bad",
-            check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="ok",
+                description="OK",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
+        checker.register(
+            HealthCheck(
+                name="bad",
+                description="Bad",
+                check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
+            )
+        )
         report = checker.run_all()
         assert report.overall_status == HealthStatus.UNHEALTHY
 
     def test_run_all_all_degraded_returns_degraded(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="slow", description="Slow",
-            check_fn=lambda: (HealthStatus.DEGRADED, "High latency", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="slow",
+                description="Slow",
+                check_fn=lambda: (HealthStatus.DEGRADED, "High latency", {}),
+            )
+        )
         report = checker.run_all()
         assert report.overall_status == HealthStatus.DEGRADED
 
     def test_run_all_unhealthy_overrides_degraded(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="deg", description="Degraded",
-            check_fn=lambda: (HealthStatus.DEGRADED, "Slow", {}),
-        ))
-        checker.register(HealthCheck(
-            name="bad", description="Down",
-            check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="deg",
+                description="Degraded",
+                check_fn=lambda: (HealthStatus.DEGRADED, "Slow", {}),
+            )
+        )
+        checker.register(
+            HealthCheck(
+                name="bad",
+                description="Down",
+                check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
+            )
+        )
         report = checker.run_all()
         assert report.overall_status == HealthStatus.UNHEALTHY
 
     def test_run_all_count_accurate(self):
         checker = HealthChecker()
         for name in ("a", "b", "c"):
-            checker.register(HealthCheck(
-                name=name, description=name,
-                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-            ))
+            checker.register(
+                HealthCheck(
+                    name=name,
+                    description=name,
+                    check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+                )
+            )
         report = checker.run_all()
         assert len(report.checks) == 3
 
     def test_run_all_healthy_count_accurate(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="h1", description="h1",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
-        checker.register(HealthCheck(
-            name="h2", description="h2",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
-        checker.register(HealthCheck(
-            name="u1", description="u1",
-            check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="h1",
+                description="h1",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
+        checker.register(
+            HealthCheck(
+                name="h2",
+                description="h2",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
+        checker.register(
+            HealthCheck(
+                name="u1",
+                description="u1",
+                check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
+            )
+        )
         report = checker.run_all()
         assert report.healthy_count == 2
         assert report.unhealthy_count == 1
@@ -462,14 +541,20 @@ class TestHealthCheckerRunAll:
 
     def test_run_all_degraded_count_accurate(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="d1", description="d1",
-            check_fn=lambda: (HealthStatus.DEGRADED, "Slow", {}),
-        ))
-        checker.register(HealthCheck(
-            name="h1", description="h1",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="d1",
+                description="d1",
+                check_fn=lambda: (HealthStatus.DEGRADED, "Slow", {}),
+            )
+        )
+        checker.register(
+            HealthCheck(
+                name="h1",
+                description="h1",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
         report = checker.run_all()
         assert report.degraded_count == 1
         assert report.healthy_count == 1
@@ -477,20 +562,26 @@ class TestHealthCheckerRunAll:
     def test_run_all_total_duration_is_sum(self):
         checker = HealthChecker()
         for name in ("a", "b"):
-            checker.register(HealthCheck(
-                name=name, description=name,
-                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-            ))
+            checker.register(
+                HealthCheck(
+                    name=name,
+                    description=name,
+                    check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+                )
+            )
         report = checker.run_all()
         individual_sum = sum(r.duration_ms for r in report.checks)
         assert abs(report.total_duration_ms - individual_sum) < 1.0
 
     def test_run_all_exception_in_check_counted_as_unhealthy(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="boom", description="Explodes",
-            check_fn=lambda: (_ for _ in ()).throw(RuntimeError("kaboom")),
-        ))
+        checker.register(
+            HealthCheck(
+                name="boom",
+                description="Explodes",
+                check_fn=lambda: (_ for _ in ()).throw(RuntimeError("kaboom")),
+            )
+        )
         report = checker.run_all()
         assert report.overall_status == HealthStatus.UNHEALTHY
         assert report.unhealthy_count == 1
@@ -501,46 +592,60 @@ class TestHealthCheckerRunAll:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable")
+@pytest.mark.skipif(
+    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
+)
 class TestHealthCheckerSummaryText:
     """Tests for HealthChecker.summary_text()."""
 
     def test_summary_includes_overall_status(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="db", description="DB",
-            check_fn=lambda: (HealthStatus.HEALTHY, "Connected", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="db",
+                description="DB",
+                check_fn=lambda: (HealthStatus.HEALTHY, "Connected", {}),
+            )
+        )
         report = checker.run_all()
         text = checker.summary_text(report)
         assert "HEALTHY" in text
 
     def test_summary_includes_check_name(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="mycheck", description="Test",
-            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="mycheck",
+                description="Test",
+                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+            )
+        )
         report = checker.run_all()
         text = checker.summary_text(report)
         assert "mycheck" in text
 
     def test_summary_includes_message(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="x", description="Test",
-            check_fn=lambda: (HealthStatus.HEALTHY, "Connected", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="x",
+                description="Test",
+                check_fn=lambda: (HealthStatus.HEALTHY, "Connected", {}),
+            )
+        )
         report = checker.run_all()
         text = checker.summary_text(report)
         assert "Connected" in text
 
     def test_summary_includes_unhealthy_indicator(self):
         checker = HealthChecker()
-        checker.register(HealthCheck(
-            name="bad", description="Bad",
-            check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
-        ))
+        checker.register(
+            HealthCheck(
+                name="bad",
+                description="Bad",
+                check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
+            )
+        )
         report = checker.run_all()
         text = checker.summary_text(report)
         assert "UNHEALTHY" in text
@@ -548,10 +653,13 @@ class TestHealthCheckerSummaryText:
     def test_summary_is_multiline_with_multiple_checks(self):
         checker = HealthChecker()
         for name in ("a", "b"):
-            checker.register(HealthCheck(
-                name=name, description=name,
-                check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
-            ))
+            checker.register(
+                HealthCheck(
+                    name=name,
+                    description=name,
+                    check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+                )
+            )
         report = checker.run_all()
         text = checker.summary_text(report)
         assert "\n" in text
@@ -840,33 +948,51 @@ class TestMaintenanceSchedulerListTasks:
     def test_list_tasks_returns_all_registered(self):
         scheduler = MaintenanceScheduler()
         for name in ("a", "b", "c"):
-            scheduler.register(MaintenanceTask(name=name, description=name, action=lambda: None))
+            scheduler.register(
+                MaintenanceTask(name=name, description=name, action=lambda: None)
+            )
         assert len(scheduler.list_tasks()) == 3
 
     def test_list_tasks_critical_before_low(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="low_task", description="Low",
-            action=lambda: None, priority=TaskPriority.LOW,
-        ))
-        scheduler.register(MaintenanceTask(
-            name="critical_task", description="Critical",
-            action=lambda: None, priority=TaskPriority.CRITICAL,
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="low_task",
+                description="Low",
+                action=lambda: None,
+                priority=TaskPriority.LOW,
+            )
+        )
+        scheduler.register(
+            MaintenanceTask(
+                name="critical_task",
+                description="Critical",
+                action=lambda: None,
+                priority=TaskPriority.CRITICAL,
+            )
+        )
         tasks = scheduler.list_tasks()
         assert tasks[0].priority == TaskPriority.CRITICAL
         assert tasks[-1].priority == TaskPriority.LOW
 
     def test_list_tasks_high_before_medium(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="med", description="Medium",
-            action=lambda: None, priority=TaskPriority.MEDIUM,
-        ))
-        scheduler.register(MaintenanceTask(
-            name="hi", description="High",
-            action=lambda: None, priority=TaskPriority.HIGH,
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="med",
+                description="Medium",
+                action=lambda: None,
+                priority=TaskPriority.MEDIUM,
+            )
+        )
+        scheduler.register(
+            MaintenanceTask(
+                name="hi",
+                description="High",
+                action=lambda: None,
+                priority=TaskPriority.HIGH,
+            )
+        )
         tasks = scheduler.list_tasks()
         assert tasks[0].priority == TaskPriority.HIGH
 
@@ -883,7 +1009,9 @@ class TestMaintenanceSchedulerGetDueTasks:
     def test_never_run_task_with_short_interval_is_due(self):
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
-            name="t", description="d", action=lambda: None,
+            name="t",
+            description="d",
+            action=lambda: None,
             schedule=ScheduleConfig(interval_seconds=10.0),
         )
         scheduler.register(task)
@@ -894,7 +1022,9 @@ class TestMaintenanceSchedulerGetDueTasks:
     def test_recently_run_task_not_due(self):
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
-            name="t", description="d", action=lambda: None,
+            name="t",
+            description="d",
+            action=lambda: None,
             schedule=ScheduleConfig(interval_seconds=3600.0),
         )
         task.last_run = time.time()
@@ -905,7 +1035,9 @@ class TestMaintenanceSchedulerGetDueTasks:
     def test_disabled_task_never_due(self):
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
-            name="t", description="d", action=lambda: None,
+            name="t",
+            description="d",
+            action=lambda: None,
             enabled=False,
             schedule=ScheduleConfig(interval_seconds=0.0),
         )
@@ -916,7 +1048,8 @@ class TestMaintenanceSchedulerGetDueTasks:
     def test_run_on_startup_task_never_run_is_due(self):
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
-            name="startup", description="Run on startup",
+            name="startup",
+            description="Run on startup",
             action=lambda: None,
             schedule=ScheduleConfig(interval_seconds=9999.0, run_on_startup=True),
         )
@@ -926,29 +1059,38 @@ class TestMaintenanceSchedulerGetDueTasks:
 
     def test_due_tasks_sorted_by_priority(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="low", description="low",
-            action=lambda: None,
-            priority=TaskPriority.LOW,
-            schedule=ScheduleConfig(interval_seconds=0.0),
-        ))
-        scheduler.register(MaintenanceTask(
-            name="critical", description="crit",
-            action=lambda: None,
-            priority=TaskPriority.CRITICAL,
-            schedule=ScheduleConfig(interval_seconds=0.0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="low",
+                description="low",
+                action=lambda: None,
+                priority=TaskPriority.LOW,
+                schedule=ScheduleConfig(interval_seconds=0.0),
+            )
+        )
+        scheduler.register(
+            MaintenanceTask(
+                name="critical",
+                description="crit",
+                action=lambda: None,
+                priority=TaskPriority.CRITICAL,
+                schedule=ScheduleConfig(interval_seconds=0.0),
+            )
+        )
         due = scheduler.get_due_tasks(time.time())
         assert due[0].name == "critical"
 
     def test_multiple_due_tasks_all_returned(self):
         scheduler = MaintenanceScheduler()
         for name in ("a", "b", "c"):
-            scheduler.register(MaintenanceTask(
-                name=name, description=name,
-                action=lambda: None,
-                schedule=ScheduleConfig(interval_seconds=0.0),
-            ))
+            scheduler.register(
+                MaintenanceTask(
+                    name=name,
+                    description=name,
+                    action=lambda: None,
+                    schedule=ScheduleConfig(interval_seconds=0.0),
+                )
+            )
         due = scheduler.get_due_tasks(time.time())
         assert len(due) == 3
 
@@ -962,14 +1104,18 @@ class TestMaintenanceSchedulerGetDueTasks:
 class TestMaintenanceSchedulerExecuteSuccess:
     """Tests for MaintenanceScheduler.execute() with successful tasks."""
 
-    def _make_scheduler_with_task(self, name="task", action=None) -> MaintenanceScheduler:
+    def _make_scheduler_with_task(
+        self, name="task", action=None
+    ) -> MaintenanceScheduler:
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name=name,
-            description="Test task",
-            action=action or (lambda: "result"),
-            schedule=ScheduleConfig(interval_seconds=60.0, max_retries=0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name=name,
+                description="Test task",
+                action=action or (lambda: "result"),
+                schedule=ScheduleConfig(interval_seconds=60.0, max_retries=0),
+            )
+        )
         return scheduler
 
     def test_execute_returns_task_result(self):
@@ -1056,31 +1202,40 @@ class TestMaintenanceSchedulerExecuteFailure:
 
     def test_execute_failed_status_when_action_raises(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="fail", description="Fails",
-            action=self._always_fails,
-            schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="fail",
+                description="Fails",
+                action=self._always_fails,
+                schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
+            )
+        )
         result = scheduler.execute("fail")
         assert result.status == TaskStatus.FAILED
 
     def test_execute_error_message_captured(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="fail", description="Fails",
-            action=self._always_fails,
-            schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="fail",
+                description="Fails",
+                action=self._always_fails,
+                schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
+            )
+        )
         result = scheduler.execute("fail")
         assert "deliberate failure" in result.error
 
     def test_execute_still_increments_run_count_on_failure(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="fail", description="Fails",
-            action=self._always_fails,
-            schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="fail",
+                description="Fails",
+                action=self._always_fails,
+                schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
+            )
+        )
         scheduler.execute("fail")
         task = scheduler.get_task("fail")
         assert task.run_count == 1
@@ -1088,11 +1243,14 @@ class TestMaintenanceSchedulerExecuteFailure:
     def test_execute_still_updates_last_run_on_failure(self):
         scheduler = MaintenanceScheduler()
         before = time.time()
-        scheduler.register(MaintenanceTask(
-            name="fail", description="Fails",
-            action=self._always_fails,
-            schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="fail",
+                description="Fails",
+                action=self._always_fails,
+                schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
+            )
+        )
         scheduler.execute("fail")
         after = time.time()
         task = scheduler.get_task("fail")
@@ -1100,11 +1258,14 @@ class TestMaintenanceSchedulerExecuteFailure:
 
     def test_execute_failed_result_stored_on_task(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="fail", description="Fails",
-            action=self._always_fails,
-            schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="fail",
+                description="Fails",
+                action=self._always_fails,
+                schedule=ScheduleConfig(max_retries=0, retry_delay_seconds=0.0),
+            )
+        )
         scheduler.execute("fail")
         task = scheduler.get_task("fail")
         assert task.last_result.status == TaskStatus.FAILED
@@ -1131,11 +1292,14 @@ class TestMaintenanceSchedulerHistory:
             counter["n"] += 1
             return counter["n"]
 
-        scheduler.register(MaintenanceTask(
-            name="counter", description="Counter",
-            action=inc,
-            schedule=ScheduleConfig(max_retries=0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="counter",
+                description="Counter",
+                action=inc,
+                schedule=ScheduleConfig(max_retries=0),
+            )
+        )
         scheduler.execute("counter")
         scheduler.execute("counter")
         history = scheduler.history()
@@ -1144,11 +1308,14 @@ class TestMaintenanceSchedulerHistory:
 
     def test_history_limit_respected(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="t", description="t",
-            action=lambda: None,
-            schedule=ScheduleConfig(max_retries=0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="t",
+                description="t",
+                action=lambda: None,
+                schedule=ScheduleConfig(max_retries=0),
+            )
+        )
         for _ in range(10):
             scheduler.execute("t")
         history = scheduler.history(limit=3)
@@ -1156,11 +1323,14 @@ class TestMaintenanceSchedulerHistory:
 
     def test_clear_history_empties_history(self):
         scheduler = MaintenanceScheduler()
-        scheduler.register(MaintenanceTask(
-            name="t", description="t",
-            action=lambda: None,
-            schedule=ScheduleConfig(max_retries=0),
-        ))
+        scheduler.register(
+            MaintenanceTask(
+                name="t",
+                description="t",
+                action=lambda: None,
+                schedule=ScheduleConfig(max_retries=0),
+            )
+        )
         scheduler.execute("t")
         scheduler.clear_history()
         assert scheduler.history() == []

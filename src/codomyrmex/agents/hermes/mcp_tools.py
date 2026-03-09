@@ -25,11 +25,13 @@ def _get_client(
     """
     from codomyrmex.agents.hermes.hermes_client import HermesClient
 
-    return HermesClient(config={
-        "hermes_backend": backend,
-        "hermes_model": model,
-        "hermes_timeout": timeout,
-    })
+    return HermesClient(
+        config={
+            "hermes_backend": backend,
+            "hermes_model": model,
+            "hermes_timeout": timeout,
+        }
+    )
 
 
 @mcp_tool(
@@ -108,6 +110,9 @@ def hermes_skills_list() -> dict[str, Any]:
         result = client.list_skills()
         if result.get("success"):
             return {"status": "success", "output": result.get("output", "")}
-        return {"status": "error", "message": result.get("error", "Skills require CLI backend")}
+        return {
+            "status": "error",
+            "message": result.get("error", "Skills require CLI backend"),
+        }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

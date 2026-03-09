@@ -249,7 +249,9 @@ class ImageOptimizer:
             return report
 
         except Exception as e:
-            logger.error("Error generating optimization report for %s: %s", image_name, e)
+            logger.error(
+                "Error generating optimization report for %s: %s", image_name, e
+            )
             return {"error": str(e)}
 
     def _extract_base_image(self, image_attrs: dict[str, Any]) -> str:

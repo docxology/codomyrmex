@@ -33,7 +33,9 @@ class HealthChecker:
             checks=list(results),
         )
 
-    def _determine_overall_status(self, results: list[HealthCheckResult]) -> HealthStatus:
+    def _determine_overall_status(
+        self, results: list[HealthCheckResult]
+    ) -> HealthStatus:
         """Determine overall status: critical failures → UNHEALTHY, any issues → DEGRADED."""
         critical_unhealthy = any(
             r.status == HealthStatus.UNHEALTHY
@@ -43,7 +45,9 @@ class HealthChecker:
         if critical_unhealthy:
             return HealthStatus.UNHEALTHY
 
-        if any(r.status in (HealthStatus.UNHEALTHY, HealthStatus.DEGRADED) for r in results):
+        if any(
+            r.status in (HealthStatus.UNHEALTHY, HealthStatus.DEGRADED) for r in results
+        ):
             return HealthStatus.DEGRADED
 
         return HealthStatus.HEALTHY

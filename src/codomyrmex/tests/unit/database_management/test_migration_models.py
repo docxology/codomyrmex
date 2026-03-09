@@ -47,14 +47,18 @@ class TestMigrationStep:
 
     def test_run_up_with_fn(self):
         called = []
-        step = MigrationStep(id="s1", name="step", up_fn=lambda: called.append(1) or True)
+        step = MigrationStep(
+            id="s1", name="step", up_fn=lambda: called.append(1) or True
+        )
         result = step.run_up()
         assert result is True
         assert len(called) == 1
 
     def test_run_down_with_fn(self):
         results = []
-        step = MigrationStep(id="s1", name="step", down_fn=lambda: results.append(1) or False)
+        step = MigrationStep(
+            id="s1", name="step", down_fn=lambda: results.append(1) or False
+        )
         result = step.run_down()
         assert result is False
 
@@ -74,33 +78,42 @@ class TestMigrationResult:
         assert r.error is None
 
     def test_progress_zero_total(self):
-        r = MigrationResult(migration_id="m1", status=MigrationStatus.PENDING, steps_total=0)
+        r = MigrationResult(
+            migration_id="m1", status=MigrationStatus.PENDING, steps_total=0
+        )
         assert r.progress == 0.0
 
     def test_progress_calculation(self):
         r = MigrationResult(
-            migration_id="m1", status=MigrationStatus.RUNNING,
-            steps_completed=3, steps_total=10
+            migration_id="m1",
+            status=MigrationStatus.RUNNING,
+            steps_completed=3,
+            steps_total=10,
         )
         assert r.progress == 0.3
 
     def test_progress_complete(self):
         r = MigrationResult(
-            migration_id="m1", status=MigrationStatus.COMPLETED,
-            steps_completed=5, steps_total=5
+            migration_id="m1",
+            status=MigrationStatus.COMPLETED,
+            steps_completed=5,
+            steps_total=5,
         )
         assert r.progress == 1.0
 
     def test_duration_seconds_positive(self):
         r = MigrationResult(migration_id="m1", status=MigrationStatus.RUNNING)
         import time
+
         time.sleep(0.01)
         assert r.duration_seconds > 0
 
     def test_to_dict_keys(self):
         r = MigrationResult(
-            migration_id="m1", status=MigrationStatus.COMPLETED,
-            steps_completed=4, steps_total=4
+            migration_id="m1",
+            status=MigrationStatus.COMPLETED,
+            steps_completed=4,
+            steps_total=4,
         )
         d = r.to_dict()
         assert d["migration_id"] == "m1"
@@ -133,9 +146,9 @@ class TestMigration:
 
     def test_add_simple_step_chainable(self):
         m = Migration(id="m1", name="test", version="1.0")
-        result = m.add_simple_step(id="s1", name="step1", up_fn=lambda: True).add_simple_step(
-            id="s2", name="step2", up_fn=lambda: True
-        )
+        result = m.add_simple_step(
+            id="s1", name="step1", up_fn=lambda: True
+        ).add_simple_step(id="s2", name="step2", up_fn=lambda: True)
         assert result is m
         assert len(m.steps) == 2
 

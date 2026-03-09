@@ -62,10 +62,7 @@ def create_assistant(
         ImportError: If qwen-agent is not installed.
     """
     if Assistant is None:
-        msg = (
-            "qwen-agent is not installed. "
-            "Install with: uv pip install qwen-agent"
-        )
+        msg = "qwen-agent is not installed. Install with: uv pip install qwen-agent"
         raise ImportError(msg)
 
     llm_cfg: dict[str, Any] = {
@@ -146,7 +143,7 @@ def stream_assistant(
             if isinstance(last, dict) and "content" in last:
                 current = last["content"]
                 if len(current) > len(prev_text):
-                    yield current[len(prev_text):]
+                    yield current[len(prev_text) :]
                     prev_text = current
 
 
@@ -165,8 +162,7 @@ def launch_webui(
     """
     if WebUI is None:
         msg = (
-            "qwen-agent WebUI requires gradio. "
-            "Install: uv pip install qwen-agent[gui]"
+            "qwen-agent WebUI requires gradio. Install: uv pip install qwen-agent[gui]"
         )
         raise ImportError(msg)
 

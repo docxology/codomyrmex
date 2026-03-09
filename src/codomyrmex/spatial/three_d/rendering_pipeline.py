@@ -97,7 +97,9 @@ class RenderPipeline:
     def _render_geometry(self, obj: Object3D) -> None:
         """Render object geometry."""
         logger.debug(
-            "Rendering geometry for object: %s (%s vertices)", obj.name, len(obj.vertices)
+            "Rendering geometry for object: %s (%s vertices)",
+            obj.name,
+            len(obj.vertices),
         )
         # Draw arrays or elements
         # gl.drawArrays(...)

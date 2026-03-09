@@ -66,7 +66,7 @@ class TestDetectPii:
         email_matches = [m for m in matches if m.pii_type == "email"]
         assert len(email_matches) >= 1
         m = email_matches[0]
-        assert text[m.start:m.end] == m.value
+        assert text[m.start : m.end] == m.value
 
     def test_multiple_pii_in_text(self):
         text = "Contact: alice@test.com, phone: 555-123-4567"
@@ -409,7 +409,9 @@ class TestPIIMatch:
     """Tests for PIIMatch dataclass."""
 
     def test_construction(self):
-        match = PIIMatch(field="email", pii_type="email", value="a@b.com", start=0, end=7)
+        match = PIIMatch(
+            field="email", pii_type="email", value="a@b.com", start=0, end=7
+        )
         assert match.field == "email"
         assert match.pii_type == "email"
         assert match.value == "a@b.com"

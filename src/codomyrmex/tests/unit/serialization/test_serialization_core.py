@@ -27,9 +27,7 @@ try:
 except ImportError:
     _YAML_AVAILABLE = False
 
-_SKIP_YAML = pytest.mark.skipif(
-    not _YAML_AVAILABLE, reason="PyYAML not installed"
-)
+_SKIP_YAML = pytest.mark.skipif(not _YAML_AVAILABLE, reason="PyYAML not installed")
 
 
 # ===========================================================================

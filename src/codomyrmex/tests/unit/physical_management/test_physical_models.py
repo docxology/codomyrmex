@@ -1,6 +1,5 @@
 """Tests for physical_management.models."""
 
-
 from codomyrmex.physical_management.models import (
     EventType,
     MaterialProperties,
@@ -64,8 +63,11 @@ class TestEventType:
 class TestMaterialProperties:
     def test_construction(self):
         mp = MaterialProperties(
-            density=7850, elasticity=200e9, thermal_conductivity=45,
-            specific_heat=500, melting_point=1811
+            density=7850,
+            elasticity=200e9,
+            thermal_conductivity=45,
+            specific_heat=500,
+            melting_point=1811,
         )
         assert mp.density == 7850
         assert mp.friction_coefficient == 0.5
@@ -273,7 +275,9 @@ class TestPhysicalObject:
         assert obj.disconnect_from("nonexistent") is False
 
     def test_calculate_thermal_energy(self):
-        obj = self._make_object(material=MaterialType.METAL, mass=1.0, temperature=373.15)
+        obj = self._make_object(
+            material=MaterialType.METAL, mass=1.0, temperature=373.15
+        )
         energy = obj.calculate_thermal_energy()
         assert energy > 0  # 1kg metal, above 0°C
 
@@ -299,7 +303,9 @@ class TestPhysicalObject:
         assert "connections" in d
 
     def test_to_dict_serializes_enum_values(self):
-        obj = self._make_object(object_type=ObjectType.VEHICLE, status=ObjectStatus.OFFLINE)
+        obj = self._make_object(
+            object_type=ObjectType.VEHICLE, status=ObjectStatus.OFFLINE
+        )
         d = obj.to_dict()
         assert d["object_type"] == "vehicle"
         assert d["status"] == "offline"

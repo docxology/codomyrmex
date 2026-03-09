@@ -58,7 +58,9 @@ class HTTPHealthCheck(HealthCheck):
 
         start = time.time()
         try:
-            req = urllib.request.Request(self.url, method=self.method, headers=self.headers)
+            req = urllib.request.Request(
+                self.url, method=self.method, headers=self.headers
+            )
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 latency_ms = (time.time() - start) * 1000
                 body = resp.read().decode("utf-8")
@@ -66,28 +68,45 @@ class HTTPHealthCheck(HealthCheck):
 
                 if code != self.expected_status:
                     return HealthCheckResult(
-                        self.name, HealthStatus.UNHEALTHY,
+                        self.name,
+                        HealthStatus.UNHEALTHY,
                         f"Expected status {self.expected_status}, got {code}",
-                        latency_ms, details={"status_code": code},
+                        latency_ms,
+                        details={"status_code": code},
                     )
                 if self.expected_body and self.expected_body not in body:
                     return HealthCheckResult(
-                        self.name, HealthStatus.UNHEALTHY, "Response body mismatch", latency_ms,
+                        self.name,
+                        HealthStatus.UNHEALTHY,
+                        "Response body mismatch",
+                        latency_ms,
                     )
                 return HealthCheckResult(
-                    self.name, HealthStatus.HEALTHY, "OK", latency_ms,
+                    self.name,
+                    HealthStatus.HEALTHY,
+                    "OK",
+                    latency_ms,
                     details={"status_code": code},
                 )
         except Exception as e:
             latency_ms = (time.time() - start) * 1000
             logger.debug("HTTP health check failed for %s: %s", self.url, e)
-            return HealthCheckResult(self.name, HealthStatus.UNHEALTHY, str(e), latency_ms)
+            return HealthCheckResult(
+                self.name, HealthStatus.UNHEALTHY, str(e), latency_ms
+            )
 
 
 class TCPHealthCheck(HealthCheck):
     """TCP port connectivity health check."""
 
-    def __init__(self, name: str, host: str, port: int, timeout: float = 5.0, critical: bool = True):
+    def __init__(
+        self,
+        name: str,
+        host: str,
+        port: int,
+        timeout: float = 5.0,
+        critical: bool = True,
+    ):
         super().__init__(name, timeout, critical)
         self.host = host
         self.port = port
@@ -104,14 +123,24 @@ class TCPHealthCheck(HealthCheck):
             details: dict[str, Any] = {"host": self.host, "port": self.port}
             if result == 0:
                 return HealthCheckResult(
-                    self.name, HealthStatus.HEALTHY, f"Port {self.port} is open", latency_ms, details=details,
+                    self.name,
+                    HealthStatus.HEALTHY,
+                    f"Port {self.port} is open",
+                    latency_ms,
+                    details=details,
                 )
             return HealthCheckResult(
-                self.name, HealthStatus.UNHEALTHY, f"Port {self.port} is closed", latency_ms, details=details,
+                self.name,
+                HealthStatus.UNHEALTHY,
+                f"Port {self.port} is closed",
+                latency_ms,
+                details=details,
             )
         except Exception as e:
             latency_ms = (time.time() - start) * 1000
-            return HealthCheckResult(self.name, HealthStatus.UNHEALTHY, str(e), latency_ms)
+            return HealthCheckResult(
+                self.name, HealthStatus.UNHEALTHY, str(e), latency_ms
+            )
 
 
 class CommandHealthCheck(HealthCheck):
@@ -135,12 +164,16 @@ class CommandHealthCheck(HealthCheck):
         """Validate subprocess result against expected exit code and output."""
         if proc.returncode != self.expected_exit_code:
             return HealthCheckResult(
-                self.name, HealthStatus.UNHEALTHY,
+                self.name,
+                HealthStatus.UNHEALTHY,
                 f"Exit code {proc.returncode}, expected {self.expected_exit_code}",
-                latency_ms, details={"stderr": proc.stderr[:500]},
+                latency_ms,
+                details={"stderr": proc.stderr[:500]},
             )
         if self.expected_output and self.expected_output not in proc.stdout:
-            return HealthCheckResult(self.name, HealthStatus.UNHEALTHY, "Output mismatch", latency_ms)
+            return HealthCheckResult(
+                self.name, HealthStatus.UNHEALTHY, "Output mismatch", latency_ms
+            )
         return HealthCheckResult(self.name, HealthStatus.HEALTHY, "OK", latency_ms)
 
     def check(self) -> HealthCheckResult:
@@ -150,17 +183,25 @@ class CommandHealthCheck(HealthCheck):
         start = time.time()
         try:
             proc = subprocess.run(
-                self.command, capture_output=True, text=True, timeout=self.timeout,
+                self.command,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
             )
             return self._validate_result(proc, (time.time() - start) * 1000)
         except subprocess.TimeoutExpired:
             return HealthCheckResult(
-                self.name, HealthStatus.UNHEALTHY, "Command timed out",
+                self.name,
+                HealthStatus.UNHEALTHY,
+                "Command timed out",
                 (time.time() - start) * 1000,
             )
         except Exception as e:
             return HealthCheckResult(
-                self.name, HealthStatus.UNHEALTHY, str(e), (time.time() - start) * 1000,
+                self.name,
+                HealthStatus.UNHEALTHY,
+                str(e),
+                (time.time() - start) * 1000,
             )
 
 
@@ -179,13 +220,33 @@ class MemoryHealthCheck(HealthCheck):
         self.warning_threshold = warning_threshold
         self.critical_threshold = critical_threshold
 
-    def _classify(self, percent: float, details: dict, latency_ms: float) -> HealthCheckResult:
+    def _classify(
+        self, percent: float, details: dict, latency_ms: float
+    ) -> HealthCheckResult:
         """Classify memory usage into HEALTHY / DEGRADED / UNHEALTHY."""
         if percent >= self.critical_threshold:
-            return HealthCheckResult(self.name, HealthStatus.UNHEALTHY, f"Memory usage critical: {percent}%", latency_ms, details=details)
+            return HealthCheckResult(
+                self.name,
+                HealthStatus.UNHEALTHY,
+                f"Memory usage critical: {percent}%",
+                latency_ms,
+                details=details,
+            )
         if percent >= self.warning_threshold:
-            return HealthCheckResult(self.name, HealthStatus.DEGRADED, f"Memory usage high: {percent}%", latency_ms, details=details)
-        return HealthCheckResult(self.name, HealthStatus.HEALTHY, f"Memory usage: {percent}%", latency_ms, details=details)
+            return HealthCheckResult(
+                self.name,
+                HealthStatus.DEGRADED,
+                f"Memory usage high: {percent}%",
+                latency_ms,
+                details=details,
+            )
+        return HealthCheckResult(
+            self.name,
+            HealthStatus.HEALTHY,
+            f"Memory usage: {percent}%",
+            latency_ms,
+            details=details,
+        )
 
     def check(self) -> HealthCheckResult:
         """Check system memory utilisation via psutil."""
@@ -202,7 +263,9 @@ class MemoryHealthCheck(HealthCheck):
             }
             return self._classify(mem.percent, details, latency_ms)
         except ImportError:
-            return HealthCheckResult(self.name, HealthStatus.UNKNOWN, "psutil not available")
+            return HealthCheckResult(
+                self.name, HealthStatus.UNKNOWN, "psutil not available"
+            )
         except Exception as e:
             return HealthCheckResult(self.name, HealthStatus.UNHEALTHY, str(e))
 
@@ -224,13 +287,33 @@ class DiskHealthCheck(HealthCheck):
         self.warning_threshold = warning_threshold
         self.critical_threshold = critical_threshold
 
-    def _classify(self, percent: float, details: dict, latency_ms: float) -> HealthCheckResult:
+    def _classify(
+        self, percent: float, details: dict, latency_ms: float
+    ) -> HealthCheckResult:
         """Classify disk usage into HEALTHY / DEGRADED / UNHEALTHY."""
         if percent >= self.critical_threshold:
-            return HealthCheckResult(self.name, HealthStatus.UNHEALTHY, f"Disk usage critical: {percent:.1f}%", latency_ms, details=details)
+            return HealthCheckResult(
+                self.name,
+                HealthStatus.UNHEALTHY,
+                f"Disk usage critical: {percent:.1f}%",
+                latency_ms,
+                details=details,
+            )
         if percent >= self.warning_threshold:
-            return HealthCheckResult(self.name, HealthStatus.DEGRADED, f"Disk usage high: {percent:.1f}%", latency_ms, details=details)
-        return HealthCheckResult(self.name, HealthStatus.HEALTHY, f"Disk usage: {percent:.1f}%", latency_ms, details=details)
+            return HealthCheckResult(
+                self.name,
+                HealthStatus.DEGRADED,
+                f"Disk usage high: {percent:.1f}%",
+                latency_ms,
+                details=details,
+            )
+        return HealthCheckResult(
+            self.name,
+            HealthStatus.HEALTHY,
+            f"Disk usage: {percent:.1f}%",
+            latency_ms,
+            details=details,
+        )
 
     def check(self) -> HealthCheckResult:
         """Check disk utilisation via shutil.disk_usage."""

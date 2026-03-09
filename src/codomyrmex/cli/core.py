@@ -86,6 +86,7 @@ class Cli:
     def status(self):
         """Show comprehensive system status dashboard"""
         from codomyrmex.cli.status import print_status_report
+
         return print_status_report()
 
     def dashboard(self, port=8787, host="0.0.0.0", open=True):

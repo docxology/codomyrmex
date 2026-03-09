@@ -174,7 +174,9 @@ class TestNote:
 class TestSearchResult:
     def test_construction(self):
         note = Note(title="Result Note")
-        sr = SearchResult(note=note, score=0.85, match_type="title", context="some context")
+        sr = SearchResult(
+            note=note, score=0.85, match_type="title", context="some context"
+        )
         assert sr.note.title == "Result Note"
         assert sr.score == 0.85
         assert sr.match_type == "title"
@@ -197,7 +199,13 @@ class TestVaultMetadata:
         assert vm.folder_count == 0
 
     def test_with_values(self):
-        vm = VaultMetadata(note_count=100, tag_count=50, link_count=200, total_words=50000, folder_count=10)
+        vm = VaultMetadata(
+            note_count=100,
+            tag_count=50,
+            link_count=200,
+            total_words=50000,
+            folder_count=10,
+        )
         assert vm.note_count == 100
         assert vm.folder_count == 10
 

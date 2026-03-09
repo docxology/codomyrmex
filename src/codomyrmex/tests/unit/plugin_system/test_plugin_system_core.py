@@ -323,9 +323,7 @@ class TestPluginRegistry:
     def test_check_dependencies_satisfied_dep(self):
         registry = self.make_registry()
         dep_plugin = self.make_plugin("dep_a")
-        main_plugin = Plugin(
-            info=PluginInfo(name="main_b", dependencies=["dep_a"])
-        )
+        main_plugin = Plugin(info=PluginInfo(name="main_b", dependencies=["dep_a"]))
         registry.register(dep_plugin)
         registry.register(main_plugin)
         missing = registry.check_dependencies("main_b")

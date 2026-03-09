@@ -102,7 +102,10 @@ class CacheWarmer(Generic[K, V]):
             try:
                 return (key, self.value_loader.load(key), None)
             except Exception as e:
-                if attempt == self.config.max_retries or not self.config.retry_on_failure:
+                if (
+                    attempt == self.config.max_retries
+                    or not self.config.retry_on_failure
+                ):
                     return (key, None, str(e))
                 time.sleep(0.1 * (2**attempt))
         return (key, None, "Max retries exceeded")
@@ -110,9 +113,13 @@ class CacheWarmer(Generic[K, V]):
     def _warm_parallel(self, keys: list[K]) -> WarmingStats:
         """Warm using parallel loading with ThreadPoolExecutor."""
         stats = WarmingStats()
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.config.max_workers) as ex:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.config.max_workers
+        ) as ex:
             futures = {ex.submit(self._load_key_with_retry, key): key for key in keys}
-            for future in concurrent.futures.as_completed(futures, timeout=self.config.warmup_timeout_s):
+            for future in concurrent.futures.as_completed(
+                futures, timeout=self.config.warmup_timeout_s
+            ):
                 key, value, error = future.result()
                 if error:
                     stats.keys_failed += 1

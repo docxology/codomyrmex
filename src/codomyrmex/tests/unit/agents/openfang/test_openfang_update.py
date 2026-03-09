@@ -1,4 +1,5 @@
 """Tests for openfang update utilities — zero-mock, filesystem-based."""
+
 import os
 import tempfile
 from pathlib import Path

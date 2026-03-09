@@ -123,7 +123,9 @@ class InfomaniakOpenStackBase:
             list(self._conn.identity.projects())
             return True
         except Exception as e:
-            logger.error("Connection validation failed for %s: %s", self._service_name, e)
+            logger.error(
+                "Connection validation failed for %s: %s", self._service_name, e
+            )
             return False
 
 

@@ -1,0 +1,11 @@
+    // Refresh Data button (dashboard)
+    const refreshBtn = document.getElementById('refresh-data-btn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '<span class="loader"></span> Refreshing...';
+            try {
+                const resp = await fetch('/api/refresh', { method: 'POST' });
+                if (resp.ok) {
+                    window.location.reload();
+                } else {

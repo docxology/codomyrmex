@@ -485,7 +485,9 @@ class ContainerRegistry:
                                 delete_url, timeout=30
                             )
                             if delete_response.status_code in [200, 202]:
-                                logger.info("Deleted image from registry: %s", full_name)
+                                logger.info(
+                                    "Deleted image from registry: %s", full_name
+                                )
                 except Exception as e:
                     logger.warning("Could not delete from registry: %s", e)
 
@@ -559,7 +561,10 @@ class ContainerRegistry:
         """
         if not self.is_available():
             logger.info(
-                "[SIMULATED] Tag image: %s -> %s:%s", source_image, target_name, target_tag
+                "[SIMULATED] Tag image: %s -> %s:%s",
+                source_image,
+                target_name,
+                target_tag,
             )
             return True
 

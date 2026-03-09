@@ -22,6 +22,7 @@ class SessionData(TypedDict):
     discoveries_made: list[str]
     demos_run: int
 
+
 # NOTE: Core-layer imports (coding, data_visualization) are loaded lazily
 # inside the methods that need them to respect the Foundation → Core layer
 # boundary.  Only Foundation-layer imports appear at the top level.

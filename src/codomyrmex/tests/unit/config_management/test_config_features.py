@@ -19,16 +19,8 @@ class TestConfigFeatures:
 
     def test_deep_merge(self):
         """Verify deep_merge recursively merges dictionaries."""
-        base = {
-            "a": 1,
-            "nested": {"b": 2, "c": 3},
-            "other": [1, 2]
-        }
-        extension = {
-            "nested": {"c": 30, "d": 4},
-            "other": [3],
-            "new": "val"
-        }
+        base = {"a": 1, "nested": {"b": 2, "c": 3}, "other": [1, 2]}
+        extension = {"nested": {"c": 30, "d": 4}, "other": [3], "new": "val"}
         result = deep_merge(base, extension)
 
         assert result["a"] == 1
@@ -48,9 +40,7 @@ class TestConfigFeatures:
             "k2": "${TEST_VAR_2:-default_2}",
             "k3": "${MISSING_VAR:-default_3}",
             "k4": "${MISSING_VAR_NO_DEFAULT}",
-            "nested": {
-                "list": ["prefix_${TEST_VAR_1}_suffix", 42]
-            }
+            "nested": {"list": ["prefix_${TEST_VAR_1}_suffix", 42]},
         }
 
         resolved = resolve_env_vars(data)
@@ -69,24 +59,16 @@ class TestConfigFeatures:
             "app": {
                 "name": "DefaultApp",
                 "port": 8080,
-                "db": {
-                    "host": "localhost",
-                    "user": "admin"
-                }
+                "db": {"host": "localhost", "user": "admin"},
             },
-            "env_test": "${ENV_VAR_SUBST:-default_subst}"
+            "env_test": "${ENV_VAR_SUBST:-default_subst}",
         }
 
         # 2. File override
         config_file = tmp_path / "myapp.yaml"
-        config_file.write_text(yaml.dump({
-            "app": {
-                "name": "FileApp",
-                "db": {
-                    "host": "db.production.com"
-                }
-            }
-        }))
+        config_file.write_text(
+            yaml.dump({"app": {"name": "FileApp", "db": {"host": "db.production.com"}}})
+        )
 
         # 3. Environment variable overrides (including nested via double underscore)
         os.environ["MYAPP_APP__DB__USER"] = "prod_user"
@@ -95,16 +77,16 @@ class TestConfigFeatures:
         try:
             manager = ConfigurationManager(config_dir=str(tmp_path))
             config = manager.load_configuration(
-                "myapp",
-                sources=["myapp.yaml"],
-                defaults=defaults
+                "myapp", sources=["myapp.yaml"], defaults=defaults
             )
 
             # Check precedence
             assert config.data["app"]["name"] == "FileApp"  # File > Default
-            assert config.data["app"]["port"] == 8080      # Default (not overridden)
-            assert config.data["app"]["db"]["host"] == "db.production.com" # File > Default
-            assert config.data["app"]["db"]["user"] == "prod_user"         # Env > File/Default
+            assert config.data["app"]["port"] == 8080  # Default (not overridden)
+            assert (
+                config.data["app"]["db"]["host"] == "db.production.com"
+            )  # File > Default
+            assert config.data["app"]["db"]["user"] == "prod_user"  # Env > File/Default
 
             # Check substitution
             assert config.data["env_test"] == "overridden_subst"
@@ -135,8 +117,10 @@ class TestConfigFeatures:
         assert config_json.data["format"] == "json"
 
         # Merge YAML then JSON
-        config_merged = manager.load_configuration("config_merged", sources=["config.yaml", "config.json"])
-        assert config_merged.data["shared"] == "json_val" # Later wins
+        config_merged = manager.load_configuration(
+            "config_merged", sources=["config.yaml", "config.json"]
+        )
+        assert config_merged.data["shared"] == "json_val"  # Later wins
 
     def test_missing_env_var_substitution_no_default(self):
         """Verify ${VAR} remains unchanged if VAR is missing and no default is provided."""

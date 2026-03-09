@@ -19,6 +19,7 @@ __all__ = [
     "QwenClient",
 ]
 
+
 # Lazy imports for optional qwen-agent framework
 def __getattr__(name: str):
     """Lazy import for qwen-agent framework wrappers."""
@@ -31,6 +32,7 @@ def __getattr__(name: str):
     }
     if name in _wrapper_exports:
         from . import qwen_agent_wrapper
+
         return getattr(qwen_agent_wrapper, name)
 
     msg = f"module {__name__!r} has no attribute {name!r}"

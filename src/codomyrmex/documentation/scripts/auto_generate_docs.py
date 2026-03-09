@@ -211,11 +211,15 @@ For complete documentation, see:
                 generated_count += 1
 
             except Exception as e:
-                logger.error("Error generating documentation for %s: %s", module_name, e)
+                logger.error(
+                    "Error generating documentation for %s: %s", module_name, e
+                )
                 continue
 
         logger.info(
-            "Successfully generated documentation for %s/%s modules", generated_count, len(modules)
+            "Successfully generated documentation for %s/%s modules",
+            generated_count,
+            len(modules),
         )
 
         return 0 if generated_count > 0 else 1

@@ -148,7 +148,8 @@ class Broadcaster:
         del self._subscriptions[subscription_id]
         logger.info(
             "Agent %s unsubscribed from %s",
-            subscription.subscriber_id, subscription.topic,
+            subscription.subscriber_id,
+            subscription.topic,
         )
         return True
 

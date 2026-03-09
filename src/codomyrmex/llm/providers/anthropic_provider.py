@@ -18,6 +18,7 @@ class AnthropicProvider(LLMProvider):
     def _init_client(self) -> None:
         try:
             from anthropic import Anthropic
+
             self._client = Anthropic(api_key=self.config.api_key)
         except ImportError:
             self._client = None
@@ -31,8 +32,14 @@ class AnthropicProvider(LLMProvider):
                 chat_messages.append({"role": m.role, "content": m.content})
         return system, chat_messages
 
-    def complete(self, messages: list[Message], model: str | None = None,
-                 temperature: float = 0.7, max_tokens: int | None = None, **kwargs) -> CompletionResponse:
+    def complete(
+        self,
+        messages: list[Message],
+        model: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+        **kwargs,
+    ) -> CompletionResponse:
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
         system, chat_messages = self._split_messages(messages)
@@ -52,13 +59,20 @@ class AnthropicProvider(LLMProvider):
             usage={
                 "prompt_tokens": response.usage.input_tokens,
                 "completion_tokens": response.usage.output_tokens,
-                "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
+                "total_tokens": response.usage.input_tokens
+                + response.usage.output_tokens,
             },
             raw_response=response,
         )
 
-    def complete_stream(self, messages: list[Message], model: str | None = None,
-                        temperature: float = 0.7, max_tokens: int | None = None, **kwargs) -> Iterator[str]:
+    def complete_stream(
+        self,
+        messages: list[Message],
+        model: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+        **kwargs,
+    ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
         system, chat_messages = self._split_messages(messages)
@@ -72,10 +86,17 @@ class AnthropicProvider(LLMProvider):
         ) as stream:
             yield from stream.text_stream
 
-    async def complete_async(self, messages: list[Message], model: str | None = None,
-                             temperature: float = 0.7, max_tokens: int | None = None, **kwargs) -> CompletionResponse:
+    async def complete_async(
+        self,
+        messages: list[Message],
+        model: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int | None = None,
+        **kwargs,
+    ) -> CompletionResponse:
         try:
             from anthropic import AsyncAnthropic
+
             async_client = AsyncAnthropic(api_key=self.config.api_key)
             system, chat_messages = self._split_messages(messages)
             response = await async_client.messages.create(  # type: ignore
@@ -94,8 +115,11 @@ class AnthropicProvider(LLMProvider):
                 usage={
                     "prompt_tokens": response.usage.input_tokens,
                     "completion_tokens": response.usage.output_tokens,
-                    "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
-                } if response.usage else None,
+                    "total_tokens": response.usage.input_tokens
+                    + response.usage.output_tokens,
+                }
+                if response.usage
+                else None,
                 raw_response=response,
             )
         except ImportError:

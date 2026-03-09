@@ -106,7 +106,13 @@ class TestReports:
 
     @pytest.mark.parametrize(
         "name",
-        ["FinanceReport", "GeneralSystemReport", "LogisticsReport", "MarketingReport", "Report"],
+        [
+            "FinanceReport",
+            "GeneralSystemReport",
+            "LogisticsReport",
+            "MarketingReport",
+            "Report",
+        ],
     )
     def test_report_callable(self, name: str) -> None:
         assert callable(getattr(dv, name))
@@ -148,6 +154,7 @@ class TestSubmoduleAccess:
 
     def test_git_visualizer_submodule(self) -> None:
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
         viz = GitVisualizer()
         assert viz is not None
 
@@ -155,7 +162,10 @@ class TestSubmoduleAccess:
         from codomyrmex.data_visualization.mermaid.mermaid_generator import (
             MermaidDiagramGenerator,
         )
+
         gen = MermaidDiagramGenerator()
         assert gen is not None
-        public = [m for m in dir(gen) if not m.startswith("_") and callable(getattr(gen, m))]
+        public = [
+            m for m in dir(gen) if not m.startswith("_") and callable(getattr(gen, m))
+        ]
         assert len(public) > 0

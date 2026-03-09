@@ -75,7 +75,9 @@ def create_box_plot(
     if theme is not None:
         apply_theme_to_axes(ax, theme)
 
-    bp = ax.boxplot(data_list, tick_labels=labels, notch=notch, patch_artist=patch_artist)
+    bp = ax.boxplot(
+        data_list, tick_labels=labels, notch=notch, patch_artist=patch_artist
+    )
 
     if patch_artist:
         for patch in bp["boxes"]:

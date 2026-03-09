@@ -159,7 +159,6 @@ class TestGetProviderMalformedToken:
         """Write a malformed JSON token and verify RuntimeError is raised."""
         from pathlib import Path as _Path
 
-
         # Build a fake token path with invalid JSON
         fake_dir = tmp_path / ".codomyrmex"
         fake_dir.mkdir()
@@ -358,7 +357,9 @@ class TestMcpToolRegistration:
             calendar_create_event("T", "2026-01-01T10:00:00", "2026-01-01T11:00:00"),
             calendar_get_event("x"),
             calendar_delete_event("x"),
-            calendar_update_event("x", "T", "2026-01-01T10:00:00", "2026-01-01T11:00:00"),
+            calendar_update_event(
+                "x", "T", "2026-01-01T10:00:00", "2026-01-01T11:00:00"
+            ),
         ]
         for result in results:
             assert isinstance(result, dict), f"Expected dict, got {type(result)}"

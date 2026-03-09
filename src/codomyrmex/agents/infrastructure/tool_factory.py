@@ -118,7 +118,9 @@ class CloudToolFactory:
             registry[tool_name] = tool
             registered.append(tool_name)
 
-        logger.info("Registered %d tools for service '%s'", len(registered), service_name)
+        logger.info(
+            "Registered %d tools for service '%s'", len(registered), service_name
+        )
         return registered
 
     @staticmethod

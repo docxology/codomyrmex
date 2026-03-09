@@ -70,7 +70,8 @@ def _update_pdf_metadata(file_path: Path, metadata: dict[str, Any]) -> None:
             writer.write(f)
     except ImportError:
         logger.warning(
-            "pypdf not installed. Skipping precise PDF metadata update for %s", file_path
+            "pypdf not installed. Skipping precise PDF metadata update for %s",
+            file_path,
         )
 
 

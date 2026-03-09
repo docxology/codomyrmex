@@ -261,9 +261,15 @@ class TestObjectRegistry:
 
     def test_check_collisions(self) -> None:
         reg = ObjectRegistry()
-        a = PhysicalObject(id="a", name="A", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0))
-        b = PhysicalObject(id="b", name="B", object_type=ObjectType.DEVICE, location=(0.5, 0.0, 0.0))
-        c = PhysicalObject(id="c", name="C", object_type=ObjectType.DEVICE, location=(100.0, 0.0, 0.0))
+        a = PhysicalObject(
+            id="a", name="A", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0)
+        )
+        b = PhysicalObject(
+            id="b", name="B", object_type=ObjectType.DEVICE, location=(0.5, 0.0, 0.0)
+        )
+        c = PhysicalObject(
+            id="c", name="C", object_type=ObjectType.DEVICE, location=(100.0, 0.0, 0.0)
+        )
         reg.register_object(a)
         reg.register_object(b)
         reg.register_object(c)
@@ -279,7 +285,9 @@ class TestObjectRegistry:
         reg = ObjectRegistry()
         events_received = []
         reg.add_event_handler(EventType.CREATED, events_received.append)
-        obj = PhysicalObject(id="e1", name="E1", object_type=ObjectType.SENSOR, location=(0.0, 0.0, 0.0))
+        obj = PhysicalObject(
+            id="e1", name="E1", object_type=ObjectType.SENSOR, location=(0.0, 0.0, 0.0)
+        )
         reg.register_object(obj)
         assert len(events_received) == 1
         assert events_received[0].event_type == EventType.CREATED
@@ -288,14 +296,18 @@ class TestObjectRegistry:
 
     def test_get_events_filter(self) -> None:
         reg = ObjectRegistry()
-        obj = PhysicalObject(id="f1", name="F1", object_type=ObjectType.SENSOR, location=(0.0, 0.0, 0.0))
+        obj = PhysicalObject(
+            id="f1", name="F1", object_type=ObjectType.SENSOR, location=(0.0, 0.0, 0.0)
+        )
         reg.register_object(obj)
         events = reg.get_events(event_type=EventType.CREATED, object_id="f1")
         assert len(events) == 1
 
     def test_tags_query(self) -> None:
         reg = ObjectRegistry()
-        obj = PhysicalObject(id="t1", name="T1", object_type=ObjectType.SENSOR, location=(0.0, 0.0, 0.0))
+        obj = PhysicalObject(
+            id="t1", name="T1", object_type=ObjectType.SENSOR, location=(0.0, 0.0, 0.0)
+        )
         obj.add_tag("indoor")
         obj.add_tag("floor1")
         reg.register_object(obj)
@@ -306,8 +318,12 @@ class TestObjectRegistry:
 
     def test_network_topology(self) -> None:
         reg = ObjectRegistry()
-        a = PhysicalObject(id="n1", name="N1", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0))
-        b = PhysicalObject(id="n2", name="N2", object_type=ObjectType.DEVICE, location=(1.0, 0.0, 0.0))
+        a = PhysicalObject(
+            id="n1", name="N1", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0)
+        )
+        b = PhysicalObject(
+            id="n2", name="N2", object_type=ObjectType.DEVICE, location=(1.0, 0.0, 0.0)
+        )
         a.connect_to("n2")
         b.connect_to("n1")
         reg.register_object(a)
@@ -317,9 +333,15 @@ class TestObjectRegistry:
 
     def test_path_through_network(self) -> None:
         reg = ObjectRegistry()
-        a = PhysicalObject(id="p1", name="P1", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0))
-        b = PhysicalObject(id="p2", name="P2", object_type=ObjectType.DEVICE, location=(1.0, 0.0, 0.0))
-        c = PhysicalObject(id="p3", name="P3", object_type=ObjectType.DEVICE, location=(2.0, 0.0, 0.0))
+        a = PhysicalObject(
+            id="p1", name="P1", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0)
+        )
+        b = PhysicalObject(
+            id="p2", name="P2", object_type=ObjectType.DEVICE, location=(1.0, 0.0, 0.0)
+        )
+        c = PhysicalObject(
+            id="p3", name="P3", object_type=ObjectType.DEVICE, location=(2.0, 0.0, 0.0)
+        )
         a.connect_to("p2")
         b.connect_to("p3")
         reg.register_object(a)
@@ -331,7 +353,12 @@ class TestObjectRegistry:
 
     def test_find_path_self(self) -> None:
         reg = ObjectRegistry()
-        a = PhysicalObject(id="self1", name="Self", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0))
+        a = PhysicalObject(
+            id="self1",
+            name="Self",
+            object_type=ObjectType.DEVICE,
+            location=(0.0, 0.0, 0.0),
+        )
         reg.register_object(a)
         assert reg.find_path_through_network("self1", "self1") == ["self1"]
 
@@ -341,8 +368,18 @@ class TestObjectRegistry:
 
     def test_analyze_network_metrics(self) -> None:
         reg = ObjectRegistry()
-        a = PhysicalObject(id="am1", name="AM1", object_type=ObjectType.DEVICE, location=(0.0, 0.0, 0.0))
-        b = PhysicalObject(id="am2", name="AM2", object_type=ObjectType.DEVICE, location=(1.0, 0.0, 0.0))
+        a = PhysicalObject(
+            id="am1",
+            name="AM1",
+            object_type=ObjectType.DEVICE,
+            location=(0.0, 0.0, 0.0),
+        )
+        b = PhysicalObject(
+            id="am2",
+            name="AM2",
+            object_type=ObjectType.DEVICE,
+            location=(1.0, 0.0, 0.0),
+        )
         a.connect_to("am2")
         b.connect_to("am1")
         reg.register_object(a)
@@ -384,7 +421,9 @@ class TestPhysicalObjectManager:
         return m
 
     def test_create_object(self, mgr: PhysicalObjectManager) -> None:
-        obj = mgr.create_object("new1", "New", ObjectType.ACTUATOR, 1.0, 2.0, 3.0, mass=5.0)
+        obj = mgr.create_object(
+            "new1", "New", ObjectType.ACTUATOR, 1.0, 2.0, 3.0, mass=5.0
+        )
         assert obj.mass == 5.0
         assert mgr.get_object_status("new1") == ObjectStatus.ACTIVE
 
@@ -404,7 +443,9 @@ class TestPhysicalObjectManager:
         sensors = mgr.get_objects_by_type(ObjectType.SENSOR)
         assert len(sensors) == 2
 
-    def test_save_and_load_state(self, mgr: PhysicalObjectManager, tmp_path: Path) -> None:
+    def test_save_and_load_state(
+        self, mgr: PhysicalObjectManager, tmp_path: Path
+    ) -> None:
         fp = tmp_path / "state.json"
         mgr.save_state(fp)
         new_mgr = PhysicalObjectManager()
@@ -417,11 +458,15 @@ class TestPhysicalObjectManager:
         assert stats["objects_by_type"]["sensor"] == 2
 
     def test_batch_update_status(self, mgr: PhysicalObjectManager) -> None:
-        count = mgr.batch_update_status(["s1", "s2", "nonexistent"], ObjectStatus.MAINTENANCE)
+        count = mgr.batch_update_status(
+            ["s1", "s2", "nonexistent"], ObjectStatus.MAINTENANCE
+        )
         assert count == 2
 
     def test_batch_move(self, mgr: PhysicalObjectManager) -> None:
-        count = mgr.batch_move_objects({"s1": (50.0, 50.0, 50.0), "nonexistent": (0, 0, 0)})
+        count = mgr.batch_move_objects(
+            {"s1": (50.0, 50.0, 50.0), "nonexistent": (0, 0, 0)}
+        )
         assert count == 1
 
     def test_calculate_center_of_mass(self, mgr: PhysicalObjectManager) -> None:
@@ -446,7 +491,11 @@ class TestPhysicalObjectManager:
 
     def test_boundary_box_empty(self) -> None:
         mgr = PhysicalObjectManager()
-        assert mgr.get_boundary_box() == {"x": (0.0, 0.0), "y": (0.0, 0.0), "z": (0.0, 0.0)}
+        assert mgr.get_boundary_box() == {
+            "x": (0.0, 0.0),
+            "y": (0.0, 0.0),
+            "z": (0.0, 0.0),
+        }
 
     def test_find_path_between(self) -> None:
         mgr = PhysicalObjectManager()

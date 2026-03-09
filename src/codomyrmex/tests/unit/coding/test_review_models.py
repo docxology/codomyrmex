@@ -79,8 +79,15 @@ class TestAnalysisType:
     def test_all_nine_members_present(self):
         members = {m.name for m in AnalysisType}
         expected = {
-            "QUALITY", "SECURITY", "PERFORMANCE", "MAINTAINABILITY",
-            "COMPLEXITY", "STYLE", "DOCUMENTATION", "TESTING", "PYSCN",
+            "QUALITY",
+            "SECURITY",
+            "PERFORMANCE",
+            "MAINTAINABILITY",
+            "COMPLEXITY",
+            "STYLE",
+            "DOCUMENTATION",
+            "TESTING",
+            "PYSCN",
         }
         assert members == expected
 
@@ -373,7 +380,10 @@ class TestQualityGateResult:
             {"gate": "complexity", "threshold": 15, "actual": 30},
         ]
         qgr = QualityGateResult(
-            passed=False, total_checks=2, passed_checks=0, failed_checks=2,
+            passed=False,
+            total_checks=2,
+            passed_checks=0,
+            failed_checks=2,
             failures=failures,
         )
         assert not qgr.passed

@@ -186,8 +186,11 @@ class VectorStoreMemory:
         self.vector_store = vector_store
         if self.vector_store is None:
             from codomyrmex.vector_store import create_vector_store
+
             try:
-                self.vector_store = create_vector_store(backend="chroma", persist_directory="chroma_db")
+                self.vector_store = create_vector_store(
+                    backend="chroma", persist_directory="chroma_db"
+                )
             except (ValueError, ImportError):
                 self.vector_store = create_vector_store(backend="namespaced")
 
@@ -223,7 +226,10 @@ class VectorStoreMemory:
                 self.vector_store.add(
                     id=mem.id,
                     embedding=embedding,
-                    metadata={"importance": importance.value, "type": memory_type.value}
+                    metadata={
+                        "importance": importance.value,
+                        "type": memory_type.value,
+                    },
                 )
 
         return mem

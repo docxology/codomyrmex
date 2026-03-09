@@ -271,7 +271,9 @@ class RepositoryMetadataManager:
             return response.json()
 
         except requests.RequestException as e:
-            logger.warning("Failed to fetch GitHub metadata for %s/%s: %s", owner, repo, e)
+            logger.warning(
+                "Failed to fetch GitHub metadata for %s/%s: %s", owner, repo, e
+            )
             return None
 
     def determine_access_level(
@@ -345,7 +347,9 @@ class RepositoryMetadataManager:
             metadata.clone_status = CloneStatus.CLONED
 
         except Exception as e:
-            logger.warning("Error updating local info for %s: %s", metadata.full_name, e)
+            logger.warning(
+                "Error updating local info for %s: %s", metadata.full_name, e
+            )
             metadata.clone_status = CloneStatus.ERROR
 
     def create_or_update_metadata(

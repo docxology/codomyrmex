@@ -104,12 +104,21 @@ class TestSpanContext:
     def test_to_dict_has_all_keys(self):
         ctx = _make_context()
         d = ctx.to_dict()
-        assert set(d.keys()) == {"trace_id", "span_id", "parent_span_id", "sampled", "baggage"}
+        assert set(d.keys()) == {
+            "trace_id",
+            "span_id",
+            "parent_span_id",
+            "sampled",
+            "baggage",
+        }
 
     def test_to_dict_values_match(self):
         ctx = SpanContext(
-            trace_id="t-99", span_id="s-88", parent_span_id="p-77", sampled=False,
-            baggage={"env": "prod"}
+            trace_id="t-99",
+            span_id="s-88",
+            parent_span_id="p-77",
+            sampled=False,
+            baggage={"env": "prod"},
         )
         d = ctx.to_dict()
         assert d["trace_id"] == "t-99"
@@ -120,8 +129,11 @@ class TestSpanContext:
 
     def test_from_dict_round_trip(self):
         ctx = SpanContext(
-            trace_id="tid", span_id="sid", parent_span_id="pid", sampled=True,
-            baggage={"user": "alice"}
+            trace_id="tid",
+            span_id="sid",
+            parent_span_id="pid",
+            sampled=True,
+            baggage={"user": "alice"},
         )
         restored = SpanContext.from_dict(ctx.to_dict())
         assert restored.trace_id == ctx.trace_id
@@ -262,9 +274,7 @@ class TestSpan:
 
     def test_chaining_api(self):
         span = (
-            _make_span()
-            .set_attribute("method", "POST")
-            .set_attributes({"code": 201})
+            _make_span().set_attribute("method", "POST").set_attributes({"code": 201})
         )
         assert span.attributes["method"] == "POST"
         assert span.attributes["code"] == 201
@@ -329,9 +339,18 @@ class TestSpan:
         span.finish()
         d = span.to_dict()
         required = {
-            "name", "trace_id", "span_id", "parent_span_id", "kind",
-            "status", "status_message", "start_time", "end_time",
-            "duration_ms", "attributes", "events",
+            "name",
+            "trace_id",
+            "span_id",
+            "parent_span_id",
+            "kind",
+            "status",
+            "status_message",
+            "start_time",
+            "end_time",
+            "duration_ms",
+            "attributes",
+            "events",
         }
         assert required.issubset(set(d.keys()))
 

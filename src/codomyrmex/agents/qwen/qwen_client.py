@@ -151,14 +151,16 @@ class QwenClient(APIAgentBase):
             tool_calls_data = []
             if choice and choice.message.tool_calls:
                 for tc in choice.message.tool_calls:
-                    tool_calls_data.append({
-                        "id": tc.id,
-                        "type": tc.type,
-                        "function": {
-                            "name": tc.function.name,
-                            "arguments": tc.function.arguments,
-                        },
-                    })
+                    tool_calls_data.append(
+                        {
+                            "id": tc.id,
+                            "type": tc.type,
+                            "function": {
+                                "name": tc.function.name,
+                                "arguments": tc.function.arguments,
+                            },
+                        }
+                    )
 
             input_tokens, output_tokens = self._extract_tokens_from_response(
                 response, "openai"
@@ -173,9 +175,7 @@ class QwenClient(APIAgentBase):
                         "prompt_tokens": input_tokens,
                         "completion_tokens": output_tokens,
                     },
-                    "finish_reason": (
-                        choice.finish_reason if choice else None
-                    ),
+                    "finish_reason": (choice.finish_reason if choice else None),
                     "tool_calls": tool_calls_data or None,
                 },
                 tokens_used=tokens_used,
@@ -313,11 +313,13 @@ class QwenClient(APIAgentBase):
                 else:
                     result = f"Tool '{fn_name}' executed (no executor configured)"
 
-                conversation.append({
-                    "role": "tool",
-                    "tool_call_id": tc.id,
-                    "content": result,
-                })
+                conversation.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": result,
+                    }
+                )
 
         return conversation
 

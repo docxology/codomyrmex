@@ -23,6 +23,7 @@ import pytest
 _HAS_Z3 = False
 try:
     import z3
+
     _HAS_Z3 = True
 except ImportError:
     pass
@@ -41,6 +42,7 @@ class TestSolverStatusEnum:
 
     def _status(self):
         from codomyrmex.formal_verification.backends.base import SolverStatus
+
         return SolverStatus
 
     def test_sat_value(self):
@@ -81,6 +83,7 @@ class TestSolverResultCore:
             SolverResult,
             SolverStatus,
         )
+
         status = SolverStatus(status_str)
         return SolverResult(status=status, model=model, error_message=error)
 
@@ -140,6 +143,7 @@ class TestFormalVerificationExceptions:
 
     def test_solver_error_is_exception(self):
         from codomyrmex.formal_verification.exceptions import SolverError
+
         assert issubclass(SolverError, Exception)
 
     def test_solver_timeout_error_inherits_solver_error(self):
@@ -147,6 +151,7 @@ class TestFormalVerificationExceptions:
             SolverError,
             SolverTimeoutError,
         )
+
         assert issubclass(SolverTimeoutError, SolverError)
 
     def test_model_build_error_inherits_solver_error(self):
@@ -154,6 +159,7 @@ class TestFormalVerificationExceptions:
             ModelBuildError,
             SolverError,
         )
+
         assert issubclass(ModelBuildError, SolverError)
 
     def test_backend_not_available_inherits_solver_error(self):
@@ -161,6 +167,7 @@ class TestFormalVerificationExceptions:
             BackendNotAvailableError,
             SolverError,
         )
+
         assert issubclass(BackendNotAvailableError, SolverError)
 
     def test_invalid_constraint_error_inherits_solver_error(self):
@@ -168,6 +175,7 @@ class TestFormalVerificationExceptions:
             InvalidConstraintError,
             SolverError,
         )
+
         assert issubclass(InvalidConstraintError, SolverError)
 
     def test_unsatisfiable_error_inherits_solver_error(self):
@@ -175,15 +183,18 @@ class TestFormalVerificationExceptions:
             SolverError,
             UnsatisfiableError,
         )
+
         assert issubclass(UnsatisfiableError, SolverError)
 
     def test_backend_not_available_can_be_raised(self):
         from codomyrmex.formal_verification.exceptions import BackendNotAvailableError
+
         with pytest.raises(BackendNotAvailableError, match="z3"):
             raise BackendNotAvailableError("z3 missing")
 
     def test_model_build_error_can_be_raised(self):
         from codomyrmex.formal_verification.exceptions import ModelBuildError
+
         with pytest.raises(ModelBuildError):
             raise ModelBuildError("bad model")
 
@@ -415,6 +426,7 @@ class TestFormalVerificationMcpTools:
 
     def setup_method(self):
         import codomyrmex.formal_verification.mcp_tools as mcp
+
         mcp._solver = None
 
     @skip_no_z3

@@ -122,7 +122,9 @@ class DeploymentManager:
 
     # --- Strategy implementations ---
 
-    def _deploy_node(self, plan: DeploymentPlan, node_id: str, *, stop_on_error: bool) -> bool:
+    def _deploy_node(
+        self, plan: DeploymentPlan, node_id: str, *, stop_on_error: bool
+    ) -> bool:
         """Deploy to a single node; return False if caller should abort iteration.
 
         When *stop_on_error* is True and an error occurs, triggers rollback and
@@ -153,7 +155,9 @@ class DeploymentManager:
     def _finalise_state(self, plan: DeploymentPlan) -> None:
         """Set terminal state based on whether any nodes failed."""
         plan.state = (
-            DeploymentState.COMPLETED if not plan.failed_nodes else DeploymentState.FAILED
+            DeploymentState.COMPLETED
+            if not plan.failed_nodes
+            else DeploymentState.FAILED
         )
 
     def _rolling_deploy(self, plan: DeploymentPlan) -> DeploymentPlan:

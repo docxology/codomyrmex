@@ -364,12 +364,19 @@ class TestVideoAnalysisError:
         assert "analysis_type" not in e.context
 
     def test_both_fields_stored(self):
-        e = VideoAnalysisError("err", video_path="/v.mp4", analysis_type="codec_detection")
+        e = VideoAnalysisError(
+            "err", video_path="/v.mp4", analysis_type="codec_detection"
+        )
         assert e.context["video_path"] == "/v.mp4"
         assert e.context["analysis_type"] == "codec_detection"
 
     def test_analysis_types(self):
-        for atype in ["metadata", "duration", "codec_detection", "resolution_detection"]:
+        for atype in [
+            "metadata",
+            "duration",
+            "codec_detection",
+            "resolution_detection",
+        ]:
             e = VideoAnalysisError("err", analysis_type=atype)
             assert e.context["analysis_type"] == atype
 
@@ -393,7 +400,9 @@ class TestInheritanceChain:
             UnsupportedFormatError,
             VideoAnalysisError,
         ]:
-            assert issubclass(cls, VideoError), f"{cls.__name__} must subclass VideoError"
+            assert issubclass(cls, VideoError), (
+                f"{cls.__name__} must subclass VideoError"
+            )
 
     def test_all_inherit_from_codomyrmex_error(self):
         for cls in [

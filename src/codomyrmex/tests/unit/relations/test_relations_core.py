@@ -44,7 +44,9 @@ class TestInteractionDataclass:
     """Interaction creation and field tests."""
 
     def test_minimal_creation(self):
-        ix = Interaction(source="a", target="b", interaction_type="message", timestamp=NOW)
+        ix = Interaction(
+            source="a", target="b", interaction_type="message", timestamp=NOW
+        )
         assert ix.source == "a"
         assert ix.target == "b"
         assert ix.interaction_type == "message"
@@ -56,7 +58,11 @@ class TestInteractionDataclass:
 
     def test_custom_weight(self):
         ix = Interaction(
-            source="a", target="b", interaction_type="meeting", timestamp=NOW, weight=3.0
+            source="a",
+            target="b",
+            interaction_type="meeting",
+            timestamp=NOW,
+            weight=3.0,
         )
         assert ix.weight == 3.0
 
@@ -192,7 +198,13 @@ class TestRelationStrengthScorerBasic:
     def test_single_interaction_raw_score(self):
         scorer = self._fresh_scorer()
         scorer.add_interaction(
-            Interaction(source="a", target="b", interaction_type="msg", timestamp=NOW, weight=2.0)
+            Interaction(
+                source="a",
+                target="b",
+                interaction_type="msg",
+                timestamp=NOW,
+                weight=2.0,
+            )
         )
         score = scorer.score("a", "b", now=NOW)
         assert score.raw_score == pytest.approx(2.0)
@@ -216,7 +228,9 @@ class TestRelationStrengthScorerBasic:
         )
         scorer = RelationStrengthScorer(config=cfg)
         scorer.add_interaction(
-            Interaction(source="a", target="b", interaction_type="meeting", timestamp=NOW)
+            Interaction(
+                source="a", target="b", interaction_type="meeting", timestamp=NOW
+            )
         )
         score = scorer.score("a", "b", now=NOW)
         assert score.raw_score == pytest.approx(5.0)
@@ -228,7 +242,9 @@ class TestRelationStrengthScorerBasic:
         )
         scorer = RelationStrengthScorer(config=cfg)
         scorer.add_interaction(
-            Interaction(source="a", target="b", interaction_type="unknown_type", timestamp=NOW)
+            Interaction(
+                source="a", target="b", interaction_type="unknown_type", timestamp=NOW
+            )
         )
         score = scorer.score("a", "b", now=NOW)
         assert score.raw_score == pytest.approx(1.0)
@@ -264,9 +280,13 @@ class TestRelationStrengthScorerEdgeCases:
     """Edge cases and boundary conditions."""
 
     def test_add_interactions_bulk(self):
-        scorer = RelationStrengthScorer(config=StrengthConfig(decay_function=DecayFunction.NONE))
+        scorer = RelationStrengthScorer(
+            config=StrengthConfig(decay_function=DecayFunction.NONE)
+        )
         interactions = [
-            Interaction(source="a", target="b", interaction_type="msg", timestamp=NOW - i * 100)
+            Interaction(
+                source="a", target="b", interaction_type="msg", timestamp=NOW - i * 100
+            )
             for i in range(5)
         ]
         scorer.add_interactions(interactions)
@@ -274,10 +294,17 @@ class TestRelationStrengthScorerEdgeCases:
 
     def test_exponential_decay_reduces_score_over_time(self):
         half_life = ONE_DAY
-        cfg = StrengthConfig(decay_function=DecayFunction.EXPONENTIAL, half_life=half_life)
+        cfg = StrengthConfig(
+            decay_function=DecayFunction.EXPONENTIAL, half_life=half_life
+        )
         scorer = RelationStrengthScorer(config=cfg)
         scorer.add_interaction(
-            Interaction(source="a", target="b", interaction_type="msg", timestamp=NOW - half_life)
+            Interaction(
+                source="a",
+                target="b",
+                interaction_type="msg",
+                timestamp=NOW - half_life,
+            )
         )
         score = scorer.score("a", "b", now=NOW)
         # One half-life ago => weight ~ 0.5, so raw_score ~ 0.5
@@ -298,7 +325,9 @@ class TestRelationStrengthScorerEdgeCases:
         assert score.raw_score == 0.0
 
     def test_latest_interaction_timestamp(self):
-        scorer = RelationStrengthScorer(config=StrengthConfig(decay_function=DecayFunction.NONE))
+        scorer = RelationStrengthScorer(
+            config=StrengthConfig(decay_function=DecayFunction.NONE)
+        )
         t1 = NOW - 100
         t2 = NOW - 10
         scorer.add_interaction(
@@ -325,31 +354,61 @@ class TestScoreAll:
         assert scorer.score_all(now=NOW) == []
 
     def test_normalized_score_strongest_is_one(self):
-        scorer = RelationStrengthScorer(config=StrengthConfig(decay_function=DecayFunction.NONE))
-        scorer.add_interaction(
-            Interaction(source="a", target="b", interaction_type="msg", timestamp=NOW, weight=10.0)
+        scorer = RelationStrengthScorer(
+            config=StrengthConfig(decay_function=DecayFunction.NONE)
         )
         scorer.add_interaction(
-            Interaction(source="a", target="c", interaction_type="msg", timestamp=NOW, weight=2.0)
+            Interaction(
+                source="a",
+                target="b",
+                interaction_type="msg",
+                timestamp=NOW,
+                weight=10.0,
+            )
+        )
+        scorer.add_interaction(
+            Interaction(
+                source="a",
+                target="c",
+                interaction_type="msg",
+                timestamp=NOW,
+                weight=2.0,
+            )
         )
         scores = scorer.score_all(now=NOW)
         max_normalized = max(s.normalized_score for s in scores)
         assert max_normalized == pytest.approx(1.0)
 
     def test_results_sorted_by_raw_score_desc(self):
-        scorer = RelationStrengthScorer(config=StrengthConfig(decay_function=DecayFunction.NONE))
-        scorer.add_interaction(
-            Interaction(source="a", target="b", interaction_type="msg", timestamp=NOW, weight=5.0)
+        scorer = RelationStrengthScorer(
+            config=StrengthConfig(decay_function=DecayFunction.NONE)
         )
         scorer.add_interaction(
-            Interaction(source="a", target="c", interaction_type="msg", timestamp=NOW, weight=1.0)
+            Interaction(
+                source="a",
+                target="b",
+                interaction_type="msg",
+                timestamp=NOW,
+                weight=5.0,
+            )
+        )
+        scorer.add_interaction(
+            Interaction(
+                source="a",
+                target="c",
+                interaction_type="msg",
+                timestamp=NOW,
+                weight=1.0,
+            )
         )
         scores = scorer.score_all(now=NOW)
         raw_scores = [s.raw_score for s in scores]
         assert raw_scores == sorted(raw_scores, reverse=True)
 
     def test_all_pairs_covered(self):
-        scorer = RelationStrengthScorer(config=StrengthConfig(decay_function=DecayFunction.NONE))
+        scorer = RelationStrengthScorer(
+            config=StrengthConfig(decay_function=DecayFunction.NONE)
+        )
         scorer.add_interaction(
             Interaction(source="a", target="b", interaction_type="msg", timestamp=NOW)
         )
@@ -370,7 +429,9 @@ class TestTopRelations:
     """top_relations top-N selection tests."""
 
     def _scorer_with_contacts(self):
-        scorer = RelationStrengthScorer(config=StrengthConfig(decay_function=DecayFunction.NONE))
+        scorer = RelationStrengthScorer(
+            config=StrengthConfig(decay_function=DecayFunction.NONE)
+        )
         for partner, weight in [("b", 5.0), ("c", 3.0), ("d", 1.0), ("e", 0.5)]:
             scorer.add_interaction(
                 Interaction(

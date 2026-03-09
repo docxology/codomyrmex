@@ -1,6 +1,5 @@
 """Tests for coding.exceptions module."""
 
-
 from codomyrmex.coding.exceptions import (
     BreakpointError,
     CodeReviewError,
@@ -35,9 +34,9 @@ class TestExecutionTimeoutError:
 
 class TestMemoryLimitError:
     def test_with_limits(self):
-        e = MemoryLimitError("OOM", limit_bytes=1024*1024, used_bytes=2*1024*1024)
-        assert e.context["limit_bytes"] == 1024*1024
-        assert e.context["used_bytes"] == 2*1024*1024
+        e = MemoryLimitError("OOM", limit_bytes=1024 * 1024, used_bytes=2 * 1024 * 1024)
+        assert e.context["limit_bytes"] == 1024 * 1024
+        assert e.context["used_bytes"] == 2 * 1024 * 1024
 
     def test_message_stored(self):
         e = MemoryLimitError("out of memory")
@@ -46,8 +45,11 @@ class TestMemoryLimitError:
 
 class TestSandboxErrors:
     def test_security_error(self):
-        e = SandboxSecurityError("policy violation", violation_type="network_access",
-                                 attempted_action="socket.connect")
+        e = SandboxSecurityError(
+            "policy violation",
+            violation_type="network_access",
+            attempted_action="socket.connect",
+        )
         assert e.context["violation_type"] == "network_access"
         assert e.context["attempted_action"] == "socket.connect"
 
@@ -107,8 +109,9 @@ class TestMonitoringErrors:
 
 class TestRuntimeError:
     def test_with_context(self):
-        e = RuntimeError("runtime fail", error_type="ZeroDivisionError",
-                        traceback="File x.py line 1")
+        e = RuntimeError(
+            "runtime fail", error_type="ZeroDivisionError", traceback="File x.py line 1"
+        )
         assert e.context["error_type"] == "ZeroDivisionError"
         assert e.context["traceback"] == "File x.py line 1"
 

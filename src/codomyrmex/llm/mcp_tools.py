@@ -141,6 +141,7 @@ def reason(prompt: str, depth: str = "normal", max_steps: int = 5) -> dict:
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+
 @mcp_tool(category="llm")
 def ask(question: str, model: str = "openrouter/free") -> str:
     """Ask a question to an LLM provider (default: OpenRouter Free Tier).

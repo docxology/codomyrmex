@@ -29,7 +29,9 @@ def merge_branch(
     try:
         logger.info(
             "Merging branch '%s' into '%s' in %s",
-            source_branch, target_branch, repository_path,
+            source_branch,
+            target_branch,
+            repository_path,
         )
 
         # Switch to target branch first
@@ -72,7 +74,9 @@ def rebase_branch(
         current_branch = get_current_branch(repository_path)
         logger.info(
             "Rebasing branch '%s' onto '%s' in %s",
-            current_branch, target_branch, repository_path,
+            current_branch,
+            target_branch,
+            repository_path,
         )
 
         cmd = ["git", "rebase"]
@@ -84,7 +88,9 @@ def rebase_branch(
             cmd, cwd=repository_path, capture_output=True, text=True, check=True
         )
 
-        logger.info("Successfully rebased '%s' onto '%s'", current_branch, target_branch)
+        logger.info(
+            "Successfully rebased '%s' onto '%s'", current_branch, target_branch
+        )
         return True
 
     except subprocess.CalledProcessError as e:

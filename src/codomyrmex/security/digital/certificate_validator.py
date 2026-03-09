@@ -115,7 +115,9 @@ class CertificateValidator:
             )
 
         except Exception as e:
-            logger.error("Certificate validation failed for %s:%s: %s", hostname, port, e)
+            logger.error(
+                "Certificate validation failed for %s:%s: %s", hostname, port, e
+            )
             return SSLValidationResult(
                 hostname=hostname,
                 port=port,

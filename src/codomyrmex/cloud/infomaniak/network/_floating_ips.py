@@ -50,7 +50,9 @@ class FloatingIPMixin:
         """Associate a floating IP with a port."""
         try:
             self._conn.network.update_ip(floating_ip_id, port_id=port_id)
-            logger.info("Associated floating IP %s with port %s", floating_ip_id, port_id)
+            logger.info(
+                "Associated floating IP %s with port %s", floating_ip_id, port_id
+            )
             return True
         except Exception as e:
             logger.error("Failed to associate floating IP: %s", e)

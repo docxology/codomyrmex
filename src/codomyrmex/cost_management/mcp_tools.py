@@ -37,10 +37,10 @@ def get_cost_summary(period_str: str = "MONTHLY") -> dict[str, Any]:
     except Exception as e:
         return error_response(str(e))
 
+
 @mcp_tool(category="cost_management")
 def check_budgets() -> dict[str, Any]:
-    """Check all active budgets and return their utilization status and any alerts.
-    """
+    """Check all active budgets and return their utilization status and any alerts."""
     try:
         store = JSONCostStore()
         tracker = CostTracker(store=store)
@@ -50,29 +50,34 @@ def check_budgets() -> dict[str, Any]:
         utilizations = []
         for b in budgets:
             util = manager.get_utilization(b)
-            utilizations.append({
-                "budget_id": b.id,
-                "name": b.name,
-                "amount": b.amount,
-                "period": b.period.name,
-                "utilization_percentage": round(util * 100, 2)
-            })
+            utilizations.append(
+                {
+                    "budget_id": b.id,
+                    "name": b.name,
+                    "amount": b.amount,
+                    "period": b.period.name,
+                    "utilization_percentage": round(util * 100, 2),
+                }
+            )
 
         alerts = manager.check_budgets()
         alert_list = [
-            {"budget_id": a.budget_id, "threshold": a.threshold, "current_spend": a.current_spend}
+            {
+                "budget_id": a.budget_id,
+                "threshold": a.threshold,
+                "current_spend": a.current_spend,
+            }
             for a in alerts
         ]
 
-        return {
-            "budgets": utilizations,
-            "alerts": alert_list
-        }
+        return {"budgets": utilizations, "alerts": alert_list}
     except Exception as e:
         return error_response(str(e))
 
+
 def register_mcp_tools(mcp_server: Any) -> None:
     """Register all MCP tools provided by the cost_management module."""
+
     @mcp_server.tool()
     def mcp_get_cost_summary(period_str: str = "MONTHLY") -> dict[str, Any]:
         """Retrieve a summary of costs for the given period."""

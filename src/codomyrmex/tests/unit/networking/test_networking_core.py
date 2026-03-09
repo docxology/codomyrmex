@@ -108,7 +108,9 @@ class TestServiceInstanceModel:
         assert inst.metadata == {}
 
     def test_custom_metadata_stored(self):
-        inst = ServiceInstance(id="s7", host="host", port=1234, metadata={"region": "us-east"})
+        inst = ServiceInstance(
+            id="s7", host="host", port=1234, metadata={"region": "us-east"}
+        )
         assert inst.metadata["region"] == "us-east"
 
     def test_healthy_can_be_false(self):
@@ -142,7 +144,9 @@ class TestCircuitBreakerConfig:
         assert cfg.half_open_max_calls == 3
 
     def test_custom_values(self):
-        cfg = CircuitBreakerConfig(failure_threshold=2, success_threshold=1, timeout_seconds=5.0)
+        cfg = CircuitBreakerConfig(
+            failure_threshold=2, success_threshold=1, timeout_seconds=5.0
+        )
         assert cfg.failure_threshold == 2
         assert cfg.success_threshold == 1
         assert cfg.timeout_seconds == 5.0
@@ -314,7 +318,9 @@ class TestRetryPolicy:
         assert d2 > d1
 
     def test_get_delay_capped_at_max(self):
-        policy = RetryPolicy(initial_delay=1.0, max_delay=5.0, exponential_base=10.0, jitter=False)
+        policy = RetryPolicy(
+            initial_delay=1.0, max_delay=5.0, exponential_base=10.0, jitter=False
+        )
         assert policy.get_delay(10) <= 5.0
 
     def test_execute_succeeds_on_first_try(self):

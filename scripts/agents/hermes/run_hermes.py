@@ -15,7 +15,9 @@ from pathlib import Path
 try:
     import codomyrmex
 except ImportError:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent / "src"))
+    sys.path.insert(
+        0, str(Path(__file__).resolve().parent.parent.parent.parent / "src")
+    )
 
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -55,7 +57,11 @@ def main() -> int:
     print_info("")
 
     # Real prompt
-    prompt = sys.argv[1] if len(sys.argv) > 1 else "Explain what Hermes Agent is in one sentence."
+    prompt = (
+        sys.argv[1]
+        if len(sys.argv) > 1
+        else "Explain what Hermes Agent is in one sentence."
+    )
     print_info(f"  Prompt: {prompt}")
     print_info("─" * 60)
 

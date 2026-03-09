@@ -30,7 +30,9 @@ class TestCredentialEntry:
 
     def test_expired_when_past_expiry(self) -> None:
         entry = CredentialEntry(
-            key="k", value="v", provider="p",
+            key="k",
+            value="v",
+            provider="p",
             expires_at=time.time() - 10,
         )
         assert entry.is_expired is True
@@ -38,7 +40,9 @@ class TestCredentialEntry:
 
     def test_remaining_seconds_positive(self) -> None:
         entry = CredentialEntry(
-            key="k", value="v", provider="p",
+            key="k",
+            value="v",
+            provider="p",
             expires_at=time.time() + 100,
         )
         assert entry.remaining_seconds > 90
@@ -161,7 +165,9 @@ class TestCredentialRotator:
 
     def test_fetcher_failure_logged_in_audit(self) -> None:
         rotator = CredentialRotator()
-        rotator.register_provider("broken", lambda: (_ for _ in ()).throw(ValueError("oops")))
+        rotator.register_provider(
+            "broken", lambda: (_ for _ in ()).throw(ValueError("oops"))
+        )
 
         with pytest.raises(RuntimeError):
             rotator.get_credential("broken")

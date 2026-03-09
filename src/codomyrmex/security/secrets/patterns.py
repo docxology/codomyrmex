@@ -16,7 +16,12 @@ class SecretPatterns:
             SecretSeverity.CRITICAL,
             0.9,
         ),
-        (r"ghp_[A-Za-z0-9]{36}", SecretType.GITHUB_TOKEN, SecretSeverity.CRITICAL, 0.99),
+        (
+            r"ghp_[A-Za-z0-9]{36}",
+            SecretType.GITHUB_TOKEN,
+            SecretSeverity.CRITICAL,
+            0.99,
+        ),
         (
             r'github[_-]?token["\']?\s*[:=]\s*["\']?([A-Za-z0-9_-]{40})',
             SecretType.GITHUB_TOKEN,

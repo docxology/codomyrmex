@@ -34,7 +34,11 @@ def _build_author_arg(
         return ["--author", f"{author_name} <{author_email}>"]
     if author_name:
         email = _git_config_value("user.email", repository_path)
-        return ["--author", f"{author_name} <{email}>"] if email else ["--author", author_name]
+        return (
+            ["--author", f"{author_name} <{email}>"]
+            if email
+            else ["--author", author_name]
+        )
     if author_email:
         name = _git_config_value("user.name", repository_path) or "Unknown"
         return ["--author", f"{name} <{author_email}>"]
@@ -106,9 +110,20 @@ def commit_changes(
         logger.info("Committing changes with message: %s", message)
         if not _stage_files_for_commit(file_paths, stage_all, repository_path):
             return None
-        cmd = ["git", "commit", *_build_author_arg(author_name, author_email, repository_path)]
+        cmd = [
+            "git",
+            "commit",
+            *_build_author_arg(author_name, author_email, repository_path),
+        ]
         cmd.extend(["-m", message])
-        subprocess.run(cmd, cwd=repository_path, capture_output=True, text=True, check=True, timeout=_GIT_TIMEOUT)
+        subprocess.run(
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
+        )
         commit_sha = _get_head_sha(repository_path)
         logger.info("Changes committed successfully: %s", commit_sha[:8])
         return commit_sha
@@ -162,7 +177,14 @@ def cherry_pick(
         if no_commit:
             cmd.append("--no-commit")
         cmd.append(commit_sha)
-        subprocess.run(cmd, cwd=repository_path, capture_output=True, text=True, check=True, timeout=_GIT_TIMEOUT)
+        subprocess.run(
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
+        )
         logger.info("Successfully cherry-picked commit %s", commit_sha[:8])
         return True
     except subprocess.CalledProcessError as e:
@@ -196,7 +218,14 @@ def amend_commit(
         else:
             cmd.append("--no-edit")
         cmd.extend(_build_author_arg(author_name, author_email, repository_path))
-        subprocess.run(cmd, cwd=repository_path, capture_output=True, text=True, check=True, timeout=_GIT_TIMEOUT)
+        subprocess.run(
+            cmd,
+            cwd=repository_path,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=_GIT_TIMEOUT,
+        )
         commit_sha = _get_head_sha(repository_path)
         logger.info("Successfully amended commit: %s", commit_sha[:8])
         return commit_sha

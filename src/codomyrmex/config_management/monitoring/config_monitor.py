@@ -234,7 +234,9 @@ class ConfigurationMonitor:
             )
 
         logger.info(
-            "Created configuration snapshot: %s (%s files)", snapshot_id, len(config_paths)
+            "Created configuration snapshot: %s (%s files)",
+            snapshot_id,
+            len(config_paths),
         )
         return snapshot
 
@@ -402,7 +404,9 @@ class ConfigurationMonitor:
                 indent=2,
             )
 
-        logger.info("Completed configuration audit: %s (%s)", audit_id, compliance_status)
+        logger.info(
+            "Completed configuration audit: %s (%s)", audit_id, compliance_status
+        )
         return audit
 
     def _contains_sensitive_data(self, content: str) -> bool:

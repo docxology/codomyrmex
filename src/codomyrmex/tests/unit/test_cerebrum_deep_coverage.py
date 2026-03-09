@@ -73,16 +73,20 @@ class TestCaseBaseDeep:
     @pytest.fixture
     def case_base(self) -> cerebrum.CaseBase:
         cb = cerebrum.CaseBase()
-        cb.add_case(cerebrum.Case(
-            case_id="c1",
-            features={"type": "classification", "feature_a": 0.5},
-            outcome="positive",
-        ))
-        cb.add_case(cerebrum.Case(
-            case_id="c2",
-            features={"type": "classification", "feature_a": 0.8},
-            outcome="negative",
-        ))
+        cb.add_case(
+            cerebrum.Case(
+                case_id="c1",
+                features={"type": "classification", "feature_a": 0.5},
+                outcome="positive",
+            )
+        )
+        cb.add_case(
+            cerebrum.Case(
+                case_id="c2",
+                features={"type": "classification", "feature_a": 0.8},
+                outcome="negative",
+            )
+        )
         return cb
 
     def test_add_and_size(self, case_base: cerebrum.CaseBase) -> None:
@@ -157,7 +161,11 @@ class TestActiveInferenceAgentDeep:
             observations=["o1"],
             actions=["a1", "a2"],
         )
-        public = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
+        public = [
+            m
+            for m in dir(agent)
+            if not m.startswith("_") and callable(getattr(agent, m))
+        ]
         assert len(public) > 0
 
 

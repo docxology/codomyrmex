@@ -268,7 +268,9 @@ class KubernetesOrchestrator:
             True if scaled successfully
         """
         if not self.is_available():
-            logger.info("[SIMULATED] Scaled %s to %s replicas", deployment_name, replicas)
+            logger.info(
+                "[SIMULATED] Scaled %s to %s replicas", deployment_name, replicas
+            )
             return True
 
         try:
@@ -284,7 +286,9 @@ class KubernetesOrchestrator:
                 name=deployment_name, namespace=namespace, body=deployment
             )
 
-            logger.info("Scaled deployment %s to %s replicas", deployment_name, replicas)
+            logger.info(
+                "Scaled deployment %s to %s replicas", deployment_name, replicas
+            )
             return True
 
         except ApiException as e:

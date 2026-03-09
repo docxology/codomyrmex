@@ -79,14 +79,17 @@ class TestSubmodules:
 
     def test_coda_io_submodule(self) -> None:
         from codomyrmex.cloud import coda_io
+
         assert coda_io is not None
 
     def test_coda_models(self) -> None:
         from codomyrmex.cloud.coda_io import models
+
         assert models is not None
 
     def test_coda_models_has_classes(self) -> None:
         from codomyrmex.cloud.coda_io import models
+
         assert hasattr(models, "TableType")
         assert hasattr(models, "PageType")
         assert hasattr(models, "Icon")

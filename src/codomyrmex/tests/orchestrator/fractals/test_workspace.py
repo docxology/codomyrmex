@@ -21,7 +21,9 @@ def test_workspace_manager_lifecycle(tmp_path: Path) -> None:
     assert wt_path.is_dir()
 
     # 3. Worktree points to our workspace logically
-    assert (wt_path / ".git").exists()  # git worktrees put a .git FILE (not dir) inside child worktrees
+    assert (
+        wt_path / ".git"
+    ).exists()  # git worktrees put a .git FILE (not dir) inside child worktrees
 
     # 4. Remove worktree
     wm.remove_worktree(task_id)

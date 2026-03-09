@@ -4,7 +4,6 @@ Targets uncovered paths in scorer functions, PromptEvaluator, and comparison log
 All tests use real function calls with inline data.
 """
 
-
 from codomyrmex.prompt_engineering.evaluation import (
     EvaluationCriteria,
     EvaluationResult,
@@ -134,7 +133,9 @@ class TestScoreCompleteness:
 
     def test_question_with_substantial_answer(self):
         prompt = "What is the capital of France?"
-        response = "The capital of France is Paris, which is located in northern France."
+        response = (
+            "The capital of France is Paris, which is located in northern France."
+        )
         score = score_completeness(prompt, response)
         assert score > 0.5
 
@@ -302,7 +303,9 @@ class TestPromptEvaluator:
 
     def test_evaluate_returns_result(self):
         evaluator = PromptEvaluator()
-        result = evaluator.evaluate("What is Python?", "Python is a programming language.")
+        result = evaluator.evaluate(
+            "What is Python?", "Python is a programming language."
+        )
         assert result.prompt == "What is Python?"
         assert result.response == "Python is a programming language."
         assert 0.0 <= result.weighted_score <= 1.0

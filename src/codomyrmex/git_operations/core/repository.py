@@ -131,7 +131,9 @@ class RepositoryManager:
                         repo_type = RepositoryType(repo_type_str)
                     except ValueError:
                         logger.warning(
-                            "Invalid repository type '%s' at line %s", repo_type_str, line_num
+                            "Invalid repository type '%s' at line %s",
+                            repo_type_str,
+                            line_num,
                         )
                         continue
 
@@ -283,7 +285,9 @@ class RepositoryManager:
         """
         try:
             current_branch = get_current_branch(repo_path)
-            logger.info("Repository %s is on branch: %s", repo.full_name, current_branch)
+            logger.info(
+                "Repository %s is on branch: %s", repo.full_name, current_branch
+            )
 
             # For own repositories, create a development branch
             if repo.repo_type == RepositoryType.OWN:
@@ -456,7 +460,9 @@ class RepositoryManager:
         futures = {}
 
         logger.info(
-            "Bulk updating %s repositories with %s workers...", len(repos_to_update), max_workers
+            "Bulk updating %s repositories with %s workers...",
+            len(repos_to_update),
+            max_workers,
         )
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:

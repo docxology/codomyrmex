@@ -46,11 +46,16 @@ class PythonParser(Parser):
                     text=func_text,
                     range=Range(
                         Position(line_num, indent),
-                        Position(end_line, len(lines[end_line]) if end_line < len(lines) else 0),
+                        Position(
+                            end_line,
+                            len(lines[end_line]) if end_line < len(lines) else 0,
+                        ),
                     ),
                     metadata={
                         "name": name,
-                        "parameters": [p.strip() for p in params.split(",") if p.strip()],
+                        "parameters": [
+                            p.strip() for p in params.split(",") if p.strip()
+                        ],
                     },
                 )
             )
@@ -72,7 +77,10 @@ class PythonParser(Parser):
                     text=class_text,
                     range=Range(
                         Position(line_num, indent),
-                        Position(end_line, len(lines[end_line]) if end_line < len(lines) else 0),
+                        Position(
+                            end_line,
+                            len(lines[end_line]) if end_line < len(lines) else 0,
+                        ),
                     ),
                     metadata={
                         "name": name,
@@ -92,8 +100,12 @@ class PythonParser(Parser):
                 ASTNode(
                     type="import_statement",
                     text=match.group(0),
-                    range=Range(Position(line_num, 0), Position(line_num, len(match.group(0)))),
-                    metadata={"modules": [m.strip() for m in match.group(1).split(",")]},
+                    range=Range(
+                        Position(line_num, 0), Position(line_num, len(match.group(0)))
+                    ),
+                    metadata={
+                        "modules": [m.strip() for m in match.group(1).split(",")]
+                    },
                 )
             )
         for match in pattern2.finditer(source):
@@ -102,7 +114,9 @@ class PythonParser(Parser):
                 ASTNode(
                     type="import_from_statement",
                     text=match.group(0),
-                    range=Range(Position(line_num, 0), Position(line_num, len(match.group(0)))),
+                    range=Range(
+                        Position(line_num, 0), Position(line_num, len(match.group(0)))
+                    ),
                     metadata={
                         "module": match.group(1),
                         "names": [n.strip() for n in match.group(2).split(",")],
@@ -111,7 +125,9 @@ class PythonParser(Parser):
             )
         return imports
 
-    def _find_block_end(self, lines: list[str], start_line: int, base_indent: int) -> int:
+    def _find_block_end(
+        self, lines: list[str], start_line: int, base_indent: int
+    ) -> int:
         end_line = start_line
         for i in range(start_line + 1, len(lines)):
             line = lines[i]

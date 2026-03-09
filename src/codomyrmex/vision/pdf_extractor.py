@@ -43,6 +43,7 @@ class PDFExtractor:
         """Check if pymupdf is installed."""
         try:
             import fitz
+
             return True
         except ImportError:
             return False

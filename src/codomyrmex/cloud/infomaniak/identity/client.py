@@ -185,7 +185,9 @@ class InfomaniakIdentityClient(InfomaniakOpenStackBase):
                 else None
             )
         except Exception as e:
-            logger.error("Failed to get application credential %s: %s", credential_id, e)
+            logger.error(
+                "Failed to get application credential %s: %s", credential_id, e
+            )
             return None
 
     def delete_application_credential(self, credential_id: str) -> bool:

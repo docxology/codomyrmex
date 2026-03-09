@@ -54,6 +54,7 @@ from codomyrmex.data_visualization.engines.plotter import Plotter
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _noshow_config(**kwargs) -> PlotConfig:
     """Return a PlotConfig with show_plot=False to avoid Agg backend warnings."""
     kwargs.setdefault("show_plot", False)
@@ -67,6 +68,7 @@ def _sample_plotter(**kwargs) -> AdvancedPlotter:
 # ---------------------------------------------------------------------------
 # Plotter wrapper (engines/plotter.py)
 # ---------------------------------------------------------------------------
+
 
 class TestPlotterWrapperInit:
     """Plotter.__init__ stores figure_size correctly."""
@@ -161,6 +163,7 @@ class TestPlotterWrapperHeatmap:
 # AdvancedPlotter.finalize_plot with save_path (line 152 in advanced_plotter.py)
 # ---------------------------------------------------------------------------
 
+
 class TestFinalizePlotWithSavePath:
     """finalize_plot(save_path=...) triggers real file save."""
 
@@ -196,6 +199,7 @@ class TestFinalizePlotWithSavePath:
 # AdvancedPlotter.save_plot failure path (no current_figure)
 # ---------------------------------------------------------------------------
 
+
 class TestSavePlotNoFigure:
     """save_plot returns False when current_figure is None."""
 
@@ -226,6 +230,7 @@ class TestSavePlotNoFigure:
 # ---------------------------------------------------------------------------
 # AdvancedPlotter.clear_figures full state reset
 # ---------------------------------------------------------------------------
+
 
 class TestClearFigures:
     """clear_figures resets all state."""
@@ -272,6 +277,7 @@ class TestClearFigures:
 # AdvancedPlotter._iter_axes iterator
 # ---------------------------------------------------------------------------
 
+
 class TestIterAxes:
     """_iter_axes yields correct axes objects."""
 
@@ -316,6 +322,7 @@ class TestIterAxes:
 # ---------------------------------------------------------------------------
 # AdvancedPlotter._plot_dataset dispatch (LINE/SCATTER/BAR/HISTOGRAM)
 # ---------------------------------------------------------------------------
+
 
 class TestPlotDatasetDispatch:
     """_plot_dataset dispatches to the correct matplotlib call for each PlotType."""
@@ -414,7 +421,9 @@ class TestPlotDatasetDispatch:
         p.create_figure()
         ax = next(iter(p._iter_axes()))
         points = [DataPoint(x=float(i), y=float(i)) for i in range(3)]
-        ds = Dataset(name="fallback", data=points, plot_type=PlotType.SCATTER, color="purple")
+        ds = Dataset(
+            name="fallback", data=points, plot_type=PlotType.SCATTER, color="purple"
+        )
         p._plot_dataset(ax, ds)
         assert len(ax.collections) >= 1
 
@@ -422,6 +431,7 @@ class TestPlotDatasetDispatch:
 # ---------------------------------------------------------------------------
 # _scatter.apply_scatter standalone function
 # ---------------------------------------------------------------------------
+
 
 class TestApplyScatterStandalone:
     """apply_scatter is a standalone delegate function in _scatter.py."""
@@ -431,6 +441,7 @@ class TestApplyScatterStandalone:
         result = apply_scatter(ax, [1, 2, 3], [4, 5, 6])
         # PathCollection from ax.scatter
         from matplotlib.collections import PathCollection
+
         assert isinstance(result, PathCollection)
         plt.close(fig)
 
@@ -452,6 +463,7 @@ class TestApplyScatterStandalone:
 # _compat.py PERFORMANCE_MONITORING_AVAILABLE and stubs
 # ---------------------------------------------------------------------------
 
+
 class TestCompatModule:
     """_compat exports the correct interface regardless of performance install state."""
 
@@ -459,10 +471,12 @@ class TestCompatModule:
         from codomyrmex.data_visualization._compat import (
             PERFORMANCE_MONITORING_AVAILABLE,
         )
+
         assert isinstance(PERFORMANCE_MONITORING_AVAILABLE, bool)
 
     def test_monitor_performance_is_callable(self):
         from codomyrmex.data_visualization._compat import monitor_performance
+
         assert callable(monitor_performance)
 
     def test_monitor_performance_decorator_passes_return_value(self):
@@ -486,16 +500,19 @@ class TestCompatModule:
 
     def test_performance_context_is_callable(self):
         from codomyrmex.data_visualization._compat import performance_context
+
         assert callable(performance_context)
 
     def test_performance_context_enters_and_exits(self):
         from codomyrmex.data_visualization._compat import performance_context
+
         with performance_context("my_op"):
             pass  # must not raise
 
     def test_performance_context_as_context_manager(self):
         """performance_context works as a context manager without raising."""
         from codomyrmex.data_visualization._compat import performance_context
+
         entered = False
         with performance_context("op"):
             entered = True
@@ -503,13 +520,19 @@ class TestCompatModule:
 
     def test_compat_all_exports(self):
         import codomyrmex.data_visualization._compat as compat
-        for name in ["PERFORMANCE_MONITORING_AVAILABLE", "monitor_performance", "performance_context"]:
+
+        for name in [
+            "PERFORMANCE_MONITORING_AVAILABLE",
+            "monitor_performance",
+            "performance_context",
+        ]:
             assert hasattr(compat, name)
 
 
 # ---------------------------------------------------------------------------
 # PlotConfig edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestPlotConfigEdgeCases:
     """PlotConfig field mutations and non-default values."""
@@ -564,6 +587,7 @@ class TestPlotConfigEdgeCases:
 # DataPoint and Dataset edge cases
 # ---------------------------------------------------------------------------
 
+
 class TestDataPointEdgeCases:
     """DataPoint with optional None fields and datetime x/y."""
 
@@ -610,6 +634,7 @@ class TestDatasetEdgeCases:
 # ---------------------------------------------------------------------------
 # AdvancedPlotter state consistency after multiple plots
 # ---------------------------------------------------------------------------
+
 
 class TestAdvancedPlotterStateConsistency:
     """State tracking (figures list, current_figure) is correct across multiple ops."""
@@ -661,6 +686,7 @@ class TestAdvancedPlotterStateConsistency:
 # finalize_plot label/legend/grid override logic
 # ---------------------------------------------------------------------------
 
+
 class TestFinalizePlotOverrides:
     """finalize_plot respects explicit args over config defaults."""
 
@@ -693,6 +719,7 @@ class TestFinalizePlotOverrides:
 # ---------------------------------------------------------------------------
 # save_plot with bad path (OSError path)
 # ---------------------------------------------------------------------------
+
 
 class TestSavePlotErrorPath:
     """save_plot returns False on OSError (bad path)."""

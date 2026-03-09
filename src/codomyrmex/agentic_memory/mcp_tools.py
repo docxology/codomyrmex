@@ -17,11 +17,14 @@ logger = get_logger(__name__)
 def _agent_memory():
     """Lazy import AgentMemory to avoid circular imports."""
     from codomyrmex.agentic_memory.memory import AgentMemory
+
     return AgentMemory
+
 
 def _vector_memory():
     """Lazy import VectorStoreMemory to avoid circular imports."""
     from codomyrmex.agentic_memory.memory import VectorStoreMemory
+
     return VectorStoreMemory
 
 
@@ -42,11 +45,15 @@ def memory_put(
 
     valid_types = {e.value for e in MemoryType}
     if memory_type not in valid_types:
-        raise ValueError(f"memory_type must be one of {sorted(valid_types)!r}, got {memory_type!r}")
+        raise ValueError(
+            f"memory_type must be one of {sorted(valid_types)!r}, got {memory_type!r}"
+        )
 
     valid_importance = {e.name.lower() for e in MemoryImportance}
     if importance.lower() not in valid_importance:
-        raise ValueError(f"importance must be one of {sorted(valid_importance)!r}, got {importance!r}")
+        raise ValueError(
+            f"importance must be one of {sorted(valid_importance)!r}, got {importance!r}"
+        )
 
     agent = _agent_memory()()
     mem = agent.remember(
@@ -88,22 +95,33 @@ def _inject_rules(context_rules: str, formatted: list[dict[str, Any]]) -> None:
         from codomyrmex.agentic_memory.rules.engine import RuleEngine
 
         engine = RuleEngine()
-        file_path = context_rules if "." in context_rules or "/" in context_rules else None
+        file_path = (
+            context_rules if "." in context_rules or "/" in context_rules else None
+        )
         module_name = context_rules if not file_path else None
-        rule_set = engine.get_applicable_rules(file_path=file_path, module_name=module_name)
+        rule_set = engine.get_applicable_rules(
+            file_path=file_path, module_name=module_name
+        )
         for rule in reversed(list(rule_set.resolved())):
-            formatted.insert(0, {
-                "memory": {
-                    "id": f"rule-{rule.name}",
-                    "content": rule.raw_content,
-                    "memory_type": "semantic",
-                    "importance": 4,
-                    "metadata": {"source": "rule_engine", "priority": rule.priority.name, "rule_name": rule.name},
-                    "tags": ["rule", rule.priority.name.lower()],
+            formatted.insert(
+                0,
+                {
+                    "memory": {
+                        "id": f"rule-{rule.name}",
+                        "content": rule.raw_content,
+                        "memory_type": "semantic",
+                        "importance": 4,
+                        "metadata": {
+                            "source": "rule_engine",
+                            "priority": rule.priority.name,
+                            "rule_name": rule.name,
+                        },
+                        "tags": ["rule", rule.priority.name.lower()],
+                    },
+                    "relevance": 1.0,
+                    "combined_score": 1.0,
                 },
-                "relevance": 1.0,
-                "combined_score": 1.0,
-            })
+            )
     except Exception:
         logger.warning("Rule injection failed during memory_search", exc_info=True)
 

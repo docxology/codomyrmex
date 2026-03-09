@@ -133,10 +133,11 @@ def create_project(
     name: str, description: str = "", template: str | None = None
 ) -> Project:
     """Create a new project instance."""
-    return Project(name=name, description=description, **({"template": template} if template else {}))
-
-
-
+    return Project(
+        name=name,
+        description=description,
+        **({"template": template} if template else {}),
+    )
 
 
 # Quick workflow execution function

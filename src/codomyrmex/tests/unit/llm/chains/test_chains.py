@@ -40,6 +40,7 @@ class TestChainStep:
         )
         assert step.parse_output("hello") == "HELLO"
 
+
 class TestSimpleChain:
     """Tests for SimpleChain."""
 
@@ -68,24 +69,29 @@ class TestSimpleChain:
         assert result.success is False
         assert "LLM error" in (result.error or "")
 
+
 class TestSequentialChain:
     """Tests for SequentialChain."""
 
     def test_run_sequential_steps(self):
         """Should pass context between steps."""
         chain = SequentialChain(name="seq_chain")
-        chain.add_step(ChainStep(
-            name="step1",
-            prompt_template="Upper {input}",
-            output_key="upper_val",
-            parser=lambda x: x.upper()
-        ))
-        chain.add_step(ChainStep(
-            name="step2",
-            prompt_template="Reverse {upper_val}",
-            output_key="final_val",
-            parser=lambda x: x[::-1]
-        ))
+        chain.add_step(
+            ChainStep(
+                name="step1",
+                prompt_template="Upper {input}",
+                output_key="upper_val",
+                parser=lambda x: x.upper(),
+            )
+        )
+        chain.add_step(
+            ChainStep(
+                name="step2",
+                prompt_template="Reverse {upper_val}",
+                output_key="final_val",
+                parser=lambda x: x[::-1],
+            )
+        )
 
         def mock_llm(prompt):
             if "Upper" in prompt:
@@ -101,6 +107,7 @@ class TestSequentialChain:
         assert result.context["upper_val"] == "HELLO"
         assert result.context["final_val"] == "OLLEH"
         assert len(result.steps) == 2
+
 
 class TestChainOfThought:
     """Tests for ChainOfThought chain."""
@@ -127,14 +134,13 @@ class TestChainOfThought:
         assert result.success is True
         assert "Final Answer: 2" in result.output
 
+
 class TestReActChain:
     """Tests for ReActChain."""
 
     def test_react_success(self):
         """Should interact with tools and finish."""
-        tools = {
-            "search": lambda x: f"Found info about {x}"
-        }
+        tools = {"search": lambda x: f"Found info about {x}"}
         chain = ReActChain(tools=tools, max_iterations=3)
 
         def mock_llm(prompt):
@@ -161,6 +167,7 @@ class TestReActChain:
         assert result.success is False
         assert "Max iterations reached" in (result.error or "")
 
+
 class TestFactory:
     """Tests for create_chain factory."""
 
@@ -175,6 +182,7 @@ class TestFactory:
     def test_create_invalid(self):
         with pytest.raises(ValueError):
             create_chain("invalid_type")
+
 
 class TestParsers:
     """Tests for output parsers."""

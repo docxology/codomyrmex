@@ -10,6 +10,7 @@ except ImportError:
 
 try:
     from codomyrmex.performance import monitoring
+
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False

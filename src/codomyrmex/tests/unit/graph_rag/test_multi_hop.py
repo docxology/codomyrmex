@@ -21,14 +21,18 @@ class TestMultiHopRetrieval:
         pipeline = GraphRAGPipeline(graph=graph)
 
         # Depth 1 should only get A and B
-        context_d1 = pipeline.retrieve("Alpha", include_neighbors=True, max_depth=1, max_entities=10)
+        context_d1 = pipeline.retrieve(
+            "Alpha", include_neighbors=True, max_depth=1, max_entities=10
+        )
         eids_d1 = [e.id for e in context_d1.entities]
         assert "A" in eids_d1
         assert "B" in eids_d1
         assert "C" not in eids_d1
 
         # Depth 2 should get A, B, and C
-        context_d2 = pipeline.retrieve("Alpha", include_neighbors=True, max_depth=2, max_entities=10)
+        context_d2 = pipeline.retrieve(
+            "Alpha", include_neighbors=True, max_depth=2, max_entities=10
+        )
         eids_d2 = [e.id for e in context_d2.entities]
         assert "A" in eids_d2
         assert "B" in eids_d2

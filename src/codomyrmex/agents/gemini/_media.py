@@ -25,7 +25,6 @@ class GeminiMediaMixin:
             if config is None and kwargs:
                 config = kwargs
 
-
             result = self.client.models.generate_images(
                 model=model, prompt=prompt, config=config
             )

@@ -210,7 +210,9 @@ class TestExceptionHierarchy:
             MistralVibeError,
         ]:
             e = exc_cls()
-            assert isinstance(e, AgentError), f"{exc_cls.__name__} should inherit AgentError"
+            assert isinstance(e, AgentError), (
+                f"{exc_cls.__name__} should inherit AgentError"
+            )
 
     def test_all_have_context_dict(self):
         """All agent exceptions should have a context attribute."""

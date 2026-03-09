@@ -34,12 +34,17 @@ def repo_path(tmp_path):
     initialize_git_repository(str(path), initial_commit=False)
 
     # Configure git user for the temp repo
-    subprocess.run(["git", "-C", str(path), "config", "user.email", "test@example.com"], check=True)
-    subprocess.run(["git", "-C", str(path), "config", "user.name", "Test User"], check=True)
+    subprocess.run(
+        ["git", "-C", str(path), "config", "user.email", "test@example.com"], check=True
+    )
+    subprocess.run(
+        ["git", "-C", str(path), "config", "user.name", "Test User"], check=True
+    )
     # Default branch name might vary by git version, let's force it to 'main'
     subprocess.run(["git", "-C", str(path), "checkout", "-b", "main"], check=False)
 
     return path
+
 
 def test_commit_operations(repo_path):
     """Test commit related operations."""
@@ -58,6 +63,7 @@ def test_commit_operations(repo_path):
     assert history[0]["message"] == "initial commit"
     assert history[0]["hash"] == sha
 
+
 def test_branch_operations(repo_path):
     """Test branch related operations."""
     # Need at least one commit before branching in some git versions
@@ -74,6 +80,7 @@ def test_branch_operations(repo_path):
     # Switch back
     assert switch_branch("main", repository_path=str(repo_path))
     assert get_current_branch(str(repo_path)) == "main"
+
 
 def test_merge_operations(repo_path):
     """Test merge operations."""
@@ -96,6 +103,7 @@ def test_merge_operations(repo_path):
     assert (repo_path / "feature.txt").exists()
     history = get_commit_history(limit=5, repository_path=str(repo_path))
     assert any("feature commit" in c["message"] for c in history)
+
 
 def test_status_and_diff_operations(repo_path):
     """Test status and diff operations."""
@@ -131,6 +139,7 @@ def test_status_and_diff_operations(repo_path):
     diff = get_diff(repository_path=str(repo_path))
     assert "-hello" in diff
     assert "+hello world" in diff
+
 
 def test_stash_operations(repo_path):
     """Test stash operations."""

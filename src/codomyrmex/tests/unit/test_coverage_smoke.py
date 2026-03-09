@@ -87,8 +87,7 @@ class TestModuleImports:
         # Allow up to 10% failure rate for optional deps
         max_failures = max(1, len(submodules) // 10)
         assert len(failures) <= max_failures, (
-            f"{package}: {len(failures)} import failures:\n"
-            + "\n".join(failures[:5])
+            f"{package}: {len(failures)} import failures:\n" + "\n".join(failures[:5])
         )
 
 
@@ -115,7 +114,9 @@ class TestClassDiscovery:
         if all_names is None:
             pytest.skip(f"{package} does not define __all__")
         for name in all_names:
-            assert hasattr(mod, name), f"{package}.{name} listed in __all__ but not importable"
+            assert hasattr(mod, name), (
+                f"{package}.{name} listed in __all__ but not importable"
+            )
 
 
 class TestDocumentationModule:
@@ -123,6 +124,7 @@ class TestDocumentationModule:
 
     def test_import_core(self) -> None:
         import codomyrmex.documentation
+
         assert hasattr(codomyrmex.documentation, "__name__")
 
     def test_submodule_structure(self) -> None:
@@ -141,6 +143,7 @@ class TestGitOperationsModule:
 
     def test_import_core(self) -> None:
         import codomyrmex.git_operations
+
         assert hasattr(codomyrmex.git_operations, "__name__")
 
     def test_submodule_structure(self) -> None:
@@ -157,6 +160,7 @@ class TestCLIModule:
 
     def test_import_core(self) -> None:
         import codomyrmex.cli
+
         assert hasattr(codomyrmex.cli, "__name__")
 
     def test_submodule_structure(self) -> None:
@@ -169,6 +173,7 @@ class TestSystemDiscoveryModule:
 
     def test_import_core(self) -> None:
         import codomyrmex.system_discovery
+
         assert hasattr(codomyrmex.system_discovery, "__name__")
 
     def test_submodule_structure(self) -> None:
@@ -185,6 +190,7 @@ class TestCryptoModule:
 
     def test_import_core(self) -> None:
         import codomyrmex.crypto
+
         assert hasattr(codomyrmex.crypto, "__name__")
 
     def test_submodule_structure(self) -> None:
@@ -197,6 +203,7 @@ class TestCerebrumModule:
 
     def test_import_core(self) -> None:
         import codomyrmex.cerebrum
+
         assert hasattr(codomyrmex.cerebrum, "__name__")
 
     def test_submodule_structure(self) -> None:
@@ -233,6 +240,7 @@ class TestModelContextProtocolModule:
         """The core @mcp_tool decorator should be importable."""
         try:
             from codomyrmex.model_context_protocol import mcp_tool
+
             assert callable(mcp_tool)
         except ImportError:
             pytest.skip("mcp_tool not directly exported from __init__")

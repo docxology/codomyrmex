@@ -1,6 +1,5 @@
 """Tests for fractals MCP tool."""
 
-
 from codomyrmex.orchestrator.fractals.mcp_tools import orchestrate_fractal_task
 
 
@@ -10,6 +9,7 @@ def test_mcp_tool_schema() -> None:
     assert hasattr(orchestrate_fractal_task, "_mcp_tool_meta")
     meta = orchestrate_fractal_task._mcp_tool_meta
     assert meta["category"] == "orchestrator"
+
 
 def test_mcp_fractal_end_to_end_dummy() -> None:
     """A minimal zero-mock verifiable execution run using a predefined task depth=0 bounds."""
@@ -23,7 +23,7 @@ def test_mcp_fractal_end_to_end_dummy() -> None:
         res = orchestrate_fractal_task(
             task_description="Output the text: ALL SYSTEMS NOMINAL",
             max_depth=0,
-            provider="codomyrmex"
+            provider="codomyrmex",
         )
         assert isinstance(res, dict)
         assert res["status"] in ["success", "error"]  # Depending on local keys

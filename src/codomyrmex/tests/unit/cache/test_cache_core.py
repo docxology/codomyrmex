@@ -175,8 +175,18 @@ class TestCacheStatsRecording:
         stats = self._fresh()
         stats.record_hit("k")
         d = stats.to_dict()
-        for key in ("hits", "misses", "total_requests", "hit_rate", "size",
-                    "max_size", "usage_percent", "evictions", "writes", "deletes"):
+        for key in (
+            "hits",
+            "misses",
+            "total_requests",
+            "hit_rate",
+            "size",
+            "max_size",
+            "usage_percent",
+            "evictions",
+            "writes",
+            "deletes",
+        ):
             assert key in d
 
     def test_to_dict_values_match_state(self):
@@ -293,7 +303,7 @@ class TestInMemoryCacheCore:
     def test_stats_hits_and_misses(self):
         c = self._cache()
         c.set("k", "v")
-        c.get("k")   # hit
+        c.get("k")  # hit
         c.get("nope")  # miss
         assert c.stats.hits == 1
         assert c.stats.misses == 1
@@ -439,6 +449,7 @@ class TestCacheMcpTools:
     def setup_method(self):
         # Reset singleton so each test class method starts fresh
         import codomyrmex.cache.mcp_tools as mt
+
         mt._manager = None
 
     def test_cache_set_returns_true(self):
@@ -493,6 +504,7 @@ class TestCacheMcpTools:
     def test_cache_stats_hit_rate_after_hit(self):
         import codomyrmex.cache.mcp_tools as mt
         from codomyrmex.cache.mcp_tools import cache_get, cache_set, cache_stats
+
         mt._manager = None
         cache_set("hr_key", "hr_val")
         cache_get("hr_key")  # 1 hit
@@ -551,6 +563,7 @@ class TestTtlManagerCore:
 
     def test_cleanup_calls_cleanup_expired_if_available(self):
         """Register a cache with cleanup_expired and verify it gets called."""
+
         class TrackingCache:
             def __init__(self):
                 self.cleaned = False

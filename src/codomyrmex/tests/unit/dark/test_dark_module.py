@@ -4,7 +4,6 @@ Zero-mock policy: no MagicMock, no monkeypatch, no unittest.mock.
 PDF-specific tests are guarded with skipif when PyMuPDF is not installed.
 """
 
-
 import pytest
 
 import codomyrmex.dark as dark_module
@@ -99,20 +98,24 @@ class TestDarkMCPTools:
 
     def test_mcp_tools_has_dark_status_function(self):
         from codomyrmex.dark import mcp_tools
+
         assert hasattr(mcp_tools, "dark_status")
 
     def test_mcp_tools_has_dark_list_presets_function(self):
         from codomyrmex.dark import mcp_tools
+
         assert hasattr(mcp_tools, "dark_list_presets")
 
     def test_dark_status_returns_dict_with_status(self):
         from codomyrmex.dark.mcp_tools import dark_status
+
         result = dark_status()
         assert isinstance(result, dict)
         assert "status" in result
 
     def test_dark_list_presets_returns_dict(self):
         from codomyrmex.dark.mcp_tools import dark_list_presets
+
         result = dark_list_presets()
         assert isinstance(result, dict)
 
@@ -126,6 +129,7 @@ class TestDarkPDFWrapper:
 
     def test_dark_pdf_filter_has_preset_names(self):
         from codomyrmex.dark.pdf import DarkPDF
+
         assert hasattr(DarkPDF, "PRESETS") or True  # just check it loads
 
     def test_apply_dark_mode_function_importable(self):

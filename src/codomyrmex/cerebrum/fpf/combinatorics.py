@@ -72,7 +72,8 @@ class FPFCombinatoricsAnalyzer:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.logger.info(
-            "Initialized combinatorics analyzer with %s patterns", len(self.spec.patterns)
+            "Initialized combinatorics analyzer with %s patterns",
+            len(self.spec.patterns),
         )
 
     def analyze_pattern_pairs(self) -> dict[str, Any]:

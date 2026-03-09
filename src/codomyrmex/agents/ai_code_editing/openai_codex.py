@@ -100,7 +100,9 @@ class OpenAICodex:
             **kwargs,
         )
 
-    def _parse_response(self, response, start_time: float) -> tuple[str, int, float, str]:
+    def _parse_response(
+        self, response, start_time: float
+    ) -> tuple[str, int, float, str]:
         """Extract (content, tokens_used, execution_time, finish_reason) from a response."""
         execution_time = time.time() - start_time
         content = response.choices[0].message.content or ""
@@ -131,11 +133,16 @@ class OpenAICodex:
                 {"role": "user", "content": self._build_user_prompt(prompt, context)},
             ]
             response = self._call_api(messages, max_tokens, temperature, **kwargs)
-            generated_code, tokens_used, execution_time, finish_reason = self._parse_response(response, start_time)
+            generated_code, tokens_used, execution_time, finish_reason = (
+                self._parse_response(response, start_time)
+            )
             generated_code = self._extract_code_block(generated_code, language)
             logger.info(
                 "Generated %s code using %s in %.2fs (%s tokens)",
-                language, self.model, execution_time, tokens_used,
+                language,
+                self.model,
+                execution_time,
+                tokens_used,
             )
             return {
                 "generated_code": generated_code,
@@ -182,20 +189,26 @@ class OpenAICodex:
             **kwargs,
         )
 
-    def _build_edit_messages(self, code: str, instruction: str, language: str) -> list[dict[str, str]]:
+    def _build_edit_messages(
+        self, code: str, instruction: str, language: str
+    ) -> list[dict[str, str]]:
         """Build chat messages for an edit_code request."""
         system_prompt = (
             f"You are a code editor. Edit the provided {language} code "
             "according to the given instruction. Return only the edited code, "
             "with no explanations."
         )
-        user_prompt = f"Instruction: {instruction}\n\nCode to edit:\n```{language}\n{code}\n```"
+        user_prompt = (
+            f"Instruction: {instruction}\n\nCode to edit:\n```{language}\n{code}\n```"
+        )
         return [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ]
 
-    def _build_explain_messages(self, code: str, language: str, detail_level: str) -> list[dict[str, str]]:
+    def _build_explain_messages(
+        self, code: str, language: str, detail_level: str
+    ) -> list[dict[str, str]]:
         """Build chat messages for an explain_code request."""
         detail_instructions = {
             "brief": "Provide a brief one-paragraph summary.",
@@ -226,11 +239,16 @@ class OpenAICodex:
         try:
             messages = self._build_edit_messages(code, instruction, language)
             response = self._call_api(messages, max_tokens, temperature, **kwargs)
-            edited_code, tokens_used, execution_time, _ = self._parse_response(response, start_time)
+            edited_code, tokens_used, execution_time, _ = self._parse_response(
+                response, start_time
+            )
             edited_code = self._extract_code_block(edited_code, language)
             logger.info(
                 "Edited %s code using %s in %.2fs (%s tokens)",
-                language, self.model, execution_time, tokens_used,
+                language,
+                self.model,
+                execution_time,
+                tokens_used,
             )
             return {
                 "original_code": code,
@@ -257,10 +275,14 @@ class OpenAICodex:
         try:
             messages = self._build_explain_messages(code, language, detail_level)
             response = self._call_api(messages, 2048, 0.3, **kwargs)
-            explanation, tokens_used, execution_time, _ = self._parse_response(response, start_time)
+            explanation, tokens_used, execution_time, _ = self._parse_response(
+                response, start_time
+            )
             logger.info(
                 "Generated code explanation using %s in %.2fs (%s tokens)",
-                self.model, execution_time, tokens_used,
+                self.model,
+                execution_time,
+                tokens_used,
             )
             return {
                 "code": code,

@@ -35,9 +35,15 @@ class SloppinessVisitor(ast.NodeVisitor):
         if not ast.get_docstring(node):
             self.missing_docstrings.append(f"{self.filename}:{node.name}")
 
-        method_count = sum(1 for item in node.body if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)))
+        method_count = sum(
+            1
+            for item in node.body
+            if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef))
+        )
         if method_count >= 30:
-            self.god_classes.append(f"{self.filename}:{node.name} ({method_count} methods)")
+            self.god_classes.append(
+                f"{self.filename}:{node.name} ({method_count} methods)"
+            )
 
         self.generic_visit(node)
 
@@ -53,12 +59,31 @@ class SloppinessVisitor(ast.NodeVisitor):
         if is_public and not ast.get_docstring(node):
             # We don't have the parent class name easily in a raw visitor without tracking scope,
             # so we just record the function name and line number
-            self.missing_docstrings.append(f"{self.filename}:{node.lineno} def {node.name}")
+            self.missing_docstrings.append(
+                f"{self.filename}:{node.lineno} def {node.name}"
+            )
 
         # Basic complexity: count loops and branches
-        branches = sum(1 for child in ast.walk(node) if isinstance(child, (ast.If, ast.For, ast.While, ast.Try, ast.With, ast.ExceptHandler, ast.Match)))
+        branches = sum(
+            1
+            for child in ast.walk(node)
+            if isinstance(
+                child,
+                (
+                    ast.If,
+                    ast.For,
+                    ast.While,
+                    ast.Try,
+                    ast.With,
+                    ast.ExceptHandler,
+                    ast.Match,
+                ),
+            )
+        )
         if branches > 15:
-            self.complex_methods.append(f"{self.filename}:{node.lineno} def {node.name} (complexity: {branches})")
+            self.complex_methods.append(
+                f"{self.filename}:{node.lineno} def {node.name} (complexity: {branches})"
+            )
 
         self.generic_visit(node)
 
@@ -97,8 +122,9 @@ def analyze_codebase(target_dir: str = "src/codomyrmex") -> dict:
         "files_analyzed": files_checked,
         "god_classes": all_god_classes,
         "missing_docstrings": all_missing_docs,
-        "complex_methods": all_complex
+        "complex_methods": all_complex,
     }
+
 
 def main():
     parser = argparse.ArgumentParser(description="Codomyrmex codebase de-sloppifier")
@@ -123,7 +149,9 @@ def main():
     if not results["god_classes"]:
         print("None detected! Excellent layout.")
 
-    print(f"\n## High Complexity Functions (>15 branches) [{len(results['complex_methods'])}]")
+    print(
+        f"\n## High Complexity Functions (>15 branches) [{len(results['complex_methods'])}]"
+    )
     for item in results["complex_methods"]:
         print(f"- {item}")
     if not results["complex_methods"]:
@@ -137,6 +165,7 @@ def main():
         print(f"... and {len(results['missing_docstrings']) - 20} more.")
     elif not results["missing_docstrings"]:
         print("100% docstring coverage! Incredible.")
+
 
 if __name__ == "__main__":
     main()

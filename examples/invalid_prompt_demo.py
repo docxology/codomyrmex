@@ -4,7 +4,6 @@ It is designed to fail when the input prompt contains the word 'invalid'.
 """
 
 
-
 def process_prompt(prompt: str) -> None:
     """
     Processes a prompt. Fails if the prompt is invalid.
