@@ -12,6 +12,7 @@ from codomyrmex.telemetry.tracing.models import (
     SpanStatus,
 )
 
+
 # ──────────────────────────── Helpers ─────────────────────────────────────
 
 

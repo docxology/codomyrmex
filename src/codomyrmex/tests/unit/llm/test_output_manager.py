@@ -12,6 +12,7 @@ import pytest
 
 from codomyrmex.llm.ollama.output_manager import OutputManager
 
+
 # ---------------------------------------------------------------------------
 # OutputManager — Init
 # ---------------------------------------------------------------------------

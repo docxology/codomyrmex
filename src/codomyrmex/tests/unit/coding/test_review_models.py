@@ -22,49 +22,50 @@ from codomyrmex.coding.review.models import (
 )
 from codomyrmex.exceptions import CodomyrmexError
 
+
 # ──────────────────────────── Helpers ─────────────────────────────────────
 
 
 def _make_analysis_result(**kwargs) -> AnalysisResult:
-    defaults = {
-        "file_path": "sample.py",
-        "line_number": 1,
-        "column_number": 0,
-        "severity": SeverityLevel.INFO,
-        "message": "test finding",
-        "rule_id": "T001",
-        "category": "quality",
-    }
+    defaults = dict(
+        file_path="sample.py",
+        line_number=1,
+        column_number=0,
+        severity=SeverityLevel.INFO,
+        message="test finding",
+        rule_id="T001",
+        category="quality",
+    )
     defaults.update(kwargs)
     return AnalysisResult(**defaults)
 
 
 def _make_quality_dashboard(**kwargs) -> QualityDashboard:
-    defaults = {
-        "overall_score": 75.0,
-        "grade": "C",
-        "analysis_timestamp": "2026-03-07T12:00:00",
-        "total_files": 5,
-        "total_functions": 20,
-        "total_lines": 500,
-        "complexity_score": 70.0,
-        "maintainability_score": 80.0,
-        "testability_score": 65.0,
-        "reliability_score": 77.0,
-        "security_score": 90.0,
-        "performance_score": 60.0,
-        "complexity_metrics": {},
-        "dead_code_metrics": {},
-        "duplication_metrics": {},
-        "coupling_metrics": {},
-        "architecture_metrics": {},
-        "top_complexity_issues": [],
-        "top_dead_code_issues": [],
-        "top_duplication_issues": [],
-        "priority_actions": [],
-        "quick_wins": [],
-        "long_term_improvements": [],
-    }
+    defaults = dict(
+        overall_score=75.0,
+        grade="C",
+        analysis_timestamp="2026-03-07T12:00:00",
+        total_files=5,
+        total_functions=20,
+        total_lines=500,
+        complexity_score=70.0,
+        maintainability_score=80.0,
+        testability_score=65.0,
+        reliability_score=77.0,
+        security_score=90.0,
+        performance_score=60.0,
+        complexity_metrics={},
+        dead_code_metrics={},
+        duplication_metrics={},
+        coupling_metrics={},
+        architecture_metrics={},
+        top_complexity_issues=[],
+        top_dead_code_issues=[],
+        top_duplication_issues=[],
+        priority_actions=[],
+        quick_wins=[],
+        long_term_improvements=[],
+    )
     defaults.update(kwargs)
     return QualityDashboard(**defaults)
 
