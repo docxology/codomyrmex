@@ -5,7 +5,6 @@ JulesError, ClaudeError (with is_retryable), CodexError, OpenCodeError, GeminiEr
 MistralVibeError, and all other provider-specific exceptions.
 """
 
-import pytest
 
 from codomyrmex.agents.core.exceptions import (
     AgentConfigurationError,

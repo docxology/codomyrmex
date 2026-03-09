@@ -15,8 +15,12 @@ Usage:
               (default: <repo_root>/reports/stub_audit.md)
 """
 
+logger = logging.getLogger(__name__)
+
+
 import argparse
 import ast
+import logging
 from pathlib import Path
 
 from codomyrmex.utils.cli_helpers import print_info, print_success
@@ -123,7 +127,8 @@ def audit_stubs_better(src_dir: Path) -> list:
         try:
             content = filepath.read_text(encoding="utf-8")
             tree = ast.parse(content)
-        except Exception:
+        except Exception as e:
+            logger.debug("Could not parse %s: %s", filepath, e)
             continue
 
         # Attach parent pointers for class-membership checks

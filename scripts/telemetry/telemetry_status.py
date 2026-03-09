@@ -6,6 +6,9 @@ Usage:
     python telemetry_status.py [--verbose]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -18,6 +21,7 @@ except ImportError:
 import argparse
 import contextlib
 import json
+import logging
 import os
 from datetime import datetime
 
@@ -62,8 +66,8 @@ def parse_metrics_file(path: Path) -> list:
                 if line.strip():
                     with contextlib.suppress(BaseException):
                         metrics.append(json.loads(line))
-    except:
-        pass
+    except Exception as e:
+        logger.debug("Could not read metrics from %s: %s", path, e)
     return metrics
 
 

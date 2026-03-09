@@ -6,6 +6,9 @@ Usage:
     python pattern_search.py <pattern> [path] [--type TYPE]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -17,6 +20,7 @@ except ImportError:
 
 import argparse
 import ast
+import logging
 import re
 
 
@@ -47,8 +51,8 @@ def search_regex(pattern: str, path: Path, file_extensions: list | None = None) 
                                 "content": line.strip()[:100],
                             }
                         )
-        except:
-            pass
+        except Exception as e:
+            logger.debug("Could not search file %s: %s", f, e)
 
     return matches
 
@@ -91,8 +95,8 @@ def search_ast_pattern(pattern_type: str, path: Path) -> list:
                             "name": name,
                         }
                     )
-        except:
-            pass
+        except Exception as e:
+            logger.debug("Could not parse %s for AST pattern search: %s", f, e)
 
     return matches
 

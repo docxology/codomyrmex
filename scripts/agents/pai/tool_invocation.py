@@ -26,6 +26,8 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+import logging
+
 from codomyrmex.agents.pai import (
     call_tool,
     reset_trust,
@@ -40,6 +42,8 @@ from codomyrmex.utils.cli_helpers import (
     print_warning,
     setup_logging,
 )
+
+logger = logging.getLogger(__name__)
 
 PATTERNS = ["direct", "trusted", "dynamic", "errors"]
 
@@ -241,8 +245,8 @@ def main() -> int:
         try:
             reset_trust()
             print_info("\n  Trust state reset on exit.")
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("Failed to reset trust state during cleanup: %s", e)
 
     if args.json_output:
         print("\n" + json.dumps(results, indent=2, default=str))

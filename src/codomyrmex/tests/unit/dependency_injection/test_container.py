@@ -10,7 +10,6 @@ from abc import ABC, abstractmethod
 import pytest
 
 from codomyrmex.dependency_injection.container import (
-    CircularDependencyError,
     Container,
     ResolutionError,
     ScopeContext,

@@ -18,6 +18,16 @@ What it does:
     4. Serves the REST API (including /api/awareness)
 """
 
+import warnings
+
+warnings.warn(
+    "scripts/agents/pai/pai_dashboard.py is deprecated. "
+    "Use scripts/pai/dashboard.py instead, which launches both "
+    "the PAI PM (:8888) and Codomyrmex Admin (:8787) dashboards.",
+    DeprecationWarning,
+    stacklevel=2,
+)
+
 import argparse
 import socketserver
 import sys

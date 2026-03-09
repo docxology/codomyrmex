@@ -96,8 +96,8 @@ class OllamaClient:
                         tags = json.loads(resp.read().decode("utf-8"))
                         models = [m.get("name") for m in tags.get("models", [])]
                         print(f"DEBUG: Available models: {models}")
-            except Exception:
-                pass
+            except Exception as debug_err:
+                logger.debug("Could not list Ollama models for debug: %s", debug_err)
             raise RuntimeError(f"Real Ollama Connection Failed: {e}") from e
 
         elapsed = time.monotonic() - start_time
@@ -140,8 +140,8 @@ def get_llm_client(identity="agent"):
                     f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})"
                 )
                 return OllamaClient(model=model)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Ollama not reachable: %s", e)
 
     raise RuntimeError(
         f"[{identity}] CRITICAL: No Real LLM Available.\n"

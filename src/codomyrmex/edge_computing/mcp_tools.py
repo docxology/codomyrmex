@@ -17,12 +17,6 @@ def _get_cluster():
     return EdgeCluster()
 
 
-def _get_health_monitor():
-    """Lazy import of HealthMonitor."""
-    from codomyrmex.edge_computing.infrastructure.health import HealthMonitor
-
-    return HealthMonitor()
-
 
 @mcp_tool(
     category="edge_computing",

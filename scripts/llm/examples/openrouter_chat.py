@@ -41,6 +41,8 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+import logging
+
 from codomyrmex.llm.providers import (
     Message,
     OpenRouterProvider,
@@ -48,6 +50,8 @@ from codomyrmex.llm.providers import (
     ProviderType,
     get_provider,
 )
+
+logger = logging.getLogger(__name__)
 
 # Default config file locations
 CONFIG_PATHS = [
@@ -73,8 +77,8 @@ def get_api_key(cli_key: str | None = None) -> str | None:
                 if content.startswith("OPENROUTER_API_KEY="):
                     return content.split("=", 1)[1].strip().strip('"').strip("'")
                 return content
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Could not read config from %s: %s", path, e)
     return None
 
 

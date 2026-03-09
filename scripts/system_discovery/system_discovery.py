@@ -6,6 +6,9 @@ Usage:
     python system_discovery.py <command> [options]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 import os
 import platform
 import subprocess
@@ -66,8 +70,8 @@ def discover_services() -> list:
             sock.close()
             if result == 0:
                 services.append({"port": port, "name": name, "status": "running"})
-        except:
-            pass
+        except Exception as e:
+            logger.debug("Could not check port %d: %s", port, e)
 
     return services
 
@@ -85,8 +89,8 @@ def discover_environment() -> dict:
     try:
         result = subprocess.run(["node", "--version"], capture_output=True, text=True)
         env["node_version"] = result.stdout.strip()
-    except:
-        pass
+    except Exception as e:
+        logger.debug("Could not get node version: %s", e)
 
     # Count Python packages
     try:
@@ -98,8 +102,8 @@ def discover_environment() -> dict:
         import json
 
         env["python_packages"] = len(json.loads(result.stdout))
-    except:
-        pass
+    except Exception as e:
+        logger.debug("Could not count Python packages: %s", e)
 
     return env
 

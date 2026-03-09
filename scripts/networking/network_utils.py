@@ -6,6 +6,9 @@ Usage:
     python network_utils.py <command> [options]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 import socket
 import time
 import urllib.error
@@ -45,7 +49,8 @@ def get_public_ip() -> str:
         try:
             with urllib.request.urlopen(url, timeout=5) as response:
                 return response.read().decode().strip()
-        except:
+        except Exception as e:
+            logger.debug("Could not reach %s for IP lookup: %s", url, e)
             continue
     return "unknown"
 

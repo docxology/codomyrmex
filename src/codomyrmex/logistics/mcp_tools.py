@@ -17,12 +17,6 @@ def _get_queue():
     return Queue
 
 
-def _get_job():
-    """Lazy import of Job."""
-    from codomyrmex.logistics.task import Job
-
-    return Job
-
 
 def _get_schedule_manager():
     """Lazy import of ScheduleManager."""

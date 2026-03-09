@@ -12,6 +12,7 @@ import re
 import subprocess
 import sys
 import threading
+import time
 from urllib.parse import urlparse
 
 from codomyrmex.logging_monitoring import get_logger
@@ -44,6 +45,32 @@ class APIHandler:
             ".yml",
         }
     )
+
+    # ── shared helpers ───────────────────────────────────────────────────
+
+    def _read_json_body(self) -> dict | None:
+        """Parse JSON from POST body.
+
+        Returns the parsed dict on success, or ``None`` after sending an
+        appropriate error response to the client.
+        """
+        try:
+            content_length = int(self.headers.get("Content-Length", 0))
+        except (TypeError, ValueError):
+            content_length = 0
+        if content_length == 0:
+            self.send_json_response({"error": "No content provided"}, status=400)
+            return None
+        try:
+            raw = self.rfile.read(content_length)
+            payload = raw.decode("utf-8").strip()
+            if not payload:
+                self.send_json_response({"error": "No content provided"}, status=400)
+                return None
+            return json.loads(payload)
+        except (json.JSONDecodeError, KeyError):
+            self.send_json_response({"error": "Invalid JSON"}, status=400)
+            return None
 
     def _is_allowed_config_file(self, filename: str) -> bool:
         """Return True if *filename* has an allowed config file extension.
@@ -131,13 +158,10 @@ class APIHandler:
 
     def handle_config_save(self) -> None:
         """Handle config save request."""
-        content_length = int(self.headers.get("Content-Length", 0))
-        if content_length == 0:
-            self.send_error(400, "No content provided")
+        data = self._read_json_body()
+        if data is None:
             return
 
-        post_data = self.rfile.read(content_length)
-        data = json.loads(post_data.decode("utf-8"))
         content = data.get("content")
         filename = data.get("filename")
 
@@ -205,18 +229,8 @@ class APIHandler:
 
     def handle_execute(self) -> None:
         """Execute a script from the scripts directory."""
-        try:
-            content_length = int(self.headers.get("Content-Length", 0))
-        except (TypeError, ValueError):
-            content_length = 0
-        if content_length == 0:
-            self.send_error(400, "No content provided")
-            return
-        try:
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode("utf-8"))
-        except (json.JSONDecodeError, KeyError):
-            self.send_json_response({"error": "Invalid JSON"}, status=400)
+        data = self._read_json_body()
+        if data is None:
             return
 
         script_name = data.get("script")
@@ -403,137 +417,171 @@ class APIHandler:
                 }
             )
 
+    # ── PAI action sub-handlers ───────────────────────────────────────
+
+    def _pai_verify(self, _data: dict) -> dict:
+        """Execute PAI verify action."""
+        from codomyrmex.agents.pai.trust_gateway import verify_capabilities
+
+        raw = verify_capabilities()
+        return {
+            "modules": raw.get("modules", {}).get("total", 0),
+            "tools_total": raw.get("tools", {}).get("total", 0),
+            "promoted": len(
+                raw.get("trust", {}).get("promoted_to_verified", [])
+            ),
+        }
+
+    def _pai_trust(self, _data: dict) -> dict:
+        """Execute PAI trust-all action."""
+        from codomyrmex.agents.pai.trust_gateway import trust_all
+
+        return trust_all()
+
+    def _pai_reset(self, _data: dict) -> dict:
+        """Execute PAI trust reset action."""
+        from codomyrmex.agents.pai.trust_gateway import reset_trust
+
+        reset_trust()
+        return {"message": "Trust levels reset to UNTRUSTED"}
+
+    def _pai_status(self, _data: dict) -> dict:
+        """Execute PAI status check."""
+        try:
+            from codomyrmex.agents.pai.mcp_bridge import tool_pai_status
+
+            return tool_pai_status()
+        except Exception as exc:
+            return {
+                "status": "degraded",
+                "error": str(exc),
+                "available": False,
+            }
+
+    def _pai_analyze(self, _data: dict) -> dict:
+        """Execute PAI system analysis."""
+        modules = self.data_provider.get_modules() if self.data_provider else []
+        summary = (
+            self.data_provider.get_system_summary()
+            if self.data_provider
+            else {}
+        )
+        active = sum(1 for m in modules if m.get("status") == "Active")
+        error_count = sum(
+            1 for m in modules if m.get("status") not in ("Active", "Unknown")
+        )
+        return {
+            "total_modules": len(modules),
+            "active_modules": active,
+            "error_modules": error_count,
+            "system": summary,
+        }
+
+    def _pai_search(self, data: dict) -> dict | None:
+        """Execute PAI module search.
+
+        Returns None after sending an error response when the query is empty.
+        """
+        query = data.get("query", "").strip()
+        if not query:
+            self.send_json_response(
+                {"error": "search requires 'query' field", "success": False},
+                status=400,
+            )
+            return None
+        # CWE-1333: Escape user input to prevent regex injection / ReDoS
+        escaped_query = re.escape(query)
+        pattern = re.compile(escaped_query, re.IGNORECASE)
+        modules = self.data_provider.get_modules() if self.data_provider else []
+        hits = [
+            m
+            for m in modules
+            if pattern.search(m.get("name", ""))
+            or pattern.search(m.get("description", ""))
+        ]
+        return {"query": query, "hits": hits, "count": len(hits)}
+
+    def _pai_docs(self, data: dict) -> dict | None:
+        """Execute PAI docs lookup.
+
+        Returns None after sending an error response when the module is missing.
+        """
+        module_name = data.get("module", "").strip()
+        if not module_name:
+            self.send_json_response(
+                {"error": "docs requires 'module' field", "success": False},
+                status=400,
+            )
+            return None
+        detail = (
+            self.data_provider.get_module_detail(module_name)
+            if self.data_provider
+            else None
+        )
+        if detail is None:
+            self.send_json_response(
+                {
+                    "error": f"Module '{module_name}' not found",
+                    "success": False,
+                },
+                status=404,
+            )
+            return None
+        return detail
+
+    def _pai_add_memory(self, data: dict) -> dict | None:
+        """Execute PAI add-memory action.
+
+        Returns None after sending an error response when content is empty.
+        """
+        from codomyrmex.agentic_memory.mcp_tools import memory_put
+
+        content = data.get("content", "")
+        if not content:
+            self.send_json_response(
+                {
+                    "error": "Content is required for add_memory",
+                    "success": False,
+                },
+                status=400,
+            )
+            return None
+        return memory_put(content=content)
+
+    # Dispatch table mapping action names to handler methods.
+    _PAI_ACTION_DISPATCH: dict[str, str] = {
+        "verify": "_pai_verify",
+        "trust": "_pai_trust",
+        "reset": "_pai_reset",
+        "status": "_pai_status",
+        "analyze": "_pai_analyze",
+        "search": "_pai_search",
+        "docs": "_pai_docs",
+        "add_memory": "_pai_add_memory",
+    }
+
     def handle_pai_action(self) -> None:
         """Handle POST /api/pai/action -- execute a PAI workflow action."""
-        try:
-            content_length = int(self.headers.get("Content-Length", 0))
-        except (TypeError, ValueError):
-            content_length = 0
-        if content_length == 0:
-            self.send_json_response({"error": "No content provided"}, status=400)
-            return
-        try:
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode("utf-8"))
-        except (json.JSONDecodeError, KeyError):
-            self.send_json_response({"error": "Invalid JSON"}, status=400)
+        data = self._read_json_body()
+        if data is None:
             return
 
         action = data.get("action", "")
-        result: dict = {}
+        handler_name = self._PAI_ACTION_DISPATCH.get(action)
+
+        if handler_name is None:
+            self.send_json_response(
+                {"error": f"Unknown action: {action}", "success": False},
+                status=400,
+            )
+            return
 
         try:
-            if action == "verify":
-                from codomyrmex.agents.pai.trust_gateway import verify_capabilities
+            handler_fn = getattr(self, handler_name)
+            result = handler_fn(data)
 
-                raw = verify_capabilities()
-                result = {
-                    "modules": raw.get("modules", {}).get("total", 0),
-                    "tools_total": raw.get("tools", {}).get("total", 0),
-                    "promoted": len(
-                        raw.get("trust", {}).get("promoted_to_verified", [])
-                    ),
-                }
-            elif action == "trust":
-                from codomyrmex.agents.pai.trust_gateway import trust_all
-
-                raw = trust_all()
-                result = raw
-            elif action == "reset":
-                from codomyrmex.agents.pai.trust_gateway import reset_trust
-
-                reset_trust()
-                result = {"message": "Trust levels reset to UNTRUSTED"}
-            elif action == "status":
-                try:
-                    from codomyrmex.agents.pai.mcp_bridge import tool_pai_status
-
-                    result = tool_pai_status()
-                except Exception as _status_err:
-                    result = {
-                        "status": "degraded",
-                        "error": str(_status_err),
-                        "available": False,
-                    }
-            elif action == "analyze":
-                modules = self.data_provider.get_modules() if self.data_provider else []
-                summary = (
-                    self.data_provider.get_system_summary()
-                    if self.data_provider
-                    else {}
-                )
-                active = sum(1 for m in modules if m.get("status") == "Active")
-                error_count = sum(
-                    1 for m in modules if m.get("status") not in ("Active", "Unknown")
-                )
-                result = {
-                    "total_modules": len(modules),
-                    "active_modules": active,
-                    "error_modules": error_count,
-                    "system": summary,
-                }
-            elif action == "search":
-                query = data.get("query", "").strip()
-                if not query:
-                    self.send_json_response(
-                        {"error": "search requires 'query' field", "success": False},
-                        status=400,
-                    )
-                    return
-                # CWE-1333: Escape user input to prevent regex injection / ReDoS
-                escaped_query = re.escape(query)
-                pattern = re.compile(escaped_query, re.IGNORECASE)
-                modules = self.data_provider.get_modules() if self.data_provider else []
-                hits = [
-                    m
-                    for m in modules
-                    if pattern.search(m.get("name", ""))
-                    or pattern.search(m.get("description", ""))
-                ]
-                result = {"query": query, "hits": hits, "count": len(hits)}
-            elif action == "docs":
-                module_name = data.get("module", "").strip()
-                if not module_name:
-                    self.send_json_response(
-                        {"error": "docs requires 'module' field", "success": False},
-                        status=400,
-                    )
-                    return
-                detail = (
-                    self.data_provider.get_module_detail(module_name)
-                    if self.data_provider
-                    else None
-                )
-                if detail is None:
-                    self.send_json_response(
-                        {
-                            "error": f"Module '{module_name}' not found",
-                            "success": False,
-                        },
-                        status=404,
-                    )
-                    return
-                result = detail
-            elif action == "add_memory":
-                from codomyrmex.agentic_memory.mcp_tools import memory_put
-
-                content = data.get("content", "")
-                if not content:
-                    self.send_json_response(
-                        {
-                            "error": "Content is required for add_memory",
-                            "success": False,
-                        },
-                        status=400,
-                    )
-                    return
-                # memory_put expects **kwargs, so we pass content=content directly
-                result = memory_put(content=content)
-            else:
-                self.send_json_response(
-                    {"error": f"Unknown action: {action}", "success": False},
-                    status=400,
-                )
+            # Sub-handlers return None when they've already sent an error
+            if result is None:
                 return
 
             # After any trust-changing action, include updated counts
@@ -564,27 +612,8 @@ class APIHandler:
         """Handle POST /api/agent/dispatch -- start an orchestrator run."""
         from codomyrmex.website.server import WebsiteServer
 
-        try:
-            content_length = int(self.headers.get("Content-Length", 0))
-        except (TypeError, ValueError):
-            content_length = 0
-
-        data = {}
-        if content_length > 0:
-            try:
-                post_data = self.rfile.read(content_length)
-                payload = post_data.decode("utf-8").strip()
-                if not payload:
-                    self.send_json_response(
-                        {"error": "No content provided"}, status=400
-                    )
-                    return
-                data = json.loads(payload)
-            except (json.JSONDecodeError, KeyError):
-                self.send_json_response({"error": "Invalid JSON"}, status=400)
-                return
-        else:
-            self.send_json_response({"error": "No content provided"}, status=400)
+        data = self._read_json_body()
+        if data is None:
             return
 
         seed_prompt = data.get("prompt", "Analyze the current context.")
@@ -602,7 +631,6 @@ class APIHandler:
                 return
 
             try:
-                import time
 
                 from codomyrmex.agents.orchestrator import ConversationOrchestrator
 

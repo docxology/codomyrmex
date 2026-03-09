@@ -6,7 +6,6 @@ for sqlite/postgresql/mysql), and SchemaGenerator (table creation, migration gen
 
 import tempfile
 
-import pytest
 
 from codomyrmex.database_management.schema_generator import (
     Column,

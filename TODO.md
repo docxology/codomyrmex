@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD060 MD033 -->
 # Codomyrmex — TODO
 
-**Version**: v1.1.9 | **Date**: 2026-03-07 | **Modules**: 130 | **Sprint**: 28
+**Version**: v1.1.9 | **Date**: 2026-03-09 | **Modules**: 128 | **Sprint**: 28
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -11,7 +11,7 @@ This is the authoritative project backlog. Updated after each sprint.
 
 | Metric | Value | Method |
 | :--- | :--- | :--- |
-| Top-level source modules | **130** | `ls -d src/codomyrmex/*/` |
+| Top-level source modules | **128** | `ls -d src/codomyrmex/*/` (minus tests/) |
 | Source files (non-test) | **2,075** | `find -name "*.py" -not -path "*/tests/*"` |
 | Test files | **1,023** | `find -name "test_*.py"` |
 | Test unit dirs | **162** | Module-level test directories |
@@ -19,8 +19,8 @@ This is the authoritative project backlog. Updated after each sprint.
 | ty diagnostics | **0** errors (264 warnings) | `uv run ty check src/` ✅ |
 | Coverage gate | `fail_under=33`; actual ~33% ✅ | Gate ratcheted (target: 40%) |
 | GitNexus index | **77,101** symbols, **178,276** relationships | `npx gitnexus analyze` |
-| MCP `@mcp_tool` decorators | **474** | `grep -r '@mcp_tool'` |
-| RASP documentation | 130/130 | Automated audit ✅ |
+| MCP `@mcp_tool` decorators | **602** | `grep -r '@mcp_tool'` |
+| RASP documentation | 128/128 | Automated audit ✅ |
 | `py.typed` markers | **572** | PEP 561 ✅ |
 | Zero-Mock policy | Enforced via ruff | `pyproject.toml` |
 | Build backend | **uv_build** | Migrated from hatchling |
@@ -104,7 +104,7 @@ Triaged: all 189 grep hits are test data strings (pattern_matching fixtures) or 
 - **Hermes Agent** — Dual-backend (`hermes3` CLI + Ollama), session persistence, prompt template library
 - **OpenFang Agent** — `agents/openfang/` with core, hands, update, config, exceptions, MCP tools (7 source files)
 - **Version Sync** — 17,000+ files synchronized to v1.1.9; RASP 130/130; ruff 0 violations
-- **RASP Completion** — `vision/PAI.md` and `languages/PAI.md` created; 128/130 modules documented
+- **RASP Completion** — `vision/PAI.md` and `languages/PAI.md` created; 128/128 modules documented
 - **Modularization** — `physical_management/object_manager.py` (951→645 LOC) → `models.py` (330 LOC)
 - **Zero-Mock Test Campaign** — 1,023 test files across 162 unit test directories; 30+ modules with new `_core.py`/`_mcp_tools.py` tests
 - **GitNexus Re-Index** — 77,101 symbols, 178,276 relationships, 300 execution flows
@@ -139,7 +139,7 @@ Triaged: all 189 grep hits are test data strings (pattern_matching fixtures) or 
 | :--- | :--- | :--- | :--- |
 | **Test-run timelines** | `data_visualization/` | Interactive D3/Recharts timeline of test execution history | Click-to-drill into individual test results |
 | **Module health heatmap** | `data_visualization/` | Live heatmap of per-module coverage, lint status, and test pass-rate | Auto-refreshes via WebSocket push |
-| **Per-module sparklines** | `data_visualization/` | Inline trend indicators for coverage, LOC, and error counts | Sparklines render for all 130 modules |
+| **Per-module sparklines** | `data_visualization/` | Inline trend indicators for coverage, LOC, and error counts | Sparklines render for all 128 modules |
 
 ### Agent Telemetry
 
@@ -195,7 +195,7 @@ Triaged: all 189 grep hits are test data strings (pattern_matching fixtures) or 
 | **Infomaniak Sovereign Cloud** | Storage (Swift), compute (Nova), DNS via Infomaniak API v1 |
 | **Swarm CLI "Codomyrmex Prime"** | `codomyrmex agent start`, `codomyrmex memory index`, `codomyrmex dashboard serve` |
 | **100% Zero-Mock Gate** | Hard block if coverage < 50%; gating on 30,000+ passing tests |
-| **1.2.0 Cut & Freeze** | All 130 module APIs frozen; serialization schemas locked; SBOM generated |
+| **1.2.0 Cut & Freeze** | All 128 module APIs frozen; serialization schemas locked; SBOM generated |
 
 ---
 
@@ -238,4 +238,4 @@ Triaged: all 189 grep hits are test data strings (pattern_matching fixtures) or 
 
 ---
 
-*Last updated: 2026-03-07 — Sprint 28.*
+*Last updated: 2026-03-09 — Sprint 28.*

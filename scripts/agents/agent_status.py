@@ -6,6 +6,9 @@ Usage:
     python agent_status.py [--list] [--health]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 import os
 
 
@@ -61,7 +65,7 @@ def check_agent_health() -> dict:
 
         health["codomyrmex_available"] = True
     except ImportError:
-        pass
+        logger.debug("codomyrmex package not available")
 
     agent_vars = ["AGENT_", "OPENAI_", "ANTHROPIC_", "LLM_", "MODEL_"]
     for key in os.environ:

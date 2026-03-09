@@ -5,7 +5,6 @@ SystemDiscoveryError, CapabilityScanError, Modeling3DError, PhysicalManagementEr
 SimulationError, and all other domain exceptions with context propagation.
 """
 
-import pytest
 
 from codomyrmex.exceptions.specialized import (
     CapabilityScanError,

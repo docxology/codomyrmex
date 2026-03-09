@@ -5,7 +5,6 @@ RiskAssessor (qualitative methodology), assess_risk, calculate_risk_score,
 prioritize_risks, calculate_aggregate_risk.
 """
 
-import pytest
 
 from codomyrmex.security.theory.risk_assessment import (
     ImpactLevel,

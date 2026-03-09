@@ -10,7 +10,11 @@ Reads each src/codomyrmex/<module>/ directory and generates enriched
 README.md, AGENTS.md, and SPEC.md files in docs/modules/<module>/.
 """
 
+logger = logging.getLogger(__name__)
+
+
 import ast
+import logging
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -177,8 +181,8 @@ def extract_module_info(module_dir: Path) -> dict:
                             if isinstance(node.value, ast.Constant):
                                 info["version"] = str(node.value.value)
 
-        except SyntaxError:
-            pass
+        except SyntaxError as e:
+            logger.debug("Syntax error parsing __init__.py: %s", e)
 
     # Find submodules (subdirectories with __init__.py)
     for child in sorted(module_dir.iterdir()):
@@ -198,8 +202,8 @@ def extract_module_info(module_dir: Path) -> dict:
                         else sub_tree.body[0].value.s
                     )
                     sub_doc = raw.strip().split("\n")[0]
-            except (SyntaxError, Exception):
-                pass
+            except (SyntaxError, Exception) as e:
+                logger.debug("Could not parse submodule __init__.py for %s: %s", child.name, e)
             info["submodules"].append({"name": child.name, "doc": sub_doc})
 
     # Find all .py files

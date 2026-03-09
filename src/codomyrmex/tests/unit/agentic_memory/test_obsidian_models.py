@@ -5,7 +5,6 @@ Note (with word_count and aliases properties), SearchResult, VaultMetadata,
 CanvasNode, CanvasEdge, Canvas (with get_node/get_edge).
 """
 
-import pytest
 
 from codomyrmex.agentic_memory.obsidian.models import (
     Callout,

@@ -7,7 +7,11 @@ Remediates documentation gaps:
 2. Generates missing RASP files (README, AGENTS, SPEC, PAI) with template content.
 """
 
+logger = logging.getLogger(__name__)
+
+
 import argparse
+import logging
 import os
 from pathlib import Path
 
@@ -76,8 +80,8 @@ def get_docstring_summary(path: Path) -> str:
                 parts = content.split("'''")
                 if len(parts) >= 3:
                     return parts[1].strip().split("\n")[0]
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Could not extract docstring from %s: %s", path, e)
     return f"Module for {path.name}"
 
 

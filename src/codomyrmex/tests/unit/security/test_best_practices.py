@@ -5,7 +5,6 @@ get_practice, get_practices_by_priority, check_compliance_with_practices,
 get_practices_for_category, and prioritize_practices.
 """
 
-import pytest
 
 from codomyrmex.security.theory.best_practices import (
     PracticeCategory,

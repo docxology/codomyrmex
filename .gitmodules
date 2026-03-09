@@ -11,3 +11,6 @@
 	path = src/codomyrmex/agents/openfang/vendor/openfang
 	url = https://github.com/RightNow-AI/openfang
 	branch = main
+[submodule "src/codomyrmex/agents/hermes/evolution"]
+	path = src/codomyrmex/agents/hermes/evolution
+	url = https://github.com/NousResearch/hermes-agent-self-evolution.git

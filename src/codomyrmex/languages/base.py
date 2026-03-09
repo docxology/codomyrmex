@@ -35,7 +35,7 @@ class BaseLanguageManager:
         """Return True if every command in :attr:`_check_commands` succeeds."""
         try:
             for cmd in self._check_commands:
-                subprocess.run(cmd, check=True, capture_output=True)
+                subprocess.run(cmd, check=True, capture_output=True, timeout=10)
             return True
         except (FileNotFoundError, subprocess.CalledProcessError):
             return False
@@ -73,6 +73,7 @@ class BaseLanguageManager:
                     cwd=cwd or path,
                     check=True,
                     capture_output=True,
+                    timeout=60,
                 )
             return True
         except (OSError, subprocess.SubprocessError) as e:

@@ -29,6 +29,7 @@ except ImportError:
 import argparse
 import asyncio
 import json
+import logging
 from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -168,8 +169,8 @@ def _extract_module_name(source_path: str, base_dir: str) -> str:
         # The first directory component is the module name
         if parts:
             return parts[0]
-    except (ValueError, IndexError):
-        pass
+    except (ValueError, IndexError) as e:
+        logger.debug("Could not extract module name from %s: %s", source_path, e)
     return ""
 
 

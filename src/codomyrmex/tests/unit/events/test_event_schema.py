@@ -6,7 +6,6 @@ EventSchema (registration, validation, standard schemas), and convenience event 
 
 import json
 
-import pytest
 
 from codomyrmex.events.core.event_schema import (
     Event,

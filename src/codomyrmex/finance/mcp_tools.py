@@ -19,12 +19,6 @@ def _get_account_types():
     return AccountType
 
 
-def _get_ledger():
-    """Lazy import of Ledger class."""
-    from codomyrmex.finance.ledger import Ledger
-
-    return Ledger
-
 
 def _get_account_chart():
     """Lazy import of AccountChart class."""

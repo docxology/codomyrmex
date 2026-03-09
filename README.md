@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🐜 Codomyrmex</h1>
   <p align="center">
-    <strong>A modular, AI-native coding workspace with 130 composable modules and 474 MCP tools</strong>
+    <strong>A modular, AI-native coding workspace with 128 composable modules and 602 MCP tools</strong>
   </p>
 </p>
 
@@ -12,7 +12,7 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
   <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/tests-21%2C000%2B-brightgreen?style=flat-square" alt="Tests"></a>
-  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/MCP_tools-474-orange?style=flat-square" alt="MCP Tools"></a>
+  <a href="https://github.com/docxology/codomyrmex"><img src="https://img.shields.io/badge/MCP_tools-602-orange?style=flat-square" alt="MCP Tools"></a>
 </p>
 
 <p align="center">
@@ -27,14 +27,14 @@
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together **130 specialized modules** for AI-assisted development, code analysis, orchestration, security, and documentation. Every module is self-contained, zero-mock tested, and composable — use what you need.
+Codomyrmex is a **modular development platform** that brings together **128 specialized modules** for AI-assisted development, code analysis, orchestration, security, and documentation. Every module is self-contained, zero-mock tested, and composable — use what you need.
 
 ### Why Codomyrmex?
 
 | | |
 |---|---|
 | 🧩 **128 Modules** | Self-contained, composable units with clear interfaces |
-| 🤖 **474 MCP Tools** | AI agents invoke tools via Model Context Protocol |
+| 🤖 **602 MCP Tools** | AI agents invoke tools via Model Context Protocol |
 | 🧪 **21,000+ Tests** | Zero-mock policy — every test exercises real code |
 | 🔒 **Security First** | Secret scanning, SBOM generation, detect-secrets integration |
 | 🎛️ **Multi-Agent Orchestration** | Claude, Gemini, GPT, and 10+ agent providers |
@@ -100,7 +100,7 @@ Codomyrmex is the **toolbox** for the [Personal AI Infrastructure](https://githu
 | **Verify** | `static_analysis`, `security`, `validation` | Test and validate |
 | **Learn** | `agentic_memory`, `telemetry` | Store insights |
 
-**MCP Bridge**: Dynamic tools across 128 auto-discovered modules  
+**MCP Bridge**: Dynamic tools across 128 auto-discovered modules
 **Trust model**: `UNTRUSTED` → `VERIFIED` → `TRUSTED`  
 **Deep dive**: [`PAI.md`](PAI.md) · [`docs/pai/`](docs/pai/)
 
@@ -148,14 +148,14 @@ uv run mutmut run                                # 6-file mutation suite
 
 | Metric | Value |
 |--------|-------|
-| Modules | **130** |
-| MCP tools | **474** dynamically discovered |
+| Modules | **128** |
+| MCP tools | **602** dynamically discovered |
 | Test suite | **21,000+** tests |
-| Coverage | ~35% (gate: 33% (target: 40%)) |
-| `@mcp_tool` decorators | **474** |
+| Coverage | ~33% (gate: 33%, target: 40%) |
+| `@mcp_tool` decorators | **602** |
 | Ruff violations | **0** |
 | PAI skills | **81** installed |
-| RASP docs compliance | **130/130** |
+| RASP docs compliance | **128/128** |
 | Python compatibility | 3.11 – 3.14 |
 
 ## Contributing

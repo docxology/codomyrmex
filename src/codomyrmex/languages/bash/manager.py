@@ -54,7 +54,8 @@ class BashManager(BaseLanguageManager):
                 ["bash", "script.sh"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+                timeout=60,
             )
             self._cleanup([script_path])
             return result.stdout + result.stderr
@@ -69,7 +70,8 @@ class BashManager(BaseLanguageManager):
             result = subprocess.run(
                 ["bash", temp_path],
                 capture_output=True,
-                text=True
+                text=True,
+                timeout=60,
             )
             return result.stdout + result.stderr
         finally:

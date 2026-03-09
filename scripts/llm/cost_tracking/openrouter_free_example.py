@@ -13,9 +13,12 @@ Usage:
     python openrouter_free_example.py
 """
 
+import logging
 import os
 import sys
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Ensure codomyrmex is in path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
@@ -45,8 +48,8 @@ def get_api_key() -> str | None:
                 if content.startswith("OPENROUTER_API_KEY="):
                     return content.split("=", 1)[1].strip().strip('"').strip("'")
                 return content
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Could not read config from %s: %s", path, e)
 
     return None
 

@@ -5,7 +5,7 @@
   <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
   <br>
   <img src="https://img.shields.io/badge/Codomyrmex-v1.1.9-blue?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Modules-127-green?style=for-the-badge" alt="Modules">
+  <img src="https://img.shields.io/badge/Modules-128-green?style=for-the-badge" alt="Modules">
   <img src="https://img.shields.io/badge/Workflows-36-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-100%25-brightgreen?style=for-the-badge" alt="Zero Mock">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
@@ -24,7 +24,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for autonomous software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a production-grade library of **128 deeply integrated modules** spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem includes **3,000+ Python files**, **905+ test files**, **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
+Codomyrmex is a production-grade library of **128 deeply integrated modules** spanning AI agents, cloud infrastructure, security, finance, multimedia, and more — all built on a strict **Zero-Mock** testing policy ensuring every method is real, tested, documented, and functional. The ecosystem includes **3,000+ Python files**, **1,023+ test files**, **1,029+ documentation pages**, and **36 GitHub Actions workflows**.
 
 ---
 
@@ -434,7 +434,7 @@ sequenceDiagram
     User->>CLI: codomyrmex run --task "analyze codebase"
     CLI->>Orchestrator: Create workflow
     Orchestrator->>MCP: Register available tools
-    MCP->>Tools: Discover ~424 tools across 130 modules
+    MCP->>Tools: Discover ~602 tools across 128 modules
     Orchestrator->>Agents: Dispatch agent
     Agents->>LLM: Generate completion (Gemini 2.5 Pro)
     LLM-->>Agents: Response + tool calls
@@ -454,7 +454,7 @@ sequenceDiagram
 ```text
 codomyrmex/
 ├── .github/                  # 36 GitHub Actions workflows, templates, docs
-├── config/                   # 130 module-specific config.yaml files
+├── config/                   # 128 module-specific config.yaml files
 ├── docs/                     # 1,029+ documentation files across 18 directories
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
@@ -472,11 +472,11 @@ codomyrmex/
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
-├── src/codomyrmex/           # Main source (130 modules)
+├── src/codomyrmex/           # Main source (128 modules)
 │   ├── agents/               # 168 files
 │   ├── llm/                  # 41 files
 │   ├── security/             # 47 files
-│   ├── tests/                # 905+ test files (zero-mock)
+│   ├── tests/                # 1,023+ test files (zero-mock)
 │   └── ... (122 more modules)
 ├── CHANGELOG.md              # Release history
 ├── CITATION.cff              # Citation metadata
@@ -489,12 +489,12 @@ codomyrmex/
 
 | Metric | Value |
 |:---|:---:|
-| **Total Modules** | 127 |
+| **Total Modules** | 128 |
 | **Total Python Files** | 3,000+ |
-| **Total Test Files** | 905+ |
+| **Total Test Files** | 1,023+ |
 | **Documentation Files** | 1,029+ |
 | **GitHub Workflows** | 36 |
-| **MCP Tools** | 424 |
+| **MCP Tools** | 602 |
 | **Testing Policy** | Zero-Mock (100% real methods) |
 | **Default LLM** | Gemini 2.5 Pro |
 | **Package Manager** | uv |
@@ -593,7 +593,7 @@ uv run ty check src/         # type check
 
 ## 🗺️ Configuration Architecture
 
-> See [config/](config/) for all 130 module configurations.
+> See [config/](config/) for all 128 module configurations.
 
 ```mermaid
 graph TB
@@ -601,7 +601,7 @@ graph TB
         C1["agents/config.yaml"]
         C2["llm/config.yaml"]
         C3["security/config.yaml"]
-        Cdots["... 127 total"]
+        Cdots["... 128 total"]
     end
 
     subgraph Scripts["scripts/"]
@@ -615,7 +615,7 @@ graph TB
         Src1["agents/"]
         Src2["llm/"]
         Src3["security/"]
-        SrcDots["... 130 modules"]
+        SrcDots["... 128 modules"]
     end
 
     C1 -.->|"YAML load"| S1
@@ -743,5 +743,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>130 modules · 3,000+ Python files · 905+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
+  <sub>128 modules · 3,000+ Python files · 1,023+ tests · 1,029+ docs · 36 workflows · Zero-Mock · Production-Grade</sub>
 </p>

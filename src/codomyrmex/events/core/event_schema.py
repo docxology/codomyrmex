@@ -7,6 +7,8 @@ event-driven architecture.
 
 import json
 import logging
+import time
+import uuid
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
@@ -125,8 +127,8 @@ class Event:
 
     event_type: EventType
     source: str
-    event_id: str = field(default_factory=lambda: str(__import__("uuid").uuid4()))
-    timestamp: float = field(default_factory=lambda: __import__("time").time())
+    event_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    timestamp: float = field(default_factory=time.time)
     correlation_id: str | None = None
     data: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -155,8 +157,8 @@ class Event:
         return cls(
             event_type=event_type,
             source=data["source"],
-            event_id=data.get("event_id", str(__import__("uuid").uuid4())),
-            timestamp=data.get("timestamp", __import__("time").time()),
+            event_id=data.get("event_id", str(uuid.uuid4())),
+            timestamp=data.get("timestamp", time.time()),
             correlation_id=data.get("correlation_id"),
             data=data.get("data", {}),
             metadata=data.get("metadata", {}),
@@ -387,7 +389,7 @@ def create_system_startup_event(version: str, components: list[str]) -> Event:
         data={
             "version": version,
             "components_loaded": components,
-            "startup_time": __import__("time").time(),
+            "startup_time": time.time(),
         },
     )
 
@@ -476,7 +478,7 @@ def create_metric_event(
             "metric_value": value,
             "metric_type": metric_type,
             "labels": labels or {},
-            "timestamp": __import__("time").time(),
+            "timestamp": time.time(),
         },
     )
 

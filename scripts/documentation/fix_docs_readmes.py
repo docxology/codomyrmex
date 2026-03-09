@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Add Testing, Installation, and code blocks to remaining docs/modules READMEs and SPECs."""
 import ast
+import logging
 import os
 import sys
+
+logger = logging.getLogger(__name__)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(REPO, "src", "codomyrmex")
@@ -24,8 +27,8 @@ def get_exports(mod_name):
             elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
                 doc = ast.get_docstring(node) or ""
                 functions.append((node.name, doc.split("\n")[0] if doc else ""))
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Could not parse __init__.py for %s: %s", mod_name, e)
     if not classes and not functions:
         for f in sorted(os.listdir(os.path.join(SRC, mod_name))):
             if not f.endswith(".py") or f == "__init__.py": continue
@@ -38,8 +41,8 @@ def get_exports(mod_name):
                     elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
                         doc = ast.get_docstring(node) or ""
                         functions.append((node.name, doc.split("\n")[0] if doc else ""))
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse %s: %s", f, e)
             if len(classes) >= 3: break
     return classes, functions
 
@@ -126,8 +129,9 @@ def fix_spec(mod_name):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():

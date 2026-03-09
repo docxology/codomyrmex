@@ -6,6 +6,9 @@ Usage:
     python embodiment_utils.py <command> [options]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 
 
 def check_hardware_interfaces() -> dict:
@@ -34,8 +38,8 @@ def check_hardware_interfaces() -> dict:
         ports = glob.glob("/dev/tty.*") + glob.glob("/dev/cu.*")
         interfaces["serial"]["available"] = len(ports) > 0
         interfaces["serial"]["ports"] = ports[:5]
-    except:
-        pass
+    except Exception as e:
+        logger.debug("Could not scan serial ports: %s", e)
 
     # Check for USB
     try:
@@ -45,8 +49,8 @@ def check_hardware_interfaces() -> dict:
             ["system_profiler", "SPUSBDataType"], capture_output=True, text=True
         )
         interfaces["usb"]["available"] = "USB" in result.stdout
-    except:
-        pass
+    except Exception as e:
+        logger.debug("Could not check USB interfaces: %s", e)
 
     return interfaces
 

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Enrich src-level SPEC.md files and create missing submodule docs.
 
+
+logger = logging.getLogger(__name__)
+
 1. Fixes wrong SPEC.md titles (coding, tests)
 2. Adds testing sections to SPEC.md files that lack them
 3. Adds code blocks (API examples) to SPEC.md files without them
@@ -8,6 +11,7 @@
 """
 
 import ast
+import logging
 import os
 import sys
 
@@ -77,8 +81,8 @@ def get_module_info(mod_path):
                             (node.name, doc.split("\n")[0] if doc else "")
                         )
                         seen_f.add(node.name)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse %s: %s", f, e)
             if len(info["classes"]) >= 5 or len(info["functions"]) >= 5:
                 break
 

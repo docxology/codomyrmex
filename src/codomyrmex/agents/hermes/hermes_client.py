@@ -12,6 +12,7 @@ Backends (configurable via ``hermes_backend``):
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import time
@@ -181,7 +182,7 @@ class HermesClient(CLIAgentBase):
         try:
             proc = subprocess.run(
                 cmd, capture_output=True, text=True, timeout=self.timeout,
-                env={**__import__("os").environ, "NO_COLOR": "1"},
+                env={**os.environ, "NO_COLOR": "1"},
             )
             elapsed = time.time() - start
             stdout = proc.stdout.strip()
@@ -239,7 +240,7 @@ class HermesClient(CLIAgentBase):
             process = subprocess.Popen(
                 cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                 text=True, bufsize=1,
-                env={**__import__("os").environ, "NO_COLOR": "1"},
+                env={**os.environ, "NO_COLOR": "1"},
             )
             for line in iter(process.stdout.readline, ""):
                 if line:

@@ -81,6 +81,7 @@ class MergeResolver:
             capture_output=True,
             text=True,
             cwd=self._repo,
+            timeout=30,
         )
         conflict_files = [f.strip() for f in result.stdout.splitlines() if f.strip()]
 
@@ -139,7 +140,7 @@ class MergeResolver:
 
         resolved = self._apply_strategy(content, strategy)
         full_path.write_text(resolved)
-        subprocess.run(["git", "add", file_path], cwd=self._repo)
+        subprocess.run(["git", "add", file_path], cwd=self._repo, timeout=30)
         return True
 
     def _apply_strategy(self, content: str, strategy: ResolutionStrategy) -> str:

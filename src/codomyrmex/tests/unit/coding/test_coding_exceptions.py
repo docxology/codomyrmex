@@ -5,7 +5,6 @@ SandboxResourceError, DebuggerError, BreakpointError, CodeReviewError,
 ReviewCommentError, MonitoringError, ProfilingError, TracingError, RuntimeError.
 """
 
-import pytest
 
 from codomyrmex.coding.exceptions import (
     BreakpointError,

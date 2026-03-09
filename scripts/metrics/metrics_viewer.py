@@ -10,6 +10,9 @@ Usage:
     python metrics_viewer.py [--source SOURCE]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -21,6 +24,7 @@ except ImportError:
 
 import argparse
 import json
+import logging
 from datetime import datetime
 
 
@@ -38,8 +42,8 @@ def collect_system_metrics() -> dict:
         metrics["memory_mb"] = usage.ru_maxrss / 1024 / 1024
         metrics["user_time"] = usage.ru_utime
         metrics["system_time"] = usage.ru_stime
-    except:
-        pass
+    except Exception as e:
+        logger.debug("Could not get resource usage metrics: %s", e)
 
     return metrics
 
@@ -82,8 +86,8 @@ def collect_code_metrics(path: str) -> dict:
                             metrics["blank_lines"] += 1
                         elif stripped.startswith(("#", "//")):
                             metrics["comment_lines"] += 1
-            except:
-                pass
+            except Exception as e:
+                logger.debug("Could not read file %s: %s", f, e)
 
     return metrics
 

@@ -23,6 +23,7 @@ class CppManager(BaseLanguageManager):
                     [cmd, "--version"],
                     check=True,
                     capture_output=True,
+                    timeout=10,
                 )
                 return True
             except FileNotFoundError:
@@ -56,10 +57,10 @@ class CppManager(BaseLanguageManager):
         """Write, compile and execute a C++ file."""
         cmd = "g++"
         try:
-            subprocess.run(["g++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["g++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
         except FileNotFoundError:
             try:
-                subprocess.run(["clang++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.run(["clang++", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
                 cmd = "clang++"
             except FileNotFoundError:
                 return "Error: Neither g++ nor clang++ found."
@@ -77,7 +78,8 @@ class CppManager(BaseLanguageManager):
                 [cmd, "main.cpp", "-o", "main_bin"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+                timeout=60,
             )
 
             if compile_result.returncode != 0:
@@ -89,7 +91,8 @@ class CppManager(BaseLanguageManager):
                 ["./main_bin"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+                timeout=30,
             )
 
             self._cleanup([script_path, bin_path])

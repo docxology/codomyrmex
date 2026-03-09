@@ -4,8 +4,11 @@ import json
 
 from codomyrmex.agents.core.base import AgentRequest
 from codomyrmex.agents.llm_client import get_llm_client
+from codomyrmex.logging_monitoring import get_logger
 
 from .models import TaskKind, TaskNode, TaskStatus
+
+logger = get_logger(__name__)
 
 
 def format_lineage(lineage: list[str], current: str) -> str:
@@ -60,8 +63,8 @@ Output strictly JSON: {"kind": "atomic"} or {"kind": "composite"}"""
 
         data = json.loads(content.strip())
         return TaskKind(data["kind"])
-    except Exception:
-        # Fallback to atomic if parsing fails
+    except (json.JSONDecodeError, KeyError, ValueError) as exc:
+        logger.warning("LLM response parsing failed, defaulting to ATOMIC: %s", exc)
         return TaskKind.ATOMIC
 
 

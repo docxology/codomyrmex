@@ -6,6 +6,9 @@ Usage:
     python ci_status.py [--provider PROVIDER] [--repo REPO]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 import os
 import subprocess
 
@@ -76,8 +80,8 @@ def get_git_info() -> dict:
             ["git", "log", "-1", "--format=%s"], capture_output=True, text=True
         )
         info["message"] = result.stdout.strip()[:50]
-    except:
-        pass
+    except Exception as e:
+        logger.debug("Could not get git info: %s", e)
     return info
 
 

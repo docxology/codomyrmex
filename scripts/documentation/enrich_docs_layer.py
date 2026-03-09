@@ -5,6 +5,9 @@
 # ///
 """Enrich docs/modules AGENTS.md and README.md files.
 
+
+logger = logging.getLogger(__name__)
+
 1. Add testing sections to AGENTS.md (84 missing)
 2. Add code examples to AGENTS.md (2 missing)
 3. Deepen thin AGENTS.md files (61 under 30 lines)
@@ -13,6 +16,7 @@
 """
 
 import ast
+import logging
 import os
 import sys
 
@@ -64,8 +68,8 @@ def get_exports(mod_name):
                 doc = ast.get_docstring(node) or ""
                 functions.append((node.name, doc.split("\n")[0] if doc else ""))
                 seen_f.add(node.name)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Could not parse __init__.py for %s: %s", mod_name, e)
 
     # Fallback: scan .py files
     if not classes and not functions:
@@ -88,8 +92,8 @@ def get_exports(mod_name):
                         doc = ast.get_docstring(node) or ""
                         functions.append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_f.add(node.name)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse %s: %s", f, e)
             if len(classes) >= 5:
                 break
 

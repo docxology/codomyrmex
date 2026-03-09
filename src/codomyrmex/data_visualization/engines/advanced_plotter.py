@@ -62,11 +62,6 @@ __all__ = [
 
 logger = get_logger(__name__)
 
-# Set up matplotlib and seaborn
-plt.style.use("default")
-sns.set_palette("husl")
-warnings.filterwarnings("ignore", category=UserWarning)
-
 
 class AdvancedPlotter(
     ScatterMixin,
@@ -82,6 +77,9 @@ class AdvancedPlotter(
         self.figures = []
         self.current_figure = None
         self.current_axes = None
+        plt.style.use("default")
+        sns.set_palette("husl")
+        warnings.filterwarnings("ignore", category=UserWarning)
 
     def _setup_style(self):
         """Setup matplotlib and seaborn styling."""
@@ -187,11 +185,10 @@ class AdvancedPlotter(
         dpi: int | None = None,
         bbox_inches: str | None = None,
         transparent: bool | None = None,
-    ) -> bool:
+    ) -> None:
         """Save the current plot to a file."""
         if self.current_figure is None:
-            logger.error("No current figure to save")
-            return False
+            raise ValueError("No current figure to save")
 
         format = format or self.config.save_format
         dpi = dpi or self.config.save_dpi
@@ -210,10 +207,9 @@ class AdvancedPlotter(
             )
         except OSError as e:
             logger.error("Failed to save plot to %s: %s", path, e)
-            return False
+            raise
 
         logger.info("Plot saved to %s", path)
-        return True
 
     def _plot_dataset(self, ax: plt.Axes, dataset: "Dataset") -> None:
         """Render a single Dataset onto *ax* based on its plot_type.

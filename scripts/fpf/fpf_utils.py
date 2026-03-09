@@ -6,6 +6,9 @@ Usage:
     python fpf_utils.py <command> [options]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 
 
 def analyze_principles(path: str = ".") -> dict:
@@ -42,8 +46,8 @@ def analyze_principles(path: str = ".") -> dict:
             if "Singleton" in content or "_instance" in content:
                 if "Singleton" not in analysis["patterns"]:
                     analysis["patterns"].append("Singleton")
-        except:
-            pass
+        except Exception as e:
+            logger.debug("Could not analyze %s: %s", f, e)
 
     return analysis
 

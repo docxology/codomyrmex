@@ -6,6 +6,9 @@ Usage:
     python build_utils.py <command> [options]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 import subprocess
 from datetime import datetime
 
@@ -61,8 +65,8 @@ def get_build_info() -> dict:
             )
             if result.returncode == 0:
                 info["tools"][tool] = result.stdout.split("\n")[0][:40]
-        except:
-            pass
+        except Exception as e:
+            logger.debug("Could not get version for tool %s: %s", tool, e)
 
     return info
 

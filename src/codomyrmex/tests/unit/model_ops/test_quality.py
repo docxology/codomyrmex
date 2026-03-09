@@ -6,7 +6,6 @@ _score_coherence, _score_relevance, _score_completeness, _score_conciseness,
 _score_accuracy), and helper functions _tokenize, _split_sentences.
 """
 
-import pytest
 
 from codomyrmex.model_ops.evaluation.quality import (
     DimensionScore,

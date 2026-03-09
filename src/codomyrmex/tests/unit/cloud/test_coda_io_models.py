@@ -5,7 +5,6 @@ reference types (Icon, Image, WorkspaceReference, FolderReference, DocSize, Page
 TableReference, ColumnReference), and from_dict deserialization.
 """
 
-import pytest
 
 from codomyrmex.cloud.coda_io.models import (
     AccessType,

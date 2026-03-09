@@ -7,7 +7,6 @@ generate_3d_examples, generate_3d_tests, generate_3d_requirements,
 generate_3d_docs_content.
 """
 
-import pytest
 
 from codomyrmex.agents.droid.generators.spatial import (
     generate_3d_api_spec,

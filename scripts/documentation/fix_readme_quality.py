@@ -5,8 +5,11 @@
 # ///
 """Fix duplicate entries in API tables and enrich thin README files."""
 import ast
+import logging
 import os
 import sys
+
+logger = logging.getLogger(__name__)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DOCS = os.path.join(REPO, "docs", "modules")
@@ -110,8 +113,8 @@ def get_module_info(mod_name):
                 sub_tree = ast.parse(open(os.path.join(child_path, "__init__.py")).read())
                 if sub_tree.body and isinstance(sub_tree.body[0], ast.Expr) and isinstance(sub_tree.body[0].value, ast.Constant):
                     sub_doc = sub_tree.body[0].value.value.strip().split("\n")[0]
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse submodule __init__.py for %s: %s", child, e)
             info["submodules"].append((child, sub_doc or child.replace("_", " ").title()))
     
     return info
@@ -254,8 +257,9 @@ def fix_duplicates_in_readme(readme_path):
 
 def main():
     # Auto-injected: Load configuration
-    import yaml
     from pathlib import Path
+
+    import yaml
     config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():

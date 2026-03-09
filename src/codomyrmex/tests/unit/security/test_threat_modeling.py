@@ -4,7 +4,6 @@ Covers: ThreatSeverity, ThreatCategory, Threat, ThreatModel, ThreatModelBuilder
 (STRIDE + generic), create_threat_model, analyze_threats, prioritize_threats.
 """
 
-import pytest
 
 from codomyrmex.security.theory.threat_modeling import (
     Threat,

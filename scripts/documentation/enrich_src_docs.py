@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """Enrich src-level README.md and AGENTS.md with code blocks and feature sections.
 
+
+logger = logging.getLogger(__name__)
+
 Reads __init__.py via AST to extract classes, functions, submodules.
 Injects missing sections: Quick Start, Key Exports, code examples.
 Preserves existing content — only appends/inserts missing sections.
 """
 
 import ast
+import logging
 import os
 import sys
 
@@ -89,8 +93,8 @@ def get_module_info(mod_name):
                             (node.name, doc.split("\n")[0] if doc else "")
                         )
                         seen_f.add(node.name)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse %s: %s", f, e)
             if len(info["classes"]) >= 8 or len(info["functions"]) >= 8:
                 break
 
@@ -114,8 +118,8 @@ def get_module_info(mod_name):
                     and isinstance(sub_tree.body[0].value, ast.Constant)
                 ):
                     sub_doc = sub_tree.body[0].value.value.strip().split("\n")[0]
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse submodule __init__.py for %s: %s", child, e)
             info["submodules"].append(
                 (child, sub_doc or child.replace("_", " ").title())
             )

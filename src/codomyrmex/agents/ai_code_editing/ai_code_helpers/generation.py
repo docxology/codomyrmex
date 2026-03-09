@@ -183,40 +183,6 @@ def generate_code_snippet(
         raise RuntimeError(f"Code generation failed: {e}") from None
 
 
-def _dispatch_generate(client, provider: str, model: str, full_prompt: str, max_length, temperature: float, **kwargs):
-    """Call the provider API for code generation and return (generated_code, tokens_used)."""
-    if provider == "openai":
-        response = client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": full_prompt}],
-            max_tokens=max_length or 1000,
-            temperature=temperature,
-            **kwargs,
-        )
-        return response.choices[0].message.content, (response.usage.total_tokens if response.usage else None)
-    if provider == "anthropic":
-        response = client.messages.create(
-            model=model, max_tokens=max_length or 1000, temperature=temperature,
-            messages=[{"role": "user", "content": full_prompt}], **kwargs,
-        )
-        tokens = (response.usage.input_tokens + response.usage.output_tokens) if response.usage else None
-        return response.content[0].text, tokens
-    if provider == "google":
-        response = client.models.generate_content(
-            model=model, contents=full_prompt,
-            config=types.GenerateContentConfig(max_output_tokens=max_length or 2000, temperature=temperature)
-            if types else None,
-        )
-        tokens = response.usage_metadata.total_token_count if hasattr(response, "usage_metadata") else None
-        return response.text, tokens
-    if provider == "ollama":
-        options = {"temperature": temperature}
-        if max_length:
-            options["max_tokens"] = max_length
-        result = client.run_model(model_name=model, prompt=full_prompt, options=options, save_output=False)
-        return result.response, result.tokens_used
-    raise ValueError(f"Unsupported provider: {provider}")
-
 
 def _dispatch_document(client, provider: str, model: str, prompt: str, **kwargs):
     """Call the provider API for documentation and return (documentation, tokens_used)."""

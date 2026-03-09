@@ -326,14 +326,3 @@ def _extract_numeric_constraint(cid: str, description: str) -> list[str] | None:
     return None
 
 
-def _find_conflicts(
-    solver: Any, criteria: list[dict[str, str]]
-) -> list[tuple[str, str]]:
-    """Attempt to identify pairwise conflicts in an unsatisfiable criteria set.
-
-    This is a best-effort heuristic — it tries removing criteria one at a time
-    to find minimal conflict sets.
-    """
-    # Simple heuristic: return empty list — full MUS extraction is expensive
-    # and can be added as a future enhancement
-    return []

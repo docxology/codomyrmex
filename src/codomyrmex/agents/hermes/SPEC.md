@@ -36,6 +36,22 @@ graph TD
 | `hermes_command` | `hermes` | CLI binary path |
 | `hermes_timeout` | `120` | Subprocess timeout (s) |
 
+## Evolution Submodule
+
+The `evolution/` git submodule ([NousResearch/hermes-agent-self-evolution](https://github.com/NousResearch/hermes-agent-self-evolution)) provides evolutionary self-improvement capabilities:
+
+- **DSPy + GEPA**: Genetic-Pareto Prompt Evolution reads execution traces to understand *why* things fail, then proposes targeted improvements.
+- **Targets**: Skills, tool descriptions, system prompts, and code.
+- **Guardrails**: Every evolved variant must pass the full test suite, stay within size limits, preserve semantic intent, and go through PR review.
+
+```mermaid
+graph LR
+    EVO[evolution/] -->|reads traces| HC[HermesClient]
+    EVO -->|proposes variants| GEPA[GEPA Optimizer]
+    GEPA -->|evaluates| EVAL[Constraint Gates]
+    EVAL -->|best variant| PR[PR to hermes-agent]
+```
+
 ## Integration Points
 
 - Plugs into `AgentRegistry` via standard `CLIAgentBase` interface.

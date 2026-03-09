@@ -192,7 +192,7 @@ class WebsiteServer(
 
     def log_message(self, format: str, *args) -> None:
         """Override to suppress high-frequency access logs like /api/health."""
-        if len(args) > 0 and type(args[0]) is str:
+        if len(args) > 0 and isinstance(args[0], str):
             req = args[0]
             if "GET /api/health" in req or "GET /api/status" in req:
                 return  # Suppress

@@ -5,7 +5,6 @@ generate_physical_simulation_content, generate_sensor_integration_content.
 All functions return large Python source strings.
 """
 
-import pytest
 
 from codomyrmex.agents.droid.generators.physical_generators.content_generators import (
     generate_physical_init_content,

@@ -27,40 +27,6 @@ _ALLOWED_OPS = {
 }
 
 
-def _safe_eval_expression(expression: str, variables: dict[str, float]) -> Value:
-    """Evaluate a simple math expression using Value objects.
-
-    Supports: variable names, float literals, +, -, *, **, parentheses,
-    unary minus.  Uses Python's ``compile`` with a restricted global
-    namespace containing only Value-wrapped variables and builtins
-    stripped out.
-    """
-    # Build namespace with Value-wrapped variables
-    namespace: dict[str, Any] = {}
-    for name, val in variables.items():
-        if not name.isidentifier():
-            raise ValueError(f"Invalid variable name: {name!r}")
-        namespace[name] = Value(float(val), label=name)
-
-    # Restrict builtins to nothing
-    namespace["__builtins__"] = {}
-
-    # Compile and evaluate
-    try:
-        code = compile(expression, "<autograd_compute>", "eval")
-    except SyntaxError as exc:
-        raise ValueError(f"Invalid expression syntax: {exc}") from exc
-
-    # Verify code only uses allowed operations
-    # (compile already restricts to expressions, and namespace has no builtins)
-    result = eval(code, namespace)
-
-    if not isinstance(result, Value):
-        # Expression evaluated to a raw number (no variables used)
-        return Value(float(result))
-
-    return result
-
 
 # ---------------------------------------------------------------------------
 # MCP Tools

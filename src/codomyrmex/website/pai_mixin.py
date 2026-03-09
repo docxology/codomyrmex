@@ -30,7 +30,7 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 # PM Server base URL — configurable via PAI_PM_PORT env var
-_PM_SERVER_PORT = os.environ.get("PAI_PM_PORT", "8889")
+_PM_SERVER_PORT = os.environ.get("PAI_PM_PORT", "8888")
 _PM_SERVER_BASE = f"http://localhost:{_PM_SERVER_PORT}"
 
 
@@ -394,7 +394,7 @@ class PAIProviderMixin:
     def get_pai_awareness_data(self) -> dict[str, Any]:
         """Aggregate all PAI ecosystem data for the awareness dashboard.
 
-        When the PAI PM Server is running (default port 8889), delegates to its
+        When the PAI PM Server is running (default port 8888), delegates to its
         /api/awareness endpoint for a single source of truth. Falls back to
         direct YAML reads when the server is not available.
         """

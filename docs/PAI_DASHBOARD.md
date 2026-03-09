@@ -34,5 +34,5 @@ The persistent header exposes immediate health metrics and global CRUD endpoints
 
 The GUI utilizes a hybrid approach for real-time responsiveness:
 
-* **WebSocket Push (v1.1.5+):** The Python `WebsiteServer` (`:8787`) establishes a stable WebSocket connection (`:8890`), pushing dashboard health metrics and PAI awareness state in real-time. This replaced the legacy 15-second REST polling introduced in earlier versions, significantly reducing latency and overhead.
+* **WebSocket Push (v1.1.8+):** The Python `WebsiteServer` (`:8787`) establishes a stable WebSocket connection (`:8890`), pushing dashboard health metrics and PAI awareness state in real-time. This replaced the legacy 15-second REST polling introduced in earlier versions, significantly reducing latency and overhead.
 * **REST Endpoints:** Direct action data-mutating endpoints rely on the local `/api` REST layer, acting as a gateway to the primary `PMServer.ts`. Minor exceptions exist (e.g. `/api/calendar/events` 500 block during headless operation), but the foundation remains unconditionally resilient.

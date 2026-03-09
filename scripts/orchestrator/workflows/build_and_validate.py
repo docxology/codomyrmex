@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Build and validation workflow.
 
+
+logger = logging.getLogger(__name__)
+
 Complete build pipeline with validation:
 1. Clean previous build artifacts
 2. Run linting and type checking
@@ -23,6 +26,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 import contextlib
+import logging
 
 from codomyrmex.orchestrator import RetryPolicy, Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
@@ -45,8 +49,8 @@ async def clean_build(_task_results: dict | None = None) -> dict:
             try:
                 shutil.rmtree(d)
                 cleaned += 1
-            except Exception:
-                pass  # best-effort cleanup
+            except Exception as e:
+                logger.debug("Could not clean directory %s: %s", d, e)
 
     return {"success": True, "directories_cleaned": cleaned}
 

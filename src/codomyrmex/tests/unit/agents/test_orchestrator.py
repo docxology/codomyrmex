@@ -4,11 +4,9 @@ Covers: ConversationTurn, AgentSpec, FileContext, ConversationLog (summary, expo
 and extract_todo_items. Tests data structures without requiring real LLM clients.
 """
 
-import json
 import tempfile
 from pathlib import Path
 
-import pytest
 
 from codomyrmex.agents.orchestrator import (
     AgentSpec,

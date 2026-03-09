@@ -1,5 +1,8 @@
 """Orchestrate Relay Demo with Real Ollama Management.
 
+
+logger = logging.getLogger(__name__)
+
 This script uses the `codomyrmex` source library to:
 1. Ensure the Ollama server is running (starting it if needed).
 2. Ensure the required model (codellama:latest) is pulled and available.
@@ -100,9 +103,9 @@ def main():
                     print_error(f"Failed to pull '{target_model}'.")
                     print_error("Please check your internet connection or disk space.")
                     sys.exit(1)
-        except Exception:
+        except Exception as e:
             # Fallback to pull if list fails
-            pass
+            logger.warning("Failed to check model list, attempting pull: %s", e)
     else:
         print_success(f"Model '{target_model}' is ready.")
 

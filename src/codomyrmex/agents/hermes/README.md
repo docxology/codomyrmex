@@ -59,6 +59,32 @@ ollama pull hermes3
 curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 ```
 
+## Evolution Submodule
+
+The `evolution/` directory is a git submodule tracking [NousResearch/hermes-agent-self-evolution](https://github.com/NousResearch/hermes-agent-self-evolution) — evolutionary self-improvement for Hermes Agent using **DSPy + GEPA** (Genetic-Pareto Prompt Evolution).
+
+It automatically evolves and optimizes skills, tool descriptions, system prompts, and code — producing measurably better variants through reflective evolutionary search. No GPU training required; everything operates via API calls (~$2–10 per run).
+
+### Evolution Quick Start
+
+```bash
+# Initialize the submodule (first time)
+git submodule update --init src/codomyrmex/agents/hermes/evolution
+
+# Install evolution dependencies
+cd src/codomyrmex/agents/hermes/evolution
+pip install -e ".[dev]"
+
+# Evolve a skill
+export HERMES_AGENT_REPO=~/.hermes/hermes-agent
+python -m evolution.skills.evolve_skill \
+    --skill github-code-review \
+    --iterations 10 \
+    --eval-source synthetic
+```
+
+See [`evolution/PLAN.md`](evolution/PLAN.md) for the full architecture, evaluation strategy, and phased roadmap.
+
 ## Rules
 
 Governed by the `agents.cursorrules` module standards requiring Zero-Mock testing and robust exception translation (`HermesError` derived from `AgentError`).

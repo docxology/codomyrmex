@@ -6,6 +6,9 @@ Usage:
     python doc_utils.py <command> [options]
 """
 
+logger = logging.getLogger(__name__)
+
+
 import sys
 from pathlib import Path
 
@@ -16,6 +19,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import logging
 import re
 
 
@@ -161,8 +165,8 @@ def main():
                 content = d.read_text()
                 total_words += len(content.split())
                 total_lines += len(content.split("\n"))
-            except:
-                pass
+            except Exception as e:
+                logger.debug("Could not read document %s: %s", d, e)
 
         print("📊 Document Statistics:\n")
         print(f"   Documents: {len(docs)}")

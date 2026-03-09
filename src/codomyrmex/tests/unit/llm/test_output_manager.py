@@ -5,10 +5,8 @@ list_saved_outputs, get_output_stats, cleanup_old_outputs).
 Uses real temp directories for all file operations.
 """
 
-import json
 import tempfile
 
-import pytest
 
 from codomyrmex.llm.ollama.output_manager import OutputManager
 

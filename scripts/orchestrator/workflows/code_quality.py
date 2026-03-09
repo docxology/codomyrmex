@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Code quality workflow.
 
+
+logger = logging.getLogger(__name__)
+
 Comprehensive code quality checks:
 1. Run linting (ruff)
 2. Run type checking (mypy)
@@ -23,6 +26,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 import contextlib
+import logging
 
 from codomyrmex.orchestrator import Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
@@ -157,8 +161,8 @@ def run_security_scan(_task_results: dict | None = None) -> dict[str, Any]:
                         "issue": issue.get("issue_text", "")[:100],
                     }
                 )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Could not parse bandit JSON output: %s", e)
 
     return {
         "success": result.returncode in (0, 1),  # bandit returns 1 if issues found

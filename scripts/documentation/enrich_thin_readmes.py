@@ -2,7 +2,10 @@
 """Enrich the 17 remaining thin README files by reading deeper into module structure."""
 
 import ast
+import logging
 import os
+
+logger = logging.getLogger(__name__)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DOCS = os.path.join(REPO, "docs", "modules")
@@ -76,8 +79,8 @@ def get_submodules(mod):
                     and isinstance(tree.body[0].value, ast.Constant)
                 ):
                     sub_doc = tree.body[0].value.value.strip().split("\n")[0]
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse submodule __init__.py for %s: %s", child, e)
             subs.append((child, sub_doc or child.replace("_", " ").title()))
     return subs
 
@@ -97,8 +100,8 @@ def get_classes_from_files(mod):
                     doc = ast.get_docstring(node) or ""
                     classes.append((node.name, doc.split("\n")[0] if doc else "", f))
                     seen.add(node.name)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Could not parse %s for class extraction: %s", f, e)
     return classes[:12]  # Limit
 
 
@@ -121,8 +124,8 @@ def get_functions_from_files(mod):
                     doc = ast.get_docstring(node) or ""
                     funcs.append((node.name, doc.split("\n")[0] if doc else ""))
                     seen.add(node.name)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Could not parse %s for function extraction: %s", f, e)
     return funcs[:8]
 
 
@@ -141,8 +144,8 @@ def get_version(mod):
                         and isinstance(node.value, ast.Constant)
                     ):
                         return str(node.value.value)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Could not extract version from %s: %s", init, e)
     return "0.1.0"
 
 

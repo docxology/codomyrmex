@@ -15,6 +15,8 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+import logging
+
 from codomyrmex.agents.exceptions import AgentConfigurationError
 
 from codomyrmex.agents import AgentRequest
@@ -26,6 +28,8 @@ from codomyrmex.utils.cli_helpers import (
     print_warning,
     setup_logging,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def test_agent(agent_class, agent_name: str, prompt: str) -> dict:
@@ -82,21 +86,21 @@ def main():
 
         agents_to_test.append(("Claude", ClaudeClient))
     except ImportError:
-        pass
+        logger.debug("ClaudeClient not available for comparison")
 
     try:
         from codomyrmex.agents import GeminiClient
 
         agents_to_test.append(("Gemini", GeminiClient))
     except ImportError:
-        pass
+        logger.debug("GeminiClient not available for comparison")
 
     try:
         from codomyrmex.agents import CodeEditor
 
         agents_to_test.append(("CodeEditor", CodeEditor))
     except ImportError:
-        pass
+        logger.debug("CodeEditor not available for comparison")
 
     if not agents_to_test:
         print_warning("No agents available for comparison")

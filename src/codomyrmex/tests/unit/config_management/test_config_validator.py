@@ -5,7 +5,6 @@ ConfigValidator with schema validation, required fields, type checking,
 constraint validation, and custom validators.
 """
 
-import pytest
 
 from codomyrmex.config_management.validation.config_validator import (
     ConfigSchema,

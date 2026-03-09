@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Deepen src-level README.md quality by adding missing sections.
 
+
+logger = logging.getLogger(__name__)
+
 Adds:
 1. ## Installation section (pip install codomyrmex)
 2. ## Testing section (pytest command)
@@ -10,6 +13,7 @@ Adds:
 """
 
 import ast
+import logging
 import os
 import sys
 
@@ -33,8 +37,8 @@ def get_module_exports(mod_path):
             elif isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
                 doc = ast.get_docstring(node) or ""
                 functions.append((node.name, doc.split("\n")[0] if doc else ""))
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Could not parse __init__.py for API extraction: %s", e)
 
     # Fallback: scan other .py files
     if not classes and not functions:
@@ -57,8 +61,8 @@ def get_module_exports(mod_path):
                         doc = ast.get_docstring(node) or ""
                         functions.append((node.name, doc.split("\n")[0] if doc else ""))
                         seen_f.add(node.name)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Could not parse %s for API extraction: %s", f, e)
             if len(classes) >= 5:
                 break
 
@@ -256,8 +260,8 @@ def create_submodule_spec(parent, sub):
             and isinstance(tree.body[0].value, ast.Constant)
         ):
             desc = tree.body[0].value.value.strip().split("\n")[0]
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("Could not extract module docstring: %s", e)
 
     content = f"# {display} — Functional Specification\n\n"
     content += f"**Module**: `codomyrmex.{parent}.{sub}`\n"
