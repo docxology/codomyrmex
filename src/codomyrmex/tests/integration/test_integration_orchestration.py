@@ -45,18 +45,33 @@ class TestOrchestrationIntegration:
         from pathlib import Path
 
         # Remove test workflows
-        test_workflows = ["test_workflow", "integration_test_workflow", "perf_test_workflow", "error_test_workflow"]
+        test_workflows = [
+            "test_workflow",
+            "integration_test_workflow",
+            "perf_test_workflow",
+            "error_test_workflow",
+        ]
         for i in range(3):
             test_workflows.append(f"concurrent_workflow_{i}")
 
         for wf_name in test_workflows:
-            if hasattr(self.wf_manager, "workflows") and wf_name in self.wf_manager.workflows:
+            if (
+                hasattr(self.wf_manager, "workflows")
+                and wf_name in self.wf_manager.workflows
+            ):
                 del self.wf_manager.workflows[wf_name]
 
         # Remove test projects
-        test_projects = ["test_project", "integration_test_project", "nonexistent_project"]
+        test_projects = [
+            "test_project",
+            "integration_test_project",
+            "nonexistent_project",
+        ]
         for proj_name in test_projects:
-            if hasattr(self.project_manager, "active_projects") and proj_name in self.project_manager.active_projects:
+            if (
+                hasattr(self.project_manager, "active_projects")
+                and proj_name in self.project_manager.active_projects
+            ):
                 del self.project_manager.active_projects[proj_name]
 
             # Clean up the physical folders
@@ -145,7 +160,12 @@ class TestOrchestrationIntegration:
         while time.time() - start < timeout:
             t1 = self.task_orchestrator.get_task(task1_id)
             t2 = self.task_orchestrator.get_task(task2_id)
-            if t1 and t2 and t1.status in (TaskStatus.COMPLETED, TaskStatus.FAILED) and t2.status in (TaskStatus.COMPLETED, TaskStatus.FAILED):
+            if (
+                t1
+                and t2
+                and t1.status in (TaskStatus.COMPLETED, TaskStatus.FAILED)
+                and t2.status in (TaskStatus.COMPLETED, TaskStatus.FAILED)
+            ):
                 break
             time.sleep(0.1)
 
@@ -159,9 +179,7 @@ class TestOrchestrationIntegration:
         user_id = "test_user"
 
         allocated = self.resource_manager.allocate(
-            resource_id="sys-compute",
-            requester_id=user_id,
-            amount=1.0
+            resource_id="sys-compute", requester_id=user_id, amount=1.0
         )
         assert allocated is not None
 
@@ -284,7 +302,11 @@ class TestOrchestrationIntegration:
 
         assert result is not None
         # Either the workflow status was updated to failed, or tasks failed
-        assert result.error is not None or result.status.value == "failed" or stats["failed"] > 0
+        assert (
+            result.error is not None
+            or result.status.value == "failed"
+            or stats["failed"] > 0
+        )
 
     def test_concurrent_execution(self):
         """Test concurrent execution of multiple workflows."""
@@ -319,16 +341,22 @@ class TestOrchestrationIntegration:
         res = self.resource_manager.get_resource("sys-compute")
         capacity = res.capacity
 
-        allocated1 = self.resource_manager.allocate("sys-compute", user1, amount=capacity)
+        allocated1 = self.resource_manager.allocate(
+            "sys-compute", user1, amount=capacity
+        )
         assert allocated1 is not None
 
-        allocated2 = self.resource_manager.allocate("sys-compute", user2, amount= capacity)
+        allocated2 = self.resource_manager.allocate(
+            "sys-compute", user2, amount=capacity
+        )
         assert allocated2 is None
 
         deallocated = self.resource_manager.release(allocated1.allocation_id)
         assert deallocated
 
-        allocated2_retry = self.resource_manager.allocate("sys-compute", user2, amount=capacity)
+        allocated2_retry = self.resource_manager.allocate(
+            "sys-compute", user2, amount=capacity
+        )
         assert allocated2_retry is not None
 
         self.resource_manager.release(allocated2_retry.allocation_id)
@@ -424,6 +452,7 @@ def run_integration_tests():
     print("=" * 60)
     exit_code = pytest.main([__file__, "-v"])
     return exit_code == 0
+
 
 if __name__ == "__main__":
     success = run_integration_tests()
