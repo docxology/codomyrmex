@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from typing import ClassVar
 
 from .base import LLMProvider
 from .models import CompletionResponse, Message, ProviderConfig, ProviderType

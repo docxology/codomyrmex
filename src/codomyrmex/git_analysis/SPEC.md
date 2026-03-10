@@ -32,35 +32,35 @@ Provides analytical intelligence about git repositories — not operational git 
 
 ### GitNexus Bridge (requires Node.js/npx)
 
-6. **Graceful degradation**: All 7 GitNexus MCP tools return `{"status": "error", ...}`
+1. **Graceful degradation**: All 7 GitNexus MCP tools return `{"status": "error", ...}`
    rather than raising exceptions when Node.js is unavailable. They never crash.
 
-7. **npx preference**: `_resolve_cmd()` prefers `npx --yes gitnexus` over vendor dist.
+2. **npx preference**: `_resolve_cmd()` prefers `npx --yes gitnexus` over vendor dist.
    This enables zero-install usage (npx downloads on first run).
 
-8. **Vendor fallback**: If npx unavailable, tries `node vendor/gitnexus/dist/index.js`.
+3. **Vendor fallback**: If npx unavailable, tries `node vendor/gitnexus/dist/index.js`.
    Build the vendor dist with `cd vendor/gitnexus && npm install && npm run build`.
 
-9. **Command caching**: `_resolve_cmd()` caches the resolved command list. Second call
+4. **Command caching**: `_resolve_cmd()` caches the resolved command list. Second call
    returns the same list object without re-checking PATH.
 
-10. **analyze() is non-JSON**: GitNexus `analyze` emits status messages, not JSON.
+5. **analyze() is non-JSON**: GitNexus `analyze` emits status messages, not JSON.
     The bridge runs it without `--json` and returns `{"stdout": ..., "indexed": True}`.
     All other commands (query, context, impact, etc.) use `--json`.
 
-11. **Timeout**: `analyze()` uses `timeout=300` (5 minutes). Other commands use `timeout=60`.
+6. **Timeout**: `analyze()` uses `timeout=300` (5 minutes). Other commands use `timeout=60`.
 
 ### MCP Tools
 
-12. **Category**: All 16 tools declare `category="git_analysis"`.
+1. **Category**: All 16 tools declare `category="git_analysis"`.
 
-13. **Error shape**: On exception, tools return `{"status": "error", "error": str(exc)}`.
+2. **Error shape**: On exception, tools return `{"status": "error", "error": str(exc)}`.
     No exceptions propagate to callers.
 
-14. **Lazy imports**: `_bridge()` and `_analyzer()` helpers avoid circular imports by
+3. **Lazy imports**: `_bridge()` and `_analyzer()` helpers avoid circular imports by
     deferring imports to first call. Pattern matches `git_operations/mcp_tools.py`.
 
-15. **Fallback decorator**: If `codomyrmex.model_context_protocol.decorators.mcp_tool`
+4. **Fallback decorator**: If `codomyrmex.model_context_protocol.decorators.mcp_tool`
     is unavailable, a local stub decorator attaches `._mcp_tool_meta` to the function.
     This ensures auto-discovery works even when MCP is partially initialized.
 
@@ -84,6 +84,7 @@ The vendor source is not built by default. Users who want vendor-mode operation
 ## Zero-Mock Policy Compliance
 
 Tests in `tests/unit/git_analysis/` comply with the codomyrmex zero-mock policy:
+
 - No `unittest.mock`, `MagicMock`, `monkeypatch`, or `pytest-mock`
 - GitPython tests run against the actual codomyrmex git repository
 - GitNexus integration tests use `@pytest.mark.skipif` guards for Node.js availability
@@ -98,6 +99,7 @@ It is a core dependency — available in all codomyrmex installations without ex
 
 GitNexus is a Node.js tool. It is NOT a Python package and NOT in `pyproject.toml`.
 Installation options:
+
 1. `npm install -g gitnexus` — global install
 2. `npx gitnexus` — automatic download on first use (zero-install)
 3. Vendor build — `npm install && npm run build` in `vendor/gitnexus/`

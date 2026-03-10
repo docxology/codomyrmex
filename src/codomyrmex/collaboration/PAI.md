@@ -70,9 +70,9 @@ The following tools are auto-discovered via `@mcp_tool` and available through th
 
 | Tool | Description | Trust Level | Category |
 |------|-------------|-------------|----------|
-| `codomyrmex.swarm_submit_task` | Submit a mission to the agent swarm for distributed execution | Safe | collaboration |
-| `codomyrmex.pool_status` | Return live status of the agent pool | Safe | collaboration |
-| `codomyrmex.list_agents` | List all registered agents in the current pool | Safe | collaboration |
+| `swarm_submit_task` | Submit a mission to the agent swarm for distributed execution | Safe | collaboration |
+| `pool_status` | Return live status of the agent pool | Safe | collaboration |
+| `collaboration_list_agents` | List available agent capabilities and coordination protocols | Safe | collaboration |
 
 ### MCP Tool Usage Examples
 

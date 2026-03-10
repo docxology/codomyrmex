@@ -7,6 +7,7 @@ from codomyrmex.agents.hermes.hermes_client import HermesClient, HermesError
 from codomyrmex.agents.hermes.session import (
     HermesSession,
     InMemorySessionStore,
+    SessionStore,
     SQLiteSessionStore,
 )
 from codomyrmex.agents.hermes.templates import TemplateLibrary
@@ -17,6 +18,7 @@ __all__ = [
     "HermesSession",
     "InMemorySessionStore",
     "SQLiteSessionStore",
+    "SessionStore",
     "TemplateLibrary",
 ]
 

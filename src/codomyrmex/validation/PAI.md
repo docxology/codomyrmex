@@ -79,9 +79,9 @@ elif result.status == ResultStatus.FAILURE:
 
 | Tool | Description | Trust Level | Category |
 |------|-------------|-------------|----------|
-| `codomyrmex.validate_schema` | Validate data against a JSON Schema definition | Safe | validation |
-| `codomyrmex.validate_config` | Check config dict for required keys; strict mode rejects extras | Safe | validation |
-| `codomyrmex.validation_summary` | Return session-wide validation run statistics | Safe | validation |
+| `validate_schema` | Validate data against a JSON Schema definition | Safe | validation |
+| `validation_validate_config` | Check config dict for required keys; strict mode rejects extras | Safe | validation |
+| `validation_summary` | Return session-wide validation run statistics | Safe | validation |
 
 ### Tool Signatures
 

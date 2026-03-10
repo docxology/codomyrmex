@@ -16,10 +16,13 @@ import sys
 import time
 from typing import Any
 
-from codomyrmex.agents.hermes.scripts.run_status import run_status
 from codomyrmex.agents.hermes.scripts.run_chat import run_chat
 from codomyrmex.agents.hermes.scripts.run_session import run_session
-from codomyrmex.agents.hermes.scripts.run_template import render_template, list_available_templates
+from codomyrmex.agents.hermes.scripts.run_status import run_status
+from codomyrmex.agents.hermes.scripts.run_template import (
+    list_available_templates,
+    render_template,
+)
 
 
 def run_pipeline(

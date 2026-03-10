@@ -18,7 +18,6 @@ from typing import Any
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.hermes.hermes_client import HermesClient, HermesError
 from codomyrmex.agents.hermes.templates import TemplateLibrary
-from codomyrmex.agents.hermes.templates.models import PromptTemplate
 
 
 def render_template(

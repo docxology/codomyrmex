@@ -234,6 +234,8 @@ providers:
 | `generate_text` | Generate text using a specified LLM provider and model | SAFE |
 | `list_local_models` | List available local models managed by Ollama | SAFE |
 | `query_fabric_metadata` | Query configuration metadata for Fabric integration | SAFE |
+| `reason` | Multi-step chain-of-thought reasoning with configurable depth | SAFE |
+| `ask` | Ask a question using openrouter/free or specified model | SAFE |
 
 All LLM module MCP tools are read-only or generative and classified as SAFE. No trust elevation is required.
 

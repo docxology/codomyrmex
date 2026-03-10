@@ -6,7 +6,6 @@ EventSchema (registration, validation, standard schemas), and convenience event 
 
 import json
 
-
 from codomyrmex.events.core.event_schema import (
     Event,
     EventPriority,
@@ -20,7 +19,6 @@ from codomyrmex.events.core.event_schema import (
     create_module_load_event,
     create_system_startup_event,
 )
-
 
 # ---------------------------------------------------------------------------
 # Enums

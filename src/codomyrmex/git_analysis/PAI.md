@@ -67,6 +67,7 @@ ISC-A-N: "No regressions introduced to modules with >30 churn touches"
 ```
 
 Contributor patterns inform agent delegation:
+
 - High commit-count areas → more detailed ISC for those modules
 - Recent large insertions → areas needing verification focus
 

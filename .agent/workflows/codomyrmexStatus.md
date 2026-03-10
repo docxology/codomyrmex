@@ -14,10 +14,10 @@ Provides a comprehensive overview of the Codomyrmex ecosystem and its integratio
 
 ```bash
 cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
-from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status, _tool_pai_awareness
+from codomyrmex.agents.pai.mcp_bridge import tool_pai_status, tool_pai_awareness
 import json
-status = _tool_pai_status()
-awareness = _tool_pai_awareness()
+status = tool_pai_status()
+awareness = tool_pai_awareness()
 report = {
     'system_status': status,
     'pai_awareness': awareness

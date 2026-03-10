@@ -11,9 +11,9 @@ Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 import pytest
 
 from codomyrmex.validation.mcp_tools import (
-    validate_config,
     validate_schema,
     validation_summary,
+    validation_validate_config,
 )
 from codomyrmex.validation.schemas import Result, ResultStatus
 
@@ -112,7 +112,7 @@ class TestValidateConfigMCPTool:
     """Tests for the validate_config MCP tool function."""
 
     def test_all_required_keys_present(self):
-        result = validate_config(
+        result = validation_validate_config(
             config={"host": "localhost", "port": 5432},
             required_keys=["host", "port"],
         )
@@ -120,7 +120,7 @@ class TestValidateConfigMCPTool:
         assert result["missing_keys"] == []
 
     def test_missing_required_key_fails(self):
-        result = validate_config(
+        result = validation_validate_config(
             config={"host": "localhost"},
             required_keys=["host", "port"],
         )
@@ -128,16 +128,16 @@ class TestValidateConfigMCPTool:
         assert "port" in result["missing_keys"]
 
     def test_no_required_keys_always_valid(self):
-        result = validate_config(config={"x": 1})
+        result = validation_validate_config(config={"x": 1})
         assert result["is_valid"] is True
 
     def test_empty_config_with_required_fails(self):
-        result = validate_config(config={}, required_keys=["key"])
+        result = validation_validate_config(config={}, required_keys=["key"])
         assert result["is_valid"] is False
         assert len(result["missing_keys"]) == 1
 
     def test_strict_mode_flags_extra_keys(self):
-        result = validate_config(
+        result = validation_validate_config(
             config={"a": 1, "b": 2, "extra": 3},
             required_keys=["a", "b"],
             strict=True,
@@ -148,7 +148,7 @@ class TestValidateConfigMCPTool:
         assert "extra" in warning_fields
 
     def test_strict_mode_no_extras_no_warnings(self):
-        result = validate_config(
+        result = validation_validate_config(
             config={"a": 1, "b": 2},
             required_keys=["a", "b"],
             strict=True,
@@ -157,7 +157,7 @@ class TestValidateConfigMCPTool:
         assert result["warnings"] == []
 
     def test_none_value_generates_warning(self):
-        result = validate_config(
+        result = validation_validate_config(
             config={"host": None},
             required_keys=["host"],
         )
@@ -166,11 +166,11 @@ class TestValidateConfigMCPTool:
         assert "host" in warning_fields
 
     def test_key_count_field(self):
-        result = validate_config(config={"a": 1, "b": 2, "c": 3})
+        result = validation_validate_config(config={"a": 1, "b": 2, "c": 3})
         assert result["key_count"] == 3
 
     def test_return_keys_present(self):
-        result = validate_config(config={})
+        result = validation_validate_config(config={})
         assert "is_valid" in result
         assert "errors" in result
         assert "warnings" in result
@@ -178,12 +178,12 @@ class TestValidateConfigMCPTool:
         assert "key_count" in result
 
     def test_error_message_contains_key_name(self):
-        result = validate_config(config={}, required_keys=["database_url"])
+        result = validation_validate_config(config={}, required_keys=["database_url"])
         assert len(result["errors"]) == 1
         assert "database_url" in result["errors"][0]["message"]
 
     def test_multiple_missing_keys(self):
-        result = validate_config(
+        result = validation_validate_config(
             config={}, required_keys=["a", "b", "c"]
         )
         assert result["is_valid"] is False

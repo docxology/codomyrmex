@@ -73,14 +73,14 @@ The following tools are auto-discovered via `@mcp_tool` and available through th
 
 | Tool | Description | Trust Level | Category |
 |------|-------------|-------------|----------|
-| `codomyrmex.generate_chart` | Generate a visualization chart and optionally save it | Safe | data_visualization |
-| `codomyrmex.export_dashboard` | Generate and export a comprehensive HTML dashboard report | Safe | data_visualization |
+| `generate_chart` | Generate a visualization chart and optionally save it | Safe | data_visualization |
+| `export_dashboard` | Generate and export a comprehensive HTML dashboard report | Safe | data_visualization |
 
 ### MCP Tool Usage Examples
 
 **Generate a bar chart of ISC pass rates:**
 ```python
-result = mcp_call("codomyrmex.generate_chart", {
+result = mcp_call("generate_chart", {
     "chart_type": "bar",
     "data": {"labels": ["ISC-C1", "ISC-C2", "ISC-C3"], "values": [1, 1, 0]},
     "title": "ISC Verification Results",
@@ -91,7 +91,7 @@ result = mcp_call("codomyrmex.generate_chart", {
 
 **Export a full HTML dashboard:**
 ```python
-result = mcp_call("codomyrmex.export_dashboard", {
+result = mcp_call("export_dashboard", {
     "report_type": "general",
     "output_dir": "reports/"
 })
@@ -113,7 +113,7 @@ PAI LEARN phase can generate a trend chart after each Algorithm run:
 ```python
 # PAI LEARN — persist ISC pass rate trend
 session_results = [0.75, 0.82, 0.91, 1.0]  # Across 4 iterations
-mcp_call("codomyrmex.generate_chart", {
+mcp_call("generate_chart", {
     "chart_type": "line",
     "data": {"x": [1, 2, 3, 4], "y": session_results},
     "title": "ISC Pass Rate — Auth Refactor",

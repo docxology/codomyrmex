@@ -162,9 +162,12 @@ codomyrmex test events       # After changing events module
 
 ## MCP Tools
 
-This module does not expose MCP tools directly. Access its capabilities via:
-- Direct Python import: `from codomyrmex.cli import ...`
-- CLI: `codomyrmex <command>`
+| Tool | Description |
+|------|-------------|
+| `cli_list_commands` | List all available CLI commands and their descriptions |
+| `cli_run_command` | Execute a codomyrmex CLI command and return output |
+
+**Auto-discovered** via `@mcp_tool` decorators in `mcp_tools.py`.
 
 ## Navigation
 

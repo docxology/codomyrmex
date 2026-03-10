@@ -1,7 +1,7 @@
 """Unit tests for git_analysis MCP tool wrappers.
 
-Tests all 12 tools for correct return shape and status handling.
-GitPython-backed tools (5) are tested against the actual codomyrmex repo.
+Tests all 16 tools for correct return shape and status handling.
+GitPython-backed tools (9) are tested against the actual codomyrmex repo.
 GitNexus-backed tools (7) verify graceful degradation when unavailable.
 """
 
@@ -21,9 +21,9 @@ PROJECT_ROOT = str(Path(__file__).parents[5])
 
 @pytest.mark.unit
 def test_commit_history_ok() -> None:
-    """git_analysis_commit_history returns status:ok with commits list."""
+    """git_analysis_commit_history returns status:success with commits list."""
     result = mcp_tools.git_analysis_commit_history(repo_path=PROJECT_ROOT, max_count=5)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "commits" in result
     assert "count" in result
     assert isinstance(result["commits"], list)
@@ -34,7 +34,7 @@ def test_commit_history_ok() -> None:
 def test_commit_history_required_keys() -> None:
     """Each commit in history has the expected metadata keys."""
     result = mcp_tools.git_analysis_commit_history(repo_path=PROJECT_ROOT, max_count=3)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     for commit in result["commits"]:
         assert "sha" in commit
         assert "author" in commit
@@ -44,9 +44,9 @@ def test_commit_history_required_keys() -> None:
 
 @pytest.mark.unit
 def test_contributor_stats_ok() -> None:
-    """git_analysis_contributor_stats returns status:ok with contributors list."""
+    """git_analysis_contributor_stats returns status:success with contributors list."""
     result = mcp_tools.git_analysis_contributor_stats(repo_path=PROJECT_ROOT)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "contributors" in result
     assert "count" in result
     assert result["count"] > 0
@@ -56,7 +56,7 @@ def test_contributor_stats_ok() -> None:
 def test_contributor_stats_fields() -> None:
     """Each contributor entry has required fields."""
     result = mcp_tools.git_analysis_contributor_stats(repo_path=PROJECT_ROOT)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     for contributor in result["contributors"]:
         assert "author" in contributor
         assert "commits" in contributor
@@ -66,9 +66,9 @@ def test_contributor_stats_fields() -> None:
 
 @pytest.mark.unit
 def test_code_churn_ok() -> None:
-    """git_analysis_code_churn returns status:ok with files list."""
+    """git_analysis_code_churn returns status:success with files list."""
     result = mcp_tools.git_analysis_code_churn(repo_path=PROJECT_ROOT, top_n=10)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "files" in result
     assert "count" in result
     assert len(result["files"]) <= 10
@@ -78,7 +78,7 @@ def test_code_churn_ok() -> None:
 def test_code_churn_fields() -> None:
     """Each churn entry has 'file' and 'change_count' fields."""
     result = mcp_tools.git_analysis_code_churn(repo_path=PROJECT_ROOT, top_n=5)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     for entry in result["files"]:
         assert "file" in entry
         assert "change_count" in entry
@@ -86,9 +86,9 @@ def test_code_churn_fields() -> None:
 
 @pytest.mark.unit
 def test_branch_topology_ok() -> None:
-    """git_analysis_branch_topology returns status:ok with branch data."""
+    """git_analysis_branch_topology returns status:success with branch data."""
     result = mcp_tools.git_analysis_branch_topology(repo_path=PROJECT_ROOT)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "active_branch" in result
     assert "branches" in result
     assert "branch_count" in result
@@ -96,9 +96,9 @@ def test_branch_topology_ok() -> None:
 
 @pytest.mark.unit
 def test_commit_frequency_ok() -> None:
-    """git_analysis_commit_frequency returns status:ok with frequency dict."""
+    """git_analysis_commit_frequency returns status:success with frequency dict."""
     result = mcp_tools.git_analysis_commit_frequency(repo_path=PROJECT_ROOT, by="month")
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "frequency" in result
     assert "bucket" in result
     assert result["bucket"] == "month"
@@ -111,7 +111,7 @@ def test_commit_frequency_week_bucket() -> None:
     import re
 
     result = mcp_tools.git_analysis_commit_frequency(repo_path=PROJECT_ROOT, by="week")
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     week_pattern = re.compile(r"^\d{4}-W\d{2}$")
     for key in result["frequency"]:
         assert week_pattern.match(key), f"Key {key!r} not in YYYY-WNN format"
@@ -122,16 +122,16 @@ def test_commit_frequency_week_bucket() -> None:
 
 @pytest.mark.unit
 def test_index_repo_returns_dict() -> None:
-    """git_analysis_index_repo returns a dict (ok or graceful error)."""
+    """git_analysis_index_repo returns a dict (success or graceful error)."""
     result = mcp_tools.git_analysis_index_repo(repo_path=PROJECT_ROOT)
     assert isinstance(result, dict)
     assert "status" in result
-    assert result["status"] in ("ok", "error")
+    assert result["status"] in ("success", "error")
 
 
 @pytest.mark.unit
 def test_query_returns_dict() -> None:
-    """git_analysis_query returns a dict (ok or graceful error)."""
+    """git_analysis_query returns a dict (success or graceful error)."""
     result = mcp_tools.git_analysis_query(
         repo_path=PROJECT_ROOT, query_text="module architecture"
     )
@@ -196,7 +196,7 @@ def test_commit_history_invalid_path() -> None:
         repo_path="/nonexistent/path/to/repo"
     )
     assert result["status"] == "error"
-    assert "error" in result
+    assert "message" in result
 
 
 @pytest.mark.unit
@@ -267,11 +267,11 @@ def test_all_tools_have_git_analysis_category() -> None:
 
 @pytest.mark.unit
 def test_filtered_history_ok() -> None:
-    """git_analysis_filtered_history returns status:ok with commits list."""
+    """git_analysis_filtered_history returns status:success with commits list."""
     result = mcp_tools.git_analysis_filtered_history(
         repo_path=PROJECT_ROOT, max_count=5
     )
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "commits" in result
     assert "count" in result
     assert isinstance(result["commits"], list)
@@ -279,20 +279,20 @@ def test_filtered_history_ok() -> None:
 
 @pytest.mark.unit
 def test_file_history_ok() -> None:
-    """git_analysis_file_history returns status:ok for README.md."""
+    """git_analysis_file_history returns status:success for README.md."""
     result = mcp_tools.git_analysis_file_history(
         repo_path=PROJECT_ROOT, file_path="README.md", max_count=5
     )
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "commits" in result
     assert "file" in result
 
 
 @pytest.mark.unit
 def test_directory_churn_ok() -> None:
-    """git_analysis_directory_churn returns status:ok with directories list."""
+    """git_analysis_directory_churn returns status:success with directories list."""
     result = mcp_tools.git_analysis_directory_churn(repo_path=PROJECT_ROOT, top_n=5)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "directories" in result
     assert "count" in result
     assert isinstance(result["directories"], list)
@@ -300,9 +300,9 @@ def test_directory_churn_ok() -> None:
 
 @pytest.mark.unit
 def test_hotspots_ok() -> None:
-    """git_analysis_hotspots returns status:ok with hotspots list."""
+    """git_analysis_hotspots returns status:success with hotspots list."""
     result = mcp_tools.git_analysis_hotspots(repo_path=PROJECT_ROOT, top_n=5)
-    assert result["status"] == "ok"
+    assert result["status"] == "success"
     assert "hotspots" in result
     assert "count" in result
 
@@ -317,7 +317,7 @@ def test_commit_frequency_invalid_by() -> None:
         repo_path=PROJECT_ROOT, by="invalid"
     )
     assert result["status"] == "error"
-    assert "error" in result
+    assert "message" in result
 
 
 @pytest.mark.unit
@@ -325,7 +325,7 @@ def test_code_churn_zero_top_n() -> None:
     """git_analysis_code_churn returns status:error for top_n=0."""
     result = mcp_tools.git_analysis_code_churn(repo_path=PROJECT_ROOT, top_n=0)
     assert result["status"] == "error"
-    assert "error" in result
+    assert "message" in result
 
 
 @pytest.mark.unit
@@ -333,4 +333,4 @@ def test_commit_history_zero_max_count() -> None:
     """git_analysis_commit_history returns status:error for max_count=0."""
     result = mcp_tools.git_analysis_commit_history(repo_path=PROJECT_ROOT, max_count=0)
     assert result["status"] == "error"
-    assert "error" in result
+    assert "message" in result

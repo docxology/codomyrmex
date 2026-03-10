@@ -7,7 +7,6 @@ and extract_todo_items. Tests data structures without requiring real LLM clients
 import tempfile
 from pathlib import Path
 
-
 from codomyrmex.agents.orchestrator import (
     AgentSpec,
     ConversationLog,

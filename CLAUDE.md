@@ -246,7 +246,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (80435 symbols, 186357 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (81074 symbols, 187896 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -352,16 +352,13 @@ This project is configured with the `qmd` skill for local hybrid search of Markd
 ## === COGNILAYER (auto-generated, do not delete) ===
 
 ## CogniLayer v3 Active
-
 Persistent memory is ON.
 ON FIRST USER MESSAGE in this session, briefly tell the user:
   'CogniLayer v3 active — persistent memory is on. Type /cognihelp for available commands.'
 Say it ONCE, keep it short, then continue with their request.
 
 ## Memory Tools
-
 You have access to the `cognilayer` MCP server:
-
 - memory_search(query) — search memory semantically
 - memory_write(content) — save important information
 - file_search(query) — search project files (PRD, docs...)
@@ -373,17 +370,13 @@ When you need info from PRD or docs, use file_search
 INSTEAD of reading the entire file.
 
 ## VERIFY-BEFORE-ACT — MANDATORY
-
 When memory_search returns a fact marked with ⚠ STALE:
-
 1. ALWAYS read the source file and verify the fact still holds
 2. If the fact changed -> update it via memory_write
 3. NEVER make changes based on STALE facts without verification
 
 ## PROACTIVE MEMORY — IMPORTANT
-
 When you discover something important during work, SAVE IT IMMEDIATELY:
-
 - Bug and fix -> memory_write(type="error_fix")
 - Pitfall/danger -> memory_write(type="gotcha")
 - Exact procedure -> memory_write(type="procedure")
@@ -393,25 +386,21 @@ When you discover something important during work, SAVE IT IMMEDIATELY:
 DO NOT wait for /harvest — session may crash.
 
 ## RUNNING BRIDGE — CRITICAL
-
 After completing each task AUTOMATICALLY update session bridge:
   session_bridge(action="save", content="Progress: ...; Open: ...")
 This is Tier 1 — do it yourself, don't announce, it's part of the job.
 
 ## Safety Rules — MANDATORY
-
 - Before ANY deploy, push, ssh, pm2, docker, db migration:
   1. ALWAYS call verify_identity(action_type="...") first
   2. If it returns BLOCKED — STOP and ask the user
   3. If it returns VERIFIED — READ the target server to the user and request confirmation
 
 ## Git Rules
-
 - Commit often, small atomic changes. Format: "[type] what and why"
 - commit = Tier 1 (do it yourself). push = Tier 3 (verify_identity).
 
 ## Project DNA: codomyrmex
-
 Stack: unknown
 Style: [unknown]
 Structure: .agent, .benchmarks, .desloppify, .gemini, .github, .gitnexus, .mypy_cache, .pipelines
@@ -420,8 +409,7 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
-
 [Emergency bridge — running bridge was not updated]
-Files: src/codomyrmex/tests/unit/finance/test_finance_models.py (edit)
+No changes or facts in this session.
 
 # === END COGNILAYER ===

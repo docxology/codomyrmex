@@ -1,6 +1,7 @@
 """Guardrail detectors: PromptInjectionDetector, PIIDetector, ContentFilter."""
 
 import re
+from typing import ClassVar
 
 from .models import GuardrailAction, GuardrailConfig, GuardrailResult, ThreatLevel
 

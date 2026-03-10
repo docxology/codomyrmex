@@ -51,7 +51,7 @@ def run_evolution_bridge() -> dict[str, Any]:
 
     # ── 2. ConstraintValidator ───────────────────────────────────────
     try:
-        from evolution.core.constraints import ConstraintValidator, ConstraintResult
+        from evolution.core.constraints import ConstraintValidator
 
         config_for_cv = EvolutionConfig(
             max_skill_size=100,
@@ -134,7 +134,7 @@ def run_evolution_bridge() -> dict[str, Any]:
 
     # ── 4. EvalExample + EvalDataset ─────────────────────────────────
     try:
-        from evolution.core.dataset_builder import EvalExample, EvalDataset
+        from evolution.core.dataset_builder import EvalDataset, EvalExample
 
         ex = EvalExample(
             task_input="Review this PR",
@@ -172,7 +172,7 @@ def run_evolution_bridge() -> dict[str, Any]:
 
     # ── 5. Skill helpers ─────────────────────────────────────────────
     try:
-        from evolution.skills.skill_module import load_skill, reassemble_skill
+        from evolution.skills.skill_module import reassemble_skill
 
         # Test reassemble
         frontmatter = "name: test-skill\ndescription: A demo skill"

@@ -1,7 +1,7 @@
 import pytest
 
 from codomyrmex.collaboration.mcp_tools import (
-    list_agents,
+    collaboration_list_agents,
     pool_status,
     swarm_submit_task,
 )
@@ -38,8 +38,8 @@ def test_pool_status():
 
 
 @pytest.mark.unit
-def test_list_agents():
-    agents = list_agents()
+def test_collaboration_list_agents():
+    agents = collaboration_list_agents()
     assert "agent_classes" in agents
     assert "BaseAgent" in agents["agent_classes"]
     assert "protocols" in agents

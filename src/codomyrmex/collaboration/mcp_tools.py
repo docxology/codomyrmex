@@ -119,7 +119,7 @@ def pool_status() -> dict[str, Any]:
     category="collaboration",
     description="List available agent capabilities and coordination protocols.",
 )
-def list_agents() -> dict[str, Any]:
+def collaboration_list_agents() -> dict[str, Any]:
     """List the available agent classes and protocols.
 
     Returns:

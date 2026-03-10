@@ -111,3 +111,110 @@ def hermes_skills_list() -> dict[str, Any]:
         return {"status": "error", "message": result.get("error", "Skills require CLI backend")}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description="List all available Hermes prompt template names.",
+)
+def hermes_template_list() -> dict[str, Any]:
+    """List available Hermes prompt templates.
+
+    Returns:
+        dict with keys: status, templates (list of names), count
+    """
+    try:
+        from codomyrmex.agents.hermes.templates import TemplateLibrary
+
+        lib = TemplateLibrary()
+        names = lib.list_templates()
+        return {"status": "success", "templates": names, "count": len(names)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Render a named Hermes prompt template with variable substitution. "
+        "Returns the rendered user prompt and system prompt."
+    ),
+)
+def hermes_template_render(
+    template_name: str,
+    variables: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Render a Hermes prompt template.
+
+    Args:
+        template_name: Name of the built-in template (e.g. ``"code_review"``).
+        variables: Optional dict of variable substitutions.  Missing variables
+            are left as ``{placeholder}`` in the output (safe rendering).
+
+    Returns:
+        dict with keys: status, template_name, rendered_prompt, system_prompt, variables_used
+    """
+    try:
+        from codomyrmex.agents.hermes.templates import TemplateLibrary
+
+        lib = TemplateLibrary()
+        template = lib.get(template_name)
+        rendered = template.render_safe(**(variables or {}))
+        return {
+            "status": "success",
+            "template_name": template_name,
+            "rendered_prompt": rendered,
+            "system_prompt": template.system_prompt,
+            "variables_used": list((variables or {}).keys()),
+        }
+    except KeyError as exc:
+        return {"status": "error", "message": str(exc)}
+    except Exception as exc:
+        return {"status": "error", "message": str(exc)}
+
+
+@mcp_tool(
+    category="hermes",
+    description=(
+        "Stream a response from the Hermes agent, collecting all output lines. "
+        "Requires a live backend (CLI or Ollama)."
+    ),
+)
+def hermes_stream(
+    prompt: str,
+    backend: str = "auto",
+    model: str = "hermes3",
+    timeout: int = 120,
+) -> dict[str, Any]:
+    """Stream Hermes agent output and collect all lines.
+
+    Args:
+        prompt: Natural-language task description.
+        backend: ``"auto"`` (default), ``"cli"``, or ``"ollama"``.
+        model: Ollama model name (default ``hermes3``).
+        timeout: Subprocess timeout in seconds (default 120).
+
+    Returns:
+        dict with keys: status, lines (list of str), line_count, backend
+    """
+    try:
+        from codomyrmex.agents.core import AgentRequest
+
+        client = _get_client(backend=backend, model=model, timeout=timeout)
+        if client.active_backend == "none":
+            return {
+                "status": "error",
+                "message": "No backend available (neither hermes CLI nor ollama found)",
+                "lines": [],
+                "line_count": 0,
+            }
+        request = AgentRequest(prompt=prompt)
+        lines = list(client.stream(request))
+        return {
+            "status": "success",
+            "lines": lines,
+            "line_count": len(lines),
+            "backend": client.active_backend,
+        }
+    except Exception as exc:
+        return {"status": "error", "message": str(exc), "lines": [], "line_count": 0}

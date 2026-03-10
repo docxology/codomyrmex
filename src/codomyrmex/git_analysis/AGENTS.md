@@ -27,6 +27,7 @@ Use this module when you need to *understand* a repository, not *operate* on it 
 ### When to use each tool
 
 **Use GitPython tools when you need:**
+
 - Recent commit history with stats → `git_analysis_commit_history`
 - Top contributors for a repo → `git_analysis_contributor_stats`
 - Files most likely to have bugs (high churn) → `git_analysis_code_churn`
@@ -38,6 +39,7 @@ Use this module when you need to *understand* a repository, not *operate* on it 
 - High-risk files combining churn and recency → `git_analysis_hotspots`
 
 **Use GitNexus tools when you need:**
+
 - To find all callers of a function → `git_analysis_symbol_context`
 - Blast radius before refactoring → `git_analysis_impact`
 - Semantic code search → `git_analysis_query`
@@ -46,6 +48,7 @@ Use this module when you need to *understand* a repository, not *operate* on it 
 ### GitNexus workflow
 
 GitNexus requires indexing before queries:
+
 ```
 1. git_analysis_index_repo(repo_path=".") → creates .gitnexus/ graph
 2. git_analysis_query(repo_path=".", query_text="my question")
@@ -60,6 +63,7 @@ from codomyrmex.git_analysis import GITNEXUS_AVAILABLE
 ```
 
 Always check before using GitNexus tools in automation:
+
 ```python
 result = git_analysis_index_repo(repo_path=".")
 if result["status"] == "error":
@@ -71,6 +75,7 @@ if result["status"] == "error":
 
 Pre-computed analysis of this repository is at `data/codomyrmex_description.md`.
 Key findings:
+
 - 4 contributors (Daniel Ari Friedman: 124 commits, NewTester: 110 commits)
 - Peak activity: February 2026 (144 commits)
 - Highest churn: README.md (58x), TO-DO.md (46x), pyproject.toml (42x)
@@ -109,6 +114,7 @@ All 16 tools are auto-discovered via `@mcp_tool` decorators and exposed through 
 ## Testing
 
 Tests at `src/codomyrmex/tests/unit/git_analysis/`:
+
 - `test_history_analyzer.py` — 27 tests against actual codomyrmex repo
 - `test_gitnexus_bridge.py` — 9 tests, Node.js tests skipif-guarded
 - `test_mcp_tools.py` — 27 tests covering all 16 MCP tools
@@ -135,13 +141,17 @@ Expected: 63 tests pass (Node.js integration test may be skipped if unavailable)
 | **Researcher** | Read-only | All 16 `git_analysis_*` tools — full read access for research-phase analysis | SAFE |
 
 ### Engineer Agent
+
 **Use Cases**: Analyzing git history during OBSERVE, generating contributor statistics, detecting commit patterns for LEARN phase.
 
 ### Architect Agent
+
 **Use Cases**: Understanding codebase evolution, reviewing development patterns, analyzing team contribution distribution.
 
 ### QATester Agent
+
 **Use Cases**: Validating git history integrity, confirming expected commit patterns during VERIFY.
 
 ### Researcher Agent
+
 **Use Cases**: Full read-only access to all 16 git analysis tools for research, codebase understanding, and knowledge extraction.

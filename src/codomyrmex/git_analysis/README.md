@@ -70,6 +70,7 @@ if GITNEXUS_AVAILABLE:
 ## MCP Tools
 
 All capabilities are exposed as 16 MCP tools (see `MCP_TOOL_SPECIFICATION.md`):
+
 - 7 GitNexus tools: `git_analysis_index_repo`, `git_analysis_query`, etc.
 - 9 GitPython tools: `git_analysis_commit_history`, `git_analysis_contributor_stats`,
   `git_analysis_filtered_history`, `git_analysis_file_history`,

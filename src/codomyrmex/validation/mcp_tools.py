@@ -65,7 +65,7 @@ def validate_schema(
     category="validation",
     description="Validate a configuration dictionary against common patterns.",
 )
-def validate_config(
+def validation_validate_config(
     config: dict[str, Any],
     required_keys: list[str] | None = None,
     strict: bool = False,

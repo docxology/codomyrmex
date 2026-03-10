@@ -14,14 +14,14 @@ Persists information into the agent's long-term memory for future retrieval and 
 
 ```bash
 cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
-from codomyrmex.agentic_memory import add_memory
+from codomyrmex.agentic_memory.mcp_tools import memory_put
 import sys
 content = sys.argv[1] if len(sys.argv) > 1 else ''
-importance = int(sys.argv[2]) if len(sys.argv) > 2 else 5
+importance = sys.argv[2] if len(sys.argv) > 2 else 'medium'
 if not content:
     print('Error: Memory content is required.')
     sys.exit(1)
-result = add_memory(content=content, importance=importance)
+result = memory_put(content=content, importance=importance)
 print(result)
 " "{{content}}" "{{importance}}"
 ```

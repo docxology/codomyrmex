@@ -257,7 +257,9 @@ class TestTemplates:
         assert "{b}" in rendered
 
     def test_list_available_templates(self) -> None:
-        from codomyrmex.agents.hermes.scripts.run_template import list_available_templates
+        from codomyrmex.agents.hermes.scripts.run_template import (
+            list_available_templates,
+        )
 
         templates = list_available_templates()
         assert isinstance(templates, list)
@@ -441,7 +443,7 @@ class TestRunEvolutionBridge:
     def test_eval_dataset_splits(self) -> None:
         """EvalDataset correctly aggregates splits."""
         try:
-            from evolution.core.dataset_builder import EvalExample, EvalDataset
+            from evolution.core.dataset_builder import EvalDataset, EvalExample
 
             dataset = EvalDataset(
                 train=[EvalExample(task_input="t1", expected_behavior="e1")],
@@ -532,3 +534,108 @@ class TestHermesClientDirect:
         assert "active_backend" in status
         assert "cli_available" in status
         assert "ollama_available" in status
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# 10. New MCP Tools
+# ═══════════════════════════════════════════════════════════════════════
+
+class TestNewMCPTools:
+    """Tests for hermes_template_list, hermes_template_render, hermes_stream."""
+
+    def test_template_list_returns_names(self) -> None:
+        """hermes_template_list requires no backend and returns builtin names."""
+        from codomyrmex.agents.hermes.mcp_tools import hermes_template_list
+
+        result = hermes_template_list()
+        assert result["status"] == "success"
+        assert isinstance(result["templates"], list)
+        assert result["count"] >= 4
+        assert "code_review" in result["templates"]
+        assert "debugging" in result["templates"]
+
+    def test_template_render_code_review(self) -> None:
+        """hermes_template_render renders code_review with safe substitution."""
+        from codomyrmex.agents.hermes.mcp_tools import hermes_template_render
+
+        result = hermes_template_render(
+            template_name="code_review",
+            variables={"language": "python", "code": "x = 1", "focus_areas": "correctness"},
+        )
+        assert result["status"] == "success"
+        assert result["template_name"] == "code_review"
+        assert "python" in result["rendered_prompt"]
+        assert "x = 1" in result["rendered_prompt"]
+        assert isinstance(result["system_prompt"], str)
+        assert len(result["system_prompt"]) > 0
+        assert "language" in result["variables_used"]
+
+    def test_template_render_partial_vars_safe(self) -> None:
+        """hermes_template_render leaves unresolved placeholders intact."""
+        from codomyrmex.agents.hermes.mcp_tools import hermes_template_render
+
+        result = hermes_template_render(
+            template_name="code_review",
+            variables={"language": "go"},
+        )
+        assert result["status"] == "success"
+        # Unreplaced variables stay as {placeholder}
+        assert "{code}" in result["rendered_prompt"] or "{focus_areas}" in result["rendered_prompt"]
+
+    def test_template_render_unknown_returns_error(self) -> None:
+        """hermes_template_render returns error status for unknown template."""
+        from codomyrmex.agents.hermes.mcp_tools import hermes_template_render
+
+        result = hermes_template_render(template_name="nonexistent_template_xyz")
+        assert result["status"] == "error"
+        assert "message" in result
+        assert "nonexistent_template_xyz" in result["message"]
+
+    def test_template_render_no_variables(self) -> None:
+        """hermes_template_render works with no variables provided."""
+        from codomyrmex.agents.hermes.mcp_tools import hermes_template_render
+
+        result = hermes_template_render(template_name="task_decomposition")
+        assert result["status"] == "success"
+        assert result["template_name"] == "task_decomposition"
+        assert isinstance(result["rendered_prompt"], str)
+
+    def test_stream_returns_expected_keys(self) -> None:
+        """hermes_stream always returns status/lines/line_count regardless of backend."""
+        from codomyrmex.agents.hermes.mcp_tools import hermes_stream
+
+        result = hermes_stream(prompt="hello", backend="cli", timeout=5)
+        assert isinstance(result, dict)
+        assert "status" in result
+        assert "lines" in result
+        assert "line_count" in result
+
+    @requires_backend
+    def test_stream_with_backend_returns_lines(self) -> None:
+        """hermes_stream collects lines when a backend is available."""
+        from codomyrmex.agents.hermes.mcp_tools import hermes_stream
+
+        result = hermes_stream(prompt="Say the word 'hello'", timeout=30)
+        assert result["status"] == "success"
+        assert isinstance(result["lines"], list)
+        assert result["line_count"] == len(result["lines"])
+        assert "backend" in result
+
+    def test_context_manager_sqlite_store(self) -> None:
+        """SQLiteSessionStore works as a context manager."""
+        from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
+
+        with SQLiteSessionStore(":memory:") as store:
+            sess = HermesSession(session_id="ctx-test")
+            sess.add_message("user", "hello")
+            store.save(sess)
+            loaded = store.load("ctx-test")
+            assert loaded is not None
+            assert loaded.message_count == 1
+
+    def test_session_store_exported_from_package(self) -> None:
+        """SessionStore protocol is importable from the hermes package."""
+        from codomyrmex.agents.hermes import SessionStore, SQLiteSessionStore
+
+        store = SQLiteSessionStore(":memory:")
+        assert isinstance(store, SessionStore)

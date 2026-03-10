@@ -89,8 +89,10 @@ emitter.emit_later(EventType.ALERT_TRIGGERED, {"alert_name": "memory_high"}, del
 | `emit_event` | Emit a named event with payload, source, and priority to the event bus | READ-ONLY |
 | `list_event_types` | List all registered event types and their subscriber counts | READ-ONLY |
 | `get_event_history` | Retrieve recent event history, optionally filtered by event type | READ-ONLY |
+| `query_event_store` | Query persistent event store with topic filtering and sequence range | READ-ONLY |
+| `replay_events` | Replay events through registered handlers for event sourcing | READ-ONLY |
 
-All three tools are safe operations that do not modify files, execute commands, or alter system state beyond the in-memory event bus. They are available without Trust Gateway elevation.
+All five tools are safe operations that do not modify files, execute commands, or alter system state beyond the in-memory event bus. They are available without Trust Gateway elevation.
 
 ### MCP Tool Usage Examples
 
