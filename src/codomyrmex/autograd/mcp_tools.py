@@ -7,6 +7,7 @@ Protocol so that AI agents can evaluate expressions and verify gradients.
 
 from __future__ import annotations
 
+import ast
 import operator
 from typing import Any
 
@@ -26,6 +27,63 @@ _ALLOWED_OPS = {
     "**": operator.pow,
 }
 
+_AST_OPS = {
+    ast.Add: "+",
+    ast.Sub: "-",
+    ast.Mult: "*",
+    ast.Pow: "**",
+}
+
+
+def _get_exponent_value(node: ast.AST) -> float:
+    """Helper to extract a constant float/int exponent."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+        return float(node.value)
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+        if isinstance(node.operand, ast.Constant) and isinstance(
+            node.operand.value, (int, float)
+        ):
+            return -float(node.operand.value)
+    raise ValueError("Exponent must be a constant float or integer")
+
+
+def _safe_eval(node: ast.AST, variables: dict[str, Value]) -> Value:
+    """Safely evaluate an AST node containing a mathematical expression."""
+    if isinstance(node, ast.Expression):
+        return _safe_eval(node.body, variables)
+    elif isinstance(node, ast.BinOp):
+        op_type = type(node.op)
+        if op_type not in _AST_OPS:
+            raise ValueError(f"Unsupported operation: {op_type.__name__}")
+
+        op_str = _AST_OPS[op_type]
+        op_func = _ALLOWED_OPS[op_str]
+
+        left = _safe_eval(node.left, variables)
+
+        # Value**Value is not supported in engine.py, exponent must be a float/int
+        if op_type == ast.Pow:
+            right = _get_exponent_value(node.right)
+        else:
+            right = _safe_eval(node.right, variables)
+
+        return op_func(left, right)
+    elif isinstance(node, ast.Name):
+        if node.id in variables:
+            return variables[node.id]
+        raise ValueError(f"Undefined variable: {node.id}")
+    elif isinstance(node, ast.Constant):
+        if isinstance(node.value, (int, float)):
+            return Value(float(node.value))
+        raise ValueError(f"Unsupported constant type: {type(node.value)}")
+    elif isinstance(node, ast.UnaryOp):
+        if isinstance(node.op, ast.USub):
+            return -_safe_eval(node.operand, variables)
+        elif isinstance(node.op, ast.UAdd):
+            return _safe_eval(node.operand, variables)
+        raise ValueError(f"Unsupported unary operation: {type(node.op).__name__}")
+    else:
+        raise ValueError(f"Unsupported AST node: {type(node).__name__}")
 
 
 # ---------------------------------------------------------------------------
@@ -46,22 +104,20 @@ def autograd_compute(expression: str, variables: dict) -> dict:
     """
     # Build Value objects for each variable
     var_values: dict[str, Value] = {}
-    namespace: dict[str, Any] = {"__builtins__": {}}
 
     for name, val in variables.items():
         if not name.isidentifier():
             raise ValueError(f"Invalid variable name: {name!r}")
         v = Value(float(val), label=name)
         var_values[name] = v
-        namespace[name] = v
 
-    # Compile and evaluate
+    # Parse and safely evaluate
     try:
-        code = compile(expression, "<autograd_compute>", "eval")
+        tree = ast.parse(expression, mode="eval")
     except SyntaxError as exc:
         raise ValueError(f"Invalid expression syntax: {exc}") from exc
 
-    result = eval(code, namespace)
+    result = _safe_eval(tree, var_values)
 
     if not isinstance(result, Value):
         result = Value(float(result))
