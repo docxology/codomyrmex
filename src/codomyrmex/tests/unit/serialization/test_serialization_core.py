@@ -545,3 +545,268 @@ class TestMcpToolsSerializer:
         from codomyrmex.serialization.mcp_tools import serialization_list_formats
 
         assert len(serialization_list_formats()) == 3
+
+    def test_deserialize_data_invalid_json_raises(self):
+        from codomyrmex.serialization.mcp_tools import deserialize_data
+        from codomyrmex.serialization.serializer import SerializationError
+
+        with pytest.raises(SerializationError):
+            deserialize_data("not valid json{{{", format="json")
+
+    def test_deserialize_data_bad_base64_pickle_raises(self):
+        """Exercises the fallback path (lines 61-67) — bad base64 for pickle."""
+        from codomyrmex.serialization.mcp_tools import deserialize_data
+
+        # Pass a string that is not valid base64 at all
+        with pytest.raises(Exception):  # noqa: B017
+            deserialize_data("!!!not_base64!!!", format="pickle")
+
+    def test_serialize_deserialize_list_json(self):
+        from codomyrmex.serialization.mcp_tools import deserialize_data, serialize_data
+
+        original = [1, "two", 3.0]
+        serialized = serialize_data(original, format="json")
+        result = deserialize_data(serialized, format="json")
+        assert result == original
+
+    def test_serialize_deserialize_list_pickle(self):
+        from codomyrmex.serialization.mcp_tools import deserialize_data, serialize_data
+
+        original = ["a", "b", "c"]
+        serialized = serialize_data(original, format="pickle")
+        result = deserialize_data(serialized, format="pickle")
+        assert result == original
+
+    @_SKIP_YAML
+    def test_deserialize_data_yaml_roundtrip(self):
+        from codomyrmex.serialization.mcp_tools import deserialize_data, serialize_data
+
+        original = {"env": "staging", "retries": 3}
+        serialized = serialize_data(original, format="yaml")
+        result = deserialize_data(serialized, format="yaml")
+        assert result == original
+
+    def test_deserialize_data_pickle_corrupted_data_raises(self):
+        """Corrupt base64-encoded payload that decodes but is invalid pickle."""
+        import base64
+
+        from codomyrmex.serialization.mcp_tools import deserialize_data
+        from codomyrmex.serialization.serializer import SerializationError
+
+        # Valid base64 but not valid pickle bytes
+        corrupt_b64 = base64.b64encode(b"this is not pickle data").decode("ascii")
+        with pytest.raises(SerializationError):
+            deserialize_data(corrupt_b64, format="pickle")
+
+
+# ===========================================================================
+# Class: TestCliCommands
+# ===========================================================================
+
+
+class TestCliCommands:
+    """Tests for the cli_commands() function in __init__.py (lines 34-61)."""
+
+    def test_cli_commands_returns_dict(self):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        assert isinstance(cmds, dict)
+
+    def test_cli_commands_has_formats_key(self):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        assert "formats" in cmds
+
+    def test_cli_commands_has_convert_key(self):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        assert "convert" in cmds
+
+    def test_cli_commands_formats_has_handler(self):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        assert callable(cmds["formats"]["handler"])
+
+    def test_cli_commands_convert_has_handler(self):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        assert callable(cmds["convert"]["handler"])
+
+    def test_formats_handler_prints_json(self, capsys):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        cmds["formats"]["handler"]()
+        output = capsys.readouterr().out
+        assert "json" in output
+
+    def test_formats_handler_prints_pickle(self, capsys):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        cmds["formats"]["handler"]()
+        output = capsys.readouterr().out
+        assert "pickle" in output
+
+    def test_formats_handler_prints_msgpack(self, capsys):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        cmds["formats"]["handler"]()
+        output = capsys.readouterr().out
+        assert "msgpack" in output.lower()
+
+    def test_convert_handler_no_path_prints_usage(self, capsys):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        cmds["convert"]["handler"]()
+        output = capsys.readouterr().out
+        assert "Usage" in output
+
+    def test_convert_handler_with_real_json_file(self, capsys):
+        """_convert with a real JSON file path round-trips to JSON output."""
+        import json
+        import tempfile
+
+        from codomyrmex.serialization import cli_commands
+
+        data = {"hello": "world"}
+        with tempfile.NamedTemporaryFile(
+            suffix=".json", delete=False, mode="wb"
+        ) as f:
+            f.write(json.dumps(data).encode())
+            path = f.name
+        try:
+            cmds = cli_commands()
+            cmds["convert"]["handler"](path=path, **{"from": "json", "to": "json"})
+            output = capsys.readouterr().out
+            # Output should be valid JSON containing "hello"
+            assert "hello" in output
+        finally:
+            os.unlink(path)
+
+    @_SKIP_YAML
+    def test_convert_handler_json_to_yaml(self, capsys):
+        """_convert writes JSON-to-YAML conversion to stdout."""
+        import json
+        import tempfile
+
+        from codomyrmex.serialization import cli_commands
+
+        data = {"service": "test", "port": 8080}
+        with tempfile.NamedTemporaryFile(
+            suffix=".json", delete=False, mode="wb"
+        ) as f:
+            f.write(json.dumps(data).encode())
+            path = f.name
+        try:
+            cmds = cli_commands()
+            cmds["convert"]["handler"](path=path, **{"from": "json", "to": "yaml"})
+            output = capsys.readouterr().out
+            assert "service" in output
+        finally:
+            os.unlink(path)
+
+    def test_convert_handler_bad_path_prints_error(self, capsys):
+        """_convert with a non-existent path prints conversion error."""
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        cmds["convert"]["handler"](
+            path="/nonexistent/path/file.json", **{"from": "json", "to": "json"}
+        )
+        output = capsys.readouterr().out
+        assert "error" in output.lower() or "Error" in output
+
+    def test_cli_commands_formats_help_string(self):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        assert isinstance(cmds["formats"].get("help"), str)
+
+    def test_cli_commands_convert_help_string(self):
+        from codomyrmex.serialization import cli_commands
+
+        cmds = cli_commands()
+        assert isinstance(cmds["convert"].get("help"), str)
+
+
+# ===========================================================================
+# Class: TestModulePublicApi
+# ===========================================================================
+
+
+class TestModulePublicApi:
+    """Tests for module-level serialize/deserialize helpers in __init__.py."""
+
+    def test_module_serialize_json_string_format(self):
+        """__init__.py serialize() accepts string format name."""
+        from codomyrmex.serialization import serialize
+
+        raw = serialize({"a": 1}, format="json")
+        assert isinstance(raw, bytes)
+        import json
+
+        assert json.loads(raw) == {"a": 1}
+
+    def test_module_deserialize_json_string_format(self):
+        """__init__.py deserialize() accepts string format name."""
+        import json
+
+        from codomyrmex.serialization import deserialize
+
+        raw = json.dumps({"x": 99}).encode()
+        result = deserialize(raw, format="json")
+        assert result == {"x": 99}
+
+    def test_module_serialize_pickle_string_format(self):
+        from codomyrmex.serialization import serialize
+
+        raw = serialize([1, 2, 3], format="pickle")
+        assert isinstance(raw, bytes)
+        assert pickle.loads(raw) == [1, 2, 3]
+
+    def test_module_deserialize_pickle_string_format(self):
+        from codomyrmex.serialization import deserialize
+
+        raw = pickle.dumps({"key": "value"})
+        result = deserialize(raw, format="pickle")
+        assert result == {"key": "value"}
+
+    @_SKIP_YAML
+    def test_module_serialize_yaml_string_format(self):
+        import yaml
+
+        from codomyrmex.serialization import deserialize, serialize
+
+        raw = serialize({"env": "test"}, format="yaml")
+        assert isinstance(raw, bytes)
+        result = deserialize(raw, format="yaml")
+        assert result == {"env": "test"}
+
+    def test_module_all_exports_present(self):
+        """Verify __all__ contains expected public symbols."""
+        import codomyrmex.serialization as mod
+
+        for name in [
+            "Serializer",
+            "SerializationFormat",
+            "SerializationError",
+            "DeserializationError",
+            "SerializationManager",
+            "serialize",
+            "deserialize",
+        ]:
+            assert hasattr(mod, name), f"Missing export: {name}"
+
+    def test_module_version_string(self):
+        import codomyrmex.serialization as mod
+
+        assert hasattr(mod, "__version__")
+        assert isinstance(mod.__version__, str)
