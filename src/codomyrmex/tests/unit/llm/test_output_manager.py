@@ -7,9 +7,7 @@ Uses real temp directories for all file operations.
 
 import tempfile
 
-
 from codomyrmex.llm.ollama.output_manager import OutputManager
-
 
 # ---------------------------------------------------------------------------
 # OutputManager — Init

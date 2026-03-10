@@ -7,7 +7,6 @@ generate_consistency_checker_module.
 
 from pathlib import Path
 
-
 from codomyrmex.agents.droid.generators.documentation import (
     assess_agents_quality,
     assess_readme_quality,

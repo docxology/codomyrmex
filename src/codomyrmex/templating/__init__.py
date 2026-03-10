@@ -32,11 +32,16 @@ try:
 except ImportError:
     CodomyrmexError = Exception  # type: ignore
 
-with contextlib.suppress(ImportError):
+try:
     from .engines.template_engine import Template, TemplateEngine
+except ImportError:
+    Template = None
+    TemplateEngine = None
 
-with contextlib.suppress(ImportError):
+try:
     from .loaders.template_manager import TemplateManager
+except ImportError:
+    TemplateManager = None
 
 # Default engine instance for convenience functions
 _default_engine = None

@@ -6,17 +6,15 @@ for sqlite/postgresql/mysql), and SchemaGenerator (table creation, migration gen
 
 import tempfile
 
-
 from codomyrmex.database_management.schema_generator import (
+    TYPE_MAPPINGS,
     Column,
     Index,
     SchemaDefinition,
     SchemaGenerator,
     SchemaMigration,
     SchemaTable,
-    TYPE_MAPPINGS,
 )
-
 
 # ---------------------------------------------------------------------------
 # TYPE_MAPPINGS

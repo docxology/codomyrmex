@@ -14,7 +14,6 @@ from codomyrmex.model_ops.evaluation.quality import (
     QualityReport,
 )
 
-
 # ---------------------------------------------------------------------------
 # QualityDimension enum
 # ---------------------------------------------------------------------------
@@ -164,7 +163,7 @@ class TestQualityAnalyzer:
 
     def test_long_output(self):
         analyzer = QualityAnalyzer()
-        text = " ".join(["This is sentence number {}.".format(i) for i in range(100)])
+        text = " ".join([f"This is sentence number {i}." for i in range(100)])
         report = analyzer.analyze(text)
         assert isinstance(report, QualityReport)
 

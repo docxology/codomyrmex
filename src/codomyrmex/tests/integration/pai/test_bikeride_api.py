@@ -18,8 +18,8 @@ from __future__ import annotations
 import json
 import logging
 import re
-import urllib.request
 import urllib.error
+import urllib.request
 
 import pytest
 
@@ -241,7 +241,7 @@ class TestProjectMissionCRUD:
 def main() -> int:
     """CLI entry point for direct execution."""
     import sys
-    return pytest.main([__file__, "-v", "--tb=short", "--log-cli-level=INFO"] + sys.argv[1:])
+    return pytest.main([__file__, "-v", "--tb=short", "--log-cli-level=INFO", *sys.argv[1:]])
 
 
 if __name__ == "__main__":

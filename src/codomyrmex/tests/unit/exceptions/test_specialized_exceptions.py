@@ -6,6 +6,7 @@ SimulationError, and all other domain exceptions with context propagation.
 """
 
 
+from codomyrmex.exceptions.base import CodomyrmexError
 from codomyrmex.exceptions.specialized import (
     CapabilityScanError,
     LoggingError,
@@ -15,7 +16,6 @@ from codomyrmex.exceptions.specialized import (
     SimulationError,
     SystemDiscoveryError,
 )
-from codomyrmex.exceptions.base import CodomyrmexError
 
 
 class TestPerformanceError:

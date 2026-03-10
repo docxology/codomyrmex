@@ -37,11 +37,13 @@ def run_chat(
         Dict with keys: ``status``, ``content``, ``error``,
         ``metadata``, ``elapsed_s``.
     """
-    client = HermesClient(config={
-        "hermes_backend": backend,
-        "hermes_model": model,
-        "hermes_timeout": timeout,
-    })
+    client = HermesClient(
+        config={
+            "hermes_backend": backend,
+            "hermes_model": model,
+            "hermes_timeout": timeout,
+        }
+    )
 
     start = time.time()
     try:
@@ -70,7 +72,9 @@ def run_chat(
 
 def main() -> None:
     """CLI entry point — pass prompt as first argument."""
-    prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Say hello in one sentence."
+    prompt = (
+        " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Say hello in one sentence."
+    )
     result = run_chat(prompt)
     print(json.dumps(result, indent=2, default=str))
     sys.exit(0 if result["status"] == "success" else 1)

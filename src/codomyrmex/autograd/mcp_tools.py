@@ -51,7 +51,7 @@ def _safe_eval(node: ast.AST, variables: dict[str, Value]) -> Value:
     """Safely evaluate an AST node containing a mathematical expression."""
     if isinstance(node, ast.Expression):
         return _safe_eval(node.body, variables)
-    elif isinstance(node, ast.BinOp):
+    if isinstance(node, ast.BinOp):
         op_type = type(node.op)
         if op_type not in _AST_OPS:
             raise ValueError(f"Unsupported operation: {op_type.__name__}")
@@ -68,22 +68,21 @@ def _safe_eval(node: ast.AST, variables: dict[str, Value]) -> Value:
             right = _safe_eval(node.right, variables)
 
         return op_func(left, right)
-    elif isinstance(node, ast.Name):
+    if isinstance(node, ast.Name):
         if node.id in variables:
             return variables[node.id]
         raise ValueError(f"Undefined variable: {node.id}")
-    elif isinstance(node, ast.Constant):
+    if isinstance(node, ast.Constant):
         if isinstance(node.value, (int, float)):
             return Value(float(node.value))
         raise ValueError(f"Unsupported constant type: {type(node.value)}")
-    elif isinstance(node, ast.UnaryOp):
+    if isinstance(node, ast.UnaryOp):
         if isinstance(node.op, ast.USub):
             return -_safe_eval(node.operand, variables)
-        elif isinstance(node.op, ast.UAdd):
+        if isinstance(node.op, ast.UAdd):
             return _safe_eval(node.operand, variables)
         raise ValueError(f"Unsupported unary operation: {type(node.op).__name__}")
-    else:
-        raise ValueError(f"Unsupported AST node: {type(node).__name__}")
+    raise ValueError(f"Unsupported AST node: {type(node).__name__}")
 
 
 # ---------------------------------------------------------------------------

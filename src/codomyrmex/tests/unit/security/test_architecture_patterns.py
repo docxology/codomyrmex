@@ -15,7 +15,6 @@ from codomyrmex.security.theory.architecture_patterns import (
     validate_pattern_application,
 )
 
-
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
