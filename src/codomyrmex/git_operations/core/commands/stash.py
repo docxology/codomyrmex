@@ -4,6 +4,8 @@ import subprocess
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
+_GIT_TIMEOUT = 60  # seconds
+
 logger = get_logger(__name__)
 
 
@@ -23,7 +25,8 @@ def stash_changes(
             cmd.extend(["push", "-m", message])
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Changes stashed successfully")
@@ -55,7 +58,8 @@ def apply_stash(
             cmd.append(stash_ref)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Stash applied successfully")
@@ -86,6 +90,7 @@ def list_stashes(repository_path: str | None = None) -> list[dict[str, str]]:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         stashes = []

@@ -1,7 +1,8 @@
 """Tests for finance.account and finance.ledger (top-level modules)."""
 
-import pytest
 from decimal import Decimal
+
+import pytest
 
 from codomyrmex.finance.account import Account, AccountChart, AccountType
 from codomyrmex.finance.ledger import Ledger, LedgerError, Transaction, TransactionEntry
@@ -10,7 +11,7 @@ from codomyrmex.finance.ledger.ledger import AccountType as LedgerAccountType
 
 class TestAccountType:
     def test_five_types(self):
-        types = {t for t in AccountType}
+        types = set(AccountType)
         assert len(types) == 5
 
     def test_has_asset(self):

@@ -21,7 +21,7 @@ class SecretScanner:
         result = scanner.scan_directory("src/")
     """
 
-    IGNORE_PATTERNS = [
+    IGNORE_PATTERNS: ClassVar[list] = [
         r"\.git",
         r"node_modules",
         r"__pycache__",

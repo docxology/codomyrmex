@@ -29,7 +29,7 @@ class OpenRouterProvider(LLMProvider):
     # Free models available on OpenRouter (verified Feb 2026)
     # See https://openrouter.ai/api/v1/models for current availability
     # Use provider.list_models() to get full list from API
-    FREE_MODELS = [
+    FREE_MODELS: ClassVar[list] = [
         "openrouter/free",  # Auto-selects best available free model
         # Meta Llama
         "meta-llama/llama-3.3-70b-instruct:free",

@@ -8,7 +8,7 @@ from .models import GuardrailAction, GuardrailConfig, GuardrailResult, ThreatLev
 class PromptInjectionDetector:
     """Detects prompt injection attempts in user input."""
 
-    INJECTION_PATTERNS = [
+    INJECTION_PATTERNS: ClassVar[list] = [
         r"ignore\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
         r"disregard\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
         r"forget\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
@@ -82,7 +82,7 @@ class PromptInjectionDetector:
 class PIIDetector:
     """Detects and optionally sanitizes Personally Identifiable Information."""
 
-    PII_PATTERNS = {
+    PII_PATTERNS: ClassVar[dict] = {
         "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
         "phone_us": r"\b(?:\+1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}\b",
         "ssn": r"\b\d{3}[-\s]?\d{2}[-\s]?\d{4}\b",
@@ -91,7 +91,7 @@ class PIIDetector:
         "date_of_birth": r"\b(?:\d{1,2}[-/]\d{1,2}[-/]\d{2,4}|\d{4}[-/]\d{1,2}[-/]\d{1,2})\b",
     }
 
-    REDACTION_MAP = {
+    REDACTION_MAP: ClassVar[dict] = {
         "email": "[EMAIL]",
         "phone_us": "[PHONE]",
         "ssn": "[SSN]",
@@ -153,7 +153,7 @@ class PIIDetector:
 class ContentFilter:
     """Filters content for safety and appropriateness."""
 
-    TOXIC_PATTERNS = [
+    TOXIC_PATTERNS: ClassVar[list] = [
         r"\b(kill|murder|attack)\s+(yourself|yourself|them|him|her)\b",
         r"\bhow\s+to\s+(make|build|create)\s+(a\s+)?(bomb|weapon|explosive)\b",
         r"\b(hack|break\s+into)\s+(a\s+)?(bank|account|system)\b",

@@ -10,6 +10,8 @@ import tempfile
 from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
+_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
 class GoManager(BaseLanguageManager):
@@ -45,6 +47,7 @@ class GoManager(BaseLanguageManager):
                 cwd=path,
                 check=True,
                 capture_output=True,
+            timeout=_TIMEOUT_SLOW,
             )
             return True
         except (OSError, subprocess.SubprocessError) as e:
@@ -64,7 +67,8 @@ class GoManager(BaseLanguageManager):
                 ["go", "run", "main.go"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+            timeout=_TIMEOUT_SLOW,
             )
 
             self._cleanup([script_path])

@@ -4,6 +4,8 @@ import subprocess
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
+_GIT_TIMEOUT = 60  # seconds
+
 logger = get_logger(__name__)
 
 
@@ -21,6 +23,7 @@ def init_submodules(repository_path: str | None = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:
@@ -47,6 +50,7 @@ def update_submodules(repository_path: str | None = None) -> bool:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
         return True
     except subprocess.CalledProcessError as e:

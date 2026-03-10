@@ -67,7 +67,7 @@ class SafetyFilter:
     CREDIT_CARD_PATTERN = re.compile(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b")
 
     # Prompt injection markers
-    INJECTION_PATTERNS = [
+    INJECTION_PATTERNS: ClassVar[list] = [
         re.compile(r"(?i)ignore\s+(all\s+)?previous\s+instructions"),
         re.compile(r"(?i)you\s+are\s+now\s+"),
         re.compile(r"(?i)system\s*:\s*"),

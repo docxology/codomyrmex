@@ -10,6 +10,8 @@ import tempfile
 from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
+_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
 class PhpManager(BaseLanguageManager):
@@ -52,7 +54,8 @@ class PhpManager(BaseLanguageManager):
                 ["php", "script.php"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+            timeout=_TIMEOUT_SLOW,
             )
 
             self._cleanup([script_path])
@@ -66,7 +69,8 @@ class PhpManager(BaseLanguageManager):
             result = subprocess.run(
                 ["php", temp_path],
                 capture_output=True,
-                text=True
+                text=True,
+            timeout=_TIMEOUT_SLOW,
             )
             return result.stdout + result.stderr
         finally:

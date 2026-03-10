@@ -47,7 +47,7 @@ class AntigravityClient(IDEClient):
     """
 
     # Available Antigravity tools
-    TOOLS = [
+    TOOLS: ClassVar[list] = [
         "task_boundary",
         "notify_user",
         "write_to_file",
@@ -69,7 +69,7 @@ class AntigravityClient(IDEClient):
     ]
 
     # Supported artifact types
-    ARTIFACT_TYPES = [
+    ARTIFACT_TYPES: ClassVar[list] = [
         "task",
         "implementation_plan",
         "walkthrough",

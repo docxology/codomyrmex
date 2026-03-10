@@ -8,6 +8,9 @@ import tempfile
 
 from codomyrmex.languages.base import BaseLanguageManager
 
+_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_SLOW = 300  # seconds for script/build execution
+
 
 class CSharpManager(BaseLanguageManager):
     """Manager for the C# (.NET) language toolchain."""
@@ -46,7 +49,8 @@ class CSharpManager(BaseLanguageManager):
                 ["dotnet", "new", "console", "--force"],
                 cwd=dir_path,
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
+                stderr=subprocess.DEVNULL,
+            timeout=_TIMEOUT_SLOW,
             )
 
             script_path = os.path.join(dir_path, "Program.cs")
@@ -57,7 +61,8 @@ class CSharpManager(BaseLanguageManager):
                 ["dotnet", "run"],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+            timeout=_TIMEOUT_SLOW,
             )
 
             return result.stdout + result.stderr

@@ -6,6 +6,8 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from .branching import get_current_branch, switch_branch
 
+_GIT_TIMEOUT = 60  # seconds
+
 logger = get_logger(__name__)
 
 
@@ -44,7 +46,8 @@ def merge_branch(
         cmd.append(source_branch)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Successfully merged '%s' into '%s'", source_branch, target_branch)
@@ -81,7 +84,8 @@ def rebase_branch(
         cmd.append(target_branch)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Successfully rebased '%s' onto '%s'", current_branch, target_branch)

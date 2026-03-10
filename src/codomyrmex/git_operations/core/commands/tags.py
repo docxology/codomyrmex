@@ -4,6 +4,8 @@ import subprocess
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
+_GIT_TIMEOUT = 60  # seconds
+
 logger = get_logger(__name__)
 
 
@@ -25,7 +27,8 @@ def create_tag(
             cmd.append(tag_name)
 
         subprocess.run(
-            cmd, cwd=repository_path, capture_output=True, text=True, check=True
+            cmd, cwd=repository_path, capture_output=True, text=True, check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         logger.info("Tag '%s' created successfully", tag_name)
@@ -56,6 +59,7 @@ def list_tags(repository_path: str | None = None) -> list[str]:
             capture_output=True,
             text=True,
             check=True,
+        timeout=_GIT_TIMEOUT,
         )
 
         tags = [tag.strip() for tag in result.stdout.strip().split("\n") if tag.strip()]

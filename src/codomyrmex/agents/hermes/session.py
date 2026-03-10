@@ -23,7 +23,7 @@ import sqlite3
 import time
 import uuid
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, Self, runtime_checkable
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -227,6 +227,14 @@ class SQLiteSessionStore:
     def close(self) -> None:
         """Close the database connection."""
         self._conn.close()
+
+    def __enter__(self) -> Self:
+        """Support use as a context manager."""
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        """Close the connection on context exit."""
+        self.close()
 
 
 __all__ = [

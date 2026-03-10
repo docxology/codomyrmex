@@ -11,6 +11,8 @@ import tempfile
 from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
+_TIMEOUT_FAST = 10   # seconds for version checks
+_TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
 class JavaManager(BaseLanguageManager):
@@ -61,7 +63,8 @@ class JavaManager(BaseLanguageManager):
                 ["javac", file_name],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+            timeout=_TIMEOUT_SLOW,
             )
 
             if compile_result.returncode != 0:
@@ -73,7 +76,8 @@ class JavaManager(BaseLanguageManager):
                 ["java", class_name],
                 cwd=dir_path,
                 capture_output=True,
-                text=True
+                text=True,
+            timeout=_TIMEOUT_SLOW,
             )
 
             self._cleanup([script_path, os.path.join(dir_path, f"{class_name}.class")])

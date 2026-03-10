@@ -48,9 +48,9 @@ class SyntheticDataGenerator:
     - Classification datasets with configurable label balance
     """
 
-    ADJECTIVES = ["quick", "slow", "bright", "dark", "happy", "sad", "large", "small"]
-    NOUNS = ["cat", "dog", "car", "house", "tree", "book", "phone", "computer"]
-    VERBS = ["runs", "jumps", "sleeps", "reads", "writes", "plays", "builds", "finds"]
+    ADJECTIVES: ClassVar[list] = ["quick", "slow", "bright", "dark", "happy", "sad", "large", "small"]
+    NOUNS: ClassVar[list] = ["cat", "dog", "car", "house", "tree", "book", "phone", "computer"]
+    VERBS: ClassVar[list] = ["runs", "jumps", "sleeps", "reads", "writes", "plays", "builds", "finds"]
 
     def generate_structured(
         self, schema: DataSchema, seed: int | None = None
