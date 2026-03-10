@@ -106,7 +106,9 @@ class TestVisualizationPerformanceWorkflow:
 
         # Test bar chart creation
         bar_data = {"categories": ["A", "B", "C"], "values": [10, 20, 15]}
-        bar_result = create_bar_chart(bar_data, "Test Bar Chart")
+        bar_result = create_bar_chart(
+            bar_data["categories"], bar_data["values"], "Test Bar Chart"
+        )
 
         assert bar_result is not None
         assert isinstance(bar_result, mpl.figure.Figure)
@@ -190,11 +192,11 @@ class TestVisualizationPerformanceWorkflow:
 
         def create_test_chart():
             """Function to create a test chart."""
-            data = {
-                "categories": ["Jan", "Feb", "Mar", "Apr", "May"],
-                "values": [100, 120, 140, 110, 160],
-            }
-            return create_bar_chart(data, "Monthly Sales")
+            return create_bar_chart(
+                ["Jan", "Feb", "Mar", "Apr", "May"],
+                [100, 120, 140, 110, 160],
+                "Monthly Sales",
+            )
 
         # Profile the chart creation
         profile_result = profile_function(create_test_chart)
@@ -248,17 +250,8 @@ class TestVisualizationPerformanceWorkflow:
         from codomyrmex.data_visualization import create_bar_chart
 
         # Test with invalid data — source returns None when required keys are missing
-        invalid_data = {"invalid": "data"}
-        result = create_bar_chart(invalid_data, "Invalid Chart")
-
-        # Should handle gracefully and return None (no exception raised)
-        assert result is None
-
-        # Test with empty data — source returns None for empty categories/values
-        empty_data = {"categories": [], "values": []}
-        result = create_bar_chart(empty_data, "Empty Chart")
-
-        assert result is None
+        with pytest.raises(ValueError):
+            create_bar_chart([], [], "Empty Chart")
 
     @pytest.mark.skipif(
         not PERFORMANCE_AVAILABLE, reason="Performance module not available"
@@ -308,15 +301,15 @@ class TestVisualizationPerformanceWorkflow:
 
         # Test that both modules can work with the same data structure
         if DATA_VISUALIZATION_AVAILABLE:
-            from codomyrmex.data_visualization import create_bar_chart
-
-            viz_data = {
-                "categories": test_data["chart_labels"],
-                "values": test_data["performance_metrics"],
-            }
             import matplotlib.figure
 
-            chart = create_bar_chart(viz_data, "Performance Chart")
+            from codomyrmex.data_visualization import create_bar_chart
+
+            chart = create_bar_chart(
+                test_data["chart_labels"],
+                test_data["performance_metrics"],
+                "Performance Chart",
+            )
             assert isinstance(chart, matplotlib.figure.Figure)
 
         if PERFORMANCE_AVAILABLE:
@@ -368,14 +361,12 @@ class TestVisualizationPerformanceWorkflow:
     def test_visualization_output_formats(self):
         """Test that visualizations support different output formats."""
         if DATA_VISUALIZATION_AVAILABLE:
-            from codomyrmex.data_visualization import create_bar_chart
-
-            data = {"categories": ["A", "B", "C"], "values": [1, 2, 3]}
-
             import matplotlib.figure
 
+            from codomyrmex.data_visualization import create_bar_chart
+
             # Test basic creation
-            result = create_bar_chart(data, "Format Test")
+            result = create_bar_chart(["A", "B", "C"], [1, 2, 3], "Format Test")
             assert isinstance(result, matplotlib.figure.Figure)
 
             # Could test different formats if supported
@@ -417,8 +408,7 @@ class TestVisualizationPerformanceWorkflow:
         if DATA_VISUALIZATION_AVAILABLE:
             from codomyrmex.data_visualization import create_bar_chart
 
-            data = {"categories": ["X", "Y", "Z"], "values": [10, 20, 30]}
-            create_bar_chart(data, "Integration Test")
+            create_bar_chart(["X", "Y", "Z"], [10, 20, 30], "Integration Test")
             workflow_steps += 1
 
         # Step 2: Profile a function

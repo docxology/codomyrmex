@@ -18,8 +18,8 @@ from __future__ import annotations
 import json
 import logging
 import re
-import urllib.request
 import urllib.error
+import urllib.request
 
 import pytest
 
@@ -89,7 +89,7 @@ def _assert_no_thinking_artifacts(text: str, label: str) -> None:
     for pattern in THINKING_PATTERNS:
         match = pattern.search(text)
         if match:
-            snippet = text[max(0, match.start() - 20):match.end() + 80]
+            snippet = text[max(0, match.start() - 20) : match.end() + 80]
             pytest.fail(
                 f"{label} contains thinking artifact matching {pattern.pattern!r}: "
                 f"...{snippet}..."
@@ -111,7 +111,11 @@ class TestServerHealth:
     def test_gmail_status(self) -> None:
         result = _api_get("/api/gmail/status")
         assert "connected" in result, f"Gmail status missing 'connected': {result}"
-        logger.info("Gmail status: connected=%s, email=%s", result.get("connected"), result.get("email"))
+        logger.info(
+            "Gmail status: connected=%s, email=%s",
+            result.get("connected"),
+            result.get("email"),
+        )
 
     def test_agentmail_status(self) -> None:
         result = _api_get("/api/email/agentmail/status")
@@ -120,12 +124,16 @@ class TestServerHealth:
 
     def test_calendar_status(self) -> None:
         result = _api_get("/api/calendar/status")
-        assert "authenticated" in result, f"Calendar status missing 'authenticated': {result}"
+        assert "authenticated" in result, (
+            f"Calendar status missing 'authenticated': {result}"
+        )
         logger.info("Calendar status: authenticated=%s", result.get("authenticated"))
 
     def test_github_status(self) -> None:
         result = _api_get("/api/github/status")
-        assert "projects" in result or "linked_count" in result, f"GitHub status unexpected: {result}"
+        assert "projects" in result or "linked_count" in result, (
+            f"GitHub status unexpected: {result}"
+        )
         logger.info("GitHub status: %s", result)
 
 
@@ -139,10 +147,14 @@ class TestBikeRideLoad:
     @pytest.mark.slow
     def test_load_returns_threads(self) -> None:
         """Load bike ride threads — verifies summary and drafts are generated."""
-        result = _api_post("/api/bikeride/load", {
-            "backend": "ollama",
-            "model": "gemma3:4b",
-        }, timeout=300)
+        result = _api_post(
+            "/api/bikeride/load",
+            {
+                "backend": "ollama",
+                "model": "gemma3:4b",
+            },
+            timeout=300,
+        )
         assert result.get("success") is True, f"Bike ride load failed: {result}"
         threads = result.get("threads", [])
         logger.info("Bike ride loaded %d threads", len(threads))
@@ -158,18 +170,29 @@ class TestBikeRideLoad:
                 f"Should be 2-3 sentences."
             )
             _assert_no_thinking_artifacts(summary, f"Summary for '{subject}'")
-            logger.info("Thread '%s' summary (%d chars): %s", subject, len(summary), summary[:120])
+            logger.info(
+                "Thread '%s' summary (%d chars): %s",
+                subject,
+                len(summary),
+                summary[:120],
+            )
 
             # Verify drafts exist and are clean
             drafts = thread.get("drafts", [])
-            assert len(drafts) == 3, f"Expected 3 drafts (A/B/C) for '{subject}', got {len(drafts)}"
+            assert len(drafts) == 3, (
+                f"Expected 3 drafts (A/B/C) for '{subject}', got {len(drafts)}"
+            )
             for draft in drafts:
                 label = draft.get("label", "?")
                 title = draft.get("title", "?")
                 text = draft.get("text", "")
                 assert len(text) > 10, f"Draft {label} ({title}) too short: {text!r}"
-                _assert_no_thinking_artifacts(text, f"Draft {label} ({title}) for '{subject}'")
-                logger.info("Draft %s (%s, %d chars): %s", label, title, len(text), text[:80])
+                _assert_no_thinking_artifacts(
+                    text, f"Draft {label} ({title}) for '{subject}'"
+                )
+                logger.info(
+                    "Draft %s (%s, %d chars): %s", label, title, len(text), text[:80]
+                )
 
 
 @requires_server
@@ -178,15 +201,23 @@ class TestBikeRideTTS:
 
     def test_tts_produces_audio(self) -> None:
         """Convert a short text to audio and verify base64 response."""
-        result = _api_post("/api/bikeride/tts", {
-            "text": "Hello, this is a test of the text to speech system.",
-        }, timeout=30)
+        result = _api_post(
+            "/api/bikeride/tts",
+            {
+                "text": "Hello, this is a test of the text to speech system.",
+            },
+            timeout=30,
+        )
         assert result.get("success") is True, f"TTS failed: {result}"
         audio_url = result.get("audioUrl", "")
-        assert audio_url.startswith("data:audio/"), f"Audio URL format unexpected: {audio_url[:60]}"
+        assert audio_url.startswith("data:audio/"), (
+            f"Audio URL format unexpected: {audio_url[:60]}"
+        )
         # Verify base64 data is non-trivial (at least 1KB)
         base64_data = audio_url.split(",", 1)[1] if "," in audio_url else ""
-        assert len(base64_data) > 1000, f"Audio data too small ({len(base64_data)} chars)"
+        assert len(base64_data) > 1000, (
+            f"Audio data too small ({len(base64_data)} chars)"
+        )
         logger.info("TTS produced %d bytes of audio", len(base64_data))
 
 
@@ -221,17 +252,23 @@ class TestProjectMissionCRUD:
 
     def test_list_projects(self) -> None:
         result = _api_get("/api/projects")
-        assert isinstance(result, list), f"Expected list of projects, got {type(result)}"
+        assert isinstance(result, list), (
+            f"Expected list of projects, got {type(result)}"
+        )
         logger.info("Projects listed: %d", len(result))
 
     def test_list_missions(self) -> None:
         result = _api_get("/api/missions")
-        assert isinstance(result, list), f"Expected list of missions, got {type(result)}"
+        assert isinstance(result, list), (
+            f"Expected list of missions, got {type(result)}"
+        )
         logger.info("Missions listed: %d", len(result))
 
     def test_awareness_endpoint(self) -> None:
         result = _api_get("/api/awareness")
-        assert isinstance(result, dict), f"Expected dict from awareness, got {type(result)}"
+        assert isinstance(result, dict), (
+            f"Expected dict from awareness, got {type(result)}"
+        )
         logger.info("Awareness keys: %s", list(result.keys())[:10])
 
 
@@ -241,7 +278,10 @@ class TestProjectMissionCRUD:
 def main() -> int:
     """CLI entry point for direct execution."""
     import sys
-    return pytest.main([__file__, "-v", "--tb=short", "--log-cli-level=INFO"] + sys.argv[1:])
+
+    return pytest.main(
+        [__file__, "-v", "--tb=short", "--log-cli-level=INFO", *sys.argv[1:]]
+    )
 
 
 if __name__ == "__main__":

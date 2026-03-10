@@ -72,10 +72,12 @@ def run_template(
     """
     rendered = render_template(template_name, variables)
 
-    client = HermesClient(config={
-        "hermes_backend": backend,
-        "hermes_model": model,
-    })
+    client = HermesClient(
+        config={
+            "hermes_backend": backend,
+            "hermes_model": model,
+        }
+    )
 
     start = time.time()
     try:

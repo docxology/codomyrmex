@@ -51,7 +51,7 @@ def run_evolution_bridge() -> dict[str, Any]:
 
     # ── 2. ConstraintValidator ───────────────────────────────────────
     try:
-        from evolution.core.constraints import ConstraintValidator, ConstraintResult
+        from evolution.core.constraints import ConstraintResult, ConstraintValidator
 
         config_for_cv = EvolutionConfig(
             max_skill_size=100,
@@ -74,16 +74,14 @@ def run_evolution_bridge() -> dict[str, Any]:
         grown = "short" + " extra" * 20
         growth_results = validator.validate_all(grown, "skill", baseline_text=baseline)
         growth_blocked = any(
-            not r.passed and r.constraint_name == "growth_limit"
-            for r in growth_results
+            not r.passed and r.constraint_name == "growth_limit" for r in growth_results
         )
 
         # Test skill structure check
         valid_skill = "---\nname: test\ndescription: demo\n---\n\n# Body\nContent here."
         struct_results = validator.validate_all(valid_skill, "skill")
         struct_ok = any(
-            r.passed and r.constraint_name == "skill_structure"
-            for r in struct_results
+            r.passed and r.constraint_name == "skill_structure" for r in struct_results
         )
 
         results["components"]["constraints"] = {
@@ -134,7 +132,7 @@ def run_evolution_bridge() -> dict[str, Any]:
 
     # ── 4. EvalExample + EvalDataset ─────────────────────────────────
     try:
-        from evolution.core.dataset_builder import EvalExample, EvalDataset
+        from evolution.core.dataset_builder import EvalDataset, EvalExample
 
         ex = EvalExample(
             task_input="Review this PR",
@@ -191,9 +189,7 @@ def run_evolution_bridge() -> dict[str, Any]:
         results["components"]["skill_helpers"] = {"status": "error", "error": str(exc)}
 
     # ── Summary ──────────────────────────────────────────────────────
-    ok_count = sum(
-        1 for c in results["components"].values() if c.get("status") == "ok"
-    )
+    ok_count = sum(1 for c in results["components"].values() if c.get("status") == "ok")
     total = len(results["components"])
     results["status"] = "success" if ok_count == total else "partial"
     results["components_ok"] = f"{ok_count}/{total}"

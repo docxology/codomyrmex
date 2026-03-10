@@ -27,10 +27,12 @@ def run_status(*, backend: str = "auto", model: str = "hermes3") -> dict[str, An
         Dict with keys: ``active_backend``, ``cli_available``,
         ``ollama_available``, ``ollama_model``, ``success``.
     """
-    client = HermesClient(config={
-        "hermes_backend": backend,
-        "hermes_model": model,
-    })
+    client = HermesClient(
+        config={
+            "hermes_backend": backend,
+            "hermes_model": model,
+        }
+    )
     status = client.get_hermes_status()
     return {
         "active_backend": client.active_backend,

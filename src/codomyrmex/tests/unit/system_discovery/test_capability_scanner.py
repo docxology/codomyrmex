@@ -8,7 +8,6 @@ Uses real AST parsing on this project's own source code.
 import ast
 from pathlib import Path
 
-
 from codomyrmex.system_discovery.core.capability_scanner import (
     CapabilityScanner,
     ClassCapability,

@@ -60,7 +60,8 @@ def run_mcp_tools(
     skills_result = hermes_skills_list()
     results["skills_tool"] = {
         "status": skills_result.get("status"),
-        "has_output_or_message": "output" in skills_result or "message" in skills_result,
+        "has_output_or_message": "output" in skills_result
+        or "message" in skills_result,
     }
 
     # ── Summary ──────────────────────────────────────────────────────
@@ -75,7 +76,9 @@ def run_mcp_tools(
 
 def main() -> None:
     """CLI entry point."""
-    prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Say hello in one sentence."
+    prompt = (
+        " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Say hello in one sentence."
+    )
     result = run_mcp_tools(prompt=prompt)
     print(json.dumps(result, indent=2, default=str))
 
