@@ -164,6 +164,20 @@ class CICDBridge:
                 logger.warning("CI/CD automation not available")
         return self._manager
 
+    def _normalize_pipeline_config(
+        self, pipeline_config: PipelineConfig | dict[str, Any]
+    ) -> PipelineConfig:
+        """Coerce dict to PipelineConfig if needed."""
+        if isinstance(pipeline_config, dict):
+            return PipelineConfig(
+                name=pipeline_config.get("name", "pipeline"),  # type: ignore
+                stages=[StageConfig(**s) for s in pipeline_config.get("stages", [])],  # type: ignore
+                variables=pipeline_config.get("variables", {}),  # type: ignore
+                timeout=pipeline_config.get("timeout", 3600),  # type: ignore
+                fail_fast=pipeline_config.get("fail_fast", True),  # type: ignore
+            )
+        return pipeline_config
+
     def create_workflow_from_pipeline(
         self, pipeline_config: PipelineConfig | dict[str, Any]
     ) -> Workflow:
@@ -175,16 +189,7 @@ class CICDBridge:
         Returns:
             Workflow instance
         """
-        if isinstance(pipeline_config, dict):
-            pipeline_config = PipelineConfig(
-                name=pipeline_config.get("name", "pipeline"),  # type: ignore
-                stages=[
-                    StageConfig(**stage) for stage in pipeline_config.get("stages", [])  # type: ignore
-                ],
-                variables=pipeline_config.get("variables", {}),  # type: ignore
-                timeout=pipeline_config.get("timeout", 3600),  # type: ignore
-                fail_fast=pipeline_config.get("fail_fast", True),  # type: ignore
-            )
+        pipeline_config = self._normalize_pipeline_config(pipeline_config)
 
         wf = Workflow(
             name=pipeline_config.name,
@@ -192,11 +197,10 @@ class CICDBridge:
             fail_fast=pipeline_config.fail_fast,
         )
 
-        prev_stages = []
+        prev_stages: list[str] = []
         for stage_config in pipeline_config.stages:
-            # Create task for each stage
             stage_action = self._create_stage_action(stage_config)
-
+            retry_policy = None
             if stage_config.retry > 0:
                 retry_policy = RetryPolicy(max_attempts=stage_config.retry + 1)
 
