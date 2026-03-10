@@ -5,8 +5,10 @@ No mocks.
 """
 
 import pytest
-from codomyrmex.coding.refactoring.rename import RenameRefactoring
+
 from codomyrmex.coding.refactoring.models import RefactoringResult
+from codomyrmex.coding.refactoring.rename import RenameRefactoring
+
 
 @pytest.fixture
 def sample_file(tmp_path):
@@ -21,7 +23,7 @@ class TestRenameRefactoring:
     def test_rename_variable(self, sample_file):
         refactor = RenameRefactoring(sample_file, "x", "y")
         result = refactor.execute()
-        
+
         assert isinstance(result, RefactoringResult)
         assert result.success is True
         assert len(result.changes) == 2
@@ -31,7 +33,7 @@ class TestRenameRefactoring:
     def test_rename_function(self, sample_file):
         refactor = RenameRefactoring(sample_file, "foo", "bar")
         result = refactor.execute()
-        
+
         assert result.success is True
         assert len(result.changes) == 2
         assert all(c.new_text == "bar" for c in result.changes)

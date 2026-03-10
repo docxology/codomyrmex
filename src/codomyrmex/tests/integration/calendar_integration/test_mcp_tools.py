@@ -90,10 +90,10 @@ def test_calendar_attendee_injection(monkeypatch):
     """Verify that _DEFAULT_ATTENDEE is always injected as an attendee."""
     test_attendee = "test@example.com"
     monkeypatch.setenv("CODOMYRMEX_CALENDAR_ATTENDEE", test_attendee)
-    
-    # Needs to match the env var or use monkeypatch's effect on the module. 
+
+    # Needs to match the env var or use monkeypatch's effect on the module.
     # But wait, mcp_tools reads os.environ at IMPORT time!
-    # So monkeypatching os.environ during the test execution 
+    # So monkeypatching os.environ during the test execution
     # won't change mcp_tools._DEFAULT_ATTENDEE because it was evaluated at import.
     # We must patch mcp_tools._DEFAULT_ATTENDEE directly!
     import codomyrmex.calendar_integration.mcp_tools as mcp_tools_mod

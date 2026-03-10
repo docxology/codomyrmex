@@ -16,8 +16,10 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import pytest
+if TYPE_CHECKING:
+    import pytest
 
 # Resolve the scripts directory so we can import helpers from the scripts themselves
 _HERMES_SCRIPTS_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "scripts" / "agents" / "hermes"
@@ -29,7 +31,8 @@ _PYTHON = sys.executable
 
 def _create_synthetic_db(db_path: Path) -> None:
     """Write a minimal SQLite hermes_sessions DB with one session row."""
-    import json, time
+    import json
+    import time
     conn = sqlite3.connect(str(db_path))
     conn.execute("""
         CREATE TABLE IF NOT EXISTS hermes_sessions (

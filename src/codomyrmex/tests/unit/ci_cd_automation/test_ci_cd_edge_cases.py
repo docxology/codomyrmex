@@ -42,7 +42,6 @@ from codomyrmex.ci_cd_automation.rollback_manager import (
     RollbackStrategy,
 )
 
-
 _HAS_GITHUB_TOKEN = bool(os.environ.get("GITHUB_TOKEN"))
 _GITHUB_OWNER = os.environ.get("GITHUB_REPO_OWNER", "")
 _GITHUB_REPO = os.environ.get("GITHUB_REPO_NAME", "")

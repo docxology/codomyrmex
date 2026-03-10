@@ -102,6 +102,7 @@ def api_health_check() -> dict[str, Any]:
         "webhooks",
         "mocking",
         "pagination",
+        "free_apis",
     ]
     results: dict[str, str] = {}
     all_ok = True
