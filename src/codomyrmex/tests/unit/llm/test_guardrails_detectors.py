@@ -3,14 +3,12 @@
 Zero-mock policy: real class instantiation only.
 Also verifies ClassVar annotations are correctly typed.
 """
-import pytest
-
 from codomyrmex.llm.guardrails.detectors import (
     ContentFilter,
     PIIDetector,
     PromptInjectionDetector,
 )
-from codomyrmex.llm.guardrails.models import GuardrailAction, ThreatLevel
+from codomyrmex.llm.guardrails.models import ThreatLevel
 
 # ──────────────────────────── PromptInjectionDetector ─────────────────────
 
@@ -20,8 +18,8 @@ class TestPromptInjectionDetector:
         det = PromptInjectionDetector()
         assert det is not None
 
-    def test_injection_patterns_is_list(self):
-        assert isinstance(PromptInjectionDetector.INJECTION_PATTERNS, list)
+    def test_injection_patterns_is_tuple(self):
+        assert isinstance(PromptInjectionDetector.INJECTION_PATTERNS, tuple)
 
     def test_injection_patterns_not_empty(self):
         assert len(PromptInjectionDetector.INJECTION_PATTERNS) > 5
@@ -187,8 +185,8 @@ class TestContentFilter:
         filt = ContentFilter()
         assert filt is not None
 
-    def test_toxic_patterns_is_list(self):
-        assert isinstance(ContentFilter.TOXIC_PATTERNS, list)
+    def test_toxic_patterns_is_tuple(self):
+        assert isinstance(ContentFilter.TOXIC_PATTERNS, tuple)
 
     def test_clean_text_passes(self):
         filt = ContentFilter()

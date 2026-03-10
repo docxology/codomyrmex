@@ -22,7 +22,7 @@ class SecretScanner:
         result = scanner.scan_directory("src/")
     """
 
-    IGNORE_PATTERNS: ClassVar[list] = [
+    IGNORE_PATTERNS: ClassVar[tuple[str, ...]] = (
         r"\.git",
         r"node_modules",
         r"__pycache__",
@@ -30,7 +30,7 @@ class SecretScanner:
         r"\.min\.js$",
         r"\.lock$",
         r"package-lock\.json$",
-    ]
+    )
 
     def __init__(self, patterns: SecretPatterns | None = None, min_confidence: float = 0.5):
         self.patterns = patterns or SecretPatterns()
