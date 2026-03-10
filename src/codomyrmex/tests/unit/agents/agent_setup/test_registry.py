@@ -1,9 +1,5 @@
 """Tests for agents.agent_setup.registry — zero-mock policy compliant."""
 
-import os
-
-import pytest
-
 from codomyrmex.agents.agent_setup.registry import (
     AgentDescriptor,
     AgentRegistry,

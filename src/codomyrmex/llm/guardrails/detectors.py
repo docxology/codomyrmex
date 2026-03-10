@@ -9,7 +9,7 @@ from .models import GuardrailAction, GuardrailConfig, GuardrailResult, ThreatLev
 class PromptInjectionDetector:
     """Detects prompt injection attempts in user input."""
 
-    INJECTION_PATTERNS: ClassVar[list] = [
+    INJECTION_PATTERNS: ClassVar[tuple[str, ...]] = (
         r"ignore\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
         r"disregard\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
         r"forget\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
@@ -29,7 +29,7 @@ class PromptInjectionDetector:
         r"DAN\s*mode|do\s+anything\s+now",
         r"developer\s+mode|god\s+mode",
         r"unlock(ed)?\s+mode",
-    ]
+    )
 
     def __init__(self, config: GuardrailConfig | None = None):
         self.config = config or GuardrailConfig()
@@ -154,14 +154,14 @@ class PIIDetector:
 class ContentFilter:
     """Filters content for safety and appropriateness."""
 
-    TOXIC_PATTERNS: ClassVar[list] = [
+    TOXIC_PATTERNS: ClassVar[tuple[str, ...]] = (
         r"\b(kill|murder|attack)\s+(yourself|yourself|them|him|her)\b",
         r"\bhow\s+to\s+(make|build|create)\s+(a\s+)?(bomb|weapon|explosive)\b",
         r"\b(hack|break\s+into)\s+(a\s+)?(bank|account|system)\b",
-    ]
+    )
 
     def __init__(self, custom_patterns: list[str] | None = None):
-        self.patterns = self.TOXIC_PATTERNS.copy()
+        self.patterns = list(self.TOXIC_PATTERNS)
         if custom_patterns:
             self.patterns.extend(custom_patterns)
         self._compiled_patterns = [re.compile(p, re.IGNORECASE) for p in self.patterns]
