@@ -8,6 +8,7 @@ subscription handling, and asynchronous event processing.
 import asyncio
 import fnmatch
 import inspect
+import re
 import threading
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -41,6 +42,17 @@ class Subscription:
     filter_func: Callable[[Event], bool] | None = None
     priority: int = 0  # Higher numbers = higher priority
 
+    def __post_init__(self):
+        self._compiled_patterns: list[re.Pattern] = []
+        self._literal_patterns: set[str] = set()
+
+        for pattern in self.event_patterns:
+            p_str = str(pattern.value) if hasattr(pattern, "value") else str(pattern)
+            if any(c in p_str for c in "*?["):
+                self._compiled_patterns.append(re.compile(fnmatch.translate(p_str)))
+            else:
+                self._literal_patterns.add(p_str)
+
     def matches_event(self, event: Event) -> bool:
         """Check if this subscription matches an event."""
         # Check event type against patterns
@@ -51,12 +63,13 @@ class Subscription:
         )
 
         match_found = False
-        for pattern in self.event_patterns:
-            # Ensure pattern is a string for fnmatch
-            p_str = pattern.value if hasattr(pattern, "value") else str(pattern)
-            if fnmatch.fnmatch(event_type_str, p_str):
-                match_found = True
-                break
+        if event_type_str in self._literal_patterns:
+            match_found = True
+        else:
+            for pattern in self._compiled_patterns:
+                if pattern.match(event_type_str):
+                    match_found = True
+                    break
 
         if not match_found:
             return False

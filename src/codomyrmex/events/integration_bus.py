@@ -6,6 +6,7 @@ Routes events between modules with topic-based subscriptions.
 from __future__ import annotations
 
 import fnmatch
+import re
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -58,6 +59,7 @@ class IntegrationBus:
         self._handlers: dict[
             str, list[tuple[Callable[[IntegrationEvent], None], int]]
         ] = defaultdict(list)
+        self._compiled_patterns: dict[str, re.Pattern] = {}
         self._history: list[IntegrationEvent] = []
 
     def subscribe(
@@ -77,6 +79,10 @@ class IntegrationBus:
         # Keep handlers sorted by priority
         self._handlers[topic].sort(key=lambda x: x[1], reverse=True)
 
+        # Pre-compile wildcard patterns
+        if topic not in self._compiled_patterns and any(c in topic for c in "*?["):
+            self._compiled_patterns[topic] = re.compile(fnmatch.translate(topic))
+
     def unsubscribe(
         self, topic: str, handler: Callable[[IntegrationEvent], None]
     ) -> bool:
@@ -92,6 +98,13 @@ class IntegrationBus:
         self._handlers[topic] = [
             h for h in self._handlers[topic] if h[0] != handler
         ]
+
+        # Cleanup
+        if not self._handlers[topic]:
+            del self._handlers[topic]
+            if topic in self._compiled_patterns:
+                del self._compiled_patterns[topic]
+
         return len(self._handlers[topic]) < original_len
 
     def emit(
@@ -105,7 +118,7 @@ class IntegrationBus:
         matching_handlers: list[tuple[Callable[[IntegrationEvent], None], int]] = []
 
         for pattern, handlers in self._handlers.items():
-            if pattern == topic or fnmatch.fnmatch(topic, pattern):
+            if pattern == topic or (pattern in self._compiled_patterns and self._compiled_patterns[pattern].match(topic)):
                 matching_handlers.extend(handlers)
 
         # Sort all matching handlers by priority
