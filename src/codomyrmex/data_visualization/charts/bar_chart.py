@@ -180,7 +180,8 @@ if __name__ == "__main__":
         bar_color="mediumseagreen",
     )
     logger.info(
-        "Horizontal bar chart example saved to %s", output_dir / "horizontal_bar_chart.png"
+        "Horizontal bar chart example saved to %s",
+        output_dir / "horizontal_bar_chart.png",
     )
 
     if not logging.getLogger("").hasHandlers():

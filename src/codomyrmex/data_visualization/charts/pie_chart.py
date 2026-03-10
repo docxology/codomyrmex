@@ -44,7 +44,8 @@ def create_pie_chart(
     if explode and len(explode) != len(labels):
         logger.warning(
             "Length mismatch for pie chart explode: labels (%d) vs explode (%d). Ignoring explode.",
-            len(labels), len(explode),
+            len(labels),
+            len(explode),
         )
         explode = None
 
